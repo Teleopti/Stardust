@@ -1,0 +1,70 @@
+﻿<div>
+	<span>
+		<md-select ng-model="vm.selectedBudgetGroupId" ng-change="vm.loadBudgetAllowance()" class="pull-left" placeholder="Select a budget group...">
+			<md-option ng-repeat="group in vm.budgetGroups" ng-value="group.id">
+				<span ng-bind="group.name"></span>
+			</md-option>
+		</md-select>
+	</span>
+	<span>
+		<team-schedule-datepicker selected-date="vm.selectedDate" on-date-change="vm.loadBudgetAllowance()" />
+	</span>
+	<span>
+		<span class="wfm-radio">
+			<input type="radio" name="group-allowance-option" id="radio-total-allowance" ng-checked="vm.allowanceOption==='TotalAllowance'"
+				   ng-click="vm.allowanceOption='TotalAllowance';vm.loadBudgetAllowance();" />
+			<label for="radio-total-allowance">
+				<span class="wfm-radio-toggle"></span>
+				<span class="wfm-radio-label">{{"TotalAllowance"|translate}}</span>
+			</label>
+		</span>
+		<span class="wfm-radio">
+			<input type="radio" name="group-allowance-option" id="radio-allowance" ng-checked="vm.allowanceOption!=='TotalAllowance'"
+				   ng-click="vm.allowanceOption='Allowance';vm.loadBudgetAllowance();" />
+			<label for="radio-allowance">
+				<span class="wfm-radio-toggle"></span>
+				<span class="wfm-radio-label">{{"Allowance"|translate}}</span>
+			</label>
+		</span>
+	</span>
+	<span class="pull-right"><input type="button" value="{{'Refresh'|translate}}" ng-click="vm.loadBudgetAllowance()" /></span>
+</div>
+<div id="allowance_detail">
+	<table class="wfm-table">
+		<thead head-width-helper="" class="xng-isolate-scope" style="width: calc((100% - 1.2em) + 1px);">
+			<tr class="weekview-thead">
+				<th class="agent-name-colomn"></th>
+				<th ng-repeat="allowance in vm.budgetAllowanceList" class="date-header ng-scope">
+					<span class="date ng-binding pull-left">{{allowance.date.format("DD")}}</span>
+					<span class="date ng-binding pull-right">{{allowance.date.format("dddd")}}</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="weekview-tr">
+				<td class="weekview-td weekview-person-name ng-binding">Allowance</td>
+				<td ng-repeat="allowance in vm.budgetAllowanceList" class="weekview-td ng-scope" ng-style="{'background-color': allowance.isWeekend ? '#FFF3DE' : '#FFFFFF'}">
+					<div class="ng-binding">{{allowance.allowance}}</div>
+				</td>
+			</tr>
+			<tr class="weekview-tr">
+				<td class="weekview-td weekview-person-name ng-binding">Used total</td>
+				<td ng-repeat="allowance in vm.budgetAllowanceList" class="weekview-td ng-scope" ng-style="{'background-color': allowance.isWeekend ? '#FFF3DE' : '#FFFFFF'}">
+					<div class="ng-binding">{{allowance.usedTotal}}</div>
+				</td>
+			</tr>
+			<tr class="weekview-tr">
+				<td class="weekview-td weekview-person-name ng-binding">Absolute difference</td>
+				<td ng-repeat="allowance in vm.budgetAllowanceList" class="weekview-td ng-scope" ng-style="{'background-color': allowance.isWeekend ? '#FFF3DE' : '#FFFFFF'}">
+					<div class="ng-binding">{{allowance.absoluteDifference}}</div>
+				</td>
+			</tr>
+			<tr class="weekview-tr">
+				<td class="weekview-td weekview-person-name ng-binding">Relative difference</td>
+				<td ng-repeat="allowance in vm.budgetAllowanceList" class="weekview-td ng-scope" ng-style="{'background-color': allowance.isWeekend ? '#FFF3DE' : '#FFFFFF'}">
+					<div class="ng-binding">{{allowance.relativeDifference}}</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1387,6 +1387,8 @@
     <Content Include="WFM\app\permissions\refact\permissions.data.service.spec.js" />
     <Content Include="WFM\app\permissions\refact\permissions.filter.r.js" />
     <Content Include="WFM\app\permissions\refact\permissions.filter.r.spec.js" />
+    <Content Include="WFM\app\requests\html\requests-budget-allowance.tpl.html" />
+    <Content Include="WFM\app\requests\requests-budget-allowance.directive.js" />
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
     <Content Include="WFM\app\resourceplanner\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\planningperiods-overview.html" />

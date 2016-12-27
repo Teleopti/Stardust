@@ -7,7 +7,7 @@
 
 	requestsCommandsPaneCtrl.$inject = [
 		'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
-		'signalRSVC','NoticeService'
+		'signalRSVC', 'NoticeService'
 	];
 
 	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc,
@@ -39,8 +39,13 @@
 		vm.showSiteOpenHour = showSiteOpenHour;
 		vm.showResourceCalculations = showResourceCalculations;
 		vm.shouldShowSiteOpenHour = false;
-		initWaitlistProcessPeriod();
 		vm.triggerResourceCalculate = triggerResourceCalculate;
+
+		vm.budgetAllowanceDetailIsVisible = false;
+		vm.couldViewBudgetAllowanceDetail = toggleSvc.Wfm_Requests_ShowBudgetAllowanceDetail_41945;
+		vm.showBudgetAllowanceDetail = showBudgetAllowanceDetail;
+
+		initWaitlistProcessPeriod();
 
 		subscribeSignalRMessage('IRunRequestWaitlistEventMessage', vm.onProcessWaitlistFinished);
 		subscribeSignalRMessage('IApproveRequestsWithValidatorsEventMessage', vm.onApproveBasedOnBusinessRulesFinished);
@@ -54,16 +59,20 @@
 			vm.shouldShowSiteOpenHour = true;
 		}
 
-		function showResourceCalculations(){
-			vm.shouldShowResourceCalculations =! vm.shouldShowResourceCalculations;
-			requestsDataService.getLastCaluclatedDateTime().success(function(result){
+		function showBudgetAllowanceDetail() {
+			vm.budgetAllowanceDetailIsVisible = true;
+		}
+
+		function showResourceCalculations() {
+			vm.shouldShowResourceCalculations = !vm.shouldShowResourceCalculations;
+			requestsDataService.getLastCaluclatedDateTime().success(function (result) {
 				result = moment(result).format('MMMM Do YYYY, h:mm:ss a');
 				vm.lastCaluclated = result;
 			})
 		}
-		
-		function triggerResourceCalculate(){
-			requestsDataService.triggerResourceCalculate().success(function(){
+
+		function triggerResourceCalculate() {
+			requestsDataService.triggerResourceCalculate().success(function () {
 				NoticeService.success('Resource calculation successfully triggered ', 5000, true);
 				vm.shouldShowResourceCalculations = false;
 			})

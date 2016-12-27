@@ -4134,6 +4134,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Budget allowance.
+        /// </summary>
+        public static string BudgetAllowance {
+            get {
+                return ResourceManager.GetString("BudgetAllowance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Budgeted leave.
         /// </summary>
         public static string BudgetedLeave {
@@ -33333,6 +33342,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewBadgeLeaderBoard {
             get {
                 return ResourceManager.GetString("ViewBadgeLeaderBoard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View budget allowance.
+        /// </summary>
+        public static string ViewBudgetAllowance {
+            get {
+                return ResourceManager.GetString("ViewBudgetAllowance", resourceCulture);
             }
         }
         

@@ -28,11 +28,8 @@
 
 	function teamScheduleDatePickerCtrl($timeout) {
 		var vm = this;
-
 		vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
-
 		vm.step = parseInt(vm.step) || 1;
-
 		vm.afterDateChangeDatePicker = function () {
 			vm.toggleCalendar();
 			vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
@@ -40,7 +37,6 @@
 		};
 
 		vm.onDateInputChange = function (currentDateStr) {
-
 			if (!currentDateStr) {
 				return;
 			}
@@ -54,8 +50,7 @@
 			newDateObj.setHours(vm.selectedDate.getHours());
 			newDateObj.setMinutes(vm.selectedDate.getMinutes());
 			vm.selectedDate = newDateObj;
-			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
-
+			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }); });
 		};
 
 		vm.gotoPreviousDate = function () {
@@ -71,7 +66,6 @@
 		vm.toggleCalendar = function () {
 			vm.isCalendarOpened = !vm.isCalendarOpened;
 		};
-
 	}
 
 	angular.module('wfm.teamSchedule').directive('teamsShortDate', function () {
@@ -101,5 +95,4 @@
 	function isValidDate(dateObj) {
 		return (!isNaN(dateObj.getTime()) && dateObj.getTime() > 0);
 	}
-
 })();

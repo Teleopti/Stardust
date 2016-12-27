@@ -10315,6 +10315,12 @@ These options are activated:
   <data name="ViewAllowance" xml:space="preserve">
     <value>View allowance</value>
   </data>
+  <data name="BudgetAllowance" xml:space="preserve">
+    <value>Budget allowance</value>
+  </data>
+  <data name="ViewBudgetAllowance" xml:space="preserve">
+    <value>View budget allowance</value>
+  </data>
   <data name="TeamSchedule" xml:space="preserve">
     <value>Team Schedule</value>
     <comment>Team Schedule</comment>
