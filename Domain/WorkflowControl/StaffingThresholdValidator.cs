@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -13,11 +14,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class StaffingThresholdValidatorHelperCascadingSkills
-	{
-		
-	}
-
 	public class StaffingThresholdValidatorHelper
 	{
 		readonly Func<ISkill, Specification<ISkillStaffPeriod>> _getIntervalsForUnderstaffing;
@@ -134,14 +130,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		}
 	}
 
-	public class StaffingThresholdValidator :  IAbsenceRequestValidator
+	public class StaffingThresholdValidatorCascadingSkills : StaffingThresholdValidator
 	{
-		private const int maxUnderStaffingItemCount = 4;// bug #40906 needs to be max 4 
-		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
-
-	
-		
-		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
+		public override IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
 		{
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequest.Person.PermissionInformation.Culture();
@@ -149,7 +140,44 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCollection().Count;
 
 			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
+
 			var underStaffingResultDict = staffingThresholdValidatorHelper.GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new CascadingPersonSkillProvider());
+
+			if (underStaffingResultDict.IsNotUnderstaffed())
+			{
+				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+			}
+			string validationError = numberOfRequestedDays > 1
+				? GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture)
+				: GetUnderStaffingHourString(underStaffingResultDict, culture, uiCulture, timeZone, absenceRequest.Period.StartDateTimeLocal(timeZone));
+			return new ValidatedRequest
+			{
+				IsValid = false,
+				ValidationErrors = validationError
+			};
+		}
+
+		public override IAbsenceRequestValidator CreateInstance()
+		{
+			return new StaffingThresholdValidatorCascadingSkills();
+		}
+	}
+
+	public class StaffingThresholdValidator :  IAbsenceRequestValidator
+	{
+		private const int maxUnderStaffingItemCount = 4;// bug #40906 needs to be max 4 
+		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
+		
+		public virtual IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
+		{
+			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			var culture = absenceRequest.Person.PermissionInformation.Culture();
+			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
+			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCollection().Count;
+
+			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
+			
+			var underStaffingResultDict = staffingThresholdValidatorHelper.GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new PersonSkillProvider());
 
 			if (underStaffingResultDict.IsNotUnderstaffed())
 			{

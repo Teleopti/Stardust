@@ -1,10 +1,39 @@
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
+	public class StaffingThresholdValidatorCascadingSkillsWithShrinkage : StaffingThresholdWithShrinkageValidator
+	{
+		public override IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
+		{
+			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			var culture = absenceRequest.Person.PermissionInformation.Culture();
+			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
+			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCollection().Count;
+
+			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
+
+			var underStaffingResultDict = staffingThresholdValidatorHelper.GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new CascadingPersonSkillProvider());
+
+			if (underStaffingResultDict.IsNotUnderstaffed())
+			{
+				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+			}
+			string validationError = numberOfRequestedDays > 1
+				? GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture)
+				: GetUnderStaffingHourString(underStaffingResultDict, culture, uiCulture, timeZone, absenceRequest.Period.StartDateTimeLocal(timeZone));
+			return new ValidatedRequest
+			{
+				IsValid = false,
+				ValidationErrors = validationError
+			};
+		}
+	}
+
 	public class StaffingThresholdWithShrinkageValidator : StaffingThresholdValidator
 	{
 		public override IAbsenceRequestValidator CreateInstance()
