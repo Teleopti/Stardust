@@ -180,6 +180,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(accountDay.LatestCalculatedBalance.Equals(balance));
 		}
 
+		[Test]
+		public void ShouldNotBeAbleToApproveDeletedRequest()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+			
+			var absenceDateTimePeriod = new DateTimePeriod(2016,01,01,00,2016,01,01,23);
+			addAssignment(person,absenceDateTimePeriod);
+
+			var personRequest = createAbsenceRequest(person,absence,absenceDateTimePeriod);
+
+			personRequest.SetDeleted();
+
+			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
+			_approveRequestCommandHandler.Handle(command);
+			command.ErrorMessages.Single().Should().Be.EqualTo(UserTexts.Resources.RequestHasBeenDeleted);
+		}
+
 		private PersonRequest createAbsenceRequest (IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			var personRequestFactory = new PersonRequestFactory() {Person = person};

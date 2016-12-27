@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 
 		private bool approveRequest(IPersonRequest personRequest, ApproveRequestCommand command)
-		{
-			if ((personRequest.IsDenied && !personRequest.IsWaitlisted) || personRequest.IsCancelled)
+		{			
+			if (personRequest.IsDeleted || (personRequest.IsDenied && !personRequest.IsWaitlisted) || personRequest.IsCancelled)
 			{
 				return invalidRequestState(personRequest, command);
 			}
@@ -128,8 +128,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private static bool invalidRequestState(IPersonRequest personRequest, ApproveRequestCommand command)
 		{
-			command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText,
+			if (personRequest.IsDeleted)
+			{
+				command.ErrorMessages.Add(UserTexts.Resources.RequestHasBeenDeleted);
+			}
+			else
+			{
+				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition,personRequest.StatusText,
 				UserTexts.Resources.Approved));
+			}
+			
 			return false;
 		}
 
