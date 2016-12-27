@@ -76,6 +76,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
 			registerType<IIntradayRequestProcessor, IntradayCascadingRequestProcessor,
 				IntradayRequestProcessor>(builder, Toggles.AbsenceRequests_Intraday_UseCascading_41969);
+
+			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

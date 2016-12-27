@@ -553,6 +553,7 @@
     <Compile Include="Areas\Reports\Core\ReportNavigationProvider.cs" />
     <Compile Include="Areas\Reports\IoC\ReportsAreaModule.cs" />
     <Compile Include="Areas\Reports\Models\ReportsViewModel.cs" />
+    <Compile Include="Areas\Requests\Controller\RequestAllowanceController.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\FormData\ApproveRequestsWithValidatorInput.cs" />
     <Compile Include="Areas\Requests\Core\FormData\RequestsCommandInput.cs" />
@@ -562,6 +563,7 @@
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingResult.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestFilterCreator.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestsProvider.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestAllowanceViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Controller\RequestsController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignTaskManager.cs" />
@@ -662,9 +664,11 @@
     <Compile Include="Areas\Global\BasicActionThrottler.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestViewModelMapper.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IShiftTradeRequestViewModelFactory.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestViewModelMapper.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\ShiftTradeRequestViewModelFactory.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModel\RequestAllowanceViewModel.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
     <Compile Include="Areas\ResourcePlanner\IslandController.cs" />
     <Compile Include="Areas\ResourcePlanner\ManageScheduleController.cs" />

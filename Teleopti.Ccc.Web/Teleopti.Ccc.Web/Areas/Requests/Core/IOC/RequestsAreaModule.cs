@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.IOC
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>().InstancePerDependency();
 			builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
 			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
+			builder.RegisterType<RequestAllowanceViewModelFactory>().As<IRequestAllowanceViewModelFactory>().SingleInstance();
 		}
 	}
 }
