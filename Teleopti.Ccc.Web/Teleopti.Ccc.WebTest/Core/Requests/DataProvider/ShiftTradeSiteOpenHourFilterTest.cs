@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldOnlyFilterScheduleDayWhenThereIsOnlyAScheduleDay()
+		public void ShouldFilterScheduleDayWhenPersonFromScheduleLayersIsNull()
 		{
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
 			{
@@ -150,14 +150,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldOnlyFilterScheduleViewModelWhenThereIsOnlyAScheduleViewModel()
+		public void ShouldFilterScheduleViewModelWhenPersonToScheduleIsNull()
 		{
 			prepareData();
 			Assert.True(Target.FilterSchedule(null, _personFromScheduleView));
 		}
 
 		[Test]
-		public void ShouldFilterTradeeScheduleEvenIfTraderhasADayOff()
+		public void ShouldFilterPersonToScheduleEvenPersonFromHasADayOff()
 		{
 			prepareData();
 

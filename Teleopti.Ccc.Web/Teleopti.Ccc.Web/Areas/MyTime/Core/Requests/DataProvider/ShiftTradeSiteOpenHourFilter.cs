@@ -35,29 +35,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				return true;
 			}
-			if (toScheduleDay != null)
+			if (toScheduleDay == null) return true;
+			var personTo = toScheduleDay.Person;
+			var personFrom = _loggedOnUser.CurrentUser();
+			var projection = _projectionProvider.Projection(toScheduleDay);
+			if (projection.HasLayers)
 			{
-				var personTo = toScheduleDay.Person;
-				var personFrom = _loggedOnUser.CurrentUser();
-				var projection = _projectionProvider.Projection(toScheduleDay);
-				if (projection.HasLayers)
+				var personToScheduleTimePeriod = projection.Period().GetValueOrDefault();
+				isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
 				{
-					var personToScheduleTimePeriod = projection.Period().GetValueOrDefault();
-					isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
-					{
-						Period = personToScheduleTimePeriod,
-						Person = personFrom
-					});
-				}
-				if (personFromScheduleView.ScheduleLayers != null && personFromScheduleView.ScheduleLayers.Any() && toScheduleDay.Person != null)
+					Period = personToScheduleTimePeriod,
+					Person = personFrom
+				});
+			}
+			if (personFromScheduleView.ScheduleLayers != null && personFromScheduleView.ScheduleLayers.Any() && toScheduleDay.Person != null)
+			{
+				var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
+				isSatisfiedPersonToSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
 				{
-					var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
-					isSatisfiedPersonToSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
-					{
-						Period = personFromSchedulePeriod,
-						Person = personTo
-					});
-				}
+					Period = personFromSchedulePeriod,
+					Person = personTo
+				});
 			}
 			return isSatisfiedPersonToSiteOpenHours && isSatisfiedPersonFromSiteOpenHours;
 		}
