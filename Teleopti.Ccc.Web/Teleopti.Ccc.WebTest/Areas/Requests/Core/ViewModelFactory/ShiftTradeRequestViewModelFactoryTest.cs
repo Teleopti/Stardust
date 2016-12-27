@@ -21,7 +21,6 @@ using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
@@ -86,7 +85,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2016, 3, 1),
-				EndDate = new DateOnly(2016, 3, 10)
+				EndDate = new DateOnly(2016, 3, 10),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -112,7 +112,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2016, 3, 1),
-				EndDate = new DateOnly(2016, 3, 10)
+				EndDate = new DateOnly(2016, 3, 10),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -133,7 +134,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2016, 3, 1),
-				EndDate = new DateOnly(2016, 3, 10)
+				EndDate = new DateOnly(2016, 3, 10),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -466,7 +468,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2016, 3, 1),
-				EndDate = new DateOnly(2016, 3, 1)
+				EndDate = new DateOnly(2016, 3, 1),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -537,7 +540,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = startDate,
-				EndDate = endDate
+				EndDate = endDate,
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 			return ShiftTradeRequestViewModelFactory.CreateRequestListViewModel (input);
 		}
