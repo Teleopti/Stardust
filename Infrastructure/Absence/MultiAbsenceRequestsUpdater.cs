@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
+		private readonly IToggleManager _toggleManager;
 
 		public MultiAbsenceRequestsUpdater(
 			ICurrentScenario scenarioRepository,
@@ -69,7 +72,19 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IStardustJobFeedback feedback, 
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
-			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IPersonRepository personRepository, ISkillRepository skillRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository, IAbsenceRepository absenceRepository, IPersonRequestRepository personRequestRepository, IDayOffTemplateRepository dayOffTemplateRepository)
+			ISchedulingResultStateHolder schedulingResultStateHolder, 
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, 
+			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, 
+			IPersonRepository personRepository, 
+			ISkillRepository skillRepository, 
+			IContractRepository contractRepository, 
+			IPartTimePercentageRepository partTimePercentageRepository, 
+			IContractScheduleRepository contractScheduleRepository,
+			ISkillTypeRepository skillTypeRepository, 
+			IActivityRepository activityRepository, 
+			IAbsenceRepository absenceRepository, 
+			IPersonRequestRepository personRequestRepository, 
+			IDayOffTemplateRepository dayOffTemplateRepository, IToggleManager toggleManager)
 		{
 			_scenarioRepository = scenarioRepository;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
@@ -98,6 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_absenceRepository = absenceRepository;
 			_personRequestRepository = personRequestRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
+			_toggleManager = toggleManager;
 		}
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
@@ -137,8 +153,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 
 				stopwatch.Restart();
+
+				var primaryMode = !_toggleManager.IsEnabled(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
 #pragma warning disable 618
-				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, true))
+				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, primaryMode))
 #pragma warning restore 618
 				{
 					stopwatch.Stop();
