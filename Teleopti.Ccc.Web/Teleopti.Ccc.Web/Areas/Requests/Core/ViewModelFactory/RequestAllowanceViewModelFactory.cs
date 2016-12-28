@@ -34,7 +34,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				Allowance = budgetAbsenceAllowanceDetail.Allowance,
 				TotalAllowance = budgetAbsenceAllowanceDetail.TotalAllowance,
 				Date = budgetAbsenceAllowanceDetail.Date,
-				RelativeDifference = budgetAbsenceAllowanceDetail.RelativeDifference,
+				RelativeDifference =
+					double.IsNaN(budgetAbsenceAllowanceDetail.RelativeDifference.Value)
+						? new double?()
+						: budgetAbsenceAllowanceDetail.RelativeDifference.Value,
 				TotalHeadCounts = budgetAbsenceAllowanceDetail.TotalHeadCounts,
 				UsedTotalAbsences = budgetAbsenceAllowanceDetail.UsedTotalAbsences,
 				UsedAbsencesDictionary =

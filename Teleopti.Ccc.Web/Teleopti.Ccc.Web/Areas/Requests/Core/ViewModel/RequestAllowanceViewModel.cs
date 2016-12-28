@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public IDictionary<string, double> UsedAbsencesDictionary { get; set; }
 		public double UsedTotalAbsences { get; set; }
 		public double AbsoluteDifference { get; set; }
-		public Percent RelativeDifference { get; set; }
+		public double? RelativeDifference { get; set; }
 		public DateOnly Date { get; set; }
 		public double TotalHeadCounts { get; set; }
 	}
