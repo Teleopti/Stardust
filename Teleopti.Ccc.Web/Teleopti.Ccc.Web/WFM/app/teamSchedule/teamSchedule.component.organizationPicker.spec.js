@@ -101,7 +101,7 @@
 			},
 
 			onPick: function(input) {
-				selectedTeams = input.groups;
+				selectedTeams = input.teams;
 			}
 		};
 
@@ -135,7 +135,7 @@
 			},
 
 			onPick: function(input) {
-				selectedTeams = input.groups;
+				selectedTeams = input.teams;
 			}
 		};
 
