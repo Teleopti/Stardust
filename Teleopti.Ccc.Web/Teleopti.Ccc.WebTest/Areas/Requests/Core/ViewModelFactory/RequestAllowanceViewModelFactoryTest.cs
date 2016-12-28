@@ -67,6 +67,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			allowanceDetailViewModels.Last().Date.Should().Be(new DateOnly(2016, 12, 31));
 		}
 
+		[Test, SetCulture("sv-SE")]
+		public void ShouldGetWeekendDateByCulture()
+		{
+			var allowanceDetailViewModels = RequestAllowanceViewModelFactory.CreateBudgetAbsenceAllowanceDetailViewModels(new DateOnly(2016, 12, 28), null);
+			allowanceDetailViewModels.Count.Should().Be(7);
+			allowanceDetailViewModels[5].IsWeekend.Should().Be(true);
+			allowanceDetailViewModels[5].Date.Should().Be(new DateOnly(2016, 12, 31));
+			allowanceDetailViewModels[6].IsWeekend.Should().Be(true);
+			allowanceDetailViewModels[6].Date.Should().Be(new DateOnly(2017, 1, 1));
+		}
+
 		[Test]
 		public void ShouldGetAllowanceDetails()
 		{

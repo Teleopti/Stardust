@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public double? RelativeDifference { get; set; }
 		public DateOnly Date { get; set; }
 		public double TotalHeadCounts { get; set; }
+		public bool IsWeekend { get; set; }
 	}
 
 	public class BudgetGroupViewModel

@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		public IList<BudgetAbsenceAllowanceDetailViewModel> CreateBudgetAbsenceAllowanceDetailViewModels(
 			DateOnly date, Guid? budgetGroupId)
 		{
-			var period = DateHelper.GetWeekPeriod(date, _loggedOnUser.CurrentUser().PermissionInformation.Culture());
+			var culture = _loggedOnUser.CurrentUser().PermissionInformation.Culture();
+			var period = DateHelper.GetWeekPeriod(date, culture);
 			var selectedBudgetGroup = getSelectedBudgetGroup(budgetGroupId);
 			var absencesInBudgetGroup = getAbsencesInBudgetGroup(selectedBudgetGroup);
 			var budgetAbsenceAllowanceDetails = _requestAllowanceProvider.GetBudgetAbsenceAllowanceDetails(period,
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				UsedTotalAbsences = budgetAbsenceAllowanceDetail.UsedTotalAbsences,
 				UsedAbsencesDictionary =
 					budgetAbsenceAllowanceDetail.UsedAbsencesDictionary.ToDictionary(
-						item => item.Key.Name, item => item.Value)
+						item => item.Key.Name, item => item.Value),
+				IsWeekend = DateHelper.IsWeekend(budgetAbsenceAllowanceDetail.Date, culture)
 			}).ToList();
 		}
 
