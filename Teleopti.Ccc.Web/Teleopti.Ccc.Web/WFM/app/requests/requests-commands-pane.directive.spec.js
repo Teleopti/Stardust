@@ -46,10 +46,10 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 			$provide.service('CurrentUserInfo', function () {
 				return currentUserInfo;
 			});
-			$provide.service('workingHoursPickerDirective', function() {
+			$provide.service('workingHoursPickerDirective', function () {
 				return null;
 			});
-			$provide.service('showWeekdaysFilter', function() {
+			$provide.service('showWeekdaysFilter', function () {
 				return null;
 			});
 		});
@@ -513,13 +513,13 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 					Checked: true,
 					Name: "BudgetAllotmentValidator",
 					Description: "ValidateRequestsBasedOnBudgetAllotment",
-					Enabled:true
+					Enabled: true
 				}, {
 					Id: 2,
 					Checked: false,
 					Name: "IntradayValidator",
 					Description: "ValidateRequestsBasedOnIntraday",
-					Enabled:true
+					Enabled: true
 				}
 			];
 		}
@@ -529,6 +529,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 				then: function (cb) { cb(response); }
 			}
 		}
+		this.getBudgetGroupsPromise = function () { return []; }
 	}
 
 	function FakeSingalRService() {
@@ -559,7 +560,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		{
 			$scope: scope,
 			requestsNotificationService: requestsNotificationService,
-			requestsDataService:requestsDataService,
+			requestsDataService: requestsDataService,
 			CurrentUserInfo: currentUserInfo
 		});
 		scope.$digest();
