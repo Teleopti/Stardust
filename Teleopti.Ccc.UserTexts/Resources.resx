@@ -10315,12 +10315,6 @@ These options are activated:
   <data name="ViewAllowance" xml:space="preserve">
     <value>View allowance</value>
   </data>
-  <data name="BudgetAllowance" xml:space="preserve">
-    <value>Budget allowance</value>
-  </data>
-  <data name="ViewBudgetAllowance" xml:space="preserve">
-    <value>View budget allowance</value>
-  </data>
   <data name="TeamSchedule" xml:space="preserve">
     <value>Team Schedule</value>
     <comment>Team Schedule</comment>
@@ -15381,5 +15375,17 @@ These options are activated:
   <data name="Staffing" xml:space="preserve">
     <value>Staffing</value>
     <comment>tab label in web intraday</comment>
+  </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>Used total</value>
+    <comment>Row label in budget allowance of web request</comment>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Used by {0}</value>
+    <comment>Row label in budget allowance of web request</comment>
+  </data>
+  <data name="NoBudgetGroupFound" xml:space="preserve">
+    <value>No budget group found.</value>
+    <comment>Error message in budget allowance of web request</comment>
   </data>
 </root>

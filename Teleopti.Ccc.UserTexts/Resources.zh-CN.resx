@@ -13309,4 +13309,10 @@ Teleopti R&amp;D</value>
   <data name="UpdateResourceCalculations" xml:space="preserve">
     <value>更新资源计算</value>
   </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>合计已使用</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>{0} 已使用</value>
+  </data>
 </root>

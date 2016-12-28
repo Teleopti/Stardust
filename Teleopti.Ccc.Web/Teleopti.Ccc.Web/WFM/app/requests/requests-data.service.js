@@ -20,6 +20,7 @@
 		var resourceCalculateUrl = '../TriggerResourceCalculate';
 		var getTeamsHierachyUrl = '../api/Requests/FetchPermittedTeamHierachy';
 		var getBudgetGroupsUrl = "../api/RequestAllowance/budgetGroups";
+		var getBudgetAllowanceUrl = "../api/RequestAllowance/allowances";
 
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -47,6 +48,16 @@
 
 		this.getBudgetGroupsPromise = function () {
 			return $http.get(getBudgetGroupsUrl);
+		}
+
+		this.getBudgetAllowancePromise = function (date, budgetGroupId) {
+			return $http.get(getBudgetAllowanceUrl,
+			{
+				params: {
+					date: date,
+					budgetGroupId: budgetGroupId
+				}
+			});
 		}
 
 		this.replyRequestsPromise = function (selectedRequestIdsAndMessage) {

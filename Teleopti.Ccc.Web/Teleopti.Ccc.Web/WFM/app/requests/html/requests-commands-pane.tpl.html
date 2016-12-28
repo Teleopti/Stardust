@@ -64,7 +64,7 @@
 			<li ng-click="requestsCommandsPane.showBudgetAllowanceDetail()"
 				ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail">
 				<i class="mdi mdi-settings"></i>
-				<span translate>ViewBudgetAllowance</span>
+				<span translate>ViewAllowance</span>
 			</li>
 		</ul>
 	</div>
@@ -163,8 +163,8 @@
 		</aside>
 	</div>
 </modal-dialog>
-<modal-dialog show='requestsCommandsPane.budgetAllowanceDetailIsVisible' ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail" ng-cloak>
-	<h1 class="modal-title">{{"BudgetAllowance"|translate}}</h1>
+<modal-dialog class="requests-allowance" show='requestsCommandsPane.budgetAllowanceDetailIsVisible' ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail" ng-cloak>
+	<h1 class="modal-title">{{"ViewAllowance"|translate}}</h1>
 	<div class="modal-inner-content">
 		<requests-budget-allowance></requests-budget-allowance>
 	</div>
