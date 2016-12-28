@@ -69,8 +69,8 @@
 			});
 		};
 
-		vm.changeSelectedTeams = function(groups) {
-			vm.selectedTeamIds = groups;
+		vm.changeSelectedTeams = function(teams) {
+			vm.selectedTeamIds = teams;
 			params.selectedTeamIds = vm.selectedTeamIds;
 			vm.resetSchedulePage();
 		};

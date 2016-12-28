@@ -193,7 +193,7 @@
 			}
 
 			ctrl.onPick({
-				groups: ctrl.selectedTeamIds
+				teams: angular.copy(ctrl.selectedTeamIds)
 			});
 		};
 	}

@@ -9,7 +9,7 @@
 	<div class="operation-container material-depth-1">
 		
 		<organization-picker ng-if="requests.businessHierarchyToggleEnabled" available-groups="requests.availableGroups" class="organization-picker-container"
-							 on-pick="requests.changeSelectedTeams(groups)"></organization-picker>
+							 on-pick="requests.changeSelectedTeams(teams)"></organization-picker>
 
 
 		<wfm-multiple-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></wfm-multiple-search-input>

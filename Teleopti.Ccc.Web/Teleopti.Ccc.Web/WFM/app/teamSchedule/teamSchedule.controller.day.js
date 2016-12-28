@@ -209,8 +209,8 @@
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 
-		vm.changeSelectedTeams = function(groups) {
-			vm.selectedTeamIds = groups;
+		vm.changeSelectedTeams = function(teams) {
+			vm.selectedTeamIds = teams;
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 		    vm.resetSchedulePage();
 		};
