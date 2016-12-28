@@ -8,7 +8,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
     [TestFixture]
-    public class DayHasUnderstaffingTest
+	[Ignore("MockIgnore")]
+	public class DayHasUnderstaffingTest
     {
         private DayHasUnderstaffing target;
         private ISkill skill;

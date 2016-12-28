@@ -1,9 +1,10 @@
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public class IntervalHasUnderstaffing : Specification<ISkillStaffPeriod>
+    public class IntervalHasUnderstaffing : Specification<IValidatePeriod>
     {
         private readonly ISkill _skill;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _skill = skill;
         }
 
-        public override bool IsSatisfiedBy(ISkillStaffPeriod obj)
+        public override bool IsSatisfiedBy(IValidatePeriod obj)
         {
             return obj.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
         }

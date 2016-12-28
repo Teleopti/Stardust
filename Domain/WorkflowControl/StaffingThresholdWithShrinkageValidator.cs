@@ -2,6 +2,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -62,12 +63,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 		}
 		
-		public override Specification<ISkillStaffPeriod> GetIntervalsForUnderstaffing(ISkill skill)
+		public override Specification<IValidatePeriod> GetIntervalsForUnderstaffing(ISkill skill)
 		{
 			return new IntervalShrinkageHasUnderstaffing(skill);
 		}
 
-		public override Specification<ISkillStaffPeriod> GetIntervalsForSeriousUnderstaffing(ISkill skill)
+		public override Specification<IValidatePeriod> GetIntervalsForSeriousUnderstaffing(ISkill skill)
 		{
 			return new IntervalShrinkageHasSeriousUnderstaffing(skill);
 		}

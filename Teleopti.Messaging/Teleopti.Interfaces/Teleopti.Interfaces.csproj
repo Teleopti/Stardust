@@ -846,6 +846,7 @@
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPlanningPeriod.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
+    <Compile Include="IValidatePeriod.cs" />
     <Compile Include="Messages\Denormalize\Legacy\PersonChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\NewAbsenceReportCreated.cs" />
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />

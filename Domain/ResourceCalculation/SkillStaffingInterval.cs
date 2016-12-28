@@ -1,9 +1,12 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class SkillStaffingInterval : IResourceCalculationPeriod, IShovelResourceDataForInterval
+	public class SkillStaffingInterval : IResourceCalculationPeriod, IShovelResourceDataForInterval, IValidatePeriod
 	{
 		public Guid SkillId { get; set; }
 		public DateTime StartDateTime { get; set; }
@@ -59,6 +62,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double AbsoluteDifference => CalculatedResource - FStaff;
 		public double RelativeDifference => new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviation;
+		public double RelativeDifferenceWithShrinkage => new DeviationStatisticData(ForecastWithShrinkage, CalculatedResource).RelativeDeviation;
+		public DateTimePeriod DateTimePeriod => new DateTimePeriod(StartDateTime.Utc(), EndDateTime.Utc());
 
 		public double CalculatedResource	
 		{

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Secrets.Furness;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -235,17 +237,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 			}
 			
-			var isDenied = false;
-			if (skillStaffingIntervals.Any(interval => interval.StaffingLevel < interval.Forecast))
+			var mergedPeriod = personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request);
+			var aggregatedValidatorList = mergedPeriod.GetSelectedValidatorList();
+
+
+			var staffingThresholdValidator = aggregatedValidatorList.FirstOrDefault(x => x.GetType() == typeof(StaffingThresholdValidator));
+
+			if (staffingThresholdValidator != null)
 			{
-				sendDenyCommand(personRequest.Id.GetValueOrDefault(), "Understaffed");
-				isDenied = true;
+				var validatedRequest = ((StaffingThresholdValidator) staffingThresholdValidator).ValidateLight((AbsenceRequest) personRequest.Request, skillStaffingIntervals);
+				if (validatedRequest.IsValid)
+				{
+					sendApproveCommand(personRequest.Id.GetValueOrDefault());
+
+					foreach (var combinationResource in skillCombinationResourcesForAgent)
+					{
+						_skillCombinationResourceRepository.PersistChange(combinationResource);
+					}
+				}
+				else
+				{
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), validatedRequest.ValidationErrors);
+				}
 			}
-			if (isDenied) return;
-			sendApproveCommand(personRequest.Id.GetValueOrDefault());
-			foreach (var combinationResource in skillCombinationResourcesForAgent)
+			else
 			{
-				_skillCombinationResourceRepository.PersistChange(combinationResource);
+				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 			}
 		}
 

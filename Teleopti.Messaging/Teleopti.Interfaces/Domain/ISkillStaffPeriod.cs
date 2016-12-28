@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: robink
     /// Created date: 2008-09-18
     /// </remarks>
-    public interface ISkillStaffPeriod : ILayer<ISkillStaff>, ICloneableEntity<ILayer<ISkillStaff>>, IResourceCalculationPeriod
+    public interface ISkillStaffPeriod : ILayer<ISkillStaff>, ICloneableEntity<ILayer<ISkillStaff>>, IResourceCalculationPeriod, IValidatePeriod
 	{
         /// <summary>
         /// Gets the segment collection.

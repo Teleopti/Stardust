@@ -10,19 +10,54 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class StaffingThresholdValidatorHelper
 	{
-		readonly Func<ISkill, Specification<ISkillStaffPeriod>> _getIntervalsForUnderstaffing;
-		readonly Func<ISkill, Specification<ISkillStaffPeriod>> _getIntervalsForSeriousUnderstaffing;
+		readonly Func<ISkill, Specification<IValidatePeriod>> _getIntervalsForUnderstaffing;
+		readonly Func<ISkill, Specification<IValidatePeriod>> _getIntervalsForSeriousUnderstaffing;
 
-		public StaffingThresholdValidatorHelper(Func<ISkill, Specification<ISkillStaffPeriod>> getIntervalsForUnderstaffing, Func<ISkill, Specification<ISkillStaffPeriod>> getIntervalsForSeriousUnderstaffing)
+		public StaffingThresholdValidatorHelper(Func<ISkill, Specification<IValidatePeriod>> getIntervalsForUnderstaffing, Func<ISkill, Specification<IValidatePeriod>> getIntervalsForSeriousUnderstaffing)
 		{
 			_getIntervalsForUnderstaffing = getIntervalsForUnderstaffing;
 			_getIntervalsForSeriousUnderstaffing = getIntervalsForSeriousUnderstaffing;
+		}
+
+		public UnderstaffingDetails GetUnderStaffingDaysLight(IAbsenceRequest absenceRequest, IEnumerable<IValidatePeriod> validatePeriods)
+		{
+			var result = new UnderstaffingDetails();
+			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			//var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
+			//var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
+			var date = new DateOnly(absenceRequest.Period.StartDateTime);
+			var personSkillProvider = new PersonSkillProvider();
+			var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, date);
+
+			if (!isSkillOpenForDateOnly(date, skills.Skills))
+				return result;
+
+				foreach (var skill in skills.Skills)
+				{
+					if (skill == null) continue;
+					if (validatePeriods.IsEmpty()) continue;
+					
+					var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods, timeZone, result);
+					if (!validatedUnderStaffingResult.IsValid)
+					{
+						result.AddUnderstaffingDay(date);
+					}
+
+					var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, validatePeriods, timeZone, result);
+					if (!validatedSeriousUnderStaffingResult.IsValid)
+					{
+						result.AddSeriousUnderstaffingDay(date);
+					}
+				}
+
+			return result;
 		}
 
 		public UnderstaffingDetails GetUnderStaffingDays(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, PersonSkillProvider personSkillProvider)
@@ -68,7 +103,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				foreach (var skill in skills.Skills)
 				{
 					if (skill == null) continue;
-					var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedRequestPeriod.Value);
+					var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedRequestPeriod.Value)?.Cast<IValidatePeriod>().ToList();
 
 					if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
 					{
@@ -97,7 +132,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
 		}
 
-		public IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
+		public IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
 		{
 			if (skillStaffPeriodList == null) throw new ArgumentNullException("skillStaffPeriodList");
 			var intervalHasSeriousUnderstaffing = _getIntervalsForSeriousUnderstaffing.Invoke(skill);
@@ -105,26 +140,26 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (seriousUnderStaffPeriods.Any())
 			{
-				seriousUnderStaffPeriods.Select(s => s.Period.TimePeriod(timeZone)).ForEach(result.AddSeriousUnderstaffingTime);
+				seriousUnderStaffPeriods.Select(s => s.DateTimePeriod.TimePeriod(timeZone)).ForEach(result.AddSeriousUnderstaffingTime);
 				return new ValidatedRequest { IsValid = false };
 			}
 
 			return new ValidatedRequest { IsValid = true };
 		}
 
-		public IValidatedRequest ValidateUnderstaffing(ISkill skill, IEnumerable<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
+		public IValidatedRequest ValidateUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
 		{
 			if (skillStaffPeriodList == null) throw new ArgumentNullException("skillStaffPeriodList");
 
 			var validatedRequest = new ValidatedRequest();
 			var intervalHasUnderstaffing = _getIntervalsForUnderstaffing.Invoke(skill);
 			var exceededUnderstaffingList = skillStaffPeriodList.Where(intervalHasUnderstaffing.IsSatisfiedBy).ToList();
-			var exceededRate = exceededUnderstaffingList.Sum(t => t.Period.ElapsedTime().TotalMinutes) / skillStaffPeriodList.Sum(t => t.Period.ElapsedTime().TotalMinutes);
+			var exceededRate = exceededUnderstaffingList.Sum(t => t.DateTimePeriod.ElapsedTime().TotalMinutes) / skillStaffPeriodList.Sum(t => t.DateTimePeriod.ElapsedTime().TotalMinutes);
 			var isWithinUnderStaffingLimit = (1 - exceededRate) >= skill.StaffingThresholds.UnderstaffingFor.Value;
 
 			validatedRequest.IsValid = isWithinUnderStaffingLimit;
 			if (!isWithinUnderStaffingLimit)
-				exceededUnderstaffingList.Select(s => s.Period.TimePeriod(timeZone)).ForEach(result.AddUnderstaffingTime);
+				exceededUnderstaffingList.Select(s => s.DateTimePeriod.TimePeriod(timeZone)).ForEach(result.AddUnderstaffingTime);
 
 			return validatedRequest;
 		}
@@ -167,7 +202,29 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	{
 		private const int maxUnderStaffingItemCount = 4;// bug #40906 needs to be max 4 
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
-		
+
+		public IValidatedRequest ValidateLight(IAbsenceRequest absenceRequest, IEnumerable<IValidatePeriod> validatePeriods)
+		{
+			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			var culture = absenceRequest.Person.PermissionInformation.Culture();
+			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
+
+			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
+
+			var underStaffingResultDict = staffingThresholdValidatorHelper.GetUnderStaffingDaysLight(absenceRequest, validatePeriods);
+
+			if (underStaffingResultDict.IsNotUnderstaffed())
+			{
+				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+			}
+			string validationError = GetUnderStaffingHourString(underStaffingResultDict, culture, uiCulture, timeZone, absenceRequest.Period.StartDateTimeLocal(timeZone));
+			return new ValidatedRequest
+			{
+				IsValid = false,
+				ValidationErrors = validationError
+			};
+		}
+
 		public virtual IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
 		{
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
@@ -291,15 +348,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 		}
 
-		public virtual Specification<ISkillStaffPeriod> GetIntervalsForUnderstaffing(ISkill skill)
+		public virtual Specification<IValidatePeriod> GetIntervalsForUnderstaffing(ISkill skill)
 		{
 			return new IntervalHasUnderstaffing(skill);
 		}
 
-		public virtual Specification<ISkillStaffPeriod> GetIntervalsForSeriousUnderstaffing(ISkill skill)
+		public virtual Specification<IValidatePeriod> GetIntervalsForSeriousUnderstaffing(ISkill skill)
 		{
 			return new IntervalHasSeriousUnderstaffing(skill);
 		}
 
+		
 	}
 }

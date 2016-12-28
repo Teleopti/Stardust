@@ -217,6 +217,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		[Ignore("MockIgnore")]
 		public void ShouldApproveAbsenceRequestCheckByIntradayWithEnoughStaffing()
 		{
 			setup();

@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    /// <summary>
+	/// <summary>
     /// Holds data needed to calculate staffing needs (activity start, end, length, occupancy etc.).
     /// </summary>
     public class SkillStaffPeriod : Layer<ISkillStaff>, ISkillStaffPeriod, IAggregateSkillStaffPeriod, IShovelResourceDataForInterval
@@ -61,7 +60,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 	    }
 
-	    public double ScheduledAgentsIncoming
+		public DateTimePeriod DateTimePeriod => Period;
+
+		public double ScheduledAgentsIncoming
         {
             get
             {

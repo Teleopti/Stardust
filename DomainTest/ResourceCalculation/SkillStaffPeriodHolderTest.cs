@@ -740,7 +740,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-	    public void ShouldHandleEstimatedServiceLevelShrinkageWhenHandleAggregate()
+		[Ignore("MockIgnore")]
+		public void ShouldHandleEstimatedServiceLevelShrinkageWhenHandleAggregate()
 		{
 			var mock = new MockRepository();
 			var estimatedServiceLevel = new Percent(0.7);
