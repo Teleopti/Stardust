@@ -3,7 +3,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[
 DROP PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 GO
 
--- EXEC [ReadModel].[PersonFinderWithCriteria] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, '1:1,2:0', 1053, '928DD0BC-BF40-412E-B970-9B5E015AADEA'
+-- EXEC [ReadModel].[PersonFinderWithCriteria] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, '1:1,2:0', 1053, '928DD0BC-BF40-412E-B970-9B5E015AADEA', '2016-10-10'
 -- =============================================
 -- Author:      Xinfeng
 -- Create date: 2005-05-09
@@ -35,13 +35,13 @@ SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' val
 DECLARE @leave_after_ISO nvarchar(10)
 DECLARE @belongs_to_date_ISO nvarchar(10)
 DECLARE @dynamicSQL nvarchar(max)
-DECLARE @cursorString nvarchar(50)
-DECLARE @cursorCount int
-DECLARE @cursorCountInAll int
-DECLARE @criteriaCount int
-DECLARE @wordsInAllCount int
+DECLARE @directDynamicSQL nvarchar(max)
+DECLARE @allQuery nvarchar(max)
 DECLARE @isSearchInAll bit
 DECLARE @collation nvarchar(50)
+DECLARE @stringholder nvarchar(max)
+DECLARE @stringholder2 nvarchar(max)
+
 
 --Set collation
 SELECT @collation = cc.[Collation]
@@ -61,6 +61,8 @@ CREATE TABLE #SearchStringsInAll (SearchWord nvarchar(200) COLLATE database_defa
 -- Temp table for splitted criteria
 CREATE TABLE #SearchCriteria (SearchType nvarchar(200) NOT NULL, SearchValue nvarchar(max) NULL)
 CREATE TABLE #PersonId (PersonId uniqueidentifier)
+CREATE TABLE #IntermediatePersonId (PersonId uniqueidentifier)
+CREATE TABLE #DirectSearchCriteria (SearchType nvarchar(200) NOT NULL, SearchValue nvarchar(max) NULL)
 
 CREATE TABLE #result (
    [PersonId] [uniqueidentifier] NOT NULL,
@@ -102,6 +104,12 @@ Declare @keywordSplitterIndex int
 Declare @searchKeyword nvarchar(max)
 Declare @notProcessedSearchValue nvarchar(100)
 
+--convert @leave_after to ISO-format string
+SELECT @leave_after_ISO = CONVERT(NVARCHAR(10), @leave_after,120)
+
+--convert @belongs_to_date to ISO-format string
+SELECT @belongs_to_date_ISO = CONVERT(NVARCHAR(10), @belongs_to_date,120)
+
 WHILE @@FETCH_STATUS = 0
 BEGIN
 	SELECT @splitterIndex = CHARINDEX(':', @searchString)
@@ -117,136 +125,163 @@ BEGIN
 			RETURN
 		END
 
-		SELECT @keywordSplitterIndex = CHARINDEX(';', @searchValue)
-
 		IF @searchType = 'All' SELECT @isSearchInAll = 1
-
-		IF @searchType = 'All' AND @keywordSplitterIndex > 0
+		IF @searchType = 'All'
 		BEGIN
-			Select @notProcessedSearchValue = @searchValue
-			IF RIGHT(@notProcessedSearchValue, 1) <> ';'
-				Select @notProcessedSearchValue = @notProcessedSearchValue + ';'
-			WHILE @keywordSplitterIndex > 0
-			BEGIN
-				SELECT @searchKeyword = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, 0, @keywordSplitterIndex)))
-
-				IF @searchKeyword <> ''
-					INSERT INTO #SearchCriteria VALUES('All', @searchKeyword)
-
-				SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @keywordSplitterIndex + 1,
-					LEN(@notProcessedSearchValue) - @keywordSplitterIndex)))
-				SELECT @keywordSplitterIndex = CHARINDEX(';', @notProcessedSearchValue)
-			END
+			INSERT INTO #SearchCriteria SELECT 'All', [string] FROM SplitStringByChar(@searchValue, ';')
+			INSERT INTO #DirectSearchCriteria SELECT * FROM #SearchCriteria
 		END
 		ELSE
-			INSERT INTO #SearchCriteria VALUES(@searchType, @searchValue)
+		BEGIN
+			IF NOT EXISTS (SELECT * FROM (VALUES ('FirstName'), ('LastName'), ('EmploymentNumber'), ('Note')) as t(SearchType) WHERE SearchType = @searchType)		
+				INSERT INTO #SearchCriteria VALUES(@searchType, @searchValue)
+			ELSE
+				INSERT INTO #DirectSearchCriteria VALUES(@searchType, @searchValue)
+		END
 	END
 
 	FETCH NEXT FROM SearchStringCursor INTO @searchString
 END
-
---debug
---SELECT * from #SearchCriteria
-
 CLOSE SearchStringCursor
 DEALLOCATE SearchStringCursor;
 
---count number of search criterias
-SELECT @criteriaCount = COUNT(SearchType)
-FROM #SearchCriteria
-
---count number of SearchWord in #SearchStringsInAll
-SELECT @wordsInAllCount = COUNT(SearchWord)
-FROM #SearchStringsInAll
-
---convert @leave_after to ISO-format string
-SELECT @leave_after_ISO = CONVERT(NVARCHAR(10), @leave_after,120)
-
---convert @belongs_to_date to ISO-format string
-SELECT @belongs_to_date_ISO = CONVERT(NVARCHAR(10), @belongs_to_date,120)
+--debug
+--SELECT * from #SearchCriteria
+--SELECT * from #DirectSearchCriteria
 
 
-------------
---search in specific one or sevaral types
---cursor for adding "AND" or "OR" conditions for each search criteria
-------------
-DECLARE SearchCriteriaCursor CURSOR FOR
-SELECT SearchType, SearchValue, ROW_NUMBER() OVER(ORDER BY SearchType DESC) as RowNum FROM #SearchCriteria;
-OPEN SearchCriteriaCursor;
+IF @isSearchInAll = 1
+BEGIN	
+	SELECT @allQuery = ''
+	SELECT @directDynamicSQL = 'SELECT p.Id AS PersonId FROM dbo.Person p with (nolock) WHERE ' 
+							+ 'ISNULL(p.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' '
 
-FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
-
-WHILE @@FETCH_STATUS = 0
-BEGIN
-	IF @isSearchInAll = 1 AND @searchType <> 'All' 
-	BEGIN
-		--fectch next
-		FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
-		CONTINUE
-	END
-
-	DECLARE @valueClause nvarchar(max)
-
-	--DECLARE @keywordSplitterIndex int
-	SELECT @keywordSplitterIndex = CHARINDEX(';', @searchValue)
-
-	-- If the search value contains multiple keyword (combined with ';')
-	-- Then generate search conditions for every search keyword combined with OR
-	IF @keywordSplitterIndex > 0
-	BEGIN
-		SELECT @notProcessedSearchValue = @searchValue
-
-		IF RIGHT(@searchValue, 1) <> ';'
-			SELECT @notProcessedSearchValue = @searchValue + ';'
-
-		SELECT @valueClause = '('
-		WHILE @keywordSplitterIndex > 0
-		BEGIN
-			SELECT @searchKeyword = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, 0, @keywordSplitterIndex)))
-			IF @searchKeyword <> ''
-			BEGIN
-			IF @valueClause <> '('
-				SELECT @valueClause = @valueClause + ' OR '
-			SELECT @valueClause = @valueClause + 'SearchValue LIKE N''%' + REPLACE(@searchKeyword, '''', '''''') + '%'''
-			END
-			SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @keywordSplitterIndex + 1,
-			LEN(@notProcessedSearchValue) - @keywordSplitterIndex)))
-			SELECT @keywordSplitterIndex = CHARINDEX(';', @notProcessedSearchValue)
-		END
-		SELECT @valueClause = @valueClause + ')'
-	END
-	ELSE
-		SELECT @valueClause = 'SearchValue like N''%' + REPLACE(@searchValue, '''', '''''') + '%'''
-
-	IF @valueClause <> '()'
-	BEGIN
-		SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson with (nolock) WHERE '
+	SELECT @dynamicSQL = 'SELECT PersonId FROM ReadModel.FindPerson with (nolock) WHERE '
 			+ 'ISNULL(TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
 			+ ' AND ( (StartDateTime IS NULL OR StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( EndDateTime IS NULL OR EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
-			+ ' AND ' + @valueClause
+			
+	SET @stringholder = ''
+	SET @stringholder2 = ''
 
-		--If 'All' set searchtype as a separate AND condition
-		IF @searchType <> 'All'
-			SELECT @dynamicSQL = @dynamicSQL + ' AND (SearchType = '''' OR SearchType = '''+ @searchType + ''')'
+	DECLARE SearchCriteriaCursor CURSOR FOR
+	SELECT SearchType, SearchValue FROM #SearchCriteria;
+	OPEN SearchCriteriaCursor;
 
-		--add INTERSECT between each result set
-		IF @cursorCount <> @criteriaCount --But NOT on last condition, the syntax is different
-			SELECT @dynamicSQL = @dynamicSQL + CHAR(13)+CHAR(10) + ' INTERSECT ' + CHAR(13)+CHAR(10)
+	FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN						
+		IF @searchValue = ''
+		BEGIN			
+			FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue
+			CONTINUE
+		END
+		SET @searchValue = REPLACE(@searchValue, '''', '''''')	
+		IF @allQuery <> ''
+			SELECT @allQuery = @allQuery + ' INTERSECT '
+			
+		SET @stringholder = ' AND (FirstName LIKE N''%' + @searchValue   + '%'' ' 
+							+ ' OR LastName LIKE N''%' + @searchValue   + '%'' '
+							+ ' OR EmploymentNumber LIKE N''%' + @searchValue   + '%'' '
+							+ ' OR Note LIKE N''%' + @searchValue   + '%'' )'
+
+		SET @stringholder2 = ' AND SearchValue LIKE N''%' + @searchValue   + '%'' ' 
+
+
+		SELECT @allQuery = @allQuery + ' ( ' + @directDynamicSQL + @stringholder + ' UNION ' + @dynamicSQL + @stringholder2 + ' ) '
+
+		FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue
 	END
 
-	--fectch next
-	FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
+	CLOSE SearchCriteriaCursor;
+	DEALLOCATE SearchCriteriaCursor;	
+		
+	SELECT @allQuery = 'WITH TMP_P (PersonId) AS (' + @allQuery + ' ) ' + ' INSERT INTO #IntermediatePersonId SELECT PersonId FROM TMP_P '
+    EXEC sp_executesql @allQuery
+	SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId'
 END
+ELSE
+BEGIN
+	IF EXISTS (SELECT * FROM #DirectSearchCriteria)
+	BEGIN
+		DECLARE DirectSearchCriteriaCursor CURSOR FOR
+		SELECT SearchType, SearchValue FROM #DirectSearchCriteria;
+		OPEN DirectSearchCriteriaCursor;
 
-CLOSE SearchCriteriaCursor;
-DEALLOCATE SearchCriteriaCursor;
+		SELECT @directDynamicSQL = 'SELECT p.Id FROM dbo.Person p WHERE ' 
+								 + 'ISNULL(p.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' '
 
---debug
---SELECT @dynamicSQL
+		FETCH NEXT FROM DirectSearchCriteriaCursor INTO @searchType, @searchValue
+
+		WHILE @@FETCH_STATUS = 0
+		BEGIN			
+			SET @stringholder = ''
+			SELECT @stringholder= @stringholder+ 'OR (' + @searchType + ' LIKE N''%' + [string]   + '%'' ) ' FROM SplitStringByChar(REPLACE(@searchValue, '''', ''''''), ';')
+	
+			IF @stringholder <> ''
+			BEGIN
+				SET @stringholder= SUBSTRING(@stringholder, 4, LEN(@stringholder) - 3)
+				SET @directDynamicSQL = @directDynamicSQL + ' AND ( ' + @stringholder + ') ' 
+			END
+	
+			FETCH NEXT FROM DirectSearchCriteriaCursor INTO @searchType, @searchValue
+		END
+
+		CLOSE DirectSearchCriteriaCursor;
+		DEALLOCATE DirectSearchCriteriaCursor;
+	
+		SELECT @directDynamicSQL = 'INSERT INTO #IntermediatePersonId ' + @directDynamicSQL
+	
+		EXEC sp_executesql @directDynamicSQL
+		SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #IntermediatePersonId t with (nolock) INNER JOIN ReadModel.FindPerson fp with (nolock) ON t.PersonId = fp.PersonId WHERE '					
+	END
+	ELSE
+	BEGIN
+		SELECT @dynamicSQL = 'SELECT fp.PersonId FROM ReadModel.FindPerson fp with (nolock) WHERE ISNULL(fp.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' AND ' 
+	END
+
+	IF EXISTS (SELECT * FROM #SearchCriteria)
+	BEGIN
+		SET @stringholder2 = ''
+		SET @dynamicSQL = @dynamicSQL
+						+ ' ( (fp.StartDateTime IS NULL OR fp.StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
+
+		DECLARE SearchCriteriaCursor CURSOR FOR
+		SELECT SearchType, SearchValue FROM #SearchCriteria;
+		OPEN SearchCriteriaCursor;
+
+		FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue
+						
+		WHILE @@FETCH_STATUS = 0
+		BEGIN					
+			IF @stringholder2 <> ''
+				SET @stringholder2 = @stringholder2 + ' INTERSECT '
+
+			SET @stringholder = ''			
+			SELECT @stringholder= @stringholder+ 'OR fp.SearchValue LIKE N''%' + [string]   + '%''  ' FROM SplitStringByChar(REPLACE(@searchValue, '''', ''''''), ';')
+				
+			IF @stringholder <> ''
+			BEGIN
+				SET @stringholder= SUBSTRING(@stringholder, 4, LEN(@stringholder) - 3)
+				SET @stringholder2 = @stringholder2 + '(' + @dynamicSQL + ' AND ( ' + @stringholder + ')  AND fp.SearchType = ''' + @searchType + ''' ) ' 
+			END
+	
+			FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue
+		END
+
+		SET @dynamicSQL = @stringholder2
+		CLOSE SearchCriteriaCursor;
+		DEALLOCATE SearchCriteriaCursor;	
+	END
+	ELSE
+		SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId'
+END
 
 --insert into PersonId temp table
 INSERT INTO #PersonId
 EXEC sp_executesql @dynamicSQL
+
+
 
 --prepare restult
 INSERT INTO #result
@@ -315,8 +350,6 @@ CLOSE OrderByStringCursor
 DEALLOCATE OrderByStringCursor;
 Drop Table #OrderByStrings
 
-SELECT @dynamicSQL=''
-
 SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
     FROM (
     SELECT *, ROW_NUMBER() OVER(ORDER BY ' + @fullOrderBy + ') AS RowNumber
@@ -328,4 +361,5 @@ SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
 
 --return
 EXEC sp_executesql @dynamicSQL
+
 GO

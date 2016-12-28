@@ -196,10 +196,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadPersonsWithMultipleCriteria()
 		{
 			var criterias = new Dictionary<PersonFinderField, string>();
-			criterias.Add(PersonFinderField.FirstName,"Ashley");
+			criterias.Add(PersonFinderField.Skill,"Email");
 			criterias.Add(PersonFinderField.Role,"Agent");
 			var crit = new PersonFinderSearchCriteria(criterias, 10,
-				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
+				new DateOnly(2020, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
