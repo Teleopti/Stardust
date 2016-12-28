@@ -10,7 +10,7 @@
 		var getTeamsHierachyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
 		var searchDayViewScheduleUrl = '../api/TeamSchedule/SearchSchedules';
 
-		service.getAvalableHierachy = getAvalableHierachy;
+		service.getAvailableHierarchy = getAvailableHierarchy;
 
 		service.searchSchedules = searchSchedule;
 
@@ -87,7 +87,7 @@
 			});
 		};
 
-		function getAvalableHierachy(dateStr) {
+		function getAvailableHierarchy(dateStr) {
 			var input = getTeamsHierachyUrl + "?date=" + dateStr;
 			return $q(function(resolve, reject) {
 				$http.get(input)

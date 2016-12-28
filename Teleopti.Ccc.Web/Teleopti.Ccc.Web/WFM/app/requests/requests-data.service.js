@@ -132,7 +132,7 @@
 			];
 		};
 
-		this.getAvailableHierachy = function(dateStr) {
+		this.getAvailableHierarchy = function(dateStr) {
 			var input = getTeamsHierachyUrl + "?date=" + dateStr;
 			return $http.get(input);
 		};

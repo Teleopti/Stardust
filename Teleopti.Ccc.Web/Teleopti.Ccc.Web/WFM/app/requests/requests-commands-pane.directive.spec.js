@@ -523,7 +523,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 				}
 			];
 		}
-		this.getAvailableHierachy = function () {
+		this.getAvailableHierarchy = function () {
 			var response = { data: {} };
 			return {
 				then: function (cb) { cb(response); }

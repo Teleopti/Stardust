@@ -16,7 +16,7 @@
 
 		$q.all([
 				toggleService.togglesLoaded,
-				requestsDataService.getAvailableHierachy(moment().format("YYYY-MM-DD"))
+				requestsDataService.getAvailableHierarchy(moment().format("YYYY-MM-DD"))
 				.then(function (response) {
 					var data = response.data;
 					var preSelectedTeamIds = data.LogonUserTeamId ? [data.LogonUserTeamId]:[];
@@ -35,7 +35,7 @@
 				return !vm.isShiftTradeViewActive() || moment(end).diff(moment(start), 'days') <= 60;
 			}
 		}];
-		
+
 		vm.changeSelectedTeams = function(teams) {
 			vm.selectedTeamIds = teams;
 		}
@@ -49,9 +49,9 @@
 			vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
 			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
-		
+
 			vm.dateRangeTemplateType = 'popup';
-			
+
 			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
 			vm.filterEnabled = vm.filterToggleEnabled;
 			vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
@@ -101,7 +101,7 @@
 			return (vm.selectedTabIndex === absenceRequestTabIndex) ||
 				(vm.selectedTabIndex === shiftTradeRequestTabIndex && vm.canApproveOrDenyShiftTradeRequest);
 		}
-		
+
 		function onAgentSearchTermChanged(agentSearchTerm) {
 			vm.agentSearchTerm = agentSearchTerm;
 		}

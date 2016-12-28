@@ -31,7 +31,7 @@
 		vm.availableGroups = [];
 		vm.currentTimezone;
 		vm.availableGroups = [];
-	
+
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.permissionsAndTogglesLoaded = false;
@@ -86,7 +86,7 @@
 
 		vm.commonCommandCallback = function(trackId, personIds) {
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
-			
+
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
 			personIds && vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
@@ -179,7 +179,7 @@
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
 				IsOnlyAbsences: vm.onlyLoadScheduleWithAbsence
-				
+
 			};
 			return params;
 		}
@@ -200,12 +200,12 @@
 		function populateAvailableTimezones(schedules) {
 			vm.availableTimezones = schedules.Schedules.map(function (s) {
 				return s.Timezone;
-			});			
+			});
 		}
-	
+
 		vm.changeTimezone = function (timezone) {
 			vm.currentTimezone = timezone;
-			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), timezone);			
+			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), timezone);
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 
@@ -214,7 +214,7 @@
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 		    vm.resetSchedulePage();
 		};
-	
+
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
 			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
@@ -360,7 +360,7 @@
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				DisplayScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
 				DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
-				
+
 				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
@@ -372,29 +372,29 @@
 				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
 				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
-				
+
 				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
 				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
 				EditAndViewInternalNoteEnabled : toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
-				
+
 				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
 				ShowWeeklyContractTimeEnabled: toggleSvc.WfmTeamSchedule_WeeklyContractTime_39871,
-				
+
 				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
 									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
-				
+
 				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
-				
+
 				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 				ManageScheduleForDistantTimezonesEnabled:  toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
-				
+
 				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039
 			};
 
@@ -419,7 +419,7 @@
 			if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled)
 				vm.resetSchedulePage();
 
-			
+
 			var template = $translate.instant('WFMReleaseNotification');
 			var moduleName = $translate.instant('Teams');
 			var message = template.replace('{0}', moduleName)
@@ -438,7 +438,7 @@
 				result.Agents > 0 && (vm.paginationOptions.pageSize = result.Agents);
 			}),
 
-			teamScheduleSvc.getAvalableHierachy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
+			teamScheduleSvc.getAvailableHierarchy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
 				.then(function (response) {
 					var data = response.data;
 					var preSelectedTeamIds = vm.selectedTeamIds.length > 0 ? vm.selectedTeamIds : [data.LogonUserTeamId];

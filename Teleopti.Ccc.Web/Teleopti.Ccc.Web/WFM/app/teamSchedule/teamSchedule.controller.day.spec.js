@@ -9,7 +9,7 @@ describe("teamschedule controller tests", function() {
 		personSelection,
 		scheduleMgmt;
 
-	beforeEach(function() {		
+	beforeEach(function() {
 		module('externalModules');
 		module('wfm.notice');
 		module('shortcutsService');
@@ -19,7 +19,7 @@ describe("teamschedule controller tests", function() {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
 			$provide.service('Toggle', setupMockAllTrueToggleService);
-			$provide.service('signalRSVC', setupMockSignalRService);			
+			$provide.service('signalRSVC', setupMockSignalRService);
 		});
 	});
 
@@ -45,8 +45,8 @@ describe("teamschedule controller tests", function() {
 		expect(schedules[1].IsSelected).toEqual(false);
 		expect(schedules[0].IsSelected).toEqual(false);
 	}));
-	
-	
+
+
 	it("should keep the activity selection when schedule reloaded", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 		rootScope.$digest();
@@ -163,7 +163,7 @@ describe("teamschedule controller tests", function() {
 
 		expect(searchScheduleCalledTimes).toEqual(1);
 	}));
-		
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
 			$scope: rootScope,
@@ -268,7 +268,7 @@ describe("teamschedule controller tests", function() {
 				}
 			}
 		}
-		
+
 
 		teamScheduleService.getSchedules = function(date, agents) {
 			return {
@@ -276,7 +276,7 @@ describe("teamschedule controller tests", function() {
 					searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
 				}
 			}
-		}	
+		}
 
 		teamScheduleService.getAgentsPerPageSetting = {
 			post: function() {
@@ -286,7 +286,7 @@ describe("teamschedule controller tests", function() {
 			}
 		};
 
-		teamScheduleService.getAvalableHierachy = function(date) {
+		teamScheduleService.getAvailableHierarchy = function(date) {
 			return {
 				then: function (){}
 			}
@@ -318,7 +318,7 @@ describe("teamschedule controller tests", function() {
 					DefaultTimeZoneName: "Etc/UTC",
 					DateFormatLocale: "en-GB"
 				};
-			}			
+			}
 		};
 	}
 

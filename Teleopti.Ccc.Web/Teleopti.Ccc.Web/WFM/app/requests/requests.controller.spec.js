@@ -31,7 +31,7 @@ describe('RequestsControllerTests', function () {
 			$provide.service('requestsDataService',
 				function() {
 					return {
-						getAvailableHierachy: function () {
+						getAvailableHierarchy: function () {
 							var response = { data: {} };
 							return {
 								then: function (cb) { cb(response); }
@@ -46,7 +46,7 @@ describe('RequestsControllerTests', function () {
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
 	}));
-	
+
 	function setUpTarget() {
 		var scope = $rootScope.$new();
 		var target = $controller('RequestsCtrl', {
