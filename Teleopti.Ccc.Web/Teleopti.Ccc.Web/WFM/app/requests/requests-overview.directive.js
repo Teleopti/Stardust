@@ -21,7 +21,6 @@
 
 		vm.filters = [];
 		vm.agentSearchTerm = "";
-		vm.selectedTeamIds = [];
 		vm.reload = reload;
 		vm.sortingOrders = [];
 

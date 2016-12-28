@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$q", "$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
 
-	function requestsController($q, $scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
+	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
@@ -14,19 +14,28 @@
 		var shiftTradeRequestTabIndex = 1;
 		vm.selectedTeamIds = [];
 
-		$q.all([
-				toggleService.togglesLoaded,
-				requestsDataService.getAvailableHierarchy(moment().format("YYYY-MM-DD"))
+		toggleService.togglesLoaded
+			.then(loadBusinessHierarchy)
+			.then(init);
+
+		function loadBusinessHierarchy() {
+			if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
+				return;
+			}
+			return requestsDataService.getAvailableHierarchy(moment().format('YYYY-MM-DD'))
 				.then(function (response) {
 					var data = response.data;
-					var preSelectedTeamIds = data.LogonUserTeamId ? [data.LogonUserTeamId]:[];
+					var preSelectedTeamIds = data.LogonUserTeamId ? [data.LogonUserTeamId] : [];
+					if (preSelectedTeamIds.length > 0) {
+						vm.selectedTeamIds = preSelectedTeamIds;
+					}
+
 					vm.availableGroups = {
 						sites: data.Children,
 						preSelectedTeamIds: preSelectedTeamIds
 					};
-				})
-			])
-			.then(init);
+				});
+		}
 
 		vm.dateRangeCustomValidators = [{
 			key: 'max60Days',
@@ -38,7 +47,7 @@
 
 		vm.changeSelectedTeams = function(teams) {
 			vm.selectedTeamIds = teams;
-		}
+		};
 
 		function init() {
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;

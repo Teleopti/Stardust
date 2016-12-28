@@ -21,7 +21,14 @@ describe('RequestsControllerTests', function () {
 					Wfm_Requests_ApproveDeny_36297: true,
 					Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
 					togglesLoaded: {
-						then: function(cb) { cb(); }
+						then: function (cb) {
+							var ret = cb();
+							return {
+								then: function (cb) {
+									cb(ret);
+								}
+							};
+						}
 					}
 				}
 			});
