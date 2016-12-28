@@ -15,12 +15,11 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
-	[TestFixture, RequestsTest]
+	[TestFixture, RequestsTest, SetCulture("en-US")]
 	public class RequestAllowanceViewModelFactoryTest : ISetup
 	{
 		public IBudgetGroupRepository BudgetGroupRepository;
