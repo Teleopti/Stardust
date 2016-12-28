@@ -40,8 +40,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					var payloadWorkTime = usedAbsences.FirstOrDefault(ua => ua.PayloadId.Equals(absence.Id.GetValueOrDefault()) && ua.BelongsToDate.Equals(currentDate.Date));
 					if (payloadWorkTime != null)
 					{
-						var usedFTEs = fteCollection[i] != 0 ? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes * 1d / TimeDefinition.MinutesPerHour / fteCollection[i] : 0d;
+						var usedFTEs = fteCollection[i] != 0
+							? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes*1d/TimeDefinition.MinutesPerHour/
+							  fteCollection[i]
+							: 0d;
 						absenceDict.Add(absence, usedFTEs);
+					}
+					else
+					{
+						absenceDict.Add(absence, 0);
 					}
 				}
 				var allowance = allowanceCollection[i];

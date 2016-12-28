@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
 	public interface IRequestAllowanceViewModelFactory
 	{
-		BudgetAbsenceAllowanceViewModel CreateBudgetAbsenceAllowanceViewModel(DateOnlyPeriod period, Guid? budgetGroupId);
+		IList<BudgetAbsenceAllowanceDetailViewModel> CreateBudgetAbsenceAllowanceDetailViewModels(DateOnly date, Guid? budgetGroupId);
 
 		IList<BudgetGroupViewModel> CreateBudgetGroupViewModels();
 	}

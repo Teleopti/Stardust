@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 {
-	public class BudgetAbsenceAllowanceViewModel
+	public class BudgetAbsenceAllowanceDetailViewModel
 	{
-		public DateOnly[] Dates { get; set; }
-
-		public AllowanceDetailViewModel[] Details { get; set; }
-	}
-
-	public class AllowanceDetailViewModel
-	{
-		public string Name { get; set; }
-
-		public double[] Values { get; set; }
+		public double Allowance { get; set; }
+		public double TotalAllowance { get; set; }
+		public IDictionary<string, double> UsedAbsencesDictionary { get; set; }
+		public double UsedTotalAbsences { get; set; }
+		public double AbsoluteDifference { get; set; }
+		public Percent RelativeDifference { get; set; }
+		public DateOnly Date { get; set; }
+		public double TotalHeadCounts { get; set; }
 	}
 
 	public class BudgetGroupViewModel
