@@ -401,10 +401,8 @@ namespace Teleopti.Interfaces.Domain
 		bool HasIntraIntervalIssue { get; set; }
 		double IntraIntervalValue { get; set; }
 		IList<int> IntraIntervalSamples { get; set; }
-		double RelativeDifferenceWithShrinkage { get; }
 		double AbsoluteDifference { get; }
 		double CalculatedResource { get; }
-		double RelativeDifference { get; }
 		double FStaff { get; }
 	}
 }
