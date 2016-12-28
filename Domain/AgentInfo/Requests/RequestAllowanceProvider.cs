@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private bool isBudgetGroupNullOrEmpty(IBudgetGroup selectedBudgetGroup)
 		{
-			return string.IsNullOrWhiteSpace(selectedBudgetGroup?.Name);
+			return selectedBudgetGroup?.Id == null;
 		}
 	}
 }
