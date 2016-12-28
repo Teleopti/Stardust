@@ -163,7 +163,7 @@
 		</aside>
 	</div>
 </modal-dialog>
-<modal-dialog show='requestsCommandsPane.budgetAllowanceDetailIsVisible' ng-cloak>
+<modal-dialog show='requestsCommandsPane.budgetAllowanceDetailIsVisible' ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail" ng-cloak>
 	<h1 class="modal-title">{{"BudgetAllowance"|translate}}</h1>
 	<div class="modal-inner-content">
 		<requests-budget-allowance></requests-budget-allowance>
