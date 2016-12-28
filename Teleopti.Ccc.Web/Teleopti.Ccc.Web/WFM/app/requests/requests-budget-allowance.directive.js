@@ -1,7 +1,7 @@
 ﻿"use strict";
 (function () {
 
-	function requestsBudgetAllowanceController($scope) {
+	function requestsBudgetAllowanceController($scope, requestsDataSvc) {
 		var vm = this;
 		vm.budgetGroups = [];
 		vm.budgetAllowanceList = [];
@@ -10,11 +10,17 @@
 		vm.allowanceOption = $scope.allowanceOption;
 
 		function setDefaultOptions() {
-			// Demo data
 			vm.selectedDate = moment().toDate();
 			vm.allowanceOption = "TotalAllowance";
-			vm.budgetGroups = [{ id: 1, name: "Backoffice" }, { id: 2, name: "Frontoffice" }];
-			vm.selectedBudgetGroupId = vm.budgetGroups[0].id;
+
+			requestsDataSvc.getBudgetGroupsPromise().then(function (response) {
+				if (response.data.length > 0) {
+					vm.budgetGroups = response.data;
+					vm.selectedBudgetGroupId = vm.budgetGroups[0].Id;
+				} else {
+					vm.budgetGroups = [];
+				}
+			});
 		}
 
 		vm.loadBudgetAllowance = function () {
@@ -75,6 +81,6 @@
 	};
 
 	angular.module("wfm.requests")
-        .controller("requestsBudgetAllowanceCtrl", ["$scope", requestsBudgetAllowanceController])
-        .directive("requestsBudgetAllowance", requestsBudgetAllowanceDirective);
+		.controller("requestsBudgetAllowanceCtrl", ["$scope", "requestsDataService", requestsBudgetAllowanceController])
+		.directive("requestsBudgetAllowance", requestsBudgetAllowanceDirective);
 })();

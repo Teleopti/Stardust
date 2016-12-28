@@ -1,8 +1,8 @@
 ﻿<div>
 	<span>
 		<md-select ng-model="vm.selectedBudgetGroupId" ng-change="vm.loadBudgetAllowance()" class="pull-left" placeholder="Select a budget group...">
-			<md-option ng-repeat="group in vm.budgetGroups" ng-value="group.id">
-				<span ng-bind="group.name"></span>
+			<md-option ng-repeat="group in vm.budgetGroups" ng-value="group.Id">
+				<span ng-bind="group.Name"></span>
 			</md-option>
 		</md-select>
 	</span>

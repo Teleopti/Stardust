@@ -19,6 +19,7 @@
 		var getLastCaluclatedDateUrl = '../GetLastCaluclatedDateTime';
 		var resourceCalculateUrl = '../TriggerResourceCalculate';
 		var getTeamsHierachyUrl = '../api/Requests/FetchPermittedTeamHierachy';
+		var getBudgetGroupsUrl = "../api/RequestAllowance/budgetGroups";
 
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -30,7 +31,7 @@
 			);
 		};
 
-		this.getSitesPromise = function() {
+		this.getSitesPromise = function () {
 			return $http.get(getSitesUrl);
 		};
 
@@ -43,6 +44,10 @@
 				{ params: requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging) }
 			);
 		};
+
+		this.getBudgetGroupsPromise = function () {
+			return $http.get(getBudgetGroupsUrl);
+		}
 
 		this.replyRequestsPromise = function (selectedRequestIdsAndMessage) {
 			return $http.post(replyRequestsUrl, selectedRequestIdsAndMessage);
@@ -74,17 +79,17 @@
 			return $http.post(denyRequestsUrl, selectedRequestIdsAndMessage);
 		}
 
-		this.getRequestTypes = function() {
+		this.getRequestTypes = function () {
 			return $http.get(requestableAbsenceUrl).then(function (result) {
 				result.data.unshift({ Id: '0', Name: 'Text', ShortName: '' });
 				return result;
 			});
 		}
 
-		this.getLastCaluclatedDateTime = function() {
+		this.getLastCaluclatedDateTime = function () {
 			return $http.get(getLastCaluclatedDateUrl);
 		}
-		this.triggerResourceCalculate = function() {
+		this.triggerResourceCalculate = function () {
 			return $http.get(resourceCalculateUrl);
 		}
 
@@ -106,7 +111,7 @@
 			return statuses;
 		}
 
-		this.getAllBusinessRulesForApproving = function() {
+		this.getAllBusinessRulesForApproving = function () {
 			return [
 				{
 					Id: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator,
@@ -132,7 +137,7 @@
 			];
 		};
 
-		this.getAvailableHierarchy = function(dateStr) {
+		this.getAvailableHierarchy = function (dateStr) {
 			var input = getTeamsHierachyUrl + "?date=" + dateStr;
 			return $http.get(input);
 		};
