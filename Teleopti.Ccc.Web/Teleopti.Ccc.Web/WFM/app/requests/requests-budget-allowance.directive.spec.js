@@ -1,14 +1,13 @@
 ﻿(function () {
 	"use strict";
 
-	fdescribe("[Requests Budget Allowance Directive Controller]",
+	describe("[Requests Budget Allowance Directive Controller]",
 		function () {
 			var $rootScope, $controller, $translate, $filter;
 
-			beforeEach(module("wfm.templates"));
-			beforeEach(module("wfm.requests"));
 			var requestsDataService = new fakeRequestsDataService();
 
+			beforeEach(module("wfm.requests"));
 			beforeEach(inject(function (_$rootScope_, _$controller_, _$translate_, _$filter_) {
 				$rootScope = _$rootScope_;
 				$controller = _$controller_;
