@@ -286,7 +286,6 @@
     <Compile Include="Rta\AgentStateReadModelReader\InAlarmExcludePhoneStateTest.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelReaderTest.cs" />
     <Compile Include="Rta\InfrastructureTestWithOneTimeSetup.cs" />
-    <Compile Include="Requests\PerformanceMeasurement\MeasureAbscenceRequests.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureClosingSnapshotTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureActivityCheckerTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureBatchTest.cs" />

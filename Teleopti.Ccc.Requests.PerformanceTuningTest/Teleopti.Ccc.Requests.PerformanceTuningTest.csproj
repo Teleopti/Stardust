@@ -57,6 +57,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
+    <Compile Include="IntradayAbsenceRequestPerformanceTest.cs" />
     <Compile Include="PerformanceTuningTest.cs" />
     <Compile Include="RequestPerformanceTestAttribute.cs" />
   </ItemGroup>
@@ -94,6 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Prepare200RequestForIntradayTest.sql" />
     <Content Include="Prepare200RequestForTest.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
