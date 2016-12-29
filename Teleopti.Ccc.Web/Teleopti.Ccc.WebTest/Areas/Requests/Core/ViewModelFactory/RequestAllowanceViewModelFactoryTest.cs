@@ -137,6 +137,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			allowanceDetailViewModels[0].UsedAbsencesDictionary.ContainsKey(absence.Name).Should().Be(true);
 		}
 
+		[Test]
+		public void ShouldGetAllowanceDetailsWithDuplicatedAbsenceNames()
+		{
+			var budgetGroup1 = createBudgetGroup("bg1");
+			var customShrinkage = new CustomShrinkage("test", true);
+			var name = "holiday";
+			customShrinkage.AddAbsence(AbsenceFactory.CreateAbsence(name).WithId());
+			customShrinkage.AddAbsence(AbsenceFactory.CreateAbsence(name).WithId());
+			budgetGroup1.AddCustomShrinkage(customShrinkage);
+
+			var allowanceDetailViewModels =
+				RequestAllowanceViewModelFactory.CreateBudgetAbsenceAllowanceDetailViewModels(new DateOnly(2016, 12, 27), budgetGroup1.Id);
+
+			allowanceDetailViewModels[0].UsedAbsencesDictionary.Count.Should().Be(1);
+			allowanceDetailViewModels[0].UsedAbsencesDictionary.ContainsKey(name).Should().Be(true);
+		}
+
 		private IBudgetGroup createBudgetGroup(string name)
 		{
 			var budgetGroup = new BudgetGroup { Name = name }.WithId();

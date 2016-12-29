@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 						: budgetAbsenceAllowanceDetail.RelativeDifference.Value,
 				TotalHeadCounts = budgetAbsenceAllowanceDetail.TotalHeadCounts,
 				UsedTotalAbsences = budgetAbsenceAllowanceDetail.UsedTotalAbsences,
-				UsedAbsencesDictionary =
-					budgetAbsenceAllowanceDetail.UsedAbsencesDictionary.ToDictionary(
-						item => item.Key.Name, item => item.Value),
+				UsedAbsencesDictionary = mapUsedAbsencesDictionary(budgetAbsenceAllowanceDetail.UsedAbsencesDictionary),
 				IsWeekend = DateHelper.IsWeekend(budgetAbsenceAllowanceDetail.Date, culture)
 			}).ToList();
 		}
@@ -88,6 +86,24 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				absencesInBudgetGroup.Add(budgetAbsence);
 			}
 			return absencesInBudgetGroup;
+		}
+
+		private IDictionary<string, double> mapUsedAbsencesDictionary(IDictionary<IAbsence, double> usedAbsencesDictionary)
+		{
+			var usedAbsenceNamesDictionary = new Dictionary<string, double>();
+			foreach (var item in usedAbsencesDictionary)
+			{
+				var key = item.Key.Name;
+				if (usedAbsenceNamesDictionary.ContainsKey(key))
+				{
+					usedAbsenceNamesDictionary[key] += item.Value;
+				}
+				else
+				{
+					usedAbsenceNamesDictionary.Add(key, item.Value);
+				}
+			}
+			return usedAbsenceNamesDictionary;
 		}
 	}
 }
