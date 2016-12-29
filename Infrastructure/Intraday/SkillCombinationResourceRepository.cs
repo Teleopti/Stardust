@@ -159,18 +159,22 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.SetDateTime("endDateTime", period.EndDateTime)
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
 				.List<RawSkillCombinationResource>();
-			foreach (var rawSkillCombinationResource in result)
+
+			var mergedResult = result.GroupBy(x => new { x.SkillCombinationId, x.StartDateTime, x.EndDateTime, x.Resource }).Select(x => new SkillCombinationResourceWithCombinationId { StartDateTime = x.Key.StartDateTime, EndDateTime = x.Key.EndDateTime, Resource = x.Key.Resource, SkillCombinationId = x.Key.SkillCombinationId, SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s) });
+			var outputResult = new List<SkillCombinationResource>();
+			foreach (var skillCombinationResource in mergedResult)
 			{
 				var delta = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
 					.CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResourceDelta] WHERE SkillCombinationId = :skillCombinationId AND StartDateTime = :start AND EndDateTime = :end")
-					.SetParameter("skillCombinationId", rawSkillCombinationResource.SkillCombinationId)
-					.SetParameter("start", rawSkillCombinationResource.StartDateTime)
-					.SetParameter("end", rawSkillCombinationResource.EndDateTime)
+					.SetParameter("skillCombinationId", skillCombinationResource.SkillCombinationId)
+					.SetParameter("start", skillCombinationResource.StartDateTime)
+					.SetParameter("end", skillCombinationResource.EndDateTime)
 					.UniqueResult<int>();
-				rawSkillCombinationResource.Resource -= delta;
+				skillCombinationResource.Resource -= delta;
+				outputResult.Add(skillCombinationResource);
 			}
 
-			return result.GroupBy(x => new { x.SkillCombinationId, x.StartDateTime, x.EndDateTime, x.Resource }).Select(x => new SkillCombinationResource { StartDateTime = x.Key.StartDateTime, EndDateTime = x.Key.EndDateTime, Resource = x.Key.Resource, SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s) });
+			return outputResult;
 		}
 
 		public void PersistChange(SkillCombinationResource skillCombinationResource)
@@ -209,6 +213,11 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		public DateTime EndDateTime;
 		public double Resource;
 		public Guid SkillId;
+	}
+
+	public class SkillCombinationResourceWithCombinationId : SkillCombinationResource
+	{
+		public Guid SkillCombinationId;
 	}
 
 

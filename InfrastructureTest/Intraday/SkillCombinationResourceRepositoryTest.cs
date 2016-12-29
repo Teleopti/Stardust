@@ -138,15 +138,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				StartDateTime = start,
 				EndDateTime = end
 			});
-			Target.PersistChange(new SkillCombinationResource
-			{
-				SkillCombination = new[] { skill, skill2 },
-				StartDateTime = start,
-				EndDateTime = end
-			});
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
-			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
+			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(2d);
 		}
 	}
 
