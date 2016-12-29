@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			if (skillCombinationIds.Any())
 			{
 				session.CreateSQLQuery(@"
-						DELETE FROM ReadModel.DeltaSkillCombinationResource
+						DELETE FROM ReadModel.SkillCombinationResourceDelta
 						WHERE InsertedOn < :InsertedOn
 						AND SkillCombinationId IN (:SkillCombinationIds)")
 					.SetParameter("InsertedOn", insertedOn)
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			foreach (var rawSkillCombinationResource in result)
 			{
 				var delta = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
-					.CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[DeltaSkillCombinationResource] WHERE SkillCombinationId = :skillCombinationId AND StartDateTime = :start AND EndDateTime = :end")
+					.CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResourceDelta] WHERE SkillCombinationId = :skillCombinationId AND StartDateTime = :start AND EndDateTime = :end")
 					.SetParameter("skillCombinationId", rawSkillCombinationResource.SkillCombinationId)
 					.SetParameter("start", rawSkillCombinationResource.StartDateTime)
 					.SetParameter("end", rawSkillCombinationResource.EndDateTime)
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			if (skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id))
 			{
 				_currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
-					.CreateSQLQuery("INSERT INTO [ReadModel].[DeltaSkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn) VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, CURRENT_TIMESTAMP)")
+					.CreateSQLQuery("INSERT INTO [ReadModel].[SkillCombinationResourceDelta] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn) VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, CURRENT_TIMESTAMP)")
 					.SetParameter("SkillCombinationId", id)
 					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
 					.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
