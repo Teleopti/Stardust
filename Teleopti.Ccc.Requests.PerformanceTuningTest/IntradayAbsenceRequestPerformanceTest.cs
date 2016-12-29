@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
-				var script = File.ReadAllText("C:/Development/teleopticcc/Teleopti.Ccc.Requests.PerformanceTuningTest/Prepare200RequestForIntradayTest.sql");
+				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "/Prepare200RequestForIntradayTest.sql";
+				var script = File.ReadAllText(path);
 			
 						using (var command = new SqlCommand(script, connection))
 						{
