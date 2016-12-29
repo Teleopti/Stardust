@@ -1,5 +1,5 @@
 IF OBJECT_ID('dbo.DeltaSkillCombinationResource', 'U') IS NOT NULL 
-  DROP TABLE dbo.Scores; 
+  DROP TABLE dbo.DeltaSkillCombinationResource; 
 
   CREATE TABLE [ReadModel].[SkillCombinationResourceDelta](
 	[SkillCombinationId] [uniqueidentifier] NOT NULL,
