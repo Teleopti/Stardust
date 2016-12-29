@@ -109,6 +109,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
 		}
+
+		[Test]
+		public void ShouldMergeDeltatWithResourceWithMultipleSkills()
+		{
+			var skill = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+			Now.Is("2016-06-16 08:00");
+			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
+
+
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = start,
+					EndDateTime = end,
+					Resource = 3,
+					SkillCombination = new[] {skill, skill2}
+				}
+			};
+			Target.PersistSkillCombinationResource(combinationResources);
+
+			Target.PersistChange(new SkillCombinationResource
+			{
+				SkillCombination = new[] { skill, skill2 },
+				StartDateTime = start,
+				EndDateTime = end
+			});
+			Target.PersistChange(new SkillCombinationResource
+			{
+				SkillCombination = new[] { skill, skill2 },
+				StartDateTime = start,
+				EndDateTime = end
+			});
+
+			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
+			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
+		}
 	}
 
 	
