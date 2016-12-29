@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		bool AbsenceRequestWaitlistingEnabled { get; set; }
 		WaitlistProcessOrder AbsenceRequestWaitlistingProcessOrder { get; set; }
 		int? AbsenceRequestCancellationThreshold { get; set; }
-		int AbsenceRequestExpiredThreshold { get; set; }
+		int? AbsenceRequestExpiredThreshold { get; set; }
 	}
 
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			}
 		}
 
-		public int AbsenceRequestExpiredThreshold
+		public int? AbsenceRequestExpiredThreshold
 		{
 			get { return DomainEntity.AbsenceRequestExpiredThreshold; }
 			set

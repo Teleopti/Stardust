@@ -583,7 +583,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			_selectedModel.AbsenceRequestCancellationThreshold = absenceRequestCancellationThreshold;
 		}
 
-		public void SetAbsenceRequestExpiredThreshold(int absenceRequestExpiredThreshold)
+		public void SetAbsenceRequestExpiredThreshold(int? absenceRequestExpiredThreshold)
 		{
 			_selectedModel.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
 		}

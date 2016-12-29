@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             workflowControlSet.AddAllowedPreferenceShiftCategory(_shiftCategory);
             workflowControlSet.AddAllowedPreferenceAbsence(_absence);
             workflowControlSet.AddAllowedAbsenceForReport(_absence);
+				workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
             workflowControlSet.AutoGrantShiftTradeRequest = true;
             return workflowControlSet;
@@ -133,18 +134,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result[0].AllowedPreferenceActivity, Is.EqualTo(activity));
         }
-
-		[Test]
-	    public void ShouldCreateWithDefaultAbsenceRequestExpiredThresholdValue()
-	    {
-			var item1 = CreateAggregateWithCorrectBusinessUnit();
-			item1.Name = "Test 1";
-			PersistAndRemoveFromUnitOfWork(item1);
-			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
-			var result = repository.LoadAllSortByName();
-			Assert.AreEqual(1, result.Count);
-			Assert.AreEqual(new WorkflowControlSet().AbsenceRequestExpiredThreshold, result[0].AbsenceRequestExpiredThreshold);
-	    }
 
         protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {

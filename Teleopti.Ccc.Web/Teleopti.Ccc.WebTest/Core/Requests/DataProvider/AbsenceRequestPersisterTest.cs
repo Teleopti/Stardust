@@ -508,7 +508,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			, bool usePersonAccountValidator = false, bool autoDeny = false, bool absenceRequestWaitlistEnabled = false)
 		{
 			_workflowControlSet.AbsenceRequestWaitlistEnabled = absenceRequestWaitlistEnabled;
-			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold.GetValueOrDefault();
+			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
 			var absenceRequestProcess = autoGrant
 				? (IProcessAbsenceRequest) new GrantAbsenceRequest()
 				: new PendingAbsenceRequest();
