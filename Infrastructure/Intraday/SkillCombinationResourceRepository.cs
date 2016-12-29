@@ -71,8 +71,13 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					.SetResultTransformer(Transformers.AliasToBean<internalSkillCombination>())
 				.List<internalSkillCombination>();
 
-			var dictionary = result.GroupBy(x => x.Id).ToDictionary(k => string.Join("_", k.Select(x => x.SkillId)), v => v.Key);
+			var dictionary = result.GroupBy(x => x.Id).ToDictionary(k => keyFor(k.Select(x => x.SkillId)), v => v.Key);
 			return dictionary;
+		}
+
+		private static string keyFor(IEnumerable<Guid> skillIds)
+		{
+			return string.Join("_", skillIds.OrderBy(x => x));
 		}
 
 		private class internalSkillCombination
@@ -95,11 +100,12 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 			foreach (var skillCombinationResource in skillCombinationResources)
 			{
+				var key = keyFor(skillCombinationResource.SkillCombination);
 				Guid id;
-				if (!skillCombinations.TryGetValue(string.Join("_", skillCombinationResource.SkillCombination), out id))
+				if (!skillCombinations.TryGetValue(key, out id))
 				{
 					id = persistSkillCombination(skillCombinationResource.SkillCombination);
-					skillCombinations.Add(string.Join("_", skillCombinationResource.SkillCombination), id);
+					skillCombinations.Add(key, id);
 				}
 				
 				
@@ -130,7 +136,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					foreach (var skillCombinationResource in skillCombinationResources)
 					{
 						Guid id;
-						if (skillCombinations.TryGetValue(string.Join("_", skillCombinationResource.SkillCombination), out id))
+						if (skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id))
 						{
 							skillCombinationIds.Add(id);
 						}
@@ -179,7 +185,7 @@ AND SkillCombinationId IN ({AddArrayParameters(deleteCommandForChanges, skillCom
 		{
 			var skillCombinations = loadSkillCombination();
 			Guid id;
-			if (skillCombinations.TryGetValue(string.Join("_", skillCombinationResource.SkillCombination), out id))
+			if (skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id))
 			{
 				((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session
 					.CreateSQLQuery("INSERT INTO [ReadModel].[DeltaSkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn) VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, CURRENT_TIMESTAMP)")
