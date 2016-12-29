@@ -1,7 +1,8 @@
 -- ta bort alla PersonAbsence där vi vill leka då blir det lättare att få godkänt
-declare @start datetime = '2016-03-14 23:00:00' 
-declare @end datetime = '2016-03-17 23:00:00' 
-
+declare @start datetime = '2016-03-13 00:00:00' 
+declare @end datetime = '2016-03-18 00:00:00' 
+declare @startRequest datetime = '2016-03-16 8:00:00' 
+declare @endRequest datetime = '2016-03-16 17:00:00'
 --select * 
 delete 
 from PersonAbsence
@@ -13,7 +14,8 @@ delete from PersonRequest where id not in(select parent from Request )
 -- ladda 200 (lite random ) personer på ett bu - '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
 -- ska ha person period och helst schema under perioden
 -- skapa person request på dom
-select distinct top 500 p.* into #tempPerson 
+
+select distinct top 200 p.* into #tempPerson 
 from person p
 inner join personperiod pp on pp.Parent = p.id
 inner join Team t on t.id = pp.team
@@ -49,7 +51,7 @@ insert into PersonRequest select @PersonRequestId, 1, '3F0886AB-7B25-4E95-856A-0
 '2016-12-24', '2016-12-24',@person_id, 0, 'Performance test', 'of absence request', 0,  '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B', '', GETUTCDATE(),null
 
 select @RequestId = newid()
-INSERT INTO Request SELECT @RequestId, @PersonRequestId, @start, @end
+INSERT INTO Request SELECT @RequestId, @PersonRequestId, @startRequest, @endRequest
 
 INSERT INTO AbsenceRequest SELECT @RequestId, '3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F' -- SEMESTER
 

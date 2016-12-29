@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (_dictionary.TryGetValue(skill, out resourceCalculationPeriod))
 			{
 				var staffingInterval = (SkillStaffingInterval)resourceCalculationPeriod;
-				if (period == new DateTimePeriod(staffingInterval.StartDateTime, staffingInterval.EndDateTime))
+				if (period == new DateTimePeriod(staffingInterval.StartDateTime.Utc(), staffingInterval.EndDateTime.Utc()))
 				{
 					dataForInterval = staffingInterval;
 					return true;
