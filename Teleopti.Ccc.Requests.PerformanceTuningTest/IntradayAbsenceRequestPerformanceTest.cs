@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			WithUnitOfWork.Do(() =>
 							  {
 								  UpdateStaffingLevel.Update(period);
-								  requests = PersonRequestRepository.FindRequestsForDate(new DateTime(2016, 03, 16));
+								  var allRequests = PersonRequestRepository.LoadAll();
+								  requests = allRequests.Where(x => x.RequestedDate.Equals(new DateTime(2016, 03, 16))).ToList();
 							  });
 			//var allRequests = WithUnitOfWork.Get(() => );
 		}

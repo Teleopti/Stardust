@@ -621,14 +621,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return allRequestExceptShiftTrade.Union(allShiftTradeRequests).ToList();
 		}
 
-		public IList<IPersonRequest> FindRequestsForDate(DateTime dateTime)
-		{
-			var date = dateTime.Date;
-			return Session.CreateCriteria<IPersonRequest>()
-				.Add(Restrictions.Between("CreatedOn", date, date.AddDays(1)))
-				.List<IPersonRequest>();
-		}
-
 		private IEnumerable<IPersonRequest> findPersonRequestWithinPeriodExceptShiftTrade(DateTimePeriod period)
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()

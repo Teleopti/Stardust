@@ -210,12 +210,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	        throw new NotImplementedException();
 	    }
 
-		public IList<IPersonRequest> FindRequestsForDate(DateTime dateTime)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
+	    public long CountAllEntities()
 		{
 			throw new NotImplementedException();
 		}
