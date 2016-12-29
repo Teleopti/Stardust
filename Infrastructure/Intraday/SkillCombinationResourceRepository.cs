@@ -107,16 +107,22 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					id = persistSkillCombination(skillCombinationResource.SkillCombination);
 					skillCombinations.Add(key, id);
 				}
-				
-				
-				var row = dt.NewRow();
-				row["SkillCombinationId"] = id;
-				row["StartDateTime"] = skillCombinationResource.StartDateTime;
-				row["EndDateTime"] = skillCombinationResource.EndDateTime;
-				row["Resource"] = skillCombinationResource.Resource;
-				row["InsertedOn"] = insertedOn;
-				dt.Rows.Add(row);
-				
+				var matchingRow = dt.AsEnumerable().FirstOrDefault(row => id == row.Field<Guid>("SkillCombinationId") && skillCombinationResource.StartDateTime == row.Field<DateTime>("StartDateTime"));
+
+				if (matchingRow != null)
+				{
+					matchingRow["Resource"] = (double)matchingRow["Resource"] + 1;
+				}
+				else
+				{
+					var row = dt.NewRow();
+					row["SkillCombinationId"] = id;
+					row["StartDateTime"] = skillCombinationResource.StartDateTime;
+					row["EndDateTime"] = skillCombinationResource.EndDateTime;
+					row["Resource"] = skillCombinationResource.Resource;
+					row["InsertedOn"] = insertedOn;
+					dt.Rows.Add(row);
+				}
 			}
 
 			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
