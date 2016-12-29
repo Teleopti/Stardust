@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IConfigReader ConfigReader;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
+		public IStardustJobFeedback StardustJobFeedback;
 
 		private IList<IPersonRequest> requests;
 
@@ -61,11 +63,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 								  var allRequests = PersonRequestRepository.LoadAll();
 								  requests = allRequests.Where(x => x.RequestedDate.Equals(new DateTime(2016, 03, 16))).ToList();
 							  });
+			//var allRequests = WithUnitOfWork.Get(() => );
 		}
 
 		[Test]
 		public void DoTheThing()
 		{
+			StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");
 			foreach (var request in requests)
 			{
 				AbsenceRequestIntradayFilter.Process(request);
