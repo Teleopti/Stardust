@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		[Test]
-		public void DoTheThing()
+		public void Run200Requests() 
 		{
 			Now.Is("2016-03-16 07:00");
 
