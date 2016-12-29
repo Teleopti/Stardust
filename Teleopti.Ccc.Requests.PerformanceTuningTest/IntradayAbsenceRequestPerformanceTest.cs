@@ -106,7 +106,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 									  AbsenceRequestIntradayFilter.Process(request);
 								  }
 							  });
-			requests.Count(x => x.IsApproved).Should().Be.EqualTo(200);
+
+		//	PersonRequestRepository.Find(requests.Select(x => x.Id.GetValueOrDefault())).Count(x => x.IsApproved).Should().Be.EqualTo(200);
 		}
 	}
 }
