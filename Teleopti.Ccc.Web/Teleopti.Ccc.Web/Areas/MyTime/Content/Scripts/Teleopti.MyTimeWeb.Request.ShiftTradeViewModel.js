@@ -873,7 +873,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		var canvasWidth;
 
 		if (self.isReadyLoaded()) {
-			canvasWidth = $("td.shift-trade-possible-trade-schedule:visible").width();
+			canvasWidth = $("td.shift-trade-my-schedule:visible").width();
 			if (canvasWidth === null) canvasWidth = self.getCanvasWidth();
 		} else {
 			canvasWidth = self.getCanvasWidth();
