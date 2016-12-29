@@ -15388,4 +15388,8 @@ These options are activated:
     <value>No budget group found.</value>
     <comment>Error message in budget allowance of web request</comment>
   </data>
+  <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
+    <value>Select a budget group...</value>
+    <comment>Placeholder for budget group selection</comment>
+  </data>
 </root>

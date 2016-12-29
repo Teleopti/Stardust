@@ -1,14 +1,14 @@
 ﻿"use strict";
 (function () {
-	function requestsBudgetAllowanceController($scope, $translate, $filter, requestsDataSvc) {
+	function requestsBudgetAllowanceController($translate, $filter, requestsDataSvc) {
 		var vm = this;
 		vm.isLoading = false;
 		vm.budgetGroups = [];
 		vm.budgetAllowanceList = [];
 		vm.linkedAbsences = [];
-		vm.selectedDate = $scope.selectedDate;
+		vm.selectedDate = new Date();
 		vm.previousSelectedDate = vm.selectedDate;
-		vm.selectedBudgetGroupId = $scope.selectedBudgetGroupId;
+		vm.selectedBudgetGroupId = "";
 
 		vm.formatAbsenceName = function (absence) {
 			var template = $translate.instant("UsedBy");
@@ -38,30 +38,37 @@
 					vm.budgetAllowanceList = [];
 					if (response.data.length === 0) return;
 
-					// Get absences linked to this allowance
+					// Get absences linked to this budget group
 					vm.linkedAbsences = [];
 					var firstAllowance = response.data[0];
 					for (var absenceAllowance in firstAllowance.UsedAbsencesDictionary) {
-						if (absenceAllowance.indexOf('$') !== 0 &&
+						if (absenceAllowance.indexOf("$") !== 0 &&
 							firstAllowance.UsedAbsencesDictionary.hasOwnProperty(absenceAllowance) &&
 							typeof (firstAllowance.UsedAbsencesDictionary[absenceAllowance]) === "number") {
 							vm.linkedAbsences.push(absenceAllowance);
 						}
 					}
 
+					var fractionSize = 2;
 					var numberFilter = $filter("number");
 					for (var i = 0; i < response.data.length; i++) {
 						var allowance = response.data[i];
+
+						var relativeDifference = allowance.RelativeDifference !== null
+							? numberFilter(allowance.RelativeDifference * 100, fractionSize)
+							: "-";
+						if (relativeDifference !== "∞" && relativeDifference !== "-") {
+							relativeDifference = relativeDifference + "%";
+						}
+
 						var allowanceModel = {
 							date: moment(allowance.Date),
-							totalAllowance: numberFilter(allowance.TotalAllowance, 2),
-							allowance: numberFilter(allowance.Allowance, 2),
-							usedTotal: numberFilter(allowance.UsedTotalAbsences, 2),
-							absoluteDifference: numberFilter(allowance.AbsoluteDifference, 2),
-							relativeDifference: allowance.RelativeDifference !== null
-								? numberFilter(allowance.RelativeDifference * 100, 2) + "%"
-								: "-",
-							totalHeadCounts: numberFilter(allowance.TotalHeadCounts, 2),
+							totalAllowance: numberFilter(allowance.TotalAllowance, fractionSize),
+							allowance: numberFilter(allowance.Allowance, fractionSize),
+							usedTotal: numberFilter(allowance.UsedTotalAbsences, fractionSize),
+							absoluteDifference: numberFilter(allowance.AbsoluteDifference, fractionSize),
+							relativeDifference: relativeDifference,
+							totalHeadCounts: numberFilter(allowance.TotalHeadCounts, fractionSize),
 							isWeekend: allowance.IsWeekend
 						};
 
@@ -78,8 +85,6 @@
 		}
 
 		function initialize() {
-			vm.selectedDate = moment().toDate();
-
 			vm.isLoading = true;
 			requestsDataSvc.getBudgetGroupsPromise().then(function (response) {
 				if (response.data.length > 0) {
@@ -91,12 +96,6 @@
 					vm.isLoading = false;
 				}
 			});
-
-			$scope.selectedDate = vm.selectedDate;
-			$scope.selectedBudgetGroupId = vm.selectedBudgetGroupId;
-			$scope.budgetGroups = vm.budgetGroups;
-			$scope.budgetAllowanceList = vm.budgetAllowanceList;
-			$scope.loadBudgetAllowance = vm.loadBudgetAllowance;
 		}
 
 		initialize();
@@ -104,26 +103,15 @@
 
 	var requestsBudgetAllowanceDirective = function () {
 		return {
-			scope: {
-				selectedDate: "=?",
-				selectedBudgetGroupId: "=?",
-				budgetGroups: "=?",
-				budgetAllowanceList: "=?",
-				loadBudgetAllowance: "&"
-			},
 			restrict: "E",
 			controller: "requestsBudgetAllowanceCtrl",
 			controllerAs: "vm",
 			bindToController: true,
-			templateUrl: "app/requests/html/requests-budget-allowance.tpl.html",
-			link: link
+			templateUrl: "app/requests/html/requests-budget-allowance.tpl.html"
 		};
-
-		function link(scope, elem, attrs, ctrls) {
-		}
 	};
 
 	angular.module("wfm.requests")
-		.controller("requestsBudgetAllowanceCtrl", ["$scope", "$translate", "$filter", "requestsDataService", requestsBudgetAllowanceController])
+		.controller("requestsBudgetAllowanceCtrl", ["$translate", "$filter", "requestsDataService", requestsBudgetAllowanceController])
 		.directive("requestsBudgetAllowance", requestsBudgetAllowanceDirective);
 })();

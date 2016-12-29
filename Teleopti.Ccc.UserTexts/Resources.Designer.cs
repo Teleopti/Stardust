@@ -26609,6 +26609,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a budget group....
+        /// </summary>
+        public static string SelectABudgetGroupThreeDots {
+            get {
+                return ResourceManager.GetString("SelectABudgetGroupThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a category.
         /// </summary>
         public static string SelectACategory {

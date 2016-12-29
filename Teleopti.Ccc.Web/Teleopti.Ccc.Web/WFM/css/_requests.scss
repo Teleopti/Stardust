@@ -610,8 +610,19 @@
             background-color: #FFF3DE;
         }
 
+        .used-by-absence {
+            color: #009688;
+        }
+
         team-schedule-datepicker > span {
             bottom: 6px;
+        }
+
+        .wfm-datepicker-wrap {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            z-index: 100;
         }
     }
 }
