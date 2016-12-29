@@ -13,7 +13,7 @@ delete from PersonRequest where id not in(select parent from Request )
 -- ladda 200 (lite random ) personer på ett bu - '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
 -- ska ha person period och helst schema under perioden
 -- skapa person request på dom
-select distinct top 200 p.* into #tempPerson 
+select distinct top 500 p.* into #tempPerson 
 from person p
 inner join personperiod pp on pp.Parent = p.id
 inner join Team t on t.id = pp.team

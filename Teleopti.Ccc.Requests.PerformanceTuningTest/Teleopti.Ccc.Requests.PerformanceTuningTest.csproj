@@ -96,7 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Prepare200RequestForIntradayTest.sql" />
+    <Content Include="Prepare500RequestForIntradayTest.sql" />
     <Content Include="Prepare200RequestForTest.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
