@@ -62,13 +62,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skill.StaffingThresholds = threshold;
 			var agent = PersonRepository.Has(skill);
 			var wfcs = new WorkflowControlSet().WithId();
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -111,6 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
 			skill2.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill, skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -119,8 +121,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -171,6 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -179,8 +182,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -225,6 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
 			skill2.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill, skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -233,8 +237,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -292,6 +296,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skill2.StaffingThresholds = threshold;
 			skill3.StaffingThresholds = threshold;
 			skill4.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill, skill2, skill3, skill4);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -300,8 +305,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -401,6 +406,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skill2.StaffingThresholds = threshold;
 			skill3.StaffingThresholds = threshold;
 			skill4.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill, skill2, skill3, skill4);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -409,8 +415,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -505,6 +511,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill1.StaffingThresholds = threshold;
 			skill2.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -513,8 +520,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -580,6 +587,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skill1.StaffingThresholds = threshold;
 			skill2.StaffingThresholds = threshold;
 			skill3.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -588,8 +596,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -656,6 +664,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var agent = PersonRepository.Has(skill);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -664,8 +673,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -738,8 +747,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
@@ -773,8 +782,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 12, 1, 2016, 12, 2),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 11, 30),
+				Period = new DateOnlyPeriod(2016, 12, 1, 2020, 12, 2),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 11, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
