@@ -602,16 +602,21 @@
     }
 
     .requests-allowance {
-        .current-date {
-            background-color: #C2DBFF;
-        }
+        #allowance_detail {
+            padding-top: 20px;
+            padding-bottom: 15px;
 
-        .weekend {
-            background-color: #FFF3DE;
-        }
+            .current-date {
+                background-color: #C2DBFF;
+            }
 
-        .used-by-absence {
-            color: #009688;
+            .weekend {
+                background-color: #FFF3DE;
+            }
+
+            .used-by-absence {
+                color: #009688;
+            }
         }
 
         team-schedule-datepicker > span {
