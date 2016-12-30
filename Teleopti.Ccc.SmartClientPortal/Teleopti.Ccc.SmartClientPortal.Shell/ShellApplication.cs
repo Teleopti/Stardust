@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
 	{
-
 		/// <summary>
 		/// Shell application entry point.
 		/// </summary>
@@ -76,13 +75,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private static void Main()
 		{
 			Runtime.AddLicense(
-						"ewQU7qe0psLhrWmZpMDpjEOXpLHLu2jY8P0a9neEjrHLn1mz8wMP5KvA8vca" +
-	"n53Y+PbooW+mt8Ddr2qrprEe9Ju8/AEU8Z7qxQXooW+mt8Ddr2qtprEh5Kvq" +
-	"7QAZvFupprHavUaBpLHLn3Xq7fgZ4K3s9vbpz5DF/Qnas4LR0dP36WzPyNQQ" +
-	"127o+87ou2jq7fgZ4K3s9vbpjEOzs/0U4p7l9/bpjEN14+30EO2s3MKetZ9Z" +
-	"l6TNF+ic3PIEEMidtbrD3bRtr7jK4LR1pvD6DuSn6unaD71GgaSxy5914+30" +
-	"EO2s3OnP566l4Of2GfKe3MKetZ9Zl6TNDOul5vvPuIlZl6Sxy59Zl8DyD+NZ" +
-	"6/0BELxbvNO/7uer5vH2zZ+v3PY=");
+				"ewQU7qe0psLhrWmZpMDpjEOXpLHLu2jY8P0a9neEjrHLn1mz8wMP5KvA8vca" +
+				"n53Y+PbooW+mt8Ddr2qrprEe9Ju8/AEU8Z7qxQXooW+mt8Ddr2qtprEh5Kvq" +
+				"7QAZvFupprHavUaBpLHLn3Xq7fgZ4K3s9vbpz5DF/Qnas4LR0dP36WzPyNQQ" +
+				"127o+87ou2jq7fgZ4K3s9vbpjEOzs/0U4p7l9/bpjEN14+30EO2s3MKetZ9Z" +
+				"l6TNF+ic3PIEEMidtbrD3bRtr7jK4LR1pvD6DuSn6unaD71GgaSxy5914+30" +
+				"EO2s3OnP566l4Of2GfKe3MKetZ9Zl6TNDOul5vvPuIlZl6Sxy59Zl8DyD+NZ" +
+				"6/0BELxbvNO/7uer5vH2zZ+v3PY=");
 
 			XmlConfigurator.Configure();
 
@@ -108,7 +107,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			 {
 				 try
 				 {
-
 					 applicationStarter.LoadShellApplication();
 				 }
 				 catch (Exception exception)
@@ -127,7 +125,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				applicationStarter.LoadShellApplication();
 			}
 #endif
-
 		}
 
 		private static void setDummyPrincipalBeforeContainerRegistrations()
@@ -175,8 +172,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			: base(container)
 		{ }
 
-
 		private static IConfigReader configReader;
+
 		private static bool createAppConfigReader()
 		{
 			var appSettingsOverrides = ServerInstallations.FetchServerInstallations();
@@ -340,7 +337,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			killOpenForms();
 			Application.Exit();
-
 		}
 
 		private static ITogglesActive exceptionSafeTogglesActive()
