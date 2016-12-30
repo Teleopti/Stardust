@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources);
 		IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period);
 		void PersistChange(SkillCombinationResource skillCombinationResource);
+		IDictionary<Guid, DateTime> GetLastCalculatedTime();
 	}
 }

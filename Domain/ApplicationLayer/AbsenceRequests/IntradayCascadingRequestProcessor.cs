@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
-		private readonly IScheduleForecastSkillReadModelValidator _scheduleForecastSkillReadModelValidator;
+		private readonly ISkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider, 
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 			ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills, 
-			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, 
-			IScheduleForecastSkillReadModelValidator scheduleForecastSkillReadModelValidator, ICurrentBusinessUnit currentBusinessUnit)
+			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff,
+			ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -56,13 +56,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_primarySkillOverstaff = primarySkillOverstaff;
-			_scheduleForecastSkillReadModelValidator = scheduleForecastSkillReadModelValidator;
+			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
-			if (!_scheduleForecastSkillReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
+			if (!_skillCombinationResourceReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
 			{
 				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 				return;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Util;
@@ -31,6 +32,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			{
 				combinationResource.Resource -= 1;
 			}
+		}
+
+		public IDictionary<Guid, DateTime> GetLastCalculatedTime()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

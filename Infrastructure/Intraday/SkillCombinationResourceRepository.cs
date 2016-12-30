@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using NHibernate;
 using NHibernate.Transform;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -191,6 +188,19 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					.ExecuteUpdate();
 			}
 
+		}
+
+		public IDictionary<Guid, DateTime> GetLastCalculatedTime()
+		{
+			var result =
+				 _currentUnitOfWorkFactory.Current().Session().CreateSQLQuery(
+							@"select s.BusinessUnit, min(insertedon) as InsertedOn from ReadModel.SkillCombinationResource scr, Skill s
+							where scr.SkillId = s.Id
+						group by s.BusinessUnit")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(MaxIntervalOnBuModel)))
+					  .List<MaxIntervalOnBuModel>();
+
+			return result.ToDictionary(x => x.BusinessUnit, y => y.InsertedOn);
 		}
 
 		protected string AddArrayParameters(SqlCommand sqlCommand, Guid[] array, string paramName)
