@@ -91,6 +91,7 @@
 		WfmTeamSchedule_MakePersonalActivityUnmerged_40252,
 		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 		WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
+		WfmTeamSchedule_SaveFavoriteSearches_42073,
 
 		WfmTeamSchedule_MoveToBaseLicense_41039,
 		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
