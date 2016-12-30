@@ -26,7 +26,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTestWithStaticDependenciesAvoidUse]
-	[TestFixture, SetCulture("en-US")]
+	[TestFixture, SetCulture("en-US")] 
 	[Toggle(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392)] 
 	public class MultiAbsenceRequestsUpdaterTest : ISetup
 	{
