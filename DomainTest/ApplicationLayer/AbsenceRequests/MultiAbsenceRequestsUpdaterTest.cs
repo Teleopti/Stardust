@@ -92,8 +92,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 												 Absence = absence,
 												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
 												 StaffingThresholdValidator = new StaffingThresholdValidator(),
-												 Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+												 Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 												 AbsenceRequestProcess = new GrantAbsenceRequest()
 											 });
 
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 												 Absence = absence,
 												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
 												 StaffingThresholdValidator = new StaffingThresholdValidator(),
-												 Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+												 Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 												 AbsenceRequestProcess = new GrantAbsenceRequest()
 											 });
 			wfcs.AbsenceRequestExpiredThreshold = 15;
@@ -172,8 +172,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -236,8 +236,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -305,8 +305,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -365,8 +365,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -426,8 +426,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -488,8 +488,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -552,8 +552,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -647,6 +647,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skillA = SkillRepository.Has("skillA", activity).WithId().CascadingIndex(1).IsOpenBetween(8,9);
 			var skillB = SkillRepository.Has("skillB", activity).WithId().CascadingIndex(1).IsOpenBetween(8,9);
 			var skillC = SkillRepository.Has("skillB", activity).WithId().CascadingIndex(2).IsOpenBetween(8,9);
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 			SkillDayRepository.Has(skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnly(period.StartDateTime), 0.08));
@@ -667,8 +668,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;

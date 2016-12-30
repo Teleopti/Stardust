@@ -56,8 +56,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestWorkflowControlSetValidator>()
 				.As<IAbsenceRequestWorkflowControlSetValidator>();
 			builder.RegisterType<AbsenceRequestPersonAccountValidator>().As<IAbsenceRequestPersonAccountValidator>();
-			builder.RegisterType<SkillCombinationResourceReadModelValidator>().As<ISkillCombinationResourceReadModelValidator>();
-
 			registerType<IExpiredRequestValidator, ExpiredRequestValidator, ExpiredRequestValidator40274ToggleOff>(builder,
 				Toggles.Wfm_Requests_Check_Expired_Requests_40274);
 			registerType

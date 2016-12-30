@@ -190,19 +190,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		}
 
-		public IDictionary<Guid, DateTime> GetLastCalculatedTime()
-		{
-			var result =
-				 _currentUnitOfWorkFactory.Current().Session().CreateSQLQuery(
-							@"select s.BusinessUnit, min(insertedon) as InsertedOn from ReadModel.SkillCombinationResource scr, Skill s
-							where scr.SkillId = s.Id
-						group by s.BusinessUnit")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(MaxIntervalOnBuModel)))
-					  .List<MaxIntervalOnBuModel>();
-
-			return result.ToDictionary(x => x.BusinessUnit, y => y.InsertedOn);
-		}
-
 		protected string AddArrayParameters(SqlCommand sqlCommand, Guid[] array, string paramName)
 		{
 			var parameters = new string[array.Length];

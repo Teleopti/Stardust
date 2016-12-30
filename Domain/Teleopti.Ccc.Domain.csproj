@@ -194,7 +194,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ScheduleForecastSkillReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandler.cs" />

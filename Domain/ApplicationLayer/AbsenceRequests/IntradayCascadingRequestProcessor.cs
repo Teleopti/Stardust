@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly IScheduleStorage _scheduleStorage;
-		private readonly ISkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
 
@@ -41,8 +40,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 												 ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills,
-												 ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff,
-												 ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, ICurrentBusinessUnit currentBusinessUnit)
+			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, 
+			ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_primarySkillOverstaff = primarySkillOverstaff;
-			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
