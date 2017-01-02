@@ -160,44 +160,20 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			}
 		}
 
-		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
-		{
-			var result = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
-				.CreateSQLQuery(
-					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId from 
-					[ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId WHERE StartDateTime < :endDateTime AND EndDateTime > :startDateTime") // ORDER BY r.SkillCombinationId,r.StartDateTime,c.SkillId
-				.SetDateTime("startDateTime", period.StartDateTime)
-				.SetDateTime("endDateTime", period.EndDateTime)
-				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
-				.List<RawSkillCombinationResource>();
 
-			var mergedResult = result.GroupBy(x => new { x.SkillCombinationId, x.StartDateTime, x.EndDateTime, x.Resource }).Select(x => new SkillCombinationResourceWithCombinationId { StartDateTime = x.Key.StartDateTime, EndDateTime = x.Key.EndDateTime, Resource = x.Key.Resource, SkillCombinationId = x.Key.SkillCombinationId, SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s) });
-			var outputResult = new List<SkillCombinationResource>();
-			foreach (var skillCombinationResource in mergedResult)
-			{
-				var delta = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
-					.CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResourceDelta] WHERE SkillCombinationId = :skillCombinationId AND StartDateTime = :start AND EndDateTime = :end")
-					.SetParameter("skillCombinationId", skillCombinationResource.SkillCombinationId)
-					.SetParameter("start", skillCombinationResource.StartDateTime)
-					.SetParameter("end", skillCombinationResource.EndDateTime)
-					.UniqueResult<int>();
-				skillCombinationResource.Resource -= delta;
-				outputResult.Add(skillCombinationResource);
-			}
 
-			return outputResult;
-		}
-
-        public IEnumerable<SkillCombinationResource> LoadSkillCombinationResourcesInOneQuery(DateTimePeriod period)
+        public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
         {
+	        var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
             var result = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
                 .CreateSQLQuery(
                     @"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource - ISNULL(COUNT(d.SkillCombinationId), 0) as Resource, c.SkillId from 
 [ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId 
 LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId = r.SkillCombinationId AND d.StartDateTime = r.StartDateTime AND d.EndDateTime = r.EndDateTime
- WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId")
+ WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime AND r.BusinessUnit = :bu GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId")
                 .SetDateTime("startDateTime", period.StartDateTime)
                 .SetDateTime("endDateTime", period.EndDateTime)
+				.SetParameter("bu", bu)
                 .SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
                 .List<RawSkillCombinationResource>();
 

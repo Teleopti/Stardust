@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
                 StartDateTime = start,
                 EndDateTime = end
             });
-            var loadedCombinationResources = Target.LoadSkillCombinationResourcesInOneQuery(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
+            var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
             loadedCombinationResources.Single(x => x.StartDateTime.Equals(start)).Resource.Should().Be.EqualTo(1d);
             loadedCombinationResources.Single(x => x.StartDateTime.Equals(start.AddMinutes(15))).Resource.Should().Be.EqualTo(3d);
         }

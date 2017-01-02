@@ -270,8 +270,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 				}
 			}
-			catch (Exception)
+			catch (Exception exp)
 			{
+				logger.Error(exp);
 				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 			}
 		}
