@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeSkillCombinationResourceRepository : ISkillCombinationResourceRepository
 	{
 		private List<SkillCombinationResource> _combinationResources = new List<SkillCombinationResource>();
-		private INow _now;
+		private readonly INow _now;
 
 		public FakeSkillCombinationResourceRepository(INow now)
 		{
@@ -31,19 +31,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 									}).ToList();
 		}
 
-	    public IEnumerable<SkillCombinationResource> LoadSkillCombinationResourcesInOneQuery(DateTimePeriod period)
-	    {
-            var resources = _combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime);
-            return resources.Select(resource => new SkillCombinationResource
-            {
-                StartDateTime = resource.StartDateTime,
-                EndDateTime = resource.EndDateTime,
-                Resource = resource.Resource,
-                SkillCombination = resource.SkillCombination
-            }).ToList();
-        }
+		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResourcesInOneQuery(DateTimePeriod period)
+		{
+			var resources = _combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime);
+			return resources.Select(resource => new SkillCombinationResource
+			{
+				StartDateTime = resource.StartDateTime,
+				EndDateTime = resource.EndDateTime,
+				Resource = resource.Resource,
+				SkillCombination = resource.SkillCombination
+			}).ToList();
+		}
 
-	    public void PersistChange(SkillCombinationResource skillCombinationResource)
+		public void PersistChange(SkillCombinationResource skillCombinationResource)
 		{
 			foreach (var combinationResource in _combinationResources.Where(x => x.StartDateTime == skillCombinationResource.StartDateTime && x.SkillCombination.NonSequenceEquals(skillCombinationResource.SkillCombination)))
 			{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 		}
 
-		public DateTime GetLastCalculatedTime(Guid buId)
+		public DateTime GetLastCalculatedTime()
 		{
 			return _now.UtcDateTime().AddMinutes(-10);  // just have something
 		}

@@ -232,11 +232,12 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 			}
 		}
 
-		public DateTime GetLastCalculatedTime(Guid buId)
+		public DateTime GetLastCalculatedTime()
 		{
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var latest =_currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
 							.CreateSQLQuery("SELECT top(1) InsertedOn from [ReadModel].SkillCombinationResource Where BusinessUnit = :bu order by InsertedOn desc ")
-							.SetParameter("bu", buId)
+							.SetParameter("bu", bu)
 							.UniqueResult<DateTime>();
 
 			return latest;

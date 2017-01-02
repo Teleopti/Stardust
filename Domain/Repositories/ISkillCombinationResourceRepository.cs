@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period);
 		IEnumerable<SkillCombinationResource> LoadSkillCombinationResourcesInOneQuery(DateTimePeriod period);
 		void PersistChange(SkillCombinationResource skillCombinationResource);
-		DateTime GetLastCalculatedTime(Guid buId);
+		DateTime GetLastCalculatedTime();
 	}
 }

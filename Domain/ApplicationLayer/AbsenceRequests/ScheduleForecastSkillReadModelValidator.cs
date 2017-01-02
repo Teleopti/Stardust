@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Intraday;
+﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -18,10 +16,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
-		public bool Validate(Guid buId)
+		public bool Validate()
 		{
 			var bulkExecutionSetting = _requestStrategySettingReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
-			var buStartTime = _skillCombinationResourceRepository.GetLastCalculatedTime(buId);
+			var buStartTime = _skillCombinationResourceRepository.GetLastCalculatedTime();
 			return _now.UtcDateTime() <= buStartTime.AddMinutes(bulkExecutionSetting*2);
 		}
 	}
@@ -29,6 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 	public interface ISkillCombinationResourceReadModelValidator
 	{
-		bool Validate(Guid buId);
+		bool Validate();
 	}
 }
