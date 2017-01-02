@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			try
 			{
-				if (!_skillCombinationResourceReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
+				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 					return;
