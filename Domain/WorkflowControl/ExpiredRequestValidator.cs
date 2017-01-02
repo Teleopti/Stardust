@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -26,15 +27,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			var period = absenceRequest.Period;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dayScheduleForAbsenceReqStart = scheduleRange.ScheduledDay(new DateOnly(period.StartDateTimeLocal(timeZone)));
-			var dayScheduleForAbsenceReqEnd = scheduleRange.ScheduledDay(new DateOnly(period.EndDateTimeLocal(timeZone)));
-
+			var localPeriod = period.ToDateOnlyPeriod(timeZone);
+			var dayScheduleForAbsenceReqStart = scheduleRange.ScheduledDayCollection(localPeriod).ToDictionary(s => s.DateOnlyAsPeriod.DateOnly);
+			
 			period = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(period, person,
-				dayScheduleForAbsenceReqStart,
-				dayScheduleForAbsenceReqEnd, _globalSettingsDataRepository);
+				dayScheduleForAbsenceReqStart[localPeriod.StartDate],
+				dayScheduleForAbsenceReqStart[localPeriod.EndDate], _globalSettingsDataRepository);
 
-			var isValid = validateRequestStartTime(period.StartDateTime, person.PermissionInformation.DefaultTimeZone(),
-				absenceRequestExpiredThreshold.Value);
+			var isValid = validateRequestStartTime(period.StartDateTime, timeZone, absenceRequestExpiredThreshold.Value);
 
 			if (!isValid)
 			{

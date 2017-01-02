@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (var skill in skills)
 				{
-					var intervalPart = ((double) filteredProjections.MinSkillResolution/skill.DefaultResolution);
+					var intervalPart = (double) filteredProjections.MinSkillResolution/skill.DefaultResolution;
 					var traff = periodResource.Value.Resource*intervalPart;
 
 					double skillEfficiencyValue;

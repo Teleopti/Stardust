@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			ruleSet.AddLimiter(new ActivityTimeLimiter(activity, TimeSpan.FromHours(8), OperatorLimiter.Equals));
 			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
-			((PersonPeriod)agentData.Agent.Period(dateOnly)).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			agentData.Agent.AddSkill(skill,dateOnly);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
 			((Person)agentData.Agent).InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			((PersonPeriod)agentData.Agent.Period(dateOnly)).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			agentData.Agent.AddSkill(skill,dateOnly);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			ruleSet.AddLimiter(new ActivityTimeLimiter(activity, TimeSpan.FromHours(8), OperatorLimiter.Equals));
 			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
-			((PersonPeriod)agentData.Agent.Period(dateOnly)).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			agentData.Agent.AddSkill(skill, dateOnly);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			ruleSet.AddLimiter(new ActivityTimeLimiter(activity, TimeSpan.FromHours(8), OperatorLimiter.Equals));
 			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
-			((PersonPeriod)agentData.Agent.Period(dateOnly)).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			agentData.Agent.AddSkill(skill,dateOnly);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			ruleSet.AddLimiter(new ActivityTimeLimiter(activity, TimeSpan.FromHours(8), OperatorLimiter.Equals));
 			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
-			((PersonPeriod)agentData.Agent.Period(dateOnly)).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			agentData.Agent.AddSkill(skill, dateOnly);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 

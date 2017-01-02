@@ -76,8 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             skillDayRepository.Stub(x => x.FindReadOnlyRange(_targetPeriod, new List<ISkill>(), _targetScenario)).IgnoreArguments().Return(new Collection<ISkillDay>());
 
             _targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory);
-            var scheduleDateTimePeriod =
-                new ScheduleDateTimePeriod(_period);
+            var scheduleDateTimePeriod = new ScheduleDateTimePeriod(_period);
             _targetStateLoader.LoadSchedules(scheduleDateTimePeriod);
             _targetStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
             _targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill });

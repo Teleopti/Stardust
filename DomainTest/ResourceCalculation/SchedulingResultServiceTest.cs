@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.IsNotNull(_target);
 
 			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod,null,false);
-			Assert.AreEqual(0.83,
+			Assert.AreEqual(0.99,
 							outDic[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(
 								s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource,
 							0.01);

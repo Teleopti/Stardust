@@ -14,19 +14,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
-		private readonly int _minSkillResolution;
-
 		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode)
 		{
 			_personSkillProvider = personSkillProvider;
-			_minSkillResolution = minSkillResolution;
+			MinSkillResolution = minSkillResolution;
 			PrimarySkillMode = primarySkillMode;
 		}
 
-		public int MinSkillResolution
-		{
-			get { return _minSkillResolution; }
-		}
+		public int MinSkillResolution { get; }
 
 		public void Clear()
 		{
@@ -42,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
 
-			var skills = fetchSkills(person, personDate);//.ForActivity(resourceLayer.PayloadId);
+			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
 			if (skills.Key == "") return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 			_skills.TryAdd(skills.Key,skills.Skills);
@@ -61,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return;
 			}
 
-			var skills = fetchSkills(person, personDate);//.ForActivity(resourceLayer.PayloadId);
+			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
 			if (skills.Key == "") return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
