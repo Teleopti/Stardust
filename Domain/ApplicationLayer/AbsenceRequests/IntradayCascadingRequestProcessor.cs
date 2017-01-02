@@ -35,13 +35,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly ISkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 
 		public IntradayCascadingRequestProcessor(ICommandDispatcher commandDispatcher,
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 												 ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills,
 			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, 
-			ICurrentBusinessUnit currentBusinessUnit)
+			ICurrentBusinessUnit currentBusinessUnit, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -55,17 +56,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_primarySkillOverstaff = primarySkillOverstaff;
 			_currentBusinessUnit = currentBusinessUnit;
+			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
 			try
 			{
-				//if (!_skillCombinationResourceReadModelValidator.Validate())
-				//{
-				//	sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
-				//	return;
-				//}
+				if (!_skillCombinationResourceReadModelValidator.Validate(_currentBusinessUnit.Current().Id.Value))
+				{
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
+					return;
+				}
 
 				//what if the agent changes personPeriod in the middle of the request period?
 

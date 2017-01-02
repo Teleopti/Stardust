@@ -729,42 +729,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void DenyIfReadModelDataIsTooOld()
-		{
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
-			var now = new DateTime(2016, 12, 1, 7, 0, 0);
-
-			var agent = PersonRepository.Has(skill);
-			var wfcs = new WorkflowControlSet().WithId();
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
-			{
-				Absence = absence,
-				PersonAccountValidator = new AbsenceRequestNoneValidator(),
-				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				AbsenceRequestProcess = new GrantAbsenceRequest()
-			});
-			agent.WorkflowControlSet = wfcs;
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
-			
-			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
-
-			Now.Is(now);
-			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(personRequest.BusinessUnit.Id.GetValueOrDefault(), now.AddHours(-3));
-			Target.Process(personRequest, period.StartDateTime);
-			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
-			denyCommand.DenyReason.Should().Contain("Please contact system administrator");
-		}
-
-		[Test]
-		public void DenyIfReadModelDataIsNotTooOldButNoSkillCombinationsInReadModel()
+		public void DenyIfReadModelHasNoSkillCombinations()
 		{
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var scenario = ScenarioRepository.Has("scenario");

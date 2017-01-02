@@ -67,8 +67,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				connection.Close();
 			}
 
-			var now = Now.UtcDateTime().Date;
+			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
+			//var period = new DateTimePeriod(now, now.AddHours(3));
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
 							  {

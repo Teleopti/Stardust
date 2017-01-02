@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -11,7 +10,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeSkillCombinationResourceRepository : ISkillCombinationResourceRepository
 	{
 		private List<SkillCombinationResource> _combinationResources = new List<SkillCombinationResource>();
-		
+		private INow _now;
+
+		public FakeSkillCombinationResourceRepository(INow now)
+		{
+			_now = now;
+		}
+
 		public void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 			_combinationResources = skillCombinationResources.ToList();
@@ -46,9 +51,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 		}
 
-		public IDictionary<Guid, DateTime> GetLastCalculatedTime()
+		public DateTime GetLastCalculatedTime(Guid buId)
 		{
-			throw new NotImplementedException();
+			return _now.UtcDateTime().AddMinutes(-10);  // just have something
 		}
 	}
 }

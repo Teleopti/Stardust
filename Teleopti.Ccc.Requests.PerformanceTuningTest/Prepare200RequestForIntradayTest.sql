@@ -11,6 +11,13 @@ DELETE FROM AbsenceRequest WHERE Request IN (SELECT Id from Request where StartD
 delete from Request where StartDateTime between  @start  and @end and Id not in (select Request from ShiftTradeRequest)
 delete from PersonRequest where id not in(select parent from Request )
 
+-- trunka för att få bort skräp
+
+truncate table [PerfA].[ReadModel].[SkillCombinationResource]
+truncate table [PerfA].[ReadModel].[SkillCombination]
+truncate table [PerfA].[ReadModel].[SkillCombinationResourceDelta]
+truncate table [PerfA].[dbo].[JobStartTime]
+
 -- ladda 200 (lite random ) personer på ett bu - '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
 -- ska ha person period och helst schema under perioden
 -- skapa person request på dom

@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 	{
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_now = now;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination)
@@ -88,6 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		public virtual void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 			var insertedOn = _now.UtcDateTime();
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var skillCombinations = loadSkillCombination();
 
 			var session = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session();
@@ -104,10 +107,11 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				session.Transaction.Begin();
 				var updated = session.CreateSQLQuery(@"
 						UPDATE [ReadModel].[SkillCombinationResource]
-						SET Resource = Resource + :Resource
+						SET Resource = Resource + :Resource, InsertedOn = :InsertedOn
 						WHERE SkillCombinationId = :SkillCombinationId
 						AND StartDateTime = :StartDateTime")
 					.SetParameter("SkillCombinationId", id)
+					.SetParameter("InsertedOn", insertedOn)
 					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
 					.SetParameter("Resource", skillCombinationResource.Resource)
 					.ExecuteUpdate();
@@ -115,13 +119,14 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				if (updated == 0)
 				{
 					session.CreateSQLQuery(@"
-							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn)
-							VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, :InsertedOn)")
+							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
+							VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, :InsertedOn, :BusinessUnit)")
 						.SetParameter("SkillCombinationId", id)
 						.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
 						.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
 						.SetParameter("Resource", skillCombinationResource.Resource)
 						.SetParameter("InsertedOn", insertedOn)
+						.SetParameter("BusinessUnit", bu)
 						.ExecuteUpdate();
 				}
 			}
@@ -221,7 +226,16 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 					.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
 					.ExecuteUpdate();
 			}
+		}
 
+		public DateTime GetLastCalculatedTime(Guid buId)
+		{
+			var latest =_currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
+							.CreateSQLQuery("SELECT top(1) InsertedOn from [ReadModel].SkillCombinationResource Where BusinessUnit = :bu order by InsertedOn desc ")
+							.SetParameter("bu", buId)
+							.UniqueResult<DateTime>();
+
+			return latest;
 		}
 
 		protected string AddArrayParameters(SqlCommand sqlCommand, Guid[] array, string paramName)
@@ -254,13 +268,13 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 	public class SkillCombinationResourceRepositoryEmpty : SkillCombinationResourceRepository
 	{
-		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory) : base(now, currentUnitOfWorkFactory)
-		{
-		}
-
 		public override void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 
+		}
+
+		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentBusinessUnit currentBusinessUnit) : base(now, currentUnitOfWorkFactory, currentBusinessUnit)
+		{
 		}
 	}
 
