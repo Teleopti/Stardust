@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
 			var processAbsenceRequest = new GrantAbsenceRequest();
-			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31),
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2059, 12, 31),
 				_absence, processAbsenceRequest, true);
 			_person = createAndSetupPerson(_startDateTime, _endDateTime, workflowControlSet);
 			_personRequest = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime), true);

@@ -66,11 +66,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfUnderstaffedOnAtLeastOnePrimarySkill()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -81,9 +82,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -102,6 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfAllChecksOk()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
 			var staffingList = new List<SkillStaffingInterval>
@@ -137,14 +139,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void UpdateResourcesAllocationWhenApproved()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
 			var startDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc);
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = startDateTime,
@@ -154,9 +157,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = startDateTime,
@@ -179,11 +182,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfUnderstaffedAfterApplyingChanges()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -193,14 +197,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			// adding three different  changes on the same interval on the same skill
-			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
+			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 				SkillId = _primarySkill1.Id.GetValueOrDefault(),
 				StaffingLevel = -1
 			});
-			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
+			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
@@ -209,9 +213,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -230,11 +234,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfTheReadModelChangeIsOnDifferentInterval()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -245,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 
 			staffingList.Add(
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -255,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 				});
 
-			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
+			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
@@ -272,6 +277,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfUnderstaffedOnNonCascadingSkills()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
@@ -334,6 +340,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfOverstaffedOnNonCascadingSkill()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
@@ -374,9 +381,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = cascadingSkill.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
@@ -395,11 +402,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyWithIntervalsInAgentsTimezone()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -410,9 +418,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -433,6 +441,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfAllSkillAreClosedOrMissingOpenHours()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
@@ -466,6 +475,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveOnIntervalsEvenIfSomeSkillsAreClosed()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
@@ -496,9 +506,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill3.Id.GetValueOrDefault(),
 				OpenHourStatus.WithinOpenHour);
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = skill3.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -518,11 +528,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfNoStaffingIntervalsFoundForASkill()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -540,11 +551,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfForecastWithShrinkageIsZero()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -555,9 +567,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -577,11 +589,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfForecastIsZero()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest(false);
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -592,9 +605,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -614,6 +627,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfRequestIsOvernightWithProperDenyReason()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			var period = new DateTimePeriod(new DateTime(2016, 10, 17, 21, 15, 0, DateTimeKind.Utc),
 				new DateTime(2016, 10, 17, 22, 15, 00, DateTimeKind.Utc));
@@ -634,9 +648,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			request.SetCreated(new DateTime(2016, 10, 17, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(request);
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = primarySkill.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 10, 17, 21, 30, 0, DateTimeKind.Utc),
@@ -647,9 +661,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = primarySkill.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 10, 17, 21, 45, 0, DateTimeKind.Utc),
@@ -672,6 +686,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfReadModelDataIsTooOld()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 			
 			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(((PersonRequest)request).BusinessUnit.Id.GetValueOrDefault(), new DateTime(2016,12, 07, 10, 0, 0, DateTimeKind.Utc));
@@ -686,6 +701,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfReadModelDataIsNotTooOld()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 			var request = createNewRequest();
 
 			var staffingList = new List<SkillStaffingInterval>
@@ -763,7 +779,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var workflowControlSet = new WorkflowControlSet {AbsenceRequestWaitlistEnabled = false};
 			workflowControlSet.SetId(Guid.NewGuid());
-			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2016, 01, 01), new DateOnly(2016, 12, 31));
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2016, 01, 01), new DateOnly(2059, 12, 31));
 
 			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
 			{
@@ -826,5 +842,3 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 	}
 }
-
-	

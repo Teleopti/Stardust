@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																					IShiftCategory category,
 																					IScenario scenario)
 		{
-			IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
+			IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.StartDateTimeLocal(agent.PermissionInformation.DefaultTimeZone())));
 			ass.AddPersonalActivity(activity, period);
 			ass.AddActivity(activity, period);
 			ass.SetShiftCategory(category);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var activity = ActivityFactory.CreateActivity("sdf");
 			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
-			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 			ass.AddPersonalActivity(activity, period);
 			ass.AddActivity(activity, period);
 			ass.SetShiftCategory(category);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 															 IPerson person,
 															 DateTimePeriod period)
 		{
-			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 			return ass;
 		}
 
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																		DateTimePeriod period,
 																		IScenario scenario)
 		{
-			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 			ass.AddPersonalActivity(activity, period);
 			return ass;
 		}
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																		DateTimePeriod period,
 																		IScenario scenario)
 		{
-			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTime));
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
 				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
 			ass.AddOvertimeActivity(activity, period, multiplicatorDefinitionSet);

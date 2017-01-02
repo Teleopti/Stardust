@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			_personRequestRepository = new FakePersonRequestRepository();
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
 			_workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01),
-				new DateTime(2016, 12, 31), _absence).WithId();
+				new DateTime(2059, 12, 31), _absence).WithId();
 			_absenceRequestWaitlistProvider = new AbsenceRequestWaitlistProvider(_personRequestRepository);
 		}
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			var baseCreatedOn = new DateTime(2016, 01, 01);
 
 			var workflowControlSetProcessWaitlistBySeniority = createWorkFlowControlSet(
-				new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), _absence,
+				new DateTime(2016, 01, 01), new DateTime(2059, 12, 31), _absence,
 				WaitlistProcessOrder.BySeniority).WithId();
 			var personContract = PersonContractFactory.CreatePersonContract();
 			var team = TeamFactory.CreateTeamWithId("Beijing");

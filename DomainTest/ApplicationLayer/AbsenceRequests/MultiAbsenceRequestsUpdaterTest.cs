@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 
 			var wfcs = new WorkflowControlSet().WithId();
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 											 {
 												 Absence = absence,
 												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-			Target.UpdateAbsenceRequest(new List<Guid>() {personRequest.Id.GetValueOrDefault()});
+			Target.UpdateAbsenceRequest(new List<Guid> {personRequest.Id.GetValueOrDefault()});
 			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonClosedPeriod);
 		}
 
@@ -92,8 +92,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 												 Absence = absence,
 												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
 												 StaffingThresholdValidator = new StaffingThresholdValidator(),
-												 Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+												 Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 												 AbsenceRequestProcess = new GrantAbsenceRequest()
 											 });
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-			Target.UpdateAbsenceRequest(new List<Guid>() {personRequest.Id.GetValueOrDefault()});
+			Target.UpdateAbsenceRequest(new List<Guid> {personRequest.Id.GetValueOrDefault()});
 			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonAlreadyAbsent);
 		}
 
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 												 Absence = absence,
 												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
 												 StaffingThresholdValidator = new StaffingThresholdValidator(),
-												 Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+												 Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 												 AbsenceRequestProcess = new GrantAbsenceRequest()
 											 });
 			wfcs.AbsenceRequestExpiredThreshold = 15;
@@ -172,8 +172,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -231,13 +231,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = new WorkflowControlSet().WithId();
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -300,13 +300,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = new WorkflowControlSet().WithId();
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -360,13 +360,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = new WorkflowControlSet().WithId();
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -421,13 +421,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = new WorkflowControlSet().WithId();
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -483,13 +483,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = new WorkflowControlSet().WithId();
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -547,13 +547,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = new WorkflowControlSet().WithId();
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
@@ -598,7 +598,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldDenyIfDenyFromToPeriodOverridesAutoGrantRollingPeriod()
 		{
-			var scenario = ScenarioRepository.Has("scnearioName");
+			Now.Is(DateTime.Now);
+			ScenarioRepository.Has("scnearioName");
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var tomorrow = DateOnly.Today.AddDays(1);
 			var theDayAfterTomorrow = DateOnly.Today.AddDays(2);
@@ -606,7 +607,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var wfcs = new WorkflowControlSet().WithId();
 			var openForRequestsPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(30));
 
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod
 			{
 				BetweenDays = new MinMax<int>(0, 1),
 				Absence = absence,
@@ -616,7 +617,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
@@ -641,6 +642,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldApproveOnlyIfShovel()
 		{
+			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
@@ -663,13 +665,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent3, period, new ShiftCategory("category"), scenario));
 
 			var wfcs = new WorkflowControlSet().WithId();
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2020, 12, 30),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;

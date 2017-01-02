@@ -9,15 +9,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static WorkflowControlSet CreateWorkFlowControlSet(IAbsence absence,
 			IProcessAbsenceRequest processAbsenceRequest, bool waitlistingIsEnabled)
 		{
-			var year = DateTime.Now.Year;
-			var startDate = new DateTime(year, 1, 1, 00, 00, 00, DateTimeKind.Utc);
-			var endDate = new DateTime(year, 12, 31, 00, 00, 00, DateTimeKind.Utc);
+			var startDate = new DateTime(2016, 1, 1, 00, 00, 00, DateTimeKind.Utc);
+			var endDate = new DateTime(2016, 12, 31, 00, 00, 00, DateTimeKind.Utc);
 
 			var workflowControlSet = new WorkflowControlSet {AbsenceRequestWaitlistEnabled = waitlistingIsEnabled};
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				AbsenceRequestProcess = processAbsenceRequest,

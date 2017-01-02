@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -383,7 +385,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
-			extractor.ViewpointDate = DateOnly.Today;
+			extractor.ViewpointDate = ServiceLocatorForEntity.Now.LocalDateOnly();
 
 			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, absenceRequest.Person.PermissionInformation.Culture(), absenceRequest.Person.PermissionInformation.UICulture());
 			return new AbsenceRequestOpenPeriodMerger().Merge(openPeriods);
