@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 
 				//what if the agent changes personPeriod in the middle of the request period?
+				//what if the request is 8:00-8:05, only a third of a resource should be removed
 
 				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
 				if (!combinationResources.Any())
