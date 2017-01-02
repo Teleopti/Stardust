@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -41,16 +42,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public ICommonAgentNameProvider CommonAgentNameProvider;
 		public ILoggedOnUser LoggedOnUser;
 		public IUserCulture UserCulture;
+		public MutableNow Now;
 
 		[Test]
 		public void TargetShouldNotBeNull()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			Target.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldNotHandleApproveCommandWithInvalidRequestId()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var result = Target.ApproveRequests(new List<Guid> { new Guid() }, string.Empty);
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(0);
 		}
@@ -58,6 +64,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldInvokeApproveAbsenceFromRequestApprovalServiceWithValidAbsenceRequest()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
@@ -79,6 +87,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldApproveAbsenceRequestWithPendingStatus()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
@@ -100,6 +110,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldApproveAbsenceRequestWithReplyMessage()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
@@ -123,6 +135,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldApproveAllAbsenceRequestsWithPendingStatus()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
@@ -156,6 +170,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldSendCommandForApproveWithValidators()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var requestIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
 			var cmdDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
@@ -176,6 +192,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldNotHandleDenyCommandWithInvalidRequestId()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var result = Target.DenyRequests(new List<Guid> { new Guid() }, string.Empty);
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(0);
 		}
@@ -183,6 +201,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldDenyAbsenceRequestWithPendingStatus()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
@@ -197,6 +217,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldDenyAbsenceRequestWithReplyMessage()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
@@ -213,6 +235,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldDenyAllAbsenceRequestsWithPendingStatus()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 			var personRequest1 = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
@@ -232,6 +256,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldManuallyDenyWaitlistRequest()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
@@ -250,6 +276,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldManuallyApproveWaitlistedRequests()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
@@ -278,6 +306,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldReturnWriteProtectedMsgWhenAttemptingToApproveAnAbsenceWhereScheduleIsWriteProtected()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var writeProtectErrorMessage = getWriteProtectMessage(person, dateTimePeriod.StartDateTime);
@@ -291,6 +321,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldNotReturnWriteProtectedMsgWhenAttemptingToApproveAnAbsenceWhereScheduleIsWriteProtected()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var writeProtectErrorMessage = getWriteProtectMessage(person, dateTimePeriod.StartDateTime);
@@ -303,6 +335,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldReturnWriteProtectedMsgWhenAttemptingToCancelAnAbsenceWhereScheduleIsWriteProtected()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var writeProtectErrorMessage = getWriteProtectMessage(person, dateTimePeriod.StartDateTime);
@@ -316,6 +350,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldNotReturnWriteProtectedMsgWhenAttemptingToCancelAnAbsenceWhereScheduleIsWriteProtected()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var writeProtectErrorMessage = getWriteProtectMessage(person, dateTimePeriod.StartDateTime);
@@ -330,6 +366,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldNotCancelPersonRequestWhenNoPersonAbsences()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var personRequest = createAcceptedRequest(person, dateTimePeriod, false);
@@ -344,6 +382,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldCancelPersonRequest()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			setupStateHolderProxy();
 
 			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
@@ -360,6 +400,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldCancelPersonRequestWithReplyMessage()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			setupStateHolderProxy();
 
 			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
@@ -377,6 +419,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldRunRequestWaitlist()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			setupStateHolderProxy();
 			var period = new DateTimePeriod(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
 			var result = Target.RunWaitlist(period);
@@ -389,6 +433,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldReplyRequest()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			const string originalMessage = "Original message\r\nLine 1\r\nLine 2";
 			const string replyMessage = "Reply message\r\nLine A\r\nLine B";
 
@@ -412,6 +458,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldDoNothingWhenReplyRequestWithEmptyMessage()
 		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
 			const string originalMessage = "Original message\r\nLine 1\r\nLine 2";
 
 			setupStateHolderProxy();
