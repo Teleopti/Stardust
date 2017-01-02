@@ -26,7 +26,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 									}).ToList();
 		}
 
-		public void PersistChange(SkillCombinationResource skillCombinationResource)
+	    public IEnumerable<SkillCombinationResource> LoadSkillCombinationResourcesInOneQuery(DateTimePeriod period)
+	    {
+            var resources = _combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime);
+            return resources.Select(resource => new SkillCombinationResource
+            {
+                StartDateTime = resource.StartDateTime,
+                EndDateTime = resource.EndDateTime,
+                Resource = resource.Resource,
+                SkillCombination = resource.SkillCombination
+            }).ToList();
+        }
+
+	    public void PersistChange(SkillCombinationResource skillCombinationResource)
 		{
 			foreach (var combinationResource in _combinationResources.Where(x => x.StartDateTime == skillCombinationResource.StartDateTime && x.SkillCombination.NonSequenceEquals(skillCombinationResource.SkillCombination)))
 			{

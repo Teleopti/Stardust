@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -142,7 +143,55 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(2d);
 		}
-	}
+
+        [Test]
+        public void ShouldMergeDeltatWithResourceWithMultipleSkillsInOneQuery()
+        {
+            var skill = Guid.NewGuid();
+            var skill2 = Guid.NewGuid();
+            Now.Is("2016-06-16 08:00");
+            var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
+            var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
+
+
+            var combinationResources = new List<SkillCombinationResource>
+            {
+                new SkillCombinationResource
+                {
+                    StartDateTime = start,
+                    EndDateTime = end,
+                    Resource = 3,
+                    SkillCombination = new[] {skill, skill2}
+                },
+                new SkillCombinationResource
+                {
+                    StartDateTime = start.AddMinutes(15),
+                    EndDateTime = end.AddMinutes(15),
+                    Resource = 3,
+                    SkillCombination = new[] {skill, skill2}
+                }
+            };
+            Target.PersistSkillCombinationResource(combinationResources);
+
+            Target.PersistChange(new SkillCombinationResource
+            {
+                SkillCombination = new[] { skill, skill2 },
+                StartDateTime = start,
+                EndDateTime = end
+            });
+            Thread.Sleep(5);
+            Target.PersistChange(new SkillCombinationResource
+            {
+                SkillCombination = new[] { skill, skill2 },
+                StartDateTime = start,
+                EndDateTime = end
+            });
+            var loadedCombinationResources = Target.LoadSkillCombinationResourcesInOneQuery(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
+            loadedCombinationResources.Single(x => x.StartDateTime.Equals(start)).Resource.Should().Be.EqualTo(1d);
+            loadedCombinationResources.Single(x => x.StartDateTime.Equals(start.AddMinutes(15))).Resource.Should().Be.EqualTo(3d);
+        }
+
+    }
 
 	
 }
