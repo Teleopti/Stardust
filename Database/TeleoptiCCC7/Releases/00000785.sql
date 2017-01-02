@@ -1,0 +1,1 @@
+ALTER TABLE readmodel.skillCombinationResource ADD BusinessUnit uniqueIdentifier Not null default '00000000-0000-0000-0000-000000000000'
