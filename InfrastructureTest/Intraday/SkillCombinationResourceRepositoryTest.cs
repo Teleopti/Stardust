@@ -153,7 +153,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
             var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
-
             var combinationResources = new List<SkillCombinationResource>
             {
                 new SkillCombinationResource
