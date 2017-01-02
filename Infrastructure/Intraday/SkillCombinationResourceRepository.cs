@@ -94,7 +94,11 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			var skillCombinations = loadSkillCombination();
 
 			var session = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session();
-			foreach (var skillCombinationResource in skillCombinationResources)
+            session.CreateSQLQuery(@"DELETE FROM [ReadModel].[SkillCombinationResource] WHERE BusinessUnit = :BUId OR BusinessUnit = '00000000-0000-0000-0000-000000000000'")
+                    .SetParameter("BUId", bu)
+                    .ExecuteUpdate();
+
+            foreach (var skillCombinationResource in skillCombinationResources)
 			{
 				var key = keyFor(skillCombinationResource.SkillCombination);
 				Guid id;
