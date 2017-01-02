@@ -4,7 +4,6 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -14,6 +13,8 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -213,10 +214,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.Forecast);
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.QueueStatistics);
 
-			var user = MockRepository.GenerateMock<IPerson>();
-			var permission = MockRepository.GenerateMock<IPermissionInformation>();
-			user.Stub(x => x.PermissionInformation).Return(permission);
-			permission.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
+			var user = new Person();
+			user.PermissionInformation.AddApplicationRole(new ApplicationRole
+			{
+				AvailableData = new AvailableData {AvailableDataRange = AvailableDataRangeOption.Everyone}
+			});
 			var dataSource = SetupFixtureForAssembly.DataSource;
 			JobHelper jobHelper = null;
 			//var jobHelper = new JobHelperForTest(null, null, new LogOnHelperFake(dataSource, user));
