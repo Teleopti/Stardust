@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			try
 			{
-				if (!_skillCombinationResourceReadModelValidator.Validate(_currentBusinessUnit.Current().Id.Value))
+				if (!_skillCombinationResourceReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
 				{
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 					return;
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				//what if the agent changes personPeriod in the middle of the request period?
 
-				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResourcesInOneQuery(personRequest.Request.Period).ToArray();
+				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
 				if (!combinationResources.Any())
 				{
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
