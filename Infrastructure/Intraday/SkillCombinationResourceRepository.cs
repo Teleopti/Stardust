@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -103,11 +104,12 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				session.Transaction.Begin();
 				var updated = session.CreateSQLQuery(@"
 						UPDATE [ReadModel].[SkillCombinationResource]
-						SET Resource = Resource + 1
+						SET Resource = Resource + :Resource
 						WHERE SkillCombinationId = :SkillCombinationId
 						AND StartDateTime = :StartDateTime")
 					.SetParameter("SkillCombinationId", id)
 					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
+					.SetParameter("Resource", skillCombinationResource.Resource)
 					.ExecuteUpdate();
 
 				if (updated == 0)
@@ -134,15 +136,18 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				}
 			}
 
-			if (skillCombinationIds.Any())
+			foreach (var ids in skillCombinationIds.Batch(1000))
 			{
-				session.CreateSQLQuery(@"
+				if (skillCombinationIds.Any())
+				{
+					session.CreateSQLQuery(@"
 						DELETE FROM ReadModel.SkillCombinationResourceDelta
 						WHERE InsertedOn < :InsertedOn
 						AND SkillCombinationId IN (:SkillCombinationIds)")
-					.SetParameter("InsertedOn", insertedOn)
-					.SetParameterList("SkillCombinationIds", skillCombinationIds)
-					.ExecuteUpdate();
+						.SetParameter("InsertedOn", insertedOn)
+						.SetParameterList("SkillCombinationIds", ids)
+						.ExecuteUpdate();
+				}
 			}
 		}
 
