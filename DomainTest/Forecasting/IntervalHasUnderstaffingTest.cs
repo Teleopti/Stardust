@@ -6,7 +6,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
     [TestFixture]
-	[Ignore("MockIgnore")]
 	public class IntervalHasUnderstaffingTest
     {
         private IntervalHasUnderstaffing target;

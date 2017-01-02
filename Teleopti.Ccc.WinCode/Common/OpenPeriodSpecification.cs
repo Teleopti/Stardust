@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public override bool IsSatisfiedBy(DateOnlyPeriod obj)
         {
-            return  obj.DayCollection().Count <= _maxNumberOfDays;
+            return  obj.DayCount() <= _maxNumberOfDays;
         }
     }
 }

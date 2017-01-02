@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-	public class FakeSkillStaffPeriodHolder :ISkillStaffPeriodHolder
+	public class FakeSkillStaffPeriodHolder :ISkillStaffPeriodHolder, IShovelResourceData
 	{
 		public void SetDictionary(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary)
 		{
@@ -56,6 +56,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		public IDictionary<ISkill, ISkillStaffPeriodDictionary> SkillStaffPeriodDictionary(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
 		{
 			throw new NotImplementedException();
 		}

@@ -44,25 +44,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest =  null)
 		{
-			IScheduleRange totalScheduleRange = _scheduleDictionary[person];
-			IScheduleDay dayScheduleForAbsenceReqStart =
-				totalScheduleRange.ScheduledDay(
-					new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
-			IScheduleDay dayScheduleForAbsenceReqEnd =
-				totalScheduleRange.ScheduledDay(
-					new DateOnly(period.EndDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
-
+			var totalScheduleRange = _scheduleDictionary[person];
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+			var dayScheduleForAbsence = totalScheduleRange.ScheduledDayCollection(dateOnlyPeriod).ToDictionary(s => s.DateOnlyAsPeriod.DateOnly);
+			
 			// To be more efficient, we only return the first schedule day for each personal account for NewPersonAccountRule
+			var firstDayOfAbsence = dayScheduleForAbsence[dateOnlyPeriod.StartDate];
 			var scheduleDaysForCheckingAccount 
-				= getScheduleDaysForCheckingAccount(absence, dayScheduleForAbsenceReqStart, totalScheduleRange, person, period).ToList();
+				= getScheduleDaysForCheckingAccount(absence, firstDayOfAbsence, totalScheduleRange, person, period).ToList();
 
-			IList<IBusinessRuleResponse> ret = new List<IBusinessRuleResponse>();
+			var ret = new List<IBusinessRuleResponse>();
 
 			//adjust the full day absence period start/end if there are shifts that already exist within the day schedule or if
 			//there is a global setting that specifies the length of a full day absence
-			period = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(period, person, dayScheduleForAbsenceReqStart, dayScheduleForAbsenceReqEnd, _globalSettingsDataRepository);
+			period = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(period, person,
+				firstDayOfAbsence, dayScheduleForAbsence[dateOnlyPeriod.EndDate],
+				_globalSettingsDataRepository);
 
-			if (dayScheduleForAbsenceReqStart.FullAccess)
+			if (firstDayOfAbsence.FullAccess)
 			{
 				var layer = new AbsenceLayer(absence, period);
 				var personAbsence = new PersonAbsence(person, _scenario, layer);
@@ -136,8 +135,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return new[] {dayScheduleForAbsenceReqStart};
 			}
 
-			var days = _checkingPersonalAccountDaysProvider.GetDays(absence, person, period).ToList();
-			if (days.Count == 1)
+			var days = _checkingPersonalAccountDaysProvider.GetDays(absence, person, period).ToArray();
+			if (days.Length == 1)
 			{
 				return new[] {dayScheduleForAbsenceReqStart};
 			}

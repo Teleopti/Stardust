@@ -7,7 +7,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
     [TestFixture]
-	[Ignore("MockIgnore")]
 	public class DayHasSeriousUnderstaffingTest
     {
         private DayHasSeriousUnderstaffing target;

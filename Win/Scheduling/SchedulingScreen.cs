@@ -954,7 +954,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//leave this at the top of this method
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
 			toolStripProgressBar1.Value = 0;
-			toolStripProgressBar1.Maximum = _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection().Count + 19;
+			toolStripProgressBar1.Maximum = _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCount() + 19;
 			toolStripProgressBar1.Visible = true;
 
 			_splitContainerAdvMain.Visible = false;
@@ -3231,7 +3231,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
 				scheduleDays.Select(x => x.Person).Distinct().Count(),
-				selectedPeriod.DayCollection().Count(),
+				selectedPeriod.DayCount(),
 				() => runBackgroundWorkerScheduling(e));
 			_undoRedo.CommitBatch();
 

@@ -11,7 +11,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Cascading;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -20,6 +22,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -100,7 +103,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			_target = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory,
 				getAbsenceRequestProcessor(_person, _personRequest), _personRequestRepository,
-				_writeProtectedScheduleCommandValidator, _messageBroker, new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), new Now()));
+				_writeProtectedScheduleCommandValidator, _messageBroker,
+				new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(),
+					new MutableNow(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc))));
 		}
 
 		private void prepareTestData()
@@ -176,11 +181,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			_target = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory,
 				getAbsenceRequestProcessor(_person, _personRequest), _personRequestRepository,
-				_writeProtectedScheduleCommandValidator, _messageBroker, new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), new Now()));
+				_writeProtectedScheduleCommandValidator, _messageBroker,
+				new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(),
+					new MutableNow(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc))));
 
 			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] {personRequest2.Id.GetValueOrDefault()};
+			_event.PersonRequestIdList = new[] {personRequest2.Id.GetValueOrDefault()};
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);
 			personRequest2.IsDenied.Should().Be.True();
@@ -217,7 +224,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		[Ignore("MockIgnore")]
 		public void ShouldApproveAbsenceRequestCheckByIntradayWithEnoughStaffing()
 		{
 			setup();
@@ -306,7 +312,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					resourceOptimizationHelper,
 					budgetGroupAllowanceSpecification,
 					new FakeScheduleDifferenceSaver(_scheduleRepository),
-					_personAccountUpdaterDummy, toggleManager, new AbsenceRequestValidatorProvider(toggleManager, new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), new Now())));
+					_personAccountUpdaterDummy, toggleManager,
+					new AbsenceRequestValidatorProvider(toggleManager,
+						new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(),
+							new MutableNow(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc)))));
 
 			return absenceRequestStatusUpdater;
 		}
@@ -357,9 +366,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private PersonRequest createPendingAbsenceRequest(IPerson person, IAbsence absence,
 			DateTimePeriod requestDateTimePeriod, bool isPending)
 		{
-			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
-
-			personRequest.SetId(Guid.NewGuid());
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
 			if (isPending)
 			{
 				personRequest.ForcePending();
@@ -401,8 +408,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private static ISkill createSkillWithOpenHours()
 		{
-			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
-			skill.SetId(new Guid());
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			foreach (var workload in skill.WorkloadCollection)
 			{
 				foreach (var templateWeek in workload.TemplateWeekCollection)
@@ -423,13 +429,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillStaffPeriod.Stub(x => x.RelativeDifference).Return(relativeDifference);
 			skillStaffPeriod.Stub(x => x.Period).Return(skillDateTimePeriod);
 
-			var skillStaffPeriodHolder = MockRepository.GenerateMock<ISkillStaffPeriodHolder, IShovelResourceData>();
-			skillStaffPeriodHolder.Stub(
-				x => x.SkillStaffPeriodList(new List<ISkill> { skill }, skillDateTimePeriod)).IgnoreArguments()
-				.Return(new List<ISkillStaffPeriod>
-				{
-					skillStaffPeriod
-				});
+			var skillStaffPeriodHolder = new FakeSkillStaffPeriodHolder();
+			skillStaffPeriodHolder.SetDictionary(new SkillSkillStaffPeriodExtendedDictionary { {skill,new SkillStaffPeriodDictionary(skill) {skillStaffPeriod} } });
 			_scheduleStateHolder.SetSkillStaffPeriodHolder(skillStaffPeriodHolder);
 		}
 	}

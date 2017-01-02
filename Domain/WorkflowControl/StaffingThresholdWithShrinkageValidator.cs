@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequest.Person.PermissionInformation.Culture();
 			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
-			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCollection().Count;
+			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCount();
 
 			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
 

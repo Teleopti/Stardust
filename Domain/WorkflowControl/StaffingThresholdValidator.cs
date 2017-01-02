@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -30,9 +29,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var result = new UnderstaffingDetails();
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-			//var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
-			//var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
-			var date = new DateOnly(absenceRequest.Period.StartDateTime);
+			var date = new DateOnly(absenceRequest.Period.StartDateTimeLocal(timeZone));
 			var personSkillProvider = new PersonSkillProvider();
 			var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, date);
 
@@ -69,10 +66,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
-			var date = new DateOnly(absenceRequest.Period.StartDateTime);
-			var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, date);
+			var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, localPeriod.StartDate);
 
-			if (!isSkillOpenForDateOnly(date, skills.Skills))
+			if (!isSkillOpenForDateOnly(localPeriod.StartDate, skills.Skills))
 				return result;
 
 			var datesToResourceCalculate = absenceRequest.Period.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
@@ -90,8 +86,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var absenceLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(absenceRequest.Absence);
 				absenceLayerCollection.AddRange(absenceLayers);
 			}
-
-
+			
 			foreach (var absenceLayer in absenceLayerCollection)
 			{
 				var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
@@ -113,13 +108,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
 					if (!validatedUnderStaffingResult.IsValid)
 					{
-						result.AddUnderstaffingDay(date);
+						result.AddUnderstaffingDay(localPeriod.StartDate);
 					}
 
 					var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
 					if (!validatedSeriousUnderStaffingResult.IsValid)
 					{
-						result.AddSeriousUnderstaffingDay(date);
+						result.AddSeriousUnderstaffingDay(localPeriod.StartDate);
 					}
 				}
 			}
@@ -134,7 +129,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
 		{
-			if (skillStaffPeriodList == null) throw new ArgumentNullException("skillStaffPeriodList");
+			if (skillStaffPeriodList == null) throw new ArgumentNullException(nameof(skillStaffPeriodList));
 			var intervalHasSeriousUnderstaffing = _getIntervalsForSeriousUnderstaffing.Invoke(skill);
 			var seriousUnderStaffPeriods = skillStaffPeriodList.Where(intervalHasSeriousUnderstaffing.IsSatisfiedBy).ToArray();
 
@@ -149,13 +144,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public IValidatedRequest ValidateUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
 		{
-			if (skillStaffPeriodList == null) throw new ArgumentNullException("skillStaffPeriodList");
+			if (skillStaffPeriodList == null) throw new ArgumentNullException(nameof(skillStaffPeriodList));
 
 			var validatedRequest = new ValidatedRequest();
 			var intervalHasUnderstaffing = _getIntervalsForUnderstaffing.Invoke(skill);
-			var exceededUnderstaffingList = skillStaffPeriodList.Where(intervalHasUnderstaffing.IsSatisfiedBy).ToList();
+			var exceededUnderstaffingList = skillStaffPeriodList.Where(intervalHasUnderstaffing.IsSatisfiedBy).ToArray();
 			var exceededRate = exceededUnderstaffingList.Sum(t => t.DateTimePeriod.ElapsedTime().TotalMinutes) / skillStaffPeriodList.Sum(t => t.DateTimePeriod.ElapsedTime().TotalMinutes);
-			var isWithinUnderStaffingLimit = (1 - exceededRate) >= skill.StaffingThresholds.UnderstaffingFor.Value;
+			var isWithinUnderStaffingLimit = 1d - (double.IsNaN(exceededRate) ? 0 : exceededRate) >= skill.StaffingThresholds.UnderstaffingFor.Value;
 
 			validatedRequest.IsValid = isWithinUnderStaffingLimit;
 			if (!isWithinUnderStaffingLimit)
@@ -172,7 +167,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequest.Person.PermissionInformation.Culture();
 			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
-			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCollection().Count;
+			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCount();
 
 			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
 
@@ -230,7 +225,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequest.Person.PermissionInformation.Culture();
 			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
-			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCollection().Count;
+			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
+			var numberOfRequestedDays = dateOnlyPeriod.DayCount();
 
 			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
 			
@@ -249,11 +245,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				ValidationErrors = validationError
 			};
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UnderStaffing"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "underStaffing"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
 		public string GetUnderStaffingDateString(UnderstaffingDetails underStaffing, CultureInfo culture, CultureInfo uiCulture)
 		{
 			var errorMessageBuilder = new StringBuilder();
@@ -278,13 +270,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			return errorMessageBuilder.ToString();
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "timeZone"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UnderStaffing"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "underStaffing"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
 		public string GetUnderStaffingHourString(UnderstaffingDetails underStaffing, CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone, DateTime dateTime)
 		{
 			var errorMessageBuilder = new StringBuilder();
@@ -313,24 +299,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			return errorMessageBuilder.ToString();
 		}
-
-	
-
 		
 		public virtual IAbsenceRequestValidator CreateInstance()
 		{
 			return new StaffingThresholdValidator();
 		}
 
-		public string InvalidReason
-		{
-			get { return "RequestDenyReasonSkillThreshold"; }
-		}
+		public string InvalidReason => "RequestDenyReasonSkillThreshold";
 
-		public virtual string DisplayText
-		{
-			get { return Resources.Intraday; }
-		}
+		public virtual string DisplayText => Resources.Intraday;
 
 		public override bool Equals(object obj)
 		{
@@ -357,7 +334,5 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			return new IntervalHasSeriousUnderstaffing(skill);
 		}
-
-		
 	}
 }

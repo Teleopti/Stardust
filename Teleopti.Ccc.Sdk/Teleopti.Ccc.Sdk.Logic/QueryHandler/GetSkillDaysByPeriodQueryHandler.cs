@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<SkillDayDto> Handle(GetSkillDaysByPeriodQueryDto query)
 		{
-			if(query.Period.ToDateOnlyPeriod().DayCollection().Count > 31)
+			var dateOnlyPeriod = query.Period.ToDateOnlyPeriod();
+			if(dateOnlyPeriod.DayCount() > 31)
 				throw new FaultException();
 			ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
 			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
@@ -63,7 +64,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var requestedScenario = _scenarioRepository.Current();
 				_skillRepository.LoadAll();
 
-				var dateOnlyPeriod = query.Period.ToDateOnlyPeriod();
 				var period = dateOnlyPeriod.ToDateTimePeriod(timeZoneInfo);
 				var periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
 				var dateOnlyPeriodForResourceCalc = periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo);
@@ -71,39 +71,38 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				_resourceCalculationPrerequisitesLoader.Execute();
 
-					var allPeople = _personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true);
-					
-					_loadSchedulingStateHolderForResourceCalculation.Execute(requestedScenario, periodForResourceCalc, allPeople, _schedulingResultStateHolder);
+				var allPeople = _personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true);
 
-					foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
+				_loadSchedulingStateHolderForResourceCalculation.Execute(requestedScenario, periodForResourceCalc, allPeople,
+					_schedulingResultStateHolder);
+
+				foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
+				{
+					_resourceOptimizationHelper.ResourceCalculate(dateTime,
+						_schedulingResultStateHolder.ToResourceOptimizationData(true, false));
+				}
+
+				var dayCollection = dateOnlyPeriod.DayCollection();
+				foreach (ISkill skill in _schedulingResultStateHolder.VisibleSkills)
+				{
+					foreach (var dateOnly in dayCollection)
 					{
-						_resourceOptimizationHelper.ResourceCalculate(dateTime, _schedulingResultStateHolder.ToResourceOptimizationData(true, false));
+						var skillDayDto = new SkillDayDto {DisplayDate = new DateOnlyDto {DateTime = dateOnly.Date}};
+
+						IList<ISkillStaffPeriod> skillStaffPeriods =
+							_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(
+								new List<ISkill> {skill}, dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(timeZoneInfo));
+						skillDayDto.Esl = _serviceLevelCalculator.EstimatedServiceLevel(skillStaffPeriods).Value;
+						skillDayDto.SkillId = skill.Id.GetValueOrDefault();
+						skillDayDto.SkillName = skill.Name;
+
+						skillDayDto.SkillDataCollection = _skillDataAssembler.DomainEntitiesToDtos(skillStaffPeriods).ToList();
+
+						returnList.Add(skillDayDto);
 					}
-
-					foreach (ISkill skill in _schedulingResultStateHolder.VisibleSkills)
-					{
-						foreach (var dateOnly in dateOnlyPeriod.DayCollection())
-						{
-							var skillDayDto = new SkillDayDto { DisplayDate = new DateOnlyDto { DateTime = dateOnly.Date } };
-
-							IList<ISkillStaffPeriod> skillStaffPeriods =
-								_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(
-									new List<ISkill> { skill }, new DateOnlyPeriod(dateOnly,dateOnly).ToDateTimePeriod(timeZoneInfo));
-							skillDayDto.Esl = _serviceLevelCalculator.EstimatedServiceLevel(skillStaffPeriods).Value;
-							skillDayDto.SkillId = skill.Id.GetValueOrDefault();
-							skillDayDto.SkillName = skill.Name;
-
-							skillDayDto.SkillDataCollection = _skillDataAssembler.DomainEntitiesToDtos(skillStaffPeriods).ToList();
-
-							returnList.Add(skillDayDto);
-						}
-
-					}
-				
+				}
 			}
 			return returnList;
 		}
 	}
-
-	
 }

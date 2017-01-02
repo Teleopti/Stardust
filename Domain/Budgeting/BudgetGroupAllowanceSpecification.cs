@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNull(language, culture, requestedPeriod);
 			}
 
-			if (budgetDays.Count != requestedPeriod.DayCollection().Count)
+			if (budgetDays.Count != requestedPeriod.DayCount())
 			{
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture, requestedPeriod);
 			}
