@@ -16,13 +16,71 @@
         this.selectAllFunction = selectAllFunction;
         this.selectDynamicOption = selectDynamicOption;
         this.prepareDynamicOption = prepareDynamicOption;
+        this.findChildFunctions = findChildFunctions;
+        this.findParentFunctions = findParentFunctions;
+
         var selectedRole;
 
+        function findChildFunctions(fn) {
+          function inner(functions) {
+            if (functions == null) {
+              return [];
+            }
+
+            return functions.reduce(function(children, func) {
+              return children.concat(func).concat(inner(func.ChildFunctions));
+            }, []);
+          }
+
+          return inner(fn.ChildFunctions);
+        }
+
+        function findParentFunctions(allFunctions, func) {
+          function inner(parents, toCheck, func) {
+            if (toCheck == null) {
+              return null;
+            }
+            var match = toCheck.find(function(f) {
+              return f === func;
+            });
+            if (match != null) {
+              return parents;
+            }
+
+            for (var i = 0; i < toCheck.length; i++) {
+              var f = toCheck[i];
+              var result = inner(parents.concat(f), f.ChildFunctions, func);
+              if (result != null) {
+                return result;
+              }
+            }
+
+            return null;
+          }
+
+          var result = inner([], allFunctions, func);
+          if (result == null) {
+            return [];
+          }
+
+          return result;
+
+        }
+
+        function matchFunction(functions, func) {
+          return functions.some(function(id) {
+              return id == func.FunctionId;
+          });
+        }
+
         function selectFunction(selectedRole, functions, func) {
-            if (func.IsSelected) {
+          console.log('1', functions);
+            if (matchFunction(functions, func)) {
+              console.log('2', functions);
                 PermissionsServiceRefact.postFunctions.query({ Id: selectedRole.Id, Functions: functions }).$promise.then(function (result) {
                 });
             } else {
+              console.log('delete');
                 PermissionsServiceRefact.deleteFunction.delete({ Id: selectedRole.Id, FunctionId: func.FunctionId }).$promise.then(function (result) {
                 });
             }
@@ -120,12 +178,12 @@
                     map.BusinessUnits = [];
                 }
                 map.BusinessUnits = map.BusinessUnits.concat(orgData.Id);
-                
+
                 if (map.Sites == null) {
                     map.Sites = [];
                 }
                 map.Sites = map.Sites.concat(orgData.ChildNodes.map(function(site) { return site.Id; }));
-                
+
                 if (map.Teams == null) {
                     map.Teams = [];
                 }
@@ -138,7 +196,7 @@
                     map.Sites = [];
                 }
                 map.Sites = map.Sites.concat(orgData.Id);
-                
+
                 if (map.Teams == null) {
                     map.Teams = [];
                 }

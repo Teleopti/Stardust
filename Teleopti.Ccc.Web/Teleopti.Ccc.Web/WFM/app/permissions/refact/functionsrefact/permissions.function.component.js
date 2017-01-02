@@ -4,57 +4,48 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
   ctrl.toggleFunction = toggleFunction;
   ctrl.onSelect = onSelect;
   ctrl.checkParent = checkParent;
-  var selectedFunctions = [];
-  // var filteredFunctions = [];
-
-  // $scope.$watchCollection('filteredFunctions', function(){
-  //   ctrl.functions = ctrl.filteredFunctions;
-  // });
-
+  // ctrl.selectedFunctions = [];
   function toggleFunction(func) {
-    var selectedRole = permissionsDataService.getSelectedRole();
+    // ctrl.selectedFunctions = [];
+    console.log('selected role', ctrl.selectedRole);
 
-    if (!selectedRole){
-      // Fixa notice här....
+
+    if (!ctrl.selectedRole){
+      // Fixa notice här...
       return;
     }
 
     //Fixa testerna
-    if (selectedRole != null && selectedRole.BuiltIn) {
+    if (ctrl.selectedRole != null && ctrl.selectedRole.BuiltIn) {
       NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
       return;
     }
     //Fix me
-    if (selectedRole != null && selectedRole.IsMyRole) {
+    if (ctrl.selectedRole != null && ctrl.selectedRole.IsMyRole) {
       NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
       return;
     }
 
-    selectedFunctions.push(func.FunctionId)
-    //Fix me
-    func.IsSelected = !func.IsSelected;
+    ctrl.select(func);
 
-    if (selectedRole != null && selectedRole) {
-      permissionsDataService.selectFunction(selectedRole, selectedFunctions, func);
-    }
+    // if (ctrl.isSelected(func)) {
+    //   var parents = permissionsDataService
+    //     .findParentFunctions(ctrl.functions, func)
+    //     .map(function(fn) { return fn.FunctionId; });
+    //   ctrl.selectedFunctions = ctrl.selectedFunctions.concat(func.FunctionId).concat(parents);
+    // }
 
-
-    if (!func.IsSelected) {
-      var childs = func.ChildFunctions;
-      while (childs != null && childs.length > 0) {
-        var next = [];
-        childs.forEach(function (fn) {
-          fn.IsSelected = false;
-          if (fn.ChildFunctions != null) {
-            next = next.concat(fn.ChildFunctions);
-          }
-        });
-        childs = next;
-      }
+    if (!ctrl.isSelected(func)) {
+      permissionsDataService.findChildFunctions(func).forEach(function(fn) {
+        if (ctrl.isSelected(fn))
+          ctrl.select(fn);
+      });
     }
     if (ctrl.parent != null) {
       ctrl.parent(func);
     }
+
+    ctrl.onClick(func);
   }
 
   function onSelect(func) {
@@ -62,8 +53,8 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
       return fn.ChildFunctions != null && fn.ChildFunctions.indexOf(func) !== -1;
     });
 
-    if (parent != null) {
-      parent.IsSelected = true;
+    if (parent != null && !ctrl.isSelected(parent)) {
+      ctrl.select(parent);
       ctrl.functions.filter(function (fn) { return fn !== parent });
       if (ctrl.parent != null) {
         ctrl.parent(parent);
@@ -72,9 +63,9 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
   }
 
   function checkParent(func) {
-    if(func.ChildFunctions.length > 0 && func.IsSelected){
+    if(func.ChildFunctions.length > 0 && ctrl.isSelected(func)) {
         func.multiDeselectModal = true;
-    }else{
+    } else{
       toggleFunction(func);
       func.multiDeselectModal = false;
     }
@@ -86,6 +77,10 @@ angular.module('wfm.permissions').component('permissionsTree', {
   controller: PermissionsTreeController,
   bindings: {
     functions: '=',
-    parent: '='
+    isSelected: '=',
+    select: '=',
+    parent: '=',
+    onClick: '=',
+    selectedRole: '='
   }
 });

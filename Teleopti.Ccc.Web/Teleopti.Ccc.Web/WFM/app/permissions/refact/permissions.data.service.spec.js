@@ -34,10 +34,43 @@ xdescribe('permissionsDataService', function () {
 		}]
 	};
 
+	var childFunction1 = {
+		ChildFunctions: [],
+		FunctionCode: 'child1',
+		FunctionDescription: 'child1',
+		FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+		IsDisabled: false,
+		LocalizedFunctionDescription: 'child1'
+	};
+	var childFunction2 = {
+		ChildFunctions: [],
+		FunctionCode: 'child2',
+		FunctionDescription: 'child2',
+		FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
+		IsDisabled: false,
+		LocalizedFunctionDescription: 'child2'
+	};
+	var defaultApplicationFunction = {
+		FunctionCode: 'Raptor',
+		FunctionDescription: 'xxOpenRaptorApplication',
+		FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+		IsDisabled: false,
+		LocalizedFunctionDescription: 'Open Teleopti WFM',
+		ChildFunctions: [childFunction1]
+	};
+	var defaultApplicationFunction2 = {
+		FunctionCode: 'Anywhere',
+		FunctionDescription: 'xxAnywhere',
+		FunctionId: '7884b7dd-31ea-4e40-b004-c7ce3b5deaf3',
+		IsDisabled: false,
+		LocalizedFunctionDescription: 'Open Teleopti TEM',
+		ChildFunctions: [childFunction2]
+	};
+
 	var dynamicOption = {
-		RangeOption: 0, 
+		RangeOption: 0,
 		Name: "Test"
-	}
+	};
 
 	beforeEach(function () {
 		module('wfm.permissions');
@@ -48,6 +81,14 @@ xdescribe('permissionsDataService', function () {
 		fakeBackend = _fakePermissionsBackend_;
 		permissionsDataService = _permissionsDataService_;
 
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function (method, url, data, headers) {
+			response = angular.fromJson(data);
+			return 200;
+		});
+		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/f19bb790-b000-4deb-97db-9b5e015b2e8c').respond(function (method, url, data, headers) {
+			response = true;
+			return 200;
+		});
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData').respond(function (method, url, data, headers) {
 			response = angular.fromJson(data);
 			return 200;
@@ -63,6 +104,24 @@ xdescribe('permissionsDataService', function () {
 		response = null;
 		$httpBackend.verifyNoOutstandingExpectation();
 		$httpBackend.verifyNoOutstandingRequest();
+	});
+
+	it('should send functions to server', function () {
+		var functions = [defaultApplicationFunction.FunctionId];
+
+		permissionsDataService.selectFunction(role, functions, defaultApplicationFunction);
+		$httpBackend.flush();
+
+		expect(response).toEqual({ Id: role.Id, Functions: functions });
+	});
+
+	it('should delete function', function () {
+		var functions = [];
+
+		permissionsDataService.selectFunction(role, functions, defaultApplicationFunction);
+		$httpBackend.flush();
+
+		expect(response).toEqual(true);
 	});
 
 	it('should prepare all org data for sending to server when selecting bu', function () {
@@ -123,6 +182,68 @@ xdescribe('permissionsDataService', function () {
 		$httpBackend.flush();
 
 		expect(response).toEqual(data)
+	});
+
+	it('should find all child functions for a function', function() {
+		var fn = {
+			Name: "First",
+			ChildFunctions: [{
+				Name: "Second",
+				ChildFunctions: [{
+					Name: "Third"
+				}]
+			}]
+		};
+
+		var result = permissionsDataService.findChildFunctions(fn)
+			.map(function(func) { return func.Name; });
+		expect(result).toEqual(["Second", "Third"]);
+	});
+
+	it('should find all parent functions for a function', function() {
+		var third = {
+			Name: "Third"
+		};
+		var fn = {
+			Name: "First",
+			ChildFunctions: [{
+				Name: "Second",
+				ChildFunctions: [third]
+			}]
+		};
+
+		var result = permissionsDataService.findParentFunctions([fn], third)
+			.map(function(func) { return func.Name; });
+		expect(result).toEqual(["First", "Second"]);
+	});
+
+	it('should find all parent functions for a function', function() {
+		var clicked = {
+			Name: "D",
+			ChildFunctions: [{
+				Name: "C",
+				ChildFunctions: []
+			}]
+		};
+		var fn = {
+			Name: "A",
+			ChildFunctions: [{
+				Name: "B",
+				ChildFunctions: [{
+					Name: "C-1",
+					ChildFunctions: [clicked]
+				}, {
+					Name: "C-2",
+					ChildFunctions: [{
+						Name: "D"
+					}]
+				}]
+			}]
+		};
+
+		var result = permissionsDataService.findParentFunctions([fn], clicked)
+			.map(function(func) { return func.Name; });
+		expect(result).toEqual(["A", "B", "C-1"]);
 	});
 
 });

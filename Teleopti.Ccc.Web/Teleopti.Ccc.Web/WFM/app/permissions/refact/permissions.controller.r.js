@@ -24,29 +24,68 @@
     vm.unSelectedFunctionsFilter = unSelectedFunctionsFilter;
     vm.selectedFunctionsFilter = selectedFunctionsFilter;
     vm.allFunctionsFilter = allFunctionsFilter;
+    vm.isFunctionSelected = isFunctionSelected;
+    vm.selectFunction = selectFunction;
     vm.selectedOrNot = false;
     vm.selectedRole = {};
+    vm.selectedFunctions = {};
     vm.componentFunctions = [];
     vm.listHandler = listHandler;
     vm.selectDynamicOption = selectDynamicOption;
+    vm.allDataFilter = allDataFilter;
+    vm.selectedDataFilter = selectedDataFilter;
+    vm.unselectedDataFilter = unselectedDataFilter;
+    vm.filteredOrganizationSelection = {};
+    vm.onFunctionClick = functionClick;
     var functionsFilter = $filter('functionsFilter');
-    
+    var dataFilter = $filter('dataFilter');
+
+    function isFunctionSelected(func) {
+      return vm.selectedFunctions[func.FunctionId];
+    }
+    function selectFunction(func) {
+      if (vm.selectedFunctions[func.FunctionId]) {
+        delete vm.selectedFunctions[func.FunctionId];
+      } else {
+        vm.selectedFunctions[func.FunctionId] = true;
+      }
+    }
+
+    function allDataFilter() {
+      orgDataHandler(vm.organizationSelection);
+    }
+
+    function selectedDataFilter () {
+      var data = dataFilter.selected(vm.organizationSelection);
+      orgDataHandler(data);
+    }
+
+    function unselectedDataFilter() {
+      var data = dataFilter.unselected(vm.organizationSelection);
+      orgDataHandler(data);
+    }
+
+    function orgDataHandler(orgData) {
+      vm.filteredOrganizationSelection = orgData;
+    }
 
     function selectDynamicOption(option) {
       permissionsDataService.selectDynamicOption(option);
     }
 
     function listHandler(arr) {
-      vm.componentFunctions = [].concat(arr);
+      vm.componentFunctions = arr;
     }
 
     function unSelectedFunctionsFilter() {
-      var filteredArray = functionsFilter.unselected(vm.componentFunctions);
+      var filteredArray = functionsFilter.unselected(vm.applicationFunctions, vm.selectedFunctions);
+      console.log('unselected', filteredArray);
       listHandler(filteredArray);
     }
 
     function selectedFunctionsFilter() {
-      var filteredArray = functionsFilter.selected(vm.componentFunctions);
+      var filteredArray = functionsFilter.selected(vm.applicationFunctions, vm.selectedFunctions);
+      console.log(filteredArray);
       listHandler(filteredArray);
     }
 
@@ -55,21 +94,23 @@
     }
 
     function toggleAllFunction() {
-      vm.applicationFunctions[0].IsSelected = !vm.applicationFunctions[0].IsSelected;
-
-      var selectedOrNot = vm.applicationFunctions[0].IsSelected ? true : false;
-      vm.selectedOrNot = selectedOrNot;
-      toggleSelection(vm.applicationFunctions, selectedOrNot);
+      vm.selectedOrNot = !vm.selectedOrNot;
+      toggleSelection(vm.applicationFunctions, vm.selectedOrNot);
 
       if (vm.selectedRole != null) {
-        permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, selectedOrNot);
+        permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, vm.selectedOrNot);
       }
     }
 
     function toggleSelection(functions, selectedOrNot) {
-      if (functions !== undefined) {
+      if (functions != null) {
         for (var i = 0; i < functions.length; i++) {
-          functions[i].IsSelected = selectedOrNot;
+          var func = functions[i];
+          if (selectedOrNot) {
+            vm.selectedFunctions[func.FunctionId] = true;
+          } else {
+            delete vm.selectedFunctions[func.FunctionId];
+          }
           if (functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
             toggleSelection(functions[i].ChildFunctions, selectedOrNot);
           }
@@ -152,7 +193,6 @@
       if (vm.organizationSelection !== null && vm.organizationSelection.BusinessUnit !== null) {
         toggleOrganizationSelecton(vm.organizationSelection.BusinessUnit, false);
       }
-
     }
 
     function copyRole(role) {
@@ -172,30 +212,28 @@
         vm.selectedRole = data;
         permissionsDataService.setSelectedRole(vm.selectedRole);
 
-      if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length > 0){
-        matchOrganizationData();
-      }
-      if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length < 1){
-        toggleOrganizationSelecton(vm.organizationSelection.BusinessUnit, false);
-      }
+        if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length > 0){
+          matchOrganizationData();
+        }
+        if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length < 1){
+          toggleOrganizationSelecton(vm.organizationSelection.BusinessUnit, false);
+        }
         matchFunctionsForSelctedRole();
       });
     }
 
     function matchFunctionsForSelctedRole(){
-      var functions = vm.applicationFunctions;
-      while (functions != null && functions.length > 0) {
-        var next = [];
-        functions.forEach(function (fn) {
-          fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function (afn) {
-            return fn.FunctionId === afn.Id;
-          });
-          if (fn.ChildFunctions != null) {
-            next = next.concat(fn.ChildFunctions);
-          }
+      function loop(functions) {
+        if (functions == null) {
+          return;
+        }
+        functions.forEach(function(f) {
+          vm.selectedFunctions[f.Id] = true;
+          loop(f.ChildFunctions);
         });
-        functions = next;
       }
+      vm.selectedFunctions = {};
+      loop(vm.selectedRole.AvailableFunctions);
     }
 
     var matchBusinessUnit = function () {
@@ -217,7 +255,7 @@
         site.ChildNodes.forEach(function(team) {
           team.IsSelected = vm.selectedRole.AvailableTeams.some(function(t) {
             return team.Id == t.Id;
-          }); 
+          });
         });
       });
     };
@@ -256,8 +294,21 @@
       });
       PermissionsServiceRefact.organizationSelection.get().$promise.then(function (data) {
         vm.organizationSelection = data;
+        orgDataHandler(vm.organizationSelection);
       });
     }
 
+    function functionClick(fn) {
+      if (vm.selectedRole === null) {
+        return;
+      }
+      var parents = permissionsDataService.findParentFunctions(vm.applicationFunctions, fn)
+        .map(function(f) { return f.FunctionId; });
+      var functions = [];
+      if (isFunctionSelected(fn)) {
+        functions = parents.concat(fn.FunctionId);
+      }
+      permissionsDataService.selectFunction(vm.selectedRole, functions, fn);
+    }
   }
 })();
