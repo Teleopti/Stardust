@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Cascading;
@@ -105,8 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							_personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
 								.ForActivity(layer.PayloadId);
 						if (!skillCombination.Skills.Any()) continue;
-
-
+						
 						var skillCombinationResourceByAgentAndLayer =
 							combinationResources.Single(
 								x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
@@ -228,15 +226,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 
-				var mergedPeriod = personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
+				var mergedPeriod = personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest) personRequest.Request);
 				var aggregatedValidatorList = mergedPeriod.GetSelectedValidatorList();
 
 
-				var staffingThresholdValidator = aggregatedValidatorList.FirstOrDefault(x => x.GetType() == typeof(StaffingThresholdValidator));
-
+				var staffingThresholdValidator = aggregatedValidatorList.OfType<StaffingThresholdValidator>().FirstOrDefault();
 				if (staffingThresholdValidator != null)
 				{
-					var validatedRequest = ((StaffingThresholdValidator) staffingThresholdValidator).ValidateLight((AbsenceRequest) personRequest.Request, skillStaffingIntervals);
+					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);
 					if (validatedRequest.IsValid)
 					{
 						var result = sendApproveCommand(personRequest.Id.GetValueOrDefault());
@@ -268,26 +265,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems + exp.Message);
 			}
 		}
-
-
-		private static OrderedSkillGroups mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillGroup> cascadingSkillGroups)
-		{
-			var ret = new List<List<CascadingSkillGroup>>();
-			foreach (var skillGroup in cascadingSkillGroups)
-			{
-				var retLast = ret.LastOrDefault();
-				if (retLast == null || retLast.First().SkillGroupIndexHash() != skillGroup.SkillGroupIndexHash())
-				{
-					ret.Add(new List<CascadingSkillGroup> {skillGroup});
-				}
-				else
-				{
-					ret.Last().Add(skillGroup);
-				}
-			}
-			return new OrderedSkillGroups(ret);
-		}
-
+		
 		private static void setFurnessResultsToSkillStaffPeriods(DateTimePeriod completeIntervalPeriod, IDictionary<ISkill, IResourceCalculationPeriod> relevantSkillStaffPeriods, IDividedActivityData optimizedActivityData)
 		{
 			foreach (var skillPair in relevantSkillStaffPeriods)
@@ -302,7 +280,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private bool sendDenyCommand(Guid personRequestId, string denyReason)
 		{
-			var command = new DenyRequestCommand()
+			var command = new DenyRequestCommand
 			{
 				PersonRequestId = personRequestId,
 				DenyReason = denyReason
@@ -319,7 +297,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private bool sendApproveCommand(Guid personRequestId)
 		{
-			var command = new ApproveRequestCommand()
+			var command = new ApproveRequestCommand
 			{
 				PersonRequestId = personRequestId,
 				IsAutoGrant = true
