@@ -160,8 +160,6 @@
 						<!--/ko-->
 						<td></td>
 					</tr>
-				</thead>
-				<tbody>
 					<tr class="shift-trade-my-schedule-row">
 						<td class="shift-trade-agent-name">
 							<div data-bind="style:showContractTime && {'font-weight': 'bold'}">@Resources.MySchedule</div>
@@ -220,7 +218,7 @@
 						<!--/ko-->
 						<td class="shift-trade-button-cell"></td>
 					</tr>
-				</tbody>
+				</thead>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 						<td class="shift-trade-agent-name floatleft">

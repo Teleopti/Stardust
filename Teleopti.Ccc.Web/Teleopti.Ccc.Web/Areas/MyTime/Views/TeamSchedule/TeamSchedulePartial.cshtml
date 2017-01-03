@@ -159,7 +159,7 @@
 
 					<div class="col-sm-5 col-md-6 col-lg-2">
 						<form id="teamschedule-name-search-form" class="input-group name-search schedule-filter-component" data-bind="submit: changeInSearchBox">
-							<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: isLocked"/>
+							<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: isLocked" />
 							<input type="submit" value="" style="border: none; width: 0; height: 0">
 							<span class="input-group-addon input-group-addon-narrow">
 								<!-- ko if: isLocked -->
@@ -184,15 +184,13 @@
 						</div>
 					</div>
 				</div>
-				<table class="responsive" style="width: 100%">
+				<table id="team-schedule-table" class="responsive" style="width: 100%">
 					<thead>
 						<tr>
 							<td class="shift-trade-agent-name">&nbsp;</td>
 							<td></td>
 						</tr>
-					</thead>
-					<!--ko if:isTeamScheduleNoReadModelEnable -->
-					<tbody>
+						<!--ko if:isTeamScheduleNoReadModelEnable -->
 						<tr class="shift-trade-my-schedule-row">
 							<td class="shift-trade-agent-name">@Resources.MySchedule</td>
 							<td class="shift-trade-my-schedule">
@@ -224,7 +222,9 @@
 								<!--/ko-->
 							</td>
 						</tr>
-					</tbody>
+						<!--/ko-->
+					</thead>
+					<!--ko if:isTeamScheduleNoReadModelEnable -->
 					<tbody data-bind="foreach: toDrawSchedules ">
 						<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
 							<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></td>

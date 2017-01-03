@@ -3,14 +3,13 @@
 	white-space: nowrap;
 }
 
-.teamschedule ul 
-{
-	margin: 0; 
+.teamschedule ul {
+	margin: 0;
 	padding: 0;
 	list-style: none;
 }
-.teamschedule 
-{
+
+.teamschedule {
 	border: 1px solid #dfdfdf;
 	background: #f8f8f8;
 	width: 100%;
@@ -18,45 +17,49 @@
 	padding-bottom: 15px;
 }
 
-.rgba .teamschedule 
-{
+.rgba .teamschedule {
 	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.teamschedule-timeline 
-{
+.teamschedule-timeline {
 	left: 0px;
 	top: 5px;
 	bottom: 0px;
 }
+
 .rtl .teamschedule-timeline {
 	left: auto;
 	right: 0px;
 }
+
 .teamschedule-timeline-spacer {
-	width: 220px;     /* space between the left hand side and the timeline*/
+	width: 220px; /* space between the left hand side and the timeline*/
 }
-.teamschedule-timeline-times 
-{
+
+.teamschedule-timeline-times {
 	height: 100%;
 }
+
 .teamschedule-timeline-time {
 	height: 100%;
 	font-size: 8px;
 	border-left: 1px solid #dfdfdf;
 }
+
 .rgba .teamschedule-timeline-time {
 	border-left: 1px solid rgba(0, 0, 0, 0.15);
 }
+
 .rtl .teamschedule-timeline-time {
 	border-left: none;
 	border-right: 1px solid #dfdfdf;
 }
+
 .rgba .rtl .teamschedule-timeline-time {
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
-.teamschedule-timeline-label 
-{
+
+.teamschedule-timeline-label {
 	padding: 1px;
 	padding-left: 4px;
 	padding-right: 5px;
@@ -71,16 +74,17 @@
 	text-align: center;
 	white-space: nowrap;
 }
-.rgba .teamschedule-timeline-label 
-{
+
+.rgba .teamschedule-timeline-label {
 	border: 1px solid #dfdfdf;
 }
+
 .rtl .teamschedule-timeline-label {
 	left: auto;
 	right: -10px;
 }
-.teamschedule-timeline-time.minute .teamschedule-timeline-label
-{
+
+.teamschedule-timeline-time.minute .teamschedule-timeline-label {
 	display: none;
 }
 
@@ -89,8 +93,7 @@
 	position: relative;
 }
 
-.teamschedule-agent-without-badge 
-{
+.teamschedule-agent-without-badge {
 	vertical-align: bottom;
 	padding-top: 8px;
 	padding-bottom: 8px;
@@ -100,13 +103,11 @@
 	z-index: 99;
 }
 
-.rgba .teamschedule-agent 
-{
+.rgba .teamschedule-agent {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.teamschedule-agent-name-without-badge 
-{
+.teamschedule-agent-name-without-badge {
 	position: absolute;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -116,19 +117,17 @@
 	margin-right: 5px;
 	padding-left: 5px;
 	background-color: #f8f8f8;
-   
 }
 
-.rt .teamschedule-agent-name-without-badge 
-{
+.rt .teamschedule-agent-name-without-badge {
 	margin-right: auto;
 	padding-left: 0;
 	margin-left: 5px;
 	padding-right: 5px;
-    text-overflow: clip;
+	text-overflow: clip;
 }
-.teamschedule-agent-name-hover
-{
+
+.teamschedule-agent-name-hover {
 	padding-right: 10px;
 	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
 	border-right: 1px solid rgba(0, 0, 0, 0.20);
@@ -136,19 +135,17 @@
 	z-index: 10;
 }
 
-.teamschedule-agent-schedule 
-{
+.teamschedule-agent-schedule {
 	position: absolute;
-	left: 220px;	
+	left: 220px;
 }
-.rtl .teamschedule-agent-schedule
-{
+
+.rtl .teamschedule-agent-schedule {
 	left: auto;
 	right: 220px;
 }
 
-.teamschedule .layer 
-{
+.teamschedule .layer {
 	vertical-align: bottom;
 	height: 22px;
 	border-radius: 2px;
@@ -156,10 +153,9 @@
 
 .teamschedule .gradient {
 	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
-} 
+}
 
-.teamschedule .dayoff 
-{
+.teamschedule .dayoff {
 	margin-left: 7px;
 	left: 250px;
 	vertical-align: bottom;
@@ -168,13 +164,12 @@
 	height: 21px;
 	border-radius: 2px;
 }
-.rgba .teamschedule .dayoff 
-{
+
+.rgba .teamschedule .dayoff {
 	border: 1px solid rgba(0, 0, 0, 0.15);
-	
 }
-.rtl .teamschedule .dayoff
-{
+
+.rtl .teamschedule .dayoff {
 	margin-left: auto;
 	margin-right: 5px;
 	right: 220px;
@@ -189,7 +184,7 @@
 }
 
 .teamschedule-agent-schedule .tooltip-bottom {
-	height: 30px;	
+	height: 30px;
 }
 
 #s2id_Team-Picker {
@@ -200,13 +195,16 @@
 #s2id_Team-Picker_Padding {
 	padding-top: 8px;
 }
+
 .team-select2-container {
 	text-align: left;
 	float: left;
 }
+
 .team-select2-container-hidden {
 	display: none;
 }
+
 .team-select2-dropdown {
 	text-align: left;
 }
@@ -217,7 +215,7 @@
 
 .teamschedule-agent .agent-badge {
 	height: 10px;
-	padding-left: 5px
+	padding-left: 5px;
 }
 
 .announce-shift-matching-date {
@@ -232,20 +230,29 @@
 .date-input-style {
 	padding: 10px 1px;
 }
+
 .dropdown-menu {
 	overflow-y: scroll;
 }
-.dropdown-menu.right-zero {
-	left: initial;
-	right:0;
-}
+
+	.dropdown-menu.right-zero {
+		left: initial;
+		right: 0;
+	}
+
 .shift-trade-agent-name + .tooltip {
 	white-space: pre-wrap;
 }
+
 .input-group-addon-narrow {
 	padding-left: 7px;
 	padding-right: 7px;
 }
+
 .clickable {
 	cursor: pointer;
+}
+
+#team-schedule-table > tbody > tr:nth-child(2n + 1) > td.shift-trade-agent-name {
+	color: #9E9E9E;
 }
