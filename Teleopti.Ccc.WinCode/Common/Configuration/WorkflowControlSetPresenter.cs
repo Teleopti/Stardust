@@ -185,6 +185,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		{
 			IWorkflowControlSet newDomainEntity = new WorkflowControlSet(Resources.NewWorkflowControlSet);
 			newDomainEntity.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
+			newDomainEntity.AbsenceRequestExpiredThreshold = 15;
 			var newModel = new WorkflowControlSetModel(newDomainEntity);
 			_workflowControlSetModelCollection.Add(newModel);
 			RefreshWorkflowControlSetCombo();
