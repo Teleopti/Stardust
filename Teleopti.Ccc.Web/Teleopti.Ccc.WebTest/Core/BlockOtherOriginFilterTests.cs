@@ -96,6 +96,18 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldIgnoreCheckWhenRequestUriIsNull()
+		{
+			var context = CreateExecutedContext();
+			context.Request.Headers.Add("Origin", "http://wfmserver1/test/2");
+			context.Request.RequestUri = null;
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.IsSuccessStatusCode.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldCreateResponseWhenNotSet()
 		{
 			var context = CreateExecutedContext();
