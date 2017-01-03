@@ -108,12 +108,12 @@ namespace Teleopti.Interfaces.Domain
 
 		Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period);
 		double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period);
-		int MinSkillResolution { get; }
 	}
 
 	public interface IResourcesForShovelAndCalculation
 	{
 		IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
+		int MinSkillResolution { get; }
 	}
 
 	public struct AffectedSkills

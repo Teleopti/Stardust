@@ -193,9 +193,12 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocator.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\ResourceCalculationPeriodDictionary.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\ResourcesExtractor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ScheduleForecastSkillReadModelValidator.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\SlimSkillResourceCalculationPeriodWrapper.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ScheduleManagementHandlerBase.cs" />

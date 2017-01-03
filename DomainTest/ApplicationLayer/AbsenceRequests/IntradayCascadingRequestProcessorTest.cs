@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
 			var agent = PersonRepository.Has(skill);
 			var wfcs = new WorkflowControlSet().WithId();
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
@@ -105,8 +106,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill2.StaffingThresholds = threshold;
+			skill.StaffingThresholds = skill2.StaffingThresholds = threshold;
+			skill.DefaultResolution = skill2.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill, skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -169,6 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -223,8 +225,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill2.StaffingThresholds = threshold;
+			skill.StaffingThresholds = skill2.StaffingThresholds = threshold;
+			skill.DefaultResolution = skill2.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill, skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -290,10 +292,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill3 = SkillRepository.Has("skillC", activity2).WithId();
 			var skill4 = SkillRepository.Has("skillD", activity2).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill2.StaffingThresholds = threshold;
-			skill3.StaffingThresholds = threshold;
-			skill4.StaffingThresholds = threshold;
+			skill.StaffingThresholds = skill2.StaffingThresholds = skill3.StaffingThresholds = skill4.StaffingThresholds = threshold;
+			skill.DefaultResolution = skill2.DefaultResolution = skill3.DefaultResolution = skill4.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill, skill2, skill3, skill4);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -401,10 +401,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill3 = SkillRepository.Has("skillC", activity2).WithId();
 			var skill4 = SkillRepository.Has("skillD", activity2).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill2.StaffingThresholds = threshold;
-			skill3.StaffingThresholds = threshold;
-			skill4.StaffingThresholds = threshold;
+			skill.StaffingThresholds = skill2.StaffingThresholds = skill3.StaffingThresholds = skill4.StaffingThresholds = threshold;
+			skill.DefaultResolution = skill2.DefaultResolution = skill3.DefaultResolution = skill4.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill, skill2, skill3, skill4);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -508,9 +506,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
 			skill1.SetCascadingIndex(1);
 			skill2.SetCascadingIndex(2);
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill1.StaffingThresholds = threshold;
-			skill2.StaffingThresholds = threshold;
+			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			skill1.StaffingThresholds = skill2.StaffingThresholds = threshold;
+			skill1.DefaultResolution = skill2.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -585,9 +583,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skill1.SetCascadingIndex(1);
 			skill2.SetCascadingIndex(2);
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill1.StaffingThresholds = threshold;
-			skill2.StaffingThresholds = threshold;
-			skill3.StaffingThresholds = threshold;
+			skill1.StaffingThresholds = skill2.StaffingThresholds = skill3.StaffingThresholds = threshold;
+			skill1.DefaultResolution = skill2.DefaultResolution = skill3.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill2);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -666,6 +663,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
 
 			var agent = PersonRepository.Has(skill);
 			var wfcs = new WorkflowControlSet().WithId();
@@ -738,6 +736,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 			var now = new DateTime(2016, 12, 1, 7, 0, 0);
 
@@ -773,6 +772,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 			var now = new DateTime(2016, 12, 1, 7, 0, 0);
 

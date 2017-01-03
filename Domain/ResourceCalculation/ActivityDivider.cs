@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
                                                              IAffectedPersonSkillService affectedPersonSkillService,
                                                            IActivity activity,
-														   IResourceCalculationDataContainer filteredProjections,
+														   IResourcesForShovelAndCalculation filteredProjections,
                                                            DateTimePeriod periodToCalculate);
     }
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
             IAffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
-			IResourceCalculationDataContainer filteredProjections,
+			IResourcesForShovelAndCalculation filteredProjections,
             DateTimePeriod periodToCalculate)
         {
             var dividedActivity = new DividedActivityData();

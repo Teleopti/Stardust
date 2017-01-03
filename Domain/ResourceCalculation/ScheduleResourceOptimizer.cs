@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	/// </summary>
 	public class ScheduleResourceOptimizer
 	{
-		private readonly IResourceCalculationDataContainer _relevantProjections;
+		private readonly IResourcesForShovelAndCalculation _relevantProjections;
 		private readonly ISkillResourceCalculationPeriodDictionary _skillStaffPeriods;
 		private readonly IAffectedPersonSkillService _personSkillService;
 		private readonly IActivityDivider _activityDivider;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private const double _quotient = 1d; // the outer quotient: default = 1
 		private const int _maximumIteration = 100; // the maximum number of iterations
 
-		public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections,
+		public ScheduleResourceOptimizer(IResourcesForShovelAndCalculation relevantProjections,
 										 ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 										 IAffectedPersonSkillService personSkillService,
 										 bool clearSkillStaffPeriods, IActivityDivider activityDivider)
@@ -54,35 +54,35 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			//All skills with same activity must have the same resolution
-			TimeSpan defaultResolution = TimeSpan.FromMinutes(skills[0].DefaultResolution);
-			DateTime currentStart =
+			var defaultResolution = TimeSpan.FromMinutes(skills[0].DefaultResolution);
+			var currentStart =
 				datePeriodToRecalculate.StartDateTime.Date.Add(
 					TimeHelper.FitToDefaultResolution(datePeriodToRecalculate.StartDateTime.TimeOfDay,
 													  (int) defaultResolution.TotalMinutes));
+			var completeIntervalPeriod = new DateTimePeriod(currentStart, currentStart.Add(defaultResolution));
 
-			while (currentStart < datePeriodToRecalculate.EndDateTime)
+			while (completeIntervalPeriod.StartDateTime < datePeriodToRecalculate.EndDateTime)
 			{
-				DateTime currentEnd =
-					currentStart.Add(defaultResolution);
+				resetSkillStaffPeriodsBeforeCalculation(skills, completeIntervalPeriod);
+				optimizeActivityPeriod(currentActivity, completeIntervalPeriod, resourceCalculationData);
+				completeIntervalPeriod = completeIntervalPeriod.MovePeriod(defaultResolution);
+			}
+		}
 
-				DateTimePeriod completeIntervalPeriod = new DateTimePeriod(currentStart, currentEnd);
-
-				//Allways empty all periods for current skill
-				foreach (ISkill skill in skills)
+		private void resetSkillStaffPeriodsBeforeCalculation(IList<ISkill> skills, DateTimePeriod completeIntervalPeriod)
+		{
+			foreach (ISkill skill in skills)
+			{
+				IResourceCalculationPeriodDictionary skillStaffPeriodDic;
+				if (_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDic))
 				{
-					IResourceCalculationPeriodDictionary skillStaffPeriodDic;
-					if (_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDic))
+					IResourceCalculationPeriod skillStaffPeriod;
+					if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriod, out skillStaffPeriod))
 					{
-						IResourceCalculationPeriod skillStaffPeriod;
-						if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriod, out skillStaffPeriod))
-						{
-							skillStaffPeriod.SetCalculatedResource65(0);
-							skillStaffPeriod.SetCalculatedLoggedOn(0);
-						}
+						skillStaffPeriod.SetCalculatedResource65(0);
+						skillStaffPeriod.SetCalculatedLoggedOn(0);
 					}
 				}
-				optimizeActivityPeriod(currentActivity, completeIntervalPeriod, resourceCalculationData);
-				currentStart = currentStart.Add(defaultResolution);
 			}
 		}
 
