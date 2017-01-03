@@ -209,6 +209,54 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         [Test]
+        public void canHandleRunningAverageWithInsuffientIntervals()
+        {
+
+            DateTime date = new DateTime(2008, 3, 20, 8, 0, 0);
+            DateTime date2 = new DateTime(2008, 3, 20, 8, 15, 0);
+
+            date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+            date2 = DateTime.SpecifyKind(date2, DateTimeKind.Utc);
+
+            _dateTimePeriod = new DateTimePeriod(date, date2);
+
+            _numbers = new Dictionary<DateTimePeriod, double>();
+            _numbers.Add(_dateTimePeriod, 10);
+            _numbers.Add(_dateTimePeriod.MovePeriod(new TimeSpan(0, 15, 0)), 30);
+            _numbers.Add(_dateTimePeriod.MovePeriod(new TimeSpan(0, 30, 0)), 50);
+            _numbers.Add(_dateTimePeriod.MovePeriod(new TimeSpan(0, 45, 0)), 20);
+
+            _origSum = 0;
+            foreach (double number in _numbers.Values)
+            {
+                _origSum += number;
+            }
+            target = new StatisticalSmoothing(_numbers);
+
+            //Target output for setup values with gliding 7 periods
+            //No change because of less no of intervals(4) than smoothing factor(7)
+
+            IList<double> testResultNumbers = new List<double>();
+            testResultNumbers.Add(10);
+            testResultNumbers.Add(30);
+            testResultNumbers.Add(50);
+            testResultNumbers.Add(20);
+
+            IDictionary<DateTimePeriod, double> runningAverageNumbers = target.CalculateRunningAverage(7);
+            double newSum = ComputeSum(testResultNumbers);
+            double factor = _origSum / newSum;
+            int index = 0;
+            foreach (KeyValuePair<DateTimePeriod, double> pair in runningAverageNumbers)
+            {
+                double modified = testResultNumbers[index] * factor;
+                double expected = Math.Round(modified, 2);
+                double actual = Math.Round(pair.Value, 2);
+                Assert.AreEqual(expected, actual);
+                index++;
+            }
+        }
+
+        [Test]
         public void CanHandleZeroValues()
         {
             DateTime date = new DateTime(2008, 3, 20, 8, 0, 0);

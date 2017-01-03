@@ -59,6 +59,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             //     second =     (10+2+30+20)/4
             //     third  =     (10+2+30+20+10)/5  //this is the first "real" gliding value with 5 periods
 
+            // if gliding periods are more than intervals count, no smoothing to apply
+            if (_internalNumbers.Count < periods)
+            {
+                periods = 1;
+            }
             int periodOffset = (int)Math.Ceiling(periods / 2.0);
 
             for (int i = 0; i < _internalNumbers.Count; i++)
