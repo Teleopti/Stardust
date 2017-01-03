@@ -11,5 +11,11 @@
             templateUrl: 'app/skillPrio/skillprio.html',
             controller: 'skillPrioController as vm'
         });
+
+        // $stateProvider.state('skillPrio', {
+        //     url: '/skillprio',
+        //     templateUrl: 'app/skillPrio/skillprio.new.html',
+        //     controller: 'skillPrioControllerNew as vm'
+        // });
     }
 })();

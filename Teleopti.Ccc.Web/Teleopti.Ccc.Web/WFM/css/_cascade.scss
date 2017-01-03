@@ -1,3 +1,38 @@
 .skill-devider{
 	border-top: 1px dashed $brown-300;
 }
+
+.angular-ui-tree-placeholder {
+	background: rgba(153, 214, 255, 0.48);
+	width: 100px!important;
+}
+
+.angular-ui-tree-empty {
+	background-image: none;
+	background: rgba(153, 214, 255, 0.48);
+	border: none;
+	min-height: 50px;
+}
+
+.angular-ui-tree-empty::after {
+	content: "Move and Drop skill here";
+	color: white;
+}
+
+.horizontal-list {
+	width: 100%;
+	display: inline-flex;
+}
+
+.drag-handle {
+	cursor: pointer;
+}
+
+.drop-card {
+	margin: 5px;
+	width: auto;
+}
+
+.unsortedListCard {
+	border-left: 1px solid gray;
+}
