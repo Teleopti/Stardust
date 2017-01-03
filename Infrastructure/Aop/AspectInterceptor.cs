@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 					.Select(attribute => (IAspect) _resolver.Resolve(attribute.AspectType))
 					.ToArray()
 				;
+			if (!aspects.Any())
+			{
+				invocation.Proceed();
+				return;
+			}
 
 			var invocationInfo = new InvocationInfo(invocation);
 			var completedBefores = new List<IAspect>();
