@@ -17,15 +17,15 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			return 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html';
 		return 'app/rta/agents/rta-agents.html';
 	}
-	var rtaAgentsTemplateUrlRefact = function (elem, attr) {
-		if(toggles.RTA_QuicklyChangeAgentsSelection_40610)
-			return 'app/rta/refact/agentsrefact/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.refact.html';
-		if (toggles.RTA_AgentsOnOrganizationAndSkills_41586)
-			return 'app/rta/refact/agentsrefact/rta-agents-AgentsOnOrganizationAndSkills_41586.refact.html';
-		if (toggles.RTA_HideAgentsByStateGroup_40469)
-			return 'app/rta/refact/agentsrefact/rta-agents-HideAgentsByStateGroup_40469.refact.html';
-		return 'app/rta/refact/agentsrefact/rta-agents.refact.html';
-	}
+	// var rtaAgentsTemplateUrlRefact = function (elem, attr) {
+	// 	if(toggles.RTA_QuicklyChangeAgentsSelection_40610)
+	// 		return 'app/rta/refact/agentsrefact/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.refact.html';
+	// 	if (toggles.RTA_AgentsOnOrganizationAndSkills_41586)
+	// 		return 'app/rta/refact/agentsrefact/rta-agents-AgentsOnOrganizationAndSkills_41586.refact.html';
+	// 	if (toggles.RTA_HideAgentsByStateGroup_40469)
+	// 		return 'app/rta/refact/agentsrefact/rta-agents-HideAgentsByStateGroup_40469.refact.html';
+	// 	return 'app/rta/refact/agentsrefact/rta-agents.refact.html';
+	// }
 	var rtaSkillTemplateUrl = function (elem, attr) {
 		if(toggles.RTA_QuicklyChangeAgentsSelection_40610)
 			return 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html';
@@ -100,30 +100,10 @@ angular.module('wfm.rta').provider('RtaState', function () {
 				templateUrl: 'app/rta/overview/rta-teams.html',
 				controller: 'RtaOverviewCtrl'
 			})
-			// .state('rta.agents', {
-			// 	url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
-			// 	templateUrl: rtaAgentsTemplateUrl,
-			// 	controller: 'RtaAgentsCtrl',
-			// 	params: {
-			// 		siteIds: {
-			// 			array: true
-			// 		},
-			// 		teamIds: {
-			// 			array: true
-			// 		},
-			// 		skillIds: {
-			// 			array: true
-			// 		},
-			// 		es: {
-			// 			array: true
-			// 		}
-			// 	}
-			// })
-			//state for refactored
 			.state('rta.agents', {
 				url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
-				templateUrl: rtaAgentsTemplateUrlRefact,
-				controller: 'RtaAgentsCtrlRefact as vm',
+				templateUrl: rtaAgentsTemplateUrl,
+				controller: 'RtaAgentsCtrl',
 				params: {
 					siteIds: {
 						array: true
@@ -148,6 +128,26 @@ angular.module('wfm.rta').provider('RtaState', function () {
 				url: '/agent-details/:personId',
 				templateUrl: 'app/rta/details/rta-agent-details.html',
 				controller: 'RtaAgentDetailsCtrl'
-			});
+			})
+			//states for refactored
+			// .state('rta.agents', {
+			// 	url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
+			// 	templateUrl: rtaAgentsTemplateUrlRefact,
+			// 	controller: 'RtaAgentsCtrlRefact as vm',
+			// 	params: {
+			// 		siteIds: {
+			// 			array: true
+			// 		},
+			// 		teamIds: {
+			// 			array: true
+			// 		},
+			// 		skillIds: {
+			// 			array: true
+			// 		},
+			// 		es: {
+			// 			array: true
+			// 		}
+			// 	}
+			// });
 	};
 });
