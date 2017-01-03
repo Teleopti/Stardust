@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class SkillGroupPerActivityProvider
 	{
-		public OrderedSkillGroups FetchOrdered(CascadingSkills cascadingSkills, IActivity activity, DateTimePeriod period)
+		public OrderedSkillGroups FetchOrdered(CascadingSkills cascadingSkills, IResourcesForShovelAndCalculation resources, IActivity activity, DateTimePeriod period)
 		{
-			var affectedSkills = ResourceCalculationContext.Fetch().AffectedResources(activity, period).Values;
+			var affectedSkills = resources.AffectedResources(activity, period).Values;
 			var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
 			var cascadingSkillGroups = new List<CascadingSkillGroup>();
 

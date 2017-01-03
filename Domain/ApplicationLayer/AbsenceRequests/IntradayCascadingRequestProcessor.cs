@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
@@ -26,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IActivityRepository _activityRepository;
 		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ICommandDispatcher _commandDispatcher;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
+		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 
 		public IntradayCascadingRequestProcessor(ICommandDispatcher commandDispatcher,
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 												 ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills,
-			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, 
-			ICurrentBusinessUnit currentBusinessUnit, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator)
+			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, SkillGroupPerActivityProvider skillGroupPerActivityProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_primarySkillOverstaff = primarySkillOverstaff;
-			_currentBusinessUnit = currentBusinessUnit;
 			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
+			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
@@ -101,12 +101,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					foreach (var layer in layers)
 					{
 						var activity = _activityRepository.Get(layer.PayloadId);
-						var skillCombination = _personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate).ForActivity(layer.PayloadId);
+						var skillCombination =
+							_personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
+								.ForActivity(layer.PayloadId);
 						if (!skillCombination.Skills.Any()) continue;
 
 
-						var skillCombinationResourceByAgentAndLayer = combinationResources.Single(x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
-																									   && x.StartDateTime == layer.Period.StartDateTime);
+						var skillCombinationResourceByAgentAndLayer =
+							combinationResources.Single(
+								x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
+									 && x.StartDateTime == layer.Period.StartDateTime);
 						skillCombinationResourceByAgentAndLayer.Resource -= 1;
 						skillCombinationResourcesForAgent.Add(skillCombinationResourceByAgentAndLayer);
 
@@ -116,17 +120,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var skillsForActivity = skillsByActivity[layer.PayloadId];
 						foreach (var skill in skillsForActivity)
 						{
-							var targetDemandValue = skillStaffingIntervals.FirstOrDefault(s => s.SkillId == skill.Id.GetValueOrDefault() && s.StartDateTime == layer.Period.StartDateTime)?.Forecast;
+							var targetDemandValue =
+								skillStaffingIntervals.FirstOrDefault(
+									s => s.SkillId == skill.Id.GetValueOrDefault() && s.StartDateTime == layer.Period.StartDateTime)?.Forecast;
 							if (targetDemandValue.HasValue)
 								dividedActivity.TargetDemands.Add(skill, targetDemandValue.Value);
 						}
 
-						var resources = combinationResources.Where(c => c.SkillCombination.Any(s => skillsForActivity.Any(x => x.Id.GetValueOrDefault() == s)) && c.StartDateTime == layer.Period.StartDateTime);
+						var resources =
+							combinationResources.Where(
+								c =>
+									c.SkillCombination.Any(s => skillsForActivity.Any(x => x.Id.GetValueOrDefault() == s)) &&
+									c.StartDateTime == layer.Period.StartDateTime);
 						foreach (var periodResource in resources)
 						{
 							if (periodResource.Resource == 0) continue;
-							var minCascadingIndex = allSkills.Where(s => periodResource.SkillCombination.Any(x => x == s.Id.GetValueOrDefault())).Min(s => s.CascadingIndex ?? int.MaxValue);
-							var skills = allSkills.Where(s => periodResource.SkillCombination.Any(x => x == s.Id.GetValueOrDefault()) && (!s.IsCascading() || s.CascadingIndex == minCascadingIndex)).Select(s => s.Id.GetValueOrDefault());
+							var minCascadingIndex =
+								allSkills.Where(s => periodResource.SkillCombination.Any(x => x == s.Id.GetValueOrDefault()))
+									.Min(s => s.CascadingIndex ?? int.MaxValue);
+							var skills =
+								allSkills.Where(
+									s =>
+										periodResource.SkillCombination.Any(x => x == s.Id.GetValueOrDefault()) &&
+										(!s.IsCascading() || s.CascadingIndex == minCascadingIndex)).Select(s => s.Id.GetValueOrDefault());
 
 							var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
 							var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
@@ -148,9 +164,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 								// add to sum also
 								double currentRelativePersonSkillResourceValue;
-								if (dividedActivity.RelativePersonSkillResourcesSum.TryGetValue(realSkill, out currentRelativePersonSkillResourceValue))
+								if (dividedActivity.RelativePersonSkillResourcesSum.TryGetValue(realSkill,
+									out currentRelativePersonSkillResourceValue))
 								{
-									dividedActivity.RelativePersonSkillResourcesSum[realSkill] = currentRelativePersonSkillResourceValue + relativePersonSkillResourceValue;
+									dividedActivity.RelativePersonSkillResourcesSum[realSkill] = currentRelativePersonSkillResourceValue +
+																								 relativePersonSkillResourceValue;
 								}
 								else
 								{
@@ -171,11 +189,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							}
 						}
 
-						var relevantSkillStaffPeriods = skillStaffingIntervals.Where(s => skillsForActivity.Any(x => x.Id.GetValueOrDefault() == s.SkillId) && s.StartDateTime == layer.Period.StartDateTime).Select(y =>
-																																																					 {
-																																																						 return new
-																																																							 {Skill = skillsForActivity.First(s => s.Id.GetValueOrDefault() == y.SkillId), y};
-																																																					 }).ToDictionary(k => k.Skill, v => (IResourceCalculationPeriod) v.y);
+						var relevantSkillStaffPeriods = skillStaffingIntervals.Where(
+							s =>
+								skillsForActivity.Any(x => x.Id.GetValueOrDefault() == s.SkillId) &&
+								s.StartDateTime == layer.Period.StartDateTime).Select(y =>
+						{
+							return new
+								{Skill = skillsForActivity.First(s => s.Id.GetValueOrDefault() == y.SkillId), y};
+						}).ToDictionary(k => k.Skill, v => (IResourceCalculationPeriod) v.y);
 
 
 						if (relevantSkillStaffPeriods.Count > 0)
@@ -194,45 +215,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var skillStaffIntervalHolder = new SkillStaffIntervalHolder(relevantSkillStaffPeriods);
 						var cascadingSkills = new CascadingSkills(allSkills);
 						if (!cascadingSkills.Any()) continue;
+
+						var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills,
+							new ResourcesExtractor(resources, allSkills), activity, layer.Period);
+						var allSkillGroups = orderedSkillGroups.AllSkillGroups();
+						foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 						{
-							var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
-							var cascadingSkillGroups = new List<CascadingSkillGroup>();
-
-							var cascadingSkillsInSkillGroup = cascadingSkillsForActivity.Where(x => skillsForActivity.Contains(x)).ToArray();
-							if (!cascadingSkillsInSkillGroup.Any())
-								continue;
-
-							var lowestCascadingIndex = cascadingSkillsInSkillGroup.Min(x => x.CascadingIndex.Value);
-							var primarySkills = cascadingSkillsInSkillGroup.Where(x => x.CascadingIndex.Value == lowestCascadingIndex);
-							var cascadingSubSkills = new List<SubSkillsWithSameIndex>();
-							foreach (var skillInSameChainAsPrimarySkill in cascadingSkillsInSkillGroup.Where(x => !primarySkills.Contains(x)))
-							{
-								var last = cascadingSubSkills.LastOrDefault();
-								if (last == null || !skillInSameChainAsPrimarySkill.CascadingIndex.Value.Equals(last.CascadingIndex))
-								{
-									var cascadingSkillGroupItem = new SubSkillsWithSameIndex();
-									cascadingSkillGroupItem.AddSubSkill(skillInSameChainAsPrimarySkill);
-									cascadingSubSkills.Add(cascadingSkillGroupItem);
-								}
-								else
-								{
-									last.AddSubSkill(skillInSameChainAsPrimarySkill);
-								}
-							}
-							cascadingSkillGroups.Add(new CascadingSkillGroup(primarySkills, cascadingSubSkills, resources.Sum(x => x.Resource)));
-
-							cascadingSkillGroups.Sort(new CascadingSkillGroupSorter());
-
-							var orderedSkillGroups = mergeSkillGroupsWithSameIndex(cascadingSkillGroups);
-
-
-							var allSkillGroups = orderedSkillGroups.AllSkillGroups();
-							foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
-							{
-								var state = _primarySkillOverstaff.AvailableSum(skillStaffIntervalHolder, allSkillGroups, skillGroupsWithSameIndex, layer.Period);
-								_addResourcesToSubSkills.Execute(state, skillStaffIntervalHolder, skillGroupsWithSameIndex, layer.Period);
-								_reducePrimarySkillResources.Execute(state, skillStaffIntervalHolder, layer.Period);
-							}
+							var state = _primarySkillOverstaff.AvailableSum(skillStaffIntervalHolder, allSkillGroups, skillGroupsWithSameIndex, layer.Period);
+							_addResourcesToSubSkills.Execute(state, skillStaffIntervalHolder, skillGroupsWithSameIndex, layer.Period);
+							_reducePrimarySkillResources.Execute(state, skillStaffIntervalHolder, layer.Period);
 						}
 					}
 				}
@@ -341,6 +332,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 
 			return !command.ErrorMessages.Any();
+		}
+	}
+
+	public class ResourcesExtractor : IResourcesForShovelAndCalculation
+	{
+		private readonly IEnumerable<SkillCombinationResource> _resources;
+		private readonly IEnumerable<ISkill> _skills;
+
+		public ResourcesExtractor(IEnumerable<SkillCombinationResource> resources, IEnumerable<ISkill> skills)
+		{
+			_resources = resources;
+			_skills = skills;
+		}
+
+		public IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
+		{
+			var skillDictionary = _skills.Where(s => s.Activity!=null && s.Activity.Equals(activity)).ToLookup(s => s.Id.GetValueOrDefault());
+			var withSkills =
+				_resources.Select(
+					r =>
+						new
+						{
+							Resource = r,
+							Skills = r.SkillCombination.Select(s => skillDictionary[s].FirstOrDefault()).Where(s => s != null)
+						}).Where(s => s.Resource.StartDateTime==periodToCalculate.StartDateTime && s.Skills.Any());
+
+			return withSkills.ToDictionary(k => string.Join("_", k.Resource.SkillCombination),
+				v =>
+					new AffectedSkills
+					{
+						Count = double.NaN,
+						Resource = v.Resource.Resource,
+						SkillEffiencies = new ConcurrentDictionary<Guid, double>(),
+						Skills = v.Skills
+					});
 		}
 	}
 }

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(defaultResolution))
 							{
-								var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval);
+								var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, ResourceCalculationContext.Fetch(), activity, interval);
 								var allSkillGroups = orderedSkillGroups.AllSkillGroups();
 								foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 								{
