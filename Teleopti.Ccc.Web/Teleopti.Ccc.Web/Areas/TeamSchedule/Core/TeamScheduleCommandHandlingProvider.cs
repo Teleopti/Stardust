@@ -62,9 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						EndTime = input.EndTime,
 						MoveConflictLayerAllowed = input.MoveConflictLayerAllowed,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 					_commandDispatcher.Execute(command);
 					if (command.ErrorMessages != null && command.ErrorMessages.Any())
@@ -112,9 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						StartTime = input.StartTime,
 						EndTime = input.EndTime,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 					_commandDispatcher.Execute(command);
 					if (command.ErrorMessages != null && command.ErrorMessages.Any())
@@ -163,9 +159,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						Period = new DateTimePeriod(startDateTimeUtc,endDateTimeUtc),
 						MultiplicatorDefinitionSetId = input.MultiplicatorDefinitionSetId,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 					_commandDispatcher.Execute(command);
 					if(command.ErrorMessages != null && command.ErrorMessages.Any())
@@ -212,9 +206,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 							ShiftLayerId = shiftLayerDate.ShiftLayerId,
 							Date = shiftLayerDate.Date,
 							TrackedCommandInfo =
-								input.TrackedCommandInfo != null
-									? input.TrackedCommandInfo
-									: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+								input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 						};
 
 						_commandDispatcher.Execute(command);
@@ -439,25 +431,22 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 
 			var result = new List<ActionResult>();
-
-			foreach (var personId in input.PersonIds)
+			var people = _personRepository.FindPeople(input.PersonIds);
+			foreach (var person in people)
 			{
 				var actionResult = new ActionResult();
-				var person = _personRepository.Get(personId);
-				actionResult.PersonId = personId;
+				actionResult.PersonId = person.Id.GetValueOrDefault();
 				actionResult.ErrorMessages = new List<string>();
 
 				if (checkPermissionFn(permissions, input.Date, person, actionResult.ErrorMessages))
 				{
 					var command = new ChangeShiftCategoryCommand
 					{
-						PersonId = personId,
+						PersonId = person.Id.GetValueOrDefault(),
 						Date = input.Date,
 						ShiftCategoryId = input.ShiftCategoryId,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+							input.TrackedCommandInfo ?? new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
 					};
 
 					_commandDispatcher.Execute(command);
@@ -482,24 +471,21 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 
 			var result = new List<ActionResult>();
-
-			foreach(var personId in input.PersonIds)
+			var people = _personRepository.FindPeople(input.PersonIds);
+			foreach(var person in people)
 			{
 				var actionResult = new ActionResult();
-				var person = _personRepository.Get(personId);
-				actionResult.PersonId = personId;
+				actionResult.PersonId = person.Id.GetValueOrDefault();
 				actionResult.ErrorMessages = new List<string>();
 
 				if(checkPermissionFn(permissions,input.Date,person,actionResult.ErrorMessages))
 				{
 					var command = new FixNotOverwriteLayerCommand
 					{
-						PersonId = personId,
+						PersonId = person.Id.GetValueOrDefault(),
 						Date = input.Date,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 
 					_commandDispatcher.Execute(command);
