@@ -40,6 +40,14 @@
 		vm.searchEnabled = $state.current.name != 'teams.for';
 		vm.showDatePicker = false;
 
+		vm.applyFavorite = function() {
+
+		};
+
+		vm.getSearch = function() {
+
+		};
+
 		vm.paginationOptions = {
 			pageSize: 20,
 			pageNumber: 1,
@@ -395,7 +403,8 @@
 				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 				ManageScheduleForDistantTimezonesEnabled:  toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
 
-				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039
+				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039,
+				SaveFavoriteSearchesEnabled: toggleSvc.WfmTeamSchedule_SaveFavoriteSearches_42073
 			};
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();

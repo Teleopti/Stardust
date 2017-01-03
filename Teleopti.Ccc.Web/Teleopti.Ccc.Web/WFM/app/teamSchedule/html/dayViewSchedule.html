@@ -10,6 +10,9 @@
 <div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)">
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
+
+			<favorite-search apply-favorite="vm.applyFavorite" get-search="vm.getSearch"></favorite-search>
+
 			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" class="organization-picker-container"
 								 on-pick="vm.changeSelectedTeams(teams)"></organization-picker>
 

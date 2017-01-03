@@ -1434,6 +1434,7 @@
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.skill.service.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.html" />
+    <Content Include="WFM\app\teamSchedule\html\favoriteSearch.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\organizationPicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsDatetimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.moveShift.html" />
@@ -1442,6 +1443,8 @@
     <Content Include="WFM\app\teamSchedule\html\timezonePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.moveShift.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.favoriteSearch.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.favoriteSearch.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.organizationPicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.teamsDatetimePicker.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timeline.js" />
@@ -1452,6 +1455,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timezonePicker.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personWeekView.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.favoriteSearch.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.names.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.timezone.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.timezone.spec.js" />
