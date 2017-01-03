@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.Time.Length.Should().Be.EqualTo(1);
-			result.DataSeries.AverageSpeedOfAnswer.First().Should().Be.EqualTo(null);
+			result.DataSeries.AverageSpeedOfAnswer.First().Should().Be.EqualTo(0);
 		}
 
 		[Test]
