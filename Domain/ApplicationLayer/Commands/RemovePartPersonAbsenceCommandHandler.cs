@@ -15,13 +15,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_personAbsenceRemover = personAbsenceRemover;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
-
 		}
 
 		public void Handle(RemovePartPersonAbsenceCommand command)
 		{
-			var personAbsences = command.PersonAbsences.ToList();
-			if (!personAbsences.Any() || !personAbsences.Any(pa => pa.Period.Intersect(command.PeriodToRemove)))
+			var personAbsences = command.PersonAbsence;
+			if (personAbsences == null || !personAbsences.Period.Intersect(command.PeriodToRemove))
 			{
 				return;
 			}
@@ -37,8 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					_currentScenario.Current());
 
 			var scheduleRange = scheduleDictionary[person];
-
-
 			var errors =
 				_personAbsenceRemover.RemovePartPersonAbsence(scheduleDate, person, personAbsences,
 					command.PeriodToRemove, scheduleRange, command.TrackedCommandInfo).ToList();

@@ -6,9 +6,8 @@ namespace Teleopti.Ccc.TestCommon.Services
 {
 	public class ApprovalServiceForTest : IRequestApprovalService
 	{
-
 	    private IEnumerable<IBusinessRuleResponse> businessRuleResponse = new List<IBusinessRuleResponse>();
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+
 		public IScenario Scenario
 		{
 			get { throw new NotImplementedException(); }
@@ -30,11 +29,7 @@ namespace Teleopti.Ccc.TestCommon.Services
 		{
 			return null;
 		}
-
-		public void ScheduleChangedCallback(IList<IScheduleDay> scheduleDaysBefore, IList<IScheduleDay> scheduleDaysAfter)
-		{
-		}
-
+		
 		public void SetBusinessRuleResponse(params IBusinessRuleResponse[] brokenRule)
 	    {
 	        businessRuleResponse = brokenRule;

@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(RemovePersonAbsenceCommand command)
 		{
-			var personAbsences = command.PersonAbsences;
-			if (personAbsences == null || !personAbsences.Any())
+			var personAbsences = command.PersonAbsence;
+			if (personAbsences == null)
 			{
 				return;
 			}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 
 			var errors =
-				_personAbsenceRemover.RemovePersonAbsence(scheduleDate, person, command.PersonAbsences, scheduleRange, command.TrackedCommandInfo).ToList();
+				_personAbsenceRemover.RemovePersonAbsence(scheduleDate, person, command.PersonAbsence, scheduleRange, command.TrackedCommandInfo).ToList();
 			if (!errors.Any())
 			{
 				return;

@@ -34,18 +34,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
             return new ReadOnlyCollection<IAccount>(ret);
         }
 
-		public virtual IPerson Person
-		{
-			get { return _person; }
-		}
+		public virtual IPerson Person => _person;
 
-		public virtual IAbsence Absence
-		{
-			get
-			{
-				return _absence;
-			}
-		}
+		public virtual IAbsence Absence => _absence;
 
 		public virtual void Add(IAccount account)
 		{
@@ -60,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
 		public virtual IAccount Find(DateOnly dateOnly)
 		{
-			return Find(new DateOnlyPeriod(dateOnly, dateOnly)).FirstOrDefault();
+			return Find(dateOnly.ToDateOnlyPeriod()).FirstOrDefault();
 		}
 
 		public virtual IEnumerable<IAccount> Find(DateOnlyPeriod dateOnlyPeriod)

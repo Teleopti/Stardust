@@ -92,17 +92,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			// Anyway, not full access is not an error that can be overridden
 			return new List<IBusinessRuleResponse>();
 		}
-
-		public void ScheduleChangedCallback(IList<IScheduleDay> scheduleDaysBefore, IList<IScheduleDay> scheduleDaysAfter)
-		{
-			for (int i = 1; i < scheduleDaysBefore.Count(); i++)
-			{
-				var partBefore = scheduleDaysBefore[i];
-				var partAfter = scheduleDaysAfter[i];
-				_scheduleDayChangeCallback.ScheduleDayChanged(partBefore, partAfter);
-			}
-		}
-
+		
 		public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
 		{
 			var shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(_scheduleDictionary, _personRequestCheckAuthorization);
@@ -135,21 +125,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return new[] {dayScheduleForAbsenceReqStart};
 			}
 
-			var days = _checkingPersonalAccountDaysProvider.GetDays(absence, person, period).ToArray();
-			if (days.Length == 1)
+			var days = _checkingPersonalAccountDaysProvider.GetDays(absence, person, period);
+			if (days.DayCount() == 1)
 			{
 				return new[] {dayScheduleForAbsenceReqStart};
 			}
 
-			var startDate = new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()));
+			var newPeriod = days.StartDate == dayScheduleForAbsenceReqStart.DateOnlyAsPeriod.DateOnly
+				? new DateOnlyPeriod(days.StartDate.AddDays(1), days.EndDate)
+				: days;
 			var scheduleDays = new List<IScheduleDay> {dayScheduleForAbsenceReqStart};
-			foreach (var day in days)
-			{
-				if (day == startDate)
-					continue;
-
-				scheduleDays.Add(totalScheduleRange.ScheduledDay(day));
-			}
+			scheduleDays.AddRange(totalScheduleRange.ScheduledDayCollection(newPeriod));
 			return scheduleDays;
 		}
 	}

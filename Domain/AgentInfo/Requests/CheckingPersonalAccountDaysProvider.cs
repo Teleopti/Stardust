@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -15,35 +13,30 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
 
-		public IEnumerable<DateOnly> GetDays(IAbsence absence,
-			IPerson person, DateTimePeriod period)
+		public DateOnlyPeriod GetDays(IAbsence absence, IPerson person, DateTimePeriod period)
 		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var startDate = new DateOnly(period.StartDateTimeLocal(timeZone));
-			var endDate = new DateOnly(period.EndDateTimeLocal(timeZone));
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 
-			if (startDate == endDate)
+			if (dateOnlyPeriod.DayCount() == 1)
 			{
-				return new[] { startDate };
+				return dateOnlyPeriod;
 			}
 
 			var personAccounts = _personAbsenceAccountRepository.Find(person);
-			var days = period.ToDateOnlyPeriod(timeZone).DayCollection();
-			var checkedScheduleDays = new HashSet<DateOnly>();
-			var checkedAccounts = new HashSet<IAccount>();
+			var account = personAccounts.Find(absence);
+			if (account == null)
+				return dateOnlyPeriod.StartDate.ToDateOnlyPeriod();
 
-			foreach (var day in days)
-			{
-				var account = personAccounts.Find(absence, day);
+			var foundAccounts = account.Find(dateOnlyPeriod).ToArray();
+			if (foundAccounts.Length == 0)
+				return dateOnlyPeriod.StartDate.ToDateOnlyPeriod();
 
-				if (account == null)
-					continue;
+			var firstDate = foundAccounts.Select(a => a.StartDate).OrderBy(a => a).First();
+			if (firstDate <= dateOnlyPeriod.StartDate)
+				return dateOnlyPeriod;
 
-				if (checkedAccounts.Add(account))
-					checkedScheduleDays.Add(day);
-			}
-
-			return checkedScheduleDays;
+			return new DateOnlyPeriod(firstDate,dateOnlyPeriod.EndDate);
 		}
 	}
 }

@@ -241,10 +241,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			var result = new List<ActionResult>();
 
+			var people = _personRepository.FindPeople(input.SelectedPersonAbsences.Select(p => p.PersonId)).ToDictionary(p => p.Id.GetValueOrDefault());
 			foreach(var selectedPersonAbsence in input.SelectedPersonAbsences)
 			{
 				var absenceDateGroups = selectedPersonAbsence.AbsenceDates.GroupBy(absenceDate => absenceDate.Date,absenceDate => absenceDate.PersonAbsenceId);
-				var person = _personRepository.Get(selectedPersonAbsence.PersonId);
+				var person = people[selectedPersonAbsence.PersonId];
 
 				foreach(var absenceGroup in absenceDateGroups)
 				{
@@ -259,15 +260,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						var command = new RemoveSelectedPersonAbsenceCommand
 						{
 							PersonId = selectedPersonAbsence.PersonId,
-							PersonAbsenceIds = absenceGroup.ToArray(),
 							Date = date,
 							TrackedCommandInfo =
-								input.TrackedCommandInfo != null
-									? input.TrackedCommandInfo
-									: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+								input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 						};
 
-						_commandDispatcher.Execute(command);
+						foreach (var personAbsenceId in absenceGroup)
+						{
+							command.PersonAbsenceId = personAbsenceId;
+							_commandDispatcher.Execute(command);
+						}
+
 						if(command.ErrorMessages != null && command.ErrorMessages.Any())
 						{
 							actionResult.ErrorMessages.AddRange(command.ErrorMessages);
@@ -293,9 +296,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.NewShiftStart, userTimezone);
 			var result = new List<ActionResult>();
 
-			foreach (var personId in input.PersonIds)
+			var people = _personRepository.FindPeople(input.PersonIds);
+			foreach (var person in people)
 			{
-				var person = _personRepository.Get(personId);
 				var personError = new ActionResult { PersonId = person.Id.GetValueOrDefault(), ErrorMessages = new List<string>() };
 				if (!checkPermissionFn(permission, input.Date, person, personError.ErrorMessages))
 				{
@@ -305,13 +308,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 				var command = new MoveShiftCommand
 				{
-					PersonId = personId,
+					PersonId = person.Id.GetValueOrDefault(),
 					ScheduleDate = input.Date,
 					NewStartTimeInUtc = newStartTimeInUtc,
 					TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 				};
 				_commandDispatcher.Execute(command);
 				if (command.ErrorMessages != null && command.ErrorMessages.Any())
@@ -348,9 +349,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						PersonId = personId,
 						Dates = dates.ToArray(),
 						TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+							input.TrackedCommandInfo ?? new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
 					};
 
 					_commandDispatcher.Execute(command);
@@ -385,9 +384,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					result.Add(personError);
 					continue;
 				}
-
-
-
+				
 				var layerToMoveTimeMap = _helper.GetCorrectNewStartForLayersForPerson(person, personActivity.Date, personActivity.ShiftLayerIds,
 					newStartTimeInUtc);
 				if (personActivity.ShiftLayerIds.Any(x => !layerToMoveTimeMap.ContainsKey(x)))

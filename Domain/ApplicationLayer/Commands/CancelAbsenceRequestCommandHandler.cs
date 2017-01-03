@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				{
 					var startDateOnly = new DateOnly(personAbsence.Period.LocalStartDateTime);
 					var errorMessages = _personAbsenceRemover.RemovePersonAbsence(startDateOnly,
-						personRequest.Person, new[] { personAbsence }, scheduleRange).ToList();
+						personRequest.Person, personAbsence, scheduleRange).ToList();
 
 					if (!errorMessages.Any()) continue;
 

@@ -12,7 +12,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -60,8 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(_person);
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate,_saveSchedulePartService,
 				_personAbsenceCreator,loggedOnUser
-				,new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()),
-				new PersonRequestAuthorizationCheckerForTest());
+				,new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
 
 
 		}
@@ -94,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
 				PersonId = _person.Id.Value,
-				PersonAbsenceIds = new[] { selectedPersonAbsence.Id.Value },
+				PersonAbsenceId = selectedPersonAbsence.Id.Value,
 				Date = new DateOnly(2016,10,1),
 			};
 
@@ -128,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
 				PersonId = _person.Id.Value,
-				PersonAbsenceIds = new[] { selectedPersonAbsence.Id.Value },
+				PersonAbsenceId = selectedPersonAbsence.Id.Value,
 				Date = new DateOnly(2016,10,1),
 			};
 
@@ -170,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
 				PersonId = _person.Id.Value,
-				PersonAbsenceIds = new[] { personAbsence.Id.Value },
+				PersonAbsenceId = personAbsence.Id.Value,
 				Date = new DateOnly(2016,10,2),
 			};
 
@@ -212,16 +210,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_scheduleStorage.Add(selectedPersonAbsence2);
 			_scheduleStorage.Add(personAssignment);
 
-			var command = new RemoveSelectedPersonAbsenceCommand
-			{
-				PersonId = _person.Id.Value,
-				PersonAbsenceIds = new[] { selectedPersonAbsence.Id.Value,selectedPersonAbsence2.Id.Value },
-				Date = new DateOnly(2016,10,1),
-			};
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
 				_personRepository,_personAbsenceRemover);
 
+			var command = new RemoveSelectedPersonAbsenceCommand
+			{
+				PersonId = _person.Id.Value,
+				PersonAbsenceId = selectedPersonAbsence.Id.Value,
+				Date = new DateOnly(2016, 10, 1),
+			};
+
+			target.Handle(command);
+
+			command.PersonAbsenceId = selectedPersonAbsence2.Id.Value;
 			target.Handle(command);
 
 			command.ErrorMessages.Count.Should().Be.EqualTo(0);

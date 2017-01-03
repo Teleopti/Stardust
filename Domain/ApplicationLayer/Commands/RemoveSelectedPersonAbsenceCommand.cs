@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly Date { get; set; }
-		public Guid[] PersonAbsenceIds { get; set; }
+		public Guid PersonAbsenceId { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public IList<string> ErrorMessages { get; set; }
 	}

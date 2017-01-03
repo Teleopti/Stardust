@@ -16,35 +16,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
-		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
 		public PersonAbsenceRemover(IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
 			ILoggedOnUser loggedOnUser,
-		 ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+		 ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 			_personAbsenceCreator = personAbsenceCreator;
 			_loggedOnUser = loggedOnUser;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
-			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
 		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
-			IEnumerable<IPersonAbsence> personAbsences, IScheduleRange scheduleRange, TrackedCommandInfo commandInfo = null)
+			IPersonAbsence personAbsence, IScheduleRange scheduleRange, TrackedCommandInfo commandInfo = null)
 		{
-			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo,
+			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsence, commandInfo,
 				scheduleRange);
 			return errors ?? new List<string>();
 		}
 
 		public IEnumerable<string> RemovePartPersonAbsence(DateOnly scheduleDate, IPerson person,
-			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove, IScheduleRange scheduleRange,
+			IPersonAbsence personAbsence, DateTimePeriod periodToRemove, IScheduleRange scheduleRange,
 			TrackedCommandInfo commandInfo = null)
 		{
-			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo,
+			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsence, commandInfo,
 				scheduleRange, periodToRemove);
 			return errors ?? new List<string>();
 		}
@@ -89,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 
 		private IEnumerable<string> removePersonAbsenceFromScheduleDay(
-			DateOnly scheduleDate, IPerson person, IList<IPersonAbsence> personAbsences,
+			DateOnly scheduleDate, IPerson person, IPersonAbsence personAbsence,
 			TrackedCommandInfo commandInfo, IScheduleRange scheduleRange,
 			DateTimePeriod? periodToRemove = null)
 		{
@@ -98,23 +96,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return new[] {Resources.CouldNotRemoveAbsenceFromProtectedSchedule};
 			}
 
-			foreach (var personAbsence in personAbsences)
-			{
-				personAbsence.RemovePersonAbsence(commandInfo);
-			}
-
+			personAbsence.RemovePersonAbsence(commandInfo);
+			
 			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate) as ExtractedSchedule;
 			if (scheduleDay != null)
 			{
 				var scheduleDaysForChecking = new List<IScheduleDay> {scheduleDay};
 				// To be more efficient, we only return the first schedule day for each personal account for NewPersonAccountRule
-				scheduleDaysForChecking.AddRange(getScheduleDaysForCheckingAccount(personAbsences, scheduleDate, scheduleRange, person));
-
-				foreach (var personAbsence in personAbsences)
-				{
-					scheduleDaysForChecking.ForEach(s => s.Remove(personAbsence));
-				}
-
+				scheduleDaysForChecking.AddRange(getScheduleDaysForCheckingAccount(personAbsence, scheduleDate, scheduleRange, person));
+				scheduleDaysForChecking.ForEach(s => s.Remove(personAbsence));
+				
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 				var errors = _saveSchedulePartService.Save(scheduleDaysForChecking, rules, KeepOriginalScheduleTag.Instance);
 
@@ -125,22 +116,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var errorMessages = new List<string>();
-			foreach (var personAbsence in personAbsences)
+			if (periodToRemove.HasValue)
 			{
-				if (!periodToRemove.HasValue)
-				{
-					// Cancel the request if removing entire absence
-					continue;
-				}
-
 				var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove.Value);
-				if (!newAbsencePeriods.Any())
+				if (newAbsencePeriods.Any())
 				{
-					// Cancel the request if removing part absence but no new absence need be created
-					continue;
+					errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
+						newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
 				}
-				errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
-					newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
 			}
 
 			return errorMessages;
@@ -174,29 +157,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return errorMessages;
 		}
 
-		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IEnumerable<IPersonAbsence> personAbsences,
+		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IPersonAbsence personAbsence,
 			DateOnly startDate,
 			IScheduleRange scheduleRange, IPerson person)
 		{
-			var scheduleDaysForChecking = new List<IScheduleDay>();
-			var days = new HashSet<DateOnly>();
+			var daysForChecking =
+					   _checkingPersonalAccountDaysProvider.GetDays(personAbsence.Layer.Payload, person,
+						   personAbsence.Period);
+			if (daysForChecking.DayCount() <= 1) return Enumerable.Empty<IScheduleDay>();
 
-			foreach (var personAbsence in personAbsences)
-			{
-				var daysForChecking =
-					_checkingPersonalAccountDaysProvider.GetDays(personAbsence.Layer.Payload, person,
-						personAbsence.Period);
-				foreach (var dayForChecking in daysForChecking)
-				{
-					if (dayForChecking != startDate && days.Add(dayForChecking))
-					{
-						scheduleDaysForChecking.Add(scheduleRange.ScheduledDay(dayForChecking));
-					}
-				}
-			}
+			var periodToLoad = daysForChecking.StartDate == startDate
+				? new DateOnlyPeriod(daysForChecking.StartDate.AddDays(1), daysForChecking.EndDate)
+				: daysForChecking;
 
-			return scheduleDaysForChecking;
+			return scheduleRange.ScheduledDayCollection(periodToLoad);
 		}
-
 	}
 }

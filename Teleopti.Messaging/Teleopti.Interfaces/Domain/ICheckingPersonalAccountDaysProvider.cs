@@ -1,10 +1,7 @@
-﻿
-using System.Collections.Generic;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
 	public interface ICheckingPersonalAccountDaysProvider
 	{
-		IEnumerable<DateOnly> GetDays(IAbsence absence, IPerson person, DateTimePeriod period);
+		DateOnlyPeriod GetDays(IAbsence absence, IPerson person, DateTimePeriod period);
 	}
 }

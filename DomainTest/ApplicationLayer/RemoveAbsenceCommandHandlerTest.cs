@@ -17,7 +17,6 @@ using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator,
 				_loggedOnUser,
-				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
+				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
 		}
 
 		[Test]
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				ScheduleDate = startDate,
 				Person = person,
-				PersonAbsences = new[] { personAbsence }
+				PersonAbsence = personAbsence
 			};
 
 			target.Handle(command);
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				string.Format("Error message {0}", Guid.NewGuid()),
 				string.Format("Error message {0}", Guid.NewGuid())
 			};
-			personAbsenceRemover.Stub(x => x.RemovePersonAbsence(new DateOnly(dateTimePeriod.StartDateTime), person, new[] { personAbsence }, null))
+			personAbsenceRemover.Stub(x => x.RemovePersonAbsence(new DateOnly(dateTimePeriod.StartDateTime), person, personAbsence, null))
 				.IgnoreArguments().Return(errorMessages);
 
 			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				ScheduleDate = startDate,
 				Person = person,
-				PersonAbsences = new[] { personAbsence }
+				PersonAbsence = personAbsence
 			};
 
 			target.Handle(command);
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new RemovePersonAbsenceCommand
 			{
 				Person = person,
-				PersonAbsences = new[] { personAbsence },
+				PersonAbsence = personAbsence,
 				ScheduleDate = startDate,
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
@@ -201,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				ScheduleDate = dateTimePeriod.StartDateTime,
 				Person = person,
-				PersonAbsences = new[] {personAbsence}
+				PersonAbsence = personAbsence
 			};
 
 			target.Handle(command);
@@ -225,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService,
 				_personAbsenceCreator,
 				_loggedOnUser,
-				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
+				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
 		}
 
 		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)

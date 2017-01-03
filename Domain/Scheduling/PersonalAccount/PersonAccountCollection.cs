@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
         public IAccount Find(IAbsence absence, DateOnly dateOnly)
         {
             var accounts = Find(absence);
-            return accounts == null ? null : accounts.Find(dateOnly);
+            return accounts?.Find(dateOnly);
         }
 
         public IEnumerable<IAccount> Find(DateOnly dateOnly)

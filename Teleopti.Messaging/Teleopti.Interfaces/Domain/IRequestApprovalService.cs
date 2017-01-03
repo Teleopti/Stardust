@@ -11,7 +11,6 @@ namespace Teleopti.Interfaces.Domain
 	/// </remarks>
 	public interface IRequestApprovalService
 	{
-		
 		IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest = null);
 
 		/// <summary>
@@ -26,7 +25,5 @@ namespace Teleopti.Interfaces.Domain
 		IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest);
 
 		IPersonAbsence GetApprovedPersonAbsence();
-
-		void ScheduleChangedCallback(IList<IScheduleDay> scheduleDaysBefore, IList<IScheduleDay> scheduleDaysAfter);
 	}
 }
