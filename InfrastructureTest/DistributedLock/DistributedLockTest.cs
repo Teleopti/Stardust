@@ -219,6 +219,17 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			exceptionThrown.Should().Be(true);
 		}
 
+		[Test]
+		[Ignore("Ran manually just to see that the keep alive query actually works. Hard to test without 30 azure timeout.")]
+		[Setting("DistributedLockKeepAliveInterval", 100)]
+		public void ShouldKeepConnectionAliveInAzure()
+		{
+			Target.TryLockForTypeOf(new Lock1(), () =>
+			{
+				Thread.Sleep(5000);
+			});
+		}
+
 		[Serializable]
 		public class TestException : Exception
 		{
