@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					latestQueueStatsIntervalDate = interval.IntervalDate;
 				}
 					
-				averageSpeedOfAnswer.Add(interval.SpeedOfAnswer.HasValue ? interval.SpeedOfAnswer / interval.AnsweredCalls : null);
+				averageSpeedOfAnswer.Add(interval.AnsweredCalls == 0 ? null : (interval.SpeedOfAnswer.HasValue ? interval.SpeedOfAnswer / interval.AnsweredCalls : null));
 				abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate * 100 : null);
 				serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? interval.ServiceLevel * 100 : null);
 

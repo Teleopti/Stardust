@@ -364,6 +364,37 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ShouldHandleAverageSpeedOfAnswerWithZeroAnsweredCalls()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+
+			fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15));
+
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				OfferedCalls = 20,
+				AnsweredCalls = 0,
+				AnsweredCallsWithinSL = 16,
+				SpeedOfAnswer = 10,
+				AbandonedCalls = 4,
+				AbandonedRate = 0.2d,
+				ServiceLevel = 0.8d
+			});
+
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.DataSeries.Time.Length.Should().Be.EqualTo(1);
+			result.DataSeries.AverageSpeedOfAnswer.First().Should().Be.EqualTo(null);
+		}
+
+		[Test]
 		public void ShouldReturnNoEslWhenNoForecast()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
