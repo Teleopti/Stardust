@@ -37,8 +37,12 @@
     vm.unselectedDataFilter = unselectedDataFilter;
     vm.filteredOrganizationSelection = {};
     vm.onFunctionClick = functionClick;
+    vm.functionsDescriptionFilter = functionsDescriptionFilter;
+    vm.orgDataDescriptionFilter = orgDataDescriptionFilter;
+
     var functionsFilter = $filter('functionsFilter');
     var dataFilter = $filter('dataFilter');
+    var descriptionFilter = $filter('newDescriptionFilter');
 
     function isFunctionSelected(func) {
       return vm.selectedFunctions[func.FunctionId];
@@ -77,15 +81,23 @@
       vm.componentFunctions = arr;
     }
 
+    function orgDataDescriptionFilter(searchString) {
+      var data = descriptionFilter.filterOrgData(vm.organizationSelection, searchString);
+      orgDataHandler(data);
+    }
+
+    function functionsDescriptionFilter(searchString) {
+      var filteredArray = descriptionFilter.filterFunctions(vm.applicationFunctions, searchString);
+      listHandler(filteredArray);
+    }
+
     function unSelectedFunctionsFilter() {
       var filteredArray = functionsFilter.unselected(vm.applicationFunctions, vm.selectedFunctions);
-      console.log('unselected', filteredArray);
       listHandler(filteredArray);
     }
 
     function selectedFunctionsFilter() {
       var filteredArray = functionsFilter.selected(vm.applicationFunctions, vm.selectedFunctions);
-      console.log(filteredArray);
       listHandler(filteredArray);
     }
 

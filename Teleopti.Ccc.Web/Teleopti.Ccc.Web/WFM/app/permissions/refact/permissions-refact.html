@@ -136,7 +136,7 @@
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" placeholder="{{'PermissionsFilterThreeDots' | translate}}">
+												<input type="text" id="filter1" ng-model="searchString" placeholder="{{'PermissionsFilterThreeDots' | translate}}" ng-change="vm.functionsDescriptionFilter(searchString)">
 												<md-tooltip>Filter</md-tooltip>
 											</i>
 										</label>
@@ -199,7 +199,7 @@
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" placeholder="{{'PermissionsFilterThreeDots' | translate}}">
+												<input type="text" id="filter1" ng-model="searchString" placeholder="{{'PermissionsFilterThreeDots' | translate}}" ng-change="vm.orgDataDescriptionFilter(searchString)">
 												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
 											</i>
 										</label>

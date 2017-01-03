@@ -541,7 +541,7 @@ xdescribe('PermissionsCtrl', function() {
 				.withRole(defaultRole2)
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
 			$httpBackend.flush();
-      vm.selectRole(vm.roles[0]);
+			vm.selectRole(vm.roles[0]);
 
 			vm.deleteRole(vm.roles[1]);
 			$httpBackend.flush();
@@ -615,8 +615,8 @@ xdescribe('PermissionsCtrl', function() {
 			vm.selectRole(vm.roles[0]);
 			$httpBackend.flush();
 
-      expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232075']).toEqual(true);
-      expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
+			expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232075']).toEqual(true);
+			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
 		});
 
 
@@ -650,9 +650,9 @@ xdescribe('PermissionsCtrl', function() {
 			vm.selectRole(vm.roles[0]);
 			$httpBackend.flush();
 
-      expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232075']).toEqual(true);
-      expect(vm.selectedFunctions['6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7']).toEqual(undefined);
-      expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
+			expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232075']).toEqual(true);
+			expect(vm.selectedFunctions['6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7']).toEqual(undefined);
+			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
 		});
 
 		it('should indicate all ApplicationFunctions and its ChildFunctions for selected role', function() {
@@ -697,9 +697,9 @@ xdescribe('PermissionsCtrl', function() {
 			vm.selectRole(vm.roles[0]);
 			$httpBackend.flush();
 
-      expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232075']).toEqual(true);
-      expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
-      expect(vm.selectedFunctions['52b6f3de-55e0-45b2-922e-316f8538f60c']).toEqual(true);
+			expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232075']).toEqual(true);
+			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
+			expect(vm.selectedFunctions['52b6f3de-55e0-45b2-922e-316f8538f60c']).toEqual(true);
 		});
 
 		it('should select all functions when toggle all function', function() {
@@ -827,19 +827,19 @@ xdescribe('PermissionsCtrl', function() {
 
 		it('should deselect all functions when toggle all function', function() {
 			fakeBackend
-        .withRole(defaultRole)
-        .withRoleInfo({
-          Id: defaultRole.Id,
-          AvailableFunctions: [{
-            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-          }, {
-            Id: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-          }, {
-            Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-          }, {
-            Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-          }]
-        })
+				.withRole(defaultRole)
+				.withRoleInfo({
+					Id: defaultRole.Id,
+					AvailableFunctions: [{
+						Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+					}, {
+						Id: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+					}, {
+						Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+					}, {
+						Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+					}]
+				})
 				.withApplicationFunction({
 					FunctionId: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
 					Name: 'All',
@@ -866,7 +866,7 @@ xdescribe('PermissionsCtrl', function() {
 				});
 			$httpBackend.flush();
 
-      vm.selectedOrNot = true;
+			vm.selectedOrNot = true;
 			vm.toggleAllFunction();
 			$httpBackend.flush();
 
@@ -1253,29 +1253,24 @@ xdescribe('PermissionsCtrl', function() {
 					.withRoleInfo({
 						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
 						AvailableFunctions: [{
-							Id: '63656f9a-be16-4bb7-9012-9bde01232075',
-							IsSelected: true
+							Id: '63656f9a-be16-4bb7-9012-9bde01232075'
 						}]
 					})
 					.withApplicationFunction({
 						FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
 						Name: 'SelectedFunction',
-						ChildFunctions: [],
-						IsSelected: true
+						ChildFunctions: []
 					})
 					.withApplicationFunction({
 						FunctionId: '9995eba9-c304-40b7-866b-5c77b3e76f8d',
 						Name: 'UnselectedFunction',
 						ChildFunctions: [{
 							FunctionId: 'be3321cd-96f1-450c-9aaf-7c5fcaf259aa',
-							IsSelected: true,
 							ChildFunctions: []
 						}, {
 							FunctionId: 'f68a4cec-4274-455f-acaf-958f79da1db6',
-							IsSelected: false,
 							ChildFunctions: []
-						}],
-						IsSelected: false
+						}]
 					});
 				$httpBackend.flush();
 
@@ -1289,81 +1284,330 @@ xdescribe('PermissionsCtrl', function() {
 			});
 		});
 
-    it('should filter on selected org data', function() {
-      	inject(function($filter) {
-          fakeBackend
-            .withRole(defaultRole)
-            .withOrganizationSelection(organizationSelection.BusinessUnit)
-            .withRoleInfo({
-              Id: defaultRole.Id,
-              AvailableDataRange: 3,
-              AvailableFunctions: [],
-              AvailableBusinessUnits: [],
-              AvailableSites: [],
-              AvailableTeams: []
-            })
-          $httpBackend.flush();
+		it('should filter on selected org data', function() {
+			inject(function($filter) {
+				fakeBackend
+					.withRole(defaultRole)
+					.withOrganizationSelection(organizationSelection.BusinessUnit)
+					.withRoleInfo({
+						Id: defaultRole.Id,
+						AvailableDataRange: 3,
+						AvailableFunctions: [],
+						AvailableBusinessUnits: [],
+						AvailableSites: [],
+						AvailableTeams: []
+					})
+				$httpBackend.flush();
 
-          vm.selectedDataFilter();
+				vm.selectedDataFilter();
 
-          expect(vm.filteredOrganizationSelection.BusinessUnit).not.toEqual(null);
-          expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(1);
-          expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(1);
-        });
-    });
+				expect(vm.filteredOrganizationSelection.BusinessUnit).not.toEqual(null);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(1);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(1);
+			});
+		});
 
-    it('should filter on unselected org data', function() {
-      	inject(function($filter) {
-          fakeBackend
-            .withRole(defaultRole)
-            .withOrganizationSelection({
-        				Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
-        				Name: "TeleoptiCCCDemo",
-        				Type: "BusinessUnit",
-        				IsSelected: true,
-        				ChildNodes: [{
-        					Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
-        					Name: 'Site1',
-        					IsSelected: true,
-        					ChildNodes: [{
-        						Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
-        						Name: 'Team1',
-        						IsSelected: false,
-        					},
-                  {
-                    Id: '65894cfb-6f7d-4128-a014-0c8f82209d68',
-                    Name: 'Team2',
-                    IsSelected: true,
-                  }]
-        				},
-                {
-                  Id: '85725804-7c51-4f43-a1ae-ecb2a17a2177',
-                  Name: 'Site2',
-                  IsSelected: false,
-                  ChildNodes: [{
-                    Id: '87590cfb-6f7d-4128-a014-0c8f82209d68',
-                    Name: 'Team3',
-                    IsSelected: false,
-                  }]
-                }]
-        			})
-            .withRoleInfo({
-              Id: defaultRole.Id,
-              AvailableDataRange: 3,
-              AvailableFunctions: [],
-              AvailableBusinessUnits: [],
-              AvailableSites: [],
-              AvailableTeams: []
-            })
-          $httpBackend.flush();
+		it('should filter on unselected org data', function() {
+			inject(function($filter) {
+				fakeBackend
+					.withRole(defaultRole)
+					.withOrganizationSelection({
+						Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
+						Name: "TeleoptiCCCDemo",
+						Type: "BusinessUnit",
+						IsSelected: true,
+						ChildNodes: [{
+							Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
+							Name: 'Site1',
+							IsSelected: true,
+							ChildNodes: [{
+								Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'Team1',
+								IsSelected: false,
+							}, {
+								Id: '65894cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'Team2',
+								IsSelected: true,
+							}]
+						}, {
+							Id: '85725804-7c51-4f43-a1ae-ecb2a17a2177',
+							Name: 'Site2',
+							IsSelected: false,
+							ChildNodes: [{
+								Id: '87590cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'Team3',
+								IsSelected: false,
+							}]
+						}]
+					})
+					.withRoleInfo({
+						Id: defaultRole.Id,
+						AvailableDataRange: 3,
+						AvailableFunctions: [],
+						AvailableBusinessUnits: [],
+						AvailableSites: [],
+						AvailableTeams: []
+					})
+				$httpBackend.flush();
 
-          vm.unselectedDataFilter();
+				vm.unselectedDataFilter();
 
-          expect(vm.filteredOrganizationSelection.BusinessUnit).not.toEqual(null);
-          expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(2);
-          expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(1);
-          expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[1].ChildNodes.length).toEqual(1);
-        });
-    });
+				expect(vm.filteredOrganizationSelection.BusinessUnit).not.toEqual(null);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(2);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(1);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[1].ChildNodes.length).toEqual(1);
+			});
+		});
+
+		it('should filter with searchString', function() {
+			inject(function($filter) {
+				fakeBackend
+					.withRole({
+						BuiltIn: false,
+						DescriptionText: 'HermansRoll',
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						IsAnyBuiltIn: true,
+						IsMyRole: false,
+						Name: 'HermansRoll'
+					})
+					.withRoleInfo({
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						AvailableFunctions: [{
+							Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+						}]
+					})
+					.withApplicationFunction({
+						ChildFunctions: [],
+						FunctionCode: 'Raptor',
+						FunctionDescription: 'xxOpenRaptorApplication',
+						FunctionId: '8ecf6029-4f3c-409c-89db-46bd8d7d402d',
+						IsDisabled: false,
+						LocalizedFunctionDescription: 'All'
+					})
+					.withApplicationFunction({
+						FunctionCode: 'Raptor',
+						FunctionDescription: 'xxOpenRaptorApplication',
+						FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+						IsDisabled: false,
+						LocalizedFunctionDescription: 'Open Teleopti WFM',
+						ChildFunctions: [{
+							FunctionId: '4bd70a0c-8da7-42fa-8400-4c438375540f',
+							LocalizedFunctionDescription: 'Child1',
+							ChildFunctions: [{
+								FunctionId: '88bd5120-c698-4ccf-8833-884389ab3efe',
+								LocalizedFunctionDescription: 'Somethingelse',
+								ChildFunctions: []
+							}, {
+								FunctionId: '24817ca2-8d5d-44de-9edb-bb464e8b2bbf',
+								LocalizedFunctionDescription: 'Child1-a',
+								ChildFunctions: []
+							}]
+						}, {
+							FunctionId: 'e1214feb-9d8a-47a9-8563-6ef5cec1c3fb',
+							LocalizedFunctionDescription: 'SomethingElse2',
+							ChildFunctions: [{
+								FunctionId: 'ac496ff5-a448-493b-91b8-ac095053f73e',
+								LocalizedFunctionDescription: 'ImAlsoAChild',
+								ChildFunctions: []
+							}]
+						}]
+					});
+				$httpBackend.flush();
+
+				vm.selectRole(vm.roles[0]);
+				$httpBackend.flush();
+				vm.functionsDescriptionFilter('child');
+
+				expect(vm.componentFunctions.length).toEqual(1);
+				expect(vm.componentFunctions[0].LocalizedFunctionDescription).toEqual('Open Teleopti WFM');
+				expect(vm.componentFunctions[0].ChildFunctions.length).toEqual(2);
+				expect(vm.componentFunctions[0].ChildFunctions[0].LocalizedFunctionDescription).toEqual('Child1');
+				expect(vm.componentFunctions[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('SomethingElse2');
+				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions.length).toEqual(2);
+				expect(vm.componentFunctions[0].ChildFunctions[1].ChildFunctions.length).toEqual(1);
+				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions[0].LocalizedFunctionDescription).toEqual('Somethingelse');
+				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('Child1-a');
+				expect(vm.componentFunctions[0].ChildFunctions[1].ChildFunctions[0].LocalizedFunctionDescription).toEqual('ImAlsoAChild');
+			});
+		});
+
+		it('should find org data with search string', function() {
+			inject(function($filter) {
+				fakeBackend
+					.withRole({
+						BuiltIn: false,
+						DescriptionText: 'HermansRoll',
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						IsAnyBuiltIn: true,
+						IsMyRole: false,
+						Name: 'HermansRoll'
+					})
+					.withRoleInfo({
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						AvailableFunctions: [{
+							Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+						}]
+					})
+					.withOrganizationSelection({
+						Id: '40b52c33-fe20-4913-a651-dcf214b88dc3',
+						Name: 'BU',
+						Type: 'BusinessUnit',
+						IsSelected: false,
+						ChildNodes: [{
+							Id: '17f20e39-3d42-422c-94ba-305966612cb5',
+							Name: 'Site1',
+							IsSelected: false,
+							ChildNodes: [{
+								Id: 'c2bbd355-0fcf-402e-858e-ca2bd0f02175',
+								Name: 'Team1',
+								IsSelected: false
+							}, {
+								Id: 'fc1645f3-8a86-49da-81d5-8b954da51fe2',
+								Name: 'Somethingelse',
+								IsSelected: false
+							}]
+						}, {
+							Id: '586591fc-1708-45fa-a967-6d7f71162072',
+							Name: 'Site2',
+							IsSelected: false,
+							ChildNodes: [{
+								Id: '4ee60742-dfa5-403c-9758-d7c5d82f6ea5',
+								Name: 'Child',
+								IsSelected: false
+							}]
+						}]
+					}, []);
+				$httpBackend.flush();
+
+				vm.selectRole(vm.roles[0]);
+				$httpBackend.flush();
+				vm.orgDataDescriptionFilter('team');
+
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(1);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].Name).toEqual('Site1');
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(1);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].Name).toEqual('Team1');
+			});
+		});
+
+		it('should show all children under found bu', function() {
+			inject(function($filter) {
+				fakeBackend
+					.withRole({
+						BuiltIn: false,
+						DescriptionText: 'HermansRoll',
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						IsAnyBuiltIn: true,
+						IsMyRole: false,
+						Name: 'HermansRoll'
+					})
+					.withRoleInfo({
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						AvailableFunctions: [{
+							Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+						}]
+					})
+					.withOrganizationSelection({
+						Id: '40b52c33-fe20-4913-a651-dcf214b88dc3',
+						Name: 'BU',
+						Type: 'BusinessUnit',
+						IsSelected: false,
+						ChildNodes: [{
+							Id: '17f20e39-3d42-422c-94ba-305966612cb5',
+							Name: 'Site1',
+							IsSelected: false,
+							ChildNodes: [{
+								Id: 'c2bbd355-0fcf-402e-858e-ca2bd0f02175',
+								Name: 'Team1',
+								IsSelected: false
+							}, {
+								Id: 'fc1645f3-8a86-49da-81d5-8b954da51fe2',
+								Name: 'Somethingelse',
+								IsSelected: false
+							}]
+						}, {
+							Id: '586591fc-1708-45fa-a967-6d7f71162072',
+							Name: 'Site2',
+							IsSelected: false,
+							ChildNodes: [{
+								Id: '4ee60742-dfa5-403c-9758-d7c5d82f6ea5',
+								Name: 'Child',
+								IsSelected: false
+							}]
+						}]
+					}, []);
+				$httpBackend.flush();
+
+				vm.selectRole(vm.roles[0]);
+				$httpBackend.flush();
+				vm.orgDataDescriptionFilter('bu');
+
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(2);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].Name).toEqual('Site1');
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(2);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[1].ChildNodes.length).toEqual(1);
+			});
+		});
+
+		it('should show all children under found site', function() {
+			inject(function($filter) {
+				fakeBackend
+					.withRole({
+						BuiltIn: false,
+						DescriptionText: 'HermansRoll',
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						IsAnyBuiltIn: true,
+						IsMyRole: false,
+						Name: 'HermansRoll'
+					})
+					.withRoleInfo({
+						Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+						AvailableFunctions: [{
+							Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+						}]
+					})
+					.withOrganizationSelection({
+						Id: '40b52c33-fe20-4913-a651-dcf214b88dc3',
+						Name: 'BU',
+						Type: 'BusinessUnit',
+						IsSelected: false,
+						ChildNodes: [{
+							Id: '17f20e39-3d42-422c-94ba-305966612cb5',
+							Name: 'Site1',
+							IsSelected: false,
+							ChildNodes: [{
+								Id: 'c2bbd355-0fcf-402e-858e-ca2bd0f02175',
+								Name: 'Team1',
+								IsSelected: false
+							}, {
+								Id: 'fc1645f3-8a86-49da-81d5-8b954da51fe2',
+								Name: 'Somethingelse',
+								IsSelected: false
+							}]
+						}, {
+							Id: '586591fc-1708-45fa-a967-6d7f71162072',
+							Name: 'Site2',
+							IsSelected: false,
+							ChildNodes: [{
+								Id: '4ee60742-dfa5-403c-9758-d7c5d82f6ea5',
+								Name: 'Child',
+								IsSelected: false
+							}]
+						}]
+					}, []);
+				$httpBackend.flush();
+
+				vm.selectRole(vm.roles[0]);
+				$httpBackend.flush();
+				vm.orgDataDescriptionFilter('site1');
+
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(1);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].Name).toEqual('Site1');
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(2);
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].Name).toEqual('Team1');
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].Name).toEqual('Somethingelse');
+			});
+		});
+
 	});
 });

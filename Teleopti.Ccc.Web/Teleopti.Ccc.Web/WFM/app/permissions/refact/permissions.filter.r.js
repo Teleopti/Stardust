@@ -3,24 +3,12 @@
 
 	angular
 		.module('wfm.permissions')
+		.filter('newDescriptionFilter', descriptionFilter)
 		.filter('functionsFilter', functionsFilter)
 		.filter('dataFilter', dataFilter);
 
 	function dataFilter() {
 		var filter = this;
-
-		function deleteStuff(temp, selectedOrNot) {
-			for (var i = 0; i < temp.length; i++) {
-				if (temp[i].IsSelected == selectedOrNot) {
-					temp.splice(i, 1);
-					i--;
-				} else {
-					if (temp[i].ChildNodes != null && temp[i].ChildNodes.length > 0) {
-						deleteStuff(temp[i].ChildNodes, selectedOrNot)
-					}
-				}
-			}
-		}
 
 		filter.unselected = function(orgData) {
 			function reduce(nodes) {
@@ -40,16 +28,6 @@
 			ret.BusinessUnit.ChildNodes = reduce(ret.BusinessUnit.ChildNodes);
 
 			return ret;
-
-			// var selectedBu = {};
-			//
-			// if (orgData.IsSelected) {
-			//   selectedBu = Object.assign({}, orgData);
-			//   deleteStuff(selectedBu.ChildNodes, true);
-			//   return selectedBu;
-			// } else {
-			//   return orgData;
-			// }
 		}
 
 		filter.selected = function(orgData) {
@@ -76,16 +54,59 @@
 			ret.BusinessUnit.ChildNodes = reduce(ret.BusinessUnit.ChildNodes);
 
 			return ret;
+		}
 
-			// var selectedBu = {};
-			//
-			// if (orgData.IsSelected) {
-			//   selectedBu = Object.assign({}, orgData);
-			//   deleteStuff(selectedBu.ChildNodes, false);
-			//   return selectedBu;
-			// } else {
-			//   return selectedBu;
-			// }
+		return filter;
+	}
+
+	function descriptionFilter() {
+		var filter = this;
+
+		filter.filterOrgData = function(orgData, searhString) {
+			var noCaseSensitiveSearchString = new RegExp(searhString, "i");
+
+			if (orgData.BusinessUnit != null && orgData.BusinessUnit.Name.match(noCaseSensitiveSearchString)) {
+				return orgData;
+			}
+
+			function reduce(nodes) {
+				return nodes.reduce(function(ret, node) {
+
+					if (!node.Name.match(noCaseSensitiveSearchString) && (node.ChildNodes != null && node.ChildNodes.length > 0)) {
+						node.ChildNodes = reduce(node.ChildNodes);
+					}
+					if (node.Name.match(noCaseSensitiveSearchString) || (node.ChildNodes != null && node.ChildNodes.length > 0))	{
+						return ret.concat(node);
+					}
+
+					return ret;
+				}, []);
+			}
+
+			var ret = $.extend(true, {}, orgData);
+			ret.BusinessUnit.ChildNodes = reduce(ret.BusinessUnit.ChildNodes);
+
+			return ret;
+		}
+
+		filter.filterFunctions = function(appFunctions, searhString) {
+			var noCaseSensitiveSearchString = new RegExp(searhString, "i");
+
+			return appFunctions.reduce(function(filteredFunctions, func) {
+
+				var f = $.extend(true, {}, func);
+
+				if (!func.LocalizedFunctionDescription.match(noCaseSensitiveSearchString) && f.ChildFunctions.length > 0) {
+					f.ChildFunctions = filter.filterFunctions(f.ChildFunctions, searhString);
+				}
+
+				if (!func.LocalizedFunctionDescription.match(noCaseSensitiveSearchString) && f.ChildFunctions.length === 0) {
+					return filteredFunctions;
+				}
+
+				return filteredFunctions.concat(f);
+			}, []);
+
 		}
 
 		return filter;
@@ -116,9 +137,9 @@
 				var f = $.extend(true, {}, func);
 				f.ChildFunctions = filter.unselected(f.ChildFunctions, selectedFunctions);
 
-        if (isFunctionSelected(selectedFunctions, func) && f.ChildFunctions.length === 0) {
-          return filteredFunctions;
-        }
+				if (isFunctionSelected(selectedFunctions, func) && f.ChildFunctions.length === 0) {
+					return filteredFunctions;
+				}
 
 				return filteredFunctions.concat(f);
 			}, []);
