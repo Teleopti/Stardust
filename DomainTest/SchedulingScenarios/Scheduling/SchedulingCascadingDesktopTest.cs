@@ -44,15 +44,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
 			var agents = new List<IPerson>();
 
-			var contract = new Contract("_")
-			{
-				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
-			};
-
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-				agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB);
 				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 				agents.Add(agent);
@@ -93,14 +87,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
 			var agents = new List<IPerson>();
-			var contract = new Contract("_")
-			{
-				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
-			};
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-				agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB);
 				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 				agents.Add(agent);
@@ -138,12 +127,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8,0,8,0,15), new TimePeriodWithSegment(16,0,16,0,15), new ShiftCategory("_").WithId()));
-			var contract = new Contract("_")
-			{
-				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
-			};
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB);
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 			agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent}, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
