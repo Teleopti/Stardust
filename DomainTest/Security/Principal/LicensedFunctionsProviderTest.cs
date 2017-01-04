@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			using(mocks.Record())
 			{
-				Expect.Call(defRaptorAppFactory.ApplicationFunctions).Return(new List<IApplicationFunction>());
+				Expect.Call(defRaptorAppFactory.ApplicationFunctions).Return(new IApplicationFunction[0]);
 			}
 			using(mocks.Playback())
 			{

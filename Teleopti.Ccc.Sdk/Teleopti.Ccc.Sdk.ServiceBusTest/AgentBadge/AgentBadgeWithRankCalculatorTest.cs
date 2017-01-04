@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -80,8 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			IPerson person = null;
 			for (var i = 0; i < 2; i++)
 			{
-				person = PersonFactory.CreatePersonWithPersonPeriod(_calculateDateOnly);
-				person.SetId(Guid.NewGuid());
+				person = PersonFactory.CreatePersonWithPersonPeriod(_calculateDateOnly).WithId();
 				person.PermissionInformation.AddApplicationRole(_badgeRole);
 				_allPersons.Add(person);
 			}
@@ -99,10 +99,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_now = MockRepository.GenerateMock<INow>();
 
 			appFunctionFactory = MockRepository.GenerateMock<IDefinedRaptorApplicationFunctionFactory>();
-			appFunctionFactory.Stub(x => x.ApplicationFunctions).Return(new List<IApplicationFunction>
-			{
-				badgeFunction
-			});
+			appFunctionFactory.Stub(x => x.ApplicationFunctions).Return(new IApplicationFunction[] { badgeFunction });
 
 			// Stub for personRepository
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string tenantName)
 		{
 			var licensedFunctions =
-				LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions
+				LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions.ToArray()
 				.SelectMany(o =>
 				{
 					o.EnableApplicationFunctions(_definedRaptorApplicationFunctionFactory.ApplicationFunctions);

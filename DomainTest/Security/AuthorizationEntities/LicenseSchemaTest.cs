@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         {
             // by default
             int expected = 1;
-            int result = _target.EnabledLicenseOptions.Count();
+            int result = _target.EnabledLicenseOptions.Length;
 
             Assert.AreEqual(expected, result);
         }
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         {
             // by default
             int expected = 1;
-            int result = _target.EnabledLicenseOptionPaths.Count;
+            int result = _target.EnabledLicenseOptionPaths.Length;
 
             Assert.AreEqual(expected, result);
         }

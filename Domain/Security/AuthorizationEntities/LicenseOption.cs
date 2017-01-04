@@ -9,12 +9,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// </summary>
     public class LicenseOption : Entity
     {
-	    private readonly string _optionPath;
-        private string _optionCode;
+	    private string _optionCode;
         private string _schemaCode;
-        private readonly string _optionName;
-        private readonly IList<IApplicationFunction> _enabledApplicationFunctions;
-        private bool _enabled;
+	    private readonly IList<IApplicationFunction> _enabledApplicationFunctions;
 
 	    /// <summary>
         /// Finds the license option by path.
@@ -49,22 +46,19 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         public LicenseOption(string licenseOptionPath, string optionName)
             : this()
         {
-            _optionPath = licenseOptionPath;
+            LicenseOptionPath = licenseOptionPath;
             _optionCode = ApplicationFunction.GetCode(licenseOptionPath);
             _schemaCode = ApplicationFunction.GetParentPath(licenseOptionPath);
-            _optionName = optionName;
+            OptionName = optionName;
         }
 
         /// <summary>
         /// Gets or sets the licence option path.
         /// </summary>
         /// <value>The license option path.</value>
-        public string LicenseOptionPath
-        {
-            get { return _optionPath; }
-        }
+        public string LicenseOptionPath { get; }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the code of the license option.
         /// </summary>
         /// <value>The name of the option.</value>
@@ -99,10 +93,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets or sets the enabled application functions.
         /// </summary>
         /// <value>The enabled application functions.</value>
-        public virtual IList<IApplicationFunction> EnabledApplicationFunctions
-        {
-            get { return _enabledApplicationFunctions; }
-        }
+        public virtual IList<IApplicationFunction> EnabledApplicationFunctions => _enabledApplicationFunctions;
 
 	    /// <summary>
 	    /// Sets the enabled (licensed) application functions.
@@ -122,15 +113,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets or sets a value indicating whether this <see cref="LicenseOption"/> is enabled.
         /// </summary>
         /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
-        public bool Enabled
-        {
-            get { return _enabled; }
-            set { _enabled = value; }
-        }
+        public bool Enabled { get; set; }
 
-        public string OptionName
-        {
-            get { return _optionName; }
-        }
+	    public string OptionName { get; }
     }
 }

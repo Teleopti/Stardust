@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 {
 	public interface IDefinedRaptorApplicationFunctionFactory
 	{
-		IEnumerable<IApplicationFunction> ApplicationFunctions { get; }
+		IApplicationFunction[] ApplicationFunctions { get; }
 	}
 
 	/// <summary>
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 	/// </summary>
 	public class DefinedRaptorApplicationFunctionFactory : IDefinedRaptorApplicationFunctionFactory
 	{
-		private readonly Lazy<ReadOnlyCollection<IApplicationFunction>> _definedApplicationFunctions = new Lazy<ReadOnlyCollection<IApplicationFunction>>(createApplicationFunctionList);
+		private readonly Lazy<IApplicationFunction[]> _definedApplicationFunctions = new Lazy<IApplicationFunction[]>(createApplicationFunctionList);
 
 		/// <summary>
 		/// Gets or sets the logged on user authorization service instance.
@@ -25,15 +24,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 		/// <remarks>
 		/// Do not use this method in tests. Singeltons are unreliable in tests. Use the CreateApplicationFunctionList() method instead.
 		/// </remarks>
-		public IEnumerable<IApplicationFunction> ApplicationFunctions
-		{
-			get
-			{
-				return _definedApplicationFunctions.Value;
-			}
-		}
+		public IApplicationFunction[] ApplicationFunctions => _definedApplicationFunctions.Value;
 
-		private static ReadOnlyCollection<IApplicationFunction> createApplicationFunctionList()
+		private static IApplicationFunction[] createApplicationFunctionList()
 		{
 			List<IApplicationFunction> applicationFunctionList = new List<IApplicationFunction>();
 
@@ -172,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebIntraday, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.WebIntraday, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebModifySkillArea, "xxModifySkillArea", DefinedRaptorApplicationFunctionForeignIds.WebModifySkillArea, null);
 
-			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
+			return applicationFunctionList.ToArray();
 		}
 
 		/// <summary>

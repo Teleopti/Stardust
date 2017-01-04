@@ -1,6 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.LicenseOptions;
@@ -47,49 +45,40 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             return activeLicenseSchema;
         }
 
-        public static ReadOnlyCollection<LicenseOption> CreateDefinedLicenseOptions()
+        public static LicenseOption[] CreateDefinedLicenseOptions()
         {
-            IList<LicenseOption> licenseOptions = new List<LicenseOption>();
-
-            licenseOptions.Add(new TeleoptiCccBaseLicenseOption());
-
-            licenseOptions.Add(new TeleoptiCccLifestyleLicenseOption());
-            licenseOptions.Add(new TeleoptiCccShiftTraderLicenseOption());
-			licenseOptions.Add(new TeleoptiCccVacationPlannerLicenseOption());
-			licenseOptions.Add(new TeleoptiCccOvertimeAvailabilityLicenseOption());
-
-			licenseOptions.Add(new TeleoptiCccNotifyLicenseOption());
-			licenseOptions.Add(new TeleoptiCccAgentScheduleMessengerLicenseOption());
-            licenseOptions.Add(new TeleoptiCccRealTimeAdherenceLicenseOption());
-			licenseOptions.Add(new TeleoptiCccSmsLinkLicenseOption());
-			licenseOptions.Add(new TeleoptiCccCalendarLinkLicenseOption());
-
-            licenseOptions.Add(new TeleoptiCccPerformanceManagerLicenseOption());
-
-            licenseOptions.Add(new TeleoptiCccPayrollIntegrationLicenseOption());
-
-            licenseOptions.Add(new TeleoptiCccMyTeamLicenseOption());
-
-            licenseOptions.Add(new TeleoptiWfmVNextPilotLicenseOption());
-				licenseOptions.Add(new TeleoptiWfmOutboundLicenseOption());
-				licenseOptions.Add(new TeleoptiWfmSeatPlannerLicenseOption());
-
-            licenseOptions.Add(new TeleoptiCccFreemiumForecastsLicenseOption());
-
-            licenseOptions.Add(new TeleoptiCccPilotCustomersBaseLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersForecastsLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersShiftsLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersPeopleLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersOptionsLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersSchedulerLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersIntradayLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersPermissionsLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersReportsLicenseOption());
-            
-            // TODO: this should be removed
-            licenseOptions.Add(new AllLicenseOption());
-            return new ReadOnlyCollection<LicenseOption>(licenseOptions);
+	        var licenseOptions = new LicenseOption[]
+	        {
+		        new TeleoptiCccBaseLicenseOption(),
+		        new TeleoptiCccLifestyleLicenseOption(),
+		        new TeleoptiCccShiftTraderLicenseOption(),
+		        new TeleoptiCccVacationPlannerLicenseOption(),
+		        new TeleoptiCccOvertimeAvailabilityLicenseOption(),
+		        new TeleoptiCccNotifyLicenseOption(),
+		        new TeleoptiCccAgentScheduleMessengerLicenseOption(),
+		        new TeleoptiCccRealTimeAdherenceLicenseOption(),
+		        new TeleoptiCccSmsLinkLicenseOption(),
+		        new TeleoptiCccCalendarLinkLicenseOption(),
+		        new TeleoptiCccPerformanceManagerLicenseOption(),
+		        new TeleoptiCccPayrollIntegrationLicenseOption(),
+		        new TeleoptiCccMyTeamLicenseOption(),
+		        new TeleoptiWfmVNextPilotLicenseOption(),
+		        new TeleoptiWfmOutboundLicenseOption(),
+		        new TeleoptiWfmSeatPlannerLicenseOption(),
+		        new TeleoptiCccFreemiumForecastsLicenseOption(),
+		        new TeleoptiCccPilotCustomersBaseLicenseOption(),
+		        new TeleoptiCccPilotCustomersForecastsLicenseOption(),
+		        new TeleoptiCccPilotCustomersShiftsLicenseOption(),
+		        new TeleoptiCccPilotCustomersPeopleLicenseOption(),
+		        new TeleoptiCccPilotCustomersOptionsLicenseOption(),
+		        new TeleoptiCccPilotCustomersSchedulerLicenseOption(),
+		        new TeleoptiCccPilotCustomersIntradayLicenseOption(),
+		        new TeleoptiCccPilotCustomersPermissionsLicenseOption(),
+		        new TeleoptiCccPilotCustomersReportsLicenseOption(),
+		        new AllLicenseOption()
+	        };
+			
+	        return licenseOptions;
         }
-
     }
 }

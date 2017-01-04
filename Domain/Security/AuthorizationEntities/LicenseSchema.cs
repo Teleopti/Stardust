@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Secrets.Licensing;
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// </summary>
     public class LicenseSchema
     {
-	    private readonly ReadOnlyCollection<LicenseOption> _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
+	    private readonly LicenseOption[] _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
 
         private static readonly ConcurrentDictionary<string, LicenseSchema> activeLicenseSchemas = new ConcurrentDictionary<string, LicenseSchema>();
         /// <summary>
@@ -45,24 +44,18 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets or sets the defined license options.
         /// </summary>
         /// <value>The defined license options.</value>
-        public IEnumerable<LicenseOption> LicenseOptions
-        {
-            get
-            {
-                return _licenseOptions;
-            }
-        }
+        public LicenseOption[] LicenseOptions => _licenseOptions;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the enabled licence option.
         /// </summary>
         /// <value>The enabled licence option paths.</value>
         /// <returns></returns>
-        public IEnumerable<LicenseOption> EnabledLicenseOptions
+        public LicenseOption[] EnabledLicenseOptions
         {
             get
             {
-                return _licenseOptions.Where(licenseOption => licenseOption.Enabled).ToList();
+                return _licenseOptions.Where(licenseOption => licenseOption.Enabled).ToArray();
             }
         }
 
@@ -71,11 +64,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </summary>
         /// <value>The enabled license option paths.</value>
         /// <returns></returns>
-        public IList<string> EnabledLicenseOptionPaths
+        public string[] EnabledLicenseOptionPaths
         {
             get
             {
-	            return EnabledLicenseOptions.Select(licenseOption => licenseOption.LicenseOptionPath).ToList();
+	            return EnabledLicenseOptions.Select(licenseOption => licenseOption.LicenseOptionPath).ToArray();
             }
         }
 
