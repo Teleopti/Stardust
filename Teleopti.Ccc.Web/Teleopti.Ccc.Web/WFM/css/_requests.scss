@@ -558,10 +558,6 @@
         word-wrap: break-word;
     }
 
-    .split-3-1 {
-        flex-basis: 70% !important;
-    }
-
     wfm-multiple-search-input {
         vertical-align: top;
         margin-top: 15px;
@@ -586,18 +582,8 @@
     }
 
     working-hours-picker {
-        .working-hours-row h2 {
-            min-width: 150px;
-        }
-    }
-
-
-    requests-site-open-hours {
-        // CSS hack for IE10, IE11
-        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
-            .click-modal .dialog {
-                min-width: 1300px;
-            }
+        .working-hours-row .con-flex:first-child{
+            flex-grow:1.5;
         }
     }
 
