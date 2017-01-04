@@ -153,14 +153,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity1, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(activity2, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(10, 0, 10, 0, 15)));
-			var ruleSetBag = new RuleSetBag{ Description = new Description("_") };
-			ruleSetBag.AddRuleSet(ruleSet);
-			var team = new Team { Site = new Site("_") };	
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill1, skill2);
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(2);
-			var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag };
-			agent.AddPeriodWithSkills(personPeriod, new[] {skill1, skill2});
 			agent.AddSchedulePeriod(schedulePeriod);	
 			var skillDays1 = skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 100, 100);
 			var skillDays2 = skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 0, 0, 10);
@@ -201,8 +196,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var directSales = new Skill("B").For(activity).WithId().IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSetBag = RuleSetBagRepository.Has(new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") });
-			var team = new Team { Site = new Site("_") };	
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 3);
 			schedulePeriod.SetDaysOff(6);
 
@@ -212,9 +206,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			for (var i = 0; i < 10; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag };
-				agent.AddPeriodWithSkills(personPeriod, new[] {channelSales, directSales});
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, channelSales, directSales);
 				agent.AddSchedulePeriod(schedulePeriod);
 				agents.Add(agent);
 
