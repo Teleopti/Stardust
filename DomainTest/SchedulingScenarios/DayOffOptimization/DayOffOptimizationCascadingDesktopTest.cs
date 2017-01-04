@@ -46,11 +46,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) };
-				personPeriod.AddPersonSkill(new PersonSkill(skillA, new Percent(1)));
-				personPeriod.AddPersonSkill(new PersonSkill(skillB, new Percent(1)));
-				agent.AddPersonPeriod(personPeriod);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB);
+				agent.Period(DateOnly.MinValue).Team = team;
 				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 				agent.AddSchedulePeriod(schedulePeriod);
 				schedulePeriod.SetDaysOff(2); //thought this was the default one?
@@ -98,11 +95,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) };
-				personPeriod.AddPersonSkill(new PersonSkill(skillA, new Percent(1)));
-				personPeriod.AddPersonSkill(new PersonSkill(skillB, new Percent(1)));
-				agent.AddPersonPeriod(personPeriod);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB);
+				agent.Period(DateOnly.MinValue).Team = team;
 				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 				schedulePeriod.SetDaysOff(1);
 				agent.AddSchedulePeriod(schedulePeriod);
