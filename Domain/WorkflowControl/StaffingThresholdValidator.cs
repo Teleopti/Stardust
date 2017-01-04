@@ -36,31 +36,31 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			if (!isSkillOpenForDateOnly(date, skills.Skills))
 				return result;
 
-				foreach (var skill in skills.Skills)
-				{
-					if (skill == null) continue;
-					if (validatePeriods.IsEmpty()) continue;
-					
-					var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods, timeZone, result);
-					if (!validatedUnderStaffingResult.IsValid)
-					{
-						result.AddUnderstaffingDay(date);
-					}
+			foreach (var skill in skills.Skills)
+			{
+				if (skill == null) continue;
+				if (validatePeriods.IsEmpty()) continue;
 
-					var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, validatePeriods, timeZone, result);
-					if (!validatedSeriousUnderStaffingResult.IsValid)
-					{
-						result.AddSeriousUnderstaffingDay(date);
-					}
+				var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods, timeZone, result);
+				if (!validatedUnderStaffingResult.IsValid)
+				{
+					result.AddUnderstaffingDay(date);
 				}
+
+				var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, validatePeriods, timeZone, result);
+				if (!validatedSeriousUnderStaffingResult.IsValid)
+				{
+					result.AddSeriousUnderstaffingDay(date);
+				}
+			}
 
 			return result;
 		}
 
 		public UnderstaffingDetails GetUnderStaffingDays(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, PersonSkillProvider personSkillProvider)
 		{
-			InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
-			InParameter.NotNull("ResourceOptimizationHelper", requiredForHandlingAbsenceRequest.ResourceOptimizationHelper);
+			InParameter.NotNull(nameof(requiredForHandlingAbsenceRequest.SchedulingResultStateHolder), requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
+			InParameter.NotNull(nameof(requiredForHandlingAbsenceRequest.ResourceOptimizationHelper), requiredForHandlingAbsenceRequest.ResourceOptimizationHelper);
 			
 			var result = new UnderstaffingDetails();
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
@@ -255,8 +255,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var underStaffingValidationError = Resources.ResourceManager.GetString("InsufficientStaffingDays", uiCulture);
 				var inSufficientDates = string.Join(", ",
 					underStaffing.UnderstaffingDays.Select(d => d.ToShortDateString(culture)).Take(maxUnderStaffingItemCount));
-				errorMessageBuilder.AppendLine(string.Format("{0}{1}{2}", underStaffingValidationError, inSufficientDates,
-					Environment.NewLine));
+				errorMessageBuilder.AppendLine($"{underStaffingValidationError}{inSufficientDates}{Environment.NewLine}");
 			}
 
 			if (underStaffing.SeriousUnderstaffingDays.Any())
@@ -264,8 +263,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var criticalUnderStaffingValidationError = Resources.ResourceManager.GetString("SeriousUnderstaffing", uiCulture);
 				var criticalUnderStaffingDates = string.Join(", ",
 					underStaffing.SeriousUnderstaffingDays.Select(d => d.ToShortDateString(culture)).Take(maxUnderStaffingItemCount));
-				errorMessageBuilder.AppendLine(string.Format("{0}{1}{2}", criticalUnderStaffingValidationError,
-					criticalUnderStaffingDates, Environment.NewLine));
+				errorMessageBuilder.AppendLine(
+					$"{criticalUnderStaffingValidationError}{criticalUnderStaffingDates}{Environment.NewLine}");
 			}
 
 			return errorMessageBuilder.ToString();
@@ -281,8 +280,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					dateTime.ToString("d", culture));
 				var insufficientHours = string.Join(", ",
 					underStaffing.UnderstaffingTimes.Select(t => t.ToShortTimeString(culture)).Take(maxUnderStaffingItemCount));
-				errorMessageBuilder.AppendLine(string.Format("{0}{1}{2}", understaffingHoursValidationError, insufficientHours,
-					Environment.NewLine));
+				errorMessageBuilder.AppendLine($"{understaffingHoursValidationError}{insufficientHours}{Environment.NewLine}");
 			}
 
 			if (underStaffing.SeriousUnderstaffingTimes.Any())
@@ -293,8 +291,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var criticalUnderstaffingHours = string.Join(", ",
 					underStaffing.SeriousUnderstaffingTimes.Select(t => t.ToShortTimeString(culture))
 						.Take(maxUnderStaffingItemCount));
-				errorMessageBuilder.AppendLine(string.Format("{0}{1}{2}", criticalUnderstaffingHoursValidationError,
-					criticalUnderstaffingHours, Environment.NewLine));
+				errorMessageBuilder.AppendLine(
+					$"{criticalUnderstaffingHoursValidationError}{criticalUnderstaffingHours}{Environment.NewLine}");
 			}
 
 			return errorMessageBuilder.ToString();
@@ -320,7 +318,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			unchecked
 			{
 				int result = (GetType().GetHashCode());
-				result = (result * 397) ^ (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
+				result = (result * 397) ^ (BudgetGroupHeadCountSpecification?.GetHashCode() ?? 0);
 				return result;
 			}
 		}

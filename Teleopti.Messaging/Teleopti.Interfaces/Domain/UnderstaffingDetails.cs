@@ -9,30 +9,18 @@ namespace Teleopti.Interfaces.Domain
     {
 		private readonly HashSet<DateOnly> _seriousUnderstaffingDays = new HashSet<DateOnly>();
 		private readonly HashSet<DateOnly> _understaffingDays = new HashSet<DateOnly>();
-        private readonly IList<TimePeriod> _seriousUnderstaffingTimes = new List<TimePeriod>();
-        private readonly IList<TimePeriod> _understaffingTimes = new List<TimePeriod>();
+        private readonly HashSet<TimePeriod> _seriousUnderstaffingTimes = new HashSet<TimePeriod>();
+        private readonly HashSet<TimePeriod> _understaffingTimes = new HashSet<TimePeriod>();
 
-        public IEnumerable<DateOnly> SeriousUnderstaffingDays
-        {
-            get { return _seriousUnderstaffingDays; }
-        }
+        public IEnumerable<DateOnly> SeriousUnderstaffingDays => _seriousUnderstaffingDays;
 
-        public IEnumerable<DateOnly> UnderstaffingDays
-        {
-            get { return _understaffingDays; }
-        } 
+	    public IEnumerable<DateOnly> UnderstaffingDays => _understaffingDays;
 
-        public IEnumerable<TimePeriod> SeriousUnderstaffingTimes
-        {
-            get { return _seriousUnderstaffingTimes; }
-        }
+	    public IEnumerable<TimePeriod> SeriousUnderstaffingTimes => _seriousUnderstaffingTimes;
 
-        public IEnumerable<TimePeriod> UnderstaffingTimes
-        {
-            get { return _understaffingTimes; }
-        } 
+	    public IEnumerable<TimePeriod> UnderstaffingTimes => _understaffingTimes;
 
-        public void AddSeriousUnderstaffingDay(DateOnly date)
+	    public void AddSeriousUnderstaffingDay(DateOnly date)
         {
 			_seriousUnderstaffingDays.Add(date);
         }
