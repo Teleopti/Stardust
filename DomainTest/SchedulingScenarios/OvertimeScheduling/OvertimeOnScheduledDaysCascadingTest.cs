@@ -125,7 +125,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var agentAandB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skillA, skillB);
-			agentAandB.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
 			agentAandB.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			var assAandB = new PersonAssignment(agentAandB, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 15));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agentAandB }, new[] { assAandB }, new[] { skillDayA, skillDayB });
