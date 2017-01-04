@@ -48,7 +48,8 @@
 			}
 
 			function createDayViewModel(day, startOfWeekIsoDay, isUsingRequestSubmitterTimezone, submitterTimezone) {
-				if (!isUsingRequestSubmitterTimezone) {
+				var currentUserTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
+				if (!isUsingRequestSubmitterTimezone && currentUserTimezone !== submitterTimezone) {
 					day = convertTimezone(day, submitterTimezone, CurrentUserInfo.CurrentUserInfo().DefaultTimeZone);
 				}
 				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
