@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		public FakeConfigReader Config;
 		public ConfigurableSyncEventPublisher Publisher;
 		public AgentStateMaintainer Maintainer;
-		public StateStreamSynchronizer Synchronizer;
 		public MutableNow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			// trigger tick to populate mappings
 			Publisher.Publish(new TenantMinuteTickEvent());
 
-			// states for all and init (touch will think its already done)
+			// states for all
 			userCodes
 				.Batch(1000)
 				.Select(x => new BatchForTest
@@ -67,7 +66,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 						StateCode = "phone"
 					}).ToArray()
 				}).ForEach(Rta.SaveStateBatch);
-			Synchronizer.Initialize();
 		}
 
 		private static IEnumerable<string> userCodes => Enumerable.Range(0, 3000).Select(x => $"user{x}").ToArray();
