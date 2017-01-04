@@ -55,6 +55,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			persistedCombinationResources.First().SkillCombination.Count().Should().Be.EqualTo(2);
 		}
 
+		[Test, Ignore("This problem should be resolved today. /Robin")]
+		public void ShouldSpecifyResourceSkillCombinationOnWithCascadingSkills()
+		{
+			var activity = ActivityFactory.CreateActivity("phone");
+			activity.RequiresSkill = true;
+			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
+
+			var scenario = ScenarioRepository.Has("default");
+
+			var saleSkill = SkillRepository.Has("sales", activity);
+			saleSkill.SetCascadingIndex(1);
+			var supportSkill = SkillRepository.Has("support", activity);
+			supportSkill.SetCascadingIndex(2);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
+			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario));
+
+			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
+			SkillDayRepository.Has(supportSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
+
+			PersonRepository.Has(person);
+			Target.Update(period);
+
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
+			persistedCombinationResources.Count().Should().Be.EqualTo(1);
+			persistedCombinationResources.First().SkillCombination.Count().Should().Be.EqualTo(2);
+		}
+
 		[Test]
 		public void ShouldSpecifyResourceForMoreThanOneInterval()
 		{
@@ -150,8 +179,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
 			persistedCombinationResources.Single().SkillCombination.Count().Should().Be.EqualTo(1);
 		}
-
-
 	}
-	
 }
