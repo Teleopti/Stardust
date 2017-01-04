@@ -3,7 +3,7 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('ShiftTradeGridConfiguration', ['$filter', '$translate', 'Toggle', 'requestsDefinitions', function ($filter, $translate, toggleSvc, requestDefinitions) {
+		.factory('ShiftTradeGridConfiguration', ['$filter', '$translate', 'Toggle', 'requestsDefinitions', 'CurrentUserInfo', function ($filter, $translate, toggleSvc, requestDefinitions, CurrentUserInfo) {
 
 			var columns = [];
 
@@ -17,7 +17,7 @@
 				return (currentMoment.diff(startMoment, 'days') * requestDefinitions.SHIFTTRADE_COLUMN_WIDTH) + "px";
 			}
 
-			function getDayViewModels(requests, shiftTradeRequestDateSummary) {
+			function getDayViewModels(requests, shiftTradeRequestDateSummary, isUsingRequestSubmitterTimezone) {
 				if (requests === undefined || requests.length === 0) {
 					return [];
 				}
@@ -25,11 +25,12 @@
 				var day = moment(shiftTradeRequestDateSummary.Minimum);
 				var maxDay = moment(shiftTradeRequestDateSummary.Maximum);
 				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
+				var submitterTimezone = requests[0].TimeZone;
 
 				var dayViewModels = [];
 				var dayIncrement = day.clone();
 				while (dayIncrement <= maxDay) {
-					var dayViewModel = createDayViewModel(dayIncrement, startOfWeekIsoDay);
+					var dayViewModel = createDayViewModel(dayIncrement, startOfWeekIsoDay, isUsingRequestSubmitterTimezone, submitterTimezone);
 					dayViewModel.leftOffset = getShiftTradeColumnLeftOffset(day, dayIncrement);
 					dayViewModels.push(dayViewModel);
 					dayIncrement.add(1, 'days');
@@ -46,9 +47,12 @@
 				return difference === 0;
 			}
 
-			function createDayViewModel(day, startOfWeekIsoDay) {
+			function createDayViewModel(day, startOfWeekIsoDay, isUsingRequestSubmitterTimezone, submitterTimezone) {
+				if (!isUsingRequestSubmitterTimezone) {
+					day = convertTimezone(day, submitterTimezone, CurrentUserInfo.CurrentUserInfo().DefaultTimeZone);
+				}
 				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
-
+				
 				return {
 					date: day.toDate(),
 					shortDate: $filter('date')(day.toDate(), 'shortDate'),
@@ -59,16 +63,23 @@
 				};
 			}
 
+			function convertTimezone(dateTime, fromTimezone, toTimezone) {
+				var dateTimeWithTimezone = moment.tz(dateTime, fromTimezone);
+				dateTimeWithTimezone = dateTimeWithTimezone.tz(toTimezone);
+				return moment(dateTimeWithTimezone.format('YYYY-MM-DD'));
+			}
+
+
 			function isDayOff(scheduleDayDetail) {
 				return (scheduleDayDetail && (scheduleDayDetail.Type === requestDefinitions.SHIFT_OBJECT_TYPE.DayOff));
 			}
 
-			function createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary) {
+			function createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary, isUsingRequestSubmitterTimezone, submitterTimezone) {
 				var startDate = moment(shiftTradeRequestDateSummary.Minimum);
 				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
 				var shiftTradeDate = moment(shiftTradeDay.Date);
 
-				var viewModel = createDayViewModel(shiftTradeDate, startOfWeekIsoDay);
+				var viewModel = createDayViewModel(shiftTradeDate, startOfWeekIsoDay, isUsingRequestSubmitterTimezone, submitterTimezone);
 				viewModel.FromScheduleDayDetail = {};
 				viewModel.ToScheduleDayDetail = {};
 
@@ -82,7 +93,7 @@
 				return viewModel;
 			}
 
-			function getShiftTradeScheduleViewModels(requests, shiftTradeRequestDateSummary) {
+			function getShiftTradeScheduleViewModels(requests, shiftTradeRequestDateSummary, isUsingRequestSubmitterTimezone) {
 				var shiftTradeDataForDisplay = {};
 
 				angular.forEach(requests, function (request) {
@@ -90,7 +101,7 @@
 
 					angular.forEach(request.ShiftTradeDays, function (shiftTradeDay) {
 						if (shiftTradeDay.FromScheduleDayDetail.ShortName !== null || shiftTradeDay.ToScheduleDayDetail.ShortName !== null) {
-							var viewModel = createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary);
+							var viewModel = createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary, isUsingRequestSubmitterTimezone, request.TimeZone);
 							viewModelArray.push(viewModel);
 						}
 					});

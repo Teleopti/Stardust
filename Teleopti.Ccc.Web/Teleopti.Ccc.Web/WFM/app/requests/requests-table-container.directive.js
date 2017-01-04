@@ -27,6 +27,7 @@
 		vm.shiftDetailStyleJson = shiftDetailStyleJson;
 		vm.requestFiltersMgr = new requestFilterSvc.RequestsFilter();
 		vm.showShiftDetail = showShiftDetail;
+		vm.setupShiftTradeVisualisation = setupShiftTradeVisualisation;
 
 		vm.defaultStatusesLoaded = false;
 		vm.definitionsLoadComplete = false;
@@ -103,8 +104,8 @@
 		function setupShiftTradeVisualisation(requests) {
 
 			if (vm.shiftTradeView && vm.shiftTradeRequestDateSummary) {
-				vm.shiftTradeDayViewModels = vm.gridConfigurationService.getDayViewModels(requests, vm.shiftTradeRequestDateSummary);
-				vm.shiftTradeScheduleViewModels = vm.gridConfigurationService.getShiftTradeScheduleViewModels(requests, vm.shiftTradeRequestDateSummary);
+				vm.shiftTradeDayViewModels = vm.gridConfigurationService.getDayViewModels(requests, vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
+				vm.shiftTradeScheduleViewModels = vm.gridConfigurationService.getShiftTradeScheduleViewModels(requests, vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
 			}
 		}
 
@@ -440,6 +441,14 @@
 
 
 			}, true);
+
+			scope.$watch('requestsTableContainer.isUsingRequestSubmitterTimeZone', function (newValue, oldValue) {
+				var ctrl = requestsTableContainerCtrl;
+				if (ctrl.shiftTradeView && ctrl.shiftTradeRequestDateSummary) {
+					var requests = ctrl.requests;
+					ctrl.setupShiftTradeVisualisation(requests);
+				}
+			});
 
 			scope.$on('reload.requests.without.selection', function () {
 				requestsTableContainerCtrl.clearSelection();

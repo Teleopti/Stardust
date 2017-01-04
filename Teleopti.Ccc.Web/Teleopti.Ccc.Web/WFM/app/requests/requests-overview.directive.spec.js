@@ -224,7 +224,7 @@
 	});
 
 	describe('requests table container directive', function () {
-		var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule;
+		var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule, currentUserInfo;
 
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
@@ -232,6 +232,7 @@
 		beforeEach(function () {
 			var requestsDataService = new FakeRequestsDataService();
 			teamSchedule = new FakeTeamSchedule();
+			currentUserInfo = new FakeCurrentUserInfo();
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
 					return {
@@ -255,6 +256,10 @@
 
 				$provide.service('TeamSchedule', function () {
 					return teamSchedule;
+				});
+
+				$provide.service('CurrentUserInfo', function () {
+					return currentUserInfo;
 				});
 			});
 		});
@@ -477,6 +482,63 @@
 			expect(request.FormatedPeriodEndTime()).toEqual(toDateString('2016-10-27T18:00:00', timeZone));
 		});
 
+		it('should display time in shift trade day view according to logon user timezone', function () {
+			var submitterTimezone = 'Europe/Berlin';
+			var test = setUpTarget();
+			test.scope.requests = [{ Id: 1, PeriodStartTime: '2017-01-09T00:00:00', PeriodEndTime: '2017-01-09T23:59:00', CreatedTime: '2017-01-03T05:54:12', TimeZone: submitterTimezone, UpdatedTime: '2017-01-03T05:54:50' }];
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2017-01-02T00:00:00',
+				Maximum: '2017-01-09T22:59:00',
+				FirstDayOfWeek: 1
+			};
+			test.scope.shiftTradeView = true;
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = false;
+			test.scope.$digest();
+
+			var request = test.scope.requests[0];
+			expect(request.FormatedPeriodStartTime()).toEqual(toDateString('2017-01-08T23:00:00'));
+			expect(request.FormatedPeriodEndTime()).toEqual(toDateString('2017-01-09T22:59:00'));
+		});
+
+		it('should get dayViewModels according to logon user timezone', function () {
+			var submitterTimezone = 'Europe/Berlin';
+			var test = setUpTarget();
+			test.scope.requests = [
+			{
+				Id: 1,
+				PeriodStartTime: '2017-01-09T00:00:00', PeriodEndTime: '2017-01-09T23:59:00', CreatedTime: '2017-01-03T05:54:12',
+				TimeZone: submitterTimezone, UpdatedTime: '2017-01-03T05:54:50',
+				ShiftTradeDays: [
+					{
+						Date: "2017-01-09T00:00:00",
+						FromScheduleDayDetail: { Name: "Day", Type: 1, ShortName: "DY", Color: "#FFC080" },
+						ToScheduleDayDetail: { Name: "Day", Type: 1, ShortName: "DY", Color: "#FFC080" }
+					}
+				]
+			}];
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2017-01-02T00:00:00',
+				Maximum: '2017-01-09T22:59:00',
+				FirstDayOfWeek: 1
+			};
+			test.scope.shiftTradeView = true;
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = false;
+			test.scope.$digest();
+
+			var shiftTradeDayViewModels = isolatedScope.requestsTableContainer.shiftTradeDayViewModels;
+			var shiftTradeScheduleViewModels = isolatedScope.requestsTableContainer.shiftTradeScheduleViewModels;
+			var length = shiftTradeDayViewModels.length;
+			expect(shiftTradeDayViewModels[0].dayNumber).toEqual("01");
+			expect(shiftTradeDayViewModels[length - 1].dayNumber).toEqual("08");
+			expect(shiftTradeScheduleViewModels[1][0].dayNumber).toEqual("08");
+		});
+
 		xit('should load schedules for shift trade request', function () {
 			var test = setUpTarget();
 
@@ -519,9 +581,14 @@
 		}
 
 		function toDateString(date, timeZone) {
-			var _isNowDST = moment.tz(timeZone).isDST();
-			var _dateTime = _isNowDST ? moment(date).add(1, 'h').toDate() : moment(date).toDate();
-			return $filter('date')(_dateTime, "short");
+			var momentDate = moment(date);
+			if (timeZone) {
+				var _isNowDST = moment.tz(timeZone).isDST();
+				var _dateTime = _isNowDST ? momentDate.add(1, 'h').toDate() : momentDate.toDate();
+				return $filter('date')(_dateTime, "short");
+			} else {
+				return $filter('date')(momentDate.toDate(), "short");
+			}
 		};
 
 		function setUpTarget() {
@@ -551,6 +618,16 @@
 		this.getSchedulesCallTimes = function () {
 			return searchScheduleCalledTimes;
 		}
+	}
+
+	function FakeCurrentUserInfo() {
+		return{
+			CurrentUserInfo: function() {
+				return{
+					DefaultTimeZone: "Atlantic/Reykjavik"
+				};
+			}
+		};
 	}
 
 	function FakeRequestsDataService() {

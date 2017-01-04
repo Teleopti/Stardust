@@ -1,6 +1,6 @@
 ﻿<div id="shift-detail" ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning ui-grid-save-state ui-grid-disable-animation></div>
 
-<form ng-show="!requestsTableContainer.shiftTradeView">
+<form ng-if="!requestsTableContainer.shiftTradeView">
 	<span class="wfm-radio">
 		<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone"
 			   checked="!requestsTableContainer.isUsingRequestSubmitterTimeZone"
@@ -15,6 +15,27 @@
 			   checked="requestsTableContainer.isUsingRequestSubmitterTimeZone"
 			   ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = true" />
 		<label for="radioRequestTimezone">
+			<span class="wfm-radio-toggle"></span>
+			<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
+		</label>
+	</span>
+</form>
+
+<form ng-if="requestsTableContainer.shiftTradeView">
+	<span class="wfm-radio">
+		<input type="radio" name="groupTimezoneSetting1" id="radioUserTimezone1"
+			   checked="!requestsTableContainer.isUsingRequestSubmitterTimeZone"
+			   ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = false" />
+		<label for="radioUserTimezone1">
+			<span class="wfm-radio-toggle"></span>
+			<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
+		</label>
+	</span>
+	<span class="wfm-radio">
+		<input type="radio" name="groupTimezoneSetting1" id="radioRequestTimezone1"
+			   checked="requestsTableContainer.isUsingRequestSubmitterTimeZone"
+			   ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = true" />
+		<label for="radioRequestTimezone1">
 			<span class="wfm-radio-toggle"></span>
 			<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
 		</label>
