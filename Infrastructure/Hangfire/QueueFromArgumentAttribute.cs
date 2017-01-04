@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 			var args = context.BackgroundJob.Job.Args.ToArray();
 			var jobInfo = args.OfType<HangfireEventJob>().SingleOrDefault();
-			var queueName = jobInfo?.QueueName ?? string.Format(_format, args);
+			var queueName = jobInfo?.QueueName ?? string.Format(_format ?? "", args);
 
 			if (!string.IsNullOrEmpty(queueName))
 				enqueuedState.Queue = queueName;
