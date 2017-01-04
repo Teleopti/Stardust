@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 new ScheduleRange(dic, new ScheduleParameters(scenario, person, range), new PersistableScheduleDataPermissionChecker());
             underlyingDictionary.Add(person, scheduleRange);
 
-            scheduleRange.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2007, 8, 3), dayOff));
+            scheduleRange.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, new DateOnly(2007, 8, 3), dayOff));
 
             var expected = new DateTimePeriod(new DateTime(2007, 8, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 13, 30, 0, DateTimeKind.Utc));
             var result = target.PossiblePeriod(scheduleRange, new DateOnly(2007, 8, 2));

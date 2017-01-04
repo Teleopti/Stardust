@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 														 new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			target.Add(abs);
 
-			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person,
-																	  parameters.Period);
+			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																	  parameters.Scenario, parameters.Period);
 
 			IMeeting meeting = new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject", "location", "description",
 				ActivityFactory.CreateActivity("activity"), parameters.Scenario);
@@ -197,9 +197,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var absence = AbsenceFactory.CreateAbsence("abs");
 			var absLayer = new AbsenceLayer(absence, absencePeriod);
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario,
-																						  parameters.Person,
-																						  assignmentPeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																						  parameters.Scenario, assignmentPeriod);
 			target.Add(personAssignment);
 			target.CreateAndAddAbsence(absLayer);
 			Assert.That(absLayer, Is.EqualTo(target.PersonAbsenceCollection()[0].Layer));
@@ -253,8 +252,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(parameters.Period.StartDateTime));
-			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person,
-																	  parameters.Period);
+			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																	  parameters.Scenario, parameters.Period);
 			target.Add(ass1);
 			
 			var activity = ActivityFactory.CreateActivity("activity");
@@ -308,8 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var assNoMainShift = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(activity, parameters.Person,
-																	  parameters.Period, parameters.Scenario);
+			var assNoMainShift = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(parameters.Person, parameters.Scenario, activity, parameters.Period);
 			target.Add(assNoMainShift);
 
 			target.CreateAndAddActivity(activity, period, shiftCategory);
@@ -332,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var assNoMainShift = PersonAssignmentFactory.CreateEmptyAssignment(scenario, parameters.Person, parameters.Period);
+			var assNoMainShift = PersonAssignmentFactory.CreateEmptyAssignment(parameters.Person, scenario, parameters.Period);
 
 			target.Add(assNoMainShift);
 
@@ -350,8 +348,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(parameters.Period.StartDateTime));
 			
-			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person,
-																	  parameters.Period);
+			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																	  parameters.Scenario, parameters.Period);
 
 			target.Add(ass1);
 
@@ -375,8 +373,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(parameters.Period.StartDateTime));
-			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person,
-																	  parameters.Period);
+			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																	  parameters.Scenario, parameters.Period);
 
 			target.Add(ass1);
 
@@ -416,7 +414,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var endPersonalShift = new DateTime(2000, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			var periodPersonalShift = new DateTimePeriod(startPersonalShift, endPersonalShift);
 
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, target.Person, periodAssignment, shiftCategory, parameters.Scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(target.Person, parameters.Scenario, activity, periodAssignment, shiftCategory);
 			target.Add(personAssignment);
 	        target.CreateAndAddPersonalActivity(activity2, periodPersonalShift);
 
@@ -464,9 +462,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(start, end);
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario,
-																						  parameters.Person,
-																						  parameters.Period);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																						  parameters.Scenario, parameters.Period);
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			target.Add(ass);
 
@@ -489,9 +486,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var end = new DateTime(2000, 1, 2, 3, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(start, end);
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario,
-																						  parameters.Person,
-																						  parameters.Period);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																						  parameters.Scenario, parameters.Period);
 			var nightPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 8, 0, 0, DateTimeKind.Utc));
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), nightPeriod, shiftCategory);
@@ -520,9 +516,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var assignmentPeriod = new DateTimePeriod(start, end);
 			var overtimePeriod = new DateTimePeriod(end, end.AddHours(1));
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario,
-																						  parameters.Person,
-																						  assignmentPeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																						  parameters.Scenario, assignmentPeriod);
 			PersonFactory.AddDefinitionSetToPerson(personAssignment.Person, definitionSet);
 			target.Add(personAssignment);
 			target.CreateAndAddOvertime(activity, overtimePeriod, definitionSet);
@@ -549,9 +544,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateTimePeriod(start, end);
 			var assignmentPeriod = new DateTimePeriod(end, end.AddHours(1));
 			var _target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario,
-																						  parameters.Person,
-																						  assignmentPeriod);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																						  parameters.Scenario, assignmentPeriod);
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			_target.Add(ass);
 
@@ -577,9 +571,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateTimePeriod(start, end);
 			var assignmentPeriod = new DateTimePeriod(end.AddHours(1), end.AddHours(2));
 			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario,
-																						  parameters.Person,
-																						  assignmentPeriod);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person,
+																						  parameters.Scenario, assignmentPeriod);
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			target.Add(ass);
 
@@ -693,7 +686,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var end = new DateTime(2011, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var dateOnly = new DateOnly(2011, 1, 1);
 			var period = new DateTimePeriod(start, end);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, period);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person, parameters.Scenario, period);
 			var absenceLayer = new AbsenceLayer(new Absence(), period);
 			var personAbsence = new PersonAbsence(parameters.Person, parameters.Scenario, absenceLayer);
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, dateOnly);

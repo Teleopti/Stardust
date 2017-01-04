@@ -275,8 +275,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 		private IPersonAssignment addAssignment(IPerson person, DateTimePeriod dateTimePeriod)
 		{
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
-				dateTimePeriod);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				_scenario, dateTimePeriod);
 			return assignment;
 		}
 

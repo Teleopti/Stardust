@@ -216,8 +216,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		{
 			var scenario = _currentScenario.Current();
 			var personAssignment = activity != null ?
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriod, new ShiftCategory("AM"), scenario).WithId() :
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod).WithId();
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, dateTimePeriod, new ShiftCategory("AM")).WithId() :
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod).WithId();
 			_scheduleStorage.Add(personAssignment);
 			return personAssignment;
 		}

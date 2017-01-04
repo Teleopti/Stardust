@@ -102,12 +102,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 		//create personassignment
 		private static IPersonAssignment CreatePersonAssignment(DateTimePeriod period, IPerson person, IShiftCategory shiftCategory, IScenario scenario)
 		{
-			return PersonAssignmentFactory.CreateAssignmentWithMainShift(
-												 Ccc.TestCommon.FakeData.ActivityFactory.CreateActivity("sdfsdf"),
-												 person,
-												 period,
-												 shiftCategory,
-												 scenario);
+			return PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+												 scenario, Ccc.TestCommon.FakeData.ActivityFactory.CreateActivity("sdfsdf"), period, shiftCategory);
 		}
 
 		//create personabsence

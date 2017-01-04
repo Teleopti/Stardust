@@ -439,9 +439,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyMainShiftIsOverwrittenByOvertime()
 		{
 			IMultiplicatorDefinitionSet defSet =dummyDefinitionSet();
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioAggregate(),
-																							person,
-																							createPeriod(12, 16));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+																							ScenarioFactory.CreateScenarioAggregate(), createPeriod(12, 16));
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
 			IActivity overTimeActivity = ActivityFactory.CreateActivity("d");
 			overTimeActivity.InWorkTime = true;
@@ -482,10 +481,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void PersonalShiftNotVisibleIfOnlyOvertimeAndNoMainShift()
 		{
 			IMultiplicatorDefinitionSet defSet = dummyDefinitionSet();
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(ActivityFactory.CreateActivity("d"), 
-																				person,
-																				createPeriod(12,16),
-																				ScenarioFactory.CreateScenarioAggregate());
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(person,
+																				ScenarioFactory.CreateScenarioAggregate(), ActivityFactory.CreateActivity("d"), createPeriod(12,16));
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
 			ass.AddOvertimeActivity(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet);
 

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var assPer = new Person {Name = new Name("roger", "moore")};
             var changedByPer = new Person {Name = new Name("hubba", "bubba")};
 
-            var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"), assPer, new DateTimePeriod(2000,1,1,2000,1,2));
+            var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(assPer, new Scenario("sdf"), new DateTimePeriod(2000,1,1,2000,1,2));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
 			conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), ass.EntityClone()));
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 						var assPer = new Person { Name = new Name("roger", "moore") }.InTimeZone(tz);
             var changedByPer = new Person { Name = new Name("hubba", "bubba") }.InTimeZone(tz);
 
-						var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("ffsdf"), assPer, new DateOnly(2000, 1, 2), new DayOffTemplate(new Description()));
+						var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(assPer, new Scenario("ffsdf"), new DateOnly(2000, 1, 2), new DayOffTemplate(new Description()));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
 			conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(ass, null), ass.EntityClone()));
 
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var assPer = new Person { Name = new Name("roger", "moore") };
             var changedByPer = new Person { Name = new Name("hubba", "bubba") };
 
-            var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"), assPer, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+            var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(assPer, new Scenario("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
 			conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), ass.EntityClone()));
 

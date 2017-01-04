@@ -1381,11 +1381,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftCategory);
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
-																					  resTemp[0],
-																					  new DateTimePeriod(2000,1,1,2000,1,2),
-																					  shiftCategory,
-																					  scenario);
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
+																					  scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
 			ass.Clear();
 			PersistAndRemoveFromUnitOfWork(ass);
 
@@ -1412,11 +1409,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftCategory);
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
-																	resTemp[0],
-																	new DateTimePeriod(2000,1,1,2000,1,2),
-																	shiftCategory,
-																	scenario);
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
+																	scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
@@ -1443,7 +1437,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftCategory);
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,resTemp[0],new DateTimePeriod(2000,1,1,2000,1,2),shiftCategory,scenario);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			var buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
@@ -1475,11 +1469,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftCategory);
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
-																	resTemp[0],
-																	new DateTimePeriod(2000,1,1,2000,1,2),
-																						  shiftCategory,
-																	scenario);
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
+																	scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			Assert.AreEqual(1,target.NumberOfActiveAgents());
@@ -1514,11 +1505,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(p);
 			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf",true);
 			PersistAndRemoveFromUnitOfWork(scenarioNew);
-			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
-				p,
-				new DateTimePeriod(2000,1,1,2000,1,2),
-				shiftCategory,
-				scenarioNew);
+			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(p,
+				scenarioNew, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(assNew);
 		}
 

@@ -192,10 +192,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var personAbsence = new PersonAbsence(person, scenario, absenceLayer).WithId();
 
 		    var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				scenario,
-				person,
-				period);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
+				scenario, period);
 			scheduleDictionary.AddPersonAssignment(assignment);
 		    scheduleDictionary.AddPersonAbsence(personAbsence);
 			schedulingResultStateHolder.Schedules = scheduleDictionary;

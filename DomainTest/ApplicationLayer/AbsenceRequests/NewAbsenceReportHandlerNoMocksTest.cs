@@ -194,10 +194,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private static IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
 		{
-			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				currentScenario.Current(),
-				person,
-				new DateTimePeriod(startDate, endDate));
+			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
+				currentScenario.Current(), new DateTimePeriod(startDate, endDate));
 		}
 
 		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, IAccount accountDay)

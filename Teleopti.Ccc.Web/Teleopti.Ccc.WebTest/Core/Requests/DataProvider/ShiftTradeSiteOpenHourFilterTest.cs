@@ -549,8 +549,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var dateTimePeriod =
 				date.ToDateTimePeriod(timePeriod, person.PermissionInformation.DefaultTimeZone());
 			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				dateTimePeriod);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, dateTimePeriod);
 			scheduleDay.Add(assignment);
 			var shiftExchangeOffer = new ShiftExchangeOffer(scheduleDay, new ShiftExchangeCriteria(),
 				ShiftExchangeOfferStatus.Pending);

@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var newPer = new Person();
 			var newScen = new Scenario("new scen");
 
-			target = PersonAssignmentFactory.CreateAssignmentWithMainShift(testScenario, testPerson, new DateTimePeriod(2000,1,1,2000,1,2));
+			target = PersonAssignmentFactory.CreateAssignmentWithMainShift(testPerson, testScenario, new DateTimePeriod(2000,1,1,2000,1,2));
 			target.SetId(Guid.NewGuid());
 			var moveToTheseParameters = new PersonAssignment(newPer, newScen, new DateOnly(2000, 1, 1));
 
@@ -769,12 +769,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			target.AddOvertimeActivity(new Activity("_"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
-			var source = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				new Activity("_"),
-				testPerson,
-				new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
-				new ShiftCategory("_"),
-				testScenario);
+			var source = PersonAssignmentFactory.CreateAssignmentWithMainShift(testPerson,
+				testScenario, new Activity("_"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4), new ShiftCategory("_"));
 
 			target.SetActivitiesAndShiftCategoryFromWithOffset(source, TimeSpan.Zero);
 
@@ -788,8 +784,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var layerPeriod = new DateTimePeriod(2016, 8, 9, 2016, 8, 10);
 			var assignment =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioWithId("_", true), agent,
-					layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+					ScenarioFactory.CreateScenarioWithId("_", true), layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -813,8 +809,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var agent = new Person().WithId();
 			var layerPeriod = new DateTimePeriod(2016, 8, 9, 2016, 8, 10);
 			var assignment =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioWithId("_", true), agent,
-					layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+					ScenarioFactory.CreateScenarioWithId("_", true), layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
 
 			assignment.PopAllEvents();
 

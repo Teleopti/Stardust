@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IPersonAssignment addPersonAssignment(IPerson person, DateTimePeriod period)
 		{
 			IPersonAssignment pAss1 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person, period);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _scenario, period);
 			_assignments.Add(pAss1);
 			return pAss1;
 		}

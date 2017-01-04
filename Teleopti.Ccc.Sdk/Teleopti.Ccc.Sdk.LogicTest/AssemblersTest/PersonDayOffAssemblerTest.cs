@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var dayOff = DayOffFactory.CreateDayOff(new Description("test"));
 		    dayOff.Anchor = anchorTime;
 		    dayOff.SetTargetAndFlexibility(length, flexibility);
-		    var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, date, dayOff).WithId();
+		    var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, dayOff).WithId();
 
 			var target = new PersonDayOffAssembler(personAssembler, new DateTimePeriodAssembler());
 			target.Person = person;

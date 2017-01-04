@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			var groupMembers1 = new List<IPerson> {person1};
 			var person2 = PersonFactory.CreatePerson();
 			var groupMembers2 = new List<IPerson> { person2 };
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hepp"), person2,
-			                                                                             new DateTimePeriod(), category1);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+			                                                                             new Scenario("hepp"), new DateTimePeriod(), category1);
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockToSwap.TeamInfo).Return(_teamInfo);

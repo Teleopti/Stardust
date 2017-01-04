@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    [Test]
 	    public void AbsenceCancelSuccessfully()
 	    {
-		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, _period).WithId());
+		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
 		    _scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
 
 		    _scheduleStorage.SetUnitOfWork(_unitOfWorkFactory.CurrentUnitOfWork());
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    {
 		    var absence2 = AbsenceFactory.CreateAbsence("Holiday").WithId();
 
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, _period).WithId());
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(absence2, _period)).WithId());
@@ -102,10 +102,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         	var otherScenario = ScenarioFactory.CreateScenarioWithId("other",false);
 			_scenarioRepository.Add(otherScenario);
 			
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, _period).WithId());
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
 
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(otherScenario, _person, _period).WithId());
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, otherScenario, _period).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, otherScenario, new AbsenceLayer(_absence, _period)).WithId());
 
 			_scheduleStorage.SetUnitOfWork(_unitOfWorkFactory.CurrentUnitOfWork());
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void AbsenceCancelSuccessfullyForTwoOverlappingAbsences()
 		{
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, _period).WithId());
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(2)))).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(4)))).WithId());
 

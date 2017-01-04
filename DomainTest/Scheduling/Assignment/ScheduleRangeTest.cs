@@ -569,7 +569,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_parameters = new ScheduleParameters(_scenario, _person, new DateTimePeriod(2000, 1, 1, 2000, 1, 1));
 			var activity = ActivityFactory.CreateActivity("activity");
 			activity.InContractTime = true;
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,_person,new DateTimePeriod(2000, 1, 1, 8, 2000, 1, 1, 10),ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),_scenario);	
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,_scenario, activity, new DateTimePeriod(2000, 1, 1, 8, 2000, 1, 1, 10), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));	
 			ass.AddActivity(activity, ass.Period);
 			
 			using (_mocks.Record())
@@ -593,12 +593,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private IPersonAssignment createPersonAssignment(DateTimePeriod period)
 		{
-			var ret = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-										ActivityFactory.CreateActivity("sdfsdf"),
-										_person,
-										period,
-										ShiftCategoryFactory.CreateShiftCategory("sdf"),
-										_scenario);
+			var ret = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+										_scenario, ActivityFactory.CreateActivity("sdfsdf"), period, ShiftCategoryFactory.CreateShiftCategory("sdf"));
 			ret.SetId(Guid.NewGuid());
 			return ret;
 		}

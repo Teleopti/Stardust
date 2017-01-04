@@ -91,10 +91,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 		private IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
 		{
-			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				currentScenario.Current(),
-				person,
-				new DateTimePeriod(startDate, endDate));
+			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
+				currentScenario.Current(), new DateTimePeriod(startDate, endDate));
 		}
 
 

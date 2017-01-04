@@ -99,9 +99,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapDayOffViewModel()
 		{
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff,
-			                                                    PersonAssignmentFactory.CreateAssignmentWithDayOff(
-				                                                    new Scenario("s"), new Person(), DateOnly.Today,
-				                                                    new DayOffTemplate(new Description("DO"))));
+			                                                    PersonAssignmentFactory.CreateAssignmentWithDayOff(new Person(), new Scenario("s"),
+				                                                    DateOnly.Today, new DayOffTemplate(new Description("DO"))));
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 

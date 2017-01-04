@@ -232,26 +232,14 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var shiftCategory = new ShiftCategory("a");
 			var scenario = new Scenario("d");
 
-			var assignment1Person1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				new Activity("Play Guitar"),
-				_person,
-				new DateTimePeriod(booking1ForPerson1.StartDateTime, booking1ForPerson1.EndDateTime),
-				shiftCategory,
-				scenario);
+			var assignment1Person1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				scenario, new Activity("Play Guitar"), new DateTimePeriod(booking1ForPerson1.StartDateTime, booking1ForPerson1.EndDateTime), shiftCategory);
 
-			var assignment2Person1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				new Activity("Play Guitar"),
-				_person,
-				new DateTimePeriod(booking2ForPerson1.StartDateTime, booking2ForPerson1.EndDateTime),
-				shiftCategory,
-				scenario);
+			var assignment2Person1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				scenario, new Activity("Play Guitar"), new DateTimePeriod(booking2ForPerson1.StartDateTime, booking2ForPerson1.EndDateTime), shiftCategory);
 
-			var assignment1Person2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				new Activity("Play Guitar"),
-				person2,
-				new DateTimePeriod(bookingForPerson2.StartDateTime, bookingForPerson2.EndDateTime),
-				shiftCategory,
-				scenario);
+			var assignment1Person2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+				scenario, new Activity("Play Guitar"), new DateTimePeriod(bookingForPerson2.StartDateTime, bookingForPerson2.EndDateTime), shiftCategory);
 
 			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(bookingDateStart, _person, scenario);
 			scheduleDayOnePerson1.Add(assignment1Person1);

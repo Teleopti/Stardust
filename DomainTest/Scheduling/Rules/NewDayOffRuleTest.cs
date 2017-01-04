@@ -80,23 +80,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             // add this and the day off cannot be moved backwards
     		_personAssignmentJustBeforeDayOffPeriod = new DateTimePeriod(_start.AddHours(-3), _end.AddHours(-3));
-            _personAssignmentJustBeforeDayOff = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-			  _activity, _person, _personAssignmentJustBeforeDayOffPeriod, _category, _scenario);
+            _personAssignmentJustBeforeDayOff = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, _scenario, _activity, _personAssignmentJustBeforeDayOffPeriod, _category);
 
             // this will start 3 hours before the Day Off ends
     		_personAssignmentConflictingWithDayOffEndPeriod = new DateTimePeriod(_start.AddHours(24 + 17), _end.AddHours(24 + 17));
-            _personAssignmentConflictingWithDayOffEnd = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-			  _activity, _person, _personAssignmentConflictingWithDayOffEndPeriod, _category, _scenario);
+            _personAssignmentConflictingWithDayOffEnd = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, _scenario, _activity, _personAssignmentConflictingWithDayOffEndPeriod, _category);
 
             // add this and the day off cannot be moved forward
     		_personAssignmentJustAfterDayOffPeriod = new DateTimePeriod(_start.AddHours(24 + 18), _end.AddHours(24 + 18));
-            _personAssignmentJustAfterDayOff = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-			  _activity, _person, _personAssignmentJustAfterDayOffPeriod, _category, _scenario);
+            _personAssignmentJustAfterDayOff = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, _scenario, _activity, _personAssignmentJustAfterDayOffPeriod, _category);
 
             // this will start just before the Day Off and end in it
     		_personAssignmentConflictingWithDayOffStartPeriod = new DateTimePeriod(_start.AddHours(2), _end.AddHours(2));
-            _personAssignmentConflictingWithDayOffStart = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-              _activity, _person, _personAssignmentConflictingWithDayOffStartPeriod, _category, _scenario);
+            _personAssignmentConflictingWithDayOffStart = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, _scenario, _activity, _personAssignmentConflictingWithDayOffStartPeriod, _category);
 
 
             Expect.Call(_day.Person).Return(_person);

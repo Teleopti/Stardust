@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var person1Schedule = ScheduleDayFactory.Create(new DateOnly(2015, 5, 21), person1, scenario);
-			var person1Assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21 ,16));
+			var person1Assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,scenario, new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21 ,16));
 			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
 			person1Assignment1.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 6, 2015, 5, 21, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 11, 2015, 5, 21, 12));
@@ -112,14 +112,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleProvider.AddScheduleDay(person3Schedule);
 
 			var person1Schedule2 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 22), person1, scenario);
-			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22 ,16));
+			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,scenario, new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22 ,16));
 			person1Assignment2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 8, 2015, 5, 22, 16));
 			person1Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 6, 2015, 5, 22, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person1Schedule2.Add(person1Assignment2);
 			ScheduleProvider.AddScheduleDay(person1Schedule2);
 
 			var person2Schedule = ScheduleDayFactory.Create(new DateOnly(2015, 5, 22), person2, scenario);
-			var person2Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22, 16));
+			var person2Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22, 16));
 			person2Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 6, 2015, 5, 22, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person2Schedule.Add(person2Assignment2);
 			ScheduleProvider.AddScheduleDay(person2Schedule);
@@ -385,8 +385,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p5);
 
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
-			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p5,
-				new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p5, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p5ScheduleOn23.Add(p5AssOn23);
@@ -422,7 +421,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p5);
 
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
-			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, p5, new DateOnly(2015, 5, 23), new DayOffTemplate(new Description("dayoff")));
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithDayOff(p5, scenario, new DateOnly(2015, 5, 23), new DayOffTemplate(new Description("dayoff")));
 			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p5ScheduleOn23.Add(p5AssOn23);
@@ -458,7 +457,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p5);
 
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
-			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, p5, new DateOnly(2015, 5, 23), new DayOffTemplate(new Description("dayoff")));
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithDayOff(p5, scenario, new DateOnly(2015, 5, 23), new DayOffTemplate(new Description("dayoff")));
 			p5ScheduleOn23.Add(p5AssOn23);
 			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
 
@@ -567,27 +566,26 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var person1Schedule1On23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person1, scenario);
-			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, scenario, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Schedule1On23.Add(person1Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person1Schedule1On23);
 			var person2ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person2, scenario);
-			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2ScheduleOn23.Add(person2Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person2ScheduleOn23);
 			var p3 = PersonFactory.CreatePersonWithGuid("p3", "b");
 			var person3ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p3,
 				scenario);
-			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p3,
-				new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p3,
+				scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3AssOn23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3ScheduleOn23.Add(person3AssOn23);
 			ScheduleProvider.AddScheduleDay(person3ScheduleOn23);
 			var p4 = PersonFactory.CreatePersonWithGuid("p4", "p4");
 			var p4ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p4, scenario);
-			var p4AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p4,
-				new DateTimePeriod(2015, 5, 23, 11, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p4AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p4, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 11, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p4AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p4, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p4ScheduleOn23.Add(p4AssOn23);
@@ -595,8 +593,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleProvider.AddScheduleDay(p4ScheduleOn23);
 			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
-			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p5,
-				new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p5, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p5ScheduleOn23.Add(p5AssOn23);
@@ -657,20 +654,20 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var person1Schedule1On23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person1, scenario);
-			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, scenario, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Schedule1On23.Add(person1Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person1Schedule1On23);
 			var person2ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person2, scenario);
-			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2ScheduleOn23.Add(person2Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person2ScheduleOn23);
 			var p3 = PersonFactory.CreatePersonWithGuid("p3", "b");
 			var person3ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p3,
 				scenario);
-			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p3,
-				new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p3,
+				scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3AssOn23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3ScheduleOn23.Add(person3AssOn23);
 			ScheduleProvider.AddScheduleDay(person3ScheduleOn23);
@@ -682,8 +679,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleProvider.AddScheduleDay(p4ScheduleOn23);
 			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
-			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p5,
-				new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p5, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p5ScheduleOn23.Add(p5AssOn23);
@@ -744,12 +740,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var person1Schedule1On23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person1, scenario);
-			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, scenario, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Schedule1On23.Add(person1Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person1Schedule1On23);
 			var person2ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person2, scenario);
-			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2ScheduleOn23.Add(person2Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person2ScheduleOn23);
@@ -762,15 +758,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var p3 = PersonFactory.CreatePersonWithGuid("p3", "b");
 			var person3ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p3,
 				scenario);
-			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p3,
-				new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p3,
+				scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3AssOn23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3ScheduleOn23.Add(person3AssOn23);
 			ScheduleProvider.AddScheduleDay(person3ScheduleOn23);
 			var p4 = PersonFactory.CreatePersonWithGuid("p4", "p4");
 			var p4ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p4, scenario);
-			var p4AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p4,
-				new DateTimePeriod(2015, 5, 23, 11, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p4AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p4, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 11, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p4AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p4, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p4ScheduleOn23.Add(p4AssOn23);
@@ -778,8 +773,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleProvider.AddScheduleDay(p4ScheduleOn23);
 			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
-			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p5,
-				new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p5, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p5ScheduleOn23.Add(p5AssOn23);
@@ -840,27 +834,26 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var person1Schedule1On23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person1, scenario);
-			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, scenario, new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
 			person1Schedule1On23.Add(person1Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person1Schedule1On23);
 			var person2ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person2, scenario);
-			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person2ScheduleOn23.Add(person2Assignment1On23);
 			ScheduleProvider.AddScheduleDay(person2ScheduleOn23);
 			var p3 = PersonFactory.CreatePersonWithGuid("p3", "b");
 			var person3ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p3,
 				scenario);
-			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p3,
-				new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p3,
+				scenario, new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3AssOn23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
 			person3ScheduleOn23.Add(person3AssOn23);
 			ScheduleProvider.AddScheduleDay(person3ScheduleOn23);
 			var p4 = PersonFactory.CreatePersonWithGuid("p4", "p4");
 			var p4ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p4, scenario);
-			var p4AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p4,
-				new DateTimePeriod(2015, 5, 23, 11, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p4AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p4, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 11, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p4AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p4, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p4ScheduleOn23.Add(p4AssOn23);
@@ -868,8 +861,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleProvider.AddScheduleDay(p4ScheduleOn23);
 			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
-			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p5,
-				new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(p5, scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"));
 			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
 				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
 			p5ScheduleOn23.Add(p5AssOn23);

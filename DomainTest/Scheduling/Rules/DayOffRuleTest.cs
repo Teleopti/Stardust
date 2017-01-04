@@ -64,9 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            dayOff1.Anchor = new TimeSpan(10, 30, 0);
 
            // add this and the day off cannot be moved backwards
-           _personAssignmentJustBeforeDayOff = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-             _activity, _person, new DateTimePeriod(_start.AddHours(-3), _end.AddHours(-3)),
-             _category, _scenario);
+           _personAssignmentJustBeforeDayOff = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, _scenario, _activity, new DateTimePeriod(_start.AddHours(-3), _end.AddHours(-3)), _category);
 
            Expect.Call(_dic.Scenario).Return(_scenario).Repeat.Any();
            _mocks.Replay(_dic);
@@ -147,10 +145,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(4));
             dayOff.Anchor = TimeSpan.FromHours(14); //för att få 12:00 UTC
-            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 8, 2), dayOff));
+            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 8, 2), dayOff));
 
-            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-                                                                                  new DateTimePeriod(new DateTime(2007, 8, 3, 1, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 3, 3, 0, 0, DateTimeKind.Utc))));
+            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+                                                                                  _scenario, new DateTimePeriod(new DateTime(2007, 8, 3, 1, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 3, 3, 0, 0, DateTimeKind.Utc))));
 
             var expected = new DateTimePeriod(new DateTime(2007, 8, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 1, 0, 0, DateTimeKind.Utc));
 
@@ -167,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(4));
             dayOff.Anchor = TimeSpan.FromHours(14); //för att få 12:00 UTC
 
-						((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 8, 2), dayOff));
+						((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 8, 2), dayOff));
 
 
             var expected = new DateTimePeriod(new DateTime(2007, 8, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 4, 0, 0, DateTimeKind.Utc));
@@ -185,8 +183,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
             dayOff.Anchor = TimeSpan.FromHours(12);
 
-	        var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-	                                           new DateTimePeriod(new DateTime(2007, 8, 2, 10, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 11, 0, 0, DateTimeKind.Utc)));
+	        var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+	                                           _scenario, new DateTimePeriod(new DateTime(2007, 8, 2, 10, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 11, 0, 0, DateTimeKind.Utc)));
 					ass.SetDayOff(dayOff);
 
             ((Schedule)_scheduleRange).Add(ass);
@@ -206,9 +204,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
             dayOff.Anchor = TimeSpan.FromHours(12);
 
-	        var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-	                                                                        new DateTimePeriod(new DateTime(2007, 8, 2, 13, 0, 0, DateTimeKind.Utc),
-		                                                                        new DateTime(2007, 8, 2, 14, 0, 0, DateTimeKind.Utc)));
+	        var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+	                                                                        _scenario, new DateTimePeriod(new DateTime(2007, 8, 2, 13, 0, 0, DateTimeKind.Utc),
+			        new DateTime(2007, 8, 2, 14, 0, 0, DateTimeKind.Utc)));
 					ass.SetDayOff(dayOff);
             ((Schedule)_scheduleRange).Add(ass);
 
@@ -226,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(4));
             dayOff.Anchor = TimeSpan.FromHours(14); //för att få 12:00 UTC
-            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 8, 2) , dayOff));
+            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario , new DateOnly(2007, 8, 2), dayOff));
 
             var expected = new DateTimePeriod(new DateTime(2007, 8, 2, 20, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 6, 22, 0, 0, DateTimeKind.Utc));
 
@@ -256,9 +254,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             //DateTime anchorDayOffTwo = new DateTime(2007, 8, 5, 8, 30, 0);
             DateTime anchorDayOffOne = new DateTime(2007, 8, 3, 8, 30, 0);
             DateTime two = new DateTime(2007, 8, 5, 8, 30, 0 , DateTimeKind.Utc);
-            IPersonAssignment personAssignmentJustAfterDayOffTwo = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-             _activity, _person, new DateTimePeriod(two.AddHours(18), two.AddHours(26)),
-             _category, _scenario);
+            IPersonAssignment personAssignmentJustAfterDayOffTwo = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, _scenario, _activity, new DateTimePeriod(two.AddHours(18), two.AddHours(26)), _category);
             ((Schedule)_scheduleRange).Add(personAssignmentJustAfterDayOffTwo);
 
             createDayOffRule();
@@ -294,13 +290,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 						DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
 						dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(9));
 						dayOff.Anchor = new TimeSpan(8, 30, 0);
-						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 8, 3), dayOff);
+						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 8, 3), dayOff);
 
 
             DayOffTemplate dOff = new DayOffTemplate(new Description("test"));
             dOff.Anchor = new TimeSpan(8, 30, 0);
             dOff.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(9));
-						var personDayOff2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 8, 5), dOff);
+						var personDayOff2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 8, 5), dOff);
             
 
            _scheduleRange = new ScheduleRange(_dic, new ScheduleParameters(_scenario, _person, _range), _permissionChecker);

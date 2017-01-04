@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var scheduleStartTime = _now.Date.AddHours(8);
 			var scheduleEndTime = _now.Date.AddHours(17);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person
-			, createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+			, _scenario, createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
 			var result = executeValidateFullDayAbsence(assignment);
 			result.IsValid.Should().Be(false);
 		}
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var scheduleStartTime = _now.Date.AddHours(9);
 			var scheduleEndTime = _now.Date.AddHours(17);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person
-				, createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, _scenario, createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
 			var result = executeValidateFullDayAbsence(assignment);
 			result.IsValid.Should().Be(true);
 		}
@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var scheduleStartTime = _now.Date.AddHours(8);
 			var scheduleEndTime = _now.Date.AddHours(17);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
 			var result = executeValidatePartDayAbsence(8, 17, assignment);
 			result.IsValid.Should().Be(false);
 		}
@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var scheduleStartTime = _now.Date.AddHours(8);
 			var scheduleEndTime = _now.Date.AddHours(17);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, createUtcTimePeriod(scheduleStartTime, scheduleEndTime));
 			var result = executeValidatePartDayAbsence(9, 17, assignment);
 			result.IsValid.Should().Be(true);
 		}

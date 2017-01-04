@@ -42,10 +42,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		private IPersonAssignment addAssignment(IPerson person, DateTime startDate, DateTime endDate)
 		{
-			return PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				_currentScenario.Current(),
-				person,
-				new DateTimePeriod(startDate, endDate));
+			return PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				_currentScenario.Current(), new DateTimePeriod(startDate, endDate));
 		}
 
 		private SeatPlanner setupSeatPlanner(ITeam[] teams, IEnumerable<IPerson> people, IEnumerable<ISeatMapLocation> seatMapLocations, params IPersonAssignment[] personAssignment)
@@ -1163,7 +1161,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				new Seat("Seat One",1)
 			});
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_currentScenario.Current(), person, dateOnlyPeriod.StartDate, new DayOffTemplate(new Description("for", "test")));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, _currentScenario.Current(), dateOnlyPeriod.StartDate, new DayOffTemplate(new Description("for", "test")));
 			var locations = new[] { seatMapLocation };
 			var seatPlanner = setupSeatPlanner(teams, new[] { person }, locations, assignment);
 
@@ -1196,7 +1194,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			addSeatBooking(person, date, date, date.AddHours(10), seatMapLocation.Seats.Last());
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_currentScenario.Current(), person, dateOnlyPeriod.StartDate, new DayOffTemplate(new Description("for", "test")));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, _currentScenario.Current(), dateOnlyPeriod.StartDate, new DayOffTemplate(new Description("for", "test")));
 			var locations = new[] { seatMapLocation };
 			var seatPlanner = setupSeatPlanner(teams, new[] { person }, locations, assignment);
 

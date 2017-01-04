@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
        public void CanCheckPersonDayOffFromPeriod()
         {
            var partWithDayOff = _mocks.StrictMock<IScheduleDay>();
-           var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("d"),_person, new DateOnly(),new DayOffTemplate());
+           var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, new Scenario("d"),new DateOnly(), new DayOffTemplate());
            IEnumerable<IPersistableScheduleData> data = new List<IPersistableScheduleData> ();
            var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
            var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
@@ -216,10 +216,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var largePeriod = new DateOnlyPeriod(2009, 1, 26, 2009, 2, 10);
             IPersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, period);
             IList<IPersonMeeting> meetings = new List<IPersonMeeting> { personMeeting };
-            IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(activity,
-                                                                                                           _person,
-                                                                                                           period,
-                                                                                                           scenario);
+            IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(_person,
+                                                                                                           scenario, activity, period);
             var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
         	var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly,TimeZoneHelper.CurrentSessionTimeZone);
@@ -284,7 +282,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             IPersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, period);
             IList<IPersonMeeting> meetings = new List<IPersonMeeting> { personMeeting };
             IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("day");
-            IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(activity, _person, period, category, scenario);
+            IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, scenario, activity, period, category);
 
             using (_mocks.Record())
             {

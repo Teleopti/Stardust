@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.AddPersonalActivity(_personalActivity, _personalActivityDateTimePeriod);
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 			{
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(
-						_mainActivity, _personRepository.Single(),_mainActivityDateTimePeriod)
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(_personRepository.Single(),_mainActivity, _mainActivityDateTimePeriod)
 			};
 
 			var currentScenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
@@ -96,8 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.AddPersonalActivity(_personalActivity, _personalActivityDateTimePeriod);
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 			{
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(
-						_mainActivity, _personRepository.Single(),_mainActivityDateTimePeriod)
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(_personRepository.Single(),_mainActivity, _mainActivityDateTimePeriod)
 			};
 
 			var currentScenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);

@@ -230,8 +230,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		private void addAssignment(IPerson person, DateTimePeriod absenceDateTimePeriod)
 		{
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario.Current(), person,
-				absenceDateTimePeriod);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				_scenario.Current(), absenceDateTimePeriod);
 			_fakeScheduleStorage.Add(assignment);
 		}
 	}

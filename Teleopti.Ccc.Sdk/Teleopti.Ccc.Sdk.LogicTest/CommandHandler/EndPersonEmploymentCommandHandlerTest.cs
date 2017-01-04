@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 			var scenario = ScenarioFactory.CreateScenario("Default", true, false);
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
 			var personRepository = new FakePersonRepository();
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 			var scenario = ScenarioFactory.CreateScenario("Default", true, false);
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
 			var personRepository = new FakePersonRepository();
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();

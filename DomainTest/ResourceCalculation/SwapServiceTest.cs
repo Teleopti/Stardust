@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyCanSwapAssignmentsWhenDateIsNotTheSame()
         {
             IList<IScheduleDay> list = new List<IScheduleDay>();
-            _p1D2.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d2));
-            _p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+            _p1D2.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1, _scenario, _d2));
+            _p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
             list.Add(_p2D1);
             list.Add(_p1D2);
             SwapService service = new SwapService();
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _list = new List<IScheduleDay>();
 
-            _p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
+            _p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1, _scenario, _d1));
             _list.Add(_p1D1);
             _list.Add(_p2D1);
 
@@ -218,8 +218,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _list = new List<IScheduleDay>();
 
-            _p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
-            _p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+            _p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1, _scenario, _d1));
+            _p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
             _list.Add(_p1D1);
             _list.Add(_p2D1);
 

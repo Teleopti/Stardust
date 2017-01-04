@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dic = new ScheduleDictionaryForTest(_scenario,
 				new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)),
 				new Dictionary<IPerson, IScheduleRange>());
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(dic.Scenario, _person, _dateOnly, new TimeSpan(),
-				new TimeSpan(), new TimeSpan());
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, dic.Scenario, _dateOnly,
+				new TimeSpan(), new TimeSpan(), new TimeSpan());
 			var range = new ScheduleRange(dic, dayOff, new PersistableScheduleDataPermissionChecker());
 			range.Add(dayOff);
 			dic.AddTestItem(_person, range);
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
         private void addPersonDayOff(ScheduleRange range)
         {
-					var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, _dateOnly.AddDays(5), new DayOffTemplate(new Description("test")));
+					var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, _dateOnly.AddDays(5), new DayOffTemplate(new Description("test")));
             range.Add(personDayOff);
         }
 

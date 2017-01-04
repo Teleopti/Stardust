@@ -26,9 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, personRepository.Single(),
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personRepository.Single(),
+				mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
 
 			pa.AddActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 
@@ -73,8 +72,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,personRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+				personRepository.Single(),
+				mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16));
 
 			pa.AddActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 
@@ -113,8 +112,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,personRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+				personRepository.Single(),
+				mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16));
 
 			pa.AddPersonalActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 
@@ -154,8 +153,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,personRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+				personRepository.Single(),
+				mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16));
 			pa.AddOvertimeActivity(otherActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14), new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime));
 		
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
@@ -193,8 +192,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,personRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+				personRepository.Single(),
+				mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16));
 		
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
 
@@ -231,9 +230,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 			{
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(
-					mainActivity, personRepository.Single(),
-					new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(personRepository.Single(),
+					mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 

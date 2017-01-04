@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -12,9 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	/// <summary>
-	/// Creating test data for PersonAssignment domain object
-	/// </summary>
 	public static class PersonAssignmentFactory
 	{
 		public static IPersonAssignment CreatePersonAssignment(IPerson agent)
@@ -46,20 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new PersonAssignment(agent, scenario, date);
 		}
 
-		/// <summary>
-		/// Creates an assignment with personal and main shift.
-		/// </summary>
-		/// <param name="activity">The activity.</param>
-		/// <param name="agent">The agent.</param>
-		/// <param name="period">The period.</param>
-		/// <param name="category">The category</param>
-		/// <param name="scenario">The scenario</param>
-		/// <returns></returns>
-		public static IPersonAssignment CreateAssignmentWithMainShiftAndPersonalShift(IActivity activity,
-																					IPerson agent,
-																					DateTimePeriod period,
-																					IShiftCategory category,
-																					IScenario scenario)
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndPersonalShift(IPerson agent, IScenario scenario, IActivity activity, DateTimePeriod period, IShiftCategory category)
 		{
 			IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.StartDateTimeLocal(agent.PermissionInformation.DefaultTimeZone())));
 			ass.AddPersonalActivity(activity, period);
@@ -67,14 +50,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ass.SetShiftCategory(category);
 			return ass;
 		}
-
-		/// <summary>
-		/// Creates an assignment with personal and main shift.
-		/// </summary>
-		public static IPersonAssignment CreateAssignmentWithMainShiftAndPersonalShift(
-															 IScenario scenario,
-															 IPerson person,
-															 DateTimePeriod period)
+		
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndPersonalShift(IPerson person, IScenario scenario, DateTimePeriod period)
 		{
 			var activity = ActivityFactory.CreateActivity("sdf");
 			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
@@ -85,11 +62,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return ass;
 		}
 
-		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity,
-																	  IPerson agent,
-																	  DateTimePeriod period,
-																	  IShiftCategory category,
-																	  IScenario scenario)
+		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson agent, IScenario scenario, IActivity activity, DateTimePeriod period, IShiftCategory category)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
 			var ass = new PersonAssignment(agent, scenario, date);
@@ -97,9 +70,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ass.SetShiftCategory(category);
 			return ass;
 		}
-
-
-		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity, IPerson agent, DateTimePeriod period)
+		
+		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson agent, IActivity activity, DateTimePeriod period)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
 			var ass = new PersonAssignment(agent, ScenarioFactory.CreateScenarioWithId("scenario", true), date);
@@ -111,53 +83,30 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson person,
 																	 DateTimePeriod period)
 		{
-			return CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioAggregate(),
-												 person,
-												 period);
+			return CreateAssignmentWithMainShift(person,
+												 ScenarioFactory.CreateScenarioAggregate(), period);
 		}
 
-		public static IPersonAssignment CreateEmptyAssignment(IScenario scenario,
-															 IPerson person,
-															 DateTimePeriod period)
+		public static IPersonAssignment CreateEmptyAssignment(IPerson person, IScenario scenario, DateTimePeriod period)
 		{
 			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 			return ass;
 		}
 
-		public static IPersonAssignment CreateAssignmentWithMainShift(IScenario scenario,
-																	 IPerson person,
-																	 DateTimePeriod period)
+		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson person, IScenario scenario, DateTimePeriod period)
 		{
-			return CreateAssignmentWithMainShift(scenario,
-												 person,
-												 period,
-												 ShiftCategoryFactory.CreateShiftCategory("sdf"));
+			return CreateAssignmentWithMainShift(person,
+												 scenario,
+												 period, ShiftCategoryFactory.CreateShiftCategory("sdf"));
 		}
 
-		public static IPersonAssignment CreateAssignmentWithMainShift(IScenario scenario,
-																													 IPerson person,
-																													 DateTimePeriod period,
-																													IShiftCategory shiftCategory)
+		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson person, IScenario scenario, DateTimePeriod period, IShiftCategory shiftCategory)
 		{
-			return CreateAssignmentWithMainShift(new Activity("ass activity"),
-																					 person,
-																					 period,
-																					 shiftCategory,
-																					 scenario);
+			return CreateAssignmentWithMainShift(person,
+																					 scenario, new Activity("ass activity"), period, shiftCategory);
 		}
 
-		/// <summary>
-		/// Creates an assignment with personal shift.
-		/// </summary>
-		/// <param name="activity">The activity.</param>
-		/// <param name="person">The agent.</param>
-		/// <param name="period">The period.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <returns></returns>
-		public static IPersonAssignment CreateAssignmentWithPersonalShift(IActivity activity,
-																		IPerson person,
-																		DateTimePeriod period,
-																		IScenario scenario)
+		public static IPersonAssignment CreateAssignmentWithPersonalShift(IPerson person, IScenario scenario, IActivity activity, DateTimePeriod period)
 		{
 			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 			ass.AddPersonalActivity(activity, period);
@@ -167,34 +116,22 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IPersonAssignment CreateAssignmentWithPersonalShift(IPerson person,
 																	   DateTimePeriod period)
 		{
-			return CreateAssignmentWithPersonalShift(new Activity("Activity"), person, period, new Scenario("Scenario"));
+			return CreateAssignmentWithPersonalShift(person, new Scenario("Scenario"), new Activity("Activity"), period);
 		}
-
-		/// <summary>
-		/// Creates an assignment with main shift and an overtime shift.
-		/// </summary>
-		public static IPersonAssignment CreateAssignmentWithMainShiftAndOvertimeShift(
-															 IScenario scenario,
-															 IPerson person,
-															 DateTimePeriod period)
+		
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndOvertimeShift(IPerson person, IScenario scenario, DateTimePeriod period)
 		{
 			var activity = ActivityFactory.CreateActivity("sdf");
 			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
-			var ass = CreateAssignmentWithMainShift(activity,
-												 person,
-												 period,
-												 category,
-												 scenario);
+			var ass = CreateAssignmentWithMainShift(person,
+												 scenario, activity, period, category);
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
 				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
 			ass.AddOvertimeActivity(activity, period, multiplicatorDefinitionSet);
 			return ass;
 		}
 
-		public static IPersonAssignment CreateAssignmentWithOvertimeShift(IActivity activity,
-																		IPerson person,
-																		DateTimePeriod period,
-																		IScenario scenario)
+		public static IPersonAssignment CreateAssignmentWithOvertimeShift(IPerson person, IScenario scenario, IActivity activity, DateTimePeriod period)
 		{
 			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
@@ -202,11 +139,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ass.AddOvertimeActivity(activity, period, multiplicatorDefinitionSet);
 			return ass;
 		}
-
-		/// <summary>
-		/// Creates an empty agentassignment.
-		/// </summary>
-		/// <returns></returns>
+		
 		public static IPersonAssignment CreatePersonAssignmentEmpty()
 		{
 			IPerson agent = PersonFactory.CreatePerson("grisisi");
@@ -215,49 +148,36 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return ass;
 		}
 
-		/// <summary>
-		/// Creates the person assignment list for Resource Divider test.
-		/// </summary>
 		public static PersonAssignmentListContainer CreatePersonAssignmentListForActivityDividerTest()
 		{
-			IList<IProjectionService> list = new List<IProjectionService>();
-			PersonAssignmentListContainer container = new PersonAssignmentListContainer(list);
+			var list = new List<IProjectionService>();
+			var container = new PersonAssignmentListContainer(list);
 
-			// general
-			IShiftCategory caMorning = ShiftCategoryFactory.CreateShiftCategory("Morning");
-			IScenario scDefault = ScenarioFactory.CreateScenarioAggregate("Default", false);
+			var caMorning = ShiftCategoryFactory.CreateShiftCategory("Morning");
+			var scDefault = ScenarioFactory.CreateScenarioAggregate("Default", false);
 			container.Scenario = scDefault;
-			ITeam team = TeamFactory.CreateSimpleTeam();
-			IPersonContract personContract = PersonContractFactory.CreatePersonContract();
+			var team = TeamFactory.CreateSimpleTeam();
+			var personContract = PersonContractFactory.CreatePersonContract();
 
-			IScheduleDictionary dic = new ScheduleDictionary(scDefault, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), new PersistableScheduleDataPermissionChecker());
+			var dic = new ScheduleDictionary(scDefault, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), new PersistableScheduleDataPermissionChecker());
+			
+			createActivitiesAndAddToContainer(container);
+			createSkillsAndAddToContainer(container);
+			createPersonsAndAddToContainer(container);
 
+			var assignment1 = new PersonAssignment(container.ContainedPersons["Person1"], scDefault, new DateOnly(2008, 1, 2));
+			var assignment2 = new PersonAssignment(container.ContainedPersons["Person2"], scDefault, new DateOnly(2008, 1, 2));
+			var assignment3 = new PersonAssignment(container.ContainedPersons["Person3"], scDefault, new DateOnly(2008, 1, 2));
+			var assignment4 = new PersonAssignment(container.ContainedPersons["Person4"], scDefault, new DateOnly(2008, 1, 2));
 
-			// create activities
-			CreateActivitiesAndAddToContainer(container);
-
-			// create skills
-			CreateSkillsAndAddToContainer(container);
-
-			// create persons
-			CreatePersonsAndAddToContainer(container);
-
-			// assignments
-			IPersonAssignment assignment1 = new PersonAssignment(container.ContainedPersons["Person1"], scDefault, new DateOnly(2008, 1, 2));
-			IPersonAssignment assignment2 = new PersonAssignment(container.ContainedPersons["Person2"], scDefault, new DateOnly(2008, 1, 2));
-			IPersonAssignment assignment3 = new PersonAssignment(container.ContainedPersons["Person3"], scDefault, new DateOnly(2008, 1, 2));
-			IPersonAssignment assignment4 = new PersonAssignment(container.ContainedPersons["Person4"], scDefault, new DateOnly(2008, 1, 2));
-
-			// periods
-			DateTimePeriod prdPerson1Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 30, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 5, 0, DateTimeKind.Utc));
-			DateTimePeriod prdPerson1Break = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 5, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc));
-			DateTimePeriod prdPerson1Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
-			DateTimePeriod prdPerson2Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 11, 0, 0, DateTimeKind.Utc));
-			DateTimePeriod prdPerson3Lunch = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 30, 0, DateTimeKind.Utc));
-			DateTimePeriod prdPerson4Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 30, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc));
-			DateTimePeriod prdPerson4Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
-
-			// activity layers
+			var prdPerson1Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 30, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 5, 0, DateTimeKind.Utc));
+			var prdPerson1Break = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 5, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc));
+			var prdPerson1Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
+			var prdPerson2Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 11, 0, 0, DateTimeKind.Utc));
+			var prdPerson3Lunch = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 30, 0, DateTimeKind.Utc));
+			var prdPerson4Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 30, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc));
+			var prdPerson4Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
+			
 			assignment1.AddActivity(container.ContainedActivities["Phone"], prdPerson1Phone);
 			assignment1.AddActivity(container.ContainedActivities["Break"], prdPerson1Break);
 			assignment1.AddActivity(container.ContainedActivities["Office"], prdPerson1Office);
@@ -272,32 +192,29 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			assignment4.AddActivity(container.ContainedActivities["Phone"], prdPerson4Phone);
 			assignment4.AddActivity(container.ContainedActivities["Office"], prdPerson4Office);
 			assignment4.SetShiftCategory(caMorning);
-
-
-			// Person Periods
-			IPersonPeriod ppPerson1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			
+			var ppPerson1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			container.ContainedPersons["Person1"].AddPersonPeriod(ppPerson1);
 			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 2), ppPerson1);
 			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson1);
 			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeA"], 1), ppPerson1);
 			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeB"], 1), ppPerson1);
-			IPersonPeriod ppPerson2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			var ppPerson2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			container.ContainedPersons["Person2"].AddPersonPeriod(ppPerson2);
 			container.ContainedPersons["Person2"].AddSkill(
 				PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 1), ppPerson2);
 			container.ContainedPersons["Person2"].AddSkill(
 				PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson2);
-			IPersonPeriod ppPerson3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			var ppPerson3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			container.ContainedPersons["Person3"].AddPersonPeriod(ppPerson3);
-			IPersonPeriod ppPerson4 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			var ppPerson4 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			container.ContainedPersons["Person4"].AddPersonPeriod(ppPerson4);
 			container.ContainedPersons["Person4"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson4);
 
-			// create list
 			var scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person1"], new DateOnly(2008, 1, 2));
 			scheduleRange.Add(assignment1);
 			container.PersonAssignmentListForActivityDividerTest.Add(assignment1);
-			IProjectionService svc = scheduleRange.ProjectionService();
+			var svc = scheduleRange.ProjectionService();
 			svc.CreateProjection();
 			list.Add(svc);
 
@@ -324,67 +241,49 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 			return container;
 		}
-
-		/// <summary>
-		/// Creates the activity and add to container.
-		/// </summary>
-		/// <param name="container">The container.</param>
-		private static void CreateActivitiesAndAddToContainer(PersonAssignmentListContainer container)
+		
+		private static void createActivitiesAndAddToContainer(PersonAssignmentListContainer container)
 		{
-			// CreateProjection activities
-			IActivity acPhone = ActivityFactory.CreateActivity("Phone", Color.DarkGreen);
-			IActivity acOffice = ActivityFactory.CreateActivity("Office", Color.Yellow);
-			IActivity acBreak = ActivityFactory.CreateActivity("Break", Color.Red);
-			IActivity acLunch = ActivityFactory.CreateActivity("Lunch", Color.Red);
-			acPhone.SetId(Guid.NewGuid());
-			acOffice.SetId(Guid.NewGuid());
-			acBreak.SetId(Guid.NewGuid());
-			acLunch.SetId(Guid.NewGuid());
+			var acPhone = ActivityFactory.CreateActivity("Phone", Color.DarkGreen).WithId();
+			var acOffice = ActivityFactory.CreateActivity("Office", Color.Yellow).WithId();
+			var acBreak = ActivityFactory.CreateActivity("Break", Color.Red).WithId();
+			var acLunch = ActivityFactory.CreateActivity("Lunch", Color.Red).WithId();
 			container.ContainedActivities.Add(acPhone.Description.Name, acPhone);
 			container.ContainedActivities.Add(acOffice.Description.Name, acOffice);
 			container.ContainedActivities.Add(acBreak.Description.Name, acBreak);
 			container.ContainedActivities.Add(acLunch.Description.Name, acLunch);
 		}
 
-		private static void CreatePersonsAndAddToContainer(PersonAssignmentListContainer container)
+		private static void createPersonsAndAddToContainer(PersonAssignmentListContainer container)
 		{
-			// CreateProjection persons
-			IPerson person1 = PersonFactory.CreatePerson("Person1");
-			IPerson person2 = PersonFactory.CreatePerson("Person2");
-			IPerson person3 = PersonFactory.CreatePerson("Person3");
-			IPerson person4 = PersonFactory.CreatePerson("Person4");
+			var person1 = PersonFactory.CreatePerson("Person1");
+			var person2 = PersonFactory.CreatePerson("Person2");
+			var person3 = PersonFactory.CreatePerson("Person3");
+			var person4 = PersonFactory.CreatePerson("Person4");
 			container.ContainedPersons.Add(person1.Name.FirstName, person1);
 			container.ContainedPersons.Add(person2.Name.FirstName, person2);
 			container.ContainedPersons.Add(person3.Name.FirstName, person3);
 			container.ContainedPersons.Add(person4.Name.FirstName, person4);
 		}
 
-		private static void CreateSkillsAndAddToContainer(PersonAssignmentListContainer container)
+		private static void createSkillsAndAddToContainer(PersonAssignmentListContainer container)
 		{
-			// CreateProjection persons
-			// CreateProjection Skill Type
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-
-			ISkill skPhoneA = SkillFactory.CreateSkill("PhoneA");
+			var skPhoneA = SkillFactory.CreateSkill("PhoneA").WithId();
 			skPhoneA.Activity = container.ContainedActivities["Phone"];
 			skPhoneA.TimeZone = timeZone;
-			skPhoneA.SetId(Guid.NewGuid());
-			ISkill skPhoneB = SkillFactory.CreateSkill("PhoneB");
+			var skPhoneB = SkillFactory.CreateSkill("PhoneB").WithId();
 			skPhoneB.Activity = container.ContainedActivities["Phone"];
 			skPhoneB.TimeZone = timeZone;
-			skPhoneB.SetId(Guid.NewGuid());
-			ISkill skPhoneC = SkillFactory.CreateSkill("PhoneC");
+			var skPhoneC = SkillFactory.CreateSkill("PhoneC").WithId();
 			skPhoneC.Activity = container.ContainedActivities["Phone"];
 			skPhoneC.TimeZone = timeZone;
-			skPhoneC.SetId(Guid.NewGuid());
-			ISkill skOfficeA = SkillFactory.CreateSkill("OfficeA");
+			var skOfficeA = SkillFactory.CreateSkill("OfficeA").WithId();
 			skOfficeA.Activity = container.ContainedActivities["Office"];
 			skOfficeA.TimeZone = timeZone;
-			skOfficeA.SetId(Guid.NewGuid());
-			ISkill skOfficeB = SkillFactory.CreateSkill("OfficeB");
+			var skOfficeB = SkillFactory.CreateSkill("OfficeB").WithId();
 			skOfficeB.Activity = container.ContainedActivities["Office"];
 			skOfficeB.TimeZone = timeZone;
-			skOfficeB.SetId(Guid.NewGuid());
 			container.AllSkills.Add(skPhoneA);
 			container.AllSkills.Add(skPhoneB);
 			container.AllSkills.Add(skPhoneC);
@@ -447,7 +346,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return ret;
 		}
 
-		public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, TimeSpan length, TimeSpan flexibility, TimeSpan anchor)
+		public static IPersonAssignment CreateAssignmentWithDayOff(IPerson person, IScenario scenario, DateOnly date, TimeSpan length, TimeSpan flexibility, TimeSpan anchor)
 		{
 			var ass = new PersonAssignment(person, scenario, date);
 			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("test"));
@@ -457,97 +356,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return ass;
 		}
 
-		public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, IDayOffTemplate template)
+		public static IPersonAssignment CreateAssignmentWithDayOff(IPerson person, IScenario scenario, DateOnly date, IDayOffTemplate template)
 		{
 			var ass = new PersonAssignment(person, scenario, date);
 			ass.SetDayOff(template);
 			return ass;
 		}
+
 		public static IPersonAssignment CreateAssignmentWithDayOff()
 		{
-			return CreateAssignmentWithDayOff(new Scenario("scenario"), new Person(), new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("for", "test")));
-		}
-	}
-
-	/// <summary>
-	/// Test class for PersonAssignment test class
-	/// </summary>
-	public class PersonAssignmentListContainer
-	{
-		private readonly IList<ISkill> _allSkills;
-		private readonly IDictionary<string, ISkill> _containedSkills;
-		private readonly IDictionary<string, IActivity> _containedActivities;
-		private readonly IDictionary<string, IPerson> _containedPersons;
-		private readonly IList<IProjectionService> _projectionServices;
-		public IList<IPersonAssignment> PersonAssignmentListForActivityDividerTest { get; private set; }
-		public IScenario Scenario { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PersonAssignmentListContainer"/> class.
-		/// </summary>
-		public PersonAssignmentListContainer(IList<IProjectionService> projectionServices)
-		{
-			_projectionServices = projectionServices;
-			_allSkills = new List<ISkill>();
-			_containedSkills = new Dictionary<string, ISkill>();
-			_containedActivities = new Dictionary<string, IActivity>();
-			_containedPersons = new Dictionary<string, IPerson>();
-			PersonAssignmentListForActivityDividerTest = new List<IPersonAssignment>();
-		}
-
-		/// <summary>
-		/// Gets the contained skills.
-		/// </summary>
-		public IDictionary<string, ISkill> ContainedSkills
-		{
-			get { return _containedSkills; }
-		}
-
-		/// <summary>
-		/// Gets all the skills.
-		/// </summary>
-		public IList<ISkill> AllSkills
-		{
-			get { return _allSkills; }
-		}
-
-		/// <summary>
-		/// Gets the contained activity.
-		/// </summary>
-		public IDictionary<string, IActivity> ContainedActivities
-		{
-			get { return _containedActivities; }
-		}
-
-		/// <summary>
-		/// Gets the contained persons.
-		/// </summary>
-		public IDictionary<string, IPerson> ContainedPersons
-		{
-			get { return _containedPersons; }
-		}
-
-		public IList<IVisualLayerCollection> TestVisualLayerCollection()
-		{
-			IList<IVisualLayerCollection> ret = new List<IVisualLayerCollection>();
-			foreach (var projectionService in _projectionServices)
-			{
-				var projection = projectionService.CreateProjection();
-				ret.Add(projection);
-			}
-
-			return ret;
-		}
-
-		public IList<IFilteredVisualLayerCollection> TestFilteredVisualLayerCollectionWithSamePerson()
-		{
-			IPerson person = _projectionServices[0].CreateProjection().Person;
-
-			return _projectionServices
-				   .Select(projectionService => projectionService.CreateProjection())
-				   .Select(projection => new FilteredVisualLayerCollection(person, projection.ToList(), new ProjectionIntersectingPeriodMerger(), projection))
-				   .Take(2)
-				   .Cast<IFilteredVisualLayerCollection>().ToList();
+			return CreateAssignmentWithDayOff(new Person(), new Scenario("scenario"), new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("for", "test")));
 		}
 	}
 }

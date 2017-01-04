@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dtp), new PersistableScheduleDataPermissionChecker());
             var period = new DateTimePeriod(2000, 6, 1, 2000, 7, 1);
             IPersonAssignment pAss =
-                PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p1,period);
+                PersonAssignmentFactory.CreateAssignmentWithMainShift(p1,scenario, period);
   
             
             IPersonAbsence pAbs =

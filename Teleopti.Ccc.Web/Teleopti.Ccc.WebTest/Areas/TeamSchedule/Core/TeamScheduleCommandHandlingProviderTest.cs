@@ -498,8 +498,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
 			PersonAssignmentRepo.Add(personAss);
 			
@@ -537,8 +537,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.AddActivity(ActivityFactory.CreateActivity("ac"), new DateTimePeriod(2016, 4, 16, 2, 2016, 4, 17, 13));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
 			PersonAssignmentRepo.Add(personAss);
@@ -577,8 +577,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.AddActivity(ActivityFactory.CreateActivity("ac"), new DateTimePeriod(2016, 4, 16, 2, 2016, 4, 17, 13));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
 			PersonAssignmentRepo.Add(personAss);
@@ -616,8 +616,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
 			PersonAssignmentRepo.Add(personAss);
 			
@@ -655,8 +655,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.AddActivity(personAss.ShiftLayers.First().Payload, new DateTimePeriod(2016, 4, 16, 7, 2016, 4, 16, 10));
 			personAss.AddActivity(personAss.ShiftLayers.First().Payload, new DateTimePeriod(2016, 4, 16, 9, 2016, 4, 16, 10));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
@@ -894,8 +894,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			PersonAssignmentRepo.Add(personAss);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("sc").WithId();
@@ -927,8 +927,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			PersonAssignmentRepo.Add(personAss);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("sc").WithId();
@@ -960,8 +960,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
 			PersonAssignmentRepo.Add(personAss);
 
@@ -991,8 +991,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
 			PersonAssignmentRepo.Add(personAss);
 

@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			virtualSchedulePeriod.Stub(x => x.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 
 			var dayOffPreferenceRestriction = new PreferenceRestriction { DayOffTemplate = dayOffTemplate };
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), new Person(), DateOnly.Today.AddDays(1), new DayOffTemplate());
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Person(), new Scenario("scenario"), DateOnly.Today.AddDays(1), new DayOffTemplate());
 			var scheduleDayWithDayOffPreference = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff, dayOff);
 			scheduleDayWithDayOffPreference.Stub(x => x.RestrictionCollection()).Return(new[] { dayOffPreferenceRestriction });
 

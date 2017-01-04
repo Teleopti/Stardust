@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var scenario = ScenarioFactory.CreateScenario("Default",true,false).WithId();
 			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
 				new DateOnly(2001, 1, 1));
-			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,new DateTimePeriod(2001,1,1,8,2001,1,1,17)).WithId());
-			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,new DateTimePeriod(2001,2,1,8,2001,2,1,17)).WithId());
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, new DateTimePeriod(2001,1,1,8,2001,1,1,17)).WithId());
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, new DateTimePeriod(2001,2,1,8,2001,2,1,17)).WithId());
 			ScenarioRepository.Add(scenario);
 
 			person.TerminatePerson(new DateOnly(2001,1,31), new PersonAccountUpdaterDummy(), new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var scenario = ScenarioFactory.CreateScenario("High", false, false).WithId();
 			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
 				new DateOnly(2001, 1, 1));
-			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2001, 1, 1, 8, 2001, 1, 1, 17)).WithId());
-			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2001, 2, 1, 8, 2001, 2, 1, 17)).WithId());
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2001, 1, 1, 8, 2001, 1, 1, 17)).WithId());
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2001, 2, 1, 8, 2001, 2, 1, 17)).WithId());
 			ScenarioRepository.Add(defaultScenario);
 			ScenarioRepository.Add(scenario);
 

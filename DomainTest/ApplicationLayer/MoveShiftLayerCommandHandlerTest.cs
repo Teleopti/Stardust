@@ -46,9 +46,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var activity = new Activity("act").WithId();
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 			{
-                PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                    activity, agent,
-                    new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
+                PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+                    activity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
             };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
             
@@ -162,8 +161,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		private static IPersonAssignment createPersonAssignmentWithOneLayer(IActivity activity, IPerson agent, DateTime orgStart, DateTime orgEnd, IUserTimeZone userTimeZone)
 		{
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
-				new DateTimePeriod(TimeZoneHelper.ConvertToUtc(orgStart, userTimeZone.TimeZone()),
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+				activity, new DateTimePeriod(TimeZoneHelper.ConvertToUtc(orgStart, userTimeZone.TimeZone()),
 					TimeZoneHelper.ConvertToUtc(orgEnd, userTimeZone.TimeZone())));
 			return assignment;
 		}

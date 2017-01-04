@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,18),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,18), shiftCategory);
 
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
 			pa.AddActivity(emailActivity,new DateTimePeriod(2013,11,14,14,2013,11,14,15));
@@ -79,9 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,18),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,18), shiftCategory);
 
 			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,14,2013,11,14,15));
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
@@ -116,9 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,18),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,18), shiftCategory);
 
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
 			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,16,2013,11,14,17));
@@ -151,9 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
 
@@ -185,9 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
 
@@ -219,9 +209,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
 
@@ -254,10 +242,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = CurrentScenario.Current();
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, person,
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18),
-				shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18), shiftCategory);
 
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
 
@@ -290,10 +275,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = CurrentScenario.Current();
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, person,
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16),
-				shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
 
@@ -326,10 +308,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = CurrentScenario.Current();
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, person,
-				new DateTimePeriod(2013, 11, 14, 9, 2013, 11, 14, 18),
-				shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 9, 2013, 11, 14, 18), shiftCategory);
 
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 13));
 
@@ -362,10 +341,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = CurrentScenario.Current();
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, person,
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18),
-				shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18), shiftCategory);
 
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 14));
 

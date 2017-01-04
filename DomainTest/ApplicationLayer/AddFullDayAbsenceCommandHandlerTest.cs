@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = _personRepository.Single();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 10, 2013, 3, 25, 15);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person, personAssignmentPeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _currentScenario.Current(), personAssignmentPeriod);
 			_scheduleStorage.Add(personAssignment);
 			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var person = _personRepository.Single();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 24, 18, 2013, 3, 25, 5);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person, personAssignmentPeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _currentScenario.Current(), personAssignmentPeriod);
 
 			_scheduleStorage.Add(personAssignment);
 			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = _personRepository.Single();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 18, 2013, 3, 26, 5);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person, personAssignmentPeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _currentScenario.Current(), personAssignmentPeriod);
 			_scheduleStorage.Add(personAssignment);
 			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
 

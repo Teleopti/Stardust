@@ -160,8 +160,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		private static IPersonAssignment createPersonAssignmentWithOneLayer(IActivity activity, IPerson agent, DateTime orgStart, DateTime orgEnd, IUserTimeZone userTimeZone)
 		{
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
-				new DateTimePeriod(TimeZoneHelper.ConvertToUtc(orgStart, userTimeZone.TimeZone()),
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+				activity, new DateTimePeriod(TimeZoneHelper.ConvertToUtc(orgStart, userTimeZone.TimeZone()),
 					TimeZoneHelper.ConvertToUtc(orgEnd, userTimeZone.TimeZone())));
 			return assignment;
 		}

@@ -25,11 +25,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
-				activity,
-				user,
-				new DateTimePeriod(startTimeUtc, endTimeUtc),
-				scenario);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(user,
+				scenario, activity, new DateTimePeriod(startTimeUtc, endTimeUtc));
 			var repository = new PersonAssignmentRepository(currentUnitOfWork);
 			repository.Add(assignment);
 		}

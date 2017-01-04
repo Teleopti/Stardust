@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
 
 			ScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
 
 			ValidationResultPersister.SavePersonScheduleDay(new ReadModelValidationResult

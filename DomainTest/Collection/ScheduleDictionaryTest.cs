@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var noNewRules = NewBusinessRuleCollection.Minimum();
 			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
 			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
-													  new DateTimePeriod(
-													  2000, 6,
-													  1,
-													  2000, 6,
-													  2));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+													  _scenario, new DateTimePeriod(
+					2000, 6,
+					1,
+					2000, 6,
+					2));
 			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
 											  new DateTimePeriod(2000, 6, 1, 2000, 6,
 													 2));
@@ -79,12 +79,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var noNewRules = NewBusinessRuleCollection.Minimum();
 			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
 			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
-													  new DateTimePeriod(
-													  2000, 6,
-													  1,
-													  2000, 6,
-													  2));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+													  _scenario, new DateTimePeriod(
+					2000, 6,
+					1,
+					2000, 6,
+					2));
 			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
 											  new DateTimePeriod(2000, 6, 1, 2000, 6,
 													 2));
@@ -114,12 +114,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				var noNewRules = NewBusinessRuleCollection.Minimum();
 				var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
 				IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-				IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
-														  new DateTimePeriod(
-														  2000, 6,
-														  1,
-														  2000, 6,
-														  2));
+				IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+														  _scenario, new DateTimePeriod(
+						2000, 6,
+						1,
+						2000, 6,
+						2));
 				IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
 												  new DateTimePeriod(2000, 6, 1, 2000, 6,
 														 2));
@@ -218,25 +218,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IPerson dummyPerson1 = PersonFactory.CreatePerson();
 			IPerson dummyPerson2 = PersonFactory.CreatePerson();
 			IPersonAssignment ass =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson,
-										  new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
-										  scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+										  scenario, ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), ShiftCategoryFactory.CreateShiftCategory("sdf"));
 			IPersonAssignment ass1 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson,
-										  new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
-										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
-										  scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+										  scenario, ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4), ShiftCategoryFactory.CreateShiftCategory("sdf"));
 			IPersonAssignment ass2 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson1,
-										  new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
-										  scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson1,
+										  scenario, ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), ShiftCategoryFactory.CreateShiftCategory("sdf"));
 			IPersonAssignment ass3 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson2,
-										  new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
-										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
-										  scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson2,
+										  scenario, ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4), ShiftCategoryFactory.CreateShiftCategory("sdf"));
 
 			using (mocks.Record())
 			{
@@ -300,12 +292,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
-					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															  new DateTimePeriod(
-															  2000, 6,
-															  1,
-															  2000, 6,
-															  2));
+					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															  scenario, new DateTimePeriod(
+							2000, 6,
+							1,
+							2000, 6,
+							2));
 					IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
 													  new DateTimePeriod(2000, 6, 1, 2000, 6,
 															 2));
@@ -342,12 +334,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
-					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															  new DateTimePeriod(
-															  2000, 6,
-															  1,
-															  2000, 6,
-															  2));
+					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															  scenario, new DateTimePeriod(
+							2000, 6,
+							1,
+							2000, 6,
+							2));
 					IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
 													  new DateTimePeriod(2000, 6, 1, 2000, 6,
 															 2));
@@ -372,7 +364,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyCorrectParametersToDifferenceSinceSnapshot()
 		{
 			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
-			IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 11, 2, 2001, 1, 1));
+			IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 11, 2, 2001, 1, 1));
 			pAss.SetId(Guid.NewGuid());
 
 			IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
@@ -423,12 +415,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
-					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															  new DateTimePeriod(
-															  2000, 6,
-															  1,
-															  2000, 6,
-															  2));
+					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															  scenario, new DateTimePeriod(
+							2000, 6,
+							1,
+							2000, 6,
+							2));
 					IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
 													  new DateTimePeriod(2000, 6, 1, 2000, 6,
 															 2));
@@ -472,9 +464,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			SetAuthorizationServiceExpectations();
 
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-													 new DateTimePeriod(2000, 6, 1,
-															2000, 6, 2));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+													 scenario, new DateTimePeriod(2000, 6, 1,
+					2000, 6, 2));
 			ass.SetId(assId);
 
 			IMeetingPerson meetingPerson = new MeetingPerson(dummyPerson, false);
@@ -534,12 +526,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
 					//this will happen on scheduleranges not initialized when loading scheduledictionary
-					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
-															   2000,
-															   11, 2,
-															   2001,
-															   1, 1));
+					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															   scenario, new DateTimePeriod(
+							2000,
+							11, 2,
+							2001,
+							1, 1));
 					IScheduleRange range = target[dummyPerson];
 					IScheduleDay part = range.ScheduledDay(new DateOnly(2000, 11, 2));
 					((Schedule)part).Add(pAss);
@@ -585,7 +577,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IPersonAssignmentRepository rep = mocks.StrictMock<IPersonAssignmentRepository>();
 			Guid newId = Guid.NewGuid();
 
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
 			ass.SetId(newId);
 			using (mocks.Record())
 			{
@@ -660,12 +652,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
-					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
-															   2000,
-															   11, 2,
-															   2001,
-															   1, 1));
+					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															   scenario, new DateTimePeriod(
+							2000,
+							11, 2,
+							2001,
+							1, 1));
 
 					IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
 													   new DateTimePeriod(2000, 1, 1, 2001,
@@ -693,8 +685,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
 					IPersonAssignment pAss =
-						PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
-												  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+						PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(),
+												  scenario, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 					pAss.SetId(Guid.NewGuid());
 					IPersonAbsence pAbs =
 						PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), scenario,
@@ -722,8 +714,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
 					IPersonAssignment pAss =
-						PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
-												  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+						PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(),
+												  scenario, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 					pAss.SetId(Guid.NewGuid());
 
 					IPersonAbsence pAbs =
@@ -756,12 +748,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1), PersonContractFactory.CreatePersonContract(), team);
 			person.AddPersonPeriod(personPeriod);
-			IPersonAssignment pAss1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-										  new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2).ToDateTimePeriod(timeZone));//Expected
+			IPersonAssignment pAss1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+										  scenario, new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2).ToDateTimePeriod(timeZone));//Expected
 			pAss1.SetId(Guid.NewGuid());
 
-			IPersonAssignment pAss2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-										  new DateOnlyPeriod(2000, 2, 1, 2000, 2, 2).ToDateTimePeriod(timeZone));
+			IPersonAssignment pAss2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+										  scenario, new DateOnlyPeriod(2000, 2, 1, 2000, 2, 2).ToDateTimePeriod(timeZone));
 
 			using (mocks.Record())
 			{
@@ -796,7 +788,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			dOff1.Anchor = TimeSpan.Zero;
 			dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
 			IPersonAbsence pAbs2BeChanged = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			IPersonAssignment pAss2BeAdded = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			IPersonAssignment pAss2BeAdded = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			const string function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
 
 			using (mocks.Record())
@@ -851,11 +843,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
 					IPersonAssignment ass =
-						PersonAssignmentFactory.CreateAssignmentWithMainShift(
-						ActivityFactory.CreateActivity("sdf"), dummyPerson,
-						new DateTimePeriod(2000, 1, 1, 2001, 1, 1),
-						ShiftCategoryFactory.CreateShiftCategory("sdf"),
-						scenario);
+						PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+						scenario, ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1), ShiftCategoryFactory.CreateShiftCategory("sdf"));
 					((ScheduleRange)target[dummyPerson]).Add(ass);
 					Assert.AreEqual(1, target.Count);
 					Assert.IsTrue(target[dummyPerson].Contains(ass));
@@ -887,9 +876,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					per.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2001, 1, 1);
 					var part = target[per].ScheduledDay(new DateOnly(2000, 1, 2));
-					part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, per,
-													   new DateTimePeriod(2000, 1, 2, 2000,
-															  1, 3)));
+					part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(per,
+													   scenario, new DateTimePeriod(2000, 1, 2, 2000,
+							1, 3)));
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 				}
 			}
@@ -914,9 +903,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					var part = target[per].ScheduledDay(new DateOnly(2000, 1, 2));
 					scenario.Restricted = true;
-					part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, per,
-													   new DateTimePeriod(2000, 1, 2, 2000,
-															  1, 3)));
+					part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(per,
+													   scenario, new DateTimePeriod(2000, 1, 2, 2000,
+							1, 3)));
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
 					Assert.AreEqual(0,
@@ -1043,7 +1032,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IPersonAssignmentRepository rep = mocks.StrictMock<IPersonAssignmentRepository>();
 			Guid newId = Guid.NewGuid();
 
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(1900, 6, 1, 1900, 6, 2));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(1900, 6, 1, 1900, 6, 2));
 			ass.SetId(newId);
 
 			using (mocks.Record())
@@ -1067,7 +1056,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IPersonAssignmentRepository rep = mocks.StrictMock<IPersonAssignmentRepository>();
 			Guid newId = Guid.NewGuid();
 
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
 			ass.SetId(newId);
 
 			using (mocks.Record())
@@ -1089,7 +1078,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IPersonAssignmentRepository rep = mocks.StrictMock<IPersonAssignmentRepository>();
 			Guid newId = Guid.NewGuid();
 
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
 			ass.SetId(newId);
 			using (mocks.Record())
 			{
@@ -1120,7 +1109,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			Guid newId = Guid.NewGuid();
 
 			IScenario theOtherScenario = ScenarioFactory.CreateScenarioAggregate();
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(theOtherScenario, dummyPerson, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, theOtherScenario, new DateTimePeriod(2000, 6, 1, 2001, 1, 1));
 			ass.SetId(newId);
 			using (mocks.Record())
 			{
@@ -1366,12 +1355,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					IUndoRedoContainer container = new UndoRedoContainer();
 					target.SetUndoRedoContainer(container);
-					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
-															   2000,
-															   11, 2,
-															   2001,
-															   1, 1));
+					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															   scenario, new DateTimePeriod(
+							2000,
+							11, 2,
+							2001,
+							1, 1));
 
 					IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
 													   new DateTimePeriod(2000, 1, 1, 2001,
@@ -1413,15 +1402,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					IUndoRedoContainer container = new UndoRedoContainer();
 					target.SetUndoRedoContainer(container);
-					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
-															   2000, 11, 1, 2000,
-															   11, 2));
-					IPersonAssignment pAss2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,
-															dummyPerson,
-															new DateTimePeriod(
-																2000, 11, 2,
-																2000, 11, 3));
+					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															   scenario, new DateTimePeriod(
+							2000, 11, 1, 2000,
+							11, 2));
+					IPersonAssignment pAss2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															scenario, new DateTimePeriod(
+							2000, 11, 2,
+							2000, 11, 3));
 					((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss, pAss2 });
 					Assert.IsFalse(container.CanUndo());
 					Assert.IsFalse(container.CanRedo());
@@ -1466,12 +1454,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					IUndoRedoContainer container = new UndoRedoContainer();
 					target.SetUndoRedoContainer(container);
-					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
-															   2000,
-															   11, 2,
-															   2001,
-															   1, 1));
+					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															   scenario, new DateTimePeriod(
+							2000,
+							11, 2,
+							2001,
+							1, 1));
 					((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss });
 
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
@@ -1509,12 +1497,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					IUndoRedoContainer container = new UndoRedoContainer();
 					target.SetUndoRedoContainer(container);
-					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,
-															   dummyPerson,
-															   new DateTimePeriod
-															   (2000, 11,
-																2, 2001,
-																1, 1));
+					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson,
+															   scenario, new DateTimePeriod
+						(2000, 11,
+							2, 2001,
+							1, 1));
 					((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss });
 
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));

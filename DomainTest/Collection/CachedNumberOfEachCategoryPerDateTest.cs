@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var personList = new List<IPerson> {person1, person2};
 
 			_dic.AddPersonAssignment(
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), person1,
-					new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory, _scenario));
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, _scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory));
 
 			_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
 			_target.SetFilteredPersons(personList);
@@ -59,8 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var personList = new List<IPerson> {person1};
 
 			_dic.AddPersonAssignment(
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), person1,
-					new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory, _scenario));
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, _scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory));
 
 			_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
 			_target.SetFilteredPersons(personList);
@@ -79,8 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var personList = new List<IPerson> {person1};
 
 			_dic.AddPersonAssignment(
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), person1,
-					new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory, _scenario));
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, _scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory));
 
 			_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
 			_target.SetFilteredPersons(personList);
@@ -103,8 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var personList = new List<IPerson> {person1};
 
 			_dic.AddPersonAssignment(
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), person1,
-					new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory, _scenario));
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, _scenario, ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 17), _shiftCategory));
 
 			_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
 			_target.SetFilteredPersons(personList);

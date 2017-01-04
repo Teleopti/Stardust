@@ -93,11 +93,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per.Team);
 			PersistAndRemoveFromUnitOfWork(dummyAgent);
 
-			target = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(dummyActivity,
-										dummyAgent,
-										new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-										dummyCat,
-										dummyScenario);
+			target = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(dummyAgent,
+										dummyScenario, dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), dummyCat);
 			target.AddOvertimeActivity(dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), definitionSet);
 			Session.Save(target);
 			Session.Flush();

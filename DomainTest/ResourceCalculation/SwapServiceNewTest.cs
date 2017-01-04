@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyCanSwapAssignmentsWhenDateIsNotTheSame()
         {
             IList<IScheduleDay> list = new List<IScheduleDay>();
-            _p1D2.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d2));
-            _p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+            _p1D2.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1, _scenario, _d2));
+            _p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
             list.Add(_p2D1);
             list.Add(_p1D2);
             var service = new SwapServiceNew();
@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
 			_list = new List<IScheduleDay>();
 
-			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
-			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1, _scenario, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _list = new List<IScheduleDay>();
 
-            _p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
+            _p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1, _scenario, _d1));
             _list.Add(_p1D1);
             _list.Add(_p2D1);
 
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_list = new List<IScheduleDay>();
 
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person1, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person1, _scenario, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
 			_p1D1.Add(dayOff);
 			
 			_list.Add(_p1D1);
@@ -228,9 +228,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
 
 			var absencePeriod = new DateTimePeriod(_d1.StartDateTime, _d1.EndDateTime);
-			_p1D1.Add(PersonAssignmentFactory.CreateEmptyAssignment(_scenario, _person1, absencePeriod));
+			_p1D1.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person1, _scenario, absencePeriod));
 			_p1D1.Add(PersonAbsenceFactory.CreatePersonAbsence(_person1, _scenario, absencePeriod));
-			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
 			// NOTE that we need to create an empty assignment from 388 as there is no null PersonAssignment() any longer
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
@@ -337,9 +337,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
 
 			var absencePeriod = new DateTimePeriod(_d1.StartDateTime.AddHours(3), _d1.StartDateTime.AddHours(4));
-			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1, _scenario, _d1));
 			_p1D1.Add(PersonAbsenceFactory.CreatePersonAbsence(_person1, _scenario, absencePeriod));
-			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
 
@@ -386,8 +386,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldNotSwapPersonalShift()
 		{
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
-			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_scenario, _person1, _d1));
-			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person1, _scenario, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
 
@@ -431,8 +431,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldSwapOvertime()
 		{
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
-			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(_scenario, _person1, _d1));
-			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(_person1, _scenario, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2, _scenario, _d1));
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
 

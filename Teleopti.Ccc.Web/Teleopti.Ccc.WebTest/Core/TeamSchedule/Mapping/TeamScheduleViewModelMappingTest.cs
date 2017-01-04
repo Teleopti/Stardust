@@ -300,9 +300,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapDayOffText()
 		{
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("s"), new Person(),
-			                                                                new DateOnly(2000, 1, 1),
-			                                                                new DayOffTemplate(new Description("long", "short")));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Person(),
+			                                                                new Scenario("s"),
+			                                                                new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("long", "short")));
 
 			data.Days = new[]
 			            	{

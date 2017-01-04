@@ -351,17 +351,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         //create personassignment
         private IPersonAssignment CreatePersonAssignment(DateTimePeriod period, IPerson person, IShiftCategory shiftCategory)
         {
-            return PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                                        ActivityFactory.CreateActivity("sdfsdf"),
-                                        person,
-                                        period,
-                                        shiftCategory,
-                                        _scenario);
+            return PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+                                        _scenario, ActivityFactory.CreateActivity("sdfsdf"), period, shiftCategory);
         }
 
 		private IPersonAssignment createPersonAssignmentWithNoMainShiftButOvertime(DateTimePeriod period, IPerson person)
 		{
-			return PersonAssignmentFactory.CreateAssignmentWithOvertimeShift(ActivityFactory.CreateActivity("sdfsdf"), person, period, _scenario);
+			return PersonAssignmentFactory.CreateAssignmentWithOvertimeShift(person, _scenario, ActivityFactory.CreateActivity("sdfsdf"), period);
 		}
 
         //create persondayoff
@@ -372,7 +368,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
             dayOff.Anchor = TimeSpan.FromHours(3);
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(35), TimeSpan.FromHours(6));
-						return PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, person, date, dayOff);
+						return PersonAssignmentFactory.CreateAssignmentWithDayOff(person, _scenario, date, dayOff);
         }
         private IPersonAssignment CreatePersonDayOffWithSpecificTemplate(DateTime period, IPerson person, IDayOffTemplate template)
         {
@@ -380,7 +376,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             template.SetTargetAndFlexibility(TimeSpan.FromHours(35), TimeSpan.FromHours(6));
             template.Anchor = TimeSpan.FromHours(4);
-						return PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, person, date, template);
+						return PersonAssignmentFactory.CreateAssignmentWithDayOff(person, _scenario, date, template);
         }
 
         //create personabsence

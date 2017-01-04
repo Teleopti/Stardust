@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
 			var part = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2001, 1, 1));
 
-			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(ActivityFactory.CreateActivity("d"), person, period, scenario);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(person, scenario, ActivityFactory.CreateActivity("d"), period);
 			part.Add(ass);
 
 			Assert.AreEqual(SchedulePartView.PersonalShift, part.SignificantPart());

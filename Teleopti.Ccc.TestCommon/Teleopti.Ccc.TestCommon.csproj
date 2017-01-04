@@ -172,6 +172,7 @@
     <Compile Include="FakeData\FakeIntradayQueueStatisticsLoader.cs" />
     <Compile Include="FakeData\FakeSkillCombinationResourceRepository.cs" />
     <Compile Include="FakeData\PersonAbsenceAccountFactory.cs" />
+    <Compile Include="FakeData\PersonAssignmentListContainer.cs" />
     <Compile Include="FakeData\PersonRequestAuthorizationCheckerConfigurable.cs" />
     <Compile Include="FakeData\WorkflowControlSetFactory.cs" />
     <Compile Include="FakeEventPublisherWithOverwritingHandlers.cs" />

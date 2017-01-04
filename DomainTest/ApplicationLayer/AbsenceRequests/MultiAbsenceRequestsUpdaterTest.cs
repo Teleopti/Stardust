@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var person = PersonFactory.CreatePerson(wfcs).WithId();
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
 			PersonAssignmentRepository.Has(assignment);
 
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 13))).WithId();
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var person = PersonFactory.CreatePerson(wfcs).WithId();
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
 			PersonAssignmentRepository.Has(assignment);
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
 			var personAbsence = new PersonAbsence(person, scenario, absenceLayer);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var person = PersonFactory.CreatePerson(wfcs).WithId();
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
 			PersonAssignmentRepository.Has(assignment);
 
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 1, 13))).WithId();
@@ -191,8 +191,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category, scenario);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category, scenario);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category);
 				PersonAssignmentRepository.Has(assignment);
 				PersonAssignmentRepository.Has(assignment2);
 				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 15))).WithId();
@@ -258,8 +258,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				var agent2 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill2);
 				agent1.WorkflowControlSet = workflowControlSet;
 				agent2.WorkflowControlSet = workflowControlSet;
-				var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent1, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category, scenario);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent2, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category, scenario);
+				var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent1, scenario, activity, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent2, scenario, activity, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
 				PersonAssignmentRepository.Has(assignment1);
 				PersonAssignmentRepository.Has(assignment2);
 				var personRequest1 = new PersonRequest(agent1, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category, scenario);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
 				PersonAssignmentRepository.Has(assignment);
 				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
 				personRequest.Pending();
@@ -384,8 +384,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category, scenario);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category, scenario);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category);
 				PersonAssignmentRepository.Has(assignment);
 				PersonAssignmentRepository.Has(assignment2);
 				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 18, 2016, 12, 2, 18))).WithId();
@@ -445,8 +445,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 1, 16, 2016, 12, 1, 17), category, scenario);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 2, 16, 2016, 12, 2, 17), category, scenario);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 16, 2016, 12, 1, 17), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 2, 16, 2016, 12, 2, 17), category);
 				PersonAssignmentRepository.Has(assignment);
 				PersonAssignmentRepository.Has(assignment2);
 				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 23, 2016, 12, 2, 18))).WithId();
@@ -507,9 +507,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 1, 23, 2016, 12, 2, 04), category, scenario);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 2, 23, 2016, 12, 3, 04), category, scenario);
-				var assignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 3, 23, 2016, 12, 4, 04), category, scenario);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 23, 2016, 12, 2, 04), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 2, 23, 2016, 12, 3, 04), category);
+				var assignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 3, 23, 2016, 12, 4, 04), category);
 				PersonAssignmentRepository.Has(assignment);
 				PersonAssignmentRepository.Has(assignment2);
 				PersonAssignmentRepository.Has(assignment3);
@@ -570,8 +570,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 			agent.WorkflowControlSet = workflowControlSet;
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category, scenario);
-			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category, scenario);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category);
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category);
 			PersonAssignmentRepository.Has(assignment);
 			PersonAssignmentRepository.Has(assignment2);
 
@@ -660,9 +660,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var agent = PersonRepository.Has(skillA, skillB, skillC);
 			var agent2 = PersonRepository.Has(skillA, skillB, skillC);
 			var agent3 = PersonRepository.Has(skillA, skillB, skillC);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent2, period, new ShiftCategory("category"), scenario));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent3, period, new ShiftCategory("category"), scenario));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent2, scenario, activity, period, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent3, scenario, activity, period, new ShiftCategory("category")));
 
 			var wfcs = new WorkflowControlSet().WithId();
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod

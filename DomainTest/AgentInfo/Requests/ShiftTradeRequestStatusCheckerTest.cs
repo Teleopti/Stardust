@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                                                               new TextRequest(new DateTimePeriod(2007, 6, 3, 2007, 7, 1)));
             _personRequest2 = new PersonRequest(_person2,
                                                               new ShiftTradeRequest(new List<IShiftTradeSwapDetail>{new ShiftTradeSwapDetail(_person2, _person1, new DateOnly(2009, 9, 21), new DateOnly(2009, 9, 21))}));
-            _personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1,
-                                                                                                  _personRequest2.
-                                                                                                  Request.Period.ChangeEndTime(TimeSpan.FromHours(1)));
-            _personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2,
-                                                                                                  _personRequest2.
-                                                                                                  Request.Period.ChangeEndTime(TimeSpan.FromHours(1)));
+            _personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person1,
+                                                                                                  _scenario, _personRequest2.
+		            Request.Period.ChangeEndTime(TimeSpan.FromHours(1)));
+            _personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person2,
+                                                                                                  _scenario, _personRequest2.
+		            Request.Period.ChangeEndTime(TimeSpan.FromHours(1)));
             
         }
 

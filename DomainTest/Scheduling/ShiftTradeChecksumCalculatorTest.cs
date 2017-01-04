@@ -26,9 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             var period = new DateTimePeriod(new DateTime(2009, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                                                        new DateTime(2009, 1, 1, 9, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioAggregate(),
-                                                                          PersonFactory.CreatePerson(),
-                                                                          period);
+            IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(),
+                                                                          ScenarioFactory.CreateScenarioAggregate(), period);
 
             using (_mocks.Record())
             {
@@ -89,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             activity.SetId(Guid.NewGuid());
             IShiftCategory schiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftcat1");
 
-            IPersonAssignment personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period1, schiftCategory, scenario);
-            IPersonAssignment personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period2, schiftCategory, scenario);
+            IPersonAssignment personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period1, schiftCategory);
+            IPersonAssignment personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period2, schiftCategory);
 
             using (_mocks.Record())
             {

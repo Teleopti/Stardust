@@ -52,13 +52,13 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
 			dayOff1.Anchor = TimeSpan.Zero;
 
-			_schedulePart1.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, _schedulePart1.DateOnlyAsPeriod.DateOnly, dayOff1));
+			_schedulePart1.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, _schedulePart1.DateOnlyAsPeriod.DateOnly, dayOff1));
 
 			var dayOff2 = new DayOffTemplate(new Description("test"));
 			dayOff2.SetId(Guid.NewGuid());
 			dayOff2.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
 			dayOff2.Anchor = new TimeSpan(1, 15, 0);
-			_schedulePart2.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, _schedulePart2.DateOnlyAsPeriod.DateOnly, dayOff2));
+			_schedulePart2.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, _schedulePart2.DateOnlyAsPeriod.DateOnly, dayOff2));
 
 
 			RaptorTransformerHelper.SetUpdatedOn(_schedulePart1.PersonAssignment(), DateTime.Now);

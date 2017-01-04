@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8,0,0, DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8,0,0, DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 
 			ScheduleStorage.Add(pa);
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, scheduleDate, DayOffFactory.CreateDayOff(new Description("DayOff")));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, scheduleDate, DayOffFactory.CreateDayOff(new Description("DayOff")));
 
 			ScheduleStorage.Add(pa);
 
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
@@ -167,9 +167,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			CurrentScenario.FakeScenario(scenario);
 			person.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
@@ -211,9 +211,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			person.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
-				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person,scenario,
 				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),
 					new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),AbsenceFactory.CreateAbsence("abs"));
@@ -249,9 +249,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
-				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person,scenario,
 				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),
 					new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),AbsenceFactory.CreateAbsence("abs"));
@@ -288,9 +288,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var absence = AbsenceFactory.CreateAbsence("absence","abs", Color.Blue);
 			absence.Confidential = true;
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
@@ -330,9 +330,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var absence = AbsenceFactory.CreateAbsence("absence","abs", Color.Blue);
 			absence.Confidential = true;
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
@@ -375,9 +375,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
@@ -418,9 +418,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
@@ -460,7 +460,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			activity.InContractTime = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", "blue");
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),shiftCategory,scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, activity, new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), shiftCategory);
 		
 			ScheduleStorage.Add(pa);
 
@@ -501,8 +501,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var startTimeUtc = new DateTime(2020,1,1,0,0,0,DateTimeKind.Utc);
 			var endTimeUtc = new DateTime(2020,1,1,9,0,0,DateTimeKind.Utc);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,new DateTimePeriod(startTimeUtc,endTimeUtc),shiftCategory,scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person2,new DateTimePeriod(startTimeUtc,endTimeUtc),shiftCategory,scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, activity, new DateTimePeriod(startTimeUtc,endTimeUtc), shiftCategory);
+			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,scenario, activity, new DateTimePeriod(startTimeUtc,endTimeUtc), shiftCategory);
 
 			ScheduleStorage.Add(pa);
 			ScheduleStorage.Add(pa2);

@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			activity.InWorkTime = true;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignmentToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodToday, shiftCategory, scenario);
-			var personAssignmentYesterday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodYesterday, shiftCategory, scenario);
+			var personAssignmentToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, dateTimePeriodToday, shiftCategory);
+			var personAssignmentYesterday = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, dateTimePeriodYesterday, shiftCategory);
 			ScheduleStorage.Add(personAssignmentToday);
 			ScheduleStorage.Add(personAssignmentYesterday);
 
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			activity.InWorkTime = true;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignmentToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodToday, shiftCategory, scenario);
-			var personAssignmentTomorrow = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodTomorrow, shiftCategory, scenario);
+			var personAssignmentToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, dateTimePeriodToday, shiftCategory);
+			var personAssignmentTomorrow = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, dateTimePeriodTomorrow, shiftCategory);
 			ScheduleStorage.Add(personAssignmentToday);
 			ScheduleStorage.Add(personAssignmentTomorrow);
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.InWorkTime = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriod, shiftCategory, scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, dateTimePeriod, shiftCategory);
 			ScheduleStorage.Add(personAssignment);
 
 			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
@@ -200,15 +200,15 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var activity = ActivityFactory.CreateActivity("Phone");
 			//activity.InWorkTime = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 10), shiftCategory, scenario);
-			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 10), shiftCategory, scenario);
-			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 10), shiftCategory, scenario);
-			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 10), shiftCategory, scenario);
-			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 10), shiftCategory, scenario);
-			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
-				new DateOnly(2016, 7, 23), new DayOffTemplate());
-			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
-				new DateOnly(2016, 7, 24), new DayOffTemplate());
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 10), shiftCategory);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 10), shiftCategory);
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 10), shiftCategory);
+			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 10), shiftCategory);
+			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 10), shiftCategory);
+			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person,
+				scenario, new DateOnly(2016, 7, 23), new DayOffTemplate());
+			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person,
+				scenario, new DateOnly(2016, 7, 24), new DayOffTemplate());
 			ScheduleStorage.Add(personAssignment1);
 			ScheduleStorage.Add(personAssignment2);
 			ScheduleStorage.Add(personAssignment3);
@@ -244,12 +244,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 1, 1), contract, team));
 			PersonRepository.Has(person);
 
-			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2016, 7, 19), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, new DateOnly(2016, 7, 19), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
 			var activity = ActivityFactory.CreateActivity("Phone");
 
 			activity.InWorkTime = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignmentWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 20, 2016, 7, 19, 4), shiftCategory, scenario);
+			var personAssignmentWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 18, 20, 2016, 7, 19, 4), shiftCategory);
 			ScheduleStorage.Add(personAssignmentWithDayOff);
 			ScheduleStorage.Add(personAssignmentWithShift);
 
@@ -282,17 +282,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			activity.InWorkTime = true;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 23), shiftCategory, scenario);
-			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 23), shiftCategory, scenario);
-			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 23), shiftCategory, scenario);
-			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 23), shiftCategory, scenario);
-			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 23), shiftCategory, scenario);
-			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 23, 9, 2016, 7, 23, 22), shiftCategory, scenario);
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 23), shiftCategory);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 23), shiftCategory);
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 23), shiftCategory);
+			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 23), shiftCategory);
+			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 23), shiftCategory);
+			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 23, 9, 2016, 7, 23, 22), shiftCategory);
 
-			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
-				new DateOnly(2016, 7, 24), new DayOffTemplate());
+			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person,
+				scenario, new DateOnly(2016, 7, 24), new DayOffTemplate());
 
-			var personAssignment8 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 25, 9, 2016, 7, 25, 23), shiftCategory, scenario);
+			var personAssignment8 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 25, 9, 2016, 7, 25, 23), shiftCategory);
 
 			ScheduleStorage.Add(personAssignment1);
 			ScheduleStorage.Add(personAssignment2);
@@ -337,17 +337,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 
-			var personAssignmentLastSunday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 17, 9, 2016, 7, 17, 23), shiftCategory, scenario);
+			var personAssignmentLastSunday = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 17, 9, 2016, 7, 17, 23), shiftCategory);
 
-			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 23), shiftCategory, scenario);
-			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 23), shiftCategory, scenario);
-			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 23), shiftCategory, scenario);
-			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 23), shiftCategory, scenario);
-			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 23), shiftCategory, scenario);
-			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 23, 9, 2016, 7, 23, 23), shiftCategory, scenario);
-			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 24, 9, 2016, 7, 24, 23), shiftCategory, scenario);
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 23), shiftCategory);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 23), shiftCategory);
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 23), shiftCategory);
+			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 23), shiftCategory);
+			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 23), shiftCategory);
+			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 23, 9, 2016, 7, 23, 23), shiftCategory);
+			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 24, 9, 2016, 7, 24, 23), shiftCategory);
 
-			var personAssignmentNextMonday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 25, 9, 2016, 7, 25, 23), shiftCategory, scenario);
+			var personAssignmentNextMonday = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2016, 7, 25, 9, 2016, 7, 25, 23), shiftCategory);
 
 			ScheduleStorage.Add(personAssignmentLastSunday);
 			ScheduleStorage.Add(personAssignment1);
@@ -394,9 +394,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 		
 			pa.AddActivity(stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13));
@@ -447,9 +445,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 		
 			pa.AddActivity(stickyActivity, new DateTimePeriod(2013,11,14,10,2013,11,14,11)); //11:00-12:00
@@ -493,9 +489,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 		
 			pa.AddActivity(stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13));
@@ -544,9 +538,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				stickyActivity,person,
-				new DateTimePeriod(2013,11,14,12,2013,11,14,13),
-				shiftCategory,scenario);
+				person,scenario, stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13), shiftCategory);
 
 		
 			pa.AddActivity(mainActivity,new DateTimePeriod(2013,11,14,8,2013,11,14,16));
@@ -589,9 +581,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				stickyActivity,person,
-				new DateTimePeriod(2013,11,14,12,2013,11,14,13),
-				shiftCategory,scenario);
+				person,scenario, stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13), shiftCategory);
 
 		
 			pa.AddActivity(mainActivity,new DateTimePeriod(2013,11,14,8,2013,11,14,16));
@@ -633,10 +623,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = CurrentScenario.Current();
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, person,
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 17),
-				shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 17), shiftCategory);
 
 
 			pa.AddActivity(stickyActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
@@ -679,9 +666,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(
-				scenario,person,
-				new DateOnly(2013,11,14),
-				DayOffFactory.CreateDayOff(new Description("Do")));
+				person,
+				scenario,
+				new DateOnly(2013,11,14), DayOffFactory.CreateDayOff(new Description("Do")));
 
 		
 			ScheduleStorage.Add(pa);
@@ -756,9 +743,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,17),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,17), shiftCategory);
 
 		
 			pa.AddPersonalActivity(stickyActivity,new DateTimePeriod(2013,11,14,8,2013,11,14,16));
@@ -801,9 +786,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 
 			pa.AddActivity(stickyActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,13));
@@ -854,9 +837,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 
 			pa.AddPersonalActivity(stickyActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,13));
@@ -906,9 +887,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				stickyActivity,person,
-				new DateTimePeriod(2013,11,14,12,2013,11,14,13),
-				shiftCategory,scenario);
+				person,scenario, stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13), shiftCategory);
 
 
 			pa.AddActivity(mainActivity,new DateTimePeriod(2013,11,14,8,2013,11,14,16));
@@ -955,9 +934,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 
 			pa.AddActivity(stickyActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,13));			
@@ -1003,9 +980,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
 
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 			pa.AddActivity(shortBreakActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13));
@@ -1051,9 +1026,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,person,
-				new DateTimePeriod(2013,11,14,8,2013,11,14,17),
-				shiftCategory,scenario);
+				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,17), shiftCategory);
 
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 			pa.AddActivity(shortBreakActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13));
@@ -1101,7 +1074,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			normalActivity.AllowOverwrite = true;
 			
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(normalActivity, person,dateTimePeriodToday,shiftCategory,scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, normalActivity, dateTimePeriodToday, shiftCategory);
 
 			var stickyActivityPeriod = new DateTimePeriod(2016, 1, 2, 11, 2016, 1, 2, 13);
 			var normalActivityPeriod = new DateTimePeriod(2016, 1, 2, 12, 2016, 1, 2, 14);
@@ -1160,7 +1133,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			normalActivity.AllowOverwrite = true;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(normalActivity,person,dateTimePeriodToday,shiftCategory,scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, normalActivity, dateTimePeriodToday, shiftCategory);
 
 			var stickyActivityPeriod = new DateTimePeriod(2016,1,2,11,2016,1,2,13);
 			var normalActivityPeriod = new DateTimePeriod(2016,1,2,12,2016,1,2,14);
@@ -1230,9 +1203,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var activity = ActivityFactory.CreateActivity("activity");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory);
 			ScheduleStorage.Add(personAssignment);
 
 			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(0),
@@ -1274,12 +1246,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var activity = ActivityFactory.CreateActivity("activity");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
-			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(new DateTime(2016, 10, 11, 8, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 10, 11, 17, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory);
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(new DateTime(2016, 10, 11, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 10, 11, 17, 0, 0, DateTimeKind.Utc)), shiftCategory);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(new DateTime(2016, 10, 10, 0, 0, 0, DateTimeKind.Utc),
 					new DateTime(2016, 10, 10, 23, 0, 0, DateTimeKind.Utc)), absence);
@@ -1322,9 +1292,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var activity = ActivityFactory.CreateActivity("activity");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(new DateTime(2016, 10, 10, 20, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 10, 11, 5, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(new DateTime(2016, 10, 10, 20, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 10, 11, 5, 0, 0, DateTimeKind.Utc)), shiftCategory);
 			ScheduleStorage.Add(personAssignment);
 
 			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(0),
@@ -1360,9 +1329,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var activity = ActivityFactory.CreateActivity("activity");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(new DateTime(2016, 10, 10, 20, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 10, 11, 5, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(new DateTime(2016, 10, 10, 20, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 10, 11, 5, 0, 0, DateTimeKind.Utc)), shiftCategory);
 			ScheduleStorage.Add(personAssignment);
 
 			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(0),
@@ -1402,9 +1370,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var activity = ActivityFactory.CreateActivity("activity");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(new DateTime(2016, 10, 10, 0, 0, 0, DateTimeKind.Utc),
 					new DateTime(2016, 10, 10, 23, 0, 0, DateTimeKind.Utc)), absence);

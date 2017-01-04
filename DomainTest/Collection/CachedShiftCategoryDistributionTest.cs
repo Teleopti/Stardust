@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var range = _mocks.StrictMock<IScheduleRange>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej");
-			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(), shiftCategory);
+			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, new Scenario("hej"), new DateTimePeriod(), shiftCategory);
 	
 			using (_mocks.Record())
 			{
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej");
 			shiftCategory.SetDeleted();
-			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(), shiftCategory);
+			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, new Scenario("hej"), new DateTimePeriod(), shiftCategory);
 
 			using (_mocks.Record())
 			{

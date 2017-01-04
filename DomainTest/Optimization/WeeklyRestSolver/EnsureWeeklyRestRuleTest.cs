@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		    var activity = ActivityFactory.CreateActivity("Phone");
 		    activity.InWorkTime = true;
 
-		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, _person,new DateTimePeriod(2014, 03, 19, 5, 2014, 03, 19, 16), ShiftCategoryFactory.CreateShiftCategory(), scenario));
-		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, _person,new DateTimePeriod(2014, 03, 20, 5, 2014, 03, 20, 16), ShiftCategoryFactory.CreateShiftCategory(), scenario));
+		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, scenario, activity, new DateTimePeriod(2014, 03, 19, 5, 2014, 03, 19, 16), ShiftCategoryFactory.CreateShiftCategory()));
+		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, scenario, activity, new DateTimePeriod(2014, 03, 20, 5, 2014, 03, 20, 16), ShiftCategoryFactory.CreateShiftCategory()));
 
 		    var result = _target.HasMinWeeklyRest(personWeek,
 			    _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.InWorkTime = true;
 
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, _person, new DateTimePeriod(2014, 03, 19, 5, 2014, 03, 19, 16), ShiftCategoryFactory.CreateShiftCategory(), scenario));
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, _person, new DateTimePeriod(2014, 03, 20, 5, 2014, 03, 20, 16), ShiftCategoryFactory.CreateShiftCategory(), scenario));
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, scenario, activity, new DateTimePeriod(2014, 03, 19, 5, 2014, 03, 19, 16), ShiftCategoryFactory.CreateShiftCategory()));
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, scenario, activity, new DateTimePeriod(2014, 03, 20, 5, 2014, 03, 20, 16), ShiftCategoryFactory.CreateShiftCategory()));
 
 			var result = _target.HasMinWeeklyRest(personWeek,
 				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.InWorkTime = true;
 
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, _person, new DateTimePeriod(2014, 03, 19, 5, 2014, 03, 19, 16), ShiftCategoryFactory.CreateShiftCategory(), scenario));
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, scenario, activity, new DateTimePeriod(2014, 03, 19, 5, 2014, 03, 19, 16), ShiftCategoryFactory.CreateShiftCategory()));
 			
 			var result = _target.HasMinWeeklyRest(personWeek,
 				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,

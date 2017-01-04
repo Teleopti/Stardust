@@ -1079,7 +1079,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(TimeZoneHelper.ConvertToUtc(new DateTime(2000, 1, 1, 8, 0, 0), part.TimeZone).Hour, period.StartDateTime.Hour);
             Assert.AreEqual(TimeZoneHelper.ConvertToUtc(new DateTime(2000, 1, 1, 17, 0, 0), part.TimeZone).Hour, period.EndDateTime.Hour);
 
-            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Scenario, parameters.Person, assPeriod);
+            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(parameters.Person, parameters.Scenario, assPeriod);
 
             part.Add(ass);
 

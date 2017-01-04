@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapDayoffDate()
 		{
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(2000, 1, 1), _person);
-			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("d"), _person, new DateOnly(2000, 1, 1), new DayOffTemplate()));
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, new Scenario("d"), new DateOnly(2000, 1, 1), new DayOffTemplate()));
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new IVisualLayer[0]));
 
 			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapDayOff()
 		{
 			var theDayOff = new DayOffTemplate(new Description("my day off"));
-			var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), _person, DateOnly.Today, theDayOff);
+			var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, new Scenario("scenario"), DateOnly.Today, theDayOff);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.DayOff, personDayOff);
 
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub());

@@ -16,9 +16,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void VerifyRootChangeInfoWhenNonRootIsDeleted()
         {
-            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioAggregate(),
-                                                                                          LoggedOnPerson,
-                                                                                          new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(LoggedOnPerson,
+                                                                                          ScenarioFactory.CreateScenarioAggregate(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 	        var sc = ass.ShiftCategory;
 					IPayload pLoad = ass.MainActivities().First().Payload;
             try

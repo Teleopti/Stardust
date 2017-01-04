@@ -45,12 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
-			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person2,
-				period3.MovePeriod(TimeSpan.FromDays(1)),
-				ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-				scenario);
+			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
 			destination.Add(personAbsenceDest);
 			destination.Add(personAssignmentDest);
@@ -84,12 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
-			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person2,
-				period3.MovePeriod(TimeSpan.FromDays(1)),
-				ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-				scenario);
+			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
 			source.PersonAssignment(true).SetDayOff(DayOffFactory.CreateDayOff());
 
@@ -136,12 +128,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
 
-			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person2,
-				period3.MovePeriod(TimeSpan.FromDays(1)),
-				ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-				scenario);
+			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
 			destination.Add(personAssignmentDest);
 			destination.PersonAssignment().SetDayOff(DayOffFactory.CreateDayOff());
@@ -465,7 +453,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			IPersonAbsence personAbsence1 = new PersonAbsence(person1, scenario, absenceLayer1);
 			IPersonAbsence personAbsence2 = new PersonAbsence(person1, scenario, absenceLayer2);
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1, assPeriod);
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, scenario, assPeriod);
 
 			//without assignment
 			source.Add(personAbsence1);
@@ -585,19 +573,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
-			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person2,
-				period3.MovePeriod(TimeSpan.FromDays(1)),
-				ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-				scenario);
+			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
-			var personAssignmentSource = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-							ActivityFactory.CreateActivity("sdfsdf"),
-							person1,
-							period1,
-							ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-							scenario);
+			var personAssignmentSource = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person1,
+							scenario, ActivityFactory.CreateActivity("sdfsdf"), period1, ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
 			var personAbsenceSource = new PersonAbsence(person1, scenario, new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), parameters1.Period));
 			var personAbsenceSource2 = new PersonAbsence(person1, scenario, new AbsenceLayer(AbsenceFactory.CreateAbsence("abs2"), parameters1.Period));
@@ -711,12 +691,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
-			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person2,
-				period3.MovePeriod(TimeSpan.FromDays(1)),
-				ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-				scenario);
+			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
 			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 15, 0, 0, DateTimeKind.Utc));
 			IPersonAbsence personAbsenceNotFullDay = PersonAbsenceFactory.CreatePersonAbsence(person1, scenario, period);
@@ -856,19 +832,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
-			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person2,
-				period3.MovePeriod(TimeSpan.FromDays(1)),
-				ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-				scenario);
+			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
-			var personAssignmentSource = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-							ActivityFactory.CreateActivity("sdfsdf"),
-							person1,
-							period1,
-							ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-							scenario);
+			var personAssignmentSource = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person1,
+							scenario, ActivityFactory.CreateActivity("sdfsdf"), period1, ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
 			source.Add(personAssignmentSource);
 
@@ -932,12 +900,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
-			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person2,
-				period3.MovePeriod(TimeSpan.FromDays(1)),
-				ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),
-				scenario);
+			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
 
 			destination.Add(personAbsenceDest);
 			destination.Add(personAssignmentDest);

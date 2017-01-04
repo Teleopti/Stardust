@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layerFirstEnd = createDateTime(8);
 			var layerSecondStart = createDateTime(4);
 			var layerSecondEnd = createDateTime(7);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerFirstStart, layerFirstEnd));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, activity, new DateTimePeriod(layerFirstStart, layerFirstEnd));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layerSecondStart, layerSecondEnd));
 
 			assignment.MoveActivityAndSetHighestPriority(activity, layerFirstStart,createDateTime(4), TimeSpan.FromHours(1), null);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var activity = new Activity("theone").WithId();
 			var layerStart = createDateTime(3);
 			var layerEnd = createDateTime(8);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerStart, layerEnd));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, activity, new DateTimePeriod(layerStart, layerEnd));
 			assignment.AddActivity(activity, new DateTimePeriod(layerStart, layerEnd));
 
 			assignment.MoveActivityAndSetHighestPriority(activity, layerStart, createDateTime(4), layerEnd - layerStart, null);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layerFirstEnd = createDateTime(8);
 			var layerSecondStart = createDateTime(4);
 			var layerSecondEnd = createDateTime(7);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerFirstStart, layerFirstEnd));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, activity, new DateTimePeriod(layerFirstStart, layerFirstEnd));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layerSecondStart, layerSecondEnd));
 
 			assignment.MoveActivityAndSetHighestPriority(activity, layerSecondEnd, createDateTime(6), TimeSpan.FromHours(1), null);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var orgEndActivity = createDateTime(5);
 			var orgStartActivityNotBeMoved = createDateTime(4);
 			var orgEndActivityNotBeMoved = createDateTime(7);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,new DateTimePeriod(orgStartActivity, orgEndActivity));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,activity, new DateTimePeriod(orgStartActivity, orgEndActivity));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
 
 			assignment.MoveActivityAndSetHighestPriority(activity, orgStartActivity, createDateTime(4), TimeSpan.FromHours(2), null);
@@ -116,8 +116,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var orgEndActivity = createDateTime(5);
 			var orgStartActivityNotBeMoved = createDateTime(11);
 			var orgEndActivityNotBeMoved = createDateTime(15);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
-				new DateTimePeriod(orgStartActivity, orgEndActivity));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+				activity, new DateTimePeriod(orgStartActivity, orgEndActivity));
 			assignment.AddActivity(activity, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
 			var newStartTime = createDateTime(1);
 
@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var orgEndActivity = createDateTime(8);
 			var orgStartActivityNotBeMoved = createDateTime(5);
 			var orgEndActivityNotBeMoved = createDateTime(10);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
-				new DateTimePeriod(orgStartActivity, orgEndActivity));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+				activity, new DateTimePeriod(orgStartActivity, orgEndActivity));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
 
 			var newStartTime = createDateTime(1);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layer2end = createDateTime(7);
 			var layer3start = createDateTime(3);
 			var layer3end = createDateTime(7);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layer1start, layer1end));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, activity, new DateTimePeriod(layer1start, layer1end));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layer2start, layer2end));
 			assignment.AddActivity(activity, new DateTimePeriod(layer3start, layer3end));
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var activity = new Activity("theone").WithId();
 			var agent = new Person().WithId();
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, layerPeriod);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, activity, layerPeriod);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var activity = new Activity("theone").WithId();
 			var agent = new Person().WithId();
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, layerPeriod);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, activity, layerPeriod);
 
 			assignment.PopAllEvents();
 

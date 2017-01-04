@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			var dayOff = new DayOffTemplate(new Description("test"));
 			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
 			dayOff.Anchor = TimeSpan.FromHours(12);
-			var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(_dateTime), dayOff);
+			var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(_dateTime), dayOff);
 			part.Add(personDayOff);
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
 			_person.AddPersonPeriod(period);

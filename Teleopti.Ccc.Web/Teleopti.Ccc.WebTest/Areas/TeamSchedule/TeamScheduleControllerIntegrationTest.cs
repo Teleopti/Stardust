@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person,scenario);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,new DateTimePeriod(2020,1,1,8,2020,1,1,9),shiftCategory);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario,new DateTimePeriod(2020,1,1,8,2020,1,1,9), shiftCategory);
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2",new Color()),
 				new DateTimePeriod(2020,1,1,9,2020,1,1,11));
 			scheduleDay.Add(pa);
@@ -381,8 +381,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person,scenario);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person,scenario,
 				new DateTimePeriod(2020,1,1,8,2020,1,1,17));
-			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario,person,new DateOnly(scheduleDate),
-				new DayOffTemplate(new Description("testDayoff")));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(person,scenario,
+				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
 			scheduleDay.Add(pa);
 			scheduleDay.Add(personAbsence);
 
@@ -606,8 +606,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1),person,scenario);
-			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
-				new DateTimePeriod(2019,12,31,20,2020,1,1,3));
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2019,12,31,20,2020,1,1,3));
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
@@ -634,8 +634,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 
 			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1),person,scenario);
-			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
-				new DateTimePeriod(2019,12,31,20,2020,1,1,3));
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2019,12,31,20,2020,1,1,3));
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
@@ -663,8 +663,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 
 			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1),person,scenario);
-			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
-				new DateTimePeriod(2019,12,31,20,2020,1,1,3));
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2019,12,31,20,2020,1,1,3));
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
@@ -691,8 +691,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 
 			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1),person,scenario);
-			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
-				new DateTimePeriod(2019,12,31,20,2020,1,1,3));
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2019,12,31,20,2020,1,1,3));
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
@@ -763,26 +763,23 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var scheduleDay1 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person1,scenario);
 			var pa1 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person1,new DateTimePeriod(2020,1,1,8,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,8,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 			scheduleDay1.Add(pa1);
 
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person2,scenario);
 			var pa2 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person2,new DateTimePeriod(2020,1,1,7,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,7,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 
 			scheduleDay2.Add(pa2);
 
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person3,scenario);
 			var pa3 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person3,new DateTimePeriod(2020,1,1,8,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,8,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 			scheduleDay3.Add(pa3);
 
 
@@ -792,9 +789,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 
 			var pa4 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person4,new DateTimePeriod(2020,1,1,8,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person4,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,8,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 			scheduleDay4.Add(pa4);
 			scheduleDay4.Add(personAbsenceForPerson4);
@@ -887,26 +883,23 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var scheduleDay1 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person1,scenario);
 			var pa1 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person1,new DateTimePeriod(2020,1,4,8,2020,1,4,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,4,8,2020,1,4,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 			scheduleDay1.Add(pa1);
 
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person2,scenario);
 			var pa2 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person2,new DateTimePeriod(2020,1,4,7,2020,1,4,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,4,7,2020,1,4,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 
 			scheduleDay2.Add(pa2);
 
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person3,scenario);
 			var pa3 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person3,new DateTimePeriod(2020,1,4,8,2020,1,4,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,4,8,2020,1,4,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 			scheduleDay3.Add(pa3);
 
 
@@ -966,31 +959,28 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var scheduleDay1 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person1,scenario);
 			var pa1 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person1,new DateTimePeriod(2020,1,1,8,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,8,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 			scheduleDay1.Add(pa1);
 
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person2,scenario);
 			var pa2 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person2,new DateTimePeriod(2020,1,1,7,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,7,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 
 			scheduleDay2.Add(pa2);
 
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate),person3,scenario);
 			var pa3 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person3,new DateTimePeriod(2020,1,1,8,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,8,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 			scheduleDay3.Add(pa3);
 
 			var scheduleDayPrevious3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1),person3,scenario);
-			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person3,
-				new DateTimePeriod(2019,12,31,20,2020,1,1,3));
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+				scenario, new DateTimePeriod(2019,12,31,20,2020,1,1,3));
 			scheduleDayPrevious3.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious3);
 
@@ -1001,9 +991,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 
 			var pa4 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1",new Color()),
-					person4,new DateTimePeriod(2020,1,1,8,2020,1,1,9),ShiftCategoryFactory.CreateShiftCategory("test"),
-					scenario);
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person4,
+					scenario, ActivityFactory.CreateActivity("activity1",new Color()), new DateTimePeriod(2020,1,1,8,2020,1,1,9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
 			scheduleDay4.Add(pa4);
 			scheduleDay4.Add(personAbsenceForPerson4);

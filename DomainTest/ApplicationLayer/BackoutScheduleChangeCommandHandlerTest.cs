@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
 			var date = new DateOnly(2016, 6, 11);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), dateTimePeriod);
 			ScheduleHistoryRepository.ClearRevision();
 			var rev = new Revision {Id = 2};
 			rev.SetRevisionData(person1);
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
 			var dateOnlyPeriod = new DateOnlyPeriod(2016, 6, 11, 2016, 6, 11);
 			var date = new DateOnly(2016, 6, 11);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), dateTimePeriod);
 			ScheduleHistoryRepository.ClearRevision();
 			var rev = new Revision {Id = 2};
 			rev.SetRevisionData(person);
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
 			var date = new DateOnly(2016,6,11);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
 
 
 			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
 			var dateOnlyPeriod = new DateOnlyPeriod(2016, 6, 11, 2016, 6, 11);
 			var date = new DateOnly(2016, 6, 11);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod);
 
 			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
 			AbsenceRepository.Add(absence);
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
 			var dateOnlyPeriod = new DateOnlyPeriod(2016,6,11,2016,6,11);
 			var date = new DateOnly(2016,6,11);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
 
 			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
 			AbsenceRepository.Add(absence);
@@ -347,8 +347,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var multiDayDateTimePeriod = new DateTimePeriod(2016, 6, 11, 0, 2016, 6, 13, 0);			
 
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,new DateTimePeriod(2016,6,11,8,2016,6,11,17));
-			var nextDayPersonAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,new DateTimePeriod(2016,6,12,8,2016,6,12,17));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, new DateTimePeriod(2016,6,11,8,2016,6,11,17));
+			var nextDayPersonAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, new DateTimePeriod(2016,6,12,8,2016,6,12,17));
 
 
 			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
@@ -408,7 +408,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
 			var date = new DateOnly(2016, 6, 11);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), dateTimePeriod);
 			ScheduleHistoryRepository.ClearRevision();
 			var rev = new Revision {Id = 2};
 			rev.SetRevisionData(person);

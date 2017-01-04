@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			_absence = new Absence { InWorkTime = true, InContractTime = true };
 			_shiftCategory = new ShiftCategory("shiftCategory");
 			_dateTimePeriod = new DateTimePeriod(new DateTime(2016, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 1, 1, 17, 0, 0, DateTimeKind.Utc));
-			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_activity, _person, _dateTimePeriod, _shiftCategory, _scenario);
+			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _activity, _dateTimePeriod, _shiftCategory);
 			_scheduleDictionaryWithPersonAssignment = new ScheduleDictionaryForTest(_scenario, new DateTimePeriod(2016, 1, 1, 2016, 1, 10));
 			_scheduleDictionaryWithPersonAssignment.AddPersonAssignment(_personAssignment);
 			_allLayersAreInWorkTimeSpecification = new AllLayersAreInWorkTimeSpecification();
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		{
 			setup();
 			_scheduleDictionaryWithPersonAssignment.Remove(_person);
-			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(_dateTimePeriod.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(_dateTimePeriod.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
 			_scheduleDictionaryWithPersonAssignment.AddPersonAssignment(personAssignmentWithDayOff);
 
 			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();

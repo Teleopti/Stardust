@@ -107,10 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = _currentScenario.Current();
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, _personRepository.Single(),
-				new DateTimePeriod(2013, 11, 27, 8, 2013, 11, 27, 16),
-				shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 27, 8, 2013, 11, 27, 16), shiftCategory);
 			_scheduleStorage.Add(pa);
 
 			var target = new AddIntradayAbsenceCommandHandler(_personAbsenceCreator, _absenceCommandConverter);

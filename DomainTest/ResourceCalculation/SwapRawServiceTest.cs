@@ -148,14 +148,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				var dateTimePeriod3 = new DateTimePeriod(new DateTime(2011, 1, 3, 10, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 3, 17, 0, 0, DateTimeKind.Utc));
 				var dateTimePeriod4 = new DateTimePeriod(new DateTime(2011, 1, 4, 11, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 4, 17, 0, 0, DateTimeKind.Utc));
 
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
-				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod2));
-				_scheduleDayOnePersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod3));
-				_scheduleDayTwoPersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod4));
-				_scheduleDayThreePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _personOne,
-																					  new DateOnly(dateTimePeriod3.StartDateTime),
-																					  TimeSpan.FromHours(24), TimeSpan.FromHours(0),
-																					  TimeSpan.FromHours(12)));
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod1));
+				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod2));
+				_scheduleDayOnePersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, dateTimePeriod3));
+				_scheduleDayTwoPersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, dateTimePeriod4));
+				_scheduleDayThreePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_personOne,
+																					  _scenario,
+																					  new DateOnly(dateTimePeriod3.StartDateTime), TimeSpan.FromHours(24),
+																					  TimeSpan.FromHours(0), TimeSpan.FromHours(12)));
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne, _scheduleDayTwoPersonOne, _scheduleDayThreePersonOne };
 				_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo, _scheduleDayTwoPersonTwo, _scheduleDayThreePersonTwo };
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod1));
 				_scheduleDayOnePersonOne.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), dateTimePeriod1));
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod1));
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
 				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod1));
 				_scheduleDayOnePersonOne.PersonAssignment().AddPersonalActivity(new Activity("activity"), dateTimePeriod2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 
-				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1);
+				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod1);
 				_scheduleDayOnePersonOne.Add(ass);
 				ass.AddOvertimeActivity(new Activity("activity"), dateTimePeriod2, definitionSet);
 
@@ -308,8 +308,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				var dateTimePeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 17, 0, 0, DateTimeKind.Utc));
 				var dateTimePeriod3 = new DateTimePeriod(new DateTime(2011, 1, 3, 10, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 3, 17, 0, 0, DateTimeKind.Utc));
 
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
-				_scheduleDayOnePersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod3));
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod1));
+				_scheduleDayOnePersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, dateTimePeriod3));
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
 				_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo };
@@ -339,8 +339,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
 				_scheduleDayThreePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 3));
 
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
-				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod2));
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod1));
+				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, dateTimePeriod2));
 				_scheduleDayTwoPersonOne.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), dateTimePeriod3));
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -379,13 +379,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 30));
 
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
 
 				// imitate a day off shown as 12:00 to 12:00 (local time) in scheduler grid in summertime
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _personTwo,
-																			  new DateOnly(2015, 3, 30),
-																			  TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_personTwo,
+																			  _scenario,
+																			  new DateOnly(2015, 3, 30), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -437,9 +437,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 30));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonOne.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -493,9 +493,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne,
 					new DateOnly(2015, 3, 31));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonOne.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -553,9 +553,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne,
 					new DateOnly(2015, 3, 29));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonOne.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -613,9 +613,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 30));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -665,9 +665,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 29));
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 31));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -719,9 +719,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 30));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -773,9 +773,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 29));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -827,9 +827,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 30));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -881,9 +881,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 29));
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 31));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
@@ -949,9 +949,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 29));
 				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 31));
 
-				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personOne, _scenario, shiftPeriod1);
 				_scheduleDayOnePersonOne.Add(ass1);
-				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_personTwo, _scenario, shiftPeriod2);
 				_scheduleDayTwoPersonTwo.Add(ass2);
 
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			addPersonAssignmentsToSchedulePart();
 			var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDic, _person, new DateOnly(2007, 8, 3));
 			// add another assigment too close to the last one
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(
 				new DateTime(2007, 8, 3, 20, 0, 0, DateTimeKind.Utc),
 				new DateTime(2007, 8, 4, 02, 0, 0, DateTimeKind.Utc)));
 			schedulePart.Add(ass);
@@ -79,14 +79,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private void addPersonAssignmentsToSchedulePart()
 		{
 			IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 1, 8, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 1, 17, 0, 0, DateTimeKind.Utc))));
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 2, 8, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 2, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 2, 17, 0, 0, DateTimeKind.Utc))));
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 3, 10, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 3, 10, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 3, 19, 0, 0, DateTimeKind.Utc))));
 
 			((ScheduleRange) _scheduleRange).AddRange(assignments);

@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,_person,
-				new DateTimePeriod(2016,10,1,8,2016,10,1,17));
+				_person,
+				mainActivity, new DateTimePeriod(2016,10,1,8,2016,10,1,17));
 
 
 			_scheduleStorage.Add(selectedPersonAbsence);
@@ -158,8 +158,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,_person,
-				new DateTimePeriod(2016,10,2,22,2016,10,3,6));
+				_person,
+				mainActivity, new DateTimePeriod(2016,10,2,22,2016,10,3,6));
 
 
 			_scheduleStorage.Add(personAbsence);
@@ -202,8 +202,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,_person,
-				new DateTimePeriod(2016,10,1,8,2016,10,1,17));
+				_person,
+				mainActivity, new DateTimePeriod(2016,10,1,8,2016,10,1,17));
 
 
 			_scheduleStorage.Add(selectedPersonAbsence);

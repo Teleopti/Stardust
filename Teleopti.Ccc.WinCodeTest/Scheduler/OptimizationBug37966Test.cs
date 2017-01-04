@@ -85,67 +85,45 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			dictionary.SetUndoRedoContainer(new UndoRedoContainer());
 			dictionary.AddPersonAbsence(PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(2014, 3, 24, 0, 2014, 3, 25, 0)));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 3, 26, 8, 2014, 3, 26, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 3, 27, 8, 2014, 3, 27, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 3, 28, 12, 2014, 3, 28, 20), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
-				new DateOnly(2014, 3, 29), DayOffFactory.CreateDayOff()));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
-				new DateOnly(2014, 3, 30), DayOffFactory.CreateDayOff()));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 3, 31, 8, 2014, 3, 31, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
-				new DateOnly(2014, 4, 1), DayOffFactory.CreateDayOff()));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 4, 2, 8, 2014, 4, 2, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 4, 3, 12, 2014, 4, 3, 21), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 4, 4, 8, 2014, 4, 4, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 4, 5, 8, 2014, 4, 5, 18), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 4, 6, 11, 2014, 4, 6, 21), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 4, 7, 8, 2014, 4, 7, 22), shiftCategory, scenario));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 3, 26, 8, 2014, 3, 26, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 3, 27, 8, 2014, 3, 27, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 3, 28, 12, 2014, 3, 28, 20), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(person,
+				scenario, new DateOnly(2014, 3, 29), DayOffFactory.CreateDayOff()));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(person,
+				scenario, new DateOnly(2014, 3, 30), DayOffFactory.CreateDayOff()));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 3, 31, 8, 2014, 3, 31, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(person,
+				scenario, new DateOnly(2014, 4, 1), DayOffFactory.CreateDayOff()));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 4, 2, 8, 2014, 4, 2, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 4, 3, 12, 2014, 4, 3, 21), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 4, 4, 8, 2014, 4, 4, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 4, 5, 8, 2014, 4, 5, 18), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 4, 6, 11, 2014, 4, 6, 21), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2014, 4, 7, 8, 2014, 4, 7, 22), shiftCategory));
 			dictionary.AddScheduleDataManyPeople(new PreferenceDay(person, new DateOnly(2014, 3, 31),
 				new PreferenceRestriction {ShiftCategory = shiftCategory}));
 
 			dictionary.AddPersonAbsence(PersonAbsenceFactory.CreatePersonAbsence(person2, scenario,
 				new DateTimePeriod(2014, 3, 24, 0, 2014, 3, 25, 0)));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 3, 26, 8, 2014, 3, 26, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 3, 27, 8, 2014, 3, 27, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 3, 28, 12, 2014, 3, 28, 20), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person2,
-				new DateOnly(2014, 3, 29), DayOffFactory.CreateDayOff()));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person2,
-				new DateOnly(2014, 3, 30), DayOffFactory.CreateDayOff()));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 3, 31, 8, 2014, 3, 31, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person2,
-				new DateOnly(2014, 4, 1), DayOffFactory.CreateDayOff()));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 4, 2, 8, 2014, 4, 2, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 4, 3, 12, 2014, 4, 3, 21), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 4, 4, 8, 2014, 4, 4, 22), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 4, 5, 8, 2014, 4, 5, 18), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 4, 6, 11, 2014, 4, 6, 21), shiftCategory, scenario));
-			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
-				new DateTimePeriod(2014, 4, 7, 8, 2014, 4, 7, 22), shiftCategory, scenario));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 3, 26, 8, 2014, 3, 26, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 3, 27, 8, 2014, 3, 27, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 3, 28, 12, 2014, 3, 28, 20), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(person2,
+				scenario, new DateOnly(2014, 3, 29), DayOffFactory.CreateDayOff()));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(person2,
+				scenario, new DateOnly(2014, 3, 30), DayOffFactory.CreateDayOff()));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 3, 31, 8, 2014, 3, 31, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithDayOff(person2,
+				scenario, new DateOnly(2014, 4, 1), DayOffFactory.CreateDayOff()));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 4, 2, 8, 2014, 4, 2, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 4, 3, 12, 2014, 4, 3, 21), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 4, 4, 8, 2014, 4, 4, 22), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 4, 5, 8, 2014, 4, 5, 18), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 4, 6, 11, 2014, 4, 6, 21), shiftCategory));
+			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(2014, 4, 7, 8, 2014, 4, 7, 22), shiftCategory));
 			dictionary.AddScheduleDataManyPeople(new PreferenceDay(person2, new DateOnly(2014, 3, 31),
 				new PreferenceRestriction {ShiftCategory = shiftCategory}));
 

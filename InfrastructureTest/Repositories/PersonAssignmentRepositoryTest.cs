@@ -146,23 +146,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var searchPeriod = new DateOnlyPeriod(2007, 1, 1, 2007, 1, 2);
 
 			////////////setup////////////////////////////////////////////////////////////////
-			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				_dummyActivity,
-				_dummyAgent,
-				new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
-				_dummyCategory,
-				_dummyScenario);
+			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent,
+				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)), _dummyCategory);
 			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 			agAssValid.AddOvertimeActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
 
-			IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
-				_dummyActivity,
-				_dummyAgent,
-				new DateTimePeriod(2006, 12, 31, 2007, 1, 1),
-				notToFindScenario);
+			IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(_dummyAgent,
+				notToFindScenario, _dummyActivity, new DateTimePeriod(2006, 12, 31, 2007, 1, 1));
 
 			PersistAndRemoveFromUnitOfWork(notToFindScenario);
 			PersistAndRemoveFromUnitOfWork(agAssValid);
@@ -179,13 +172,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyAssignmentsCannotBeReadForDeletedPerson()
 		{
-			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				_dummyActivity,
-				_dummyAgent,
-				new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
-				_dummyCategory,
-				_dummyScenario);
+			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent,
+				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)), _dummyCategory);
 			PersistAndRemoveFromUnitOfWork(agAssValid);
 			new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Remove(_dummyAgent);
 			PersistAndRemoveFromUnitOfWork(_dummyAgent);
@@ -209,31 +198,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			#region setup test data
 
 			// Assignments of _dummyAgent Data
-			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				_dummyActivity,
-				_dummyAgent,
-				new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
-				_dummyCategory,
-				_dummyScenario);
+			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent,
+				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)), _dummyCategory);
 			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 
-			IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
-				_dummyActivity,
-				_dummyAgent,
-				new DateTimePeriod(2006, 12, 31, 2007, 1, 1),
-				notToFindScenario);
+			IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(_dummyAgent,
+				notToFindScenario, _dummyActivity, new DateTimePeriod(2006, 12, 31, 2007, 1, 1));
 
 			//Assignments of _dummyAgent2 
-			IPersonAssignment agAssInvalid4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				_dummyActivity,
-				_dummyAgent2,
-				new DateTimePeriod(new DateTime(2007, 1, 1, 4, 0, 0, DateTimeKind.Utc),
-					new DateTime(2007, 1, 2, 4, 0, 0, DateTimeKind.Utc)),
-				_dummyCategory,
-				_dummyScenario);
+			IPersonAssignment agAssInvalid4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent2,
+				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 4, 0, 0, DateTimeKind.Utc),
+					new DateTime(2007, 1, 2, 4, 0, 0, DateTimeKind.Utc)), _dummyCategory);
 
 			PersistAndRemoveFromUnitOfWork(notToFindScenario);
 			PersistAndRemoveFromUnitOfWork(agAssValid);

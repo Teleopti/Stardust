@@ -39,15 +39,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	        setup();
 			var person1 = new Person {Name=new Name("person1", "person1")}.InTimeZone(TimeZoneInfo.Utc);
             var person2 = new Person { Name = new Name("person2", "person2") }.InTimeZone(TimeZoneInfo.Utc);
-            IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("dummy1"),
-                                                                                        person1,
-                                                                                        new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
-            IPersonAssignment assNonValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("dummy2"),
-                                                                                        person2,
-                                                                                        new DateTimePeriod(2000, 1, 2, 2000, 1, 4));
+            IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+                                                                                        new Scenario("dummy1"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
+            IPersonAssignment assNonValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+                                                                                        new Scenario("dummy2"), new DateTimePeriod(2000, 1, 2, 2000, 1, 4));
 
-            putScheduleDataToDic(PersonAssignmentFactory.CreateAssignmentWithMainShift(destination.Scenario, new Person(), new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
-            putScheduleDataToDic(PersonAssignmentFactory.CreateAssignmentWithMainShift(destination.Scenario, person1, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
+            putScheduleDataToDic(PersonAssignmentFactory.CreateAssignmentWithMainShift(new Person(), destination.Scenario, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
+            putScheduleDataToDic(PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, destination.Scenario, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
             IScheduleDay part1 = createPartWithData(assValid, new DateOnly(2000,1,3));
             IScheduleDay part2 = createPartWithData(assNonValid, new DateOnly(2000,1,2));
 
@@ -75,9 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             nr.Add(nfRule);
             target =new MoveDataBetweenSchedules( nr, new DoNothingScheduleDayChangeCallBack());
 
-            IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"),
-                                                                            new Person().InTimeZone(TimeZoneInfo.Utc),
-                                                                            new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
+            IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Person().InTimeZone(TimeZoneInfo.Utc),
+                                                                            new Scenario("sdf"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
 
             IScheduleDay part = createPartWithData(assValid, new DateOnly(2000,1,3));
             var res = target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { part });
@@ -90,8 +87,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			setup();
 			var person = PersonFactory.CreatePerson();
             var prefDay = new PreferenceDay(person, new DateOnly(2000, 1, 2), new PreferenceRestriction());
-            var org1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(destination.Scenario, person,
-                                                                            new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
+            var org1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+                                                                            destination.Scenario, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
             org1.SetId(Guid.NewGuid());
             var org2 = new PreferenceDay(person, new DateOnly(2000, 1, 2), new PreferenceRestriction());
             ((IEntity) org2).SetId(Guid.NewGuid());
@@ -112,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			setup();
 			var scenario = new Scenario("scenario");
 			var person = PersonFactory.CreatePerson("person");
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2000, 1, 3, 2000, 1, 3));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 1, 3, 2000, 1, 3));
 			putScheduleDataToDic(PersonAbsenceFactory.CreatePersonAbsence(person, destination.Scenario, new DateTimePeriod(2000, 1, 4, 2000, 1, 5)));
 			var schedulePart = createPartWithData(personAssignment, new DateOnly(2000, 1, 3));
 			target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { schedulePart });
@@ -176,11 +173,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				var startTimeEarlyDay2 = new DateTime(2000, 1, 4, 6, 0, 0, DateTimeKind.Utc);
 				var endTimeEarlyDay2 = new DateTime(2000, 1, 4, 15, 0, 0, DateTimeKind.Utc);
 
-				var sourceDay1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeLateDay1, endTimeLateDay1), shiftCategory, new Scenario("dummy1"));
-				var sourceDay2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeLateDay2, endTimeLateDay2), shiftCategory, new Scenario("dummy1"));
+				var sourceDay1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, new Scenario("dummy1"), activity, new DateTimePeriod(startTimeLateDay1, endTimeLateDay1), shiftCategory);
+				var sourceDay2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, new Scenario("dummy1"), activity, new DateTimePeriod(startTimeLateDay2, endTimeLateDay2), shiftCategory);
 
-				var destinationDay1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeEarlyDay1, endTimeEarlyDay1), shiftCategory, destination.Scenario);
-				var destinationDay2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeEarlyDay2, endTimeEarlyDay2), shiftCategory, destination.Scenario);
+				var destinationDay1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, destination.Scenario, activity, new DateTimePeriod(startTimeEarlyDay1, endTimeEarlyDay1), shiftCategory);
+				var destinationDay2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, destination.Scenario, activity, new DateTimePeriod(startTimeEarlyDay2, endTimeEarlyDay2), shiftCategory);
 
 				putScheduleDataToDic(destinationDay1);
 				putScheduleDataToDic(destinationDay2);

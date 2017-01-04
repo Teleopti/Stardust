@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,15),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,15), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,14));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
 			pa.ShiftLayers.ForEach(l => l.WithId());
@@ -106,8 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,15),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,15), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,14));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
 			pa.ShiftLayers.ForEach(l => l.WithId());
@@ -157,8 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,15),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,15), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,14));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,15));
@@ -197,8 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,9,2013,11,14,18),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,9,2013,11,14,18), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,14));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,15));
@@ -239,8 +235,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,18), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,11));
 			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,14));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
@@ -281,8 +276,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,18), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,12));
 			pa.AddActivity(mainActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
@@ -322,8 +316,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,18), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,12));
 			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
@@ -365,8 +358,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity,PersonRepository.Single(),
-				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+				PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,18), shiftCategory);
 			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,12));
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,9,2013,11,14,17));
 			pa.ShiftLayers.ForEach(l => l.WithId());

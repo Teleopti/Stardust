@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] {saleSkill, supportSkill}).WithId();
 			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,period,ShiftCategoryFactory.CreateShiftCategory(),scenario));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory()));
 
 			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
 			SkillDayRepository.Has(supportSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
 			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory()));
 
 			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
 			SkillDayRepository.Has(supportSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			person2.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 			person3.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2, period, ShiftCategoryFactory.CreateShiftCategory(), scenario));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person3, period, ShiftCategoryFactory.CreateShiftCategory(), scenario));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory()));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory()));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person3, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory()));
 
 			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
 			SkillDayRepository.Has(supportSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 0));
@@ -136,8 +136,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 			person2.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario);
-			var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2, period, ShiftCategoryFactory.CreateShiftCategory(), scenario);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory());
+			var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory());
 			PersonAssignmentRepository.Has(ass);
 			PersonAssignmentRepository.Has(ass2);
 
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory());
 			PersonAssignmentRepository.Has(ass);
 
 			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));

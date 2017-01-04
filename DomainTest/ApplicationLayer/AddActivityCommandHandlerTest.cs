@@ -55,9 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			ActivityRepository.Add(mainActivity);
 			ActivityRepository.Add(addedActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, PersonRepository.Single(),
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16),ShiftCategoryFactory.CreateShiftCategory("regularShift"),scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonRepository.Single(),scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), ShiftCategoryFactory.CreateShiftCategory("regularShift"));
 			PersonAssignmentRepo.Add(pa);
 
 			var operatedPersonId = Guid.NewGuid();
@@ -97,9 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			ActivityRepository.Add(mainActivity);
 			ActivityRepository.Add(addedActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, PersonRepository.Single(),
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), ShiftCategoryFactory.CreateShiftCategory("regularShift"), scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), ShiftCategoryFactory.CreateShiftCategory("regularShift"));
 			PersonAssignmentRepo.Add(pa);
 
 
@@ -129,9 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			ActivityRepository.Add(mainActivity);
 			ActivityRepository.Add(addedActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, PersonRepository.Single(),
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), ShiftCategoryFactory.CreateShiftCategory("regularShift"), scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), ShiftCategoryFactory.CreateShiftCategory("regularShift"));
 			PersonAssignmentRepo.Add(pa);
 
 
@@ -188,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 
 			
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, PersonRepository.SingleOrDefault(), date, new DayOffTemplate());
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(PersonRepository.SingleOrDefault(), scenario, date, new DayOffTemplate());
 			PersonAssignmentRepo.Add(dayOff);
 
 			PersonAssignmentRepo.Count().Should().Be.EqualTo(1);
@@ -216,8 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var activity = ActivityFactory.CreateActivity("an activity");
 			ActivityRepository.Add(activity);
-			var dayOffWithPersonalActivity = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario,
-				PersonRepository.SingleOrDefault(), date, new DayOffTemplate());
+			var dayOffWithPersonalActivity = PersonAssignmentFactory.CreateAssignmentWithDayOff(PersonRepository.SingleOrDefault(), scenario, date, new DayOffTemplate());
 
 			var personalActivity = ActivityFactory.CreateActivity("a personal activity");
 			dayOffWithPersonalActivity.AddPersonalActivity(personalActivity, new DateTimePeriod(), true, null);
@@ -255,9 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			ActivityRepository.Add(addedActivity);
 			ActivityRepository.Add(mainActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, PersonRepository.Single(),
-				new DateTimePeriod(2013, 11, 13, 23, 2013, 11, 14, 8), shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 13, 23, 2013, 11, 14, 8), shiftCategory);
 			PersonAssignmentRepo.Add(pa);
 
 
@@ -289,9 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 			ActivityRepository.Add(addedActivity);
 			ActivityRepository.Add(mainActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, PersonRepository.Single(),
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14,13));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
@@ -332,9 +321,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 			ActivityRepository.Add(addedActivity);
 			ActivityRepository.Add(mainActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, PersonRepository.Single(),
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 13));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
@@ -370,9 +357,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 			ActivityRepository.Add(addedActivity);
 			ActivityRepository.Add(mainActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, PersonRepository.Single(),
-				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 15), shiftCategory, scenario);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 15), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14,14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);

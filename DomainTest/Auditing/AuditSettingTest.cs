@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Auditing
 			target.TurnOnScheduleAuditing(auditSettingRepository, auditSettingProvider);
 
 			var scenario = new Scenario("default") {DefaultScenario = true};
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, new Person(), 
-			                                                               new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Person(), 
+			                                                               scenario, new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
 			target.ShouldBeAudited(pa).Should().Be.True();
 			target.ShouldBeAudited(pa.MainActivities().First()).Should().Be.True();
 		}
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.Auditing
 			target.TurnOffScheduleAuditing(auditSettingProvider);
 
 			var scenario = new Scenario("default") { DefaultScenario = true };
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, new Person(),
-																								new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Person(),
+																								scenario, new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
 			target.ShouldBeAudited(pa).Should().Be.False();
 			target.ShouldBeAudited(pa.MainActivities().First()).Should().Be.False();
 		}

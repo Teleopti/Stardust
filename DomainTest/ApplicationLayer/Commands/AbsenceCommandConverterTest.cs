@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		{
 			var person = _personRepository.Single();
 			var scenario = _currentScenario.Current();
-			var previousDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, person, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
+			var previousDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
 			_scheduleStorage.Add(previousDay);
-			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
+			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
 			_scheduleStorage.Add(selectedDay);
 			var target = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleStorage, null);
 
@@ -88,10 +88,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		{
 			var person = _personRepository.Single();
 			var scenario = _currentScenario.Current();
-			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, person, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
+			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
 			_scheduleStorage.Add(selectedDay);
-			var nextDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
-				new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
+			var nextDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
 			_scheduleStorage.Add(nextDay);
 			var target = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleStorage, null);
 

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = PersonFactory.CreatePerson("test").WithId();
 			personRepository.Add(person);
 
-			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, _period));
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, _period));
 
 		    var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
 			    personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = PersonFactory.CreatePerson("test").WithId();
 			personRepository.Add(person);
 
-			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, person, _period));
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, _period));
 
 			var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
 				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = PersonFactory.CreatePerson("test").WithId();
 			personRepository.Add(person);
 
-			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(newScenario, person, _period));
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, newScenario, _period));
 
 			var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
 				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = PersonFactory.CreatePerson("test").WithId();
 			personRepository.Add(person);
 
-			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, _period));
+			scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, _period));
 
 			var target = new ClearMainShiftCommandHandler(new ScheduleTagAssembler(scheduleTagRepository), scheduleStorage,
 				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),

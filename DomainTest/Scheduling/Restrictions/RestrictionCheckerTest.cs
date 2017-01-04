@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalShiftCategoryRotationsPermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             IRotationRestriction dayRestriction = new RotationRestriction
                                                       {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         public void VerifyCanCalculateIllegalShiftCategoryRotationsPermissionState()
         {
             IShiftCategory wrongCategory = ShiftCategoryFactory.CreateShiftCategory("WrongShiftCat");
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             dayOffTemplate.Anchor = TimeSpan.FromHours(10);
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 
-						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 1, 1), dayOffTemplate);
+						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 1, 1), dayOffTemplate);
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
@@ -584,7 +584,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             dayOffTemplate.Anchor = TimeSpan.FromHours(10);
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 
-						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 1, 1), dayOffTemplate);
+						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 1, 1), dayOffTemplate);
 
 
 
@@ -620,7 +620,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             dayOffTemplate.Anchor = TimeSpan.FromHours(10);
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 
-						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 1, 1), dayOffTemplate);
+						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 1, 1), dayOffTemplate);
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
@@ -653,7 +653,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IScheduleDay scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
             RotationRestriction rotationRestriction = new RotationRestriction();
             rotationRestriction.ShiftCategory = _shiftCategory;
-            var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(),new DayOffTemplate());
+            var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario,new DateOnly(), new DayOffTemplate());
             _target = new RestrictionChecker();
 
             using(_mockRepository.Record())
@@ -759,7 +759,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test] 
         public void VerifyCanCalculateIllegalStartPreferencePermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
 
             var dayRestriction = new PreferenceRestriction
             {
@@ -797,7 +797,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateIllegalEndPreferencePermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             var dayRestriction = new PreferenceRestriction 
 			{
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(17, 0, 0)),
@@ -833,7 +833,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalTimesPreferencePermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             var dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -872,7 +872,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             DateTime dateTimeStart = new DateTime(2010, 1,10,22,0,0, DateTimeKind.Utc);
             DateTime dateTimeEnd = dateTimeStart.AddHours(7);
             DateTimePeriod period = new DateTimePeriod(dateTimeStart, dateTimeEnd);
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
 
             var dayRestriction = new PreferenceRestriction
 			{
@@ -912,7 +912,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             DateTime dateTimeStart = new DateTime(2010, 1, 10, 22, 0, 0, DateTimeKind.Utc);
             DateTime dateTimeEnd = dateTimeStart.AddHours(7);
             DateTimePeriod period = new DateTimePeriod(dateTimeStart, dateTimeEnd);
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             var dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(23, 0, 0), new TimeSpan(23, 0, 0)),
@@ -948,7 +948,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateIllegalWorkTimePreferencePermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             IPreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -985,7 +985,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalShiftCategoryPreferencePermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -1069,7 +1069,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         public void VerifyCanCalculateIllegalShiftCategoryPreferencePermissionState()
         {
             IShiftCategory wrongCategory = ShiftCategoryFactory.CreateShiftCategory("WrongShiftCat");
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             var dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -1150,7 +1150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var layerPeriod = new DateTimePeriod(start, end);
 			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
 			var layer = new VisualLayer(_activity, layerPeriod, _activity, _person);
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
 			var preferenceRestriction = new PreferenceRestriction();
 			var activityRestriction = new ActivityRestriction(_activity)
 				{
@@ -1196,7 +1196,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var layerPeriod = new DateTimePeriod(start, end);
 			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
 			var layer = _mockRepository.StrictMock<IVisualLayer>();
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
 			var preferenceRestriction = new PreferenceRestriction();
 			var activityRestriction = new ActivityRestriction(_activity);
 			activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), new TimeSpan(11, 30, 0));
@@ -1239,7 +1239,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void ShouldGetPermissionStateBrokenOnActivityWhenNoPreferredActivityInShift()
 		{
 			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
 			var preferenceRestriction = new PreferenceRestriction();
 			var activityRestriction = new ActivityRestriction(_activity);
 			preferenceRestriction.AddActivityRestriction(activityRestriction);
@@ -1283,7 +1283,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
             var dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -1352,7 +1352,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             dayOffTemplate.Anchor = TimeSpan.FromHours(10);
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 
-            var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 1, 1), dayOffTemplate);
+            var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 1, 1), dayOffTemplate);
 
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
@@ -1394,7 +1394,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             dayOffTemplate.Anchor = TimeSpan.FromHours(10);
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(), dayOffTemplate);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(), dayOffTemplate);
 
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
@@ -1462,7 +1462,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person, new DateOnly(_dateTime), new List<IStudentAvailabilityRestriction> { restriction });
             studentAvailabilityDay.NotAvailable = true;
             var dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { studentAvailabilityDay });
-            var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(), new DayOffTemplate());
+            var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(), new DayOffTemplate());
             using (_mockRepository.Record())
             {
                 Expect.Call(_schedulePartMock.PersonAssignment()).Return(dayOff).Repeat.Any();

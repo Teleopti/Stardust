@@ -170,12 +170,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
         private IPersonAssignment createPersonAssignment(DateTimePeriod period)
         {
-            return PersonAssignmentFactory.CreateAssignmentWithMainShift(
-                                        ActivityFactory.CreateActivity("sdfsdf"),
-                                        person,
-                                        period,
-                                        ShiftCategoryFactory.CreateShiftCategory("sdf"),
-                                        scenario);
+            return PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+                                        scenario, ActivityFactory.CreateActivity("sdfsdf"), period, ShiftCategoryFactory.CreateShiftCategory("sdf"));
         }
 
         private class extractor : IScheduleExtractor

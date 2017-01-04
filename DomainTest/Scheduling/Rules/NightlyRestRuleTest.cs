@@ -161,14 +161,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private void addPersonAssignmentsToSchedulePart()
 		{
 			IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 1, 8, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 1, 17, 0, 0, DateTimeKind.Utc))));
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 2, 8, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 2, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 2, 17, 0, 0, DateTimeKind.Utc))));
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 3, 10, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 3, 10, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 3, 19, 0, 0, DateTimeKind.Utc))));
 
 			((Schedule) _scheduleRange).AddRange(assignments);
@@ -177,11 +177,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private void addPersonAssignmentsForLongest()
 		{
 			IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 1, 8, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 1, 17, 0, 0, DateTimeKind.Utc))));
-			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-				new DateTimePeriod(new DateTime(2007, 8, 3, 10, 0, 0, DateTimeKind.Utc),
+			assignments.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
+				_scenario, new DateTimePeriod(new DateTime(2007, 8, 3, 10, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 8, 3, 19, 0, 0, DateTimeKind.Utc))));
 
 			((Schedule) _scheduleRange).AddRange(assignments);

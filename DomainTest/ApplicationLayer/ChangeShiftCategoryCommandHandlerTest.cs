@@ -23,9 +23,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("sc").WithId();
 			shiftCategoryRepository.Add(shiftCategory);
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				mainActivity, personRepository.Single(),
-				new DateTimePeriod(2013, 11, 13, 23, 2013, 11, 14, 8));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personRepository.Single(),
+				mainActivity, new DateTimePeriod(2013, 11, 13, 23, 2013, 11, 14, 8));
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
 
@@ -53,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			shiftCategoryRepository.Add(shiftCategory);
 			
 			var scenario = ScenarioFactory.CreateScenarioWithId("s", true);
-			var pa = PersonAssignmentFactory.CreateEmptyAssignment(scenario,
-				personRepository.Single(), new DateTimePeriod(2013, 11, 13, 12, 2013, 11, 13, 17));
+			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personRepository.Single(), scenario, new DateTimePeriod(2013, 11, 13, 12, 2013, 11, 13, 17));
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository {pa};			
 

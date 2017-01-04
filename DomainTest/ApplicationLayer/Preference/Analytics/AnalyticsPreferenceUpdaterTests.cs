@@ -176,12 +176,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			IScenario scenario;
 			var preferenceDay = setupPreferenceDay(date, preferenceRestriction, out person, out scenario);
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				ActivityFactory.CreateActivity("sdfsdf"),
-				person,
-				new DateTimePeriod(2001, 1, 1, 2002, 1, 1),
-				preferenceRestriction.ShiftCategory,
-				scenario);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, ActivityFactory.CreateActivity("sdfsdf"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1), preferenceRestriction.ShiftCategory);
 
 			_scheduleStorage.Add(assignment);
 

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_mainShiftPeriod = new DateTimePeriod(start, end);
 			_intervalPeriod = new DateTimePeriod(start, end.AddMinutes(25));
 			_shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
-			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_mainActivity, _person, _mainShiftPeriod, _shiftCategory, _scenario);
+			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _mainActivity, _mainShiftPeriod, _shiftCategory);
 			_scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(_scenario, _dateOnly.Date, _personAssignment);
 		}
 

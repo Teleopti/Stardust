@@ -49,10 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 		private IPersonAssignment createAndStoreAssignment(DateTime start)
 		{
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),
-																																		 SetupFixtureForAssembly.loggedOnPerson,
-																																		 new DateTimePeriod(start, start.AddHours(8)),
-																																		 new ShiftCategory("d"), new Scenario("d"));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(SetupFixtureForAssembly.loggedOnPerson, new Scenario("d"), new Activity("sdf"), new DateTimePeriod(start, start.AddHours(8)), new ShiftCategory("d"));
 			PersistAndRemoveFromUnitOfWork(pa.MainActivities().First().Payload);
 			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);

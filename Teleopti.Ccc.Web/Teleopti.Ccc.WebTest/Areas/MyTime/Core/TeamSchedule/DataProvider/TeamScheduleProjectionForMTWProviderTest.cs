@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public void ShouldSetCorrectSortDateIfDayOff()
 		{
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithoutMainShift();
-			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person, new DateOnly(2001,1,1), new DayOffTemplate()));
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2001,1,1), new DayOffTemplate()));
 
 			var target = new TeamScheduleProjectionForMtwForMtwProvider(new ProjectionProvider());
 			var result = target.Projection(scheduleDay);

@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 
 
                 _p1D3 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2009, 2, 3));
-								_p1D3.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person1, theFirstDate, dOff));
+								_p1D3.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person1, _scenario, theFirstDate, dOff));
 
                 _p2D3 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2009, 2, 3));
 				_p2D3.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d3, category));

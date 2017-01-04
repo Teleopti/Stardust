@@ -56,9 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             scen.ChangeName("scen");
             PersistAndRemoveFromUnitOfWork(scen);
             IPersonAssignment pAss =
-                PersonAssignmentFactory.CreateAssignmentWithMainShift(act, per,
-                                                                      new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-                                                                      shiftCat, scen);
+                PersonAssignmentFactory.CreateAssignmentWithMainShift(per, scen, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCat);
 
             PersistAndRemoveFromUnitOfWork(pAss);
 
