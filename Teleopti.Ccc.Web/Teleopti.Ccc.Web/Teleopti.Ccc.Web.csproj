@@ -1435,6 +1435,7 @@
     <Content Include="WFM\app\skillPrio\skillprio.skill.service.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.html" />
     <Content Include="WFM\app\teamSchedule\html\favoriteSearch.tpl.html" />
+    <Content Include="WFM\app\teamSchedule\html\favoriteSearchPanel.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\organizationPicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsDatetimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.moveShift.html" />

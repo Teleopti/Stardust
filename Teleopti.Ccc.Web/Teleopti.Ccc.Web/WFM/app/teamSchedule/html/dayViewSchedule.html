@@ -11,7 +11,7 @@
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
-			<favorite-search apply-favorite="vm.applyFavorite" get-search="vm.getSearch"></favorite-search>
+			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled" apply-favorite="vm.applyFavorite" get-search="vm.getSearch"></favorite-search>
 
 			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" class="organization-picker-container"
 								 on-pick="vm.changeSelectedTeams(teams)"></organization-picker>

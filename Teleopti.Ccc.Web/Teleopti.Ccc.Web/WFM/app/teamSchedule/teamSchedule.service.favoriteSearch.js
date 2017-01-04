@@ -79,5 +79,9 @@
 		this.makeDefault = function () {
 			return { then: function (cb) { cb(); } };
 		}
+
+		this.removeDefault = function () {
+			return { then: function (cb) { cb(); } };
+		}
 	}
 })();

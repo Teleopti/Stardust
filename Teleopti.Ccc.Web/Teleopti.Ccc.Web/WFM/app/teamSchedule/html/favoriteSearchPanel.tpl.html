@@ -1,0 +1,28 @@
+﻿<div class="fav-search-panel material-depth-1">
+	<md-list>
+		<md-subheader class="md-no-sticky fav-search-header">
+			<input type="text" placeholder="Name..." ng-model="$ctrl.currentName" />
+			<button class="btn btn-xs btn-primary" ng-click="$ctrl.save()" ng-disable="$ctrl.disableSave()" translate>
+				Save
+			</button>
+		</md-subheader>
+		<md-divider ng-if="$ctrl.favoriteSearchList.length > 0"></md-divider>
+		<md-list-item ng-repeat="searchItem in $ctrl.favoriteSearchList" class="fav-search-item pointer" ng-mouseenter="showIcons = true" ng-mouseleave="showIcons = false">
+			<div class="fav-search-item-container" ng-click="$ctrl.select(searchItem)">
+				<span>
+					{{searchItem.Name}}
+				</span>
+
+				<div class="pull-right" ng-click="$event.stopPropagation()">
+					<span ng-class="{'visible':showIcons || searchItem.IsDefault,'invisible':!showIcons && !searchItem.IsDefault}"
+						  ng-click="$ctrl.toggleDefault(searchItem.Name)">
+						<i ng-class="{ 'mdi-star':searchItem.IsDefault, 'mdi-star-outline':!searchItem.IsDefault}" class="mdi"></i>
+					</span>
+					<span ng-class="{'visible':showIcons, 'invisible':!showIcons}"ng-click="$ctrl.delete(searchItem.Name)">
+						<i class="mdi mdi-close"></i>
+					</span>
+				</div>
+			</div>
+		</md-list-item>
+	</md-list>
+</div>

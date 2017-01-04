@@ -855,3 +855,54 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 		font-size: 12px !important;
 	}
 }
+.md-button.md-icon-button.fav-search-open-btn{
+	margin: 0;
+	padding-left: 0;
+}
+
+.fav-search-panel {
+	background: $white;
+	md-list{
+		padding: 0 0 0.5em 0;
+	}
+}
+.fav-search-header{
+	background:$white;
+	padding: 0;
+
+	.md-subheader-inner{
+		padding: 1em 0.8em 0.6em 0.8em;
+	}
+	button.btn-primary{
+		background: #09f;
+	}
+}
+.fav-search-item{
+	height: 2em;
+	padding: 0!important;
+	min-height: initial!important;
+
+	& > .fav-search-item-container{
+		padding: 0 0.8em;
+		width: 100%;
+	}
+
+	.default-icon{
+		display: inline-block;
+		margin-right: 20px;
+	}
+
+	.invisible{
+		visibility: hidden;
+	}
+
+	.visible{
+		visibility:visible;
+	}
+}
+
+
+.fav-search-item:hover{
+	background: $gray012;
+}
+

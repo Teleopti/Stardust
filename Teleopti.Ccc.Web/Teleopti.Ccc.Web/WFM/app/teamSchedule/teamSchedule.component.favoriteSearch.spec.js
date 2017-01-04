@@ -74,7 +74,7 @@ describe('favoriteSearch component tests', function () {
 
 
 		var ctrl = element.isolateScope().$ctrl;
-
+		ctrl.isTest = true;
 		ctrl.currentName = 'test2';
 		ctrl.save();
 
@@ -95,7 +95,7 @@ describe('favoriteSearch component tests', function () {
 
 		var ctrl = element.isolateScope().$ctrl;
 		var newDefaultName = 'test1';
-		ctrl.makeDefault(newDefaultName);
+		ctrl.toggleDefault(newDefaultName);
 
 		expect(ctrl.favoriteSearchList.length).toEqual(2);
 		expect(ctrl.favoriteSearchList[0].IsDefault).toEqual(true);
@@ -168,6 +168,10 @@ describe('favoriteSearch component tests', function () {
 		}
 
 		this.makeDefault = function() {
+			return { then: function (cb) { cb(); } };
+		}
+
+		this.removeDefault = function () {
 			return { then: function (cb) { cb(); } };
 		}
 

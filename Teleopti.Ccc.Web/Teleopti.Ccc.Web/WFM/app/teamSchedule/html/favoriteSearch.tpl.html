@@ -1,21 +1,3 @@
-﻿<md-menu>
-	<md-button aria-label="favorite menu" class="md-icon-button" ng-click="$ctrl.openMenu($mdOpenMenu, $event)">
-		<i class="mdi mdi-star-outline"></i>
-	</md-button>
-	<md-menu-content width="4">
-		<div>
-			<input type="text" placeholder="Name..." ng-model="$ctrl.currentName" />
-			<button ng-click="$ctrl.save()">
-				Save
-			</button>
-		</div>
-		<md-menu-divider></md-menu-divider>
-		<md-menu-item ng-repeat="searchItem in $ctrl.favoriteSearchList">
-			<md-button ng-click="$ctrl.select(searchItem)">
-				{{searchItem.Name}}
-			</md-button>
-			<button ng-click="$ctrl.makeDefault(searchItem.Name)">Default</button>
-			<button ng-click ="$ctrl.delete(searchItem.Name)">X</button>
-		</md-menu-item>
-	</md-menu-content>
-</md-menu>
+﻿<md-button aria-label="favorite menu" class="md-icon-button fav-search-open-btn" ng-click="$ctrl.openPanel($event)">
+	<i class="mdi mdi-star-outline"></i>
+</md-button>
