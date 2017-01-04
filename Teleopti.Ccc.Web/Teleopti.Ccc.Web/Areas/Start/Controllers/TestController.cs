@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
@@ -47,7 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
-		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
 		public TestController(
 			TestLog log,
@@ -65,8 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
-			TenantTickEventPublisher tenantTickEventPublisher,
-			Domain.ApplicationLayer.Rta.Service.Rta rta)
+			TenantTickEventPublisher tenantTickEventPublisher)
 		{
 			_log = log;
 			_mutateNow = mutateNow;
@@ -84,7 +83,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
-			_rta = rta;
 		}
 
 		public ViewResult BeforeScenario(string name, bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -93,7 +91,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
-
 			_mutateNow.Reset();
 
 			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
@@ -210,9 +207,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			else
 				_mutateNow.Is(DateTime.SpecifyKind(new DateTime(ticks), DateTimeKind.Utc));
 
-			TouchRta();
 			TriggerRecurringJobs();
-
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -220,13 +215,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
 		}
-
-		[TestLogTime]
-		protected virtual void TouchRta()
-		{
-			_rta.Touch("TestData");
-		}
-
+		
 		[TestLogTime]
 		protected virtual void TriggerRecurringJobs()
 		{

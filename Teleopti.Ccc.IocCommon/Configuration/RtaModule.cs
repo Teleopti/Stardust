@@ -22,11 +22,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
-			builder.RegisterType<RtaInitializor>().SingleInstance();
-			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
-			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
 			builder.RegisterType<EventualStateCodeAdder>()
 				.As<IStateCodeAdder>()
 				.SingleInstance();

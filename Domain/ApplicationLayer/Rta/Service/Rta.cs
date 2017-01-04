@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Interfaces.Domain;
@@ -96,20 +95,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private readonly RtaProcessor _processor;
 		private readonly TenantLoader _tenantLoader;
-		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeChecker _activityChangeChecker;
 		private readonly IContextLoader _contextLoader;
 
 		public Rta(
 			RtaProcessor processor,
 			TenantLoader tenantLoader,
-			RtaInitializor initializor,
 			ActivityChangeChecker activityChangeChecker,
 			IContextLoader contextLoader)
 		{
 			_processor = processor;
 			_tenantLoader = tenantLoader;
-			_initializor = initializor;
 			_activityChangeChecker = activityChangeChecker;
 			_contextLoader = contextLoader;
 		}
@@ -119,7 +115,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void SaveStateBatch(BatchInputModel batch)
 		{
 			validateAuthenticationKey(batch);
-			_initializor.EnsureTenantInitialized();
 			validatePlatformId(batch);
 
 			_contextLoader.ForBatch(batch, person =>
@@ -133,7 +128,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void SaveState(StateInputModel input)
 		{
 			validateAuthenticationKey(input);
-			_initializor.EnsureTenantInitialized();
 			validatePlatformId(input);
 
 			_contextLoader.For(input, person =>
@@ -171,14 +165,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_activityChangeChecker.CheckForActivityChanges();
 		}
-
-		[LogInfo]
-		[TestLogTime]
-		[TenantScope]
-		public virtual void Touch(string tenant)
-		{
-			_initializor.EnsureTenantInitialized();
-		}
-
 	}
 }

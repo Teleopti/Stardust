@@ -810,8 +810,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\IDatabaseLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKey.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\RtaInitializor.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\TenantsInitializedInRta.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\BehaviorTestTenants.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\DatabaseLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateRuleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\TenantLoader.cs" />
@@ -860,7 +859,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Context.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateMapper.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateStreamSynchronizer.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamInAlarmModel.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDate.cs" />
@@ -916,7 +914,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleDay.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleProjection.cs" />
-    <Compile Include="ApplicationLayer\SyncPublishTo.cs" />
     <Compile Include="ApplicationLayer\TrackingMessageSender.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\LoginAttemptModel.cs" />

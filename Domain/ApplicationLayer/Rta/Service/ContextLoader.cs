@@ -144,23 +144,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var logons = WithUnitOfWork(() => _agentStatePersister.FindAll());
 			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons, _now.UtcDateTime()));
 		}
-
-		public void ForSynchronize(Action<Context> action)
-		{
-			var logons = WithUnitOfWork(() =>
-					_agentStatePersister.FindForSynchronize()
-						.Where(x => x.StateCode != null)
-						.Select(x => new ExternalLogon
-						{
-							DataSourceId = x.DataSourceId,
-							UserCode = x.UserCode,
-							PersonId = x.PersonId
-						})
-						.ToArray()
-			);
-			process(new synchronizeStrategy(_config, _agentStatePersister, action, logons, _now.UtcDateTime()));
-		}
-
+		
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]
 		[AnalyticsUnitOfWork]
@@ -386,44 +370,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				};
 			}
 		}
-
-		private class synchronizeStrategy : baseStrategy<ExternalLogon>
-		{
-			private readonly IEnumerable<ExternalLogon> _things;
-
-			public synchronizeStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogon> things, DateTime time) : base(config, persister, action, time)
-			{
-				_things = things;
-				ParallelTransactions = _config.ReadValue("RtaSynchronizeParallelTransactions", 1);
-				MaxTransactionSize = _config.ReadValue("RtaSynchronizeMaxTransactionSize", 1000);
-				UpdateAgentState = null;
-			}
-
-			public override IEnumerable<ExternalLogon> AllItems()
-			{
-				return _things.OrderBy(x => x.NormalizedString()).ToArray();
-			}
-
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
-			{
-				return _persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim.Yes);
-			}
-
-			public override InputInfo GetInputFor(AgentState state)
-			{
-				return new InputInfo
-				{
-					StateCode = state.StateCode,
-					PlatformTypeId = state.PlatformTypeId.ToString()
-				};
-			}
-
-			public override Func<AgentState> GetStored(AgentState state)
-			{
-				return null;
-			}
-		}
-
+		
 		protected abstract class baseStrategy<T> : IStrategy<T>
 		{
 			protected readonly IConfigReader _config;

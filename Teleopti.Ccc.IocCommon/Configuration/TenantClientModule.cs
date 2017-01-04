@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
 
 			if (_configuration.Args().BehaviorTestServer)
-				builder.Register(c => c.Resolve<TenantsInitializedInRta>()).As<IAllTenantNames>().SingleInstance();
+				builder.RegisterType<BehaviorTestTenants>().As<IAllTenantNames>().SingleInstance();
 			else
 				builder.RegisterType<CannotIterateAllTenants>().As<IAllTenantNames>().SingleInstance();
 		}
