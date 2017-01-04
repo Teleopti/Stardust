@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
 			if (skills.Key == "") return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
-			_skills.TryAdd(skills.Key,skills.Skills);
+			_skills.TryAdd(skills.MergedKey(),skills.Skills);
 			if (resourceLayer.RequiresSeat)
 			{
 				_activityRequiresSeat.TryAdd(resourceLayer.PayloadId,true);

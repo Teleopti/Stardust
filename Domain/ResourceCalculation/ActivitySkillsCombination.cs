@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		//TODO: remove me later!
 		public string SkillCombinationKey()
 		{
-			return _skills.Key;
+			return _skills.MergedKey();
 		}
 
 		public bool ContainsSkill(Guid id)
@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (that == null)
 				return false;
 			return _activity == that._activity &&
-				_skills.Key == that._skills.Key;
+				_skills.MergedKey() == that._skills.MergedKey();
 		}
 
 		public override int GetHashCode()
 		{
-			return _activity.GetHashCode() ^ _skills.Key.GetHashCode();
+			return _activity.GetHashCode() ^ _skills.MergedKey().GetHashCode();
 		}
 	}
 }

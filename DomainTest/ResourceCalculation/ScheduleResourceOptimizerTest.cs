@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_personAssignmentListContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_personAssignmentListContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_personAssignmentListContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
             
             // Iteration
             Assert.AreEqual(8, _furnessEvaluator.InnerIteration);

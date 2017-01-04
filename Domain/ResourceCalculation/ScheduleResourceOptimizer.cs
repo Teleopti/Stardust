@@ -110,14 +110,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					optimizedActivityData.RelativePersonResources
 						.ForEach(resources =>
 								 {
-									 var allSKills = resources.Key.Split('_').Select(Guid.Parse);
+									 var allSKills = resources.Key.Substring(resources.Key.IndexOf("+", StringComparison.InvariantCulture)+1).Split('_').Select(Guid.Parse);
 									 var skillCombination = allSKills.Where(x => relevantSkills.Any(y => y.Id.GetValueOrDefault() == x));
 									 resourceCalculationData.SkillCombinationHolder
 										 .Add(new SkillCombinationResource
 											  {
 												  StartDateTime = completeIntervalPeriod.StartDateTime,
 												  EndDateTime = completeIntervalPeriod.EndDateTime,
-												  SkillCombination = skillCombination.ToList(),
+												  SkillCombination = skillCombination.ToArray(),
 												  Resource = resources.Value
 											  });
 								 });

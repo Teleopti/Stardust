@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceMatrix = dividedActivity.KeyedSkillResourceEfficiencies;
 
 			Assert.IsNotNull(resourceMatrix);
-			Assert.AreEqual(0.8, resourceMatrix[skill.Id.Value.ToString()][skill], 0.001d);
+			Assert.AreEqual(0.8, resourceMatrix[skill.Id.Value+"+"+ skill.Id.Value][skill], 0.001d);
 		}
 
         [Test]
@@ -181,13 +181,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person2 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person4 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 
 		    IDictionary<string, double> personResources = dividedActivity.PersonResources;
 		    Assert.IsNotNull(personResources);
@@ -201,13 +201,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person2 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person4 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 
             // Person Relative Resources (TRAFF)
             IDictionary<string, double> personResources = dividedActivity.RelativePersonResources;
@@ -231,13 +231,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person2 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person4 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 
             KeyedSkillResourceDictionary skillResourceEfficiencyMatrix = dividedActivity.KeyedSkillResourceEfficiencies;
             Assert.IsNotNull(skillResourceEfficiencyMatrix);
@@ -256,13 +256,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person2 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person4 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 
             KeyedSkillResourceDictionary resourceMatrix = dividedActivity.RelativeKeyedSkillResourceResources;
             Assert.IsNotNull(resourceMatrix);
@@ -281,13 +281,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
 	        var person1 =
 		        _personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 	        var person2 =
 		        _personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 			var person4 =
 		        _personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).Key;
+									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 
             KeyedSkillResourceDictionary resourceMatrix = dividedActivity.WeightedRelativeKeyedSkillResourceResources;
             Assert.IsNotNull(resourceMatrix);

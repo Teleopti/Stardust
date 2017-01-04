@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        {
 		        Expect.Call(_personSkillProvider.SkillsOnPersonDate(p1, new DateOnly()))
 		              .IgnoreArguments()
-		              .Return(new SkillCombination(new ISkill[] {}, new DateOnlyPeriod(),
-		                                           new SkillEffiencyResource[]{}));
+		              .Return(new SkillCombination(new ISkill[0], new DateOnlyPeriod(),
+		                                           new SkillEffiencyResource[0],new ISkill[0]));
 	        }
 	        using (_mocks.Playback())
 	        {

@@ -12,14 +12,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IList<Guid> _skillKeys;
 		private readonly ConcurrentDictionary<Guid,SkillCombination> _activityCombinations = new ConcurrentDictionary<Guid, SkillCombination>();
 
-		public SkillCombination(ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies)
+		public SkillCombination(ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies, ISkill[] originalSkills)
 		{
 			_period = period;
 			SkillEfficiencies = skillEfficiencies;
 			Skills = skills;
+			OriginalSkills = originalSkills;
 			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToArray();
 			Key = toKey(_skillKeys);
+			OriginalKey = toKey(originalSkills.Select(s => s.Id.GetValueOrDefault()));
 		}
+
+		public string OriginalKey { get; }
 
 		public bool IsValidForDate(DateOnly date)
 		{
@@ -36,6 +40,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _skillKeys.Contains(skill);
 		}
 
+		public string MergedKey()
+		{
+			return Key + "+" + OriginalKey;
+		}
+
 		public SkillCombination ForActivity(Guid activityId)
 		{
 			return _activityCombinations.GetOrAdd(activityId, id => new SkillCombination(
@@ -43,11 +52,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					x =>
 						(x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill) ||
 						(x.Activity != null && x.Activity.Id.GetValueOrDefault() == id)).ToArray(), _period,
-				SkillEfficiencies));
+				SkillEfficiencies,OriginalSkills.Where(
+					x =>
+						(x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill) ||
+						(x.Activity != null && x.Activity.Id.GetValueOrDefault() == id)).ToArray()));
 		}
 
-		public string Key { get; private set; }
+		public string Key { get; }
 		public ISkill[] Skills { get; }
+		public ISkill[] OriginalSkills { get; }
 		public SkillEffiencyResource[] SkillEfficiencies { get; }
 	}
 }

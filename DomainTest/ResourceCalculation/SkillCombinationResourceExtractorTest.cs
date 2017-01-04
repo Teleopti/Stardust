@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			persistedCombinationResources.First().SkillCombination.Count().Should().Be.EqualTo(2);
 		}
 
-		[Test, Ignore("This problem should be resolved today. /Robin")]
+		[Test]
 		public void ShouldSpecifyResourceSkillCombinationOnWithCascadingSkills()
 		{
 			var activity = ActivityFactory.CreateActivity("phone");
