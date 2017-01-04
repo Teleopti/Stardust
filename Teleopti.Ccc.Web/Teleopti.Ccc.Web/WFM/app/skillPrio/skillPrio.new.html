@@ -53,33 +53,30 @@
           </label>
 				</div>
 				<div class="con-row" ng-show="true">
-					<div class="con-flex" ng-hide="vm.cascadeList.length === 0">
-						<div class="wfm-simple-list" ng-model="vm.cascadeList">
-							<div ng-repeat="sortedRow in vm.cascadeList" class="skill-devider">
-								<!-- {{sortedRow.Priority}} -->
-								<div ui-tree="vm.options" data-drag-enabled="true">
-									<div ui-tree-nodes ng-model="sortedRow.Skills" class="horizontal-list">
-										<div ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" ui-tree-node class="drag-handle drop-card material-depth-1">
-											<div id="card" class="drop-card">
-												{{Skill.SkillName}}
-												<a data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" style="padding:10px;"> <i class="mdi" ng-class="{'mdi-close':true}"></i></a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+					<div class="con-flex" ng-hide="vm.unsortedList.length === 0">
+						<h2>Unsorted Skills</h2>
+						<div ui-tree="vm.options" data-drag-enabled="true" data-max-depth="1">
+							<ol ui-tree-nodes ng-model="vm.unsortedList" class="horizontal-list" data-horizontal>
+								<li ng-repeat="Skill in vm.unsortedList | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
+									<span id="card">
+											{{Skill.SkillName}}
+										</span>
+								</li>
+							</ol>
 						</div>
 					</div>
-					<div class="con-flex unsortedListCard" ng-hide="vm.unsortedList.length===0">
-						<div class="wfm-simple-list">
-							<div ui-tree="vm.options" data-drag-enabled="true">
-								<div ui-tree-nodes ng-model="vm.unsortedList" class="horizontal-list">
-									<div ng-repeat="Skill in vm.unsortedList | filter:skillFilter" ui-tree-node class="drag-handle drop-card material-depth-1" >
-										<div id="card" class="drop-card">
-											{{Skill.SkillName}}
-										</div>
-									</div>
-								</div>
+					<div class="con-flex" ng-hide="vm.cascadeList.length === 0" ng-class="{'skill-group-devider':vm.unsortedList.length > 0}">
+						<h2>Cascade Skills</h2>
+						<div ng-repeat="sortedRow in vm.cascadeList" class="skill-devider">
+							<div ui-tree="vm.options" data-drag-enabled="true" data-max-depth="1">
+								<ol ui-tree-nodes ng-model="sortedRow.Skills" class="horizontal-list" data-horizontal>
+									<li ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
+										<span id="card">
+												{{Skill.SkillName}}
+												<a data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" style="padding:10px;"><i class="mdi" ng-class="{'mdi-close':true}"></i></a>
+											</span>
+									</li>
+								</ol>
 							</div>
 						</div>
 					</div>
@@ -88,15 +85,7 @@
 		</div>
 	</div>
 </div>
-<!-- cascadeList <br>
-{{vm.cascadeList}} <br>
-unsortedList <br>
-{{vm.unsortedList}} <br> -->
-<!-- activities <br>
-{{vm.activites}} <br>
-{{vm.activites[0]}} <br>
-selectedActivity <br>
-{{vm.selectedActivity}} <br> -->
+
 
 <style>
 

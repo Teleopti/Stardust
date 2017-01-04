@@ -22,6 +22,7 @@
 		getActivities();
 		getSkills();
 
+
 		function resetAllList() {
 			vm.unsortedList = [];
 			vm.cascadeList = [];
@@ -81,7 +82,7 @@
 		}
 
 		function autoNewRow() {
-			if (vm.cascadeList[vm.cascadeList.length - 1].Skills.length > 0) {
+			if (vm.cascadeList.length > 0 && vm.cascadeList[vm.cascadeList.length - 1].Skills.length > 0) {
 				addNewRow();
 			}
 		}
@@ -101,8 +102,8 @@
 			for (var i = 0; i < vm.cascadeList.length - 1; i++) {
 				vm.cascadeList[i].Skills.sort(sortBySkillName);
 			}
+			vm.unsortedList.sort(sortBySkillName);
 		}
-
 
 		function findIndexInData(data, property, value) {
 			var result = -1;
@@ -121,10 +122,9 @@
 				vm.selectedActivity = activity;
 				var skillsOfSelectedActivity = vm.skills.filter(belongsToActivity);
 				vm.unsortedList = skillsOfSelectedActivity.filter(lacksPriority);
-				vm.unsortedList.sort(sortBySkillName);
-
 				var storedCascadeSkills = skillsOfSelectedActivity.filter(hasPriority);
 				loadCascadeList(storedCascadeSkills);
+				autoSortSkillByEachRow();
 			}
 		}
 
@@ -141,7 +141,6 @@
 					}
 				}
 				vm.cascadeList.sort(sortByPriority);
-				autoSortSkillByEachRow();
 				addNewRow();
 			}
 		}

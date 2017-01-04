@@ -1,5 +1,10 @@
 .skill-devider{
-	border-top: 1px dashed $brown-300;
+	border-top: 1px dashed $gray-500;
+}
+
+.angular-ui-tree-nodes {
+	width: 100% !important;
+	display: inline-table;
 }
 
 .angular-ui-tree-placeholder {
@@ -21,7 +26,8 @@
 
 .horizontal-list {
 	width: 100%;
-	display: inline-flex;
+	display: inline-table;
+	padding: 10px;
 }
 
 .drag-handle {
@@ -30,9 +36,11 @@
 
 .drop-card {
 	margin: 5px;
+	padding: 5px;
 	width: auto;
 }
 
-.unsortedListCard {
+
+.skill-group-devider {
 	border-left: 1px solid gray;
 }
