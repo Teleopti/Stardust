@@ -215,33 +215,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return FStaffTime().TotalHours;
         }
 
-        public IList<ISkillStaffSegmentPeriod> SortedSegmentCollection
-        {
-            get { return new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_sortedSegmentCollection.Values); }
-        }
+        public IList<ISkillStaffSegmentPeriod> SortedSegmentCollection => new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_sortedSegmentCollection.Values);
 
-        public IList<ISkillStaffSegmentPeriod> SegmentInThisCollection
-        {
-            get { return new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_segmentInThisCollection); }
-        }
+		public IList<ISkillStaffSegmentPeriod> SegmentInThisCollection => new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_segmentInThisCollection);
 
-        public double RelativeDifference
-        {
-            get
-            {
-                return new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviation;
-            }
-        }
+		public double RelativeDifference => new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviation;
 
-        public double RelativeDifferenceForDisplayOnly
-        {
-            get
-            {
-                return new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviationForDisplay;
-            }
-        }
+		public double RelativeDifferenceForDisplayOnly => new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviationForDisplay;
 
-        public double RelativeDifferenceIncoming
+		public double RelativeDifferenceIncoming
         {
             get
             {
@@ -255,12 +237,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public double AbsoluteDifference
-        {
-            get { return CalculatedResource - FStaff; }
-        }
+        public double AbsoluteDifference => CalculatedResource - FStaff;
 
-        public double AbsoluteDifferenceMinStaffBoosted()
+		public double AbsoluteDifferenceMinStaffBoosted()
         {
             if (Payload.SkillPersonData.MinimumPersons > 0 && Payload.CalculatedLoggedOn < Payload.SkillPersonData.MinimumPersons)
                 return ((Payload.CalculatedLoggedOn - Payload.SkillPersonData.MinimumPersons)* 10000) + AbsoluteDifference;
@@ -319,11 +298,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public IList<ISkillStaffPeriodView> Split(TimeSpan periodLength)
         {
             if (Period.ElapsedTime() < periodLength)
-                throw new ArgumentOutOfRangeException("periodLength", periodLength,
+                throw new ArgumentOutOfRangeException(nameof(periodLength), periodLength,
                                                       "You cannot split to a higher period length");
        
             if(Period.ElapsedTime().TotalMinutes % periodLength.TotalMinutes > 0)
-                throw new ArgumentOutOfRangeException("periodLength", periodLength,
+                throw new ArgumentOutOfRangeException(nameof(periodLength), periodLength,
                                                       "You cannot split if you get a remaining time");
 
             IList<ISkillStaffPeriodView> newViews = new List<ISkillStaffPeriodView>();
@@ -345,7 +324,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return newViews;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution)
         {
             IntraIntervalDeviation = calculatedValues.StandardDeviation;
@@ -513,7 +491,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 
             }
 
-        	var castedPayLoad = ((SkillStaff) Payload);
+        	var castedPayLoad = (SkillStaff) Payload;
 	        double demandWithoutEfficiency;
 	        if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
 	        {
@@ -661,23 +639,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public double ForecastedDistributedDemandWithShrinkage
-        {
-            get { return ForecastedDistributedDemand * (1d + Payload.Shrinkage.Value); }
-        }
+        public double ForecastedDistributedDemandWithShrinkage => ForecastedDistributedDemand * (1d + Payload.Shrinkage.Value);
 
-        public bool IsAvailable
+		public bool IsAvailable
         {
             get { return _isAvailable; }
             set { _isAvailable = value; }
         }
 
-        public IStaffingCalculatorServiceFacade StaffingCalculatorService
-        {
-            get { return _staffingCalculatorService; }
-        }
+        public IStaffingCalculatorServiceFacade StaffingCalculatorService => _staffingCalculatorService;
 
-        public void PickResources65()
+		public void PickResources65()
         {
 	        _estimatedServiceLevel = null;
 	        _estimatedServiceLevelShrinkage = null;
@@ -806,12 +778,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set { _aggregatedFStaff = value; }
         }
 
-        double IAggregateSkillStaffPeriod.AggregatedCalculatedLoggedOn
-        {
-            get { return double.NaN; }
-        }
-       
-        void IAggregateSkillStaffPeriod.CombineAggregatedSkillStaffPeriod(IAggregateSkillStaffPeriod aggregateSkillStaffPeriod)
+        double IAggregateSkillStaffPeriod.AggregatedCalculatedLoggedOn => double.NaN;
+
+		void IAggregateSkillStaffPeriod.CombineAggregatedSkillStaffPeriod(IAggregateSkillStaffPeriod aggregateSkillStaffPeriod)
         {
             if(_isAggregate && aggregateSkillStaffPeriod.IsAggregate)
             {
@@ -893,15 +862,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    public StaffingThreshold AggregatedStaffingThreshold { get; set; }
 
-	    public IPeriodDistribution PeriodDistribution
-        {
-            get
-            {
-                return _periodDistribution;
-            }
-        }
+	    public IPeriodDistribution PeriodDistribution => _periodDistribution;
 
-	    public void AddResources(double resourcesToAdd)
+		public void AddResources(double resourcesToAdd)
 	    {
 			var newValue = Math.Max(0, CalculatedResource + resourcesToAdd);
 			SetCalculatedResource65(newValue);

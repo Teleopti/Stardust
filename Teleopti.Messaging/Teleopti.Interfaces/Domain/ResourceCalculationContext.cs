@@ -17,10 +17,7 @@ namespace Teleopti.Interfaces.Domain
 			return _container.Value;
 		}
 
-		public static bool InContext
-		{
-			get { return _container != null; }
-		}
+		public static bool InContext => _container != null;
 
 		public static bool PrimarySkillMode()
 		{

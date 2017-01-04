@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_period = period;
 			SkillEfficiencies = skillEfficiencies;
 			Skills = skills;
-			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToList();
+			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToArray();
 			Key = toKey(_skillKeys);
 		}
 
