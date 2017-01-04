@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var contract = new Contract("Contract").WithId();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod();
 				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 				schedulePeriod.SetDaysOff(2);
 				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), team);

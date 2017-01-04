@@ -54,8 +54,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < scheduledAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-				agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")),  new Team { Site = new Site("_") }), skill);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 				var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 				agents.Add(agent);
@@ -84,8 +83,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(0.8);
 				skillStaffPeriod.Payload.TaskData = new Task(7, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			}
-			var agent = new Person().WithId();
-			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			var agent = new Person().WithId().WithPersonPeriod(skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] {agent}, new[] {ass}, skillDay);
@@ -175,9 +173,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(9, 17);
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.Kathmandu());
-			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.Kathmandu()).WithPersonPeriod(skill);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
 
