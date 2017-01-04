@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var scenario = ScenarioFactory.CreateScenario("scenario", true, false);
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
 
-			var target = new ExportToScenarioAccountPersister(personAccountPersister, new FalseToggleManager());
+			var target = new ExportToScenarioAccountPersister(personAccountPersister);
 
 			using (mock.Record())
 			{
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var scenario = ScenarioFactory.CreateScenario("scenario", true, false);
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
 
-			var target = new ExportToScenarioAccountPersister(personAccountPersister, new FalseToggleManager());
+			var target = new ExportToScenarioAccountPersister(personAccountPersister);
 
 			using (mock.Record())
 			{
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var mock = new MockRepository();
 			var personAccountPersister = mock.StrictMock<IPersonAccountPersister>();
 			var scenario = ScenarioFactory.CreateScenario("scenario", false, false);
-			var target = new ExportToScenarioAccountPersister(personAccountPersister, new FalseToggleManager());
+			var target = new ExportToScenarioAccountPersister(personAccountPersister);
 			var result = target.Persist(scenario, null, null, null, null, null);
 			Assert.IsFalse(result);	
 		}
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var allPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 			var scenario = ScenarioFactory.CreateScenario("scenario", true, false);
 			
-			var target = new ExportToScenarioAccountPersister(personAccountPersister, new FalseToggleManager());
+			var target = new ExportToScenarioAccountPersister(personAccountPersister);
 			var result = target.Persist(scenario, uowFactory, persons, allPersonAccounts, null, null);
 			Assert.IsFalse(result);
 		}

@@ -15,7 +15,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -364,7 +363,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 	        var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 	        _targetDay =
                 new PersonAccountChildModel(
-                    new TraceableRefreshService(scenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
+                    new TraceableRefreshService(scenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
         }
 
         private void SetTargetDayWithoutAccount(IUnitOfWork unitOfWork, ICurrentScenario scenario)
@@ -374,7 +373,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 	        var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 	        _targetDay =
 		        new PersonAccountChildModel(
-			        new TraceableRefreshService(scenario,new ScheduleStorage(currentUnitOfWork, repositoryFactory,new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
+			        new TraceableRefreshService(scenario,new ScheduleStorage(currentUnitOfWork, repositoryFactory,new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
         }
 
         [Test]

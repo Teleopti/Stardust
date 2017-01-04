@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setupExpectationsForRelatedRepositories();
 			var currentUnitOfWork = new ThisUnitOfWork(_unitOfWork);
 			var scheduleStorageRepositoryWrapper = new ScheduleStorageRepositoryWrapper(_repositoryFactory, currentUnitOfWork);
-			_target = new ScheduleStorage(currentUnitOfWork, _repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), scheduleStorageRepositoryWrapper);
+			_target = new ScheduleStorage(currentUnitOfWork, _repositoryFactory, new PersistableScheduleDataPermissionChecker(), scheduleStorageRepositoryWrapper);
 
 			createBasicStuff();
 			createEmptyLists();

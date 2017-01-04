@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -31,7 +30,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.ReadModel;
@@ -602,7 +600,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+				var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true };
 				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 

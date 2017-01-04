@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 							currUnitOfWork, 
 							repositoryFactory, 
 							new PersistableScheduleDataPermissionChecker(),
-							new FalseToggleManager(), 
 							new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork))),
 					new PersonAbsenceAccountRepository(currUnitOfWork)));
 		}

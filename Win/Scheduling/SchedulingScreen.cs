@@ -3851,7 +3851,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				};
 				stateHolder.LoadSchedules(
 					new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(),
-						new PersistableScheduleDataPermissionChecker(), _container.Resolve<IToggleManager>(),
+						new PersistableScheduleDataPermissionChecker(), 
 						_container.Resolve<IScheduleStorageRepositoryWrapper>()), personsInOrganizationProvider,
 					scheduleDictionaryLoadOptions, period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
@@ -4780,8 +4780,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
 			var toggleManager = _container.Resolve<IToggleManager>();
-			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), toggleManager, _container.Resolve<IScheduleStorageRepositoryWrapper>());
-			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>(), toggleManager);
+			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), _container.Resolve<IScheduleStorageRepositoryWrapper>());
+			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
 			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
 			using (
 				var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,

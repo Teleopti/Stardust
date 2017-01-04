@@ -24,7 +24,6 @@ using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Reporting
@@ -190,7 +189,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			unitOfWork.Reassociate(persons);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 		}
 	
 		public static IList<IReportDataParameter> CreateScheduleAuditingParameters(ReportSettingsScheduleAuditingModel model, IFormatProvider culture)

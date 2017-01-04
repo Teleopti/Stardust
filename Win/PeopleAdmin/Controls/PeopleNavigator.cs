@@ -27,7 +27,6 @@ using Teleopti.Ccc.WpfControls.Controls.Messaging;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 {
@@ -156,7 +155,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 																														var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
 																														var repositoryFactory = new RepositoryFactory();
 																														var currentUnitOfWork = new ThisUnitOfWork(uow);
-																														ITraceableRefreshService service = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+																														ITraceableRefreshService service = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
 
 																														var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour, _personRepository)
 																														{
@@ -237,7 +236,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 				var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
 				var state = new WorksheetStateHolder();
 				var saviour = _container.Resolve<ITenantDataManager>();
 				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour, _personRepository)

@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 	            var repositoryFactory = new RepositoryFactory();
 	            var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork();
 	            var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-	            var scheduleStorage = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+	            var scheduleStorage = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 
 								IPersonAccountChildModel adapter1 = new PersonAccountChildModel
                     (new TraceableRefreshService(currentScenario, scheduleStorage), _collection, _account1, null, null);

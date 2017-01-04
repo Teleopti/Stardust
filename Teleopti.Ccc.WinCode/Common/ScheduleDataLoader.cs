@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 			_schedulerStateHolder.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
 		}
 	}

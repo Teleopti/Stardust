@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var repository = new PersonAbsenceAccountRepository(currentUnitOfWork);
 			var repositoryFactory = new RepositoryFactory();
-			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 			var traceableService = new TraceableRefreshService(CurrentScenario, scheduleRepository);
 			var updater = new PersonAccountUpdater(repository, traceableService);
 			updater.Update(user);

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -27,12 +26,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class ExportToScenarioAccountPersister : IExportToScenarioAccountPersister
 	{
 		private readonly IPersonAccountPersister _personAccountPersister;
-		private readonly IToggleManager _toggleManager;
 
-		public ExportToScenarioAccountPersister(IPersonAccountPersister personAccountPersister, IToggleManager toggleManager)
+		public ExportToScenarioAccountPersister(IPersonAccountPersister personAccountPersister)
 		{
 			_personAccountPersister = personAccountPersister;
-			_toggleManager = toggleManager;
 		}
 
 		public bool Persist(IScenario exportScenario, 
@@ -51,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), _toggleManager, new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
 				var refreshedPersonAbsenceAccounts = new List<IPersonAbsenceAccount>();
 				
 				foreach (var person in persons)

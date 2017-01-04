@@ -16,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var repositoryFactory = new RepositoryFactory();
-			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork));
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork));
 			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
 				var repositoryFactory = new RepositoryFactory();
-				var scheduleStorage = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+				var scheduleStorage = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 				Given().ForEach(x =>
 				{
 					scheduleStorage.Add(x);
@@ -125,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				ReassociateDataFor(Person);
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
 																								 new PersonProvider(new[] { Person }),
@@ -144,7 +143,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var repositoryFactory = new RepositoryFactory();
-			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork));
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork));
 			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper(), new DatabaseVersion(currUnitOfWork));
 		}
 

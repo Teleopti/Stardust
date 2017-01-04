@@ -19,15 +19,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 	    private readonly IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
-	    private readonly IToggleManager _toggleManager;
 	    private readonly IScheduleStorageRepositoryWrapper _scheduleStorageRepositoryWrapper;
 
-	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IToggleManager toggleManager, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper)
+	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;
-					_repositoryFactory = repositoryFactory;
+		    _repositoryFactory = repositoryFactory;
 		    _dataPermissionChecker = dataPermissionChecker;
-		    _toggleManager = toggleManager;
 		    _scheduleStorageRepositoryWrapper = scheduleStorageRepositoryWrapper;
 	    }
 
