@@ -161,6 +161,11 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			// 			array: true
 			// 		}
 			// 	}
+			// })
+			// .state('rta.agent-details', {
+			// 	url: '/agent-details/:personId',
+			// 	templateUrl: 'app/rta/refact/detailsrefact/rta-agent-details.refact.html',
+			// 	controller: 'RtaAgentDetailsCtrlRefact as vm'
 			// });
 	};
 });
