@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _skill = SkillFactory.CreateSkill("testSkill");
             _skill.MidnightBreakOffset = TimeSpan.FromHours(2);
             _workload = new Workload(_skill);
-
-            //_taskPeriods = new List<TemplateTaskPeriod>();
+			
             _openHours = new List<TimePeriod>
                          	{
                          		new TimePeriod(new TimeSpan(13, 0, 0), new TimeSpan(1, 2, 0, 0)),
@@ -111,13 +110,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyLocalWorkloadDateWorks()
         {
-            //Assert.AreEqual(_dt, _workloadDayTemplate.LocalWorkloadDate);
             Assert.AreEqual(_dt, _workloadDayTemplate.CreatedDate);
             ISkill skill = SkillFactory.CreateSkill("MySkill");
             skill.TimeZone = (TimeZoneInfo.Local);
             _workloadDayTemplate.Workload.Skill = skill;
             Assert.AreEqual(_dt, _workloadDayTemplate.CreatedDate);
-            //Assert.AreEqual(TimeZoneInfo.ConvertTimeFromUtc(_dt, TimeZoneInfo.Local), _workloadDayTemplate.LocalWorkloadDate);
         }
 
         [Test]
