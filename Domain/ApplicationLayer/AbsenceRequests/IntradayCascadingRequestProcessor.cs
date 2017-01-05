@@ -98,17 +98,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					foreach (var layer in layers)
 					{
 						var activity = _activityRepository.Get(layer.PayloadId);
+						if (nonSkillActivityForWholeInterval(activity, layer))
+						{
+							zeroDemandForIntervalsCoveredByNonSkillActivity(skillStaffingIntervals, layer);
+							continue;
+						}
 						var skillCombination =
 							_personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
 								.ForActivity(layer.PayloadId);
 						if (!skillCombination.Skills.Any()) continue;
 						
-						var skillCombinationResourceByAgentAndLayer =
-							combinationResources.Single(
-								x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
-									 && x.StartDateTime == layer.Period.StartDateTime);
-						skillCombinationResourceByAgentAndLayer.Resource -= 1;
-						skillCombinationResourcesForAgent.Add(skillCombinationResourceByAgentAndLayer);
+							var skillCombinationResourceByAgentAndLayer =
+								combinationResources.Single(
+									x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
+										 && x.StartDateTime == layer.Period.StartDateTime);
+							skillCombinationResourceByAgentAndLayer.Resource -= 1;
+							skillCombinationResourcesForAgent.Add(skillCombinationResourceByAgentAndLayer);
 						
 						var scheduleResourceOptimizer = new ScheduleResourceOptimizer(resourcesForShovelAndCalculation,new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods),new AffectedPersonSkillService(allSkills), false, new ActivityDivider());
 						scheduleResourceOptimizer.Optimize(layer.Period);
@@ -173,7 +178,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems + exp.Message);
 			}
 		}
-		
+
+		private static bool nonSkillActivityForWholeInterval(IActivity activity, ResourceLayer layer)
+		{
+			return !activity.RequiresSkill && !layer.FractionPeriod.HasValue;
+		}
+
+		private static void zeroDemandForIntervalsCoveredByNonSkillActivity(List<SkillStaffingInterval> skillStaffingIntervals, ResourceLayer layer)
+		{
+			var relevantStaffingIntervals = skillStaffingIntervals.Where(s => s.StartDateTime == layer.Period.StartDateTime);
+			foreach (var relevantStaffingInterval in relevantStaffingIntervals)
+			{
+				relevantStaffingInterval.ForecastWithShrinkage = 0;
+				relevantStaffingInterval.FStaff = 0;
+			}
+		}
+
 		private bool sendDenyCommand(Guid personRequestId, string denyReason)
 		{
 			var command = new DenyRequestCommand

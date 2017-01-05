@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				InWorkTime = true,
 				InContractTime = true,
 				RequiresSkill = true
-			};
-			newActivity.SetId(Guid.NewGuid());
+			}.WithId();
 			_activities.Add(newActivity);
 			return newActivity;
 		}
