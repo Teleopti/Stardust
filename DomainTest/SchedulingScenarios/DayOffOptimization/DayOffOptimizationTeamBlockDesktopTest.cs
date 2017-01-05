@@ -46,12 +46,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-				schedulePeriod.SetDaysOff(2);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodOneWeek(firstDay);
+				agent.SchedulePeriod(firstDay).SetDaysOff(2);
 				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag };
 				agent.AddPeriodWithSkill(personPeriod, skill);
-				agent.AddSchedulePeriod(schedulePeriod);
 				agents.Add(agent);
 			}
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
@@ -101,13 +99,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var contract = new Contract("Contract").WithId();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod();
-				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-				schedulePeriod.SetDaysOff(2);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodOneWeek(firstDay);
+				agent.SchedulePeriod(firstDay).SetDaysOff(2);
 				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), team);
 				if (i == 1) personPeriod.RuleSetBag = ruleSetBag;	
 				agent.AddPeriodWithSkill(personPeriod, skill);
-				agent.AddSchedulePeriod(schedulePeriod);
 				agents.Add(agent);
 			}
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 10, 100);
@@ -153,10 +149,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity1, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(activity2, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(10, 0, 10, 0, 15)));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill1, skill2);
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(2);
-			agent.AddSchedulePeriod(schedulePeriod);	
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill1, skill2).WithSchedulePeriodOneWeek(firstDay);
+			agent.SchedulePeriod(firstDay).SetDaysOff(2);
 			var skillDays1 = skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 100, 100);
 			var skillDays2 = skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 0, 0, 10);
 			var asses = new List<IPersonAssignment>();

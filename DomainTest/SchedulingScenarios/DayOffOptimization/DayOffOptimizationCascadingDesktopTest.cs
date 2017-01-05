@@ -46,11 +46,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneWeek(firstDay);
 				agent.Period(DateOnly.MinValue).Team = team;
-				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-				agent.AddSchedulePeriod(schedulePeriod);
-				schedulePeriod.SetDaysOff(2); //thought this was the default one?
+				agent.SchedulePeriod(firstDay).SetDaysOff(2);
 				agents.Add(agent);
 			}
 			var skillDaysA = skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 1, 1, 1, 1);
@@ -95,11 +93,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneWeek(firstDay);
 				agent.Period(DateOnly.MinValue).Team = team;
-				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-				schedulePeriod.SetDaysOff(1);
-				agent.AddSchedulePeriod(schedulePeriod);
+				agent.SchedulePeriod(firstDay).SetDaysOff(1);
 				agents.Add(agent);
 			}
 			var skillDaysA = skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,

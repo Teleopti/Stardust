@@ -39,14 +39,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var activity = new Activity("_");
 			var skill = new Skill().For(activity).IsOpen();
 			var scenario = new Scenario("_");
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var team = new Team { Site = new Site("_") };
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(firstDay);
 			agent.Period(DateOnly.MinValue).Team = team;
-			agent.AddSchedulePeriod(schedulePeriod);
+			agent.SchedulePeriod(firstDay).SetDaysOff(1);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				5,
 				1,
@@ -85,21 +83,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = new Skill().For(activity).IsOpen();
 			var skillMaxSeat = new Skill("SkillMaxSeat").For(activity).IsOpen();
 			var scenario = new Scenario("_");
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			//var ruleSetBag = new RuleSetBag(ruleSet);
 			var site = new Site("_");
 			var siteMaxSeat = new Site("siteMaxSeat"){MaxSeats = 0, MaxSeatSkill = skillMaxSeat};
 			var team = new Team { Site = site };
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(firstDay);
 			agent.Period(DateOnly.MinValue).Team = team;
 			var teamMaxSeat = new Team { Site = siteMaxSeat };
-			var agentMaxSeat = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillMaxSeat);
+			var agentMaxSeat = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillMaxSeat).WithSchedulePeriodOneWeek(firstDay);
 			agentMaxSeat.Period(DateOnly.MinValue).Team = teamMaxSeat;
-			agent.AddSchedulePeriod(schedulePeriod);
-			agentMaxSeat.AddSchedulePeriod(schedulePeriod);
+			agent.SchedulePeriod(firstDay).SetDaysOff(1);
+			agentMaxSeat.SchedulePeriod(firstDay).SetDaysOff(1);
 
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				5,
