@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
@@ -39,6 +40,12 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			agent.WithPersonPeriod(skills);
 			agent.Period(DateOnly.MinValue).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
+			return agent;
+		}
+
+		public static Person WithSchedulePeriodOneDay(this Person agent, DateOnly date)
+		{
+			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 			return agent;
 		}
 	}
