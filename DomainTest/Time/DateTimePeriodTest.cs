@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 3, 24, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 3, 25, 3, 45, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
 
             IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneHelper.CurrentSessionTimeZone);
 
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 28, 3, 45, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
 
             IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneHelper.CurrentSessionTimeZone);
 
@@ -497,7 +497,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 28, 3, 45, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
             Assert.Throws<ArgumentException>(() => _period.IntervalsFromHourCollection(0, TimeZoneHelper.CurrentSessionTimeZone));
         }
 
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
             _period.IntervalsFromHourCollection(60, TimeZoneHelper.CurrentSessionTimeZone);
         }
 
@@ -517,7 +517,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 26, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
             _period.IntervalsFromHourCollection(120, TimeZoneHelper.CurrentSessionTimeZone);
         }
 

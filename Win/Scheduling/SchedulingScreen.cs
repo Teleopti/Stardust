@@ -2579,7 +2579,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var request = _requestView.SelectedAdapters().FirstOrDefault();
 			if (request == null) return;
 
-			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest);
+			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest, TimeZoneHelper.CurrentSessionTimeZone);
 			selectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
 		}
 

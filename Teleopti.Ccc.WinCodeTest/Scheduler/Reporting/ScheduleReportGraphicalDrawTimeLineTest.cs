@@ -146,8 +146,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         [Test]
         public void ShouldUseDefaultPeriodOnNoLayers()
         {
-            var dateTimeExpectedStart = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 8, 0, 0));
-            var dateTimeExpectedEnd = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 17, 0, 0));
+            var dateTimeExpectedStart = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 8, 0, 0), TimeZoneHelper.CurrentSessionTimeZone);
+            var dateTimeExpectedEnd = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 17, 0, 0), TimeZoneHelper.CurrentSessionTimeZone);
             var dateOnly = new DateOnly(2011, 1, 1);
             var expectedPeriod = new DateTimePeriod(dateTimeExpectedStart, dateTimeExpectedEnd);
 
@@ -164,7 +164,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_projectionService2.CreateProjection()).Return(_layerCollection2).Repeat.Twice();
                 Expect.Call(_layerCollection1.HasLayers).Return(false).Repeat.Twice();
                 Expect.Call(_layerCollection2.HasLayers).Return(false).Repeat.Twice();
- 
             }
 
             using (_mockRepository.Playback())

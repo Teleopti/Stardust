@@ -1535,7 +1535,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			IList<SiteDto> dtos = new List<SiteDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone);
 				teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 				foreach (ISite site in teamCollection.AllPermittedSites)
 				{
@@ -1572,7 +1572,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			List<TeamDto> dtos = new List<TeamDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone);
 				var teamCollection =
 					OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 
@@ -1674,7 +1674,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			IList<TeamDto> dtos = new List<TeamDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone);
 				teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 
 				foreach (ITeam team in teamCollection.AllPermittedTeams)
@@ -1704,7 +1704,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			var persons = new List<IPerson>();
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDateTime));
+				var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone));
 				IPersonCollection personCollection =
 					OrganizationFactory.CreatePersonCollectionLight(unitOfWork, func, localDate);
 

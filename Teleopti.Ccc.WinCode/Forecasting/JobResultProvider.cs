@@ -33,12 +33,11 @@ namespace Teleopti.Ccc.WinCode.Forecasting
                             JobCategory = j.JobCategory,
 							Owner = j.Owner.Name.ToString(),
 							Status = determineStatus(j),
-							Timestamp = TimeZoneHelper.ConvertFromUtc(j.Timestamp).ToString()
+							Timestamp = TimeZoneHelper.ConvertFromUtc(j.Timestamp, TimeZoneHelper.CurrentSessionTimeZone).ToString()
 						}).ToList();
 			}
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
 		public IList<JobResultDetailModel> GetJobResultDetails(JobResultModel jobResultModel, int detailLevel)
         {
 	        using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
                         new JobResultDetailModel
                             {
                                 Message = m.Message,
-                                Timestamp = TimeZoneHelper.ConvertFromUtc(m.Timestamp),
+                                Timestamp = TimeZoneHelper.ConvertFromUtc(m.Timestamp, TimeZoneHelper.CurrentSessionTimeZone),
                                 ExceptionMessage = m.ExceptionMessage,
                                 ExceptionStackTrace= m.ExceptionStackTrace,
                                 InnerExceptionMessage= m.InnerExceptionMessage,

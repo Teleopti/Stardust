@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 				if (e.ColIndex == 0 && e.RowIndex > 0)
 				{
-					e.Style.CellValue = TimeZoneHelper.ConvertFromUtc(_presenter.CurrentPeriods[e.RowIndex - 1].StartDateTime).ToShortDateString();
+					e.Style.CellValue = _presenter.CurrentPeriods[e.RowIndex - 1].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortDateString();
 				}
                 if (e.ColIndex == 1 && e.RowIndex > 0)
                 {

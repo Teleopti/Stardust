@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var target = new TextRequestAssembler(new TestCultureProvider(cultureForDetails), dateTimePeriodAssembler);
 			DateTimePeriod period = new DateTimePeriod(2009, 7, 5, 2009, 7, 31);
-            TextRequest textRequest = new TextRequest(period);
+            var textRequest = new PersonRequest(PersonFactory.CreatePerson(), new TextRequest(period)).Request;
 
             TextRequestDto textRequestDto = target.DomainEntityToDto(textRequest);
             Assert.AreEqual(period.StartDateTime,textRequestDto.Period.UtcStartTime);

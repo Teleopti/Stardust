@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             TimeSpan localEndTimeOfDay = TimeSpan.FromHours(13);
 			
 	        var startDateTimeLocal = _targetDateTimePeriod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-	        _defaultLocal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(localStartTimeOfDay), startDateTimeLocal.Add(localEndTimeOfDay));
+	        _defaultLocal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(localStartTimeOfDay), startDateTimeLocal.Add(localEndTimeOfDay), TimeZoneHelper.CurrentSessionTimeZone);
             _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, null, _info);
             _scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
         }

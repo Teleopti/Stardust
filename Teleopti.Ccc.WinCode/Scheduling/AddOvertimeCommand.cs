@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	            var startDateTimeLocal = scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
 	            defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                         startDateTimeLocal.Add(TimeSpan.FromHours(8)),
-                        startDateTimeLocal.Add(TimeSpan.FromHours(17)));
+                        startDateTimeLocal.Add(TimeSpan.FromHours(17)), TimeZoneHelper.CurrentSessionTimeZone);
             }
             return defaultPeriod;    
         }

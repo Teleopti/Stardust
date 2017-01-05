@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			DateTimePeriod defaultPeriod =
 				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 					startDateTimeLocal.Add(TimeSpan.FromHours(8)),
-					startDateTimeLocal.Add(TimeSpan.FromHours(17)));
+					startDateTimeLocal.Add(TimeSpan.FromHours(17)), TimeZoneHelper.CurrentSessionTimeZone);
 
 			if (part.SignificantPart() == SchedulePartView.MainShift)
 			{

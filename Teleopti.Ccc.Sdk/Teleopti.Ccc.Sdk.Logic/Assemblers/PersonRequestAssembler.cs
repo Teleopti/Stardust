@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			personRequestDto.RequestStatus = (RequestStatusDto)statusId;
 
             personRequestDto.RequestedDate = entity.RequestedDate;
-            personRequestDto.CreatedDate = entity.CreatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value) : DateTime.MinValue;
-            personRequestDto.UpdatedOn =  entity.UpdatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.UpdatedOn.Value) : DateTime.MinValue;
-            personRequestDto.RequestedDateLocal = TimeZoneHelper.ConvertFromUtc(entity.RequestedDate);
+            personRequestDto.CreatedDate = entity.CreatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value, TimeZoneHelper.CurrentSessionTimeZone) : DateTime.MinValue;
+            personRequestDto.UpdatedOn =  entity.UpdatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.UpdatedOn.Value, TimeZoneHelper.CurrentSessionTimeZone) : DateTime.MinValue;
+            personRequestDto.RequestedDateLocal = TimeZoneHelper.ConvertFromUtc(entity.RequestedDate, TimeZoneHelper.CurrentSessionTimeZone);
             personRequestDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
             personRequestDto.CanDelete = entity.IsEditable;
             personRequestDto.Request = null;

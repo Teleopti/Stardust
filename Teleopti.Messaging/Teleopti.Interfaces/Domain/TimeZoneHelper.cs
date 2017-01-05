@@ -14,21 +14,6 @@ namespace Teleopti.Interfaces.Domain
 	public static class TimeZoneHelper
 	{
 		/// <summary>
-		/// Converts to UTC, using the logged on users TimeZone.
-		/// </summary>
-		/// <param name="localDateTime">The local date time.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-10-23
-		/// </remarks>
-		public static DateTime ConvertToUtc(DateTime localDateTime)
-		{
-			TimeZoneInfo sourceTimeZone = CurrentSessionTimeZone;
-			return sourceTimeZone.SafeConvertTimeToUtc(DateTime.SpecifyKind(localDateTime, DateTimeKind.Unspecified));
-		}
-
-		/// <summary>
 		/// Converts to UTC.
 		/// </summary>
 		/// <param name="localDateTime">The local date time.</param>
@@ -42,22 +27,7 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return sourceTimeZone.SafeConvertTimeToUtc(DateTime.SpecifyKind(localDateTime, DateTimeKind.Unspecified));
 		}
-
-		/// <summary>
-		/// Converts from UTC.
-		/// </summary>
-		/// <param name="utcDateTime">The UTC date time.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-10-23
-		/// </remarks>
-		public static DateTime ConvertFromUtc(DateTime utcDateTime)
-		{
-			TimeZoneInfo targetTimeZone = CurrentSessionTimeZone;
-			return ConvertFromUtc(utcDateTime, targetTimeZone);
-		}
-
+		
 		/// <summary>
 		/// Converts from UTC.
 		/// </summary>
@@ -73,22 +43,7 @@ namespace Teleopti.Interfaces.Domain
 			return TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcDateTime, DateTimeKind.Unspecified),
 											  sourceTimeZone);
 		}
-
-		/// <summary>
-		/// Creates a new DateTimePeriod from local date time.
-		/// </summary>
-		/// <param name="localDateTimeStart">The local date time start.</param>
-		/// <param name="localDateTimeEnd">The local date time end.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-10-23
-		/// </remarks>
-		public static DateTimePeriod NewUtcDateTimePeriodFromLocalDateTime(DateTime localDateTimeStart, DateTime localDateTimeEnd)
-		{
-			return new DateTimePeriod(ConvertToUtc(localDateTimeStart), ConvertToUtc(localDateTimeEnd));
-		}
-
+		
 		/// <summary>
 		/// Gets the current sessions time zone.
 		/// </summary>
@@ -115,7 +70,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public static DateTimePeriod NewUtcDateTimePeriodFromLocalDateTime(DateTime localStartDateTime, DateTime localEndDateTime, TimeZoneInfo timeZone)
 		{
-			InParameter.NotNull("timeZone", timeZone);
+			InParameter.NotNull(nameof(timeZone), timeZone);
 
 			DateTime utcStartDateTime = timeZone.SafeConvertTimeToUtc(localStartDateTime);
 			DateTime utcEndDateTime = timeZone.SafeConvertTimeToUtc(localEndDateTime);
@@ -157,7 +112,6 @@ namespace Teleopti.Interfaces.Domain
 
 		private static DateTime getFixedDateRuleDate(TimeZoneInfo timeZoneInfo, TimeZoneInfo.TransitionTime transitionTime, int year)
 		{
-
 			return ConvertToUtc(new DateTime(
 				year,
 				transitionTime.Month,
@@ -166,8 +120,6 @@ namespace Teleopti.Interfaces.Domain
 				transitionTime.TimeOfDay.Minute,
 				transitionTime.TimeOfDay.Second
 				), timeZoneInfo);
-
-			
 		}
 
 		private static DateTime getFloatingDateRuleDate(TimeZoneInfo timeZoneInfo, TimeZoneInfo.TransitionTime transitionTime, int year)

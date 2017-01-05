@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public void CheckMousePosition(int mouseGridPositionX, Rectangle cellRect, LengthToTimeCalculator pixelConverter, DateTimePeriod period, int mouseCellPosition, TimeSpan startTime)
         {
-            if(pixelConverter == null) throw new ArgumentNullException("pixelConverter");
+            if(pixelConverter == null) throw new ArgumentNullException(nameof(pixelConverter));
 
             var meetingRect = GetLayerRectangle(pixelConverter, period, cellRect);
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             {
                 _view.SetHandCursor();
                 MeetingMousePosition = MeetingMousePosition.OverStartAndEnd;
-                var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _view.IsRightToLeft));
+                var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _view.IsRightToLeft), TimeZoneHelper.CurrentSessionTimeZone);
                 var time = dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond));
                 DiffStart = time.TimeOfDay.Subtract(startTime);
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public RectangleF GetLayerRectangle(LengthToTimeCalculator pixelConverter, DateTimePeriod period, RectangleF clientRect)
         {
-            if (pixelConverter == null) throw new ArgumentNullException("pixelConverter");
+            if (pixelConverter == null) throw new ArgumentNullException(nameof(pixelConverter));
 
             var x1 = pixelConverter.PositionFromDateTime(period.StartDateTime, _view.IsRightToLeft);
             var x2 = pixelConverter.PositionFromDateTime(period.EndDateTime, _view.IsRightToLeft);

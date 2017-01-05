@@ -66,9 +66,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				string timeString;
 
 				if (_rightToLeft)
-					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.EndDateTime.AddHours(-i)).ToShortTimeString();
+					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.EndDateTime.AddHours(-i), TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
 				else
-					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.StartDateTime.AddHours(i)).ToShortTimeString();
+					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.StartDateTime.AddHours(i), TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
 
 				const float fontSize = 6f;
 				var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, _culture);
@@ -227,8 +227,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 
             if (startDateTime.Equals(endDateTime))
             {
-                startDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(8));
-                endDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(17));
+                startDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(8), TimeZoneHelper.CurrentSessionTimeZone);
+                endDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(17), TimeZoneHelper.CurrentSessionTimeZone);
             }
 
             return new DateTimePeriod(startDateTime, endDateTime);

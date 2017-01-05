@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(2, mainShift.LayerCollection.Count);
             Assert.AreEqual(category, mainShift.ShiftCategory);
             Assert.AreEqual(layer1.Payload, mainShift.LayerCollection[0].Payload);
-            Assert.AreEqual(WorkShift.BaseDate.AddHours(8).TimeOfDay, TimeZoneHelper.ConvertFromUtc(mainShift.LayerCollection[1].Period.StartDateTime).TimeOfDay);
+            Assert.AreEqual(WorkShift.BaseDate.AddHours(8).TimeOfDay, TimeZoneHelper.ConvertFromUtc(mainShift.LayerCollection[1].Period.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
             Assert.AreEqual(category, mainShift.ShiftCategory);
         }
 

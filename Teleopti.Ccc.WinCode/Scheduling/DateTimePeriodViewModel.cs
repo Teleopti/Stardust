@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             new UIPropertyMetadata(DateTime.UtcNow, StartPropertyChanged, CoerceStartValue),
             delegate(object value)
             {
-                value = TimeZoneHelper.ConvertToUtc((DateTime)value);
+                value = TimeZoneHelper.ConvertToUtc((DateTime)value, TimeZoneHelper.CurrentSessionTimeZone);
                 //InParameter.VerifyDateIsUtc("Start", (DateTime)value);
                 return true;
             });
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             new UIPropertyMetadata(DateTime.UtcNow, EndPropertyChanged, CoerceEndValue),
             delegate(object value)
             {
-                value = TimeZoneHelper.ConvertToUtc((DateTime)value);
+                value = TimeZoneHelper.ConvertToUtc((DateTime)value, TimeZoneHelper.CurrentSessionTimeZone);
                 InParameter.VerifyDateIsUtc("End", (DateTime)value);
                 return true;
             });
@@ -468,14 +468,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         //dateTimePickerAdv uses local datetimes
         public DateTime StartDateTimeAsLocal
         {
-            get { return TimeZoneHelper.ConvertFromUtc(Start); }
-            set { SetValue(StartProperty, TimeZoneHelper.ConvertToUtc(value)); }
+            get { return TimeZoneHelper.ConvertFromUtc(Start, TimeZoneHelper.CurrentSessionTimeZone); }
+            set { SetValue(StartProperty, TimeZoneHelper.ConvertToUtc(value, TimeZoneHelper.CurrentSessionTimeZone)); }
         }
 
         public DateTime EndDateTimeAsLocal
         {
-            get { return TimeZoneHelper.ConvertFromUtc(End); }
-            set { SetValue(EndProperty, TimeZoneHelper.ConvertToUtc(value)); }
+            get { return TimeZoneHelper.ConvertFromUtc(End, TimeZoneHelper.CurrentSessionTimeZone); }
+            set { SetValue(EndProperty, TimeZoneHelper.ConvertToUtc(value, TimeZoneHelper.CurrentSessionTimeZone)); }
         }
 
         public TimeSpan StartTimeAsLocalTimeSpan

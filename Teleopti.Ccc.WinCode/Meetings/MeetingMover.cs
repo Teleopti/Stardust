@@ -46,14 +46,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         private void MoveStart(ILengthToTimeCalculator pixelConverter, int mouseCellPosition, Rectangle cellRect)
         {
-            if(pixelConverter == null) throw new ArgumentNullException("pixelConverter");
+            if(pixelConverter == null) throw new ArgumentNullException(nameof(pixelConverter));
 
             var refresh = false;
 
             if (mouseCellPosition < 0) mouseCellPosition = 0;
             if (mouseCellPosition > cellRect.Width) mouseCellPosition = cellRect.Width;
 
-            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft));
+            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TimeZoneHelper.CurrentSessionTimeZone);
             if (dateTime.Date > _meetingViewModel.StartDate.Date)
             {
                 dateTime = _meetingViewModel.StartDate.Date.AddDays(1);
@@ -86,14 +86,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         private void MoveEnd(ILengthToTimeCalculator pixelConverter, int mouseCellPosition, Rectangle cellRect)
         {
-            if(pixelConverter == null) throw new ArgumentNullException("pixelConverter");
+            if(pixelConverter == null) throw new ArgumentNullException(nameof(pixelConverter));
 
             var refresh = false;
 
             if (mouseCellPosition > cellRect.Width) mouseCellPosition = cellRect.Width;
             if (mouseCellPosition < 0) mouseCellPosition = 0;
 
-            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft));
+            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TimeZoneHelper.CurrentSessionTimeZone);
             var snappedTime = GetSnappedTime(dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond)).TimeOfDay);
 
             if (snappedTime.Subtract(TimeSpan.FromMinutes(_snapToMinutes)) <= _meetingViewModel.StartTime && !(dateTime.Date > _meetingViewModel.StartDate.Date))
@@ -118,14 +118,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         private void MoveStartAndEnd(ILengthToTimeCalculator pixelConverter, int mouseCellPosition, Rectangle cellRect, TimeSpan diffStart)
         {
-            if(pixelConverter == null) throw new ArgumentNullException("pixelConverter");
+            if(pixelConverter == null) throw new ArgumentNullException(nameof(pixelConverter));
 
             var refresh = false;
 
             if (mouseCellPosition > cellRect.Width) mouseCellPosition = cellRect.Width;
             if (mouseCellPosition < 0) mouseCellPosition = 0;
 
-            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft));
+            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TimeZoneHelper.CurrentSessionTimeZone);
             var time = dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond));
 
             if (diffStart < TimeSpan.Zero) diffStart = TimeSpan.FromDays(1).Add(diffStart);
@@ -139,10 +139,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
             var maxPos = cellRect.Width;
             if(_rightToLeft) maxPos = 0;
-   
-            if (_meetingViewModel.StartDate.Date.Add(snappedStart.Add(duration)) > TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(maxPos, _rightToLeft)))
+
+	        var fromUtc = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(maxPos, _rightToLeft), TimeZoneHelper.CurrentSessionTimeZone);
+	        if (_meetingViewModel.StartDate.Date.Add(snappedStart.Add(duration)) > fromUtc)
             {
-                var maxStart = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(maxPos, _rightToLeft)).Subtract(duration);
+                var maxStart = fromUtc.Subtract(duration);
                 if (!maxStart.Date.Equals(_meetingViewModel.StartDate.Date)) snappedStart = TimeSpan.FromDays(1).Subtract(TimeSpan.FromMinutes(_snapToMinutes));
                 else snappedStart = maxStart.TimeOfDay;
             }

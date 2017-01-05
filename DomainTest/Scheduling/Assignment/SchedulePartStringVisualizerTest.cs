@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             scheduleRange = new ScheduleRange(dic, param, new PersistableScheduleDataPermissionChecker());
 
             ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_agent,
-                             _scenario, ActivityFactory.CreateActivity("PersonalShiftActivity"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 0, 0, 0), new DateTime(2001, 1, 2, 0, 0, 0)), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
+                             _scenario, ActivityFactory.CreateActivity("PersonalShiftActivity"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 0, 0, 0), new DateTime(2001, 1, 2, 0, 0, 0), TimeZoneHelper.CurrentSessionTimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
 
             meeting1 = new Meeting(_agent, new List<IMeetingPerson>(), "meeting1", "location1", "description1", ActivityFactory.CreateActivity("activity1"), _scenario);
             meeting1.StartDate = new DateOnly(2001, 1, 1);

@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IList<IWorkloadDay> workloadDaysLongTerm;
         private DateOnlyPeriod _period;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         protected override void SetupForRepositoryTest()
         {
             DateOnly dateTime = new DateOnly(2008, 7, 2);
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
                                                                    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                                                                        _period.StartDate.Date,
-                                                                       _period.EndDate.Date));
+                                                                       _period.EndDate.Date, TimeZoneHelper.CurrentSessionTimeZone));
 
             workloadDaysLongTerm[0].CreateFromTemplate(dateTime, workload, templateLongTerm);
 
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(skillDayLongTerm);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We wan't the test to fail, regardless of what exception occured"), Test]
+		[Test]
         public void VerifyValidateReport()
         {
             try
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Flush();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We wan't the test to fail, regardless of what exception occured"), Test]
+		[Test]
         public void VerifyBudgetReport()
         {
             try
@@ -147,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We wan't the test to fail, regardless of what exception occured"), Test]
+        [Test]
         public void VerifyDetailedReport()
         {
             try

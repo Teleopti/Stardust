@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var target = new AbsenceRequestAssembler(new TestCultureProvider(cultureForDetails), absenceAssembler, dateTimePeriodAssembler);
 			
             var period = new DateTimePeriod(2009, 7, 5, 2009, 7, 31);
-            var absenceRequest = new AbsenceRequest(absence, period);
+            var absenceRequest = (IAbsenceRequest)new PersonRequest(PersonFactory.CreatePerson(), new AbsenceRequest(absence, period)).Request;
 
             var absenceRequestDto = target.DomainEntityToDto(absenceRequest);
             Assert.AreEqual(period.StartDateTime, absenceRequestDto.Period.UtcStartTime);

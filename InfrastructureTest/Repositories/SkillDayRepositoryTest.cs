@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
 				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 					dateTimePeriod.StartDateTime,
-					dateTimePeriod.EndDateTime));
+					dateTimePeriod.EndDateTime, TimeZoneHelper.CurrentSessionTimeZone));
 			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod> {skillDataPeriod};
 			ISkillDay skillDay = new SkillDay(dateTime, _skill, _scenario, workloadDays, skillDataPeriods);
 

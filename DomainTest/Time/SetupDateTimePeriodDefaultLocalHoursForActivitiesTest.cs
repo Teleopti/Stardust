@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Time
             var expectedEndTime = new DateTime(2010, 01, 01, 15, 45, 0, DateTimeKind.Utc);
 
             var period = new DateTimePeriod(2010, 1, 1, 2010, 1, 2);
-            var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).Add(new TimeSpan(14, 30, 0)), period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).Add(new TimeSpan(15, 45, 0)));
+	        var startDateTimeLocal = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+	        var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(new TimeSpan(14, 30, 0)), startDateTimeLocal.Add(new TimeSpan(15, 45, 0)), TimeZoneHelper.CurrentSessionTimeZone);
 
             using (_mockRepository.Record())
             {

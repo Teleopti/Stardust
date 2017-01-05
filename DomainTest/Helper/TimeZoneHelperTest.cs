@@ -10,71 +10,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
     /// Tests class TimeZoneHelper
     /// </summary>
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
     public class TimeZoneHelperTest
     {
-        /// <summary>
-        /// Verifies the convert to UTC works.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-23
-        /// </remarks>
-        [Test]
-        public void VerifyConvertToUtcWorks()
-        {
-
-            DateTime utcDateTime = DateTime.UtcNow;
-            DateTime localDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, StateHolderReader.Instance.StateReader.UserTimeZone);
-
-            DateTime localDateTimeConverted = TimeZoneHelper.ConvertToUtc(localDateTime);
-
-            Assert.AreEqual(utcDateTime,localDateTimeConverted);
-        }
-
-        /// <summary>
-        /// Verifies the convert from UTC works.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-23
-        /// </remarks>
-        [Test]
-        public void VerifyConvertFromUtcWorks()
-        {
-            DateTime localDateTime = DateTime.SpecifyKind(DateTime.Now,DateTimeKind.Unspecified);
-            DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(localDateTime, StateHolderReader.Instance.StateReader.UserTimeZone);
-
-            DateTime utcDateTimeConverted = TimeZoneHelper.ConvertFromUtc(utcDateTime);
-
-            Assert.AreEqual(localDateTime, utcDateTimeConverted);
-        }
-
-        /// <summary>
-        /// Verifies the create new date time period.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-23
-        /// </remarks>
-        [Test]
-        public void VerifyCreateNewDateTimePeriod()
-        {
-            DateTime utcStartDateTime = DateTime.UtcNow.AddHours(-1);
-            DateTime utcEndDateTime = DateTime.UtcNow.AddHours(1);
-            DateTime localStartDateTime =
-                TimeZoneInfo.ConvertTimeFromUtc(utcStartDateTime,
-																								StateHolderReader.Instance.StateReader.UserTimeZone);
-            DateTime localEndDateTime =
-                TimeZoneInfo.ConvertTimeFromUtc(utcEndDateTime,
-																								StateHolderReader.Instance.StateReader.UserTimeZone);
-
-            DateTimePeriod expectedDateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
-
-            Assert.AreEqual(expectedDateTimePeriod,
-                            TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime));
-        }
-
         /// <summary>
         /// Verifies the create new date time period with time zone supplied.
         /// </summary>
@@ -97,10 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Helper
             DateTimePeriod expectedDateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
 
             Assert.AreEqual(expectedDateTimePeriod,
-                            TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, (TimeZoneInfo.Local)));
+                            TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, TimeZoneInfo.Local));
         }
-
-
+		
         /// <summary>
         /// Verifies the create new date time period with time zone supplied.
         /// Part of SPI 9115 fix.
@@ -122,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             DateTime utcStartDateTime = new DateTime(2008, 3, 30, 1, 0, 0, DateTimeKind.Utc);
             DateTime utcEndDateTime = new DateTime(2008, 3, 30, 1, 0, 0, DateTimeKind.Utc);
             DateTimePeriod expectedDateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
-            DateTimePeriod actualDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, (wetTimeZoneInfo));
+            DateTimePeriod actualDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, wetTimeZoneInfo);
             Assert.AreEqual(expectedDateTimePeriod, actualDateTimePeriod);
 
             localStartDateTime = new DateTime(2008, 3, 30, 2, 45, 0, DateTimeKind.Unspecified);
@@ -131,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             utcStartDateTime = new DateTime(2008, 3, 30, 1, 0, 0, DateTimeKind.Utc);
             utcEndDateTime = new DateTime(2008, 3, 30, 1, 0, 0, DateTimeKind.Utc);
             expectedDateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
-            actualDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, (wetTimeZoneInfo));
+            actualDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, wetTimeZoneInfo);
             Assert.AreEqual(expectedDateTimePeriod, actualDateTimePeriod);
         }
 
@@ -156,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             DateTime utcStartDateTime = TimeZoneInfo.ConvertTimeToUtc(localStartDateTime, jordanTimeZoneInfo);
             DateTime utcEndDateTime = TimeZoneInfo.ConvertTimeToUtc(localEndDateTime, jordanTimeZoneInfo);
             DateTimePeriod expectedDateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
-            DateTimePeriod actualDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, (jordanTimeZoneInfo));
+            DateTimePeriod actualDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime, localEndDateTime, jordanTimeZoneInfo);
             Assert.AreEqual(expectedDateTimePeriod, actualDateTimePeriod);
         }
 
@@ -174,9 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             DateTime utcEndDateTime = DateTime.UtcNow.AddHours(1);
 			Assert.Throws<ArgumentNullException>(() => TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(utcStartDateTime, utcEndDateTime, null));
         }
-
-
-
+		
 	    [Test]
 	    public void MakeSureGetDaylightChangesIfThereAreSomeForTheYear()
 	    {
@@ -189,8 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			    }
 		    }
 	    }
-
-
+		
 	    [Test]
 	    public void VerifyGetDaylightChangesReturnCorrectDayLightTime()
 	    {
@@ -209,7 +142,5 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			brasiliaDaylightSavingTimeRule.End.Should().Be(new DateTime(2015, 2, 22, 2, 59, 59));
 			brasiliaDaylightSavingTimeRule.Delta.Should().Be(TimeSpan.FromHours(1));
 	    }
-
-
     }
 }
