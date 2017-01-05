@@ -172,6 +172,7 @@ FROM
 	#fact_schedule f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_absence ab
 	ON ab.absence_id=f.absence_id
 INNER JOIN mart.bridge_time_zone b
