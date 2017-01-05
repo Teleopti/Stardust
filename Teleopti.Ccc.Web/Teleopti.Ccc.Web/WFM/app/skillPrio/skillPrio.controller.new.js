@@ -88,13 +88,20 @@
 		}
 
 		function autoDeleteEmptyRow() {
+			if (vm.cascadeList.length === 1 && vm.cascadeList[0].Skills.length === 0) {
+				vm.cascadeList = [];
+			}
 			for (var i = 0; i < vm.cascadeList.length - 1; i++) {
 				if (vm.cascadeList[i].Skills.length === 0) {
 					vm.cascadeList.splice(i, 1);
+					resetCascadeLevel();
 				}
 			}
-			if (vm.cascadeList.length === 1 && vm.cascadeList[0].Skills.length === 0) {
-				vm.cascadeList = [];
+		}
+
+		function resetCascadeLevel(){
+			for (var i = 0; i < vm.cascadeList.length; i++) {
+				vm.cascadeList[i].Priority =  i + 1;
 			}
 		}
 

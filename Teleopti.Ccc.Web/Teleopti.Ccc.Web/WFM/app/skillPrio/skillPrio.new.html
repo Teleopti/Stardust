@@ -71,6 +71,7 @@
 						<div ng-repeat="sortedRow in vm.cascadeList" class="skill-devider">
 							<div ui-tree="vm.options" data-drag-enabled="true" data-max-depth="1">
 								<ol ui-tree-nodes ng-model="sortedRow.Skills" class="horizontal-list" data-horizontal>
+									{{sortedRow.Priority}}
 									<li ui-tree-node ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
 										<span id="card">
 												{{Skill.SkillName}}
