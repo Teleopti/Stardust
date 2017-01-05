@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
            
             _mocks.ReplayAll();
             var result = _target.FindSlots(dateOnly, _duration, _startTime, _endTime, _dictionary, new List<IPerson>{_person1});
-            Assert.That(result.Count, Is.EqualTo(12));
+            Assert.That(result.Count, Is.EqualTo(7));
             _mocks.VerifyAll();
         }
 

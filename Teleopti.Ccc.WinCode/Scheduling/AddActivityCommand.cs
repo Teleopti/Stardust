@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class AddActivityCommand : AddLayerCommand
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public AddActivityCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
 			: base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.SelectedSchedules())
 		{
@@ -22,7 +21,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public static DateTimePeriod GetDefaultPeriodFromPart(IScheduleDay part)
 		{
-			DateTimePeriod defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(part.Period.LocalStartDateTime.Add(TimeSpan.FromHours(8)), part.Period.LocalStartDateTime.Add(TimeSpan.FromHours(17)));
+			var startDateTimeLocal = part.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+			DateTimePeriod defaultPeriod =
+				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+					startDateTimeLocal.Add(TimeSpan.FromHours(8)),
+					startDateTimeLocal.Add(TimeSpan.FromHours(17)));
 
 			if (part.SignificantPart() == SchedulePartView.MainShift)
 			{
@@ -33,7 +36,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return defaultPeriod;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public override void Execute()
 		{
 			var filteredScheduleParts = SchedulePartsOnePerAgent();
@@ -68,12 +70,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				part.CreateAndAddActivity(activity, period, shiftCategory);
 
 				IPersonAssignment assignment = part.PersonAssignment();
-				if(assignment != null)
-					assignment.CheckRestrictions();
-
+				assignment?.CheckRestrictions();
 			}
-
-
+			
 			Presenter.ModifySchedulePart(filteredScheduleParts);
 			
 			//modify only refresh date for SchedulePart, we need to refresh whole absence period

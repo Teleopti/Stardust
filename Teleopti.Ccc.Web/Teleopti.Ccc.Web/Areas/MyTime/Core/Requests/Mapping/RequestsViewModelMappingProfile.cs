@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return false;
 			}
 
-			var dateforDayCancellationCheck = new DateOnly (personRequest.Request.Period.LocalStartDateTime);
+			var dateforDayCancellationCheck = new DateOnly (personRequest.Request.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
 			if ( dateforDayCancellationCheck >= DateOnly.Today)
 			{
 				if (PrincipalAuthorization.Current().IsPermitted (

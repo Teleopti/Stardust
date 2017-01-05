@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 new DateTimePeriod(new DateTime(2011, 1, 2, 7, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(new DateTime(2011, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc), result.StartDateTime);
-            Assert.AreEqual(expected.LocalEndDateTime, result.EndDateTime);
+            Assert.AreEqual(expected.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone), result.EndDateTime);
         }
 
         [Test]
@@ -205,8 +205,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 6, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
-            Assert.AreEqual(expected.LocalStartDateTime, result.StartDateTime);
-            Assert.AreEqual(expected.LocalEndDateTime, result.EndDateTime);
+            Assert.AreEqual(expected.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone), result.StartDateTime);
+            Assert.AreEqual(expected.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone), result.EndDateTime);
         }
 
         [Test]

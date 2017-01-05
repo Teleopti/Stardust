@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             _timeZoneInfo = (TimeZoneInfo.Utc);
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
-            _defaultTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_period.LocalStartDateTime.Add(TimeSpan.FromHours(9)), _period.LocalStartDateTime.Add(TimeSpan.FromHours(13)));
+	        var startDateTimeLocal = _period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+	        _defaultTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(TimeSpan.FromHours(9)), startDateTimeLocal.Add(TimeSpan.FromHours(13)));
             _defaultActivity = ActivityFactory.CreateActivity("default");
             _acticvities = new List<IActivity>() { ActivityFactory.CreateActivity("name"), _defaultActivity, ActivityFactory.CreateActivity("anotherName") };
             _definitionSets = new List<IMultiplicatorDefinitionSet>(){MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("m1",MultiplicatorType.OBTime),

@@ -7,17 +7,21 @@ namespace Teleopti.Ccc.Domain.Time
     public class SetupDateTimePeriodDefaultLocalHoursForAbsence: ISetupDateTimePeriod
     {
 	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-	    private readonly DateTimePeriod _period;
 
-        public SetupDateTimePeriodDefaultLocalHoursForAbsence(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+	    public SetupDateTimePeriodDefaultLocalHoursForAbsence(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
         {
 	        _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
-	        _period = GetPeriodFromScheduleDays(scheduleDay);
+	        Period = getPeriodFromScheduleDays(scheduleDay);
         }
 
-	    private DateTimePeriod GetPeriodFromScheduleDays(IScheduleDay scheduleDay)
-        {
-            var defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.Zero), scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59))),_currentTeleoptiPrincipal.Current().Regional.TimeZone);
+	    private DateTimePeriod getPeriodFromScheduleDays(IScheduleDay scheduleDay)
+	    {
+		    var defaultPeriod =
+			    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+				    scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).Add(TimeSpan.Zero),
+				    scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone)
+					    .Add(TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59))),
+				    _currentTeleoptiPrincipal.Current().Regional.TimeZone);
             var setupDateTimePeriodToDefaultLocalHours =
                 new SetupDateTimePeriodToDefaultLocalHours(
                     defaultPeriod,
@@ -27,9 +31,6 @@ namespace Teleopti.Ccc.Domain.Time
             return setupDateTimePeriodToDefaultLocalHours.Period;
         }
 
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
+        public DateTimePeriod Period { get; }
     }
 }

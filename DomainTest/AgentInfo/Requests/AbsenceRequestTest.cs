@@ -234,7 +234,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyCanGetDetails()
         {
-            var absenceRequest = new AbsenceRequest(new Absence {Description = new Description("The Absence")}, _period);
+	        var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+	        var absenceRequest = new PersonRequest(person, new AbsenceRequest(new Absence {Description = new Description("The Absence")}, _period)).Request;
             string text = absenceRequest.GetDetails(new CultureInfo("en-US"));
 
             Assert.AreEqual("The Absence, 2:00 AM - 2:00 AM", text);
@@ -243,7 +245,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             text = absenceRequest.GetDetails(new CultureInfo("zh-TW"));
             Assert.AreEqual("The Absence, 上午 02:00 - 上午 02:00", text);
 
-            var obj2 = new AbsenceRequest(new Absence{ Description = new Description("The other Absence") }, new DateTimePeriod(new DateTime(2009, 12, 10, 0, 0, 0,DateTimeKind.Utc), new DateTime(2009, 12, 10,23, 59, 59, DateTimeKind.Utc)));
+	        var obj2 =
+		        new PersonRequest(person,
+			        new AbsenceRequest(new Absence {Description = new Description("The other Absence")},
+				        new DateTimePeriod(new DateTime(2009, 12, 10, 0, 0, 0, DateTimeKind.Utc),
+					        new DateTime(2009, 12, 10, 23, 59, 59, DateTimeKind.Utc)))).Request;
             string otertext = obj2.GetDetails(new CultureInfo("es-ES"));
             Assert.AreEqual("The other Absence", otertext);
         }

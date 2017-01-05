@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             string meetingPeriod2 = DateTime.MinValue.Add(meeting2.StartTime).ToShortTimeString() +
                                     " - " + DateTime.MinValue.Add(meeting2.EndTime).ToShortTimeString();
-            string expected = " - Personal activity" + ": \r\n    " + "PersonalShiftActivity: " + ass1.Period.LocalStartDateTime.ToShortTimeString() + " - " + ass1.Period.LocalEndDateTime.ToShortTimeString() +
+            string expected = " - Personal activity" + ": \r\n    " + "PersonalShiftActivity: " + ass1.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString() + " - " + ass1.Period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString() +
 								"\r\n" + " - Meeting: \r\n    " + "meeting1" + ": " + meetingPeriod1 +
                                "\r\n" + " - Meeting: \r\n    " + "meeting2" + ": " + meetingPeriod2 + " (" + UserTexts.Resources.Optional + ")";
 

@@ -568,7 +568,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void schedulesPartModified(object sender, ModifyEventArgs e)
 		{
-			_presenter.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(e.ModifiedPeriod.LocalStartDateTime));
+			_presenter.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone)));
 			if (e.Modifier != ScheduleModifier.MessageBroker)
 				_owner.EnableSave();
 

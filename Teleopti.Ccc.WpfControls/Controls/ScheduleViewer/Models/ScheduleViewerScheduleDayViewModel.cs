@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-
 namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
 {
     public class ScheduleViewerScheduleDayViewModel : DependencyObject
     {
-        private IScheduleDay _part;
+        private readonly IScheduleDay _part;
         
-        public LayerViewModelCollection Layers { get; private set; }
+        public LayerViewModelCollection Layers { get; }
 
         public ScheduleViewerScheduleDayViewModel(IScheduleDay part,IEventAggregator eventAggregator)
         {
@@ -29,9 +27,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
                 HasMainShift = true;
                 Description = ass.ShiftCategory.Description;
                 DisplayColor = ass.ShiftCategory.DisplayColor;
-
             }
-
         }
 
         public Color DisplayColor
@@ -39,41 +35,26 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
             get { return (Color)GetValue(DisplayColorProperty); }
             set { SetValue(DisplayColorProperty, value); }
         }
-
-      
+		
         public static readonly DependencyProperty DisplayColorProperty =
             DependencyProperty.Register("DisplayColor", typeof(Color), typeof(ScheduleViewerScheduleDayViewModel), new UIPropertyMetadata(Color.LightBlue));
-
-
-
+		
         public Description Description
         {
             get { return (Description)GetValue(DescriptionProperty); }
             set { SetValue(DescriptionProperty, value); }
         }
-
-    
+		
         public static readonly DependencyProperty DescriptionProperty =
             DependencyProperty.Register("Description", typeof(Description), typeof(ScheduleViewerScheduleDayViewModel), new UIPropertyMetadata(new Description("DEMO", "DE")));
+		
+        public DateTime Start => _part.DateOnlyAsPeriod.DateOnly.Date;
 
+	    public DateTime End => _part.DateOnlyAsPeriod.DateOnly.Date.AddDays(1);
 
+	    public DateTimePeriod Period => _part.Period;
 
-        public DateTime Start
-        {
-            get { return _part.DateOnlyAsPeriod.Period().LocalStartDateTime; }
-        }
-
-        public DateTime End
-        {
-            get { return _part.DateOnlyAsPeriod.Period().LocalEndDateTime; }
-        }
-
-        public DateTimePeriod Period
-        {
-            get { return _part.Period; }
-        }
-
-        public bool HasMainShift
+	    public bool HasMainShift
         {
             get { return (bool)GetValue(HasMainShiftProperty); }
             set { SetValue(HasMainShiftProperty, value); }
@@ -81,6 +62,5 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
 
         public static readonly DependencyProperty HasMainShiftProperty =
             DependencyProperty.Register("HasMainShift", typeof(bool), typeof(ScheduleViewerScheduleDayViewModel), new UIPropertyMetadata(false));
-
     }
 }

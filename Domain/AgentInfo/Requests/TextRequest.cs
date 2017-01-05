@@ -55,10 +55,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public override string GetDetails(CultureInfo cultureInfo)
         {
+	        var timeZone = Person.PermissionInformation.DefaultTimeZone();
             string text = string.Format(cultureInfo, "{0}, {1} - {2}",
                                         UserTexts.Resources.TextRequest,
-                                        Period.LocalStartDateTime.ToString("t", cultureInfo),
-                                        Period.LocalEndDateTime.ToString("t", cultureInfo));
+                                        Period.StartDateTimeLocal(timeZone).ToString("t", cultureInfo),
+                                        Period.EndDateTimeLocal(timeZone).ToString("t", cultureInfo));
             return text;
         }
 

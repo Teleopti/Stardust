@@ -11,12 +11,9 @@ namespace Teleopti.Ccc.DomainTest.Time
 	public class SetupDateTimePeriodToDefaultWorkHoursTest
     {
         private ISetupDateTimePeriod _target;
-        private DateTime _start = new DateTime(2001, 12, 27, 8, 0, 0, DateTimeKind.Utc);
-        private DateTime _end = new DateTime(2001, 12, 27, 17, 0, 0, DateTimeKind.Utc);
-        private TimeZoneInfo _timeZone;
-        private DateTimePeriod _targetDateTimePeriod;
-        private TimeZoneInfo _info;
-        private IScheduleDay _scheduleDay;
+		private readonly DateTimePeriod _targetDateTimePeriod = new DateTimePeriod(2001,12,27,2,2001,12,31,12);
+		private readonly TimeZoneInfo _info = TimeZoneInfo.CreateCustomTimeZone("MyOwn", TimeSpan.FromMinutes(12), "MyOwn", "MyOwn");
+		private IScheduleDay _scheduleDay;
 
         private DateTimePeriod _defaultLocal;
 
@@ -24,18 +21,11 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
             TimeSpan localStartTimeOfDay = TimeSpan.FromHours(6);
             TimeSpan localEndTimeOfDay = TimeSpan.FromHours(13);
-
-            _timeZone = TimeZoneInfo.CreateCustomTimeZone("MyOwn", TimeSpan.FromMinutes(12), "MyOwn", "MyOwn");
-            _info = (_timeZone);
-            _start = new DateTime(2001, 12, 27, 2, 0, 0, DateTimeKind.Utc);
-            _end = new DateTime(2001, 12, 31, 12, 0, 0, DateTimeKind.Utc);
-            
-            var timePeriod = new DateTimePeriod(_start, _end);
-            _defaultLocal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(timePeriod.LocalStartDateTime.Add(localStartTimeOfDay), timePeriod.LocalStartDateTime.Add(localEndTimeOfDay));
+			
+	        var startDateTimeLocal = _targetDateTimePeriod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+	        _defaultLocal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(localStartTimeOfDay), startDateTimeLocal.Add(localEndTimeOfDay));
             _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, null, _info);
-            _targetDateTimePeriod = new DateTimePeriod(_start, _end);
             _scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
-
         }
 
         [Test]
@@ -46,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Time
 			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, (TimeZoneInfo.Utc));
 
             DateTimePeriod result = _target.Period;
-            Assert.AreEqual(_defaultLocal.LocalStartDateTime.TimeOfDay, result.StartDateTime.TimeOfDay);
-            Assert.AreEqual(_defaultLocal.LocalEndDateTime.TimeOfDay, result.EndDateTime.TimeOfDay);
-
+	        var localPeriod = _defaultLocal.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+            Assert.AreEqual(localPeriod.StartTime, result.StartDateTime.TimeOfDay);
+            Assert.AreEqual(localPeriod.EndTime, result.EndDateTime.TimeOfDay);
         }
 
         [Test]
@@ -58,10 +48,11 @@ namespace Teleopti.Ccc.DomainTest.Time
 			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, _info);
 
             DateTimePeriod p = _target.Period;
-            Assert.AreEqual(_defaultLocal.LocalStartDateTime.TimeOfDay, p.StartDateTimeLocal(_info).TimeOfDay);
-            Assert.AreEqual(_defaultLocal.LocalEndDateTime.TimeOfDay, p.EndDateTimeLocal(_info).TimeOfDay);
-
+	        var localPeriod = _defaultLocal.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+            Assert.AreEqual(localPeriod.StartTime, p.StartDateTimeLocal(_info).TimeOfDay);
+            Assert.AreEqual(localPeriod.EndTime, p.EndDateTimeLocal(_info).TimeOfDay);
         }
+
         [Test]
         public void VerifyDateIsFromTheStartDate()
         {

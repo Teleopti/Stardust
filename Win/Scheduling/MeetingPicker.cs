@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 TupleItem comboItem = new TupleItem();
                 comboItem.ValueMember = meeting.BelongsToMeeting;
-                comboItem.Text = meeting.BelongsToMeeting.GetSubject(new NoFormatting()) + "  " + meeting.Period.LocalStartDateTime.ToShortTimeString() +
-                    " - " + meeting.Period.LocalEndDateTime.ToShortTimeString();
+	            var period = meeting.Period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+                comboItem.Text = meeting.BelongsToMeeting.GetSubject(new NoFormatting()) + "  " + period.ToShortTimeString();
                 comboBoxMeetings.Items.Add(comboItem);
             }
 

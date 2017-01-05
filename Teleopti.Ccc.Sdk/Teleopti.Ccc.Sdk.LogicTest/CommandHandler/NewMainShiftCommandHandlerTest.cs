@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	        var activityLayerDto = new ActivityLayerDto();
 	        var period = new DateTimePeriodDto();
 	        var dtp = new DateTimePeriod(2013, 1, 1, 2013, 1, 1);
-	        period.LocalStartDateTime = dtp.LocalStartDateTime;
-	        period.LocalEndDateTime = dtp.LocalEndDateTime;
+	        period.LocalStartDateTime = dtp.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+	        period.LocalEndDateTime = dtp.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
 			activityLayerDto.Period = period;
 			_activityLayerDtoCollection.Add(new ActivityLayerDto());
             _mainShiftActivityLayerCollection = new Collection<IMainShiftLayer>();

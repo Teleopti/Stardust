@@ -1186,9 +1186,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ExpectCallsViewBaseOnVerifyAddOvertimeTheNewWay(period);
             ExpectCallsDialogOnVerifyAddOvertimeTheNewWay(period);
             ExpectCallsScheduleDayOnVerifyAddOvertimeTheNewWay();
-            Expect.Call(_day1.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
+            Expect.Call(_day1.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             Expect.Call(_ass.CheckRestrictions);
-            //Expect.Call(_ass.Period).Return(period);
 	        Expect.Call(_ass.MainActivities()).Return(new List<IMainShiftLayer>());
 	        Expect.Call(_ass.OvertimeActivities()).Return(new List<IOvertimeShiftLayer>());
 
@@ -1271,7 +1270,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
             var dialog = _mocks.StrictMock<IAddOvertimeViewModel>();
-            Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
+            Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
 			Expect.Call(_viewBase.CreateAddOvertimeViewModel( null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(schedulePart.PersonAssignment()).Return(ass);
@@ -1299,7 +1298,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(schedulePart.PersonAssignment()).Return(ass);
 			Expect.Call(ass.MainActivities()).Return(new List<IMainShiftLayer>());
-            Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
+            Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
             Expect.Call(person.IsAgent(new DateOnly(2001, 1, 1))).Return(false);
@@ -1359,7 +1358,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePartDayOne, person);
                 Expect.Call(schedulePartDayTwo.Person).Return((person));
-                Expect.Call(schedulePartDayOne.Period).Return(defaultPeriod).Repeat.Twice();
+                Expect.Call(schedulePartDayOne.Period).Return(defaultPeriod);
                 Expect.Call(schedulePartDayOne.SignificantPart()).Return(SchedulePartView.None);
                 AddActivityDialogExpectations(dialog, defaultPeriod);
                 Expect.Call(() => schedulePartDayOne.CreateAndAddActivity(null, new DateTimePeriod(), null)).IgnoreArguments();

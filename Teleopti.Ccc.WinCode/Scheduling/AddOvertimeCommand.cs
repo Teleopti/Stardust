@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         private IList<IMultiplicatorDefinitionSet> _definitionSets;
 	    private readonly IEditableShiftMapper _editableShiftMapper;
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		
 		public AddOvertimeCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IMultiplicatorDefinitionSet> definitionSets, IList<IScheduleDay> scheduleParts, IEditableShiftMapper editableShiftMapper)
             : base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.SelectedSchedules())
 		{
@@ -36,14 +35,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var defaultPeriod = new DateTimePeriod();
             if (scheduleDay != null)
             {
-                defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                        scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(8)),
-                        scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(17)));
+	            var startDateTimeLocal = scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+	            defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+                        startDateTimeLocal.Add(TimeSpan.FromHours(8)),
+                        startDateTimeLocal.Add(TimeSpan.FromHours(17)));
             }
             return defaultPeriod;    
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		
         public override void Execute()
         {
             DateTimePeriod period;

@@ -74,29 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Time
                         TimeSpan.FromHours(7))),
                 _period.TimePeriod((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))));
         }
-
-        /// <summary>
-        /// Verifies the can get time period with time zone.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-02-18
-        /// </remarks>
-        [Test]
-        public void VerifyCanGetLocalTimePeriod()
-        {
-            _period = new DateTimePeriod(
-                new DateTime(2008, 2, 1, 2, 0, 0, DateTimeKind.Utc),
-                new DateTime(2008, 2, 2, 6, 0, 0, DateTimeKind.Utc));
-
-            Assert.AreEqual(
-                new TimePeriod(
-                    TimeSpan.FromHours(3),
-                    TimeSpan.FromDays(1).Add(
-                        TimeSpan.FromHours(7))),
-                _period.TimePeriodLocal());
-        }
-
+		
         /// <summary>
         /// Verifies that start datetime and end datetime are set using create.
         /// </summary>
@@ -421,34 +399,15 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(expPeriod.StartDateTime, _period.ChangeStartTime(new TimeSpan(0, -1, 0, 0, 0)).StartDateTime);
             Assert.AreEqual(expPeriod.EndDateTime, _period.ChangeStartTime(new TimeSpan(0, -1, 0, 0, 0)).EndDateTime);
         }
-
-        /// <summary>
-        /// Verifies the local date time properties works.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-23
-        /// </remarks>
-        [Test]
-        public void VerifyLocalDateTimesWorks()
-        {
-            DateTime expectedLocalStart =
-                TimeZoneInfo.ConvertTimeFromUtc(_start, StateHolderReader.Instance.StateReader.UserTimeZone);
-            DateTime expectedLocalEnd =
-                TimeZoneInfo.ConvertTimeFromUtc(_end, StateHolderReader.Instance.StateReader.UserTimeZone);
-
-            Assert.AreEqual(expectedLocalStart, _period.LocalStartDateTime);
-            Assert.AreEqual(expectedLocalEnd, _period.LocalEndDateTime);
-        }
-
+		
         [Test]
         public void VerifyDateTimeLocalWorks()
         {
             TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.UserTimeZone;
             DateTime expectedLocalStart =
-                TimeZoneInfo.ConvertTimeFromUtc(_start, (TimeZoneInfo)timeZoneInfo);
+                TimeZoneInfo.ConvertTimeFromUtc(_start, timeZoneInfo);
             DateTime expectedLocalEnd =
-                TimeZoneInfo.ConvertTimeFromUtc(_end, (TimeZoneInfo)timeZoneInfo);
+                TimeZoneInfo.ConvertTimeFromUtc(_end, timeZoneInfo);
 
             Assert.AreEqual(expectedLocalStart, _period.StartDateTimeLocal(timeZoneInfo));
             Assert.AreEqual(expectedLocalEnd, _period.EndDateTimeLocal(timeZoneInfo));
@@ -615,7 +574,8 @@ namespace Teleopti.Ccc.DomainTest.Time
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(0, 30, 0), wholeDays[1].ElapsedTime());
-            Assert.AreEqual(wholeDays[0].LocalStartDateTime.TimeOfDay, wholeDays[1].LocalStartDateTime.TimeOfDay);
+	        Assert.AreEqual(wholeDays[0].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay,
+		        wholeDays[1].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
 
             startDate1 = new DateTime(2008, 3, 29, 12, 00, 0, DateTimeKind.Utc);
             endDate1 = new DateTime(2008, 3, 30, 13, 30, 0, DateTimeKind.Utc);
@@ -625,7 +585,8 @@ namespace Teleopti.Ccc.DomainTest.Time
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(2, 30, 0), wholeDays[1].ElapsedTime());
-            Assert.AreEqual(wholeDays[0].LocalStartDateTime.TimeOfDay, wholeDays[1].LocalStartDateTime.TimeOfDay);
+	        Assert.AreEqual(wholeDays[0].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay,
+		        wholeDays[1].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
         }
 
         [Test]
@@ -761,13 +722,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
             Assert.AreEqual(_start + " - " + _end, _period.ToString());
         }
-
-        [Test]
-        public void VerifyLocalDateString()
-        {
-            Assert.AreEqual(_period.LocalStartDateTime.ToShortDateString() + " - " + _period.LocalEndDateTime.AddDays(-1).ToShortDateString(), _period.LocalDateString);
-        }
-
+		
         [Test]
         public void VerifyCanGetListOfPeriodsDependingOnTimeSpan()
         {

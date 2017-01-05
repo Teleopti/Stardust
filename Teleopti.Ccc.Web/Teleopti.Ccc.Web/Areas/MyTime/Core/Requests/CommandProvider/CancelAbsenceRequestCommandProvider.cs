@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider
 		public CancelAbsenceRequestCommand CancelAbsenceRequest (Guid personRequestId)
 		{
 
-			var command = new CancelAbsenceRequestCommand()
+			var command = new CancelAbsenceRequestCommand
 			{
 				PersonRequestId = personRequestId,
 				ErrorMessages = new List<string>()
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider
 			if (workflowControlSet != null)
 			{
 				var threshold = workflowControlSet.AbsenceRequestCancellationThreshold ?? 0;
-				var minDate = new DateOnly(personRequest.Request.Period.LocalStartDateTime.AddDays(-threshold));
+				var minDate = new DateOnly(personRequest.Request.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).AddDays(-threshold));
 
 				if (DateOnly.Today > minDate )
 				{

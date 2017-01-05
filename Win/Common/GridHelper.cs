@@ -1068,7 +1068,7 @@ namespace Teleopti.Ccc.Win.Common
                     {
                         IMeeting selectedMeeting;
                         using (MeetingPicker meetingPicker = new MeetingPicker(clip.ClipValue.Person.Name + " " +
-                            clip.ClipValue.Period.LocalStartDateTime.ToShortDateString(), personMeetingsFromClip))
+                            clip.ClipValue.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortDateString(), personMeetingsFromClip))
                         {
                             meetingPicker.ShowDialog();
                             selectedMeeting = meetingPicker.SelectedMeeting();

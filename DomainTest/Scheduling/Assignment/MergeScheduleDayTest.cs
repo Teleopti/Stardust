@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -744,7 +743,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.Add(absence);
 
 			destination.Merge(source, false);
-			Assert.AreEqual(periodAbsence.LocalStartDateTime.TimeOfDay, destination.PersonAbsenceCollection()[0].Period.LocalStartDateTime.TimeOfDay);
+			Assert.AreEqual(periodAbsence.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay, destination.PersonAbsenceCollection()[0].Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
 		}
 
 		[Test]

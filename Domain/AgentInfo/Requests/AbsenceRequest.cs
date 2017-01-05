@@ -86,12 +86,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public override string GetDetails(CultureInfo cultureInfo)
         {
             string text = Absence.Name;
-            if (!Period.LocalStartDateTime.AddDays(1).AddSeconds(-1).Equals(Period.LocalEndDateTime))
+	        var timeZone = Person.PermissionInformation.DefaultTimeZone();
+	        var localStart = Period.StartDateTimeLocal(timeZone);
+	        var localEnd = Period.EndDateTimeLocal(timeZone);
+	        if (!localStart.AddDays(1).AddSeconds(-1).Equals(localEnd))
             {
                 text = string.Format(cultureInfo, "{0}, {1} - {2}",
                                      Absence.Name,
-                                     Period.LocalStartDateTime.ToString("t",cultureInfo),
-                                     Period.LocalEndDateTime.ToString("t", cultureInfo));
+                                     localStart.ToString("t",cultureInfo),
+                                     localEnd.ToString("t", cultureInfo));
             }
             return text;
         }

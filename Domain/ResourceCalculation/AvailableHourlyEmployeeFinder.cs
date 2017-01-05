@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (yesterday.SignificantPartForDisplay() != SchedulePartView.MainShift)
 				return string.Empty;
 
-			return yesterday.ProjectionService().CreateProjection().Period().Value.TimePeriodLocal().ToShortTimeString();
+			return yesterday.ProjectionService().CreateProjection().Period().Value.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
 		}
 
 		private string workTimesTomorrow(IPerson person)
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (tomorrow.SignificantPartForDisplay() != SchedulePartView.MainShift)
 				return string.Empty;
 
-			return tomorrow.ProjectionService().CreateProjection().Period().Value.TimePeriodLocal().ToShortTimeString();
+			return tomorrow.ProjectionService().CreateProjection().Period().Value.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
 		}
 
 		private string availabilityTimes(IScheduleDay targetScheduleDay)

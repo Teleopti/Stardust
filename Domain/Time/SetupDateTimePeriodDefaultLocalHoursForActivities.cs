@@ -7,14 +7,13 @@ namespace Teleopti.Ccc.Domain.Time
     public class SetupDateTimePeriodDefaultLocalHoursForActivities : ISetupDateTimePeriod
     {
 	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-	    private readonly DateTimePeriod _period;
-        private DateTimePeriod _tp;
+	    private DateTimePeriod _tp;
 
         public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
         {
 	        _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 	        HasDefaultValue = false;
-	        _period = GetPeriodFromScheduleDays(scheduleDay);
+	        Period = getPeriodFromScheduleDays(scheduleDay);
         }
 
 		public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, DateTimePeriod defaultPeriod)
@@ -22,12 +21,16 @@ namespace Teleopti.Ccc.Domain.Time
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_tp = defaultPeriod;
             HasDefaultValue = true;
-            _period = GetPeriodFromScheduleDays(scheduleDay);
+            Period = getPeriodFromScheduleDays(scheduleDay);
         }
 
-        private DateTimePeriod GetPeriodFromScheduleDays(IScheduleDay scheduleDay)
+        private DateTimePeriod getPeriodFromScheduleDays(IScheduleDay scheduleDay)
         {
-            var defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(8)), scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(17)), _currentTeleoptiPrincipal.Current().Regional.TimeZone);
+	        var defaultPeriod =
+		        TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+			        scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).Add(TimeSpan.FromHours(8)),
+			        scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).Add(TimeSpan.FromHours(17)),
+			        _currentTeleoptiPrincipal.Current().Regional.TimeZone);
             var dateTimePeriod = HasDefaultValue ? _tp : defaultPeriod;
             var setupDateTimePeriodToDefaultLocalHours =
                 new SetupDateTimePeriodToDefaultLocalHours(
@@ -38,12 +41,9 @@ namespace Teleopti.Ccc.Domain.Time
             return setupDateTimePeriodToDefaultLocalHours.Period;
         }
 
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
+        public DateTimePeriod Period { get; }
 
-        protected static bool HasDefaultValue
+	    protected static bool HasDefaultValue
         {
             get;
             private set;

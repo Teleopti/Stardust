@@ -70,16 +70,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             TimeZoneInfo sourceTimeZone = source.TimeZone;
             TimeZoneInfo targetTimeZone = target.TimeZone;
-            return targetTimeZone.GetUtcOffset(target.Period.LocalStartDateTime)
-                    .Subtract(sourceTimeZone.GetUtcOffset(source.Period.LocalStartDateTime));
+            return targetTimeZone.GetUtcOffset(TimeZoneHelper.ConvertFromUtc(target.Period.StartDateTime,TimeZoneHelper.CurrentSessionTimeZone))
+                    .Subtract(sourceTimeZone.GetUtcOffset(TimeZoneHelper.ConvertFromUtc(source.Period.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone)));
         }
 
 		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
 		{
 			var loggedOnPersonsTimezone = TimeZoneGuard.Instance.CurrentTimeZone();
 			
-			var sourceIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(sourceShiftPeriod.LocalStartDateTime);
-			var targetIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(targetShiftPeriod.LocalStartDateTime);
+			var sourceIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone));
+			var targetIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(targetShiftPeriod.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone));
 
 			if (sourceIsDaylightSavingTime == targetIsDaylightSavingTime)
 				return TimeSpan.Zero;

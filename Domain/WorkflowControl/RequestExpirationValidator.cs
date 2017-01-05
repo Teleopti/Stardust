@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -27,12 +26,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public IAbsenceRequestValidator CreateInstance()
 		{
-			throw new NotImplementedException();
+			return new RequestExpirationValidator(_expiredRequestValidator);
 		}
 
 		public override bool Equals(object obj)
 		{
-			var validator = obj as BudgetGroupHeadCountValidator;
+			var validator = obj as RequestExpirationValidator;
 			return validator != null;
 		}
 

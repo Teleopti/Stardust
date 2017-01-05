@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -86,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			if (personAbsenceAccount != null)
 			{
 				var accountForPersonAbsence = personAbsenceAccount.Find (absenceRequest.Absence);
-				var affectedAccounts = accountForPersonAbsence?.Find (new DateOnlyPeriod (new DateOnly (absenceRequest.Period.LocalStartDateTime), new DateOnly(absenceRequest.Period.LocalEndDateTime)));
+				var affectedAccounts = accountForPersonAbsence?.Find (absenceRequest.Period.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone));
 
 				if (affectedAccounts != null)
 				{

@@ -12,57 +12,22 @@ namespace Teleopti.Interfaces.Domain
     [Serializable]
 	public struct DateTimePeriod
     {
-        private MinMax<DateTime> period;
+        private readonly MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
 
         /// <summary>
         /// Gets the start date time in UTC.
         /// </summary>
         /// <value>The start date time.</value>
-        public DateTime StartDateTime
-        {
-            get { return period.Minimum; }
-        }
+        public DateTime StartDateTime => period.Minimum;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the end date time in UTC.
         /// </summary>
         /// <value>The end date time.</value>
-        public DateTime EndDateTime
-        {
-            get { return period.Maximum; }
-        }
-
-        /// <summary>
-        /// Gets the local start date time.
-        /// </summary>
-        /// <value>The local start date time.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-23
-        /// </remarks>
-        public DateTime LocalStartDateTime
-        {
-            get { return TimeZoneHelper.ConvertFromUtc(StartDateTime); }
-        }
-
-        /// <summary>
-        /// Gets the local end date time.
-        /// </summary>
-        /// <value>The local end date time.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-23
-        /// </remarks>
-        public DateTime LocalEndDateTime
-        {
-            get
-            {
-                return TimeZoneHelper.ConvertFromUtc(EndDateTime);
-            }
-        }
-
-        /// <summary>
+        public DateTime EndDateTime => period.Maximum;
+		
+	    /// <summary>
         /// Starts the date time local.
         /// </summary>
         /// <param name="timeZoneInfo">The time zone info.</param>
@@ -570,37 +535,7 @@ namespace Teleopti.Interfaces.Domain
                 localEndDate = localStartDate;
             return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
         }
-
-        /// <summary>
-        /// Gets the local date string.
-        /// </summary>
-        /// <value>The local date string.</value>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2008-03-06
-        /// </remarks>
-        public string LocalDateString
-        {
-            get
-            {
-                return
-                    LocalStartDateTime.ToShortDateString() + DATETIME_SEPARATOR + LocalEndDateTime.AddDays(-1).ToShortDateString();
-            }
-        }
-
-        /// <summary>
-        /// The local times as time period.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-02-18
-        /// </remarks>
-        public TimePeriod TimePeriodLocal()
-        {
-            return TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
-        }
-
+		
         /// <summary>
         /// Get the time period
         /// </summary>
@@ -610,7 +545,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-02-18
         /// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public TimePeriod TimePeriod(TimeZoneInfo timeZone)
         {
         	TimeSpan startTimeOfDay = StartDateTimeLocal(timeZone).TimeOfDay;

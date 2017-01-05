@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			if (requests.Any())
 			{
 				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request)).ToList();
-				var maximumRequestDate = requests.Max(r => r.Request.Period.LocalEndDateTime);
+				var maximumRequestDate = requests.Max(r => r.Request.Period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
 				if (maximumRequestDate > requestListModel.MaximumDateTime)
 				{
 					requestListModel.MaximumDateTime = maximumRequestDate;

@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.DisplayDescription() + "  " +
-                                                      layer.Period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
+                                                      layer.Period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.DisplayDescription() + "  " +
-                                                      period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
+                                                      period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.DisplayDescription() + "  " +
-                                                      period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
+                                                      period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 

@@ -239,24 +239,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         //Hmm. looks a bit vidrish, how do we do this better, move to domain in some way?
         private string ResolveRequestDate()
         {
-            var localStart = _personRequest.Request.Period.LocalStartDateTime;
-            var localEnd = _personRequest.Request.Period.LocalEndDateTime;
-            string text = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", localStart.ToShortDateString(), localEnd.ToShortDateString());
-            if (localStart.Date.Equals(localEnd.AddMinutes(-1).Date))
+            var localPeriod = _personRequest.Request.Period.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone);
+            string text = localPeriod.DateString;
+            if (localPeriod.DayCount() == 1)
             {
-                text = localStart.ToShortDateString();
+                text = localPeriod.StartDate.ToShortDateString();
             }
 
             var shiftTradeRequest = _personRequest.Request as IShiftTradeRequest;
-            if (shiftTradeRequest != null)
-            {
-                if (shiftTradeRequest.ShiftTradeSwapDetails.Count > 1)
-                {
-                    string multiple = Resources.MultipleValuesParanteses;
-                    text = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", localStart.ToShortDateString(), multiple);
-                }
-            }
-            return text;
+	        if (shiftTradeRequest?.ShiftTradeSwapDetails.Count > 1)
+	        {
+		        string multiple = Resources.MultipleValuesParanteses;
+		        text = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", localPeriod.StartDate.ToShortDateString(), multiple);
+	        }
+	        return text;
         }
 
         public bool CausesBrokenBusinessRule

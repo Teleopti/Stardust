@@ -8,32 +8,27 @@ namespace Teleopti.Ccc.Domain.Time
     /// </summary>
     public class SetupDateTimePeriodToDefaultLocalHours : ISetupDateTimePeriod
     {
-        private DateTimePeriod _period;
-
-        public SetupDateTimePeriodToDefaultLocalHours(DateTimePeriod defaultLocal, IScheduleDay scheduleDay, TimeZoneInfo info)
+	    public SetupDateTimePeriodToDefaultLocalHours(DateTimePeriod defaultLocal, IScheduleDay scheduleDay, TimeZoneInfo info)
         {
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(defaultLocal.LocalStartDateTime, defaultLocal.LocalEndDateTime, info);
+            Period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(defaultLocal.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone), defaultLocal.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone), info);
 
             createFromScheduleDay(scheduleDay);
         }
 
         private void createFromScheduleDay(IScheduleDay scheduleDay)
         {
-            if (ScheduleDayHasPersonAssignment(scheduleDay))
+            if (scheduleDayHasPersonAssignment(scheduleDay))
             {
                 var timePeriod = scheduleDay.PersonAssignment().Period;
-                _period = new DateTimePeriod(timePeriod.EndDateTime, timePeriod.EndDateTime.AddHours(1));
+                Period = new DateTimePeriod(timePeriod.EndDateTime, timePeriod.EndDateTime.AddHours(1));
             }
         }
 
-        private static bool ScheduleDayHasPersonAssignment(IScheduleDay scheduleDay)
+        private static bool scheduleDayHasPersonAssignment(IScheduleDay scheduleDay)
         {
-            return scheduleDay != null && scheduleDay.PersonAssignment() != null;
+            return scheduleDay?.PersonAssignment() != null;
         }
 
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
+        public DateTimePeriod Period { get; private set; }
     }
 }

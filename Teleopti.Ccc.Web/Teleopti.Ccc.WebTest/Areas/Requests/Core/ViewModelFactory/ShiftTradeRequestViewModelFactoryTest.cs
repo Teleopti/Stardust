@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 
 			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(input.StartDate.Date);
-			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(shiftTradeWithLaterEndDate.Request.Period.LocalEndDateTime);
+			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(shiftTradeWithLaterEndDate.Request.Period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
 		}
 
 		[Test]

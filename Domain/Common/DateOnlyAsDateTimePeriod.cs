@@ -15,12 +15,9 @@ namespace Teleopti.Ccc.Domain.Common
             _sourceTimeZone = sourceTimeZone;
         }
 
-        public DateOnly DateOnly
-        {
-            get { return _dateOnly; }
-        }
+        public DateOnly DateOnly => _dateOnly;
 
-        public DateTimePeriod Period()
+	    public DateTimePeriod Period()
         {
             if(!_period.HasValue)
             {

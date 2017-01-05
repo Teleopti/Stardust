@@ -64,13 +64,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
-					.Return(dateTimePeriodDay1.TimePeriodLocal());
+					.Return(dateTimePeriodDay1.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				//compare with both dates
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
-					.Return(dateTimePeriodDay1.TimePeriodLocal());
+					.Return(dateTimePeriodDay1.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
-					.Return(dateTimePeriodDay2.TimePeriodLocal());
+					.Return(dateTimePeriodDay2.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 			}
 			Assert.IsFalse(_target.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator));
 		}
@@ -102,13 +102,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
-					.Return(dateTimePeriodDay1.TimePeriodLocal());
+					.Return(dateTimePeriodDay1.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				//compare with both dates
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
-					.Return(dateTimePeriodDay1.TimePeriodLocal());
+					.Return(dateTimePeriodDay1.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
-					.Return(dateTimePeriodDay2.TimePeriodLocal());
+					.Return(dateTimePeriodDay2.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 			}
 			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator));
 		}
@@ -140,11 +140,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
-					.Return(dateTimePeriodDay1.TimePeriodLocal());
+					.Return(dateTimePeriodDay1.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				//compare with both dates
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
-					.Return(dateTimePeriodDay1.TimePeriodLocal());
+					.Return(dateTimePeriodDay1.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(null);
 			}
@@ -180,13 +180,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
 					.Return(null); //first date in block is closed
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
-					.Return(dateTimePeriodDay2.TimePeriodLocal());
+					.Return(dateTimePeriodDay2.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				//compare with both dates
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
 					.Return(null);
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
-					.Return(dateTimePeriodDay2.TimePeriodLocal());
+					.Return(dateTimePeriodDay2.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
 			}
 			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator));
 		}

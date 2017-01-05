@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _period = new DateTimePeriod(new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
                                          new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc));
 
-            target = new TextRequest(_period);
+	        var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			target = (TextRequest) new PersonRequest(person, new TextRequest(_period)).Request;
             _description = "Text";
             target.RequestTypeDescription = _description;
         }
