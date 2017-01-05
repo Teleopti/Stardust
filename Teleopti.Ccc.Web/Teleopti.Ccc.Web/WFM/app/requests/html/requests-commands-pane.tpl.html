@@ -69,7 +69,8 @@
 		</ul>
 	</div>
 </div>
-<div ng-cloak class="modal-box">
+
+<div ng-cloak class="modal-box" ng-if="!requestsCommandsPane.isShiftTradeViewActive && requestsCommandsPane.ShowCancelAbsenceConfirmationModal">
 	<div ng-cloak ng-show="requestsCommandsPane.ShowCancelAbsenceConfirmationModal">
 		<div class="modalbg">
 			<div class="dialog">
@@ -89,6 +90,7 @@
 		</div>
 	</div>
 </div>
+
 <requests-reply-message approve="requestsCommandsPane.approveRequests(message)"
 						deny="requestsCommandsPane.denyRequests(message)"
 						cancel="requestsCommandsPane.cancelRequests(message)"
@@ -98,79 +100,90 @@
 						show-original-message="requestsCommandsPane.showOriginalMessage"></requests-reply-message>
 
 <requests-site-open-hours show-site="requestsCommandsPane.shouldShowSiteOpenHour" ng-if="requestsCommandsPane.shouldShowSiteOpenHour"></requests-site-open-hours>
-<modal-dialog show="requestsCommandsPane.showProcessWaitlistModal" ng-cloak>
-	<h1 class="modal-title">{{'WaitlistPeriod' | translate}}</h1>
-	<div class="modal-inner-content">
-		<h2>{{'ProcessWaitlistRequestsReminder' | translate}}</h2>
-		<form name="form">
-			<div class="modal-inner-content">
-				<div class="text-center">
-					<date-range-picker name="WaitlistRange" ng-model="requestsCommandsPane.waitlistPeriod"></date-range-picker>
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class="modal-actions">
-		<aside>
-			<button class="wfm-btn wfm-btn-invis-default" ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">{{ 'Cancel' | translate }}</button>
-			<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="form.WaitlistRange.$invalid" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsCommandsPane.processWaitlistRequests()">{{ 'Run' | translate }}</button>
-		</aside>
-	</div>
-</modal-dialog>
 
-<modal-dialog show="requestsCommandsPane.showApproveBasedOnRulesPanel" ng-cloak>
-	<div class="modalbg">
-		<div class="dialog">
-			<h1 class="modal-title">
-				{{'SelectBusinessRulesWithColon'|translate}}
-			</h1>
-			<div class="modal-inner-content">
-				<div ng-repeat="rule in requestsCommandsPane.allBusinessRulesForApproving">
-					<div class="wfm-checkbox" ng-if="rule.Enabled">
-						<input type="checkbox" id="{{'checkbox-' + rule.Name}}" ng-model="rule.Checked" />
-						<label for="{{'checkbox-' + rule.Name}}">
-							<span class="wfm-checkbox-toggle"></span>
-							<span class="wfm-checkbox-label">{{rule.Description}}</span>
-						</label>
+<div ng-if="!requestsCommandsPane.isShiftTradeViewActive && requestsCommandsPane.showProcessWaitlistModal">
+	<modal-dialog show="requestsCommandsPane.showProcessWaitlistModal" ng-cloak>
+		<h1 class="modal-title">{{'WaitlistPeriod' | translate}}</h1>
+		<div class="modal-inner-content">
+			<h2>{{'ProcessWaitlistRequestsReminder' | translate}}</h2>
+			<form name="form">
+				<div class="modal-inner-content">
+					<div class="text-center">
+						<date-range-picker name="WaitlistRange" ng-model="requestsCommandsPane.waitlistPeriod"></date-range-picker>
 					</div>
 				</div>
-			</div>
-			<div class="modal-actions">
-				<aside>
-					<button ng-click="requestsCommandsPane.toggleApproveBasedOnRulesPanel()"
-							class="wfm-btn wfm-btn-invis-default">
-						{{'Back'|translate}}
-					</button>
-					<button ng-disabled="!requestsCommandsPane.anyRuleSelected()"
-							ng-click="requestsCommandsPane.approveBasedOnBusinessRules()"
-							ng-class="requestsCommandsPane.anyRuleSelected() ? 'wfm-btn-invis-default' : 'wfm-btn-invis-disabled'"
-							class="wfm-btn">
-						{{'Approve'|translate}}
-					</button>
-				</aside>
+			</form>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">{{ 'Cancel' | translate }}</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="form.WaitlistRange.$invalid" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsCommandsPane.processWaitlistRequests()">{{ 'Run' | translate }}</button>
+			</aside>
+		</div>
+	</modal-dialog>
+</div>
+
+<div ng-if="requestsCommandsPane.isApproveBasedOnBusinessRulesEnabled() && requestsCommandsPane.showApproveBasedOnRulesPanel">
+	<modal-dialog show="requestsCommandsPane.showApproveBasedOnRulesPanel" ng-cloak>
+		<div class="modalbg">
+			<div class="dialog">
+				<h1 class="modal-title">
+					{{'SelectBusinessRulesWithColon'|translate}}
+				</h1>
+				<div class="modal-inner-content">
+					<div ng-repeat="rule in requestsCommandsPane.allBusinessRulesForApproving">
+						<div class="wfm-checkbox" ng-if="rule.Enabled">
+							<input type="checkbox" id="{{'checkbox-' + rule.Name}}" ng-model="rule.Checked" />
+							<label for="{{'checkbox-' + rule.Name}}">
+								<span class="wfm-checkbox-toggle"></span>
+								<span class="wfm-checkbox-label">{{rule.Description}}</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="requestsCommandsPane.toggleApproveBasedOnRulesPanel()"
+								class="wfm-btn wfm-btn-invis-default">
+							{{'Back'|translate}}
+						</button>
+						<button ng-disabled="!requestsCommandsPane.anyRuleSelected()"
+								ng-click="requestsCommandsPane.approveBasedOnBusinessRules()"
+								ng-class="requestsCommandsPane.anyRuleSelected() ? 'wfm-btn-invis-default' : 'wfm-btn-invis-disabled'"
+								class="wfm-btn">
+							{{'Approve'|translate}}
+						</button>
+					</aside>
+				</div>
 			</div>
 		</div>
-	</div>
-</modal-dialog>
-<modal-dialog show="requestsCommandsPane.shouldShowResourceCalculations" ng-cloak>
-	<h1 class="modal-title">Resource calculations</h1>
-	<div class="modal-inner-content">
-		<h2>The read model was last calculated: {{requestsCommandsPane.lastCaluclated}}</h2>
-	</div>
-	<div class="modal-actions">
-		<aside>
-			<button class="wfm-btn wfm-btn-invis-primary" ng-click="requestsCommandsPane.triggerResourceCalculate()">Trigger calculation manually</button>
-		</aside>
-	</div>
-</modal-dialog>
-<modal-dialog class="requests-allowance" show='requestsCommandsPane.budgetAllowanceDetailIsVisible' ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail" ng-cloak on-close="requestsCommandsPane.onCloseDialog()">
-	<h1 class="modal-title">{{"ViewAllowance"|translate}}</h1>
-	<div class="modal-inner-content">
-		<requests-budget-allowance></requests-budget-allowance>
-	</div>
-	<div class="modal-actions">
-		<aside>
-			<button class="wfm-btn wfm-btn-invis-primary" ng-click="requestsCommandsPane.budgetAllowanceDetailIsVisible=false;">{{"Close"|translate}}</button>
-		</aside>
-	</div>
-</modal-dialog>
+	</modal-dialog>
+</div>
+
+<div ng-if="requestsCommandsPane.isUpdateResourceCalculationsEnabled && requestsCommandsPane.shouldShowResourceCalculations">
+	<modal-dialog show="requestsCommandsPane.shouldShowResourceCalculations" ng-cloak>
+		<h1 class="modal-title">Resource calculations</h1>
+		<div class="modal-inner-content">
+			<h2>The read model was last calculated: {{requestsCommandsPane.lastCaluclated}}</h2>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="requestsCommandsPane.triggerResourceCalculate()">Trigger calculation manually</button>
+			</aside>
+		</div>
+	</modal-dialog>
+</div>
+
+<div ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail && requestsCommandsPane.budgetAllowanceDetailIsVisible">
+	<modal-dialog class="requests-allowance" show='requestsCommandsPane.budgetAllowanceDetailIsVisible' on-close="requestsCommandsPane.onCloseDialog()" ng-cloak>
+		<h1 class="modal-title">{{"ViewAllowance"|translate}}</h1>
+		<div class="modal-inner-content">
+			<requests-budget-allowance></requests-budget-allowance>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="requestsCommandsPane.budgetAllowanceDetailIsVisible=false;">{{"Close"|translate}}</button>
+			</aside>
+		</div>
+	</modal-dialog>
+</div>

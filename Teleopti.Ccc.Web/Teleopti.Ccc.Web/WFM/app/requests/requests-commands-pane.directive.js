@@ -69,14 +69,14 @@
 			requestsDataService.getLastCaluclatedDateTime().success(function (result) {
 				result = moment(result).format('MMMM Do YYYY, h:mm:ss a');
 				vm.lastCaluclated = result;
-			})
+			});
 		}
 
 		function triggerResourceCalculate() {
 			requestsDataService.triggerResourceCalculate().success(function () {
 				NoticeService.success('Resource calculation successfully triggered ', 5000, true);
 				vm.shouldShowResourceCalculations = false;
-			})
+			});
 		}
 
 		function initWaitlistProcessPeriod() {
