@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
-
-
+		
 		[Test]
 		public void ShouldApproveRequestIfEnoughResourcesOnSkills()
 		{
@@ -568,7 +567,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
-
+		
 		[Test]
 		public void ShouldApproveRequestIfShovelAndHasUnsortedSkills()
 		{
