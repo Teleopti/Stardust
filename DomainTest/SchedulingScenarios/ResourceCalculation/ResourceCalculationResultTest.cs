@@ -54,8 +54,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < scheduledAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
-				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill).WithSchedulePeriodOneDay(date);
 				var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 				agents.Add(agent);
 				asses.Add(ass);
@@ -83,8 +82,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(0.8);
 				skillStaffPeriod.Payload.TaskData = new Task(7, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			}
-			var agent = new Person().WithId().WithPersonPeriod(skill);
-			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+			var agent = new Person().WithId().WithPersonPeriod(skill).WithSchedulePeriodOneDay(date);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] {agent}, new[] {ass}, skillDay);
 

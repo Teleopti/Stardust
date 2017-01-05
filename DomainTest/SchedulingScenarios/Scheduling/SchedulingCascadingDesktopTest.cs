@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB);
-				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
 				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 				agents.Add(agent);
 			}
@@ -89,8 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agents = new List<IPerson>();
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB);
-				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
 				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 				agents.Add(agent);
 			}
@@ -127,8 +125,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8,0,8,0,15), new TimePeriodWithSegment(16,0,16,0,15), new ShiftCategory("_").WithId()));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB);
-			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
 			agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent}, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 

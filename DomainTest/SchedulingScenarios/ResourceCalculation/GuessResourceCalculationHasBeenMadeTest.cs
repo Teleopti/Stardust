@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, TimeSpan.FromMinutes(60));
-			var agent = new Person().WithId().WithPersonPeriod(skill);
-			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+			var agent = new Person().WithId().WithPersonPeriod(skill).WithSchedulePeriodOneDay(date);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent }, new[] { ass }, skillDay);
 
@@ -44,8 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, TimeSpan.FromMinutes(60));
-			var agent = new Person().WithId().WithPersonPeriod(skill);
-			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+			var agent = new Person().WithId().WithPersonPeriod(skill).WithSchedulePeriodOneDay(date);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent}, new[] {ass}, skillDay);
 
