@@ -44,6 +44,7 @@
 		vm.budgetAllowanceDetailIsVisible = false;
 		vm.couldViewBudgetAllowanceDetail = toggleSvc.Wfm_Requests_ShowBudgetAllowanceDetail_41945;
 		vm.showBudgetAllowanceDetail = showBudgetAllowanceDetail;
+		vm.onCloseDialog = onCloseDialog;
 
 		initWaitlistProcessPeriod();
 
@@ -289,6 +290,13 @@
 
 		function isRequestsReplyMessageEnabled() {
 			return toggleSvc.Wfm_Requests_Reply_Message_39629 && !vm.isShiftTradeViewActive;
+		}
+
+		function onCloseDialog() {
+			var backdrops = angular.element(document).find('md-backdrop');
+			if (backdrops.length) {
+				backdrops[0].click();
+			}
 		}
 	}
 
