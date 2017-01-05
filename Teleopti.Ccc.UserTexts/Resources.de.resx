@@ -11632,7 +11632,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Einzelne</value>
   </data>
   <data name="LockBulletinBoardTrading" xml:space="preserve">
-    <value>Anzeigetafel - Windhundprinzip</value>
+    <value>Anzeigetafel - "First Come First Serve"-Basis</value>
   </data>
   <data name="ShiftCategoryValueColon" xml:space="preserve">
     <value>Schichtkategorie Wert</value>
@@ -12446,5 +12446,29 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
     <value>Wählen Sie eine Budgetgruppe</value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>Auf der Warteliste stehend</value>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>Bericht erstellen</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>Sie müssen ein Szenario für den Import wählen</value>
+  </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>Dem Administrator senden</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Filter ausblenden</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Filter zeigen</value>
+  </data>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>Resourcenberechnung aktualisieren</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Performance</value>
   </data>
 </root>
