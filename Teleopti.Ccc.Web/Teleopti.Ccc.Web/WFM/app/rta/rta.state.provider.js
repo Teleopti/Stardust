@@ -36,6 +36,10 @@ angular.module('wfm.rta').provider('RtaState', function () {
 		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/overview/rta-sites-SiteOnSkillsOverview.html' : 'app/rta/overview/rta-sites.html';
 	}
 
+	// var sitesBySkillTemplateRefact = function (elem, attr) {
+	// 	return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/refact/overviewrefact/rta-sites-SiteOnSkillsOverview.refact.html' : 'app/rta/refact/overviewrefact/rta-sites.refact.html';
+	// }
+
 	this.$get = function () {
 		return function (toggleService) {
 			toggleService.togglesLoaded.then(function () {
@@ -130,6 +134,15 @@ angular.module('wfm.rta').provider('RtaState', function () {
 				controller: 'RtaAgentDetailsCtrl'
 			})
 			//states for refactored
+			// .state('rta.sites', {
+			// 	templateUrl: sitesBySkillTemplateRefact,
+			// 	controller: 'RtaOverviewCtrlRefact as vm',
+			// })
+			// .state('rta.teams', {
+			// 	url: '/teams/:siteId',
+			// 	templateUrl: 'app/rta/refact/overviewrefact/rta-teams.refact.html',
+			// 	controller: 'RtaOverviewCtrlRefact as vm'
+			// })
 			// .state('rta.agents', {
 			// 	url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
 			// 	templateUrl: rtaAgentsTemplateUrlRefact,

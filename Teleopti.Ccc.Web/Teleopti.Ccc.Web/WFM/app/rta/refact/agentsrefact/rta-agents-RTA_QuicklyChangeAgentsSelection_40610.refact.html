@@ -37,7 +37,7 @@
 										 md-selected-item="vm.selectedSkill"
 										 md-search-text="searchSkillText"
 										 md-selected-item-change="vm.selectedSkillChange(skill)"
-										 md-items="skill in vm.querySearch(searchSkillText, skills)"
+										 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
 										 md-item-text="skill.Name"
 										 md-min-length="0"
 										 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
@@ -58,7 +58,7 @@
 										md-selected-item="vm.selectedSkillArea"
 										md-search-text="searchSkillAreaText"
 										md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
-										md-items="skillArea in vm.querySearch(searchSkillAreaText, skillAreas)"
+										md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
 										md-item-text="skillArea.Name"
 										md-min-length="0"
 										placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
