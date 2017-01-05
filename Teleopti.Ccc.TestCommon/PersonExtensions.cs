@@ -61,5 +61,11 @@ namespace Teleopti.Ccc.TestCommon
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
 			return agent;
 		}
+
+		public static Person InTeam(this Person agent, ITeam team)
+		{
+			agent.Period(DateOnly.MinValue).Team = team;
+			return agent;
+		}
 	}
 }
