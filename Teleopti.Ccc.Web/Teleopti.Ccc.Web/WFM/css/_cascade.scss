@@ -8,20 +8,27 @@
 }
 
 .angular-ui-tree-placeholder {
-	background: rgba(153, 214, 255, 0.48);
-	width: 100px!important;
+	background: $gray012;
+	width: 100%!important;
+	display: inline-table!important;
+	float: right;
+	position: relative;
+	top: 10px !important;
+	border-style: dotted;
+	border-color: $gray087;
+	border-width: thin;
 }
 
 .angular-ui-tree-empty {
 	background-image: none;
-	background: rgba(153, 214, 255, 0.48);
+	background: none;
 	border: none;
 	min-height: 50px;
 }
 
-.angular-ui-tree-empty::after {
+.angular-ui-tree-placeholder:after {
 	content: "Move and Drop skill here";
-	color: white;
+	color: $gray087;
 }
 
 .horizontal-list {
@@ -31,6 +38,10 @@
 }
 
 .drag-handle {
+	cursor: move;
+}
+
+.drag-handle-delete {
 	cursor: pointer;
 }
 
@@ -39,7 +50,6 @@
 	padding: 5px;
 	width: auto;
 }
-
 
 .skill-group-devider {
 	border-left: 1px solid gray;
