@@ -160,9 +160,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				return true;
 			if (!scheduleDay.PersonAbsenceCollection().IsEmpty())
 				return true;
-			var definitionSets = agent.Period(date)
-				.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Where(
-					x => x.MultiplicatorType == MultiplicatorType.Overtime);
+			
+			var definitionSets = agent.Period(date)?.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Where(x => x.MultiplicatorType == MultiplicatorType.Overtime);
+
+			if (definitionSets == null)
+				return true;
+
 			if (!definitionSets.Contains(overtimePreferences.OvertimeType))
 				return true;
 			if (overtimePreferences.AvailableAgentsOnly)

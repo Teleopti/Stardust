@@ -815,6 +815,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				.Should().Not.Be.Empty();
 		}
 
+		[Test]
+		public void ShouldNotCrashWhenAgentHasNoPersonPeriod()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var dateOnly = DateOnly.Today;
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodOneDay(dateOnly);
+			var overtimePreference = new OvertimePreferences { OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, Enumerable.Empty<IScheduleData>(), skillDay);
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			});
+		}
+
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
