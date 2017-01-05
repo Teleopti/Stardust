@@ -868,6 +868,7 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 }
 .fav-search-header{
 	background:$white;
+	margin-bottom: 0.5em;
 	padding: 0;
 
 	.md-subheader-inner{
@@ -875,6 +876,9 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 	}
 	button.btn-primary{
 		background: #09f;
+	}
+	button.btn-default{
+		background: $gray026;
 	}
 }
 .fav-search-item{

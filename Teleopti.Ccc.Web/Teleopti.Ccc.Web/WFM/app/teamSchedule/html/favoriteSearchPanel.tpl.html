@@ -2,7 +2,7 @@
 	<md-list>
 		<md-subheader class="md-no-sticky fav-search-header">
 			<input type="text" placeholder="Name..." ng-model="$ctrl.currentName" />
-			<button class="btn btn-xs btn-primary" ng-click="$ctrl.save()" ng-disable="$ctrl.disableSave()" translate>
+			<button class="btn btn-xs" ng-click="$ctrl.save()" ng-class="{' btn-primary':!$ctrl.disableSave(), ' btn-default':$ctrl.disableSave()}" ng-disabled="$ctrl.disableSave()" translate>
 				Save
 			</button>
 		</md-subheader>

@@ -50,14 +50,14 @@
 			});
 		}
 
-		ctrl.save = function () {
-			var currentSearch = ctrl.getSearch();
-
+		ctrl.save = function() {
+			var currentSearch = angular.copy(ctrl.getSearch());
 			if (favoriteSearchNameList.indexOf(ctrl.currentName) === -1) {
 				FavoriteSearchDataService.add(ctrl.currentName, currentSearch)
 					.then(function (resp) {
 						ctrl.favoriteSearchList.unshift(resp.data);
 						favoriteSearchNameList.unshift(resp.data.Name);
+						ctrl.currentFavorite = resp.data;
 					});
 			} else {
 				ctrl.isTest ? updateFavorite() : popDialog();
@@ -65,10 +65,12 @@
 		}
 
 		ctrl.disableSave = function () {
+			if (!ctrl.currentFavorite) return false;
+
 			var currentSearch = ctrl.getSearch();
 			return angular.equals(ctrl.currentFavorite.TeamIds, currentSearch.teamIds) &&
 				ctrl.currentFavorite.SearchTerm == currentSearch.searchTerm;
-		}
+		};
 
 		function popDialog() {
 			var title = $translate.instant('UpdateConfirm');
@@ -81,14 +83,14 @@
 		}
 
 		function updateFavorite() {
-			var currentSearch = ctrl.getSearch();
+			var currentSearch = angular.copy(ctrl.getSearch());
 
 			var updatedCurrent = {
 				Id: ctrl.currentFavorite.Id,
 				Name: ctrl.currentFavorite.Name,
 				TeamIds: currentSearch.teamIds,
 				SearchTerm: currentSearch.searchTerm
-			}
+			};
 			FavoriteSearchDataService.update(updatedCurrent)
 				.then(function () {
 					ctrl.currentFavorite.SearchTerm = updatedCurrent.SearchTerm;
@@ -131,7 +133,9 @@
 
 		ctrl.select = function (item) {
 			ctrl.currentFavorite = item;
+			ctrl.currentName = item.Name;
 			ctrl.mdPanelRef.close();
+			ctrl.applyFavorite({ teamIds: angular.copy(item.TeamIds), searchTerm: item.SearchTerm });
 		}
 
 		function refreshList(data) {

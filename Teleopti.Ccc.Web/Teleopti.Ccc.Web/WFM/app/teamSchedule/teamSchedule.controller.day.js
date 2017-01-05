@@ -40,12 +40,17 @@
 		vm.searchEnabled = $state.current.name != 'teams.for';
 		vm.showDatePicker = false;
 
-		vm.applyFavorite = function() {
-
+		vm.applyFavorite = function(teamIds, searchTerm) {
+			vm.selectedTeamIds = teamIds;
+			vm.searchOptions.keyword = searchTerm;
+			//resetPage();
 		};
 
 		vm.getSearch = function() {
-
+			return {
+				teamIds: vm.selectedTeamIds,
+				searchTerm: vm.searchOptions.keyword
+			};
 		};
 
 		vm.paginationOptions = {

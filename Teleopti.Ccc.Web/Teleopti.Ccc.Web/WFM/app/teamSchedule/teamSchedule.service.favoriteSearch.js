@@ -33,20 +33,7 @@
 		*/
 
 		var fakeData = [
-			{
-				Id: '1',
-				Name: 'test1',
-				TeamIds: ['Team1Id', 'Team2Id'],
-				SearchTerm: '',
-				IsDefault: false
-			},
-			{
-				Id: '2',
-				Name: 'test2',
-				TeamIds: ['Team1Id', 'Team2Id'],
-				SearchTerm: '',
-				IsDefault: true
-			}
+			
 		];
 
 		this.getFavoriteSearchList = function () {

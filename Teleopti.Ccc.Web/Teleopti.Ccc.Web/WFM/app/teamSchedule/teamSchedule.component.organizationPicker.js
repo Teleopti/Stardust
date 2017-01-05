@@ -7,6 +7,7 @@
 			controller: organizationPickerCtrl,
 			bindings: {
 				availableGroups: '<',
+				selectedTeamIds: '<?',
 				onPick: '&'
 			}
 		});
