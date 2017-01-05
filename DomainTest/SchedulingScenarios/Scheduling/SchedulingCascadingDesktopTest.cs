@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
-				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneDay(date);
 				agents.Add(agent);
 			}
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
@@ -88,8 +87,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agents = new List<IPerson>();
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
-				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneDay(date);
 				agents.Add(agent);
 			}
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
@@ -125,8 +123,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8,0,8,0,15), new TimePeriodWithSegment(16,0,16,0,15), new ShiftCategory("_").WithId()));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
-			agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneDay(date);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent}, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 
 			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),

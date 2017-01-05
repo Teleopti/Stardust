@@ -43,6 +43,13 @@ namespace Teleopti.Ccc.TestCommon
 			return agent;
 		}
 
+		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract,  params ISkill[] skills)
+		{
+			agent.WithPersonPeriod(ruleSet, skills);
+			agent.Period(DateOnly.MinValue).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
+			return agent;
+		}
+
 		public static Person WithSchedulePeriodOneDay(this Person agent, DateOnly date)
 		{
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
