@@ -132,6 +132,7 @@
 		Wfm_Requests_ImproveStaffingForCascadingSkills_41969,
 		Wfm_Requests_ShowBudgetAllowanceDetail_41945,
 		Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309,
+		Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450,
 
 		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
 
