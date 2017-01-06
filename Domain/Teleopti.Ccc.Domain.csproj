@@ -263,6 +263,8 @@
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
     <Compile Include="Common\ClearPersonRelatedInformation.cs" />
+    <Compile Include="Common\FavoriteSearch.cs" />
+    <Compile Include="Common\IFavoriteSearch.cs" />
     <Compile Include="Common\IPersonLeavingUpdater.cs" />
     <Compile Include="Common\IScheduleDayProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />
@@ -3154,6 +3156,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Analytics\AnalyticsDate.analytics.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\FavoriteSearch.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt">

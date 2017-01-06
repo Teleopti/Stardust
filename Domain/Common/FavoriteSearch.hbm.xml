@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Common"
+                   default-access="field.camelcase-underscore">
+
+  <class name="FavoriteSearch">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+		  				access="nosetter.camelcase-underscore"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_FavoriteSearch_Person_UpdatedBy"/>
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+    
+	<property name="Name"
+			  type="string"
+			  not-null="true"
+			  length="50" />
+						 
+	<property name="TeamIds"	
+			  type="string"
+			  not-null="false"
+			  length="1000000"/>
+	
+	<property name="SearchTerm"	
+			  type="string"
+			  not-null="false"
+			  length="1000000"/>
+	
+	<property name="Status"
+          type="int"
+          not-null="true"/>
+	<many-to-one name="Creator"
+			 class="Teleopti.Ccc.Domain.Common.Person"
+			 not-null="true"
+			 update="false" foreign-key="FK_FavoriteSearch_Person_CreatedBy"
+				  access="property"/>
+	
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true"
+      foreign-key="FK_FavoriteSearch_BusinessUnit"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+  </class>
+</hibernate-mapping>
