@@ -262,7 +262,7 @@
 		width: 195px;
 	}
 
-	.shift-trade-add-schedule > table.responsive > tbody > tr:nth-child(2n + 1) > td.shift-trade-agent-name {
+	#Requests-body-inner .shift-trade-person-schedule-row:nth-child(odd) .shift-trade-agent-name{
 		color: #9E9E9E;
 	}
 }
