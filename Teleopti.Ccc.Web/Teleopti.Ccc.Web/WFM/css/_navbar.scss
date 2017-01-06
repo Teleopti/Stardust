@@ -31,6 +31,9 @@
 	.nav-context-menu .arrow-up{
 		border-bottom: 15px solid $white;
 	}
+    .context-menu:focus [class*="context-menu-"]{
+        visibility: visible !important;
+    }
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
