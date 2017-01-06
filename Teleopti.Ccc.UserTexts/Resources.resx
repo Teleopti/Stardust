@@ -15392,4 +15392,8 @@ These options are activated:
     <value>Select a budget group...</value>
     <comment>Placeholder for budget group selection</comment>
   </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>Schedule contract time tolerance</value>
+    <comment>Friendly description of ShiftTradeTargetTimeSpecification to show in shift trade system setting</comment>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -13,10 +14,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 	    private readonly IMatrixListFactory _scheduleMatrixListCreator;
 	    private readonly ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;
         
-        public override string DenyReason
-        {
-            get { return "ShiftTradeTargetTimeDenyReason"; }
-        }
+        public override string DenyReason => "ShiftTradeTargetTimeDenyReason";
+
+	    public override bool Configurable => true;
+
+	    public override string Description => Resources.DescriptionOfShiftTradeTargetTimeSpecification;
 
 		public ShiftTradeTargetTimeSpecification(Func<ISchedulerStateHolder> schedulerStateHolder, IMatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
         {

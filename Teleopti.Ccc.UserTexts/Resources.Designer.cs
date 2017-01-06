@@ -8771,6 +8771,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schedule contract time tolerance.
+        /// </summary>
+        public static string DescriptionOfShiftTradeTargetTimeSpecification {
+            get {
+                return ResourceManager.GetString("DescriptionOfShiftTradeTargetTimeSpecification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Site open hours.
         /// </summary>
         public static string DescriptionOfSiteOpenHoursRule {

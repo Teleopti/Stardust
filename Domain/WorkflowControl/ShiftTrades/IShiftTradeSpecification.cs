@@ -34,5 +34,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
         /// Created date: 2010-05-27
         /// </remarks>
         string DenyReason { get; }
-    }
+
+		bool Configurable { get; }
+
+		string Description { get; }
+	}
 }
