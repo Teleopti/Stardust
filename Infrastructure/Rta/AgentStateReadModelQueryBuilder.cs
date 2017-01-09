@@ -85,7 +85,8 @@ ORDER BY AlarmStartTime ASC ",
 				builder.Append(selections.Single(x => x.Type == Type.Skill).Query);
 				if (selections.Any(x => x.Type == Type.Org))
 					builder
-					.Append(" AND (")
+					.Append(" AND ")
+					.Append("(")
 					.Append(string.Join(" OR ", selections
 						.Where(x => x.Type == Type.Org)
 						.Select(x => x.Query)))
@@ -94,11 +95,12 @@ ORDER BY AlarmStartTime ASC ",
 			else if (selections.Any(x => x.Type == Type.Org))
 			{
 				builder
-					.Append(" WHERE ( ")
+					.Append(" WHERE ")
+					.Append("(")
 					.Append(string.Join(" OR ", selections
 						.Where(x => x.Type == Type.Org)
 						.Select(x => x.Query)))
-					.Append(") ");
+					.Append(")");
 			}
 			if (!excluded.IsNullOrEmpty())
 			{
