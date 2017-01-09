@@ -32463,6 +32463,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update Confirmation.
+        /// </summary>
+        public static string UpdateConfirmation {
+            get {
+                return ResourceManager.GetString("UpdateConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updated.
         /// </summary>
         public static string Updated {

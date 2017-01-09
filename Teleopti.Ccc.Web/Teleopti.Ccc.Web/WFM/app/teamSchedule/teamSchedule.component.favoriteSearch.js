@@ -74,7 +74,7 @@
 		};
 
 		function popDialog() {
-			var title = $translate.instant('UpdateConfirm');
+			var title = $translate.instant('UpdateConfirmation');
 			var message = $translate.instant('AreYouSureToUpdateCurrentFavoriteSearch').replace('{0}', ctrl.currentName);
 			$wfmModal.confirm(message, title).then(function (resp) {
 				if (resp) {

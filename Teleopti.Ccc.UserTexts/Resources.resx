@@ -15400,4 +15400,8 @@ These options are activated:
     <value>{0} exists, are you sure to update it?</value>
     <comment>confirmation message for updating existed favorite search in Teams &amp; Request</comment>
   </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>Update Confirmation</value>
+    <comment>Update confirmation pop up modal title</comment>
+  </data>
 </root>
