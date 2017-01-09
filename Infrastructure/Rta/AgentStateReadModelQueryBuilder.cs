@@ -56,10 +56,16 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 			});
 		}
 
-		private bool inAlarm;
 		public AgentStateReadModelQueryBuilder InAlarm()
 		{
-			inAlarm = true;
+			selections.Add(new selectionInfo
+			{
+				Query = @" 
+AlarmStartTime <= :now 
+ORDER BY AlarmStartTime ASC ",
+				Set = s => s.SetParameter("now", _now.UtcDateTime()),
+				Type = Type.Alarm
+			});
 			return this;
 		}
 
@@ -74,27 +80,25 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 		{
 			var setFuncs = new List<Func<ISQLQuery, IQuery>>();
 			var builder = new StringBuilder("SELECT DISTINCT TOP 50 a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
-			if (selections.All(x => x.Type == Type.Skill))
+			if (selections.Any(x => x.Type == Type.Skill))
 			{
-				builder.Append(selections.Single().Query);
-			} 
-			else if (selections.All(x => x.Type == Type.Org))
-			{
-				builder
-					.Append(" WHERE ( ")
-					.Append(string.Join(" OR ", selections.Select(x => x.Query)))
-					.Append(") ");
-			}
-			else
-			{
-				builder
-					.Append(selections.Single(x => x.Type == Type.Skill).Query)
+				builder.Append(selections.Single(x => x.Type == Type.Skill).Query);
+				if (selections.Any(x => x.Type == Type.Org))
+					builder
 					.Append(" AND (")
 					.Append(string.Join(" OR ", selections
 						.Where(x => x.Type == Type.Org)
 						.Select(x => x.Query)))
 					.Append(")");
-
+			}
+			else if (selections.Any(x => x.Type == Type.Org))
+			{
+				builder
+					.Append(" WHERE ( ")
+					.Append(string.Join(" OR ", selections
+						.Where(x => x.Type == Type.Org)
+						.Select(x => x.Query)))
+					.Append(") ");
 			}
 			if (!excluded.IsNullOrEmpty())
 			{
@@ -113,12 +117,11 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 				builder.Append(")");
 
 			}
-			if (inAlarm)
+			if (selections.Any(x => x.Type == Type.Alarm))
 			{
-				builder.Append(@" AND 
-			AlarmStartTime <= :now 
-			ORDER BY AlarmStartTime ASC ");
-				setFuncs.Add(s => s.SetParameter("now", _now.UtcDateTime()));
+				builder
+					.Append(" AND ")
+					.Append(selections.Single(x => x.Type == Type.Alarm).Query);
 			}
 
 			return new Selection
