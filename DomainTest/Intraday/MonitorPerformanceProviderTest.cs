@@ -68,7 +68,35 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(esl*100, 5));
 		}
 
-		[Test]
+        [Test]
+        public void ShouldHandleMergedForecastIntervals()
+        {
+
+            var userNow = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
+            var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+            Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+            var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+            var skillDay = createSkillDay(skill, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+
+            skillDay.WorkloadDayCollection.First().MergeTemplateTaskPeriods(skillDay.WorkloadDayCollection.First().TaskPeriodList);
+
+            SkillRepository.Has(skill);
+            SkillDayRepository.Has(skillDay);
+
+            var scheduledStaffingList = createScheduledStaffing(skillDay);
+            createStatistics(latestStatsTime.AddMinutes(-minutesPerInterval), userNow, latestStatsTime);
+            ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+            var result = Target.Load(new Guid[] { skill.Id.Value });
+
+            var esl = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks/2, 0);
+
+            result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(2);
+            Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(esl * 100, 5));
+        }
+
+        [Test]
 		public void ShouldReturnEslInCorrectOrder()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
