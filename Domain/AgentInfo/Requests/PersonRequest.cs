@@ -81,20 +81,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 		}
 
-		public virtual IPerson Person
-		{
-			get { return _person; }
-		}
-			
-		public virtual bool IsAlreadyAbsent
-		{
-			get { return _personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence); }
-		}
+		public virtual IPerson Person => _person;
 
-		public virtual bool IsExpired
-		{
-			get { return _personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired); }
-		}
+		public virtual bool IsAlreadyAbsent => _personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
+
+		public virtual bool IsExpired => _personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
 
 		public virtual bool TrySetMessage(string message)
 		{
@@ -118,15 +109,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual string GetMessage(ITextFormatter formatter)
 		{
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 
 			return formatter.Format(_message);
 		}
 
-		private string Message
-		{
-			get { return _message; }
-		}
+		private string Message => _message;
 
 		public virtual bool TrySetBrokenBusinessRule(BusinessRuleFlags brokenRules)
 		{
@@ -135,12 +123,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return true;
 		}
 
-		public virtual BusinessRuleFlags? BrokenBusinessRules
-		{
-			get { return _brokenBusinessRules; }
-		}
-
-
+		public virtual BusinessRuleFlags? BrokenBusinessRules => _brokenBusinessRules;
+		
 		public virtual IRequest Request
 		{
 			get { return getRequest(); }
@@ -162,7 +146,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual string GetSubject(ITextFormatter formatter)
 		{
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 
 			return formatter.Format(_subject);
 		}
@@ -259,15 +243,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			set { _changed = value; }
 		}
 
-		public virtual bool IsDeleted
-		{
-			get { return _isDeleted; }
-		}
+		public virtual bool IsDeleted => _isDeleted;
 
-		public virtual DateTime UpdatedOnServerUtc
-		{
-			get { return _updatedOnServerUtc; }
-		}
+		public virtual DateTime UpdatedOnServerUtc => _updatedOnServerUtc;
 
 		private bool checkIfCanSetMessage()
 		{
@@ -524,56 +502,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			RequestState = new newPersonRequest(this);
 		}
 
-		public virtual bool IsNew
-		{
-			get { return RequestState.IsNew; }
-		}
+		public virtual bool IsNew => RequestState.IsNew;
 
-		public virtual bool IsPending
-		{
-			get { return RequestState.IsPending; }
-		}
+		public virtual bool IsPending => RequestState.IsPending;
 
-		public virtual bool WasManuallyDenied
-		{
-			get { return RequestState is deniedPersonRequest; }
-		}
+		public virtual bool WasManuallyDenied => RequestState is deniedPersonRequest;
 
-		public virtual bool IsDenied
-		{
-			get { return RequestState.IsDenied; }
-		}
+		public virtual bool IsDenied => RequestState.IsDenied;
 
-		public virtual bool IsAutoDenied
-		{
-			get { return RequestState.IsAutoDenied; }
-		}
+		public virtual bool IsAutoDenied => RequestState.IsAutoDenied;
 
-		public virtual bool IsWaitlisted
-		{
-			get { return RequestState.IsWaitlisted; }
-		}
+		public virtual bool IsWaitlisted => RequestState.IsWaitlisted;
 
-		public virtual bool IsCancelled
-		{
-			get { return RequestState.IsCancelled; }
-		}
+		public virtual bool IsCancelled => RequestState.IsCancelled;
+		
+		public virtual bool IsApproved => RequestState.IsApproved;
 
+		public virtual bool IsAutoAproved => RequestState.IsAutoApproved;
 
-		public virtual bool IsApproved
-		{
-			get { return RequestState.IsApproved; }
-		}
-
-		public virtual bool IsAutoAproved
-		{
-			get { return RequestState.IsAutoApproved; }
-		}
-
-		private personRequestState PersistedRequestState
-		{
-			get { return _persistedState ?? (_persistedState = RequestState); }
-		}
+		private personRequestState PersistedRequestState => _persistedState ?? (_persistedState = RequestState);
 
 		private personRequestState RequestState
 		{
@@ -590,10 +537,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 		}
 
-		public virtual string StatusText
-		{
-			get { return RequestState.StatusText; }
-		}
+		public virtual string StatusText => RequestState.StatusText;
 
 		#region Classes handling status transitions
 
@@ -945,9 +889,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public static int GetUnderlyingStateId(IPersonRequest request)
 		{
 			var typedRequest = request as PersonRequest;
-			return typedRequest == null
-					   ? (int)PersonRequestStatus.New
-					   : typedRequest.requestStatus;
+			return typedRequest?.requestStatus ?? (int)PersonRequestStatus.New;
 		}
 
 		public virtual void DummyMethodToRemoveCompileErrorsWithUnusedVariable()
@@ -957,9 +899,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual IPerson CreatedBy { get; protected set; }
 		public virtual DateTime? CreatedOn { get; protected set; }
-
-
-
+		
 		public virtual bool SendChangeOverMessageBroker()
 		{
 			if (_persistedState == null)
@@ -1012,6 +952,5 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					break;
 			}
 		}
-		
 	}
 }
