@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CMSB")]
 	public class CMSBCaseSolver : IDayOffBackToLegalStateSolver
 	{
 		private readonly ILockableBitArray _bitArray;
@@ -35,11 +35,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			if (ResolvableState() == MinMaxNumberOfResult.Ok)
 				return false;
 
-			IList<double?> values = new List<double?>();
-			for (int i = 0; i < _bitArray.Count; i++)
-			{
-				values.Add(0);
-			}
+			IList<double?> values = Enumerable.Repeat((double?)0d, _bitArray.Count).ToArray();
 			return _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker.Execute(_bitArray, values);
 		}
 
@@ -48,9 +44,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return ResolvableState() != MinMaxNumberOfResult.Ok;
 		}
 
-		public string ResolverDescriptionKey
-		{
-			get { return "CMSBCaseSolver"; }
-		}
+		public string ResolverDescriptionKey => "CMSBCaseSolver";
 	}
 }

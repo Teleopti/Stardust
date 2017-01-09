@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
@@ -23,15 +24,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 
 		public IEnumerable<string> Generate(int count)
 		{
-			var stateCodes = new List<string>();
-			for (var i = 0; i < count; i++)
+			var stateCodes = Enumerable.Range(0, count).Select(i =>
 			{
 				var name = Convert.ToString(i);
 				var stateGroup = new RtaStateGroup(name, false, true);
 				stateGroup.AddState(name, name, Guid.Empty);
 				_rtaStateGroupRepository.Add(stateGroup);
-				stateCodes.Add(name);
-			}
+				return name;
+			}).ToArray();
 
 			_unitOfWork.Current().PersistAll();
 			return stateCodes;

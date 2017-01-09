@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
         public static IList<int> DayOffRemovedIndexChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray)
         {
-            IList<int> movedDays = new List<int>();
+            IList<int> movedDays = new List<int>(workingBitArray.Count);
 
             for (int i = 0; i < workingBitArray.Count; i++)
             {
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
         public static IList<int> DayOffAddedIndexChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray)
         {
-            IList<int> movedDays = new List<int>();
+            IList<int> movedDays = new List<int>(workingBitArray.Count);
 
             for (int i = 0; i < workingBitArray.Count; i++)
             {

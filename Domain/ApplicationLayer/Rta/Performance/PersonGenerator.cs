@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 
 		public PersonDataForLoadTest Generate(int count)
 		{
-			var date = new DateOnly(_now.UtcDateTime());
+			var date = _now.LocalDateOnly();
 			var site = new Site("site");
 			_siteRepository.Add(site);
 			var team = new Team {Site = site, Description = new Description("team")};
@@ -74,8 +75,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			_partTimePercentageRepository.Add(partTimePercentage);
 			var contractSchedule = new ContractSchedule("cs");
 			_contractScheduleRepository.Add(contractSchedule);
-			var generatedPersonData = new List<PersonWithExternalLogon>();
-			for (var i = 0; i < count; i++)
+			
+			var generatedPersonData = Enumerable.Range(0, count).Select(i =>
 			{
 				var externalLogOn = new ExternalLogOn(i, i, Convert.ToString(i), Convert.ToString(i), true) {DataSourceId = 6};
 				_externalLogOnRepository.Add(externalLogOn);
@@ -89,11 +90,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 				_unitOfWork.Current().PersistAll();
 				_scheduleGenerator.Generate(person.Id.GetValueOrDefault(), date);
 
-				generatedPersonData.Add(new PersonWithExternalLogon
+				return new PersonWithExternalLogon
 				{
 					ExternalLogOn = externalLogOn.AcdLogOnName
-				});
-			}
+				};
+			}).ToArray();
 			return new PersonDataForLoadTest { Persons = generatedPersonData, TeamId = team.Id.GetValueOrDefault() };
 		}
 

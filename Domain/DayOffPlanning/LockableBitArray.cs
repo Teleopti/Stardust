@@ -6,7 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-   
     public class LockableBitArray : ILockableBitArray
     {
         private readonly bool _includesWeekBefore;
@@ -29,17 +28,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 PeriodArea = new MinMax<int>(0, bitArrayCount - 1);
         }
 
-        public BitArray DaysOffBitArray
-        {
-            get { return _dayOffBits; }
-        }
+        public BitArray DaysOffBitArray => _dayOffBits;
 
-        public int Count
-        {
-            get { return _dayOffBits.Count; }
-        }
+	    public int Count => _dayOffBits.Count;
 
-        public MinMax<int> PeriodArea
+	    public MinMax<int> PeriodArea
         {
             get { return _periodArea; }
             set { _periodArea = value; }
@@ -56,12 +49,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             }
         }
 
-        public int? TerminalDateIndex
-        {
-            get { return _terminalDateIndex; }
-        }
+        public int? TerminalDateIndex => _terminalDateIndex;
 
-        public void Set(int index, bool value)
+	    public void Set(int index, bool value)
         {
             if(_lockedBits[index])
                 throw new ArgumentException("Locked index can not be modifyed");
@@ -76,17 +66,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             }
         }
 
-	    public decimal PeriodAreaMaximum
-	    {
-		    get { return _periodArea.Maximum; }
-	    }
+	    public decimal PeriodAreaMaximum => _periodArea.Maximum;
 
-	    public bool this[int index]
-        {
-            get { return _dayOffBits[index]; }
-        }
+	    public bool this[int index] => _dayOffBits[index];
 
-        public void Lock(int index, bool value)
+	    public void Lock(int index, bool value)
         {
             _lockedBits.Set(index, value);
             _unlockedIndexes = null;
@@ -101,7 +85,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return UnlockedIndexes[listIndex];
         }
 
-		public decimal PeriodAreaMinimum { get { return _periodArea.Minimum; } }
+		public decimal PeriodAreaMinimum => _periodArea.Minimum;
 
 	    private void createUnlockedList()
         {
