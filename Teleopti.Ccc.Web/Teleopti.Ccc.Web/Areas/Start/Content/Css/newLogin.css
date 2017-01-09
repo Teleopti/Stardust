@@ -1,8 +1,15 @@
-﻿body {
-	background: #ebebeb;
-	background-size: cover;
+﻿
+body {
+	background: rgb(153,214,255);
+	background: -moz-linear-gradient(top, rgba(153,214,255,1) 0%, rgba(153,214,255,1) 45%, rgba(0,153,255,1) 100%);
+	background: -webkit-linear-gradient(top, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%);
+	background: linear-gradient(to bottom, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99d6ff', endColorstr='#0099ff',GradientType=0 );
+	height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
-
 
 .animate-material {
   animation-name: material;
@@ -10,8 +17,7 @@
   animation-delay: 0.5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-
-  max-height: 25%;
+  max-height: 54px;
 }
 
 @keyframes material {
@@ -112,4 +118,26 @@
 
 #BusinessUnits {
 	padding-bottom: 15px;
+}
+
+@media screen and (min-width: 728px) {
+  .con-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .con-flex {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 728px) {
+  .con-row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .con-flex {
+    flex: 1 1 auto;
+  }
 }
