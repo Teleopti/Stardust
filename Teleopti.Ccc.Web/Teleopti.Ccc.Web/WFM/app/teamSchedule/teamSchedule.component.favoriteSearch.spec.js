@@ -167,13 +167,9 @@ describe('favoriteSearch component tests', function () {
 			return { then: function (cb) { cb(); } };
 		}
 
-		this.makeDefault = function() {
+		this.changeDefault = function() {
 			return { then: function (cb) { cb(); } };
-		}
-
-		this.removeDefault = function () {
-			return { then: function (cb) { cb(); } };
-		}
+		};
 
 	}
 });
