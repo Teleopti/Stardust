@@ -811,13 +811,6 @@ namespace Teleopti.Ccc.Domain.Common
 			return base.GetHashCode() ^ 431;
 		}
 
-		//Added mainly for easier testing. Not yet part of IPerson
-		public virtual void AddPeriodWithSkill(PersonPeriod period, ISkill skill)
-		{
-			period.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
-			AddPersonPeriod(period);
-		}
-
 	    public virtual ISiteOpenHour SiteOpenHour(DateOnly dateOnly)
 	    {
 			if (MyTeam(dateOnly) != null)

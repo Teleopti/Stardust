@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodOneWeek(firstDay);
 				agent.SchedulePeriod(firstDay).SetDaysOff(2);
 				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag };
-				agent.AddPeriodWithSkill(personPeriod, skill);
+				personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+				agent.AddPersonPeriod(personPeriod);
 				agents.Add(agent);
 			}
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
@@ -102,8 +103,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodOneWeek(firstDay);
 				agent.SchedulePeriod(firstDay).SetDaysOff(2);
 				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), team);
-				if (i == 1) personPeriod.RuleSetBag = ruleSetBag;	
-				agent.AddPeriodWithSkill(personPeriod, skill);
+				if (i == 1)
+				{
+					personPeriod.RuleSetBag = ruleSetBag;
+				}
+				personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+				agent.AddPersonPeriod(personPeriod);
 				agents.Add(agent);
 			}
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 10, 100);
