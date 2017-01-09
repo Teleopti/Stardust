@@ -18,6 +18,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
+	[Ignore("Stuck in pending on build server, do we need this one still?")]
 	[IntradayRequestPerformanceTest]
 	public class IntradayAbsenceRequestTest
 	{
