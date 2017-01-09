@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
@@ -67,13 +68,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanChangeTrendLine()
         {
-            IList<double> callCollection = new List<double>();
+	        var callCollection = Enumerable.Repeat(1d, 365).ToArray();
             double expectedresult = 1d*1.1;
-            for (int i = 1; i <= 365; i++)
-            {
-                callCollection.Add(1);
-            }
-            _target = new VolumeTrend(callCollection);
+
+			_target = new VolumeTrend(callCollection);
             _target.ChangeTrendLine(new Percent(0.1));
 
             Assert.AreEqual(Math.Round(expectedresult, 4), Math.Round(_target.End.Value, 4));
@@ -88,12 +86,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanGetDayChangeFactor()
         {
-            IList<double> callCollection = new List<double>();
-            for (int i = 1; i <= 365; i++)
-            {
-                callCollection.Add(1);
-            }
-            _target = new VolumeTrend(callCollection);
+			var callCollection = Enumerable.Repeat(1d, 365).ToArray();
+
+			_target = new VolumeTrend(callCollection);
             _target.ChangeTrendLine(new Percent(0));
 
             Assert.AreEqual(1, VolumeTrend.DayChangeFactor);
@@ -111,13 +106,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             Assert.AreEqual(expectedStartValue, startDayFactor);
 
-
-            IList<double> callCollection = new List<double>();
-            for (int i = 1; i <= 365; i++)
-            {
-                callCollection.Add(1);
-            }
-            _target = new VolumeTrend(callCollection);
+			var callCollection = Enumerable.Repeat(1d, 365).ToArray();
+			_target = new VolumeTrend(callCollection);
             startDayFactor = VolumeTrend.CalculateStartDayFactor(startTrendPeriod, startTrendPeriod.AddDays(365), new Percent(1));
 
             Assert.AreEqual(2, startDayFactor);

@@ -81,16 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             Assert.IsNotNull(_target);
         }
-
-        //[Test]
-        //public void VerifyProperties()
-        //{
-        //    Assert.AreSame(_personResources, _target.PersonResources);
-        //    Assert.AreSame(_targetDemands, _target.TargetDemands);
-        //    Assert.AreSame(_skillEfficiencyMatrix, _target.KeyedSkillResourceEfficiencies);
-        //    Assert.AreSame(_resourceMatrix, _target.ResourceMatrix);
-        //}
-
+		
         [Test]
         public void VerifyConvertToFurnessData()
         {
@@ -141,9 +132,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 for(int skillIndex = 0;skillIndex < furnessData.ProductTypes;skillIndex++)
                 {
-                    furnessData.ResourceMatrix()[personIndex, skillIndex] *= 2;
+                    var resource = furnessData.ResourceMatrix()[personIndex, skillIndex] *= 2;
                     furnessData.ProductionMatrix()[personIndex, skillIndex] =
-                        furnessData.ResourceMatrix()[personIndex, skillIndex]*
+                        resource*
                         furnessData.ProductivityMatrix()[personIndex, skillIndex];
                 }
             }
@@ -155,8 +146,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneA], furnessData.ResourceMatrix()[1, 0]);
             Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneB], furnessData.ResourceMatrix()[1, 1]);
             Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person4][_phoneB], furnessData.ResourceMatrix()[2, 1]);
-
         }
     }
-
 }

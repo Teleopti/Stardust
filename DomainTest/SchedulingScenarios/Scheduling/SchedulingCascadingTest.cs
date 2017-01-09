@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -51,16 +52,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
 
-			for (var i = 0; i < numberOfAgents; i++)
-			{
-				PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB);
-			}
-			SkillDayRepository.Has(new[]
-			{
-				skillA.CreateSkillDayWithDemand(scenario, date, 1),
-				skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000))
-				//should not shovel resources here when deciding what shift to choose
-			});
+			Enumerable.Range(0,100).ForEach(i => PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB));
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, date, 1), skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)));
 
 			Target.DoScheduling(date.ToDateOnlyPeriod());
 

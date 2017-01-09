@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -19,14 +19,9 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldRandomize()
 		{
-			IList<bool> result = new List<bool>();
-			for (int i = 0; i < 100; i++)
-			{
-				if(_target.Randomize())
-					result.Add(true);
-			}
-
-			Assert.IsTrue(result.Count > 25);
+			var result = Enumerable.Range(0, 100).Select(i => _target.Randomize()).Where(r => r).ToArray();
+			
+			Assert.IsTrue(result.Length > 25);
 		}
 	}
 }

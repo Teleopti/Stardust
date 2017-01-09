@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 	[TestFixture]
 	public class VisualLayerCollectionTest
 	{
-		private IList<IVisualLayer> internalCollection;
+		private List<IVisualLayer> internalCollection;
 		private IActivity dummyPayload;
 		private IPerson dummyPerson;
 		private IVisualLayerFactory visualLayerFactory;
@@ -187,14 +187,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyFilteredLayersWithNarrowingIndex()
 		{
 			IActivity phone = ActivityFactory.CreateActivity("phone");
-			DateTimePeriod period = new DateTimePeriod(new DateTime(2006, 1, 1, 1, 0, 0, DateTimeKind.Utc),
-																								 new DateTime(2006, 1, 1, 2, 0, 0, DateTimeKind.Utc));
+			DateTimePeriod period = new DateTimePeriod(2006, 1, 1, 1, 2006, 1, 1, 2);
 
-			for (int i = 0; i < 100; i++)
-			{
-				period = period.MovePeriod(TimeSpan.FromDays(1));
-				internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(phone, period, dummyPerson));
-			}
+			internalCollection.AddRange(Enumerable.Range(0,100).Select(i => visualLayerFactory.CreateShiftSetupLayer(phone, period.MovePeriod(TimeSpan.FromDays(i+1)), dummyPerson)));
 			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
 			{
 				PeriodOptimizer = new FilterLayerNoOptimizer()
@@ -584,14 +579,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IVisualLayer ret = visualLayerFactory.CreateAbsenceSetupLayer(absence, underLayer, period, underLayer.PersonAbsenceId);
 			return ret;
 		}
-
-		private IVisualLayer createVisualLayerWithActivityForReadyTime(DateTimePeriod period, bool activityInReadyTime)
-		{
-			IActivity payload = createActivity(activityInReadyTime);
-			IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
-			return ret;
-		}
-
+		
 		private static IActivity createActivity(bool activityInReadyTime)
 		{
 			IActivity payload = ActivityFactory.CreateActivity("for test");

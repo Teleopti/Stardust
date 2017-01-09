@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.DomainTest.Collection
 {
-  
     [TestFixture]
     public class ExtensionsTest
     {
@@ -19,22 +18,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void Setup()
         {
             _target = new List<int>();
-            _source = new List<int>();
-            for (int i = 0; i < 100; i++)
-            {
-                 _source.Insert(i,i);
-            }
+            _source = new List<int>(Enumerable.Range(0,100));
         }
-
 
         [Test]
         public void VerifyCanCallGetRandom()
-        { 
-            foreach (int integer in _source)
-            {
-                _target.Add(_source.GetRandom());
-            }
-            Assert.LessOrEqual(Math.Abs(_source.Average() - _target.Average()), 10);
+        {
+	        for (int index = 0; index < _source.Count; index++)
+	        {
+		        _target.Add(_source.GetRandom());
+	        }
+	        Assert.LessOrEqual(Math.Abs(_source.Average() - _target.Average()), 10);
             Assert.IsTrue(HasDifferentElement(_source,_target));    
         }
 
@@ -42,14 +36,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyCanGetRandomWithDuplicatesRandomList()
         { 
            
-            _target = new List<int>(_source.GetRandom(_source.Count(),false));
+            _target = new List<int>(_source.GetRandom(_source.Count,false));
             
             if (!HasDuplicatedElements(_target))
                 {
-                 _target = (List<int>) _source.GetRandom(_source.Count(),false);
+                 _target = (List<int>) _source.GetRandom(_source.Count,false);
                 }
             Assert.IsTrue(HasDuplicatedElements(_target));
-            Assert.AreEqual(_source.Count(), _target.Count());
+            Assert.AreEqual(_source.Count, _target.Count);
 
         }
 
@@ -60,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
             var batched = list.Batch(3);
 
-            Assert.AreEqual(4, batched.Count());
+            Assert.AreEqual(4, batched.Length);
             Assert.AreEqual(10, batched[3].First());
         }
 
@@ -76,11 +70,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         { 
             //If same length, no duplicates, same SUM but not in the same order, it works
             Assert.AreNotEqual(0, _source.Count);
-            _target = new List<int>(_source.GetRandom(_source.Count(), true));
+            _target = new List<int>(_source.GetRandom(_source.Count, true));
             Assert.AreNotEqual(0, _source.Count);
             Assert.IsFalse(HasDuplicatedElements(_target),"Element is duplicated");
             Assert.AreEqual(_target.Sum(), _source.Sum(),"The sum of  elements are different");
-            Assert.AreEqual(_target.Count(), _source.Count(),"Number of elements are different");
+            Assert.AreEqual(_target.Count, _source.Count,"Number of elements are different");
             Assert.IsTrue(HasDifferentElement(_source, _target),"All the elements are in the same order");
 
             
@@ -89,8 +83,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyNotSameCollectionTwice()
         {
-            IList<int> listOne = new List<int>(_source.GetRandom(_source.Count(), true));
-            IList<int> listTwo = new List<int>(_source.GetRandom(_source.Count(), true));
+            IList<int> listOne = new List<int>(_source.GetRandom(_source.Count, true));
+            IList<int> listTwo = new List<int>(_source.GetRandom(_source.Count, true));
             Assert.IsTrue(HasDifferentElement(listOne, listTwo));
         }
 
@@ -152,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 	        Assert.IsTrue(_source.IsNullOrEmpty());
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        [Test]
         public void ShouldCopyEnumerable()
         {
             IList nonGenericList = new ArrayList {"string", 1};

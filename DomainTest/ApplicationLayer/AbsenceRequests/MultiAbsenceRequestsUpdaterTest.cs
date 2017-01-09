@@ -186,20 +186,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 150));
 
-			var reqs = new List<IPersonRequest>();
-			for (int i = 0; i < 200; i++)
+			var reqs = Enumerable.Range(0, 200).Select(i =>
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category);
 				PersonAssignmentRepository.Has(assignment);
 				PersonAssignmentRepository.Has(assignment2);
-				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 15))).WithId();
+				var personRequest =
+					new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 15))).WithId();
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
-				reqs.Add(personRequest);
-			}
+				return personRequest;
+			}).ToArray();
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
@@ -251,26 +253,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillDayRepository.Has(skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150));
 			SkillDayRepository.Has(skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150));
 
-			var reqs = new List<IPersonRequest>();
-			for (int i = 0; i < 200; i++)
+			var reqs = Enumerable.Range(0, 200).SelectMany(i =>
 			{
 				var agent1 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill1);
 				var agent2 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill2);
 				agent1.WorkflowControlSet = workflowControlSet;
 				agent2.WorkflowControlSet = workflowControlSet;
-				var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent1, scenario, activity, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent2, scenario, activity, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
+				var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent1, scenario, activity,
+					new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent2, scenario, activity,
+					new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
 				PersonAssignmentRepository.Has(assignment1);
 				PersonAssignmentRepository.Has(assignment2);
-				var personRequest1 = new PersonRequest(agent1, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
-				var personRequest2 = new PersonRequest(agent2, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
+				var personRequest1 =
+					new PersonRequest(agent1, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId
+						();
+				var personRequest2 =
+					new PersonRequest(agent2, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId
+						();
 				personRequest1.Pending();
 				personRequest2.Pending();
 				PersonRequestRepository.Add(personRequest1);
 				PersonRequestRepository.Add(personRequest2);
-				reqs.Add(personRequest1);
-				reqs.Add(personRequest2);
-			}
+
+				return new[] {personRequest1, personRequest2};
+			}).ToArray();
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
@@ -319,18 +326,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 170));
 
-			var reqs = new List<IPersonRequest>();
-			for (int i = 0; i < 200; i++)
+			var reqs = Enumerable.Range(0, 200).Select(i =>
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
 				PersonAssignmentRepository.Has(assignment);
-				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
+				var personRequest =
+					new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
-				reqs.Add(personRequest);
-			}
+				return personRequest;
+			}).ToArray();
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
@@ -379,20 +387,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 150));
 
-			var reqs = new List<IPersonRequest>();
-			for (int i = 0; i < 200; i++)
+			var reqs = Enumerable.Range(0, 200).Select(i =>
 			{
 				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
 				agent.WorkflowControlSet = workflowControlSet;
-				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category);
-				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category);
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 17), category);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 17), category);
 				PersonAssignmentRepository.Has(assignment);
 				PersonAssignmentRepository.Has(assignment2);
-				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 18, 2016, 12, 2, 18))).WithId();
+				var personRequest =
+					new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 18, 2016, 12, 2, 18))).WithId();
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
-				reqs.Add(personRequest);
-			}
+				return personRequest;
+			}).ToArray();
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
