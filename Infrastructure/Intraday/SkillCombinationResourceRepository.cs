@@ -93,12 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var skillCombinations = loadSkillCombination();
 
-			var session = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session();
-            session.CreateSQLQuery(@"DELETE FROM [ReadModel].[SkillCombinationResource] WHERE BusinessUnit = :BUId OR BusinessUnit = '00000000-0000-0000-0000-000000000000'")
-                    .SetParameter("BUId", bu)
-                    .ExecuteUpdate();
-
-            foreach (var skillCombinationResource in skillCombinationResources)
+			foreach (var skillCombinationResource in skillCombinationResources)
 			{
 				var key = keyFor(skillCombinationResource.SkillCombination);
 				Guid id;
@@ -107,94 +102,88 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					id = persistSkillCombination(skillCombinationResource.SkillCombination);
 					skillCombinations.Add(key, id);
 				}
+				var connectionString = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session().Connection.ConnectionString;
 
-				session.Transaction.Begin();
-				var updated = session.CreateSQLQuery(@"
-						UPDATE [ReadModel].[SkillCombinationResource]
-						SET Resource = Resource + :Resource, InsertedOn = :InsertedOn
-						WHERE SkillCombinationId = :SkillCombinationId
-						AND StartDateTime = :StartDateTime")
-					.SetParameter("SkillCombinationId", id)
-					.SetParameter("InsertedOn", insertedOn)
-					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
-					.SetParameter("Resource", skillCombinationResource.Resource)
-					.ExecuteUpdate();
-
-				if (updated == 0)
+				using (var connection = new SqlConnection(connectionString))
 				{
-					session.CreateSQLQuery(@"
-							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
-							VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, :InsertedOn, :BusinessUnit)")
-						.SetParameter("SkillCombinationId", id)
-						.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
-						.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
-						.SetParameter("Resource", skillCombinationResource.Resource)
-						.SetParameter("InsertedOn", insertedOn)
-						.SetParameter("BusinessUnit", bu)
-						.ExecuteUpdate();
-				}
-			}
+					connection.Open();
+					using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+					{
+						using (var deleteCommand = new SqlCommand($@"
+						DELETE FROM [ReadModel].[SkillCombinationResource] 
+						WHERE SkillCombinationId = '{id}' 
+						AND StartDateTime = '{skillCombinationResource.StartDateTime}'", connection, transaction))
+						{
+							deleteCommand.ExecuteNonQuery();
+						}
 
-			var skillCombinationIds = new HashSet<Guid>();
-			foreach (var skillCombinationResource in skillCombinationResources)
-			{
-				Guid id;
-				if (skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id))
-				{
-					skillCombinationIds.Add(id);
-				}
-			}
-
-			foreach (var ids in skillCombinationIds.Batch(1000))
-			{
-				if (skillCombinationIds.Any())
-				{
-					session.CreateSQLQuery(@"
+						using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM ReadModel.SkillCombinationResourceDelta
-						WHERE InsertedOn < :InsertedOn
-						AND SkillCombinationId IN (:SkillCombinationIds)")
-						.SetParameter("InsertedOn", insertedOn)
-						.SetParameterList("SkillCombinationIds", ids)
-						.ExecuteUpdate();
+						WHERE InsertedOn < '{insertedOn}'
+						AND SkillCombinationId = '{id}'
+						AND StartDateTime = '{skillCombinationResource.StartDateTime}'", connection, transaction))
+						{
+							deleteCommand.ExecuteNonQuery();
+						}
+
+						if (skillCombinationResource.StartDateTime > insertedOn.AddHours(-1))
+						{
+							using (var insertCommand = new SqlCommand(@"
+							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
+							VALUES (@SkillCombinationId, @StartDateTime, @EndDateTime, @Resource, @InsertedOn, @BusinessUnit)", connection, transaction))
+							{
+								insertCommand.Parameters.AddWithValue("@SkillCombinationId", id);
+								insertCommand.Parameters.AddWithValue("@StartDateTime", skillCombinationResource.StartDateTime);
+								insertCommand.Parameters.AddWithValue("@EndDateTime", skillCombinationResource.EndDateTime);
+								insertCommand.Parameters.AddWithValue("@Resource", skillCombinationResource.Resource);
+								insertCommand.Parameters.AddWithValue("@InsertedOn", insertedOn);
+								insertCommand.Parameters.AddWithValue("@BusinessUnit", bu);
+								
+								insertCommand.ExecuteNonQuery();
+							}
+						}
+						transaction.Commit();
+					}
 				}
+
 			}
 		}
 
 
 
-        public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
-        {
-	        var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-	        var result = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
-		        .CreateSQLQuery(
-			        @"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource - ISNULL(COUNT(d.SkillCombinationId), 0) as Resource, c.SkillId from 
+		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
+		{
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+			var result = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
+				.CreateSQLQuery(
+					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource - ISNULL(COUNT(d.SkillCombinationId), 0) as Resource, c.SkillId from 
 [ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId 
 LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId = r.SkillCombinationId AND d.StartDateTime = r.StartDateTime AND d.EndDateTime = r.EndDateTime
  WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime AND r.BusinessUnit = :bu GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId")
-		        .SetDateTime("startDateTime", period.StartDateTime)
-		        .SetDateTime("endDateTime", period.EndDateTime)
+				.SetDateTime("startDateTime", period.StartDateTime)
+				.SetDateTime("endDateTime", period.EndDateTime)
 		        .SetParameter("bu", bu)
-		        .SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
 		        .SetTimeout(5)
-		        .List<RawSkillCombinationResource>();
+				.List<RawSkillCombinationResource>();
 
-            var mergedResult =
-                result.GroupBy(x => new {x.SkillCombinationId, x.StartDateTime, x.EndDateTime, x.Resource})
-                    .Select(
-                        x =>
-                            new SkillCombinationResourceWithCombinationId
-                            {
-                                StartDateTime = x.Key.StartDateTime,
-                                EndDateTime = x.Key.EndDateTime,
-                                Resource = x.Key.Resource,
-                                SkillCombinationId = x.Key.SkillCombinationId,
-                                SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s)
-                            });
+			var mergedResult =
+				result.GroupBy(x => new {x.SkillCombinationId, x.StartDateTime, x.EndDateTime, x.Resource})
+					.Select(
+						x =>
+							new SkillCombinationResourceWithCombinationId
+							{
+								StartDateTime = x.Key.StartDateTime,
+								EndDateTime = x.Key.EndDateTime,
+								Resource = x.Key.Resource,
+								SkillCombinationId = x.Key.SkillCombinationId,
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s)
+							});
 
-            return mergedResult;
-        }
+			return mergedResult;
+		}
 
-        public void PersistChange(SkillCombinationResource skillCombinationResource)
+		public void PersistChange(SkillCombinationResource skillCombinationResource)
 		{
 			var skillCombinations = loadSkillCombination();
 			Guid id;

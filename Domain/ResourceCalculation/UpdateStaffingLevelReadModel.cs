@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public virtual void Update(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
-			_feedback.SendProgress($"Starting Read Model update for period {period}");
+			_feedback.SendProgress($"Starting ForecastSkill Read Model update for period {period}");
 			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
 			var resCalcData =
 				_extractSkillStaffDataForResourceCalculation.ExtractResourceCalculationData(periodDateOnly);
@@ -47,10 +47,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (models.Any())
 			{
 				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
-				if(resCalcData.SkillCombinationHolder != null)
-					_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
+				if (resCalcData.SkillCombinationHolder != null)
+					_feedback.SendProgress("Starting SkillCombinationResource Read Model update.");
+				_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
 			}
-			
+			_feedback.SendProgress("Starting purge ForeCastSkill Read Model");
 			_scheduleForecastSkillReadModelRepository.Purge();
 		}
 
