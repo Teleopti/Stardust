@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
@@ -36,13 +37,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			return value;
 		}
 
-		public int ItemCount
-		{
-			get
-			{
-				return _internalDic.Count;
-			}
-		}
+		public int ItemCount => _internalDic.Count;
 
 		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
 		{
@@ -64,25 +59,14 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		private IDictionary<IShiftCategory, int> calculateValue(DateOnly dateOnly)
 		{
-			IDictionary<IShiftCategory, int> value = new Dictionary<IShiftCategory, int>();
-			foreach (var filteredAgent in _filteredAgents)
-			{
-			    if (dateOnly > filteredAgent.TerminalDate) continue;
-                var scheduleDay = _scheduleDictionary[filteredAgent].ScheduledDay(dateOnly);
-				if(!scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) continue;
-				var personAssignment = scheduleDay.PersonAssignment(true);
-				if (personAssignment == null) continue;
-				
-				var shiftCategory = personAssignment.ShiftCategory;
-				if (shiftCategory == null) continue;
+			var agents = _filteredAgents.Where(filteredAgent => dateOnly <= filteredAgent.TerminalDate.GetValueOrDefault(DateOnly.MaxValue)).ToArray();
 
-				if (!value.ContainsKey(shiftCategory))
-					value.Add(shiftCategory, 0);
-
-				value[shiftCategory]++;
-			}
-
-			return value;
+			return _scheduleDictionary.SchedulesForPeriod(dateOnly.ToDateOnlyPeriod(), agents)
+				.Where(s => s.SignificantPartForDisplay().Equals(SchedulePartView.MainShift))
+				.Select(s => s.PersonAssignment()?.ShiftCategory)
+				.Where(s => s != null)
+				.GroupBy(s => s)
+				.ToDictionary(k => k.Key,v => v.Count());
 		}
 	}
 }

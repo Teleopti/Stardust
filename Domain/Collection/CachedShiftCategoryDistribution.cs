@@ -38,10 +38,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public event EventHandler<ModifyEventArgs> PartModified;
 
-		public IList<IShiftCategory> AllShiftCategories
-		{
-			get { return _allShiftCategories; }
-		}
+		public IList<IShiftCategory> AllShiftCategories => _allShiftCategories;
 
 		void scheduleDictionary_PartModified(object sender, ModifyEventArgs e)
 		{
@@ -58,11 +55,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		private void OnPartModified(ModifyEventArgs e)
 		{
-			var partModified = PartModified;
-			if (partModified != null)
-			{
-				partModified(this, e);
-			}
+			PartModified?.Invoke(this, e);
 		}
 
 		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
@@ -75,8 +68,7 @@ namespace Teleopti.Ccc.Domain.Collection
 				_changedPersons.Add(filteredPerson);
 			}
 		}
-
-
+		
 		public IDictionary<IShiftCategory, MinMax<int>> GetMinMaxDictionary(IEnumerable<IPerson> filteredPersons)
 		{
 			if (_changedPersons.Count == 0) return _internalDic;

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Collection
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class CachedNumberOfEachCategoryPerDateTest
 	{
 		private ICachedNumberOfEachCategoryPerDate _target;
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void ShouldReturnValueForKey()
 		{
 			var periodToMonitor = new DateOnlyPeriod(2013, 09, 12, 2013, 09, 13);
-			var person1 = PersonFactory.CreatePerson();
-			var person2 = PersonFactory.CreatePerson();
+			var person1 = PersonFactory.CreatePerson().WithId();
+			var person2 = PersonFactory.CreatePerson().WithId();
 			var personList = new List<IPerson> {person1, person2};
 
 			_dic.AddPersonAssignment(

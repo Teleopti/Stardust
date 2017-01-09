@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-
 namespace Teleopti.Ccc.DomainTest.Collection
 {
 	[TestFixture]
