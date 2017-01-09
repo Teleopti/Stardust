@@ -2,58 +2,66 @@
 (function() {
 	angular
 		.module('wfm.rta')
-		.service('ControllerBuilder', function($controller, $interval, $httpBackend, $rootScope) {
+		.factory('ControllerBuilder', ControllerBuilder);
 
-			var controllerName = "hejsan";
-			var scope;
+	ControllerBuilder.$inject = ['$controller', '$interval', '$httpBackend', '$rootScope'];
 
-			this.setup = function(name) {
-				controllerName = name;
-				scope = $rootScope.$new();
-				return scope;
+	function ControllerBuilder($controller, $interval, $httpBackend, $rootScope) {
+
+		var service = this;
+
+		var controllerName = "hejsan";
+		var scope;
+
+		this.setup = function(name) {
+			controllerName = name;
+			scope = $rootScope.$new();
+			return scope;
+		};
+
+		this.createController = function() {
+
+			var vm = $controller(controllerName, {
+				$scope: scope
+			});
+			scope.$digest();
+			safeBackendFlush();
+
+			var callbacks = {
+
+				apply: function(apply) {
+					if (typeof apply === "function") {
+						apply();
+						scope.$digest();
+					} else {
+						scope.$apply(apply);
+					}
+					safeBackendFlush();
+					return callbacks;
+				},
+
+				wait: function(milliseconds) {
+					$interval.flush(milliseconds);
+					safeBackendFlush();
+					return callbacks;
+				},
+				vm: vm
 			};
 
-			var safeBackendFlush = function () {
-				try { // the internal mock will throw if no requests were made
-					$httpBackend.flush();
-				} catch (e) {
-					if (e.message.includes("No pending request to flush !"))
-						return;
-					console.error(e.message)
-				}
-			};
+			return callbacks;
+		}
 
-			this.createController = function () {
-
-				var vm = $controller(controllerName, {
-					$scope: scope
-				});
-				scope.$digest();
-				safeBackendFlush();
-
-				var callbacks = {
-
-					apply: function(apply) {
-						if (typeof apply === "function") {
-							apply();
-							scope.$digest();
-						} else {
-							scope.$apply(apply);
-						}
-						safeBackendFlush();
-						return callbacks;
-					},
-
-					wait: function(milliseconds) {
-						$interval.flush(milliseconds);
-						safeBackendFlush();
-						return callbacks;
-					},
-					vm: vm
-
-				};
-
-				return callbacks;
+		var safeBackendFlush = function() {
+			try { // the internal mock will throw if no requests were made
+				$httpBackend.flush();
+			} catch (e) {
+				if (e.message.includes("No pending request to flush !"))
+					return;
+				console.error(e.message)
 			}
-		});
+		};
+
+		return this;
+
+	};
 })();
