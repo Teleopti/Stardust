@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -24,7 +25,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
 		public ISkillRepository SkillRepository;
-		//public INewAbsenceRequestHandler Target;
 		public QueuedAbsenceRequestFastIntradayHandler Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
-
-
+		public MutableNow Now;
+		
 		[Test]
 		public void Aa()
 		{
@@ -44,13 +44,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		[Test]
 		public void ShouldApproveAbsenceRequest()
 		{
+			Now.Is(new DateTime(2016,12,1));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-15 05:00");
 
 			var requestPeriod = new DateTimePeriod(new DateTime(2016, 3, 15, 07, 0, 0, DateTimeKind.Utc),
 													   new DateTime(2016, 3, 15, 07, 15, 0, DateTimeKind.Utc));
 
 			var request = prepareAndCreateRequest(requestPeriod);
-			var newRequestEvent = new NewAbsenceRequestCreatedEvent() { PersonRequestId = request.Id.GetValueOrDefault() };
+			var newRequestEvent = new NewAbsenceRequestCreatedEvent { PersonRequestId = request.Id.GetValueOrDefault() };
 
 
 			WithUnitOfWork.Do(() => Target.Handle(newRequestEvent));
@@ -63,13 +64,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		[Test]
 		public void ShouldDenyAbsenceRequest()
 		{
+			Now.Is(new DateTime(2016, 12, 1));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
 			var requestPeriod = new DateTimePeriod(new DateTime(2016, 3, 14, 8, 15, 0, DateTimeKind.Utc),
 													   new DateTime(2016, 3, 14, 10, 0, 0, DateTimeKind.Utc));
 
 			var request = prepareAndCreateRequest(requestPeriod);
-			var newRequestEvent = new NewAbsenceRequestCreatedEvent() { PersonRequestId = request.Id.GetValueOrDefault() };
+			var newRequestEvent = new NewAbsenceRequestCreatedEvent { PersonRequestId = request.Id.GetValueOrDefault() };
 
 
 			WithUnitOfWork.Do(() => Target.Handle(newRequestEvent));
@@ -144,12 +146,5 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			var req = new AbsenceRequest(absence, dateTimePeriod);
 			return new PersonRequest(person) {Request = req};
 		}
-
-
-	
 	}
-
-
-
-
 }

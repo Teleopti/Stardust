@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 
@@ -30,8 +28,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public AsSystem AsSystem;
 		public IDataSourceScope DataSource;
 		public FakeConfigReader ConfigReader;
-
-
+		
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
@@ -67,5 +64,4 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			container.Resolve<HangfireClientStarter>().Start();
 		}
 	}
-
 }
