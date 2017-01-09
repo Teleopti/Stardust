@@ -381,6 +381,7 @@
     <Compile Include="RequestInfo.cs" />
     <Compile Include="ScheduleDayExtensions.cs" />
     <Compile Include="Services\ShiftTradeRequestStatusCheckerForTestAlwaysRefer.cs" />
+    <Compile Include="SkillDayExtensions.cs" />
     <Compile Include="SkillExtensions.cs" />
     <Compile Include="TestConnectionStrings.cs" />
     <Compile Include="TestData\Analytics\DatesFromPeriod.cs" />
