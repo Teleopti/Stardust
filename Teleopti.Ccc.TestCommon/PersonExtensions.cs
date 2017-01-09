@@ -18,7 +18,25 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, params ISkill[] skills)
 		{
-			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team {Site = new Site("_")});
+			agent.WithPersonPeriod(null, null, skills);
+			return agent;
+		}
+
+		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		{
+			agent.WithPersonPeriod(ruleSet, null, skills);
+			return agent;
+		}
+
+		public static Person WithPersonPeriod(this Person agent, IContract contract, params ISkill[] skills)
+		{
+			agent.WithPersonPeriod(null, null, skills);
+			return agent;
+		}
+
+		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, params ISkill[] skills)
+		{
+			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") });
 			if (skills.Any())
 			{
 				foreach (var skill in skills)
@@ -26,31 +44,17 @@ namespace Teleopti.Ccc.TestCommon
 					personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 				}
 			}
+			if (ruleSet != null)
+			{
+				personPeriod.RuleSetBag = new RuleSetBag(ruleSet);
+			}
+			if (contract != null)
+			{
+				personPeriod.PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
+			}
 			agent.AddPersonPeriod(personPeriod);
 			return agent;
 		}
-
-		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
-		{
-			agent.WithPersonPeriod(skills);
-			agent.Period(DateOnly.MinValue).RuleSetBag = new RuleSetBag(ruleSet);
-			return agent;
-		}
-
-		public static Person WithPersonPeriod(this Person agent, IContract contract, params ISkill[] skills)
-		{
-			agent.WithPersonPeriod(skills);
-			agent.Period(DateOnly.MinValue).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
-			return agent;
-		}
-
-		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract,  params ISkill[] skills)
-		{
-			agent.WithPersonPeriod(ruleSet, skills);
-			agent.Period(DateOnly.MinValue).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
-			return agent;
-		}
-
 
 		public static Person WithSchedulePeriodOneDay(this Person agent, DateOnly date)
 		{
