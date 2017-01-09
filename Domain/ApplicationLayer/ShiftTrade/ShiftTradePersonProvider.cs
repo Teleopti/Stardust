@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,7 +17,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IPersonForScheduleFinder _personForScheduleFinder;
 		private readonly IPeopleForShiftTradeFinder _peopleForShiftTradeFinder;
 		private readonly ILoggedOnUser _loggedOnUser;
-
 
 		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder)
 		{
@@ -66,16 +63,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 			var personList = _personRepository.FindPeople(personGuidList);
 
-
 			return personList.Where(
 				person =>
 					_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeDate, me, person))
-						.Value && (_permissionProvider.IsPersonSchedulePublished(shiftTradeDate, person) ||
+						.IsOk && (_permissionProvider.IsPersonSchedulePublished(shiftTradeDate, person) ||
 								   _permissionProvider.HasApplicationFunctionPermission(
 									   DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)));
 		}
 	}
-
 
 	public interface IShiftTradePersonProvider
 	{

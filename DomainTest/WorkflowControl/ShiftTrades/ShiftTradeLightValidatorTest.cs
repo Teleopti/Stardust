@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			spec2.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			var validator = new ShiftTradeLightValidator(new []{spec1, spec2});
-			validator.Validate(checkItem).Value.Should().Be.True();
+			validator.Validate(checkItem).IsOk.Should().Be.True();
 		}
 
 		[Test]
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			spec2.Expect(m => m.IsSatisfiedBy(checkItem)).Return(false);
 			var validator = new ShiftTradeLightValidator(new[] { spec1, spec2 });
-			validator.Validate(checkItem).Value.Should().Be.False();
+			validator.Validate(checkItem).IsOk.Should().Be.False();
 		}
 
 		[Test]

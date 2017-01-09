@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				var tradeSwapDetails = shiftTradeRequest.ShiftTradeSwapDetails;
 
 				var lightResult = validateLightSpecs(tradeSwapDetails);
-				return lightResult.Value ? Validate(tradeSwapDetails) : lightResult;
+				return lightResult.IsOk ? Validate(tradeSwapDetails) : lightResult;
 			}
 			return new ShiftTradeRequestValidationResult(false);
 		}
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			foreach (var specification in _shiftTradeSpecifications)
 			{
 				var result = specification.Validate(shiftTradeDetails);
-				if (!result.Value)
+				if (!result.IsOk)
 				{
 					return result;
 				}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		private ShiftTradeRequestValidationResult validateLightSpecs(IEnumerable<IShiftTradeSwapDetail> shiftTradeRequest)
 		{
 			foreach (var result in shiftTradeRequest.Select(swapDetail => new ShiftTradeAvailableCheckItem(swapDetail.DateFrom, swapDetail.PersonFrom, swapDetail.PersonTo))
-						.Select(checkItem => _shiftTradeLightValidator.Validate(checkItem)).Where(result => !result.Value))
+						.Select(checkItem => _shiftTradeLightValidator.Validate(checkItem)).Where(result => !result.IsOk))
 			{
 				return result;
 			}

@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 				var status = shiftTradeRequest.GetShiftTradeStatus(shiftTradeRequestStatusChecker);
 				logger.InfoFormat("Shift trade state is Accepted, status is: {0}", status);
 			}
-			else if (!validationResult.Value)
+			else if (!validationResult.IsOk)
 			{
 				personRequest.Deny(validationResult.DenyReason, _authorization);
 			}
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private bool checkStatus(ShiftTradeStatus shiftTradeStatus, ShiftTradeRequestValidationResult validationResult)
 		{
-			return shiftTradeStatus == ShiftTradeStatus.OkByMe && validationResult.Value;
+			return shiftTradeStatus == ShiftTradeStatus.OkByMe && validationResult.IsOk;
 		}
 
 		private IPerson loadPersonAcceptingPerson(AcceptShiftTradeEvent @event)
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private void setPersonRequestState(ShiftTradeRequestValidationResult validationResult, IPersonRequest personRequest,
 										   IShiftTradeRequest shiftTradeRequest)
 		{
-			if (validationResult.Value)
+			if (validationResult.IsOk)
 			{
 				personRequest.Pending();
 				shiftTradeRequest.NotifyToPersonAfterValidation();
