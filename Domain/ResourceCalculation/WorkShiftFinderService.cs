@@ -149,12 +149,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        if (foundValuesCount == 1)
 		        return foundValues[0];
 
-			IDictionary<int, int> randomResultList = new Dictionary<int, int>(foundValuesCount);
-			for (int i = 0; i < foundValuesCount; i++)
-	        {
-		        randomResultList.Add(i, 0);
-	        }
-
+	        var randomResultList = Enumerable.Range(0, foundValuesCount).ToDictionary(k => k, v => 0);
 	        for (int i = 0; i < 100; i++)
 	        {
 				var rndResult = foundValues.GetRandom();

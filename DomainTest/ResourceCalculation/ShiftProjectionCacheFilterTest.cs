@@ -510,8 +510,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(mainshift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);
                 Expect.Call(ps2.CreateProjection()).Return(lc2);
-                Expect.Call(lc1.Period()).Return(scheduleDayPeriod).Repeat.Twice();
-                Expect.Call(lc2.Period()).Return(scheduleDayPeriod.MovePeriod(TimeSpan.FromMinutes(1))).Repeat.Twice();
+                Expect.Call(lc1.Period()).Return(scheduleDayPeriod);
+                Expect.Call(lc2.Period()).Return(scheduleDayPeriod.MovePeriod(TimeSpan.FromMinutes(1)));
 
             }
 

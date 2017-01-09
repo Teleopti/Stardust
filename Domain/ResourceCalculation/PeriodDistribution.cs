@@ -84,14 +84,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public double[] CalculateSplitPeriodRelativeValues()
         {
-	        var ret = new double[_splittedValues.Length];
-            for (int i = 0; i < _splittedValues.Length; i++)
-            {
-                double traff = _splittedValues[i]/_periods[i].ElapsedTime().TotalMinutes;
-                DeviationStatisticData stat = new DeviationStatisticData(_demandedTraff, traff);
-                ret[i] = stat.RelativeDeviation;
-            }
-            return ret;
+			return _splittedValues.Select((s, i) =>
+			{
+				double traff = s / _periods[i].ElapsedTime().TotalMinutes;
+				DeviationStatisticData stat = new DeviationStatisticData(_demandedTraff, traff);
+				return stat.RelativeDeviation;
+			}).ToArray();
         }
 
         public double DeviationAfterNewLayers(IVisualLayerCollection layerCollection)

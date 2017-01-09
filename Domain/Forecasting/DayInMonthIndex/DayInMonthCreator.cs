@@ -13,11 +13,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
         public void Create(IVolumeYear dayInMonth)
         {
             //create a list to hold data temporary
-            var temps = new List<TempData>();
-            for (int i = 0; i < 30; i++)
-            {
-                temps.Add(new TempData { Day = i + 1 });
-            }
+	        var temps = Enumerable.Range(0, 30).Select(i => new TempData {Day = i + 1}).ToList();
+            
             double totalSum = 0;
             var days = dayInMonth.TaskOwnerDays;
             foreach (var taskOwner in days)

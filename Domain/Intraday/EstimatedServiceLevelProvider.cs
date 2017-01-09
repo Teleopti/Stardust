@@ -132,8 +132,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.Select(x => (double?) x.Esl * 100)
 				.ToList();
 			var nullCount = queueIncoming.DataSeries.Time.Length - dataSeries.Count;
-			for (int interval = 0; interval < nullCount; interval++)
-				dataSeries.Add(null);
+			dataSeries.AddRange(Enumerable.Repeat<double?>(null,nullCount));
 
 			return dataSeries.ToArray();
 		}

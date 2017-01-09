@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -18,18 +19,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			int cntBefore = shiftList.Count;
-			IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
-			for (int workShiftCounter = 0; workShiftCounter < shiftList.Count; workShiftCounter++)
-			{
-				IShiftProjectionCache proj = shiftList[workShiftCounter];
+	        IList<IShiftProjectionCache> workShiftsWithinPeriod =
+		        shiftList.Select(s => new {Period = s.MainShiftProjection.Period(), s})
+			        .Where(s => s.Period.HasValue && s.Period.Value.EndDateTime >= earliestEnd)
+			        .Select(s => s.s)
+			        .ToList();
 
-				if (!proj.MainShiftProjection.Period().HasValue) continue;
-				DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
-				if (virtualPeriod.EndDateTime >= earliestEnd)
-				{
-					workShiftsWithinPeriod.Add(proj);
-				}
-			}
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(string.Concat(UserTexts.Resources.FilterOnMinEndTimeOnRestriction, " "),
 										  cntBefore, workShiftsWithinPeriod.Count));

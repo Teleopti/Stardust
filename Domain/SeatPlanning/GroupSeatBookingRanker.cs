@@ -87,10 +87,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var seatScoresByIndex = new List<SeatByIndexScore>();
 
 			// handle next batch of seats at position...
-			for (var startIdx = 0; startIdx <= seatArray.Count(); startIdx++)
+			for (var startIdx = 0; startIdx <= seatArray.Count; startIdx++)
 			{
 				// get the seats that can be used by the team at this position.
-				var seats = seatArray.Skip(startIdx).Take(groupSeatBookingsInOrder.Count());
+				var seats = seatArray.Skip(startIdx).Take(groupSeatBookingsInOrder.Count);
 				if (seats.Any())
 				{
 					seatScoresByIndex.Add(getSeatBatchScore(seatScoresForCurrentLocation, seats, startIdx));
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var allScoresForChosenSeats = getAllScoresForChosenSeats(seatScores, seats);
 			var transientSeatBookings = seats.Select(s => new TransientSeatBooking(s)).ToList();
 
-			var seatByIndexScore = new SeatByIndexScore()
+			var seatByIndexScore = new SeatByIndexScore
 			{
 				Index = startIdx,
 				TransientSeatBookingsForASeat = transientSeatBookings,
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			var transientSeatBookingsWithBookings = transientSeatBookings.Where(booking => booking.AlmostAllocatedBookings.Any()).ToArray();
 
-			seatByIndexScore.FilledSeatCount = transientSeatBookingsWithBookings.Count();
+			seatByIndexScore.FilledSeatCount = transientSeatBookingsWithBookings.Length;
 			seatByIndexScore.TotalGroupNeighbourCount = calculateGroupNeighbourCount(transientSeatBookingsWithBookings);
 			if (transientSeatBookingsWithBookings.Any())
 			{
