@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -17,14 +16,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		public ShiftTradeRequestValidationResult Validate(IShiftTradeRequest shiftTradeRequest)
 		{
-			if (new IsShiftTradeRequestNotNullSpecification().IsSatisfiedBy(shiftTradeRequest))
-			{
-				var tradeSwapDetails = shiftTradeRequest.ShiftTradeSwapDetails;
+			if (!new IsShiftTradeRequestNotNullSpecification().IsSatisfiedBy(shiftTradeRequest))
+				return new ShiftTradeRequestValidationResult(false);
 
-				var lightResult = validateLightSpecs(tradeSwapDetails);
-				return lightResult.IsOk ? Validate(tradeSwapDetails) : lightResult;
-			}
-			return new ShiftTradeRequestValidationResult(false);
+			var tradeSwapDetails = shiftTradeRequest.ShiftTradeSwapDetails;
+			var lightResult = validateLightSpecs(tradeSwapDetails);
+			return lightResult.IsOk ? Validate(tradeSwapDetails) : lightResult;
 		}
 
 		public ShiftTradeRequestValidationResult Validate(IList<IShiftTradeSwapDetail> shiftTradeDetails)
@@ -40,13 +37,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return new ShiftTradeRequestValidationResult(true);
 		}
 
-		private ShiftTradeRequestValidationResult validateLightSpecs(IEnumerable<IShiftTradeSwapDetail> shiftTradeRequest)
+		private ShiftTradeRequestValidationResult validateLightSpecs(IEnumerable<IShiftTradeSwapDetail> shiftTradeRequestDetails)
 		{
-			foreach (var result in shiftTradeRequest.Select(swapDetail => new ShiftTradeAvailableCheckItem(swapDetail.DateFrom, swapDetail.PersonFrom, swapDetail.PersonTo))
-						.Select(checkItem => _shiftTradeLightValidator.Validate(checkItem)).Where(result => !result.IsOk))
+			foreach (var swapDetail in shiftTradeRequestDetails)
 			{
-				return result;
+				var checkItem = new ShiftTradeAvailableCheckItem(swapDetail.DateFrom, swapDetail.PersonFrom, swapDetail.PersonTo);
+				var checkResult = _shiftTradeLightValidator.Validate(checkItem);
+				if (!checkResult.IsOk) return checkResult;
 			}
+
 			return new ShiftTradeRequestValidationResult(true);
 		}
 	}

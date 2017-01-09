@@ -37,16 +37,19 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_shiftTradeMaxSeatsSpecification = new ValidatorSpecificationForTest(true, "_shiftTradeMaxSeatsSpecification");
 		}
 
-		private ShiftTradeValidator CreateValidator()
+		private ShiftTradeValidator createValidator()
 		{
-			return new ShiftTradeValidator(shiftTradeLightValidator, new[]{_openShiftTradePeriodSpecification,
+			return new ShiftTradeValidator(shiftTradeLightValidator, new[]
+			{
+				_openShiftTradePeriodSpecification,
 				_shiftTradeSkillSpecification,
 				_shiftTradeTargetTimeSpecification,
 				_isWorkflowControlSetNotNullSpecification,
 				_shiftTradeAbsenceSpecification,
 				_shiftTradePersonalActivitySpecification,
 				_shiftTradeMeetingSpecification,
-				_shiftTradeMaxSeatsSpecification});
+				_shiftTradeMaxSeatsSpecification
+			});
 		}
 
 		[Test]
@@ -55,15 +58,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(new Person(), new Person(), new DateOnly(), new DateOnly());
 			var result = new ShiftTradeRequestValidationResult(false);
 			shiftTradeLightValidator.Expect(m => m.Validate(null)).IgnoreArguments().Return(result);
-			var request = new ShiftTradeRequest(new[] { shiftTradeSwapDetail });
-			var validator = CreateValidator();
+			var request = new ShiftTradeRequest(new[] { (IShiftTradeSwapDetail)shiftTradeSwapDetail });
+			var validator = createValidator();
 			validator.Validate(request).Should().Be.SameInstanceAs(result);
 		}
 
 		[Test]
 		public void VerifyThatAllSpecificationsGetsCalled()
 		{
-			ShiftTradeValidator validator = CreateValidator();
+			ShiftTradeValidator validator = createValidator();
 
 			IList<IShiftTradeSwapDetail> details = new List<IShiftTradeSwapDetail>();
 
@@ -84,17 +87,27 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		{
 			//not so pretty.. we really need a Ilist of the same interface in the container...
 			const string denyReason = "denyReason";
-			var validator = CreateValidator();
+			var validator = createValidator();
 			IList<IShiftTradeSwapDetail> details = new List<IShiftTradeSwapDetail>();
 
 			Assert.IsTrue(validator.Validate(details).IsOk);
 
 			var falseValidator = new ValidatorSpecificationForTest(false, denyReason);
-			validator = new ShiftTradeValidator(MockRepository.GenerateMock<IShiftTradeLightValidator>(), new[] { falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification });
-			CheckResult(validator.Validate(details), false, denyReason);
+			validator = new ShiftTradeValidator(MockRepository.GenerateMock<IShiftTradeLightValidator>(), new[]
+			{
+				falseValidator,
+				_shiftTradeSkillSpecification,
+				_shiftTradeTargetTimeSpecification,
+				_isWorkflowControlSetNotNullSpecification,
+				_shiftTradeAbsenceSpecification,
+				_shiftTradePersonalActivitySpecification,
+				_shiftTradeMeetingSpecification
+			});
+			checkResult(validator.Validate(details), false, denyReason);
 		}
 
-		private static void CheckResult(ShiftTradeRequestValidationResult result, bool expectedValue, string expectedDenyReason)
+		private static void checkResult(ShiftTradeRequestValidationResult result, bool expectedValue,
+			string expectedDenyReason)
 		{
 			Assert.AreEqual(expectedValue, result.IsOk, "Value is not expected");
 			Assert.AreEqual(expectedDenyReason, result.DenyReason, "Denyreason is not expected");
@@ -103,12 +116,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void VerifyValidateReturnsFalseIfRequestIsNull()
 		{
-			IShiftTradeRequest request = null;
+			IShiftTradeValidator validator = createValidator();
+			Assert.IsFalse(validator.Validate(null).IsOk);
 
-			IShiftTradeValidator validator = CreateValidator();
-			Assert.IsFalse(validator.Validate(request).IsOk);
-
-			request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>());
+			var request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>());
 			Assert.IsTrue(validator.Validate(request).IsOk);
 		}
 
@@ -118,8 +129,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		internal class ValidatorSpecificationForTest : ShiftTradeSpecification
 		{
 			private readonly bool _isSatisfiedBy;
-			private readonly string _denyReason;
 			private IEnumerable<IShiftTradeSwapDetail> _calledWith;
+
+			public override string DenyReason { get; }
 
 			public bool HasBeenCalledWith(IEnumerable<IShiftTradeSwapDetail> details)
 			{
@@ -129,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			public ValidatorSpecificationForTest(bool isSatisfiedBy, string denyReason)
 			{
 				_isSatisfiedBy = isSatisfiedBy;
-				_denyReason = denyReason;
+				DenyReason = denyReason;
 			}
 
 			public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
@@ -137,11 +149,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 				_calledWith = obj;
 
 				return _isSatisfiedBy;
-			}
-
-			public override string DenyReason
-			{
-				get { return _denyReason; }
 			}
 		}
 	}
