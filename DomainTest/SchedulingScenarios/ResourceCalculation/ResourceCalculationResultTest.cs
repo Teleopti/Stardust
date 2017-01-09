@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -50,15 +49,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				skillStaffPeriod.Payload.Shrinkage = new Percent(shrinkage);
 				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(serviceLevel);
 			}
-			var agents = new List<IPerson>();
-			var asses = new List<IPersonAssignment>();
-			for (var i = 0; i < scheduledAgents; i++)
-			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill).WithSchedulePeriodOneDay(date);
-				var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
-				agents.Add(agent);
-				asses.Add(ass);
-			}
+			var agents = Enumerable.Repeat(1,scheduledAgents).Select(i => new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill).WithSchedulePeriodOneDay(date)).ToArray();
+			var asses =
+				agents.Select(agent => new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17)))
+					.ToArray();
+
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), agents, asses, skillDay);
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
