@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 		private ShiftTradeValidator createValidator()
 		{
-			return new ShiftTradeValidator(shiftTradeLightValidator, new[]
+			var specifications = new[]
 			{
 				_openShiftTradePeriodSpecification,
 				_shiftTradeSkillSpecification,
@@ -49,7 +49,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 				_shiftTradePersonalActivitySpecification,
 				_shiftTradeMeetingSpecification,
 				_shiftTradeMaxSeatsSpecification
-			});
+			};
+			var specificationChecker = new SpecificationChecker(specifications);
+			return new ShiftTradeValidator(shiftTradeLightValidator, specificationChecker);
 		}
 
 		[Test]
@@ -66,9 +68,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void VerifyThatAllSpecificationsGetsCalled()
 		{
-			ShiftTradeValidator validator = createValidator();
-
-			IList<IShiftTradeSwapDetail> details = new List<IShiftTradeSwapDetail>();
+			var validator = createValidator();
+			var details = new List<IShiftTradeSwapDetail>();
 
 			validator.Validate(details);
 
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			Assert.IsTrue(validator.Validate(details).IsOk);
 
 			var falseValidator = new ValidatorSpecificationForTest(false, denyReason);
-			validator = new ShiftTradeValidator(MockRepository.GenerateMock<IShiftTradeLightValidator>(), new[]
+			var specifications = new[]
 			{
 				falseValidator,
 				_shiftTradeSkillSpecification,
@@ -102,15 +103,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 				_shiftTradeAbsenceSpecification,
 				_shiftTradePersonalActivitySpecification,
 				_shiftTradeMeetingSpecification
-			});
-			checkResult(validator.Validate(details), false, denyReason);
-		}
+			};
 
-		private static void checkResult(ShiftTradeRequestValidationResult result, bool expectedValue,
-			string expectedDenyReason)
-		{
-			Assert.AreEqual(expectedValue, result.IsOk, "Value is not expected");
-			Assert.AreEqual(expectedDenyReason, result.DenyReason, "Denyreason is not expected");
+			var specificationChecker = new SpecificationChecker(specifications);
+			validator = new ShiftTradeValidator(MockRepository.GenerateMock<IShiftTradeLightValidator>(), specificationChecker);
+			checkResult(validator.Validate(details), false, false, denyReason);
 		}
 
 		[Test]
@@ -123,33 +120,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			Assert.IsTrue(validator.Validate(request).IsOk);
 		}
 
-		/// <summary>
-		/// Stub so we dont have to mock validators, gets a little bit easier to follow
-		/// </summary>
-		internal class ValidatorSpecificationForTest : ShiftTradeSpecification
+		private static void checkResult(ShiftTradeRequestValidationResult result, bool shouldBeOk, bool shouldBeDenied,
+			string expectedDenyReason)
 		{
-			private readonly bool _isSatisfiedBy;
-			private IEnumerable<IShiftTradeSwapDetail> _calledWith;
-
-			public override string DenyReason { get; }
-
-			public bool HasBeenCalledWith(IEnumerable<IShiftTradeSwapDetail> details)
-			{
-				return details.Equals(_calledWith);
-			}
-
-			public ValidatorSpecificationForTest(bool isSatisfiedBy, string denyReason)
-			{
-				_isSatisfiedBy = isSatisfiedBy;
-				DenyReason = denyReason;
-			}
-
-			public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
-			{
-				_calledWith = obj;
-
-				return _isSatisfiedBy;
-			}
+			Assert.AreEqual(shouldBeOk, result.IsOk, "Value of IsOk property is not expected");
+			Assert.AreEqual(shouldBeDenied, result.ShouldBeDenied, "Value of ShouldBeDenied is not expected");
+			Assert.AreEqual(expectedDenyReason, result.DenyReason, "Denyreason is not expected");
 		}
 	}
 }

@@ -2603,6 +2603,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeLightValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeValidator.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ISpecificationChecker.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecification.cs" />
@@ -2620,6 +2621,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeRequestValidationResult.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\SpecificationChecker.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilityValidator.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdWithShrinkageValidator.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdValidator.cs" />

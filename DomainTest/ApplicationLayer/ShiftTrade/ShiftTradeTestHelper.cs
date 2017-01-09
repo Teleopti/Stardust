@@ -74,11 +74,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
 			{
-				new ShiftTradeValidatorTest.ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
+				new ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
 				new ShiftTradeMaxSeatsSpecification (_globalSettingDataRepository, _shiftTradeMaxSeatReadModelValidator)
 			};
-			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), shiftTradeSpecifications);
+			var specificatonChecker = new SpecificationChecker(shiftTradeSpecifications);
 
+			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificatonChecker);
 			_loadSchedulingDataForRequestWithoutResourceCalculation =
 				new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
 		}
@@ -105,11 +106,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		{
 			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
 			{
-				new ShiftTradeValidatorTest.ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
+				new ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
 				new ShiftTradeMaxSeatsSpecification (_globalSettingDataRepository, shiftTradeMaxSeatValidator)
 			};
+			var specificationChecker = new SpecificationChecker(shiftTradeSpecifications);
 
-			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), shiftTradeSpecifications);
+			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 			_activeShiftTradeMaxSeatValidator = shiftTradeMaxSeatValidator;
 		}
 

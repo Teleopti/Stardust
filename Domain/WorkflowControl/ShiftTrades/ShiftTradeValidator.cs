@@ -6,12 +6,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 	public class ShiftTradeValidator : IShiftTradeValidator
 	{
 		private readonly IShiftTradeLightValidator _shiftTradeLightValidator;
-		private readonly IEnumerable<IShiftTradeSpecification> _shiftTradeSpecifications;
+		private readonly ISpecificationChecker _specificationChecker;
 
-		public ShiftTradeValidator(IShiftTradeLightValidator shiftTradeLightValidator, IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
+		public ShiftTradeValidator(IShiftTradeLightValidator shiftTradeLightValidator,
+			ISpecificationChecker specificationChecker)
 		{
 			_shiftTradeLightValidator = shiftTradeLightValidator;
-			_shiftTradeSpecifications = shiftTradeSpecifications;
+			_specificationChecker = specificationChecker;
 		}
 
 		public ShiftTradeRequestValidationResult Validate(IShiftTradeRequest shiftTradeRequest)
@@ -26,15 +27,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		public ShiftTradeRequestValidationResult Validate(IList<IShiftTradeSwapDetail> shiftTradeDetails)
 		{
-			foreach (var specification in _shiftTradeSpecifications)
-			{
-				var result = specification.Validate(shiftTradeDetails);
-				if (!result.IsOk)
-				{
-					return result;
-				}
-			}
-			return new ShiftTradeRequestValidationResult(true);
+			return _specificationChecker.Check(shiftTradeDetails);
 		}
 
 		private ShiftTradeRequestValidationResult validateLightSpecs(IEnumerable<IShiftTradeSwapDetail> shiftTradeRequestDetails)

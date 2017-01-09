@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private readonly IIocConfiguration _configuration;
 
-
 		public ShiftTradeModule(IIocConfiguration configuration)
 		{
 			_configuration = configuration;
@@ -46,6 +45,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<ShiftTradeMaxSeatsSpecification>().As<IShiftTradeSpecification>();
 				builder.RegisterType<ShiftTradeMaxSeatValidator>().As<IShiftTradeMaxSeatValidator>().SingleInstance();
+			}
+
+			if (_configuration.Toggle(Toggles.Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450))
+			{
+				builder.RegisterType<SpecificationCheckerWithConfig>().As<ISpecificationChecker>();
+			}
+			else
+			{
+				builder.RegisterType<SpecificationChecker>().As<ISpecificationChecker>();
 			}
 
 			builder.RegisterType<ShiftTradeValidator>().As<IShiftTradeValidator>();

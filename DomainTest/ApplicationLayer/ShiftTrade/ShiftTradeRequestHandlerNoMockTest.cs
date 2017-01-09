@@ -51,12 +51,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 
-			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService (_requestFactory, _currentScenario);
+			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(_requestFactory, _currentScenario);
 
 			_loadSchedulingDataForRequestWithoutResourceCalculation =
-				new LoadSchedulesForRequestWithoutResourceCalculation (new FakePersonAbsenceAccountRepository(), _scheduleStorage);
+				new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
 
-			_shiftTradeTestHelper = new ShiftTradeTestHelper (_schedulingResultStateHolder, _scheduleStorage, _personRepository,
+			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
 				_businessRuleProvider, _businessRuleCollection, _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
 		}
 
@@ -89,9 +89,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
 			{
-				new ShiftTradeValidatorTest.ValidatorSpecificationForTest(true, "_openShiftTradePeriodSpecification")
+				new ValidatorSpecificationForTest(true, "_openShiftTradePeriodSpecification")
 			};
-			var validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), shiftTradeSpecifications);
+			var specificationChecker = new SpecificationChecker(shiftTradeSpecifications);
+			var validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, validator, _requestFactory, _currentScenario,
 				_personRequestRepository, _scheduleStorage, _personRepository, null, null,
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public void ShouldSetMinWeeklyWorkTimeBrokenRuleWhenUseMinWeekWorkTimeIsOn()
 		{
 			var businessRuleProvider = new BusinessRuleProvider();
-			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider, useMinWeekWorkTime:true);
+			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider, useMinWeekWorkTime: true);
 			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
 		}
 
