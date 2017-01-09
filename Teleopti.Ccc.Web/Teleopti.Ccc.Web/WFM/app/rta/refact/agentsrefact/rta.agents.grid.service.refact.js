@@ -1,17 +1,25 @@
 (function() {
 	'use strict';
 	angular.module('wfm.rta')
-		.service('RtaGridServiceRefact', RtaGridServiceRefact);
+		.factory('RtaGridServiceRefact', RtaGridServiceRefact);
 
 	RtaGridServiceRefact.$inject = ['Toggle', 'uiGridConstants', 'RtaLocaleLanguageSortingService'];
 
 	function RtaGridServiceRefact(toggleService, uiGridConstants, RtaLocaleLanguageSortingService) {
 
-		this.makeAllGrid = function() {
+		var service = {
+			makeAllGrid: makeAllGrid,
+			makeInAlarmGrid: makeInAlarmGrid
+		};
+
+		return service;
+		/////////////////////////
+
+		function makeAllGrid() {
 			return makeGridOptions(false);
 		};
 
-		this.makeInAlarmGrid = function() {
+		function makeInAlarmGrid() {
 			return makeGridOptions(true);
 		};
 

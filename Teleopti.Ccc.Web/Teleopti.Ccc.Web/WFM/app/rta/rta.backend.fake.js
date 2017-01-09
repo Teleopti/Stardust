@@ -2,11 +2,13 @@
 (function() {
 	angular
 		.module('wfm.rta')
-		.service('FakeRtaBackend', FakeRtaBackend);
+		.factory('FakeRtaBackend', FakeRtaBackend);
 
 	FakeRtaBackend.$inject = ['$httpBackend'];
 
 	function FakeRtaBackend($httpBackend) {
+
+		var service = this;
 
 		var serverTime = null;
 		var toggles = {};
@@ -588,5 +590,7 @@
 			organizations.push(organization)
 			return this;
 		}
+
+		return this;
 	};
 })();
