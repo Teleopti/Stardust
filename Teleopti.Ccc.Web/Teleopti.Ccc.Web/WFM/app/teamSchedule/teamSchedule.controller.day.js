@@ -294,8 +294,9 @@
 		vm.selectAllForAllPages = function () {
 			var params = getParamsForLoadingSchedules({ currentPageIndex: 1, pageSize: vm.total });
 			teamScheduleSvc.searchSchedules(params).then(function (result) {
-				var groupSchedule = groupScheduleFactory.Create(result.data.Schedules, vm.scheduleDateMoment());
-				personSelectionSvc.selectAllPerson(groupSchedule.Schedules);
+
+				scheduleMgmtSvc.resetSchedules(result.data.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);			
+				personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.hasSelectedAllPeopleInEveryPage = true;
 			});
@@ -304,9 +305,8 @@
 		vm.unselectAllForAllPages = function() {
 			var params = getParamsForLoadingSchedules({ currentPageIndex: 1, pageSize: vm.total });
 			teamScheduleSvc.searchSchedules(params).then(function (result) {
-				var groupSchedules = groupScheduleFactory.Create(result.data.Schedules, vm.scheduleDateMoment()).Schedules;
-				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-				personSelectionSvc.unselectAllPerson(groupSchedules);
+				scheduleMgmtSvc.resetSchedules(result.data.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);				
 				vm.hasSelectedAllPeopleInEveryPage = false;
 			});
 		};

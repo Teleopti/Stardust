@@ -61,7 +61,14 @@
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table ng-show="vm.scheduleFullyLoaded" select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.cmdConfigurations.validateWarningToggle" cmd-configurations="vm.cmdConfigurations" selected-timezone="vm.currentTimezone"/>
+			<schedule-table ng-show="vm.scheduleFullyLoaded" 
+							select-mode="vm.scheduleTableSelectMode" 
+							selected-date="vm.scheduleDate" 
+							show-warnings="vm.cmdConfigurations.validateWarningToggle" 
+							cmd-configurations="vm.cmdConfigurations" 
+							selected-timezone="vm.currentTimezone"
+							pagination-options="vm.paginationOptions"
+							/>
 		</div>
 
 		<teamschedule-command-container date="vm.scheduleDate"

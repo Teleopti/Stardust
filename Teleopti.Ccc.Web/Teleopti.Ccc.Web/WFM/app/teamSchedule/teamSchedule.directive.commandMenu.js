@@ -185,9 +185,8 @@
 				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 
-		vm.canMoveInvalidOverlappedActivity = function () {
-			var filteredRuleType = "NotOverwriteLayerRuleName";
-			return personSelectionSvc.anyAgentChecked() && checkValidationResultForSelectedPerson(personSelectionSvc.getCheckedPersonIds(), filteredRuleType) && vm.configurations.validateWarningToggle;
+		vm.canMoveInvalidOverlappedActivity = function () {			
+			return personSelectionSvc.anyAgentChecked() && vm.configurations.validateWarningToggle;
 		};
 
 		vm.canMoveShift = function() {
@@ -213,15 +212,6 @@
 		vm.canUndoSchedule = function () {
 			return personSelectionSvc.anyAgentChecked();
 		};
-
-		function checkValidationResultForSelectedPerson(selectedPersonIds, filteredRuleType){
-			var hasInvalidOverlap = false;
-			selectedPersonIds.forEach(function(personId){
-				if(validateRulesService.checkValidationForPerson(personId, filteredRuleType).length > 0)
-					hasInvalidOverlap = true;
-			});
-			return hasInvalidOverlap;
-		}
 
 		function registerShortCuts() {
 			vm.commands.forEach(function (cmd) {

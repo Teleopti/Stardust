@@ -11,7 +11,8 @@
 				selectedDate: '=',
 				selectedTimezone: '<',
 				showWarnings: '=?',
-				cmdConfigurations: '='
+				cmdConfigurations: '=',
+				paginationOptions: '<?'
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
@@ -163,7 +164,15 @@
 
 		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
-			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
+
+			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {
+				vm.scheduleVm.Schedules = ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
+					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize);
+			} else {
+				vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
+			}
+
+			
 			vm.toggles = {
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
@@ -212,7 +221,12 @@
 
 		vm.init();
 
-		$scope.$watch(function () {
+		$scope.$watchCollection(function () {
+			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {				
+				return ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
+					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize);
+			}
+
 			return ScheduleMgmt.groupScheduleVm.Schedules;
 		}, function (newVal) {
 			if (newVal)

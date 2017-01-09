@@ -164,6 +164,13 @@ describe("teamschedule controller tests", function() {
 		expect(searchScheduleCalledTimes).toEqual(1);
 	}));
 
+
+	it("Should rest schedules in schedule management service when select all for all pages", function () {
+		expect(scheduleMgmt.groupScheduleVm.Schedules).toBeUndefined();
+		controller.selectAllForAllPages();
+		expect(scheduleMgmt.groupScheduleVm.Schedules.length).toEqual(2);
+	});
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
 			$scope: rootScope,
