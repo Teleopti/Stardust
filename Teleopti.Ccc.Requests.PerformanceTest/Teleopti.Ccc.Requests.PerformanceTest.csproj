@@ -63,10 +63,8 @@
     </Compile>
     <Compile Include="AbsenceRequests\IProcessMultipleAbsenceRequest.cs" />
     <Compile Include="AbsenceRequests\MultiAbsenceRequestsTest.cs" />
-    <Compile Include="AbsenceRequests\IntradayAbsenceRequestTest.cs" />
     <Compile Include="AbsenceRequests\ProcessBulkAbsenceRequests.cs" />
     <Compile Include="AbsenceRequests\ProcessMultipleAbsenceRequests.cs" />
-    <Compile Include="AbsenceRequests\IntradayRequestPerformanceTestAttribute.cs" />
     <Compile Include="AbsenceRequests\RequestPerformanceTestAttribute.cs" />
     <Compile Include="ShiftTradeRequestsTest.cs" />
   </ItemGroup>
