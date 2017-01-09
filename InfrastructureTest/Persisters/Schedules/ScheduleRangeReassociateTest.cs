@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
