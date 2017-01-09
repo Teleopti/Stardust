@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -304,8 +305,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private IEnumerable<ShiftTradeBusinessRuleConfig> getDefaultBusinessRuleConfigs()
 		{
-			return _businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest()
-				.Select(s => (ShiftTradeBusinessRuleConfig) s);
+			var configs = _businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest()
+				.Select(s => (ShiftTradeBusinessRuleConfig) s).ToList();
+
+			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450))
+			{
+				var shiftTradeTargetTimeSpecificationRuleConfig = configs.First(x => x.BusinessRuleType == typeof(ShiftTradeTargetTimeSpecification).FullName);
+				configs.Remove(shiftTradeTargetTimeSpecificationRuleConfig);
+			}
+
+			return configs;
 		}
 	}
 }

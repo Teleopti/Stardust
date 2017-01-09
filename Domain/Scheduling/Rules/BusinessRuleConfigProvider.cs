@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -9,12 +10,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	{
 		private readonly IBusinessRuleProvider _businessRuleProvider;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IEnumerable<IShiftTradeSpecification> _shiftTradeSpecifications;
 
 		public BusinessRuleConfigProvider(IBusinessRuleProvider businessRuleProvider,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
 		{
 			_businessRuleProvider = businessRuleProvider;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_shiftTradeSpecifications = shiftTradeSpecifications;
 			_schedulingResultStateHolder.UseMinWeekWorkTime = true;
 		}
 
@@ -34,6 +37,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				HandleOptionOnFailed = RequestHandleOption.Pending
 			}));
 
+			result.AddRange(_shiftTradeSpecifications.Where(x => x.Configurable).Select(x => new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = x.GetType().FullName,
+				FriendlyName = x.Description,
+				Enabled = true,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			}));
+
 			return result;
 		}
 	}
@@ -41,7 +52,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class BusinessRuleConfigProvider25635ToggleOff : BusinessRuleConfigProvider
 	{
 		public BusinessRuleConfigProvider25635ToggleOff(IBusinessRuleProvider businessRuleProvider,
-			ISchedulingResultStateHolder schedulingResultStateHolder) : base(businessRuleProvider, schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
+			: base(businessRuleProvider, schedulingResultStateHolder, shiftTradeSpecifications)
 		{
 			schedulingResultStateHolder.UseMinWeekWorkTime = false;
 		}
