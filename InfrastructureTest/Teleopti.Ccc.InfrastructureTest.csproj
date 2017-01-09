@@ -349,7 +349,6 @@
     <Compile Include="Bugs\Bug7871.cs" />
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
-    <Compile Include="CoverAllAssemblies.cs" />
     <Compile Include="Foundation\AssemblyInfoTest.cs" />
     <Compile Include="ReadModelUnitOfWork\ReadModelUnitOfWorkTest.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterTest.cs" />
