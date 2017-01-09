@@ -1,8 +1,8 @@
 ﻿<div class="fav-search-panel material-depth-1">
 	<md-list>
 		<md-subheader class="md-no-sticky fav-search-header">
-			<input type="text" placeholder="Name..." ng-model="$ctrl.currentName" />
-			<button class="btn btn-xs" ng-click="$ctrl.save()" ng-class="{' btn-primary':!$ctrl.disableSave(), ' btn-default':$ctrl.disableSave()}" ng-disabled="$ctrl.disableSave()" translate>
+			<input type="text" class="name" placeholder="{{'Name'|translate}}..." ng-model="$ctrl.currentName" ng-maxlength="50" ng-required="true"/>
+			<button class="btn btn-xs" ng-click="$ctrl.save()" ng-class="{' btn-primary':!$ctrl.disableSave(), ' btn-default':$ctrl.disableSave()}" ng-disabled="$ctrl.disableSave()"  translate>
 				Save
 			</button>
 		</md-subheader>

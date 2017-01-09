@@ -65,11 +65,12 @@
 		}
 
 		ctrl.disableSave = function () {
-			if (!ctrl.currentFavorite) return false;
+			var isNameValid = ctrl.currentName && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
+			if (!ctrl.currentFavorite) return !isNameValid;
 
 			var currentSearch = ctrl.getSearch();
 			return angular.equals(ctrl.currentFavorite.TeamIds, currentSearch.teamIds) &&
-				ctrl.currentFavorite.SearchTerm == currentSearch.searchTerm;
+				ctrl.currentFavorite.SearchTerm == currentSearch.searchTerm && !isNameValid;
 		};
 
 		function popDialog() {
