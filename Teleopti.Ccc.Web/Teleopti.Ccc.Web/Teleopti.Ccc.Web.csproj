@@ -1439,6 +1439,7 @@
     <Content Include="WFM\app\rta\agents\rta.agents.controller.monitorBySkills.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.multipleOrganizationSelection.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.pauseButton.spec.js" />
+    <Content Include="WFM\app\rta\agents\rta.agents.controller.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.recentOutOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
@@ -1476,6 +1477,7 @@
     <Content Include="WFM\app\rta\refact\agentsrefact\rta.agents.controller.monitorBySkills.refact.spec.js" />
     <Content Include="WFM\app\rta\refact\agentsrefact\rta.agents.controller.multipleOrganizationSelection.refact.spec.js" />
     <Content Include="WFM\app\rta\refact\agentsrefact\rta.agents.controller.pauseButton.refact.spec.js" />
+    <Content Include="WFM\app\rta\refact\agentsrefact\rta.agents.controller.QuicklyChangeAgentsSelection.refact.spec.js" />
     <Content Include="WFM\app\rta\refact\agentsrefact\rta.agents.controller.recentOutOfAdherences.refact.spec.js" />
     <Content Include="WFM\app\rta\refact\agentsrefact\rta.agents.controller.refact.js" />
     <Content Include="WFM\app\rta\refact\agentsrefact\rta.agents.controller.refact.spec.js" />
@@ -1516,13 +1518,9 @@
     <Content Include="WFM\app\rta\rta.sorting.localelanguage.service.js" />
     <Content Include="WFM\app\rta\rta.state.provider.js" />
     <Content Include="WFM\app\rta\skills\rta-selectSkill.html" />
-    <Content Include="WFM\app\rta\skills\rta-selectSkill.QuicklyChangeAgentsSelection.html" />
     <Content Include="WFM\app\rta\skills\rta-sites-bySkills.html" />
     <Content Include="WFM\app\rta\skills\rta-teams-bySkills.html" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.spec.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.skillSelection.spec.js" />
