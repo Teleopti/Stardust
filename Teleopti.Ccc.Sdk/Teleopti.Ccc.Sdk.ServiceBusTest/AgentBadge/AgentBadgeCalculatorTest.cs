@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IAgentBadgeCalculator _calculator;
 		private DateOnly _calculateDateOnly;
 		private Guid _lastPersonId;
-		private List<IPerson> _allPersons;
+		private IPerson[] _allPersons;
 		private IBadgeCalculationRepository _badgeCalculationRepository;
 		private IAgentBadgeTransactionRepository _badgeTransactionRepository;
 		private IGamificationSetting _gamificationSetting;
@@ -66,20 +67,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GoldToSilverBadgeRate = 2,
 				SilverToBronzeBadgeRate = 5
 			};
-			_allPersons = new List<IPerson>();
-
-			IPerson person = null;
-			for (var i = 0; i < 2; i++)
+			_allPersons = Enumerable.Range(0, 2).Select(i =>
 			{
-				person = PersonFactory.CreatePersonWithPersonPeriod(_calculateDateOnly);
-				person.SetId(Guid.NewGuid());
+				var person = PersonFactory.CreatePersonWithPersonPeriod(_calculateDateOnly).WithId();
 				person.PermissionInformation.AddApplicationRole(_badgeRole);
-				_allPersons.Add(person);
-			}
-			lastPerson = person;
+				return person;
+			}).ToArray();
+			
+			lastPerson = _allPersons[1];
 			_businessUnitId = new Guid();
 
-			_lastPersonId = (Guid) person.Id;
+			_lastPersonId = (Guid) lastPerson.Id;
 			_badgeCalculationRepository = MockRepository.GenerateMock<IBadgeCalculationRepository>();
 			_badgeCalculationRepository.Stub(
 				x =>x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new Dictionary<Guid, double> { { _lastPersonId, 120}});
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeTransactionRepository>();
-			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence, DateOnly.Today)).IgnoreArguments().Return(null);
+			_badgeTransactionRepository.Stub(x => x.Find(lastPerson, BadgeType.Adherence, DateOnly.Today)).IgnoreArguments().Return(null);
 
 			_now = MockRepository.GenerateMock<INow>();
 

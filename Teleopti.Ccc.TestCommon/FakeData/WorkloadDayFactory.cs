@@ -155,24 +155,29 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
 
-            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+			var timePeriod = new TimePeriod(workload.Skill.MidnightBreakOffset, workload.Skill.MidnightBreakOffset.Add(TimeSpan.FromHours(24)));
+			foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                var template = ((IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, day));
-                template.Lock();
-                template.MakeOpen24Hours();
-                template.Release();
+                var template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, day);
+	            if (!template.OpenHourList.Contains(timePeriod))
+	            {
+		            template.Lock();
+		            template.MakeOpen24Hours();
+		            template.Release();
+	            }
             }
 
-            DateTime currentDate = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
-            endDate = DateTime.SpecifyKind(endDate, DateTimeKind.Utc);
+	        var currentDate =
+		        new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.SpecifyKind(startDate, DateTimeKind.Utc),
+			        workload.Skill.TimeZone));
+			var endDateOnly = new DateOnly(endDate);
 
             int i = 0;
-            do
-            {
+			do
+			{
                 WorkloadDay workloadDay = new WorkloadDay();
-                workloadDay.Create(new DateOnly(TimeZoneHelper.ConvertFromUtc(currentDate, workload.Skill.TimeZone)), workload, new List<TimePeriod>());
+	            workloadDay.Create(currentDate, workload, new[] { timePeriod });
                 workloadDay.Lock();
-                workloadDay.MakeOpen24Hours();
                 foreach (ITemplateTaskPeriod taskPeriod in workloadDay.TaskPeriodList)
                 {
                     taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds((i % 4) + 3);
@@ -184,7 +189,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 workloadDays.Add(workloadDay);
                 currentDate = currentDate.AddDays(1);
                 i++;
-            } while (currentDate <= endDate) ;
+            } while (currentDate <= endDateOnly) ;
 
             return workloadDays;
         }
