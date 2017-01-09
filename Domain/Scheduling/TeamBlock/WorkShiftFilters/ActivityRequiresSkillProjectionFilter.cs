@@ -23,20 +23,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			var personPeriod = person.Period(dateToCheck);
 			if (personPeriod == null) return shiftList;
-
-			IList<IShiftProjectionCache> workShiftsWithValidActivities = new List<IShiftProjectionCache>();
-
+			
 			var validActivities = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(personPeriod).Select(p => p.Skill.Activity).ToArray();
-
-			foreach (var projection in shiftList)
+			var workShiftsWithValidActivities = shiftList.Where(s =>
 			{
-				var projectedLayersRequiringSkill = projection.MainShiftProjection.Select(l => l.Payload).OfType<IActivity>().Where(a => a.RequiresSkill);
-				if (projectedLayersRequiringSkill.All(validActivities.Contains))
-				{
-					workShiftsWithValidActivities.Add(projection);
-				}
-			}
-
+				var projectedLayersRequiringSkill = s.MainShiftProjection.Select(l => l.Payload).OfType<IActivity>().Where(a => a.RequiresSkill);
+				return projectedLayersRequiringSkill.All(validActivities.Contains);
+			}).ToList();
+			
 			return workShiftsWithValidActivities.Count == 0 ? filterResults(shiftList, finderResult) : workShiftsWithValidActivities;
 		}
 

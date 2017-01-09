@@ -18,25 +18,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (effectiveRestriction == null) return shiftList;
 			if (!(schedulingOptions.TeamSameActivity && schedulingOptions.UseTeam)) return shiftList;
 
-			if (effectiveRestriction.CommonActivity != null)
-			{
-				IList<IShiftProjectionCache> activtyfinalShiftList = new List<IShiftProjectionCache>();
-				foreach (var shift in shiftList)
-				{
-					IList<DateTimePeriod> visualLayerPeriodList = new List<DateTimePeriod>();
-					foreach (var visualLayer in shift.TheMainShift.ProjectionService().CreateProjection().Where(c => c.Payload.Id == schedulingOptions.CommonActivity.Id))
-					{
-						visualLayerPeriodList.Add(visualLayer.Period);
-					}
+			if (effectiveRestriction.CommonActivity == null) return shiftList;
 
-					if (effectiveRestriction.CommonActivity.Periods.All(visualLayerPeriodList.Contains))
-					{
-						activtyfinalShiftList.Add(shift);
-					}
-				}
-				return activtyfinalShiftList;
-			}
-			return shiftList;
+			var retList = (from shift in shiftList
+				let visualLayerPeriodList =
+				shift.TheMainShift.ProjectionService()
+					.CreateProjection()
+					.Where(c => c.Payload.Id == schedulingOptions.CommonActivity.Id)
+					.Select(c => c.Period)
+					.ToArray()
+				where effectiveRestriction.CommonActivity.Periods.All(visualLayerPeriodList.Contains)
+				select shift).ToList();
+			return retList;
 		}
 	}
 }

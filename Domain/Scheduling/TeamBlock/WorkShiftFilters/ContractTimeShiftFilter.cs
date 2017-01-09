@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_userCulture = userCulture;
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		
 		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
 		                                           IList<IShiftProjectionCache> shiftList,
 		                                           ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
@@ -70,13 +69,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			int cntBefore = shiftList.Count;
-			IList<IShiftProjectionCache> workShiftsWithinMinMax = new List<IShiftProjectionCache>();
-
-			foreach (IShiftProjectionCache proj in shiftList)
-			{
-				if (allowedMinMax.Value.Contains(proj.WorkShiftProjectionContractTime))
-					workShiftsWithinMinMax.Add(proj);
-			}
+			var workShiftsWithinMinMax = shiftList.Where(s => allowedMinMax.Value.Contains(s.WorkShiftProjectionContractTime)).ToList();
+			
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(
 					string.Format(_userCulture.GetCulture(),

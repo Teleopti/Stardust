@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -25,24 +25,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (restriction == null) return null;
 			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
-			IList<IShiftProjectionCache> workShiftsWithinMinMax = new List<IShiftProjectionCache>();
-			if (restriction.WorkTimeLimitation.EndTime.HasValue || restriction.WorkTimeLimitation.StartTime.HasValue)
-			{
-				foreach (ShiftProjectionCache proj in shiftList)
-				{
-					var workTime = proj.WorkShiftProjectionWorkTime;
-
-					if (restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(workTime))
-						workShiftsWithinMinMax.Add(proj);
-				}
-				finderResult.AddFilterResults(
-				new WorkShiftFilterResult(string.Format(_userCulture.GetCulture(), UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
-										  shiftList.Count, workShiftsWithinMinMax.Count));
-			}
-			else
+			if (!restriction.WorkTimeLimitation.EndTime.HasValue && !restriction.WorkTimeLimitation.StartTime.HasValue)
 			{
 				return shiftList;
 			}
+
+			var workShiftsWithinMinMax =
+				shiftList.Where(
+					s => restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(s.WorkShiftProjectionWorkTime)).ToList();
+			finderResult.AddFilterResults(
+				new WorkShiftFilterResult(
+					string.Format(_userCulture.GetCulture(), UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams,
+						restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
+					shiftList.Count, workShiftsWithinMinMax.Count));
 			return workShiftsWithinMinMax;
 		}
 	}

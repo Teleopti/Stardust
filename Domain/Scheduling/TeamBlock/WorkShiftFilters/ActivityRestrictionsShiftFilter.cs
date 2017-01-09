@@ -21,16 +21,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				return shiftList;
 
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			IList<IShiftProjectionCache> workShiftsWithActivity = new List<IShiftProjectionCache>();
-
-			foreach (var projectionCache in shiftList)
-			{
-				if (restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, timeZone,
-																				  projectionCache.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>()))
-				{
-					workShiftsWithActivity.Add(projectionCache);
-				}
-			}
+			var workShiftsWithActivity =
+				shiftList.Where(
+					s =>
+						restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, timeZone,
+							s.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>())).ToList();
 
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(UserTexts.Resources.FilterOnPreferenceActivity, shiftList.Count,

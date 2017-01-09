@@ -26,9 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (effectiveRestriction.CommonMainShift != null)
 			{
 				var shift = shiftList.FirstOrDefault(x => _scheduleDayEquator.MainShiftBasicEquals(x.TheMainShift, effectiveRestriction.CommonMainShift));
-				if (shift != null)
-					return new List<IShiftProjectionCache> { shift };
-				return null;
+				return shift != null ? new List<IShiftProjectionCache> { shift } : null;
 			}
 			return shiftList;
 		}

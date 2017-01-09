@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -14,12 +15,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;
-			IList<IShiftProjectionCache> ret = new List<IShiftProjectionCache>();
-			foreach (var shiftProjectionCache in shiftList)
-			{
-				if (mainShiftActivitiesOptimizeSpecification != null && mainShiftActivitiesOptimizeSpecification.IsSatisfiedBy(shiftProjectionCache.TheMainShift))
-					ret.Add(shiftProjectionCache);
-			}
+			if (mainShiftActivitiesOptimizeSpecification == null) return new List<IShiftProjectionCache>();
+			IList<IShiftProjectionCache> ret =
+				shiftList.Where(s => mainShiftActivitiesOptimizeSpecification.IsSatisfiedBy(s.TheMainShift)).ToList();
+
 			return ret;
 		}
 	}

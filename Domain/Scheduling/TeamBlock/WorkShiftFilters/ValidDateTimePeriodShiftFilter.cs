@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -28,18 +28,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			var cntBefore = shiftList.Count;
-			IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
-			foreach (IShiftProjectionCache proj in shiftList)
-			{
-				var mainShiftPeriod = proj.TheMainShift.LayerCollection.OuterPeriod();
-				if (mainShiftPeriod.HasValue)
-				{
-					if (validPeriod.Contains(mainShiftPeriod.Value))
-					{
-						workShiftsWithinPeriod.Add(proj);
-					}
-				}
-			}
+			IList<IShiftProjectionCache> workShiftsWithinPeriod =
+				shiftList.Select(s => new {s, OuterPeriod = s.TheMainShift.LayerCollection.OuterPeriod()})
+					.Where(s => s.OuterPeriod.HasValue && validPeriod.Contains(s.OuterPeriod.Value))
+					.Select(s => s.s)
+					.ToList();
+
 			var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(

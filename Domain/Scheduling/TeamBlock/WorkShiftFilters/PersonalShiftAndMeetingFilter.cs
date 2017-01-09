@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -25,36 +26,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			if (shiftList.Count == 0)
 				return shiftList;
-			DateTimePeriod? period = GetMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
-			if (period.HasValue)
-			{
-				var meetings = schedulePart.PersonMeetingCollection();
-				var personalAssignment = schedulePart.PersonAssignment();
-				int cntBefore = shiftList.Count;
-				IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
-				foreach (IShiftProjectionCache t in shiftList)
-				{
-					IShiftProjectionCache proj = t;
-					if (!proj.MainShiftProjection.Period().HasValue) continue;
-					DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
 
-					if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignment))
-					{
-						workShiftsWithinPeriod.Add(proj);
-					}
-				}
-				var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
-				finderResult.AddFilterResults(
-					new WorkShiftFilterResult(
-						string.Format(CultureInfo.InvariantCulture,
-									  UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-									  period.Value.StartDateTimeLocal(currentTimeZone), period.Value.EndDateTimeLocal(currentTimeZone)), cntBefore,
-						workShiftsWithinPeriod.Count));
+			var period = GetMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
+			if (!period.HasValue) return shiftList;
 
-				return workShiftsWithinPeriod;
+			var meetings = schedulePart.PersonMeetingCollection();
+			var personalAssignment = schedulePart.PersonAssignment();
+			int cntBefore = shiftList.Count;
+			IList<IShiftProjectionCache> workShiftsWithinPeriod =
+				shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
+					.Where(
+						s =>
+							s.Period.HasValue && s.Period.Value.Contains(period.Value) &&
+							s.s.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignment))
+					.Select(s => s.s)
+					.ToList();
 
-			}
-			return shiftList;
+			var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
+			finderResult.AddFilterResults(
+				new WorkShiftFilterResult(
+					string.Format(CultureInfo.InvariantCulture,
+						UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
+						period.Value.StartDateTimeLocal(currentTimeZone), period.Value.EndDateTimeLocal(currentTimeZone)), cntBefore,
+					workShiftsWithinPeriod.Count));
+
+			return workShiftsWithinPeriod;
 		}
 
 		public DateTimePeriod? GetMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)

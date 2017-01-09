@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (shiftList.Count == 0) return shiftList;
 			var part = scheduleDictionary[person].ScheduledDay(dateToSchedule);
 
-			var filteredList = new List<IShiftProjectionCache>();
 			var meetings = part.PersonMeetingCollection();
 			var personAssignment = part.PersonAssignment(true);
 			var cnt = shiftList.Count;
@@ -32,14 +31,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (meetings.Count == 0 && !personAssignment.PersonalActivities().Any())
 				return shiftList;
 
-			foreach (var shift in shiftList)
-			{
-				if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
-				                                       isActivityIntersectedWithMeetingOrPersonalShift(
-					                                       personAssignment, meetings, x)))
-					continue;
-				filteredList.Add(shift);
-			}
+			var filteredList =
+				shiftList.Where(
+					shift =>
+						!shift.MainShiftProjection.Any(
+							x =>
+								!((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
+								isActivityIntersectedWithMeetingOrPersonalShift(personAssignment, meetings, x))).ToList();
 			finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstActivities,
 			                                                        cnt, filteredList.Count));
 
