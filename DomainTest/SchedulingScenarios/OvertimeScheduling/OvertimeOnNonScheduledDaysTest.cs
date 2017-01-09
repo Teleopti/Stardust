@@ -835,7 +835,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			});
 		}
 
-		[Test, Ignore("to be fixed")]
+		[Test]
 		public void ShoulNotCrashWhenAgentHasNoContract()
 		{
 			var scenario = new Scenario("_");
