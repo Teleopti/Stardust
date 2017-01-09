@@ -17,7 +17,7 @@
 			'$translate',
 			'$location',
 			'RtaService',
-			'RtaGridService',
+			'RtaGridServiceRefact',
 			'RtaFormatService',
 			'RtaRouteService',
 			'FakeTimeService',
@@ -45,6 +45,7 @@
 				NoticeService,
 				$timeout
 			) {
+				
 				var vm = this;
 
 				var selectedPersonId, lastUpdate, notice, selectedSiteId;;
