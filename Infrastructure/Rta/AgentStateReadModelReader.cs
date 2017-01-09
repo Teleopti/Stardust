@@ -23,41 +23,39 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
-			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
-			return load(queryBuilder, siteIds, teamIds, skillIds);
+			var queryBuilder =
+				new AgentStateReadModelQueryBuilder(_now)
+					.WithSelection(siteIds, teamIds, skillIds);
+			return load(queryBuilder);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			var queryBuilder =
 				new AgentStateReadModelQueryBuilder(_now)
+					.WithSelection(siteIds, teamIds, skillIds)
 					.InAlarm();
-			return load(queryBuilder, siteIds, teamIds, skillIds);
+			return load(queryBuilder);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
 		{
 			var queryBuilder =
 				new AgentStateReadModelQueryBuilder(_now)
+					.WithSelection(siteIds, teamIds, skillIds)
 					.InAlarm()
 					.Exclude(excludedStates);
-			return load(queryBuilder, siteIds, teamIds, skillIds);
+			return load(queryBuilder);
 		}
 
-		private IEnumerable<AgentStateReadModel> load(AgentStateReadModelQueryBuilder queryBuilder, IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
-			IEnumerable<Guid> skillIds)
+		private IEnumerable<AgentStateReadModel> load(AgentStateReadModelQueryBuilder queryBuilder)
 		{
-			if (siteIds != null)
-				queryBuilder.InSites(siteIds);
-			if (teamIds != null)
-				queryBuilder.InTeams(teamIds);
-			if (skillIds != null)
-				queryBuilder.WithSkills(skillIds);
 
 			var builder = queryBuilder.Build();
 			var sqlQuery = _unitOfWork.Current().Session()
 				.CreateSQLQuery(builder.Query);
-			builder.ParameterFuncs.ForEach(f => f(sqlQuery));
+			builder.ParameterFuncs
+				.ForEach(f => f(sqlQuery));
 			return sqlQuery
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
