@@ -150,16 +150,39 @@
     }
 
     .operation-container {
-        height: 50px;
+        display: flex;
+        justify-content: space-between;
         background-color: $white;
         padding: 0;
         padding-left: 12px;
-    }
 
-    requests-commands-pane {
-        position: absolute;
-        top: 0;
-        right: 1em;
+        .left-part {
+            padding: .4em 0;
+            flex: 1 1 80%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: flex-start;
+
+            wfm-multiple-search-input {
+                margin: 0;
+            }
+
+            .request-date-range-picker {
+                margin-right: 1em;
+            }
+
+            .wfm-switch {
+                padding: 0;
+                margin: 0;
+            }
+        }
+
+        .right-part {
+            flex: 1 1 20%;
+            display: flex;
+            justify-content: flex-end;
+        }
     }
 
     .request-filter {
@@ -520,7 +543,6 @@
     }
 
     .request-date-range-picker {
-        margin-top: 5px;
 
         .date-range-start-date {
             margin-right: 0;
