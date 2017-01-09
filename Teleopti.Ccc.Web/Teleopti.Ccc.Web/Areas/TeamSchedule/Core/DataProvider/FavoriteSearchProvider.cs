@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Name = f.Name,
 				SearchTerm = f.SearchTerm,
 				IsDefault = f.Status == FavoriteSearchStatus.Default,
-				TeamIds = f.TeamIds.Split(',').Select(t => new Guid(t)).ToArray()
+				TeamIds = f.TeamIds?.Split(',').Select(t => new Guid(t)).ToArray()
 			}).OrderBy(f => f.Name).ToList();
 		}
 
