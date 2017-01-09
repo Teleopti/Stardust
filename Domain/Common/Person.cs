@@ -818,16 +818,6 @@ namespace Teleopti.Ccc.Domain.Common
 			AddPersonPeriod(period);
 		}
 
-		//Added mainly for easier testing. Not yet part of IPerson
-		public virtual void AddPeriodWithSkills(PersonPeriod period, IEnumerable<ISkill> skills)
-		{
-			foreach (var skill in skills)
-			{
-				period.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
-			}
-			AddPersonPeriod(period);
-		}
-
 	    public virtual ISiteOpenHour SiteOpenHour(DateOnly dateOnly)
 	    {
 			if (MyTeam(dateOnly) != null)

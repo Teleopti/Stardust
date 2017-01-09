@@ -18,14 +18,15 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, params ISkill[] skills)
 		{
+			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team {Site = new Site("_")});
 			if (skills.Any())
 			{
-				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team {Site = new Site("_")}), skills);
+				foreach (var skill in skills)
+				{
+					personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+				}
 			}
-			else
-			{
-				agent.AddPersonPeriod(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }));
-			}
+			agent.AddPersonPeriod(personPeriod);
 			return agent;
 		}
 
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.TestCommon
 			agent.Period(DateOnly.MinValue).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
 			return agent;
 		}
+
 
 		public static Person WithSchedulePeriodOneDay(this Person agent, DateOnly date)
 		{
