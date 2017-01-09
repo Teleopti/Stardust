@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[Test, Ignore("fix build")]
+		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
 		{
 			const int numberOfAgents = 100;
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
-			var date = DateOnly.Today;
+			var date = new DateOnly(2017, 1, 10);
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpen(new TimePeriod(7, 45, 16, 0));
@@ -69,14 +69,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					.Should().Be.EqualTo(numberOfAgents / 2);
 		}
 
-		[Test, Ignore("fix build")]
+		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation_TeamBlock()
 		{
 			const int numberOfAgents = 100;
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
-			var date = DateOnly.Today; 
+			var date = new DateOnly(2017, 1, 10);
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpen(new TimePeriod(7, 45, 16, 0));
@@ -111,10 +111,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					.Should().Be.EqualTo(numberOfAgents / 2);
 		}
 
-		[Test, Ignore("fix build")]
+		[Test]
 		public void ShouldShovelWhenSchedulingHasBeenDone()
 		{
-			var date = DateOnly.Today;
+			var date = new DateOnly(2017, 1, 10);
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
