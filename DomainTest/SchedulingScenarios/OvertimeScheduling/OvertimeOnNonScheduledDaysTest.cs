@@ -836,7 +836,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		}
 
 		[Test]
-		public void ShoulNotCrashWhenAgentHasNoContract()
+		public void ShouldNotCrashWhenAgentHasNoContract()
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
