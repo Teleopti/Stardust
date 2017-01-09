@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneWeek(firstDay).InTeam(team);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skillA, skillB).WithSchedulePeriodOneWeek(firstDay);
 				agent.SchedulePeriod(firstDay).SetDaysOff(2);
 				agents.Add(agent);
 			}
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneWeek(firstDay).InTeam(team);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skillA, skillB).WithSchedulePeriodOneWeek(firstDay);
 				agent.SchedulePeriod(firstDay).SetDaysOff(1);
 				agents.Add(agent);
 			}

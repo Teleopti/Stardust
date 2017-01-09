@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_") {RequiresSeat = true};
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod().InTeam(new Team { Site = new Site("_") { MaxSeats = 10 }.WithId() });
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new Team { Site = new Site("_") { MaxSeats = 10 }.WithId() });
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(15);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_") { RequiresSeat = true };
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod().InTeam(new Team { Site = new Site("_") { MaxSeats = 10 }.WithId() });
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new Team { Site = new Site("_") { MaxSeats = 10 }.WithId() });
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(intervalLength);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_") { RequiresSeat = true };
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod().InTeam(new Team { Site = new Site("_") { MaxSeats = numberOfSeats }.WithId() });
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new Team { Site = new Site("_") { MaxSeats = numberOfSeats }.WithId() });
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(15);
