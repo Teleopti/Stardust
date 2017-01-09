@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	public class FavoriteSearchProvider : IFavoriteSearchProvider
 	{
 		private readonly ILoggedOnUser _loggonUser;
-		private IFavoriteSearchRepository _favoriteSearchRepo;
+		private readonly IFavoriteSearchRepository _favoriteSearchRepo;
 
 		public FavoriteSearchProvider(ILoggedOnUser loggonUser, IFavoriteSearchRepository favoriteSearchRepo)
 		{
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public IList<FavoriteSearchViewModel> GetAllForCurrentUser()
 		{
 			var currentUser = _loggonUser.CurrentUser();
-			return _favoriteSearchRepo.FindAllForPerson(currentUser.Id.Value).Select(f => new FavoriteSearchViewModel
+			return _favoriteSearchRepo.FindAllForPerson(currentUser.Id.GetValueOrDefault()).Select(f => new FavoriteSearchViewModel
 			{
 				Id =f.Id.GetValueOrDefault(),
 				Name = f.Name,

@@ -2962,6 +2962,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} exists, are you sure to update it?.
+        /// </summary>
+        public static string AreYouSureToUpdateCurrentFavoriteSearch {
+            get {
+                return ResourceManager.GetString("AreYouSureToUpdateCurrentFavoriteSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete?.
         /// </summary>
         public static string AreYouSureYouWantToDelete {
