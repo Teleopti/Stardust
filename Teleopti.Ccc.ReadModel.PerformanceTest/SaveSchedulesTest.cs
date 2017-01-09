@@ -51,31 +51,33 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Impersonate.Impersonate(logOnDatasource, businessUnitId);
 
 			Now.Is("2016-06-01".Utc());
-			Http.Get($"/Test/SetCurrentTime?ticks={Now.UtcDateTime().Ticks}");
+			var utcNow = Now.UtcDateTime();
+			Http.Get($"/Test/SetCurrentTime?ticks={utcNow.Ticks}");
 			var dates = Enumerable.Range(1, Configuration.NumberOfDays)
-				.Select(i => new DateOnly(Now.UtcDateTime().AddDays(i))).ToList();
+				.Select(i => new DateOnly(utcNow.AddDays(i))).ToList();
 
 				WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
+				var localDateOnly = Now.LocalDateOnly();
 				var persons = Persons.LoadAll()
-					.Where(p => p.Period(new DateOnly(Now.UtcDateTime())) != null) // UserThatCreatesTestData has no period
+					.Where(p => p.Period(localDateOnly) != null) // UserThatCreatesTestData has no period
 					.ToList();
 
 				TestLog.Debug($"Creating data for {persons.Count} people for {dates.Count} dates.");
 
 				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
-				persons.ForEach(person =>
+				Assignments.AddRange(persons.SelectMany(person =>
 				{
-					dates.ForEach(date =>
+					return dates.Select(date =>
 					{
 						var assignment = new PersonAssignment(person, scenario, date);
 						var startTime = DateTime.SpecifyKind(date.Date.AddHours(8), DateTimeKind.Utc);
 						var endTime = DateTime.SpecifyKind(date.Date.AddHours(17), DateTimeKind.Utc);
 						assignment.AddActivity(phone, startTime, endTime);
-						Assignments.Add(assignment);
+						return assignment;
 					});
-				});
+				}));
 			});
 			TestLog.Debug($"Done creating data waiting for the process to finish.");
 
@@ -87,8 +89,5 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Hangfire.WaitForQueue();
 			hangfireQueueLogCancellationToken.Cancel();
 		}
-		
-
 	}
-	
 }
