@@ -12,7 +12,7 @@
 			}
 		});
 
-	favoriteSearchCtrl.$inject = ['$translate','$mdPanel', '$wfmModal', 'FavoriteSearchDataService'];
+	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmModal', 'FavoriteSearchDataService'];
 
 	function favoriteSearchCtrl($translate, $mdPanel, $wfmModal, FavoriteSearchDataService) {
 		var ctrl = this;
@@ -26,10 +26,10 @@
 				.addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW);
 			var config = {
 				attachTo: angular.element(document.body),
-				controller: ['mdPanelRef', function(mdPanelRef) {
-						if (mdPanelRef) ctrl.mdPanelRef = mdPanelRef;
-						return ctrl;
-					}
+				controller: ['mdPanelRef', function (mdPanelRef) {
+					if (mdPanelRef) ctrl.mdPanelRef = mdPanelRef;
+					return ctrl;
+				}
 				],
 				controllerAs: '$ctrl',
 				templateUrl: 'app/teamSchedule/html/favoriteSearchPanel.tpl.html',
@@ -50,7 +50,7 @@
 			});
 		}
 
-		ctrl.save = function() {
+		ctrl.save = function () {
 			var currentSearch = angular.copy(ctrl.getSearch());
 			if (favoriteSearchNameList.indexOf(ctrl.currentName) === -1) {
 				FavoriteSearchDataService.add(ctrl.currentName, currentSearch)
@@ -100,31 +100,40 @@
 
 		ctrl.toggleDefault = function (name) {
 			var index = favoriteSearchNameList.indexOf(name);
-			if (index != -1) {
-
+			if (index !== -1) {
+				//already default => not default
 				if (ctrl.favoriteSearchList[index].IsDefault) {
-					FavoriteSearchDataService.removeDefault(name)
-						.then(function () {
+					var clonedSearchItem = angular.copy(ctrl.favoriteSearchList[index]);
+					clonedSearchItem.IsDefault = false;
+
+					FavoriteSearchDataService.update(clonedSearchItem)
+						.then(function() {
 							ctrl.favoriteSearchList[index].IsDefault = false;
 						});
-				} else {
-					FavoriteSearchDataService.makeDefault(name)
-						.then(function () {
-							for (var i = 0; i < ctrl.favoriteSearchList.length; i++) {
-								if (i === index) {
-									ctrl.favoriteSearchList[i].IsDefault = true;
-								} else {
-									ctrl.favoriteSearchList[i].IsDefault = false;
+				} else { //not default => default
+					var currentDefault = ctrl.favoriteSearchList.filter(function(f) {
+						return f.IsDefault;
+					})[0];
+
+					FavoriteSearchDataService.changeDefault({
+							CurrentDefaultId: ctrl.favoriteSearchList[index].Id,
+							PreDefaultId: currentDefault? currentDefault.Id:null
+						})
+						.then(
+							function () {
+								if (currentDefault) {
+									currentDefault.IsDefault = false;
 								}
-							}
-						});
+								
+								ctrl.favoriteSearchList[index].IsDefault = true;
+							});
 				}
 			}
 		}
 
 		ctrl.delete = function (name) {
 			var index = favoriteSearchNameList.indexOf(name);
-			FavoriteSearchDataService.delete(name)
+			FavoriteSearchDataService.delete(ctrl.favoriteSearchList[index].Id)
 				.then(function () {
 					ctrl.favoriteSearchList.splice(index, 1);
 					favoriteSearchNameList.splice(index, 1);

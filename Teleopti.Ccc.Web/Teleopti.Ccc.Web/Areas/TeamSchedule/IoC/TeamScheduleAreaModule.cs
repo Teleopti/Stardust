@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<AbsenceCommandConverter>().As<IAbsenceCommandConverter>();
 			builder.RegisterType<ScheduleValidationProvider>().As<IScheduleValidationProvider>().SingleInstance();
 			builder.RegisterType<ProjectionSplitter>().As<IProjectionSplitter>().SingleInstance();
+
+			builder.RegisterType<FavoriteSearchProvider>().As<IFavoriteSearchProvider>().SingleInstance();
 		}
 	}
 }

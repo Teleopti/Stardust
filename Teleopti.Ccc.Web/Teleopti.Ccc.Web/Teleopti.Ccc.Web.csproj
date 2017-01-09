@@ -700,6 +700,9 @@
     <Compile Include="Areas\Rta\Controllers\RtaToolController.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
+    <Compile Include="Areas\TeamSchedule\Controllers\FavoriteSearchController.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\FavoriteSearchProvider.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\CheckingResult.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleProjectionProvider.cs" />

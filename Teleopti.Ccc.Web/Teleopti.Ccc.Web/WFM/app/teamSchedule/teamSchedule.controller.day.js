@@ -43,7 +43,7 @@
 		vm.applyFavorite = function(teamIds, searchTerm) {
 			vm.selectedTeamIds = teamIds;
 			vm.searchOptions.keyword = searchTerm;
-			//resetPage();
+			vm.resetSchedulePage();
 		};
 
 		vm.getSearch = function() {
@@ -430,7 +430,7 @@
 										|| vm.toggles.SwapShiftEnabled
 										|| vm.toggles.ModifyShiftCategoryEnabled;
 
-			if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled)
+			if (!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && !vm.toggles.SaveFavoriteSearchesEnabled)
 				vm.resetSchedulePage();
 
 

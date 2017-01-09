@@ -4,15 +4,16 @@
 	angular.module('wfm.teamSchedule').service('FavoriteSearchDataService', ['$http', FavoriteSearchService]);
 
 	function FavoriteSearchService($http) {
-		/*var svc = this;
-		var getFavoriteSearchListUrl = 'app/teamSchedule/getFavoriteSearchList';
-		var addFavoriteUrl = '';
-		var updateFavoriteUrl = '';
-		var makeDefaultFavoriteUrl = '';
-		var deleteFavoriteUrl = '';
+		var svc = this;
+
+		var fetchAvailableFavoritesUrl = '../api/FavoriteSearch/FetchAvailableFavorites';
+		var addFavoriteUrl = '../api/FavoriteSearch/AddFavorite';
+		var updateFavoriteUrl = '../api/FavoriteSearch/Update';
+		var makeDefaultFavoriteUrl = '../api/FavoriteSearch/ChangeDefault';
+		var deleteFavoriteUrl = '../api/FavoriteSearch/Delete';
 
 		svc.getFavoriteSearchList = function () {
-			return $http.get(getFavoriteSearchListUrl);
+			return $http.get(fetchAvailableFavoritesUrl);
 		};
 
 		svc.add = function(name, curSearch) {
@@ -23,52 +24,12 @@
 			return $http.post(updateFavoriteUrl, curFavorite);
 		};
 
-		svc.makeDefault = function(name) {
-			return $http.post(makeDefaultFavoriteUrl,{Name:name});
+		svc.changeDefault = function(formData) {
+			return $http.post(makeDefaultFavoriteUrl, formData);
 		};
 
-		svc.delete = function(name) {
-			return $http.post(deleteFavoriteUrl, { Name: name });
+		svc.delete = function(searchId) {
+			return $http.get(deleteFavoriteUrl + '?id=' + searchId);
 		};
-		*/
-
-		var fakeData = [
-			
-		];
-
-		this.getFavoriteSearchList = function () {
-			return {
-				then: function (cb) { cb({ data: fakeData }); }
-			}
-		}
-
-		this.add = function (currentName, currentSearch) {
-			var result = {
-				Id: 'id',
-				Name: currentName,
-				TeamIds: currentSearch.teamIds,
-				SearchTerm: currentSearch.searchTerm,
-				IsDefault: false
-			};
-			return {
-				then: function (cb) { cb({ data: result }); }
-			}
-		}
-
-		this.update = function () {
-			return { then: function (cb) { cb(); } };
-		}
-
-		this.delete = function () {
-			return { then: function (cb) { cb(); } };
-		}
-
-		this.makeDefault = function () {
-			return { then: function (cb) { cb(); } };
-		}
-
-		this.removeDefault = function () {
-			return { then: function (cb) { cb(); } };
-		}
 	}
 })();

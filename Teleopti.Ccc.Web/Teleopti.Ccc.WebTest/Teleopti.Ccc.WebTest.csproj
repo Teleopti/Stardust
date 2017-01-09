@@ -275,6 +275,7 @@
     <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersonToPermissionValidatorTest.cs" />
     <Compile Include="Core\Startup\PublishStartupJobsTaskTest.cs" />
+    <Compile Include="Core\TeamSchedule\FavoriteSearchProviderTest.cs" />
     <Compile Include="Core\TeamSchedule\ScheduleValidationProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProviderTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiControllerTest.cs" />
