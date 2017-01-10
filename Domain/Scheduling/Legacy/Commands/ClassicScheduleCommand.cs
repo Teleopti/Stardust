@@ -52,16 +52,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
-			var allScheduleDays = new List<IScheduleDay>();
-			var stateHolder = _schedulerStateHolder();
-
-			foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
-			{
-				allScheduleDays.AddRange(
-					stateHolder.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(
-						scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
-			}
-
 			var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
 			if (daysOnlyHelper.DaysOnly)
 			{
@@ -93,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulingOptions);
 
 			if(runWeeklyRestSolver && selectedPeriod.HasValue)
-				solveWeeklyRest(schedulingOptions, selectedSchedules, stateHolder, selectedPeriod.Value, backgroundWorker, dayOffOptimizationPreferenceProvider);
+				solveWeeklyRest(schedulingOptions, selectedSchedules, _schedulerStateHolder(), selectedPeriod.Value, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
 
