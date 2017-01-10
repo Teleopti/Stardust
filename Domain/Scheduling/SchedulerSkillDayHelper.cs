@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			if (datesToProcess.Any())
 			{
-				IList<ISkillDay> skillDaysToRepository = new List<ISkillDay>();
 				foreach (var uniqueDate in datesToProcess)
 				{
 					ISkillDay skillDay = new SkillDay();
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					skillDay.CreateFromTemplate(uniqueDate, skill, scenario, skillDayTemplate);
 
 					skillDays.Add(skillDay);
-					skillDaysToRepository.Add(skillDay);
 				}
 			}
 
