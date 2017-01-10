@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			DateOnly firstPeriodDay = matrix.EffectivePeriodDays[0].Day;
 			var personalSkills = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(matrix.Person.Period(firstPeriodDay));
-			return personalSkills.Select(personalSkill => personalSkill.Skill).ToList();
+			return personalSkills.Select(personalSkill => personalSkill.Skill).ToArray();
 		}
 	}
 

@@ -99,10 +99,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 
 				var maxContractWorkTimePerWeek = 0d;
-				foreach (var dateOnly in personWeek.Week.DayCollection())
+				foreach (var period in person.PersonPeriods(personWeek.Week))
 				{
-					var period = person.Period(dateOnly);
-					if (period == null) continue;
 					var workTime = period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
 					if (workTime > maxContractWorkTimePerWeek) maxContractWorkTimePerWeek = workTime;
 				}

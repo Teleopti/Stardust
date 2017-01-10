@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -45,15 +44,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    }
 
 	    public IList<double?> Values()
-        {
-            IList<double?> ret = new List<double?>();
-
-            foreach (IScheduleDayPro scheduleDayPro in _scheduleMatrix.EffectivePeriodDays)
-            {
-                double? value = DayValue(scheduleDayPro.Day);
-                ret.Add(value);
-            }
-
+	    {
+		    IList<double?> ret =
+			    _scheduleMatrix.EffectivePeriodDays.Select(scheduleDayPro => DayValue(scheduleDayPro.Day)).ToList();
+			
             return ret;
         }
 

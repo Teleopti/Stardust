@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -72,12 +73,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             foreach (var scheduleDayPro in daysToWorkWith)
             {
-                IList<ISkill> skillList = new List<ISkill>();
-                foreach (var personSkill in _scheduleMatrix.Person.Period(scheduleDayPro.Day).PersonSkillCollection)
-                {
-                    skillList.Add(personSkill.Skill);
-                }
-
+	            IList<ISkill> skillList =
+		            _scheduleMatrix.Person.Period(scheduleDayPro.Day).PersonSkillCollection.Select(s => s.Skill).ToArray();
+                
             	double? current = _scheduleMatrixValueCalculator.DayValueForSkills(scheduleDayPro.Day, skillList);
                 if(current.HasValue)
                 {

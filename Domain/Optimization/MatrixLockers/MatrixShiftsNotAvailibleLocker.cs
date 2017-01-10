@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 				{
 					var dateOnly = scheduleDayPro.Day;
 					var period = person.Period(dateOnly);
-					var bag = period.RuleSetBag;
+					var bag = period?.RuleSetBag;
 					if(bag == null)
 						continue;
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 					}
 
 					if (!foundOne)
-						matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+						matrix.LockPeriod(dateOnly.ToDateOnlyPeriod());
 				}
 			}
 		}

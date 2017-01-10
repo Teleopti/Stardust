@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	    public VirtualSchedulePeriod(IPerson person, DateOnly date, IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, IVirtualSchedulePeriodSplitChecker splitChecker)
 	    {
-			if (person == null) throw new ArgumentNullException("person");
-			if (splitChecker == null) throw new ArgumentNullException("splitChecker");
+			if (person == null) throw new ArgumentNullException(nameof(person));
+			if (splitChecker == null) throw new ArgumentNullException(nameof(splitChecker));
 
 			_schedulePeriod = (SchedulePeriod) schedulePeriod;
 			_person = person;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
@@ -13,12 +14,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         public TimeSpan GetWeeklyRestFromContract(PersonWeek personWeek)
         {
             var person = personWeek.Person;
-            var period = person.Period(personWeek.Week.StartDate) ?? person.Period(personWeek.Week.EndDate);
-            if (period == null)
+            var period = person.PersonPeriods(personWeek.Week);
+            if (!period.Any())
             {
-                return TimeSpan.FromSeconds(0);
+                return TimeSpan.Zero;
             }
-            return  period.PersonContract.Contract.WorkTimeDirective.WeeklyRest;
+            return  period.First().PersonContract.Contract.WorkTimeDirective.WeeklyRest;
         }
     }
 }

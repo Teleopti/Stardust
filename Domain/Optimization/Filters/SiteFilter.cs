@@ -19,13 +19,10 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 		public virtual bool IsValidFor(IPerson person, DateOnly dateOnly)
 		{
 			var personPeriod = person.Period(dateOnly);
-			return personPeriod != null && person.Period(dateOnly).Team.Site.Equals(Site);
+			return personPeriod != null && personPeriod.Team.Site.Equals(Site);
 		}
 
-		public virtual string FilterType
-		{
-			get { return "organization"; }
-		}
+		public virtual string FilterType => "organization";
 
 		public override bool Equals(IEntity other)
 		{

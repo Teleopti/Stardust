@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private personAssociationInfo currentAssociationInfo(INow now)
 		{
-			var period = Period(new DateOnly(now.UtcDateTime()));
+			var period = Period(now.LocalDateOnly());
 			var info = new personAssociationInfo();
 			if (period?.Team != null)
 			{

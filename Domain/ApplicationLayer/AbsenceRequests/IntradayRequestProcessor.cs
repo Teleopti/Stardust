@@ -41,13 +41,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems + " Old processor.");
 				return;
 			}
-			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(startTime)).CascadingSkills();
+			var personPeriod = personRequest.Person.Period(new DateOnly(startTime));
+			var cascadingPersonSkills = personPeriod.CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
 			var periods =
 				personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(personRequest.Request as IAbsenceRequest);
 			var useShrinkage = periods.GetSelectedValidatorList().Any(x => x is StaffingThresholdWithShrinkageValidator);
 			var primaryAndUnSortedSkills =
-				personRequest.Person.Period(new DateOnly(startTime))
+				personPeriod
 					.PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue);
 			if (!areAllSkillsClosed(primaryAndUnSortedSkills, personRequest.Request.Period))
 			{

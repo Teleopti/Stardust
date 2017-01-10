@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public IEnumerable<StaffingIntervalChange> AllocateResource(IPersonRequest personRequest, DateTime startDate)
 		{
 			//Get skillStaffingIntervals 
-			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(startDate)).CascadingSkills();
+			var personPeriod = personRequest.Person.Period(new DateOnly(startDate));
+			var cascadingPersonSkills = personPeriod.CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
-			var skills = personRequest.Person.Period(new DateOnly(startDate)).PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == lowestIndex);
+			var skills = personPeriod.PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == lowestIndex);
 			var skillStaffingIntervals = new List<SkillStaffingInterval>();
 
 			foreach (var skill in skills)
