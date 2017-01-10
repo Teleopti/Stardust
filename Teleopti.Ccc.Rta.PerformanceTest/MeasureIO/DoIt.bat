@@ -60,29 +60,31 @@ ECHO %MyINSTANCE%
 GOTO Start
 
 :Manual
-CLS
+::CLS
 ECHO Run this script in elevated mode
 ECHO Run this script locally on a SQL Server.
 ECHO.
 ECHO note: SQL traces will potentially use a lot of I/O resources in a buzy system.
 ECHO e.g put batch file on a disk device not used by Windows OS and/or SQL Server.
 ECHO Trace files will be placed here: "%OutPutFolder%"
-IF %Silent% EQU 0 PAUSE
-cls
+::IF %Silent% EQU 0 PAUSE
+::cls
 
-ECHO SQL Server instance name
-SET /P MyINSTANCE=^(if you are running a default instance leave blank^):
-ECHO.
+::ECHO SQL Server instance name
+::SET /P MyINSTANCE=^(if you are running a default instance leave blank^):
+::ECHO.
 
-CHOICE /C yn /M "Do you connect using WinAuth?"
-IF ERRORLEVEL 1 SET /a WinAuth=1
-IF ERRORLEVEL 2 SET /a WinAuth=0
-IF %WinAuth% equ 1 Call :WinAuth
-IF %WinAuth% equ 0 Call :SQLAuth
-ECHO.
+::CHOICE /C yn /M "Do you connect using WinAuth?"
+::IF ERRORLEVEL 1 SET /a WinAuth=1
+::IF ERRORLEVEL 2 SET /a WinAuth=0
+::IF %WinAuth% equ 1 Call :WinAuth
+::IF %WinAuth% equ 0 Call :SQLAuth
+::ECHO.
+Call :WinAuth
 
-SET /P MaxDisc=Max disk usage for the SQL trace (Gb):
-ECHO.
+::SET /P MaxDisc=Max disk usage for the SQL trace (Gb):
+::ECHO.
+SET MaxDisc=20
 
 GOTO Start
 
@@ -97,7 +99,7 @@ ECHO.
 set /A perfMaxDisc=%MaxDisc%*1024
 IF NOT EXIST "%OutPutFolder%" MKDIR "%OutPutFolder%"
 ECHO.
-cls
+::cls
 
 ::Try connect and check ALTER TRACE
 ECHO Connect to SQL Server ...
@@ -106,7 +108,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO noConnection
 ECHO Connect to SQL Server. Done
 ECHO.
 
-IF %Silent% equ 0 Call :DBfilter
+::IF %Silent% equ 0 Call :DBfilter
 
 ::Get SQL Server version
 sqlcmd -S%INSTANCE% %Conn% -Q"SELECT cast(SERVERPROPERTY('ProductVersion') as nvarchar(20))" -W -h-1 -o ProductVersion.txt 
@@ -173,8 +175,10 @@ call :stopTrace %traceid%
 call :cleanUpLogman
 
 ::generate example call for Analyse
-ECHO %READTRACE% -S%INSTANCE% %Conn% -I"%tracefile%.trc" > "%AnalyseCmd%"
-goto :finished
+::ECHO %READTRACE% -S%INSTANCE% %Conn% -I"%tracefile%.trc" > "%AnalyseCmd%"
+Call %READTRACE% -S%INSTANCE% %Conn% -I"%tracefile%.trc"
+::goto :finished
+goto :eof
 
 ::-----------functions----------------
 :cleanUpLogman
@@ -250,7 +254,7 @@ exit /b %logmanError%
 
 ::-----------Labels----------------
 :DBfilter
-::filter trace by database Id?
+filter trace by database Id?
 CHOICE /C yn /M "Would you like to filter your trace by database_id?"
 IF ERRORLEVEL 1 SET /a Filter=1
 IF ERRORLEVEL 2 SET /a Filter=0
