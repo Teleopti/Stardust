@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -23,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		[Test]
 		public void ShouldPersistSingleSkillCombinationResource()
 		{
+			Now.Is("2016-12-19 08:00");
 			var combinationResources = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		[Test]
 		public void ShouldPersistSkillCombinationResource()
 		{
+			Now.Is("2016-12-19 08:00");
 			var combinationResources = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		[Test]
 		public void ShouldLoadSkillCombinationInHexaDecimalOrder()
 		{
+			Now.Is("2016-12-19 08:00");
 			var combinationResources = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		public void ShouldInsertDelta()
 		{
 			var skill = Guid.NewGuid();
-			Now.Is("2016-06-16 08:00");
+			Now.Is("2016-12-19 08:00");
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		{
 			var skill = Guid.NewGuid();
 			var skill2 = Guid.NewGuid();
-			Now.Is("2016-06-16 08:00");
+			Now.Is("2016-12-19 08:00");
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -149,8 +151,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
         {
             var skill = Guid.NewGuid();
             var skill2 = Guid.NewGuid();
-            Now.Is("2016-06-16 08:00");
-            var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is("2016-12-19 08:00");
+			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
             var combinationResources = new List<SkillCombinationResource>
