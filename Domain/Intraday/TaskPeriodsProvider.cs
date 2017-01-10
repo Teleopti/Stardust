@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			if (targetMinutesPerInterval < skillMinutesPerInterval || isTaskPeriodsMerged(templateTaskPeriodCollection, skillMinutesPerInterval))
 			{
-                templateTaskPeriodCollection =  splitTaskPeriods(templateTaskPeriodCollection, targetMinutesPerInterval, latestStatisticsTimeUtc, usersNowStartOfDayUtc, periodLength);
+                templateTaskPeriodCollection =  splitTaskPeriods(templateTaskPeriodCollection, periodLength);
 			}
 
 			return templateTaskPeriodCollection
@@ -74,11 +74,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	        return (expectedIntervalCount != taskPeriodCollection.Count);
 	    }
 
-	    private static IList<ITemplateTaskPeriod> splitTaskPeriods(IList<ITemplateTaskPeriod> templateTaskPeriodCollection, 
-			int targetMinutesPerInterval,
-			DateTime? latestStatisticsTimeUtc, 
-			DateTime? usersNowStartOfDayUtc, 
-			TimeSpan periodLength)
+	    private static IList<ITemplateTaskPeriod> splitTaskPeriods(IList<ITemplateTaskPeriod> templateTaskPeriodCollection, TimeSpan periodLength)
 		{
 			List<ITemplateTaskPeriod> returnList = new List<ITemplateTaskPeriod>();
 			foreach (var taskPeriod in templateTaskPeriodCollection)

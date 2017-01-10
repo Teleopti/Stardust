@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var errorMessage = createErrorMessage(person, overlappingLayers);
+			var errorMessage = createErrorMessage(overlappingLayers);
 			IBusinessRuleResponse response = new BusinessRuleResponse(
 				typeof(NotOverwriteLayerRule),
 				errorMessage,
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return response;
 		}
 
-		private string createErrorMessage(IPerson person, OverlappingLayers overlappingLayers)
+		private static string createErrorMessage(OverlappingLayers overlappingLayers)
 		{
 			var errorMessage = Resources.BusinessRuleOverlappingErrorMessage3;
 			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
