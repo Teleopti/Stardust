@@ -252,7 +252,6 @@
 
 				if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
 					if ($scope.selectedItem.Skills) {
-						console.log();
 						services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.toggles);
 						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
 					} else {
