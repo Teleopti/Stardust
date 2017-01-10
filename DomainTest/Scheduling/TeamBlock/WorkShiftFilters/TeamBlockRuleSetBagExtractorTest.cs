@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
@@ -11,159 +13,114 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
     [TestFixture]
     public class TeamBlockRuleSetBagExtractorTest
     {
-        private IRuleSetBagExtractor _target;
-        private ITeamBlockInfo _teamBlockInfo;
-        private MockRepository _mock;
-        private ITeamInfo _teamInfo;
-        private IPerson _person1;
-        private IPerson _person2;
-        private IBlockInfo _blockInfo;
-        private IPersonPeriod _personPeriod1;
-        private IPersonPeriod _personPeriod2;
-        private IPersonPeriod _personPeriod3;
-        private IPersonPeriod _personPeriod4;
-        private IRuleSetBag _ruleSetBag1;
-        private IRuleSetBag _ruleSetBag2;
-        private IRuleSetBag _ruleSetBag3;
-        private IRuleSetBag _ruleSetBag4;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mock = new MockRepository();
-            _teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
-            _teamInfo = _mock.StrictMock<ITeamInfo>();
-            _person1 = _mock.StrictMock<IPerson>();
-            _person2 = _mock.StrictMock<IPerson>();
-            _blockInfo = _mock.StrictMock<IBlockInfo>();
-            _personPeriod1 = _mock.StrictMock<IPersonPeriod>();
-            _personPeriod2 = _mock.StrictMock<IPersonPeriod>();
-            _personPeriod3 = _mock.StrictMock<IPersonPeriod>();
-            _personPeriod4 = _mock.StrictMock<IPersonPeriod>();
-            _ruleSetBag1 = _mock.StrictMock<IRuleSetBag>();
-            _ruleSetBag2 = _mock.StrictMock<IRuleSetBag>();
-            _ruleSetBag3 = _mock.StrictMock<IRuleSetBag>();
-            _ruleSetBag4 = _mock.StrictMock<IRuleSetBag>();
-            _target = new RuleSetBagExtractor();
-        }
-
         [Test]
         public void ShouldReturnEmptyListIfTeamBlockIsEmpty()
         {
-            using (_mock.Record())
-            {
-                Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>());
-            }
-            using (_mock.Playback())
-            {
-                Assert.AreEqual(0, _target.GetRuleSetBag(_teamBlockInfo).Count());
-            }
+			var target = new RuleSetBagExtractor();
+			var teamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(), new List<IList<IScheduleMatrixPro>>()), new BlockInfo(new DateOnlyPeriod()));
+
+			Assert.AreEqual(0, target.GetRuleSetBag(teamBlockInfo).Count());
         }
 
         [Test]
         public void ShouldReturnRuleSetBagForSigleAgentSingleDay()
-        {
-            var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 10);
-			var persons = new List<IPerson> { _person1 };
+		{
+			var ruleSetBag1 = new RuleSetBag();
+			
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2014, 3, 10));
+			person1.PersonPeriodCollection[0].RuleSetBag = ruleSetBag1;
 
-			using (_mock.Record())
-            {
-                Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(persons);
-                Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-                Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
-                Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-			}
-            using (_mock.Playback())
-            {
-                Assert.AreEqual(1, _target.GetRuleSetBag(_teamBlockInfo).Count());
-            }
+			var target = new RuleSetBagExtractor();
+			var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 10);
+			var persons = new List<IPerson> { person1 };
+
+			var teamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(persons,"test"), new List<IList<IScheduleMatrixPro>>()), new BlockInfo(dateOnlyPeriod));
+
+	        Assert.AreEqual(1, target.GetRuleSetBag(teamBlockInfo).Count());
         }
 
         [Test]
         public void ShouldReturnRuleSetBagForSigleAgentMultipleDays()
-        {
-            var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
-			var persons = new List<IPerson> {_person1};
-            using (_mock.Record())
-            {
-                Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(persons);
-                Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-                Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
-                Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod2);
-                Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-			}
-            using (_mock.Playback())
-            {
-                Assert.AreEqual(2, _target.GetRuleSetBag(_teamBlockInfo).Count());
-            }
+		{
+			var ruleSetBag1 = new RuleSetBag();
+			var ruleSetBag3 = new RuleSetBag();
+			
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2014, 3, 10));
+			person1.PersonPeriodCollection[0].RuleSetBag = ruleSetBag1;
+			
+			var newPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 3, 11));
+			newPeriod1.RuleSetBag = ruleSetBag3;
+			person1.AddPersonPeriod(newPeriod1);
+
+			var target = new RuleSetBagExtractor();
+			var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
+			var persons = new List<IPerson> {person1};
+
+			var teamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(persons, "test"), new List<IList<IScheduleMatrixPro>>()), new BlockInfo(dateOnlyPeriod));
+
+	        Assert.AreEqual(2, target.GetRuleSetBag(teamBlockInfo).Count());
         }
 
         [Test]
         public void ShouldReturnRuleSetBagForTeamSingleDay()
         {
-            var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 10);
-			var persons = new List<IPerson> { _person1, _person2 };
-			using (_mock.Record())
-            {
-                Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(persons);
-                Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
-                Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
-                Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-                Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2);
-                Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-			}
-            using (_mock.Playback())
-            {
-                Assert.AreEqual(2, _target.GetRuleSetBag(_teamBlockInfo).Count());
-            }
+			var ruleSetBag1 = new RuleSetBag();
+			var ruleSetBag2 = new RuleSetBag();
+
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2014, 3, 10));
+			person1.PersonPeriodCollection[0].RuleSetBag = ruleSetBag1;
+
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2014, 3, 10));
+			person2.PersonPeriodCollection[0].RuleSetBag = ruleSetBag2;
+
+			var target = new RuleSetBagExtractor();
+			var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 10);
+			var persons = new List<IPerson> { person1, person2 };
+
+			var teamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(persons, "test"), new List<IList<IScheduleMatrixPro>>()), new BlockInfo(dateOnlyPeriod));
+
+	        Assert.AreEqual(2, target.GetRuleSetBag(teamBlockInfo).Count());
         }
 
         [Test]
         public void ShouldReturnRuleSetBagForTeamMultipleDays()
         {
-            var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
-			var persons = new List<IPerson> {_person1, _person2};
-            using (_mock.Record())
-            {
-                Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(persons);
-                Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
-                Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
-                Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-                Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2);
-                Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod3);
-                Expect.Call(_personPeriod3.RuleSetBag).Return(_ruleSetBag3);
-                Expect.Call(_person2.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod4);
-                Expect.Call(_personPeriod4.RuleSetBag).Return(_ruleSetBag4);
-			}
-            using (_mock.Playback())
-            {
-                Assert.AreEqual(4, _target.GetRuleSetBag(_teamBlockInfo).Count());
-            }
+			var ruleSetBag1 = new RuleSetBag();
+			var ruleSetBag2 = new RuleSetBag();
+			var ruleSetBag3 = new RuleSetBag();
+			var ruleSetBag4 = new RuleSetBag();
+
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2014, 3, 10));
+	        person1.PersonPeriodCollection[0].RuleSetBag = ruleSetBag1;
+
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2014, 3, 10));
+			person2.PersonPeriodCollection[0].RuleSetBag = ruleSetBag2;
+
+			var newPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 3, 11));
+	        newPeriod1.RuleSetBag = ruleSetBag3;
+			person1.AddPersonPeriod(newPeriod1);
+
+			var newPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 3, 11));
+			newPeriod2.RuleSetBag = ruleSetBag4;
+			person2.AddPersonPeriod(newPeriod2);
+
+			var target = new RuleSetBagExtractor();
+			var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
+			var persons = new List<IPerson> {person1, person2};
+
+			var teamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(persons, "test"), new List<IList<IScheduleMatrixPro>>()), new BlockInfo(dateOnlyPeriod));
+			Assert.AreEqual(4, target.GetRuleSetBag(teamBlockInfo).Count());
         }
 
         [Test]
         public void ShouldReturnRuleSetBagForTeamSingleDateOnly()
         {
-            using (_mock.Record())
-            {
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
-                Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-            }
-            using (_mock.Playback())
-            {
-				Assert.IsNotNull(_target.GetRuleSetBagForTeamMember(_person1, new DateOnly(2014, 03, 10)));
-            }
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2014, 3, 10));
+			var ruleSetBag1 = new RuleSetBag();
+	        person1.PersonPeriodCollection[0].RuleSetBag = ruleSetBag1;
+			var target = new RuleSetBagExtractor();
+
+	        Assert.IsNotNull(target.GetRuleSetBagForTeamMember(person1, new DateOnly(2014, 03, 10)));
         }
     }
 }
