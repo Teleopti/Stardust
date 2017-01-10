@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var personRequest1 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] {personRequest1.Id.GetValueOrDefault()};
+			_event.PersonRequestIdList = new Guid[] { personRequest1.Id.GetValueOrDefault() };
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);
 			personRequest1.IsApproved.Should().Be.True();
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new[] {personRequest2.Id.GetValueOrDefault()};
+			_event.PersonRequestIdList = new[] { personRequest2.Id.GetValueOrDefault() };
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);
 			personRequest2.IsDenied.Should().Be.True();
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_endDateTime = new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc);
 			var personRequest1 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] {personRequest1.Id.GetValueOrDefault()};
+			_event.PersonRequestIdList = new Guid[] { personRequest1.Id.GetValueOrDefault() };
 			_target.Handle(_event);
 			personRequest1.IsApproved.Should().Be.True();
 
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_endDateTime = new DateTime(2016, 3, 1, 14, 0, 0, DateTimeKind.Utc);
 			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] {personRequest2.Id.GetValueOrDefault()};
+			_event.PersonRequestIdList = new Guid[] { personRequest2.Id.GetValueOrDefault() };
 			_target.Handle(_event);
 			personRequest2.IsApproved.Should().Be.True();
 
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			person.AddPersonPeriod(personPeriod);
 			var budgetDay = new BudgetDay(budgetGroup, _currentScenario.Current(), new DateOnly(2016, 3, 1))
 			{
-				Allowance = allowance
+				ShrinkedAllowance = allowance
 			};
 			_fakeBudgetDayRepository.Add(budgetDay);
 		}
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillStaffPeriod.Stub(x => x.Period).Return(skillDateTimePeriod);
 
 			var skillStaffPeriodHolder = new FakeSkillStaffPeriodHolder();
-			skillStaffPeriodHolder.SetDictionary(new SkillSkillStaffPeriodExtendedDictionary { {skill,new SkillStaffPeriodDictionary(skill) {skillStaffPeriod} } });
+			skillStaffPeriodHolder.SetDictionary(new SkillSkillStaffPeriodExtendedDictionary { { skill, new SkillStaffPeriodDictionary(skill) { skillStaffPeriod } } });
 			_scheduleStateHolder.SetSkillStaffPeriodHolder(skillStaffPeriodHolder);
 		}
 	}

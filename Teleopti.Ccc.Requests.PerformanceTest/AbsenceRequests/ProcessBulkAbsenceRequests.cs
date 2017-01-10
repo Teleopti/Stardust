@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
 	[RequestPerformanceTest]
-	public class ProcessBulkAbsenceRequests 
+	public class ProcessBulkAbsenceRequests
 	{
 		public IAbsenceRepository AbsenceRepository;
 		public AsSystem AsSystem;
@@ -80,7 +80,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-
 			var personReqs = new List<IPersonRequest>();
 			var absenceRequestIds = new List<Guid>();
 
@@ -104,18 +103,15 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				//load vacation
 				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
 
-
 				foreach (var person in persons)
 				{
 					personReqs.Add(createAbsenceRequest(person, absence));
 				}
 
-
 				foreach (var pReq in personReqs)
 				{
 					PersonRequestRepository.Add(pReq);
 					CurrentUnitOfWork.Current().PersistAll();
-
 
 					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
 				}
@@ -132,7 +128,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				//queueRequests(absenceRequestIds);
 
 				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
-
 			});
 
 			var expectedStatuses = new Dictionary<Guid, int>();
@@ -155,7 +150,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			expectedStatuses.Add(new Guid("391DB822-3936-4C4D-9634-A1410113C47D"), 4); //
 			expectedStatuses.Add(new Guid("87E6CEF0-388A-4365-94FA-A1410113C47D"), 4);
 			expectedStatuses.Add(new Guid("55E3A133-6305-4C9A-8AEA-A1410113C47D"), 2);
-
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -182,7 +176,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					EndDateTime = new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)
 				};
 				QueuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-
 			}
 			CurrentUnitOfWork.Current().PersistAll();
 		}
@@ -202,7 +195,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				new Guid("811ACA34-B256-4E72-9E69-A141010DDC78"), //Susanne Eriksson
 				new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413") //Sara Andersson
 			};
-			
+
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
@@ -230,10 +223,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 
 				budgetDays.ForEach(budgetDay =>
 				{
-					budgetDay.Allowance = 0;
+					budgetDay.ShrinkedAllowance = 0;
 				});
-				
-				
+
 				//Add a request to waitlist
 				waitListedRequest = createAbsenceRequest(persons.FirstOrDefault(x => x.Name.ToString().Contains("Sara")), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 																										   new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
@@ -245,13 +237,11 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 
 				Thread.Sleep(1000); // 1 sec sleep to make sure 'first come first serve'
 
-
 				//give one request the opprtunity to be approved
 				budgetDays.ForEach(budgetDay =>
 				{
-					budgetDay.Allowance = 1;
+					budgetDay.ShrinkedAllowance = 1;
 				});
-
 
 				foreach (var person in persons.Where(x => !x.Name.ToString().Contains("Sara")))
 				{
@@ -290,7 +280,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					resultStatuses.Add(request.Id.GetValueOrDefault(), getRequestStatus(request));
 				}
 			});
-			
+
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
 		}
 
@@ -312,7 +302,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				requestStatus = 4;
 			else if (request.IsDenied)
 				requestStatus = 1;
-
 
 			return requestStatus;
 		}
@@ -342,9 +331,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 						if (datePeriod != null)
 							datePeriod.Period = period.OpenForRequestsPeriod;
 					}
-
 				}
-				// person  Vinblad, Christian has a person account that on that absence 
+				// person  Vinblad, Christian has a person account that on that absence
 				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
 
 				var req4th = createAbsenceRequest(person, absence,
@@ -363,10 +351,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				PersonRequestRepository.Add(req6th);
 				personRequests.Add(req6th);
 
-
 				CurrentUnitOfWork.Current().PersistAll();
 
-				var absenceRequestIds = new List<Guid> {req4th.Id.GetValueOrDefault(), req5th.Id.GetValueOrDefault(), req6th.Id.GetValueOrDefault()};
+				var absenceRequestIds = new List<Guid> { req4th.Id.GetValueOrDefault(), req5th.Id.GetValueOrDefault(), req6th.Id.GetValueOrDefault() };
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -390,11 +377,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
 
 					if (request.IsApproved)
-						cntApproved ++;
-
+						cntApproved++;
 					else if (request.IsDenied)
-						cntDenied ++;
-					
+						cntDenied++;
 				}
 			});
 
@@ -435,12 +420,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					new DateOnlyPeriod(new DateOnly(2016, 4, 15), new DateOnly(2016, 4, 15)));
 				budgetDays.ForEach(budgetDay =>
 				{
-					budgetDay.Allowance = 1;
-					budgetDay.TotalAllowance = 1;
+					budgetDay.ShrinkedAllowance = 1;
+					budgetDay.FullAllowance = 1;
 					budgetDay.AbsenceOverride = 1;
 				});
 
-				// person Englund, Rasmus 
+				// person Englund, Rasmus
 				var person1 = PersonRepository.Load(new Guid("90FA4DCD-65CA-4599-B1EB-A276008EC775"));
 				//Persson, Josefin
 				var person2 = PersonRepository.Load(new Guid("F2588126-373C-47CC-BD78-A3E000AACF79"));
@@ -456,10 +441,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				PersonRequestRepository.Add(req2);
 				personRequests.Add(req2);
 
-
 				CurrentUnitOfWork.Current().PersistAll();
 
-				var absenceRequestIds = new List<Guid> { req1.Id.GetValueOrDefault(), req2.Id.GetValueOrDefault()};
+				var absenceRequestIds = new List<Guid> { req1.Id.GetValueOrDefault(), req2.Id.GetValueOrDefault() };
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -484,10 +468,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 
 					if (request.IsApproved)
 						cntApproved++;
-
 					else if (request.IsDenied)
 						cntDenied++;
-
 				}
 			});
 
@@ -520,7 +502,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 						if (datePeriod != null)
 							datePeriod.Period = period.OpenForRequestsPeriod;
 					}
-
 				}
 
 				var bu = BusinessUnitRepository.Load(new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
@@ -529,7 +510,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				var bDay = BudgetDayRepository.Find(scenario, bGroup,
 					new DateOnlyPeriod(new DateOnly(2016, 4, 11), new DateOnly(2016, 4, 11)));
 
-				bDay.First().Allowance = 1;
+				bDay.First().ShrinkedAllowance = 1;
 
 				var person = PersonRepository.Load(new Guid("BD2400CC-0FFE-4E30-8D4F-A141010651CB"));
 				var person2 = PersonRepository.Load(new Guid("8080B4A4-785D-44FD-B7F9-A141010651CB"));
@@ -544,10 +525,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
 				PersonRequestRepository.Add(req4Th2);
 				personRequests.Add(req4Th2);
-				
+
 				CurrentUnitOfWork.Current().PersistAll();
 
-				var absenceRequestIds = new List<Guid> { req4Th.Id.GetValueOrDefault(), req4Th2.Id.GetValueOrDefault()};
+				var absenceRequestIds = new List<Guid> { req4Th.Id.GetValueOrDefault(), req4Th2.Id.GetValueOrDefault() };
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -572,32 +553,29 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 
 					if (request.IsApproved)
 						cntApproved++;
-
 					else if (request.IsDenied)
 					{
 						cntDenied++;
 						Assert.That(request.DenyReason.Contains("Otillräcklig bemanning"));
 					}
-
 				}
 			});
 
 			cntDenied.Should().Be.EqualTo(1);
 			cntApproved.Should().Be.EqualTo(1);
 		}
-		
 
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
 		{
 			var req = createAbsenceRequest(person, absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 																			   new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
-	
+
 			return req;
 		}
 
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
-			var req = new AbsenceRequest(absence,dateTimePeriod);
+			var req = new AbsenceRequest(absence, dateTimePeriod);
 			var personReq = new PersonRequest(person) { Request = req };
 			personReq.Pending();
 			return personReq;

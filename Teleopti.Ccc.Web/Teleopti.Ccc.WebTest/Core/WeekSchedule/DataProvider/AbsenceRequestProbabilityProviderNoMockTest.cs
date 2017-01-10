@@ -147,13 +147,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			{
 				var budgetDay = new BudgetDay(personPeriod.BudgetGroup, _scenario, day)
 				{
-					Allowance = 1,
+					ShrinkedAllowance = 1,
 					FulltimeEquivalentHours = 8,
 					AbsenceOverride = 1
 				};
 				BudgetDayRepository.Add(budgetDay);
 			}
-				
 		}
 
 		private void assertAbsenceRequestProbability(IEnumerable<IAbsenceRequestProbability> absenceRequestProbabilities,

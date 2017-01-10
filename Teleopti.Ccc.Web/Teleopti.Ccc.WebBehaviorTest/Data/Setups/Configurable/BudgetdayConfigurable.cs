@@ -10,19 +10,19 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
-    public class BudgetdayConfigurable : IUserDataSetup
-    {
+	public class BudgetdayConfigurable : IUserDataSetup
+	{
 		public string BudgetGroup { get; set; }
 		public DateTime Date { get; set; }
 		public int Allowance { get; set; }
 		public int FulltimeEquivalentHours { get; set; }
 
-	    public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
-	    {
-		    var budgetDayRepository = new BudgetDayRepository(currentUnitOfWork);
-            var budgetGroupRepository = new BudgetGroupRepository(currentUnitOfWork);
-			IBudgetGroup budgetGroup = new BudgetGroup() {Name = BudgetGroup };
-	        var existingBudgetGroups = budgetGroupRepository.LoadAll();
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		{
+			var budgetDayRepository = new BudgetDayRepository(currentUnitOfWork);
+			var budgetGroupRepository = new BudgetGroupRepository(currentUnitOfWork);
+			IBudgetGroup budgetGroup = new BudgetGroup() { Name = BudgetGroup };
+			var existingBudgetGroups = budgetGroupRepository.LoadAll();
 			bool budgetGroupAlreadyExists = existingBudgetGroups.Any(b => b.Name == BudgetGroup);
 			if (budgetGroupAlreadyExists)
 			{
@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				budgetGroup = new BudgetGroup() { Name = BudgetGroup, TimeZone = user.PermissionInformation.DefaultTimeZone() };
 				budgetGroupRepository.Add(budgetGroup);
 			}
-		    user.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
-				var scenario = DefaultScenario.Scenario;
-			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(Date)) { Allowance = Allowance, FulltimeEquivalentHours = FulltimeEquivalentHours };
-            budgetDayRepository.Add(budgetDay);
-	    }
-    }
+			user.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
+			var scenario = DefaultScenario.Scenario;
+			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(Date)) { ShrinkedAllowance = Allowance, FulltimeEquivalentHours = FulltimeEquivalentHours };
+			budgetDayRepository.Add(budgetDay);
+		}
+	}
 }

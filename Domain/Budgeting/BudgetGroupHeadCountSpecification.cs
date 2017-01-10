@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		{
 			var timeZone = absenceRequest.AbsenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequest.AbsenceRequest.Person.PermissionInformation.Culture();
-		    var language = absenceRequest.AbsenceRequest.Person.PermissionInformation.UICulture();
-            var requestedPeriod = absenceRequest.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
+			var language = absenceRequest.AbsenceRequest.Person.PermissionInformation.UICulture();
+			var requestedPeriod = absenceRequest.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var personPeriod = absenceRequest.AbsenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
 
 			if (personPeriod == null || personPeriod.BudgetGroup == null)
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
 			{
 				var currentDay = budgetDay.Day;
-				var allowance = budgetDay.Allowance;
+				var allowance = budgetDay.ShrinkedAllowance;
 				var alreadyUsedAllowance = _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(
 						budgetGroup.Id.GetValueOrDefault(), currentDay);
 				var addedBefore = schedulingResultStateHolder.AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.Domain.Budgeting
 					schedulingResultStateHolder.AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
 					alreayAddedHeadCountDictionary.Add(budgetDay, 1);
 				}
-
 			}
 			return invalidDays.IsEmpty() ? invalidDays : invalidDays.Substring(0, invalidDays.Length - 1);
 		}

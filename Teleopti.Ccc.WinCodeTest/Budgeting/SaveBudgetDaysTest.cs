@@ -8,6 +8,7 @@ using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+
 #pragma warning disable 618
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
@@ -19,17 +20,17 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		private MockRepository mocks;
 		private IBudgetDayRepository budgetDayRepository;
 		private IBudgetDayProvider budgetDayProvider;
-	    private IBudgetPermissionService budgetPermissionService;
+		private IBudgetPermissionService budgetPermissionService;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-		    var mainModel = new BudgetGroupMainModel(null) {Period = new DateOnlyPeriod(2010, 10, 1, 2010, 10, 31)};
+			var mainModel = new BudgetGroupMainModel(null) { Period = new DateOnlyPeriod(2010, 10, 1, 2010, 10, 31) };
 			budgetDayRepository = mocks.StrictMock<IBudgetDayRepository>();
 			budgetDayProvider = mocks.StrictMock<IBudgetDayProvider>();
-		    budgetPermissionService = mocks.StrictMock<IBudgetPermissionService>();
-            target = new BudgetGroupDataService(mainModel, budgetDayRepository, null, budgetPermissionService);
+			budgetPermissionService = mocks.StrictMock<IBudgetPermissionService>();
+			target = new BudgetGroupDataService(mainModel, budgetDayRepository, null, budgetPermissionService);
 		}
 
 		[Test]
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				Expect.Call(budgetGroupDayDetailModel.UpdateBudgetDay);
 				Expect.Call(budgetGroupDayDetailModel.BudgetDay).Return(budgetDay).Repeat.AtLeastOnce();
 				Expect.Call(budgetDayProvider.VisibleDayModels()).Return(new List<IBudgetGroupDayDetailModel>
-				                                                         	{budgetGroupDayDetailModel}).Repeat.AtLeastOnce();
+																			 {budgetGroupDayDetailModel}).Repeat.AtLeastOnce();
 			}
 			using (mocks.Playback())
 			{
@@ -89,12 +90,12 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			budgetGroupDayDetailModel.OvertimeHours = 10;
 			budgetGroupDayDetailModel.StudentsHours = 20;
 			budgetGroupDayDetailModel.ForecastedHours = 80;
-		    budgetGroupDayDetailModel.IsClosed = true;
-		    budgetGroupDayDetailModel.AbsenceExtra = 2d;
-		    budgetGroupDayDetailModel.AbsenceOverride = 10d;
-            budgetGroupDayDetailModel.AbsenceThreshold = new Percent(0.8);
-		    budgetGroupDayDetailModel.TotalAllowance = 10d;
-		    budgetGroupDayDetailModel.Allowance = 8d;
+			budgetGroupDayDetailModel.IsClosed = true;
+			budgetGroupDayDetailModel.AbsenceExtra = 2d;
+			budgetGroupDayDetailModel.AbsenceOverride = 10d;
+			budgetGroupDayDetailModel.AbsenceThreshold = new Percent(0.8);
+			budgetGroupDayDetailModel.TotalAllowance = 10d;
+			budgetGroupDayDetailModel.Allowance = 8d;
 
 			budgetGroupDayDetailModel.UpdateBudgetDay();
 			Assert.AreEqual(new Percent(0.2d), budgetDay.AttritionRate);
@@ -107,11 +108,11 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			Assert.AreEqual(20, budgetDay.StudentHours);
 			Assert.AreEqual(80, budgetDay.ForecastedHours);
 			Assert.IsTrue(budgetDay.IsClosed);
-            Assert.AreEqual(2d, budgetDay.AbsenceExtra);
-            Assert.AreEqual(10d, budgetDay.AbsenceOverride);
-            Assert.AreEqual(new Percent(0.8), budgetDay.AbsenceThreshold);
-            Assert.AreEqual(10d, budgetDay.TotalAllowance);
-            Assert.AreEqual(8d, budgetDay.Allowance);
+			Assert.AreEqual(2d, budgetDay.AbsenceExtra);
+			Assert.AreEqual(10d, budgetDay.AbsenceOverride);
+			Assert.AreEqual(new Percent(0.8), budgetDay.AbsenceThreshold);
+			Assert.AreEqual(10d, budgetDay.FullAllowance);
+			Assert.AreEqual(8d, budgetDay.ShrinkedAllowance);
 		}
 	}
 }

@@ -49,17 +49,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			if (person.WorkflowControlSet != null && person.WorkflowControlSet.AbsenceRequestOpenPeriods != null)
 			{
-
 				var openPeriods = person.WorkflowControlSet.AbsenceRequestOpenPeriods;
 
 				var unSorted = openPeriods.Where(
 					absenceRequestOpenPeriod =>
-						absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof (BudgetGroupAllowanceValidator) ||
-						absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof (BudgetGroupHeadCountValidator)).ToList();
+						absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupAllowanceValidator) ||
+						absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupHeadCountValidator)).ToList();
 
 				var validOpenPeriods = (from p in unSorted
-					orderby p.StaffingThresholdValidatorList.IndexOf(p.StaffingThresholdValidator)
-					select p).ToList();
+										orderby p.StaffingThresholdValidatorList.IndexOf(p.StaffingThresholdValidator)
+										select p).ToList();
 
 				if (validOpenPeriods.Count > 0)
 				{
@@ -85,16 +84,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 							from budgetDay in budgetDays
 							where openPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone))).Contains(budgetDay.Day)
 							where openPeriod.OpenForRequestsPeriod.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone)))
-							where openPeriod.AbsenceRequestProcess.GetType() != typeof (DenyAbsenceRequest)
+							where openPeriod.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)
 							select
 								new
 								{
 									Date = budgetDay.Day,
-									Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
+									Time = TimeSpan.FromHours(Math.Max(budgetDay.ShrinkedAllowance * budgetDay.FulltimeEquivalentHours, 0)),
 									Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
-									AllowanceHeads = budgetDay.Allowance,
+									AllowanceHeads = budgetDay.ShrinkedAllowance,
 									Availability = true,
-									UseHeadCount = openPeriod.StaffingThresholdValidator.GetType() == typeof (BudgetGroupHeadCountValidator),
+									UseHeadCount = openPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupHeadCountValidator),
 									ValidateBudgetGroup = true
 								};
 						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);

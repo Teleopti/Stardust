@@ -164,8 +164,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		{
 			var budgetDay = new BudgetDay(budgetGroup, CurrentScenario.Current(), date)
 			{
-				Allowance = allowance,
-				TotalAllowance = totalAllowance
+				ShrinkedAllowance = allowance,
+				FullAllowance = totalAllowance
 			};
 			BudgetDayRepository.Add(budgetDay);
 		}

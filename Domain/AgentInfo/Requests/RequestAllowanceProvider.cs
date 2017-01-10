@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var usedAbsences = loadUsedAbsences(selectedBudgetGroup, period);
 			var budgetDays = loadBudgetDays(selectedBudgetGroup, period);
 			var fteCollection = budgetDays.Select(b => b.FulltimeEquivalentHours).ToList();
-			var allowanceCollection = budgetDays.Select(b => b.Allowance).ToList();
-			var totalAllowanceCollection = budgetDays.Select(b => b.TotalAllowance).ToList();
+			var allowanceCollection = budgetDays.Select(b => b.ShrinkedAllowance).ToList();
+			var totalAllowanceCollection = budgetDays.Select(b => b.FullAllowance).ToList();
 			for (var i = 0; i < period.DayCount(); i++)
 			{
 				var currentDate = period.StartDate.AddDays(i);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					if (payloadWorkTime != null)
 					{
 						var usedFTEs = fteCollection[i] != 0
-							? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes*1d/TimeDefinition.MinutesPerHour/
+							? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes * 1d / TimeDefinition.MinutesPerHour /
 							  fteCollection[i]
 							: 0d;
 						absenceDict.Add(absence, usedFTEs);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var budgetDays = new List<IBudgetDay>();
 			if (!isBudgetGroupNullOrEmpty(selectedBudgetGroup))
 				budgetDays = _budgetDayRepository.Find(_scenarioRepository.Current(), selectedBudgetGroup, period).ToList();
-			selectedBudgetGroup = selectedBudgetGroup ?? new BudgetGroup {Name = UserTexts.Resources.Empty};
+			selectedBudgetGroup = selectedBudgetGroup ?? new BudgetGroup { Name = UserTexts.Resources.Empty };
 			budgetDays = addMissingDays(selectedBudgetGroup, budgetDays, period).ToList();
 			return budgetDays;
 		}

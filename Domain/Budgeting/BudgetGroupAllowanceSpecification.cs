@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Budgeting
 {
-
 	public class BudgetGroupAllowanceSpecification : PersonRequestSpecification<IAbsenceRequestAndSchedules>, IBudgetGroupAllowanceSpecification
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupAllowanceSpecification));
@@ -38,11 +37,10 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		{
 			var timeZone = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.Culture();
-		    var language = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.UICulture();
+			var language = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.UICulture();
 
-            var requestedPeriod = absenceRequestAndSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
+			var requestedPeriod = absenceRequestAndSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var personPeriod = absenceRequestAndSchedules.AbsenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
-
 
 			if (personPeriod == null || personPeriod.BudgetGroup == null)
 			{
@@ -71,8 +69,6 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 			return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
 		}
-
-
 
 		private string getInvalidDays(IAbsenceRequest absenceRequest, IList<IBudgetDay> budgetDays, IPersonPeriod personPeriod,
 			IScenario defaultScenario, CultureInfo culture, ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -123,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 		private double getRemainingAllowanceMinutes(IPersonPeriod personPeriod, IScenario defaultScenario, IBudgetDay budgetDay, DateOnly currentDay)
 		{
-			var allowanceMinutes = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * TimeDefinition.MinutesPerHour;
+			var allowanceMinutes = budgetDay.ShrinkedAllowance * budgetDay.FulltimeEquivalentHours * TimeDefinition.MinutesPerHour;
 			var absenceTimeListForAllBudgetGroup = _scheduleProjectionReadOnlyPersister
 													.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay), personPeriod.BudgetGroup, defaultScenario);
 
@@ -153,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				var personContract = personPeriod.PersonContract;
 				var averageWorktimePerDayInMinutes = personContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes;
 				var partTimePercentage = personContract.PartTimePercentage.Percentage.Value;
-				var averageContractTimeSpan = TimeSpan.FromMinutes(averageWorktimePerDayInMinutes*partTimePercentage);
+				var averageContractTimeSpan = TimeSpan.FromMinutes(averageWorktimePerDayInMinutes * partTimePercentage);
 
 				requestedTime += requestedPeriod.ElapsedTime() < averageContractTimeSpan
 					? requestedPeriod.ElapsedTime()

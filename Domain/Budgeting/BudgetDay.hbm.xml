@@ -42,10 +42,10 @@
     <property name="StaffEmployed" type="double" not-null="false" />
     <property name="StudentHours" type="double" not-null="true" />
     <property name="IsClosed" not-null="true" />
-	<property name="AbsenceExtra" type="double"  not-null="false" />
-	<property name="AbsenceOverride" type="double"  not-null="false" />
-	<property name="TotalAllowance" type="double" not-null="true" />
-	<property name="Allowance" type="double" not-null="true" />
+    <property name="AbsenceExtra" type="double"  not-null="false" />
+    <property name="AbsenceOverride" type="double"  not-null="false" />
+    <property name="FullAllowance" column="TotalAllowance" type="double" not-null="true" />
+    <property name="ShrinkedAllowance" column="Allowance" type="double" not-null="true" />
     <property name="Day"
       type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
       not-null="true" />

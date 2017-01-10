@@ -168,7 +168,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var allowance2 = TimeSpan.FromHours(8);
 			var budgetDay2 = createBudgetDayWithAllowance(budgetGroup2, day2, allowance2.TotalHours);
 
-
 			extractBudgetGroupPeriods.Expect(e => e.BudgetGroupsForPeriod(_user, period))
 				.Return(new List<Tuple<DateOnlyPeriod, IBudgetGroup>>
 				{
@@ -176,8 +175,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					new Tuple<DateOnlyPeriod, IBudgetGroup>(period2, budgetGroup2)
 				});
 
-			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup1, period1)).Return(new List<IBudgetDay> {budgetDay1});
-			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup2, period2)).Return(new List<IBudgetDay> {budgetDay2});
+			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup1, period1)).Return(new List<IBudgetDay> { budgetDay1 });
+			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup2, period2)).Return(new List<IBudgetDay> { budgetDay2 });
 			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, extractBudgetGroupPeriods, _now);
 
 			var result = target.GetAllowanceForPeriod(period).ToList();
@@ -228,12 +227,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetGroup = new BudgetGroup();
 			personPeriod.BudgetGroup = budgetGroup;
 
-
 			var budgetDayWithNegativeValue = createBudgetDayWithAllowance(budgetGroup, period.StartDate, -20);
 
 			_user.AddPersonPeriod(personPeriod);
 			budgetDayRepository.Expect(x => x.Find(_scenario, budgetGroup, period))
-				.Return(new List<IBudgetDay> {budgetDayWithNegativeValue});
+				.Return(new List<IBudgetDay> { budgetDayWithNegativeValue });
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
@@ -526,7 +524,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 		private BudgetDay createBudgetDayWithAllowance(IBudgetGroup budgetGroup, DateOnly date, double hoursOfAllowance)
 		{
-			return new BudgetDay(budgetGroup, _scenario, date) {FulltimeEquivalentHours = 1, Allowance = hoursOfAllowance};
+			return new BudgetDay(budgetGroup, _scenario, date) { FulltimeEquivalentHours = 1, ShrinkedAllowance = hoursOfAllowance };
 		}
 
 		private void addWorkFlowControlSetWithOpenAbsencePeriod(DateOnlyPeriod openForRequests,
@@ -593,6 +591,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			_user.WorkflowControlSet = workflowControlSet;
 		}
-		#endregion
+
+		#endregion helpers
 	}
 }

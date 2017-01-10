@@ -17,29 +17,29 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 		private double _daysOffPerWeek;
 		private double _netStaff;
 		private double _netStaffFcAdj;
-        private double _overtimeHours;
-        private double _studentsHours;
+		private double _overtimeHours;
+		private double _studentsHours;
 		private double _budgetedStaff;
 		private double _forecastedHours;
 		private double _forecastedStaff;
 		private double _difference;
 		private Percent _differencePercent;
-	    private bool _isClosed;
-	    private Percent _absenceThreshold;
-	    private double? _absenceExtra;
-	    private double? _absenceOverride;
-	    private double _budgetedLeave;
-	    private double _budgetedSurplus;
-	    private double _allowance;
-	    private double _totalAllowance;
+		private bool _isClosed;
+		private Percent _absenceThreshold;
+		private double? _absenceExtra;
+		private double? _absenceOverride;
+		private double _budgetedLeave;
+		private double _budgetedSurplus;
+		private double _allowance;
+		private double _totalAllowance;
 
-	    public event EventHandler<CustomEventArgs<IBudgetGroupDayDetailModel>> Invalidate;
+		public event EventHandler<CustomEventArgs<IBudgetGroupDayDetailModel>> Invalidate;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public BudgetGroupDayDetailModel(IBudgetDay budgetDay)
 		{
 			_date = budgetDay.Day; //column header
-		    
+
 			_fulltimeEquivalentHours = budgetDay.FulltimeEquivalentHours;
 			_attritionRate = budgetDay.AttritionRate;
 			_staffEmployed = budgetDay.StaffEmployed;
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			_daysOffPerWeek = budgetDay.DaysOffPerWeek;
 			_overtimeHours = budgetDay.OvertimeHours;
 			_studentsHours = budgetDay.StudentHours;
-		    _forecastedHours = budgetDay.ForecastedHours;
-		    _isClosed = budgetDay.IsClosed;
-		    _absenceThreshold = budgetDay.AbsenceThreshold;
-		    _absenceExtra = budgetDay.AbsenceExtra;
-		    _absenceOverride = budgetDay.AbsenceOverride;
-		    _totalAllowance = budgetDay.TotalAllowance;
-		    _allowance = budgetDay.Allowance;
+			_forecastedHours = budgetDay.ForecastedHours;
+			_isClosed = budgetDay.IsClosed;
+			_absenceThreshold = budgetDay.AbsenceThreshold;
+			_absenceExtra = budgetDay.AbsenceExtra;
+			_absenceOverride = budgetDay.AbsenceOverride;
+			_totalAllowance = budgetDay.FullAllowance;
+			_allowance = budgetDay.ShrinkedAllowance;
 			BudgetDay = budgetDay;
 		}
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 		{
 			get
 			{
-                return new DateDayModel(_date);
+				return new DateDayModel(_date);
 			}
 			set
 			{
@@ -82,28 +82,28 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			}
 		}
 
-        public string Week
-        {
-            get
-            {
-                var weekNumber = DateHelper.WeekNumber(_date.Date, CultureInfo.CurrentCulture);
-                var week = DateHelper.GetWeekPeriod(_date, CultureInfo.CurrentCulture);
-	            return string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WeekAbbreviationDot, weekNumber,
-		            week.StartDate.ToShortDateString());
-            }
-            set
-            {
-                TriggerNotifyPropertyChanged(nameof(Week));
-                _date = new DateOnly(DateTime.Parse(value, CultureInfo.CurrentCulture)); 
-            }
-        }
+		public string Week
+		{
+			get
+			{
+				var weekNumber = DateHelper.WeekNumber(_date.Date, CultureInfo.CurrentCulture);
+				var week = DateHelper.GetWeekPeriod(_date, CultureInfo.CurrentCulture);
+				return string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WeekAbbreviationDot, weekNumber,
+					week.StartDate.ToShortDateString());
+			}
+			set
+			{
+				TriggerNotifyPropertyChanged(nameof(Week));
+				_date = new DateOnly(DateTime.Parse(value, CultureInfo.CurrentCulture));
+			}
+		}
 
 		private void TriggerInvalidate()
 		{
 			var recalculation = Invalidate;
-			if (recalculation!=null)
+			if (recalculation != null)
 			{
-				recalculation.Invoke(this,new CustomEventArgs<IBudgetGroupDayDetailModel>(this));
+				recalculation.Invoke(this, new CustomEventArgs<IBudgetGroupDayDetailModel>(this));
 			}
 		}
 
@@ -190,21 +190,21 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			}
 		}
 
-	    public bool IsClosed
-	    {
-            get { return _isClosed; }
-            set
-            {
-                if (_isClosed != value)
-                {
-                    _isClosed = value;
-                    TriggerNotifyPropertyChanged(nameof(IsClosed));
-                    TriggerInvalidate();
-                }
-            }
-	    }
+		public bool IsClosed
+		{
+			get { return _isClosed; }
+			set
+			{
+				if (_isClosed != value)
+				{
+					_isClosed = value;
+					TriggerNotifyPropertyChanged(nameof(IsClosed));
+					TriggerInvalidate();
+				}
+			}
+		}
 
-	    public double NetStaff
+		public double NetStaff
 		{
 			get { return _netStaff; }
 			set
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			}
 		}
 
-        public double OvertimeHours
+		public double OvertimeHours
 		{
 			get { return _overtimeHours; }
 			set
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			}
 		}
 
-        public double StudentsHours
+		public double StudentsHours
 		{
 			get { return _studentsHours; }
 			set
@@ -326,101 +326,101 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 
 		public IBudgetDay BudgetDay { get; set; }
 
-	    public Percent AbsenceThreshold
-	    {
-            get { return _absenceThreshold; }
-            set
-            {
-                if (_absenceThreshold != value)
-                {
-                    _absenceThreshold = value;
-                    TriggerNotifyPropertyChanged(nameof(AbsenceThreshold));
-                    TriggerInvalidate();
-                }
-            }
-	    }
+		public Percent AbsenceThreshold
+		{
+			get { return _absenceThreshold; }
+			set
+			{
+				if (_absenceThreshold != value)
+				{
+					_absenceThreshold = value;
+					TriggerNotifyPropertyChanged(nameof(AbsenceThreshold));
+					TriggerInvalidate();
+				}
+			}
+		}
 
-	    public double? AbsenceExtra
-	    {
-            get { return _absenceExtra; }
-            set
-            {
-                if (_absenceExtra != value)
-                {
-                    _absenceExtra = value;
-                    TriggerNotifyPropertyChanged(nameof(AbsenceExtra));
-                    TriggerInvalidate();
-                }
-            }
-	    }
+		public double? AbsenceExtra
+		{
+			get { return _absenceExtra; }
+			set
+			{
+				if (_absenceExtra != value)
+				{
+					_absenceExtra = value;
+					TriggerNotifyPropertyChanged(nameof(AbsenceExtra));
+					TriggerInvalidate();
+				}
+			}
+		}
 
-	    public double? AbsenceOverride
-	    {
-            get { return _absenceOverride; }
-            set
-            {
-                if (_absenceOverride != value)
-                {
-                    _absenceOverride = value;
-                    TriggerNotifyPropertyChanged(nameof(AbsenceOverride));
-                    TriggerInvalidate();
-                }
-            }
-	    }
+		public double? AbsenceOverride
+		{
+			get { return _absenceOverride; }
+			set
+			{
+				if (_absenceOverride != value)
+				{
+					_absenceOverride = value;
+					TriggerNotifyPropertyChanged(nameof(AbsenceOverride));
+					TriggerInvalidate();
+				}
+			}
+		}
 
-	    public double BudgetedLeave
-	    {
-            get { return _budgetedLeave; }
-            set
-            {
-                if (_budgetedLeave != value)
-                {
-                    _budgetedLeave = value;
-                    TriggerNotifyPropertyChanged(nameof(BudgetedLeave));
-                }
-            }
-	    }
+		public double BudgetedLeave
+		{
+			get { return _budgetedLeave; }
+			set
+			{
+				if (_budgetedLeave != value)
+				{
+					_budgetedLeave = value;
+					TriggerNotifyPropertyChanged(nameof(BudgetedLeave));
+				}
+			}
+		}
 
-	    public double BudgetedSurplus
-	    {
-            get { return _budgetedSurplus; }
-            set
-            {
-                if (_budgetedSurplus != value)
-                {
-                    _budgetedSurplus = value;
-                    TriggerNotifyPropertyChanged(nameof(BudgetedSurplus));
-                }
-            }
-	    }
+		public double BudgetedSurplus
+		{
+			get { return _budgetedSurplus; }
+			set
+			{
+				if (_budgetedSurplus != value)
+				{
+					_budgetedSurplus = value;
+					TriggerNotifyPropertyChanged(nameof(BudgetedSurplus));
+				}
+			}
+		}
 
-	    public double Allowance
-	    {
-            get { return _allowance; }
-            set
-            {
-                if (_allowance != value)
-                {
-                    _allowance = value;
-                    TriggerNotifyPropertyChanged(nameof(Allowance));
-                }
-            }
-	    }
+		public double Allowance
+		{
+			get { return _allowance; }
+			set
+			{
+				if (_allowance != value)
+				{
+					_allowance = value;
+					TriggerNotifyPropertyChanged(nameof(Allowance));
+				}
+			}
+		}
 
-	    public double TotalAllowance
-	    {
-            get { return _totalAllowance; }
-            set
-            {
-                if (_totalAllowance != value)
-                {
-                    _totalAllowance = value;
-                    TriggerNotifyPropertyChanged(nameof(TotalAllowance));
-                }
-            }
-	    }
+		public double TotalAllowance
+		{
+			get { return _totalAllowance; }
+			set
+			{
+				if (_totalAllowance != value)
+				{
+					_totalAllowance = value;
+					TriggerNotifyPropertyChanged(nameof(TotalAllowance));
+				}
+			}
+		}
 
-	    public void UpdateBudgetDay()
+		public void UpdateBudgetDay()
 		{
 			BudgetDay.AttritionRate = _attritionRate;
 			BudgetDay.FulltimeEquivalentHours = _fulltimeEquivalentHours;
@@ -432,29 +432,29 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			BudgetDay.StudentHours = _studentsHours;
 			BudgetDay.ForecastedHours = _forecastedHours;
 			BudgetDay.IsClosed = _isClosed;
-	        BudgetDay.AbsenceThreshold = _absenceThreshold;
-	        BudgetDay.AbsenceOverride = _absenceOverride;
-	        BudgetDay.AbsenceExtra = _absenceExtra;
-	        BudgetDay.TotalAllowance = _totalAllowance;
-	        BudgetDay.Allowance = _allowance;
+			BudgetDay.AbsenceThreshold = _absenceThreshold;
+			BudgetDay.AbsenceOverride = _absenceOverride;
+			BudgetDay.AbsenceExtra = _absenceExtra;
+			BudgetDay.FullAllowance = _totalAllowance;
+			BudgetDay.ShrinkedAllowance = _allowance;
 		}
 
-        public void Recalculate(IBudgetCalculator calculator)
-        {
-            var result = BudgetDay.Calculate(calculator);
+		public void Recalculate(IBudgetCalculator calculator)
+		{
+			var result = BudgetDay.Calculate(calculator);
 
-            NetStaffFcAdj = result.NetStaffFcAdj;
-            NetStaff = result.NetStaff;
-            GrossStaff = result.GrossStaff;
-            BudgetedStaff = result.BudgetedStaff;
-            ForecastedStaff = result.ForecastedStaff;
-            Difference = result.Difference;
-            DifferencePercent = result.DifferencePercent;
-            BudgetedLeave = result.BudgetedLeave;
-            BudgetedSurplus = result.BudgetedSurplus;
-            TotalAllowance = result.TotalAllowance;
-            Allowance = result.Allowance;
-        }
+			NetStaffFcAdj = result.NetStaffFcAdj;
+			NetStaff = result.NetStaff;
+			GrossStaff = result.GrossStaff;
+			BudgetedStaff = result.BudgetedStaff;
+			ForecastedStaff = result.ForecastedStaff;
+			Difference = result.Difference;
+			DifferencePercent = result.DifferencePercent;
+			BudgetedLeave = result.BudgetedLeave;
+			BudgetedSurplus = result.BudgetedSurplus;
+			TotalAllowance = result.TotalAllowance;
+			Allowance = result.Allowance;
+		}
 
 		public void RecalculateWithoutNetStaffForecastAdjustCalculator(IBudgetCalculator calculator, double netStaffFcAdj)
 		{
@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 
 		public void SetShrinkage(ICustomShrinkage customShrinkage, Percent percent)
 		{
-			BudgetDay.CustomShrinkages.SetShrinkage(customShrinkage.Id.GetValueOrDefault(Guid.Empty),percent);
+			BudgetDay.CustomShrinkages.SetShrinkage(customShrinkage.Id.GetValueOrDefault(Guid.Empty), percent);
 			TriggerInvalidate();
 		}
 
