@@ -349,6 +349,11 @@ module.exports = function (grunt) {
                     '!app/global/i18n/*.js'
                 ]
             },
+            rta: {
+                src: [
+                    'app/rta/**/*.js'
+                ]
+            },
             dev: {
                 src: [
                     //add your path to module here
