@@ -272,20 +272,7 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray();
 		}
-
-		[LogInfo]
-		public virtual IEnumerable<AgentStateFound> FindForSynchronize()
-		{
-			var sql = SelectAgentState + "WITH (TABLOCK, UPDLOCK)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentStateFound>()
-				.GroupBy(x => x.PersonId, (guid, states) => states.First())
-				.ToArray()
-				;
-		}
-
+		
 		[LogInfo]
 		public virtual IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{

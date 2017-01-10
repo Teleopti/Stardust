@@ -212,31 +212,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Find(new ExternalLogon {UserCode = "usercode2"}, DeadLockVictim.Yes)
 				.Single().PersonId.Should().Be(person);
 		}
-
-		[Test]
-		public void ShouldGetOneForAllPersonIds()
-		{
-			var person = Guid.NewGuid();
-
-			Target.Prepare(new AgentStatePrepare
-			{
-				PersonId = person,
-				ExternalLogons = new[]
-				{
-					new ExternalLogon
-					{
-						UserCode = "usercode1"
-					},
-					new ExternalLogon
-					{
-						UserCode = "usercode2"
-					}
-				}
-			}, DeadLockVictim.Yes);
-
-			Target.FindForSynchronize().Single().PersonId.Should().Be(person);
-		}
-
+		
 		[Test]
 		public void ShouldUpdateOnMultipleUserCodes()
 		{

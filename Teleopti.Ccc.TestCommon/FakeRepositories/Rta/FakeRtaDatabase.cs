@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			WithPlatform(new Guid(new StateForTest().PlatformTypeId));
 		}
 
-		public AgentState StoredState => _agentStates.FindForSynchronize().SingleOrDefault();
+		public AgentState StoredState => _agentStates.Find(_agentStates.FindAll(), DeadLockVictim.Yes).SingleOrDefault();
 		public AgentState StoredStateFor(Guid personId) => _agentStates.ForPersonId(personId);
 		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
 		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;

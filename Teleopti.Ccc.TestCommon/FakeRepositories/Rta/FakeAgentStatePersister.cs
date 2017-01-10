@@ -120,16 +120,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					})
 					.ToArray();
 		}
-
-		public IEnumerable<AgentStateFound> FindForSynchronize()
-		{
-			lock (_lock)
-				return _data
-					.Select(x => x.State)
-					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.ToArray();
-		}
-
+		
 		public void Delete(Guid personId, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)

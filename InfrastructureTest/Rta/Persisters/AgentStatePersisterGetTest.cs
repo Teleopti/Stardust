@@ -29,26 +29,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var result = Persister.Get(new[] {state1.PersonId, state3.PersonId}, DeadLockVictim.Yes);
 			
-			result.Select(x => x.PersonId).Should().Have.SameValuesAs(state1.PersonId, state3.PersonId);
+			result.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(state1.PersonId, state3.PersonId);
 		}
-
+		
 		[Test]
-		public void ShouldGetCurrentActualAgentStates()
-		{
-			var writer = Persister;
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			writer.Upsert(new AgentStateForUpsert { PersonId = personId1 });
-			writer.Upsert(new AgentStateForUpsert { PersonId = personId2 });
-
-			var result = Persister.FindForSynchronize();
-
-			result.Where(x => x.PersonId == personId1).Should().Have.Count.EqualTo(1);
-			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldGetCurrentActualAgentStatesWithAllData()
+		public void ShouldGetWithAllData()
 		{
 			var writer = Persister;
 			var state = new AgentStateForUpsert
@@ -69,7 +55,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			};
 			writer.Upsert(state);
 
-			var result = Persister.FindForSynchronize().Single();
+			var result = Persister.Get(new[] { state.PersonId}, DeadLockVictim.Yes)
+				.Single();
 
 			result.PersonId.Should().Be(state.PersonId);
 			result.BusinessUnitId.Should().Be(state.BusinessUnitId);

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				{
 					while (true)
 					{
-						var states = _persister.FindForSynchronize();
+						var states = _persister.Find(_persister.FindAll(), DeadLockVictim.Yes);
 						if (states.All(x => x.ReceivedTime == timeWhenLastStateWasSent.Utc()))
 							break;
 						Thread.Sleep(20);
