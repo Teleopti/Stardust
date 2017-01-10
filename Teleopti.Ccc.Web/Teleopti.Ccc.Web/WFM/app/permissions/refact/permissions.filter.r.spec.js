@@ -1,4 +1,4 @@
-xdescribe('permissionsFilter', function() {
+describe('permissionsFilter', function() {
 	var $httpBackend,
 		fakeBackend,
 		$controller,

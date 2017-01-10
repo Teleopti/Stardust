@@ -1,6 +1,6 @@
 'use strict';
-//DONT REMOVE X
-xdescribe('permissionsDataService', function () {
+
+describe('permissionsDataService', function () {
 	var $httpBackend,
 		fakeBackend,
 		permissionsDataService,
@@ -93,7 +93,6 @@ xdescribe('permissionsDataService', function () {
 			response = angular.fromJson(data);
 			return 200;
 		});
-		//HÄR SKA NI FORTÄSTTA
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/DeleteData').respond(function (method, url, data, headers) {
 			return 200;
 		});
@@ -125,9 +124,7 @@ xdescribe('permissionsDataService', function () {
 	});
 
 	it('should prepare all org data for sending to server when selecting bu', function () {
-		permissionsDataService.setSelectedRole(role);
-
-		var data = permissionsDataService.prepareData(BusinessUnit);
+		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
 		expect(data.Id).toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
 		expect(data.BusinessUnits[0]).toEqual('928dd0bc-bf40-412e-b970-9b5e015aadea');
@@ -136,18 +133,16 @@ xdescribe('permissionsDataService', function () {
 	});
 
 	it('should send all org data to server when selecting bu', function () {
-		permissionsDataService.setSelectedRole(role);
-		var data = permissionsDataService.prepareData(BusinessUnit);
+		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
-		permissionsDataService.selectOrganization(BusinessUnit);
+		permissionsDataService.selectOrganization(BusinessUnit, role);
 		$httpBackend.flush();
 
 		expect(response).toEqual(data);
 	});
 
 	it('should not persist previously sent bu', function () {
-		permissionsDataService.setSelectedRole(role);
-		var data = permissionsDataService.prepareData(BusinessUnit);
+		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
 		permissionsDataService.selectOrganization(
 			{
@@ -167,7 +162,8 @@ xdescribe('permissionsDataService', function () {
 				Name: 'TeleoptiCCCDemo',
 				Type: 'BusinessUnit',
 				IsSelected: false
-			}
+			},
+			role
 		);
 		$httpBackend.flush();
 

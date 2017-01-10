@@ -4,36 +4,23 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
   ctrl.toggleFunction = toggleFunction;
   ctrl.onSelect = onSelect;
   ctrl.checkParent = checkParent;
-  // ctrl.selectedFunctions = [];
+
   function toggleFunction(func) {
-    // ctrl.selectedFunctions = [];
-    console.log('selected role', ctrl.selectedRole);
-
-
     if (!ctrl.selectedRole){
       // Fixa notice här...
       return;
     }
 
-    //Fixa testerna
     if (ctrl.selectedRole != null && ctrl.selectedRole.BuiltIn) {
       NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
       return;
     }
-    //Fix me
     if (ctrl.selectedRole != null && ctrl.selectedRole.IsMyRole) {
       NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
       return;
     }
 
     ctrl.select(func);
-
-    // if (ctrl.isSelected(func)) {
-    //   var parents = permissionsDataService
-    //     .findParentFunctions(ctrl.functions, func)
-    //     .map(function(fn) { return fn.FunctionId; });
-    //   ctrl.selectedFunctions = ctrl.selectedFunctions.concat(func.FunctionId).concat(parents);
-    // }
 
     if (!ctrl.isSelected(func)) {
       permissionsDataService.findChildFunctions(func).forEach(function(fn) {

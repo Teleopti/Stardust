@@ -37,6 +37,7 @@
     vm.unselectedDataFilter = unselectedDataFilter;
     vm.filteredOrganizationSelection = {};
     vm.onFunctionClick = functionClick;
+    vm.onNodeClick = nodeClick;
     vm.functionsDescriptionFilter = functionsDescriptionFilter;
     vm.orgDataDescriptionFilter = orgDataDescriptionFilter;
 
@@ -153,7 +154,7 @@
       PermissionsServiceRefact.roles.save(roleData).$promise.then(function (data) {
         vm.roles.unshift(data);
         vm.selectedRole = data;
-        permissionsDataService.setSelectedRole(vm.selectedRole);
+        // permissionsDataService.setSelectedRole(vm.selectedRole);
         refreshRoleSelection();
         markSelectedRole(vm.selectedRole);
       });
@@ -194,7 +195,7 @@
       }
 
       PermissionsServiceRefact.manage.deleteRole({ Id: role.Id });
-      permissionsDataService.setSelectedRole(null);
+      // permissionsDataService.setSelectedRole(null);
       var index = vm.roles.indexOf(role);
       vm.roles.splice(index, 1);
 
@@ -211,7 +212,7 @@
       PermissionsServiceRefact.copyRole.copy({ Id: role.Id }).$promise.then(function (data) {
         vm.roles.unshift(data);
         vm.selectedRole = data;
-        permissionsDataService.setSelectedRole(vm.selectedRole);
+        // permissionsDataService.setSelectedRole(vm.selectedRole);
         refreshRoleSelection();
         markSelectedRole(vm.selectedRole);
       });
@@ -222,7 +223,7 @@
 
       PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function (data) {
         vm.selectedRole = data;
-        permissionsDataService.setSelectedRole(vm.selectedRole);
+        // permissionsDataService.setSelectedRole(vm.selectedRole);
 
         if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length > 0){
           matchOrganizationData();
@@ -308,6 +309,12 @@
         vm.organizationSelection = data;
         orgDataHandler(vm.organizationSelection);
       });
+    }
+
+    function nodeClick(node) {
+      if (vm.selectedRole != null) {
+      permissionsDataService.selectOrganization(node, vm.selectedRole);
+      }
     }
 
     function functionClick(fn) {

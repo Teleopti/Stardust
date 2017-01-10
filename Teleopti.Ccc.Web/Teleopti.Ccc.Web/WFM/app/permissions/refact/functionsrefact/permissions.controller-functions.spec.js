@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe('component: permissionsTree', function() {
+describe('component: permissionsTree', function() {
 	var $httpBackend,
 		fakeBackend,
 		$controller,
@@ -150,8 +150,10 @@ xdescribe('component: permissionsTree', function() {
 		ctrl = $componentController('permissionsTree', null, {
 			functions: vm.applicationFunctions,
 			select: vm.selectFunction,
-			isSelected: vm.isFunctionSelected
+			isSelected: vm.isFunctionSelected,
+			onClick: vm.onFunctionClick
 		});
+		vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c'] = true;
 
 		ctrl.checkParent(vm.applicationFunctions[0]);
 

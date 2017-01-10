@@ -13,12 +13,18 @@
 	// 	})
   // }
 
-   function stateConfig($stateProvider) {
-    $stateProvider.state('permissions', {
-			url: '/permissions',
-			templateUrl: 'app/permissions/permissions.html',
-			controller: 'PermissionsCtrl'
-		})
-  }
+  function stateConfig($stateProvider) {
+   $stateProvider.state('permissions', {
+     url: '/permissions',
+     templateUrl: 'app/permissions/permissions.html',
+     controller: 'PermissionsCtrl'
+   })
+   .state('permissions-refact', {
+     url: '/permissions/v2',
+     templateUrl: 'app/permissions/refact/permissions-refact.html',
+     controller: 'PermissionsCtrlRefact as vm'
+   })
+ }
+
 
 })();

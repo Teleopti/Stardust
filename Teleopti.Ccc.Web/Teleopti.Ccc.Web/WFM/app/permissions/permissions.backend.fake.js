@@ -89,8 +89,13 @@
         return roleInfos[0];
       }
 
-      //FIXME måste ha dynamiskt argument
-      this.deleteUnselectedOrgData = function(data){
+      this.deleteUnselectedOrgData = function(id, type){
+        if (type === 'Team' && roleInfos[0].AvailableTeams != null && roleInfos[0].AvailableTeams.length > 0) {
+          var toBeDeleted = roleInfos[0].AvailableTeams.find(function(element){
+            return element.Id == id;
+          });
+          roleInfos[0].AvailableTeams.splice(toBeDeleted, 1);
+        }
       };
 
       this.clear = function () {
