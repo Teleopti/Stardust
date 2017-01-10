@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
             foreach (DateOnly datePointer in selectedPeriod.DayCollection())
             {
-                if (listOfAllTeamBlock.Count(s => s.BlockInfo.BlockPeriod.DayCollection().Contains(datePointer)) > 0)
+                if (listOfAllTeamBlock.Count(s => s.BlockInfo.BlockPeriod.Contains(datePointer)) > 0)
                     continue;
 
                 var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();

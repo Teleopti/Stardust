@@ -1,4 +1,3 @@
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -8,7 +7,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public static DateOnly DatePoint(this IBlockInfo blockInfo, DateOnlyPeriod period)
 		{
 			//don't really understand but extracted from present code.
-			return blockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); 
+			var datePoint = period.StartDate;
+			if (blockInfo.BlockPeriod.StartDate > datePoint)
+				datePoint = blockInfo.BlockPeriod.StartDate;
+				
+			return datePoint; 
 		}
 	}
 }

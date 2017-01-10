@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
                     if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
                     {
                         var destShift = scheduleDay.GetEditorShift();
-                        if ((!_scheduleDayEquator.MainShiftBasicEquals(sampleShift, destShift)))
+                        if (!_scheduleDayEquator.MainShiftBasicEquals(sampleShift, destShift))
                             return false;
                     }
                 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
@@ -151,8 +150,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock
 					.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
-				var firstSelectedDay = selectedPeriod.DayCollection().First();
-				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
+				var firstSelectedDay = selectedPeriod.StartDate;
+				var datePoint = firstSelectedDay;
+				if (teamBlockInfo.BlockInfo.BlockPeriod.StartDate > firstSelectedDay)
+					datePoint = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 			
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,

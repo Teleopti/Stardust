@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-				Expect.Call(_blockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 24, 2014, 3, 24));
+				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.AtLeastOnce();
+				Expect.Call(_blockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 24, 2014, 3, 24)).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> {_person});
 				Expect.Call(_teamInfo.MatrixForMemberAndDate(_person, new DateOnly(2014, 3, 24))).Return(_matrix);
 				Expect.Call(_matrix.ActiveScheduleRange).Return(_range);
-				Expect.Call(_range.ScheduledDay(new DateOnly(2014, 3, 24))).Return(_scheduleDay);
+				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2014, 3, 24,2014,3,24))).Return(new [] { _scheduleDay});
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
 			}
 
@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-				Expect.Call(_blockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 24, 2014, 3, 24));
+				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.AtLeastOnce();
+				Expect.Call(_blockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 24, 2014, 3, 24)).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person,_personWithoutSchedulePeriod });
 				Expect.Call(_teamInfo.MatrixForMemberAndDate(_person, new DateOnly(2014, 3, 24))).Return(_matrix);
 				Expect.Call(_teamInfo.MatrixForMemberAndDate(_personWithoutSchedulePeriod, new DateOnly(2014, 3, 24))).Return(null);
 				Expect.Call(_matrix.ActiveScheduleRange).Return(_range);
-				Expect.Call(_range.ScheduledDay(new DateOnly(2014, 3, 24))).Return(_scheduleDay);
+				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2014, 3, 24, 2014, 3, 24))).Return(new[] { _scheduleDay });
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
 			}
 

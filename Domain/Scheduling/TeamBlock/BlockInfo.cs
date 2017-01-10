@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -56,12 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IList<DateOnly> UnLockedDates()
 		{
-			var ret = new List<DateOnly>();
-			foreach (var dateOnly in _blockPeriod.DayCollection())
-			{
-				if(!_lockedDates.Contains(dateOnly))
-					ret.Add(dateOnly);
-			}
+			var ret = _blockPeriod.DayCollection().Where(d => !_lockedDates.Contains(d)).ToList();
 
 			return ret;
 		}

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
                 foreach (var day in blockInfo.BlockPeriod.DayCollection())
                 {
                     if (person.TerminalDate < day)
-						teamInfo.LockMember(new DateOnlyPeriod(day, day), person );
+						teamInfo.LockMember(day.ToDateOnlyPeriod(), person );
                        
                 }
             }  

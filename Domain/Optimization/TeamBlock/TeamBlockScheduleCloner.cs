@@ -16,18 +16,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		public IEnumerable<IScheduleDay> CloneSchedules(ITeamBlockInfo teamBlock)
 		{
-			IList<IScheduleDay> clonedSchedules = new List<IScheduleDay>();
-			var dates = teamBlock.BlockInfo.BlockPeriod.DayCollection();
+			var clonedSchedules = new List<IScheduleDay>();
 			var teamInfo = teamBlock.TeamInfo;
 			foreach (var groupMember in teamInfo.GroupMembers)
 			{
-				var scheduleMatrixPro = teamInfo.MatrixForMemberAndDate(groupMember, dates.First());
+				var scheduleMatrixPro = teamInfo.MatrixForMemberAndDate(groupMember, teamBlock.BlockInfo.BlockPeriod.StartDate);
 				if (scheduleMatrixPro == null) continue;
 				var rangeForMember = scheduleMatrixPro.ActiveScheduleRange;
-				foreach (var dateOnly in dates)
-				{
-					clonedSchedules.Add((IScheduleDay)rangeForMember.ScheduledDay(dateOnly).Clone());
-				}
+				clonedSchedules.AddRange(rangeForMember.ScheduledDayCollection(teamBlock.BlockInfo.BlockPeriod).Select(s => (IScheduleDay)s.Clone()));
 			}
 
 			return clonedSchedules;

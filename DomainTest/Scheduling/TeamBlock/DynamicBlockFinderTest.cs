@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
 			{
-                IList<DateOnly> result = _target.ExtractBlockInfo(_date, _teamInfo, new SingleDayBlockFinder(), false ).BlockPeriod.DayCollection();
-				Assert.AreEqual(_date, result[0]);
-				Assert.AreEqual(1, result.Count);
+                var result = _target.ExtractBlockInfo(_date, _teamInfo, new SingleDayBlockFinder(), false ).BlockPeriod;
+				Assert.AreEqual(_date, result.StartDate);
+				Assert.AreEqual(1, result.DayCount());
 			}
       
 		}

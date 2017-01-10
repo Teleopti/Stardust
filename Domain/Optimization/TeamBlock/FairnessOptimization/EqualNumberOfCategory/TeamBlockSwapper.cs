@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		{
 			List<IScheduleDay> totalModifyList = new List<IScheduleDay>();
 			var teamBlock1GroupMembers = teamBlock1.TeamInfo.GroupMembers.ToList();
-			for (int i = 0; i < teamBlock1GroupMembers.Count(); i++)
+			for (int i = 0; i < teamBlock1GroupMembers.Count; i++)
 			{
 				foreach (var dateOnly in teamBlock1.BlockInfo.BlockPeriod.DayCollection())
 				{
