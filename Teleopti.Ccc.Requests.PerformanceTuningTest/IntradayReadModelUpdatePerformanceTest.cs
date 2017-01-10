@@ -1,7 +1,10 @@
 using System;
+using System.Data.SqlClient;
+using System.IO;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -21,6 +24,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
+		public IConfigReader ConfigReader;
 
 
 		public override void OneTimeSetUp()
@@ -33,7 +37,17 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			//Fill up so need to purge later
 			WithUnitOfWork.Do(() =>
 							  {
-								  UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1), now.AddDays(1)));
+								  using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
+								  {
+									  connection.Open();
+
+									  using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResource", connection))
+									  {
+										  command.ExecuteNonQuery();
+									  }
+									  connection.Close();
+								  }
+								  UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(1).AddHours(-1)));
 							  });
 		}
 
