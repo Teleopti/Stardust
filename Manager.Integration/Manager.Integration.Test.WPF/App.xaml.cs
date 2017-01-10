@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Data.Entity.Infrastructure.Interception;
 using System.Net;
 using System.Windows;
-using Manager.Integration.Test.WPF.Interceptors;
 
 namespace Manager.Integration.Test.WPF
 {
