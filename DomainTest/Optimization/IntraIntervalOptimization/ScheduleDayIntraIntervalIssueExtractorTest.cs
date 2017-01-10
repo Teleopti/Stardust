@@ -21,11 +21,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private DateOnly _dateOnly;
 		private IScenario _scenario;
 		private IPersonAssignment _personAssignment;
-		private IActivity _skillActivity;
 		private IActivity _mainActivity;
 		private IPerson _person;
 		private IShiftCategory _shiftCategory;
-		private ISkill _skill;
 		private DateTimePeriod _intervalPeriod;
 		private DateTimePeriod _mainShiftPeriod;
 
@@ -37,10 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_target = new ScheduleDayIntraIntervalIssueExtractor();
 			_skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
 			_issues = new List<ISkillStaffPeriod>{_skillStaffPeriod};
-			_skillActivity = ActivityFactory.CreateActivity("skillActivity");
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
-			_skill = SkillFactory.CreateSkill("skill");
-			_skill.Activity = _skillActivity;
 			_person = PersonFactory.CreatePerson("person");
 			var start = DateTime.SpecifyKind(_dateOnly.Date.AddHours(10), DateTimeKind.Utc);
 			var end = start.AddMinutes(5);
@@ -62,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues, _skill);	
+				var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues);	
 				Assert.AreEqual(1, result.Count);
 			}
 		}
@@ -73,8 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			setup();
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _mainShiftPeriod);
 			_scheduleDictionary = ScheduleDictionaryForTest.WithPersonAbsence(_scenario, _mainShiftPeriod, personAbsence);
-			_skill.Activity = _mainActivity;
-			var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues, _skill);
+			var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues);
 			Assert.AreEqual(0, result.Count);
 		}
 
@@ -89,8 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Playback())
 			{
-				_skill.Activity = _mainActivity;
-				var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues, _skill);
+				var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues);
 				Assert.AreEqual(0, result.Count);
 			}	
 		}

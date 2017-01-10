@@ -94,8 +94,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(_scheduleDays);
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter)).Return(_scheduleDays);
 				
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.Period).Return(dateTimePeriod);
@@ -146,8 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
 				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(new List<IScheduleDay>());
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(new List<IScheduleDay>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay)).Return(new List<IScheduleDay>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter)).Return(new List<IScheduleDay>());
 			}
 
 			using (_mock.Playback())
@@ -173,8 +173,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(_scheduleDays);
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(new List<IScheduleDay>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter)).Return(new List<IScheduleDay>());
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.Period).Return(dateTimePeriod);
@@ -204,8 +204,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(new List<IScheduleDay>());
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay)).Return(new List<IScheduleDay>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter)).Return(_scheduleDays);
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.Period).Return(dateTimePeriod);
@@ -235,8 +235,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(_scheduleDays);
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(new List<IScheduleDay>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter)).Return(new List<IScheduleDay>());
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.Period).Return(dateTimePeriod);
@@ -267,8 +267,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(new List<IScheduleDay>());
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay)).Return(new List<IScheduleDay>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter)).Return(_scheduleDays);
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.Period).Return(dateTimePeriod);
@@ -299,8 +299,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(_scheduleDays);
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter)).Return(_scheduleDays);
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.Period).Return(dateTimePeriod);

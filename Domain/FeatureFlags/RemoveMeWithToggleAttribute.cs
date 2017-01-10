@@ -1,4 +1,5 @@
 using System;
+// ReSharper disable UnusedParameter.Local
 
 namespace Teleopti.Ccc.Domain.FeatureFlags
 {
@@ -12,10 +13,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		public RemoveMeWithToggleAttribute(string comment, params Toggles[] toggles)
 		{
 
-		}
-
-		public static void This(params Toggles[] toggles)
-		{
 		}
 	}
 }

@@ -15,21 +15,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INow _now;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
-		private readonly CurrentBelongsToDate _date;
 
 		public AdherencePercentageViewModelBuilder(
 			INow now, 
 			IAdherencePercentageReadModelReader adherencePercentageReadModelReader, 
 			IUserCulture culture, 
-			IUserTimeZone timeZone,
-			CurrentBelongsToDate date
+			IUserTimeZone timeZone
 			)
 		{
 			_adherencePercentageReadModelReader = adherencePercentageReadModelReader;
 			_now = now;
 			_culture = culture;
 			_timeZone = timeZone;
-			_date = date;
 		}
 
 		public AdherencePercentageViewModel Build(Guid personId)
