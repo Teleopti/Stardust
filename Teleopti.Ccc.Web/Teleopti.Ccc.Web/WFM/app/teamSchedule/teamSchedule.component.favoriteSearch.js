@@ -48,7 +48,7 @@
 			FavoriteSearchDataService.getFavoriteSearchList().then(function (resp) {
 				refreshList(resp.data);
 			});
-		}
+		};
 
 		ctrl.save = function () {
 			var currentSearch = angular.copy(ctrl.getSearch());
@@ -62,15 +62,21 @@
 			} else {
 				ctrl.isTest ? updateFavorite() : popDialog();
 			}
-		}
+		};
 
-		ctrl.disableSave = function () {
-			var isNameValid = ctrl.currentName && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
-			if (!ctrl.currentFavorite) return !isNameValid;
-
+		ctrl.enableSave = function () {
 			var currentSearch = ctrl.getSearch();
-			return angular.equals(ctrl.currentFavorite.TeamIds, currentSearch.teamIds) &&
-				ctrl.currentFavorite.SearchTerm == currentSearch.searchTerm && !isNameValid;
+
+			var isNameValid = ctrl.currentName !== '' && ctrl.currentName.length <= 50;
+			var hasTeamIds = currentSearch.teamIds.length > 0;
+
+			if (!ctrl.currentFavorite) return isNameValid && hasTeamIds;
+
+			var nameChanged = ctrl.currentName != ctrl.currentFavorite.Name;
+			var notSameTeamIdsAndSearchTerm = !angular.equals(ctrl.currentFavorite.TeamIds, currentSearch.teamIds) ||
+				ctrl.currentFavorite.SearchTerm != currentSearch.searchTerm;
+
+			return (nameChanged || notSameTeamIdsAndSearchTerm) && isNameValid && hasTeamIds;
 		};
 
 		function popDialog() {
@@ -130,7 +136,7 @@
 							});
 				}
 			}
-		}
+		};
 
 		ctrl.delete = function (name) {
 			var index = favoriteSearchNameList.indexOf(name);
@@ -139,14 +145,14 @@
 					ctrl.favoriteSearchList.splice(index, 1);
 					favoriteSearchNameList.splice(index, 1);
 				});
-		}
+		};
 
 		ctrl.select = function (item) {
 			ctrl.currentFavorite = item;
 			ctrl.currentName = item.Name;
 			ctrl.mdPanelRef.close();
 			ctrl.applyFavorite({ teamIds: angular.copy(item.TeamIds), searchTerm: item.SearchTerm });
-		}
+		};
 
 		function refreshList(data) {
 			if (!angular.isArray(data)) return;

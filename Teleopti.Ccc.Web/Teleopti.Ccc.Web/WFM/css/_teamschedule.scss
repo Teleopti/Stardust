@@ -233,13 +233,12 @@
 		.advanced-input-dropdown {
 			top: 14px;
 			left: 17px;
-			width: 321px;
 		}
 		.advanced-input {
-			width: 200px;
+			width: 150px;
 		}
 		wfm-multiple-search-input .expand-advanced-input {
-			width: 200px !important;
+			width: 150px !important;
 		}
 		.expand-advanced-input {
 			max-width: 100%;
@@ -298,6 +297,77 @@
 	.view-navigator-container .wfm-btn {
 		padding: 5px;
 	}
+}
+.fav-search-open-btn {
+	display: inline-block;
+	margin: 10px 5px;
+}
+.fav-search-panel {
+	background: $white;
+
+	md-list {
+		padding: 0 0 0.5em 0;
+		min-width: 400px;
+	}
+}
+.fav-search-header {
+	background: $white;
+	padding: 0;
+	padding-top: 0.5em;
+
+	.md-subheader-inner {
+		padding: 1em 0.8em 0.6em 0.8em;
+	}
+	.input-block {
+		display: inline-block;
+		width: calc(100% - 50px);
+		position: relative;
+	}
+	input.name {
+		width: 100%;
+	}
+	input.name.ng-invalid {
+		border-bottom: 1px solid red;
+	}
+	.tag-icon {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		transform: scale(0.8, 0.8);
+	}
+	button.btn-primary {
+		background: #09f;
+	}
+	button.btn-default {
+		background: $gray026;
+	}
+}
+.fav-search-item {
+	height: 2em;
+	padding: 0 !important;
+	border-bottom: 1px solid $gray012;
+	min-height: initial !important;
+
+	& > .fav-search-item-container {
+		padding: 0.2em 0.8em 0 0.8em;
+		width: 100%;
+	}
+	.pull-right {
+		margin-top: 3px;
+	}
+	.default-icon {
+		display: inline-block;
+		margin-right: 20px;
+	}
+	.invisible {
+		visibility: hidden;
+	}
+	.visible {
+		visibility: visible;
+	}
+}
+.fav-search-item:hover {
+	background: $gray012;
 }
 .organization-picker-container {
 	display: inline-block;
@@ -374,7 +444,7 @@
 			& > md-checkbox:hover {
 				background-color: rgba(0, 0, 0, .06) !important;
 			}
-			& > md-checkbox.md-checked .md-ink-ripple .md-icon{
+			& > md-checkbox.md-checked .md-ink-ripple .md-icon {
 				background-color: #09F;
 			}
 			.partial-selected .md-icon {
@@ -855,61 +925,3 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 		font-size: 12px !important;
 	}
 }
-.md-button.md-icon-button.fav-search-open-btn{
-	margin: 0;
-	padding-left: 0;
-}
-
-.fav-search-panel {
-	background: $white;
-	md-list{
-		padding: 0 0 0.5em 0;
-	}
-	.name.ng-invalid{
-		border-bottom:1px solid red;
-	}
-}
-.fav-search-header{
-	background:$white;
-	margin-bottom: 0.5em;
-	padding: 0;
-
-	.md-subheader-inner{
-		padding: 1em 0.8em 0.6em 0.8em;
-	}
-	button.btn-primary{
-		background: #09f;
-	}
-	button.btn-default{
-		background: $gray026;
-	}
-}
-.fav-search-item{
-	height: 2em;
-	padding: 0!important;
-	min-height: initial!important;
-
-	& > .fav-search-item-container{
-		padding: 0 0.8em;
-		width: 100%;
-	}
-
-	.default-icon{
-		display: inline-block;
-		margin-right: 20px;
-	}
-
-	.invisible{
-		visibility: hidden;
-	}
-
-	.visible{
-		visibility:visible;
-	}
-}
-
-
-.fav-search-item:hover{
-	background: $gray012;
-}
-
