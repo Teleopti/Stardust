@@ -8,7 +8,34 @@
 
 	function FakeRtaBackend($httpBackend) {
 
-		var service = this;
+		var service = {
+			clear: clear,
+			withToggle: withToggle,
+			withTime: withTime,
+			withAgent: withAgent,
+			clearStates: clearStates,
+			withState: withState,
+			withAdherence: withAdherence,
+			withPersonDetails: withPersonDetails,
+			withActivityAdherence: withActivityAdherence,
+			withSite: withSite,
+			withSiteAdherence: withSiteAdherence,
+			withSiteAdherenceForSkill: withSiteAdherenceForSkill,
+			clearSiteAdherences: clearSiteAdherences,
+			clearSiteAdherencesForSkill: clearSiteAdherencesForSkill,
+			clearTeamAdherencesForSkill: clearTeamAdherencesForSkill,
+			withTeam: withTeam,
+			withTeamAdherenceForSkill: withTeamAdherenceForSkill,
+			withTeamAdherence: withTeamAdherence,
+			clearTeamAdherences: clearTeamAdherences,
+			withSkill: withSkill,
+			withSkills: withSkills,
+			withSkillAreas: withSkillAreas,
+			withPhoneState: withPhoneState,
+			withOrganization: withOrganization
+		};
+
+		///////////////////////////////
 
 		var serverTime = null;
 		var toggles = {};
@@ -458,7 +485,7 @@
 			});
 
 
-		this.clear = function() {
+		function clear() {
 			serverTime = null;
 			toggles = {};
 			agents = [];
@@ -476,117 +503,117 @@
 			teamAdherencesForSkill = [];
 		}
 
-		this.withToggle = function(toggle) {
+		function withToggle(toggle) {
 			toggles[toggle] = true;
 			return this;
 		}
 
-		this.withTime = function(time) {
+		function withTime(time) {
 			serverTime = time;
 			return this;
 		};
 
-		this.withAgent = function(agent) {
+		function withAgent(agent) {
 			agents.push(agent);
 			return this;
 		};
 
-		this.clearStates = function() {
+		function clearStates() {
 			states = [];
 			return this;
 		};
 
-		this.withState = function(state) {
+		function withState(state) {
 			states.push(state);
 			return this;
 		};
 
-		this.withAdherence = function(adherence) {
+		function withAdherence(adherence) {
 			adherences.push(adherence);
 			return this;
 		}
 
-		this.withPersonDetails = function(personDetail) {
+		function withPersonDetails(personDetail) {
 			personDetails.push(personDetail);
 			return this;
 		};
 
-		this.withActivityAdherence = function(activityAdherence) {
+		function withActivityAdherence(activityAdherence) {
 			activityAdherences.push(activityAdherence);
 			return this;
 		}
 
-		this.withSite = function(site) {
+		function withSite(site) {
 			sites.push(site);
 			return this;
 		};
 
-		this.withSiteAdherence = function(siteAdherence) {
+		function withSiteAdherence(siteAdherence) {
 			siteAdherences.push(siteAdherence);
 			return this;
 		};
 
-		this.withSiteAdherenceForSkill = function(siteAdherenceForSkill) {
+		function withSiteAdherenceForSkill(siteAdherenceForSkill) {
 			siteAdherencesForSkill.push(siteAdherenceForSkill);
 			return this;
 		};
 
-		this.clearSiteAdherences = function() {
+		function clearSiteAdherences() {
 			siteAdherences = [];
 			return this;
 		};
 
-		this.clearSiteAdherencesForSkill = function() {
+		function clearSiteAdherencesForSkill() {
 			siteAdherencesForSkill = [];
 			return this;
 		};
 
-		this.clearTeamAdherencesForSkill = function() {
+		function clearTeamAdherencesForSkill() {
 			teamAdherencesForSkill = [];
 			return this;
 		};
 
-		this.withTeam = function(team) {
+		function withTeam(team) {
 			teams.push(team);
 			return this;
 		};
 
-		this.withTeamAdherenceForSkill = function(teamAdherenceForSkill) {
+		function withTeamAdherenceForSkill(teamAdherenceForSkill) {
 			teamAdherencesForSkill.push(teamAdherenceForSkill);
 			return this;
 		};
 
-		this.withTeamAdherence = function(teamAdherence) {
+		function withTeamAdherence(teamAdherence) {
 			teamAdherences.push(teamAdherence);
 			return this;
 		};
 
-		this.clearTeamAdherences = function() {
+		function clearTeamAdherences() {
 			teamAdherences = [];
 			return this;
 		};
 
-		this.withSkill = function(skill) {
+		function withSkill(skill) {
 			skills.push(skill);
 			return this;
 		}
 
-		this.withSkills = function(newSkills) {
+		function withSkills(newSkills) {
 			skills = skills.concat(newSkills);
 			return this;
 		}
 
-		this.withSkillAreas = function(newSkillAreas) {
+		function withSkillAreas(newSkillAreas) {
 			skillAreas = newSkillAreas;
 			return this;
 		}
 
-		this.withPhoneState = function(phoneState) {
+		function withPhoneState(phoneState) {
 			phoneStates.push(phoneState)
 			return this;
 		}
 
-		this.withOrganization = function(organization) {
+		function withOrganization(organization) {
 			organizations.push(organization)
 			return this;
 		}
