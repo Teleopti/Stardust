@@ -5,14 +5,16 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class CreateSkillsFromMaxSeatSitesTest
 	{
 		public ICreateSkillsFromMaxSeatSites Target;
+		public IUserTimeZone UserTimeZone;
 
 		[Test]
 		public void ShouldCreateSkillForSiteWithMaxSeatAnd15MinuteInterval()
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             Assert.AreEqual(15, skills[0].DefaultResolution);
             Assert.AreEqual(site1.Description.Name, skills[0].Name);
             Assert.AreEqual(ForecastSource.MaxSeatSkill, skills[0].SkillType.ForecastSource);
-            Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.Id, skills[0].TimeZone.Id);
+            Assert.AreEqual(UserTimeZone.TimeZone().Id, skills[0].TimeZone.Id);
             Assert.AreEqual(96, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection.Count);
             Assert.AreEqual(20, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection[0].MaxSeats);
 		}
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			Assert.AreEqual(30, skills[0].DefaultResolution);
 			Assert.AreEqual(site1.Description.Name, skills[0].Name);
 			Assert.AreEqual(ForecastSource.MaxSeatSkill, skills[0].SkillType.ForecastSource);
-			Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.Id, skills[0].TimeZone.Id);
+			Assert.AreEqual(UserTimeZone.TimeZone().Id, skills[0].TimeZone.Id);
 			Assert.AreEqual(48, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection.Count);
 			Assert.AreEqual(20, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection[0].MaxSeats);
 		}
