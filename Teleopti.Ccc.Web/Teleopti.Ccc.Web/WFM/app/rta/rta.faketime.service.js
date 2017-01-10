@@ -2,9 +2,9 @@
 (function() {
 	angular
 		.module('wfm.rta')
-		.service('FakeTimeService', FakeTimeService);
+		.service('fakeTimeService', fakeTimeService);
 
-	function FakeTimeService() {
+	function fakeTimeService() {
 		// copied from sinon.js
 		// https://github.com/cjohansen/Sinon.JS/blob/master/lib/sinon/util/fake_timers.js
 		window.fakeTime = function(fyear, fmonth, fdate, fhour, fminute, fsecond) {

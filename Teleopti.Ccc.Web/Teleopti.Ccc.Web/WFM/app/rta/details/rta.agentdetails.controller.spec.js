@@ -1,27 +1,27 @@
 'use strict';
-describe('RtaAgentDetailsCtrl', function() {
+describe('RtaAgentDetailsController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
 		$sessionStorage,
 		$fakeBackend,
 		$controllerBuilder,
-		scope;
+		vm;
 
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
 
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.service('$stateParams', function () {
+	beforeEach(function() {
+		module(function($provide) {
+			$provide.service('$stateParams', function() {
 				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
+	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
@@ -29,7 +29,7 @@ describe('RtaAgentDetailsCtrl', function() {
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
 
-		scope = $controllerBuilder.setup('RtaAgentDetailsCtrl');
+		$controllerBuilder.setup('RtaAgentDetailsController');
 
 		$fakeBackend.clear();
 	}));
@@ -41,9 +41,9 @@ describe('RtaAgentDetailsCtrl', function() {
 			Name: "Ashley Andeen"
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.name).toEqual("Ashley Andeen");
+		expect(vm.name).toEqual("Ashley Andeen");
 	});
 
 	it('should get details for agent', function() {
@@ -57,12 +57,12 @@ describe('RtaAgentDetailsCtrl', function() {
 			TimeOutOfAdherence: "01:30:00"
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.adherence[0].Name).toEqual("Phone");
-		expect(scope.adherence[0].StartTime).toEqual("2014-10-06T08:00:00");
-		expect(scope.adherence[0].ActualStartTime).toEqual("2014-10-06T08:00:00");
-		expect(scope.adherence[0].TimeInAdherence).toEqual("00:30:00");
-		expect(scope.adherence[0].TimeOutOfAdherence).toEqual("01:30:00");
+		expect(vm.adherence[0].Name).toEqual("Phone");
+		expect(vm.adherence[0].StartTime).toEqual("2014-10-06T08:00:00");
+		expect(vm.adherence[0].ActualStartTime).toEqual("2014-10-06T08:00:00");
+		expect(vm.adherence[0].TimeInAdherence).toEqual("00:30:00");
+		expect(vm.adherence[0].TimeOutOfAdherence).toEqual("01:30:00");
 	});
 });

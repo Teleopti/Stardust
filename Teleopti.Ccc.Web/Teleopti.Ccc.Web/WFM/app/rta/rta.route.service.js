@@ -3,11 +3,11 @@
 
 	angular
 		.module('wfm.rta')
-		.factory('RtaRouteService', RtaRouteService);
+		.factory('rtaRouteService', rtaRouteService);
 
-	RtaRouteService.$inject = ['$state'];
+	rtaRouteService.$inject = ['$state'];
 
-	function RtaRouteService($state) {
+	function rtaRouteService($state) {
 
 		var service = {
 			goToSites: goToSites,

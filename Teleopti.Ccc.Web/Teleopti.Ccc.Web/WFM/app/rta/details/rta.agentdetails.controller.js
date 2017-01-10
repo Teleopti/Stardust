@@ -3,32 +3,37 @@
 
 	angular
 		.module('wfm.rta')
-		.controller('RtaAgentDetailsCtrl', ['$scope', '$state', '$stateParams', 'RtaService',
-			function($scope, $state, $stateParams, RtaService) {
-				var personId = $stateParams.personId;
-				$scope.name = "";
-				$scope.adherence = [];
+		.controller('RtaAgentDetailsController', RtaAgentDetailsController);
 
-				RtaService.getPersonDetails({
-						personId: personId
-					})
-					.then(function(person) {
-						$scope.name = person.Name;
-					});
+	RtaAgentDetailsController.$inject = ['$state', '$stateParams', 'rtaService'];
 
-				RtaService.getAdherenceDetails({
-						personId: personId
-					})
-					.then(function(adherence) {
-						$scope.adherence = adherence;
-					});
+	function RtaAgentDetailsController($state, $stateParams, rtaService) {
 
-				RtaService.forToday({
-						personId: personId
-					})
-					.then(function(data) {
-						$scope.dailyTotal = data.AdherencePercent;
-					});
-			}
-		]);
+		var vm = this;
+
+		var personId = $stateParams.personId;
+		vm.name = "";
+		vm.adherence = [];
+
+		rtaService.getPersonDetails({
+				personId: personId
+			})
+			.then(function(person) {
+				vm.name = person.Name;
+			});
+
+		rtaService.getAdherenceDetails({
+				personId: personId
+			})
+			.then(function(adherence) {
+				vm.adherence = adherence;
+			});
+
+		rtaService.forToday({
+				personId: personId
+			})
+			.then(function(data) {
+				vm.dailyTotal = data.AdherencePercent;
+			});
+	};
 })();

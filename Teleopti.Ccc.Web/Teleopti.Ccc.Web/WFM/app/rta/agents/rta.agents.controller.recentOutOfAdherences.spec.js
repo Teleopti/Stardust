@@ -1,12 +1,13 @@
 'use strict';
-describe('RtaAgentsCtrl', function() {
+describe('RtaAgentsController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
 		$sessionStorage,
 		$fakeBackend,
 		$controllerBuilder,
-		scope;
+		scope,
+		vm;
 
 	var stateParams = {};
 
@@ -29,7 +30,7 @@ describe('RtaAgentsCtrl', function() {
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
 
-		scope = $controllerBuilder.setup('RtaAgentsCtrl');
+		scope = $controllerBuilder.setup('RtaAgentsController');
 		$fakeBackend.withToggle('RTA_SeeRecentOutOfAdherenceOccurancesToday_39145');
 
 		$fakeBackend.clear();
@@ -58,11 +59,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(30));
-		expect(scope.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(15));
+		expect(vm.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(30));
+		expect(vm.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(15));
 	});
 
 	it('should display past out of adherences', function() {
@@ -85,13 +87,14 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(15));
-		expect(scope.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(15));
-		expect(scope.agents[0].OutOfAdherences[1].Offset).toEqual(minutesToPercent(45));
-		expect(scope.agents[0].OutOfAdherences[1].Width).toEqual(minutesToPercent(15));
+		expect(vm.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(15));
+		expect(vm.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(15));
+		expect(vm.agents[0].OutOfAdherences[1].Offset).toEqual(minutesToPercent(45));
+		expect(vm.agents[0].OutOfAdherences[1].Width).toEqual(minutesToPercent(15));
 	});
 
 	it('should display on going out of adherence', function() {
@@ -111,11 +114,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(45));
-		expect(scope.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(15));
+		expect(vm.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(45));
+		expect(vm.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(15));
 	});
 
 	it('should cut on going out of adherence', function() {
@@ -135,11 +139,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(0));
-		expect(scope.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(60));
+		expect(vm.agents[0].OutOfAdherences[0].Offset).toEqual(minutesToPercent(0));
+		expect(vm.agents[0].OutOfAdherences[0].Width).toEqual(minutesToPercent(60));
 	});
 
 	it('should display on going out of adherence time', function() {
@@ -159,10 +164,11 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].TimeOutOfAdherence).toEqual("0:10:00");
+		expect(vm.agents[0].TimeOutOfAdherence).toEqual("0:10:00");
 	});
 
 	it('should not display out of adherence time when in adherence', function() {
@@ -182,10 +188,11 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].TimeOutOfAdherence).toEqual(undefined);
+		expect(vm.agents[0].TimeOutOfAdherence).toEqual(undefined);
 	});
 
 	it('should display when out of adherence started and ended', function() {
@@ -205,11 +212,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].OutOfAdherences[0].StartTime).toEqual("07:30:00");
-		expect(scope.agents[0].OutOfAdherences[0].EndTime).toEqual("07:45:00");
+		expect(vm.agents[0].OutOfAdherences[0].StartTime).toEqual("07:30:00");
+		expect(vm.agents[0].OutOfAdherences[0].EndTime).toEqual("07:45:00");
 	});
 
 	it('should display when ongoing out of adherence started', function() {
@@ -229,11 +237,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].OutOfAdherences[0].StartTime).toEqual("07:30:00");
-		expect(scope.agents[0].OutOfAdherences[0].EndTime).toEqual(null);
+		expect(vm.agents[0].OutOfAdherences[0].StartTime).toEqual("07:30:00");
+		expect(vm.agents[0].OutOfAdherences[0].EndTime).toEqual(null);
 	});
 
 	it('should not display out of adherence ending before time window', function() {
@@ -256,10 +265,11 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].OutOfAdherences.length).toEqual(0);
+		expect(vm.agents[0].OutOfAdherences.length).toEqual(0);
 	});
 
 });

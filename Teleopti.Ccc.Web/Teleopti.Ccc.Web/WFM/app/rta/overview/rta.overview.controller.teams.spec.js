@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaOverviewCtrl', function () {
+describe('RtaOverviewController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -7,22 +7,23 @@ describe('RtaOverviewCtrl', function () {
 		$fakeBackend,
 		$controllerBuilder,
 		scope,
-		NoticeService;
+		NoticeService,
+		vm;
 
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
 
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.service('$stateParams', function () {
+	beforeEach(function() {
+		module(function($provide) {
+			$provide.service('$stateParams', function() {
 				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
+	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
@@ -31,12 +32,12 @@ describe('RtaOverviewCtrl', function () {
 		$controllerBuilder = _ControllerBuilder_;
 		NoticeService = _NoticeService_;
 
-		scope = $controllerBuilder.setup('RtaOverviewCtrl');
+		scope = $controllerBuilder.setup('RtaOverviewController');
 
 		$fakeBackend.clear();
 	}));
 
-	it('should display team for site', function () {
+	it('should display team for site', function() {
 		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
 		$fakeBackend.withTeam({
 			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
@@ -44,13 +45,13 @@ describe('RtaOverviewCtrl', function () {
 			NumberOfAgents: 1
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.teams[0].Name).toEqual("Green");
-		expect(scope.teams[0].NumberOfAgents).toEqual(1);
+		expect(vm.teams[0].Name).toEqual("Green");
+		expect(vm.teams[0].NumberOfAgents).toEqual(1);
 	});
 
-	it('should display agents out of adherence in the team', function () {
+	it('should display agents out of adherence in the team', function() {
 		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
 		$fakeBackend.withTeam({
 				Id: "2d45a50e-db48-41db-b771-a53000ef6565",
@@ -69,10 +70,10 @@ describe('RtaOverviewCtrl', function () {
 				OutOfAdherence: 5,
 			});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.teams[0].OutOfAdherence).toEqual(1);
-		expect(scope.teams[1].OutOfAdherence).toEqual(5);
+		expect(vm.teams[0].OutOfAdherence).toEqual(1);
+		expect(vm.teams[1].OutOfAdherence).toEqual(5);
 	});
 
 	it('should display site name London', function() {
@@ -82,9 +83,9 @@ describe('RtaOverviewCtrl', function () {
 			Name: "London"
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.siteName).toEqual("London");
+		expect(vm.siteName).toEqual("London");
 	});
 
 	it('should display site name Paris', function() {
@@ -99,24 +100,25 @@ describe('RtaOverviewCtrl', function () {
 				Name: "Paris"
 			});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.siteName).toEqual("Paris");
+		expect(vm.siteName).toEqual("Paris");
 	});
 
-	it('should update adherence', function () {
+	it('should update adherence', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		$fakeBackend.withTeam({
-			Id: "2d45a50e-db48-41db-b771-a53000ef6565",
-			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+				Id: "2d45a50e-db48-41db-b771-a53000ef6565",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
 			})
 			.withTeamAdherence({
 				Id: "2d45a50e-db48-41db-b771-a53000ef6565",
 				OutOfAdherence: 1
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
 				$fakeBackend.clearTeamAdherences()
 					.withTeamAdherence({
 						Id: "2d45a50e-db48-41db-b771-a53000ef6565",
@@ -125,10 +127,10 @@ describe('RtaOverviewCtrl', function () {
 			})
 			.wait(5000);
 
-		expect(scope.teams[0].OutOfAdherence).toEqual(3);
+		expect(vm.teams[0].OutOfAdherence).toEqual(3);
 	});
 
-	it('should stop polling when page is about to destroy', function () {
+	it('should stop polling when page is about to destroy', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		$controllerBuilder.createController()
 			.wait(5000);
@@ -138,7 +140,7 @@ describe('RtaOverviewCtrl', function () {
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	it('should go to agents for multiple teams', function () {
+	it('should go to agents for multiple teams', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		$fakeBackend.withTeam({
 				Id: "2d45a50e-db48-41db-b771-a53000ef6565"
@@ -148,12 +150,13 @@ describe('RtaOverviewCtrl', function () {
 			});
 		spyOn($state, 'go');
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
-				scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
-				scope.openSelectedItems();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+			vm.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
+			vm.openSelectedItems();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
@@ -162,23 +165,24 @@ describe('RtaOverviewCtrl', function () {
 		});
 	});
 
-	it('should go to agents after deselecting team', function () {
+	it('should go to agents after deselecting team', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		$fakeBackend.withTeam({
-			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
-		})
-		.withTeam({
-			Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
-		});
+				Id: "2d45a50e-db48-41db-b771-a53000ef6565"
+			})
+			.withTeam({
+				Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+			});
 		spyOn($state, 'go');
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
-				scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
-				scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
-				scope.openSelectedItems();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+			vm.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
+			vm.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+			vm.openSelectedItems();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			teamIds: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
@@ -200,12 +204,12 @@ describe('RtaOverviewCtrl', function () {
 				Name: "Stores"
 			});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.siteName).toEqual("Stores");
+		expect(vm.siteName).toEqual("Stores");
 	});
 
-	it('should go back to sites when business unit is changed', function () {
+	it('should go back to sites when business unit is changed', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
 		spyOn($state, 'go');
@@ -218,7 +222,7 @@ describe('RtaOverviewCtrl', function () {
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
-	it('should not go back to sites overview when business unit is not initialized yet', function () {
+	it('should not go back to sites overview when business unit is not initialized yet', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		$sessionStorage.buid = undefined;
 		spyOn($state, 'go');
@@ -231,7 +235,7 @@ describe('RtaOverviewCtrl', function () {
 		expect($state.go).not.toHaveBeenCalledWith('rta');
 	});
 
-	it('should convert teams out of adherence and number of agents to percent', function () {
+	it('should convert teams out of adherence and number of agents to percent', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		//$fakeBackend.withTeamAdherence({
 		//		OutOfAdherence: 5
@@ -240,15 +244,15 @@ describe('RtaOverviewCtrl', function () {
 		//		NumberOfAgents: 10
 		//	});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		var result = scope.getAdherencePercent(5, 10);
+		var result = vm.getAdherencePercent(5, 10);
 
 		expect(result).toEqual(50);
 	});
 
 
-	it('should not call notify service', function () {
+	it('should not call notify service', function() {
 		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		spyOn(NoticeService, 'info');
 

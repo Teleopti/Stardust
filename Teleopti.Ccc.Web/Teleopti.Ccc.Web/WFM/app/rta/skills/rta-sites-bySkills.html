@@ -9,12 +9,12 @@
 			<div class="rta-top-buttons-wrapper">
 				<span>
 					<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'Dashboard'|translate}}</button>
-					<button class="wfm-btn wfm-btn-default" ng-click="goToSelectSkill()">{{'Details'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default" ng-click="vm.goToSelectSkill()">{{'Details'|translate}}</button>
 				</span>
 			</div>
 		</div>
 		<div class="fab-wrapper">
-			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': selectedItemIds.length < 1, 'grow-out': selectedItemIds.length > 0}" ng-click="openSelectedItems()">
+			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': vm.selectedItemIds.length < 1, 'grow-out': vm.selectedItemIds.length > 0}" ng-click="vm.openSelectedItems()">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{'Open'|translate}}</md-tooltip>
 			</button>
@@ -27,17 +27,17 @@
 				<div class="con-row">
 					<span class="con-flex">
 							<md-autocomplete id="skill-id"
-											 ng-disabled="!skillsLoaded"
-											 ng-attr-skillsLoaded="{{skillsLoaded}}"
+											 ng-disabled="!vm.skillsLoaded"
+											 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
 											 class="autocomplete-skill"
 											 md-input-id="skill-input"
-											 md-selected-item="selectedSkill"
+											 md-selected-item="vm.selectedSkill"
 											 md-search-text="searchSkillText"
-											 md-selected-item-change="selectedSkillChange(skill)"
-											 md-items="skill in querySearch(searchSkillText, skills)"
+											 md-selected-item-change="vm.selectedSkillChange(skill)"
+											 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
 											 md-item-text="skill.Name"
 											 md-min-length="0"
-											 placeholder="{{skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+											 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 					</md-item-template>
@@ -48,17 +48,17 @@
 					</span>
 					<span class="con-flex">
 							<md-autocomplete id="skill-area-id"
-											ng-disabled="!skillAreasLoaded"
-											ng-attr-skillAreasLoaded="{{skillAreasLoaded}}"
+											ng-disabled="!vm.skillAreasLoaded"
+											ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
 											class="autocomplete-skillarea"
 											md-input-id="skill-area-input"
-											md-selected-item="selectedSkillArea"
+											md-selected-item="vm.selectedSkillArea"
 											md-search-text="searchSkillAreaText"
-											md-selected-item-change="selectedSkillAreaChange(skillArea)"
-											md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
+											md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
+											md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
 											md-item-text="skillArea.Name"
 											md-min-length="0"
-											placeholder="{{skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
+											placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 					</md-item-template>
@@ -73,8 +73,8 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1" ng-if="selectedSkill || selectedSkillArea">
-		<div class="con-row" ng-if="sites.length === 0">
+	<div class="panel material-depth-1" ng-if="vm.selectedSkill || vm.selectedSkillArea">
+		<div class="con-row" ng-if="vm.sites.length === 0">
 			<div class="con-flex no-data-available">
 				{{'NoSitesFound' | translate}}
 			</div>
@@ -82,13 +82,13 @@
 		<div class="con-row demo-outline">
 			<div class="con-flex">
 				<div class="wfm-grid">
-					<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
-						<a ui-sref="{{getStateForTeams()}}" class="rta-card-link">
+					<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in vm.sites">
+						<a ui-sref="{{vm.getStateForTeams()}}" class="rta-card-link">
 											<div class="list-content"
-											ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" tabindex="-1">
+											ng-class="{good: vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" tabindex="-1">
 											<div class="wfm-checkbox">
 												<label ng-attr-name="{{site.Name}}" ng-click="$event.stopPropagation()" tabindex="-1">
-													<input type="checkbox" value="value" ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)" ng-model="selected" tabindex="-1"/>
+													<input type="checkbox" value="value" ng-checked="vm.selectedSites.indexOf(site.Id) > -1" ng-click="vm.toggleSelection(site.Id)" ng-model="selected" tabindex="-1"/>
 													<span class="wfm-checkbox-toggle"></span>
 													<b>
 														<span class="wfm-checkbox-label" ng-attr-data-max="{{site.NumberOfAgents}}" ng-attr-data-value="{{site.OutOfAdherence}}">

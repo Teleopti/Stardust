@@ -6,9 +6,9 @@
 					<i class="mdi mdi-alarm"></i> {{'RTA'|translate}}
 				</h1>
 			</div>
-			<div class="rta-top-buttons-wrapper" ng-if="!showNewButtons">
+			<div class="rta-top-buttons-wrapper" ng-if="!vm.showNewButtons">
 				<span>
-					<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">{{'Dashboard'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'Dashboard'|translate}}</button>
 					<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'Details'|translate}}</button>
 				</span>
 			</div>
@@ -22,45 +22,45 @@
 					<div class="con-row">
 						<span class="con-flex">
 							<md-autocomplete id="skill-id"
-											 ng-disabled="!skillsLoaded"
-											 ng-attr-skillsLoaded="{{skillsLoaded}}"
+											 ng-disabled="!vm.skillsLoaded"
+											 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
 											 class="autocomplete-skill"
 											 md-input-id="skill-input"
-											 md-selected-item="selectedSkill"
+											 md-selected-item="vm.selectedSkill"
 											 md-search-text="searchSkillText"
-											 md-selected-item-change="selectedSkillChange(skill)"
-											 md-items="skill in querySearch(searchSkillText, skills)"
+											 md-selected-item-change="vm.selectedSkillChange(skill)"
+											 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
 											 md-item-text="skill.Name"
 											 md-min-length="0"
-											 placeholder="{{skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+											 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-								</md-item-template>
-								<md-not-found>
-									{{'RepViewerNoMoreMatches'|translate}}
-								</md-not-found>
-							</md-autocomplete>
+						</md-item-template>
+						<md-not-found>
+							{{'RepViewerNoMoreMatches'|translate}}
+						</md-not-found>
+						</md-autocomplete>
 						</span>
 						<span class="con-flex">
 							<md-autocomplete id="skill-area-id"
-											ng-disabled="!skillAreasLoaded"
-											ng-attr-skillAreasLoaded="{{skillAreasLoaded}}"
+											ng-disabled="!vm.skillAreasLoaded"
+											ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
 											class="autocomplete-skillarea"
 											md-input-id="skill-area-input"
-											md-selected-item="selectedSkillArea"
+											md-selected-item="vm.selectedSkillArea"
 											md-search-text="searchSkillAreaText"
-											md-selected-item-change="selectedSkillAreaChange(skillArea)"
-											md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
+											md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
+											md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
 											md-item-text="skillArea.Name"
 											md-min-length="0"
-											placeholder="{{skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
+											placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
-								</md-item-template>
-								<md-not-found>
-									{{'RepViewerNoMoreMatches'|translate}}
-								</md-not-found>
-							</md-autocomplete>
+						</md-item-template>
+						<md-not-found>
+							{{'RepViewerNoMoreMatches'|translate}}
+						</md-not-found>
+						</md-autocomplete>
 						</span>
 						<div class="hide-on-ie con-flex split-1-2"></div>
 					</div>

@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrl', function() {
+describe('RtaAgentsController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -7,7 +7,8 @@ describe('RtaAgentsCtrl', function() {
 		scope,
 		$fakeBackend,
 		$controllerBuilder,
-		$timeout;
+		$timeout,
+		vm;
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
@@ -30,7 +31,7 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaAgentsCtrl');
+		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		$fakeBackend.clear();
 		spyOn($state, 'go');
@@ -62,12 +63,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController();
-		expect(scope.sites.length).toEqual(2);
-		expect(scope.sites[0].Id).toEqual('LondonGuid');
-		expect(scope.sites[0].Name).toEqual('London');
-		expect(scope.sites[0].Teams.length).toEqual(2);
-		expect(scope.sites[0].Teams).toEqual([{
+		vm = $controllerBuilder.createController().vm;
+		expect(vm.sites.length).toEqual(2);
+		expect(vm.sites[0].Id).toEqual('LondonGuid');
+		expect(vm.sites[0].Name).toEqual('London');
+		expect(vm.sites[0].Teams.length).toEqual(2);
+		expect(vm.sites[0].Teams).toEqual([{
 			Id: '1',
 			Name: 'Team Preferences'
 		}, {
@@ -86,13 +87,14 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.forTest_selectSite(vm.sites[0]);
+		});
 
-		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
-		expect(scope.sites[0].Teams[1].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[1].isChecked).toBe(true);
 	});
 
 	it('should unselect all teams when unselecting site', function() {
@@ -105,14 +107,15 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-				scope.forTest_selectSite(scope.sites[0]);
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.forTest_selectSite(vm.sites[0]);
+			vm.forTest_selectSite(vm.sites[0]);
+		});
 
-		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toBe(false);
-		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toBe(false);
+		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toBe(false);
+		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[1])).toBe(false);
 	});
 
 	it('should unselect site when unselecting all teams and site was in stateParams', function() {
@@ -126,15 +129,16 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['LondonTeam2'];
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.teamsSelected = ['LondonTeam2'];
 			})
-			.apply(function(){
-				scope.teamsSelected = [];
+			.apply(function() {
+				vm.teamsSelected = [];
 			});
 
-		expect(scope.sites[0].isChecked).toBe(false);
+		expect(vm.sites[0].isChecked).toBe(false);
 	});
 
 	it('should select team when selecting site', function() {
@@ -145,12 +149,13 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.forTest_selectSite(vm.sites[0]);
+		});
 
-		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
 	});
 
 	it('should only unselect one team when a site was selected', function() {
@@ -163,16 +168,17 @@ describe('RtaAgentsCtrl', function() {
 			}, ]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.teamsSelected = ['LondonTeam1'];
+				vm.teamsSelected = ['LondonTeam1'];
 			});
 
-		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toBe(true);
-		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toBe(false);
+		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toBe(true);
+		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[1])).toBe(false);
 	});
 
 	it('should go to agents on site', function() {
@@ -183,11 +189,12 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-				scope.goToAgents();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.forTest_selectSite(vm.sites[0]);
+			vm.goToAgents();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: ['LondonGuid'],
@@ -212,12 +219,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-				scope.forTest_selectSite(scope.sites[1]);
-				scope.goToAgents();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.forTest_selectSite(vm.sites[0]);
+			vm.forTest_selectSite(vm.sites[1]);
+			vm.goToAgents();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: ['LondonGuid', 'ParisGuid'],
@@ -238,11 +246,12 @@ describe('RtaAgentsCtrl', function() {
 			}, ]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['LondonTeam1'];
-				scope.goToAgents();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.teamsSelected = ['LondonTeam1'];
+			vm.goToAgents();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: [],
@@ -271,11 +280,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});;
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['LondonTeam1', 'ParisTeam1'];
-				scope.goToAgents();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.teamsSelected = ['LondonTeam1', 'ParisTeam1'];
+			vm.goToAgents();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: [],
@@ -304,12 +314,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});;
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-				scope.teamsSelected = ['ParisTeam1'];
-				scope.goToAgents();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.forTest_selectSite(vm.sites[0]);
+			vm.teamsSelected = ['ParisTeam1'];
+			vm.goToAgents();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: ['LondonGuid'],
@@ -338,12 +349,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});;
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['LondonTeam1', 'ParisTeam1'];
-				scope.teamsSelected = ['ParisTeam1'];
-				scope.goToAgents();
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.teamsSelected = ['LondonTeam1', 'ParisTeam1'];
+			vm.teamsSelected = ['ParisTeam1'];
+			vm.goToAgents();
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: [],
@@ -368,14 +380,15 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});;
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-				scope.forTest_selectSite(scope.sites[1]);
-				scope.forTest_selectSite(scope.sites[0]);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.forTest_selectSite(vm.sites[0]);
+				vm.forTest_selectSite(vm.sites[1]);
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.goToAgents();
+				vm.goToAgents();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
@@ -399,12 +412,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});;
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.forTest_selectSite(vm.sites[0]);
+		});
 
-		expect(scope.sites[0].isChecked).toBe(false);
+		expect(vm.sites[0].isChecked).toBe(false);
 	});
 
 	it('should select team', function() {
@@ -418,14 +432,15 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});;
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['ParisTeam1'];
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.teamsSelected = ['ParisTeam1'];
+		});
 
-		expect(scope.sites[0].isChecked).not.toBe(true);
-		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
-		expect(scope.sites[0].Teams[1].isChecked).toBe(false);
+		expect(vm.sites[0].isChecked).not.toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[1].isChecked).toBe(false);
 	});
 
 
@@ -437,15 +452,16 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.goToAgents();
+				vm.goToAgents();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
@@ -468,11 +484,11 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.sites[0].isChecked).toEqual(true);
-		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toEqual(true);
-		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toEqual(true);
+		expect(vm.sites[0].isChecked).toEqual(true);
+		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toEqual(true);
+		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[1])).toEqual(true);
 	});
 
 	it('should unselect site when preselected and team is unselected', function() {
@@ -487,14 +503,15 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['ParisTeam2'];
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.teamsSelected = ['ParisTeam2'];
+		});
 
-		expect(scope.sites[0].isChecked).not.toEqual(true);
-		expect(scope.sites[0].Teams[0].isChecked).toEqual(false);
-		expect(scope.sites[0].Teams[1].isChecked).toEqual(true);
+		expect(vm.sites[0].isChecked).not.toEqual(true);
+		expect(vm.sites[0].Teams[0].isChecked).toEqual(false);
+		expect(vm.sites[0].Teams[1].isChecked).toEqual(true);
 	});
 
 	it('should unselect site and team', function() {
@@ -508,17 +525,18 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.teamsSelected = ['ParisTeam2'];
+				vm.teamsSelected = ['ParisTeam2'];
 			});
 
-		expect(scope.sites[0].isChecked).toEqual(false);
-		expect(scope.sites[0].Teams[0].isChecked).toEqual(false);
-		expect(scope.sites[0].Teams[1].isChecked).toEqual(true);
+		expect(vm.sites[0].isChecked).toEqual(false);
+		expect(vm.sites[0].Teams[0].isChecked).toEqual(false);
+		expect(vm.sites[0].Teams[1].isChecked).toEqual(true);
 	});
 
 	it('should go to agents when selecting new site', function() {
@@ -536,12 +554,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.goToAgents();
+				vm.goToAgents();
 			});
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: ['LondonGuid', 'ParisGuid'],
@@ -561,10 +580,10 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.sites[0].isChecked).toBe(true);
-		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
 	});
 
 	it('should select team when team in stateParams', function() {
@@ -578,10 +597,10 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.sites[0].isChecked).not.toBe(true);
-		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].isChecked).not.toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
 	});
 
 	it('should select teams when teams in stateParams', function() {
@@ -597,11 +616,11 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.sites[0].isChecked).not.toBe(true);
-		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
-		expect(scope.sites[0].Teams[1].isChecked).toBe(true);
+		expect(vm.sites[0].isChecked).not.toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[1].isChecked).toBe(true);
 
 	});
 
@@ -623,12 +642,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});;
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.sites[0].isChecked).toBe(true);
-		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toBe(true);
-		expect(scope.sites[1].isChecked).not.toBe(true);
-		expect(scope.sites[1].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].isChecked).toBe(true);
+		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toBe(true);
+		expect(vm.sites[1].isChecked).not.toBe(true);
+		expect(vm.sites[1].Teams[0].isChecked).toBe(true);
 	});
 
 	it('should go to agents when selecting new site and deselecting some teams in the old one', function() {
@@ -648,12 +667,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['LondonTeam1', 'ParisTeam2'];
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.teamsSelected = ['LondonTeam1', 'ParisTeam2'];
 			})
 			.apply(function() {
-				scope.goToAgents();
+				vm.goToAgents();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
@@ -676,11 +696,12 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
-			});
-		expect(scope.sites[0].isChecked).toEqual(true);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+		});
+		expect(vm.sites[0].isChecked).toEqual(true);
 	});
 
 	it('should not select site when some teams are selected', function() {
@@ -693,14 +714,15 @@ describe('RtaAgentsCtrl', function() {
 			}, ]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['LondonTeam1'];
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.teamsSelected = ['LondonTeam1'];
+		});
 
-		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
-		expect(scope.sites[0].Teams[1].isChecked).not.toBe(true);
-		expect(scope.sites[0].isChecked).not.toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[1].isChecked).not.toBe(true);
+		expect(vm.sites[0].isChecked).not.toBe(true);
 	});
 
 	it('should unselect site when all teams are unselected', function() {
@@ -714,18 +736,19 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0]);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.teamsSelected = ['ParisTeam2'];
+				vm.teamsSelected = ['ParisTeam2'];
 			})
 			.apply(function() {
-				scope.teamsSelected = [];
+				vm.teamsSelected = [];
 			});
 
-		expect(scope.sites[0].isChecked).toBe(false);
+		expect(vm.sites[0].isChecked).toBe(false);
 	});
 
 	it('should go to agents on site when all teams are selected', function() {
@@ -739,12 +762,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
 			})
 			.apply(function() {
-				scope.goToAgents();
+				vm.goToAgents();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
@@ -768,12 +792,13 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = ['ParisTeam1'];
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.teamsSelected = ['ParisTeam1'];
 			})
 			.apply(function() {
-				scope.goToAgents();
+				vm.goToAgents();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
@@ -803,13 +828,14 @@ describe('RtaAgentsCtrl', function() {
 				}]
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = [];
-				scope.forTest_selectSite(scope.sites[0]);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.teamsSelected = [];
+				vm.forTest_selectSite(vm.sites[0]);
 			})
 			.apply(function() {
-				scope.goToAgents();
+				vm.goToAgents();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
@@ -829,15 +855,16 @@ describe('RtaAgentsCtrl', function() {
 			}]
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.forTest_selectSite(scope.sites[0])
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.forTest_selectSite(vm.sites[0])
 			})
 			.apply(function() {
-				scope.teamsSelected = [];
+				vm.teamsSelected = [];
 			});
 
-		expect(scope.sites[0].isChecked).toBe(false);
+		expect(vm.sites[0].isChecked).toBe(false);
 	});
 
 	it('should go to agents with skill', function() {
@@ -845,12 +872,13 @@ describe('RtaAgentsCtrl', function() {
 			Id: "phoneSkillGuid"
 		})
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillChange({
-					Id: "phoneSkillGuid"
-				});
-			});;
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillChange({
+				Id: "phoneSkillGuid"
+			});
+		});;
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			skillIds: 'phoneSkillGuid',
@@ -868,12 +896,13 @@ describe('RtaAgentsCtrl', function() {
 			Id: "phoneAndEmailGuid"
 		}]);
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillAreaChange({
-					Id: "phoneAndEmailGuid"
-				});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillAreaChange({
+				Id: "phoneAndEmailGuid"
 			});
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			skillAreaId: 'phoneAndEmailGuid',
@@ -892,9 +921,9 @@ describe('RtaAgentsCtrl', function() {
 			Id: "phoneSkillGuid"
 		})
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.selectedSkill.Id).toBe("phoneSkillGuid");
+		expect(vm.selectedSkill.Id).toBe("phoneSkillGuid");
 	});
 
 	it('should keep skillArea in selection', function() {
@@ -903,9 +932,9 @@ describe('RtaAgentsCtrl', function() {
 			Id: "phoneAndEmailGuid"
 		}])
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.selectedSkillArea.Id).toBe("phoneAndEmailGuid");
+		expect(vm.selectedSkillArea.Id).toBe("phoneAndEmailGuid");
 	});
 
 	it('should go to agents by skillArea and clear skill from stateParams', function() {
@@ -923,22 +952,23 @@ describe('RtaAgentsCtrl', function() {
 				}, ]
 			}])
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillAreaChange({
-					Id: "phoneAndEmailGuid"
-				});
-
-				expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
-					skillAreaId: 'phoneAndEmailGuid',
-					skillIds: [],
-					siteIds: [],
-					teamIds: []
-				}, {
-					reload: true,
-					notify: true
-				});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillAreaChange({
+				Id: "phoneAndEmailGuid"
 			});
+
+			expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+				skillAreaId: 'phoneAndEmailGuid',
+				skillIds: [],
+				siteIds: [],
+				teamIds: []
+			}, {
+				reload: true,
+				notify: true
+			});
+		});
 	});
 
 });

@@ -2,11 +2,11 @@
 	'use strict';
 	angular
 		.module('wfm.rta')
-		.factory('RtaGridService', RtaGridService);
+		.factory('rtaGridService', rtaGridService);
 
-	RtaGridService.$inject = ['Toggle', 'uiGridConstants', 'RtaLocaleLanguageSortingService'];
+	rtaGridService.$inject = ['Toggle', 'uiGridConstants', 'rtaLocaleLanguageSortingService'];
 
-	function RtaGridService(toggleService, uiGridConstants, RtaLocaleLanguageSortingService) {
+	function rtaGridService(toggleService, uiGridConstants, rtaLocaleLanguageSortingService) {
 
 		var service = {
 			makeAllGrid: makeAllGrid,
@@ -15,6 +15,7 @@
 
 		return service;
 		/////////////////////////
+
 
 		function makeAllGrid() {
 			return makeGridOptions(false);
@@ -25,10 +26,16 @@
 		};
 
 		function makeGridOptions(alarmOnly) {
-			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
+			//if (toggleService.RTA_AdherenceDetails_34267)
+			//	rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AdherenceDetails_34267.html';
 
-			var alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
+			var rowTemplate = 'app/rta/agents/rta-agents-rowtemplate.html';
+			if (toggleService.RTA_SeeAllOutOfAdherencesToday_39146)
+				rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html';
+			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
+			var alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.vm.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
 			var headerCellTemplate = 'app/rta/agents/rta-agents-headercelltemplate.html';
+			var columnDefs = [];
 
 			var name = {
 				displayName: 'Name',
@@ -39,7 +46,7 @@
 				sort: alarmOnly ? null : {
 					direction: 'asc'
 				},
-				sortingAlgorithm: RtaLocaleLanguageSortingService.sort
+				sortingAlgorithm: rtaLocaleLanguageSortingService.sort
 			};
 			var siteAndTeam = {
 				displayName: 'Site/Team',
@@ -47,7 +54,7 @@
 				headerCellTemplate: headerCellTemplate,
 				cellTemplate: coloredCellTemplate,
 				headerCellFilter: 'translate',
-				sortingAlgorithm: RtaLocaleLanguageSortingService.sort
+				sortingAlgorithm: rtaLocaleLanguageSortingService.sort
 			};
 
 			var state = {
@@ -94,15 +101,6 @@
 				headerCellClass: 'white-cell-header',
 				enableHiding: false
 			};
-
-			var columnDefs = [];
-
-			//if (toggleService.RTA_AdherenceDetails_34267)
-			//	rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AdherenceDetails_34267.html';
-
-			var rowTemplate = 'app/rta/agents/rta-agents-rowtemplate.html';
-			if (toggleService.RTA_SeeAllOutOfAdherencesToday_39146)
-				rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html'
 
 			columnDefs.push(name);
 			columnDefs.push(siteAndTeam);

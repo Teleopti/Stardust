@@ -2,8 +2,8 @@
 (function() {﻿
 	'use strict';﻿﻿
 	angular﻿.module('wfm.rta')﻿.controller('RtaHistoricalController', RtaHistoricalController);﻿﻿
-	RtaHistoricalController.$inject = ['$stateParams', 'RtaService'];﻿﻿
-	function RtaHistoricalController($stateParams, RtaService) {﻿
+	RtaHistoricalController.$inject = ['$stateParams', 'rtaService'];﻿﻿
+	function RtaHistoricalController($stateParams, rtaService) {﻿
 		var vm = this;
 
 		var id = $stateParams.personId;
@@ -15,7 +15,7 @@
 			return time.format('HH:mm:ss');
 		};
 
-		RtaService.getAgentHistoricalData(id)
+		rtaService.getAgentHistoricalData(id)
 			.then(function(data) {
 				var shiftInfo = buildShiftInfo(data.Schedules);
 

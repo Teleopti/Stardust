@@ -3,12 +3,12 @@
 
 	angular
 		.module('wfm.rta')
-		.factory('RtaOrganizationService', RtaOrganizationService);
+		.factory('rtaOrganizationService', rtaOrganizationService);
 
-	RtaOrganizationService.$inject = ['$filter', '$q', 'RtaService'];
+	rtaOrganizationService.$inject = ['$filter', '$q', 'rtaService'];
 
-	function RtaOrganizationService($filter, $q, RtaService) {
-		var sites = RtaService.getSites ? RtaService.getSites() : null;
+	function rtaOrganizationService($filter, $q, rtaService) {
+		var sites = rtaService.getSites ? rtaService.getSites() : null;
 		var teams = undefined;
 
 		var service = {

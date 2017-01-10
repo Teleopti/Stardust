@@ -4,71 +4,71 @@
 	</div>
 </div>
 <div class="panel material-depth-1">
-				<div class="sub-header">
-								<div class="con-row">
-												<div class="con-flex split-3-1">
-																<span class="agent-name">{{name}}</span>
-												</div>
-												<div class="con-flex rta-agent-details-total">
-																<span class="daily-percent">{{'DailyTotal'|translate}}
-																				{{dailyTotal}}%
+	<div class="sub-header">
+		<div class="con-row">
+			<div class="con-flex split-3-1">
+				<span class="agent-name">{{vm.name}}</span>
+			</div>
+			<div class="con-flex rta-agent-details-total">
+				<span class="daily-percent">{{'DailyTotal'|translate}}
+																				{{vm.dailyTotal}}%
 																</span>
-												</div>
-								</div>
-				</div>
-				<div class="con-row">
-												<div class="con-flex split-2-1">
-																<h4 flex>{{'Planned'|translate}}</h4>
-																<table class="wfm-table">
-																				<thead>
-																								<tr>
-																												<th>
-																																{{'Activity'|translate}}
-																												</th>
-																												<th>
-																																{{'Start'|translate}}
-																												</th>
-																								</tr>
-																				</thead>
-																				<tbody>
-																								<tr ng-repeat="detail in adherence">
-																												<td class="activity-name">
-																																{{detail.Name}}
-																												</td>
-																												<td>
-																																{{detail.StartTime}}
-																												</td>
-																								</tr>
-																				</tbody>
-																</table>
-												</div>
-												<div class="con-flex split-2-1">
-																<h4 flex>{{'Actual'|translate}}</h4>
-																<table class="wfm-table">
-																				<thead>
-																								<tr>
-																												<th>
-																																{{'Start'|translate}}
-																												</th>
-																												<th>
-																																{{'Adherence'|translate}}
-																												</th>
-																								</tr>
-																				</thead>
-																				<tbody>
-																								<tr ng-repeat="detail in adherence">
-																												<td>
-																																{{detail.ActualStartTime}}
-																												</td>
-																												<td class="adherence-percent" ng-if="detail.AdherencePercent === null">
-																																-
-																												</td>
-																												<td class="adherence-percent" ng-if="detail.AdherencePercent !== null">
-																																{{detail.AdherencePercent}}%
-																												</td>
-																								</tr>
-																				</tbody>
-																</table>
-												</div>
-				</div>
+			</div>
+		</div>
+	</div>
+	<div class="con-row">
+		<div class="con-flex split-2-1">
+			<h4 flex>{{'Planned'|translate}}</h4>
+			<table class="wfm-table">
+				<thead>
+					<tr>
+						<th>
+							{{'Activity'|translate}}
+						</th>
+						<th>
+							{{'Start'|translate}}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="detail in vm.adherence">
+						<td class="activity-name">
+							{{detail.Name}}
+						</td>
+						<td>
+							{{detail.StartTime}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="con-flex split-2-1">
+			<h4 flex>{{'Actual'|translate}}</h4>
+			<table class="wfm-table">
+				<thead>
+					<tr>
+						<th>
+							{{'Start'|translate}}
+						</th>
+						<th>
+							{{'Adherence'|translate}}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="detail in vm.adherence">
+						<td>
+							{{detail.ActualStartTime}}
+						</td>
+						<td class="adherence-percent" ng-if="detail.AdherencePercent === null">
+							-
+						</td>
+						<td class="adherence-percent" ng-if="detail.AdherencePercent !== null">
+							{{detail.AdherencePercent}}%
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>

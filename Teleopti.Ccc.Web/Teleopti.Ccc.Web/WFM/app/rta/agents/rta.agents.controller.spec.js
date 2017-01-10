@@ -1,11 +1,12 @@
 'use strict';
-describe('RtaAgentsCtrl', function() {
+describe('RtaAgentsController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
 		$sessionStorage,
 		$fakeBackend,
 		$controllerBuilder,
+		vm,
 		scope;
 
 	var stateParams = {};
@@ -29,11 +30,10 @@ describe('RtaAgentsCtrl', function() {
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
 
-		scope = $controllerBuilder.setup('RtaAgentsCtrl');
-
 		$fakeBackend.clear();
-
 		spyOn($state, 'go');
+
+		scope = $controllerBuilder.setup('RtaAgentsController');
 	}));
 
 	it('should get agent for team', function() {
@@ -43,13 +43,14 @@ describe('RtaAgentsCtrl', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 		});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(vm.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
 	it('should get agent states', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -67,22 +68,24 @@ describe('RtaAgentsCtrl', function() {
 				TimeInState: 15473
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].TeamName).toEqual("Team Preferences");
-		expect(scope.agents[0].SiteName).toEqual("London");
-		expect(scope.agents[0].State).toEqual("Ready");
-		expect(scope.agents[0].Activity).toEqual("Phone");
-		expect(scope.agents[0].NextActivity).toEqual("Short break");
-		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(scope.agents[0].Alarm).toEqual("In Adherence");
-		expect(scope.agents[0].Color).toEqual("#00FF00");
-		expect(scope.agents[0].TimeInState).toEqual(15473);
+		expect(vm.agents[0].TeamName).toEqual("Team Preferences");
+		expect(vm.agents[0].SiteName).toEqual("London");
+		expect(vm.agents[0].State).toEqual("Ready");
+		expect(vm.agents[0].Activity).toEqual("Phone");
+		expect(vm.agents[0].NextActivity).toEqual("Short break");
+		expect(vm.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
+		expect(vm.agents[0].Alarm).toEqual("In Adherence");
+		expect(vm.agents[0].Color).toEqual("#00FF00");
+		expect(vm.agents[0].TimeInState).toEqual(15473);
 	});
 
 	it('should update agent state', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -93,8 +96,10 @@ describe('RtaAgentsCtrl', function() {
 				State: "Ready"
 			});
 
-		var c = $controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
+
 		$fakeBackend
 			.clearStates()
 			.withState({
@@ -103,11 +108,12 @@ describe('RtaAgentsCtrl', function() {
 			});
 		c.wait(5000);
 
-		expect(scope.agents[0].State).toEqual("In Call");
+		expect(vm.agents[0].State).toEqual("In Call");
 	});
 
 	it('should set state to agent', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -123,20 +129,22 @@ describe('RtaAgentsCtrl', function() {
 				TimeInState: 15473
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].State).toEqual("Ready");
-		expect(scope.agents[0].Activity).toEqual("Phone");
-		expect(scope.agents[0].NextActivity).toEqual("Short break");
-		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(scope.agents[0].Alarm).toEqual("In Adherence");
-		expect(scope.agents[0].Color).toEqual("#00FF00");
-		expect(scope.agents[0].TimeInState).toEqual(15473);
+		expect(vm.agents[0].State).toEqual("Ready");
+		expect(vm.agents[0].Activity).toEqual("Phone");
+		expect(vm.agents[0].NextActivity).toEqual("Short break");
+		expect(vm.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
+		expect(vm.agents[0].Alarm).toEqual("In Adherence");
+		expect(vm.agents[0].Color).toEqual("#00FF00");
+		expect(vm.agents[0].TimeInState).toEqual(15473);
 	});
 
 	it('should display in the same order as states received', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -154,19 +162,21 @@ describe('RtaAgentsCtrl', function() {
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].Name).toEqual("Charley Caper");
-		expect(scope.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
-		expect(scope.agents[0].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
-		expect(scope.agents[1].Name).toEqual("Ashley Andeen");
-		expect(scope.agents[1].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
-		expect(scope.agents[1].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
+		expect(vm.agents[0].Name).toEqual("Charley Caper");
+		expect(vm.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
+		expect(vm.agents[0].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
+		expect(vm.agents[1].Name).toEqual("Ashley Andeen");
+		expect(vm.agents[1].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(vm.agents[1].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
 	});
 
 	it('should display agent without state received', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+
 		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -175,14 +185,15 @@ describe('RtaAgentsCtrl', function() {
 			SiteName: "London"
 		});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].Name).toEqual("Ashley Andeen");
-		expect(scope.agents[0].TeamName).toEqual("Team Preferences");
-		expect(scope.agents[0].SiteName).toEqual("London");
-		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
-		expect(scope.agents[0].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
+		expect(vm.agents[0].Name).toEqual("Ashley Andeen");
+		expect(vm.agents[0].TeamName).toEqual("Team Preferences");
+		expect(vm.agents[0].SiteName).toEqual("London");
+		expect(vm.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(vm.agents[0].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
 	});
 
 	it('should go back to sites when business unit is changed', function() {
@@ -212,13 +223,14 @@ describe('RtaAgentsCtrl', function() {
 			LastTimestamp: "16:34"
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.getAdherenceForAgent("11610fe4-0130-4568-97de-9b5e015b2564");
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.getAdherenceForAgent("11610fe4-0130-4568-97de-9b5e015b2564");
+		});
 
-		expect(scope.adherence.AdherencePercent).toEqual(99);
-		expect(scope.adherence.LastTimestamp).toEqual("16:34");
+		expect(vm.adherence.AdherencePercent).toEqual(99);
+		expect(vm.adherence.LastTimestamp).toEqual("16:34");
 	});
 
 	it('should stop polling when page is about to destroy', function() {
@@ -252,12 +264,13 @@ describe('RtaAgentsCtrl', function() {
 			PersonId: personId
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectAgent(personId);
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectAgent(personId);
+		});
 
-		expect(scope.isSelected(personId)).toEqual(true);
+		expect(vm.isSelected(personId)).toEqual(true);
 	});
 
 	it('should unselect an agent', function() {
@@ -266,15 +279,17 @@ describe('RtaAgentsCtrl', function() {
 			PersonId: personId
 		});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectAgent(personId);
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+
+		c.apply(function() {
+				vm.selectAgent(personId);
 			})
 			.apply(function() {
-				scope.selectAgent(personId);
+				vm.selectAgent(personId);
 			});
 
-		expect(scope.isSelected(personId)).toEqual(false);
+		expect(vm.isSelected(personId)).toEqual(false);
 	});
 
 	it('should unselect previous selected agent', function() {
@@ -287,27 +302,30 @@ describe('RtaAgentsCtrl', function() {
 				PersonId: personId2
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectAgent(personId1);
-			})
-			.apply(function() {
-				scope.selectAgent(personId2);
-			});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectAgent(personId1);
+		})
+		c.apply(function() {
+			vm.selectAgent(personId2);
+		});
 
-		expect(scope.isSelected(personId1)).toEqual(false);
+		expect(vm.isSelected(personId1)).toEqual(false);
 	});
 
 	it('should not show adherence updated when there is no adherence value', function() {
-		$controllerBuilder.createController();
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
 
-		expect(scope.showAdherenceUpdates()).toEqual(false);
+		expect(vm.showAdherenceUpdates()).toEqual(false);
 	});
 
 	it('should display adherence updated when there is adherence value', function() {
-		$controllerBuilder.createController()
-			.apply('adherencePercent = 0');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.adherencePercent = 0);
 
-		expect(scope.showAdherenceUpdates()).toEqual(true);
+		expect(vm.showAdherenceUpdates()).toEqual(true);
 	});
 });

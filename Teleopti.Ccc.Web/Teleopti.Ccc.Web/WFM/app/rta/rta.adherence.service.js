@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('wfm.rta')
-		.factory('RtaAdherenceService', RtaAdherenceService);
+		.factory('rtaAdherenceService', rtaAdherenceService);
 
-	function RtaAdherenceService() {
+	function rtaAdherenceService() {
 
 		var service = {
 			updateAdherence: updateAdherence

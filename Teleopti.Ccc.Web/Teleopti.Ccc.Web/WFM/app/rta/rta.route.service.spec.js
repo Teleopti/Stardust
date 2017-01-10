@@ -1,10 +1,10 @@
 ﻿'use strict';
-describe('RtaRouteService', function() {
+describe('rtaRouteService', function() {
 	var target, $state, curDate;
 
 	beforeEach(module('wfm.rta'));
-	beforeEach(inject(function(_$state_, RtaRouteService) {
-		target = RtaRouteService;
+	beforeEach(inject(function(_$state_, rtaRouteService) {
+		target = rtaRouteService;
 		$state = _$state_;
 		curDate = new Date();
 	}));
@@ -12,7 +12,6 @@ describe('RtaRouteService', function() {
 	afterEach(function() {
 		jasmine.clock().mockDate(curDate);
 	});
-
 
 	it('should go back to sites overview', function() {
 		spyOn($state, 'go');
@@ -39,7 +38,7 @@ describe('RtaRouteService', function() {
 
 	it('should get agent details url', function() {
 		expect(target.urlForAgentDetails('11610fe4-0130-4568-97de-9b5e015b2564'))
-		.toEqual('#/rta/agent-details/11610fe4-0130-4568-97de-9b5e015b2564');
+			.toEqual('#/rta/agent-details/11610fe4-0130-4568-97de-9b5e015b2564');
 	});
 
 	it('should get sites overview url', function() {

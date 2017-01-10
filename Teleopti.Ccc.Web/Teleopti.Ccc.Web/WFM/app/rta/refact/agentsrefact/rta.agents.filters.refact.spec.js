@@ -1,5 +1,4 @@
-﻿
-'use strict';
+﻿'use strict';
 describe('RtaAgentsFilters', function() {
 
 	beforeEach(module('wfm.rta'));

@@ -1,4 +1,3 @@
-﻿
 'use strict';
 describe('RtaAgentsFilters', function() {
 

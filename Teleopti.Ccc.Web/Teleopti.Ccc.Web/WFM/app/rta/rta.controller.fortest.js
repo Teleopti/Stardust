@@ -2,11 +2,11 @@
 (function() {
 	angular
 		.module('wfm.rta')
-		.factory('ControllerBuilder', ControllerBuilder);
+		.factory('ControllerBuilder', controllerBuilder);
 
-	ControllerBuilder.$inject = ['$controller', '$interval', '$httpBackend', '$rootScope'];
+	controllerBuilder.$inject = ['$controller', '$interval', '$httpBackend', '$rootScope'];
 
-	function ControllerBuilder($controller, $interval, $httpBackend, $rootScope) {
+	function controllerBuilder($controller, $interval, $httpBackend, $rootScope) {
 		var controllerName = "hejsan";
 		var scope;
 

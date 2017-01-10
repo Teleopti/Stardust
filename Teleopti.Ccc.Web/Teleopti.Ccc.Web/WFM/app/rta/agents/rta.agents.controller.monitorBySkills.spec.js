@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
+describe('RtaAgentsController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -7,7 +7,8 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 		$fakeBackend,
 		$controllerBuilder,
 		scope,
-		NoticeService;
+		NoticeService,
+		vm;
 
 	var stateParams = {};
 
@@ -33,25 +34,26 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 
 		$fakeBackend.clear();
 
-		scope = $controllerBuilder.setup('RtaAgentsCtrl');
+		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		spyOn($state, 'go');
 	}));
 
-	it('should get agent for skill', function () {
+	it('should get agent for skill', function() {
 		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
 		});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(vm.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
-	it('should get state for skill', function () {
+	it('should get state for skill', function() {
 		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -62,13 +64,14 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 				State: "Ready"
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].State).toEqual("Ready");
+		expect(vm.agents[0].State).toEqual("Ready");
 	});
 
-	it('should state in alarm for skill', function () {
+	it('should state in alarm for skill', function() {
 		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
@@ -91,26 +94,28 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 				TimeInAlarm: 60
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = true');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true);
 
-		expect(scope.filteredData.length).toEqual(1);
-		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
-		expect(scope.filteredData[0].State).toEqual("Break");
+		expect(vm.filteredData.length).toEqual(1);
+		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.filteredData[0].State).toEqual("Break");
 	});
 
 
-	it('should get agent for skill area', function () {
+	it('should get agent for skill area', function() {
 		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
 
 		$fakeBackend
-			.withSkillAreas([
-				{
-					Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
-					Name: "my skill area 2",
-					Skills: [{ Id: "5f15b334-22d1-4bc1-8e41-72359805d30f", Name: "Phone" }]
-				}
-			])
+			.withSkillAreas([{
+				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+				Name: "my skill area 2",
+				Skills: [{
+					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+					Name: "Phone"
+				}]
+			}])
 			.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				SkillId: "d08d75b3-fdb4-484a-ae4c-9f0800e2f753"
@@ -120,45 +125,51 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f"
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].PersonId).toEqual("22610fe4-0130-4568-97de-9b5e015b2564");
+		expect(vm.agents[0].PersonId).toEqual("22610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
-	it('should get state for skill area', function () {
-		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
-		$fakeBackend
-			.withSkillAreas([{
-					Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
-					Name: "my skill area 2",
-					Skills: [{ Id: "5f15b334-22d1-4bc1-8e41-72359805d30f", Name: "Phone" }]
-				}
-				])
-				.withAgent({
-					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-					SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f"
-				})
-				.withState({
-					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-					State: "Ready"
-				});
-
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
-
-		expect(scope.agents[0].State).toEqual("Ready");
-	});
-
-	it('should state in alarm for skill area', function () {
+	it('should get state for skill area', function() {
 		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
 		$fakeBackend
 			.withSkillAreas([{
 				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
 				Name: "my skill area 2",
-				Skills: [{ Id: "5f15b334-22d1-4bc1-8e41-72359805d30f", Name: "Phone" }]
-			}
-			])
+				Skills: [{
+					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+					Name: "Phone"
+				}]
+			}])
+			.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Ready"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
+
+		expect(vm.agents[0].State).toEqual("Ready");
+	});
+
+	it('should state in alarm for skill area', function() {
+		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		$fakeBackend
+			.withSkillAreas([{
+				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+				Name: "my skill area 2",
+				Skills: [{
+					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+					Name: "Phone"
+				}]
+			}])
 			.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -180,11 +191,12 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 				TimeInAlarm: 60
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = true');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true);
 
-		expect(scope.filteredData.length).toEqual(1);
-		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
-		expect(scope.filteredData[0].State).toEqual("Break");
+		expect(vm.filteredData.length).toEqual(1);
+		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.filteredData[0].State).toEqual("Break");
 	});
 });

@@ -3,11 +3,11 @@
 
 	angular
 		.module('wfm.rta')
-		.factory('RtaService', RtaService);
+		.factory('rtaService', rtaService);
 
-	RtaService.$inject = ['RtaResourceFactory', '$q'];
+	rtaService.$inject = ['rtaResourceFactory', '$q'];
 
-	function RtaService($resource, $q) {
+	function rtaService($resource, $q) {
 
 		var service = {
 			getSkills: getSkills,

@@ -5,21 +5,21 @@
 		</div>
 		<div class="rta-top-buttons-wrapper">
 			<span>
-				<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">{{'Dashboard'|translate}}</button>
-				<button class="wfm-btn wfm-btn-primary rta-default-cursor" ng-click="goToSelectItem()">{{'Details'|translate}}</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'Dashboard'|translate}}</button>
+				<button class="wfm-btn wfm-btn-primary rta-default-cursor" ng-click="vm.goToSelectItem()">{{'Details'|translate}}</button>
 			</span>
 		</div>
 	</div>
 	<div class="fab-wrapper pull-right">
-		<button class="wfm-fab material-depth-1" ng-click="pause = !pause">
-			<i ng-class="{'mdi mdi-play': pause, 'mdi mdi-pause': !pause}"></i>
-			<md-tooltip>{{(pause ? 'Play' : 'Pause')|translate}}</md-tooltip>
+		<button class="wfm-fab material-depth-1" ng-click="vm.pause = !vm.pause">
+			<i ng-class="{'mdi mdi-play': vm.pause, 'mdi mdi-pause': !vm.pause}"></i>
+			<md-tooltip>{{(vm.pause ? 'Play' : 'Pause')|translate}}</md-tooltip>
 		</button>
 	</div>
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<span ng-if="pausedAt" class="h4">{{'PausedAt'|translate}} {{pausedAt}}</span>
+		<span ng-if="vm.pausedAt" class="h4">{{'PausedAt'|translate}} {{vm.pausedAt}}</span>
 	</div>
 </div>
 
@@ -30,17 +30,17 @@
 				<div class="con-row">
 					<span class="con-flex">
 						<md-autocomplete id="skill-id"
-										 ng-disabled="!skillsLoaded"
-										 ng-attr-skillsLoaded="{{skillsLoaded}}"
+										 ng-disabled="!vm.skillsLoaded"
+										 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
 										 class="autocomplete-skill"
 										 md-input-id="skill-input"
-										 md-selected-item="selectedSkill"
+										 md-selected-item="vm.selectedSkill"
 										 md-search-text="searchSkillText"
-										 md-selected-item-change="selectedSkillChange(skill)"
-										 md-items="skill in querySearch(searchSkillText, skills)"
+										 md-selected-item-change="vm.selectedSkillChange(skill)"
+										 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
 										 md-item-text="skill.Name"
 										 md-min-length="0"
-										 placeholder="{{skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+										 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 					</md-item-template>
@@ -51,17 +51,17 @@
 					</span>
 					<span class="con-flex">
 						<md-autocomplete id="skill-area-id"
-										ng-disabled="!skillAreasLoaded"
-										ng-attr-skillAreasLoaded="{{skillAreasLoaded}}"
+										ng-disabled="!vm.skillAreasLoaded"
+										ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
 										class="autocomplete-skillarea"
 										md-input-id="skill-area-input"
-										md-selected-item="selectedSkillArea"
+										md-selected-item="vm.selectedSkillArea"
 										md-search-text="searchSkillAreaText"
-										md-selected-item-change="selectedSkillAreaChange(skillArea)"
-										md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
+										md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
+										md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
 										md-item-text="skillArea.Name"
 										md-min-length="0"
-										placeholder="{{skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
+										placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 					</md-item-template>
@@ -70,85 +70,81 @@
 					</md-not-found>
 					</md-autocomplete>
 					</span>
-					<span class="con-flex rta-multiple-selection-panel" ng-show="showOrgSelection">
+					<span class="con-flex rta-multiple-selection-panel" ng-show="vm.showOrgSelection">
 						<md-input-container class="rta-md-input-container" id="organization">
 							<label class="for-searchTerm"></label>
-							<md-select ng-model="teamsSelected" class="rta-md-select" md-selected-text="selectFieldText" multiple md-on-close="goToAgents()">
+							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" multiple md-on-close="vm.goToAgents()">
 								<div class="demo-select-header">
 									<md-select-header>
 										<i class="mdi mdi-magnify"></i>
-										<span ng-if="searchTerm.length > 0" ng-click="clearSearchTerm()" class="pull-right grow-out rta-clear-search">
+										<span ng-if="vm.searchTerm.length > 0" ng-click="vm.clearSearchTerm()" class="pull-right grow-out rta-clear-search">
 											<i class="mdi mdi-close"></i>
 										</span>
-            				<input ng-model="searchTerm"
-		                   type="search"
-		                   placeholder="{{'SearchASiteOrTeam' | translate}}"
-											 ng-keydown="onSearchOrganization($event)"
-		                   class="picker-searchbox md-text rta-options-search-input">
-          				</md-select-header>
-								</div>
-								<button class="wfm-btn wfm-btn-invis-primary" ng-class="teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="teamsSelected.length === 0" ng-click="clearOrgSelection()">Clear All</button>
-								<md-optgroup ng-repeat="site in sites | filter:searchTerm" class="rta-option-group">
-									<span ng-click="expandSite(site)" style="margin-right:6px"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
+					<input ng-model="vm.searchTerm" type="search" placeholder="{{'SearchASiteOrTeam' | translate}}" ng-keydown="vm.onSearchOrganization($event)" class="picker-searchbox md-text rta-options-search-input">
+					</md-select-header>
+				</div>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="vm.teamsSelected.length === 0" ng-click="vm.clearOrgSelection()">Clear All</button>
+				<md-optgroup ng-repeat="site in vm.sites | filter:vm.searchTerm" class="rta-option-group">
+					<span ng-click="vm.expandSite(site)" style="margin-right:6px"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
 					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
-					<md-option ng-show="site.isExpanded" ng-selected="teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
-					</md-optgroup>
-					</md-select>
-					</md-input-container>
-					</span>
+					<md-option ng-show="site.isExpanded" ng-selected="vm.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
+				</md-optgroup>
+				</md-select>
+				</md-input-container>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel material-depth-1" ng-show="vm.showOrgSelection">
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="sub-header" ng-show="vm.showBreadcrumb">
+				<div>
+					<a class="rta-nav-link" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
+					<a class="rta-nav-link" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>
+					<span ng-if="!vm.showPath">{{vm.siteName}}</span>
+					<span ng-if="vm.showPath">/</span>
+					<span>{{vm.teamName}}</span>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<div class="panel material-depth-1" ng-show="showOrgSelection">
-		<div class="con-row">
-			<div class="con-flex">
-				<div class="sub-header" ng-show="showBreadcrumb">
-					<div>
-						<a class="rta-nav-link" href="{{goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
-						<a class="rta-nav-link" ng-if="showPath" href="{{goBackToTeamsWithUrl}}">{{siteName}}</a>
-						<span ng-if="!showPath">{{siteName}}</span>
-						<span ng-if="showPath">/</span>
-						<span>{{teamName}}</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="con-row" style="padding-top:10px">
-			<div class="con-flex">
-				<label class="input-prepend" for="filter-agents">
+	<div class="con-row" style="padding-top:10px">
+		<div class="con-flex">
+			<label class="input-prepend" for="filter-agents">
 				<i class="mdi mdi-filter-outline"></i>
-				<input id="filter-agents" ng-change="filterData()" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
+				<input id="filter-agents" ng-change="vm.filterData()" ng-model="vm.filterText" placeholder="{{'Search'|translate}}..." type="text">
 			</label>
-			</div>
-			<div class="con-flex">
-				<div class="wfm-switch panel-switch line-right rta-alarm-switch-panel">
-					<input id="switch1" ng-model="agentsInAlarm" type="checkbox" ng-disabled="pause" />
-					<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="agents.length <= maxNumberOfAgents && !isLoading">
+		</div>
+		<div class="con-flex">
+			<div class="wfm-switch panel-switch line-right rta-alarm-switch-panel">
+				<input id="switch1" ng-model="vm.agentsInAlarm" type="checkbox" ng-disabled="vm.pause" />
+				<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="vm.agents.length <= vm.maxNumberOfAgents && !vm.isLoading">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
-					<span class="wfm-switch-toggle" ng-class="pause ? 'rta-disabled-switch' : ''"></span>
+					<span class="wfm-switch-toggle" ng-class="vm.pause ? 'rta-disabled-switch' : ''"></span>
 				</label>
-					<span ng-if="agents.length > maxNumberOfAgents">{{'AgentsInAlarm'|translate}}</span>
-				</div>
+				<span ng-if="vm.agents.length > vm.maxNumberOfAgents">{{'AgentsInAlarm'|translate}}</span>
 			</div>
 		</div>
-		<div class="con-row">
-			<div class="con-flex agent-table-wrapper">
-				<div class="grid" ng-style="getTableHeight()" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="allGrid"></div>
-				<div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="inAlarmGrid"></div>
-			</div>
+	</div>
+	<div class="con-row">
+		<div class="con-flex agent-table-wrapper">
+			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="vm.allGrid"></div>
+			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
 		</div>
-		<wfm-right-panel ng-if="agentsInAlarm && !pause" panel-options="rightPanelOptions" style="min-height:400px">
-			<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
-			<div ng-repeat="state in states">
-				<div class="wfm-checkbox">
-					<label>
+	</div>
+	<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause" panel-options="vm.rightPanelOptions" style="min-height:400px">
+		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
+		<div ng-repeat="state in vm.states">
+			<div class="wfm-checkbox">
+				<label>
 					<input type="checkbox" name="checkbox" id="{{state.Id}}" ng-model="state.Selected" />
 					<span class="wfm-checkbox-toggle"></span>
 					<span class="wfm-checkbox-label rta-deselect-state">{{state.Name}}</span>
 				</label>
-				</div>
 			</div>
-		</wfm-right-panel>
-	</div>
+		</div>
+	</wfm-right-panel>
+</div>

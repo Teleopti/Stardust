@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrlPauseButton_39144', function() {
+describe('RtaAgentsController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -7,7 +7,8 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		$fakeBackend,
 		$controllerBuilder,
 		scope,
-		NoticeService;
+		NoticeService,
+		vm;
 
 	var stateParams = {};
 
@@ -33,7 +34,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 
 		$fakeBackend.clear();
 
-		scope = $controllerBuilder.setup('RtaAgentsCtrl');
+		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		spyOn($state, 'go');
 	}));
@@ -49,10 +50,11 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 				State: "Phone"
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false')
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false)
 			.wait(5000)
-			.apply('pause = true')
+			.apply(vm.pause = true)
 			.apply(function() {
 				$fakeBackend
 					.clearStates()
@@ -63,7 +65,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 			})
 			.wait(5000);
 
-		expect(scope.agents[0].State).toEqual("Phone");
+		expect(vm.agents[0].State).toEqual("Phone");
 	});
 
 	it('should restart polling when unpausing', function() {
@@ -73,11 +75,12 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false')
-			.apply('pause = true')
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false)
+			.apply(vm.pause = true)
 			.wait(5000)
-			.apply('pause = false')
+			.apply(vm.pause = false)
 			.apply(function() {
 				$fakeBackend.withState({
 					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -86,7 +89,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 			})
 			.wait(5000);
 
-		expect(scope.agents[0].State).toEqual("Ready")
+		expect(vm.agents[0].State).toEqual("Ready")
 	});
 
 	it('should display time from when paused', function() {
@@ -96,15 +99,16 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
 
-		$controllerBuilder.createController()
-			.wait(5000)
-			.apply('pause = true')
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.wait(5000)
+			.apply(vm.pause = true)
 			.apply(function() {
 				$fakeBackend.withTime('2016-06-13T16:00:05')
 			})
 			.wait(5000);
 
-		expect(scope.pausedAt).toEqual('2016-06-13 16:00:00');
+		expect(vm.pausedAt).toEqual('2016-06-13 16:00:00');
 	});
 
 	it('should not display time when not paused', function() {
@@ -114,29 +118,30 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
 
-		$controllerBuilder.createController()
-			.wait(5000)
-			.apply('pause = true')
-			.apply('pause = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.wait(5000)
+			.apply(vm.pause = true)
+			.apply(vm.pause = false);
 
-		expect(scope.pausedAt).toBeNull();
+		expect(vm.pausedAt).toBeNull();
 	});
 
 	it('should trigger notice when pausing', function() {
 		spyOn(NoticeService, 'info');
-		$controllerBuilder
-			.createController()
-			.apply('pause = true');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.pause = true);
 
 		expect(NoticeService.info).toHaveBeenCalled();
 	});
 
 	it('should trigger notice when unpausing', function() {
 		spyOn(NoticeService, 'info')
-		$controllerBuilder
-			.createController()
-			.apply('pause = true')
-			.apply('pause = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.pause = true)
+			.apply(vm.pause = false);
 
 		expect(NoticeService.info).toHaveBeenCalled();
 	});
@@ -148,10 +153,10 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		spyOn(NoticeService, 'info').and.returnValue(destroyer);
 		spyOn(destroyer, 'destroy');
 
-		$controllerBuilder
-			.createController()
-			.apply('pause = true')
-			.apply('pause = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.pause = true)
+			.apply(vm.pause = false);
 
 		expect(destroyer.destroy).toHaveBeenCalled();
 	})
@@ -164,9 +169,9 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
 		spyOn(NoticeService, 'info');
-		$controllerBuilder
-			.createController()
-			.apply('pause = true');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.pause = true);
 
 		expect(NoticeService.info.calls.mostRecent().args[0]).toContain("2016-06-15 09:00:46");
 	});
@@ -182,10 +187,11 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 				State: "Phone"
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false')
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false)
 			.wait(5000)
-			.apply('pause = true')
+			.apply(vm.pause = true)
 			.apply(function() {
 				$fakeBackend.clearStates()
 					.withState({
@@ -194,9 +200,9 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 						State: "Ready"
 					})
 			})
-			.apply('agentsInAlarm = true');
+			.apply(vm.agentsInAlarm = true);
 
-		expect(scope.agents[0].State).toEqual("Phone");
+		expect(vm.agents[0].State).toEqual("Phone");
 	});
 
 	it('should sort by time in alarm when paused and toggling agents in alarm', function() {
@@ -222,14 +228,15 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 				TimeInAlarm: 90
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false')
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false)
 			.wait(5000)
-			.apply('pause = true')
-			.apply('agentsInAlarm = true');
+			.apply(vm.pause = true)
+			.apply(vm.agentsInAlarm = true);
 
-		expect(scope.filteredData[0].Name).toEqual("Dmitry Pavlov");
-		expect(scope.filteredData[1].Name).toEqual("Asley Andeen");
+		expect(vm.filteredData[0].Name).toEqual("Dmitry Pavlov");
+		expect(vm.filteredData[1].Name).toEqual("Asley Andeen");
 	});
 
 });

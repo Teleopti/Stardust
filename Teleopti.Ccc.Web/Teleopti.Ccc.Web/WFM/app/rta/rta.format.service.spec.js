@@ -1,10 +1,10 @@
 'use strict';
-describe('RtaFormatService', function() {
+describe('rtaFormatService', function() {
 	var target, curDate;
 
 	beforeEach(module('wfm.rta'));
-	beforeEach(inject(function(RtaFormatService) {
-		target = RtaFormatService;
+	beforeEach(inject(function(rtaFormatService) {
+		target = rtaFormatService;
 		curDate = new Date();
 	}));
 

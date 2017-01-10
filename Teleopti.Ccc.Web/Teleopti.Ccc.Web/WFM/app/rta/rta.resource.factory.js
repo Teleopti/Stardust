@@ -4,11 +4,11 @@
 
 	angular
 		.module('wfm.rta')
-		.factory('RtaResourceFactory', RtaResourceFactory);
+		.factory('rtaResourceFactory', rtaResourceFactory);
 
-	RtaResourceFactory.$inject = ['$resource'];
+	rtaResourceFactory.$inject = ['$resource'];
 
-	function RtaResourceFactory($resource) {
+	function rtaResourceFactory($resource) {
 		var resource = function(url, paramDefaults, actions, options) {
 			actions.query.headers = {
 				'Cache-Control': 'no-cache',

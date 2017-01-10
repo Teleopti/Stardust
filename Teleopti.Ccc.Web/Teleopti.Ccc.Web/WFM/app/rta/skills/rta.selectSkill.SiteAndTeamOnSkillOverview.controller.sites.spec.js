@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
+describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -7,8 +7,11 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		scope,
 		$fakeBackend,
 		$controllerBuilder,
-		$timeout;
+		$timeout,
+		vm;
+
 	var stateParams = {};
+
 	beforeEach(module('wfm.rta'));
 	beforeEach(function() {
 		module(function($provide) {
@@ -28,10 +31,10 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaSiteAndTeamOnSkillOverviewCtrl');
+		scope = $controllerBuilder.setup('RtaSiteAndTeamOnSkillOverviewController');
 		$fakeBackend.clear();
 		spyOn($state, 'go');
-		$fakeBackend.withToggle('RTA_SiteAndTeamOnSkillOverview_40817'); 
+		$fakeBackend.withToggle('RTA_SiteAndTeamOnSkillOverview_40817');
 	}));
 
 	it('should display agents out of adherence in sites for selected skill', function() {
@@ -50,16 +53,17 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SkillId: "phoneGuid"
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillChange({
-					Id: "emailGuid"
-				});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillChange({
+				Id: "emailGuid"
 			});
+		});
 
-		expect(scope.sites.length).toEqual(1);
-		expect(scope.sites[0].Id).toEqual("parisGuid");
-		expect(scope.sites[0].OutOfAdherence).toEqual(5);
+		expect(vm.sites.length).toEqual(1);
+		expect(vm.sites[0].Id).toEqual("parisGuid");
+		expect(vm.sites[0].OutOfAdherence).toEqual(5);
 	});
 
 	it('should display agents out of adherence in sites for selected skill area', function() {
@@ -94,18 +98,19 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				}]
 			}]);
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillAreaChange({
-					Id: "emailAndPhoneGuid"
-				});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillAreaChange({
+				Id: "emailAndPhoneGuid"
 			});
+		});
 
-		expect(scope.sites.length).toEqual(2);
-		expect(scope.sites[0].Id).toEqual("londonGuid");
-		expect(scope.sites[0].OutOfAdherence).toEqual(1);
-		expect(scope.sites[1].Id).toEqual("parisGuid");
-		expect(scope.sites[1].OutOfAdherence).toEqual(5);
+		expect(vm.sites.length).toEqual(2);
+		expect(vm.sites[0].Id).toEqual("londonGuid");
+		expect(vm.sites[0].OutOfAdherence).toEqual(1);
+		expect(vm.sites[1].Id).toEqual("parisGuid");
+		expect(vm.sites[1].OutOfAdherence).toEqual(5);
 	});
 
 	it('should display agents out of adherence in sites for preselected skill', function() {
@@ -120,11 +125,11 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SkillId: "emailGuid"
 			});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.sites.length).toEqual(1);
-		expect(scope.sites[0].Id).toEqual("parisGuid");
-		expect(scope.sites[0].OutOfAdherence).toEqual(5);
+		expect(vm.sites.length).toEqual(1);
+		expect(vm.sites[0].Id).toEqual("parisGuid");
+		expect(vm.sites[0].OutOfAdherence).toEqual(5);
 	});
 
 	it('should display agents out of adherence in sites for preselected skill area', function() {
@@ -160,13 +165,13 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				}]
 			}]);
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.sites.length).toEqual(2);
-		expect(scope.sites[0].Id).toEqual("londonGuid");
-		expect(scope.sites[0].OutOfAdherence).toEqual(1);
-		expect(scope.sites[1].Id).toEqual("parisGuid");
-		expect(scope.sites[1].OutOfAdherence).toEqual(5);
+		expect(vm.sites.length).toEqual(2);
+		expect(vm.sites[0].Id).toEqual("londonGuid");
+		expect(vm.sites[0].OutOfAdherence).toEqual(1);
+		expect(vm.sites[1].Id).toEqual("parisGuid");
+		expect(vm.sites[1].OutOfAdherence).toEqual(5);
 	});
 
 	it('should update adherence for site and selected skill', function() {
@@ -180,9 +185,10 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SkillId: "phoneGuid"
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillChange({
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.selectedSkillChange({
 					Id: "phoneGuid"
 				});
 			})
@@ -197,7 +203,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 			})
 			.wait(5000);
 
-		expect(scope.sites[0].OutOfAdherence).toEqual(3);
+		expect(vm.sites[0].OutOfAdherence).toEqual(3);
 	});
 
 	it('should update adherence for site and selected skill area', function() {
@@ -224,9 +230,10 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				}]
 			}]);
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillAreaChange({
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+				vm.selectedSkillAreaChange({
 					Id: "emailAndPhoneGuid"
 				});
 			})
@@ -246,7 +253,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 			})
 			.wait(5000);
 
-		expect(scope.sites[0].OutOfAdherence).toEqual(7);
+		expect(vm.sites[0].OutOfAdherence).toEqual(7);
 	});
 
 	it('should update adherence for site and preselected skill', function() {
@@ -261,8 +268,9 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SkillId: "phoneGuid"
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
 				$fakeBackend.clearSiteAdherencesForSkill()
 					.withSiteAdherenceForSkill({
 						Id: "londonGuid",
@@ -272,7 +280,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 			})
 			.wait(5000);
 
-		expect(scope.sites[0].OutOfAdherence).toEqual(3);
+		expect(vm.sites[0].OutOfAdherence).toEqual(3);
 	});
 
 	it('should update adherence for site and preselected skill area', function() {
@@ -300,8 +308,9 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				}]
 			}]);
 
-		$controllerBuilder.createController()
-			.apply(function() {
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
 				$fakeBackend.clearSiteAdherencesForSkill()
 					.withSiteAdherenceForSkill({
 						Id: "londonGuid",
@@ -316,7 +325,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 			})
 			.wait(5000);
 
-		expect(scope.sites[0].OutOfAdherence).toEqual(7);
+		expect(vm.sites[0].OutOfAdherence).toEqual(7);
 	});
 
 	it('should have preselected skill in field for sites', function() {
@@ -335,10 +344,10 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				Name: "Phone"
 			});
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.selectedSkill.Id).toEqual('phoneGuid');
-		expect(scope.selectedSkill.Name).toEqual('Phone');
+		expect(vm.selectedSkill.Id).toEqual('phoneGuid');
+		expect(vm.selectedSkill.Name).toEqual('Phone');
 	});
 
 	it('should have preselected skill area in field for sites', function() {
@@ -362,10 +371,10 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				}]
 			}]);
 
-		$controllerBuilder.createController();
+		vm = $controllerBuilder.createController().vm;
 
-		expect(scope.selectedSkillArea.Id).toEqual('emailAndPhoneGuid');
-		expect(scope.selectedSkillArea.Name).toEqual('Email and phone');
+		expect(vm.selectedSkillArea.Id).toEqual('emailAndPhoneGuid');
+		expect(vm.selectedSkillArea.Name).toEqual('Email and phone');
 	});
 
 	it('should not allow simoultaneous selection when new skill area', function() {
@@ -394,12 +403,13 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				}]
 			}]);
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillAreaChange({
-					Id: "emailAndPhoneGuid"
-				});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillAreaChange({
+				Id: "emailAndPhoneGuid"
 			});
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skillArea', {
 			skillAreaId: "emailAndPhoneGuid"
@@ -432,12 +442,13 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				}]
 			}]);
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillChange({
-					Id: "phoneGuid"
-				});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillChange({
+				Id: "phoneGuid"
 			});
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {
 			skillIds: "phoneGuid"
@@ -455,12 +466,13 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SkillId: "phoneGuid"
 			});
 
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.selectedSkillChange({
-					Id: "emailGuid"
-				});
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function() {
+			vm.selectedSkillChange({
+				Id: "emailGuid"
 			});
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {
 			skillIds: "emailGuid"

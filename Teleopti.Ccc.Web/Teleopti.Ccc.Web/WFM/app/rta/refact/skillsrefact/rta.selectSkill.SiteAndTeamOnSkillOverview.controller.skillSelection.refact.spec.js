@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaSelectSkillCtrl', function () {
+xdescribe('RtaSelectSkillCtrl', function () {
 	var $interval,
 		$httpBackend,
 		$state,

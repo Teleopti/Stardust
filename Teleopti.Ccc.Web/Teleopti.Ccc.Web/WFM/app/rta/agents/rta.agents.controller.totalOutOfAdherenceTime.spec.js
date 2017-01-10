@@ -1,19 +1,20 @@
 'use strict';
-describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
+describe('RtaAgentsController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
 		$sessionStorage,
 		$fakeBackend,
 		$controllerBuilder,
-		scope;
+		scope,
+		vm;
 
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
 
 	beforeEach(function() {
-		module(function ($provide) {
+		module(function($provide) {
 			$provide.service('$stateParams', function() {
 				stateParams = {};
 				return stateParams;
@@ -31,7 +32,7 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 
 		$fakeBackend.clear();
 
-		scope = $controllerBuilder.setup('RtaAgentsCtrl');
+		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		spyOn($state, 'go');
 	}));
@@ -48,13 +49,14 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 				TimeInRule: 11 * 60
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = true');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true);
 
-		expect(scope.agents[0].TimeInRule).toEqual(11 * 60);
+		expect(vm.agents[0].TimeInRule).toEqual(11 * 60);
 	});
 
-	it('should not display time in rule if not in alarm', function () {
+	it('should not display time in rule if not in alarm', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -65,13 +67,14 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 				TimeInRule: 11 * 60
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].TimeInRule).toEqual(null);
+		expect(vm.agents[0].TimeInRule).toEqual(null);
 	});
 
-	it('should display time bar based on rule time', function () {
+	it('should display time bar based on rule time', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -83,13 +86,14 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 				TimeInRule: 30 * 60
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = true');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true);
 
-		expect(scope.agents[0].ShiftTimeBar).toEqual("12.5%");
+		expect(vm.agents[0].ShiftTimeBar).toEqual("12.5%");
 	});
 
-	it('should not display time bar if not in alarm', function () {
+	it('should not display time bar if not in alarm', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -100,10 +104,11 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 				TimeInRule: 30 * 60
 			});
 
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = false');
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = false);
 
-		expect(scope.agents[0].ShiftTimeBar).toEqual("0%");
+		expect(vm.agents[0].ShiftTimeBar).toEqual("0%");
 	});
 
 });
