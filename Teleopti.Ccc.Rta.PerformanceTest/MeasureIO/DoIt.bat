@@ -18,16 +18,6 @@ CALL %CODEDIR%\.debug-setup\InfratestConfig.bat
 SET NugetServers="http://hestia/nuget";"https://nuget.org/api/v2"
 CALL %CODEDIR%\.nuget\nuget.exe install %CODEDIR%\.nuget\packages.config -o %CODEDIR%\packages -source %NugetServers%
 
-echo 1. ActualAgentStateUpdateTest
-echo 2. BackgroundWorkTest
-echo 3. BatchSendTest
-echo 4. StateSendTest
-choice /c 1234 /n /m "Which test should i run?"
-IF ERRORLEVEL 1 SET TestName=Teleopti.Ccc.Rta.PerformanceTest.ActualAgentStateUpdateTest
-IF ERRORLEVEL 2 SET TestName=Teleopti.Ccc.Rta.PerformanceTest.BackgroundWorkTest
-IF ERRORLEVEL 3 SET TestName=Teleopti.Ccc.Rta.PerformanceTest.BatchSendTest
-IF ERRORLEVEL 4 SET TestName=Teleopti.Ccc.Rta.PerformanceTest.StateSendTest
-
 SET NUnit=%CODEDIR%\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe %CODEDIR%\Teleopti.Ccc.Rta.PerformanceTest\bin\Debug\Teleopti.Ccc.Rta.PerformanceTest.dll
 
 ::Prepare database
@@ -176,7 +166,7 @@ TIME /T
 ECHO.
 
 :: Run selected test within trace
-CALL %NUnit% --where="test==%TestName%"
+CALL %NUnit% --where="test==Teleopti.Ccc.Rta.PerformanceTest.BatchSendTest"
 
 :: Cleanup RML
 call :stopTrace %traceid%
