@@ -194,7 +194,6 @@ HealthCheck_EasyValidateAndFixReadModels_39696 = true
 HealthCheck_ReinitializeReadModels_39697 = true
 ETL_SpeedUpIntradayBusinessUnit_38932 = RC
 ETL_SpeedUpNightlyBusinessUnit_38932 = RC
-AddActivity_TriggerResourceCalculation_39346 = RC
 AbsenceRequests_SpeedupIntradayRequests_40754 = true
 ETL_EventbasedDate_39562 = true
 ReadModel_ToHangfire_39147 = true

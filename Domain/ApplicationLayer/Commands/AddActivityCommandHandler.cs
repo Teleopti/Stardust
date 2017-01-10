@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IPerson> _personForId;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
-		private readonly IPersonAssignmentAddActivity _addActivity;
 		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
 		private readonly INonoverwritableLayerMovingHelper _movingHelper;
 
@@ -29,8 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			IProxyForId<IActivity> activityForId, 
 			IProxyForId<IPerson> personForId, 
 			IUserTimeZone timeZone, 
-			IShiftCategoryRepository shiftCategoryRepository, 
-			IPersonAssignmentAddActivity addActivity,
+			IShiftCategoryRepository shiftCategoryRepository,
 			INonoverwritableLayerMovabilityChecker movabilityChecker,
 			INonoverwritableLayerMovingHelper movingHelper)
 		{
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_personForId = personForId;
 			_timeZone = timeZone;
 			_shiftCategoryRepository = shiftCategoryRepository;
-			_addActivity = addActivity;
 			_movabilityChecker = movabilityChecker;
 			_movingHelper = movingHelper;
 		}
@@ -78,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (personAssignment == null)
 			{
 				var newPersonAssignment = new PersonAssignment(person, scenario, command.Date);
-				_addActivity.AddActivity(newPersonAssignment, activity, period, command.TrackedCommandInfo);
+				newPersonAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
 				shiftCategories.Sort(new ShiftCategorySorter());
 				var shiftCategory = shiftCategories.FirstOrDefault();
@@ -90,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			else if (!personAssignment.ShiftLayers.Any())
 			{
-				_addActivity.AddActivity(personAssignment,activity, period, command.TrackedCommandInfo);
+				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 
 				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
 				shiftCategories.Sort(new ShiftCategorySorter());
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					}
 					command.WarningMessages = warnings;
 				}
-				_addActivity.AddActivity(personAssignment, activity, period, command.TrackedCommandInfo);
+				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				if (personAssignment.ShiftCategory == null)
 				{
 					var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
@@ -135,30 +132,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				}
 			}
 		}
-	}
-
-	[EnabledBy(Toggles.AddActivity_TriggerResourceCalculation_39346)]
-	public class AddActivityWithResourceCalculation : IPersonAssignmentAddActivity
-	{
-		public void AddActivity(IPersonAssignment personAssignment, IActivity activity, DateTimePeriod period,
-			TrackedCommandInfo trackedCommandInfo)
-		{
-			personAssignment.AddActivity(activity, period, trackedCommandInfo,true);
-		}
-	}
-
-	[DisabledBy(Toggles.AddActivity_TriggerResourceCalculation_39346)]
-	public class AddActivityWithoutResourceCalculation : IPersonAssignmentAddActivity
-	{
-		public void AddActivity(IPersonAssignment personAssignment, IActivity activity, DateTimePeriod period,
-			TrackedCommandInfo trackedCommandInfo)
-		{
-			personAssignment.AddActivity(activity, period, trackedCommandInfo);
-		}
-	}
-
-	public interface IPersonAssignmentAddActivity
-	{
-		void AddActivity(IPersonAssignment personAssignment, IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo);
 	}
 }

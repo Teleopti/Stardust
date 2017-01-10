@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class IntradayWebModule : Module
 	{
-		private IIocConfiguration _configuration;
+		private readonly IIocConfiguration _configuration;
 
 		public IntradayWebModule(IIocConfiguration configuration)
 		{
@@ -46,10 +46,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
-			if (_configuration.Toggle(Toggles.AddActivity_TriggerResourceCalculation_39346))
-				builder.RegisterType<AddActivityWithResourceCalculation>().As<IPersonAssignmentAddActivity>().SingleInstance();
-			else
-				builder.RegisterType<AddActivityWithoutResourceCalculation>().As<IPersonAssignmentAddActivity>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<SkillStaffingIntervalProvider>().As<SkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();

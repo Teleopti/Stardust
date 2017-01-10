@@ -177,7 +177,6 @@
 		ETL_SpeedUpGroupPagePersonNightly_37623,
 		ETL_SpeedUpNightlyWorkload_38928,
 		ETL_SpeedUpNightlyForecastWorkload_38929,
-		AddActivity_TriggerResourceCalculation_39346,
 		HealthCheck_ValidateReadModelPersonScheduleDay_39421,
 		HealthCheck_ValidateReadModelScheduleDay_39423,
 		HealthCheck_EasyValidateAndFixReadModels_39696,
