@@ -7,14 +7,16 @@ SET ROOTDIR=%~dp0
 ::Remove trailer slash
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
+SET CODEDIR=%ROOTDIR%\..\..
+
 ::Setup toggle
 ::Fix configuration
-CALL %ROOTDIR%\InfratestConfig.bat
+CALL %CODEDIR%\.debug-setup\InfratestConfig.bat
 
 ::NUnit stuff
 ::Restore nuget packages
 SET NugetServers="http://hestia/nuget";"https://nuget.org/api/v2"
-CALL %ROOTDIR%\..\.nuget\nuget.exe install %ROOTDIR%\..\.nuget\packages.config -o %ROOTDIR%\..\packages -source %NugetServers%
+CALL %CODEDIR%\.nuget\nuget.exe install %CODEDIR%\.nuget\packages.config -o %CODEDIR%\packages -source %NugetServers%
 
 echo 1. ActualAgentStateUpdateTest
 echo 2. BackgroundWorkTest
@@ -26,7 +28,7 @@ IF ERRORLEVEL 2 SET TestName=Teleopti.Ccc.Rta.PerformanceTest.BackgroundWorkTest
 IF ERRORLEVEL 3 SET TestName=Teleopti.Ccc.Rta.PerformanceTest.BatchSendTest
 IF ERRORLEVEL 4 SET TestName=Teleopti.Ccc.Rta.PerformanceTest.StateSendTest
 
-SET NUnit=%ROOTDIR%\..\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe %ROOTDIR%\..\Teleopti.Ccc.Rta.PerformanceTest\bin\Debug\Teleopti.Ccc.Rta.PerformanceTest.dll
+SET NUnit=%CODEDIR%\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe %CODEDIR%\Teleopti.Ccc.Rta.PerformanceTest\bin\Debug\Teleopti.Ccc.Rta.PerformanceTest.dll
 
 ::Prepare database
 echo Setup database
@@ -44,12 +46,12 @@ SET /A Silent=0
 SET READTRACE="%ProgramFiles%\Microsoft Corporation\RMLUtils\ReadTrace.exe"
 SET AnalyseCmd=%ROOTDIR%\AnalyseExample.bat
 SET OutPutFolder=%ROOTDIR%\IOMeasurementData
-SET TraceOutput=%ROOTDIR%\..\Teleopti.Support.Tool\SQLServerPerformance\RML\helpers\TraceOutput.sql
+SET TraceOutput=%CODEDIR%\Teleopti.Support.Tool\SQLServerPerformance\RML\helpers\TraceOutput.sql
 SET sqlerror=0
 SET /A traceid=0
 SET tracefile=
 SET perfmonName=SQLServerBaselineCounters
-SET perfmonConfig=%ROOTDIR%\..\Teleopti.Support.Tool\SQLServerPerformance\RML\helpers\SQLServerBaselineCounters.config
+SET perfmonConfig=%CODEDIR%\Teleopti.Support.Tool\SQLServerPerformance\RML\helpers\SQLServerBaselineCounters.config
 call :cleanUpLogman
 
 ::If now input parameters
@@ -136,7 +138,7 @@ echo.
 
 ::Try create a SQL server side trace
 echo Create SQL Server trace ... 
-SQLCMD -S%INSTANCE% %Conn% -dtempdb -i"%ROOTDIR%\..\Teleopti.Support.Tool\SQLServerPerformance\RML\tsql\TraceCaptureDef_ReportMin.sql" -o"%TraceOutput%" -b -v MaxMinutes="1440" FolderName="%OutPutFolder%" MaxDisc="%MaxDisc%" DBIdString="%DBIdString%"
+SQLCMD -S%INSTANCE% %Conn% -dtempdb -i"%CODEDIR%\Teleopti.Support.Tool\SQLServerPerformance\RML\tsql\TraceCaptureDef_ReportMin.sql" -o"%TraceOutput%" -b -v MaxMinutes="1440" FolderName="%OutPutFolder%" MaxDisc="%MaxDisc%" DBIdString="%DBIdString%"
 if %ERRORLEVEL% NEQ 0 (
 call :sqlerror
 GOTO :quitError
