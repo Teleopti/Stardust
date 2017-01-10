@@ -6,9 +6,9 @@
 	Teleopti Authentication Bridge
 </asp:Content>
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
-	<div class="con-row" style="margin-top: 2%;">
+	<div class="con-row" style="margin-top: 10%;">
 		<div class="con-flex"></div>
-		<div class="con-flex split-1-2">
+		<div class="con-flex">
 			<div class="panel material-depth-1 line-center animate-material">
 				<div class="sub-header">
 					<h1>TELEOPTI WFM</h1>
@@ -36,16 +36,14 @@
 		<div class="con-flex"></div>
 	</div>
 	<div class="con-row">
-		<div class="con-flex"></div>
-		<div class="con-flex split-1-2">
+		<div class="con-flex">
 			<div class="login-message formError">
 				<% if (!string.IsNullOrEmpty(Model.ErrorMessage))
 					{ %>
-				<p class="alert alert-warning formError material-depth-1"><%="Technical information: " + Model.ErrorMessage%></p>
+				<p><%="Technical information: " + Model.ErrorMessage%></p>
 				<% } %>
 			</div>
 		</div>
-		<div class="con-flex"></div>
 	</div>
 
 </asp:Content>
