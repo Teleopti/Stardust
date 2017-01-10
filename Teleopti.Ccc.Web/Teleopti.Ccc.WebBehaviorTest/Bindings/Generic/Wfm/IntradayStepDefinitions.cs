@@ -205,8 +205,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var esl = parseFloat(scope.viewObj.estimatedServiceLevelObj.series[1]);" +
-				"return (esl >= 0);"
-				, "True");
+                "return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
+                , "true");
 		}
 
 		[Then(@"I should see a summary of today's performance")]
@@ -248,13 +248,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var actualStaffing = parseFloat(scope.viewObj.actualStaffingSeries[1]);" +
-				"return (actualStaffing >= 0);"
-				, "True");
+                "return (actualStaffing >= 0);"
+                , "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var scheduledStaffing = parseFloat(scope.viewObj.scheduledStaffing[1]);" +
-				"return (scheduledStaffing >= 0);"
-				, "True");
+                "return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
+                , "true");
 		}
 	}
 }
