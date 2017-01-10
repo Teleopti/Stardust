@@ -1,41 +1,55 @@
-(function () {
+(function() {
 	'use strict';
 
-	var rtaModule = angular.module('wfm.rta');
-	rtaModule.service('RtaOrganizationService', [
-	   '$filter', '$q', 'RtaService', function ($filter, $q, RtaService) {
+	angular
+		.module('wfm.rta')
+		.factory('RtaOrganizationService', RtaOrganizationService);
 
-	  	var service = {};
-			service.sites = RtaService.getSites ? RtaService.getSites() : null;
-			service.teams = undefined;
+	RtaOrganizationService.$inject = ['$filter', '$q', 'RtaService'];
 
-	   	service.getSiteName = function (siteId) {
-				var deferred = $q.defer();
-				service.sites.then(function(data){
-					var siteName = null;
-					var result = $filter('filter')(data, { Id: siteId });
-		   		if (result.length > 0) {
-		   			siteName = result[0].Name;
-		   		}
-		   		deferred.resolve(siteName);
-				})
-	   		return deferred.promise;
-	   	};
+	function RtaOrganizationService($filter, $q, RtaService) {
+		var sites = RtaService.getSites ? RtaService.getSites() : null;
+		var teams = undefined;
+		
+		var service = {
+			getSiteName: getSiteName,
+			getTeamName: getTeamName,
+			sites: sites,
+			teams: teams
+		};
 
-	   	service.getTeamName = function (teamId) {
-				var deferred = $q.defer();
-				service.teams = service.teams;
-				service.teams.$promise.then(function(data){
-					var teamName = null;
-					var result = $filter('filter')(data, { Id: teamId });
-					if (result.length > 0) {
-		   			teamName = result[0].Name;
-		   		}
-					deferred.resolve(teamName);
-				})
-	   		return deferred.promise;
-	   	};
+		return service;
+		/////////////////
 
-	   	return service;
-	   }]);
+		function getSiteName(siteId) {
+			var deferred = $q.defer();
+			service.sites.then(function(data) {
+				var siteName = null;
+				var result = $filter('filter')(data, {
+					Id: siteId
+				});
+				if (result.length > 0) {
+					siteName = result[0].Name;
+				}
+				deferred.resolve(siteName);
+			})
+			return deferred.promise;
+		};
+
+		function getTeamName(teamId) {
+			var deferred = $q.defer();
+			service.teams = service.teams;
+			service.teams.$promise.then(function(data) {
+				var teamName = null;
+				var result = $filter('filter')(data, {
+					Id: teamId
+				});
+				if (result.length > 0) {
+					teamName = result[0].Name;
+				}
+				deferred.resolve(teamName);
+			})
+			return deferred.promise;
+		};
+	};
 })();
