@@ -52,16 +52,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				5,
 				25,
 				5);
-			var asses = new List<IPersonAssignment>();
-			for (var i = 0; i < 7; i++)
-			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
-				asses.Add(ass);
-				if (i == 5)
-				{
-					ass.SetDayOff(new DayOffTemplate()); //saturday
-				}
-			}
+		
+			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			asses[5].SetDayOff(new DayOffTemplate()); //saturday
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, asses, skillDays);
 			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}};
 
@@ -123,6 +116,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				ass.SetDayOff(new DayOffTemplate()); //saturday
 				assMaxSeat.SetDayOff(new DayOffTemplate()); //saturday
 			}
+
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays.Union(skillDaysMaxSeat));
 			var optPrefs = new OptimizationPreferences
 			{

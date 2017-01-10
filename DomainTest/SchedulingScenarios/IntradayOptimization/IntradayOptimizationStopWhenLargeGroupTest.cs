@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
@@ -226,13 +227,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var scenario = ScenarioRepository.Has("some name");
 			var dateOnly = new DateOnly(2015, 10, 12);
 			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemandFactory(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
-			var agents = new List<IPerson>();
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
-			for (var i = 0; i < numberOfAgents; i++)
-			{
-				agents.Add(PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill));
-			}
-
+			var agents = Enumerable.Range(0, numberOfAgents).Select(i => PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill)).ToArray();
 			var optimizedAgentsInAnyOfLoops = new HashSet<IPerson>();
 			for (var retries = 0; retries < retriesBeforeGivingUp; retries++)
 			{
