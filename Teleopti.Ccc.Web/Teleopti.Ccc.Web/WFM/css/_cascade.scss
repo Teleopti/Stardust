@@ -17,18 +17,21 @@
 	border-style: dotted;
 	border-color: $gray087;
 	border-width: thin;
+	text-align: center;
+	transition: $transition-timing;
+	padding: $full-padding*10 0;
+	color: $gray087;
+}
+
+.flip{
+	transform: rotate(90deg);
 }
 
 .angular-ui-tree-empty {
 	background-image: none;
 	background: none;
 	border: none;
-	min-height: 50px;
-}
-
-.angular-ui-tree-placeholder:after {
-	content: "Move and Drop skill here";
-	color: $gray087;
+	min-height: 40px;
 }
 
 .horizontal-list {

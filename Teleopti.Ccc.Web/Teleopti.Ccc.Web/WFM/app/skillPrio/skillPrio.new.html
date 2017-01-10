@@ -41,32 +41,37 @@
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
-				<div class="sub-header con-flex">
-					<h2>Skills</h2>
-				</div>
-				<div class="con-flex">
-					<label for="filter" class="input-icon">
-            <i class="mdi mdi-filter-outline">
-              <input type="text" id="filter" ng-model="skillFilter.SkillName" placeholder="filter skills...">
-            </i>
-          </label>
-				</div>
+				<div class="sub-header">
+					<label for="filter">
+					 <i class="mdi mdi-filter-outline inline-flex">
+					   <input type="text" id="filter" ng-model="skillFilter.SkillName" placeholder="filter skills...">
+					   <md-tooltip>Filter</md-tooltip>
+					 </i>
+					</label>
+
+			    <div class="head-actions panel-menu">
+			      <div tabindex=0 class="context-menu card-context">
+			        <i class="mdi mdi-information-outline"></i>
+							<md-tooltip>Drag and drop skills to create or sort cascade skills</md-tooltip>
+			      </div>
+			    </div>
+			  </div>
+
 				<div class="con-row" ng-show="true">
 					<div class="con-flex" ng-hide="vm.unsortedList.length === 0">
-						<h2>Unsorted Skills</h2>
+						<b>Unsorted Skills</b>
 						<div ui-tree="vm.options" data-drag-enabled="true" data-max-depth="1">
 							<ol ui-tree-nodes ng-model="vm.unsortedList" class="horizontal-list" data-horizontal>
 								<li ui-tree-node ng-repeat="Skill in vm.unsortedList | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
 									<span id="card">
 											{{Skill.SkillName}}
-										</span>
+									</span>
 								</li>
 							</ol>
-							<md-tooltip>Drag and drop skill to cascade list</md-tooltip>
 						</div>
 					</div>
 					<div class="con-flex" ng-hide="vm.cascadeList.length === 0" ng-class="{'skill-group-devider':vm.unsortedList.length > 0}">
-						<h2>Cascade Skills</h2>
+						<b>Cascade Skills</b>
 						<div ng-repeat="sortedRow in vm.cascadeList" class="skill-devider">
 							<div ui-tree="vm.options" data-drag-enabled="true" data-max-depth="1">
 								<ol ui-tree-nodes ng-model="sortedRow.Skills" class="horizontal-list" data-horizontal>
@@ -74,7 +79,7 @@
 									<li ui-tree-node ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
 										<span id="card">
 												{{Skill.SkillName}}
-													<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" class="mdi mdi-arrow-left-bold drag-handle-delete">
+													<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" class="mdi mdi-close drag-handle-delete">
 														<md-tooltip>Move skill to unsorted list</md-tooltip>
 													</i>
 										</span>

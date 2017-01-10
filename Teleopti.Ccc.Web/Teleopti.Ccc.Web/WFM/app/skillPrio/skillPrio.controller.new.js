@@ -55,6 +55,11 @@
 		}
 
 		vm.options = {
+			dragStart: function(event) {
+				if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
+					event.elements.placeholder.remove();
+				}
+			},
 			dropped: function(event) {
 				if (event.pos.moving || vm.ismodified === true) {
 					vm.ismodified = true;
@@ -69,11 +74,24 @@
 				if (vm.cascadeList.length === 0) {
 					addNewRow();
 				}
+
+//temp
+var placeholder = document.getElementsByClassName("angular-ui-tree-placeholder");
+for (var i = 0; i < placeholder.length; i++) {
+	placeholder[i].innerHTML = "<div class='flip mdi mdi-exit-to-app'></div>";
+}
+
 				if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
-					
+					//event.source.nodeScope.$$apply = false;
+					event.dest.nodesScope.nodropEnabled = true;
+					event.elements.placeholder.remove();
 				}
 			}
 		};
+
+		// if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
+		//
+		// }
 
 		function addNewRow() {
 			var newRow = {
