@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skillEfficiencies =
 				personSkillCollection.Where(
 					s => s.SkillPercentage.Value > 0)
-					.Select(k => new SkillEffiencyResource(k.Skill.Id.GetValueOrDefault(), k.SkillPercentage.Value)).ToArray();
+					.GroupBy(g => g.Skill.Id.GetValueOrDefault())
+					.Select(k => new SkillEffiencyResource(k.Key, k.First().SkillPercentage.Value)).ToArray();
 
 			return new SkillCombination(skills.ToArray(), personPeriod.Period, skillEfficiencies, originalPersonSkills.OriginalSkills.Where(s => s.SkillPercentage.Value>0).Select(s => s.Skill).ToArray());
 		}

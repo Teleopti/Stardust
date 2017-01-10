@@ -76,15 +76,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public DateTimePeriod[] FractionPeriods
-		{
-			get { return _fractionPeriods; }
-		}
+		public DateTimePeriod[] FractionPeriods => _fractionPeriods;
 
-		public SkillEffiencyResource[] EffiencyResources
-		{
-			get { return _effiencyResources; }
-		}
+		public SkillEffiencyResource[] EffiencyResources => _effiencyResources;
 	}
 
 	public struct SkillEffiencyResource

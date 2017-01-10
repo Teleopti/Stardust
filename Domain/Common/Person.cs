@@ -247,8 +247,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void RemoveSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
-			InParameter.NotNull("skill",skill);
-			InParameter.NotNull("personPeriod",personPeriod);
+			InParameter.NotNull(nameof(skill), skill);
+			InParameter.NotNull(nameof(personPeriod), personPeriod);
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
 				((IPersonPeriodModifySkills)personPeriod).DeletePersonSkill(personSkill);
@@ -256,8 +256,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void ChangeSkillProficiency(ISkill skill, Percent proficiency, IPersonPeriod personPeriod)
 		{
-			InParameter.NotNull("skill", skill);
-			InParameter.NotNull("personPeriod", personPeriod);
+			InParameter.NotNull(nameof(skill), skill);
+			InParameter.NotNull(nameof(personPeriod), personPeriod);
 			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
 				personSkill.SkillPercentage = proficiency;

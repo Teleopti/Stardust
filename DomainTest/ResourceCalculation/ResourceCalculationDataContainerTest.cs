@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -78,6 +79,34 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldGetAffectedSkillsWithProficiency()
 		{
 			_person.ChangeSkillProficiency(_skill,new Percent(0.9), _person.Period(_date));
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.8
+								 });
+			var result = _target.AffectedResources(_activity, _period);
+			var affectedSkill = result.First().Value;
+			affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.EqualTo(0.9);
+			affectedSkill.Resource.Should().Be.EqualTo(0.8);
+			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
+		}
+
+		[Test]
+		public void ShouldGetAffectedSkillsDuplicateProficiency()
+		{
+			var skillClone = _skill.NoneEntityClone();
+			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] { _skill, skillClone });
+			skillClone.SetId(_skill.Id);
+			_person.Period(_date).PersonSkillCollection.OfType<IPersonSkillModify>().ForEach(
+				s =>
+				{
+					s.Active = true;
+					s.SkillPercentage = new Percent(0.9);
+				});
+			
 			_target.AddResources(_person, _date,
 								 new ResourceLayer
 								 {
