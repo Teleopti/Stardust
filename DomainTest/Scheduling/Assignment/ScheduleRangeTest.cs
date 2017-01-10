@@ -20,7 +20,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleRangeTest
 	{
 		private string _function;
