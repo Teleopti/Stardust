@@ -33,7 +33,7 @@ Scenario: View incoming traffic for one skill
 	Then I should see incoming traffic data in the chart
 	And I should see a summary of today's incoming traffic
 		
-
+@ignore
 Scenario: View performance for a skill area
 	Given the time is '2016-12-22 14:00'
 	And there is a Skill Area called 'Area A' that monitors skill 'Skill A'
