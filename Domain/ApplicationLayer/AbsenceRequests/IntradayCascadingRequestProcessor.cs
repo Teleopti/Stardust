@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
 				if (!combinationResources.Any())
 				{
-					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems + " Can not find any skillcombinations.");
+					logger.Debug(Resources.DenyDueToTechnicalProblems + " Can not find any skillcombinations.");
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 					return;
 				}
 
@@ -169,13 +170,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				else
 				{
-					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems + " Can not find any staffingThresholdValidator.");
+					logger.Debug(Resources.DenyDueToTechnicalProblems + " Can not find any staffingThresholdValidator.");
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 				}
 			}
 			catch (Exception exp)
 			{
-				logger.Error(exp);
-				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems + exp.Message);
+				logger.Error(Resources.DenyDueToTechnicalProblems + exp);
+				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 			}
 		}
 
