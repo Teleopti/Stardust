@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -10,13 +9,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class InnerOptimizerHelperHelper : IOptimizerHelperHelper
 	{
 		private readonly IRestrictionExtractor _restrictionExtractor;
-		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 
-		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, PersonalSkillsProvider personalSkillsProvider, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
 			_restrictionExtractor = restrictionExtractor;
-			_personalSkillsProvider = personalSkillsProvider;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 		}
 

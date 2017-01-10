@@ -18,14 +18,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IPersonRepository _persons;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IUserCulture _culture;
 		
 		public HistoricalAdherenceViewModelBuilder(
 			IHistoricalAdherenceReadModelReader reader,
 			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IPersonRepository persons,
-			INow now, IUserTimeZone timeZone, IUserCulture culture)
+			INow now, IUserTimeZone timeZone)
 		{
 			_reader = reader;
 			_scenario = scenario;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_persons = persons;
 			_now = now;
 			_timeZone = timeZone;
-			_culture = culture;
 		}
 		
 		private IEnumerable<HistoricalAdherenceActivityViewModel> getCurrentSchedules(IPerson person)

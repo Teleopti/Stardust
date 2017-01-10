@@ -19,15 +19,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepo;
 		private readonly DenyLongQueuedAbsenceRequests _denyLongQueuedAbsenceRequests;
-		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IConfigReader _configReader;
 
-		public AbsenceRequestStrategyProcessor(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepo, DenyLongQueuedAbsenceRequests denyLongQueuedAbsenceRequests, IConfigReader configReader, IPersonRequestRepository personRequestRepository)
+		public AbsenceRequestStrategyProcessor(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepo, DenyLongQueuedAbsenceRequests denyLongQueuedAbsenceRequests, IConfigReader configReader)
 		{
 			_queuedAbsenceRequestRepo = queuedAbsenceRequestRepo;
 			_denyLongQueuedAbsenceRequests = denyLongQueuedAbsenceRequests;
 			_configReader = configReader;
-			_personRequestRepository = personRequestRepository;
 		}
 
 		public IList<IEnumerable<Guid>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime,
