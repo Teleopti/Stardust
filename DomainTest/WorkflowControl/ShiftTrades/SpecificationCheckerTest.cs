@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -11,46 +10,41 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 	[TestFixture]
 	public class SpecificationCheckerTest
 	{
-		private IGlobalSettingDataRepository _globalSettingDataRepository;
+		private const string denyReason = "Test deny reason";
+		private ValidatorSpecificationForTest satisfiedSpecification;
+		private DummySpecification dummySpecification;
+		private ShiftTradeSpecification[] specifications;
 
 		[SetUp]
 		public void Setup()
 		{
-			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			satisfiedSpecification = new ValidatorSpecificationForTest(true, denyReason);
+			dummySpecification = new DummySpecification(false);
+			specifications = new ShiftTradeSpecification[]
+			{
+				satisfiedSpecification,
+				dummySpecification
+			};
 		}
 
 		[Test]
-		public void ShouldPendingIfSpecificationIsNotConfigured()
+		public void ShouldDenyIfSpecificationIsNotConfiguredFailed()
 		{
-			var dummySpecification = new DummySpecification(false);
-			var specifications = new ShiftTradeSpecification[]
-			{
-				dummySpecification
-			};
-
 			var businessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { };
-
 			var swapDetails = new List<IShiftTradeSwapDetail>();
-			var result = checkSpecification(specifications, businessRuleConfigs, swapDetails);
+			var result = checkSpecification(businessRuleConfigs, swapDetails);
+
+			Assert.That(satisfiedSpecification.HasBeenCalledWith(swapDetails));
 
 			Assert.That(dummySpecification.WasCalled);
 			Assert.That(dummySpecification.HasBeenCalledWith(swapDetails));
 
-			checkResult(result, false, false, dummySpecification.DenyReason);
+			checkResult(result, false, true, dummySpecification.DenyReason);
 		}
 
 		[Test]
-		public void ShouldNotValidateSpecificationIfItIsDisabled()
+		public void ShouldNotValidateSpecificationDisabled()
 		{
-			const string denyReason = "Test deny reason";
-			var falseValidator = new ValidatorSpecificationForTest(false, denyReason);
-			var dummySpecification = new DummySpecification(false);
-			var specifications = new ShiftTradeSpecification[]
-			{
-				falseValidator,
-				dummySpecification
-			};
-
 			var businessRuleConfigs = new[]
 			{
 				new ShiftTradeBusinessRuleConfig
@@ -62,22 +56,16 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			IList<IShiftTradeSwapDetail> swapDetails = new List<IShiftTradeSwapDetail>();
 
-			var result = checkSpecification(specifications, businessRuleConfigs, swapDetails);
+			var result = checkSpecification(businessRuleConfigs, swapDetails);
 
-			Assert.That(falseValidator.HasBeenCalledWith(swapDetails));
+			Assert.That(satisfiedSpecification.HasBeenCalledWith(swapDetails));
 			Assert.That(!dummySpecification.WasCalled);
-			checkResult(result, false, false, denyReason);
+			checkResult(result, true, false, string.Empty);
 		}
 
 		[Test]
-		public void ShouldDenyIfSpecificationIsConfiguredAsDeny()
+		public void ShouldDenyIfSpecificationIsConfiguredAsDenyFailed()
 		{
-			var dummySpecification = new DummySpecification(false);
-			var specifications = new ShiftTradeSpecification[]
-			{
-				dummySpecification
-			};
-
 			var businessRuleConfigs = new[]
 			{
 				new ShiftTradeBusinessRuleConfig
@@ -89,10 +77,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			};
 
 			var swapDetails = new List<IShiftTradeSwapDetail>();
-			var result = checkSpecification(specifications, businessRuleConfigs, swapDetails);
+			var result = checkSpecification(businessRuleConfigs, swapDetails);
 
 			Assert.That(dummySpecification.WasCalled);
 			Assert.That(dummySpecification.HasBeenCalledWith(swapDetails));
+			Assert.That(satisfiedSpecification.HasBeenCalledWith(swapDetails));
 
 			checkResult(result, false, true, dummySpecification.DenyReason);
 		}
@@ -100,12 +89,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldPendingIfSpecificationIsConfiguredAsPending()
 		{
-			var dummySpecification = new DummySpecification(false);
-			var specifications = new ShiftTradeSpecification[]
-			{
-				dummySpecification
-			};
-
 			var businessRuleConfigs = new[]
 			{
 				new ShiftTradeBusinessRuleConfig
@@ -117,25 +100,24 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			};
 
 			var swapDetails = new List<IShiftTradeSwapDetail>();
-			var result = checkSpecification(specifications, businessRuleConfigs, swapDetails);
+			var result = checkSpecification(businessRuleConfigs, swapDetails);
 
 			Assert.That(dummySpecification.WasCalled);
 			Assert.That(dummySpecification.HasBeenCalledWith(swapDetails));
+			Assert.That(satisfiedSpecification.HasBeenCalledWith(swapDetails));
 
 			checkResult(result, false, false, dummySpecification.DenyReason);
 		}
 
-		private ShiftTradeRequestValidationResult checkSpecification(IEnumerable<ShiftTradeSpecification> specifications,
-			ShiftTradeBusinessRuleConfig[] specificificatonConfigs, IList<IShiftTradeSwapDetail> swapDetails)
+		private ShiftTradeRequestValidationResult checkSpecification(ShiftTradeBusinessRuleConfig[] specificificatonConfigs, IList<IShiftTradeSwapDetail> swapDetails)
 		{
-			var shiftTradeSetting = new ShiftTradeSettings
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
 			{
 				BusinessRuleConfigs = specificificatonConfigs
-			};
-			_globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, shiftTradeSetting);
+			});
 
-			var specificationChecker = new SpecificationCheckerWithConfig(specifications, _globalSettingDataRepository);
-
+			var specificationChecker = new SpecificationCheckerWithConfig(specifications, globalSettingDataRepository);
 			return specificationChecker.Check(swapDetails);
 		}
 

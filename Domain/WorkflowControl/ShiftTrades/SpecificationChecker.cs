@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			var businessRuleConfigs = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey,
 				new ShiftTradeSettings()).BusinessRuleConfigs;
 
-			var allRulesAreOk = true;
+			var allSpecificationsSatisfied = true;
 			string firstDenyReason = null;
 			foreach (var specification in _shiftTradeSpecifications)
 			{
@@ -62,20 +62,21 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				var result = specification.Validate(swapDetails);
 				if (result.IsOk) continue;
 
-				allRulesAreOk = false;
-				if (ruleConfig?.HandleOptionOnFailed != null && ruleConfig.HandleOptionOnFailed.Value == RequestHandleOption.AutoDeny)
+				if (ruleConfig == null ||
+					(ruleConfig.HandleOptionOnFailed != null && ruleConfig.HandleOptionOnFailed.Value == RequestHandleOption.AutoDeny))
 				{
-					return new ShiftTradeRequestValidationResult(result.IsOk, true, result.DenyReason);
+					return new ShiftTradeRequestValidationResult(false, true, result.DenyReason);
 				}
 
+				allSpecificationsSatisfied = false;
 				if (firstDenyReason == null)
 				{
 					firstDenyReason = result.DenyReason;
 				}
 			}
 
-			return allRulesAreOk
-				? new ShiftTradeRequestValidationResult(true)
+			return allSpecificationsSatisfied
+				? new ShiftTradeRequestValidationResult(true, false, "")
 				: new ShiftTradeRequestValidationResult(false, false, firstDenyReason);
 		}
 	}
