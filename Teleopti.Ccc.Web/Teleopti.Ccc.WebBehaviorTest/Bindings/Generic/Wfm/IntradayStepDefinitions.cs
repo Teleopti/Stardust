@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
@@ -202,18 +205,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				"var sl = parseFloat(scope.viewObj.serviceLevelObj.series[1]);" +
 				"return (sl >= 0);"
 				, "True");
-			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var esl = parseFloat(scope.viewObj.estimatedServiceLevelObj.series[1]);" +
-                "return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
-                , "true");
+			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
+			if (toggleQuerier.IsEnabled(Toggles.Wfm_Intraday_ESL_41827))
+			{
+				Browser.Interactions.AssertJavascriptResultContains(
+					"var scope = angular.element(document.querySelector('.c3')).scope();" +
+					"var esl = parseFloat(scope.viewObj.estimatedServiceLevelObj.series[1]);" +
+					"return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
+					, "true");
+			}
 		}
 
 		[Then(@"I should see a summary of today's performance")]
 		public void ThenIShouldSeeASummaryOfTodaySPerformance()
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.service-level').text().length > 0", "True");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.esl').text().length > 0", "True");
+			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
+			if (toggleQuerier.IsEnabled(Toggles.Wfm_Intraday_ESL_41827))
+			{
+				Browser.Interactions.AssertJavascriptResultContains("return $('.esl').text().length > 0", "True");
+			}
 			Browser.Interactions.AssertJavascriptResultContains("return $('.abandoned-rate').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.average-speed-of-answer').text().length > 0", "True");
 		}
