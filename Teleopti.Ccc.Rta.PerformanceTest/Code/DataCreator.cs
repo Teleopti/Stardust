@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly AnalyticsDatabase _analytics;
-		private readonly Database _database;
 		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly ITeamRepository _teams;
 		private readonly IPersonRepository _persons;
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			ITenantUnitOfWork tenantUnitOfWork,
 			ICurrentTenantSession currentTenantSession,
 			AnalyticsDatabase analytics,
-			Database database,
 			WithUnitOfWork withUnitOfWork,
 			ITeamRepository teams,
 			IPersonRepository persons,
@@ -72,7 +70,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_currentTenantSession = currentTenantSession;
 			_analytics = analytics;
-			_database = database;
 			_withUnitOfWork = withUnitOfWork;
 			_teams = teams;
 			_persons = persons;
@@ -104,9 +101,44 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		}
 
+		public IEnumerable<string> LoggedOffStates()
+		{
+			yield return "LoggedOff";
+		}
+
+		public IEnumerable<string> PhoneStates()
+		{
+			yield return "Ready";
+			yield return "Phone";
+		}
+
+		public IEnumerable<StateChange> OffChangesFor(string time)
+		{
+			yield return new StateChange
+			{
+				Time = $"{time}:00",
+				StateCode = $"LoggedOff"
+			};
+		}
+
+		public IEnumerable<StateChange> PhoneChangesFor(int calls, string time)
+		{
+			var statesPerCall = PhoneStates().Count();
+			return PhoneStates()
+				.Infinite()
+				.Take(calls * statesPerCall)
+				.Select((x, i) =>
+						new StateChange
+						{
+							Time = $"{time}:{i:00}",
+							StateCode = x
+						}
+				);
+		}
+
 		private void createPersonsAndSchedules()
 		{
-			IList<IPerson> rogers = new List<IPerson>();
+			IList<IPerson> workingRogers = new List<IPerson>();
 
 			_withUnitOfWork.Do(() =>
 			{
@@ -115,7 +147,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				var contractSchedule = _contractSchedules.LoadAll().Single(x => x.Description.Name == "contractSchedule");
 				var teams = _teams.LoadAll();
 
-				Enumerable.Range(0, _testConfiguration.NumberOfAgents)
+				Enumerable.Range(0, _testConfiguration.NumberOfAgentsInSystem)
 					.ForEach(roger =>
 					{
 						var name = "roger" + roger;
@@ -131,7 +163,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 						var logon = new ExternalLogOn
 						{
-							AcdLogOnName = name,// is not used?
+							AcdLogOnName = name, // is not used?
 							DataSourceId = _testConfiguration.DataSourceId,
 							AcdLogOnOriginalId = name, // this is the user code the rta receives
 							AcdLogOnMartId = -1
@@ -139,7 +171,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						_externalLogOns.Add(logon);
 						person.AddExternalLogOn(logon, personPeriod);
 
-						rogers.Add(person);
+						if (roger <= _testConfiguration.NumberOfAgentsWorking)
+							workingRogers.Add(person);
 					});
 
 			});
@@ -148,33 +181,38 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			var brejk = _withUnitOfWork.Get(() => _activities.LoadAll().Single(x => x.Name == "Break"));
 			var lunch = _withUnitOfWork.Get(() => _activities.LoadAll().Single(x => x.Name == "Lunch"));
 
-			rogers.ForEach(roger =>
-			{
-				_withUnitOfWork.Do(() =>
+			workingRogers
+				.Batch(100)
+				.ForEach(rogers =>
 				{
-					var assignment1 = new PersonAssignment(roger, _scenario.Current(), "2016-02-25".Date());
-					assignment1.AddActivity(phone, "2016-02-25 08:00".Utc(), "2016-02-25 17:00".Utc());
-					assignment1.AddActivity(brejk, "2016-02-25 10:00".Utc(), "2016-02-25 10:15".Utc());
-					assignment1.AddActivity(lunch, "2016-02-25 11:30".Utc(), "2016-02-25 12:00".Utc());
-					assignment1.AddActivity(brejk, "2016-02-25 15:00".Utc(), "2016-02-25 15:15".Utc());
-					_assignments.Add(assignment1);
+					_withUnitOfWork.Do(() =>
+					{
+						rogers.ForEach(roger =>
+						{
+							var assignment1 = new PersonAssignment(roger, _scenario.Current(), "2016-02-25".Date());
+							assignment1.AddActivity(phone, "2016-02-25 08:00".Utc(), "2016-02-25 17:00".Utc());
+							assignment1.AddActivity(brejk, "2016-02-25 10:00".Utc(), "2016-02-25 10:15".Utc());
+							assignment1.AddActivity(lunch, "2016-02-25 11:30".Utc(), "2016-02-25 12:00".Utc());
+							assignment1.AddActivity(brejk, "2016-02-25 15:00".Utc(), "2016-02-25 15:15".Utc());
+							_assignments.Add(assignment1);
 
-					var assignment2 = new PersonAssignment(roger, _scenario.Current(), "2016-02-26".Date());
-					assignment2.AddActivity(phone, "2016-02-26 08:00".Utc(), "2016-02-26 17:00".Utc());
-					assignment2.AddActivity(brejk, "2016-02-26 10:00".Utc(), "2016-02-26 10:15".Utc());
-					assignment2.AddActivity(lunch, "2016-02-26 11:30".Utc(), "2016-02-26 12:00".Utc());
-					assignment2.AddActivity(brejk, "2016-02-26 15:00".Utc(), "2016-02-26 15:15".Utc());
-					_assignments.Add(assignment2);
+							var assignment2 = new PersonAssignment(roger, _scenario.Current(), "2016-02-26".Date());
+							assignment2.AddActivity(phone, "2016-02-26 08:00".Utc(), "2016-02-26 17:00".Utc());
+							assignment2.AddActivity(brejk, "2016-02-26 10:00".Utc(), "2016-02-26 10:15".Utc());
+							assignment2.AddActivity(lunch, "2016-02-26 11:30".Utc(), "2016-02-26 12:00".Utc());
+							assignment2.AddActivity(brejk, "2016-02-26 15:00".Utc(), "2016-02-26 15:15".Utc());
+							_assignments.Add(assignment2);
 
-					var assignment3 = new PersonAssignment(roger, _scenario.Current(), "2016-02-27".Date());
-					assignment3.AddActivity(phone, "2016-02-27 08:00".Utc(), "2016-02-27 17:00".Utc());
-					assignment3.AddActivity(brejk, "2016-02-27 10:00".Utc(), "2016-02-27 10:15".Utc());
-					assignment3.AddActivity(lunch, "2016-02-27 11:30".Utc(), "2016-02-27 12:00".Utc());
-					assignment3.AddActivity(brejk, "2016-02-27 15:00".Utc(), "2016-02-27 15:15".Utc());
-					_assignments.Add(assignment3);
+							var assignment3 = new PersonAssignment(roger, _scenario.Current(), "2016-02-27".Date());
+							assignment3.AddActivity(phone, "2016-02-27 08:00".Utc(), "2016-02-27 17:00".Utc());
+							assignment3.AddActivity(brejk, "2016-02-27 10:00".Utc(), "2016-02-27 10:15".Utc());
+							assignment3.AddActivity(lunch, "2016-02-27 11:30".Utc(), "2016-02-27 12:00".Utc());
+							assignment3.AddActivity(brejk, "2016-02-27 15:00".Utc(), "2016-02-27 15:15".Utc());
+							_assignments.Add(assignment3);
+						});
 
+					});
 				});
-			});
 
 		}
 
@@ -194,17 +232,21 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			data.Apply(new PartTimePercentageConfigurable {Name = "partTimePercentage"});
 			data.Apply(new ContractScheduleConfigurable {Name = "contractSchedule"});
 
-			data.Apply(new RtaMapConfigurable {Activity = "Phone", PhoneState = "Ready", Adherence = "In", Name = "InAdherence"});
-			data.Apply(new RtaMapConfigurable {Activity = "Phone", PhoneState = "LoggedOff", Adherence = "Out", Name = "OutOfAdherence"});
+			PhoneStates().ForEach(s =>
+			{
+				data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = s, Adherence = "In", Name = "InAdherence" });
+				data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = s, Adherence = "Out", Name = "OutOfAdherence" });
+				data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = s, Adherence = "Out", Name = "OutOfAdherence" });
+			});
 
-			data.Apply(new RtaMapConfigurable {Activity = "Break", PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence"});
-			data.Apply(new RtaMapConfigurable {Activity = "Break", PhoneState = "Ready", Adherence = "Out", Name = "OutOfAdherence"});
-
-			data.Apply(new RtaMapConfigurable {Activity = "Lunch", PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence"});
-			data.Apply(new RtaMapConfigurable {Activity = "Lunch", PhoneState = "Ready", Adherence = "Out", Name = "OutOfAdherence"});
-
-			data.Apply(new RtaMapConfigurable {Activity = null, PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence"});
-
+			LoggedOffStates().ForEach(s =>
+			{
+				data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = s, Adherence = "Out", Name = "OutOfAdherence" });
+				data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = s, Adherence = "In", Name = "InAdherence" });
+				data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = s, Adherence = "In", Name = "InAdherence" });
+				data.Apply(new RtaMapConfigurable { Activity = null, PhoneState = s, Adherence = "In", Name = "InAdherence" });
+			});
+			
 			Enumerable.Range(0, (_testConfiguration.NumberOfMappings/4))
 				.ForEach(code =>
 				{
@@ -215,7 +257,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 					data.Apply(new RtaMapConfigurable {Activity = "Lunch", PhoneState = phoneState, Adherence = "Out", Name = "OutOfAdherence"});
 				});
 
-			Enumerable.Range(0, (_testConfiguration.NumberOfAgents/100) + 1)
+			Enumerable.Range(0, (_testConfiguration.NumberOfAgentsInSystem/100) + 1)
 				.ForEach(site =>
 				{
 					data.Apply(new SiteConfigurable
@@ -225,7 +267,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 					});
 				});
 
-			Enumerable.Range(0, (_testConfiguration.NumberOfAgents/10) + 1)
+			Enumerable.Range(0, (_testConfiguration.NumberOfAgentsInSystem/10) + 1)
 				.ForEach(team =>
 				{
 					data.Apply(new TeamConfigurable

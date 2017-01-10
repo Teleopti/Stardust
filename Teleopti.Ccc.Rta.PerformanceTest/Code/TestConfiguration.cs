@@ -5,16 +5,19 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public static int HashValue =>
 			sourceId.GetHashCode() ^
 			dataSourceId ^
-			numberOfAgents ^
+			numberOfAgentsInSystem ^
+			numberOfAgentsWorking ^
 			numberOfMappings ^ 
-			1123532; // change this whenever anything created by DataCreator changes
+			345452; // change this whenever anything created by DataCreator changes
 
-		private const int numberOfAgents = 2000;
+		private const int numberOfAgentsInSystem = 10000;
+		private const int numberOfAgentsWorking = 2000;
 		private const int numberOfMappings = 10000;
 		private const string sourceId = "8";
 		private const int dataSourceId = 9;
 
-		public int NumberOfAgents => numberOfAgents;
+		public int NumberOfAgentsInSystem => numberOfAgentsInSystem;
+		public int NumberOfAgentsWorking => numberOfAgentsWorking;
 		public int NumberOfMappings => numberOfMappings;
 
 		// this is the switch id

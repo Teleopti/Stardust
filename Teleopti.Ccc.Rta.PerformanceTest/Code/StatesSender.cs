@@ -15,25 +15,28 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	{
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _stateHolder;
+		private readonly DataCreator _data;
 		private readonly Http _http;
 
 		public StatesSender(
 			MutableNow now, 
 			TestConfiguration stateHolder,
+			DataCreator data,
 			Http http)
 		{
 			_now = now;
 			_stateHolder = stateHolder;
+			_data = data;
 			_http = http;
 		}
 
 		[TestLogTime]
 		public virtual void Send()
 		{
-			states().ForEach(stateChange =>
+			StateChanges().ForEach(stateChange =>
 			{
 				setTime(stateChange);
-				Enumerable.Range(0, _stateHolder.NumberOfAgents)
+				Enumerable.Range(0, _stateHolder.NumberOfAgentsWorking)
 					.ForEach(roger =>
 					{
 						_http.PostJson(
@@ -52,10 +55,10 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		public void SendBatches()
 		{
-			states().ForEach(stateChange =>
+			StateChanges().ForEach(stateChange =>
 			{
 				setTime(stateChange);
-				Enumerable.Range(0, _stateHolder.NumberOfAgents)
+				Enumerable.Range(0, _stateHolder.NumberOfAgentsWorking)
 					.Select(agent => new ExternalUserStateWebModel
 					{
 						AuthenticationKey = LegacyAuthenticationKey.TheKey,
@@ -76,62 +79,35 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
 		}
 
-		private static StateChange[] states()
+		// ~10% adherence changes
+		// 10 calls per hour
+		// 2 state changes per call
+		// 200+5 state changes
+		// 17 adherence changes
+		public IEnumerable<StateChange> StateChanges()
 		{
-			return new[]
-			{
-				new StateChange {Time = "2016-02-26 07:00", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 07:05", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 07:06", StateCode = "LoggedOff"},
+			var states = Enumerable.Empty<StateChange>();
 
-				// 08:00 phone
-				new StateChange {Time = "2016-02-26 08:01", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 08:30", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 08:32", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 09:00", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 09:05", StateCode = "Ready"},
+			states = states.Concat(_data.OffChangesFor("2016-02-26 07:00")); // 1 state changes, 1 adherence change(s)
+			// 08:00 phone
+			states = states.Concat(_data.PhoneChangesFor(20, "2016-02-26 08:01")); // 40 state changes,  2 adherence change(s)
+			// 10:00 break
+			states = states.Concat(_data.OffChangesFor("2016-02-26 10:01")); // 1 state changes,  2 adherence change(s)
+			// 10:15 phone
+			states = states.Concat(_data.PhoneChangesFor(10, "2016-02-26 10:16")); // 20 state changes,  2 adherence change(s)
+			// 11:30 lunch
+			states = states.Concat(_data.OffChangesFor("2016-02-26 10:35")); // 1 state changes,  2 adherence change(s)
+			// 12:00 phone
+			states = states.Concat(_data.PhoneChangesFor(30, "2016-02-26 11:55")); // 60 state changes,  2 adherence change(s)
+			// 15:00 break
+			states = states.Concat(_data.OffChangesFor("2016-02-26 14:55")); // 1 state changes,  2 adherence change(s)
+			// 15:15 phone
+			states = states.Concat(_data.PhoneChangesFor(20, "2016-02-26 15:16")); // 40 state changes,  2 adherence change(s)
+			// 17:00 off
+			states = states.Concat(_data.OffChangesFor("2016-02-26 17:05")); // 1 state changes,  2 adherence change(s)
 
-				// 10:00 break
-				new StateChange {Time = "2016-02-26 10:00", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 10:02", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 10:03", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 10:15", StateCode = "Ready"},
-
-				// 11:30 lunch
-				new StateChange {Time = "2016-02-26 11:35", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 11:36", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 11:37", StateCode = "LoggedOff"},
-
-				// 12:00 phone
-				new StateChange {Time = "2016-02-26 11:55", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 12:20", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 12:22", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 12:30", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 12:21", StateCode = "Ready"},
-
-				// 15:00 break
-				new StateChange {Time = "2016-02-26 14:55", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 15:02", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 15:03", StateCode = "LoggedOff"},
-
-				// 15:15 phone
-				new StateChange {Time = "2016-02-26 15:15", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 15:45", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 15:47", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 16:10", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 16:15", StateCode = "Ready"},
-
-				// 17:00 off
-				new StateChange {Time = "2016-02-26 17:05", StateCode = "LoggedOff"},
-				new StateChange {Time = "2016-02-26 17:10", StateCode = "Ready"},
-				new StateChange {Time = "2016-02-26 17:11", StateCode = "LoggedOff"},
-			};
+			return states;
 		}
 		
-		public IEnumerable<StateChange> SentSates()
-		{
-			return states();
-		}
-
 	}
 }

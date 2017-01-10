@@ -1,9 +1,6 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;

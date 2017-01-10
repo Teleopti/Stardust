@@ -258,6 +258,15 @@ namespace Teleopti.Ccc.Domain.Collection
 			yield return item;
 		}
 
+		public static IEnumerable<T> Infinite<T>(this IEnumerable<T> source)
+		{
+			while (true)
+			{
+				foreach (var a in source)
+					yield return a;
+			}
+		}
+
 		public static int IndexOf<T>(this IEnumerable<T> collection, T targetValue)
 		{
 			return collection.Select((value, index) => new { value, index })
