@@ -1533,7 +1533,7 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
-    <Compile Include="TestWithStaticDependenciesAvoidUse.cs" />
+    <Compile Include="TestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="OneTimeSetUp.cs" />
     <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />
     <Compile Include="Specification\AllTest.cs" />

@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.DomainTest
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			TestWithStaticDependenciesAvoidUse.BeforeTest();
+			TestWithStaticDependenciesAvoidUseAttribute.BeforeTest();
 			base.Setup(system, configuration);
 		}
 
 		protected override void AfterTest()
 		{
-			TestWithStaticDependenciesAvoidUse.AfterTest();
+			TestWithStaticDependenciesAvoidUseAttribute.AfterTest();
 		}
 	}
 }
