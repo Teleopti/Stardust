@@ -48,8 +48,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
 				if (resCalcData.SkillCombinationHolder != null)
+				{
 					_feedback.SendProgress("Starting SkillCombinationResource Read Model update.");
-				_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
+					_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
+				}
+					
 			}
 			_feedback.SendProgress("Starting purge ForeCastSkill Read Model");
 			_scheduleForecastSkillReadModelRepository.Purge();
