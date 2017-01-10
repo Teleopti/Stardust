@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -85,10 +84,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			createBudgetDay(budgetGroup1, new DateOnly(2016, 12, 28), 1, 2);
 
 			var allowanceDetailViewModels = RequestAllowanceViewModelFactory.CreateBudgetAbsenceAllowanceDetailViewModels(new DateOnly(2016, 12, 27), null);
-			allowanceDetailViewModels[0].Allowance.Should().Be(0);
-			allowanceDetailViewModels[1].TotalAllowance.Should().Be(0);
-			allowanceDetailViewModels[3].Allowance.Should().Be(1);
-			allowanceDetailViewModels[3].TotalAllowance.Should().Be(2);
+			allowanceDetailViewModels[0].AllowanceAfterThreshold.Should().Be(0);
+			allowanceDetailViewModels[1].Allowance.Should().Be(0);
+			allowanceDetailViewModels[3].AllowanceAfterThreshold.Should().Be(1);
+			allowanceDetailViewModels[3].Allowance.Should().Be(2);
 		}
 
 		[Test]
@@ -101,9 +100,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var allowanceDetailViewModels =
 				RequestAllowanceViewModelFactory.CreateBudgetAbsenceAllowanceDetailViewModels(new DateOnly(2016, 12, 27), null);
-			allowanceDetailViewModels[3].Allowance.Should().Be(1);
-			allowanceDetailViewModels[3].TotalAllowance.Should().Be(2);
-			allowanceDetailViewModels.Any(a => Math.Abs(a.Allowance - 3) < 0.0000001).Should().Be(false);
+			allowanceDetailViewModels[3].AllowanceAfterThreshold.Should().Be(1);
+			allowanceDetailViewModels[3].Allowance.Should().Be(2);
+			allowanceDetailViewModels.Any(a => Math.Abs(a.AllowanceAfterThreshold - 3) < 0.0000001).Should().Be(false);
 		}
 
 		[Test]
@@ -116,9 +115,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var allowanceDetailViewModels =
 				RequestAllowanceViewModelFactory.CreateBudgetAbsenceAllowanceDetailViewModels(new DateOnly(2016, 12, 27), budgetGroup2.Id);
-			allowanceDetailViewModels[3].Allowance.Should().Be(3);
-			allowanceDetailViewModels[3].TotalAllowance.Should().Be(4);
-			allowanceDetailViewModels.Any(a => Math.Abs(a.Allowance - 1) < 0.0000001).Should().Be(false);
+			allowanceDetailViewModels[3].AllowanceAfterThreshold.Should().Be(3);
+			allowanceDetailViewModels[3].Allowance.Should().Be(4);
+			allowanceDetailViewModels.Any(a => Math.Abs(a.AllowanceAfterThreshold - 1) < 0.0000001).Should().Be(false);
 		}
 
 		[Test]

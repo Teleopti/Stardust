@@ -2240,6 +2240,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allowance after threshold.
+        /// </summary>
+        public static string AllowanceAfterThreshold {
+            get {
+                return ResourceManager.GetString("AllowanceAfterThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow break contract max work time per week.
         /// </summary>
         public static string AllowBreakContractMaxWorkTimePerWeek {

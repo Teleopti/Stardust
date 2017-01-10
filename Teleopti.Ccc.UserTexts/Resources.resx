@@ -10309,6 +10309,10 @@ These options are activated:
     <value>Total allowance</value>
     <comment>total allowance</comment>
   </data>
+  <data name="AllowanceAfterThreshold" xml:space="preserve">
+    <value>Allowance after threshold</value>
+    <comment>Allowance after threshold</comment>
+  </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Can Change and Save</value>
   </data>

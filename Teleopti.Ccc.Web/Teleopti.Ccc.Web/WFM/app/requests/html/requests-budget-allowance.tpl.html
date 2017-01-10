@@ -30,9 +30,9 @@
 				</td>
 			</tr>
 			<tr class="weekview-tr">
-				<td class="weekview-td weekview-person-name ng-binding">{{"TotalAllowance"|translate}}</td>
+				<td class="weekview-td weekview-person-name ng-binding">{{"AllowanceAfterThreshold"|translate}}</td>
 				<td ng-repeat="allowance in vm.budgetAllowanceList" class="weekview-td ng-scope {{vm.getStyle(allowance)}}">
-					<div class="ng-binding pull-right">{{allowance.totalAllowance}}</div>
+					<div class="ng-binding pull-right">{{allowance.allowanceAfterThreshold}}</div>
 				</td>
 			</tr>
 			<tr class="weekview-tr">

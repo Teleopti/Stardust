@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			return budgetAbsenceAllowanceDetails.Select(budgetAbsenceAllowanceDetail => new BudgetAbsenceAllowanceDetailViewModel
 			{
 				AbsoluteDifference = budgetAbsenceAllowanceDetail.AbsoluteDifference,
-				Allowance = budgetAbsenceAllowanceDetail.Allowance,
-				TotalAllowance = budgetAbsenceAllowanceDetail.TotalAllowance,
+				AllowanceAfterThreshold = budgetAbsenceAllowanceDetail.Allowance,
+				Allowance = budgetAbsenceAllowanceDetail.TotalAllowance,
 				Date = budgetAbsenceAllowanceDetail.Date,
 				RelativeDifference =
 					double.IsNaN(budgetAbsenceAllowanceDetail.RelativeDifference.Value)
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private IEnumerable<IAbsence> getAbsencesInBudgetGroup(IBudgetGroup selectedBudgetGroup)
 		{
-			if (selectedBudgetGroup == null) return new IAbsence[] {};
+			if (selectedBudgetGroup == null) return new IAbsence[] { };
 			var absencesInBudgetGroup = new HashSet<IAbsence>();
 			foreach (
 				var budgetAbsence in

@@ -26,8 +26,8 @@
 				expect(target.budgetAllowanceList.length).toEqual(3);
 				var allowance1 = target.budgetAllowanceList[0];
 				expect(allowance1.date.format("YYYY-MM-DD")).toEqual("2016-12-30");
-				expect(allowance1.totalAllowance).toEqual("0.00");
 				expect(allowance1.allowance).toEqual("0.00");
+				expect(allowance1.allowanceAfterThreshold).toEqual("0.00");
 				expect(allowance1.usedTotal).toEqual("1.00");
 				expect(allowance1.absoluteDifference).toEqual("-1.00");
 				expect(allowance1.relativeDifference).toEqual("∞");
@@ -39,8 +39,8 @@
 
 				var allowance2 = target.budgetAllowanceList[1];
 				expect(allowance2.date.format("YYYY-MM-DD")).toEqual("2016-12-31");
-				expect(allowance2.totalAllowance).toEqual("0.00");
-				expect(allowance2.allowance).toEqual("0.00");
+				expect(allowance2.allowance).toEqual("2.00");
+				expect(allowance2.allowanceAfterThreshold).toEqual("1.00");
 				expect(allowance2.usedTotal).toEqual("0.00");
 				expect(allowance2.absoluteDifference).toEqual("0.00");
 				expect(allowance2.relativeDifference).toEqual("-");
@@ -52,8 +52,8 @@
 
 				var allowance3 = target.budgetAllowanceList[2];
 				expect(allowance3.date.format("YYYY-MM-DD")).toEqual("2017-01-01");
-				expect(allowance3.totalAllowance).toEqual("3.00");
-				expect(allowance3.allowance).toEqual("3.00");
+				expect(allowance3.allowance).toEqual("4.00");
+				expect(allowance3.allowanceAfterThreshold).toEqual("2.00");
 				expect(allowance3.usedTotal).toEqual("1.00");
 				expect(allowance3.absoluteDifference).toEqual("2.00");
 				expect(allowance3.relativeDifference).toEqual("33.33%");
@@ -92,7 +92,7 @@
 						data: [
 							{
 								"Allowance": 0,
-								"TotalAllowance": 0,
+								"AllowanceAfterThreshold": 0,
 								"UsedAbsencesDictionary":
 								{
 									"Illness": 0,
@@ -107,8 +107,8 @@
 								"IsWeekend": false
 							},
 							{
-								"Allowance": 0,
-								"TotalAllowance": 0,
+								"Allowance": 2,
+								"AllowanceAfterThreshold": 1,
 								"UsedAbsencesDictionary":
 								{
 									"Illness": 0,
@@ -123,8 +123,8 @@
 								"IsWeekend": true
 							},
 							{
-								"Allowance": 3,
-								"TotalAllowance": 3,
+								"Allowance": 4,
+								"AllowanceAfterThreshold": 2,
 								"UsedAbsencesDictionary":
 								{
 									"Illness": 0,

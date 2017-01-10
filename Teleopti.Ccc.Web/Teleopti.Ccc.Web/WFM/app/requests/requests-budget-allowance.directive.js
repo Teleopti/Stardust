@@ -63,8 +63,8 @@
 
 						var allowanceModel = {
 							date: moment(allowance.Date),
-							totalAllowance: numberFilter(allowance.TotalAllowance, fractionSize),
 							allowance: numberFilter(allowance.Allowance, fractionSize),
+							allowanceAfterThreshold: numberFilter(allowance.AllowanceAfterThreshold, fractionSize),
 							usedTotal: numberFilter(allowance.UsedTotalAbsences, fractionSize),
 							absoluteDifference: numberFilter(allowance.AbsoluteDifference, fractionSize),
 							relativeDifference: relativeDifference,
