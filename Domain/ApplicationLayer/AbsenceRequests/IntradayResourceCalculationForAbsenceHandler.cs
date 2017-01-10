@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					        _businessUnitScope.OnThisThreadUse(businessUnit);
 							_publisher.Publish(new UpdateStaffingLevelReadModelEvent()
 					        {
-								StartDateTime = now.AddHours(-24),
-						        EndDateTime = now.AddHours(24)
+								StartDateTime = now.AddHours(-25),
+						        EndDateTime = now.AddHours(25)
 					        });
 				        }
 			        }
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						_businessUnitScope.OnThisThreadUse(businessUnit);
 						_publisher.Publish(new UpdateStaffingLevelReadModelEvent()
 						{
-							StartDateTime = now.AddHours(-24),
-							EndDateTime = now.AddHours(24)
+							StartDateTime = now.AddHours(-25),
+							EndDateTime = now.AddHours(25)
 						});
 					}
 

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Handle(new TenantMinuteTickEvent());
             Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
 	        var StardustEvent = Publisher.PublishedEvents.FirstOrDefault() as UpdateStaffingLevelReadModelEvent;
-	        StardustEvent.StartDateTime.Should().Be.EqualTo(new DateTime(2016, 02, 01, 8, 10, 0, DateTimeKind.Utc));
+	        StardustEvent.StartDateTime.Should().Be.EqualTo(new DateTime(2016, 02, 01, 7, 10, 0, DateTimeKind.Utc));
 
         }
 

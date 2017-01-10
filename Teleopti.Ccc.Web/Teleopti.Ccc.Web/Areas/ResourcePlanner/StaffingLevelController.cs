@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			_publisher.Publish(new UpdateStaffingLevelReadModelEvent()
 			{
-				StartDateTime = now.AddHours(-24),
-				EndDateTime = now.AddHours(24),
+				StartDateTime = now.AddHours(-25),
+				EndDateTime = now.AddHours(25),
 				RequestedFromWeb = true
 			});
 

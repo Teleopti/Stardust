@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period, bool muteEvent = false)
 		{
-			AddActivity(activity, period, null,false, muteEvent);
+			AddActivity(activity, period, null, muteEvent);
 		}
 
 		public virtual void AddActivity(IActivity activity, TimePeriod period)
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			AddActivity(activity, periodAsDateTimePeriod);
 		}
 
-		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false, bool muteEvent = false)
+		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
 			addActivityInternal(activity, period);
 			if (!muteEvent)
@@ -397,21 +397,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
 						activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
 					}
-					return activityAddedEvent;
-				});
-			}
-			
-			if (triggerResourceCalcualtion)
-			{
-				AddEvent(() =>
-				{
-					var activityAddedEvent = new UpdateStaffingLevelReadModelEvent()
-					{
-						InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.Value,
-						StartDateTime = period.StartDateTime,
-						EndDateTime = period.EndDateTime
-					};
-					
 					return activityAddedEvent;
 				});
 			}

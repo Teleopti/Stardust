@@ -58,7 +58,7 @@ namespace Teleopti.Interfaces.Domain
 		bool AssignedWithDayOff(IDayOffTemplate template);
 		void FillWithDataFrom(IPersonAssignment personAssignmentSource, bool muteEvent = false);
 		void AddActivity(IActivity activity, DateTimePeriod period, bool muteEvent = false);
-		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false, bool muteEvent = false);
+		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false);
 		void SetShiftCategory(IShiftCategory shiftCategory, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment);
 		void InsertActivity(IActivity activity, DateTimePeriod period, int index);
