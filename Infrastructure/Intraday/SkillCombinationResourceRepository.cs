@@ -93,20 +93,38 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var skillCombinations = loadSkillCombination();
 
-			foreach (var skillCombinationResource in skillCombinationResources)
+			var connectionString = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session().Connection.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
 			{
-				var key = keyFor(skillCombinationResource.SkillCombination);
-				Guid id;
-				if (!skillCombinations.TryGetValue(key, out id))
-				{
-					id = persistSkillCombination(skillCombinationResource.SkillCombination);
-					skillCombinations.Add(key, id);
-				}
-				var connectionString = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session().Connection.ConnectionString;
+				connection.Open();
 
-				using (var connection = new SqlConnection(connectionString))
+				using (var deleteCommand = new SqlCommand($@"
+						DELETE FROM [ReadModel].[SkillCombinationResource] 
+						WHERE StartDateTime < '{insertedOn.AddHours(-1)}'", connection))
 				{
-					connection.Open();
+					deleteCommand.ExecuteNonQuery();
+				}
+
+				using (var deleteCommand = new SqlCommand($@"
+						DELETE FROM [ReadModel].[SkillCombinationResourceDelta] 
+						WHERE StartDateTime < '{insertedOn.AddHours(-1)}'", connection))
+				{
+					deleteCommand.ExecuteNonQuery();
+				}
+
+
+				foreach (var skillCombinationResource in skillCombinationResources)
+				{
+					var key = keyFor(skillCombinationResource.SkillCombination);
+					Guid id;
+					if (!skillCombinations.TryGetValue(key, out id))
+					{
+						id = persistSkillCombination(skillCombinationResource.SkillCombination);
+						skillCombinations.Add(key, id);
+					}
+					
+
+
 					using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
 					{
 						using (var deleteCommand = new SqlCommand($@"
@@ -126,7 +144,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 							deleteCommand.ExecuteNonQuery();
 						}
 
-						if (skillCombinationResource.StartDateTime > insertedOn.AddHours(-1))
+						if (skillCombinationResource.StartDateTime > insertedOn.AddHours(-1) && skillCombinationResource.StartDateTime < insertedOn.AddDays(1).AddHours(1))
 						{
 							using (var insertCommand = new SqlCommand(@"
 							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
@@ -138,7 +156,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 								insertCommand.Parameters.AddWithValue("@Resource", skillCombinationResource.Resource);
 								insertCommand.Parameters.AddWithValue("@InsertedOn", insertedOn);
 								insertCommand.Parameters.AddWithValue("@BusinessUnit", bu);
-								
+
 								insertCommand.ExecuteNonQuery();
 							}
 						}
