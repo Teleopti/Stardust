@@ -16,27 +16,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays, IPerson person, DateOnly datePointer)
 		{
-			IList<IShiftProjectionCache> openShifts = new List<IShiftProjectionCache>();
 			var skillDays = allSkillDays.Where(x => x.CurrentDate == datePointer || x.CurrentDate == datePointer.AddDays(-1) || x.CurrentDate == datePointer.AddDays(1));
-			foreach (var shiftProjectionCache in shifts)
+
+			var agentTimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+			return shifts.Select(shiftProjectionCache => new
 			{
-				var isClosed = false;
-				foreach (var visualLayer in shiftProjectionCache.MainShiftProjection)
-				{
-					if (!_isAnySkillOpen.Check(skillDays, visualLayer, person.PermissionInformation.DefaultTimeZone()))
-					{
-						isClosed = true;
-						break;
-					}
-				}
-
-				if (!isClosed)
-				{
-					openShifts.Add(shiftProjectionCache);
-				}
-			}
-
-			return openShifts;
+				shiftProjectionCache,
+				isClosed = shiftProjectionCache.MainShiftProjection.Any(
+					visualLayer => !_isAnySkillOpen.Check(skillDays, visualLayer, agentTimeZoneInfo))
+			}).Where(t => !t.isClosed).Select(t => t.shiftProjectionCache).ToList();
 		}
 	}
 }

@@ -39,20 +39,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	    private IEnumerable<IWorkShiftRuleSet> filterForShiftsForRestrictions(IEnumerable<IWorkShiftRuleSet> filteredList)
 	    {
-		    var result = new List<IWorkShiftRuleSet>();
-		    foreach (var workShiftRuleSet in filteredList)
-		    {
-				if(!workShiftRuleSet.OnlyForRestrictions)
-					result.Add(workShiftRuleSet);
-		    }
-
+		    var result = filteredList.Where(w => !w.OnlyForRestrictions);
 		    return result;
 	    }
 
 	    public IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly explicitDateToCheck, ISchedulingOptions schedulingOptions, bool useShiftsForRestrictions)
         {
 	        var extractedRuleSetBags = new[] { _ruleSetBagExtractorProvider.Fetch(schedulingOptions).GetRuleSetBagForTeamMember(person, explicitDateToCheck)};
-			var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(new DateOnlyPeriod(explicitDateToCheck, explicitDateToCheck), extractedRuleSetBags);
+			var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(explicitDateToCheck.ToDateOnlyPeriod(), extractedRuleSetBags);
 			if (!useShiftsForRestrictions)
 				filteredList = filterForShiftsForRestrictions(filteredList);
 
@@ -61,16 +55,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	    private IEnumerable<IWorkShiftRuleSet> filterForSkillActivity(IEnumerable<IWorkShiftRuleSet> filteredList, ITeamBlockInfo teamBlockInfo, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 	    {
-		    var retList = new List<IWorkShiftRuleSet>();
 		    var aggregatedSkills = groupPersonSkillAggregator.AggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers,
 				teamBlockInfo.BlockInfo.BlockPeriod).ToList();
-		    foreach (var workShiftRuleSet in filteredList)
-		    {
-			    if (_ruleSetSkillActivityChecker.CheckSkillActivities(workShiftRuleSet, aggregatedSkills))
-					retList.Add(workShiftRuleSet);
-		    }
-
-		    return retList;
+		    return filteredList.Where(w => _ruleSetSkillActivityChecker.CheckSkillActivities(w, aggregatedSkills));
 	    }
     }
 }

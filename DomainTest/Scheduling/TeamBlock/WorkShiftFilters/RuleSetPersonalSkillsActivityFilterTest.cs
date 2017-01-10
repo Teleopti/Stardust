@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_ruleSetList, _person, DateOnly.MinValue).ToList();
+				var result = _target.Filter(_ruleSetList, _person.Period(DateOnly.MinValue), DateOnly.MinValue).ToList();
 				Assert.AreEqual(1, result.Count);
 				Assert.AreSame(_ruleSet2, result[0]);
 			}

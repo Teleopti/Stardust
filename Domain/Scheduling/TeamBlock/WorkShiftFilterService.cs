@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (teamBlockInfo == null)
 				return null;
 			var matrixList =
-				teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, new DateOnlyPeriod(dateOnly, dateOnly)).ToList();
+				teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, dateOnly.ToDateOnlyPeriod()).ToList();
 			if (matrixList.Count == 0) return null;
 			var currentSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
 			if (!currentSchedulePeriod.IsValid)
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
 			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForTeamMember(person, dateOnly, schedulingOptions, useShiftsForRestrictions);
-			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.Filter(filteredRuleSetList, person, dateOnly);
+			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.Filter(filteredRuleSetList, person.Period(dateOnly), dateOnly);
 
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,
 				person.PermissionInformation.DefaultTimeZone(), filteredRuleSetList, false, false);
