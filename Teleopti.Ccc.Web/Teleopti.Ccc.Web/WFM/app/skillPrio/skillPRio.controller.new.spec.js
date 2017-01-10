@@ -210,7 +210,7 @@ describe('skillPrioControllerNew', function () {
     vm.selectActivity(vm.activites[0]);
     vm.moveBackToUnsort(vm.cascadeList[0].Skills, vm.skills[2]);
 
-    expect(vm.cascadeList.length).toBe(2);
+    expect(vm.cascadeList.length).toBe(1);
     expect(vm.unsortedList.length).toBe(2);
   });
 
