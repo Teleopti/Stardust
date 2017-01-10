@@ -10210,7 +10210,7 @@ These options are activated:
     <comment>threshold for budgeted allowance</comment>
   </data>
   <data name="Allowance" xml:space="preserve">
-    <value>Allowance</value>
+    <value>Allowance After Threshold</value>
     <comment>budgeted allowance</comment>
   </data>
   <data name="BudgetedLeave" xml:space="preserve">
@@ -10306,7 +10306,7 @@ These options are activated:
     <value>The input text can not be empty.</value>
   </data>
   <data name="TotalAllowance" xml:space="preserve">
-    <value>Total allowance</value>
+    <value>Full Allowance</value>
     <comment>total allowance</comment>
   </data>
   <data name="AllowanceAfterThreshold" xml:space="preserve">

@@ -2231,7 +2231,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allowance.
+        ///   Looks up a localized string similar to Allowance After Threshold.
         /// </summary>
         public static string Allowance {
             get {
@@ -31834,7 +31834,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total allowance.
+        ///   Looks up a localized string similar to Full Allowance.
         /// </summary>
         public static string TotalAllowance {
             get {
