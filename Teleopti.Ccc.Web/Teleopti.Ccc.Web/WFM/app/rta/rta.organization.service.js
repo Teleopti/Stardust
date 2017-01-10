@@ -10,7 +10,7 @@
 	function RtaOrganizationService($filter, $q, RtaService) {
 		var sites = RtaService.getSites ? RtaService.getSites() : null;
 		var teams = undefined;
-		
+
 		var service = {
 			getSiteName: getSiteName,
 			getTeamName: getTeamName,

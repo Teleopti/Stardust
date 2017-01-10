@@ -6,9 +6,14 @@
 
 	function RtaAdherenceService() {
 
-		var service = {};
+		var service = {
+			updateAdherence: updateAdherence
+		};
 
-		service.updateAdherence = function(stuff, adherences) {
+		return service;
+		///////////////////////////
+
+		function updateAdherence(stuff, adherences) {
 			adherences.forEach(function(adherence) {
 				var match = stuff.filter(function(item) {
 					return item.Id === adherence.Id;
@@ -17,7 +22,5 @@
 					match[0].OutOfAdherence = adherence.OutOfAdherence ? adherence.OutOfAdherence : 0;
 			});
 		}
-
-		return service;
 	};
 })();

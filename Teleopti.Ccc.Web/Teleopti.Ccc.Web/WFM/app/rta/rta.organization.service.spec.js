@@ -1,5 +1,4 @@
-﻿
-'use strict';
+﻿'use strict';
 describe('RtaOrganizationService', function() {
 	var $q,
 		$rootScope,

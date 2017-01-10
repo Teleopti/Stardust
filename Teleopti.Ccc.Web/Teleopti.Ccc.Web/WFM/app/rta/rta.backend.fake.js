@@ -591,6 +591,6 @@
 			return this;
 		}
 
-		return this;
+		return service;
 	};
 })();

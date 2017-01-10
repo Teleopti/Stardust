@@ -1,6 +1,7 @@
 (function() {
 	'use strict';
-	angular.module('wfm.rta')
+	angular
+		.module('wfm.rta')
 		.factory('RtaGridService', RtaGridService);
 
 	RtaGridService.$inject = ['Toggle', 'uiGridConstants', 'RtaLocaleLanguageSortingService'];
