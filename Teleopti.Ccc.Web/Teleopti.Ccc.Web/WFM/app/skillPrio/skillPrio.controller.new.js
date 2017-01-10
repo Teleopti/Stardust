@@ -7,7 +7,7 @@
 
 	skillPrioController.$inject = ['$filter', 'Toggle', '$location', 'NoticeService', '$translate', '$q', 'skillPrioServiceNew'];
 
-	function skillPrioController($filter, toggleService, $location, NoticeService, $translate, $q,  skillPrioServiceNew) {
+	function skillPrioController($filter, toggleService, $location, NoticeService, $translate, $q, skillPrioServiceNew) {
 		var vm = this;
 
 		vm.ismodified = false;
@@ -71,27 +71,19 @@
 				}
 			},
 			dragMove: function(event) {
+				var placeholder = document.getElementsByClassName("angular-ui-tree-placeholder");
+				for (var i = 0; i < placeholder.length; i++) {
+					placeholder[i].innerHTML = "<div class='flip mdi mdi-exit-to-app'></div>";
+				}
 				if (vm.cascadeList.length === 0) {
 					addNewRow();
 				}
-
-//temp
-var placeholder = document.getElementsByClassName("angular-ui-tree-placeholder");
-for (var i = 0; i < placeholder.length; i++) {
-	placeholder[i].innerHTML = "<div class='flip mdi mdi-exit-to-app'></div>";
-}
-
 				if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
-					//event.source.nodeScope.$$apply = false;
 					event.dest.nodesScope.nodropEnabled = true;
 					event.elements.placeholder.remove();
 				}
 			}
 		};
-
-		// if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
-		//
-		// }
 
 		function addNewRow() {
 			var newRow = {
@@ -109,24 +101,24 @@ for (var i = 0; i < placeholder.length; i++) {
 		}
 
 		function autoDeleteEmptyRow() {
-			if (vm.cascadeList.length === 1 && vm.cascadeList[0].Skills.length === 0) {
-				vm.cascadeList = [];
-			}
-			for (var i = 0; i < vm.cascadeList.length - 1; i++) {
+			for (var i = 0; i < vm.cascadeList.length; i++) {
 				if (vm.cascadeList[i].Skills.length === 0) {
 					vm.cascadeList.splice(i, 1);
 					resetCascadeLevel();
 				}
+				if (vm.cascadeList[0].Skills.length === 0) {
+					vm.cascadeList= [];
+				}
 			}
 		}
 
-		function resetCascadeLevel(){
+		function resetCascadeLevel() {
 			for (var i = 0; i < vm.cascadeList.length; i++) {
-				vm.cascadeList[i].Priority =  i + 1;
+				vm.cascadeList[i].Priority = i + 1;
 			}
 		}
 
-		function autoSortSkillByEachRow(){
+		function autoSortSkillByEachRow() {
 			for (var i = 0; i < vm.cascadeList.length - 1; i++) {
 				vm.cascadeList[i].Skills.sort(sortBySkillName);
 			}
