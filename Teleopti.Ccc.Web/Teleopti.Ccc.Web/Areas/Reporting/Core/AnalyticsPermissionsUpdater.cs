@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
@@ -33,27 +36,50 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitId);
 			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 
-			var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId, businessUnit.BusinessUnitId);
-			if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))
-				return;
+			var distributedLock = getDistributedLock(personId, businessUnit);
+			if (distributedLock == null) return;
+			try
+			{
+				var currentPermissions = _permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId).ToList();
+				var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId);
 
-			var distributedLock = _distributedLockAcquirer.LockForGuid(typeof(AnalyticsPermissionsUpdater), personId);
+				var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Any(x => x.Equals(p)));
+				var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Any(x => x.Equals(p)));
+				_analyticsPermissionRepository.InsertPermissions(toBeAdded);
+				_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
+
+				_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
+			}
+			catch (Exception)
+			{
+				distributedLock.Dispose();
+				throw;
+			}
+
 			_analyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
+			{
+				distributedLock.Dispose();
+			});
+		}
+
+		private IDisposable getDistributedLock(Guid personId, AnalyticBusinessUnit businessUnit)
+		{
+			for (var i = 0; i < 5; i++)
+			{
+				try
 				{
-					distributedLock.Dispose();
+					var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId, businessUnit.BusinessUnitId);
+					if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))
+						return null;
+					 return _distributedLockAcquirer.LockForGuid(this, personId);
 				}
-			);
-
-			var currentPermissions = _permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId).ToList();
-			var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId);
-
-			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Any(x => x.Equals(p)));
-			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Any(x => x.Equals(p)));
-			_analyticsPermissionRepository.InsertPermissions(toBeAdded);
-			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
-
-			_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
-
+				catch (DistributedLockException)
+				{
+					if (i == 4)
+						throw;
+				}
+			}
+			throw new DistributedLockException("Failed to aquire a distributed lock");
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,29 +19,55 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void DeletePermissions(IEnumerable<AnalyticsPermission> permissions)
 		{
-			foreach (var permission in permissions)
+			runWithBulk(session =>
 			{
-				_analyticsUnitOfWork.Current().Session().Delete(permission);
-			}
+				foreach (var permission in permissions)
+				{
+					session.Delete(permission);
+				}
+			});
 		}
 
 		public void InsertPermissions(IEnumerable<AnalyticsPermission> permissions)
 		{
-			foreach (var permission in permissions)
+			runWithBulk(session =>
 			{
-				_analyticsUnitOfWork.Current().Session().Save(permission);
-			}
+				foreach (var permission in permissions)
+				{
+					session.Insert(permission);
+				}
+			});
 		}
 
 		public IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId, int businessUnitId)
 		{
-
 			var query = _analyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsPermission>()
 				.Add(Restrictions.Eq(nameof(AnalyticsPermission.PersonCode), personId))
 				.Add(Restrictions.Eq(nameof(AnalyticsPermission.BusinessUnitId), businessUnitId));
 
 			var result = query.List<AnalyticsPermission>();
 			return result;
+		}
+
+		private void runWithBulk(Action<IStatelessSession> action)
+		{
+			using (var session = _analyticsUnitOfWork.Current().Session().SessionFactory.OpenStatelessSession())
+			{
+				using (var transaction = session.BeginTransaction())
+				{
+					try
+					{
+						action(session);
+					}
+					catch (Exception)
+					{
+						transaction.Rollback();
+						throw;
+					}
+					
+					transaction.Commit();
+				}
+			}
 		}
 	}
 }
