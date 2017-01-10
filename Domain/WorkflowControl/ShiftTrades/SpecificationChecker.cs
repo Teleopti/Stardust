@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				var result = specification.Validate(swapDetails);
 				if (!result.IsOk)
 				{
-					return result;
+					return new ShiftTradeRequestValidationResult(result.IsOk, true, result.DenyReason);
 				}
 			}
 			return new ShiftTradeRequestValidationResult(true);

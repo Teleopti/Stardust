@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			var specificationChecker = new SpecificationChecker(specifications);
 			validator = new ShiftTradeValidator(MockRepository.GenerateMock<IShiftTradeLightValidator>(), specificationChecker);
-			checkResult(validator.Validate(details), false, false, denyReason);
+			checkResult(validator.Validate(details), false, true, denyReason);
 		}
 
 		[Test]

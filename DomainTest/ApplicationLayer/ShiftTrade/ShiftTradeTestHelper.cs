@@ -72,16 +72,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeMaxSeatValidator = new ShiftTradeMaxSeatValidator(_currentScenario, _scheduleStorage, _personRepository);
 			_activeShiftTradeMaxSeatValidator = _shiftTradeMaxSeatValidator;
 
-			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
-			{
-				new ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
-				new ShiftTradeMaxSeatsSpecification (_globalSettingDataRepository, _shiftTradeMaxSeatReadModelValidator)
-			};
-			var specificatonChecker = new SpecificationChecker(shiftTradeSpecifications);
+			var specificatonChecker = new SpecificationChecker(GetDefaultShiftTradeSpecifications());
 
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificatonChecker);
 			_loadSchedulingDataForRequestWithoutResourceCalculation =
 				new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
+		}
+
+		internal void UseSpecificationCheckerWithConfig(IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications,
+			IGlobalSettingDataRepository globalSettingDataRepository)
+		{
+			var specificatonChecker = new SpecificationCheckerWithConfig(shiftTradeSpecifications, globalSettingDataRepository);
+			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificatonChecker);
+		}
+
+		internal void UseSpecificationChecker(IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
+		{
+			var specificatonChecker = new SpecificationChecker(shiftTradeSpecifications);
+			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificatonChecker);
+		}
+
+		internal List<IShiftTradeSpecification> GetDefaultShiftTradeSpecifications()
+		{
+			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
+			{
+				new ValidatorSpecificationForTest(true, "_openShiftTradePeriodSpecification"),
+				new ShiftTradeMaxSeatsSpecification(_globalSettingDataRepository, _shiftTradeMaxSeatReadModelValidator)
+			};
+			return shiftTradeSpecifications;
 		}
 
 		internal void UseMaxSeatReadModelValidator(bool useReadModelForValidation)
@@ -190,6 +208,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		internal void HandleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, bool toggle39473IsOff = false, IBusinessRuleProvider businessRuleProvider = null)
 		{
+			setShiftTradeRequestHandler(toggle39473IsOff, businessRuleProvider);
+			_target.Handle(acceptShiftTradeEvent);
+		}
+
+		internal void HandleRequest(NewShiftTradeRequestCreatedEvent newShiftTradeRequestCreatedEvent, bool toggle39473IsOff = false, IBusinessRuleProvider businessRuleProvider = null)
+		{
+			setShiftTradeRequestHandler(toggle39473IsOff, businessRuleProvider);
+			_target.Handle(newShiftTradeRequestCreatedEvent);
+		}
+
+		private void setShiftTradeRequestHandler(bool toggle39473IsOff, IBusinessRuleProvider businessRuleProvider)
+		{
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_currentScenario, _personRequestRepository, _scheduleStorage, _personRepository
 				, new PersonRequestAuthorizationCheckerForTest(), _scheduleDifferenceSaver,
@@ -197,7 +227,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				businessRuleProvider ?? _businessRuleProvider,
 				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService);
-			_target.Handle(acceptShiftTradeEvent);
 		}
 
 		internal PersonAbsenceAccount CreatePersonAbsenceAccount(IPerson person, DateOnly scheduleDateOnly)

@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 
 			validator.Stub(x => x.Validate((IShiftTradeRequest)personRequest.Request))
-				.Return(new ShiftTradeRequestValidationResult(false));
+				.Return(new ShiftTradeRequestValidationResult(false, true, string.Empty));
 			personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
