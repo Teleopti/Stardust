@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
 	public class OvertimeOnScheduleDaysTest : IConfigureToggleManager
