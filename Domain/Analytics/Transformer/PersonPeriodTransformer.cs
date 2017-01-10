@@ -118,7 +118,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 			var validFromDateId = _analyticsPersonPeriodDateFixer.MapDateId(validFromDate);
 			var validToDateId = _analyticsPersonPeriodDateFixer.MapDateId(validToDate);
-			var maxDate = _analyticsDateRepository.MaxDate();
 			var validToDateIdMaxDate = _analyticsPersonPeriodDateFixer.GetValidToDateIdMaxDate(validToDate, validToDateId);
 
 			var validFromDateLocal = _analyticsPersonPeriodDateFixer.ValidFromDateLocal(personPeriodStartDate);

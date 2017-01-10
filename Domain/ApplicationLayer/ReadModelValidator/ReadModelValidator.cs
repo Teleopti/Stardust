@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 			if (mode == ReadModelValidationMode.Reinitialize)
 			{
-				using(var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using(_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					if (_readModelPersonScheduleDayValidator.IsInitialized() ||
 						_readModelScheduleProjectionReadOnlyValidator.IsInitialized() || _readModelScheduleDayValidator.IsInitialized())
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				}
 			}			
 
-			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				personIds = _personRepository.LoadAll().Select(x => x.Id.Value).ToList();
 				scenario = _currentScenario.Current();

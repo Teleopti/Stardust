@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
 			var person = _persons.Load(personId);
-			var tz = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
 			var utcDateTime = utcDateTimeForOoa(person);
 			var schedule = getCurrentSchedules(person);
 

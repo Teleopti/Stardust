@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			if (@event.Targets.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
 				IList<ReadModelValidationResult> invalidRecords;
-				using(var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using(_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					invalidRecords = _persister.LoadAllInvalidScheduleProjectionReadOnly().ToList();
 				}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			if (@event.Targets.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{				
 				IList<ReadModelValidationResult> invalidRecords;
-				using(var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using(_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					invalidRecords = _persister.LoadAllInvalidPersonScheduleDay().ToList();
 				}
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			if(@event.Targets.HasFlag(ValidateReadModelType.ScheduleDay))
 			{				
 				IList<ReadModelValidationResult> invalidRecords;
-				using(var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using(_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					invalidRecords = _persister.LoadAllInvalidScheduleDay().ToList();
 				}

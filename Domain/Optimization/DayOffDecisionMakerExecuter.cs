@@ -450,7 +450,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					var resCalcData = _schedulingResultStateHolder.ToResourceOptimizationData(schedulingOptions.ConsiderShortBreaks, false);
 					foreach (DateOnly dateOnly1 in toResourceCalculate)
 					{
-						bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
 						_resourceOptimizationHelper.ResourceCalculate(dateOnly1, resCalcData);
 						_resourceOptimizationHelper.ResourceCalculate(dateOnly1.AddDays(1), resCalcData);
 					}
