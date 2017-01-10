@@ -69,6 +69,9 @@
 				if (vm.cascadeList.length === 0) {
 					addNewRow();
 				}
+				if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
+					
+				}
 			}
 		};
 

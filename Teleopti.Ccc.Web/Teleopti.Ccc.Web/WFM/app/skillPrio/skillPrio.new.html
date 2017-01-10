@@ -48,7 +48,6 @@
 					<label for="filter" class="input-icon">
             <i class="mdi mdi-filter-outline">
               <input type="text" id="filter" ng-model="skillFilter.SkillName" placeholder="filter skills...">
-              <md-tooltip>Filter skills</md-tooltip>
             </i>
           </label>
 				</div>
@@ -75,11 +74,9 @@
 									<li ui-tree-node ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
 										<span id="card">
 												{{Skill.SkillName}}
-												<a data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" class="drag-handle-delete" style="padding:10px;">
-													<i class="mdi" ng-class="{'mdi-close':true}">
+													<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" class="mdi mdi-arrow-left-bold drag-handle-delete">
 														<md-tooltip>Move skill to unsorted list</md-tooltip>
 													</i>
-												</a>
 										</span>
 									</li>
 								</ol>
