@@ -103,33 +103,26 @@ ORDER BY AlarmStartTime ASC ",
 			var builder = new StringBuilder("SELECT DISTINCT TOP 50 a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
 			if (selections.Any(SelectionType.Skill))
 			{
-				builder.Append(selections.SkillQuery());
+				builder.Append(selections.QueryFor(SelectionType.Skill).Single());
 				if (selections.Any(SelectionType.Org))
-				{
 					builder
 						.Append(" AND ")
-						.Append(selections.OrganizationQuery());
-				}
+						.Append("(" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
 			}
-			else if (selections.Any(SelectionType.Org))
-			{
+			else
 				builder
 					.Append(" WHERE ")
-					.Append(selections.OrganizationQuery());
-			}
-			if (selections.Any(SelectionType.ExcludeStateGroups))
-			{
-				builder
-					.Append(" AND ")
-					.Append(selections.ExcludedStateGroupsQuery());
+					.Append("(" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
 
-			}
-			if (selections.Any(SelectionType.Alarm))
-			{
+			if (selections.Any(SelectionType.ExcludeStateGroups))
 				builder
 					.Append(" AND ")
-					.Append(selections.InAlarmQuery());
-			}
+					.Append("(" + selections.QueryFor(SelectionType.ExcludeStateGroups).Single() + ")");
+
+			if (selections.Any(SelectionType.Alarm))
+				builder
+					.Append(" AND ")
+					.Append(selections.QueryFor(SelectionType.Alarm).Single());
 
 			return new Selection
 			{

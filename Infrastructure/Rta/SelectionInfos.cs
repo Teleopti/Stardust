@@ -32,28 +32,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			return _data.Any(x => x.SelectionType == selectionType);
 		}
-
-		public string SkillQuery()
-		{
-			return queryFor(SelectionType.Skill).Single();
-		}
-
-		public string OrganizationQuery()
-		{
-			return "(" + string.Join(" OR ", queryFor(SelectionType.Org)) + ")";
-		}
 		
-		public string ExcludedStateGroupsQuery()
-		{
-			return "(" + queryFor(SelectionType.ExcludeStateGroups).Single() + ")";
-		}
-
-		public string InAlarmQuery()
-		{
-			return queryFor(SelectionType.Alarm).Single();
-		}
-
-		private IEnumerable<string> queryFor(SelectionType selectionType)
+		public IEnumerable<string> QueryFor(SelectionType selectionType)
 		{
 			return _data
 				.Where(x => x.SelectionType == selectionType)
