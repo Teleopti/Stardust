@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			}
 		}
 
-		public double Allowance
+		public double ShrinkedAllowance
 		{
 			get { return _allowance; }
 			set
@@ -402,12 +402,12 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_allowance != value)
 				{
 					_allowance = value;
-					TriggerNotifyPropertyChanged(nameof(Allowance));
+					TriggerNotifyPropertyChanged(nameof(ShrinkedAllowance));
 				}
 			}
 		}
 
-		public double TotalAllowance
+		public double FullAllowance
 		{
 			get { return _totalAllowance; }
 			set
@@ -415,7 +415,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_totalAllowance != value)
 				{
 					_totalAllowance = value;
-					TriggerNotifyPropertyChanged(nameof(TotalAllowance));
+					TriggerNotifyPropertyChanged(nameof(FullAllowance));
 				}
 			}
 		}
@@ -452,8 +452,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			DifferencePercent = result.DifferencePercent;
 			BudgetedLeave = result.BudgetedLeave;
 			BudgetedSurplus = result.BudgetedSurplus;
-			TotalAllowance = result.FullAllowance;
-			Allowance = result.ShrinkedAllowance;
+			FullAllowance = result.FullAllowance;
+			ShrinkedAllowance = result.ShrinkedAllowance;
 		}
 
 		public void RecalculateWithoutNetStaffForecastAdjustCalculator(IBudgetCalculator calculator, double netStaffFcAdj)
@@ -468,8 +468,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			DifferencePercent = result.DifferencePercent;
 			BudgetedLeave = result.BudgetedLeave;
 			BudgetedSurplus = result.BudgetedSurplus;
-			TotalAllowance = result.FullAllowance;
-			Allowance = result.ShrinkedAllowance;
+			FullAllowance = result.FullAllowance;
+			ShrinkedAllowance = result.ShrinkedAllowance;
 		}
 
 		public Percent GetShrinkage(ICustomShrinkage customShrinkage)

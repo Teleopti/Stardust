@@ -94,8 +94,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			budgetGroupDayDetailModel.AbsenceExtra = 2d;
 			budgetGroupDayDetailModel.AbsenceOverride = 10d;
 			budgetGroupDayDetailModel.AbsenceThreshold = new Percent(0.8);
-			budgetGroupDayDetailModel.TotalAllowance = 10d;
-			budgetGroupDayDetailModel.Allowance = 8d;
+			budgetGroupDayDetailModel.FullAllowance = 10d;
+			budgetGroupDayDetailModel.ShrinkedAllowance = 8d;
 
 			budgetGroupDayDetailModel.UpdateBudgetDay();
 			Assert.AreEqual(new Percent(0.2d), budgetDay.AttritionRate);

@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			target.AbsenceThreshold.Should().Be.EqualTo(_budgetDay.AbsenceThreshold);
 			target.AbsenceExtra.Should().Be.EqualTo(_budgetDay.AbsenceExtra);
 			target.AbsenceOverride.Should().Be.EqualTo(_budgetDay.AbsenceOverride);
-			target.TotalAllowance.Should().Be.EqualTo(_budgetDay.FullAllowance);
-			target.Allowance.Should().Be.EqualTo(_budgetDay.ShrinkedAllowance);
+			target.FullAllowance.Should().Be.EqualTo(_budgetDay.FullAllowance);
+			target.ShrinkedAllowance.Should().Be.EqualTo(_budgetDay.ShrinkedAllowance);
 		}
 
 		[Test]
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				target.ForecastedStaff.Should().Be.EqualTo(result.ForecastedStaff);
 				target.BudgetedLeave.Should().Be.EqualTo(result.BudgetedLeave);
 				target.BudgetedSurplus.Should().Be.EqualTo(result.BudgetedSurplus);
-				target.Allowance.Should().Be.EqualTo(result.ShrinkedAllowance);
-				target.TotalAllowance.Should().Be.EqualTo(result.FullAllowance);
+				target.ShrinkedAllowance.Should().Be.EqualTo(result.ShrinkedAllowance);
+				target.FullAllowance.Should().Be.EqualTo(result.FullAllowance);
 			}
 		}
 
