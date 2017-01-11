@@ -53,6 +53,7 @@
 		};
 
 		ctrl.save = function () {
+			if(!ctrl.enableSave()) return;
 			var currentSearch = angular.copy(ctrl.getSearch());
 			if (favoriteSearchNameList.indexOf(ctrl.currentName) === -1) {
 				FavoriteSearchDataService.add(ctrl.currentName, currentSearch)
