@@ -23386,6 +23386,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove default.
+        /// </summary>
+        public static string RemoveDefault {
+            get {
+                return ResourceManager.GetString("RemoveDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove entire multi-day absence.
         /// </summary>
         public static string RemoveEntireAbsenceForMultiDayPersonAbsence {
@@ -27532,6 +27541,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ServiceLevelSParenthesisColon {
             get {
                 return ResourceManager.GetString("ServiceLevelSParenthesisColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set as default.
+        /// </summary>
+        public static string SetAsDefault {
+            get {
+                return ResourceManager.GetString("SetAsDefault", resourceCulture);
             }
         }
         

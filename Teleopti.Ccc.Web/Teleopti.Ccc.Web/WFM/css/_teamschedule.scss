@@ -309,25 +309,23 @@
 		overflow-y: auto;
 	}
 	.fav-search-header {
-		padding: .6em $favsearchleftpadding;
-	padding: .8em;
-	display: flex;
+		padding: 1.2em $favsearchleftpadding $favsearchleftpadding;
+		display: flex;
 
 		input.name {
-		flex-grow: 1;
-		margin-right: .8em;
+			flex-grow: 1;
+			margin-right: .8em;
 		}
 		input.name.ng-invalid {
 			border-bottom: 1px solid red;
 		}
-	button {
-		border: none;
+		button {
+			margin: 0;
 		}
-		button.btn-primary {
-		background: $blue-500;
-		}
-		button.btn-default {
-			background: $gray026;
+		//remember to put this into styleguide
+		.wfm-btn.wfm-btn-sm {
+			padding: 5px;
+			font-size: .8em;
 		}
 	}
 	.fav-search-item {
@@ -335,24 +333,24 @@
 		padding: 0 !important;
 		min-height: initial !important;
 
-	.fav-search-item-container {
+		.fav-search-item-container {
 			padding: 0.2em $favsearchleftpadding 0;
 			width: 100%;
 		}
-	.default-favorite {
+		.default-favorite {
 			display: inline-block;
-	}
-	.default-favorite button {
-		font-size: 0.8em;
-		margin: -.3em 0 0 0;
-		padding-top: 0;
-		padding-bottom: 0;
-	}
-	.set-as-default {
-		background: $blue-300;
-	}
-	.unset-default {
-		background: $gray026;
+		}
+		.default-favorite button {
+			font-size: 0.8em;
+			margin: -.3em 0 0 0;
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+		.set-as-default {
+			background: $blue-300;
+		}
+		.unset-default {
+			background: $gray026;
 		}
 		.invisible {
 			visibility: hidden;

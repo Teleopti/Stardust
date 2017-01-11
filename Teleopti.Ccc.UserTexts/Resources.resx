@@ -15408,4 +15408,12 @@ These options are activated:
     <value>Update Confirmation</value>
     <comment>Update confirmation pop up modal title</comment>
   </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>Remove default</value>
+    <comment>Tooltip message of Team/FavoriteSearch list</comment>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>Set as default</value>
+    <comment>Tooltip message of Team/FavoriteSearch list</comment>
+  </data>
 </root>

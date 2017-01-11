@@ -2,8 +2,7 @@
 	<div class="fav-search-header">
 		<input type="text" class="name" placeholder="{{'Name'|translate}}..." ng-keydown="$event.which === 13 && $ctrl.save()" ng-model="$ctrl.currentName" ng-maxlength="50" ng-required="true"/>
 		
-
-		<button class="btn btn-xs pull-right" ng-click="$ctrl.save()" ng-class="{' btn-primary':$ctrl.enableSave(), 'btn-default':!$ctrl.enableSave()}" ng-disabled="!$ctrl.enableSave()"  translate>
+		<button class="wfm-btn wfm-btn-sm pull-right" ng-click="$ctrl.save()" ng-class="{'wfm-btn-invis-primary':$ctrl.enableSave(), 'wfm-btn-invis-disabled':!$ctrl.enableSave()}" ng-disabled="!$ctrl.enableSave()" ng-cloak translate>
 			Save
 		</button>
 	</div>
@@ -16,17 +15,18 @@
 				</span>
 
 				<div class="pull-right" ng-click="$event.stopPropagation()">
-					<div class="default-favorite" ng-class="{'visible':showIcons, 'invisible':!showIcons}">
+					<div class="default-favorite" ng-class="{'visible':showIcons || searchItem.IsDefault, 'invisible':!showIcons}">
 						<span ng-click="$ctrl.toggleDefault(searchItem.Name)">
 							<i ng-class="{ 'mdi-star':searchItem.IsDefault, 'mdi-star-outline':!searchItem.IsDefault}" class="mdi"></i>
 						</span>
 						<md-tooltip class="multiline-tooltip">
-							<div ng-if="!searchItem.IsDefault" translate>Set as default</div>
-							<div ng-if="searchItem.IsDefault" translate>Unset default</div>
+							<div ng-if="!searchItem.IsDefault" translate>SetAsDefault</div>
+							<div ng-if="searchItem.IsDefault" translate>RemoveDefault</div>
 						</md-tooltip>
 					</div>
 					<span ng-class="{'visible':showIcons, 'invisible':!showIcons}"ng-click="$ctrl.delete(searchItem.Name)">
 						<i class="mdi mdi-close"></i>
+						<md-tooltip><span translate>Remove</span></md-tooltip>
 					</span>
 				</div>
 			</div>
