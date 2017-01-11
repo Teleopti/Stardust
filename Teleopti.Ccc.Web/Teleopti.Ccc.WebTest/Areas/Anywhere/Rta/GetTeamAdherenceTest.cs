@@ -13,7 +13,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeTeamInAlarmReader>().For<ITeamInAlarmReader>();
