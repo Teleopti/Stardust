@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 {
 	public class BudgetAbsenceAllowanceDetailViewModel
 	{
-		public double Allowance { get; set; }
-		public double AllowanceAfterThreshold { get; set; }
+		public double FullAllowance { get; set; }
+		public double ShrinkedAllowance { get; set; }
 		public IDictionary<string, double> UsedAbsencesDictionary { get; set; }
 		public double UsedTotalAbsences { get; set; }
 		public double AbsoluteDifference { get; set; }

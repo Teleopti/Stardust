@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			return budgetAbsenceAllowanceDetails.Select(budgetAbsenceAllowanceDetail => new BudgetAbsenceAllowanceDetailViewModel
 			{
 				AbsoluteDifference = budgetAbsenceAllowanceDetail.AbsoluteDifference,
-				AllowanceAfterThreshold = budgetAbsenceAllowanceDetail.ShrinkedAllowance,
-				Allowance = budgetAbsenceAllowanceDetail.FullAllowance,
+				ShrinkedAllowance = budgetAbsenceAllowanceDetail.ShrinkedAllowance,
+				FullAllowance = budgetAbsenceAllowanceDetail.FullAllowance,
 				Date = budgetAbsenceAllowanceDetail.Date,
 				RelativeDifference =
 					double.IsNaN(budgetAbsenceAllowanceDetail.RelativeDifference.Value)
