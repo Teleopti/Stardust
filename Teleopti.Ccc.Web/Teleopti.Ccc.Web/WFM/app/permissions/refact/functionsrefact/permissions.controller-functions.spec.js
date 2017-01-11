@@ -79,6 +79,7 @@ describe('component: permissionsTree', function() {
 			onClick: vm.onFunctionClick,
 			selectedRole: vm.selectedRole
 		});
+		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
 
 		ctrl.toggleFunction(vm.applicationFunctions[0]);
@@ -186,6 +187,7 @@ describe('component: permissionsTree', function() {
 			onClick: vm.onFunctionClick,
 			selectedRole: vm.selectedRole
 		});
+		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
 		vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c'] = true;
 
@@ -233,6 +235,7 @@ describe('component: permissionsTree', function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
 		});
+		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
 
 		ctrl.toggleFunction(vm.applicationFunctions[0].ChildFunctions[0]);
@@ -296,6 +299,7 @@ describe('component: permissionsTree', function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
 		});
+		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
 
 		ctrl.toggleFunction(vm.applicationFunctions[0].ChildFunctions[0]);
@@ -354,7 +358,9 @@ describe('component: permissionsTree', function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
 		});
+		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
+
 		vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c'] = true;
 		vm.selectedFunctions['t19bb790-b000-4deb-97db-9b5e015b2e8d'] = true;
 
@@ -412,7 +418,9 @@ describe('component: permissionsTree', function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
 		});
+		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
+
 		vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c'] = true;
 		vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9'] = true;
 
@@ -487,7 +495,9 @@ describe('component: permissionsTree', function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
 		});
+		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
+
 		vm.selectedFunctions['t19bb790-b000-4deb-97db-9b5e015b2e8c'] = true;
 		vm.selectedFunctions['6ad43bfa-7842-4cca-ae9e-8d03ddc789e9'] = true;
 		vm.selectedFunctions['7ad43bfa-7842-4cca-ae9e-8d03ddc789e0'] = true;

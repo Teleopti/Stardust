@@ -1,18 +1,26 @@
-function PermissionsListController(permissionsDataService) {
+function PermissionsListController(permissionsDataService, NoticeService, $translate) {
 	var ctrl = this;
 
 	ctrl.toggleNode = toggleNode;
 
 	function toggleNode(node) {
 
-		// var selectedRole = permissionsDataService.getSelectedRole() || null;
-		// var selectedRole = ctrl.selectedRole;
-		if (ctrl.selectedRole === null || ctrl.selectedRole === undefined || ctrl.selectedRole.BuiltIn || ctrl.selectedRole.IsMyRole) {
-			return;
-		}
+		if (angular.isUndefined(ctrl.selectedRole) || !ctrl.selectedRole.Id ){
+      // NoticeService.warning($translate.instant(''), 5000, true);
+      return;
+    }
+
+    if (ctrl.selectedRole != null && ctrl.selectedRole.BuiltIn) {
+      NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
+      return;
+    }
+    if (ctrl.selectedRole != null && ctrl.selectedRole.IsMyRole) {
+      NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
+      return;
+    }
+
 		toggleSelection(node);
 		ctrl.onClick(node);
-		// permissionsDataService.selectOrganization(node, ctrl.selectedRole);
 	}
 
 	function toggleSelection(node) {

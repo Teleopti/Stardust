@@ -6,8 +6,8 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
   ctrl.checkParent = checkParent;
 
   function toggleFunction(func) {
-    if (!ctrl.selectedRole){
-      // Fixa notice här...
+    if (angular.isUndefined(ctrl.selectedRole) || !ctrl.selectedRole.Id ){
+      // NoticeService.warning($translate.instant(''), 5000, true);
       return;
     }
 

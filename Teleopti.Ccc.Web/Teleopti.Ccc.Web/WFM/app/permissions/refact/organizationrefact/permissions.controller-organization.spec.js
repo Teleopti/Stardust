@@ -81,6 +81,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
@@ -118,6 +119,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
@@ -162,6 +164,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
@@ -211,6 +214,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
@@ -255,6 +259,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
@@ -301,6 +306,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -352,6 +358,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
@@ -406,6 +413,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
@@ -460,6 +468,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1]);
@@ -519,6 +528,7 @@ describe('component: permissionsList', function() {
 		});
 		spyOn(permissionsDataService, 'selectOrganization');
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 
@@ -577,6 +587,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
@@ -638,6 +649,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -707,6 +719,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -781,6 +794,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
@@ -851,6 +865,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -922,6 +937,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
@@ -993,6 +1009,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -1064,6 +1081,7 @@ describe('component: permissionsList', function() {
 			selectedRole: vm.selectedRole
 		});
 		vm.selectedRole = vm.roles[0];
+		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -1133,6 +1151,7 @@ describe('component: permissionsList', function() {
 			onClick: vm.onNodeClick,
 			selectedRole: vm.selectedRole
 		});
+		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
@@ -1167,6 +1186,7 @@ describe('component: permissionsList', function() {
 			onClick: vm.onNodeClick,
 			selectedRole: vm.selectedRole
 		});
+		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
@@ -1227,6 +1247,8 @@ describe('component: permissionsList', function() {
 			onClick: vm.onNodeClick,
 			selectedRole: vm.selectedRole
 		});
+
+		ctrl.selectedRole = vm.roles[0];
 
 		vm.selectRole(vm.roles[0]);
 		$httpBackend.flush();
