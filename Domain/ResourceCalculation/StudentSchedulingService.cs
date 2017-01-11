@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IUserTimeZone _userTimeZone;
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
-        private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
 		
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -74,20 +73,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    }
 
 
-	    public IList<IWorkShiftFinderResult> FinderResults
-        {
-            get
-            {
-                var ret = new List<IWorkShiftFinderResult>(_scheduleService.FinderResults);
-                ret.AddRange(new List<IWorkShiftFinderResult>(_finderResults));
+	    public IList<IWorkShiftFinderResult> FinderResults => _scheduleService.FinderResults.ToList();
 
-                return ret;
-            }  
-        }
-
-        public void ClearFinderResults()
+	    public void ClearFinderResults()
         {
-            _finderResults.Clear();
             _scheduleService.ClearFinderResults();
         }
 
