@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
@@ -14,9 +13,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Messaging.Client.Composite;
 
@@ -409,8 +406,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork (morningBooking);
 			updatePersonScheduleDayFromBooking (morningBooking);
 
-			updatePersonScheduleDay (dateOnly.Date.AddHours (13), dateOnly.Date.AddHours (17), dateOnly, person2,
-				morningBooking.BusinessUnit);
+			updatePersonScheduleDay (dateOnly.Date.AddHours (13), dateOnly.Date.AddHours (17), person2, morningBooking.BusinessUnit);
 
 			var repo = new SeatBookingRepository (CurrUnitOfWork);
 
@@ -503,13 +499,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		
 		private static void updatePersonScheduleDayFromBooking(SeatBooking booking)
 		{
-			updatePersonScheduleDay (booking.StartDateTime, booking.EndDateTime, booking.BelongsToDate, booking.Person,booking.BusinessUnit);
+			updatePersonScheduleDay (booking.StartDateTime, booking.EndDateTime, booking.Person,booking.BusinessUnit);
 		}
 
 
-		private static void updatePersonScheduleDay(DateTime startDateTime, DateTime endDateTime, DateOnly belongsToDate, IPerson person, IAggregateRoot businessUnit)
+		private static void updatePersonScheduleDay(DateTime startDateTime, DateTime endDateTime, IPerson person, IAggregateRoot businessUnit)
 		{
-
 			var uow = CurrentUnitOfWork.Make();
 			var target = new PersonScheduleDayReadModelPersister(uow, new DoNotSend(), 
 				new FakeCurrentDatasource("dummy"));

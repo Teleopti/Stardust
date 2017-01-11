@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -146,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest,person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
-			createPersonAbsence(absence,new DateTimePeriod(2016,03,01, 09, 2016,03,01,13 ),person,personRequest);
+			createPersonAbsence(absence,new DateTimePeriod(2016,03,01, 09, 2016,03,01,13 ),person);
 
 			var cancelRequestCommand = new CancelAbsenceRequestCommand()
 			{
@@ -291,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absenceRequest = createApprovedAbsenceRequest(absence, absenceDateTimePeriod, person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 			createShiftsForPeriod(absenceDateTimePeriod);
-			createPersonAbsence(absence, absenceDateTimePeriod, person, personRequest);
+			createPersonAbsence(absence, absenceDateTimePeriod, person);
 
 			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1), TimeSpan.FromDays(0), TimeSpan.FromDays(5), TimeSpan.FromDays(1));
 			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18), TimeSpan.FromDays(0), TimeSpan.FromDays(3), TimeSpan.FromDays(2));
@@ -327,9 +326,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				createShiftsForPeriod(dateTimePeriodOfAbsenceRequest);
 			}
 
-			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 05, 2016, 03, 07), person, personRequest);
-			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 09, 2016, 03, 13), person, personRequest);
-			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 01, 2016, 03, 03), person, personRequest);
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 05, 2016, 03, 07), person);
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 09, 2016, 03, 13), person);
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 01, 2016, 03, 03), person);
 
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
 
@@ -353,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			if (propertyChanged != null)
 				personRequest.PropertyChanged += propertyChanged;
 
-			createPersonAbsence(absence, dateTimePeriodOfAbsenceRequest, person, personRequest);
+			createPersonAbsence(absence, dateTimePeriodOfAbsenceRequest, person);
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
 
 			Target.Handle(cancelRequestCommand);
@@ -377,15 +376,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personRequest;
 		}
 
-		private PersonAbsence createPersonAbsence(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person, IPersonRequest personRequest)
+		private void createPersonAbsence(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person)
 		{
 			var absenceLayer = new AbsenceLayer(absence,dateTimePeriodOfAbsenceRequest);
 			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer).WithId();
 
 			PersonAbsenceRepository.Add(personAbsence);
 			ScheduleStorage.Add(personAbsence);
-
-			return personAbsence;
 		}
 
 		private void createShiftsForPeriod(DateTimePeriod period)

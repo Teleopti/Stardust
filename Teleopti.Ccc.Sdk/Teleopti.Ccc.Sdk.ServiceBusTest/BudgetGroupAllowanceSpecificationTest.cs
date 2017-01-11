@@ -284,8 +284,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 	public class BudgetGroupAllowanceSpecificationForTest : BudgetGroupAllowanceSpecification
 	{
-		public BudgetGroupAllowanceSpecificationForTest(ISchedulingResultStateHolder schedulingResultStateHolder,
-			 ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
+		public BudgetGroupAllowanceSpecificationForTest(ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
 			 : base(scenarioRepository, budgetDayRepository, scheduleProjectionReadOnlyPersister)
 		{
 		}
