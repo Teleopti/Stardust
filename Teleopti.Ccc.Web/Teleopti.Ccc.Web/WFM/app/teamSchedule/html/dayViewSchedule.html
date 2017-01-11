@@ -11,9 +11,9 @@
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
-			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled" apply-favorite="vm.applyFavorite(teamIds, searchTerm)" get-search="vm.getSearch()"></favorite-search>
+			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled && vm.searchEnabled" apply-favorite="vm.applyFavorite(teamIds, searchTerm)" get-search="vm.getSearch()" on-data-ready="vm.onFavoriteSearchesLoaded(defaultSearch)"></favorite-search>
 
-			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" selected-team-ids="vm.selectedTeamIds" class="organization-picker-container"
+			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled" available-groups="vm.availableGroups" selected-team-ids="vm.selectedTeamIds" class="organization-picker-container"
 								 on-pick="vm.changeSelectedTeams(teams)"></organization-picker>
 
 			<span class="people-search-container" ng-if="vm.searchEnabled">
@@ -61,11 +61,11 @@
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table ng-show="vm.scheduleFullyLoaded" 
-							select-mode="vm.scheduleTableSelectMode" 
-							selected-date="vm.scheduleDate" 
-							show-warnings="vm.cmdConfigurations.validateWarningToggle" 
-							cmd-configurations="vm.cmdConfigurations" 
+			<schedule-table ng-show="vm.scheduleFullyLoaded"
+							select-mode="vm.scheduleTableSelectMode"
+							selected-date="vm.scheduleDate"
+							show-warnings="vm.cmdConfigurations.validateWarningToggle"
+							cmd-configurations="vm.cmdConfigurations"
 							selected-timezone="vm.currentTimezone"
 							pagination-options="vm.paginationOptions"
 							/>

@@ -15401,7 +15401,7 @@ These options are activated:
     <comment>Friendly description of ShiftTradeTargetTimeSpecification to show in shift trade system setting</comment>
   </data>
   <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
-    <value>{0} exists, are you sure to update it?</value>
+    <value>"{0}" already exists. Are you sure to replace it?</value>
     <comment>confirmation message for updating existed favorite search in Teams &amp; Request</comment>
   </data>
   <data name="UpdateConfirmation" xml:space="preserve">

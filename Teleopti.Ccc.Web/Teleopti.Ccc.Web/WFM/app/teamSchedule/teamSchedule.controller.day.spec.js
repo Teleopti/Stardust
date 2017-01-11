@@ -294,9 +294,13 @@ describe("teamschedule controller tests", function() {
 		};
 
 		teamScheduleService.getAvailableHierarchy = function(date) {
-			return {
-				then: function (){}
-			}
+			return $q(function (resolve, reject) {
+				resolve({
+					data: {
+						LogonUserTeamId: '111'
+					}
+				});
+			});
 		}
 	};
 

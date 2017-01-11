@@ -51,13 +51,8 @@
 			}
 		});
 
-		service.PromiseForGetAgentsPerPageSetting = function(callback) {
-			return $q(function(resolve) {
-				service.getAgentsPerPageSetting.post().$promise.then(function(result) {
-					callback(result);
-					resolve();
-				});
-			});
+		service.PromiseForGetAgentsPerPageSetting = function () {
+			return service.getAgentsPerPageSetting.post().$promise;
 		};
 
 		service.getAgentsPerPageSetting = $resource("../api/TeamSchedule/GetAgentsPerPage", {}, {
@@ -78,26 +73,13 @@
 			}
 		});
 
-		service.PromiseForloadedPermissions = function(callback) {
-			return $q(function(resolve) {
-				service.getPermissions.query().$promise.then(function(result) {
-					callback(result);
-					resolve();
-				});
-			});
+		service.PromiseForloadedPermissions = function () {
+			return service.getPermissions.query().$promise;
 		};
 
 		function getAvailableHierarchy(dateStr) {
 			var input = getTeamsHierachyUrl + "?date=" + dateStr;
-			return $q(function(resolve, reject) {
-				$http.get(input)
-					.then(function(data) {
-							resolve(data);
-						},
-						function(err) {
-							reject(err);
-						});
-			});
+			return $http.get(input);
 		}
 	}
 })();

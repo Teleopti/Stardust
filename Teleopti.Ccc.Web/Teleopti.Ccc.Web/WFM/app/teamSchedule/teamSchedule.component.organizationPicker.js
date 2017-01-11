@@ -17,28 +17,20 @@
 	function organizationPickerCtrl($scope, $translate) {
 		var ctrl = this,
 			currentSite,
-			preSelectedTeamIds = [],
 			initialSelectedTeamIds = [];
 
 		ctrl.groupList = [];
 		ctrl.availableTeamIds = [];
-		ctrl.selectedTeamIds = [];
 
-		ctrl.$onInit = function() {};
+		ctrl.$onInit = function () { };
 
 		ctrl.refresh = function() {
 			populateGroupList();
 
-			if (preSelectedTeamIds != null && preSelectedTeamIds.length > 0) {
-				if (preSelectedTeamIds.every(function(tId) {
-						return ctrl.availableTeamIds.indexOf(tId) > -1;
-					})) {
-					ctrl.selectedTeamIds = ctrl.selectedTeamIds.concat(preSelectedTeamIds);
-				}
+			if (ctrl.selectedTeamIds) {
+				updateAllSiteSelection();
+				ctrl.onSelectionDone();
 			}
-
-			updateAllSiteSelection();
-			ctrl.onSelectionDone();
 		};
 
 		ctrl.$onChanges = function(changesObj) {
@@ -58,8 +50,6 @@
 		function populateGroupList() {
 			if (!ctrl.availableGroups || !ctrl.availableGroups.sites || ctrl.availableGroups.sites.length == 0) return;
 			ctrl.groupList = [];
-
-			preSelectedTeamIds = ctrl.availableGroups.preSelectedTeamIds;
 
 			ctrl.availableGroups.sites.forEach(function(g) {
 				var site = {

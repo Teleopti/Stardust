@@ -1,4 +1,5 @@
-﻿describe('organizationPicker component tests', function () {
+﻿'use strict';
+describe('organizationPicker component tests', function () {
 
 	var $componentController;
 
@@ -63,6 +64,7 @@
 				}],
 				logonUserTeamId: 'logonUserTeamId'
 			},
+			selectedTeamIds: [],
 
 			onPick:function() {}
 		};
@@ -99,6 +101,7 @@
 				}],
 				logonUserTeamId: null
 			},
+			selectedTeamIds: [],
 
 			onPick: function(input) {
 				selectedTeams = input.teams;
@@ -133,6 +136,7 @@
 				}],
 				logonUserTeamId: 'logonUserTeamId'
 			},
+			selectedTeamIds: [],
 
 			onPick: function(input) {
 				selectedTeams = input.teams;

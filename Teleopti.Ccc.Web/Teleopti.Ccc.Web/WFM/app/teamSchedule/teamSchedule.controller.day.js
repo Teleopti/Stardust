@@ -20,12 +20,10 @@
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService) {
-
 		var vm = this;
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
-		vm.scheduleDate = $stateParams.selectedDate ? $stateParams.selectedDate : new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
@@ -36,17 +34,21 @@
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.permissionsAndTogglesLoaded = false;
 		vm.lastCommandTrackId = '';
-		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
-		vm.searchEnabled = $state.current.name != 'teams.for';
 		vm.showDatePicker = false;
 
-		vm.applyFavorite = function(teamIds, searchTerm) {
+		vm.initFavoriteSearches = $q.defer();
+
+		vm.onFavoriteSearchesLoaded = function (defaultSearch) {
+			vm.initFavoriteSearches.resolve(defaultSearch);
+		};
+
+		vm.applyFavorite = function (teamIds, searchTerm) {
 			vm.selectedTeamIds = teamIds;
 			vm.searchOptions.keyword = searchTerm;
 			vm.resetSchedulePage();
 		};
 
-		vm.getSearch = function() {
+		vm.getSearch = function () {
 			return {
 				teamIds: vm.selectedTeamIds,
 				searchTerm: vm.searchOptions.keyword
@@ -60,14 +62,14 @@
 		};
 
 		vm.searchOptions = {
-			keyword: getDefaultKeyword() || '',
+			keyword: getDefaultKeyword() || undefined,
 			searchKeywordChanged: false
 		};
 
 		vm.hasSelectedAllPeopleInEveryPage = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
-		function getDefaultKeyword(){
+		function getDefaultKeyword() {
 			if ($stateParams.keyword)
 				return $stateParams.keyword;
 		}
@@ -92,12 +94,12 @@
 			});
 		};
 
-		vm.openSettingsPanel = function(){
+		vm.openSettingsPanel = function () {
 			closeAllCommandSidenav();
 			$mdSidenav(settingsContainerId).toggle();
 		};
 
-		vm.commonCommandCallback = function(trackId, personIds) {
+		vm.commonCommandCallback = function (trackId, personIds) {
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
@@ -116,9 +118,9 @@
 				});
 			}
 
-			var unbindWatchPanel = $scope.$watch(function() {
+			var unbindWatchPanel = $scope.$watch(function () {
 				return $mdSidenav(commandContainerId).isOpen();
-			}, function(newValue, oldValue) {
+			}, function (newValue, oldValue) {
 				if (newValue !== oldValue && !newValue) {
 					$scope.$broadcast('teamSchedule.reset.command');
 					CommandCheckService.getCommandCheckStatus() && CommandCheckService.resetCommandCheckStatus();
@@ -135,7 +137,7 @@
 			$mdSidenav(settingsContainerId).isOpen() && $mdSidenav(settingsContainerId).close();
 		}
 
-		vm.onPageSizeSelectorChange = function() {
+		vm.onPageSizeSelectorChange = function () {
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.resetSchedulePage();
 			});
@@ -208,7 +210,7 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			];
 			vm.scheduleFullyLoaded = true;
-		};
+		}
 
 		function populateAvailableTimezones(schedules) {
 			vm.availableTimezones = schedules.Schedules.map(function (s) {
@@ -222,17 +224,16 @@
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 
-		vm.changeSelectedTeams = function(teams) {
+		vm.changeSelectedTeams = function (teams) {
 			vm.selectedTeamIds = teams;
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
-		    vm.resetSchedulePage();
+			vm.resetSchedulePage();
 		};
 
-		vm.loadSchedules = function() {
+		vm.loadSchedules = function () {
 			vm.isLoading = true;
 			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
-
-			if(vm.searchEnabled){
+			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
 
 				teamScheduleSvc.searchSchedules(params).then(function (response) {
@@ -245,10 +246,10 @@
 					vm.checkValidationWarningForCurrentPage();
 					populateAvailableTimezones(result);
 				});
-			}else if(preSelectPersonIds.length > 0){
+			} else if (preSelectPersonIds.length > 0) {
 				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
 
-				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function(result) {
+				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function (result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
@@ -267,9 +268,9 @@
 			vm.loadSchedules();
 		};
 
-		vm.checkValidationWarningForCurrentPage = function(){
+		vm.checkValidationWarningForCurrentPage = function () {
 			if (vm.cmdConfigurations.validateWarningToggle) {
-				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function(schedule) {
+				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) {
 					return schedule.PersonId;
 				});
 				ValidateRulesService.getValidateRulesResultForCurrentPage(vm.scheduleDateMoment(), currentPagePersonIds);
@@ -284,7 +285,7 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
-			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), vm.currentTimezone, function() {
+			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), vm.currentTimezone, function () {
 				personSelectionSvc.clearPersonInfo();
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
@@ -295,18 +296,18 @@
 			var params = getParamsForLoadingSchedules({ currentPageIndex: 1, pageSize: vm.total });
 			teamScheduleSvc.searchSchedules(params).then(function (result) {
 
-				scheduleMgmtSvc.resetSchedules(result.data.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);			
+				scheduleMgmtSvc.resetSchedules(result.data.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 				personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.hasSelectedAllPeopleInEveryPage = true;
 			});
 		};
 
-		vm.unselectAllForAllPages = function() {
+		vm.unselectAllForAllPages = function () {
 			var params = getParamsForLoadingSchedules({ currentPageIndex: 1, pageSize: vm.total });
 			teamScheduleSvc.searchSchedules(params).then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.data.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
-				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);				
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.hasSelectedAllPeopleInEveryPage = false;
 			});
 		};
@@ -320,7 +321,7 @@
 			return vm.hasSelectedAllPeopleInEveryPage;
 		};
 
-		vm.toggleErrorDetails = function() {
+		vm.toggleErrorDetails = function () {
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
 
@@ -337,8 +338,8 @@
 				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
 				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
 				var isScheduleDateInMessageRange = vm.toggles.ManageScheduleForDistantTimezonesEnabled
-						? startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]') || endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]')
-						: viewRangeStart.isSameOrBefore(endDate) && viewRangeEnd.isSameOrAfter(startDate);;
+					? startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]') || endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]')
+					: viewRangeStart.isSameOrBefore(endDate) && viewRangeEnd.isSameOrAfter(startDate);;
 
 				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
 			}
@@ -354,7 +355,7 @@
 				if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
 			});
 
-			if(uniquePersonIds.length !== 0){
+			if (uniquePersonIds.length !== 0) {
 				vm.updateSchedules(uniquePersonIds);
 				vm.checkValidationWarningForCommandTargets(uniquePersonIds);
 			}
@@ -367,73 +368,110 @@
 				, 300);
 		}
 
-		vm.init = function() {
-			vm.toggles = {
-				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
-				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
-				DisplayScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
-				DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
+		vm.toggles = {
+			SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
+			SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
+			DisplayScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
+			DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
 
-				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
-				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
-				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
-				AddOvertimeEnabled: toggleSvc.WfmTeamSchedule_AddOvertime_41696,
-				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
-				MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
-				MoveEntireShiftEnabled: toggleSvc.WfmTeamSchedule_MoveEntireShift_41632,
-				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
-				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
-				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
-				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
+			AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
+			AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
+			AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
+			AddOvertimeEnabled: toggleSvc.WfmTeamSchedule_AddOvertime_41696,
+			MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
+			MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
+			MoveEntireShiftEnabled: toggleSvc.WfmTeamSchedule_MoveEntireShift_41632,
+			SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
+			RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
+			RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
+			UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
 
-				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
-				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
-				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
-				EditAndViewInternalNoteEnabled : toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
+			ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
+			ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
+			ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
+			EditAndViewInternalNoteEnabled: toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
 
-				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
-				ShowWeeklyContractTimeEnabled: toggleSvc.WfmTeamSchedule_WeeklyContractTime_39871,
+			WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
+			ShowWeeklyContractTimeEnabled: toggleSvc.WfmTeamSchedule_WeeklyContractTime_39871,
 
-				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
-									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
-									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
-									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
-									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
-				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
+			ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
+			|| toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
+			|| toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
+			|| toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
+			|| toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
+			FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
 
-				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
-				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
-				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
+			CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
+			AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
+			CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
 
-				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
-				ManageScheduleForDistantTimezonesEnabled:  toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
+			ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
+			ManageScheduleForDistantTimezonesEnabled: toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
 
-				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039,
-				SaveFavoriteSearchesEnabled: toggleSvc.WfmTeamSchedule_SaveFavoriteSearches_42073
+			MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039,
+			SaveFavoriteSearchesEnabled: toggleSvc.WfmTeamSchedule_SaveFavoriteSearches_42073
+		};
+
+		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
+		vm.searchOptions.keyword = $stateParams.keyword || '';
+
+		var asyncData = {
+			permissions: teamScheduleSvc.PromiseForloadedPermissions(),
+			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
+			hierarchy: teamScheduleSvc.getAvailableHierarchy(vm.scheduleDateMoment().format('YYYY-MM-DD')),
+		};
+
+		vm.searchEnabled = $state.current.name != 'teams.for';
+		if (vm.searchEnabled && vm.toggles.SaveFavoriteSearchesEnabled) {
+			asyncData.defaultFavoriteSearch = vm.initFavoriteSearches.promise;
+		}
+
+		$q.all(asyncData).then(function init(data) {
+			if (data.pageSetting.Agents > 0)
+				vm.paginationOptions.pageSize = data.pageSetting.Agents;
+
+			var defaultFavoriteSearch = data.defaultFavoriteSearch;
+			var hierarchy = data.hierarchy.data;
+
+			if (!$stateParams.do && defaultFavoriteSearch) {
+				vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
+				vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+			} else if (!$stateParams.do && hierarchy.LogonUserTeamId) {
+				vm.selectedTeamIds = [hierarchy.LogonUserTeamId];
+			}
+
+			vm.availableGroups = {
+				sites: hierarchy.Children,
 			};
+			vm.scheduleDate = vm.scheduleDate || new Date();
+			vm.searchOptions.keyword = vm.searchOptions.keyword || '';
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 
+			vm.permissions = data.permissions;
+			vm.permissionsAndTogglesLoaded = true;
 			vm.cmdConfigurations = {
 				toggles: vm.toggles,
 				permissions: vm.permissions,
 				validateWarningToggle: false,
 				currentCommandName: null
 			};
-
-			vm.permissionsAndTogglesLoaded = true;
-
 			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
-										|| vm.toggles.AddActivityEnabled
-										|| vm.toggles.RemoveActivityEnabled
-										|| vm.toggles.RemoveAbsenceEnabled
-										|| vm.toggles.SwapShiftEnabled
-										|| vm.toggles.ModifyShiftCategoryEnabled;
+				|| vm.toggles.AddActivityEnabled
+				|| vm.toggles.RemoveActivityEnabled
+				|| vm.toggles.RemoveAbsenceEnabled
+				|| vm.toggles.SwapShiftEnabled
+				|| vm.toggles.ModifyShiftCategoryEnabled;
 
-			if (!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && !vm.toggles.SaveFavoriteSearchesEnabled)
+			if ((!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && !vm.toggles.SaveFavoriteSearchesEnabled) || !vm.searchEnabled) {
 				vm.resetSchedulePage();
+			}
 
+			showReleaseNotification();
+		});
 
+		function showReleaseNotification() {
 			var template = $translate.instant('WFMReleaseNotification');
 			var moduleName = $translate.instant('Teams');
 			var message = template.replace('{0}', moduleName)
@@ -441,27 +479,6 @@
 				.replace('{2}', '</a>')
 				.replace('{3}', '<a href="../Anywhere#teamschedule">' + $translate.instant('TeamSchedule') + '</a>');
 			NoticeService.info(message, null, true);
-		};
-
-		$q.all([
-			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
-				vm.permissions = result;
-			}),
-
-			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(function (result) {
-				result.Agents > 0 && (vm.paginationOptions.pageSize = result.Agents);
-			}),
-
-			teamScheduleSvc.getAvailableHierarchy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
-				.then(function (response) {
-					var data = response.data;
-					var preSelectedTeamIds = vm.selectedTeamIds.length > 0 ? vm.selectedTeamIds : [data.LogonUserTeamId];
-
-					vm.availableGroups = {
-						sites: data.Children,
-						preSelectedTeamIds: preSelectedTeamIds
-					};
-				})
-		]).then(vm.init);
-	};
-}());
+		}
+	}
+} ());

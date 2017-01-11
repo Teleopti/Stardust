@@ -34,6 +34,7 @@
 
         vc.changeView = function (viewState) {
             var params = {};
+            params.do = true;
 
             if (vc.keyword) params.keyword = vc.keyword;
             if (vc.selectedDate) params.selectedDate = vc.selectedDate;

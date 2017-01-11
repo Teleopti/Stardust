@@ -299,6 +299,7 @@
 	}
 }
 .fav-search-panel {
+	$favsearchleftpadding: .8em;
 	background: $white;
 
 	md-list {
@@ -307,41 +308,39 @@
 		max-height: 400px;
 		overflow-y: auto;
 	}
-}
-.fav-search-header {
-	background: $white;
+	.fav-search-header {
+		padding: .6em $favsearchleftpadding;
 	padding: .8em;
 	display: flex;
 
-	input.name {
+		input.name {
 		flex-grow: 1;
 		margin-right: .8em;
-	}
-	input.name.ng-invalid {
-		border-bottom: 1px solid red;
-	}
+		}
+		input.name.ng-invalid {
+			border-bottom: 1px solid red;
+		}
 	button {
 		border: none;
-	}
-	button.btn-primary {
+		}
+		button.btn-primary {
 		background: $blue-500;
+		}
+		button.btn-default {
+			background: $gray026;
+		}
 	}
-	button.btn-default {
-		background: $gray026;
-	}
-}
-.fav-search-item {
-	height: 2em;
-	padding: 0 !important;
-	border-bottom: 1px solid $gray012;
-	min-height: initial !important;
+	.fav-search-item {
+		height: 2em;
+		padding: 0 !important;
+		min-height: initial !important;
 
 	.fav-search-item-container {
-		padding: 0.2em 0.8em 0 0.8em;
-		width: 100%;
-	}
+			padding: 0.2em $favsearchleftpadding 0;
+			width: 100%;
+		}
 	.default-favorite {
-		display: inline-block;
+			display: inline-block;
 	}
 	.default-favorite button {
 		font-size: 0.8em;
@@ -354,16 +353,17 @@
 	}
 	.unset-default {
 		background: $gray026;
+		}
+		.invisible {
+			visibility: hidden;
+		}
+		.visible {
+			visibility: visible;
+		}
 	}
-	.invisible {
-		visibility: hidden;
+	.fav-search-item:hover {
+		background: $gray012;
 	}
-	.visible {
-		visibility: visible;
-	}
-}
-.fav-search-item:hover {
-	background: $gray012;
 }
 .organization-picker-container {
 	display: inline-block;

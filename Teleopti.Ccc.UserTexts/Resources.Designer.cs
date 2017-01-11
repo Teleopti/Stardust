@@ -2971,7 +2971,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} exists, are you sure to update it?.
+        ///   Looks up a localized string similar to &quot;{0}&quot; already exists. Are you sure to replace it?.
         /// </summary>
         public static string AreYouSureToUpdateCurrentFavoriteSearch {
             get {

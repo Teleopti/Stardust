@@ -7,6 +7,7 @@
 			templateUrl: 'app/teamSchedule/html/favoriteSearch.tpl.html',
 			controller: favoriteSearchCtrl,
 			bindings: {
+				onDataReady: '&?',
 				applyFavorite: '&',
 				getSearch: '&'
 			}
@@ -71,7 +72,7 @@
 			var currentSearch = ctrl.getSearch();
 
 			var isNameValid = ctrl.currentName && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
-			var hasTeamIds = currentSearch.teamIds.length > 0;
+			var hasTeamIds = angular.isArray(currentSearch.teamIds) && currentSearch.teamIds.length > 0;
 
 			if (!ctrl.currentFavorite) return isNameValid && hasTeamIds;
 
@@ -134,7 +135,7 @@
 								if (currentDefault) {
 									currentDefault.IsDefault = false;
 								}
-								
+
 								ctrl.favoriteSearchList[index].IsDefault = true;
 							});
 				}
@@ -165,11 +166,15 @@
 				return f.Name;
 			});
 
-			var defaultes = ctrl.favoriteSearchList.filter(function (f) {
+			var defaults = ctrl.favoriteSearchList.filter(function (f) {
 				return f.IsDefault;
 			});
-			ctrl.currentFavorite = defaultes.length > 0 ? defaultes[0] : undefined;
+			ctrl.currentFavorite = defaults[0];
 			ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';
+
+			if (ctrl.onDataReady) {
+				ctrl.onDataReady({defaultSearch: defaults[0] || null});
+			}
 		}
 
 		function reorderListAccordingToIsDefault(item1, item2){

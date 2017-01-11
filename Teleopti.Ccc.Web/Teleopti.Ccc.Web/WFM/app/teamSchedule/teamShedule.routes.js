@@ -12,9 +12,10 @@
 			templateUrl: 'app/teamSchedule/html/dayViewSchedule.html',
 			controller: 'TeamScheduleController as vm',
 			params: {
-				keyword: '',
-				selectedDate: new Date(),
-				selectedTeamIds: []
+				keyword: undefined,
+				selectedDate: undefined,
+				selectedTeamIds: undefined,
+				do: undefined,
 			}
 		}).state('teams.for', {
 			url: '/?personId',
@@ -28,7 +29,8 @@
 			params: {
 				keyword: '',
 				selectedDate: new Date(),
-				selectedTeamIds: []
+				selectedTeamIds: [],
+				do: undefined,
 			},
 			templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',
 			controller: 'TeamScheduleWeeklyController as vm'

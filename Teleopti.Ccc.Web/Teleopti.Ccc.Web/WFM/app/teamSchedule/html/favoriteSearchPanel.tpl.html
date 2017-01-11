@@ -2,6 +2,7 @@
 	<div class="fav-search-header">
 		<input type="text" class="name" placeholder="{{'Name'|translate}}..." ng-keydown="$event.which === 13 && $ctrl.save()" ng-model="$ctrl.currentName" ng-maxlength="50" ng-required="true"/>
 		
+
 		<button class="btn btn-xs pull-right" ng-click="$ctrl.save()" ng-class="{' btn-primary':$ctrl.enableSave(), 'btn-default':!$ctrl.enableSave()}" ng-disabled="!$ctrl.enableSave()"  translate>
 			Save
 		</button>
