@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		DateOnly SelectedDate { get; }
 		DateOnlyPeriod VisibleWeek { get; }
 		IScenario DefaultScenario { get; }
-		bool TotalAllowanceSelected { get; set; }
-		bool AllowanceSelected { get; set; }
+		bool FullAllowanceSelected { get; set; }
+		bool ShrinkedAllowanceSelected { get; set; }
 		IBudgetGroup SelectedBudgetGroup { get; set; }
 		HashSet<IAbsence> AbsencesInBudgetGroup { get; }
 		IList<IBudgetGroup> BudgetGroups { get; }
@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public IScenario DefaultScenario { get; private set; }
 
-		public bool TotalAllowanceSelected { get; set; }
+		public bool FullAllowanceSelected { get; set; }
 
-		public bool AllowanceSelected { get; set; }
+		public bool ShrinkedAllowanceSelected { get; set; }
 
 		public IBudgetGroup SelectedBudgetGroup { get; set; }
 
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 					VisibleModel.Add(new BudgetAbsenceAllowanceDetailModel
 					{
 						AbsoluteDifference = budgetAbsenceAllowanceDetail.AbsoluteDifference,
-						Allowance = AllowanceSelected ? budgetAbsenceAllowanceDetail.ShrinkedAllowance : budgetAbsenceAllowanceDetail.FullAllowance,
+						Allowance = ShrinkedAllowanceSelected ? budgetAbsenceAllowanceDetail.ShrinkedAllowance : budgetAbsenceAllowanceDetail.FullAllowance,
 						Date = new DateDayModel(budgetAbsenceAllowanceDetail.Date),
 						RelativeDifference = budgetAbsenceAllowanceDetail.RelativeDifference,
 						TotalHeadCounts = budgetAbsenceAllowanceDetail.TotalHeadCounts,
