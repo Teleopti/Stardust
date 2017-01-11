@@ -511,7 +511,7 @@
     <Compile Include="Budgeting\GrossStaffCalculatorTest.cs" />
     <Compile Include="Budgeting\NetStaffCalculatorTest.cs" />
     <Compile Include="Budgeting\NetStaffForecastAdjustCalculatorTest.cs" />
-    <Compile Include="Budgeting\TotalAllowanceCalculatorTest.cs" />
+    <Compile Include="Budgeting\FullAllowanceCalculatorTest.cs" />
     <Compile Include="Collection\CachedNumberOfEachCategoryPerDateTest.cs" />
     <Compile Include="Collection\CachedNumberOfEachCategoryPerPersonTest.cs" />
     <Compile Include="Collection\CachedShiftCategoryDistributionTest.cs" />

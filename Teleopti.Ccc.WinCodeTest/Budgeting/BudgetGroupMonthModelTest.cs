@@ -572,8 +572,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		[Test]
 		public void ShouldHaveAverageTotalAllowance()
 		{
-			var totalAllowance = Math.Round(target.FullAllowance, 2);
-			totalAllowance.Should().Be.EqualTo(10);
+			var fullAllowance = Math.Round(target.FullAllowance, 2);
+			fullAllowance.Should().Be.EqualTo(10);
 		}
 
 		[Test]

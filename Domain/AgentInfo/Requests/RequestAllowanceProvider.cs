@@ -51,18 +51,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						absenceDict.Add(absence, 0);
 					}
 				}
-				var allowance = shrinkedAllowanceCollection[i];
-				var totalAllowance = fullAllowanceCollection[i];
+				var shrinkedAllowance = shrinkedAllowanceCollection[i];
+				var fullAllowance = fullAllowanceCollection[i];
 				var usedTotalAbsences = absenceDict.Sum(a => a.Value);
-				var absoluteDiff = allowance - usedTotalAbsences;
-				var relativeDiff = new Percent(usedTotalAbsences / allowance);
+				var absoluteDiff = shrinkedAllowance - usedTotalAbsences;
+				var relativeDiff = new Percent(usedTotalAbsences / shrinkedAllowance);
 				var headCounts = getHeadCounts(selectedBudgetGroup, currentDate);
 
 				var detailModel = new BudgetAbsenceAllowanceDetail
 				{
 					Date = currentDate,
-					ShrinkedAllowance = allowance,
-					FullAllowance = totalAllowance,
+					ShrinkedAllowance = shrinkedAllowance,
+					FullAllowance = fullAllowance,
 					UsedAbsencesDictionary = absenceDict,
 					UsedTotalAbsences = usedTotalAbsences,
 					AbsoluteDifference = absoluteDiff,

@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			_model.Stub(x => x.VisibleWeek).Return(visibleWeek);
 			_model.Stub(x => x.ShrinkedAllowanceSelected).Return(false);
 
-			_target.OnRadioButtonAllowanceCheckChanged(true);
+			_target.OnRadioButtonShrinkedAllowanceCheckChanged(true);
 
 			_model.AssertWasCalled(x => x.ReloadModel(visibleWeek, true));
 		}
@@ -80,31 +80,31 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			_model.Stub(x => x.VisibleWeek).Return(visibleWeek);
 			_model.Stub(x => x.ShrinkedAllowanceSelected).Return(true);
 
-			_target.OnRadioButtonAllowanceCheckChanged(true);
+			_target.OnRadioButtonShrinkedAllowanceCheckChanged(true);
 
 			_model.AssertWasNotCalled(x => x.ReloadModel(visibleWeek, false));
 		}
 
 		[Test]
-		public void ShouldReloadWhenTotalAllowanceSelectionChanged()
+		public void ShouldReloadWhenFullAllowanceSelectionChanged()
 		{
 			var visibleWeek = new DateOnlyPeriod();
 			_model.Stub(x => x.VisibleWeek).Return(visibleWeek);
 			_model.Stub(x => x.FullAllowanceSelected).Return(false);
 
-			_target.OnRadioButtonTotalAllowanceCheckChanged(true);
+			_target.OnRadioButtonFullAllowanceCheckChanged(true);
 
 			_model.AssertWasCalled(x => x.ReloadModel(visibleWeek, true));
 		}
 
 		[Test]
-		public void ShouldNotReloadWhenTotalAllowanceSelectionChange()
+		public void ShouldNotReloadWhenFullAllowanceSelectionChange()
 		{
 			var visibleWeek = new DateOnlyPeriod();
 			_model.Stub(x => x.VisibleWeek).Return(visibleWeek);
 			_model.Stub(x => x.FullAllowanceSelected).Return(true);
 
-			_target.OnRadioButtonTotalAllowanceCheckChanged(true);
+			_target.OnRadioButtonFullAllowanceCheckChanged(true);
 
 			_model.AssertWasNotCalled(x => x.ReloadModel(visibleWeek, false));
 		}

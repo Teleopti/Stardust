@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			return _model.SelectedBudgetGroup;
 		}
 
-		public void OnRadioButtonTotalAllowanceCheckChanged(bool value)
+		public void OnRadioButtonFullAllowanceCheckChanged(bool value)
 		{
 			if (Equals(_model.FullAllowanceSelected, value)) return;
 			_model.FullAllowanceSelected = value;
 			reloadModel(true);
 		}
 
-		public void OnRadioButtonAllowanceCheckChanged(bool value)
+		public void OnRadioButtonShrinkedAllowanceCheckChanged(bool value)
 		{
 			if (Equals(_model.ShrinkedAllowanceSelected, value)) return;
 			_model.ShrinkedAllowanceSelected = value;

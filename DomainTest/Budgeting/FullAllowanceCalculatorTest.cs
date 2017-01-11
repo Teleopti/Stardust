@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Budgeting
 {
 	[TestFixture]
-	public class TotalAllowanceCalculatorTest
+	public class FullAllowanceCalculatorTest
 	{
 		[Test]
 		public void ShouldReturnWhenZeroFte()

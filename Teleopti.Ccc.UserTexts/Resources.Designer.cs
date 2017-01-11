@@ -12039,6 +12039,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total allowance.
+        /// </summary>
+        public static string FullAllowance {
+            get {
+                return ResourceManager.GetString("FullAllowance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Full Day.
         /// </summary>
         public static string FullDay {
@@ -31830,15 +31839,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TotalAFW {
             get {
                 return ResourceManager.GetString("TotalAFW", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Total allowance.
-        /// </summary>
-        public static string TotalAllowance {
-            get {
-                return ResourceManager.GetString("TotalAllowance", resourceCulture);
             }
         }
         

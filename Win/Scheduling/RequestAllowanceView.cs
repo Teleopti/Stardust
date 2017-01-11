@@ -21,10 +21,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly RequestAllowancePresenter _presenter;
 		private readonly ColumnEntityBinder<BudgetAbsenceAllowanceDetailModel> _entityBinder;
 		private GridRowSection<BudgetAbsenceAllowanceDetailModel> _absenceSection;
+
 		public RequestAllowanceView()
 		{
 			InitializeComponent();
-			if(!DesignMode)
+			if (!DesignMode)
 			{
 				SetTexts();
 				labelBudgetGroup.Text = string.Format(CultureInfo.CurrentUICulture, "{0}{1}",
@@ -50,9 +51,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 													   new RequestAllowanceModel(UnitOfWorkFactory.Current,
 														   new BudgetDayRepository(currentUnitOfWork),
 														   new BudgetGroupRepository(currentUnitOfWork),
-														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUnitOfWork)), 
+														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUnitOfWork)),
 														   new ScheduleProjectionReadOnlyPersister(currentUnitOfWork)));
-														   
+
 			_presenter.Initialize(budgetGroup, defaultDate);
 			initializeGrid();
 			_presenter.InitializeGridBinding();
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var percentCell = new PercentReadOnlyCellModel(requestAllowanceGridControl.Model) { NumberOfDecimals = 2 };
 			requestAllowanceGridControl.CellModels.Add("NumericReadOnlyCellModel", numCell);
 			requestAllowanceGridControl.CellModels.Add("PercentReadOnlyCellModel", percentCell);
-			
+
 			_entityBinder.GridColors = new GridColors
 			{
 				ColorHolidayCell = ColorHelper.GridControlGridHolidayCellColor(),
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_absenceSection = new GridRowSection<BudgetAbsenceAllowanceDetailModel>(_entityBinder);
 			_entityBinder.AddRow(new GridRow<BudgetAbsenceAllowanceDetailModel>
 			{
-				HeaderText = string.Format(CultureInfo.CurrentUICulture,"{0} {1}", UserTexts.Resources.Used, UserTexts.Resources.Total),
+				HeaderText = string.Format(CultureInfo.CurrentUICulture, "{0} {1}", UserTexts.Resources.Used, UserTexts.Resources.Total),
 				ValueMember = new ModelProperty<BudgetAbsenceAllowanceDetailModel>("UsedTotalAbsences"),
 				CellValueType = typeof(double),
 				CellModel = "NumericReadOnlyCellModel",
@@ -137,18 +138,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_entityBinder.SetColumnHeaderMember(new ModelProperty<BudgetAbsenceAllowanceDetailModel>("Date"));
 			requestAllowanceGridControl.QueryCellInfo += requestAllowanceGridControlQueryCellInfo;
 		}
-		
+
 		private void requestAllowanceGridControlQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
 			if (e.RowIndex != RequestAllowanceGridControl.NavigationButtonRowIndex) return;
-			
-			if(e.ColIndex == RequestAllowanceGridControl.PrevButtonColIndex)
+
+			if (e.ColIndex == RequestAllowanceGridControl.PrevButtonColIndex)
 			{
 				e.Style.CellType = "PushButton";
 				e.Style.CellAppearance = GridCellAppearance.Flat;
 				e.Style.Description = "<";
 			}
-			else if(e.ColIndex == RequestAllowanceGridControl.NextButtonColIndex)
+			else if (e.ColIndex == RequestAllowanceGridControl.NextButtonColIndex)
 			{
 				e.Style.CellType = "PushButton";
 				e.Style.CellAppearance = GridCellAppearance.Flat;
@@ -158,12 +159,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void radioButtonTotalAllowanceCheckChanged(object sender, EventArgs e)
 		{
-			_presenter.OnRadioButtonTotalAllowanceCheckChanged(radioButtonTotalAllowance.Checked);
+			_presenter.OnRadioButtonFullAllowanceCheckChanged(radioButtonTotalAllowance.Checked);
 		}
 
 		private void radioButtonAllowanceCheckChanged(object sender, EventArgs e)
 		{
-			_presenter.OnRadioButtonAllowanceCheckChanged(radioButtonAllowance.Checked);
+			_presenter.OnRadioButtonShrinkedAllowanceCheckChanged(radioButtonAllowance.Checked);
 		}
 
 		private void comboBoxAdvBudgetGroupSelectedIndexChanged(object sender, EventArgs e)
@@ -191,7 +192,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void resizeWindow()
 		{
 			resizeRowHeaders();
-			Width =requestAllowanceGridControl.ColWidths.GetTotal(0, requestAllowanceGridControl.ColCount) + 40;
+			Width = requestAllowanceGridControl.ColWidths.GetTotal(0, requestAllowanceGridControl.ColCount) + 40;
 		}
 
 		private void resizeRowHeaders()

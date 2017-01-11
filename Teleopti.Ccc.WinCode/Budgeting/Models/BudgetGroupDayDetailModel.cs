@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 		private double? _absenceOverride;
 		private double _budgetedLeave;
 		private double _budgetedSurplus;
-		private double _allowance;
-		private double _totalAllowance;
+		private double _shrinkedAllowance;
+		private double _fullAllowance;
 
 		public event EventHandler<CustomEventArgs<IBudgetGroupDayDetailModel>> Invalidate;
 
@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			_absenceThreshold = budgetDay.AbsenceThreshold;
 			_absenceExtra = budgetDay.AbsenceExtra;
 			_absenceOverride = budgetDay.AbsenceOverride;
-			_totalAllowance = budgetDay.FullAllowance;
-			_allowance = budgetDay.ShrinkedAllowance;
+			_fullAllowance = budgetDay.FullAllowance;
+			_shrinkedAllowance = budgetDay.ShrinkedAllowance;
 			BudgetDay = budgetDay;
 		}
 
@@ -396,12 +396,12 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 
 		public double ShrinkedAllowance
 		{
-			get { return _allowance; }
+			get { return _shrinkedAllowance; }
 			set
 			{
-				if (_allowance != value)
+				if (_shrinkedAllowance != value)
 				{
-					_allowance = value;
+					_shrinkedAllowance = value;
 					TriggerNotifyPropertyChanged(nameof(ShrinkedAllowance));
 				}
 			}
@@ -409,12 +409,12 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 
 		public double FullAllowance
 		{
-			get { return _totalAllowance; }
+			get { return _fullAllowance; }
 			set
 			{
-				if (_totalAllowance != value)
+				if (_fullAllowance != value)
 				{
-					_totalAllowance = value;
+					_fullAllowance = value;
 					TriggerNotifyPropertyChanged(nameof(FullAllowance));
 				}
 			}
@@ -435,8 +435,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			BudgetDay.AbsenceThreshold = _absenceThreshold;
 			BudgetDay.AbsenceOverride = _absenceOverride;
 			BudgetDay.AbsenceExtra = _absenceExtra;
-			BudgetDay.FullAllowance = _totalAllowance;
-			BudgetDay.ShrinkedAllowance = _allowance;
+			BudgetDay.FullAllowance = _fullAllowance;
+			BudgetDay.ShrinkedAllowance = _shrinkedAllowance;
 		}
 
 		public void Recalculate(IBudgetCalculator calculator)

@@ -115,8 +115,8 @@
 		/// <param name="differencePercent">The difference percent.</param>
 		/// <param name="budgetedLeave">The budgeted leave.</param>
 		/// <param name="budgetedSurplus">The budgeted surplus.</param>
-		/// <param name="allowance">The allowance.</param>
-		/// <param name="totalAllowance">The total allowance</param>
+		/// <param name="shrinkedAllowance">The allowance.</param>
+		/// <param name="fullAllowance">The total allowance</param>
 		/// <remarks>
 		/// Created by: peterwe
 		/// Created date: 10/15/2010
@@ -124,7 +124,7 @@
 		public BudgetCalculationResult(double grossStaff,
 			double netStaff, double netStaffFcAdj,
 			double budgetedStaff, double forecastedStaff,
-			double difference, Percent differencePercent, double budgetedLeave, double budgetedSurplus, double allowance, double totalAllowance)
+			double difference, Percent differencePercent, double budgetedLeave, double budgetedSurplus, double shrinkedAllowance, double fullAllowance)
 		{
 			GrossStaff = grossStaff;
 			NetStaff = netStaff;
@@ -135,8 +135,8 @@
 			DifferencePercent = differencePercent;
 			BudgetedLeave = budgetedLeave;
 			BudgetedSurplus = budgetedSurplus;
-			ShrinkedAllowance = allowance;
-			FullAllowance = totalAllowance;
+			ShrinkedAllowance = shrinkedAllowance;
+			FullAllowance = fullAllowance;
 		}
 
 		/// <summary>

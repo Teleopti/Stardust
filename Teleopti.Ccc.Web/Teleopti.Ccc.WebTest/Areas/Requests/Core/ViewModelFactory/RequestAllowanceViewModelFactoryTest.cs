@@ -160,12 +160,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			return budgetGroup;
 		}
 
-		private void createBudgetDay(IBudgetGroup budgetGroup, DateOnly date, double allowance, double totalAllowance)
+		private void createBudgetDay(IBudgetGroup budgetGroup, DateOnly date, double shrinkedAllowance, double fullAllowance)
 		{
 			var budgetDay = new BudgetDay(budgetGroup, CurrentScenario.Current(), date)
 			{
-				ShrinkedAllowance = allowance,
-				FullAllowance = totalAllowance
+				ShrinkedAllowance = shrinkedAllowance,
+				FullAllowance = fullAllowance
 			};
 			BudgetDayRepository.Add(budgetDay);
 		}
