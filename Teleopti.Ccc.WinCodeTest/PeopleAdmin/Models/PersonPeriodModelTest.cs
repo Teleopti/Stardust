@@ -248,12 +248,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
 
 			Assert.AreEqual(_personPeriod2, currentPeriod);
-			Assert.AreEqual(ExternalLogOn2, currentPeriod.ExternalLogOnCollection[0]);
+			Assert.AreEqual(ExternalLogOn2, currentPeriod.ExternalLogOnCollection.First());
 			Assert.AreEqual("Login name (DS)", _target.ExternalLogOnNames);
 
-			Assert.AreEqual(1, currentPeriod.ExternalLogOnCollection.Count);
+			Assert.AreEqual(1, currentPeriod.ExternalLogOnCollection.Count());
 			_target.ExternalLogOnNames = "Login name (DS)";
-			Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count);
+			Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count());
             Assert.AreEqual("Login name (DS), Login name (DS), Login name (DS)", _target.ExternalLogOnNames);
 		}
 

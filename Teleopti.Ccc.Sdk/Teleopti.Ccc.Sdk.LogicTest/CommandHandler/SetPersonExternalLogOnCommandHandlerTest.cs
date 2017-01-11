@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			currentPeriod.Should().Not.Be.Null();
 			currentPeriod.Id.GetValueOrDefault().Should().Not.Be.EqualTo(period.Id.GetValueOrDefault());
 			currentPeriod.StartDate.Should().Be.EqualTo(setPersonExternalLogOnCommandDto.PeriodStartDate.ToDateOnly());
-			currentPeriod.ExternalLogOnCollection.Count.Should().Be.EqualTo(1);
+			currentPeriod.ExternalLogOnCollection.Count().Should().Be.EqualTo(1);
 			currentPeriod.ExternalLogOnCollection.Any(x => x.AcdLogOnName == externalLogon.AcdLogOnName && x.AcdLogOnOriginalId == externalLogon.AcdLogOnOriginalId).Should().Be.True();
 		}
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			currentPeriod.Should().Not.Be.Null();
 			currentPeriod.Id.GetValueOrDefault().Should().Be.EqualTo(period.Id.GetValueOrDefault());
 			currentPeriod.StartDate.Should().Be.EqualTo(setPersonExternalLogOnCommandDto.PeriodStartDate.ToDateOnly());
-			currentPeriod.ExternalLogOnCollection.Count.Should().Be.EqualTo(1);
+			currentPeriod.ExternalLogOnCollection.Count().Should().Be.EqualTo(1);
 			currentPeriod.ExternalLogOnCollection.Any(x => x.AcdLogOnName == externalLogon.AcdLogOnName && x.AcdLogOnOriginalId == externalLogon.AcdLogOnOriginalId).Should().Be.True();
 		}
 	}

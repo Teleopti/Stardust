@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			IExternalLogOn login = ExternalLogOnFactory.CreateExternalLogOn();
 			_target.AddExternalLogOn(login);
 
-			Assert.AreEqual(1,_target.ExternalLogOnCollection.Count);
+			Assert.AreEqual(1,_target.ExternalLogOnCollection.Count());
 			Assert.IsTrue(_target.ExternalLogOnCollection.Contains(login));
 		}
 
@@ -193,12 +193,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			IExternalLogOn login = ExternalLogOnFactory.CreateExternalLogOn();
 			_target.AddExternalLogOn(login);
 
-			Assert.AreEqual(1, _target.ExternalLogOnCollection.Count);
+			Assert.AreEqual(1, _target.ExternalLogOnCollection.Count());
 			Assert.IsTrue(_target.ExternalLogOnCollection.Contains(login));
 
 			_target.RemoveExternalLogOn(login);
 
-			Assert.AreEqual(0, _target.ExternalLogOnCollection.Count);
+			Assert.AreEqual(0, _target.ExternalLogOnCollection.Count());
 		}
 
 		[Test]
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			IExternalLogOn login = ExternalLogOnFactory.CreateExternalLogOn();
 			_target.RemoveExternalLogOn(login);
 
-			Assert.AreEqual(0, _target.ExternalLogOnCollection.Count);
+			Assert.AreEqual(0, _target.ExternalLogOnCollection.Count());
 		}
 
 		[Test]
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			_target.AddExternalLogOn(login);
 			_target.AddExternalLogOn(login);
 
-			Assert.AreEqual(1, _target.ExternalLogOnCollection.Count);
+			Assert.AreEqual(1, _target.ExternalLogOnCollection.Count());
 		}
 
 		[Test]
@@ -246,8 +246,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(_target.PersonSkillCollection.Count(), personPeriodClone.PersonSkillCollection.Count());
 			Assert.AreSame(_target, _target.PersonSkillCollection.First().Parent);
 			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection.First().Parent);
-			Assert.AreEqual(_target.ExternalLogOnCollection.Count, personPeriodClone.ExternalLogOnCollection.Count);
-			Assert.AreEqual(_target.ExternalLogOnCollection[0], personPeriodClone.ExternalLogOnCollection[0]);
+			Assert.AreEqual(_target.ExternalLogOnCollection.Count(), personPeriodClone.ExternalLogOnCollection.Count());
+			Assert.AreEqual(_target.ExternalLogOnCollection.First(), personPeriodClone.ExternalLogOnCollection.First());
 			Assert.AreEqual(_target.Note, personPeriodClone.Note);
 			Assert.AreEqual(_target.Period, personPeriodClone.Period);
 			Assert.AreNotEqual(_target.PersonContract, personPeriodClone.PersonContract);
@@ -263,8 +263,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(_target.PersonSkillCollection.Count(), personPeriodClone.PersonSkillCollection.Count());
 			Assert.AreSame(_target, _target.PersonSkillCollection.First().Parent);
 			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection.First().Parent);
-			Assert.AreEqual(_target.ExternalLogOnCollection.Count, personPeriodClone.ExternalLogOnCollection.Count);
-			Assert.AreEqual(_target.ExternalLogOnCollection[0], personPeriodClone.ExternalLogOnCollection[0]);
+			Assert.AreEqual(_target.ExternalLogOnCollection.Count(), personPeriodClone.ExternalLogOnCollection.Count());
+			Assert.AreEqual(_target.ExternalLogOnCollection.First(), personPeriodClone.ExternalLogOnCollection.First());
 			Assert.AreEqual(_target.Note, personPeriodClone.Note);
 			Assert.AreEqual(_target.Period, personPeriodClone.Period);
 			Assert.AreNotEqual(_target.PersonContract, personPeriodClone.PersonContract);
@@ -280,8 +280,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(_target.PersonSkillCollection.Count(), personPeriodClone.PersonSkillCollection.Count());
 			Assert.AreSame(_target, _target.PersonSkillCollection.First().Parent);
 			Assert.AreSame(personPeriodClone, personPeriodClone.PersonSkillCollection.First().Parent);
-			Assert.AreEqual(_target.ExternalLogOnCollection.Count, personPeriodClone.ExternalLogOnCollection.Count);
-			Assert.AreEqual(_target.ExternalLogOnCollection[0], personPeriodClone.ExternalLogOnCollection[0]);
+			Assert.AreEqual(_target.ExternalLogOnCollection.Count(), personPeriodClone.ExternalLogOnCollection.Count());
+			Assert.AreEqual(_target.ExternalLogOnCollection.First(), personPeriodClone.ExternalLogOnCollection.First());
 			Assert.AreEqual(_target.Note, personPeriodClone.Note);
 			Assert.AreEqual(_target.Period, personPeriodClone.Period);
 			Assert.AreNotEqual(_target.PersonContract, personPeriodClone.PersonContract);
@@ -312,13 +312,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			IExternalLogOn externalLogOn = ExternalLogOnFactory.CreateExternalLogOn();
 			_target.AddExternalLogOn(externalLogOn);
 			_target.ResetExternalLogOn();
-			Assert.AreEqual(0, _target.ExternalLogOnCollection.Count);
+			Assert.AreEqual(0, _target.ExternalLogOnCollection.Count());
 		}
 
 		[Test]
 		public void VerifyCanSetNote()
 		{
-			string note = "Mage Note Eka";
+			const string note = "Mage Note Eka";
 			_target.Note = note;
 			Assert.AreEqual(note, _target.Note);
 		}

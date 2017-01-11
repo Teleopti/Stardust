@@ -210,11 +210,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             IPersonPeriod currentPeriod = _target.ContainedEntity;
 
             Assert.AreEqual(_personPeriod, currentPeriod);
-            Assert.AreEqual(ExternalLogOn1, currentPeriod.ExternalLogOnCollection[0]);
+            Assert.AreEqual(ExternalLogOn1, currentPeriod.ExternalLogOnCollection.First());
 
-            Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count);
+            Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count());
             _target.ExternalLogOnNames = "Login name (DS)";
-            Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count);
+            Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count());
             Assert.AreEqual("Login name (DS), Login name (DS), Login name (DS)", _target.ExternalLogOnNames);
         }
 

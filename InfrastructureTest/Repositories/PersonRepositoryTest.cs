@@ -478,11 +478,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(testList[1],per1);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection.First().Team));
-			Assert.AreEqual(0,testList[0].PersonPeriodCollection.Count());
-			Assert.AreEqual(2,testList[1].PersonPeriodCollection.Count());
+			Assert.AreEqual(0,testList[0].PersonPeriodCollection.Count);
+			Assert.AreEqual(2,testList[1].PersonPeriodCollection.Count);
 			IList<IPersonPeriod> wrappedPersonPeriod = new List<IPersonPeriod>(testList[1].PersonPeriodCollection);
-			Assert.AreEqual(1,wrappedPersonPeriod[0].ExternalLogOnCollection.Count);
-			Assert.AreEqual(1,wrappedPersonPeriod[1].ExternalLogOnCollection.Count);
+			Assert.AreEqual(1,wrappedPersonPeriod[0].ExternalLogOnCollection.Count());
+			Assert.AreEqual(1,wrappedPersonPeriod[1].ExternalLogOnCollection.Count());
 		}
 
 		[Test]
@@ -1696,8 +1696,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2000,1,2),false);
 			Assert.AreEqual(1,res.Count);
 			IPerson per = res.First();
-			Assert.AreEqual(2,per.PersonPeriodCollection.Count());
-			Assert.AreEqual(2,per.PersonPeriodCollection.Sum(x => x.ExternalLogOnCollection.Count));
+			Assert.AreEqual(2,per.PersonPeriodCollection.Count);
+			Assert.AreEqual(2,per.PersonPeriodCollection.Sum(x => x.ExternalLogOnCollection.Count()));
 		}
 
 		[Test]

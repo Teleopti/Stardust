@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -66,14 +65,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			set { }
 		}
 
-		public virtual DateOnlyPeriod Period
-		{
-			get
-			{
-				var returnValue = new DateOnlyPeriod(StartDate, EndDate());
-				return (returnValue);
-			}
-		}
+		public virtual DateOnlyPeriod Period => new DateOnlyPeriod(StartDate, EndDate());
 
 		public virtual IPersonContract PersonContract
 		{
@@ -93,13 +85,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			set { _team = value; }
 		}
 
-		public virtual IEnumerable<IPersonSkill> PersonSkillCollection
-		{
-			get
-			{
-				return _personSkillCollection.ToList();
-			}
-		}
+		public virtual IEnumerable<IPersonSkill> PersonSkillCollection => _personSkillCollection.ToArray();
 
 		public virtual IEnumerable<IPersonSkill> CascadingSkills()
 		{
@@ -118,10 +104,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			set { _note = value; }
 		}
 
-		public virtual ReadOnlyCollection<IExternalLogOn> ExternalLogOnCollection
-		{
-			get { return new ReadOnlyCollection<IExternalLogOn>(_externalLogOnCollection.ToList()); }
-		}
+		public virtual IEnumerable<IExternalLogOn> ExternalLogOnCollection => _externalLogOnCollection.ToArray();
 
 		public virtual IBudgetGroup BudgetGroup
 		{
@@ -131,11 +114,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public virtual void AddPersonSkill(IPersonSkill personSkill)
 		{
-			InParameter.NotNull("personSkill", personSkill);
+			InParameter.NotNull(nameof(personSkill), personSkill);
 
 			if (_personSkillCollection.Any(p => p.Skill.Equals(personSkill.Skill)))
 			{
-				throw new ArgumentException("There is already an instance of the skill connected to this person period.");
+				throw new ArgumentException("There is already an instance of the skill connected to this person period.",nameof(personSkill));
 			}
 
 			personSkill.SetParent(this);
@@ -144,7 +127,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public virtual void DeletePersonSkill(IPersonSkill personSkill)
 		{
-			InParameter.NotNull("personSkill", personSkill);
+			InParameter.NotNull(nameof(personSkill), personSkill);
 
 			_personSkillCollection.Remove(personSkill);
 		}
@@ -156,42 +139,36 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public virtual void AddExternalLogOn(IExternalLogOn externalLogOn)
 		{
-			InParameter.NotNull("logOn", externalLogOn);
+			InParameter.NotNull(nameof(externalLogOn), externalLogOn);
 			_externalLogOnCollection.Add(externalLogOn);
 		}
 
 		public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn)
 		{
-			InParameter.NotNull("externalLogOn", externalLogOn);
+			InParameter.NotNull(nameof(externalLogOn), externalLogOn);
 
 			_externalLogOnCollection.Remove(externalLogOn);
 		}
 
 		[RemoveMeWithToggle("Change return parameter to MaxSeatSkill", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public virtual ISkill MaxSeatSkill
-		{
-			get { return _maxSeatSkill; }
-		}
+		public virtual ISkill MaxSeatSkill => _maxSeatSkill;
 
 		[RemoveMeWithToggle("Change inparameter to MaxSeatSkill", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public virtual void SetMaxSeatSkill(ISkill maxSeatSkill)
 		{
 			if(maxSeatSkill!=null && maxSeatSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
-				throw new ArgumentOutOfRangeException("personSkill", "The SkillType.ForecastSource of the Skill on the PersonSkill must be MaxSeatSkill");
+				throw new ArgumentOutOfRangeException(nameof(maxSeatSkill), "The SkillType.ForecastSource of the Skill on the PersonSkill must be MaxSeatSkill");
 			_maxSeatSkill = maxSeatSkill;
 		}
 
-	    public virtual IList<IPersonSkill> PersonNonBlendSkillCollection
-	    {
-            get { return _personNonBlendSkillCollection; }
-	    }
+	    public virtual IList<IPersonSkill> PersonNonBlendSkillCollection => _personNonBlendSkillCollection;
 
-	    public virtual void AddPersonNonBlendSkill(IPersonSkill personSkill)
+		public virtual void AddPersonNonBlendSkill(IPersonSkill personSkill)
 	    {
             if (personSkill == null)
                 return;
             if (personSkill.Skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
-                throw new ArgumentOutOfRangeException("personSkill", "The SkillType.ForecastSource of the Skill on the PersonSkill must be NonBlendSkill");
+                throw new ArgumentOutOfRangeException(nameof(personSkill), "The SkillType.ForecastSource of the Skill on the PersonSkill must be NonBlendSkill");
             _personNonBlendSkillCollection.Add(personSkill);
 	    }
 

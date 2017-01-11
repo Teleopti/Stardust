@@ -84,7 +84,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the person external log on collection.
         /// </summary>
         /// <value>The person external log on collection.</value>
-        ReadOnlyCollection<IExternalLogOn> ExternalLogOnCollection { get; }
+        IEnumerable<IExternalLogOn> ExternalLogOnCollection { get; }
 
     	///<summary>
     	/// Gets or sets the budget group

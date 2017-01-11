@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public PersonSkill(ISkill skill, Percent skillPercentage)
 			: this()
 		{
-			InParameter.NotNull("skill", skill);
-			InParameter.NotNull("skillPercentage", skillPercentage);
+			InParameter.NotNull(nameof(skill), skill);
+			InParameter.NotNull(nameof(skillPercentage), skillPercentage);
 
 			_skill = skill;
 			_skillPercentage = skillPercentage;
@@ -29,12 +29,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return Skill.Activity?.Equals(activity) ?? Skill.Activity == null;
 		}
 
-		public virtual ISkill Skill
-        {
-            get { return _skill; }
-        }
+		public virtual ISkill Skill => _skill;
 
-        public virtual Percent SkillPercentage
+	    public virtual Percent SkillPercentage
         {
             get { return _skillPercentage; }
             set
