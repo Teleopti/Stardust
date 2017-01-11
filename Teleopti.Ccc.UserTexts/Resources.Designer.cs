@@ -2240,15 +2240,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allowance after threshold.
-        /// </summary>
-        public static string AllowanceAfterThreshold {
-            get {
-                return ResourceManager.GetString("AllowanceAfterThreshold", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Allow break contract max work time per week.
         /// </summary>
         public static string AllowBreakContractMaxWorkTimePerWeek {
@@ -12039,7 +12030,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total allowance.
+        ///   Looks up a localized string similar to Full allowance.
         /// </summary>
         public static string FullAllowance {
             get {
@@ -28795,6 +28786,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShrinkageSpan {
             get {
                 return ResourceManager.GetString("ShrinkageSpan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allowance after threshold.
+        /// </summary>
+        public static string ShrinkedAllowance {
+            get {
+                return ResourceManager.GetString("ShrinkedAllowance", resourceCulture);
             }
         }
         

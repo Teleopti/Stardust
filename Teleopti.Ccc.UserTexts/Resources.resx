@@ -10305,11 +10305,11 @@ These options are activated:
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>The input text can not be empty.</value>
   </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Total allowance</value>
-    <comment>total allowance</comment>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>Full allowance</value>
+    <comment>Full allowance</comment>
   </data>
-  <data name="AllowanceAfterThreshold" xml:space="preserve">
+  <data name="ShrinkedAllowance" xml:space="preserve">
     <value>Allowance after threshold</value>
     <comment>Allowance after threshold</comment>
   </data>

@@ -43,17 +43,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle4 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle5 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle6 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle7 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonRefresh = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.labelBudgetGroup = new System.Windows.Forms.Label();
 			this.labelAllowance = new System.Windows.Forms.Label();
-			this.radioButtonTotalAllowance = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
-			this.radioButtonAllowance = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
+			this.radioButtonFullAllowance = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
+			this.radioButtonShrinkedAllowance = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.comboBoxAdvBudgetGroup = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.requestAllowanceGridControl = new Teleopti.Ccc.Win.Scheduling.RequestAllowanceGridControl();
 			this.tableLayoutPanel.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonTotalAllowance)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonAllowance)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonFullAllowance)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonShrinkedAllowance)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvBudgetGroup)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.requestAllowanceGridControl)).BeginInit();
 			this.SuspendLayout();
@@ -66,13 +67,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
 			this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
 			this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
-			this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
+			this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
 			this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel.Controls.Add(this.buttonRefresh, 4, 0);
 			this.tableLayoutPanel.Controls.Add(this.labelBudgetGroup, 0, 0);
 			this.tableLayoutPanel.Controls.Add(this.labelAllowance, 2, 0);
-			this.tableLayoutPanel.Controls.Add(this.radioButtonTotalAllowance, 3, 0);
-			this.tableLayoutPanel.Controls.Add(this.radioButtonAllowance, 3, 1);
+			this.tableLayoutPanel.Controls.Add(this.radioButtonFullAllowance, 3, 0);
+			this.tableLayoutPanel.Controls.Add(this.radioButtonShrinkedAllowance, 3, 1);
 			this.tableLayoutPanel.Controls.Add(this.comboBoxAdvBudgetGroup, 1, 0);
 			this.tableLayoutPanel.Controls.Add(this.requestAllowanceGridControl, 0, 3);
 			this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.buttonRefresh.ForeColor = System.Drawing.Color.White;
 			this.buttonRefresh.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.buttonRefresh.IsBackStageButton = false;
-			this.buttonRefresh.Location = new System.Drawing.Point(563, 15);
+			this.buttonRefresh.Location = new System.Drawing.Point(573, 15);
 			this.buttonRefresh.Margin = new System.Windows.Forms.Padding(3, 3, 12, 3);
 			this.buttonRefresh.MinimumSize = new System.Drawing.Size(99, 28);
 			this.buttonRefresh.Name = "buttonRefresh";
@@ -136,33 +137,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.labelAllowance.Text = "xxAllowanceColon";
 			this.labelAllowance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// radioButtonTotalAllowance
+			// radioButtonFullAllowance
 			// 
-			this.radioButtonTotalAllowance.BeforeTouchSize = new System.Drawing.Size(142, 22);
-			this.radioButtonTotalAllowance.DrawFocusRectangle = false;
-			this.radioButtonTotalAllowance.Location = new System.Drawing.Point(393, 3);
-			this.radioButtonTotalAllowance.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.radioButtonTotalAllowance.Name = "radioButtonTotalAllowance";
-			this.radioButtonTotalAllowance.Size = new System.Drawing.Size(142, 22);
-			this.radioButtonTotalAllowance.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
-			this.radioButtonTotalAllowance.TabIndex = 1;
-			this.radioButtonTotalAllowance.Text = "xxTotalAllowance";
-			this.radioButtonTotalAllowance.ThemesEnabled = false;
-			this.radioButtonTotalAllowance.CheckChanged += new System.EventHandler(this.radioButtonTotalAllowanceCheckChanged);
+			this.radioButtonFullAllowance.BeforeTouchSize = new System.Drawing.Size(174, 22);
+			this.radioButtonFullAllowance.DrawFocusRectangle = false;
+			this.radioButtonFullAllowance.Location = new System.Drawing.Point(393, 3);
+			this.radioButtonFullAllowance.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.radioButtonFullAllowance.Name = "radioButtonFullAllowance";
+			this.radioButtonFullAllowance.Size = new System.Drawing.Size(174, 22);
+			this.radioButtonFullAllowance.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
+			this.radioButtonFullAllowance.TabIndex = 1;
+			this.radioButtonFullAllowance.Text = "xxFullAllowance";
+			this.radioButtonFullAllowance.ThemesEnabled = false;
+			this.radioButtonFullAllowance.CheckChanged += new System.EventHandler(this.radioButtonFullAllowanceCheckChanged);
 			// 
-			// radioButtonAllowance
+			// radioButtonShrinkedAllowance
 			// 
-			this.radioButtonAllowance.BeforeTouchSize = new System.Drawing.Size(142, 22);
-			this.radioButtonAllowance.DrawFocusRectangle = false;
-			this.radioButtonAllowance.Location = new System.Drawing.Point(393, 32);
-			this.radioButtonAllowance.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.radioButtonAllowance.Name = "radioButtonAllowance";
-			this.radioButtonAllowance.Size = new System.Drawing.Size(142, 22);
-			this.radioButtonAllowance.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
-			this.radioButtonAllowance.TabIndex = 2;
-			this.radioButtonAllowance.Text = "xxAllowance";
-			this.radioButtonAllowance.ThemesEnabled = false;
-			this.radioButtonAllowance.CheckChanged += new System.EventHandler(this.radioButtonAllowanceCheckChanged);
+			this.radioButtonShrinkedAllowance.BeforeTouchSize = new System.Drawing.Size(174, 22);
+			this.radioButtonShrinkedAllowance.DrawFocusRectangle = false;
+			this.radioButtonShrinkedAllowance.Location = new System.Drawing.Point(393, 32);
+			this.radioButtonShrinkedAllowance.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.radioButtonShrinkedAllowance.Name = "radioButtonShrinkedAllowance";
+			this.radioButtonShrinkedAllowance.Size = new System.Drawing.Size(174, 22);
+			this.radioButtonShrinkedAllowance.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
+			this.radioButtonShrinkedAllowance.TabIndex = 2;
+			this.radioButtonShrinkedAllowance.Text = "xxShrinkedAllowance";
+			this.radioButtonShrinkedAllowance.ThemesEnabled = false;
+			this.radioButtonShrinkedAllowance.CheckChanged += new System.EventHandler(this.radioButtonShrinkedAllowanceCheckChanged);
 			// 
 			// comboBoxAdvBudgetGroup
 			// 
@@ -273,19 +274,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 			gridRangeStyle4.StyleInfo.Font.Strikeout = false;
 			gridRangeStyle4.StyleInfo.Font.Underline = false;
 			gridRangeStyle4.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
-			gridRangeStyle5.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cell(0, 1);
-			gridRangeStyle5.StyleInfo.CellType = "PushButton";
-			gridRangeStyle5.StyleInfo.Description = "<";
-			gridRangeStyle6.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cell(0, 7);
+			gridRangeStyle5.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle5.StyleInfo.Font.Bold = false;
+			gridRangeStyle5.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle5.StyleInfo.Font.Italic = false;
+			gridRangeStyle5.StyleInfo.Font.Size = 8.25F;
+			gridRangeStyle5.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle5.StyleInfo.Font.Underline = false;
+			gridRangeStyle5.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle6.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cell(0, 1);
 			gridRangeStyle6.StyleInfo.CellType = "PushButton";
-			gridRangeStyle6.StyleInfo.Description = ">";
+			gridRangeStyle6.StyleInfo.Description = "<";
+			gridRangeStyle7.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cell(0, 7);
+			gridRangeStyle7.StyleInfo.CellType = "PushButton";
+			gridRangeStyle7.StyleInfo.Description = ">";
 			this.requestAllowanceGridControl.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
             gridRangeStyle1,
             gridRangeStyle2,
             gridRangeStyle3,
             gridRangeStyle4,
             gridRangeStyle5,
-            gridRangeStyle6});
+            gridRangeStyle6,
+            gridRangeStyle7});
 			this.requestAllowanceGridControl.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
 			this.requestAllowanceGridControl.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
@@ -319,8 +329,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.Load += new System.EventHandler(this.requestAllowanceViewLoad);
 			this.tableLayoutPanel.ResumeLayout(false);
 			this.tableLayoutPanel.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonTotalAllowance)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonAllowance)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonFullAllowance)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonShrinkedAllowance)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvBudgetGroup)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.requestAllowanceGridControl)).EndInit();
 			this.ResumeLayout(false);
@@ -330,14 +340,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #endregion
 
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.Label labelBudgetGroup;
         private System.Windows.Forms.Label labelAllowance;
-        private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonTotalAllowance;
-        private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAllowance;
+        private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonFullAllowance;
+        private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonShrinkedAllowance;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvBudgetGroup;
         private RequestAllowanceGridControl requestAllowanceGridControl;
         private Syncfusion.Windows.Forms.ButtonAdv buttonRefresh;
-
     }
 }

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 		private GridRowSection<IBudgetGroupDayDetailModel> _efficiencyShrinkageSection;
 		private IList<double> _modifiedItems;
 		private readonly IEventAggregator _globalEventAggregator;
-		
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reassociator")]
 		public BudgetGroupDayView(IEventAggregatorLocator eventAggregatorLocator, BudgetDayReassociator budgetDayReassociator, IBudgetPermissionService budgetPermissionService)
 		{
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 				_budgetDayReassociator.Reassociate();
 				Presenter.Initialize();
 			}
-			
+
 			SetupGridControl();
 
 			budgetGroupDayViewMenu.Items[9].Enabled = false;
@@ -119,9 +119,11 @@ namespace Teleopti.Ccc.Win.Budgeting
 				case ClipboardAction.Copy:
 					gridControlDayView.CutPaste.Copy();
 					break;
+
 				case ClipboardAction.Cut:
 					gridControlDayView.CutPaste.Cut();
 					break;
+
 				case ClipboardAction.Paste:
 					{
 						OnBeginBudgetDaysUpdate(true);
@@ -235,7 +237,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			var nullableCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
 			var nullableNegativeCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = -99999999d, MaxValue = 99999999d };
 			var restrictedValueForFte = new NumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 12d };
-			
+
 			gridControlDayView.CellModels.Add("RestrictedValueForFTE", restrictedValueForFte);
 			gridControlDayView.CellModels.Add("NumericReadOnlyCellModel", numCell);
 			gridControlDayView.CellModels.Add("PercentReadOnlyCellModel", percentCell);
@@ -385,58 +387,58 @@ namespace Teleopti.Ccc.Win.Budgeting
 			if (_budgetPermissionService.IsAllowancePermitted)
 			{
 				_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
-										 {
-											 HeaderText = UserTexts.Resources.BudgetedLeave,
-											 ValueMember =
+				{
+					HeaderText = UserTexts.Resources.BudgetedLeave,
+					ValueMember =
 												 new ModelProperty<IBudgetGroupDayDetailModel>("BudgetedLeave"),
-											 CellModel = "NumericReadOnlyCellModel",
-											 ReadOnly = true
-										 });
+					CellModel = "NumericReadOnlyCellModel",
+					ReadOnly = true
+				});
 				_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
-										 {
-											 HeaderText = UserTexts.Resources.BudgetedSurplus,
-											 ValueMember =
+				{
+					HeaderText = UserTexts.Resources.BudgetedSurplus,
+					ValueMember =
 												 new ModelProperty<IBudgetGroupDayDetailModel>("BudgetedSurplus"),
-											 CellModel = "NumericReadOnlyCellModel",
-											 ReadOnly = true
-										 });
+					CellModel = "NumericReadOnlyCellModel",
+					ReadOnly = true
+				});
 				_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
-										 {
-											 HeaderText = UserTexts.Resources.AbsenceExtra,
-											 ValueMember = new ModelProperty<IBudgetGroupDayDetailModel>("AbsenceExtra"),
-											 CellValueType = typeof (double),
-											 CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
-										 });
+				{
+					HeaderText = UserTexts.Resources.AbsenceExtra,
+					ValueMember = new ModelProperty<IBudgetGroupDayDetailModel>("AbsenceExtra"),
+					CellValueType = typeof(double),
+					CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
+				});
 				_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
-										 {
-											 HeaderText = UserTexts.Resources.AbsenceOverride,
-											 ValueMember =
+				{
+					HeaderText = UserTexts.Resources.AbsenceOverride,
+					ValueMember =
 												 new ModelProperty<IBudgetGroupDayDetailModel>("AbsenceOverride"),
-											 CellValueType = typeof (double),
-											 CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
-										 });
+					CellValueType = typeof(double),
+					CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
+				});
 				_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
-										 {
-											 HeaderText = UserTexts.Resources.TotalAllowance,
-											 ValueMember = new ModelProperty<IBudgetGroupDayDetailModel>("TotalAllowance"),
-											 CellModel = "NumericReadOnlyCellModel",
-											 ReadOnly = true
-										 });
+				{
+					HeaderText = UserTexts.Resources.FullAllowance,
+					ValueMember = new ModelProperty<IBudgetGroupDayDetailModel>("FullAllowance"),
+					CellModel = "NumericReadOnlyCellModel",
+					ReadOnly = true
+				});
 				_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
-										 {
-											 HeaderText = string.Format(UserTexts.Resources.AbsenceThreshold + " (%)"),
-											 ValueMember =
+				{
+					HeaderText = string.Format(UserTexts.Resources.AbsenceThreshold + " (%)"),
+					ValueMember =
 												 new ModelProperty<IBudgetGroupDayDetailModel>("AbsenceThreshold"),
-											 CellValueType = typeof (Percent),
-											 CellModel = "PercentWithTwoDecimalsCell"
-										 });
+					CellValueType = typeof(Percent),
+					CellModel = "PercentWithTwoDecimalsCell"
+				});
 				_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
-										 {
-											 HeaderText = UserTexts.Resources.Allowance,
-											 ValueMember = new ModelProperty<IBudgetGroupDayDetailModel>("Allowance"),
-											 CellModel = "NumericReadOnlyCellModel",
-											 ReadOnly = true
-										 });
+				{
+					HeaderText = UserTexts.Resources.ShrinkedAllowance,
+					ValueMember = new ModelProperty<IBudgetGroupDayDetailModel>("ShrinkedAllowance"),
+					CellModel = "NumericReadOnlyCellModel",
+					ReadOnly = true
+				});
 			}
 
 			gridControlDayView.Rows.HeaderCount = 1;
@@ -469,15 +471,15 @@ namespace Teleopti.Ccc.Win.Budgeting
 			{
 				if (customShrinkage == null) throw new ArgumentNullException("customShrinkage");
 				_shrinkageSection.InsertRow(new GridRow<IBudgetGroupDayDetailModel>
-												{
-													HeaderText = string.Format(CultureInfo.CurrentCulture, customShrinkage.ShrinkageName + " (%)"),
-													ValueMember =
+				{
+					HeaderText = string.Format(CultureInfo.CurrentCulture, customShrinkage.ShrinkageName + " (%)"),
+					ValueMember =
 														new ModelDynamicProperty<IBudgetGroupDayDetailModel, Percent, ICustomShrinkage>(
 														OnGetShrinkageModelValue, OnSetShrinkageModelValue, customShrinkage),
-													CellValueType = typeof(Percent),
-													CellModel = "PercentWithTwoDecimalsCell",
-													Tag = customShrinkage
-												});
+					CellValueType = typeof(Percent),
+					CellModel = "PercentWithTwoDecimalsCell",
+					Tag = customShrinkage
+				});
 			}
 		}
 
@@ -501,17 +503,17 @@ namespace Teleopti.Ccc.Win.Budgeting
 			{
 				if (customEfficiencyShrinkage == null) throw new ArgumentNullException("customEfficiencyShrinkage");
 				_efficiencyShrinkageSection.InsertRow(new GridRow<IBudgetGroupDayDetailModel>
-														{
-															HeaderText = customEfficiencyShrinkage.ShrinkageName + " (%)",
-															ValueMember =
+				{
+					HeaderText = customEfficiencyShrinkage.ShrinkageName + " (%)",
+					ValueMember =
 																new ModelDynamicProperty
 																<IBudgetGroupDayDetailModel, Percent, ICustomEfficiencyShrinkage>
 																(OnGetEfficiencyShrinkageModelValue, OnSetEfficiencyShrinkageModelValue,
 																 customEfficiencyShrinkage),
-															CellValueType = typeof(Percent),
-															CellModel = "PercentWithTwoDecimalsCell",
-															Tag = customEfficiencyShrinkage
-														});
+					CellValueType = typeof(Percent),
+					CellModel = "PercentWithTwoDecimalsCell",
+					Tag = customEfficiencyShrinkage
+				});
 			}
 		}
 
@@ -539,7 +541,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			_shrinkageSection.IsInsideSection(e.Range);
 			_efficiencyShrinkageSection.IsInsideSection(e.Range);
-			_localEventAggregator.GetEvent<GridSelectionChanged>().Publish(true); 
+			_localEventAggregator.GetEvent<GridSelectionChanged>().Publish(true);
 			budgetGroupDayViewMenu.Items[9].Enabled = true;
 		}
 
@@ -606,7 +608,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			gridControlDayView.ColWidths.ResizeToFit(GridRangeInfo.Col(0));
 			_entityBinder.RangeChanged.RangeChanging += RangeChanged_RangeChanging;
 			_entityBinder.RangeChanged.RangeChanged += RangeChanged_RangeChanged;
-
 		}
 
 		private void RangeChanged_RangeChanged(object sender, EventArgs e)
@@ -677,7 +678,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 				}
 				else
 				{
-
 					toolStripMenuItemUpdateEfficiencyShrinkageRow.Enabled = false;
 					toolStripMenuItemDeleteEfficiencyShrinkageRow.Enabled = false;
 				}
@@ -698,7 +698,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 					toolStripMenuItemDeleteShrinkageRow.Enabled = false;
 				}
 			}
-
 		}
 
 		private void GridUpdated(bool b)

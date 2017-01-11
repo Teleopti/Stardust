@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			comboBoxAdvBudgetGroup.SelectedIndexChanged += comboBoxAdvBudgetGroupSelectedIndexChanged;
 			comboBoxAdvBudgetGroup.SelectedItem = _presenter.SelectedBudgetGroup();
 			comboBoxAdvBudgetGroup.DisplayMember = "Name";
-			radioButtonAllowance.Checked = true;
+			radioButtonShrinkedAllowance.Checked = true;
 		}
 
 		public IList<BudgetAbsenceAllowanceDetailModel> DataSource
@@ -157,14 +157,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void radioButtonTotalAllowanceCheckChanged(object sender, EventArgs e)
+		private void radioButtonFullAllowanceCheckChanged(object sender, EventArgs e)
 		{
-			_presenter.OnRadioButtonFullAllowanceCheckChanged(radioButtonTotalAllowance.Checked);
+			_presenter.OnRadioButtonFullAllowanceCheckChanged(radioButtonFullAllowance.Checked);
 		}
 
-		private void radioButtonAllowanceCheckChanged(object sender, EventArgs e)
+		private void radioButtonShrinkedAllowanceCheckChanged(object sender, EventArgs e)
 		{
-			_presenter.OnRadioButtonShrinkedAllowanceCheckChanged(radioButtonAllowance.Checked);
+			_presenter.OnRadioButtonShrinkedAllowanceCheckChanged(radioButtonShrinkedAllowance.Checked);
 		}
 
 		private void comboBoxAdvBudgetGroupSelectedIndexChanged(object sender, EventArgs e)
