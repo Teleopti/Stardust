@@ -4,16 +4,16 @@ using Teleopti.Ccc.Rta.PerformanceTest.Code;
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	[TestFixture]
-	[Category("SendStateTest")]
 	[RtaPerformanceTest]
-	public class StateSendTest
+	[Explicit]
+	public class SendLargeBatchesTest
 	{
 		public StatesSender States;
 
 		[Test]
 		public void MeasurePerformance()
 		{
-			States.Send();
+			States.SendAllAsLargeBatches();
 		}
 	}
 }

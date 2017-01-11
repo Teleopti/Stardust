@@ -5,9 +5,9 @@ using Teleopti.Ccc.Rta.PerformanceTest.Code;
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	[TestFixture]
-	[Category("BackgroundWorkTest")]
 	[RtaPerformanceTest]
-	public class BackgroundWorkTest
+	[Explicit]
+	public class QueueWorkLargeBatchesTest
 	{
 		public StatesSender States;
 		public HangfireUtilities Hangfire;
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[Test]
 		public void MeasurePerformance()
 		{
-			States.Send();
+			States.SendAllAsLargeBatches();
 			Hangfire.WaitForQueue();
 		}
     }

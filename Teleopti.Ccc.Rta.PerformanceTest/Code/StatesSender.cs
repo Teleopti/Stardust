@@ -14,60 +14,72 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	public class StatesSender
 	{
 		private readonly MutableNow _now;
-		private readonly TestConfiguration _stateHolder;
+		private readonly TestConfiguration _testConfiguration;
 		private readonly DataCreator _data;
 		private readonly Http _http;
 
 		public StatesSender(
 			MutableNow now, 
-			TestConfiguration stateHolder,
+			TestConfiguration testConfiguration,
 			DataCreator data,
 			Http http)
 		{
 			_now = now;
-			_stateHolder = stateHolder;
+			_testConfiguration = testConfiguration;
 			_data = data;
 			_http = http;
 		}
 
 		[TestLogTime]
-		public virtual void Send()
+		public virtual void SendAllAsSingles()
 		{
 			StateChanges().ForEach(stateChange =>
 			{
 				setTime(stateChange);
-				Enumerable.Range(0, _stateHolder.NumberOfAgentsWorking)
-					.ForEach(roger =>
+				_data.LogonsWorking()
+					.ForEach(logon =>
 					{
 						_http.PostJson(
 							"Rta/State/Change",
 							new ExternalUserStateWebModel
 							{
 								AuthenticationKey = LegacyAuthenticationKey.TheKey,
-								UserCode = $"roger{roger}",
+								UserCode = logon.UserCode,
 								StateCode = stateChange.StateCode,
 								PlatformTypeId = Guid.Empty.ToString(),
-								SourceId = _stateHolder.SourceId,
+								SourceId = _testConfiguration.SourceId,
 							});
 					});
 			});
 		}
 
-		public void SendBatches()
+		[TestLogTime]
+		public virtual void SendAllAsSmallBatches()
+		{
+			sendAllAsBatches(50);
+		}
+
+		[TestLogTime]
+		public virtual void SendAllAsLargeBatches()
+		{
+			sendAllAsBatches(1000);
+		}
+
+		private void sendAllAsBatches(int size)
 		{
 			StateChanges().ForEach(stateChange =>
 			{
 				setTime(stateChange);
-				Enumerable.Range(0, _stateHolder.NumberOfAgentsWorking)
-					.Select(agent => new ExternalUserStateWebModel
+				_data.LogonsWorking()
+					.Select(logon => new ExternalUserStateWebModel
 					{
 						AuthenticationKey = LegacyAuthenticationKey.TheKey,
-						UserCode = $"roger{agent}",
+						UserCode = logon.UserCode,
 						StateCode = stateChange.StateCode,
 						PlatformTypeId = Guid.Empty.ToString(),
-						SourceId = _stateHolder.SourceId,
+						SourceId = _testConfiguration.SourceId,
 					})
-					.Batch(1000)
+					.Batch(size)
 					.ForEach(state => _http.PostJson("Rta/State/Batch", state));
 			});
 		}

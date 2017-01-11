@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	[TestFixture]
-	[Category("PrepareDatabase")]
+	[Explicit]
 	public class PrepareDatabase
 	{
 		[Test]

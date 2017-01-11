@@ -168,7 +168,7 @@ TIME /T
 ECHO.
 
 :: Run selected test within trace
-CALL %NUnit% --where="test==Teleopti.Ccc.Rta.PerformanceTest.BatchSendTest"
+CALL %NUnit% --where="test==Teleopti.Ccc.Rta.PerformanceTest.SendLargeBatchesTest"
 
 :: Cleanup RML
 call :stopTrace %traceid%
