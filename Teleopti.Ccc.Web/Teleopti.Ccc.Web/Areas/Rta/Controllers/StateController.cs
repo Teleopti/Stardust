@@ -107,6 +107,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			return Ok();
 		}
 
+		[HttpPost, Route("Rta/State/CloseSnapshot")]
+		public void CloseSnapshot([FromBody]ExternalCloseSnapshotWebModel input)
+		{
+			_rta.CloseSnapshot(new CloseSnapshotInputModel
+			{
+				AuthenticationKey = input.AuthenticationKey,
+				SourceId = input.SourceId,
+				SnapshotId = input.SnapshotId
+			});
+		}
+
 		private static DateTime? parseSnapshotId(string snapshotId)
 		{
 			DateTime parsed;

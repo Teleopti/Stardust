@@ -9,6 +9,7 @@
 					<span ng-repeat="state in stateCodes"><button ng-click="sendBatches(state.Code)" class="wfm-btn wfm-btn-primary" style="margin-bottom: 20px; width: 120px;">{{state.Name}}</button> </span>
 				</div>
 				<div class="pull-right">
+					
 					<div style="float:left">
 						<div class="con-flex" ng-if="!pause" style="margin-top:10px">
 							<span class="h4">Random states</span>
@@ -21,6 +22,11 @@
 							<i ng-class="{'mdi mdi-play': pause, 'mdi mdi-pause': !pause}"></i>
 							<md-tooltip>Send random states</md-tooltip>
 						</button>
+					</div>
+					<div>
+						<label>Snapshot
+							<input type="checkbox" ng-model="snapshot.value">
+						</label>
 					</div>
 				</div>
 			</div>

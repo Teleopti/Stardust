@@ -12,6 +12,7 @@
 				var polling = null;
 				$scope.sendInterval = { time: 5 };
 				$scope.stateCodes = [];
+				$scope.snapshot = { value: false };
 				var statesCellTemplate = '<div class="ui-grid-cell-contents" style=" margin: 0 auto; text-align: center"><button ng-click="grid.appScope.sendState(row.entity.UserCode, row.entity.DataSource, COL_FIELD)" class="wfm-btn wfm-btn-primary" style="width: 120px;">{{COL_FIELD}}</button></div>';
 
 				$scope.gridOptions = {
@@ -95,6 +96,7 @@
 							method: 'POST',
 						},
 					}).query(data).$promise;
+					closeSnapshot(dataSource);
 				}
 
 				$scope.sendBatches = function (stateCode) {
@@ -104,6 +106,7 @@
 					sendBatch(selectedAgents.map(function (s) {
 						return createState(s.UserCode, s.DataSource, stateCode);
 					}));
+					closeSnapshot(selectedAgents[0].DataSource);
 				}
 
 				$scope.sendRandomBatch = function () {
@@ -117,7 +120,9 @@
 							return createState(s.UserCode, s.DataSource, getRandomStateCode());
 						}));
 					}
+					closeSnapshot(selectedAgents[0].DataSource);
 				}
+
 				function getRandomStateCode() {
 					return $scope.stateCodes[Math.floor(Math.random() * $scope.stateCodes.length)].Code
 				}
@@ -143,8 +148,21 @@
 						SourceId: dataSource,
 						BatchId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 						SnapshotId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
-						IsSnapshot: false
+						IsSnapshot: $scope.snapshot.value
 					};
+				}
+
+				function closeSnapshot(dataSource) {
+					if ($scope.snapshot.value)
+						$resource('../Rta/State/CloseSnapshot', {}, {
+							query: {
+								method: 'POST',
+							},
+						}).query({
+							AuthenticationKey: "!#¤atAbgT%",
+							SourceId: dataSource,
+							SnapshotId: moment.utc().format('YYYY-MM-DD HH:mm:ss')
+						}).$promise;
 				}
 
 				function setupPolling() {

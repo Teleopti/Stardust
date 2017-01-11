@@ -240,6 +240,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPreferenceMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsRequestMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
+    <Compile Include="ApplicationLayer\Rta\ExternalCloseSnapshotWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
