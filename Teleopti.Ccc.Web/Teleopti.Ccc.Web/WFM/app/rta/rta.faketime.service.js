@@ -4,12 +4,10 @@
 		.module('wfm.rta')
 		.service('fakeTimeService', fakeTimeService);
 
-	fakeTimeService.$inject = ['$window'];
-
-	function fakeTimeService($window) {
+	function fakeTimeService() {
 		// copied from sinon.js
 		// https://github.com/cjohansen/Sinon.JS/blob/master/lib/sinon/util/fake_timers.js
-		$window.fakeTime = function(fyear, fmonth, fdate, fhour, fminute, fsecond) {
+		window.fakeTime = function(fyear, fmonth, fdate, fhour, fminute, fsecond) {
 			function mirrorDateProperties(target, source) {
 				if (source.now) {
 					target.now = function now() {
