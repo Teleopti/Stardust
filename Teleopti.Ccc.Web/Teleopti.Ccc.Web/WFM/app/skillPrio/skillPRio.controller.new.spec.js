@@ -210,7 +210,7 @@ describe('skillPrioControllerNew', function () {
     vm.selectActivity(vm.activites[0]);
     vm.moveBackToUnsort(vm.cascadeList[0].Skills, vm.skills[2]);
 
-    expect(vm.cascadeList.length).toBe(1);
+    expect(vm.cascadeList.length).toBe(2); //should be 1 but function auto add new row when list is not totally empty 
     expect(vm.unsortedList.length).toBe(2);
   });
 

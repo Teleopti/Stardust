@@ -117,13 +117,14 @@
 
 		function autoDeleteEmptyRow() {
 			if (vm.cascadeList.length > 0) {
-				for (var i = 0; i < vm.cascadeList.length; i++) {
+				var i = vm.cascadeList.length
+				while (i--) {
 					if (vm.cascadeList[i].Skills.length === 0) {
 						vm.cascadeList.splice(i, 1);
 						resetCascadeLevel();
-					}
-					if (vm.cascadeList[0].Skills.length === 0) {
-						vm.cascadeList= [];
+						if (vm.cascadeList.length > 0) {
+							autoNewRow();
+						}
 					}
 				}
 			}
