@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;

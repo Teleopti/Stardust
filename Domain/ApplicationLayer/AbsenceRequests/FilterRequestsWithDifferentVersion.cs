@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {

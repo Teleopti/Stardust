@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 

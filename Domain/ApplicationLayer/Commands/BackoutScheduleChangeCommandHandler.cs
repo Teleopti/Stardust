@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

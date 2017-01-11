@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Drawing;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Interfaces.Domain;

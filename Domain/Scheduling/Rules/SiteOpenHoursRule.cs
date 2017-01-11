@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

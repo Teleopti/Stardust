@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 {

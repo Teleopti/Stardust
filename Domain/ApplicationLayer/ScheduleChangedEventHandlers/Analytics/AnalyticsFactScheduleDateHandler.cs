@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;

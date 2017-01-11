@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

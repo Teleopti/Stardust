@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {

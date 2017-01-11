@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common

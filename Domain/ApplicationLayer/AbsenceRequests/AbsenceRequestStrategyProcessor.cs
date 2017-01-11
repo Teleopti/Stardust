@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;

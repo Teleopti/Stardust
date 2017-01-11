@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Analytics.Transformer

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using log4net;

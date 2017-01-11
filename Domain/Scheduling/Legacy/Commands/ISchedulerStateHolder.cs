@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
