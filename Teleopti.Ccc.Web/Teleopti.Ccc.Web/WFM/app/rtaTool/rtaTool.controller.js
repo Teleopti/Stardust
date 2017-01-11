@@ -96,32 +96,33 @@
 						query: {
 							method: 'POST',
 						},
-					}).query(data).$promise;
-					closeSnapshot(dataSource);
+					}).query(data).$promise
+						.then(function () {
+							closeSnapshot(dataSource)
+						});
 				}
 
 				$scope.sendBatches = function (stateCode) {
 					var selectedAgents = $scope.gridApi.selection.getSelectedRows();
-					if (selectedAgents.length == 0)
-						selectedAgents = $scope.filteredAgents;
+					selectedAgents = selectedAgents.length > 0 ? selectedAgents : $scope.filteredAgents
+					
 					sendBatch(selectedAgents.map(function (s) {
 						return createState(s.UserCode, s.DataSource, stateCode);
-					}));
-					closeSnapshot(selectedAgents[0].DataSource);
+					})).then(function () {
+						closeSnapshot(selectedAgents[0].DataSource)
+					});
 				}
 
 				$scope.sendRandomBatch = function () {
 					var selectedAgents = $scope.gridApi.selection.getSelectedRows();
-					if (selectedAgents.length === 0)
-						sendBatch($scope.agents.map(function (s) {
-							return createState(s.UserCode, s.DataSource, getRandomStateCode())
-						}));
-					else {
-						sendBatch(selectedAgents.map(function (s) {
-							return createState(s.UserCode, s.DataSource, getRandomStateCode());
-						}));
-					}
-					closeSnapshot(selectedAgents[0].DataSource);
+					selectedAgents = selectedAgents.length > 0 ? selectedAgents : $scope.filteredAgents;
+
+					sendBatch(selectedAgents.map(function (s) {
+						return createState(s.UserCode, s.DataSource, getRandomStateCode());
+					})).then(function () {
+						closeSnapshot(selectedAgents[0].DataSource)
+					});
+
 				}
 
 				function getRandomStateCode() {
@@ -137,6 +138,7 @@
 				}
 
 				function createState(userCode, dataSource, code) {
+					var now = moment.utc().format('YYYY-MM-DD HH:mm:ss')
 					return {
 						AuthenticationKey: $scope.authKey.value,
 						UserCode: userCode,
@@ -144,17 +146,17 @@
 						StateDescription: code,
 						IsLoggedOn: true,
 						SecondsInState: 0,
-						TimeStamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
+						TimeStamp: now,
 						PlatformTypeId: '00000000-0000-0000-0000-000000000000',
 						SourceId: dataSource,
-						BatchId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
-						SnapshotId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
+						BatchId: now,
+						SnapshotId: now,
 						IsSnapshot: $scope.snapshot.value
 					};
 				}
 
 				function closeSnapshot(dataSource) {
-					if ($scope.snapshot.value)
+					if ($scope.snapshot.value) {
 						$resource('../Rta/State/CloseSnapshot', {}, {
 							query: {
 								method: 'POST',
@@ -164,6 +166,7 @@
 							SourceId: dataSource,
 							SnapshotId: moment.utc().format('YYYY-MM-DD HH:mm:ss')
 						}).$promise;
+					}
 				}
 
 				function setupPolling() {
