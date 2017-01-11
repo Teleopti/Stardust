@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using NHibernate.Criterion;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
@@ -13,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest, Toggle(Toggles.Wfm_Requests_ImproveStaffingForCascadingSkills_41969)]
-	public class SkillCombinationResourceExtractorTest : ISetup
+	public class UpdateStaffingLevelReadModelTest : ISetup
 	{
 		public UpdateStaffingLevelReadModel Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
+		public MutableNow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -31,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldSpecifyResourceSkillCombinationOnInterval()
 		{
+			Now.Is("2016-12-19 00:00");
 			var activity = ActivityFactory.CreateActivity("phone");
 			activity.RequiresSkill = true;
 			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
@@ -58,6 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldSpecifyResourceSkillCombinationOnWithCascadingSkills()
 		{
+			Now.Is("2016-12-19 00:00");
 			var activity = ActivityFactory.CreateActivity("phone");
 			activity.RequiresSkill = true;
 			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
@@ -87,6 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldSpecifyResourceSkillCombinationOnWithCascadingSkillsWhenSecondaryIsOpenOutsidePrimary()
 		{
+			Now.Is("2016-12-19 00:00");
 			var activity = ActivityFactory.CreateActivity("phone");
 			activity.RequiresSkill = true;
 			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
@@ -116,6 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldSpecifyResourceForMoreThanOneInterval()
 		{
+			Now.Is("2016-12-19 00:00");
 			var activity = ActivityFactory.CreateActivity("phone");
 			activity.RequiresSkill = true;
 			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
@@ -152,6 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldIgnoreToPersistResourceIfSkillCombinationIsAnEmptyKey()
 		{
+			Now.Is("2016-12-19 00:00");
 			var activity = ActivityFactory.CreateActivity("phone");
 			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
 
@@ -183,6 +191,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldAddSkillsMatchingScheduledActivityOnly()
 		{
+			Now.Is("2016-12-19 00:00");
 			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
 			var scenario = ScenarioRepository.Has("default");
 
