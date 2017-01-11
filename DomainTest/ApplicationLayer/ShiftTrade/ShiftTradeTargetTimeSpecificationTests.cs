@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
@@ -42,6 +44,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
 				_businessRuleProvider, _businessRuleCollection, _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
+		}
+
+		[Test]
+		public void ShouldDenyWhenSpecificationIsNotConfigured()
+		{
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new ShiftTradeBusinessRuleConfig());
+			Assert.IsTrue(personRequest.IsDenied);
+			Assert.IsTrue(personRequest.DenyReason == "ShiftTradeTargetTimeDenyReason");
 		}
 
 		[Test]
@@ -83,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(personRequest.DenyReason == "ShiftTradeTargetTimeDenyReason");
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldPendingWhenSpecificationConfiguredAsPending()
 		{
 			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
@@ -97,9 +107,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
 			Assert.IsTrue(personRequest.IsPending);
+
+			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimeDenyReason");
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldPendingWhenAutoGrantIsOff()
 		{
 			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
@@ -113,6 +126,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
 			Assert.IsTrue(personRequest.IsPending);
+
+			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimeDenyReason");
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
 		}
 
 		private IPersonRequest createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(

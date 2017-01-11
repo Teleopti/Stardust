@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var result = BusinessRuleFlags.None;
 			foreach (var ruleType in ruleTypes)
 			{
-				if (!ruleAndFlagMapping.ContainsKey(ruleType)) continue;
+				if (ruleType == null || !ruleAndFlagMapping.ContainsKey(ruleType)) continue;
 				result = result | ruleAndFlagMapping[ruleType];
 			}
 

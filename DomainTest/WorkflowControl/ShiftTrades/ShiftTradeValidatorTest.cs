@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void ShouldCheckLightRule()
 		{
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(new Person(), new Person(), new DateOnly(), new DateOnly());
-			var result = new ShiftTradeRequestValidationResult(false);
+			var result = new ShiftTradeRequestValidationResult(false, true, string.Empty);
 			shiftTradeLightValidator.Expect(m => m.Validate(null)).IgnoreArguments().Return(result);
 			var request = new ShiftTradeRequest(new[] { (IShiftTradeSwapDetail)shiftTradeSwapDetail });
 			var validator = createValidator();

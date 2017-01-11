@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				IntradayRequestProcessor>(builder, Toggles.AbsenceRequests_Intraday_UseCascading_41969);
 
 			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();
+			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

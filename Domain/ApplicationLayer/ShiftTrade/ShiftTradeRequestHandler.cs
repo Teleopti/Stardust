@@ -12,8 +12,10 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -34,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IBusinessRuleProvider _businessRuleProvider;
-		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation
 			_loadSchedulingDataForRequestWithoutResourceCalculation;
@@ -43,12 +44,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IRequestFactory _requestFactory;
 		private readonly ICurrentScenario _scenarioRepository;
-		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly IScheduleStorage _scheduleStorage;
 
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
 		private readonly IShiftTradeValidator _validator;
+		private readonly IShiftTradeApproveService _shiftTradeApproveService;
 
 		public ShiftTradeRequestHandler(
 			ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -57,11 +58,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IPersonRequestRepository personRequestRepository,
 			IScheduleStorage scheduleStorage, IPersonRepository personRepository,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
-			IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 			IBusinessRuleProvider businessRuleProvider,
-			IShiftTradePendingReasonsService shiftTradePendingReasonsService)
+			IShiftTradePendingReasonsService shiftTradePendingReasonsService, IShiftTradeApproveService shiftTradeApproveService)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_validator = validator;
@@ -71,11 +70,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_personRequestRepository = personRequestRepository;
 			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
-			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
-			_differenceService = differenceService;
 			_businessRuleProvider = businessRuleProvider;
 			_shiftTradePendingReasonsService = shiftTradePendingReasonsService;
+			_shiftTradeApproveService = shiftTradeApproveService;
 
 			logger.Info("New instance of Shift Trade saga was created");
 		}
@@ -165,9 +163,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 					personRequest.Pending();
 
+					var ruleResponses = new List<IBusinessRuleResponse>();
 					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest) && validationResult.IsOk)
 					{
-						var ruleResponses = autoApproveShiftTrade(personRequest, approvalService);
+						logger.DebugFormat("Approving ShiftTrade: {0}", personRequest.GetSubject(new NormalizeText()));
+						ruleResponses.AddRange(_shiftTradeApproveService.AutoApprove(personRequest, approvalService, _schedulingResultStateHolder));
 						if (ruleResponses.Any())
 						{
 							var deniableResponse = _businessRuleProvider.GetFirstDeniableResponse(allEnabledRules, ruleResponses);
@@ -176,14 +176,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 								personRequest.Deny(deniableResponse.Message, _authorization);
 							}
 						}
-
-						_shiftTradePendingReasonsService.SetBrokenBusinessRulesFieldOnPersonRequest(ruleResponses, personRequest);
 					}
 					else
 					{
-						_shiftTradePendingReasonsService.SimulateApproveAndSetBusinessRuleResponsesOnFail(shiftTradeRequest,
-							allEnabledRules, _schedulingResultStateHolder);
+						addValidationResultToResponses(validationResult, ruleResponses, personRequest);
+						ruleResponses.AddRange(_shiftTradeApproveService.SimulateApprove(shiftTradeRequest, allEnabledRules,
+							_schedulingResultStateHolder));
 					}
+
+					handleBrokenBusinessRules(ruleResponses, personRequest);
 				}
 				catch (ShiftTradeRequestStatusException exception)
 				{
@@ -209,19 +210,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			clearStateHolder();
 		}
 
-		private IList<IBusinessRuleResponse> autoApproveShiftTrade(IPersonRequest personRequest,
-			IRequestApprovalService approvalService)
+		private static void addValidationResultToResponses(ShiftTradeRequestValidationResult validationResult,
+			List<IBusinessRuleResponse> ruleResponses, IPersonRequest personRequest)
 		{
-			logger.DebugFormat("Approving ShiftTrade: {0}", personRequest.GetSubject(new NormalizeText()));
-			var brokenBusinessRules = personRequest.Approve(approvalService, _authorization, true);
-
-			handleBrokenBusinessRules(brokenBusinessRules, personRequest);
-			foreach (var range in _schedulingResultStateHolder.Schedules.Values)
+			if (!validationResult.IsOk)
 			{
-				var diff = range.DifferenceSinceSnapshot(_differenceService);
-				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) range);
+				ruleResponses.Add(new BusinessRuleResponse(null,
+					Resources.ResourceManager.GetString(validationResult.DenyReason,
+						personRequest.Person.PermissionInformation.Culture()), true, true, new DateTimePeriod(), personRequest.Person,
+					new DateOnlyPeriod(), string.Empty));
 			}
-			return brokenBusinessRules;
 		}
 
 		private void setUpdatedMessage(AcceptShiftTradeEvent @event, IPersonRequest personRequest)
@@ -237,6 +235,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private void handleBrokenBusinessRules(ICollection<IBusinessRuleResponse> brokenBusinessResponses,
 			IPersonRequest personRequest)
 		{
+			_shiftTradePendingReasonsService.SetBrokenBusinessRulesFieldOnPersonRequest(brokenBusinessResponses, personRequest);
+
 			if (brokenBusinessResponses.Count <= 0) return;
 
 			var culture = personRequest.Person.PermissionInformation.UICulture();

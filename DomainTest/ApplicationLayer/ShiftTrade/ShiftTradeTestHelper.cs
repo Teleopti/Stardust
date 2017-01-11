@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_currentScenario = currentScenario;
 
 			_scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make());
-			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(_requestFactory, _currentScenario);
+			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService();
 
 			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			_globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings()
@@ -220,13 +220,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private void setShiftTradeRequestHandler(bool toggle39473IsOff, IBusinessRuleProvider businessRuleProvider)
 		{
+			var authorization = new PersonRequestAuthorizationCheckerForTest();
+			var differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
+			var shiftTradeApproveService = new ShiftTradeApproveService(authorization, differenceService,
+				_scheduleDifferenceSaver, _requestFactory, _currentScenario);
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_currentScenario, _personRequestRepository, _scheduleStorage, _personRepository
-				, new PersonRequestAuthorizationCheckerForTest(), _scheduleDifferenceSaver,
+				, authorization,
 				_loadSchedulingDataForRequestWithoutResourceCalculation,
-				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				businessRuleProvider ?? _businessRuleProvider,
-				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService);
+				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService,
+				shiftTradeApproveService);
 		}
 
 		internal PersonAbsenceAccount CreatePersonAbsenceAccount(IPerson person, DateOnly scheduleDateOnly)

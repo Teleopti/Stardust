@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 
-			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(_requestFactory, _currentScenario);
+			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService();
 
 			_loadSchedulingDataForRequestWithoutResourceCalculation =
 				new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
@@ -95,9 +95,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, validator, _requestFactory, _currentScenario,
-				_personRequestRepository, _scheduleStorage, _personRepository, null, null,
-				_loadSchedulingDataForRequestWithoutResourceCalculation, null, _businessRuleProvider,
-				_shiftTradePendingReasonsService);
+				_personRequestRepository, _scheduleStorage, _personRepository, null,
+				_loadSchedulingDataForRequestWithoutResourceCalculation, _businessRuleProvider,
+				_shiftTradePendingReasonsService, new ShiftTradeApproveService(null, null, null, _requestFactory, _currentScenario));
 
 			_target.Handle(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 

@@ -143,6 +143,7 @@
     <Compile Include="Domain\IPersonLeavingUpdater.cs" />
     <Compile Include="Domain\IRequestAllowanceProvider.cs" />
     <Compile Include="Domain\IResourceCalculationPeriod.cs" />
+    <Compile Include="Domain\IShiftTradeApproveService.cs" />
     <Compile Include="Domain\IShiftTradeBusinessRuleConfig.cs" />
     <Compile Include="Domain\IShovelResourceData.cs" />
     <Compile Include="Domain\IShovelResourceDataForInterval.cs" />

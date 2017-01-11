@@ -253,6 +253,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeApproveService.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePersonProvider.cs" />
     <Compile Include="Cascading\EmptyShovelResourceDataForInterval.cs" />
     <Compile Include="Cascading\OrderedSkillGroups.cs" />
