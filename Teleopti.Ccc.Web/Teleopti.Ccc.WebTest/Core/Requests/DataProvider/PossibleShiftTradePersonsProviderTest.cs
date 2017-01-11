@@ -155,7 +155,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = DateOnly.Today;
 			var teamIds = new List<Guid>();
 			teamIds.Add(myTeam.Id.Value);
-			string teamIdsString = string.Join(",", teamIds.ToArray());
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = teamIds };
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))

@@ -138,8 +138,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ShouldAddChangedDaysOff()
         {
-
-            var optimizerPrefrences = _optimizationPreferences;
             _daysOffPreferences.UseKeepExistingDaysOff = true;
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             using (_mocks.Record())
@@ -161,8 +159,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ShouldReturnFalseWhenUseKeepExistingDaysOffIsUsed()
         {
-
-            var optimizerPrefrences = _optimizationPreferences;
             _daysOffPreferences.UseKeepExistingDaysOff = true;
             _daysOffPreferences.KeepExistingDaysOffValue = 50;
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();

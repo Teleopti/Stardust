@@ -147,7 +147,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldHandleOverlappingSkills()
 		{
-			DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
 			ISkillStaffPeriodDictionary dictionary = _skillStaffPeriods[_testContainer.AllSkills[0]];
 			dictionary.Clear();
 			_target = new ActivityDivider();

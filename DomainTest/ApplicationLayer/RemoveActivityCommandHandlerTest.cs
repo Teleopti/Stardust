@@ -189,7 +189,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				personRepository.Single(),

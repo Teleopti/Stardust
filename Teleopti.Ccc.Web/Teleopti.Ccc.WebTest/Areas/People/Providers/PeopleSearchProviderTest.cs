@@ -206,7 +206,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			
 			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
 			{
-				var a = c.DisplayRows.Count;
 				c.TotalRows = 500;
 				for (var i = 1; i <= c.TotalRows; i++)
 				{

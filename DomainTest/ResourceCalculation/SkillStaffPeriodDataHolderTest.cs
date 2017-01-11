@@ -106,7 +106,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyTweakedCurrentDemand()
         {
-            DateTime date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
 	        var overstaffing = new Percent(.4);
 	        const int priority = 256;
 

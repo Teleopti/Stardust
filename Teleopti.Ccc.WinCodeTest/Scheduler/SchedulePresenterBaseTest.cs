@@ -1176,7 +1176,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             _multiplicatorDefinitionSets.Add(_definitionSet);
             _day1 = _mocks.StrictMock<IScheduleDay>();
-	        var mainShiftLayer = _mocks.StrictMock<IMainShiftLayer>();
 
             var period1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2008, 1, 1));
             period1.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime));

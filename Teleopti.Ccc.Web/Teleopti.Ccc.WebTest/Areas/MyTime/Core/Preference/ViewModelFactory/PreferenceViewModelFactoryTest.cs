@@ -117,7 +117,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			 var weeklyWorkTimeProvider = MockRepository.GenerateMock<IPreferenceWeeklyWorkTimeSettingProvider>();
 			 var target = new PreferenceViewModelFactory(null, null, null, null, weeklyWorkTimeProvider);
-			 var preferenceWeeklyWorkTimeViewModels = new PreferenceWeeklyWorkTimeViewModel();
 			 var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting();
 			 weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = 120;
 			 weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = 360;

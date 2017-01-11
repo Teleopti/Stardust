@@ -220,7 +220,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc);
 			DateTime end = start.AddHours(1);
 			IActivity activity = new Activity("act");
-			IShiftCategory shiftCategory = new ShiftCategory("shiftCategory");
 
 			DateTimePeriod mainShiftPeriod = new DateTimePeriod(start, end);
 			DateTimePeriod personalShiftPeriod = mainShiftPeriod.ChangeStartTime(TimeSpan.FromHours(-1)).ChangeEndTime(TimeSpan.FromHours(1));

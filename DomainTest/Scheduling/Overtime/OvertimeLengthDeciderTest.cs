@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 					skillIntervalData1, skillIntervalData2, skillIntervalData3, skillIntervalData4, skillIntervalData5,
 					skillIntervalData6, skillIntervalData7
 				};
-			var skillIntervalDataList = new List<ISkillIntervalData> {};
-
 
 			using (_mocks.Record())
 			{
@@ -128,7 +126,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0, 1);
 			var overtimeSkillIntervalDataList = new List<IOvertimeSkillIntervalData>() { skillIntervalData1 };
-			var skillIntervalDataList = new List<ISkillIntervalData>() { };
 			MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
 			using (_mocks.Record())
 			{
@@ -160,7 +157,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		{
 
 			var overtimeSkillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-			var skillIntervalDataList = new List<ISkillIntervalData>();
 			
 			MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
 

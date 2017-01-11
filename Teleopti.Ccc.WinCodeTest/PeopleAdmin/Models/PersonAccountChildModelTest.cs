@@ -110,8 +110,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _traceableRefreshService.Refresh(_account2);
             LastCall.Repeat.AtLeastOnce();
 
-            var personAbsenceAccountRepository = _mocker.DynamicMock<IPersonAbsenceAccountRepository>();
-            var refreshService = _mocker.DynamicMock<ITraceableRefreshService>();
 			_targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
             ((PersonAccountChildModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
 
@@ -159,10 +157,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
             IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
-
-
-            var personAbsenceAccountRepository = _mocker.DynamicMock<IPersonAbsenceAccountRepository>();
-            var refreshService = _mocker.DynamicMock<ITraceableRefreshService>();
 			PersonAccountChildModelForTest targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
 			PersonAccountChildModelForTest targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
 
@@ -199,8 +193,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
             ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();        
             IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            var personAbsenceAccountRepository = _mocker.DynamicMock<IPersonAbsenceAccountRepository>();
-            var refreshService = _mocker.DynamicMock<ITraceableRefreshService>();
 			PersonAccountChildModelForTest targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
 			PersonAccountChildModelForTest targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
 
@@ -289,8 +281,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
             ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
-            var personAbsenceAccountRepository = _mocker.DynamicMock<IPersonAbsenceAccountRepository>();
-            var refreshService = _mocker.DynamicMock<ITraceableRefreshService>();
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
             unitOfWork.Dispose();
             LastCall.Repeat.AtLeastOnce();
