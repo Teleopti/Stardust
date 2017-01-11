@@ -70,15 +70,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = fakeScenarioAndIntervalLength();
-
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
-			SkillRepository.Has(skill);
-
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
-			SkillDayRepository.Has(skillDay);
-
 			var actualCalls = createStatistics(skillDay, latestStatsTime);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
+
+            SkillRepository.Has(skill);
+            SkillDayRepository.Has(skillDay);
+            IntradayQueueStatisticsLoader.Has(actualCalls);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -89,8 +87,41 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * deviationWithReforecast;
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
 		}
-		
-		[Test]
+
+        [Test]
+        public void ShouldReturnHigherUpdatedStaffingWithNegativeCampaign()
+        {
+            var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+            var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+            Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+            var scenario = fakeScenarioAndIntervalLength();
+            var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+            var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+            skillDay.WorkloadDayCollection.First().CampaignTasks = new Percent(-0.5);
+            var actualCalls = new List<SkillIntervalStatistics>()
+            {
+                new SkillIntervalStatistics
+                {
+                    SkillId = skill.Id.Value,
+                    StartTime = TimeZoneHelper.ConvertFromUtc(latestStatsTime, TimeZone.TimeZone()),
+                    Calls = skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks,
+                    AverageHandleTime = 40d
+                }
+            };
+
+            SkillRepository.Has(skill);
+            SkillDayRepository.Has(skillDay);
+            IntradayQueueStatisticsLoader.Has(actualCalls);
+
+            var vm = Target.Load(new[] { skill.Id.Value });
+
+            vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
+            vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
+            vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.GreaterThan(vm.DataSeries.ForecastedStaffing.Last());
+        }
+
+        [Test]
 		public void ShouldReturnStaffingCorrectlyWhenViewingAfterSkillIsClosed()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 45, 0, DateTimeKind.Utc);

@@ -51,12 +51,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (targetMinutesPerInterval > skillMinutesPerInterval)
 				return Enumerable.Empty<ITemplateTaskPeriod>();
 
-			if (targetMinutesPerInterval < skillMinutesPerInterval || isTaskPeriodsMerged(templateTaskPeriodCollection, skillMinutesPerInterval))
-			{
-                templateTaskPeriodCollection =  splitTaskPeriods(templateTaskPeriodCollection, periodLength);
-			}
+			if (targetMinutesPerInterval < skillMinutesPerInterval || isTaskPeriodsMerged(templateTaskPeriodCollection, skillMinutesPerInterval))         
+				templateTaskPeriodCollection =  splitTaskPeriods(templateTaskPeriodCollection, periodLength);
+                
 
-			return templateTaskPeriodCollection
+            return templateTaskPeriodCollection
 				.Where(t => 
 						t.Period.StartDateTime >= usersNowStartOfDayUtc.Value && 
 						t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	    private bool isTaskPeriodsMerged(IList<ITemplateTaskPeriod> taskPeriodCollection, int skillResolution)
 	    {
 	        var periodStart = taskPeriodCollection.Min(x => x.Period.StartDateTime);
-	        var periodEnd = taskPeriodCollection.Min(x => x.Period.EndDateTime);
+	        var periodEnd = taskPeriodCollection.Max(x => x.Period.EndDateTime);
 	        var periodLength = (int)periodEnd.Subtract(periodStart).TotalMinutes;
 	        var expectedIntervalCount = periodLength/skillResolution;
 	        return (expectedIntervalCount != taskPeriodCollection.Count);
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				var splittedTaskPeriods = taskPeriod.Split(periodLength);
 				returnList.AddRange(splittedTaskPeriods.Select(p => new TemplateTaskPeriod(
-					new Task(p.Tasks, p.TotalAverageTaskTime, p.TotalAverageAfterTaskTime), p.Period)));
+					new Task(p.TotalTasks, p.TotalAverageTaskTime, p.TotalAverageAfterTaskTime), p.Period)));
 			}
 		    return returnList;
 		}
