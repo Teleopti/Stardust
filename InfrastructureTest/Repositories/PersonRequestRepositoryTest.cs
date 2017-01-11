@@ -1208,30 +1208,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
 			result.Single().Request.RequestType.Should().Be(RequestType.TextRequest);
 		}
-		
+
 		[Test]
 		public void ShouldFilterRequestByTextAndAbsenceType()
 		{
-			var requests = setUpGetRequestsByTypeTests();
-			var absenceRequest = (AbsenceRequest)requests.Single(r => r.Request.RequestType == RequestType.AbsenceRequest).Request;
-			var absence = absenceRequest.Absence;
+			setUpGetRequestsByTypeTests();
 
 			var now = DateTime.UtcNow;
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(now.AddMinutes(-1), now),
-				RequestFilters = new Dictionary<RequestFilterField, string>
-				{
-					{RequestFilterField.Type, $"0 {absence.Id}"}
-				}
+				RequestTypes = new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest}
 			};
 
 			int count;
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
-			result.Count().Should().Be(2);
 
-			result.Count(r=>r.Request.RequestType == RequestType.TextRequest).Should().Be(1);
 			result.Count(r => r.Request.RequestType == RequestType.AbsenceRequest).Should().Be(1);
+			result.Count(r => r.Request.RequestType == RequestType.TextRequest).Should().Be(1);
+			count.Should().Be(2);
 		}
 
 		private PersonRequest createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
