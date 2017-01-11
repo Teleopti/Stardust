@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (resCalcData.SkillCombinationHolder != null)
 				{
 					_feedback.SendProgress("Starting SkillCombinationResource Read Model update.");
-					_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
+					var filteredCombinations = resCalcData.SkillCombinationHolder.SkillCombinationResources.Where(x => x.StartDateTime > timeWhenResourceCalcDataLoaded.AddHours(-1) && x.StartDateTime < timeWhenResourceCalcDataLoaded.AddHours(25));
+					_skillCombinationResourceRepository.PersistSkillCombinationResource(timeWhenResourceCalcDataLoaded, filteredCombinations);
 				}
 					
 			}

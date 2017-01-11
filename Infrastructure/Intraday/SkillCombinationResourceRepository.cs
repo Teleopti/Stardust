@@ -87,9 +87,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			public Guid SkillId { get; set; }
 		}
 
-		public virtual void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
+		public virtual void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
-			var insertedOn = _now.UtcDateTime();
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var skillCombinations = loadSkillCombination();
 
@@ -100,14 +99,14 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 				using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResource] 
-						WHERE StartDateTime < '{insertedOn.AddHours(-1)}'", connection))
+						WHERE StartDateTime < '{dataLoaded.AddHours(-1)}'", connection))
 				{
 					deleteCommand.ExecuteNonQuery();
 				}
 
 				using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResourceDelta] 
-						WHERE StartDateTime < '{insertedOn.AddHours(-1)}'", connection))
+						WHERE StartDateTime < '{dataLoaded.AddHours(-1)}'", connection))
 				{
 					deleteCommand.ExecuteNonQuery();
 				}
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 						id = persistSkillCombination(skillCombinationResource.SkillCombination);
 						skillCombinations.Add(key, id);
 					}
-					
+
 
 
 					using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
@@ -137,29 +136,28 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 						using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM ReadModel.SkillCombinationResourceDelta
-						WHERE InsertedOn < '{insertedOn}'
+						WHERE InsertedOn < '{dataLoaded}'
 						AND SkillCombinationId = '{id}'
 						AND StartDateTime = '{skillCombinationResource.StartDateTime}'", connection, transaction))
 						{
 							deleteCommand.ExecuteNonQuery();
 						}
 
-						if (skillCombinationResource.StartDateTime > insertedOn.AddHours(-1) && skillCombinationResource.StartDateTime < insertedOn.AddDays(1).AddHours(1))
-						{
-							using (var insertCommand = new SqlCommand(@"
+
+						using (var insertCommand = new SqlCommand(@"
 							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
 							VALUES (@SkillCombinationId, @StartDateTime, @EndDateTime, @Resource, @InsertedOn, @BusinessUnit)", connection, transaction))
-							{
-								insertCommand.Parameters.AddWithValue("@SkillCombinationId", id);
-								insertCommand.Parameters.AddWithValue("@StartDateTime", skillCombinationResource.StartDateTime);
-								insertCommand.Parameters.AddWithValue("@EndDateTime", skillCombinationResource.EndDateTime);
-								insertCommand.Parameters.AddWithValue("@Resource", skillCombinationResource.Resource);
-								insertCommand.Parameters.AddWithValue("@InsertedOn", insertedOn);
-								insertCommand.Parameters.AddWithValue("@BusinessUnit", bu);
+						{
+							insertCommand.Parameters.AddWithValue("@SkillCombinationId", id);
+							insertCommand.Parameters.AddWithValue("@StartDateTime", skillCombinationResource.StartDateTime);
+							insertCommand.Parameters.AddWithValue("@EndDateTime", skillCombinationResource.EndDateTime);
+							insertCommand.Parameters.AddWithValue("@Resource", skillCombinationResource.Resource);
+							insertCommand.Parameters.AddWithValue("@InsertedOn", _now.UtcDateTime());
+							insertCommand.Parameters.AddWithValue("@BusinessUnit", bu);
 
-								insertCommand.ExecuteNonQuery();
-							}
+							insertCommand.ExecuteNonQuery();
 						}
+
 						transaction.Commit();
 					}
 				}
@@ -257,7 +255,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 	public class SkillCombinationResourceRepositoryEmpty : SkillCombinationResourceRepository
 	{
-		public override void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
+		public override void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 
 		}

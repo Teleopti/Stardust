@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_now = now;
 		}
 
-		public void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
+		public void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 			_combinationResources = skillCombinationResources.ToList();
 		}
