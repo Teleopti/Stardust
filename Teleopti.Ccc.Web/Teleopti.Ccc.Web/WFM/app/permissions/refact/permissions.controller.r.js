@@ -56,18 +56,28 @@
       }
     }
 
-    function allDataFilter() {
-      orgDataHandler(vm.organizationSelection);
-    }
+    vm.dataFilterObj = {};
+    vm.dataFilterObj.selectedDataFilter = selectedDataFilter;
+    vm.dataFilterObj.unselectedDataFilter = unselectedDataFilter;
 
     function selectedDataFilter () {
+      vm.dataFilterObj.isSelected = true;
+      vm.dataFilterObj.isUnSelected = false;
       var data = dataFilter.selected(vm.organizationSelection);
       orgDataHandler(data);
     }
 
     function unselectedDataFilter() {
+      vm.dataFilterObj.isSelected = false;
+      vm.dataFilterObj.isUnSelected = true;
       var data = dataFilter.unselected(vm.organizationSelection);
       orgDataHandler(data);
+    }
+
+    function allDataFilter() {
+      vm.dataFilterObj.isSelected = false;
+      vm.dataFilterObj.isUnSelected = false;
+      orgDataHandler(vm.organizationSelection);
     }
 
     function orgDataHandler(orgData) {
@@ -92,17 +102,27 @@
       listHandler(filteredArray);
     }
 
+    vm.functionsFilterObj = {};
+    vm.functionsFilterObj.unSelectedFunctionsFilter = unSelectedFunctionsFilter;
+    vm.functionsFilterObj.selectedFunctionsFilter = selectedFunctionsFilter;
+
     function unSelectedFunctionsFilter() {
+      vm.functionsFilterObj.isUnSelected = true;
+      vm.functionsFilterObj.isSelected = false;
       var filteredArray = functionsFilter.unselected(vm.applicationFunctions, vm.selectedFunctions);
       listHandler(filteredArray);
     }
 
     function selectedFunctionsFilter() {
+      vm.functionsFilterObj.isSelected = true;
+      vm.functionsFilterObj.isUnSelected = false;
       var filteredArray = functionsFilter.selected(vm.applicationFunctions, vm.selectedFunctions);
       listHandler(filteredArray);
     }
 
     function allFunctionsFilter() {
+      vm.functionsFilterObj.isSelected = false;
+      vm.functionsFilterObj.isUnSelected = false;
       listHandler(vm.applicationFunctions);
     }
 

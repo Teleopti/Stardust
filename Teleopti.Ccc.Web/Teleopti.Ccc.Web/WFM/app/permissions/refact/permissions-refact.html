@@ -188,7 +188,7 @@
 								</div>
 								<div class="con-row">
 									<div class="con-flex tree">
-										<permissions-tree selected-role="vm.selectedRole" functions="vm.componentFunctions" is-selected="vm.isFunctionSelected" select="vm.selectFunction" on-click="vm.onFunctionClick"></permissions-tree>
+										<permissions-tree filter-func="vm.functionsFilterObj" selected-role="vm.selectedRole" functions="vm.componentFunctions" is-selected="vm.isFunctionSelected" select="vm.selectFunction" on-click="vm.onFunctionClick"></permissions-tree>
 									</div>
 								</div>
 							</md-content>
@@ -246,7 +246,7 @@
 								</div>
 								<div class="con-row">
 									<div class="con-flex">
-										<permissions-list selected-role="vm.selectedRole" on-click="vm.onNodeClick" org="vm.filteredOrganizationSelection"></permissions-list>
+										<permissions-list datafilter="vm.dataFilterObj" selected-role="vm.selectedRole" on-click="vm.onNodeClick" org="vm.filteredOrganizationSelection"></permissions-list>
 									</div>
 								</div>
 							</md-content>

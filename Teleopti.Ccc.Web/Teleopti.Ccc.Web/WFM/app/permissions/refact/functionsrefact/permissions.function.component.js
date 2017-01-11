@@ -15,12 +15,21 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
       NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
       return;
     }
+
     if (ctrl.selectedRole != null && ctrl.selectedRole.IsMyRole) {
       NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
       return;
     }
 
     ctrl.select(func);
+
+    if (!angular.isUndefined(ctrl.filterFunc) && ctrl.filterFunc.isSelected) {
+      ctrl.filterFunc.selectedFunctionsFilter();
+    }
+
+    if (!angular.isUndefined(ctrl.filterFunc) && ctrl.filterFunc.isUnSelected) {
+      ctrl.filterFunc.unSelectedFunctionsFilter();
+    }
 
     if (!ctrl.isSelected(func)) {
       permissionsDataService.findChildFunctions(func).forEach(function(fn) {
@@ -68,6 +77,7 @@ angular.module('wfm.permissions').component('permissionsTree', {
     select: '=',
     parent: '=',
     onClick: '=',
-    selectedRole: '='
+    selectedRole: '=',
+    filterFunc: '='
   }
 });

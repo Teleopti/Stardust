@@ -77,7 +77,8 @@ describe('component: permissionsTree', function() {
 			select: vm.selectFunction,
 			isSelected: vm.isFunctionSelected,
 			onClick: vm.onFunctionClick,
-			selectedRole: vm.selectedRole
+			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj
 		});
 		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
@@ -185,7 +186,8 @@ describe('component: permissionsTree', function() {
 			select: vm.selectFunction,
 			isSelected: vm.isFunctionSelected,
 			onClick: vm.onFunctionClick,
-			selectedRole: vm.selectedRole
+			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj
 		});
 		ctrl.selectedRole = vm.roles[0];
 		vm.selectedRole = vm.roles[0];
@@ -231,6 +233,7 @@ describe('component: permissionsTree', function() {
 			isSelected: vm.isFunctionSelected,
 			onClick: vm.onFunctionClick,
 			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj,
 			parent: function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
@@ -295,6 +298,7 @@ describe('component: permissionsTree', function() {
 			isSelected: vm.isFunctionSelected,
 			onClick: vm.onFunctionClick,
 			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj,
 			parent: function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
@@ -354,6 +358,7 @@ describe('component: permissionsTree', function() {
 			isSelected: vm.isFunctionSelected,
 			onClick: vm.onFunctionClick,
 			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj,
 			parent: function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
@@ -414,6 +419,7 @@ describe('component: permissionsTree', function() {
 			isSelected: vm.isFunctionSelected,
 			onClick: vm.onFunctionClick,
 			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj,
 			parent: function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
@@ -491,6 +497,7 @@ describe('component: permissionsTree', function() {
 			isSelected: vm.isFunctionSelected,
 			onClick: vm.onFunctionClick,
 			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj,
 			parent: function() {
 				return ctrl.onSelect.apply(null, arguments)
 			}
@@ -578,7 +585,8 @@ describe('component: permissionsTree', function() {
 			select: vm.selectFunction,
 			isSelected: vm.selectFunction,
 			onClick: vm.onFunctionClick,
-			selectedRole: vm.selectedRole
+			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj
 		});
 		spyOn(permissionsDataService, 'selectFunction');
 		ctrl.selectedRole = vm.roles[0];
@@ -616,7 +624,8 @@ describe('component: permissionsTree', function() {
 			select: vm.selectFunction,
 			isSelected: vm.selectFunction,
 			onClick: vm.onFunctionClick,
-			selectedRole: vm.selectedRole
+			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj
 		});
 		ctrl.selectedRole = vm.roles[0];
 		spyOn(permissionsDataService, 'selectFunction')
@@ -624,6 +633,54 @@ describe('component: permissionsTree', function() {
 		ctrl.toggleFunction(vm.applicationFunctions[0]);
 
 		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
+	});
+	//fix better expect - same for selected
+	it('should remove selected function when unselected functions filter is active', function() {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'Agent',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: false,
+				IsMyRole: false,
+				Name: 'Agent'
+			})
+			.withApplicationFunction({
+				FunctionCode: 'Raptor',
+				FunctionDescription: 'xxOpenRaptorApplication',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				IsOpen: false,
+				ChildFunctions: [{
+					ChildFunctions: [],
+					FunctionCode: 'ChildFunction',
+					FunctionDescription: 'ChildFunction',
+					FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+					IsDisabled: false,
+					LocalizedFunctionDescription: 'I am A child function',
+					IsOpen: false
+				}]
+			});
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, {
+			functions: vm.applicationFunctions,
+			select: vm.selectFunction,
+			isSelected: vm.isFunctionSelected,
+			onClick: vm.onFunctionClick,
+			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj
+		});
+		ctrl.selectedRole = vm.roles[0];
+		vm.selectedRole = vm.roles[0];
+		vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9'] = true;
+		vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c'] = true;
+		ctrl.filterFunc.isUnSelected = true;
+
+		ctrl.toggleFunction(vm.applicationFunctions[0].ChildFunctions[0]);
+		$httpBackend.flush();
+
+		expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toEqual(true);
 	});
 
 });

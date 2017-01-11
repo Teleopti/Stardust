@@ -20,6 +20,11 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
     }
 
 		toggleSelection(node);
+
+		// if (!angular.isUndefined(ctrl.datafilter) && ctrl.datafilter.isUnSelected) {
+		// 	ctrl.datafilter.unselectedDataFilter();
+		// }
+
 		ctrl.onClick(node);
 	}
 
@@ -93,6 +98,7 @@ angular.module('wfm.permissions').component('permissionsList', {
 	bindings: {
 		org: '=',
 		selectedRole: '=',
-		onClick: '='
+		onClick: '=',
+		datafilter: '='
 	}
 });

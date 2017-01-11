@@ -30,7 +30,7 @@
 			</div>
 
 			<div class="animate-show" ng-show="function.IsOpen">
-				<permissions-tree selected-role="$ctrl.selectedRole" functions="function.ChildFunctions" parent="$ctrl.onSelect" is-selected="$ctrl.isSelected" select="$ctrl.select" on-click="$ctrl.onClick"></permissions-tree>
+				<permissions-tree filter-func="$ctrl.filterFunc" selected-role="$ctrl.selectedRole" functions="function.ChildFunctions" parent="$ctrl.onSelect" is-selected="$ctrl.isSelected" select="$ctrl.select" on-click="$ctrl.onClick"></permissions-tree>
 			</div>
 		</li>
 	</ol>
