@@ -4,9 +4,9 @@
 		.module('wfm.rta')
 		.factory('ControllerBuilder', controllerBuilder);
 
-	controllerBuilder.$inject = ['$controller', '$interval', '$httpBackend', '$rootScope'];
+	controllerBuilder.$inject = ['$controller', '$interval', '$httpBackend', '$rootScope', '$log'];
 
-	function controllerBuilder($controller, $interval, $httpBackend, $rootScope) {
+	function controllerBuilder($controller, $interval, $httpBackend, $rootScope, $log) {
 		var controllerName = "hejsan";
 		var scope;
 
@@ -61,7 +61,7 @@
 				} catch (e) {
 					if (e.message.includes("No pending request to flush !"))
 						return;
-					console.error(e.message)
+					$log.error(e.message);
 				}
 			};
 		}

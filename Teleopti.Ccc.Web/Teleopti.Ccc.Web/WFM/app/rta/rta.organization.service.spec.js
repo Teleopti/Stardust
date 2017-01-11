@@ -74,7 +74,7 @@ describe('rtaOrganizationService', function() {
 	beforeEach(function() {
 		module('wfm.rta');
 		module(function($provide) {
-			$provide.service('RtaService', function() {
+			$provide.factory('RtaService', function() {
 				return rtaSvrc;
 			});
 		});

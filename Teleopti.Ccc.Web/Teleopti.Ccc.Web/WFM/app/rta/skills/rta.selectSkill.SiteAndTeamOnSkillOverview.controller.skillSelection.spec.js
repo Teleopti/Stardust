@@ -30,7 +30,7 @@ describe('RtaSelectSkillController', function() {
 
 	beforeEach(function() {
 		module(function($provide) {
-			$provide.service('$stateParams', function() {
+			$provide.factory('$stateParams', function() {
 				stateParams = {};
 				return stateParams;
 			});

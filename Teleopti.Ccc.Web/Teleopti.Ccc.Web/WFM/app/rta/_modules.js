@@ -18,9 +18,10 @@ angular
 runRtaModule.$inject = ['$rootScope', '$state', '$location'];
 
 function runRtaModule($rootScope, $state, $location) {
-	$rootScope.$on('$stateChangeSuccess',
+	var result = $rootScope.$on('$stateChangeSuccess',
 		function (event, toState) {
 			if ($location.url() == $state.current.url && toState.name == 'rta') $state.go('rta.sites');
 		});
+	return result;
 }
 })();

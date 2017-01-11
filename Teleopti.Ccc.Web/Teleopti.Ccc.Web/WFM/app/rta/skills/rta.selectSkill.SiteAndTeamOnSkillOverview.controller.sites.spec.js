@@ -15,7 +15,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	beforeEach(module('wfm.rta'));
 	beforeEach(function() {
 		module(function($provide) {
-			$provide.service('$stateParams', function() {
+			$provide.factory('$stateParams', function() {
 				stateParams = {};
 				return stateParams;
 			});
