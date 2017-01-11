@@ -131,11 +131,10 @@
 			teamScheduleSvc.getAvailableHierarchy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
 				.then(function (response) {
 					var data = response.data;
-					var preSelectedTeamIds = vm.selectedTeamIds.length > 0 ? vm.selectedTeamIds : [data.LogonUserTeamId];
+					vm.selectedTeamIds = vm.selectedTeamIds.length > 0 ? vm.selectedTeamIds : [data.LogonUserTeamId];
 
 					vm.availableGroups = {
 						sites: data.Children,
-						preSelectedTeamIds: preSelectedTeamIds
 					};
 			})
 			]).then(vm.init);
