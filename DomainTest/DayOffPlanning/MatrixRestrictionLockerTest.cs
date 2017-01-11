@@ -413,10 +413,5 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Expect.Call(_extractor.Extract(_schedulePart)).Return(extractedRestrictionResult).Repeat.Any();
             Expect.Call(scheduleDayPro.Day).Return(_dayToCheck).Repeat.Any();
         }
-
-        private void p2referenceExpectationsForAll()
-        {
-            
-        }
     }
 }

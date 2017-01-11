@@ -445,11 +445,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 throw new NotImplementedException();
             }
 
-            public int? Version { get; private set; }
-            public void SetVersion(int version) {
-                throw new NotImplementedException();
-            }
-
             public IPerson UpdatedBy { get; private set; }
             public DateTime? UpdatedOn { get; private set; }
         }

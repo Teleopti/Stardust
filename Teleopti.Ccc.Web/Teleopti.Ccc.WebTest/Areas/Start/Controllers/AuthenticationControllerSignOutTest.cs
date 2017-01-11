@@ -35,11 +35,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null);
 			new TestControllerBuilder().InitializeController(_target);
 		}
-		private static FakeToggleManager getToggleManager()
-		{
-			var toggleManager = new FakeToggleManager();
-			return toggleManager;
-		}
 
 		[TearDown]
 		public void Teardown()

@@ -46,19 +46,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.TimeoutScope(new TimeSpan(0, 1, 0));
 			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container");
 		}
-
-		private static Guid idForActivity(string activityName)
-		{
-			var activityId = (from a in DataMaker.Data().UserDatasOfType<ActivityConfigurable>()
-						  let activity = a.Activity
-						  where activity.Name.Equals(activityName)
-						  select activity.Id.GetValueOrDefault()).First();
-			return activityId;
-		}
-
-		private static Guid idForLogonUser()
-		{
-			return DataMaker.Me().Person.Id.GetValueOrDefault();
-		}
 	}
 }

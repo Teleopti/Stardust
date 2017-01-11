@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -162,22 +161,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			});
 
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
-		}
-
-		private void queueRequests(List<Guid> absenceRequestIds)
-		{
-			foreach (var requestId in absenceRequestIds)
-			{
-				var queuedAbsenceRequest = new QueuedAbsenceRequest()
-				{
-					PersonRequest = requestId,
-					Created = new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
-					StartDateTime = new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
-					EndDateTime = new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)
-				};
-				QueuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-			}
-			CurrentUnitOfWork.Current().PersistAll();
 		}
 
 		[Test]

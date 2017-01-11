@@ -100,20 +100,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder.RegisterModule(new CommonModule(configuration));
 			return builder.Build();
 		}
-
-		private static IContainer BuildContainerWithToggle(Toggles toggle, bool value)
-		{
-			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs(new ConfigReader()), ToggleManager(toggle, value));
-			builder.RegisterModule(new CommonModule(config));
-			return builder.Build();
-		}
-
-		private static IToggleManager ToggleManager(Toggles toggle, bool value)
-		{
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
-			return toggleManager;
-		}
 	}
 }

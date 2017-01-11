@@ -156,12 +156,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scheduleDictionary.Stub(x => x.Scenario).Return(_scenario);
 		}
 
-		private void expectPersistOfDictionary()
-		{
-			var changes = new DifferenceCollection<IPersistableScheduleData>();
-			_scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(changes);
-		}
-
 		private DateTimePeriod getExpectedPeriod()
 		{
 			var fullDayTimeSpanStart = new TimeSpan(0, 0, 0);

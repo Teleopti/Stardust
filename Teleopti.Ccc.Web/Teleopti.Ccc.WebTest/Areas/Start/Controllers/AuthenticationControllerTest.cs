@@ -26,11 +26,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			result.ViewName.Should().Be.EqualTo(string.Empty);
 			Assert.That(result.ViewBag.LayoutBase, Is.SameAs(layoutBaseViewModel));
 		}
-		private static FakeToggleManager getToggleManager()
-		{
-			var toggleManager = new FakeToggleManager();
-			return toggleManager;
-		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void DefaultActionShouldRenderDefaultView()

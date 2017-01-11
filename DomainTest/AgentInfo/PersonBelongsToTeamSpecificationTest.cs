@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         private DateOnlyPeriod _periodInQuestion =
             new DateOnlyPeriod(2007, 1, 1, 2008, 1, 1);
 
-        private DateOnly _dateInQuestion = new DateOnly(2007, 2, 1);
-
         private ITeam _okTeam = TeamFactory.CreateSimpleTeam("OKTeam");
         private ITeam _notOkTeam = TeamFactory.CreateSimpleTeam("NotOKTeam");
 

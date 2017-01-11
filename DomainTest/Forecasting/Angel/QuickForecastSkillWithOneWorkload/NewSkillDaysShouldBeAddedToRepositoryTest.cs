@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 				throw new NotImplementedException();
 			}
 
-			public IUnitOfWork UnitOfWork { get; private set; }
 			public ICollection<ISkillDay> FindRange(DateOnlyPeriod period, ISkill skill, IScenario scenario)
 			{
 				return _existingSkillDays;
