@@ -1492,6 +1492,12 @@
     <Content Include="WFM\app\skillPrio\skillprio.service.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.skill.service.js" />
+    <Content Include="WFM\app\staffing\staffing.controller.js" />
+    <Content Include="WFM\app\staffing\staffing.controller.spec.js" />
+    <Content Include="WFM\app\staffing\staffing.html" />
+    <Content Include="WFM\app\staffing\staffing.routes.js" />
+    <Content Include="WFM\app\staffing\staffing.service.js" />
+    <Content Include="WFM\app\staffing\_modules.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.html" />
     <Content Include="WFM\app\teamSchedule\html\favoriteSearch.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\favoriteSearchPanel.tpl.html" />

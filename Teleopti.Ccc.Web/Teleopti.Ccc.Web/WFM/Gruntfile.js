@@ -359,6 +359,7 @@ module.exports = function (grunt) {
                 src: [
                     //add your path to module here
                     '!app/permissions/refact/**/*js',
+                    "app/staffing/**/*.js",
                     'app/skillPrio/**/*.js',
                     'app/teamSchedule/**/*.js',
                     '!app/**/*.spec.js',
