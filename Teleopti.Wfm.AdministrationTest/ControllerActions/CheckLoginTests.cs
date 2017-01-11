@@ -66,8 +66,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			TestPollutionCleaner.Clean("tenant", "appuser");
-			var builder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
 			var model = new CreateTenantModel
 			{

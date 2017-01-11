@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			TestPollutionCleaner.Clean("tenant", "appuser");
 
-			var result = Database.CreateDatabases(new CreateTenantModelForTest
+			Database.CreateDatabases(new CreateTenantModelForTest
 			{
 				Tenant = "tenant",
 				AppPassword = "Passw0rd"

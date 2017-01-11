@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		{
 			var personId = Guid.NewGuid();
 			var tenantPassword = RandomName.Make();
-			var expected = new PersonInfo();
 			var httpcontext = createHttpContextWithHeadersSet(personId, tenantPassword);
 
 			var findPersonByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
