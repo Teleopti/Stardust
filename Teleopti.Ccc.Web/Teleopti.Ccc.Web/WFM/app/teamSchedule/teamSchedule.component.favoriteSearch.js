@@ -42,6 +42,8 @@
 				zIndex: 150
 			};
 			$mdPanel.open(config);
+
+			ctrl.favoriteSearchList.sort(reorderListAccordingToIsDefault);
 		};
 
 		ctrl.$onInit = function () {
@@ -67,7 +69,7 @@
 		ctrl.enableSave = function () {
 			var currentSearch = ctrl.getSearch();
 
-			var isNameValid = ctrl.currentName !== '' && ctrl.currentName.length <= 50;
+			var isNameValid = ctrl.currentName && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
 			var hasTeamIds = currentSearch.teamIds.length > 0;
 
 			if (!ctrl.currentFavorite) return isNameValid && hasTeamIds;
@@ -157,7 +159,7 @@
 		function refreshList(data) {
 			if (!angular.isArray(data)) return;
 
-			ctrl.favoriteSearchList = data;
+			ctrl.favoriteSearchList = data.sort(reorderListAccordingToIsDefault);
 			favoriteSearchNameList = ctrl.favoriteSearchList.map(function (f) {
 				return f.Name;
 			});
@@ -167,6 +169,14 @@
 			});
 			ctrl.currentFavorite = defaultes.length > 0 ? defaultes[0] : undefined;
 			ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';
+		}
+
+		function reorderListAccordingToIsDefault(item1, item2){
+			if(item1.IsDefault)
+				return -1;
+			if(item2.IsDefault)
+				return 1;
+			return 0;
 		}
 	}
 

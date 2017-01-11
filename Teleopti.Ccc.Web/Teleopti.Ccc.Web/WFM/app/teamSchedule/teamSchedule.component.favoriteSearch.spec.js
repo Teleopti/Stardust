@@ -39,7 +39,7 @@ describe('favoriteSearch component tests', function () {
 		expect(ctrl.favoriteSearchList.length).toEqual(2);
 		expect(ctrl.favoriteSearchList[0].Id).toEqual("1");
 		expect(ctrl.favoriteSearchList[1].Id).toEqual("2");
-		expect(ctrl.currentName).toEqual('test2');
+		expect(ctrl.currentName).toEqual('test1');
 	}));
 
 	it('should save new favorite', function () {
@@ -75,12 +75,12 @@ describe('favoriteSearch component tests', function () {
 
 		var ctrl = element.isolateScope().$ctrl;
 		ctrl.isTest = true;
-		ctrl.currentName = 'test2';
+		ctrl.currentName = 'test1';
 		ctrl.save();
 
 		expect(ctrl.favoriteSearchList.length).toEqual(2);
-		expect(ctrl.favoriteSearchList[1].TeamIds[0]).toEqual("fakeTeamId");
-		expect(ctrl.favoriteSearchList[1].SearchTerm).toEqual("agent");
+		expect(ctrl.favoriteSearchList[0].TeamIds[0]).toEqual("fakeTeamId");
+		expect(ctrl.favoriteSearchList[0].SearchTerm).toEqual("agent");
 	});
 
 	it('should make specific favorite default', function () {
@@ -94,12 +94,13 @@ describe('favoriteSearch component tests', function () {
 
 
 		var ctrl = element.isolateScope().$ctrl;
-		var newDefaultName = 'test1';
+		var newDefaultName = 'test2';
 		ctrl.toggleDefault(newDefaultName);
 
 		expect(ctrl.favoriteSearchList.length).toEqual(2);
-		expect(ctrl.favoriteSearchList[0].IsDefault).toEqual(true);
-		expect(ctrl.favoriteSearchList[1].IsDefault).toEqual(false);
+		expect(ctrl.favoriteSearchList[0].IsDefault).toEqual(false);
+		expect(ctrl.favoriteSearchList[0].Name).toEqual('test1');
+		expect(ctrl.favoriteSearchList[1].IsDefault).toEqual(true);
 	});
 
 
@@ -129,14 +130,14 @@ describe('favoriteSearch component tests', function () {
 				Name: 'test1',
 				TeamIds: ['Team1Id', 'Team2Id'],
 				SearchTerm: '',
-				IsDefault: false
+				IsDefault: true
 			},
 			{
 				Id: '2',
 				Name: 'test2',
 				TeamIds: ['Team1Id', 'Team2Id'],
 				SearchTerm: '',
-				IsDefault: true
+				IsDefault: false
 			}
 		];
 

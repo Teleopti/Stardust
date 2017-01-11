@@ -298,45 +298,33 @@
 		padding: 5px;
 	}
 }
-.fav-search-open-btn {
-	display: inline-block;
-	margin: 10px 5px;
-}
 .fav-search-panel {
 	background: $white;
 
 	md-list {
-		padding: 0 0 0.5em 0;
-		min-width: 400px;
+		padding: 0;
+		min-width: 300px;
+		max-height: 400px;
+		overflow-y: auto;
 	}
 }
 .fav-search-header {
 	background: $white;
-	padding: 0;
-	padding-top: 0.5em;
+	padding: .8em;
+	display: flex;
 
-	.md-subheader-inner {
-		padding: 1em 0.8em 0.6em 0.8em;
-	}
-	.input-block {
-		display: inline-block;
-		width: calc(100% - 50px);
-		position: relative;
-	}
 	input.name {
-		width: 100%;
+		flex-grow: 1;
+		margin-right: .8em;
 	}
 	input.name.ng-invalid {
 		border-bottom: 1px solid red;
 	}
-	.tag-icon {
-		position: absolute;
-		bottom: 0;
-		right: 0;
-		transform: scale(0.8, 0.8);
+	button {
+		border: none;
 	}
 	button.btn-primary {
-		background: #09f;
+		background: $blue-500;
 	}
 	button.btn-default {
 		background: $gray026;
@@ -348,16 +336,24 @@
 	border-bottom: 1px solid $gray012;
 	min-height: initial !important;
 
-	& > .fav-search-item-container {
+	.fav-search-item-container {
 		padding: 0.2em 0.8em 0 0.8em;
 		width: 100%;
 	}
-	.pull-right {
-		margin-top: 3px;
-	}
-	.default-icon {
+	.default-favorite {
 		display: inline-block;
-		margin-right: 20px;
+	}
+	.default-favorite button {
+		font-size: 0.8em;
+		margin: -.3em 0 0 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+	.set-as-default {
+		background: $blue-300;
+	}
+	.unset-default {
+		background: $gray026;
 	}
 	.invisible {
 		visibility: hidden;
