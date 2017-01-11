@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             _skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-            _skillIntervalDataList.Add(createSkillIntervalData(0, 30, 0.8));
-            _skillIntervalDataList.Add(createSkillIntervalData(30, 60, 0.9));
-            _skillIntervalDataList.Add(createSkillIntervalData(60, 90, 0.11));
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 30));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 60));
+            _skillIntervalDataList.Add(createSkillIntervalData(60, 90));
 
             using (_mock.Playback())
             {
@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             _skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-            _skillIntervalDataList.Add(createSkillIntervalData(0, 30, 0.8));
-            _skillIntervalDataList.Add(createSkillIntervalData(30, 60, 0.9));
-            _skillIntervalDataList.Add(createSkillIntervalData(60, 90, 0.11));
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 30));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 60));
+            _skillIntervalDataList.Add(createSkillIntervalData(60, 90));
 
             using (_mock.Playback())
             {
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             _skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-            _skillIntervalDataList.Add(createSkillIntervalData(0, 30, 0.8));
-            _skillIntervalDataList.Add(createSkillIntervalData(30, 60, 0.9));
-            _skillIntervalDataList.Add(createSkillIntervalData(60, 90, 0.11));
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 30));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 60));
+            _skillIntervalDataList.Add(createSkillIntervalData(60, 90));
 
             using (_mock.Playback())
             {
@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             _skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-            _skillIntervalDataList.Add(createSkillIntervalData(0, 30, 0.8));
-            _skillIntervalDataList.Add(createSkillIntervalData(30, 60, 0.9));
-            _skillIntervalDataList.Add(createSkillIntervalData(60, 90, 0.11));
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 30));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 60));
+            _skillIntervalDataList.Add(createSkillIntervalData(60, 90));
 
             using (_mock.Playback())
             {
@@ -122,14 +122,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	    public void ShouldHandle60MinutesInterval()
 	    {
 			_skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-			_skillIntervalDataList.Add(createSkillIntervalData(0, 60, 0.8));
+			_skillIntervalDataList.Add(createSkillIntervalData(0, 60));
 
 			var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 60);
 
 			Assert.AreEqual(1, skillIntervalData.Count);
 	    }
 
-	    private static OvertimeSkillIntervalData createSkillIntervalData(int startMin, int endMin, double relativeDifference)
+	    private static OvertimeSkillIntervalData createSkillIntervalData(int startMin, int endMin)
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             return new OvertimeSkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(startMin), startDateTime.AddMinutes(endMin)), 0, 0);

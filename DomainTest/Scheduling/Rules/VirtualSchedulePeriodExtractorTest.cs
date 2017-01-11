@@ -24,11 +24,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void CanGetUniqueSchedulePeriods()
         {
-            DateTimePeriod period = new DateTimePeriod(2009,2,2,2009,2,3);
-            DateTimePeriod period2 = new DateTimePeriod(2009, 3, 1, 2009, 3, 2);
             DateOnly dateOnly1 = new DateOnly(2009,2,2);
             DateOnly dateOnly2 = new DateOnly(2009,3,1);
-            IPermissionInformation permissionInformation = _mocks.StrictMock<IPermissionInformation>();
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.Utc;
 
             IVirtualSchedulePeriod vPeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();

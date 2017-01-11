@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Tracking
         [Test]
         public void VerifyRefreshIfNeeded()
         {
-            IUnitOfWork uow = _mocker.StrictMock<IUnitOfWork>();
             IAccount pacc = _mocker.StrictMock<IAccount>();
             using(_mocker.Record())
             {
@@ -45,13 +44,11 @@ namespace Teleopti.Ccc.DomainTest.Tracking
         [Test]
         public void VerifyRefresh()
         {
-            IUnitOfWork uow = _mocker.StrictMock<IUnitOfWork>();
             IAccount pacc = _mocker.StrictMock<IAccount>();
             using (_mocker.Record())
             {
                 Expect.Call(() => pacc.CalculateUsed(null, null)).IgnoreArguments().Repeat.Twice();
                 Expect.Call(_scenario.Current()).Repeat.Twice();
-                //Expect.Call(()=>pacc.CalculateBalanceIn()).Repeat.Twice();
             }
             using (_mocker.Playback())
             {

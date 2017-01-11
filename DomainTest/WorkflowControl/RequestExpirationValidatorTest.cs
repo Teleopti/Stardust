@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 		private IValidatedRequest executeValidate(IAbsenceRequest absenceRequest, IPersonAssignment assignment)
 		{
-			var schedulingResultStateHolder = createSchedulingResultStateHolder(_person, assignment);
+			var schedulingResultStateHolder = createSchedulingResultStateHolder(assignment);
 			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder, null, null,
 				null);
 			return getTarget().Validate(absenceRequest, requiredForHandlingAbsenceRequest);
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			return absenceRequest;
 		}
 
-		private ISchedulingResultStateHolder createSchedulingResultStateHolder(IPerson person, IPersonAssignment assignment)
+		private ISchedulingResultStateHolder createSchedulingResultStateHolder(IPersonAssignment assignment)
 		{
 			var schedulingResultStateHolder = new SchedulingResultStateHolder();
 			schedulingResultStateHolder.Schedules = ScheduleDictionaryForTest.WithPersonAssignment(_scenario,
