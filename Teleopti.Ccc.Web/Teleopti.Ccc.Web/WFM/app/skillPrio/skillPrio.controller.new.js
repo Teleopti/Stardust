@@ -3,7 +3,15 @@
 
 	angular
 		.module('wfm.skillPrio')
-		.controller('skillPrioControllerNew', skillPrioController);
+		.controller('skillPrioControllerNew', skillPrioController)
+		.filter('highlight', function($sce) {
+	    return function(text, phrase) {
+	      if (phrase) text = text.replace(new RegExp('('+phrase+')', 'gi'),
+	        '<span class="highlighted">$1</span>')
+
+	      return $sce.trustAsHtml(text)
+	    }
+	  });
 
 	skillPrioController.$inject = ['$filter', 'Toggle', '$location', 'NoticeService', '$translate', '$q', 'skillPrioServiceNew'];
 

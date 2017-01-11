@@ -44,7 +44,7 @@
 				<div class="sub-header">
 					<label for="filter">
 					 <i class="mdi mdi-filter-outline inline-flex">
-					   <input type="text" id="filter" ng-model="skillFilter.SkillName" placeholder="filter skills...">
+					   <input type="text" id="filter" ng-model="search.text" placeholder="filter skills...">
 					   <md-tooltip>Filter</md-tooltip>
 					 </i>
 					</label>
@@ -60,9 +60,9 @@
 						<b>Unsorted Skills</b>
 						<div ui-tree="vm.unsortedOpt" data-drag-enabled="true" data-max-depth="0">
 							<ol ui-tree-nodes ng-model="vm.unsortedList" class="horizontal-list" data-horizontal>
-								<li ui-tree-node ng-repeat="Skill in vm.unsortedList | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
-									<span id="card">
-											{{Skill.SkillName}}
+								<li ui-tree-node ng-repeat="Skill in vm.unsortedList" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
+									<span ng-bind-html="Skill.SkillName | highlight:search.text" id="card">
+										{{Skill.SkillName}}
 									</span>
 								</li>
 							</ol>
@@ -74,13 +74,13 @@
 							<div ui-tree="vm.cascadeOpt" data-drag-enabled="true" data-max-depth="0">
 								<ol ui-tree-nodes ng-model="sortedRow.Skills" class="horizontal-list" data-horizontal>
 									{{sortedRow.Priority}}
-									<li ui-tree-node ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
-										<span id="card">
-												{{Skill.SkillName}}
-													<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" class="mdi mdi-close drag-handle-delete">
-														<md-tooltip>Move skill to unsorted list</md-tooltip>
-													</i>
+									<li ui-tree-node ng-repeat="Skill in sortedRow.Skills" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
+										<span ng-bind-html="Skill.SkillName | highlight:search.text" id="card">
+											{{Skill.SkillName}}
 										</span>
+										<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" class="mdi mdi-close drag-handle-delete">
+											<md-tooltip>Move skill to unsorted list</md-tooltip>
+										</i>
 									</li>
 								</ol>
 							</div>
