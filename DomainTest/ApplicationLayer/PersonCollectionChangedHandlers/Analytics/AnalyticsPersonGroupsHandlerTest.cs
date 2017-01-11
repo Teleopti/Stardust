@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;

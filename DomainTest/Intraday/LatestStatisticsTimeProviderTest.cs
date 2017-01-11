@@ -4,7 +4,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {

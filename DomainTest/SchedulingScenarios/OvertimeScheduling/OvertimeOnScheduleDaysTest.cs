@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;

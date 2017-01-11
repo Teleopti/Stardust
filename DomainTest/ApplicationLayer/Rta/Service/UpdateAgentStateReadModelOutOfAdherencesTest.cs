@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;

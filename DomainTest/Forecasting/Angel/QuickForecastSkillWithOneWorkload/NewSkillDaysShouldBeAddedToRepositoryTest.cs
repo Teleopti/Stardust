@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
 {

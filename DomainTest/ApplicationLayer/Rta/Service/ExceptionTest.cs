@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;

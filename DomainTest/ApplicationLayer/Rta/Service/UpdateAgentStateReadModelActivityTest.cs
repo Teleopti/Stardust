@@ -2,7 +2,6 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service

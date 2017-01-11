@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling

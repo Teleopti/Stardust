@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;

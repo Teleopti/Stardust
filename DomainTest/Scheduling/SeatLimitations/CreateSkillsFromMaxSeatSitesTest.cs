@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;

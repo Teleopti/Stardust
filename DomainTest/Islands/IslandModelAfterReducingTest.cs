@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Islands.ClientModel;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Islands
 {
