@@ -149,8 +149,8 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					 0);
 				var answeredCalls = Math.Round((offeredCalls * RandomNumber(80, 100)) / 100, 0);
 				var actualHandleTime = forecastedAverageHandleTime * (double)answeredCalls;
-				var talkTime = actualHandleTime * (interval.TalkTime / interval.HandleTime);
-				var acw = actualHandleTime * (interval.AfterTalkTime / interval.HandleTime);
+				var talkTime = interval.HandleTime > 0 ? actualHandleTime * (interval.TalkTime / interval.HandleTime) : 0;
+				var acw = interval.HandleTime > 0 ? actualHandleTime * (interval.AfterTalkTime / interval.HandleTime) : 0;
 				var speedOfAnswer = createSpeedOfAnswer(answeredCalls);
 				var isASAWithinSL = speedOfAnswer / answeredCalls <= 20;
 				var answeredCallsWithinSL = isASAWithinSL
