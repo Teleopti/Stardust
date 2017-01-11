@@ -498,13 +498,13 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		[Test]
 		public void ShouldHaveAverageOfTotalAllowance()
 		{
-			Assert.AreEqual(10, target.TotalAllowance);
+			Assert.AreEqual(10, target.FullAllowance);
 		}
 
 		[Test]
 		public void ShouldHaveAverageOfAllowance()
 		{
-			Assert.AreEqual(8, target.Allowance);
+			Assert.AreEqual(8, target.ShrinkedAllowance);
 		}
 
 		[Test]
@@ -572,14 +572,14 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		[Test]
 		public void ShouldHaveAverageTotalAllowance()
 		{
-			var totalAllowance = Math.Round(target.TotalAllowance, 2);
+			var totalAllowance = Math.Round(target.FullAllowance, 2);
 			totalAllowance.Should().Be.EqualTo(10);
 		}
 
 		[Test]
 		public void ShouldHaveAverageAllowance()
 		{
-			var allowance = Math.Round(target.Allowance, 2);
+			var allowance = Math.Round(target.ShrinkedAllowance, 2);
 			allowance.Should().Be.EqualTo(8);
 		}
 

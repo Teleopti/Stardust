@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 		private int _openDaysCount;
 		private double _budgetedLeave;
 		private double _budgetedSurplus;
-		private double _allowance;
+		private double _shrinkedAllowance;
 		private double? _absenceOverride;
 		private Percent _absenceThreshold;
 		private double? _absenceExtra;
-		private double _totalAllowance;
+		private double _fullAllowance;
 
 		public BudgetGroupDistributedDetailModel(IList<IBudgetGroupDayDetailModel> budgetDays, IBudgetDayProvider budgetDayProvider, IBudgetPermissionService budgetPermissionService)
 		{
@@ -132,16 +132,16 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 											: new Percent(0d);
 					_absenceExtra = _openDaysCount > 0 ? openBudgetDays.Average(b => b.AbsenceExtra) : 0d;
 					_absenceOverride = _openDaysCount > 0 ? openBudgetDays.Average(b => b.AbsenceOverride) : 0d;
-					_totalAllowance = _openDaysCount > 0 ? openBudgetDays.Average(b => b.FullAllowance) : 0d;
-					_allowance = _openDaysCount > 0 ? openBudgetDays.Average(b => b.ShrinkedAllowance) : 0d;
+					_fullAllowance = _openDaysCount > 0 ? openBudgetDays.Average(b => b.FullAllowance) : 0d;
+					_shrinkedAllowance = _openDaysCount > 0 ? openBudgetDays.Average(b => b.ShrinkedAllowance) : 0d;
 
 					TriggerNotifyPropertyChanged(nameof(BudgetedLeave));
 					TriggerNotifyPropertyChanged(nameof(BudgetedSurplus));
 					TriggerNotifyPropertyChanged(nameof(AbsenceThreshold));
 					TriggerNotifyPropertyChanged(nameof(AbsenceExtra));
 					TriggerNotifyPropertyChanged(nameof(AbsenceOverride));
-					TriggerNotifyPropertyChanged(nameof(TotalAllowance));
-					TriggerNotifyPropertyChanged(nameof(Allowance));
+					TriggerNotifyPropertyChanged(nameof(FullAllowance));
+					TriggerNotifyPropertyChanged(nameof(ShrinkedAllowance));
 				}
 
 				TriggerNotifyPropertyChanged(nameof(NetStaff));
@@ -465,23 +465,23 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			}
 		}
 
-		public double TotalAllowance
+		public double FullAllowance
 		{
-			get { return _totalAllowance; }
+			get { return _fullAllowance; }
 			set
 			{
-				_totalAllowance = value;
-				TriggerNotifyPropertyChanged(nameof(TotalAllowance));
+				_fullAllowance = value;
+				TriggerNotifyPropertyChanged(nameof(FullAllowance));
 			}
 		}
 
-		public double Allowance
+		public double ShrinkedAllowance
 		{
-			get { return _allowance; }
+			get { return _shrinkedAllowance; }
 			set
 			{
-				_allowance = value;
-				TriggerNotifyPropertyChanged(nameof(Allowance));
+				_shrinkedAllowance = value;
+				TriggerNotifyPropertyChanged(nameof(ShrinkedAllowance));
 			}
 		}
 

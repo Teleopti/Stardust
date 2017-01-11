@@ -272,14 +272,14 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		[Test]
 		public void ShouldCalculateTotalAllowance()
 		{
-			var totalAllowance = Math.Round(target.TotalAllowance, 2);
+			var totalAllowance = Math.Round(target.FullAllowance, 2);
 			totalAllowance.Should().Be.EqualTo(10);
 		}
 
 		[Test]
 		public void ShouldCalculateAllowance()
 		{
-			var allowance = Math.Round(target.Allowance, 2);
+			var allowance = Math.Round(target.ShrinkedAllowance, 2);
 			allowance.Should().Be.EqualTo(8);
 		}
 
