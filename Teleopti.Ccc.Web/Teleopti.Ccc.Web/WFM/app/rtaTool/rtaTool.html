@@ -9,7 +9,6 @@
 					<span ng-repeat="state in stateCodes"><button ng-click="sendBatches(state.Code)" class="wfm-btn wfm-btn-primary" style="margin-bottom: 20px; width: 120px;">{{state.Name}}</button> </span>
 				</div>
 				<div class="pull-right">
-					
 					<div style="float:left">
 						<div class="con-flex" ng-if="!pause" style="margin-top:10px">
 							<span class="h4">Random states</span>
@@ -23,21 +22,24 @@
 							<md-tooltip>Send random states</md-tooltip>
 						</button>
 					</div>
-					<div>
-						<label>Snapshot
-							<input type="checkbox" ng-model="snapshot.value">
-						</label>
-					</div>
+					
 				</div>
 			</div>
 		</div>
-</div>
-<div class="panel material-depth-1">
-	<div class="con-row">
-		<div class="con-flex agent-table-wrapper" style="margin-top:4px; margin-left:3px;">
-			<div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+		<div class="con-row">
+			<label>Snapshot
+				<input type="checkbox" ng-model="snapshot.value">
+			</label>
+			<label>Authentication Key:
+				<input type="textbox" ng-model="authKey.value">
+			</label>
 		</div>
-	</div>
+		<div class="panel material-depth-1">
+			<div class="con-row">
+				<div class="con-flex agent-table-wrapper" style="margin-top:4px; margin-left:3px;">
+					<div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+				</div>
+			</div>
+		</div>
 	</section>
-</div>
 </div>

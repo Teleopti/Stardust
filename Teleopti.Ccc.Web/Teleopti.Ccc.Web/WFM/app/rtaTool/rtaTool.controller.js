@@ -13,6 +13,7 @@
 				$scope.sendInterval = { time: 5 };
 				$scope.stateCodes = [];
 				$scope.snapshot = { value: false };
+				$scope.authKey = { value: "!#¤atAbgT%" };
 				var statesCellTemplate = '<div class="ui-grid-cell-contents" style=" margin: 0 auto; text-align: center"><button ng-click="grid.appScope.sendState(row.entity.UserCode, row.entity.DataSource, COL_FIELD)" class="wfm-btn wfm-btn-primary" style="width: 120px;">{{COL_FIELD}}</button></div>';
 
 				$scope.gridOptions = {
@@ -137,7 +138,7 @@
 
 				function createState(userCode, dataSource, code) {
 					return {
-						AuthenticationKey: "!#¤atAbgT%",
+						AuthenticationKey: $scope.authKey.value,
 						UserCode: userCode,
 						StateCode: code,
 						StateDescription: code,
@@ -159,7 +160,7 @@
 								method: 'POST',
 							},
 						}).query({
-							AuthenticationKey: "!#¤atAbgT%",
+							AuthenticationKey: $scope.authKey.value,
 							SourceId: dataSource,
 							SnapshotId: moment.utc().format('YYYY-MM-DD HH:mm:ss')
 						}).$promise;
