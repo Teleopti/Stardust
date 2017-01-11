@@ -351,7 +351,8 @@ module.exports = function (grunt) {
             },
             rta: {
                 src: [
-                    'app/rta/**/*.js'
+                    'app/rta/**/*.js',
+                    '!app/rta/rta.faketime.service.js'
                 ]
             },
             dev: {
