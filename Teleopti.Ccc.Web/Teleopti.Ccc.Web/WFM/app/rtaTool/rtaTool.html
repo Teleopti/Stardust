@@ -6,19 +6,19 @@
 					<h1><i class="mdi mdi-alarm"></i>Rta Tool - This is an internal testing tool, handle with caution</h1>
 				</div>
 				<div class="rta-top-buttons-wrapper pull-left">
-					<span ng-repeat="state in stateCodes"><button ng-click="sendBatches(state.Code)" class="wfm-btn wfm-btn-primary" style="margin-bottom: 20px; width: 120px;">{{state.Name}}</button> </span>
+					<span ng-repeat="state in vm.stateCodes"><button ng-click="vm.sendBatches(state.Code)" class="wfm-btn wfm-btn-primary" style="margin-bottom: 20px; width: 120px;">{{state.Name}}</button> </span>
 				</div>
 				<div class="pull-right">
 					<div style="float:left">
-						<div class="con-flex" ng-if="!pause" style="margin-top:10px">
+						<div class="con-flex" ng-if="!vm.pause" style="margin-top:10px">
 							<span class="h4">Random states</span>
 						</div>
-						<md-slider flex md-discrete min="5" max="60" step="5" ng-model="sendInterval.time" ng-hide="!pause" ng-disabled="!pause"
+						<md-slider flex md-discrete min="5" max="60" step="5" ng-model="vm.sendInterval.time" ng-hide="!vm.pause" ng-disabled="!vm.pause"
 							aria-label="slider" style="width:200px"></md-slider>
 					</div> 
 					<div class="fab-wrapper" style="float:right">
-						<button class="wfm-fab material-depth-1" ng-click="togglePause()">
-							<i ng-class="{'mdi mdi-play': pause, 'mdi mdi-pause': !pause}"></i>
+						<button class="wfm-fab material-depth-1" ng-click="vm.togglePause()">
+							<i ng-class="{'mdi mdi-play': vm.pause, 'mdi mdi-pause': !vm.pause}"></i>
 							<md-tooltip>Send random states</md-tooltip>
 						</button>
 					</div>
@@ -28,16 +28,16 @@
 		</div>
 		<div class="con-row">
 			<label>Snapshot
-				<input type="checkbox" ng-model="snapshot.value">
+				<input type="checkbox" ng-model="vm.snapshot">
 			</label>
 			<label>Authentication Key:
-				<input type="textbox" ng-model="authKey.value">
+				<input type="textbox" ng-model="vm.authKey">
 			</label>
 		</div>
 		<div class="panel material-depth-1">
 			<div class="con-row">
 				<div class="con-flex agent-table-wrapper" style="margin-top:4px; margin-left:3px;">
-					<div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+					<div ui-grid="vm.gridOptions" ui-grid-selection class="grid"></div>
 				</div>
 			</div>
 		</div>

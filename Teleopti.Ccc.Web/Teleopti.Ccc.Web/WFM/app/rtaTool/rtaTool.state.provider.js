@@ -6,7 +6,7 @@ angular.module('wfm.rtaTool')
 function rtaStates($stateProvider) {
   $stateProvider.state('rtaTool', {
     url: '/rtaTool',
-    controller: 'RtaToolCtrl',
+    controller: 'RtaToolController as vm',
     templateUrl: 'app/rtaTool/rtaTool.html'
   })
 };

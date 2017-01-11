@@ -1419,7 +1419,9 @@
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.controller.spec.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.controller.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.html" />
+    <Content Include="WFM\app\rtaTool\rtaTool.service.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.state.provider.js" />
+    <Content Include="WFM\app\rtaTool\rtaTool.statesCellTemplate.html" />
     <Content Include="WFM\app\rtaTool\_modules.js" />
     <Content Include="WFM\app\rta\agents\rta-agents-AgentsOnOrganizationAndSkills_41586.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-headercelltemplate.html" />

@@ -362,6 +362,7 @@ module.exports = function (grunt) {
                     "app/staffing/**/*.js",
                     'app/skillPrio/**/*.js',
                     'app/teamSchedule/**/*.js',
+                    'app/rtaTool/**/*.js',
                     '!app/**/*.spec.js',
                     '!app/**/*.fake.js'
                 ]
