@@ -136,6 +136,26 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				);
 		}
 
+		public IEnumerable<Domain.ApplicationLayer.Rta.Service.ExternalLogon> Logons()
+		{
+			return Enumerable.Range(0, _testConfiguration.NumberOfAgentsInSystem)
+				.Select(roger => new Domain.ApplicationLayer.Rta.Service.ExternalLogon
+				{
+					DataSourceId = _testConfiguration.DataSourceId,
+					UserCode = $"roger{roger}"
+				});
+		}
+
+		public IEnumerable<Domain.ApplicationLayer.Rta.Service.ExternalLogon> LogonsWorking()
+		{
+			return Enumerable.Range(0, _testConfiguration.NumberOfAgentsWorking)
+				.Select(roger => new Domain.ApplicationLayer.Rta.Service.ExternalLogon
+				{
+					DataSourceId = _testConfiguration.DataSourceId,
+					UserCode = $"roger{roger}"
+				});
+		}
+
 		private void createPersonsAndSchedules()
 		{
 			IList<IPerson> workingRogers = new List<IPerson>();
@@ -147,13 +167,14 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				var contractSchedule = _contractSchedules.LoadAll().Single(x => x.Description.Name == "contractSchedule");
 				var teams = _teams.LoadAll();
 
-				Enumerable.Range(0, _testConfiguration.NumberOfAgentsInSystem)
-					.ForEach(roger =>
+				Logons()
+					.Select((logon, index) => new {logon, index})
+					.ForEach(l =>
 					{
-						var name = "roger" + roger;
-						var team = teams.Single(x => x.Description.Name == "team" + (roger/10));
+						var index = l.index;
+						var team = teams.Single(x => x.Description.Name == "team" + (index/ 10));
 
-						var person = new Person {Name = new Name(name, name)};
+						var person = new Person {Name = new Name(l.logon.UserCode, l.logon.UserCode) };
 						person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 						_persons.Add(person);
 
@@ -163,15 +184,15 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 						var logon = new ExternalLogOn
 						{
-							AcdLogOnName = name, // is not used?
-							DataSourceId = _testConfiguration.DataSourceId,
-							AcdLogOnOriginalId = name, // this is the user code the rta receives
+							AcdLogOnName = l.logon.UserCode, // is not used?
+							DataSourceId = l.logon.DataSourceId,
+							AcdLogOnOriginalId = l.logon.UserCode, // this is the user code the rta receives
 							AcdLogOnMartId = -1
 						};
 						_externalLogOns.Add(logon);
 						person.AddExternalLogOn(logon, personPeriod);
 
-						if (roger <= _testConfiguration.NumberOfAgentsWorking)
+						if (index <= _testConfiguration.NumberOfAgentsWorking)
 							workingRogers.Add(person);
 					});
 
