@@ -43,14 +43,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 			DateTime? latestStatisticsTimeUtc,
 			DateTime? usersNowStartOfDayUtc)
 		{
-			var returnList = new List<ITemplateTaskPeriod>();
 			var periodLength = TimeSpan.FromMinutes(targetMinutesPerInterval);
 
 			if (!latestStatisticsTimeUtc.HasValue)
-				return returnList;
+				return Enumerable.Empty<ITemplateTaskPeriod>();
 
 			if (targetMinutesPerInterval > skillMinutesPerInterval)
-				return returnList;
+				return Enumerable.Empty<ITemplateTaskPeriod>();
 
 			if (targetMinutesPerInterval < skillMinutesPerInterval || isTaskPeriodsMerged(templateTaskPeriodCollection, skillMinutesPerInterval))
 			{
