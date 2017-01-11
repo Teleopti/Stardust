@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldNotPlaceOvertimeShiftDueToNoUnderstaffingAfterShoveling()
 		{
 			var scenario = new Scenario("_");
-			var activity = new Activity("_").WithId();
+			var activity = new Activity("_");
 			var date = DateOnly.Today;
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldNotPlaceOverTimeShiftDueToNoUnderstaffingOnPrimarySkill()
 		{
 			var scenario = new Scenario("_");
-			var activity = new Activity("_").WithId();
+			var activity = new Activity("_");
 			var dateOnly = new DateOnly(2016, 12, 13);
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldPlaceOverTimeShiftEvenIfNoUnderstaffingOnPrimarySkillIfUseSkillAll()
 		{
 			var scenario = new Scenario("_");
-			var activity = new Activity("_").WithId();
+			var activity = new Activity("_");
 			var dateOnly = new DateOnly(2016, 12, 13);
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };

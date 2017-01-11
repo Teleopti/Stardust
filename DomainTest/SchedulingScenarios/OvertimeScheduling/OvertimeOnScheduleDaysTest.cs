@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldSkipLockedDaysWithAssignmentWithLayers()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 16));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDay);
 			var overtimePreference = new OvertimePreferences
 			{
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ScheduleTag = new ScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(16, 0, 17, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-				SkillActivity = phoneActivity
+				SkillActivity = activity
 			};
 
 			LockManager.AddLock(agent, dateOnly,LockType.Normal);
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		{
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithId().IsOpen();
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithId().IsOpen();
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				skill.CreateSkillDayWithDemand(scenario, dateOnly, 10),
 				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 10)
 			};
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(1, 2));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(1, 2));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDays);
 			var overtimePreference = new OvertimePreferences
 			{
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ScheduleTag = new ScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(0, 0, 30, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-				SkillActivity = phoneActivity
+				SkillActivity = activity
 			};
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		{
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(viewersTimeZone));
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).WithId().IsOpen();
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).WithId().IsOpen();
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(15))
 			};
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(phoneActivity, new DateTimePeriod(2015, 10, 11, 23, 2015, 10, 12, 8));
+			ass.AddActivity(activity, new DateTimePeriod(2015, 10, 11, 23, 2015, 10, 12, 8));
 			ass.SetShiftCategory(shiftCategory);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDays);
 			var overtimePreference = new OvertimePreferences
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ScheduleTag = new ScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(0, 0, 30, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-				SkillActivity = phoneActivity
+				SkillActivity = activity
 			};
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
@@ -146,9 +146,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldScheduleNextAvailablePeriodIfCurrentCouldNotBeScheduled()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.InWorkTime = true;
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var activity = new Activity("_") {InWorkTime = true};
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -157,8 +156,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(10, 18));
-			var assNextDay = new PersonAssignment(agent, scenario, dateOnly.AddDays(1)).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(6, 14));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
+			var assNextDay = new PersonAssignment(agent, scenario, dateOnly.AddDays(1)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(6, 14));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass, assNextDay }, skillDay);
 			var overtimePreference = new OvertimePreferences
 			{
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ScheduleTag = new ScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(18, 0, 20, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 15),
-				SkillActivity = phoneActivity
+				SkillActivity = activity
 			};
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
@@ -182,9 +181,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldConsiderAllPeriodsWhenAvailableAgentsOnly()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.InWorkTime = true;
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var activity = new Activity("_") {InWorkTime = true};
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -193,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(10, 18));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
 			var overtimeAvailability = new OvertimeAvailability(agent, dateOnly, new TimeSpan(18, 0, 0), new TimeSpan(20, 0, 0));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDay);
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
@@ -205,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ScheduleTag = new ScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(0, 0, 20, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-				SkillActivity = phoneActivity,
+				SkillActivity = activity,
 				AvailableAgentsOnly = true
 			};
 
@@ -222,9 +220,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldConsiderOvertimePreferenceMinimumOvertimeLengthBug41951()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			phoneActivity.InWorkTime = true;
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var activity = new Activity("_") {InWorkTime = true};
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -233,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(10, 18));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
 			var overtimeAvailability = new OvertimeAvailability(agent, dateOnly, new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDay);
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
@@ -246,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ScheduleTag = new ScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(0, 0, 20, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-				SkillActivity = phoneActivity,
+				SkillActivity = activity,
 				AvailableAgentsOnly = true
 			};
 
