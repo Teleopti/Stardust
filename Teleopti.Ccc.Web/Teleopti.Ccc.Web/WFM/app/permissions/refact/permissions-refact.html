@@ -19,7 +19,7 @@
 					<label for="createRole" class="input-icon">
 						<i class="mdi mdi-account-key">
 							<input type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="{{'Role'|translate}}" autofocus>
-							<md-tooltip>Name</md-tooltip>
+							<md-tooltip>{{'Name'|translate}}</md-tooltip>
 						</i>
 					</label>
 				</div>
@@ -27,7 +27,7 @@
 		</div>
 		<div class="modal-actions">
 			<aside>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.showCreateModal = false" type="submit" name="button">create</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.showCreateModal = false" type="submit" name="button">{{'Add'|translate}}</button>
 			</aside>
 		</div>
 	</form>
@@ -86,7 +86,7 @@
 												<label for="editRole" class="input-icon">
 													<i class="mdi mdi-pencil">
 														<input type="text" id="editRole" ng-model="newRoleName" placeholder="New name">
-														<md-tooltip>Name</md-tooltip>
+														<md-tooltip>{{'Name' | translate}}</md-tooltip>
 													</i>
 												</label>
 											</div>
@@ -137,7 +137,7 @@
 										<label for="filter1" class="input-icon">
 											<i class="mdi mdi-filter-outline">
 												<input type="text" id="filter1" ng-model="searchString" placeholder="{{'PermissionsFilterThreeDots' | translate}}" ng-change="vm.functionsDescriptionFilter(searchString)">
-												<md-tooltip>Filter</md-tooltip>
+												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
 											</i>
 										</label>
 									</div>
@@ -208,7 +208,7 @@
 									<div class="con-flex">
 										<md-select ng-model="model" placeholder="Pick an option">
 											<h2>{{'AddGlobalAuthorizationLabel'| translate}}</h2>
-											<md-option selected ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)" ng-value="option.RangeOption">{{option.Name}}</md-option>
+											<md-option selected ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)" ng-value="option.RangeOption">{{option.Name | translate}}</md-option>
 										</md-select>
 									</div>
 								</div>

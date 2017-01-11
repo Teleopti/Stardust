@@ -17261,6 +17261,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MyBusinessUnit.
+        /// </summary>
+        public static string MyBusinessUnit {
+            get {
+                return ResourceManager.GetString("MyBusinessUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My current culture.
         /// </summary>
         public static string MyCurrentCulture {
@@ -17275,6 +17284,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MyLanguage {
             get {
                 return ResourceManager.GetString("MyLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MyOwn.
+        /// </summary>
+        public static string MyOwn {
+            get {
+                return ResourceManager.GetString("MyOwn", resourceCulture);
             }
         }
         
@@ -17329,6 +17347,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MySchedule {
             get {
                 return ResourceManager.GetString("MySchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MySite.
+        /// </summary>
+        public static string MySite {
+            get {
+                return ResourceManager.GetString("MySite", resourceCulture);
             }
         }
         

@@ -15416,6 +15416,17 @@ These options are activated:
     <value>Set as default</value>
     <comment>Tooltip message of Team/FavoriteSearch list</comment>
   </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>MyBusinessUnit</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>MyOwn</value>
+    <comment>MyOwn dynamic option</comment>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>MySite</value>
+    <comment>MySite dynamic option</comment>
+  </data>
   <data name="NeedToSelectARoleFirst" xml:space="preserve">
     <value>Select a role first</value>
     <comment>error message if the user tries some permission action without a selected role</comment>
