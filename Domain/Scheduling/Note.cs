@@ -14,20 +14,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public Note(IPerson person, DateOnly noteDate, IScenario scenario, string scheduleNote) : this()
         {
-            InParameter.StringTooLong("scheduleNote", scheduleNote, 255);
+            InParameter.StringTooLong(nameof(scheduleNote), scheduleNote, 255);
 
             _person = person;
             _noteDate = noteDate;
             _scenario = scenario;
             _scheduleNote = scheduleNote;
         }
-
-        /// <summary>
-        /// For Nhib only
-        /// </summary>
+		
         protected Note()
         {
-            
         }
 
         public virtual DateTimePeriod Period
@@ -42,32 +38,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-        public virtual IPerson Person
-        {
-            get { return _person; }
-        }
+        public virtual IPerson Person => _person;
 
-        public virtual IScenario Scenario
-        {
-            get { return _scenario; }
-        }
+	    public virtual IScenario Scenario => _scenario;
 
-        public virtual string GetScheduleNote(ITextFormatter formatter)
+	    public virtual string GetScheduleNote(ITextFormatter formatter)
         {
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_scheduleNote);
         }
 
-		private string ScheduleNote { get { return _scheduleNote; } }
+		private string ScheduleNote => _scheduleNote;
 
-        public virtual DateOnly NoteDate
-        {
-            get { return _noteDate; }
-        }
+	    public virtual DateOnly NoteDate => _noteDate;
 
-        public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
+	    public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
         {
             return dateAndPeriod.DateOnly == _noteDate;
         }
@@ -85,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public virtual void AppendScheduleNote(string text)
         {
             string combined = _scheduleNote.Length == 0 ? text : string.Concat(_scheduleNote, " ", text);
-            InParameter.StringTooLong("text", combined, 255);
+            InParameter.StringTooLong(nameof(text), combined, 255);
             _scheduleNote = combined;
         }
 
@@ -109,17 +96,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return retObj;
         }
 
-        public virtual IAggregateRoot MainRoot
-        {
-            get { return _person; }
-        }
+        public virtual IAggregateRoot MainRoot => _person;
 
-        public virtual string FunctionPath
-        {
-            get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
-        }
+	    public virtual string FunctionPath => DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 
-        public virtual IPersistableScheduleData CreateTransient()
+	    public virtual IPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }

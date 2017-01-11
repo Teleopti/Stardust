@@ -85,8 +85,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         private static void validateDateTime(DateTime startDateTime, DateTime endDateTime)
         {
-            InParameter.VerifyDateIsUtc("startDateTime", startDateTime);
-            InParameter.VerifyDateIsUtc("endDateTime", endDateTime);
+            InParameter.VerifyDateIsUtc(nameof(startDateTime), startDateTime);
+            InParameter.VerifyDateIsUtc(nameof(endDateTime), endDateTime);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace Teleopti.Interfaces.Domain
         /// <returns><c>true</c> if the specified period is contained; otherwise, <c>false</c>.</returns>
         public bool ContainsPart(DateTime theDateTime)
         {
-            InParameter.VerifyDateIsUtc("theDateTime", theDateTime);
+            InParameter.VerifyDateIsUtc(nameof(theDateTime), theDateTime);
 
             return (theDateTime <= EndDateTime && theDateTime >= StartDateTime);
         }

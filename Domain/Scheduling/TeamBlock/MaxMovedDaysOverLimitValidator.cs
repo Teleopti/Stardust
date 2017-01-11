@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return true;
 
 			var allSelectedScheduleRangeClones = optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones;
-			InParameter.ListCannotBeEmpty("optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones.Keys", optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones.Keys);
+			InParameter.ListCannotBeEmpty(nameof(optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones.Keys), optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones.Keys);
 				
 			IScheduleRange rangeCloneForMatrix = allSelectedScheduleRangeClones[matrix.Person];
 			foreach (var scheduleDayPro in matrix.EffectivePeriodDays)

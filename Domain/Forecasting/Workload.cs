@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _name; }
             set
             {
-                InParameter.NotStringEmptyOrNull("Name", value);
-                InParameter.StringTooLong("Name",value,50);
+                InParameter.NotStringEmptyOrNull(nameof(Name), value);
+                InParameter.StringTooLong(nameof(Name),value,50);
                 _name = value;
             }
         }

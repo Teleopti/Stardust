@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             get { return _dayInMonth; }
             set
             {
-                InParameter.ValueMustBeLargerThanZero(nameof(value), value);
-                if (value > 31) throw new ArgumentOutOfRangeException(nameof(value), "The supplied value is bigger than number of days available in a month."); 
+                InParameter.ValueMustBeLargerThanZero(nameof(DayInMonth), value);
+                if (value > 31) throw new ArgumentOutOfRangeException(nameof(DayInMonth), "The supplied value is bigger than number of days available in a month."); 
                 _dayInMonth = value;
             }
         }

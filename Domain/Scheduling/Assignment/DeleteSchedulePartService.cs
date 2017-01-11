@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             IList<IScheduleDay> returnList = new List<IScheduleDay>();
             if (backgroundWorker == null)
-                throw new ArgumentNullException("backgroundWorker");
+                throw new ArgumentNullException(nameof(backgroundWorker));
  
             foreach (IScheduleDay part in list)
             {
@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 
-			InParameter.ListCannotBeEmpty("list", list);
+			InParameter.ListCannotBeEmpty(nameof(list), list);
 			if (backgroundWorker == null)
-				throw new ArgumentNullException("backgroundWorker");
+				throw new ArgumentNullException(nameof(backgroundWorker));
 
 			return list.Select(part =>
 			{

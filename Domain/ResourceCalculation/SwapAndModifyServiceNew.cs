@@ -7,7 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public class SwapAndModifyServiceNew : ISwapAndModifyServiceNew
 	{
 		private readonly ISwapServiceNew _swapService;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				throw new ArgumentNullException(nameof(dates));
 			if (scheduleDictionary == null)
 				throw new ArgumentNullException(nameof(scheduleDictionary));
-			InParameter.ListCannotBeEmpty("dates", dates);
+			InParameter.ListCannotBeEmpty(nameof(dates), dates);
 			if (person1 == person2)
 				throw new ArgumentException("The Persons must be different");
 			if(lockedDates == null)
@@ -58,16 +57,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				modifiedParts.AddRange(SwapParts(scheduleDictionary, selectedSchedules, trackedCommandInfo));
 
 				var ass1 = part1.PersonAssignment();
-				if (ass1 != null)
-				{
-					ass1.CheckRestrictions();
-				}
+				ass1?.CheckRestrictions();
 
 				var ass2 = part1.PersonAssignment();
-				if (ass2 != null)
-				{
-					ass2.CheckRestrictions();
-				}
+				ass2?.CheckRestrictions();
 			}
 
 			var responses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);

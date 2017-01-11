@@ -7,27 +7,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
     public class PublicNote : VersionedAggregateRootWithBusinessUnit, IPublicNote
     {
-        private IPerson _person;
+        private readonly IPerson _person;
         private IScenario _scenario;
         private string _scheduleNote;
         private DateOnly _noteDate;
 
         public PublicNote(IPerson person, DateOnly noteDate, IScenario scenario, string scheduleNote) : this()
         {
-            InParameter.StringTooLong("scheduleNote", scheduleNote, 255);
+            InParameter.StringTooLong(nameof(scheduleNote), scheduleNote, 255);
 
             _person = person;
             _noteDate = noteDate;
             _scenario = scenario;
             _scheduleNote = scheduleNote;
         }
-
-        /// <summary>
-        /// For Nhib only
-        /// </summary>
+		
         protected PublicNote()
         {
-            
         }
 
         public virtual DateTimePeriod Period
@@ -42,36 +38,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-        public virtual IPerson Person
-        {
-            get { return _person; }
-        }
+        public virtual IPerson Person => _person;
 
-        public virtual IScenario Scenario
-        {
-            get { return _scenario; }
-        }
+	    public virtual IScenario Scenario => _scenario;
 
-        public virtual string GetScheduleNote(ITextFormatter formatter)
+	    public virtual string GetScheduleNote(ITextFormatter formatter)
         {
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_scheduleNote);
         }
 
 		// For nHibernate
-    	private string ScheduleNote
-    	{
-    		get { return _scheduleNote; }
-    	}
+    	private string ScheduleNote => _scheduleNote;
 
-        public virtual DateOnly NoteDate
-        {
-            get { return _noteDate; }
-        }
+	    public virtual DateOnly NoteDate => _noteDate;
 
-        public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
+	    public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
         {
             InParameter.NotNull(nameof(dateAndPeriod), dateAndPeriod);
             return dateAndPeriod.DateOnly == _noteDate;

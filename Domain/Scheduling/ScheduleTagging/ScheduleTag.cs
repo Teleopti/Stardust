@@ -9,12 +9,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
         private bool _isDeleted;
         private string _description;
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        public virtual void SetDeleted()
+	    public virtual void SetDeleted()
         {
             _isDeleted = true;
         }
@@ -24,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
             get { return _description; }
             set 
             { 
-                InParameter.StringTooLong("Description", value, 15);
+                InParameter.StringTooLong(nameof(Description), value, 15);
                 _description = value;
             }
         }

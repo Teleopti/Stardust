@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _swapService = swapService;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
         public IEnumerable<IBusinessRuleResponse> SwapShiftTradeSwapDetails(ReadOnlyCollection<IShiftTradeSwapDetail> shiftTradeSwapDetails, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter)
         {
             List<IScheduleDay> modifiedParts = new List<IScheduleDay>();
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             InParameter.NotNull(nameof(person2), person2);
             InParameter.NotNull(nameof(dates), dates);
             InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
-            InParameter.ListCannotBeEmpty("dates", dates);
+            InParameter.ListCannotBeEmpty(nameof(dates), dates);
             if (person1 == person2)
                 throw new ArgumentException("The Persons must be different");
 
@@ -78,17 +77,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 IList<IScheduleDay> selectedSchedules = new List<IScheduleDay> {part1, part2};
                 modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules, false));
 
-								var ass1 = part1.PersonAssignment();
-								if (ass1 != null)
-								{
-									ass1.CheckRestrictions();
-								}
+	            var ass1 = part1.PersonAssignment();
+	            ass1?.CheckRestrictions();
 
-								var ass2 = part1.PersonAssignment();
-								if (ass2 != null)
-								{
-									ass2.CheckRestrictions();
-								}
+	            var ass2 = part1.PersonAssignment();
+	            ass2?.CheckRestrictions();
             }
 
             IEnumerable<IBusinessRuleResponse> responses =

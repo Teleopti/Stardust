@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="skillType">Type of the skill.</param>
         public Skill(string name, string description, Color displayColor, int defaultResolution, ISkillType skillType)
         {
-            InParameter.StringTooLong("name", name, 50);
-            InParameter.StringTooLong("description", description, 1024);
+            InParameter.StringTooLong(nameof(name), name, 50);
+            InParameter.StringTooLong(nameof(description), description, 1024);
             ChangeName(name);
             _description = description;
             _displayColor = displayColor;
@@ -153,24 +153,21 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _description; }
             set
             {
-                InParameter.StringTooLong("Description", value, 1024);
+                InParameter.StringTooLong(nameof(Description), value, 1024);
                 _description = value;
             }
         }
 
 	    public virtual void ChangeName(string name)
 	    {
-			InParameter.StringTooLong("Name", name, 50);
-			InParameter.NotStringEmptyOrNull("value", name);
+			InParameter.StringTooLong(nameof(Name), name, 50);
+			InParameter.NotStringEmptyOrNull(nameof(Name),name);
 			_name = name;
 		}
 
-	    public virtual string Name
-        {
-            get { return _name; }
-        }
+	    public virtual string Name => _name;
 
-        public virtual StaffingThresholds StaffingThresholds
+		public virtual StaffingThresholds StaffingThresholds
         {
             get { return _staffingThresholds; }
             set { _staffingThresholds = value; }
@@ -213,7 +210,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set
             {
                 if (value < 1 || value > 7)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Priority must be between 1 and 7.");
+                    throw new ArgumentOutOfRangeException(nameof(Priority), value, "Priority must be between 1 and 7.");
                 _priority = value;
             }
         }
@@ -250,9 +247,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set
             {
                 if (value.Value > 1)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "OverstaffingFactor can not be higher than 100%.");
+                    throw new ArgumentOutOfRangeException(nameof(OverstaffingFactor), value, "OverstaffingFactor can not be higher than 100%.");
                 if (value.Value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "OverstaffingFactor can not be less than 0%.");
+                    throw new ArgumentOutOfRangeException(nameof(OverstaffingFactor), value, "OverstaffingFactor can not be less than 0%.");
                 _overstaffingFactor = value;
             }
         }
@@ -399,7 +396,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    set
 		    {
 				if (value < 1 || value > 100)
-					throw new ArgumentOutOfRangeException(nameof(value), value, "Priority must be between 1 and 100.");
+					throw new ArgumentOutOfRangeException(nameof(MaxParallelTasks), value, "Priority must be between 1 and 100.");
 				_maxParallelTasks = value;
 		    }
 	    }

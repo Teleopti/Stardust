@@ -23,7 +23,7 @@
         /// </remarks>
         public ServiceLevel(Percent percent, double seconds)
         {
-            InParameter.BetweenOneAndHundredPercent("percent", percent);
+            InParameter.BetweenOneAndHundredPercent(nameof(percent), percent);
 
             _percent = percent;
             _seconds = seconds;
@@ -53,7 +53,7 @@
         {
             get { return _percent;}
             set {
-                InParameter.BetweenOneAndHundredPercent("value", value);
+                InParameter.BetweenOneAndHundredPercent(nameof(Percent), value);
                 _percent = value;}
         }
 

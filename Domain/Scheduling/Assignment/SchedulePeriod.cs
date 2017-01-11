@@ -467,9 +467,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// </remarks>
 		public virtual void SetDaysOff(int value)
 		{
-			InParameter.ValueMustBePositive(nameof(value), value);
+			InParameter.ValueMustBePositive(nameof(DaysOff), value);
 			if (value > 999)
-				throw new ArgumentOutOfRangeException(nameof(value), "The number of days off cannot exceed 999.");
+				throw new ArgumentOutOfRangeException(nameof(DaysOff), "The number of days off cannot exceed 999.");
 
 			_daysOff = value;
 		}

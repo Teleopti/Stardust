@@ -30,9 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public virtual Guid ActivityId
-		{
-			get { return Payload.Id.Value; }
-		}
+		public virtual Guid ActivityId => Payload.Id.Value;
 	}
 }

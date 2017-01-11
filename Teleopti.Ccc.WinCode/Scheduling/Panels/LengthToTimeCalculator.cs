@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Panels
 
         public double PositionFromDateTime(DateTime dateTime, bool rightToLeft)
         {
-            InParameter.VerifyDateIsUtc("dateTime", dateTime);
+            InParameter.VerifyDateIsUtc(nameof(dateTime), dateTime);
             double positionNormal = (_length * DiffInTicks(_period.StartDateTime, dateTime)) / DiffInTicks(_period.StartDateTime, _period.EndDateTime);
             return rightToLeft ? _length - positionNormal : positionNormal;
         }

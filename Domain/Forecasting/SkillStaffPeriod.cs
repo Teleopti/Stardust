@@ -563,7 +563,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 TimeSpan elapsedTime = skillStaffPeriods[index].Period.ElapsedTime();
                 if (elapsedTime != period.ElapsedTime())
-                    InParameter.CheckTimeLimit("skillStaffPeriods", elapsedTime,0);
+                    InParameter.CheckTimeLimit(nameof(skillStaffPeriods), elapsedTime,0);
             }
 
             double tasks = 0;

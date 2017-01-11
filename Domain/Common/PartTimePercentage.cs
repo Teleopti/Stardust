@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Common
             get { return _percentage; }
             set
             {
-                InParameter.BetweenZeroAndHundredPercent("Percentage", value);
+                InParameter.BetweenZeroAndHundredPercent(nameof(Percentage), value);
                 _percentage = value;
             }
         }

@@ -49,12 +49,12 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         private static void ValidateName(string name, string shortName)
         {
-            InParameter.NotStringEmptyOrWhiteSpace("name", name);
+            InParameter.NotStringEmptyOrWhiteSpace(nameof(name), name);
 
             if (name.Length > _nameLength)
-                throw new ArgumentOutOfRangeException("name", "String too long.");
+                throw new ArgumentOutOfRangeException(nameof(name), "String too long.");
             if (shortName!=null && shortName.Length > _shortNameLength)
-                throw new ArgumentOutOfRangeException("shortName", "String too long.");
+                throw new ArgumentOutOfRangeException(nameof(shortName), "String too long.");
         }
 
         /// <summary>
@@ -93,12 +93,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2007-11-12
         /// </remarks>
-        public static int MaxLengthOfShortName
-        {
-            get { return _shortNameLength; }
-        }
+        public static int MaxLengthOfShortName => _shortNameLength;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the max length of the name.
         /// </summary>
         /// <value>The max length of the name.</value>
@@ -106,12 +103,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2007-11-12
         /// </remarks>
-        public static int MaxLengthOfName
-        {
-            get { return _nameLength; }
-        }
+        public static int MaxLengthOfName => _nameLength;
 
-        /// <summary>
+	    /// <summary>
         /// Returns the fully qualified type name of this instance.
         /// </summary>
         /// <returns>

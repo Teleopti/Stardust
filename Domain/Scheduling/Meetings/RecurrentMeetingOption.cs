@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             }
             set
             {
-                InParameter.ValueMustBeLargerThanZero(nameof(value), value);
+                InParameter.ValueMustBeLargerThanZero(nameof(IncrementCount), value);
                 _incrementCount = value;
             }
         }

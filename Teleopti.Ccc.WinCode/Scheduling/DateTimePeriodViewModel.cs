@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 CoerceMinValue),
             delegate(object value)
             {
-                InParameter.VerifyDateIsUtc("Min", (DateTime)value);
+                InParameter.VerifyDateIsUtc(nameof(Min), (DateTime)value);
                 return true;
             });
 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 CoerceMaxValue),
             delegate(object value)
             {
-                InParameter.VerifyDateIsUtc("Max", (DateTime)value);
+                InParameter.VerifyDateIsUtc(nameof(Max), (DateTime)value);
                 return true;
             });
 
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             delegate(object value)
             {
                 value = TimeZoneHelper.ConvertToUtc((DateTime)value, TimeZoneHelper.CurrentSessionTimeZone);
-                InParameter.VerifyDateIsUtc("End", (DateTime)value);
+                InParameter.VerifyDateIsUtc(nameof(End), (DateTime)value);
                 return true;
             });
 

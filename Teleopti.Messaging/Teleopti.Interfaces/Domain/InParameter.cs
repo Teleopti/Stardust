@@ -57,7 +57,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static void CheckTimeSpanAtLeastOneTick(string parameterName, TimeSpan timeToCheck)
         {
-            if (timeToCheck <= new TimeSpan(0))
+            if (timeToCheck <= TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(
                     String.Format(CultureInfo.CurrentCulture,
                                   "TimePeriod must ba at least one tick. {0}",
@@ -259,7 +259,7 @@ namespace Teleopti.Interfaces.Domain
         {
             if (period.StartDateTime.Second != 0 || period.EndDateTime.Second != 0)
             {
-                throw new ArgumentException(@"The seconds part is not allowed for this period.", "period");
+                throw new ArgumentException(@"The seconds part is not allowed for this period.", nameof(period));
             }
         }
 

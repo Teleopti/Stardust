@@ -6,111 +6,54 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class DayOff : IDayOff
     {
-        #region Fields
-
-        private DateTime _anchor;
+	    private DateTime _anchor;
         private TimeSpan _targetLength;
         private TimeSpan _flexibility;
-        private Description _description;
-        private Color _displayColor;
+        private readonly Description _description;
+        private readonly Color _displayColor;
 		private readonly string _payrollCode;
 
-		#endregion
+		protected DayOff()
+		{
+		}
 
-        #region Properties
+		public DayOff(DateTime anchor, TimeSpan targetLength, TimeSpan flexibility, Description description, Color displayColor, string payrollCode, Guid dayOffTemplateId)
+		{
+			InParameter.VerifyDateIsUtc(nameof(anchor), anchor);
 
-        /// <summary>
-        /// Gets the flexibility.
-        /// </summary>
-        public TimeSpan Flexibility
-        {
-            get { return _flexibility; }
-        }
+			_anchor = anchor;
+			_targetLength = targetLength;
+			if (flexibility.TotalMinutes > targetLength.TotalMinutes / 2d)
+				flexibility = TimeSpan.FromMinutes(targetLength.TotalMinutes / 2);
+			_flexibility = flexibility;
+			_description = description;
+			_displayColor = displayColor;
+			_payrollCode = payrollCode;
+			DayOffTemplateId = dayOffTemplateId;
+		}
 
-        /// <summary>
-        /// Gets the length (duration).
-        /// </summary>
-        public TimeSpan TargetLength
-        {
-            get { return _targetLength; }
-        }
+		public TimeSpan Flexibility => _flexibility;
 
-        /// <summary>
-        /// Gets the anchor point as date and time.
-        /// </summary>
-        public DateTime Anchor
-        {
-            get { return _anchor; }
-        }
+        public TimeSpan TargetLength => _targetLength;
 
-        /// <summary>
-        /// Description
-        /// </summary>
-        public Description Description
-        {
-            get { return _description; }
-        }
+        public DateTime Anchor => _anchor;
 
-        /// <summary>
-        /// Gets the anchor with current time zone applied.
-        /// </summary>
-        /// <value>The anchor local.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-22
-        /// </remarks>
+        public Description Description => _description;
+
         public DateTime AnchorLocal(TimeZoneInfo targetTimeZone)
         {
             return TimeZoneInfo.ConvertTimeFromUtc(_anchor, targetTimeZone);
          }
 
-        /// <summary>
-        /// Gets the displayColor
-        /// </summary>
-        public Color DisplayColor
-        {
-            get { return _displayColor; }
-        }
+        public Color DisplayColor => _displayColor;
+		
+	    public Guid DayOffTemplateId { get; }
 
-
-		public Guid DayOffTemplateId { get; }
-
-		#endregion
-
-		protected DayOff()
-		{
-			
-		}
-
-
-    	public DayOff(DateTime anchor, TimeSpan targetLength, TimeSpan flexibility, Description description, Color displayColor, string payrollCode, Guid dayOffTemplateId)
-        {
-            InParameter.VerifyDateIsUtc("anchor", anchor);
-
-            _anchor = anchor;
-            _targetLength = targetLength;
-            if (flexibility.TotalMinutes > targetLength.TotalMinutes / 2d)
-                flexibility = TimeSpan.FromMinutes(targetLength.TotalMinutes / 2);
-            _flexibility = flexibility;
-            _description = description;
-            _displayColor = displayColor;
-			_payrollCode = payrollCode;
-    		DayOffTemplateId = dayOffTemplateId;
-        }
-
-        /// <summary>
-        /// Gets the boundary.
-        /// </summary>
-        /// <value>The boundary.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-08
-        /// </remarks>
         public DateTimePeriod Boundary
         {
             get
             {
-                double minutes = (_targetLength.TotalMinutes / 2d) + (_flexibility.TotalMinutes);
+                double minutes = _targetLength.TotalMinutes / 2d + (_flexibility.TotalMinutes);
 
                 return new DateTimePeriod(
                     _anchor.AddMinutes(-minutes),
@@ -118,15 +61,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        /// <summary>
-        /// Gets the inner boundary.
-        /// </summary>
-        /// <value>The inner boundary.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-06-12    
-        /// /// </remarks>
         public DateTimePeriod InnerBoundary
         {
             get
@@ -136,16 +70,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     _anchor.AddMinutes(_targetLength.TotalMinutes / 2d).AddMinutes(-_flexibility.TotalMinutes));
             }
         }
+		
+    	public string PayrollCode => _payrollCode;
 
-    	///<summary>
-		/// Gets the payrollcode
-    	///</summary>
-    	public string PayrollCode
-    	{
-			get { return _payrollCode; }
-    	}
-
-        public override bool Equals(object obj)
+	    public override bool Equals(object obj)
         {
 	        var other = obj as DayOff;
 					if (other == null)
@@ -162,6 +90,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
 			return _anchor.GetHashCode() ^ _targetLength.GetHashCode() ^ _flexibility.GetHashCode();
         }
-
     }
 }

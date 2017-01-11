@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Common
         {
             DateTime? toCompare = obj.UpdatedOn;
             if (toCompare == null) return true;
-            InParameter.MustBeTrue("obj", ((DateTime)toCompare).Kind == DateTime.Kind);
+            InParameter.MustBeTrue(nameof(obj), ((DateTime)toCompare).Kind == DateTime.Kind);
             return toCompare > DateTime;
         }
     }
