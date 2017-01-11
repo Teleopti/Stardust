@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		{
 			foreach (var specification in _specifications.Where(specification => !specification.IsSatisfiedBy(checkItem)))
 			{
-				return new ShiftTradeRequestValidationResult(false, specification.DenyReason);
+				return new ShiftTradeRequestValidationResult(false, true, specification.DenyReason);
 			}
 			return new ShiftTradeRequestValidationResult(true);
 		}

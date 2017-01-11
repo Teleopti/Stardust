@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			{
 				var checkItem = new ShiftTradeAvailableCheckItem(swapDetail.DateFrom, swapDetail.PersonFrom, swapDetail.PersonTo);
 				var checkResult = _shiftTradeLightValidator.Validate(checkItem);
-				if (!checkResult.IsOk) return new ShiftTradeRequestValidationResult(checkResult.IsOk, true, checkResult.DenyReason);
+				if (!checkResult.IsOk) return checkResult;
 			}
 
 			return new ShiftTradeRequestValidationResult(true);
