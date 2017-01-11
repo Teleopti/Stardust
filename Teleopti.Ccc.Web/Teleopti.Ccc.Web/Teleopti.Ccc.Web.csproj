@@ -2160,7 +2160,7 @@
     <Content Include="Areas\RtaTool\Content\Scripts\statecodevm.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\view.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\vm.js" />
-    <Content Include="Areas\RtaTool\Views\Application\Index.aspx" />
+    <Content Include="Areas\RtaTool\Views\Application\Old.aspx" />
     <Content Include="Areas\SSO\Content\Css\login.css" />
     <Content Include="Areas\SSO\Content\Css\Site.css" />
     <Content Include="Areas\SSO\Content\Images\ajax-loader-small.gif" />

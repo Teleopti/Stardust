@@ -3,10 +3,16 @@
 namespace Teleopti.Ccc.Web.Areas.RtaTool.Controllers
 {
     public class ApplicationController : Controller
-    {	   
-	    public ViewResult Index()
-        {
-            return new ViewResult();
-        }
-    }
+	{
+		public RedirectResult Index()
+		{
+			return Redirect("/WFM/#/rtaTool");
+		}
+
+		[HttpGet]
+		public ViewResult Old()
+		{
+			return new ViewResult();
+		}
+	}
 }
