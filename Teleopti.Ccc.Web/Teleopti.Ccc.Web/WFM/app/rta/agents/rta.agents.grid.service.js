@@ -85,6 +85,10 @@
 				displayName: 'Time in Alarm',
 				field: 'TimeInAlarm',
 				headerCellTemplate: headerCellTemplate,
+				sort: alarmOnly ?  {
+					direction: 'desc'
+				}
+				 : null,
 				cellTemplate: coloredCellTemplate,
 				headerCellFilter: 'translate'
 			};
