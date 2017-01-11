@@ -22,7 +22,6 @@
 		getActivities();
 		getSkills();
 
-
 		function resetAllList() {
 			vm.unsortedList = [];
 			vm.cascadeList = [];
@@ -54,9 +53,10 @@
 			});
 		}
 
-		vm.options = {
+		vm.unsortedOpt = {
 			dragStart: function(event) {
 				if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
+					event.dest.nodesScope.nodropEnabled = true;
 					event.elements.placeholder.remove();
 				}
 			},
@@ -78,9 +78,24 @@
 				if (vm.cascadeList.length === 0) {
 					addNewRow();
 				}
-				if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
-					event.dest.nodesScope.nodropEnabled = true;
-					event.elements.placeholder.remove();
+			}
+		};
+
+		vm.cascadeOpt = {
+			dropped: function(event) {
+				if (event.pos.moving || vm.ismodified === true) {
+					vm.ismodified = true;
+					autoDeleteEmptyRow();
+					autoSortSkillByEachRow();
+					autoNewRow();
+				} else {
+					vm.ismodified = false;
+				}
+			},
+			dragStart: function(event) {
+				var placeholder = document.getElementsByClassName("angular-ui-tree-placeholder");
+				for (var i = 0; i < placeholder.length; i++) {
+					placeholder[i].innerHTML = "<div class='flip mdi mdi-exit-to-app'></div>";
 				}
 			}
 		};
@@ -101,13 +116,15 @@
 		}
 
 		function autoDeleteEmptyRow() {
-			for (var i = 0; i < vm.cascadeList.length; i++) {
-				if (vm.cascadeList[i].Skills.length === 0) {
-					vm.cascadeList.splice(i, 1);
-					resetCascadeLevel();
-				}
-				if (vm.cascadeList[0].Skills.length === 0) {
-					vm.cascadeList= [];
+			if (vm.cascadeList.length > 0) {
+				for (var i = 0; i < vm.cascadeList.length; i++) {
+					if (vm.cascadeList[i].Skills.length === 0) {
+						vm.cascadeList.splice(i, 1);
+						resetCascadeLevel();
+					}
+					if (vm.cascadeList[0].Skills.length === 0) {
+						vm.cascadeList= [];
+					}
 				}
 			}
 		}
@@ -239,6 +256,5 @@
 			}
 			return prepareSkills;
 		}
-
 	}
 })();
