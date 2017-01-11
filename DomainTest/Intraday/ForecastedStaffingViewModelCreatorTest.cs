@@ -298,8 +298,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void ShouldReturnStaffingForUsersCurrentDayInAustraliaTimeZoneWhenOpen247()
 		{
 			TimeZone.IsAustralia();
-			var userNow = new DateTime(2016, 8, 26, 2, 0, 0, DateTimeKind.Local);
-			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 1, 45, 0, DateTimeKind.Local);
+			var userNow = new DateTime(2016, 8, 26, 2, 0, 0, DateTimeKind.Unspecified);
+			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 1, 45, 0, DateTimeKind.Unspecified);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = fakeScenarioAndIntervalLength();
@@ -953,6 +953,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var index = 0;
 
 			var workloadDay = skillDay.WorkloadDayCollection.First();
+			workloadDay.Lock();
 			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))
 			{
 				workloadDay.TaskPeriodList[index].Tasks = random.Next(5,50);
@@ -960,6 +961,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				workloadDay.TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);			
 				index++;
 			}
+			workloadDay.Release();
 
 			return skillDay;
 		}
