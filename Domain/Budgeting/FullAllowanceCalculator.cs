@@ -4,9 +4,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Budgeting
 {
-	public class TotalAllowanceCalculator : ICalculator
+	public class FullAllowanceCalculator : ICalculator
 	{
-		public void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList, ref BudgetCalculationResult budgetCalculationResult)
+		public void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList,
+			ref BudgetCalculationResult budgetCalculationResult)
 		{
 			if (Math.Abs(budgetDay.FulltimeEquivalentHours - 0d) < double.Epsilon)
 			{
@@ -19,7 +20,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				return;
 			}
 
-			budgetCalculationResult.FullAllowance = (budgetCalculationResult.BudgetedLeave + budgetCalculationResult.BudgetedSurplus) + (budgetDay.AbsenceExtra ?? 0d);
+			budgetCalculationResult.FullAllowance = budgetCalculationResult.BudgetedLeave +
+													budgetCalculationResult.BudgetedSurplus + (budgetDay.AbsenceExtra ?? 0d);
 		}
 	}
 }

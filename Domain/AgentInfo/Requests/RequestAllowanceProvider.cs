@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var usedAbsences = loadUsedAbsences(selectedBudgetGroup, period);
 			var budgetDays = loadBudgetDays(selectedBudgetGroup, period);
 			var fteCollection = budgetDays.Select(b => b.FulltimeEquivalentHours).ToList();
-			var allowanceCollection = budgetDays.Select(b => b.ShrinkedAllowance).ToList();
-			var totalAllowanceCollection = budgetDays.Select(b => b.FullAllowance).ToList();
+			var shrinkedAllowanceCollection = budgetDays.Select(b => b.ShrinkedAllowance).ToList();
+			var fullAllowanceCollection = budgetDays.Select(b => b.FullAllowance).ToList();
 			for (var i = 0; i < period.DayCount(); i++)
 			{
 				var currentDate = period.StartDate.AddDays(i);
@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						absenceDict.Add(absence, 0);
 					}
 				}
-				var allowance = allowanceCollection[i];
-				var totalAllowance = totalAllowanceCollection[i];
+				var allowance = shrinkedAllowanceCollection[i];
+				var totalAllowance = fullAllowanceCollection[i];
 				var usedTotalAbsences = absenceDict.Sum(a => a.Value);
 				var absoluteDiff = allowance - usedTotalAbsences;
 				var relativeDiff = new Percent(usedTotalAbsences / allowance);

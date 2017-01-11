@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 		[Test]
 		public void ShouldReturnWhenZeroFte()
 		{
-			var target = new TotalAllowanceCalculator();
+			var target = new FullAllowanceCalculator();
 			var budgetDay = new BudgetDay(new BudgetGroup(), new Scenario("Test"), new DateOnly(2013, 04, 16))
 			{
 				FulltimeEquivalentHours = 0

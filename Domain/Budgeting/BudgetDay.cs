@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		private Percent _absenceThreshold;
 		private double? _absenceExtra;
 		private double? _absenceOverride;
-		private double _totalAllowance;
-		private double _allowance;
+		private double _fullAllowance;
+		private double _shrinkedAllowance;
 		private double? _netStaffFcAdjustedSurplus;
 
 		protected BudgetDay()
@@ -148,14 +148,14 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 		public virtual double FullAllowance
 		{
-			get { return _totalAllowance; }
-			set { _totalAllowance = value; }
+			get { return _fullAllowance; }
+			set { _fullAllowance = value; }
 		}
 
 		public virtual double ShrinkedAllowance
 		{
-			get { return _allowance; }
-			set { _allowance = value; }
+			get { return _shrinkedAllowance; }
+			set { _shrinkedAllowance = value; }
 		}
 
 		public virtual double? NetStaffFcAdjustedSurplus

@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 					{
 						new BudgetedLeaveCalculator(netStaffCalculator),
 						new BudgetedSurplusCalculator(),
-						new TotalAllowanceCalculator(),
+						new FullAllowanceCalculator(),
 						new AllowanceCalculator()
 					});
 				var budgetCalculator = new BudgetCalculator(new List<IBudgetDay> { target },

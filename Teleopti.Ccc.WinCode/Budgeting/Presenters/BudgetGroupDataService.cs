@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 					{
 						new BudgetedLeaveCalculator(netStaffCalculator),
 						new BudgetedSurplusCalculator(),
-						new TotalAllowanceCalculator(),
+						new FullAllowanceCalculator(),
 						new AllowanceCalculator()
 					});
 

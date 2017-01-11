@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 					{
 						new BudgetedLeaveCalculator(netStaffCalculator),
 						new BudgetedSurplusCalculator(),
-						new TotalAllowanceCalculator(),
+						new FullAllowanceCalculator(),
 						new AllowanceCalculator()
 					});
 			_target = new BudgetCalculator(_listOfBudgetDays, netStaffCalculator, _calcList);
