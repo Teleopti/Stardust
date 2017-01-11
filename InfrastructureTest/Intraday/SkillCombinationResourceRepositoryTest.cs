@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					SkillCombination = new[] {Guid.NewGuid()}
 				}
 			};
-			Target.PersistSkillCombinationResource(combinationResources);
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Count().Should().Be.EqualTo(1);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					SkillCombination = new[] {Guid.NewGuid()}
 				}
 			};
-			Target.PersistSkillCombinationResource(combinationResources);
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					SkillCombination = new[] {new Guid("f7001b28-b78a-481a-9849-7379bc56ed70"), new Guid("3afb3e83-6d92-4196-9862-05694d2fa7d4"), new Guid("663ea425-c166-4f96-9b04-9d4a8cc36d63")}
 				}
 			};
-			Target.PersistSkillCombinationResource(combinationResources);
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					SkillCombination = new[] {skill}
 				}
 			};
-			Target.PersistSkillCombinationResource(combinationResources);
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
 			Target.PersistChange(new SkillCombinationResource
 			{
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					SkillCombination = new[] {skill, skill2}
 				}
 			};
-			Target.PersistSkillCombinationResource(combinationResources);
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
 			Target.PersistChange(new SkillCombinationResource
 			{
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
                     SkillCombination = new[] {skill, skill2}
                 }
             };
-            Target.PersistSkillCombinationResource(combinationResources);
+            Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
             Target.PersistChange(new SkillCombinationResource
             {
