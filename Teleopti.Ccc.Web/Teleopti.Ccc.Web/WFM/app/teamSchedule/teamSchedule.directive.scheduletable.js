@@ -165,9 +165,12 @@
 		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 
-			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {
-				vm.scheduleVm.Schedules = ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
-					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize);
+			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {
+				vm.scheduleVm = {
+					Schedules: ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
+					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize)
+				};
+
 			} else {
 				vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 			}
@@ -222,12 +225,12 @@
 		vm.init();
 
 		$scope.$watchCollection(function () {
-			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {				
+			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {				
 				return ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
 					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize);
 			}
 
-			return ScheduleMgmt.groupScheduleVm.Schedules;
+			return angular.isDefined(ScheduleMgmt.groupScheduleVm) ? ScheduleMgmt.groupScheduleVm.Schedules : [];
 		}, function (newVal) {
 			if (newVal)
 				vm.init();
