@@ -277,8 +277,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 				Assert.AreEqual(1.84d, Math.Round(calculations.Difference, 2));
 				Assert.AreEqual(4.40d, Math.Round(calculations.BudgetedLeave, 2));
 				Assert.AreEqual(2.04d, Math.Round(calculations.BudgetedSurplus, 2));
-				Assert.AreEqual(8.44d, Math.Round(calculations.TotalAllowance, 2));
-				Assert.AreEqual(6.76d, Math.Round(calculations.Allowance, 2));
+				Assert.AreEqual(8.44d, Math.Round(calculations.FullAllowance, 2));
+				Assert.AreEqual(6.76d, Math.Round(calculations.ShrinkedAllowance, 2));
 			}
 		}
 
@@ -328,8 +328,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 																	new AllowanceCalculator()
 																});
 				var calculations = target.Calculate(budgetCalculator);
-				Assert.AreEqual(0d, calculations.TotalAllowance);
-				Assert.AreEqual(0d, calculations.Allowance);
+				Assert.AreEqual(0d, calculations.FullAllowance);
+				Assert.AreEqual(0d, calculations.ShrinkedAllowance);
 			}
 		}
 	}

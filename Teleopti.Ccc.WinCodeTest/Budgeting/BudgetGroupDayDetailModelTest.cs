@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				target.ForecastedStaff.Should().Be.EqualTo(result.ForecastedStaff);
 				target.BudgetedLeave.Should().Be.EqualTo(result.BudgetedLeave);
 				target.BudgetedSurplus.Should().Be.EqualTo(result.BudgetedSurplus);
-				target.Allowance.Should().Be.EqualTo(result.Allowance);
-				target.TotalAllowance.Should().Be.EqualTo(result.TotalAllowance);
+				target.Allowance.Should().Be.EqualTo(result.ShrinkedAllowance);
+				target.TotalAllowance.Should().Be.EqualTo(result.FullAllowance);
 			}
 		}
 

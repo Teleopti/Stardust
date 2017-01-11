@@ -452,8 +452,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			DifferencePercent = result.DifferencePercent;
 			BudgetedLeave = result.BudgetedLeave;
 			BudgetedSurplus = result.BudgetedSurplus;
-			TotalAllowance = result.TotalAllowance;
-			Allowance = result.Allowance;
+			TotalAllowance = result.FullAllowance;
+			Allowance = result.ShrinkedAllowance;
 		}
 
 		public void RecalculateWithoutNetStaffForecastAdjustCalculator(IBudgetCalculator calculator, double netStaffFcAdj)
@@ -468,8 +468,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			DifferencePercent = result.DifferencePercent;
 			BudgetedLeave = result.BudgetedLeave;
 			BudgetedSurplus = result.BudgetedSurplus;
-			TotalAllowance = result.TotalAllowance;
-			Allowance = result.Allowance;
+			TotalAllowance = result.FullAllowance;
+			Allowance = result.ShrinkedAllowance;
 		}
 
 		public Percent GetShrinkage(ICustomShrinkage customShrinkage)

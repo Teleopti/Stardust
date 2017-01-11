@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 		{
 			var target = new TotalAllowanceCalculator();
 			var budgetDay = new BudgetDay(new BudgetGroup(), new Scenario("Test"), new DateOnly(2013, 04, 16))
-				{
-					FulltimeEquivalentHours = 0
-				};
+			{
+				FulltimeEquivalentHours = 0
+			};
 			var result = new BudgetCalculationResult();
-			target.Calculate(budgetDay, new List<IBudgetDay>{budgetDay}, ref result);
+			target.Calculate(budgetDay, new List<IBudgetDay> { budgetDay }, ref result);
 
-			result.TotalAllowance.Should().Be.EqualTo(0);
+			result.FullAllowance.Should().Be.EqualTo(0);
 		}
 	}
 }
