@@ -18,7 +18,7 @@
 		//////////////////////////
 
 		function formatDateTime(time) {
-			if (time === null || time === undefined || time === '') return '';
+			if (time === null || angular.isUndefined(time) || time === '') return '';
 			var momentTime = moment.utc(time);
 			if (momentTime.format("YYYYMMDD") > moment().format("YYYYMMDD")) {
 				return momentTime.format('YYYY-MM-DD HH:mm:ss');

@@ -235,7 +235,7 @@
 				return $sessionStorage.buid;
 			},
 			function(newValue, oldValue) {
-				if (oldValue !== undefined && newValue !== oldValue) {
+				if (angular.isDefined(oldValue) && newValue !== oldValue) {
 					vm.goToDashboard();
 				}
 			}

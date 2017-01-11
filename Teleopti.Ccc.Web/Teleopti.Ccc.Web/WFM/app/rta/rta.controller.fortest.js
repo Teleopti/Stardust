@@ -35,7 +35,7 @@
 
 			var callbacks = {
 				apply: function(apply) {
-					if (typeof apply === "function") {
+					if (angular.isFunction(apply)) {
 						apply();
 						scope.$digest();
 					} else {

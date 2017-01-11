@@ -357,7 +357,7 @@
 				$scope.$watch(function() {
 					return vm.teamsSelected;
 				}, function(newValue, oldValue) {
-					if (JSON.stringify(newValue) !== JSON.stringify(oldValue) && enableWatchOnTeam) {
+					if (angular.toJson(newValue) !== angular.toJson(oldValue) && enableWatchOnTeam) {
 						vm.updateSite(oldValue);
 					}
 				});
@@ -734,7 +734,7 @@
 				}, filterData);
 
 				function filterData() {
-					if (vm.filterText === undefined)
+					if (angular.isUndefined(vm.filterText))
 						vm.filteredData = vm.agents;
 					else
 						vm.filteredData = $filter('agentFilter')(vm.agents, vm.filterText, propertiesForFiltering);
@@ -793,7 +793,7 @@
 						return $sessionStorage.buid;
 					},
 					function(newValue, oldValue) {
-						if (oldValue !== undefined && newValue !== oldValue) {
+						if (angular.isDefined(oldValue) && newValue !== oldValue) {
 							rtaRouteService.goToSites();
 						}
 					}

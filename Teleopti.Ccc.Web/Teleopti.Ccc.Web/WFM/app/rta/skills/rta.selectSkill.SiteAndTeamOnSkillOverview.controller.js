@@ -171,12 +171,12 @@
 
 				var polling = $interval(function () {
 					if (vm.skillId !== null || vm.skillAreaId !== null) {
-						if (vm.siteIds.length > 0 && vm.teams !== undefined) {
+						if (vm.siteIds.length > 0 && angular.isDefined(vm.teams)) {
 							getAdherenceForTeamsBySkills(vm.siteIds, vm.skillIds)
 								.then(function (teamAdherences) {
 									updateAdherence(vm.teams, teamAdherences);
 								});
-						} else if (vm.sites !== undefined) {
+						} else if (angular.isDefined(vm.sites)) {
 							getAdherenceForSitesBySkills(vm.skillIds)
 								.then(function (siteAdherences) {
 									updateAdherence(vm.sites, siteAdherences);
@@ -292,7 +292,7 @@
 				});
 
 				function changed(newValue, oldValue) {
-					return newValue !== oldValue && oldValue != undefined && oldValue != null && newValue == null;
+					return newValue !== oldValue && angular.isDefined(oldValue) && oldValue != null && newValue == null;
 				}
 
 				$scope.$watch(
@@ -300,7 +300,7 @@
 						return $sessionStorage.buid;
 					},
 					function (newValue, oldValue) {
-						if (oldValue !== undefined && newValue !== oldValue) {
+						if (angular.isDefined(oldValue) && newValue !== oldValue) {
 							rtaRouteService.goToSites();
 						}
 					}

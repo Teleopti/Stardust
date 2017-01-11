@@ -18,9 +18,9 @@
 					var item = data[i];
 					var matched = false;
 					for (var property in item) {
-						if (includes !== undefined && includes.indexOf(property) === -1)
+						if (angular.isDefined(includes) && includes.indexOf(property) === -1)
 							continue;
-						if (item[property] !== null && item[property] !== undefined)
+						if (item[property] !== null && angular.isDefined(item[property]))
 							matched = matched || (item[property].toString().search(new RegExp(escapeRegExp(keyword), "i")) !== -1 ? true : false);
 					}
 					if (matched === false) {

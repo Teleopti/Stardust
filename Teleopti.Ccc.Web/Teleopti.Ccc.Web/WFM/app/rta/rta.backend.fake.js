@@ -401,7 +401,7 @@
 
 				if (params.skillIds.length > 1) {
 					sAdherencesForSkill.forEach(function(sas) {
-						if (adherenceBySiteId[sas.Id] !== undefined)
+						if (angular.isDefined(adherenceBySiteId[sas.Id]))
 							adherenceBySiteId[sas.Id] = adherenceBySiteId[sas.Id] + sas.OutOfAdherence;
 						else
 							adherenceBySiteId[sas.Id] = sas.OutOfAdherence;
@@ -442,7 +442,7 @@
 
 				if (params.skillIds.length > 1) {
 					teamAdherencesBySkillId.forEach(function(tas) {
-						if (adherenceByTeamId[tas.Id] !== undefined)
+						if (angular.isDefined(adherenceByTeamId[tas.Id]))
 							adherenceByTeamId[tas.Id] = adherenceByTeamId[tas.Id] + tas.OutOfAdherence;
 						else
 							adherenceByTeamId[tas.Id] = tas.OutOfAdherence;
