@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 	    public virtual void Add(ILayer<T> item)
 	    {
-		    InParameter.NotNull(nameof(layer), item);
+		    InParameter.NotNull(nameof(item), item);
 		    _owner?.OnAdd(item);
 		    Items.Add(item);
 		    var itemAsPersistedLayer = item as IAggregateEntity;
