@@ -12,14 +12,17 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	{
 		private readonly IAgentStatePersister _persister;
 		private readonly StatesSender _sender;
+		private readonly TestConfiguration _stateHolder;
 		public IDataSourceForTenant DataSourceForTenant;
 
 		public StatesArePersisted(
 			IAgentStatePersister persister,
-			StatesSender sender)
+			StatesSender sender, 
+			TestConfiguration stateHolder)
 		{
 			_persister = persister;
 			_sender = sender;
+			_stateHolder = stateHolder;
 		}
 
 		[TestLogTime]
@@ -27,9 +30,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public virtual void WaitForAll()
 		{
 			var timeWhenLastStateWasSent = _sender.StateChanges().Max(x => x.Time);
+			var rogersWorking = Enumerable.Range(0, _stateHolder.NumberOfAgentsWorking)
+				.Select(x => new ExternalLogon
+				{
+					DataSourceId = _stateHolder.DataSourceId,
+					UserCode = $"roger{x}"
+				})
+				.ToArray();
 			while (true)
 			{
-				var states = _persister.Find(_persister.FindAll(), DeadLockVictim.Yes);
+				var states = _persister.Find(rogersWorking, DeadLockVictim.Yes);
 				if (states.All(x => x.ReceivedTime == timeWhenLastStateWasSent.Utc()))
 					break;
 				Thread.Sleep(20);
