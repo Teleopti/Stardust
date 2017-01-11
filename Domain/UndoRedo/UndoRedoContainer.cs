@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 
 		public void SaveState<T>(IOriginator<T> state)
 		{
-			InParameter.NotNull("state", state);
+			InParameter.NotNull(nameof(state), state);
 			if (InUndoRedo)
 				throw new InvalidOperationException("Cannot save state from within undo or redo action");
 

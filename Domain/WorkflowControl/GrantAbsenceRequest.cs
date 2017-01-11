@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
 		{
-			InParameter.NotNull("RequestApprovalService", requiredForProcessingAbsenceRequest.RequestApprovalService);
+			InParameter.NotNull(nameof(requiredForProcessingAbsenceRequest.RequestApprovalService), requiredForProcessingAbsenceRequest.RequestApprovalService);
 			if (
 				!CheckValidatorList(absenceRequest, requiredForProcessingAbsenceRequest,
 					requiredForHandlingAbsenceRequest, absenceRequestValidatorList)) return;

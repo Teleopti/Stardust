@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
         public PersonRotation(IPerson person, IRotation rotation, DateOnly startDate, int startDay)
         {
-            InParameter.NotNull("person", person);
-            InParameter.NotNull("rotation", rotation);
-            InParameter.ValueMustBePositive("startRow", startDay);
+            InParameter.NotNull(nameof(person), person);
+            InParameter.NotNull(nameof(rotation), rotation);
+            InParameter.ValueMustBePositive(nameof(startDay), startDay);
 
             _person = person;
             _rotation = rotation;
@@ -56,20 +56,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             set { _rotation = value;}
         }
 
-        public virtual IPerson Person
-        {
-            get { return _person; }
-        }
+        public virtual IPerson Person => _person;
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+	    public virtual bool IsDeleted => _isDeleted;
 
-        public virtual IRotationDay GetRotationDay(DateOnly currentDate)
+	    public virtual IRotationDay GetRotationDay(DateOnly currentDate)
         {
             if (currentDate < _startDate)
-                throw new ArgumentOutOfRangeException("currentDate", currentDate, "Date must not be less than start date");
+                throw new ArgumentOutOfRangeException(nameof(currentDate), currentDate, "Date must not be less than start date");
             
             int dateDiff = currentDate.Date.Subtract(_startDate.Date).Days;
             return _rotation.FindRotationDay(dateDiff + StartDay);

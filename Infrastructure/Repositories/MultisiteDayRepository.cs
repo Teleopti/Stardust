@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		
         public ICollection<IMultisiteDay> FindRange(DateOnlyPeriod period, ISkill skill, IScenario scenario)
         {
-            InParameter.NotNull("skill", skill);
-            InParameter.NotNull("period", period);
-            InParameter.NotNull("scenario", scenario);
+            InParameter.NotNull(nameof(skill), skill);
+            InParameter.NotNull(nameof(period), period);
+            InParameter.NotNull(nameof(scenario), scenario);
 
             DetachedCriteria multisiteDaySubquery = DetachedCriteria.For<MultisiteDay>("md")
                 .Add(Restrictions.Eq("md.Scenario", scenario))

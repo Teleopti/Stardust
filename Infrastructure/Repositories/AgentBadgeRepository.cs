@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		
 		public AgentBadge Find(IPerson person, BadgeType badgeType)
 		{
-			InParameter.NotNull("person", person);
-			InParameter.NotNull("badgeType", badgeType);
+			InParameter.NotNull(nameof(person), person);
+			InParameter.NotNull(nameof(badgeType), badgeType);
 			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
 				+ "from AgentBadge where Person = :person and BadgeType=:badgeType";
 			var result = _currentUnitOfWork.Current().Session().CreateSQLQuery(query)

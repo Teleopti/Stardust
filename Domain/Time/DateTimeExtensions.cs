@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Time
         /// <returns></returns>
         public static DateTime ToInterval(this DateTime dateTime, int resolutionInMinutes, IntervalRounding mode)
         {
-            InParameter.ValueMustBeLargerThanZero("resolutionInMinutes", resolutionInMinutes);
+            InParameter.ValueMustBeLargerThanZero(nameof(resolutionInMinutes), resolutionInMinutes);
             double factor = (double)dateTime.Minute / resolutionInMinutes;
             return dateTime.Date.AddHours(dateTime.Hour).AddMinutes(resolutionInMinutes * NumberOfIntervals(factor, mode));
         }

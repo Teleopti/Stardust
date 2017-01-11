@@ -21,17 +21,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
 		{
-			InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
-			InParameter.NotNull("PersonAccountBalanceCalculator",
+			InParameter.NotNull(nameof(requiredForHandlingAbsenceRequest.SchedulingResultStateHolder), requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
+			InParameter.NotNull(nameof(requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator),
 				requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator);
 
 			var person = absenceRequest.Person;
 
-			var validatedRequest = new ValidatedRequest();
-			validatedRequest.IsValid =
-				requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator.CheckBalance(
+			var validatedRequest = new ValidatedRequest
+			{
+				IsValid = requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator.CheckBalance(
 					requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[person],
-					absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
+					absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()))
+			};
 
 			if (!validatedRequest.IsValid)
 			{

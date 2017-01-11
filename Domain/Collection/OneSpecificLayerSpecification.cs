@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         internal OneSpecificLayerSpecification(IPayload payload)
         {
-            InParameter.NotNull("payload", payload);
+            InParameter.NotNull(nameof(payload), payload);
             _payload = payload;
         }
 

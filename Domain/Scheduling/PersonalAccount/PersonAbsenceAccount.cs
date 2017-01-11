@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
 		public PersonAbsenceAccount(IPerson person, IAbsence absence)
 		{
-			InParameter.NotNull("absence", absence);
+			InParameter.NotNull(nameof(absence), absence);
 			_person = person;
 			_absence = absence;
 			accountCollection = new List<IAccount>();

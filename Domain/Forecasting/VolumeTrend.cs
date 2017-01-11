@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public VolumeTrend(IList<double> sortedTrendBaseValues)
         {
-            InParameter.NotNull("sortedTrendBaseValues", sortedTrendBaseValues);
-            InParameter.ValueMustBeLargerThanZero("sortedTrendBaseValues", sortedTrendBaseValues.Count);
+            InParameter.NotNull(nameof(sortedTrendBaseValues), sortedTrendBaseValues);
+            InParameter.ValueMustBeLargerThanZero(nameof(sortedTrendBaseValues), sortedTrendBaseValues.Count);
 
             ((List<double>)_trendBaseValues).AddRange(sortedTrendBaseValues);
             ((List<double>)_currentTrendValues).AddRange(sortedTrendBaseValues);
@@ -51,12 +51,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-04-15
         /// </remarks>
-        public KeyValuePair<int, double> Start
-        {
-            get { return _start; }
-        }
+        public KeyValuePair<int, double> Start => _start;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the end.
         /// </summary>
         /// <value>The end.</value>
@@ -64,12 +61,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-04-15
         /// </remarks>
-        public KeyValuePair<int, double> End
-        {
-            get { return _end; }
-        }
+        public KeyValuePair<int, double> End => _end;
 
-        /// <summary>
+	    /// <summary>
         /// Calculates the trend start and en points.
         /// </summary>
         /// <remarks>
@@ -147,12 +141,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-04-23
         /// </remarks>
-        public Percent Trend
-        {
-            get{ return _trend;}
-        }
+        public Percent Trend => _trend;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the day change factor.
         /// </summary>
         /// <value>The day change factor.</value>
@@ -160,12 +151,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-04-24
         /// </remarks>
-        public static double DayChangeFactor
-        {
-            get { return _dayChangeFactor; }
-        }
+        public static double DayChangeFactor => _dayChangeFactor;
 
-        /// <summary>
+	    /// <summary>
         /// Calculates the start day factor for the forecast period.
         /// </summary>
         /// <param name="startTrendPeriod">The start trend period.</param>

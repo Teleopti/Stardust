@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -77,23 +76,17 @@ namespace Teleopti.Ccc.Domain.Common
         /// Read only wrapper around the actual site list.
         /// </summary>
         /// <value>The agents list.</value>
-        public virtual ReadOnlyCollection<ISite> SiteCollection
-        {
-            get { return new ReadOnlyCollection<ISite>(_siteCollection); }
-        }
+        public virtual ReadOnlyCollection<ISite> SiteCollection => new ReadOnlyCollection<ISite>(_siteCollection);
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+	    public virtual bool IsDeleted => _isDeleted;
 
-        /// <summary>
+	    /// <summary>
         /// Adds a Site.
         /// </summary>
         /// <param name="site">The site.</param>
         public virtual void AddSite(ISite site)
         {
-            InParameter.NotNull("site", site);
+            InParameter.NotNull(nameof(site), site);
             if (_siteCollection.Contains(site))
             {
                 _siteCollection.Remove(site);
@@ -107,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// <param name="site">The site.</param>
         public virtual void RemoveSite(ISite site)
         {
-            InParameter.NotNull("site", site);
+            InParameter.NotNull(nameof(site), site);
             _siteCollection.Remove(site);
         }
 

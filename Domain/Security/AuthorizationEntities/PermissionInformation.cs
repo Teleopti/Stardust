@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		public void SetDefaultTimeZone(TimeZoneInfo value)
 		{
-			InParameter.NotNull("DefaultTimeZone", value);
+			InParameter.NotNull(nameof(DefaultTimeZone), value);
 			_defaultTimeZoneCache = new Lazy<TimeZoneInfo>(()=>value);
 			defaultTimeZone = value.Id;
 		}
@@ -111,8 +111,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			if (value != null) culture = value.LCID;
 			else culture = null;
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
+		
 		public CultureInfo Culture()
 		{
 
@@ -191,7 +190,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		public void AddApplicationRole(IApplicationRole role)
 		{
-			InParameter.NotNull("role", role);
+			InParameter.NotNull(nameof(role), role);
 			if (!personInApplicationRole.Contains(role))
 				personInApplicationRole.Add(role);
 		}

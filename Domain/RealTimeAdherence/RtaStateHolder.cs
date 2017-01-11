@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		
         public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository)
         {
-            InParameter.NotNull("schedulingResultStateHolder", schedulingResultStateHolder);
-            InParameter.NotNull("rtaStateGroupProvider", rtaStateGroupRepository);
+            InParameter.NotNull(nameof(schedulingResultStateHolder), schedulingResultStateHolder);
+            InParameter.NotNull(nameof(rtaStateGroupRepository), rtaStateGroupRepository);
 
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _rtaStateGroupRepository = rtaStateGroupRepository;
@@ -33,19 +33,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 	    public IEnumerable<IRtaStateGroup> RtaStateGroups { get; private set; }
 
 
-	    public ISchedulingResultStateHolder SchedulingResultStateHolder
-        {
-            get { return _schedulingResultStateHolder; }
-        }
+	    public ISchedulingResultStateHolder SchedulingResultStateHolder => _schedulingResultStateHolder;
 
 	    public event EventHandler<CustomEventArgs<AgentStateReadModel>> AgentstateUpdated;
 
-        public IDictionary<Guid, AgentStateReadModel> ActualAgentStates
-        {
-            get { return new ReadOnlyDictionary<Guid, AgentStateReadModel>(_actualAgentStates); }
-        }
+        public IDictionary<Guid, AgentStateReadModel> ActualAgentStates => new ReadOnlyDictionary<Guid, AgentStateReadModel>(_actualAgentStates);
 
-        public void SetActualAgentState(AgentStateReadModel agentStateReadModel)
+	    public void SetActualAgentState(AgentStateReadModel agentStateReadModel)
         {
 	        var person = FilteredPersons.FirstOrDefault(p => p.Id.GetValueOrDefault() == agentStateReadModel.PersonId);
 	        if (person == null || person.Id == null)

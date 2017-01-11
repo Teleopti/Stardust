@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 		public BudgetCalculationResult Calculate(IBudgetDay budgetDay)
 		{
-			InParameter.NotNull("budgetDay", budgetDay);
+			InParameter.NotNull(nameof(budgetDay), budgetDay);
 			var budgetDayCalculations = _netStaffCalculator.CalculatedResult(budgetDay);
 			foreach (var calculator in _calculatorList)
 				calculator.Calculate(budgetDay, _budgetDayList, ref budgetDayCalculations);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 		public BudgetCalculationResult CalculateWithoutNetStaffFcAdj(IBudgetDay budgetDay, double netStaffFcAdj)
 		{
-			InParameter.NotNull("budgetDay", budgetDay);
+			InParameter.NotNull(nameof(budgetDay), budgetDay);
 			if (budgetDay.IsClosed) return new BudgetCalculationResult();
 			var budgetDayCalculations = _netStaffCalculator.CalculatedResult(budgetDay);
 			budgetDayCalculations.NetStaffFcAdj = netStaffFcAdj;

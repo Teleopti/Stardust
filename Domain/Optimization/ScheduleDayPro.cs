@@ -21,35 +21,20 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="scheduleMatrix">The schedule matrix.</param>
         public ScheduleDayPro(DateOnly day, IScheduleMatrixPro scheduleMatrix)
         {
-            InParameter.NotNull("scheduleMatrix", scheduleMatrix);
+            InParameter.NotNull(nameof(scheduleMatrix), scheduleMatrix);
             _day = day;
             _scheduleMatrix = scheduleMatrix; 
         }
 
-	    public DateOnly Day
-        {
-            get { return _day; }
-        }
+	    public DateOnly Day => _day;
 
-        public IScheduleMatrixPro Parent
-        {
-            get { return _scheduleMatrix; }
-        }
+	    public IScheduleMatrixPro Parent => _scheduleMatrix;
 
-        public IScheduleRange ActiveScheduleRange
-        {
-            get { return Parent.ActiveScheduleRange; }
-        }
+	    public IScheduleRange ActiveScheduleRange => Parent.ActiveScheduleRange;
 
-        public IPerson Person
-        {
-            get
-            {
-                return Parent.Person;
-            }
-        }
+	    public IPerson Person => Parent.Person;
 
-        public IScheduleDay DaySchedulePart()
+	    public IScheduleDay DaySchedulePart()
         {
             return ActiveScheduleRange.ScheduledDay(Day);
         }

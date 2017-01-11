@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="schedulePart">The schedule part.</param>
         public SchedulePartExtractor(IScheduleDay schedulePart)
         {
-            InParameter.NotNull("schedulePart", schedulePart);
+            InParameter.NotNull(nameof(schedulePart), schedulePart);
 
             _schedulePart = schedulePart;
 
             IPerson person = schedulePart.Person;
             if (person == null)
-                throw new ArgumentException("The Schedule Part must have a valid person.", "schedulePart");
+                throw new ArgumentException("The Schedule Part must have a valid person.", nameof(schedulePart));
 
             _person = person;
 
@@ -39,27 +39,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             _actualSchedulePeriod = _schedulePeriod.DateOnlyPeriod;
         }
 
-        public IVirtualSchedulePeriod SchedulePeriod
-        {
-            get { return _schedulePeriod; }
-        }
+        public IVirtualSchedulePeriod SchedulePeriod => _schedulePeriod;
 
-        public DateOnlyPeriod ActualSchedulePeriod
-        {
-            get { return _actualSchedulePeriod;  }
-        }
+	    public DateOnlyPeriod ActualSchedulePeriod => _actualSchedulePeriod;
 
-        public IPerson Person
-        {
-            get { return _person; }
-        }
+	    public IPerson Person => _person;
 
-        public IScheduleDay SchedulePart
-        {
-            get { return _schedulePart; }
-        }
+	    public IScheduleDay SchedulePart => _schedulePart;
 
-        public override int GetHashCode()
+	    public override int GetHashCode()
         {
             return Person.GetHashCode() ^ SchedulePeriod.GetHashCode() ^ ActualSchedulePeriod.GetHashCode();
         }

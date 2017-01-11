@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void MapTo(IGeneralPreferences target, IEnumerable<IScheduleTag> scheduleTags)
 		{
-			InParameter.NotNull("scheduleTags", scheduleTags);
+			InParameter.NotNull(nameof(scheduleTags), scheduleTags);
 
 			foreach (var scheduleTag in scheduleTags)
 			{

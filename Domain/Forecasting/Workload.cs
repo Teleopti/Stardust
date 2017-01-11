@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         private void AssociateWithSkill(ISkill skill)
         {
-            InParameter.NotNull("skill", skill);
+            InParameter.NotNull(nameof(skill), skill);
             _skill = skill;
             _skill.AddWorkload(this);
         }
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get { return _skill; }
             set {
-                InParameter.NotNull("value", value);
+                InParameter.NotNull(nameof(value), value);
                 _skill = value; }
         }
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="queueSource"></param>
         public virtual void AddQueueSource(IQueueSource queueSource)
         {
-            InParameter.NotNull("queue", queueSource);
+            InParameter.NotNull(nameof(queueSource), queueSource);
             _queueSourceCollection.Add(queueSource);
         }
 
@@ -155,12 +155,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Read only wrapper around the forecast list.
         /// </summary>
         /// <value>The forecast.</value>
-        public virtual ReadOnlyCollection<IQueueSource> QueueSourceCollection
-        {
-            get { return new ReadOnlyCollection<IQueueSource>(_queueSourceCollection); }
-        }
+        public virtual ReadOnlyCollection<IQueueSource> QueueSourceCollection => new ReadOnlyCollection<IQueueSource>(_queueSourceCollection);
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
@@ -285,12 +282,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set { _queueAdjustments = value; }
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the name of the find template by.
         /// </summary>
         /// <param name="target">The target.</param>
@@ -381,7 +375,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public virtual void RefreshTemplates(IForecastTemplateOwner forecastTemplateOwner)
         {
-            if (!Equals(forecastTemplateOwner)) throw new ArgumentException("The supplied template owner must be of the same workload", "forecastTemplateOwner");
+            if (!Equals(forecastTemplateOwner)) throw new ArgumentException("The supplied template owner must be of the same workload", nameof(forecastTemplateOwner));
 
             _templateWeekCollection = new Dictionary<int, IWorkloadDayTemplate>(((Workload)forecastTemplateOwner)._templateWeekCollection);
 

@@ -211,10 +211,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _childSkills.Remove(childSkill);
             //TODO! Maybe do this a nicer way? :)
             ((Skill)childSkill).SetDeleted();
-            //childSkill.GetType().
-            //    GetMethod("SetDeleted", BindingFlags.NonPublic | BindingFlags.Instance).
-            //    Invoke(childSkill, BindingFlags.NonPublic | BindingFlags.Instance,
-            //        null, null, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -227,7 +223,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void AddChildSkill(IChildSkill childSkill)
         {
-            InParameter.NotNull("childSkill", childSkill);
+            InParameter.NotNull(nameof(childSkill), childSkill);
             if (_childSkills.Contains(childSkill)) return;
 
             _childSkills.Add(childSkill);

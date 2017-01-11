@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get { return TemplateReference.DisplayName(DayOfWeek, _name, false); }
             set {
-                InParameter.NotNull("Name", value);
+                InParameter.NotNull(nameof(Name), value);
                 _name = value; }
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public MultisiteDayTemplate(string name, IList<ITemplateMultisitePeriod> multisitePeriodCollection)
             :this()
         {
-            InParameter.NotStringEmptyOrNull("name", name);
+            InParameter.NotStringEmptyOrNull(nameof(name), name);
             _name = name;
 			_updatedDate = DateTime.UtcNow;
             VerifyAndAttachMultisitePeriods(multisitePeriodCollection);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (ITemplateMultisitePeriod multisitePeriod in templateMultisitePeriodCollection)
             {
                 if (multisitePeriod.Period.StartDateTime > SkillDayTemplate.BaseDate.AddDays(3).Date)
-                    throw new ArgumentOutOfRangeException("templateMultisitePeriodCollection","The date is out of order.");
+                    throw new ArgumentOutOfRangeException(nameof(templateMultisitePeriodCollection),"The date is out of order.");
                 if (_templateMultisitePeriodCollection.Any(t => t.Period.StartDateTime == multisitePeriod.Period.StartDateTime))
                     throw new InvalidOperationException("The multisite periods must have unique start times");
                 multisitePeriod.SetParent(this);
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             retobj._templateMultisitePeriodCollection = new HashSet<ITemplateMultisitePeriod>();
             foreach (ITemplateMultisitePeriod templateSkillDataPeriod in _templateMultisitePeriodCollection)
             {
-                ITemplateMultisitePeriod clonedPeriod = (ITemplateMultisitePeriod)templateSkillDataPeriod.NoneEntityClone();
+                ITemplateMultisitePeriod clonedPeriod = templateSkillDataPeriod.NoneEntityClone();
                 clonedPeriod.SetParent(retobj);
                 retobj._templateMultisitePeriodCollection.Add(clonedPeriod);
             }
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             retobj._templateMultisitePeriodCollection = new HashSet<ITemplateMultisitePeriod>();
             foreach (ITemplateMultisitePeriod templateSkillDataPeriod in _templateMultisitePeriodCollection)
             {
-                ITemplateMultisitePeriod clonedPeriod = (ITemplateMultisitePeriod)templateSkillDataPeriod.EntityClone();
+                ITemplateMultisitePeriod clonedPeriod = templateSkillDataPeriod.EntityClone();
                 clonedPeriod.SetParent(retobj);
                 retobj._templateMultisitePeriodCollection.Add(clonedPeriod);
             }

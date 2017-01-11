@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			set
 			{
 				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive("Resource", roundedValue);
+				InParameter.ValueMustBePositive(nameof(Resource), roundedValue);
 				_resource = roundedValue;
 			}
 		}
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			set
 			{
 				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive("Resource", roundedValue);
+				InParameter.ValueMustBePositive(nameof(Resource), roundedValue);
 				_count = roundedValue;
 			}
 		}
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			private set
 			{
 				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive("Resource", roundedValue);
+				InParameter.ValueMustBePositive(nameof(Resource), roundedValue);
 				_resource = roundedValue;
 			}
 		}
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			private set
 			{
 				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive("Count", roundedValue);
+				InParameter.ValueMustBePositive(nameof(Count), roundedValue);
 				_count = roundedValue;
 			}
 		}

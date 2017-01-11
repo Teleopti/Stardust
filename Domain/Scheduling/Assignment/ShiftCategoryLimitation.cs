@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public ShiftCategoryLimitation(IShiftCategory shiftCategory):this()
         {
-            InParameter.NotNull("shiftCategory", shiftCategory);
+            InParameter.NotNull(nameof(shiftCategory), shiftCategory);
             _shiftCategory = shiftCategory;
         }
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             get { return _shiftCategory; }
             set
             {
-                InParameter.NotNull("ShiftCategory", value);
+                InParameter.NotNull(nameof(ShiftCategory), value);
                 _shiftCategory = value;
             }
         }
@@ -31,6 +31,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             return MemberwiseClone();
         }
-
     }
 }

@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void Create(string name, DateTime createdDate, IWorkload workload, IList<TimePeriod> openHourList)
         {
-            InParameter.VerifyDateIsUtc("createdDate", createdDate);
-            InParameter.NotNull("name", name);
+            InParameter.VerifyDateIsUtc(nameof(createdDate), createdDate);
+            InParameter.NotNull(nameof(name), name);
 
             SetParent(workload);
             _createdDate = createdDate;
@@ -56,12 +56,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-01-23
         /// </remarks>
-        public virtual DateTime CreatedDate
-        {
-            get { return _createdDate; }
-        }
+        public virtual DateTime CreatedDate => _createdDate;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the template reference.
         /// </summary>
         /// <value>The template reference.</value>

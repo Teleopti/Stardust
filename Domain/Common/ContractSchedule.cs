@@ -45,12 +45,9 @@ namespace Teleopti.Ccc.Domain.Common
         /// <summary>
         /// Gets the contained weeks in contract schedule
         /// </summary>
-        public virtual IEnumerable<IContractScheduleWeek> ContractScheduleWeeks
-        {
-            get { return _contractScheduleWeeks; }
-        }
+        public virtual IEnumerable<IContractScheduleWeek> ContractScheduleWeeks => _contractScheduleWeeks;
 
-        /// <summary>
+	    /// <summary>
         /// Adds the contract schedule week.
         /// </summary>
         /// <param name="contractScheduleWeek">The contract schedule week.</param>
@@ -60,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public virtual void AddContractScheduleWeek(IContractScheduleWeek contractScheduleWeek)
         {
-            InParameter.NotNull("contractScheduleWeek", contractScheduleWeek);
+            InParameter.NotNull(nameof(contractScheduleWeek), contractScheduleWeek);
             ((AggregateEntity)contractScheduleWeek).SetParent(this);
 
             //Sets the week order to the next index of the collection
@@ -78,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public virtual void RemoveContractScheduleWeek(IContractScheduleWeek contractScheduleWeek)
         {
-            InParameter.NotNull("contractScheduleWeek", contractScheduleWeek);
+            InParameter.NotNull(nameof(contractScheduleWeek), contractScheduleWeek);
             ((AggregateEntity)contractScheduleWeek).SetParent(this);
             _contractScheduleWeeks.Remove(contractScheduleWeek);
             
@@ -107,17 +104,11 @@ namespace Teleopti.Ccc.Domain.Common
         /// Created by: Dinesh Ranasinghe
         /// Created date: 2008-09-09
         /// </remarks>
-        public virtual bool IsChoosable
-        {
-            get { return !IsDeleted; }
-        }
+        public virtual bool IsChoosable => !IsDeleted;
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+	    public virtual bool IsDeleted => _isDeleted;
 
-		public virtual void SetDeleted()
+	    public virtual void SetDeleted()
 		{
 			_isDeleted = true;
 		}
@@ -188,7 +179,6 @@ namespace Teleopti.Ccc.Domain.Common
 		/// Gets the correct day of week by the index that can be used to question the Contract week..
 		/// </summary>
 		/// <param name="dayIndexInWeek">The day index in week. Index 0 is always the start day in the person period week start day.</param>
-		/// <param name="personWeekStartDay">The person week start day.</param>
 		/// <returns></returns>
 		private static DayOfWeek getCorrectDayOfWeek(int dayIndexInWeek)
 		{

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public SchedulePartSignificantPartDefinitions(IScheduleDay schedulePart, IHasContractDayOffDefinition hasContractDayOffDefinition)
         {
-            InParameter.NotNull("schedulePart", schedulePart);
+            InParameter.NotNull(nameof(schedulePart), schedulePart);
             _schedulePart = schedulePart;
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 

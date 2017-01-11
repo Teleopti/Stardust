@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
         {
-            InParameter.NotNull("dateAndPeriod", dateAndPeriod);
+            InParameter.NotNull(nameof(dateAndPeriod), dateAndPeriod);
             return dateAndPeriod.DateOnly == _noteDate;
         }
 
@@ -84,14 +84,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public virtual bool BelongsToScenario(IScenario scenario)
         {
-            InParameter.NotNull("scenario", scenario);
+            InParameter.NotNull(nameof(scenario), scenario);
             return scenario.Equals(_scenario);
         }
 
         public virtual void AppendScheduleNote(string text)
         {
             string combined = _scheduleNote.Length == 0 ? text : string.Concat(_scheduleNote, " ", text);
-            InParameter.StringTooLong("text", combined, 255);
+            InParameter.StringTooLong(nameof(text), combined, 255);
             _scheduleNote = combined;
         }
 
@@ -115,24 +115,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return retObj;
         }
 
-        public virtual IAggregateRoot MainRoot
-        {
-            get { return _person; }
-        }
+        public virtual IAggregateRoot MainRoot => _person;
 
-        public virtual string FunctionPath
-        {
-            get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
-        }
+	    public virtual string FunctionPath => DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 
-        public virtual IPersistableScheduleData CreateTransient()
+	    public virtual IPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }
 
         public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
         {
-            InParameter.NotNull("parameters", parameters);
+            InParameter.NotNull(nameof(parameters), parameters);
             var retObj = (PublicNote)NoneEntityClone();
             retObj._scenario = parameters.Scenario;
             return retObj;

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             get
             {
                 IMultiplicatorDefinitionSet owner = (IMultiplicatorDefinitionSet)Parent;
-                InParameter.NotNull("owner", owner);
+                InParameter.NotNull(nameof(owner), owner);
                 _orderIndex = owner.DefinitionCollection.IndexOf(this);
                 return _orderIndex;
             } 

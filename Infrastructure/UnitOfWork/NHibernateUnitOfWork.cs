@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			TransactionIsolationLevel isolationLevel, 
 			ICurrentTransactionHooks transactionHooks)
 		{
-			InParameter.NotNull("session", session);
+			InParameter.NotNull(nameof(session), session);
 			_context = context;
 			_context.Set(this);
 			_session = session;
@@ -256,8 +256,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Dispose()
 		{
-			if (_context != null)
-				_context.Clear();
+			_context?.Clear();
 
 			if (_session != null)
 			{

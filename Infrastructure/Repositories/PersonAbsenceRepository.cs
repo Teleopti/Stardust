@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						     DateTimePeriod period,
 						     IScenario scenario)
 		{
-			InParameter.NotNull("persons", persons);
-			InParameter.NotNull("period", period);
-			InParameter.NotNull("scenario", scenario);
+			InParameter.NotNull(nameof(persons), persons);
+			InParameter.NotNull(nameof(period), period);
+			InParameter.NotNull(nameof(scenario), scenario);
 			var retList = new List<IPersonAbsence>();
 
 			var restrictions = Restrictions.Conjunction().Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds, IScenario scenario)
 		{
-			InParameter.NotNull("personAbsenceIds", personAbsenceIds);
+			InParameter.NotNull(nameof(personAbsenceIds), personAbsenceIds);
 
 			var retList = new List<IPersonAbsence>();
 

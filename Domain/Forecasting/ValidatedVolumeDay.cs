@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public ValidatedVolumeDay(IWorkload workload, DateOnly date)
         {
-            InParameter.NotNull("workload", workload);
+            InParameter.NotNull(nameof(workload), workload);
 
             _workload = workload;
             _volumeDayDate = date;
@@ -60,17 +60,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-03-28
         /// </remarks>
-        public virtual bool HasValues
-        {
-            get
-            {
-                return (_validatedTasks.HasValue ||
-                        validatedTaskTime.HasValue ||
-                        validatedAfterTaskTime.HasValue);
-            }
-        }
+        public virtual bool HasValues => (_validatedTasks.HasValue ||
+										  validatedTaskTime.HasValue ||
+										  validatedAfterTaskTime.HasValue);
 
-        /// <summary>
+	    /// <summary>
         /// Gets the workload.
         /// </summary>
         /// <value>The workload.</value>
@@ -78,12 +72,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-03-27
         /// </remarks>
-        public virtual IWorkload Workload
-        {
-            get { return _workload; }
-        }
+        public virtual IWorkload Workload => _workload;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the date.
         /// </summary>
         /// <value>The date.</value>
@@ -91,12 +82,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-03-27
         /// </remarks>
-        public virtual DateOnly VolumeDayDate
-        {
-            get { return _volumeDayDate; }
-        }
+        public virtual DateOnly VolumeDayDate => _volumeDayDate;
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the task owner.
         /// </summary>
         /// <value>The task owner.</value>

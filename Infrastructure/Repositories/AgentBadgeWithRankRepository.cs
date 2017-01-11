@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IAgentBadgeWithRank> Find(IPerson person)
 		{
-			InParameter.NotNull("person", person);
+			InParameter.NotNull(nameof(person), person);
 
 			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
 				+ "from AgentBadgeWithRank where Person = :person";
@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IAgentBadgeWithRank Find(IPerson person, BadgeType badgeType)
 		{
-			InParameter.NotNull("person", person);
-			InParameter.NotNull("badgeType", badgeType);
+			InParameter.NotNull(nameof(person), person);
+			InParameter.NotNull(nameof(badgeType), badgeType);
 			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
 				+ "from AgentBadgeWithRank where Person = :person and BadgeType=:badgeType";
 			var result = Session.CreateSQLQuery(query)

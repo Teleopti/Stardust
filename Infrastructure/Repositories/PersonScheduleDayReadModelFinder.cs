@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public PersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork)
 		{
-			InParameter.NotNull("unitOfWork", unitOfWork);
+			InParameter.NotNull(nameof(unitOfWork), unitOfWork);
 			_unitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 

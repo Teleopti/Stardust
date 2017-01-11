@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// </remarks>
 		public IList<ITaskOwner> GetWorkloadDaysWithValidatedStatistics(DateOnlyPeriod period, IWorkload workload, IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays)
 		{
-			InParameter.NotNull("workload", workload);
-			InParameter.NotNull("existingValidatedVolumeDays", existingValidatedVolumeDays);
+			InParameter.NotNull(nameof(workload), workload);
+			InParameter.NotNull(nameof(existingValidatedVolumeDays), existingValidatedVolumeDays);
 
 			IList<IWorkloadDayBase> workloadDays = LoadStatisticData(period, workload);
 
@@ -91,10 +91,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// </remarks>
 		private void OnStatusChanged(StatusChangedEventArgs eventArgs)
 		{
-			if (StatusChanged != null)
-			{
-				StatusChanged.Invoke(this, eventArgs);
-			}
+			StatusChanged?.Invoke(this, eventArgs);
 		}
 
 		/// <summary>

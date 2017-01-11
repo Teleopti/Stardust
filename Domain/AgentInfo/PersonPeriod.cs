@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public PersonPeriod(DateOnly startDate, IPersonContract personContract, ITeam team)
 			: this()
 		{
-			InParameter.NotNull("personContract", personContract);
-			InParameter.NotNull("team", team);
+			InParameter.NotNull(nameof(personContract), personContract);
+			InParameter.NotNull(nameof(team), team);
 
 			_personContract = personContract;
 			_team = team;

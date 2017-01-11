@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		public DataSource(IUnitOfWorkFactory application, IAnalyticsUnitOfWorkFactory analytics, IReadModelUnitOfWorkFactory readModel)
 		{
-			InParameter.NotNull("application", application);
+			InParameter.NotNull(nameof(application), application);
 			Application = application;
 			Analytics = analytics;
 			ReadModel = readModel;
@@ -17,10 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public IAnalyticsUnitOfWorkFactory Analytics { get; private set; }
 		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
 
-		public string DataSourceName
-		{
-			get { return Application.Name; }
-		}
+		public string DataSourceName => Application.Name;
 
 		public void RemoveAnalytics()
 		{

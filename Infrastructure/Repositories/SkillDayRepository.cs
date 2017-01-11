@@ -55,11 +55,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 												ISkill skill,
 												IScenario scenario)
 		{
-			InParameter.NotNull("period", period);
-			InParameter.NotNull("skillCollection", skill);
-			InParameter.NotNull("scenario", scenario);
-
-
+			InParameter.NotNull(nameof(period), period);
+			InParameter.NotNull(nameof(skill), skill);
+			InParameter.NotNull(nameof(scenario), scenario);
+			
 			var restriction = Restrictions.Conjunction()
 				.Add(Restrictions.Eq("skillDay.Skill", skill))
 				.Add(Restrictions.Eq("skillDay.Scenario", scenario))
@@ -92,9 +91,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
-            InParameter.NotNull("period", period);
-            InParameter.NotNull("skillCollection", skills);
-            InParameter.NotNull("scenario", scenario);
+            InParameter.NotNull(nameof(period), period);
+            InParameter.NotNull(nameof(skills), skills);
+            InParameter.NotNull(nameof(scenario), scenario);
 
             var skillDays = new List<ISkillDay>();
 	        var defaultReadOnly = Session.DefaultReadOnly;
@@ -218,7 +217,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public DateOnly FindLastSkillDayDate(IWorkload workload, IScenario scenario)
 		{
-			InParameter.NotNull("workload", workload);
+			InParameter.NotNull(nameof(workload), workload);
 			DateOnly? latestDate = Session.CreateCriteria(typeof(SkillDay))
 				.Add(Restrictions.Eq("Scenario", scenario))
 				.CreateAlias("Skill", "skill")

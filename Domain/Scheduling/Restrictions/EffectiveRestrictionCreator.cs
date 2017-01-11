@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			ISchedulingOptions options,
 			IScheduleDictionary scheduleDictionary)
 		{
-			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
 			IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
 			return GetEffectiveRestriction(scheduleDay, options);
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             ISchedulingOptions options, 
             IScheduleDictionary scheduleDictionary)
 		{
-			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
 
             IEffectiveRestriction ret = null;
 			foreach (var person in groupPersons)

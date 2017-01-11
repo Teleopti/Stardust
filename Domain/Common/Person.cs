@@ -166,8 +166,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod)
 		{
-			InParameter.NotNull("personSkill", personSkill);
-			InParameter.NotNull("personPeriod", personPeriod);
+			InParameter.NotNull(nameof(personSkill), personSkill);
+			InParameter.NotNull(nameof(personPeriod), personPeriod);
 
 			var modify = personPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill)) as IPersonSkillModify;
 			if (modify == null)
@@ -183,11 +183,10 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void ResetPersonSkills(IPersonPeriod personPeriod)
 		{
-			InParameter.NotNull("personPeriod", personPeriod);
+			InParameter.NotNull(nameof(personPeriod), personPeriod);
 
 			var modify = personPeriod as IPersonPeriodModifySkills;
-			if (modify != null)
-				modify.ResetPersonSkill();
+			modify?.ResetPersonSkill();
 		}
 
 		public virtual void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
@@ -224,8 +223,8 @@ namespace Teleopti.Ccc.Domain.Common
 		
 	    public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
-			InParameter.NotNull("skill", skill);
-			InParameter.NotNull("personPeriod", personPeriod);
+			InParameter.NotNull(nameof(skill), skill);
+			InParameter.NotNull(nameof(personPeriod), personPeriod);
 
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
 			if (personSkill == null) return;
@@ -236,8 +235,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void DeactivateSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
-			InParameter.NotNull("skill", skill);
-			InParameter.NotNull("personPeriod", personPeriod);
+			InParameter.NotNull(nameof(skill), skill);
+			InParameter.NotNull(nameof(personPeriod), personPeriod);
 
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
 			if (personSkill == null) return;
@@ -269,20 +268,11 @@ namespace Teleopti.Ccc.Domain.Common
             set { _name = value; }
         }
 
-        public virtual IPermissionInformation PermissionInformation
-        {
-            get { return _permissionInformation; }
-        }
+        public virtual IPermissionInformation PermissionInformation => _permissionInformation;
 
-        public virtual IList<IPersonPeriod> PersonPeriodCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<IPersonPeriod>(InternalPersonPeriodCollection.ToList());
-            }
-        }
+	    public virtual IList<IPersonPeriod> PersonPeriodCollection => new ReadOnlyCollection<IPersonPeriod>(InternalPersonPeriodCollection.ToList());
 
-        private IEnumerable<IPersonPeriod> InternalPersonPeriodCollection
+	    private IEnumerable<IPersonPeriod> InternalPersonPeriodCollection
         {
             get
             {
@@ -291,21 +281,11 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        private IEnumerable<ISchedulePeriod> InternalSchedulePeriodCollection
-        {
-            get
-            {
-                return _personSchedulePeriodCollection.Values;
-            }
-        }
+        private IEnumerable<ISchedulePeriod> InternalSchedulePeriodCollection => _personSchedulePeriodCollection.Values;
 
-        public virtual IList<ISchedulePeriod> PersonSchedulePeriodCollection
-        {
+	    public virtual IList<ISchedulePeriod> PersonSchedulePeriodCollection => new ReadOnlyCollection<ISchedulePeriod>(InternalSchedulePeriodCollection.ToList());
 
-            get { return new ReadOnlyCollection<ISchedulePeriod>(InternalSchedulePeriodCollection.ToList()); }
-        }
-
-        public virtual string Email
+	    public virtual string Email
         {
             get { return _email; }
             set { _email = value; }
@@ -330,7 +310,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void AddSchedulePeriod(ISchedulePeriod period)
 		{
-			InParameter.NotNull("period", period);
+			InParameter.NotNull(nameof(period), period);
 
 			if (_personSchedulePeriodCollection.ContainsKey(period.DateFrom)) return;
 			period.SetParent(this);
@@ -339,13 +319,13 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void RemoveSchedulePeriod(ISchedulePeriod period)
 		{
-			InParameter.NotNull("period", period);
+			InParameter.NotNull(nameof(period), period);
 			_personSchedulePeriodCollection.Remove(period.DateFrom);
 		}
 
 		public virtual void ChangeSchedulePeriodStartDate(DateOnly startDate, ISchedulePeriod schedulePeriod)
 		{
-			InParameter.NotNull("schedulePeriod", schedulePeriod);
+			InParameter.NotNull(nameof(schedulePeriod), schedulePeriod);
 
 			var startDateBefore = schedulePeriod.DateFrom;
 			_personSchedulePeriodCollection.Remove(startDateBefore);
@@ -364,7 +344,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void AddPersonPeriod(IPersonPeriod period)
 		{
-			InParameter.NotNull("period", period);
+			InParameter.NotNull(nameof(period), period);
 
 			if (!_personPeriodCollection.ContainsKey(period.StartDate))
 			{
@@ -392,7 +372,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void DeletePersonPeriod(IPersonPeriod period)
 	    {
-		    InParameter.NotNull("period", period);
+		    InParameter.NotNull(nameof(period), period);
 		    _personPeriodCollection.Remove(period.StartDate);
 
 			addPersonPeriodChangedEvent();
@@ -400,7 +380,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
 		{
-			InParameter.NotNull("personPeriod", personPeriod);
+			InParameter.NotNull(nameof(personPeriod), personPeriod);
 			
 			var startDateBefore = personPeriod.StartDate;
 			_personPeriodCollection.Remove(startDateBefore);
@@ -660,20 +640,11 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        public virtual IPersonWriteProtectionInfo PersonWriteProtection
-        {
-            get
-            {
-                return _personWriteProtection;
-            }
-        }
+        public virtual IPersonWriteProtectionInfo PersonWriteProtection => _personWriteProtection;
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+	    public virtual bool IsDeleted => _isDeleted;
 
-        public virtual IWorkflowControlSet WorkflowControlSet
+	    public virtual IWorkflowControlSet WorkflowControlSet
         {
             get
             {
@@ -702,18 +673,12 @@ namespace Teleopti.Ccc.Domain.Common
 			    });
 	    }
 
-	    public virtual ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection
-		{
-			get
-			{
-				return new ReadOnlyCollection<IOptionalColumnValue>(_optionalColumnValueCollection);
-			}
-		}
+	    public virtual ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection => new ReadOnlyCollection<IOptionalColumnValue>(_optionalColumnValueCollection);
 
-		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
+	    public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
 		{
-			InParameter.NotNull("value", value);
-			InParameter.NotNull("column", column);
+			InParameter.NotNull(nameof(value), value);
+			InParameter.NotNull(nameof(column), column);
 
 			var colValue = GetColumnValue(column);
 			if (colValue == null)
@@ -730,7 +695,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void RemoveOptionalColumnValue(IOptionalColumnValue value)
 		{
-			InParameter.NotNull("value", value);
+			InParameter.NotNull(nameof(value), value);
 
 			_optionalColumnValueCollection.Remove(value);
 		}

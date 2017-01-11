@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         protected ActivityExtender(IActivity activity,
                                    TimePeriodWithSegment activityLengthWithSegment)
         {
-            InParameter.NotNull("activity", activity);
+            InParameter.NotNull(nameof(activity), activity);
             _extendWithActivity = activity;
             _activityLengthWithSegment = activityLengthWithSegment;
         }
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
             set
             {
-                InParameter.NotNull("value", value);
+                InParameter.NotNull(nameof(ExtendWithActivity), value);
                 _extendWithActivity = value;
             }
         }

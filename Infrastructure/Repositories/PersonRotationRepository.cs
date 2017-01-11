@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public IList<IPersonRotation> Find(IPerson person)
         {
-            InParameter.NotNull("person",person);
+            InParameter.NotNull(nameof(person),person);
 
             return Find(new List<IPerson> {person});
         }
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public IList<IPersonRotation> Find(IList<IPerson> persons)
         {
-            InParameter.NotNull("persons", persons);
+            InParameter.NotNull(nameof(persons), persons);
 
 			var personRotations = new List<IPersonRotation>();
 			foreach (var personBatch in persons.Batch(400))

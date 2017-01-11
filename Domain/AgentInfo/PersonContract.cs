@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         /// </remarks>
         public PersonContract(IContract contract, IPartTimePercentage partTimePercentage, IContractSchedule contractSchedule)
         {
-            InParameter.NotNull("contract", contract);
-            InParameter.NotNull("partTimePercentage", partTimePercentage);
-            InParameter.NotNull("contractSchedule", contractSchedule);
+            InParameter.NotNull(nameof(contract), contract);
+            InParameter.NotNull(nameof(partTimePercentage), partTimePercentage);
+            InParameter.NotNull(nameof(contractSchedule), contractSchedule);
 
             _contractSchedule = contractSchedule;
             _partTimePercentage = partTimePercentage;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get { return _contract; }
             set
             {
-                InParameter.NotNull("Contract", value);
+                InParameter.NotNull(nameof(Contract), value);
                 _contract = value;
             }
         }
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             }
             set
             {
-                InParameter.NotNull("PartTimePercentage", value);
+                InParameter.NotNull(nameof(PartTimePercentage), value);
                 _partTimePercentage = value;
             }
         }
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get { return _contractSchedule; }
             set
             {
-                InParameter.NotNull("ContractSchedule", value);
+                InParameter.NotNull(nameof(ContractSchedule), value);
 
                 _contractSchedule = value;
             }
@@ -92,15 +92,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         /// Created by: robink
         /// Created date: 2008-06-23
         /// </remarks>
-        public TimeSpan AverageWorkTimePerDay
-        {
-            get {
-                return
-                    TimeSpan.FromMinutes(_partTimePercentage.Percentage.Value *
-                                         _contract.WorkTime.AvgWorkTimePerDay.TotalMinutes); }
-        }
+        public TimeSpan AverageWorkTimePerDay => TimeSpan.FromMinutes(_partTimePercentage.Percentage.Value *
+																	  _contract.WorkTime.AvgWorkTimePerDay.TotalMinutes);
 
-        #region Implementation of ICloneable
+	    #region Implementation of ICloneable
 
         public object Clone()
         {

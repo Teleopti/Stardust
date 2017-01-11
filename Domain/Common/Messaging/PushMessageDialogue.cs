@@ -28,22 +28,13 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             _pushMessage = pushMessage;
         }
 
-        public virtual IPushMessage PushMessage
-        {
-            get { return _pushMessage; }
-        }
+        public virtual IPushMessage PushMessage => _pushMessage;
 
-        public virtual IPerson Receiver
-        {
-            get { return _receiver; }
-        }
+	    public virtual IPerson Receiver => _receiver;
 
-        public virtual IList<IDialogueMessage> DialogueMessages
-        {
-            get { return _dialogueMessages; }
-        }
+	    public virtual IList<IDialogueMessage> DialogueMessages => _dialogueMessages;
 
-        public virtual bool IsReplied
+	    public virtual bool IsReplied
         {
             get { return _isReplied; }
             protected set { _isReplied = value; }
@@ -62,9 +53,9 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 
 	    public virtual void DialogueReply(string message, IPerson sender)
         {
-            InParameter.NotNull("sender", sender);
+            InParameter.NotNull(nameof(sender), sender);
             if (!_pushMessage.AllowDialogueReply)
-                throw new ArgumentException("No text replies are allowed for this message.", "message");
+                throw new ArgumentException("No text replies are allowed for this message.", nameof(message));
 
             var messageToAdd = new DialogueMessage(message, sender);
             messageToAdd.SetParent(this);
@@ -78,20 +69,14 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             IsReplied = false;
         }
 
-        public virtual IAggregateRoot MainRoot
-        {
-            get { return Receiver; }
-        }
+        public virtual IAggregateRoot MainRoot => Receiver;
 
-		protected virtual string Reply
-    	{
-    		get { return _reply; }
-    	}
+	    protected virtual string Reply => _reply;
 
-        public virtual string GetReply(ITextFormatter formatter)
+	    public virtual string GetReply(ITextFormatter formatter)
         {
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_reply);
         }

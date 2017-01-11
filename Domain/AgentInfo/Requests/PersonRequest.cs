@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public PersonRequest(IPerson person, IRequest request)
 			: this()
 		{
-			InParameter.NotNull("person", person);
+			InParameter.NotNull(nameof(person), person);
 			_person = person;
 			setRequest(request);
 		}

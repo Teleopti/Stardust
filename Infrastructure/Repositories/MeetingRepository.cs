@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// <returns></returns>
         public ICollection<IMeeting> Find(DateTimePeriod period, IScenario scenario)
         {
-            InParameter.NotNull("period", period);
-            InParameter.NotNull("scenario", scenario);
+            InParameter.NotNull(nameof(period), period);
+            InParameter.NotNull(nameof(scenario), scenario);
 
             period = period.ChangeStartTime(TimeSpan.FromDays(-1)).ChangeEndTime(TimeSpan.FromDays(1)); //To compensate for time zones
             IList<IMeeting> retList = Session.CreateCriteria(typeof(Meeting), "ME")
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer = true)
         {
-    		InParameter.NotNull("persons", persons);
-    		InParameter.NotNull("period", period);
-    		InParameter.NotNull("scenario", scenario);
+    		InParameter.NotNull(nameof(persons), persons);
+    		InParameter.NotNull(nameof(period), period);
+    		InParameter.NotNull(nameof(scenario), scenario);
 
     		ICollection<IMeeting> retList = new HashSet<IMeeting>();
 

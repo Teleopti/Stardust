@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.UnitOfWork
 
 		public ThisUnitOfWork(IUnitOfWork unitOfWork)
 		{
-			InParameter.NotNull("unitOfWork", unitOfWork);
+			InParameter.NotNull(nameof(unitOfWork), unitOfWork);
 			_unitOfWork = unitOfWork;
 		}
 

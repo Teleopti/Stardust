@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         /// </remarks>
         public override IList<IWorkShift> ReplaceWithNewShifts(IWorkShift shift)
         {
-            InParameter.NotNull("oldShift", shift);
+            InParameter.NotNull(nameof(shift), shift);
 
             DateTimePeriod? projPeriod = shift.LayerCollection.Period();
             DateTimePeriod? actPeriod = PossiblePeriodForActivity(projPeriod.Value);

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public AuditSetter(Func<ISession, IAuditSetting> entityDel)
 		{
-			InParameter.NotNull("entityDel", entityDel);
+			InParameter.NotNull(nameof(entityDel), entityDel);
 			_entityDel = entityDel;
 		}
 

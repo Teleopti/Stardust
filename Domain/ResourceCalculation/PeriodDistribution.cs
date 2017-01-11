@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    /// </remarks>
 	    public PeriodDistribution(ISkillStaffPeriod skillStaffPeriod, IActivity activity, DateTimePeriod period, int lengthToSplitOn, double demandedTraff)
         {
-            InParameter.NotNull("period", period);
-            InParameter.ValueMustBeLargerThanZero("lengthToSplitOn", lengthToSplitOn);
+            InParameter.NotNull(nameof(period), period);
+            InParameter.ValueMustBeLargerThanZero(nameof(lengthToSplitOn), lengthToSplitOn);
 
             _skillStaffPeriod = skillStaffPeriod;
             _activity = activity;
@@ -144,12 +144,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         ///  Created by: Ola
         ///  Created date: 2008-10-27    
         /// </remarks>
-        public double PeriodDetailAverage
-        {
-            get { return PeriodDetailsSum / _splittedValues.Length; }
-        }
+        public double PeriodDetailAverage => PeriodDetailsSum / _splittedValues.Length;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the period details sum.
         /// </summary>
         /// <value>The period details sum.</value>
@@ -157,15 +154,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         ///  Created by: Ola
         ///  Created date: 2008-10-27    
         /// </remarks>
-        public double PeriodDetailsSum
-        {
-            get
-            {
-	            return _splittedValues.Sum();
-            }
-        }
+        public double PeriodDetailsSum => _splittedValues.Sum();
 
-        /// <summary>
+	    /// <summary>
         /// Gets the splitted period values.
         /// </summary>
         /// <value>The splitted period values.</value>

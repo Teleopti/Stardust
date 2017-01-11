@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public virtual ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
-			InParameter.NotNull("persons", persons);
+			InParameter.NotNull(nameof(persons), persons);
 			var retList = new List<IPersonAssignment>();
 
 			foreach (var personList in persons.Batch(400))
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
 		{
-			InParameter.NotNull("scenario", scenario);
+			InParameter.NotNull(nameof(scenario), scenario);
 			var crit = personAssignmentCriteriaLoader(period, scenario);
 			using (PerformanceOutput.ForOperation("Loading personassignments"))
 			{

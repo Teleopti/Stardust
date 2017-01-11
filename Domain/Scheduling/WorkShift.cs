@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public WorkShift(IShiftCategory category)
         {
-            InParameter.NotNull("category", category);
+            InParameter.NotNull(nameof(category), category);
             _shiftCategory = category;
         }
 
@@ -24,13 +24,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
         }
 
-		public virtual ILayerCollection<IActivity> LayerCollection
-		{
-			get { return (new LayerCollection<IActivity>(this, _layerCollection)); }
+		public virtual ILayerCollection<IActivity> LayerCollection => new LayerCollection<IActivity>(this, _layerCollection);
 
-		}
-
-		public virtual IProjectionService ProjectionService()
+	    public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService(null);
 			proj.Add(LayerCollection, new VisualLayerFactory());
@@ -64,18 +60,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return retObj;
 		}
 
-        public static DateTime BaseDate
-        {
-            get { return DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc); }
+        public static DateTime BaseDate => DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc);
 
-        }
+	    public IShiftCategory ShiftCategory => _shiftCategory;
 
-        public IShiftCategory ShiftCategory
-        {
-            get { return _shiftCategory; }
-        }
-
-       public TimePeriod? ToTimePeriod()
+	    public TimePeriod? ToTimePeriod()
        {
            var period = Projection.Period();
 
@@ -94,12 +83,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _visualLayerCollection = null;
         }
 
-        public IVisualLayerCollection Projection
-        {
-            get { return _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection()); }
-        }
+        public IVisualLayerCollection Projection => _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection());
 
-        public IEditableShift ToEditorShift(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, TimeZoneInfo localTimeZone)
+	    public IEditableShift ToEditorShift(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, TimeZoneInfo localTimeZone)
         {
 			var period = dateOnlyAsDateTimePeriod.Period();
 			var utcDateBaseDate = period.StartDateTime;

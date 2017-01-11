@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		
 		public IAgentBadgeWithRankTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate)
 		{
-			InParameter.NotNull("person", person);
+			InParameter.NotNull(nameof(person), person);
 
 			var result = Session.CreateCriteria(typeof(IAgentBadgeWithRankTransaction), "badge")
 				.Add(Restrictions.Eq("Person", person))

@@ -63,13 +63,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 18.12.2007
         /// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
 		public SkillDay(DateOnly skillDayDate, ISkill skill, IScenario scenario,
             IEnumerable<IWorkloadDay> workloadDayCollection, IEnumerable<ISkillDataPeriod> skillDataPeriodCollection)
             : this()
         {
-            InParameter.NotNull("scenario", scenario);
-            InParameter.NotNull("skill", skill);
+            InParameter.NotNull(nameof(scenario), scenario);
+            InParameter.NotNull(nameof(skill), skill);
 
             _currentDate = skillDayDate;
             _skill = skill;
@@ -106,12 +105,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-08
         /// </remarks>
-        public virtual DateOnly CurrentDate
-        {
-            get { return _currentDate; }
-        }
+        public virtual DateOnly CurrentDate => _currentDate;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the Scenario
         /// </summary>
         public virtual IScenario Scenario
@@ -128,12 +124,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 18.12.2007
         /// </remarks>
-        public virtual ISkill Skill
-        {
-            get { return _skill; }
-        }
+        public virtual ISkill Skill => _skill;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the skill data period collection.
         /// </summary>
         /// <value>The skill data period collection.</value>
@@ -141,12 +134,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-30
         /// </remarks>
-        public virtual ReadOnlyCollection<ISkillDataPeriod> SkillDataPeriodCollection
-        {
-            get { return new ReadOnlyCollection<ISkillDataPeriod>(_skillDataPeriodCollection.ToArray()); }
-        }
+        public virtual ReadOnlyCollection<ISkillDataPeriod> SkillDataPeriodCollection => new ReadOnlyCollection<ISkillDataPeriod>(_skillDataPeriodCollection.ToArray());
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the total tasks.
         /// </summary>
         /// <value>The total tasks.</value>
@@ -163,16 +153,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-	    public virtual double? OverrideTasks
-	    {
-		    get { return null; }
-	    }
+	    public virtual double? OverrideTasks => null;
 
 	    public virtual TimeSpan? OverrideAverageTaskTime { get; set; }
 	    public virtual TimeSpan? OverrideAverageAfterTaskTime { get; set; }
-
-	  
-
+		
 	    /// <summary>
         /// Gets the workload day collection.
         /// </summary>
@@ -181,12 +166,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2007-12-17
         /// </remarks>
-        public virtual ReadOnlyCollection<IWorkloadDay> WorkloadDayCollection
-        {
-            get { return new ReadOnlyCollection<IWorkloadDay>(_workloadDayCollection.ToArray()); }
-        }
+        public virtual ReadOnlyCollection<IWorkloadDay> WorkloadDayCollection => new ReadOnlyCollection<IWorkloadDay>(_workloadDayCollection.ToArray());
 
-        /// <summary>
+	    /// <summary>
         /// Gets the forecasted incoming demand for the skill day.
         /// </summary>
         /// <value>The forecasted incoming demand.</value>
@@ -285,7 +267,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void AddWorkloadDay(IWorkloadDay workloadDay)
         {
-            InParameter.NotNull("workloadDay", workloadDay);
+            InParameter.NotNull(nameof(workloadDay), workloadDay);
             workloadDay.ClearParents();
             workloadDay.SetParent(this);
             verifyAndAttachWorkloadDays(new List<IWorkloadDay> { workloadDay });
@@ -401,10 +383,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					_skill.SkillType.ForecastSource != ForecastSource.Retail)
                 {
                     var nextOpenSkillDay = _skillDayCalculator.FindNextOpenDay(this);
-                    if (nextOpenSkillDay != null)
-                    {
-                        nextOpenSkillDay.RecalculateDailyTasks();
-                    }
+	                nextOpenSkillDay?.RecalculateDailyTasks();
                 }
             }
         }
@@ -422,8 +401,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void CreateFromTemplate(DateOnly skillDayDate, ISkill skill, IScenario scenario, ISkillDayTemplate skillDayTemplate)
         {
-            InParameter.NotNull("scenario", scenario);
-            InParameter.NotNull("skill", skill);
+            InParameter.NotNull(nameof(scenario), scenario);
+            InParameter.NotNull(nameof(skill), skill);
 
             _currentDate = skillDayDate;
             _skill = skill;
@@ -678,10 +657,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (IWorkloadDay day in workloadDayCollection)
             {
                 if (!day.Workload.Skill.Equals(_skill))
-                    throw new ArgumentException("Incorrect skill found", "workloadDayCollection");
+                    throw new ArgumentException("Incorrect skill found", nameof(workloadDayCollection));
 
                 if (day.CurrentDate != _currentDate)
-                    throw new ArgumentException("Incorrect date found", "workloadDayCollection");
+                    throw new ArgumentException("Incorrect date found", nameof(workloadDayCollection));
 
                 day.AddParent(this);
                 day.SetParent(this);

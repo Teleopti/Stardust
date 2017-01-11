@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                                         byte numberOfLayers)
             : base(activity, activityLengthWithSegment)
         {
-            InParameter.CheckTimeSpanAtLeastOneTick("startSegment", startSegment);
+            InParameter.CheckTimeSpanAtLeastOneTick(nameof(startSegment), startSegment);
             _startSegment = startSegment;
             _autoPositionIntervalSegment = startSegment;
             _numberOfLayers = numberOfLayers;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                                               TimeSpan startSegment)
                                         : base(activity, activityLengthWithSegment)
         {
-            InParameter.CheckTimeSpanAtLeastOneTick("startSegment", startSegment);
+            InParameter.CheckTimeSpanAtLeastOneTick(nameof(startSegment), startSegment);
             _startSegment = startSegment;
             _autoPositionIntervalSegment = startSegment;
             _numberOfLayers = 1;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
             set
             {
-                InParameter.CheckTimeSpanAtLeastOneTick("value", value);
+                InParameter.CheckTimeSpanAtLeastOneTick(nameof(value), value);
                 _startSegment = value;
             }
         }
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
             set
             {
-                InParameter.CheckTimeSpanAtLeastOneTick("value", value);
+                InParameter.CheckTimeSpanAtLeastOneTick(nameof(value), value);
                 _startSegment = value;
                 _autoPositionIntervalSegment = value;
             }

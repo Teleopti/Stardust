@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		/// </remarks>
 		public static IEnumerable<T>[] Batch<T>(this IEnumerable<T> source, int batchSize)
 		{
-			InParameter.ValueMustBeLargerThanZero("batchSize", batchSize);
+			InParameter.ValueMustBeLargerThanZero(nameof(batchSize), batchSize);
 			var wrappedSource = new List<T>(source);
 			var count = (int) Math.Ceiling(wrappedSource.Count/(double) batchSize);
 			var partitions = new List<T>[count];
@@ -100,13 +100,13 @@ namespace Teleopti.Ccc.Domain.Collection
 		/// </remarks>
 		public static IEnumerable<T> GetRandom<T>(this IEnumerable<T> list, int numberOfElements, bool onlyUnique)
 		{
-			InParameter.NotNull("list", list);
+			InParameter.NotNull(nameof(list), list);
 			return RandomIterator(list, numberOfElements, onlyUnique);
 		}
 
 		public static IEnumerable<T> RandomIterator<T>(this IEnumerable<T> list)
 		{
-			InParameter.NotNull("list", list);
+			InParameter.NotNull(nameof(list), list);
 			return RandomIterator(list, list.Count(), true);
 		}
 

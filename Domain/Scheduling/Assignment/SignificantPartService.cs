@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private SignificantPartService(ISignificantPartProvider source)
         {
-            InParameter.NotNull("source", source);
+            InParameter.NotNull(nameof(source), source);
             _source = source;
         }
 

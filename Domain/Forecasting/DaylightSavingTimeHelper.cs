@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public static DateTime GetUtcStartTimeOfOneDay(DateTime localDateTime, TimeZoneInfo timeZone)
         {
-            InParameter.NotNull("timeZone", timeZone);
+            InParameter.NotNull(nameof(timeZone), timeZone);
             var startTime = localDateTime;
             if (timeZone.IsInvalidTime(startTime))
             {

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             IList<IActivityRestriction> activityRestrictionCollection
             )
         {
-            InParameter.NotNull("activityRestrictionCollection", activityRestrictionCollection);
+            InParameter.NotNull(nameof(activityRestrictionCollection), activityRestrictionCollection);
 
             _startTimeLimitation = startTimeLimitation;
             _endTimeLimitation = endTimeLimitation;
@@ -88,22 +88,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		#endregion
 
-		public StartTimeLimitation StartTimeLimitation
-        {
-            get { return _startTimeLimitation; }
-        }
+		public StartTimeLimitation StartTimeLimitation => _startTimeLimitation;
 
-        public EndTimeLimitation EndTimeLimitation
-        {
-            get { return _endTimeLimitation; }
-        }
+	    public EndTimeLimitation EndTimeLimitation => _endTimeLimitation;
 
-        public WorkTimeLimitation WorkTimeLimitation
-        {
-            get { return _workTimeLimitation; }
-        }
+	    public WorkTimeLimitation WorkTimeLimitation => _workTimeLimitation;
 
-        public IAbsence Absence
+	    public IAbsence Absence
         {
             get { return _absence; }
             set { _absence = value; }
@@ -122,8 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             get { return _dayOff; }
             set { _dayOff = value; }
         }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
 		public bool ValidateWorkShiftInfo(IWorkShiftProjection workShiftProjection)
         {
 			TimePeriod workShiftTimePeriod = workShiftProjection.TimePeriod;
@@ -286,7 +276,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private static TimeSpan? resolveTime(TimeSpan? thisTime, TimeSpan? otherTime, bool min)
         {
-            //TimeSpan? ret;
             if (!thisTime.HasValue && !otherTime.HasValue)
                 return null;
 
@@ -361,12 +350,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public bool NotAvailable { get; set; }
 
         
-        public IList<IActivityRestriction> ActivityRestrictionCollection
-        {
-            get { return _activityRestrictionCollection; }
-        }
+        public IList<IActivityRestriction> ActivityRestrictionCollection => _activityRestrictionCollection;
 
-        public bool MustHave { get; set; }
+	    public bool MustHave { get; set; }
 
 		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
         {
@@ -386,17 +372,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             return true;
         }
+		
+        public bool IsRestriction => IsAvailabilityDay || IsPreferenceDay || IsRotationDay || IsStudentAvailabilityDay;
 
-        
-        public bool IsRestriction
-        {
-            get
-            {
-                return IsAvailabilityDay || IsPreferenceDay || IsRotationDay || IsStudentAvailabilityDay;
-            }
-        }
-
-		private static bool visualLayerCollectionSatisfiesOneActivityRestriction(TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
+	    private static bool visualLayerCollectionSatisfiesOneActivityRestriction(TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
         {
             IActivityRestriction actRestriction = activityRestriction;
             

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		public IEnumerable<IRevision> FindRevisions(IPerson agent, DateOnly dateOnly, int maxResult)
 		{
-			InParameter.ValueMustBeLargerThanZero("maxResult", maxResult);
+			InParameter.ValueMustBeLargerThanZero(nameof(maxResult), maxResult);
 
 			var revisionIds = new HashSet<long>();
 			var dateTime = convertFromDateOnly(agent, dateOnly);
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			var ret = new List<IPersistableScheduleData>();
 			var dateTime = convertFromDateOnly(agent, dateOnly);
-			findAssignment(agent, dateOnly, revision).ForEach(ret.Add);
-			findAbsence(agent, dateTime, revision, ret).ForEach(ret.Add);
+			ret.AddRange(findAssignment(agent, dateOnly, revision));
+			ret.AddRange(findAbsence(agent, dateTime, revision, ret));
 			return ret;
 		}
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		private static DateTimePeriod convertFromDateOnly(IPerson agent, DateOnly date)
 		{
-			return new DateOnlyPeriod(date, date).ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone());
+			return date.ToDateOnlyPeriod().ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone());
 		}
 
 		private ISession session()

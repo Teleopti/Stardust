@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         public BusinessRuleResponse(Type typeOfRule, string message, bool error, bool mandatory, DateTimePeriod period, IPerson person, DateOnlyPeriod dateOnlyPeriod, string friendlyName)
         {
-            InParameter.NotNull("person", person);
+            InParameter.NotNull(nameof(person), person);
             _typeOfRule = typeOfRule;
             _message = message ?? string.Empty;
             _error = error;
@@ -26,42 +26,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	        FriendlyName = friendlyName;
         }
 
-        public Type TypeOfRule
-        {
-            get { return _typeOfRule; }
-        }
+        public Type TypeOfRule => _typeOfRule;
 
-        public string Message
-        {
-            get { return _message; }
-        }
+	    public string Message => _message;
 
-        public bool Error
-        {
-            get { return _error; }
-        }
+	    public bool Error => _error;
 
-        public bool Overridden { get; set; }
+	    public bool Overridden { get; set; }
 
-        public bool Mandatory
-        {
-            get { return _mandatory; }
-        }
+        public bool Mandatory => _mandatory;
 
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
+	    public DateTimePeriod Period => _period;
 
-		public DateOnlyPeriod DateOnlyPeriod
-		{
-			get { return _dateOnlyPeriod; }
-		}
+	    public DateOnlyPeriod DateOnlyPeriod => _dateOnlyPeriod;
 
-        public IPerson Person
-        {
-            get { return _person; }
-        }
+	    public IPerson Person => _person;
 
 	    public string FriendlyName { get; }
 

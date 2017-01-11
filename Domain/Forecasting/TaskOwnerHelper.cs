@@ -20,12 +20,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public IList<ITaskOwner> TaskOwnerDays
-        {
-            get { return _taskOwnerDays; }
-        }
+        public IList<ITaskOwner> TaskOwnerDays => _taskOwnerDays;
 
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="TaskOwnerHelper"/> class.
         /// </summary>
         /// <param name="taskOwnerDays">The task owner days.</param>
@@ -35,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public TaskOwnerHelper(IEnumerable taskOwnerDays)
         {
-            InParameter.NotNull("taskOwnerDays", taskOwnerDays);
+            InParameter.NotNull(nameof(taskOwnerDays), taskOwnerDays);
 
             _taskOwnerDays = taskOwnerDays.OfType<ITaskOwner>().ToList();
         }

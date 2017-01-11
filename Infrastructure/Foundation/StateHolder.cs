@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public static void Initialize(IState clientCache, IMessageBrokerComposite messageBroker)
 		{
-			InParameter.NotNull("clientCache", clientCache);
+			InParameter.NotNull(nameof(clientCache), clientCache);
 			if (InstanceInternal == null)
 			{
 				lock (_locker)
@@ -36,20 +36,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				throw new StateHolderException("Singleton StateHolder must only be initialized once per application domain.");
 		}
 
-		public new static StateHolder Instance
-		{
-			get { return (StateHolder) StateHolderReader.Instance; }
-		}
+		public new static StateHolder Instance => (StateHolder) StateHolderReader.Instance;
 
-		internal IState State
-		{
-			get { return _state; }
-		}
-		
-		public override IStateReader StateReader
-		{
-			get { return _state; }
-		}
+		internal IState State => _state;
+
+		public override IStateReader StateReader => _state;
 
 		public void Terminate()
 		{

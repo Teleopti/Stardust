@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public MultisiteDay(DateOnly multisiteDayDate, IMultisiteSkill skill, IScenario scenario)
             :this()
         {
-            InParameter.NotNull("scenario", scenario);
-            InParameter.NotNull("skill", skill);
+            InParameter.NotNull(nameof(scenario), scenario);
+            InParameter.NotNull(nameof(skill), skill);
             
             _multisiteDayDate = multisiteDayDate;
             _skill = skill;
@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void CreateFromTemplate(DateOnly multisiteDayDate, IMultisiteSkill skill, IScenario scenario, IMultisiteDayTemplate multisiteDayTemplate)
         {
-            InParameter.NotNull("scenario", scenario);
-            InParameter.NotNull("skill", skill);
+            InParameter.NotNull(nameof(scenario), scenario);
+            InParameter.NotNull(nameof(skill), skill);
 
             _multisiteDayDate = multisiteDayDate;
             _skill = skill;
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void ApplyTemplate(IMultisiteDayTemplate templateDay)
         {
-            InParameter.NotNull("templateDay", templateDay);
+            InParameter.NotNull(nameof(templateDay), templateDay);
 
             //Copy the TemplateMultisitePeriod to the MultisiteDay
             TimeZoneInfo raptorTimeZoneInfo = _skill.TimeZone;
@@ -136,12 +136,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-30
         /// </remarks>
-        public virtual ReadOnlyCollection<IMultisitePeriod> MultisitePeriodCollection
-        {
-            get { return new ReadOnlyCollection<IMultisitePeriod>(_multisitePeriodCollection.ToArray()); }
-        }
+        public virtual ReadOnlyCollection<IMultisitePeriod> MultisitePeriodCollection => new ReadOnlyCollection<IMultisitePeriod>(_multisitePeriodCollection.ToArray());
 
-        private void VerifyAndAttachMultisitePeriods(IEnumerable<IMultisitePeriod> multisitePeriodCollection)
+	    private void VerifyAndAttachMultisitePeriods(IEnumerable<IMultisitePeriod> multisitePeriodCollection)
         {
             foreach (IMultisitePeriod multisitePeriod in multisitePeriodCollection)
             {
@@ -177,12 +174,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-22
         /// </remarks>
-        public virtual DateOnly MultisiteDayDate
-        {
-            get { return _multisiteDayDate; }
-        }
+        public virtual DateOnly MultisiteDayDate => _multisiteDayDate;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the skill.
         /// </summary>
         /// <value>The skill.</value>
@@ -190,12 +184,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-22
         /// </remarks>
-        public virtual IMultisiteSkill Skill
-        {
-            get { return _skill; }
-        }
+        public virtual IMultisiteSkill Skill => _skill;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the scenario.
         /// </summary>
         /// <value>The scenario.</value>
@@ -203,12 +194,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-22
         /// </remarks>
-        public virtual IScenario Scenario
-        {
-            get { return _scenario; }
-        }
+        public virtual IScenario Scenario => _scenario;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the template reference.
         /// </summary>
         /// <value>The template reference.</value>
@@ -216,12 +204,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-06-09
         /// </remarks>
-        public virtual ITemplateReference TemplateReference
-        {
-            get { return _templateReference; }
-        }
+        public virtual ITemplateReference TemplateReference => _templateReference;
 
-        /// <summary>
+	    /// <summary>
         /// Updates the name of the template.
         /// </summary>
         /// <remarks>
@@ -336,12 +321,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-29
         /// </remarks>
-        public virtual IList<ISkillDay> ChildSkillDays
-        {
-            get { return _childSkillDays; }
-        }
+        public virtual IList<ISkillDay> ChildSkillDays => _childSkillDays;
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the multisite skill day.
         /// </summary>
         /// <value>The multisite skill day.</value>
@@ -478,10 +460,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		private void triggerValueChangedEvent()
 		{
-			if (ValueChanged != null)
-			{
-				ValueChanged.Invoke(this, EventArgs.Empty);
-			}
+			ValueChanged?.Invoke(this, EventArgs.Empty);
 		}
 
     	public virtual object Clone()

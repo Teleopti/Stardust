@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         /// </remarks>
         public PersonAvailability(IPerson person, IAvailabilityRotation availability, DateOnly startDate) 
         {
-            InParameter.NotNull("person", person);
-            InParameter.NotNull("availability", availability);
-            InParameter.NotNull("startDate", startDate);
+            InParameter.NotNull(nameof(person), person);
+            InParameter.NotNull(nameof(availability), availability);
+            InParameter.NotNull(nameof(startDate), startDate);
 
             _person = person;
             _availability = availability;
@@ -59,17 +59,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             set { _startDate = value; }
         }
 
-        public virtual IPerson Person
-        {
-            get { return _person; }
-        }
+        public virtual IPerson Person => _person;
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+	    public virtual bool IsDeleted => _isDeleted;
 
-        public virtual IAvailabilityRotation Availability
+	    public virtual IAvailabilityRotation Availability
         {
             get
             {
@@ -94,7 +88,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         public virtual IAvailabilityDay GetAvailabilityDay(DateOnly currentDate)
         {
             if (currentDate < _startDate)
-                throw new ArgumentOutOfRangeException("currentDate", currentDate, "Date must not be less than start date");
+                throw new ArgumentOutOfRangeException(nameof(currentDate), currentDate, "Date must not be less than start date");
             
             int dateDiff = currentDate.Subtract(_startDate).Days;
             return _availability.FindAvailabilityDay(dateDiff + StartDay);

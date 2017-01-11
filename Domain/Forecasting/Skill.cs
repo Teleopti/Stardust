@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-                InParameter.NotNull("TimeZone", value);
+                InParameter.NotNull(nameof(TimeZone), value);
                 _cachedTimeZone = value;
                 _timeZone = _cachedTimeZone.Id;
             }
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set
             {
                 if (value < 1 || value > 7)
-                    throw new ArgumentOutOfRangeException("value", value, "Priority must be between 1 and 7.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "Priority must be between 1 and 7.");
                 _priority = value;
             }
         }
@@ -250,23 +250,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set
             {
                 if (value.Value > 1)
-                    throw new ArgumentOutOfRangeException("value", value, "OverstaffingFactor can not be higher than 100%.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "OverstaffingFactor can not be higher than 100%.");
                 if (value.Value < 0)
-                    throw new ArgumentOutOfRangeException("value", value, "OverstaffingFactor can not be less than 0%.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "OverstaffingFactor can not be less than 0%.");
                 _overstaffingFactor = value;
             }
         }
 
         public virtual void AddWorkload(IWorkload workload)
         {
-            InParameter.NotNull("workload", workload);
+            InParameter.NotNull(nameof(workload), workload);
             _workloadCollection.Add(workload);
             workload.Skill = this;
         }
 
         public virtual void RemoveWorkload(IWorkload workload)
         {
-            InParameter.NotNull("workload", workload);
+            InParameter.NotNull(nameof(workload), workload);
             if (_workloadCollection.Contains(workload))
             {
                 _workloadCollection.Remove(workload);
@@ -282,12 +282,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Read only wrapper around the workload list.
         /// </summary>
         /// <value>The workload.</value>
-        public virtual IEnumerable<IWorkload> WorkloadCollection
-        {
-            get { return _workloadCollection; }
-        }
+        public virtual IEnumerable<IWorkload> WorkloadCollection => _workloadCollection;
 
-        public virtual IActivity Activity
+		public virtual IActivity Activity
         {
             get { return _activity; }
             set { _activity = value; }
@@ -356,12 +353,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-02-12
         /// </remarks>
-        public virtual IDictionary<int, ISkillDayTemplate> TemplateWeekCollection
-        {
-            get { return new ReadOnlyDictionary<int, ISkillDayTemplate>(_templateWeekCollection); }
-        }
+        public virtual IDictionary<int, ISkillDayTemplate> TemplateWeekCollection => new ReadOnlyDictionary<int, ISkillDayTemplate>(_templateWeekCollection);
 
-        /// <summary>
+		/// <summary>
         /// Removes the template.
         /// </summary>
         /// <param name="templateName">Name of the template.</param>
@@ -405,7 +399,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    set
 		    {
 				if (value < 1 || value > 100)
-					throw new ArgumentOutOfRangeException("value", value, "Priority must be between 1 and 100.");
+					throw new ArgumentOutOfRangeException(nameof(value), value, "Priority must be between 1 and 100.");
 				_maxParallelTasks = value;
 		    }
 	    }

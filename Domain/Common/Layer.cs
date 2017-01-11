@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    protected Layer(T payload, DateTimePeriod period)
         {
-            InParameter.NotNull("payload", payload);
+            InParameter.NotNull(nameof(payload), payload);
             _period = period;
             _payload = payload;
         }
@@ -27,13 +27,9 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        public virtual T Payload
-        {
-            get { return _payload; }
-        }
-
-
-        public virtual object Clone()
+        public virtual T Payload => _payload;
+		
+	    public virtual object Clone()
         {
             object retObj = NoneEntityClone();
 
@@ -44,9 +40,8 @@ namespace Teleopti.Ccc.Domain.Common
         {
             var retObj = (ILayer<T>)MemberwiseClone();
 	        var entity = retObj as IEntity;
-			if(entity != null)
-				entity.SetId(null);
-            return retObj;
+	        entity?.SetId(null);
+	        return retObj;
         }
 
         public virtual ILayer<T> EntityClone()

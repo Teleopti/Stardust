@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	    public VisualLayer(IPayload payload, DateTimePeriod period, IActivity highestPriorityActivity, IPerson person,
 		    Guid? personAbsenceId = null) : base(payload, period)
 	    {
-		    InParameter.NotNull("highestPriorityActivity", highestPriorityActivity);
+		    InParameter.NotNull(nameof(highestPriorityActivity), highestPriorityActivity);
 
 		    HighestPriorityActivity = highestPriorityActivity;
 		    Person = person;
@@ -106,12 +106,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return false;
         }
 
-    	public Guid ActivityId
-    	{
-			get { return HighestPriorityActivity != null ? HighestPriorityActivity.Id.GetValueOrDefault() : Guid.Empty; }
-    	}
+    	public Guid ActivityId => HighestPriorityActivity != null ? HighestPriorityActivity.Id.GetValueOrDefault() : Guid.Empty;
 
-		public IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod)
+	    public IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod)
 		{
 			var ret = new VisualLayer(Payload, newPeriod, HighestPriorityActivity, Person, PersonAbsenceId)
 			{

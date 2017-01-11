@@ -25,12 +25,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	    private BlockFinderType _blockFinderTypeForAdvanceOptimization;
 	    
-
-	   [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void MapTo(IExtraPreferences target, IList<GroupPageLight> groupPages, IList<GroupPageLight> groupPagesForTeamBlockPer)
 		{
-		    if (groupPagesForTeamBlockPer == null) throw new ArgumentNullException("groupPagesForTeamBlockPer");
-		    InParameter.NotNull("groupPages", groupPages);
+		    if (groupPagesForTeamBlockPer == null) throw new ArgumentNullException(nameof(groupPagesForTeamBlockPer));
+		    InParameter.NotNull(nameof(groupPages), groupPages);
 
 			foreach (var groupPage in groupPages)
 			{

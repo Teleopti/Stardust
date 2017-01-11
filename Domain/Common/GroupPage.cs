@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         public GroupPage(string description) : this()
         {
-            InParameter.NotStringEmptyOrNull("description", description);
+            InParameter.NotStringEmptyOrNull(nameof(description), description);
             _description = new Description(description);
         }
 
@@ -43,15 +43,9 @@ namespace Teleopti.Ccc.Domain.Common
             set { _descriptionKey = value; }
         }
 
-        public virtual string Key
-        {
-            get
-            {
-                return _descriptionKey ?? _description.Name;
-            }
-        }
+        public virtual string Key => _descriptionKey ?? _description.Name;
 
-		public virtual string IdOrDescriptionKey { 
+	    public virtual string IdOrDescriptionKey { 
 			get
 			{
 				if (DescriptionKey == null && Id.HasValue)
@@ -79,14 +73,11 @@ namespace Teleopti.Ccc.Domain.Common
             set { _rootNodeName = value; }
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        public virtual void AddRootPersonGroup(IRootPersonGroup group)
+	    public virtual void AddRootPersonGroup(IRootPersonGroup group)
         {
-            InParameter.NotNull("group", group);
+            InParameter.NotNull(nameof(group), group);
 
             if (!_rootGroupCollection.Contains(group))
             {
@@ -97,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual void RemoveRootPersonGroup(IRootPersonGroup group)
         {
-            InParameter.NotNull("group", group);
+            InParameter.NotNull(nameof(group), group);
 
             if (_rootGroupCollection.Contains(group))
             {

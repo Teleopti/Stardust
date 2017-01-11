@@ -132,19 +132,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         public virtual void AddRuleSet(IWorkShiftRuleSet workShiftRuleSet)
         {
-            InParameter.NotNull("workShiftRuleSet", workShiftRuleSet);
+            InParameter.NotNull(nameof(workShiftRuleSet), workShiftRuleSet);
             WorkShiftRuleSet concrete = workShiftRuleSet as WorkShiftRuleSet;
-            if(concrete!=null)
-                concrete.RuleSetBagCollectionWritable.Add(this);
-            _ruleSetCollection.Add(workShiftRuleSet);
+	        concrete?.RuleSetBagCollectionWritable.Add(this);
+	        _ruleSetCollection.Add(workShiftRuleSet);
         }
 
         public virtual void RemoveRuleSet(IWorkShiftRuleSet workShiftRuleSet)
         {
             WorkShiftRuleSet concrete = workShiftRuleSet as WorkShiftRuleSet;
-            if (concrete != null)
-                concrete.RuleSetBagCollectionWritable.Remove(this);
-            _ruleSetCollection.Remove(workShiftRuleSet);
+	        concrete?.RuleSetBagCollectionWritable.Remove(this);
+	        _ruleSetCollection.Remove(workShiftRuleSet);
         }
 
         public virtual void ClearRuleSetCollection()
@@ -166,17 +164,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             return categories;
         }
 
-        public virtual bool IsChoosable
-        {
-            get { return !IsDeleted; }
-        }
+        public virtual bool IsChoosable => !IsDeleted;
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+	    public virtual bool IsDeleted => _isDeleted;
 
-        #region ICloneableEntity<RuleSetBag> Members (2) 
+	    #region ICloneableEntity<RuleSetBag> Members (2) 
 
         /// <summary>
         /// Returns a clone of this T with IEntitiy.Id set to null.

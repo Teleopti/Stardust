@@ -49,14 +49,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return ruleRepsonses.Where(r => !r.Overridden).ToList();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates,
             IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter)
         {
-            InParameter.NotNull("person1", person1);
-            InParameter.NotNull("person2", person2);
-            InParameter.NotNull("dates", dates);
-            InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+            InParameter.NotNull(nameof(person1), person1);
+            InParameter.NotNull(nameof(person2), person2);
+            InParameter.NotNull(nameof(dates), dates);
+            InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
             InParameter.ListCannotBeEmpty("dates", dates);
             if (person1 == person2)
                 throw new ArgumentException("The Persons must be different");

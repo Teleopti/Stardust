@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         /// </remarks>
         protected internal NHibernateStatelessUnitOfWork(IStatelessSession session)
         {
-            InParameter.NotNull("session", session);
+            InParameter.NotNull(nameof(session), session);
             _session = session;
         }
 
@@ -32,12 +32,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         /// Gets the session.
         /// </summary>
         /// <value>The session.</value>
-		protected internal IStatelessSession Session
-        {
-            get { return _session; }
-        }
+		protected internal IStatelessSession Session => _session;
 
-    	///<summary>
+	    ///<summary>
         ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         ///</summary>
         /// <remarks>
@@ -82,10 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         /// </summary>
         protected virtual void ReleaseManagedResources()
         {
-            if (_session != null)
-            {
-                _session.Dispose();
-            }
+	        _session?.Dispose();
         }
     }
 }

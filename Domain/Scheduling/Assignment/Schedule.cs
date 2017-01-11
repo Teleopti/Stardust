@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	    protected Schedule(IScheduleDictionary owner, IScheduleParameters parameters)
         {
-            InParameter.NotNull("parameters", parameters);
-            InParameter.NotNull("owner", owner);
+            InParameter.NotNull(nameof(parameters), parameters);
+            InParameter.NotNull(nameof(owner), owner);
             _owner = owner;
             _parameters = parameters;
             _businessRuleResponseCollection = new List<IBusinessRuleResponse>();
@@ -37,24 +37,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				new SchedulePublishedSpecificationForAbsence(Person.WorkflowControlSet, ScheduleVisibleReasons.Any);
         }
 
-        public IScheduleDictionary Owner
-        {
-            get { return _owner; }
-        }
+        public IScheduleDictionary Owner => _owner;
+		
+	    public DateTimePeriod Period => _parameters.Period;
 
-
-        public DateTimePeriod Period
-        {
-            get { return _parameters.Period; }
-        }
-
-        public IPerson Person
-        {
-            get { return _parameters.Person; }
-        }
-
-
-        /// <summary>
+	    public IPerson Person => _parameters.Person;
+		
+	    /// <summary>
         /// Gets the business rule response internal collection.
         /// </summary>
         /// <value>The business rule response internal collection.</value>
@@ -62,13 +51,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         ///  Created by: Ola
         ///  Created date: 2008-08-22    
         /// </remarks>
-        public  IList<IBusinessRuleResponse> BusinessRuleResponseInternalCollection
-        {
-            get { return _businessRuleResponseCollection; }
-        }
-
-
-        protected IScheduleData[] ScheduleDataInternalCollection()
+        public  IList<IBusinessRuleResponse> BusinessRuleResponseInternalCollection => _businessRuleResponseCollection;
+		
+	    protected IScheduleData[] ScheduleDataInternalCollection()
         {
             IScheduleData[] retList;
             lock(lockObject)
@@ -83,13 +68,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return ScheduleDataInternalCollection().OfType<IPersistableScheduleData>();
         }
 
-        public IScenario Scenario
-        {
-            get { return _parameters.Scenario; }
-        }
-
-
-        public virtual void Add(IScheduleData scheduleData)
+        public IScenario Scenario => _parameters.Scenario;
+		
+	    public virtual void Add(IScheduleData scheduleData)
         {
             if (checkData(scheduleData))
             {
@@ -167,7 +148,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return new DateTimePeriod(scheduleDataClone.Min(d => d.Period.StartDateTime), scheduleDataClone.Max(d => d.Period.EndDateTime));
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected IScheduleDay ScheduleDay(IDateOnlyAsDateTimePeriod dateAndDateTime, bool includeUnpublished, IEnumerable<DateOnlyPeriod> availableDatePeriods)
         {
             IEnumerable<IScheduleData> filteredData;
@@ -209,12 +189,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private bool checkData(IScheduleData scheduleData)
         {
-            InParameter.NotNull("scheduleData", scheduleData);
+            InParameter.NotNull(nameof(scheduleData), scheduleData);
 	      
             if(!scheduleData.Person.Equals(Person))
-                throw new ArgumentOutOfRangeException("scheduleData", "Trying to add schedule info to incorrect person.");
+                throw new ArgumentOutOfRangeException(nameof(scheduleData), "Trying to add schedule info to incorrect person.");
             if (!scheduleData.BelongsToScenario(Scenario))
-                throw new ArgumentOutOfRangeException("scheduleData", "Trying to add schedule info to incorrect scenario.");
+                throw new ArgumentOutOfRangeException(nameof(scheduleData), "Trying to add schedule info to incorrect scenario.");
             return CheckPermission(scheduleData);
         }
 

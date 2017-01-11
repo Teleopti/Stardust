@@ -85,17 +85,11 @@ namespace Teleopti.Ccc.Domain.Common
         /// <value>
         /// 	<c>true</c> if this instance is choosable; otherwise, <c>false</c>.
         /// </value>
-        public virtual bool IsChoosable
-        {
-            get { return !IsDeleted; }
-        }
+        public virtual bool IsChoosable => !IsDeleted;
 
-        public virtual ReadOnlyCollection<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
-        {
-            get { return new ReadOnlyCollection<IMultiplicatorDefinitionSet>(_multiplicatorDefinitionSetCollection); }
-        }
+	    public virtual ReadOnlyCollection<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection => new ReadOnlyCollection<IMultiplicatorDefinitionSet>(_multiplicatorDefinitionSetCollection);
 
-        public virtual TimeSpan PlanningTimeBankMax
+	    public virtual TimeSpan PlanningTimeBankMax
         {
             get { return _planningTimeBankMax; }
             set
@@ -117,12 +111,9 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        public virtual TimeSpan PositivePeriodWorkTimeTolerance
+	    public virtual TimeSpan PositivePeriodWorkTimeTolerance
         {
             get { return _positivePeriodWorkTimeTolerance; }
             set { _positivePeriodWorkTimeTolerance = value; }
@@ -136,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual void AddMultiplicatorDefinitionSetCollection(IMultiplicatorDefinitionSet definitionSet)
         {
-            InParameter.NotNull("definitionSet", definitionSet);
+            InParameter.NotNull(nameof(definitionSet), definitionSet);
 
             if (!_multiplicatorDefinitionSetCollection.Contains(definitionSet))
                 _multiplicatorDefinitionSetCollection.Add(definitionSet);

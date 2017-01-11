@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private QueryFilter(string name, Action<ISession, object> enable)
 		{
 			_enable = enable;
-			InParameter.NotNull("name", name);
+			InParameter.NotNull(nameof(name), name);
 			Name = name;
 		}
 

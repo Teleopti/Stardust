@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		//should be removed
 		public void SetMainShiftLayers(IPersonAssignment personassignment, IEditableShift editableShift)
 		{
-			InParameter.NotNull("personassignment", personassignment);
-			InParameter.NotNull("editableShift", editableShift);
+			InParameter.NotNull(nameof(personassignment), personassignment);
+			InParameter.NotNull(nameof(editableShift), editableShift);
 
 			personassignment.ClearMainActivities();
 			foreach (var layer in editableShift.LayerCollection)

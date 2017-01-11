@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Kpi
         ///  Created by: Ola
         ///  Created date: 2008-04-17    
         /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public virtual IScorecardPeriod Period
         {
             get
@@ -45,12 +44,9 @@ namespace Teleopti.Ccc.Domain.Kpi
         ///  Created by: Ola
         ///  Created date: 2008-04-15    
         /// </remarks>
-        public virtual ReadOnlyCollection<IKeyPerformanceIndicator> KeyPerformanceIndicatorCollection
-        {
-            get { return new ReadOnlyCollection<IKeyPerformanceIndicator>(_keyPerformanceIndicatorCollection); }
-        }
+        public virtual ReadOnlyCollection<IKeyPerformanceIndicator> KeyPerformanceIndicatorCollection => new ReadOnlyCollection<IKeyPerformanceIndicator>(_keyPerformanceIndicatorCollection);
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -74,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Kpi
         /// </remarks>
         public virtual void AddKpi(IKeyPerformanceIndicator kpi)
         {
-            InParameter.NotNull("Kpi", kpi);
+            InParameter.NotNull(nameof(kpi), kpi);
             _keyPerformanceIndicatorCollection.Add(kpi);
         }
 
@@ -88,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Kpi
         /// </remarks>
         public virtual void RemoveKpi(IKeyPerformanceIndicator kpi)
         {
-            InParameter.NotNull("Kpi", kpi);
+            InParameter.NotNull(nameof(kpi), kpi);
             _keyPerformanceIndicatorCollection.Remove(kpi);
         }
     }

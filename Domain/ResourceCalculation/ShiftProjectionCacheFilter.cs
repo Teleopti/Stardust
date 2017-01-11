@@ -332,8 +332,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IList<IShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
         {
-			InParameter.NotNull("groupOfPersons", groupOfPersons);
-			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+			InParameter.NotNull(nameof(groupOfPersons), groupOfPersons);
+			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
 			foreach (var person in groupOfPersons)
             {
                 var range = scheduleDictionary[person];

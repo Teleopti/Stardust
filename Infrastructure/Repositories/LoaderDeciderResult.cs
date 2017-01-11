@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public LoaderDeciderResult(DateTimePeriod period, Guid[] peopleResult, Guid[] skillResult, Guid[] siteResult)
 		{
-			InParameter.NotNull("peopleResult",peopleResult);
-			InParameter.NotNull("skillResult", skillResult);
+			InParameter.NotNull(nameof(peopleResult),peopleResult);
+			InParameter.NotNull(nameof(skillResult), skillResult);
 
 			_period = period;
 			PeopleGuidDependencies = peopleResult;
@@ -28,13 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public Guid[] SiteGuidDependencies { get; private set; }
 
-		public double PercentageOfPeopleFiltered
-		{
-			get
-			{
-				return _percentageOfPeopleFiltererd * 100;
-			}
-		}
+		public double PercentageOfPeopleFiltered => _percentageOfPeopleFiltererd * 100;
 
 		public int FilterPeople(ICollection<IPerson> people)
 		{

@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 
 		public Memento(IOriginator<T> owner, T oldState)
 		{
-			InParameter.NotNull("owner", owner);
-			InParameter.NotNull("oldState", oldState);
+			InParameter.NotNull(nameof(owner), owner);
+			InParameter.NotNull(nameof(oldState), oldState);
 			_owner = owner;
 			_state = oldState;
 		}

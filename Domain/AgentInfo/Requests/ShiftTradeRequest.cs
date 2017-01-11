@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						Period.EndDateTimeLocal(timezone).ToString(datePattern));
             }
 
-            InParameter.NotNull("acceptingPerson",acceptingPerson);
+            InParameter.NotNull(nameof(acceptingPerson),acceptingPerson);
             var okBothParts = ShiftTradeStatus.OkByBothParts;
             if (Person.Equals(acceptingPerson))
             {
@@ -434,36 +434,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             set { _typeDescription = value; }
         }
 
-    	public override RequestType RequestType
-    	{
-    		get { return RequestType.ShiftTradeRequest; }
-    	}
-
-
+    	public override RequestType RequestType => RequestType.ShiftTradeRequest;
+		
 	    public virtual IShiftExchangeOffer Offer
 	    {
 		    get { return _offer; }
 		    set { _offer = value; }
 	    }
+		
+        public override Description RequestPayloadDescription => new Description();
+		
+	    public override IList<IPerson> ReceiversForNotification => _receiverOfNotification;
 
-
-	    /// <summary>
-        /// Payload description
-        /// </summary>
-        public override Description RequestPayloadDescription
-        {
-            get { return new Description(); }
-        }
-
-
-        public override IList<IPerson> ReceiversForNotification
-        {
-            get
-            {
-                return _receiverOfNotification;
-            }
-        }
-        private void SetNotification(string notification,IList<IPerson> receivers)
+	    private void SetNotification(string notification,IList<IPerson> receivers)
         {
             _receiverOfNotification = receivers;
             TextForNotification = notification;

@@ -18,11 +18,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Swap(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IList<IScheduleDay> selectionOne, IList<IScheduleDay> selectionTwo, IDictionary<IPerson, IList<DateOnly>> locks)
 		{
-
-			InParameter.NotNull("selectionOne", selectionOne);
-			InParameter.NotNull("selectionTwo", selectionTwo);
-			InParameter.NotNull("locks", locks);
-			InParameter.NotNull("schedulePartModifyAndRollbackService", schedulePartModifyAndRollbackService);
+			InParameter.NotNull(nameof(selectionOne), selectionOne);
+			InParameter.NotNull(nameof(selectionTwo), selectionTwo);
+			InParameter.NotNull(nameof(locks), locks);
+			InParameter.NotNull(nameof(schedulePartModifyAndRollbackService), schedulePartModifyAndRollbackService);
 			InParameter.ListsHaveSameSize(selectionOne, selectionTwo);
 
 			for (var i = 0; i < selectionOne.Count; i++)
@@ -105,8 +104,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var hasSwapData = false;
 
-			InParameter.NotNull("scheduleDay", scheduleDay);
-			InParameter.NotNull("tempDay", tempDay);
+			InParameter.NotNull(nameof(scheduleDay), scheduleDay);
+			InParameter.NotNull(nameof(tempDay), tempDay);
 
 			var personAssignment = scheduleDay.PersonAssignment();
 			if (personAssignment != null)

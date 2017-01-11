@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void Create(DateOnly workloadDate, IWorkload workload, IList<TimePeriod> openHourList)
         {
-            InParameter.NotNull("workload", workload);
-            InParameter.NotNull("openHourList", openHourList);
+            InParameter.NotNull(nameof(workload), workload);
+            InParameter.NotNull(nameof(openHourList), openHourList);
 
             _workload = workload;
             _currentDate = workloadDate;
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (openHourList.Any(o => o.StartTime < _workload.Skill.MidnightBreakOffset ||
                 o.EndTime > _workload.Skill.MidnightBreakOffset.Add(TimeSpan.FromDays(1))))
             {
-                throw new ArgumentOutOfRangeException("openHourList", "The open hour list contains open hours outside the defined midnight break plus 24 hours.");
+                throw new ArgumentOutOfRangeException(nameof(openHourList), "The open hour list contains open hours outside the defined midnight break plus 24 hours.");
             }
 
             //Split day

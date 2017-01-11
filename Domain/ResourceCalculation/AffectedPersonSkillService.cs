@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public AffectedPersonSkillService(IEnumerable<ISkill> skillCollection)
         {
-            InParameter.NotNull("validSkillCollection", skillCollection);
+            InParameter.NotNull(nameof(skillCollection), skillCollection);
             _skillCollection = skillCollection;
         }
 

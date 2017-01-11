@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
         public ApplicationFunction(string functionCode)
         {
-            InParameter.NotStringEmptyOrNull("functionCode", functionCode);
+            InParameter.NotStringEmptyOrNull(nameof(functionCode), functionCode);
             _functionCode = functionCode;
             _functionDescription = functionCode;
         }
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         public ApplicationFunction(string functionCode, IApplicationFunction parent)
             : this(functionCode)
         {
-            InParameter.NotNull("parent", parent);
+            InParameter.NotNull(nameof(parent), parent);
             Parent = parent;
         }
 
@@ -161,15 +161,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Created by: tamasb
         /// Created date: 17/08/2008
         /// </remarks>
-        public virtual string LocalizedFunctionDescription
-        {
-            get
-            {
-                return _userTextTranslator.TranslateText(FunctionDescription);
-            }
-        }
+        public virtual string LocalizedFunctionDescription => _userTextTranslator.TranslateText(FunctionDescription);
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the FunctionCode value.
         /// </summary>
         /// <value>The FunctionCode value.</value>
@@ -271,10 +265,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             set 
             { 
                 _parent = value;
-                if (_parent != null)
-                    (_parent).AddChild(this);
 
-                _functionPathCache = null;
+	            _parent?.AddChild(this);
+	            _functionPathCache = null;
             }
         }
 
@@ -286,12 +279,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Created by: tamasb
         /// Created date: 12/3/2007
         /// </remarks>
-        public virtual ReadOnlyCollection<IParentChildEntity> ChildCollection
-        {
-            get { return new ReadOnlyCollection<IParentChildEntity>(_children); }
-        }
+        public virtual ReadOnlyCollection<IParentChildEntity> ChildCollection => new ReadOnlyCollection<IParentChildEntity>(_children);
 
-        /// <summary>
+	    /// <summary>
         /// Adds the child.
         /// </summary>
         /// <param name="child">The child.</param>
@@ -348,12 +338,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             set { _isPreliminary = value; }
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        /// <summary>
+	    /// <summary>
         /// Creates a new object that is a copy of the current instance.
         /// </summary>
         /// <returns>

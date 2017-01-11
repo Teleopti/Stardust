@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public ICollection<IValidatedVolumeDay> FindRange(DateOnlyPeriod period, IWorkload workload)
         {
-            InParameter.NotNull("period", period);
-            InParameter.NotNull("workload", workload);
+            InParameter.NotNull(nameof(period), period);
+            InParameter.NotNull(nameof(workload), workload);
 
             IList<IValidatedVolumeDay> validatedVolumeDays = Session.CreateCriteria(typeof(ValidatedVolumeDay), "VVD")
                 .Add(Restrictions.Eq("Workload", workload))
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public DateOnly FindLastValidatedDay(IWorkload workload)
         {
-            InParameter.NotNull("workload", workload);
+            InParameter.NotNull(nameof(workload), workload);
 
             DateOnly? latestDate = Session.CreateCriteria(typeof(ValidatedVolumeDay))
                 .Add(Restrictions.Eq("Workload", workload))

@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public SkillDayLoadHelper(ISkillDayRepository skillDayRepository, IMultisiteDayRepository multisiteDayRepository)
 		{
-			InParameter.NotNull("multisiteDayRepository", multisiteDayRepository);
-			InParameter.NotNull("skillDayRepository", skillDayRepository);
+			InParameter.NotNull(nameof(multisiteDayRepository), multisiteDayRepository);
+			InParameter.NotNull(nameof(skillDayRepository), skillDayRepository);
 
 			_skillDayRepository = skillDayRepository;
 			_multisiteDayRepository = multisiteDayRepository;
@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-05-08
         /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
             if (skills == null || scenario==null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();

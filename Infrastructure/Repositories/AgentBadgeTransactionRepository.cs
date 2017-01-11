@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		
 		public IAgentBadgeTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate)
 		{
-			InParameter.NotNull("person", person);
-			InParameter.NotNull("badgeType", badgeType);
-			InParameter.NotNull("calculateDate", calculateDate);
+			InParameter.NotNull(nameof(person),person);
+			InParameter.NotNull(nameof(badgeType), badgeType);
+			InParameter.NotNull(nameof(calculateDate),calculateDate);
 
 			var result = Session.CreateCriteria(typeof(IAgentBadgeTransaction), "badge")
 				.Add(Restrictions.Eq("Person", person))

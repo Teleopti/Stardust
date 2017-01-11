@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 		public WorkShiftRuleSet(IWorkShiftTemplateGenerator generator)
         {
-            InParameter.NotNull("generator", generator);
+            InParameter.NotNull(nameof(generator), generator);
             _extenderCollection = new List<IWorkShiftExtender>();
             _limiterCollection = new List<IWorkShiftLimiter>();
             _ruleSetBagCollection = new List<IRuleSetBag>();
@@ -60,37 +60,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 		}
 		// ReSharper restore ConvertToAutoProperty
 
-		public virtual ReadOnlyCollection<IWorkShiftExtender> ExtenderCollection
-        {
-            get { return new ReadOnlyCollection<IWorkShiftExtender>(_extenderCollection); }
-        }
+		public virtual ReadOnlyCollection<IWorkShiftExtender> ExtenderCollection => new ReadOnlyCollection<IWorkShiftExtender>(_extenderCollection);
 
-        public virtual ReadOnlyCollection<IWorkShiftLimiter> LimiterCollection
-        {
-            get { return new ReadOnlyCollection<IWorkShiftLimiter>(_limiterCollection); }
-        }
+	    public virtual ReadOnlyCollection<IWorkShiftLimiter> LimiterCollection => new ReadOnlyCollection<IWorkShiftLimiter>(_limiterCollection);
 
-        public virtual ReadOnlyCollection<IRuleSetBag> RuleSetBagCollection
-        {
-            get { return new ReadOnlyCollection<IRuleSetBag>(_ruleSetBagCollection); }
-        }
+	    public virtual ReadOnlyCollection<IRuleSetBag> RuleSetBagCollection => new ReadOnlyCollection<IRuleSetBag>(_ruleSetBagCollection);
 
-        public virtual void RemoveRuleSetBag(IRuleSetBag ruleSetBag)
+	    public virtual void RemoveRuleSetBag(IRuleSetBag ruleSetBag)
         {
-            InParameter.NotNull("ruleSetBag", ruleSetBag);
+            InParameter.NotNull(nameof(ruleSetBag), ruleSetBag);
             var concrete = ruleSetBag as RuleSetBag;
-            if (concrete != null)
-                concrete.RuleSetCollectionWritable.Remove(this);
-            _ruleSetBagCollection.Remove(ruleSetBag);
+	        concrete?.RuleSetCollectionWritable.Remove(this);
+	        _ruleSetBagCollection.Remove(ruleSetBag);
         }
 
         
-        public virtual ICollection<IRuleSetBag> RuleSetBagCollectionWritable
-        {
-	        get { return _ruleSetBagCollection; }
-        }
+        public virtual ICollection<IRuleSetBag> RuleSetBagCollectionWritable => _ruleSetBagCollection;
 
-        public virtual IWorkShiftTemplateGenerator TemplateGenerator
+	    public virtual IWorkShiftTemplateGenerator TemplateGenerator
         {
             get { return _templateGenerator; }
             set { _templateGenerator = value; }
@@ -102,21 +89,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             set { _defaultAccessibility = value; }
         }
 
-        public virtual IEnumerable<DayOfWeek> AccessibilityDaysOfWeek
-        {
-            get { return _accessibilityDaysOfWeek; }
-        }
+        public virtual IEnumerable<DayOfWeek> AccessibilityDaysOfWeek => _accessibilityDaysOfWeek;
 
-				public virtual IEnumerable<DateOnly> AccessibilityDates
-        {
-            get { return _accessibilityDates; }
-        }
-		#endregion Properties 
+	    public virtual IEnumerable<DateOnly> AccessibilityDates => _accessibilityDates;
+
+	    #endregion Properties 
 
 		#region Methods (4) 
 		public virtual void AddExtender(IWorkShiftExtender extender)
         {
-            InParameter.NotNull("extender", extender);
+            InParameter.NotNull(nameof(extender), extender);
             if(extender.Parent != null)
                 throw new ArgumentException("extender.Parent nust be null");
             extender.SetParent(this);
@@ -125,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         public virtual void AddLimiter(IWorkShiftLimiter limiter)
         {
-            InParameter.NotNull("limiter", limiter);
+            InParameter.NotNull(nameof(limiter), limiter);
             if (limiter.Parent != null)
                 throw new ArgumentException("limiter.Parent nust be null");
             limiter.SetParent(this);
@@ -134,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 		public virtual void InsertExtender(int index, IWorkShiftExtender extender)
 		{
-			InParameter.NotNull("extender", extender);
+			InParameter.NotNull(nameof(extender), extender);
 			if (extender.Parent != null)
 				throw new ArgumentException("extender.Parent must be null");
 			extender.SetParent(this);
@@ -173,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         public virtual void AddAccessibilityDate(DateOnly date)
         {
-						_accessibilityDates.Add(date);
+	        _accessibilityDates.Add(date);
         }
 
 		public virtual void RemoveAccessibilityDate(DateOnly date)

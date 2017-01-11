@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 return TemplateReference.DisplayName(DayOfWeek, _name, false);
             }
             set {
-                InParameter.NotNull("Name", value);
+                InParameter.NotNull(nameof(Name), value);
                 _name = value; }
         }
         /// <summary>
@@ -68,12 +68,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-02-18
         /// </remarks>
-        public static DateOnly BaseDate
-        {
-            get { return new DateOnly(1800, 1, 1); }
-        }
+        public static DateOnly BaseDate => new DateOnly(1800, 1, 1);
 
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="SkillDayTemplate"/> class for NHibernate.
         /// </summary>
         /// <remarks>
@@ -94,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public SkillDayTemplate(string name, IEnumerable<ITemplateSkillDataPeriod> skillDataPeriodCollection)
             :this()
         {
-            InParameter.NotStringEmptyOrNull("name", name);
+            InParameter.NotStringEmptyOrNull(nameof(name), name);
             _name = name;
         	_updatedDate = DateTime.UtcNow;
             VerifyAndAttachSkillDataPeriods(skillDataPeriodCollection);
@@ -119,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (ITemplateSkillDataPeriod skillDataPeriod in templateSkillDataPeriodCollection)
             {
                 if (skillDataPeriod.Period.StartDateTime > BaseDate.AddDays(3).Date)
-                    throw new ArgumentOutOfRangeException("templateSkillDataPeriodCollection","The date is out of order.");
+                    throw new ArgumentOutOfRangeException(nameof(templateSkillDataPeriodCollection),"The date is out of order.");
                 skillDataPeriod.SetParent(this);
                 _templateSkillDataPeriodCollection.Add(skillDataPeriod);
             }
@@ -255,7 +252,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             if (!list.All(i => Equals(i.Parent)))
             {
-                throw new ArgumentException("All items in supplied list must have this template as parent.", "list");
+                throw new ArgumentException("All items in supplied list must have this template as parent.", nameof(list));
             }
             TimeSpan resolutionAsTimeSpan = TimeSpan.FromMinutes(SkillResolution);
             foreach (ITemplateSkillDataPeriod skillDataPeriod in list)
@@ -304,7 +301,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             if (!list.All(i => Equals(i.Parent)))
             {
-                throw new ArgumentException("All items in supplied list must have this template as parent.", "list");
+                throw new ArgumentException("All items in supplied list must have this template as parent.", nameof(list));
             }
             ITemplateSkillDataPeriod newSkillDataPeriod = TemplateSkillDataPeriod.Merge(list, this);
             list.ForEach(i => _templateSkillDataPeriodCollection.Remove(i));

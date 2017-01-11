@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.Domain.Helper
             IList<ISkillStaffPeriod> skillStaffPeriods,
             IEnumerable<IMultisitePeriod> multisitePeriods)
         {
-            InParameter.NotNull("skillStaffPeriods", skillStaffPeriods);
-            InParameter.NotNull("multisitePeriods", multisitePeriods);
+            InParameter.NotNull(nameof(skillStaffPeriods), skillStaffPeriods);
+            InParameter.NotNull(nameof(multisitePeriods), multisitePeriods);
 
             IEnumerable<IPeriodized> periodizedSkillStaff = skillStaffPeriods.OfType<IPeriodized>();
             IEnumerable<IPeriodized> periodizedMultisite = multisitePeriods.OfType<IPeriodized>();

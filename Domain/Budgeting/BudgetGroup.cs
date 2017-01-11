@@ -23,23 +23,17 @@ namespace Teleopti.Ccc.Domain.Budgeting
 	        _skillCollection = new HashSet<ISkill>();
         }
 
-        public virtual IEnumerable<ISkill> SkillCollection
-        {
-            get { return _skillCollection; }
-        }
+        public virtual IEnumerable<ISkill> SkillCollection => _skillCollection;
 
-        public virtual string Name
+	    public virtual string Name
         {
             get { return _name; }
             set { _name = value; }
         }
-        public virtual int DaysPerYear
-        {
-            get { return _daysPerYear; }
-        }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public virtual TimeZoneInfo TimeZone
+        public virtual int DaysPerYear => _daysPerYear;
+
+	    public virtual TimeZoneInfo TimeZone
         {
             get
             {
@@ -49,32 +43,23 @@ namespace Teleopti.Ccc.Domain.Budgeting
             }
             set
             {
-                InParameter.NotNull("TimeZone", value);
+                InParameter.NotNull(nameof(TimeZone), value);
                 _timeZone = value.Id;
             }
         }
 
-        public virtual IEnumerable<ICustomShrinkage> CustomShrinkages
-        {
-            get { return _customShrinkages; }
-        }
+        public virtual IEnumerable<ICustomShrinkage> CustomShrinkages => _customShrinkages;
 
-        public virtual IEnumerable<ICustomEfficiencyShrinkage> CustomEfficiencyShrinkages
-        {
-            get { return _customEfficiencyShrinkages; }
-        }
+	    public virtual IEnumerable<ICustomEfficiencyShrinkage> CustomEfficiencyShrinkages => _customEfficiencyShrinkages;
 
-        public virtual void AddSkill(ISkill skill)
+	    public virtual void AddSkill(ISkill skill)
         {
             _skillCollection.Add(skill);
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        public virtual void SetDeleted()
+	    public virtual void SetDeleted()
         {
             _isDeleted = true;
         }
@@ -84,31 +69,29 @@ namespace Teleopti.Ccc.Domain.Budgeting
             _skillCollection.Clear();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public virtual void AddCustomShrinkage(ICustomShrinkage customShrinkage)
         {
-            InParameter.NotNull("customShrinkage",customShrinkage);
+            InParameter.NotNull(nameof(customShrinkage),customShrinkage);
             customShrinkage.SetParent(this);
             _customShrinkages.Add(customShrinkage);
         }
 
         public virtual void RemoveCustomShrinkage(ICustomShrinkage customShrinkage)
         {
-            InParameter.NotNull("customShrinkage", customShrinkage);
+            InParameter.NotNull(nameof(customShrinkage), customShrinkage);
             _customShrinkages.Remove(customShrinkage);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public virtual void AddCustomEfficiencyShrinkage(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
         {
-            InParameter.NotNull("customEfficiencyShrinkage", customEfficiencyShrinkage);
+            InParameter.NotNull(nameof(customEfficiencyShrinkage), customEfficiencyShrinkage);
             customEfficiencyShrinkage.SetParent(this);
             _customEfficiencyShrinkages.Add(customEfficiencyShrinkage);
         }
 
         public virtual void RemoveCustomEfficiencyShrinkage(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
         {
-            InParameter.NotNull("customEfficiencyShrinkage", customEfficiencyShrinkage);
+            InParameter.NotNull(nameof(customEfficiencyShrinkage), customEfficiencyShrinkage);
             _customEfficiencyShrinkages.Remove(customEfficiencyShrinkage);
         }
 
@@ -135,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
         public virtual void UpdateCustomShrinkage(Guid id, ICustomShrinkage newCustomShrinkage)
         {
-            InParameter.NotNull("newCustomShrinkage", newCustomShrinkage);
+            InParameter.NotNull(nameof(newCustomShrinkage), newCustomShrinkage);
             var foundShrinkage = _customShrinkages.FirstOrDefault(s => s.Id.Equals(id));
             if (foundShrinkage != null)
             {
@@ -148,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
         public virtual void UpdateCustomEfficiencyShrinkage(Guid id, ICustomEfficiencyShrinkage newCustomEfficiencyShrinkage)
         {
-            InParameter.NotNull("newCustomEfficiencyShrinkage", newCustomEfficiencyShrinkage);
+            InParameter.NotNull(nameof(newCustomEfficiencyShrinkage), newCustomEfficiencyShrinkage);
             var foundShrinkage = _customEfficiencyShrinkages.FirstOrDefault(s => s.Id.Equals(id));
             if (foundShrinkage != null)
             {

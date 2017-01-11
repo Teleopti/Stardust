@@ -6,13 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>
-    /// Created by: kosalanp
-    /// Created date: 2008-06-24
-    /// </remarks>
     public abstract class PersonGroupBase : AggregateEntity
     {
         private Description _description;
@@ -41,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Common
         protected PersonGroupBase(string description)
             : this()
         {
-            InParameter.NotStringEmptyOrNull("description", description);
+            InParameter.NotStringEmptyOrNull(nameof(description), description);
             _description = new Description(description);
         }
 
@@ -67,12 +60,9 @@ namespace Teleopti.Ccc.Domain.Common
         /// Created by: kosalanp
         /// Created date: 2008-06-24
         /// </remarks>
-        public virtual ReadOnlyCollection<IPerson> PersonCollection
-        {
-            get { return new ReadOnlyCollection<IPerson>(_personCollection.ToArray()); }
-        }
+        public virtual ReadOnlyCollection<IPerson> PersonCollection => new ReadOnlyCollection<IPerson>(_personCollection.ToArray());
 
-        /// <summary>
+	    /// <summary>
         /// Gets the child collection.
         /// </summary>
         /// <value>The child collection.</value>
@@ -80,12 +70,9 @@ namespace Teleopti.Ccc.Domain.Common
         /// Created by: kosalanp
         /// Created date: 2008-06-26
         /// </remarks>
-        public virtual ReadOnlyCollection<IChildPersonGroup> ChildGroupCollection
-        {
-            get { return new ReadOnlyCollection<IChildPersonGroup>(_childGroupCollection); }
-        }
+        public virtual ReadOnlyCollection<IChildPersonGroup> ChildGroupCollection => new ReadOnlyCollection<IChildPersonGroup>(_childGroupCollection);
 
-        /// <summary>
+	    /// <summary>
         /// Adds the person to group.
         /// </summary>
         /// <param name="person">The person.</param>
@@ -95,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public virtual void AddPerson(IPerson person)
         {
-            InParameter.NotNull("person", person);
+            InParameter.NotNull(nameof(person),person);
             _personCollection.Add(person);
         }
 
@@ -109,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public virtual void RemovePerson(IPerson person)
         {
-            InParameter.NotNull("person", person);
+            InParameter.NotNull(nameof(person), person);
             _personCollection.Remove(person);
         }
 
@@ -123,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public virtual void AddChildGroup(IChildPersonGroup group)
         {
-            InParameter.NotNull("group", group);
+            InParameter.NotNull(nameof(group), group);
 
             if (!_childGroupCollection.Contains(group))
             {
@@ -142,14 +129,14 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public virtual void RemoveChildGroup(IChildPersonGroup group)
         {
-            InParameter.NotNull("group", group);
+            InParameter.NotNull(nameof(group), group);
             _childGroupCollection.Remove(group);
         }
 
         public virtual IAggregateRoot Entity { get; set; }
 
-        public virtual bool IsTeam { get { return Entity != null && typeof(ITeam).IsInstanceOfType(Entity); } }
+        public virtual bool IsTeam => Entity != null && typeof(ITeam).IsInstanceOfType(Entity);
 
-        public virtual bool IsSite { get { return Entity != null && typeof(ISite).IsInstanceOfType(Entity); } }
+	    public virtual bool IsSite => Entity != null && typeof(ISite).IsInstanceOfType(Entity);
     }
 }

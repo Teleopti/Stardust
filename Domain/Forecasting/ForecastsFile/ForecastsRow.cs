@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 
         public ForecastsRow(string forecastsRow)
         {
-            InParameter.NotNull("forecastsRow",forecastsRow);
+            InParameter.NotNull(nameof(forecastsRow),forecastsRow);
             var parts = forecastsRow.Split(seperator);
             SkillName = parts[0];
             LocalDateTimeFrom = DateTime.ParseExact(parts[1], dateTimeFormat, CultureInfo);

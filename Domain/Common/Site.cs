@@ -64,12 +64,9 @@ namespace Teleopti.Ccc.Domain.Common
         /// Read only wrapper around the actual list.
         /// </summary>
         /// <value>The teams.</value>
-        public virtual ReadOnlyCollection<ITeam> TeamCollection
-        {
-            get { return new ReadOnlyCollection<ITeam>(_teamCollection); }
-        }
+        public virtual ReadOnlyCollection<ITeam> TeamCollection => new ReadOnlyCollection<ITeam>(_teamCollection);
 
-    	public virtual ReadOnlyCollection<ITeam> SortedTeamCollection
+	    public virtual ReadOnlyCollection<ITeam> SortedTeamCollection
     	{
     		get
     		{
@@ -81,12 +78,9 @@ namespace Teleopti.Ccc.Domain.Common
     		}
     	}
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-    	public virtual int? MaxSeats
+	    public virtual int? MaxSeats
     	{
     		get {
     			return _maxSeats;
@@ -102,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// <param name="team">The team.</param>
         public virtual void AddTeam(ITeam team)
         {
-            InParameter.NotNull("team", team);
+            InParameter.NotNull(nameof(team), team);
             if (!_teamCollection.Contains(team))
             {
                 _teamCollection.Add(team);
@@ -116,17 +110,14 @@ namespace Teleopti.Ccc.Domain.Common
         /// <param name="team">The team.</param>
         public virtual void RemoveTeam(ITeam team)
         {
-            InParameter.NotNull("team", team);
+            InParameter.NotNull(nameof(team), team);
             _teamCollection.Remove(team);
 
         }
 
-		public virtual IEnumerable<ISiteOpenHour> OpenHourCollection
-	    {
-			get { return new ReadOnlyCollection<ISiteOpenHour>(_openHourCollection); }
-	    }
+		public virtual IEnumerable<ISiteOpenHour> OpenHourCollection => new ReadOnlyCollection<ISiteOpenHour>(_openHourCollection);
 
-		public virtual void ClearOpenHourCollection()
+	    public virtual void ClearOpenHourCollection()
 		{
 			_openHourCollection.Clear();
 		}

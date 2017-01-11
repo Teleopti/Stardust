@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <param name="businessUnit">The business unit.</param>
         public virtual void AddAvailableBusinessUnit(IBusinessUnit businessUnit)
         {
-            InParameter.NotNull("businessUnit", businessUnit);
+            InParameter.NotNull(nameof(businessUnit), businessUnit);
             if (!_availableBusinessUnits.Contains(businessUnit))
                 _availableBusinessUnits.Add(businessUnit);
         }
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <param name="site">The site.</param>
         public virtual void AddAvailableSite(ISite site)
         {
-            InParameter.NotNull("site", site);
+            InParameter.NotNull(nameof(site), site);
             if (!_availableSites.Contains(site))
                 _availableSites.Add(site);
         }
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <param name="team">The team.</param>
         public virtual void AddAvailableTeam(ITeam team)
         {
-            InParameter.NotNull("team", team);
+            InParameter.NotNull(nameof(team), team);
             if (!_availableTeams.Contains(team))
                 _availableTeams.Add(team);
         }
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual void DeleteAvailableTeam(ITeam team)
         {
-            InParameter.NotNull("team", team);
+            InParameter.NotNull(nameof(team), team);
             if (_availableTeams.Contains(team))
                 _availableTeams.Remove(team);
         }
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual void DeleteAvailableSite(ISite site)
         {
-            InParameter.NotNull("site", site);
+            InParameter.NotNull(nameof(site), site);
             if (_availableSites.Contains(site))
                 _availableSites.Remove(site);
 
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual void DeleteAvailableBusinessUnit(IBusinessUnit businessUnit)
         {
-            InParameter.NotNull("businessUnit", businessUnit);
+            InParameter.NotNull(nameof(businessUnit), businessUnit);
             if (_availableBusinessUnits.Contains(businessUnit))
                 _availableBusinessUnits.Remove(businessUnit);
 
@@ -216,12 +216,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             }
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        public virtual void SetDeleted()
+	    public virtual void SetDeleted()
         {
             _isDeleted = true;
         }

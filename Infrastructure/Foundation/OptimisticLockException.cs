@@ -52,26 +52,17 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         {
         }
 
-        public Guid RootId
-        {
-            get { return _rootId; }
-        }
+        public Guid RootId => _rootId;
 
-        public string EntityName
-        {
-            get { return _entityName; }
-        }
+	    public string EntityName => _entityName;
 
-        public bool HasEntityInformation
-        {
-            get { return !string.IsNullOrEmpty(_entityName); }
-        }
+	    public bool HasEntityInformation => !string.IsNullOrEmpty(_entityName);
 
 
-		[SecurityCritical]
+	    [SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            InParameter.NotNull("info", info);
+            InParameter.NotNull(nameof(info), info);
 
             info.AddValue("RootId", _rootId);
             info.AddValue("EntityName", _entityName);

@@ -26,8 +26,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public TimePeriodWithSegment(TimePeriod period, TimeSpan segment)
         {
-            InParameter.CheckTimeSpanAtLeastOneTick("segment", segment);
-            InParameter.TimeSpanCannotBeNegative("period.StartTime", period.StartTime);
+            InParameter.CheckTimeSpanAtLeastOneTick(nameof(segment),segment);
+            InParameter.TimeSpanCannotBeNegative(nameof(period.StartTime), period.StartTime);
             
             _period = period;
             _segment = segment;
@@ -56,8 +56,7 @@ namespace Teleopti.Interfaces.Domain
                 )
         {
         }
-
-
+		
         /// <summary>
         /// Gets the period.
         /// </summary>
@@ -66,12 +65,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-03-05
         /// </remarks>
-        public TimePeriod Period
-        {
-            get { return _period; }
-        }
+        public TimePeriod Period => _period;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the segment.
         /// </summary>
         /// <value>The segment.</value>
@@ -79,12 +75,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-03-05
         /// </remarks>
-        public TimeSpan Segment
-        {
-            get { return _segment; }
-        }
+        public TimeSpan Segment => _segment;
 
-        #region IEquatable<TimePeriod> Implementation
+	    #region IEquatable<TimePeriod> Implementation
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.

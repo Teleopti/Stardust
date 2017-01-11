@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<IPersonAvailability> Find(IEnumerable<IPerson> persons,
 												   DateOnlyPeriod period)
 		{
-			InParameter.NotNull("persons", persons);
+			InParameter.NotNull(nameof(persons), persons);
 
 			var personAvailabilites = new List<IPersonAvailability>();
 			foreach (var personBatch in persons.Batch(400))

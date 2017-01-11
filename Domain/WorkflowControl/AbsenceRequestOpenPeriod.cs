@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -50,29 +49,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set { _openForRequestsPeriod = value; }
 		}
 
-		public virtual IList<IAbsenceRequestValidator> PersonAccountValidatorList
-		{
-			get { return _personAccountValidatorList; }
-		}
+		public virtual IList<IAbsenceRequestValidator> PersonAccountValidatorList => _personAccountValidatorList;
 
-		public virtual IList<IAbsenceRequestValidator> StaffingThresholdValidatorList
-		{
-			get { return _staffingThresholdValidatorList; }
-		}
+		public virtual IList<IAbsenceRequestValidator> StaffingThresholdValidatorList => _staffingThresholdValidatorList;
 
 		public virtual IAbsenceRequestValidator StaffingThresholdValidator
 		{
-			get
-			{
-				if (_currentStaffingThresholdValidator == null)
-				{
-					_currentStaffingThresholdValidator = _staffingThresholdValidatorList[_staffingThresholdValidator].CreateInstance();
-				}
-				return _currentStaffingThresholdValidator;
+			get {
+				return _currentStaffingThresholdValidator ??
+					   (_currentStaffingThresholdValidator =
+						   _staffingThresholdValidatorList[_staffingThresholdValidator].CreateInstance());
 			}
 			set
 			{
-				InParameter.NotNull("value", value);
+				InParameter.NotNull(nameof(StaffingThresholdValidator), value);
 				_staffingThresholdValidator = _staffingThresholdValidatorList.IndexOf(value);
 				//otherwise it will find no 1, because it inherits from that
 				if (value is StaffingThresholdWithShrinkageValidator)
@@ -95,10 +85,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 		}
 
-		public virtual IList<IProcessAbsenceRequest> AbsenceRequestProcessList
-		{
-			get { return _absenceRequestProcessList; }
-		}
+		public virtual IList<IProcessAbsenceRequest> AbsenceRequestProcessList => _absenceRequestProcessList;
 
 		public virtual IProcessAbsenceRequest AbsenceRequestProcess
 		{
@@ -112,7 +99,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 			set
 			{
-				InParameter.NotNull("value", value);
+				InParameter.NotNull(nameof(AbsenceRequestProcess), value);
 				_absenceRequestProcess = _absenceRequestProcessList.IndexOf(value);
 				_currentAbsenceRequestProcess = value.CreateInstance();
 				
@@ -136,7 +123,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 			set
 			{
-				InParameter.NotNull("value", value);
+				InParameter.NotNull(nameof(PersonAccountValidator), value);
 				_personAccountValidator = _personAccountValidatorList.IndexOf(value);
 				_currentPersonAccountValidator = value.CreateInstance();
 
