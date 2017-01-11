@@ -9,7 +9,7 @@
 	<div class="operation-container material-depth-1">
 		<div class="left-part">
 
-			<organization-picker ng-if="requests.businessHierarchyToggleEnabled" available-groups="requests.availableGroups" class="organization-picker-container"
+			<organization-picker ng-if="requests.businessHierarchyToggleEnabled" available-groups="requests.availableGroups" selected-team-ids="requests.selectedTeamIds" class="organization-picker-container"
 								on-pick="requests.changeSelectedTeams(teams)"></organization-picker>
 
 

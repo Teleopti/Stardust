@@ -25,14 +25,11 @@
 			return requestsDataService.getAvailableHierarchy(moment().format('YYYY-MM-DD'))
 				.then(function (response) {
 					var data = response.data;
-					var preSelectedTeamIds = data.LogonUserTeamId ? [data.LogonUserTeamId] : [];
-					if (preSelectedTeamIds.length > 0) {
-						vm.selectedTeamIds = preSelectedTeamIds;
-					}
+
+					vm.selectedTeamIds = data.LogonUserTeamId ? [data.LogonUserTeamId] : [];
 
 					vm.availableGroups = {
 						sites: data.Children,
-						preSelectedTeamIds: preSelectedTeamIds
 					};
 				});
 		}
