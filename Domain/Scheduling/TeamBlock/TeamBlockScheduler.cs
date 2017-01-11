@@ -144,12 +144,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right)
 				shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
 
-			var cancelMe = false;
 			for (int dayIndex = 0; dayIndex <= lastIndex; dayIndex++)
 			{
 				var day = selectedBlockDays[dayIndex];
-				if (cancelMe)
-					return false;
 
 				if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Left && dayIndex == lastIndex)
 					shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
