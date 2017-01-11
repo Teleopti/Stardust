@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				var detailModel = new BudgetAbsenceAllowanceDetail
 				{
 					Date = currentDate,
-					Allowance = allowance,
-					TotalAllowance = totalAllowance,
+					ShrinkedAllowance = allowance,
+					FullAllowance = totalAllowance,
 					UsedAbsencesDictionary = absenceDict,
 					UsedTotalAbsences = usedTotalAbsences,
 					AbsoluteDifference = absoluteDiff,

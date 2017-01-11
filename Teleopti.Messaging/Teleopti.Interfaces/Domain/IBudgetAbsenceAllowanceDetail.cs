@@ -4,8 +4,8 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IBudgetAbsenceAllowanceDetail
 	{
-		double Allowance { get; set; }
-		double TotalAllowance { get; set; }
+		double ShrinkedAllowance { get; set; }
+		double FullAllowance { get; set; }
 		IDictionary<IAbsence, double> UsedAbsencesDictionary { get; set; }
 		double UsedTotalAbsences { get; set; }
 		double AbsoluteDifference { get; set; }
