@@ -7,7 +7,7 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 
   function toggleFunction(func) {
     if (angular.isUndefined(ctrl.selectedRole) || !ctrl.selectedRole.Id ){
-      // NoticeService.warning($translate.instant(''), 5000, true);
+      NoticeService.warning($translate.instant('NeedToSelectARoleFirst'), 5000, true);
       return;
     }
 

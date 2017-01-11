@@ -17504,6 +17504,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a role first.
+        /// </summary>
+        public static string NeedToSelectARoleFirst {
+            get {
+                return ResourceManager.GetString("NeedToSelectARoleFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Negative effect:.
         /// </summary>
         public static string NegativeEffectColon {
