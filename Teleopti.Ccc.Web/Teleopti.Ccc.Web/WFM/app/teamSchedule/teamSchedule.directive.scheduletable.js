@@ -52,21 +52,16 @@
 		};
 
 		vm.canToggleSelection = function (currentProjection, viewDate) {
-			if (!vm.toggles.RemoveAbsenceEnabled && !vm.toggles.RemoveActivityEnabled)
+			if ((!vm.toggles.RemoveAbsenceEnabled && !vm.toggles.RemoveActivityEnabled) || !currentProjection.Selectable())
 				return false;
 
-			if(currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
-				return false;
-			}else{
-				var isSameDay = currentProjection.Parent && currentProjection.Parent.Date === moment(viewDate).format('YYYY-MM-DD');
-				return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;
-			}
+			var isSameDay = currentProjection.Parent && currentProjection.Parent.Date === moment(viewDate).format('YYYY-MM-DD');
+			return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;
 		};
 
 		vm.ToggleProjectionSelection = function (currentProjection, viewDate) {
 			if (!vm.canToggleSelection(currentProjection, viewDate)) return;
 			currentProjection.ToggleSelection();
-
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, viewDate);
 		};
 

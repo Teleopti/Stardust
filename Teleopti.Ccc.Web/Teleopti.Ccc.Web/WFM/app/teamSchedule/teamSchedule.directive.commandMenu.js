@@ -181,7 +181,7 @@
 
 		vm.canMoveActivity = function () {
 			return personSelectionSvc.isAnyAgentSelected() &&
-				!(personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount > 0) &&
+				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount === 0 &&
 				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 

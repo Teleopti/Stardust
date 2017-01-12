@@ -75,7 +75,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var personAbsence2 = {
 			ParentPersonAbsences: ["PersonAbsenceId-222"],
@@ -85,7 +86,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var personAbsence3 = {
 			ParentPersonAbsences: ["PersonAbsenceId-111"],
@@ -95,7 +97,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		}
 		var allProjections = [personAbsence1, personAbsence2, personAbsence3];
 		var shift = {
@@ -163,7 +166,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var personActivity2 = {
 			ShiftLayerIds: ['222'],
@@ -173,7 +177,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var personActivity3 = {
 			ShiftLayerIds: ['333'],
@@ -183,7 +188,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var shift = {
@@ -261,7 +267,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var personActivity2 = {
 			ShiftLayerIds: ['222'],
@@ -271,7 +278,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var personActivity3 = {
 			ShiftLayerIds: ['111'],
@@ -281,7 +289,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var shift = {
@@ -404,7 +413,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return true;}
 		};
 		var overtimeActivity = {
 			ShiftLayerIds: ['222'],
@@ -414,7 +424,8 @@ describe('teamschedule schedule table controller tests', function () {
 			Selected: false,
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
-			}
+			},
+			Selectable:function() {return false;}
 		};
 		var allProjections = [personActivity1, overtimeActivity];
 		var shift = {
@@ -513,7 +524,8 @@ describe('teamschedule schedule table controller tests', function () {
 
 					projections.push({
 						Start: dateMomentCopy.add(projectionInfo.startHour, 'hours').format('YYYY-MM-DD HH:mm'),
-						Minutes: moment.duration(projectionInfo.endHour - projectionInfo.startHour, 'hours').asMinutes()
+						Minutes: moment.duration(projectionInfo.endHour - projectionInfo.startHour, 'hours').asMinutes(),
+						Selectable: function(){return true;}
 					});
 				});
 			}

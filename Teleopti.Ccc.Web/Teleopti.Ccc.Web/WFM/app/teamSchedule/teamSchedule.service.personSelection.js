@@ -30,7 +30,7 @@ function PersonSelectionService() {
 									absences.push(targetSelectedAbsence);
 								}
 							});
-						} else if (projection.ShiftLayerIds && !projection.IsOvertime) {
+						} else if (projection.ShiftLayerIds && projection.Selectable()) {
 							var targetShiftLayerIds = projection.ShiftLayerIds;
 							targetShiftLayerIds.forEach(function (shiftLayerId) {
 								var targetSelectedActivity = new SelectedActivity(shiftLayerId, shift.Date);
@@ -104,7 +104,7 @@ function PersonSelectionService() {
 		return personSchedule.Shifts.every( function (shift) {
 			if (shift.Date === moment(viewDate).format("YYYY-MM-DD")) {
 				return shift.Projections.every(function(projection) {
-					if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
+					if (projection.Selectable()) {
 						return projection.Selected;
 					}
 					return true;
@@ -118,7 +118,7 @@ function PersonSelectionService() {
 		angular.forEach(personSchedule.Shifts, function (shift) {
 			if (shift.Date === moment(viewDate).format("YYYY-MM-DD") || !personSchedule.IsSelected) {
 				angular.forEach(shift.Projections, function (projection) {
-					if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
+					if (projection.Selectable()) {
 						projection.Selected = personSchedule.IsSelected;
 					}
 				});
@@ -142,9 +142,8 @@ function PersonSelectionService() {
 			if (currentProjection.ParentPersonAbsences && currentProjection.ParentPersonAbsences.length > 0) {
 				currentProjection.ParentPersonAbsences.forEach(function(absenceId) {
 					addAbsence(personInfo.SelectedAbsences, absenceId, currentShift.Date);
-
 				});
-			} else if (currentProjection.ShiftLayerIds && currentProjection.ShiftLayerIds.length > 0 && !currentProjection.IsOvertime) {
+			} else if (currentProjection.ShiftLayerIds && currentProjection.Selectable()) {
 				currentProjection.ShiftLayerIds.forEach(function(shiftLayerId) {
 					addActivity(personInfo.SelectedActivities, shiftLayerId, currentShift.Date);
 				});
@@ -154,7 +153,7 @@ function PersonSelectionService() {
 				currentProjection.ParentPersonAbsences.forEach(function (absenceId) {
 					deleteAbsence(personInfo.SelectedAbsences, absenceId, currentShift.Date);
 				});
-			} else if (currentProjection.ShiftLayerIds && currentProjection.ShiftLayerIds.length > 0 && !currentProjection.IsOvertime) {
+			} else if (currentProjection.ShiftLayerIds && currentProjection.Selectable()) {
 				currentProjection.ShiftLayerIds.forEach(function (shiftLayerId) {
 					deleteActivity(personInfo.SelectedActivities, shiftLayerId, currentShift.Date);
 				});

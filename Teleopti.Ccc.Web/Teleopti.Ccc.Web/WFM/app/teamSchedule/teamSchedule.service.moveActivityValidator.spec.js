@@ -351,6 +351,48 @@
 			expect(result).toEqual(true);
 		});
 
+		it('should return false when overtime is selected', function () {
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 01:00",
+						"Minutes": 480,
+						"IsOvertime": true
+					},
+					{
+						"ShiftLayerIds": ["layer2"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Phone",
+						"Start": scheduleDate + " 10:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			}
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.Shifts[0].Projections[1].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1]);
+			var newStartMoment = moment("2016-05-13 13:00");
+
+			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+
+			expect(result).toEqual(false);
+			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
+		});
+
 		it('should validate move to time when moving shift to time in current date', function () {
 			var currentDate = "2016-05-13";
 			schedule = {

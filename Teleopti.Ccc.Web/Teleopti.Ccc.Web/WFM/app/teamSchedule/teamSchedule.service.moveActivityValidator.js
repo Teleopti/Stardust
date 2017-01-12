@@ -131,6 +131,10 @@
 			for (var i = 0; i < selectedPersonIds.length; i++) {
 				var personId = selectedPersonIds[i];
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
+				if(hasOvertimeSelected(personSchedule)){
+					invalidPeople.push(personSchedule);
+					continue;
+				}
 
 				var shiftDate = getShiftDate(personSchedule);
 
@@ -152,6 +156,16 @@
 			}
 
 			return invalidPeople.length === 0;
+		}
+
+		function hasOvertimeSelected(personSchedule){
+			var result = [];
+			personSchedule.Shifts.forEach(function(s){
+				result = result.concat(s.Projections.filter(function(p){
+					return p.Selected && p.IsOvertime;
+				}));
+			});
+			return result.length > 0;
 		}
 
 		function calculateMaximumProjectionLengthInMinute(projections) {

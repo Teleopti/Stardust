@@ -1,8 +1,8 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter',personScheduleFactory]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter', 'teamsToggles', 'teamsPermissions', personScheduleFactory]);
 
-	function personScheduleFactory($filter) {
+	function personScheduleFactory($filter, toggles, permissions) {
 
 		var personScheduleFactory = {
 			Create: create
@@ -330,6 +330,20 @@
 				return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
 			}
 			return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
+		};
+
+		ProjectionViewModel.prototype.Selectable = function () {
+			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0) {
+				return true;
+			}
+			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) {
+				return false;
+			}
+			if (!this.IsOvertime) {
+				return true;
+			}
+
+			return toggles.all().WfmTeamSchedule_RemoveOvertime_42481;
 		};
 
 		ProjectionViewModel.prototype.ToggleSelection = function () {
