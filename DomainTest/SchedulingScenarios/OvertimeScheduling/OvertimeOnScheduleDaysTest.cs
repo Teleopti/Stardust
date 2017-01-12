@@ -256,6 +256,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				Be.Empty();
 		}
 
+		[Test, Ignore("#42543: Overtime Duration not OK in certain cases")]
+		public void ShouldScheduleNextAvailablePeriodIfCurrentIsNotBetter()
+		{
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			phoneActivity.InWorkTime = true;
+			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var scenario = new Scenario("_");
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 0.1, new Tuple<TimePeriod, double>(new TimePeriod(9, 45, 10, 0), 1));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(10, 18));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDay);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = definitionSet,
+				ScheduleTag = new ScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(0, 0, 10, 0),
+				SelectedTimePeriod = new TimePeriod(0, 30, 0, 45),
+				SkillActivity = phoneActivity
+			};
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
+		}
+
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
