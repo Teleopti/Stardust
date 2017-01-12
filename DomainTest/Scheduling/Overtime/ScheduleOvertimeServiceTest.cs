@@ -201,42 +201,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		}
 
 		[Test]
-		public void ShouldRollbackWhenRmsGetsHigher()
-		{
-			var period = new DateTimePeriod(2014, 1, 1, 8, 2014, 1, 1, 10);
-			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), new ServiceAgreement());
-			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), new ServiceAgreement());
-			skillStaffPeriod2.SetCalculatedResource65(10);
-			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { skillStaffPeriod1 };
-			IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { skillStaffPeriod2 };
-
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_overtimeLengthDecider.Decide(new OvertimePreferences(), _person, _dateOnly, _scheduleDay,
-					new MinMax<TimeSpan>(TimeSpan.Zero, new TimeSpan(23, 59, 0)), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero),
-					false)).IgnoreArguments().Return(new List<DateTimePeriod> {_dateTimePeriod});
-				Expect.Call(() => _scheduleDay.CreateAndAddOvertime(_activity, _dateTimePeriod, null));
-				Expect.Call(_schedulePartModifyAndRollbackService.ClearModificationCollection);
-				Expect.Call(_schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)).Return(true);
-				_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false);
-				LastCall.Repeat.Twice();
-				_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly.AddDays(1), null, false);
-				LastCall.Repeat.Twice();
-				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods1).Repeat.Twice().IgnoreArguments();
-				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods2).Repeat.Twice().IgnoreArguments();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter);
-				Assert.IsFalse(result);
-			}	
-		}
-
-		[Test]
 		public void ShouldOnlyScheduleOverTimeOnSelectedTimePeriodInViewPointTimeZoneBug39740()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);

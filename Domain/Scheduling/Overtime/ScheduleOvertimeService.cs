@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			var oldRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo);
 
-			DateTimePeriod? overtimeLayerLengthPeriod = null;
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
 			{
 				var periodStartMyViewPoint = dateTimePeriod.StartDateTimeLocal(timeZoneInfo);
@@ -71,42 +70,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				var endOk = periodEndMyViewPoint <= overtimeSpecifiedPeriodEndDateTime && periodEndMyViewPoint > overtimeSpecifiedPeriodStartDateTime;
 				if (!endOk) continue;
 
-				overtimeLayerLengthPeriod = dateTimePeriod;
-				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, overtimeLayerLengthPeriod.Value, overtimePreferences.OvertimeType);
+				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, dateTimePeriod, overtimePreferences.OvertimeType);
 
-				if (!overtimePreferences.AllowBreakNightlyRest)
-					rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
-				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
-					rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+				if (!overtimePreferences.AllowBreakNightlyRest)rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
+				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 				if (!overtimePreferences.AllowBreakWeeklyRest)
 				{
 					IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
 					IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
-					IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
-					rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(),
-						new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
-							new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
+					IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor,dayOffMaxFlexCalculator);
+					rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(),new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
 				}
 
 				_schedulePartModifyAndRollbackService.ClearModificationCollection();
-				if (_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules))
-					break;
+				if (!_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules))
+				{
+					scheduleDay = scheduleDay.ReFetch();
+					continue;
+				}
 
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
+
+				var newRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo);
+
+				if (!(newRmsValue > oldRmsValue)) return true;
+
+				_schedulePartModifyAndRollbackService.Rollback();
 				scheduleDay = scheduleDay.ReFetch();
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
 			}
 
-			if (!overtimeLayerLengthPeriod.HasValue) return false;
-
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
-
-			var newRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo);
-			
-			if (!(newRmsValue > oldRmsValue)) return true;
-
-			_schedulePartModifyAndRollbackService.Rollback();
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
-			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
 			return false;
 		}
 

@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				.Should().Be.Empty();
 		}
 
-		[Test, Ignore("#42543: Overtime Duration not OK in certain cases")]
+		[Test]
 		public void ShouldScheduleNextAvailablePeriodIfCurrentIsNotBetter()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
