@@ -208,44 +208,6 @@ namespace CheckPreRequisites
 			buffer.Append(System.Environment.NewLine);
 			buffer.Append(System.Environment.NewLine);
 
-			foreach (ColumnHeader header in listView2.Columns)
-			{
-				buffer.Append(header.Text.Trim());
-				buffer.Append('\t');
-			}
-			buffer.Append(System.Environment.NewLine);
-
-			foreach (ListViewItem item in listView2.Items)
-			{
-				foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
-				{
-					buffer.Append(subItem.Text);
-					buffer.Append('\t');
-				}
-				buffer.Append(System.Environment.NewLine);
-			}
-
-			buffer.Append(System.Environment.NewLine);
-			buffer.Append(System.Environment.NewLine);
-
-			foreach (ColumnHeader header in listView3.Columns)
-			{
-				buffer.Append(header.Text.Trim());
-				buffer.Append('\t');
-			}
-			buffer.Append(System.Environment.NewLine);
-
-			foreach (ListViewItem item in listView3.Items)
-			{
-				foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
-				{
-					buffer.Append(subItem.Text);
-					buffer.Append('\t');
-				}
-				buffer.Append(System.Environment.NewLine);
-			}
-
-
 			Clipboard.SetText(buffer.ToString().Trim());
 		}
 
@@ -312,10 +274,6 @@ namespace CheckPreRequisites
 		private void ClearListView()
 		{
 			listView1.Items.Clear();
-		}
-
-		private void listView2_SelectedIndexChanged(object sender, EventArgs e)
-		{
 		}
 
 		// ReSharper restore InconsistentNaming
