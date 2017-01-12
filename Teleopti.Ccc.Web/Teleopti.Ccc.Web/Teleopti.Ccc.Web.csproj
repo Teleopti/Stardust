@@ -1521,6 +1521,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personWeekView.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.favoriteSearch.js" />
+    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.directive.waitFor.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.names.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.timezone.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.timezone.spec.js" />
@@ -1532,6 +1533,9 @@
     <Content Include="WFM\app\skillPrio\skillprio.html" />
     <Content Include="WFM\app\skillPrio\skillprio.routes.js" />
     <Content Include="WFM\app\skillPrio\_modules.js" />
+    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapCommon.js" />
+    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.permissions.js" />
+    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.toggles.js" />
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />

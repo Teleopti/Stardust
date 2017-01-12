@@ -4,6 +4,8 @@
 		$httpBackend,
 		personSelectionSvc,
 		validateRulesService,
+		permissions,
+		toggles,
 		overlappedWarningPersonId = ['12345'],
 		noneOverlappedWarningPersonId = ['67890'];
 
@@ -17,6 +19,9 @@
 	beforeEach(function() {
 		personSelectionSvc = new FakePersonSelection();
 		validateRulesService = new FakeValidateRulesService();
+		permissions = new FakePermissions();
+		toggles = new FakeToggles();
+
 
 		module(function($provide) {
 			$provide.value('ShortCuts', function() {
@@ -30,6 +35,9 @@
 			$provide.service('ValidateRulesService', function () {
 				return validateRulesService;
 			});
+
+			$provide.service('teamsPermissions', function() { return permissions; });
+			$provide.service('teamsToggles', function() { return toggles; });
 		});
 
 	});
@@ -48,15 +56,7 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {},
-			permissions: {}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
-
+					
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -74,20 +74,17 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				AbsenceReportingEnabled: true
-			},
-			permissions: {
-				IsAddFullDayAbsenceAvailable: true,
-				IsAddIntradayAbsenceAvailable: true
-			}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
 
+		toggles.set({
+			AbsenceReportingEnabled: true
+		});
+
+		permissions.set({
+			IsAddFullDayAbsenceAvailable: true,
+			IsAddIntradayAbsenceAvailable: true
+		});
+
+		
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -105,18 +102,15 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				AddActivityEnabled: true
-			},
-			permissions: {
-				HasAddingActivityPermission: true
-			}
-		};
 		
-		scope.getConfigurations = function() {
-			return config;
-		};
+		
+		toggles.set({
+			AddActivityEnabled: true
+		});
+
+		permissions.set({
+			HasAddingActivityPermission: true
+		});		
 
 		var element = $compile(html)(scope);
 
@@ -134,20 +128,16 @@
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
-		};
-		var config = {
-			toggles: {
-				AddPersonalActivityEnabled: true
-			},
-			permissions: {
-				HasAddingPersonalActivityPermission: true
-			}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
+		};		
 
+		toggles.set({
+			AddPersonalActivityEnabled: true
+		});
+
+		permissions.set({
+			HasAddingPersonalActivityPermission: true
+		});
+				
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -165,18 +155,14 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				MoveActivityEnabled: true
-			},
-			permissions: {
-				HasMoveActivityPermission: true
-			}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
+
+		toggles.set({
+			MoveActivityEnabled: true
+		});
+
+		permissions.set({
+			HasMoveActivityPermission: true
+		});
 
 		var element = $compile(html)(scope);
 
@@ -195,19 +181,15 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				SwapShiftEnabled: true
-			},
-			permissions: {
-				IsSwapShiftsAvailable: true
-			}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
 
+		toggles.set({
+			SwapShiftEnabled: true
+		});
+
+		permissions.set({
+			IsSwapShiftsAvailable: true
+		});
+		
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -225,19 +207,15 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				RemoveAbsenceEnabled: true
-			},
-			permissions: {
-				IsRemoveAbsenceAvailable: true
-			}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
 
+		toggles.set({
+			RemoveAbsenceEnabled: true
+		});
+
+		permissions.set({
+			IsRemoveAbsenceAvailable: true
+		});
+	
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -255,19 +233,15 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				RemoveActivityEnabled: true
-			},
-			permissions: {
-				HasRemoveActivityPermission: true
-			}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
 
+		toggles.set({
+			RemoveActivityEnabled: true
+		});
+
+		permissions.set({
+			HasRemoveActivityPermission: true
+		});
+		
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -285,21 +259,12 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				UndoScheduleEnabled: true
-			},
-			permissions: {
-				
-			}
-		};
-		
-		scope.getConfigurations = function() {
-			return config;
-		};
+
+		toggles.set({
+			UndoScheduleEnabled: true
+		});		
 
 		var element = $compile(html)(scope);
-
 		scope.$apply();
 
 		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
@@ -314,15 +279,10 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				MoveInvalidOverlappedActivityEnabled: false
-			},
-		};
 
-		scope.getConfigurations = function() {
-			return config;
-		};
+		toggles.set({
+			MoveInvalidOverlappedActivityEnabled: false
+		});		
 
 		var element = $compile(html)(scope);
 
@@ -341,18 +301,14 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				MoveInvalidOverlappedActivityEnabled: true
-			},
-			permissions: {
-				HasMoveInvalidOverlappedActivityPermission: true
-			},
-		};
 
-		scope.getConfigurations = function() {
-			return config;
-		};
+		toggles.set({
+			MoveInvalidOverlappedActivityEnabled: true
+		});
+
+		permissions.set({
+			HasMoveInvalidOverlappedActivityPermission: true
+		});
 
 		var element = $compile(html)(scope);
 
@@ -371,13 +327,16 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				MoveInvalidOverlappedActivityEnabled: true
-			},
-			permissions: {
-				HasMoveInvalidOverlappedActivityPermission: true
-			},
+
+		toggles.set({
+			MoveInvalidOverlappedActivityEnabled: true
+		});
+
+		permissions.set({
+			HasMoveInvalidOverlappedActivityPermission: true
+		});
+
+		var config = {			
 			validateWarningToggle: true
 		};
 
@@ -406,13 +365,16 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				MoveInvalidOverlappedActivityEnabled: true
-			},
-			permissions: {
-				HasMoveInvalidOverlappedActivityPermission: true
-			},
+
+		toggles.set({
+			MoveInvalidOverlappedActivityEnabled: true
+		});
+
+		permissions.set({
+			HasMoveInvalidOverlappedActivityPermission: true
+		});
+
+		var config = {			
 			validateWarningToggle: true
 		};
 
@@ -505,6 +467,26 @@
 		this.getCheckedPersonIds = function (){
 			return personIds;
 		};
+	}
+
+	function FakeToggles() {
+		var _toggles = {};
+		this.set = function(toggles) {
+			_toggles = toggles;
+		}
+		this.all = function() {
+			return _toggles;
+		}
+	}
+
+	function FakePermissions() {
+		var _permissions ={};
+		this.set = function (permissions) {
+			_permissions = permissions;
+		}
+		this.all = function () {
+			return _permissions;
+		}
 	}
 	
 	function FakeValidateRulesService(){

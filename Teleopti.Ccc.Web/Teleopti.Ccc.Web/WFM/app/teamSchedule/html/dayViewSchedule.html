@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)">
+<div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)" wait-for="vm.inited">
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
@@ -52,7 +52,7 @@
 				<i class="mdi mdi-settings"></i>
 			</span>
 
-			<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
+			<teamschedule-command-menu class="teamschedule-command" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 		</div>
 	</div>
 	<div class="con-row teamschedule-body">

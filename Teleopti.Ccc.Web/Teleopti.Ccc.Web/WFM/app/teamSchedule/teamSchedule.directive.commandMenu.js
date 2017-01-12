@@ -9,14 +9,14 @@
 				configurations: '=',
 				triggerCommand: '&?'
 			},
-			controller: ['$scope', 'PersonSelection', 'ValidateRulesService','ShortCuts', 'keyCodes', teamscheduleCommandMenuCtrl],
+			controller: ['$scope', 'PersonSelection', 'ValidateRulesService','ShortCuts', 'keyCodes', 'teamsPermissions', 'teamsToggles',  teamscheduleCommandMenuCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/commandMenu.tpl.html'
 		};
 	}
 
-	function teamscheduleCommandMenuCtrl($scope, personSelectionSvc, validateRulesService, shortCuts, keyCodes) {
+	function teamscheduleCommandMenuCtrl($scope, personSelectionSvc, validateRulesService, shortCuts, keyCodes, teamsPermissions, teamsToggles) {
 		var vm = this;
 
 		function buildAction(label, openSidePanel) {
@@ -227,8 +227,9 @@
 		}
 
 		vm.init = function () {
-			vm.toggles = vm.configurations.toggles;
-			vm.permissions = vm.configurations.permissions;
+			vm.toggles = teamsToggles.all();
+			vm.permissions = teamsPermissions.all();
+		
 			vm.isMenuVisible = function () {
 				return vm.canActiveAddAbsence()
 					|| vm.canActiveSwapShifts()
