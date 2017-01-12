@@ -8,8 +8,8 @@
     staffingController.inject = ['staffingService'];
     function staffingController(staffingService) {
         var vm = this;
-        vm.staffingArea =
-            vm.staffing = monitorskillstaffing.get();
+        vm.staffingArea = 0;
+        vm.staffing = monitorskillstaffing.get();
         vm.getStaffingForSkillArea = getStaffingForSkillArea(areaId);
 
 
@@ -18,7 +18,7 @@
         getSkillAreaStaffing = function (areaId) {
             return staffingService.getSkillAreaStaffing.get(areaId);
         }
-        getSkillStaffing = function(skillId){
+        getSkillStaffing = function (skillId) {
             return staffingService.getSkillAreaStaffing.get(skillId)
         }
     }
