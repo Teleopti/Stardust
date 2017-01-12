@@ -44,7 +44,7 @@
 			};
 			$mdPanel.open(config);
 
-			ctrl.favoriteSearchList.sort(reorderListAccordingToIsDefault);
+			//ctrl.favoriteSearchList.sort(reorderListAccordingToIsDefault);
 		};
 
 		ctrl.$onInit = function () {

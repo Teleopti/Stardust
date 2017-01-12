@@ -20,10 +20,6 @@
 				teamsPermissions.set(data.permissions);				
 				readyDefer.resolve();
 			});
-
-
-
-
 	}
 
 })();
