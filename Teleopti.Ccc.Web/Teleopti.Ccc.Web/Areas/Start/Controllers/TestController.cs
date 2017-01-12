@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		[TestLogTime]
+		[LogInfo]
 		public virtual ViewResult SetCurrentTime(long ticks, string time)
 		{
 			if (time != null)

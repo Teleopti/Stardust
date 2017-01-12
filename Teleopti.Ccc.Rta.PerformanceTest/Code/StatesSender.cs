@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -33,62 +34,57 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		[TestLogTime]
 		public virtual void SendAllAsSingles()
 		{
-			StateChanges().ForEach(stateChange =>
-			{
-				setTime(stateChange);
-				_data.LogonsWorking()
-					.ForEach(logon =>
-					{
-						_http.PostJson(
-							"Rta/State/Change",
-							new ExternalUserStateWebModel
-							{
-								AuthenticationKey = LegacyAuthenticationKey.TheKey,
-								UserCode = logon.UserCode,
-								StateCode = stateChange.StateCode,
-								PlatformTypeId = Guid.Empty.ToString(),
-								SourceId = _testConfiguration.SourceId,
-							});
-					});
-			});
+			sendAll(1);
 		}
 
 		[TestLogTime]
 		public virtual void SendAllAsSmallBatches()
 		{
-			sendAllAsBatches(50);
+			sendAll(50);
 		}
 
 		[TestLogTime]
 		public virtual void SendAllAsLargeBatches()
 		{
-			sendAllAsBatches(1000);
+			sendAll(1000);
 		}
 
-		private void sendAllAsBatches(int size)
+		private void sendAll(int batchSize)
 		{
 			StateChanges().ForEach(stateChange =>
 			{
-				setTime(stateChange);
-				_data.LogonsWorking()
-					.Select(logon => new ExternalUserStateWebModel
-					{
-						AuthenticationKey = LegacyAuthenticationKey.TheKey,
-						UserCode = logon.UserCode,
-						StateCode = stateChange.StateCode,
-						PlatformTypeId = Guid.Empty.ToString(),
-						SourceId = _testConfiguration.SourceId,
-					})
-					.Batch(size)
-					.ForEach(state => _http.PostJson("Rta/State/Batch", state));
+				SendStateChange(batchSize, stateChange);
 			});
 		}
-
-		private void setTime(StateChange stateChange)
+		
+		[LogInfo]
+		protected virtual void SendStateChange(int batchSize, StateChange stateChange)
 		{
 			var now = stateChange.Time.Utc();
 			_now.Is(now);
 			_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
+
+
+			_data.LogonsWorking()
+				.Select(logon => new ExternalUserStateWebModel
+				{
+					AuthenticationKey = LegacyAuthenticationKey.TheKey,
+					UserCode = logon.UserCode,
+					StateCode = stateChange.StateCode,
+					PlatformTypeId = Guid.Empty.ToString(),
+					SourceId = _testConfiguration.SourceId,
+				})
+				.Batch(batchSize)
+				.ForEach(x => Send(x.ToArray()));
+		}
+
+		[LogInfo]
+		protected virtual void Send(IEnumerable<ExternalUserStateWebModel> states)
+		{
+			if (states.Count() == 1)
+				_http.PostJson("Rta/State/Change", states.Single());
+			else
+				_http.PostJson("Rta/State/Batch", states);
 		}
 
 		// ~10% adherence changes
