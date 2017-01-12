@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
 		{
 			var personOwner = PersonFactory.CreatePerson();
 			var resultRep = new FakePayrollResultRepository();
-			var target = new PayrollResultService(new FakeCurrentUnitOfWorkFactory(), resultRep);
+			var target = new PayrollResultService(resultRep);
 			var resultGuid = new Guid("AAB2796D-C440-4A85-BD96-719D8FCBA8ED");
 			var payrollExport = new PayrollExport();
 			payrollExport.Name = "The Ex\\port";

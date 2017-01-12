@@ -67,9 +67,7 @@ namespace Teleopti.Ccc.Domain.Payroll
                 _period = value;
             }
         }
-
-
-
+		
         public virtual void ClearPersons()
         {
             _persons.Clear();
@@ -83,17 +81,11 @@ namespace Teleopti.Ccc.Domain.Payroll
             }
         }
 
-        public virtual ReadOnlyCollection<IPerson> Persons
-        {
-            get { return new ReadOnlyCollection<IPerson>(_persons); }
-        }
+        public virtual ReadOnlyCollection<IPerson> Persons => new ReadOnlyCollection<IPerson>(_persons);
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+	    public virtual bool IsDeleted => _isDeleted;
 
-        public virtual void SetDeleted()
+	    public virtual void SetDeleted()
         {
             _isDeleted = true;
         }

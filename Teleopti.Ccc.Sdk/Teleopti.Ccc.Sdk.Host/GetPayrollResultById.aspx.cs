@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -34,13 +35,12 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				Response.Write(result.FailReason);
 				return;
 			}
-
 			var logOnOff = new LogOnOff(new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
 			logOnOff.LogOn(result.DataSource, result.Person, null);
-
+			
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var service = new PayrollResultService(CurrentUnitOfWorkFactory.Make(), new PayrollResultRepository(new FromFactory(() => result.DataSource.Application)));
+				var service = new PayrollResultService(new PayrollResultRepository(new FromFactory(() => result.DataSource.Application)));
 				var buffer = service.CreatePayrollResultFileNameById(new Guid(guid));
 				Response.AppendHeader("content-disposition", string.Format(CultureInfo.CurrentCulture, "attachment; filename={0}", guid));
 				Response.OutputStream.Write(buffer, 0, buffer.Length);

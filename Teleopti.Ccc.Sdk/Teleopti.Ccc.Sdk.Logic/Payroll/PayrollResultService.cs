@@ -3,33 +3,23 @@ using System.IO;
 using System.Xml;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.PayrollFormatter;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.Payroll
 {
     public class PayrollResultService
     {
-        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IPayrollResultRepository _payrollResultRepository;
+	    private readonly IPayrollResultRepository _payrollResultRepository;
 
-        public PayrollResultService(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPayrollResultRepository payrollResultRepository)
+        public PayrollResultService(IPayrollResultRepository payrollResultRepository)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _payrollResultRepository = payrollResultRepository;
+	        _payrollResultRepository = payrollResultRepository;
         }
 
         public byte[] CreatePayrollResultFileNameById(Guid id)
         {
-            XmlDocument navigable;
-            IPayrollResult result;
-
-            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-            {
-                result = _payrollResultRepository.Load(id);
-                navigable = new XmlDocument {InnerXml = result.XmlResult.XPathNavigable.CreateNavigator().OuterXml};
-            }
-
+	        var result = _payrollResultRepository.Load(id);
+	        var navigable = new XmlDocument {InnerXml = result.XmlResult.XPathNavigable.CreateNavigator().OuterXml};
+            
             var format = DocumentFormat.LoadFromXml(navigable);
             var formatter = PayrollFormatterFactory.CreatePayrollFormatter(format);
 
