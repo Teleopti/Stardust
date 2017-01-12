@@ -16,9 +16,10 @@
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
 		'teamsToggles',
+		'bootstrapCommon',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -312,16 +313,26 @@
 			vm.checkValidationWarningForCommandTargets(personIds);
 		}
 	
-		vm.toggles = teamsToggles.all();
-		var deferInited = $q.defer();
-		vm.inited = deferInited.promise;
+		vm.toggles = teamsToggles.all();	
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
 		vm.searchOptions = {
 			keyword: $stateParams.keyword || '',
 			searchKeywordChanged: false
 		};
+
+		vm.cmdConfigurations = {
+			validateWarningToggle: false,
+			currentCommandName: null
+		};
 	
+		vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
+				|| vm.toggles.AddActivityEnabled
+				|| vm.toggles.RemoveActivityEnabled
+				|| vm.toggles.RemoveAbsenceEnabled
+				|| vm.toggles.SwapShiftEnabled
+				|| vm.toggles.ModifyShiftCategoryEnabled;
+
 		var asyncData = {			
 			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
 			hierarchy: teamScheduleSvc.getAvailableHierarchy(vm.scheduleDateMoment().format('YYYY-MM-DD')),
@@ -332,7 +343,10 @@
 			asyncData.defaultFavoriteSearch = vm.initFavoriteSearches.promise;
 		}
 
-		$q.all(asyncData).then(function init(data) {
+		vm.boostrap = bootstrapCommon.ready();
+
+		$q.all(asyncData).then(function init(data) {			
+
 			if (data.pageSetting.Agents > 0)
 				vm.paginationOptions.pageSize = data.pageSetting.Agents;
 
@@ -351,25 +365,12 @@
 			};
 			vm.scheduleDate = vm.scheduleDate || new Date();
 			vm.searchOptions.keyword = vm.searchOptions.keyword || '';
-			
-			vm.cmdConfigurations = {					
-				validateWarningToggle: false,
-				currentCommandName: null
-			};
-
-			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
-				|| vm.toggles.AddActivityEnabled
-				|| vm.toggles.RemoveActivityEnabled
-				|| vm.toggles.RemoveAbsenceEnabled
-				|| vm.toggles.SwapShiftEnabled
-				|| vm.toggles.ModifyShiftCategoryEnabled;
-
+									
 			if ((!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && !vm.toggles.SaveFavoriteSearchesEnabled) || !vm.searchEnabled) {
 				vm.resetSchedulePage();
 			}
 
-			showReleaseNotification();
-			deferInited.resolve();
+			showReleaseNotification();		
 		});
 
 		function showReleaseNotification() {

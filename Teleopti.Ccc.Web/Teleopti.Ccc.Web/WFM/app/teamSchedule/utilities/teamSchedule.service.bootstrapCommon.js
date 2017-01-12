@@ -13,7 +13,7 @@
 		};
 
 		var readyDefer = $q.defer();
-		self.onReady = function onReady() { return readyDefer.promise; }
+		self.ready = function ready() { return readyDefer.promise; }
 
 		$q.all(tasks)
 			.then(function(data) {
