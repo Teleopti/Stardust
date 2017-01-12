@@ -379,6 +379,7 @@
     <Compile Include="NHibernateConfiguration\AnalyticsUnitOfWorkContext.cs" />
     <Compile Include="NHibernateConfiguration\MoreParameterInCriterion.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
+    <Compile Include="NHibernateConfiguration\ShiftLayerCollectionType.cs" />
     <Compile Include="NHibernateConfiguration\SqlAzureClientDriverWithLogRetries.cs" />
     <Compile Include="NHibernateConfiguration\SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
     <Compile Include="NHibernateConfiguration\ApplicationUnitOfWorkContext.cs" />

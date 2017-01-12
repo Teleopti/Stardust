@@ -30,14 +30,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			_auditSettingProvider = new AuditSetter(auditSettingDel);
 		}
 
-		public IAuditSetter AuditSettingProvider
-		{
-			get { return _auditSettingProvider; }
-		}
+		public IAuditSetter AuditSettingProvider => _auditSettingProvider;
 
 		public void Configure(Configuration nhibConfiguration)
 		{
-
 			var eventListener = new TeleoptiAuditEventListener(_auditSettingProvider);
 			var fluentCfg = new FluentConfiguration();
 			configureSchedule(fluentCfg);
@@ -57,7 +53,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				.ExcludeRelationData(pa => pa.Person)
 				.ExcludeRelationData(pa => pa.Scenario)
 				.ExcludeRelationData(pa => pa.ShiftCategory)
-				.ExcludeRelationData("_dayOffTemplate");
+				.ExcludeRelationData("_dayOffTemplate")
+				//can be removed if https://github.com/nhibernate/nhibernate-core/pull/545 is part of our nhib release.
+				//can also be removed if we backout toggle ResourcePlanner_LessPersonAssignmentUpdates_42159
+				.SetCollectionMapper<ShiftLayerEnversMapperFactory>(x => x.ShiftLayers);
 			fluentCfg.Audit<ShiftLayer>()
 			   .ExcludeRelationData(l => l.Payload);
 			fluentCfg.Audit<MainShiftLayer>();
@@ -75,4 +74,5 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				.ExcludeRelationData(pa => pa.Payload);
 		}
 	}
+
 }
