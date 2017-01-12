@@ -1521,6 +1521,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personWeekView.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.favoriteSearch.js" />
+    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.directive.onNotifiedScheduleChange.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.directive.waitFor.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.names.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.timezone.js" />

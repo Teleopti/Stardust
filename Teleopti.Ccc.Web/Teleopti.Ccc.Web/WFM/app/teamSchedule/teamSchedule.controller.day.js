@@ -11,7 +11,6 @@
 		'GroupScheduleFactory',
 		'PersonSelection',
 		'ScheduleManagement',
-		'signalRSVC',
 		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
@@ -19,35 +18,22 @@
 		'teamsToggles',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles) {
 		var vm = this;
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
+		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
+		vm.availableGroups = [];
+
+		vm.toggleForSelectAgentsPerPageEnabled = false;
+		vm.onlyLoadScheduleWithAbsence = false;
+
 		vm.lastCommandTrackId = '';
 		vm.showDatePicker = false;
-		vm.toggles = teamsToggles.all();
-		vm.toggleForSelectAgentsPerPageEnabled = false;
-		vm.hasSelectedAllPeopleInEveryPage = false;
-		vm.onlyLoadScheduleWithAbsence = false;
-		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
-		vm.paginationOptions = {
-			pageSize: 20,
-			pageNumber: 1,
-			totalPages: 0
-		};
-
-		vm.searchOptions = {
-			keyword: getDefaultKeyword() || undefined,
-			searchKeywordChanged: false
-		};
-		vm.scheduleDate = $stateParams.selectedDate || new Date();
-		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
-		vm.searchOptions.keyword = $stateParams.keyword || '';
-		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.initFavoriteSearches = $q.defer();
 
 		vm.onFavoriteSearchesLoaded = function (defaultSearch) {
@@ -67,10 +53,15 @@
 			};
 		};
 
-		function getDefaultKeyword() {
-			if ($stateParams.keyword)
-				return $stateParams.keyword;
-		}
+		vm.paginationOptions = {
+			pageSize: 20,
+			pageNumber: 1,
+			totalPages: 0
+		};
+
+		vm.hasSelectedAllPeopleInEveryPage = false;
+		vm.agentsPerPageSelection = [20, 50, 100, 500];
+
 
 		var commandContainerId = 'teamschedule-command-container';
 		var settingsContainerId = 'teamschedule-settings-container';
@@ -176,19 +167,12 @@
 			vm.loadSchedules();
 		};
 
-		function momentToYYYYMMDD(m) {
-			var YYYY = '' + m.year();
-			var MM = (m.month() + 1) < 10 ? '0' + (m.month() + 1) : '' + (m.month() + 1);
-			var DD = m.date() < 10 ? '0' + m.date() : '' + m.date();
-			return YYYY + '-' + MM + '-' + DD;
-		}
-
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {
 				SelectedTeamIds: vm.selectedTeamIds ? vm.selectedTeamIds : [],
 				Keyword: options.keyword || vm.searchOptions.keyword,
-				Date: options.date || momentToYYYYMMDD(vm.scheduleDateMoment()),
+				Date: options.date || vm.scheduleDateMoment().format('YYYY-MM-DD'),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
 				IsOnlyAbsences: vm.onlyLoadScheduleWithAbsence
@@ -323,58 +307,28 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
 
-		function isMessageNeedToBeHandled() {
-			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
-			var scheduleDate = vm.scheduleDateMoment();
-			var viewRangeStart = scheduleDate.clone().add(-1, 'day').startOf('day');
-			var viewRangeEnd = scheduleDate.clone().add(1, 'day').startOf('day');
-
-			return function (message) {
-				if (message.TrackId === vm.lastCommandTrackId) { return false; }
-
-				var isMessageInsidePeopleList = personIds.indexOf(message.DomainReferenceId) > -1;
-				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
-				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
-				var isScheduleDateInMessageRange = vm.toggles.ManageScheduleForDistantTimezonesEnabled
-					? startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]') || endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]')
-					: viewRangeStart.isSameOrBefore(endDate) && viewRangeEnd.isSameOrAfter(startDate);;
-
-				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
-			}
+		
+		vm.onPersonScheduleChanged = function(personIds) {
+			vm.updateSchedules(personIds);
+			vm.checkValidationWarningForCommandTargets(personIds);
 		}
-
-		function scheduleChangedEventHandler(messages) {
-			var personIds = messages.filter(isMessageNeedToBeHandled()).map(function (message) {
-				return message.DomainReferenceId;
-			});
-
-			var uniquePersonIds = [];
-			personIds.forEach(function (personId) {
-				if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
-			});
-
-			if (uniquePersonIds.length !== 0) {
-				vm.updateSchedules(uniquePersonIds);
-				vm.checkValidationWarningForCommandTargets(uniquePersonIds);
-			}
-		}
-
-		function monitorScheduleChanged() {
-			signalRSVC.subscribeBatchMessage(
-				{ DomainType: 'IScheduleChangedInDefaultScenario' }
-				, scheduleChangedEventHandler
-				, 300);
-		}
-
+	
+		vm.toggles = teamsToggles.all();
 		var deferInited = $q.defer();
 		vm.inited = deferInited;
-
+		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
+		vm.searchOptions = {
+			keyword: $stateParams.keyword || '',
+			searchKeywordChanged: false
+		};
+	
 		var asyncData = {			
 			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
 			hierarchy: teamScheduleSvc.getAvailableHierarchy(vm.scheduleDateMoment().format('YYYY-MM-DD')),
 		};
 
-		vm.searchEnabled = $state.current.name != 'teams.for';
+		vm.searchEnabled = $state.current.name !== 'teams.for';
 		if (vm.searchEnabled && vm.toggles.SaveFavoriteSearchesEnabled) {
 			asyncData.defaultFavoriteSearch = vm.initFavoriteSearches.promise;
 		}
@@ -398,9 +352,7 @@
 			};
 			vm.scheduleDate = vm.scheduleDate || new Date();
 			vm.searchOptions.keyword = vm.searchOptions.keyword || '';
-
-			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
-		
+			
 			vm.cmdConfigurations = {					
 				validateWarningToggle: false,
 				currentCommandName: null

@@ -5,7 +5,6 @@ describe("teamschedule controller tests", function() {
 		rootScope,
 		controller,
 		searchScheduleCalledTimes,
-		mockSignalRBackendServer = {},
 		personSelection,
 		scheduleMgmt;
 
@@ -19,7 +18,6 @@ describe("teamschedule controller tests", function() {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
 			$provide.service('Toggle', setupMockAllTrueToggleService);
-			$provide.service('signalRSVC', setupMockSignalRService);
 		});
 	});
 
@@ -65,105 +63,6 @@ describe("teamschedule controller tests", function() {
 		expect(personSchedule1.Shifts[0].Projections[0].Selected).toEqual(true);
 
 	});
-
-	it("should reload schedule when schedule changed by others", inject(function() {
-		rootScope.$digest();
-		searchScheduleCalledTimes = 0;
-
-		controller.scheduleDate = new Date("2015-10-26");
-		mockSignalRBackendServer.notifyClients([
-			{
-				"DomainReferenceId": "221B-Baker-SomeoneElse",
-				"StartDate": "D2015-10-25T00:00:00",
-				"EndDate": "D2015-10-27T00:00:00"
-			}
-		]);
-
-		expect(searchScheduleCalledTimes).toEqual(1);
-	}));
-
-	it("should not reload schedule when other people schedule changed", inject(function() {
-		rootScope.$digest();
-		searchScheduleCalledTimes = 0;
-
-		controller.scheduleDate = new Date("2015-10-26");
-		mockSignalRBackendServer.notifyClients([
-			{
-				"DomainReferenceId": "221B-Baker-otherPeople",
-				"StartDate": "D2015-10-25T00:00:00",
-				"EndDate": "D2015-10-27T00:00:00"
-			}
-		]);
-
-		expect(searchScheduleCalledTimes).toEqual(0);
-	}));
-
-	it("should not reload schedule when schedule changed beyond the date", inject(function() {
-		rootScope.$digest();
-		searchScheduleCalledTimes = 0;
-
-		controller.scheduleDate = new Date("2015-10-25");
-		mockSignalRBackendServer.notifyClients([
-			{
-				"DomainReferenceId": "221B-Baker-SomeoneElse",
-				"StartDate": "D2015-10-27T00:00:00",
-				"EndDate": "D2015-10-28T00:00:00"
-			}
-		]);
-
-		expect(searchScheduleCalledTimes).toEqual(0);
-	}));
-
-	it("should not reload schedule when schedule changed beyond the yesterday, today and tomorrow when ManageScheduleForDistantTimezonesEnabled is on", inject(function() {
-		rootScope.$digest();
-		searchScheduleCalledTimes = 0;
-
-		controller.scheduleDate = new Date("2015-10-25");
-		mockSignalRBackendServer.notifyClients([
-			{
-				"DomainReferenceId": "221B-Baker-SomeoneElse",
-				"StartDate": "D2015-10-22T00:00:00",
-				"EndDate": "D2015-10-23T00:00:00"
-			}
-		]);
-
-		expect(searchScheduleCalledTimes).toEqual(0);
-	}));
-
-	it("should reload schedule when schedule changed from yesterday when toggle ManageScheduleForDistantTimezonesEnabled is on", inject(function() {
-		rootScope.$digest();
-		searchScheduleCalledTimes = 0;
-
-		controller.scheduleDate = new Date("2015-10-25");
-		controller.toggles.ManageScheduleForDistantTimezonesEnabled = true;
-		mockSignalRBackendServer.notifyClients([
-			{
-				"DomainReferenceId": "221B-Baker-SomeoneElse",
-				"StartDate": "D2015-10-24T00:00:00",
-				"EndDate": "D2015-10-24T00:00:00"
-			}
-		]);
-
-		expect(searchScheduleCalledTimes).toEqual(1);
-	}));
-
-	it("should reload schedule when schedule changed from tomorrow when toggle ManageScheduleForDistantTimezonesEnabled is on", inject(function() {
-		rootScope.$digest();
-		searchScheduleCalledTimes = 0;
-
-		controller.scheduleDate = new Date("2015-10-25");
-		controller.toggles.ManageScheduleForDistantTimezonesEnabled = true;
-		mockSignalRBackendServer.notifyClients([
-			{
-				"DomainReferenceId": "221B-Baker-SomeoneElse",
-				"StartDate": "D2015-10-26T00:00:00",
-				"EndDate": "D2015-10-27T00:00:00"
-			}
-		]);
-
-		expect(searchScheduleCalledTimes).toEqual(1);
-	}));
-
 
 	it("Should rest schedules in schedule management service when select all for all pages", function () {
 		expect(scheduleMgmt.groupScheduleVm.Schedules).toBeUndefined();
@@ -333,17 +232,4 @@ describe("teamschedule controller tests", function() {
 		};
 	}
 
-	function setupMockSignalRService() {
-	    mockSignalRBackendServer.subscriptions = [];
-
-		return {
-			subscribe: function(options, eventHandler, errorHandler) {
-				mockSignalRBackendServer.subscriptions.push(options);
-				mockSignalRBackendServer.notifyClients = eventHandler;
-			},
-			subscribeBatchMessage: function (options, messageHandler, timeout) {
-				mockSignalRBackendServer.notifyClients = messageHandler;
-			}
-		};
-	}
 });
