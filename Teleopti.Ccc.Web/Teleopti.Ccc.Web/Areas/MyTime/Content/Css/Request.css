@@ -496,6 +496,7 @@
 	margin-bottom: 10px;
 	display: flex;
 	flex-direction: row;
+	width: auto;
 }
 
 .shift-trade-dayoff {
