@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				throw new Exception($"Posting json returned http code {response.StatusCode}, Sent: {json}, Response: {responseContent}");
 			}
 		}
-
+		
+		// will "sometimes always" return 200 for html if the server responds with friendly custom error page
 		public void Get(string url)
 		{
 			var post = _client.GetAsync(uri(url));
@@ -52,18 +53,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				var responseContent = response.Content.ReadAsStringAsync().Result;
 				throw new Exception("Get returned http code " + response.StatusCode + ", Content: " + responseContent);
 			}
-		}
-
-		public T GetJson<T>(string url)
-		{
-			var post = _client.GetAsync(uri(url));
-			var response = post.Result;
-			var responseContent = response.Content.ReadAsStringAsync().Result;
-			if (response.StatusCode != HttpStatusCode.OK)
-			{
-				throw new Exception("Get returned http code " + response.StatusCode + ", Content: " + responseContent);
-			}
-			return JsonConvert.DeserializeObject<T>(responseContent);
 		}
 
 		public void GetAsync(string url)

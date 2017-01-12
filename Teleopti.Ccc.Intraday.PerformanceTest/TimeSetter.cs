@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Helper;
+﻿using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Intraday.PerformanceTest
@@ -18,7 +16,7 @@ namespace Teleopti.Ccc.Intraday.PerformanceTest
 		public void SetDateTime(string time)
 		{
 			_now.Is(time);
-			_http.Get("/Test/SetCurrentTime?ticks=" + time.Utc().Ticks);
+			_http.PostJson("/Test/SetCurrentTime", new {time});
 		}
 	}
 }

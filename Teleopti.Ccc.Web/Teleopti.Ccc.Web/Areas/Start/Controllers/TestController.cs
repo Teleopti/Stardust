@@ -199,24 +199,34 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[LogInfo]
-		public virtual ViewResult SetCurrentTime(long ticks, string time, bool? triggerRecurringJobs)
+		[HttpGet]
+		public virtual ViewResult SetCurrentTime(long? ticks, string time)
 		{
-			if (time != null)
-				_mutateNow.Is(time.Utc());
-			else
-				_mutateNow.Is(DateTime.SpecifyKind(new DateTime(ticks), DateTimeKind.Utc));
-
-			if (triggerRecurringJobs ?? true)
-				_tenantTickEventPublisher.WithPublishingsForTest(() =>
-				{
-					_hangfire.TriggerReccuringJobs();
-				});
+			setCurrentTime(ticks, time, true);
 
 			return View("Message", new TestMessageViewModel
 			{
 				Title = "Time changed on server!",
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
+		}
+
+		[LogInfo]
+		[HttpPost]
+		public virtual void SetCurrentTime(long? ticks, string time, bool? triggerRecurringJobs)
+		{
+			setCurrentTime(ticks, time, triggerRecurringJobs ?? true);
+		}
+
+		private void setCurrentTime(long? ticks, string time, bool triggerRecurringJobs)
+		{
+			if (ticks.HasValue)
+				_mutateNow.Is(DateTime.SpecifyKind(new DateTime(ticks.Value), DateTimeKind.Utc));
+			else
+				_mutateNow.Is(time.Utc());
+
+			if (triggerRecurringJobs)
+				_tenantTickEventPublisher.WithPublishingsForTest(() => { _hangfire.TriggerReccuringJobs(); });
 		}
 
 		private static void clearAllConnectionPools()

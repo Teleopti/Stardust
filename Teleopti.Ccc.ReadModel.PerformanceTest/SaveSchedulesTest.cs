@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 
 			Now.Is("2016-06-01".Utc());
 			var utcNow = Now.UtcDateTime();
-			Http.Get($"/Test/SetCurrentTime?ticks={utcNow.Ticks}");
+			Http.PostJson("/Test/SetCurrentTime", new { ticks = utcNow.Ticks });
 			var dates = Enumerable.Range(1, Configuration.NumberOfDays)
 				.Select(i => new DateOnly(utcNow.AddDays(i))).ToList();
 
