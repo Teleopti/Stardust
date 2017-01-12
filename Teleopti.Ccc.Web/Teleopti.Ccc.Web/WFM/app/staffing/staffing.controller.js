@@ -1,19 +1,25 @@
-﻿(function() {
-'use strict';
+﻿(function () {
+    'use strict';
 
     angular
         .module('wfm.staffing')
         .controller('staffingController', staffingController);
 
-    staffingController.inject = [];
-    function staffingController() {
-        var vm = this;   
+    staffingController.inject = ['staffingService'];
+    function staffingController(staffingService) {
+        var vm = this;
+        vm.staffingArea =
+            vm.staffing = monitorskillstaffing.get();
+        vm.getStaffingForSkillArea = getStaffingForSkillArea(areaId);
 
-
-        activate();
 
         ////////////////
 
-        function activate() { }
+        getSkillAreaStaffing = function (areaId) {
+            return staffingService.getSkillAreaStaffing.get(areaId);
+        }
+        getSkillStaffing = function(skillId){
+            return staffingService.getSkillAreaStaffing.get(skillId)
+        }
     }
 })();

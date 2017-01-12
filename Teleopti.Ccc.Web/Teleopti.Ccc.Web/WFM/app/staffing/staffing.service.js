@@ -1,15 +1,24 @@
-﻿(function() {
-'use strict';
+﻿(function () {
+    'use strict';
 
     angular
         .module('wfm.staffing')
-        .service('staffingService', staffingService);
+        .factory('staffingService', staffingService);
 
-    staffingService.inject = [];
-    function staffingService() {
-        this.exposedFn = exposedFn;
-        
+    staffingService.$inject = ['$resource'];
+    function staffingService($resource) {
+        var monitorskillareastaffing = $resource('../api/intraday/monitorskillareastaffing/');
+        var monitorskillstaffing = $resource('../api/intraday/monitorskillstaffing/');
         ////////////////
-        function exposedFn() { }
+
+        var service = {
+            getSkillAreaStaffing: monitorskillareastaffing, //skillAreas
+            getSkillStaffing: monitorskillstaffing, //skills
+        };
+
+        return service;
+
+
+
     }
 })();
