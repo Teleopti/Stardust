@@ -26,7 +26,6 @@
 
 		ctrl.refresh = function() {
 			populateGroupList();
-
 			if (ctrl.selectedTeamIds) {
 				updateAllSiteSelection();
 				ctrl.onSelectionDone();
@@ -34,11 +33,14 @@
 		};
 
 		ctrl.$onChanges = function(changesObj) {
-			if (!changesObj ||
-				!changesObj.availableGroups ||
-				!changesObj.availableGroups.currentValue ||
-				!changesObj.availableGroups.currentValue.sites ||
-				changesObj.availableGroups.currentValue.sites.length == 0) return;
+			if (!changesObj) return;
+
+			var selectedTeamIdsNotChanged = !changesObj.selectedTeamIds 
+							|| !changesObj.selectedTeamIds.currentValue 
+							|| changesObj.selectedTeamIds.currentValue.length == 0 
+							|| changesObj.selectedTeamIds.currentValue.length == changesObj.selectedTeamIds.previousValue.length;
+
+			if(selectedTeamIdsNotChanged) return;
 
 			ctrl.refresh();
 		};
