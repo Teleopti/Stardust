@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, () => Resources.RealTimeAdherence, "rta"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, () => Resources.Intraday, "intraday"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.TeamsModule, "teams"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports")
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebStaffing, () => Resources.WebStaffing, "staffing")
 		};
 
 		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager, ILicenseActivatorProvider licenseActivatorProvider, IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter)
@@ -118,7 +119,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.WfmReportPortal_Basic_38825);
 			}
-
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebStaffing))
+			{
+				return _toggleManager.IsEnabled(Toggles.WfmStaffing_AllowActions_42524);
+			}
 
 			return true;
 		}

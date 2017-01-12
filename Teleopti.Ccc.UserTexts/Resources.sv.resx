@@ -13860,4 +13860,8 @@ Dessa val är aktiverade:
   <data name="ImportSchedule" xml:space="preserve">
     <value>Importera schema</value>
   </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>Bemanning</value>
+    <comment>Module in web</comment>
+  </data>
 </root>

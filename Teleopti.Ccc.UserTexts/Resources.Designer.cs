@@ -33814,6 +33814,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staffing.
+        /// </summary>
+        public static string WebStaffing {
+            get {
+                return ResourceManager.GetString("WebStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wednesday.
         /// </summary>
         public static string Wednesday {

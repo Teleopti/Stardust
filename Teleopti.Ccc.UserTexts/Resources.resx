@@ -15431,4 +15431,8 @@ These options are activated:
     <value>Select a role first</value>
     <comment>error message if the user tries some permission action without a selected role</comment>
   </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>Staffing</value>
+    <comment>Module in web</comment>
+  </data>
 </root>

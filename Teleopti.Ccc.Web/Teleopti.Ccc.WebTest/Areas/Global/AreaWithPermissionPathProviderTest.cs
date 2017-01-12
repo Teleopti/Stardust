@@ -147,6 +147,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
+		public void ShouldHaveStaffingAreaWhenFeatureEnabledAndPermitted()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebStaffing }
+			, o => true);
+
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.WfmStaffing_AllowActions_42524);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebStaffing);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebStaffing);
+			areas.Single().Name.Invoke().Should().Be(Resources.WebStaffing);
+			areas.Single().InternalName.Should().Be("staffing");
+		}
+		[Test]
+		public void ShouldNotHaveStaffingAreaWhenFeatureIsDisabled()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Disable(Toggles.WfmStaffing_AllowActions_42524);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotHaveStaffingAreaWhenItIsNotPermitted()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.WfmStaffing_AllowActions_42524);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldNotHaveAreasFromNotLicensedModules()
 		{
 			ApplicationFunctionsToggleFilter
