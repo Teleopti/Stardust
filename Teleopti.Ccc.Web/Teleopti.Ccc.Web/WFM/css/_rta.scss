@@ -69,7 +69,6 @@
 	&:hover {
 		box-shadow: none;
 	}
-
 }
 
 .rta-option-group {
@@ -86,10 +85,9 @@
 	md-checkbox {
 		margin-bottom: 8px;
 	}
-
 }
 
-.demo-select-header {
+.rta-select-header {
 	margin: 0 16px;
 }
 
@@ -102,7 +100,7 @@
 	width: 86%;
 }
 
-.demo-select-header,
+.rta-select-header,
 .rta-option-group {
 	border-bottom: 1px solid rgba(0,0,0,.06);
 }
