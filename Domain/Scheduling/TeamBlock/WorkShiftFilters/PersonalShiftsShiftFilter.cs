@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			TimePeriod? period = getMaximumPeriodForPersonalShiftsAndMeetings(personalAssignment,meetings);
 			if (!period.HasValue) return shiftList;
 
-			return shiftList.Select(
+			return shiftList.AsParallel().Select(
 					shiftProjectionCache =>
 							new {shiftProjectionCache, currentPeriod = shiftProjectionCache.MainShiftProjection.Period()})
 				.Where(t => t.currentPeriod.HasValue && t.currentPeriod.Value.TimePeriod(TimeZoneInfo.Utc).Contains(period.Value))

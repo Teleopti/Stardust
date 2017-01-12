@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var personalAssignment = schedulePart.PersonAssignment();
 			int cntBefore = shiftList.Count;
 			IList<IShiftProjectionCache> workShiftsWithinPeriod =
-				shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
+				shiftList.AsParallel().Select(s => new {s, Period = s.MainShiftProjection.Period()})
 					.Where(
 						s =>
 							s.Period.HasValue && s.Period.Value.Contains(period.Value) &&

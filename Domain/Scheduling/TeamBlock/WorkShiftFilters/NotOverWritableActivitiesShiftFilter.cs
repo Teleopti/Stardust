@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				return shiftList;
 
 			var filteredList =
-				shiftList.Where(
+				shiftList.AsParallel().Where(
 					shift =>
 						!shift.MainShiftProjection.Any(
 							x =>

@@ -64,11 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
 		{
-			var handler = DayScheduled;
-			if (handler != null)
-			{
-				handler(this, scheduleServiceBaseEventArgs);
-			}
+			DayScheduled?.Invoke(this, scheduleServiceBaseEventArgs);
 		}
 	}
 }

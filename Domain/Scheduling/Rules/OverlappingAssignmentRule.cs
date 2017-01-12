@@ -45,12 +45,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private static DateTime endTimeOnAssignmentBefore(IScheduleRange currentCompleteRange, IPersonAssignment assBefore)
 		{
-			return assBefore == null ? currentCompleteRange.Period.StartDateTime : assBefore.Period.EndDateTime;
+			return assBefore?.Period.EndDateTime ?? currentCompleteRange.Period.StartDateTime;
 		}
 
 		private static DateTime startTimeOnAssignmentAfter(IScheduleRange currentCompleteRange, IPersonAssignment assAfter)
 		{
-			return assAfter == null ? currentCompleteRange.Period.EndDateTime : assAfter.Period.StartDateTime;
+			return assAfter?.Period.StartDateTime ?? currentCompleteRange.Period.EndDateTime;
 		}
 	}
 }

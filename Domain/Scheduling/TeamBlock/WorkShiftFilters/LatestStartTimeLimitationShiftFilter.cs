@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			int cntBefore = shiftList.Count;
 
 			IList<IShiftProjectionCache> workShiftsWithinPeriod =
-				shiftList.Select(s => new { Period = s.MainShiftProjection.Period(), s })
+				shiftList.AsParallel().Select(s => new { Period = s.MainShiftProjection.Period(), s })
 					.Where(s => s.Period.HasValue && s.Period.Value.StartDateTime <= latestStart)
 					.Select(s => s.s)
 					.ToList();

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (shiftList.Count == 0) return shiftList;
 			if (mainShiftActivitiesOptimizeSpecification == null) return new List<IShiftProjectionCache>();
 			IList<IShiftProjectionCache> ret =
-				shiftList.Where(s => mainShiftActivitiesOptimizeSpecification.IsSatisfiedBy(s.TheMainShift)).ToList();
+				shiftList.AsParallel().Where(s => mainShiftActivitiesOptimizeSpecification.IsSatisfiedBy(s.TheMainShift)).ToList();
 
 			return ret;
 		}

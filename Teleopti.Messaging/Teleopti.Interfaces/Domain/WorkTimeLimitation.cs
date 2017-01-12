@@ -39,15 +39,15 @@ namespace Teleopti.Interfaces.Domain
 			if (startTime.HasValue)
 			{
 				if (startTime.Value > VerifyLimit)
-					throw new ArgumentOutOfRangeException("startTime", startTime, "Min Time can't be bigger than 36 hours");
+					throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Min Time can't be bigger than 36 hours");
 
 				if (endTime.HasValue && startTime > endTime.Value)
-					throw new ArgumentOutOfRangeException("startTime", startTime, "Start time can't be greater than end time");
+					throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start time can't be greater than end time");
 			}
 
 			if (!endTime.HasValue) return;
 			if (endTime.Value > VerifyLimit)
-				throw new ArgumentOutOfRangeException("endTime", endTime, "End time can't be bigger than 36 hours");
+				throw new ArgumentOutOfRangeException(nameof(endTime), endTime, "End time can't be bigger than 36 hours");
 		}
         /// <summary>
         /// Gets or sets the start time.
@@ -58,12 +58,9 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-		public TimeSpan? StartTime
-        {
-			get { return _startTime; }
-        }
+		public TimeSpan? StartTime => _startTime;
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the end time.
         /// </summary>
         /// <value>The end time.</value>
@@ -72,12 +69,9 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-		public TimeSpan? EndTime
-        {
-            get { return _endTime; }
-        }
+		public TimeSpan? EndTime => _endTime;
 
-        /// <summary>
+	    /// <summary>
         /// Determines whether the supplied value matches the limitation.
         /// </summary>
         /// <param name="timeSpanToCompareTo">The time span to compare to.</param>
@@ -90,17 +84,11 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
 		public bool IsCorrespondingToWorkTimeLimitation(TimeSpan timeSpanToCompareTo)
         {
-            if (_startTime.HasValue)
-            {
-                if (_startTime.Value.CompareTo(timeSpanToCompareTo) > 0)
-                    return false;
-            }
-            if (_endTime.HasValue)
-            {
-                if (_endTime.Value.CompareTo(timeSpanToCompareTo) < 0)
-                    return false;
-            }
-            return true;
+	        if (_startTime?.CompareTo(timeSpanToCompareTo) > 0)
+		        return false;
+	        if (_endTime?.CompareTo(timeSpanToCompareTo) < 0)
+		        return false;
+	        return true;
         }
 
         /// <summary>
@@ -112,16 +100,9 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-        public string StartTimeString
-        {
-            get
-            {
-                return StringFromTimeSpan(StartTime);
-            }
-        }
-
-
-        /// <summary>
+        public string StartTimeString => StringFromTimeSpan(StartTime);
+		
+	    /// <summary>
         /// Gets or sets the end time string.
         /// </summary>
         /// <value>The end time string.</value>
@@ -130,15 +111,9 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// /// </remarks>
-        public string EndTimeString
-        {
-            get
-            {
-                return StringFromTimeSpan(EndTime);
-            }
-        }
+        public string EndTimeString => StringFromTimeSpan(EndTime);
 
-        /// <summary>
+	    /// <summary>
         /// Implements the operator ==.
         /// </summary>
         /// <param name="per1">The per1.</param>

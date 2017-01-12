@@ -12,16 +12,14 @@ namespace Teleopti.Ccc.DomainTest.Helper
 	[TestWithStaticDependenciesAvoidUse]
 	public class LogPointOutputTest
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        [Test]
         public void ShouldListenToCorrectName()
         {
             var appender = setUpMemoryAppender("Teleopti.LogPointOutput");
             LogPointOutput.LogInfo("Foo", "starting");
             appender.GetEvents().Should().Not.Be.Empty();
         }
-
-
-        
+   
         private static MemoryAppender setUpMemoryAppender(string listeningTo)
         {
             var filter = new LoggerMatchFilter { LoggerToMatch = listeningTo };
@@ -32,13 +30,10 @@ namespace Teleopti.Ccc.DomainTest.Helper
             return memAppender;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), TearDown]
+        [TearDown]
         public void Teardown()
         {
             BasicConfigurator.Configure(new DoNothingAppender());
         }
-        
     }
-
-    
 }

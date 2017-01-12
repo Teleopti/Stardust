@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class ShiftProjectionCacheManager : IShiftProjectionCacheManager, IDisposable
     {
-        private readonly IDictionary<IWorkShiftRuleSet, IList<IShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, IList<IShiftProjectionCache>>();
+        private readonly IDictionary<IWorkShiftRuleSet, List<IShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<IShiftProjectionCache>>();
         private readonly IShiftFromMasterActivityService _shiftFromMasterActivityService;
         private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
@@ -43,27 +44,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    bool forRestrictionsOnly, bool checkExcluded)
 	    {
 			var shiftProjectionCaches = new List<IShiftProjectionCache>();
-			foreach (var ruleSet in ruleSets)
-			{
-				if (checkExcluded && !ruleSet.IsValidDate(scheduleDateOnly))
-					continue;
+		    ruleSets.ForEach(ruleSet =>
+		    {
+			    if (checkExcluded && !ruleSet.IsValidDate(scheduleDateOnly))
+				    return;
 
-				if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
-					continue;
+			    if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
+				    return;
 
-				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(ruleSet))
-					continue;
+			    if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(ruleSet))
+				    return;
 
-				var ruleSetList = getShiftsForRuleSet(ruleSet);
-				if (ruleSetList == null)
-					continue;
+			    var ruleSetList = getShiftsForRuleSet(ruleSet);
+			    if (ruleSetList == null)
+				    return;
 
-				foreach (var projectionCache in ruleSetList)
-				{
-					shiftProjectionCaches.Add(projectionCache);
-					projectionCache.SetDate(scheduleDateOnly, timeZone);
-				}
-			}
+			    foreach (var projectionCache in ruleSetList)
+			    {
+				    shiftProjectionCaches.Add(projectionCache);
+				    projectionCache.SetDate(scheduleDateOnly, timeZone);
+			    }
+		    });
 
 			return shiftProjectionCaches;
 		}
@@ -74,14 +75,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    if (bag == null)
 			    return new List<IShiftProjectionCache>();
 		    var ruleSets =
-			    bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly)
-				    .ToList();
+			    bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly);
 		    return ShiftProjectionCachesFromRuleSets(scheduleDateOnly, timeZone, ruleSets, forRestrictionsOnly, checkExcluded);
 	    }
 
 	    private IEnumerable<IShiftProjectionCache> getShiftsForRuleSet(IWorkShiftRuleSet ruleSet)
         {
-			IList<IShiftProjectionCache> shiftProjectionCacheList;
+			List<IShiftProjectionCache> shiftProjectionCacheList;
 
 			if (!_ruleSetListDictionary.TryGetValue(ruleSet, out shiftProjectionCacheList))
             {
@@ -90,14 +90,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var tmpList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback).Select(s => s.WorkShift).ToArray();
                 
 				shiftProjectionCacheList = new List<IShiftProjectionCache>();
-	            foreach (IWorkShift shift in tmpList)
-	            {
-		            IEnumerable<IWorkShift> expandedShifts = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift);
-		            foreach (IWorkShift workShift in expandedShifts)
-		            {
-						shiftProjectionCacheList.Add(new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker));
-		            }
-	            }
+	            shiftProjectionCacheList.AddRange(
+		            tmpList.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift))
+			            .Select(workShift => new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker)));
 	            _ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);
             }
 			return shiftProjectionCacheList;
