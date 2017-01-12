@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			var builder = new ContainerBuilder();
 			var toggles = new FakeToggleManager();
 			toggles.Enable(Toggles.No_UnitOfWork_Nesting_42175);
+			toggles.Enable(Toggles.ResourcePlanner_LessPersonAssignmentUpdates_42159);
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, toggles)));
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();

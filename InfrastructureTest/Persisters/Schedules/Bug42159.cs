@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public IScheduleStorage ScheduleStorage;
 
-		[Test, Ignore("Bug 42159")]
+		[Test]
 		public virtual void ShouldNotDoAnyUpdateIfNoRealChangesWereMade()
 		{
 			var date = new DateOnly(2000, 1, 1);

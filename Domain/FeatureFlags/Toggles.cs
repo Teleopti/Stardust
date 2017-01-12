@@ -155,6 +155,7 @@
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_SplitBigIslands_42049,
 		ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318,
+		ResourcePlanner_LessPersonAssignmentUpdates_42159,
 
 		Wfm_DisplayOnlineHelp_39402,
 

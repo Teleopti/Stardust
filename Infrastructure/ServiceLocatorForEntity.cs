@@ -1,4 +1,6 @@
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure
@@ -10,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure
 	{
 		private static INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
 		private static IUpdatedBy _updatedBy;
+		private static IChangeNHibernateConfiguration _changeNHibernateConfiguration;
 
 		public static INestedUnitOfWorkStrategy NestedUnitOfWorkStrategy
 		{
@@ -23,6 +26,11 @@ namespace Teleopti.Ccc.Infrastructure
 			set { _updatedBy = value; }
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessPersonAssignmentUpdates_42159)]
+		public static IChangeNHibernateConfiguration ChangeNHibernateConfiguration
+		{
+			get { return _changeNHibernateConfiguration ?? new NoNHibernateConfigurationChange(); }
+			set { _changeNHibernateConfiguration = value; }
+		}
 	}
-
 }

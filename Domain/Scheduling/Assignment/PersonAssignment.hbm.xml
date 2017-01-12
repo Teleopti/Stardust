@@ -37,7 +37,6 @@
 		<list name="ShiftLayers"
 				cascade="all-delete-orphan"
 				inverse="true">
-			<!-- Claes! To solve bug 42159 and make test Bug42159 green, add |||collection-type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ShiftLayerCollectionType, Teleopti.Ccc.Infrastructure"||| on element above-->
 			<key column="Parent" on-delete ="cascade" />
 			<index type="Byte" column="OrderIndex" />
 			<one-to-many class="ShiftLayer"/>

@@ -154,6 +154,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void setDefaultValuesOnApplicationConf(Configuration cfg)
 		{
 			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg);
+			ServiceLocatorForLegacy.ChangeNHibernateConfiguration.Execute(cfg);
 			_enversConfiguration.Configure(cfg);
 		}
 	}
