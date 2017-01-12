@@ -53,9 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
 
 					var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
-					var rules = NewBusinessRuleCollection.Minimum();
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter);
+					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter);
 					_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
 					var progressResult = onDayScheduled(backgroundWorker,new SchedulingServiceSuccessfulEventArgs(scheduleDay,()=>cancel=true));
 					if (progressResult.ShouldCancel) return;
