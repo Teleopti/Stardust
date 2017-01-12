@@ -3,15 +3,27 @@
 	margin: auto;
 }
 
+#StudentAvailability-body-inner .calendarview-week li:first-child {
+	width: 27px;
+}
+
+#StudentAvailability-body-inner .weekdays {
+	padding-left: 27px;
+}
+
+#StudentAvailability-body-inner .calendarview-week:last-child {
+	margin-bottom: 5px;
+}
+
 .student-availability-time-input > div {
 	margin: 5px;
 	max-width: 276px;
 }
 
-	.student-availability-time-input > div:nth-child(2) {
-		display: inline-block;
-		vertical-align: bottom;
-	}
+.student-availability-time-input > div:nth-child(2) {
+	display: inline-block;
+	vertical-align: bottom;
+}
 
 .student-availability-time-input > span {
 	margin: 5px;
@@ -21,12 +33,6 @@
 
 .student-availability-time-input > input {
 	margin: 5px;
-}
-
-
-#StudentAvailability-period {
-	max-width: 965px;
-	margin: 10px auto;
 }
 
 #StudentAvailability-body {
@@ -41,8 +47,8 @@
 }
 
 .alert-student-availability {
-	max-width: 954px;
-	/*margin: 20px auto;*/
+	width: 965px;
+	margin: auto;
 }
 
 .form-student-availability {
@@ -73,6 +79,31 @@
 }
 
 @media(max-width: 768px) {
+	.phone-form-availability .form-student-availability {
+		position: fixed;
+		top: 20%;
+		left: 0;
+		right: 0;
+		z-index: 100;
+		margin-left: 5px;
+		margin-right: 5px;
+		max-height: 70%;
+		overflow-y: scroll;
+	}
+
+	.phone-form-availability .phone-background {
+		height: 200%;
+		width: 100%;
+		z-index: 99;
+		background-color: #636363;
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
+
+	.phone-warning-indicator + .student-availability-body-container {
+		overflow-x: auto;
+	}
 	.overtime-availability-start-time, .overtime-availability-end-time {
 		padding-left: 5px;
 		padding-right: 5px;

@@ -10,6 +10,8 @@ Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel = function (ajax, showM
 	this.NextDay = ko.observable(false);
     
 	this.AddAvailabilityFormVisible = ko.observable(false);
+	this.IsHostAMobile = ko.observable((/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent)));
+	this.IsStudentAvailabilityForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_StudentAvailabilityForMobile_42498');
 	this.IsAvailabilityInputVisible = ko.observable(true);
 	this.IsTimeInputVisible = ko.observable(true);
 	this.ShowMeridian = ko.observable(showMeridian);

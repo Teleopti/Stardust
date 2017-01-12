@@ -150,6 +150,7 @@ MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = true
 MyTimeWeb_ShiftTradeFilterSite_40374 = true
 MyTimeWeb_ShiftTradeOptimization_40792 = true
 MyTimeWeb_PreferenceForMobile_40265 = true
+MyTimeWeb_StudentAvailabilityForMobile_42498 = RC
 MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = true
 MyTimeWeb_ShowContractTime_41462 = true
 

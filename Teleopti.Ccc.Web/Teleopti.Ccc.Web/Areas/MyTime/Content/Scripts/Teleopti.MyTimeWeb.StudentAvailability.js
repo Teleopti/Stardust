@@ -26,7 +26,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
         
         self.minDate = ko.observable(moment());
         self.maxDate = ko.observable(moment());
-
+        self.IsHostAMobile = ko.observable((/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent)));
+        self.IsStudentAvailabilityForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_StudentAvailabilityForMobile_42498');
         self.displayDate = ko.observable();
         self.nextPeriodDate = ko.observable(moment());
         self.previousPeriodDate = ko.observable(moment());
@@ -219,7 +220,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		if (promises.length != 0) {
 			$.when.apply(null, promises)
 				.done(function () {
-
+					if (!editFormViewModel.ShowError() && studentAvailability.IsHostAMobile) studentAvailability.ToggleAddAvailabilityFormVisible();
 				});
 		}
 	}
@@ -258,7 +259,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			ajax.AbortAll();
 			_cleanBindings();
 		},
-		SetStudentAvailability: function(studentAvailabilityViewModel) {
+		SetStudentAvailability: function (studentAvailabilityViewModel) {
 		    _setStudentAvailability(ko.toJS(studentAvailabilityViewModel));
 		}
 	};

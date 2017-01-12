@@ -32,7 +32,7 @@
 				<ul class="nav navbar-nav navbar-teleopti row submenu">
 					@if (Model.ExtendedPreferencesPermission)
 					{
-						<li class="col-xs-12 col-sm-4 w-30"><a href="#" class="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;<span class="phone-navbar-text">@Resources.Preference</span></a></li>
+						<li class="col-xs-12 col-sm-4 w-30"><a href="#" class="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;<span>@Resources.Preference</span></a></li>
 					}
 					else
 					{
@@ -77,7 +77,7 @@
 	}
 					<li class="col-xs-12 col-sm-4 w-30">
 						<a href="#" data-bind="click: deletePreference">
-							<i class="glyphicon glyphicon-remove"></i>&nbsp;<span class="phone-navbar-text">@Resources.Remove</span>
+							<i class="glyphicon glyphicon-remove"></i>&nbsp;<span>@Resources.Remove</span>
 						</a>
 					</li>
 
@@ -88,7 +88,7 @@
 								<div class="btn-group" role="group">
 									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 										<i class="glyphicon glyphicon-heart"></i>&nbsp;
-										<span class="phone-navbar-text">
+										<span>
 											<span>@Resources.MustHave</span>&nbsp;
 											<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;
 											(<span data-bind="text: maxMustHave" class="musthave-max"></span>)
@@ -117,7 +117,7 @@
 	</div>
 	<div class="phone-background" ></div>
 </div>
-<div id="Preference-period-feedback-view" data-bind="css:{'phone-warning-indicator':IsPreferenceForMobileEnabled && IsHostAMobile}" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
+<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsPreferenceForMobileEnabled && IsHostAMobile}" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: PreferenceFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
 		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
 			<div class="alert alert-preference " data-bind="css: PreferenceFeedbackClass">
@@ -181,7 +181,7 @@
 	</div>
 
 	<div id="Preference-body"
-		 class="clearfix pagebody"
+		 class="clearfix"
 		 data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'
 		 data-mytime-maxmusthave="@Model.MaxMustHave"
 		 data-mytime-currentmusthave="@Model.CurrentMustHave">

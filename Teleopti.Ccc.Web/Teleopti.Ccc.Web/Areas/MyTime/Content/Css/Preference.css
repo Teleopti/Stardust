@@ -1,6 +1,6 @@
 ﻿
 .alert-preference {
-	max-width: 1024px;
+	width: 1024px;
 	margin: auto;
 }
 
@@ -92,6 +92,7 @@
 		position: fixed;
 		top: 10%;
 		left: 0;
+		right: 0;
 		z-index: 100;
 		margin-left: 5px;
 		margin-right: 5px;
@@ -109,6 +110,9 @@
 	}
 	.phone-warning-indicator {
 		position: relative;
+	}
+	.phone-warning-indicator .alert {
+		width: 100%;
 	}
 	.phone-warning-indicator .warning-indicator {
 		display: block !important;
@@ -166,8 +170,9 @@
 		width: 100vw !important;
 		left: 0;
 		margin: 0;
+		height: 40px;
 	}
-	.phone-navbar .phone-navbar-bottom .phone-navbar-text {
+	.phone-navbar .phone-navbar-bottom .glyphicon {
 		display: block;
 	}
 	.phone-navbar .phone-navbar-bottom li {
@@ -183,6 +188,9 @@
 	}
 	.phone-navbar .w-40 {
 		width: 40% !important;
+	}
+	.phone-navbar .w-50 {
+		width: 50% !important;
 	}
 	.phone-navbar .phone-navbar-bottom  .input-group {
 		padding: 0 !important;
@@ -200,7 +208,7 @@
 		position: fixed;
 		top: inherit;
 		left: inherit;
-		bottom: 46px;
+		bottom: 40px;
 		background-color: #9ccc33;
 		min-width: inherit;
 		width: 100%;
@@ -217,9 +225,6 @@
 	.phone-navbar .phone-navbar-bottom .preference-split-button .navbar-btn{
 		margin-left: 0 !important;
 		margin-top: 10px;
-	}
-	.phone-navbar .phone-navbar-bottom .glyphicon {
-		top: 5px;
 	}
 	body { /*I know*/
 		margin-bottom: 50px;

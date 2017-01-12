@@ -79,6 +79,22 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes();
 	});
 
+	this.IsHostAMobile = ko.observable((/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent)));
+
+	this.IsStudentAvailabilityForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_StudentAvailabilityForMobile_42498');
+
+	this.WarningCount = ko.computed(function() {
+		var studentAvailabilityPeriod = $("#StudentAvailability-period").data("mytime-studentavailabilityperiod");
+		if (studentAvailabilityPeriod == null) return 1;
+		else return 2;
+	});
+
+	this.shouldShowWarningDetail = ko.observable(true);
+
+	this.toggleWarningDetail = function () {
+		self.shouldShowWarningDetail(!self.shouldShowWarningDetail());
+	};
+
 	this.StudentAvailabilityFeedbackClass = ko.computed(function () {
 		return self.StudentAvailabilityTimeIsOutOfRange()
 			? 'alert-danger' : 'alert-info';
