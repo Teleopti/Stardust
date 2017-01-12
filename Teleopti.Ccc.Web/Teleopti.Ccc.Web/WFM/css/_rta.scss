@@ -32,10 +32,6 @@
 	color: $text-color-standard!important;
 }
 
-.rta-nav-link {
-	cursor: pointer;
-}
-
 .shift-cell-header {
 	height: 30px;
 	text-align: right;
@@ -143,11 +139,7 @@
 ///////////End of rta-skills///////////////////////
 ///////////rta-agents///////////////////////
 
-.agent-row {
-	cursor: pointer;
-}
-
-.testclass {
+.rtagridcell {
 	margin-bottom: 50px;
 }
 
@@ -157,10 +149,9 @@
 	margin-top: 30px;
 	padding: 15px;
 	width: 100%;
-}
-
-.agent-menu > a {
-	margin-right: 5%;
+	a {
+		margin-right: 5%;
+	}
 }
 
 .agent-table-wrapper {
@@ -217,12 +208,11 @@
 }
 
 .rta-disabled-switch {
-	background: #E0E0E0 !important;
+	background: $gray-300 !important;
 }
 
 .rta-clear-search {
 	padding: 10px 0;
-	cursor: pointer;
 }
 ///////////End of rta-agents////////////////
 ///////////rta-agent-details///////////////

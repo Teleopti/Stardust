@@ -31,8 +31,8 @@
 		<div class="con-flex">
 			<div class="sub-header" ng-show="vm.showBreadcrumb">
 				<div>
-					<a class="rta-nav-link" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
-					<a class="rta-nav-link" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>
+					<a class="cursor-pointer" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
+					<a class="cursor-pointer" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>
 					<span ng-if="!vm.showPath">{{vm.siteName}}</span>
 					<span ng-if="vm.showPath">/</span>
 					<span>{{vm.teamName}}</span>

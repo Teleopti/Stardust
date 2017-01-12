@@ -77,7 +77,7 @@
 								<div class="rta-select-header">
 									<md-select-header>
 										<i class="mdi mdi-magnify"></i>
-										<span ng-if="vm.searchTerm.length > 0" ng-click="vm.clearSearchTerm()" class="pull-right grow-out rta-clear-search">
+										<span ng-if="vm.searchTerm.length > 0" ng-click="vm.clearSearchTerm()" class="pull-right grow-out rta-clear-search cursor-pointer">
 											<i class="mdi mdi-close"></i>
 										</span>
 					<input ng-model="vm.searchTerm" type="search" placeholder="{{'SearchASiteOrTeam' | translate}}" ng-keydown="vm.onSearchOrganization($event)" class="picker-searchbox md-text rta-options-search-input">
@@ -102,8 +102,8 @@
 		<div class="con-flex">
 			<div class="sub-header" ng-show="vm.showBreadcrumb">
 				<div>
-					<a class="rta-nav-link" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
-					<a class="rta-nav-link" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>
+					<a class="cursor-pointer" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
+					<a class="cursor-pointer" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>
 					<span ng-if="!vm.showPath">{{vm.siteName}}</span>
 					<span ng-if="vm.showPath">/</span>
 					<span>{{vm.teamName}}</span>

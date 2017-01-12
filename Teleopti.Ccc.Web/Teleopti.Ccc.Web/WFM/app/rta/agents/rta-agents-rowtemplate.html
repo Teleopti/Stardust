@@ -1,5 +1,5 @@
 <div ng-click="grid.appScope.vm.selectAgent(row.entity.PersonId)" class="agent-state">
-	<div ng-class="{testclass:grid.appScope.vm.isSelected(row.entity.PersonId)}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell agent-row" ng-attr-agentid="{{row.entity.PersonId}}" ng-click="grid.appScope.vm.getAdherenceForAgent(row.entity.PersonId)"
+	<div ng-class="{rtagridcell:grid.appScope.vm.isSelected(row.entity.PersonId)}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell cursor-pointer" ng-attr-agentid="{{row.entity.PersonId}}" ng-click="grid.appScope.vm.getAdherenceForAgent(row.entity.PersonId)"
 					ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell=""></div>
 </div>
 <div ng-show="grid.appScope.vm.isSelected(row.entity.PersonId)">
