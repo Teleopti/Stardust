@@ -61,11 +61,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             _daysToReschedule = new List<DateOnly>();
         }
 
-        public IList<DateOnly> DaysToDelete => _daysToDelete;
-
-	    public IList<DateOnly> DaysToReschedule()
+        public IList<DateOnly> DaysToDelete
         {
-            return _daysToReschedule.OrderByDescending(d => d).ToArray(); 
+            get { return _daysToDelete; }
+        }
+
+        public IList<DateOnly> DaysToReschedule()
+        {
+            return _daysToReschedule.OrderByDescending(d => d).ToList(); 
         }
 
         public void AddDayToReschedule(DateOnly dateOnly)
