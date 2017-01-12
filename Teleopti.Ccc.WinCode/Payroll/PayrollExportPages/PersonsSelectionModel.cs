@@ -13,12 +13,9 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages
             _selectedPersons.Add(person);
         }
 
-        public IEnumerable<IPerson> SelectedPersons
-        {
-            get { return _selectedPersons; }
-        }
+        public IEnumerable<IPerson> SelectedPersons => _selectedPersons;
 
-        public DateOnlyPeriod SelectedPeriod
+	    public DateOnlyPeriod SelectedPeriod
         {
             get; set; 
         }

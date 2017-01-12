@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages
 
         public void SetSelectedPeopleToPayrollExport(IPayrollExport payrollExport, HashSet<Guid> selectedPersonGuids)
         {
-            if (payrollExport == null) throw new ArgumentNullException("payrollExport");
+            if (payrollExport == null) throw new ArgumentNullException(nameof(payrollExport));
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var persons = _repositoryFactory.CreatePersonRepository(uow).FindPeople(selectedPersonGuids);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages
 
         public void PopulateModel(IPayrollExport payrollExport)
         {
-            if (payrollExport == null) throw new ArgumentNullException("payrollExport");
+            if (payrollExport == null) throw new ArgumentNullException(nameof(payrollExport));
             foreach (var person in payrollExport.Persons)
             {
                 _model.AddPerson(person);

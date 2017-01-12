@@ -90,14 +90,8 @@ namespace Teleopti.Ccc.WinCode.Grouping
 		private void refreshGroupPage(string obj)
 		{
 			var tab = _personSelectorView.SelectedTab;
-			if (tab != null)
-			{
-				var command = tab.Tag as IExecutableCommand;
-				if (command != null)
-				{
-					command.Execute();
-				}
-			}
+			var command = tab?.Tag as IExecutableCommand;
+			command?.Execute();
 		}
 
 		private void peopleSaved(string obj)
@@ -152,8 +146,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 				}
 			}
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		
 		private void groupPageAdded(EventGroupPage eventGroupPage)
 		{
 			// the control isn't loaded yet
@@ -176,8 +169,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 		{
 			_addGroupPageCommand.Execute();
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		
 		public void LoadTabs()
 		{
 			var tabs = new List<TabPageAdv>
@@ -268,10 +260,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 			}
 		}
 
-		public DateOnly SelectedDate
-		{
-			get { return _personSelectorView.SelectedDate; }
-		}
+		public DateOnly SelectedDate => _personSelectorView.SelectedDate;
 
 		public IApplicationFunction ApplicationFunction { get; set; }
 
@@ -294,13 +283,8 @@ namespace Teleopti.Ccc.WinCode.Grouping
 			get
 			{
 				var tab = _personSelectorView.SelectedTab;
-				if (tab != null)
-				{
-					var command = tab.Tag as ILoadOrganizationCommand;
-					if (command != null)
-						return true;
-				}
-				return false;
+				var command = tab?.Tag as ILoadOrganizationCommand;
+				return command != null;
 			}
 		}
 

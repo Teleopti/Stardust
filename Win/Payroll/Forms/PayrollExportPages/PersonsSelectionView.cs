@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
         {
             InitializeComponent();
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
         public PersonsSelectionView(PersonsSelectionModel model, IComponentContext componentContext) : this()
         {
             _model = model;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
         {
             var payrollExport = (IPayrollExport)aggregateRoot;
             _presenter.PopulateModel(payrollExport);
-            //_presenter.BuildTreeStructure();
+
             _selectorView.PreselectedPersonIds = new HashSet<Guid>(_model.SelectedPersons.Select(selectedPerson => selectedPerson.Id.Value));
             _selectorView.SelectedPeriod = _model.SelectedPeriod;
             _personSelectorPresenter.LoadTabs();
@@ -86,12 +85,9 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
         {
         }
 
-        public string PageName
-        {
-            get { return Resources.PersonSelection; }
-        }
+        public string PageName => Resources.PersonSelection;
 
-        public IApplicationFunction ApplicationFunction { get; set; }
+	    public IApplicationFunction ApplicationFunction { get; set; }
 
     }
 }
