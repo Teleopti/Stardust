@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-
     public class NightRestWhiteSpotSolverService : INightRestWhiteSpotSolverService
     {
         private readonly INightRestWhiteSpotSolver _solver;
@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _workShiftFinderResultHolder = workShiftFinderResultHolder;
         	_resourceCalculateDelayer = resourceCalculateDelayer;
         }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
         public bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
             NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix);
@@ -34,13 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (solverResult.DaysToDelete.Count == 0)
                 return false;
 
-            IList<IScheduleDay> daysToDelete = new List<IScheduleDay>();
-
-            foreach (var dateOnly in solverResult.DaysToDelete)
-            {
-            	IScheduleDay scheduleDay = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
-				daysToDelete.Add(scheduleDay);
-            }
+	        var daysToDelete =
+		        solverResult.DaysToDelete.Select(dateOnly => matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart()).ToArray();
         	_deleteAndResourceCalculateService.DeleteWithResourceCalculation(daysToDelete,
         	                                                                 schedulePartModifyAndRollbackService,
 																			 schedulingOptions.ConsiderShortBreaks, false);
