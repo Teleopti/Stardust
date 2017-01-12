@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		}
 		
 		[LogInfo]
+		[TestLogTime]
 		protected virtual void SendStateChange(int batchSize, StateChange stateChange)
 		{
 			var now = stateChange.Time.Utc();
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		}
 
 		[LogInfo]
+		[TestLogTime]
 		protected virtual void Send(IEnumerable<ExternalUserStateWebModel> states)
 		{
 			if (states.Count() == 1)
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		// ~10% adherence changes
 		// 10 calls per hour
 		// 2 state changes per call
-		// 200+5 state changes
+		// 160+5 state changes
 		// 17 adherence changes
 		public IEnumerable<StateChange> StateChanges()
 		{
