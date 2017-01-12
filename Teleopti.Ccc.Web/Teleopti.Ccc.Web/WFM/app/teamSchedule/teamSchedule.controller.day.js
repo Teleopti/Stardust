@@ -26,7 +26,6 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
-		vm.availableGroups = [];
 
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
@@ -315,7 +314,7 @@
 	
 		vm.toggles = teamsToggles.all();
 		var deferInited = $q.defer();
-		vm.inited = deferInited;
+		vm.inited = deferInited.promise;
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
 		vm.searchOptions = {
