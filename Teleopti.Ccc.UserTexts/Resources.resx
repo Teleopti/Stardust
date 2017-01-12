@@ -15103,7 +15103,7 @@ These options are activated:
     <comment>skill area</comment>
   </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
-    <value>Cannot apply change to agent in different timezones</value>
+    <value>Cannot apply change to agents in other time zones</value>
     <comment>Alert message stating the intended changes cannot be applied to agents that have timezones different to the currently selected timezone.</comment>
   </data>
   <data name="ArchiveSchedule" xml:space="preserve">
@@ -15139,10 +15139,10 @@ These options are activated:
     <comment>MoveShift command in the Teams module</comment>
   </data>
   <data name="ArchiveScheduleDescription" xml:space="preserve">
-    <value>Archive schedule from Default scenario to another scenario, overwriting any previous scheduling in the target scenario for the given period.</value>
+    <value>Archive schedule from default scenario to another scenario, overwriting any previous schedule in the target scenario for the given period.</value>
   </data>
   <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
-    <value>You are about to overwrite all existing scheduling for scenario '{0}' for the period {1} - {2} and the selected teams.</value>
+    <value>You are about to overwrite all existing schedule for scenario '{0}' for the period {1} - {2} and the selected teams.</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
     <value>Are you sure?</value>
@@ -15157,7 +15157,7 @@ These options are activated:
     <value>Pick a smaller date period.</value>
   </data>
   <data name="PickAtleastOneTeamDot" xml:space="preserve">
-    <value>Pick atleast one team.</value>
+    <value>Pick at least one team.</value>
   </data>
   <data name="Run" xml:space="preserve">
     <value>Run</value>
@@ -15209,7 +15209,7 @@ These options are activated:
   </data>
   <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
     <value>Select a multiplicator definition set</value>
-    <comment>place holder for multiplicator definition sets select in add overtime pannel under web WFM/teams</comment>
+    <comment>place holder for multiplicator definition sets select in add overtime panel under web WFM/teams</comment>
   </data>
   <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
     <value>Successfully added an overtime activity for the selected agent(s). </value>
@@ -15243,15 +15243,15 @@ These options are activated:
     <comment>Done importing for {0} people.</comment>
   </data>
   <data name="ImportingConfirmationWithParameters" xml:space="preserve">
-    <value>You are about to merge some existing scheduling for scenario '{0}' for the period {1} - {2} and the selected teams.</value>
+    <value>You are about to merge the schedule in scenario '{0}' with the existing schedule in the default scenario for the period {1} - {2} and the selected teams.</value>
   </data>
   <data name="ImportScheduleDescription" xml:space="preserve">
-    <value>Import schedule from another scenario to default scenario, merge some previous scheduling in the target scenario for the given period.</value>
+    <value>Import schedule from another scenario to default scenario, merging with the existing schedule in the default scenario for the given period.</value>
     <comment>Import schedule from another scenario to default scenario, merge some previous scheduling in the target scenario for the given period.</comment>
   </data>
   <data name="RunImporting" xml:space="preserve">
-    <value>Run importing</value>
-    <comment>Run importing</comment>
+    <value>Run import</value>
+    <comment>Run import</comment>
   </data>
   <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
     <value>You need to pick a scenario to import from.</value>
@@ -15270,7 +15270,7 @@ These options are activated:
     <comment>button text of reset button for resetting rules</comment>
   </data>
   <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
-    <value>Validating Rules</value>
+    <value>Validation Rules</value>
     <comment>header text of shift trade rule setting grid</comment>
   </data>
   <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
@@ -15310,11 +15310,11 @@ These options are activated:
     <comment>Friendly description of NotOverwriteLayerRule to show in shift trade system setting</comment>
   </data>
   <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
-    <value>Meeting, Person activity or Overtime activity in shift</value>
+    <value>Meeting, personal activity or overtime activity in shift</value>
     <comment>Friendly description of NonMainShiftActivityRule to show in shift trade system setting</comment>
   </data>
   <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
-    <value>Person account</value>
+    <value>Personal account</value>
     <comment>Friendly description of NewPersonAccountRule to show in shift trade system setting</comment>
   </data>
   <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
@@ -15397,7 +15397,7 @@ These options are activated:
     <comment>Placeholder for budget group selection</comment>
   </data>
   <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
-    <value>Schedule contract time tolerance</value>
+    <value>Contract time tolerance</value>
     <comment>Friendly description of ShiftTradeTargetTimeSpecification to show in shift trade system setting</comment>
   </data>
   <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">

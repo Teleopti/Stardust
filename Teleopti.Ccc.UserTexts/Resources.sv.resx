@@ -13860,8 +13860,262 @@ Dessa val är aktiverade:
   <data name="ImportSchedule" xml:space="preserve">
     <value>Importera schema</value>
   </data>
-  <data name="WebStaffing" xml:space="preserve">
+  <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Flytta otillåted överlappad aktivitet</value>
+  </data>
+  <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Du har inte rättigheter för att flytta otillåtet överlappade aktiviteter.</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>Otillåtet överlappade aktiviteter för valda agenter har flyttats. </value>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>Flyttar otillåtet överlappade aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
+  </data>
+  <data name="SortByStartDate" xml:space="preserve">
+    <value>Startdatum</value>
+  </data>
+  <data name="SortByUpdateDate" xml:space="preserve">
+    <value>Uppdateringsdatum</value>
+  </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value>Validerar {0} av {1} person(er) </value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Fortsätt</value>
+  </data>
+  <data name="MoveShift" xml:space="preserve">
+    <value>Flytta skift</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Är du säker?</value>
+  </data>
+  <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
+    <value>Klar med arkivering för {0} personer. </value>
+  </data>
+  <data name="FromScenarioColon" xml:space="preserve">
+    <value>Från scenario:</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>Välj en kortare datumperiod. </value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Kör</value>
+  </data>
+  <data name="RunArchiving" xml:space="preserve">
+    <value>Kör arkivering</value>
+  </data>
+  <data name="TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>Du kan bara arkivera från standardscenariot.</value>
+  </data>
+  <data name="TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>Du kan inte arkivera till standardscenariot. </value>
+  </data>
+  <data name="ToScenarioColon" xml:space="preserve">
+    <value>Till scenario:</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveFromDot" xml:space="preserve">
+    <value>Du måste välja ett scenario att arkivera från. </value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
+    <value>Du måste välja ett scenario att arkivera till.</value>
+  </data>
+  <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
+    <value>Ditt urval resulterade i 0 personer. </value>
+  </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>Laddar förfrågningar...</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingShift" xml:space="preserve">
+    <value>Flyttar skift för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
+  </data>
+  <data name="SuccessfulMessageForMovingShift" xml:space="preserve">
+    <value>Flyttade skift för valda agenter</value>
+  </data>
+  <data name="NoSitesFound" xml:space="preserve">
+    <value>Inga enheter hittades för de valda kompetenserna</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
+    <value>Lägger till en övertidsaktivitet för {0} agenter, {1} lyckades och {2} misslyckades. </value>
+  </data>
+  <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
+    <value>Välj en definitionsgrupp för multiplikatorer</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Göm filter</value>
+  </data>
+  <data name="NotificationTimeToStay" xml:space="preserve">
+    <value>Visning av notifieringar (sekunder)</value>
+  </data>
+  <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
+    <value>Övertidsaktivitet tillagd för valda agenter.</value>
+  </data>
+  <data name="AddOvertimeActivity" xml:space="preserve">
+    <value>Lägg till övertidsaktivitet</value>
+  </data>
+  <data name="RequestedPeriodIsTooLong" xml:space="preserve">
+    <value>Perioden för förfrågan är för lång</value>
+  </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>Inga rättigheter att lägga till övertidsaktivitet för agenten {0}.</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Nivå</value>
+  </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>Du måste välja ett datum i framtiden. </value>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>Klar med import för {0} personer.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>Du måste välja ett scenario att importera från. </value>
+  </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>Skicka till administratör</value>
+  </data>
+  <data name="WhenValidationFails" xml:space="preserve">
+    <value>Vid fel i valideringen</value>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>Återställ reglerna</value>
+  </data>
+  <data name="DescriptionOfNewShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Skiftkategoribegränsning för perioden</value>
+  </data>
+  <data name="DescriptionOfWeekShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Skiftkategoribegränsning för veckan</value>
+  </data>
+  <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
+    <value>Nattvila</value>
+  </data>
+  <data name="DescriptionOfNewMaxWeekWorkTimeRule" xml:space="preserve">
+    <value>Max arbetstid per vecka</value>
+  </data>
+  <data name="DescriptionOfMinWeekWorkTimeRule" xml:space="preserve">
+    <value>Minsta arbetstid per vecka</value>
+  </data>
+  <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
+    <value>Konflikt mellan fridag och aktivitet</value>
+  </data>
+  <data name="DescriptionOfNotOverwriteLayerRule" xml:space="preserve">
+    <value>Icke överskrivningsbar aktivitet i skiftet</value>
+  </data>
+  <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
+    <value>Öppettider på enheten</value>
+  </data>
+  <data name="DescriptionOfOpenHoursRule" xml:space="preserve">
+    <value>Öppettider på kompetensen</value>
+  </data>
+  <data name="DenyDueToTechnicalProblems" xml:space="preserve">
+    <value>Bemanningsinformationen är inte uppdaterad i systemet. Var god kontakta systemadministratören. </value>
+  </data>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>Sök en enhet eller ett team</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>{0} team valda</value>
+  </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>Servicenivå</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>Använd kompetenserna:</value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>Agenter med larm</value>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>Inkludera agenter med status:</value>
+  </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>Filter...</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Visa filter</value>
+  </data>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>Uppdatera resursberäkning</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Prestanda</value>
+  </data>
+  <data name="Staffing" xml:space="preserve">
     <value>Bemanning</value>
-    <comment>Module in web</comment>
+  </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>Använt totalt</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Använt av {0}</value>
+  </data>
+  <data name="NoBudgetGroupFound" xml:space="preserve">
+    <value>Ingen budgetgrupp hittades.</value>
+  </data>
+  <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
+    <value>Välj en budgetgrupp...</value>
+  </data>
+  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
+    <value>"{0}" finns redan. Är du säker på att du vill ersätta den?</value>
+  </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>Uppdateringsbekräftelse</value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>Ta bort standard</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>Ange som standard</value>
+  </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>MyBusinessUnit</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>MyOwn</value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>MySite</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>Välj en roll först</value>
+  </data>
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>Kan inte göra ändringar för agenter i andra tidszoner</value>
+  </data>
+  <data name="ArchiveScheduleDescription" xml:space="preserve">
+    <value>Arkivering av schema från standardscenariot till annat scenario. Befintligt schema i målscenariot skrivs över för den angivna perioden.</value>
+  </data>
+  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+    <value>Du är på väg att skriva över allt befintligt schema i scenario {0} för den angivna perioden {1} - {2} och de valda teamen. </value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>Välj minst ett team.</value>
+  </data>
+  <data name="ImportingConfirmationWithParameters" xml:space="preserve">
+    <value>Du är på väg att slå ihop schemat i scenario '{0}' med befintligt schema i standardscenariot för perioden {1} - {2} och de valda teamen. </value>
+  </data>
+  <data name="ImportScheduleDescription" xml:space="preserve">
+    <value>Import av schema från ett annat scenario till standardscenariot. Det importerade schemat slås ihop med befintligt schema i standardscenariot för den angivna perioden.  </value>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>Kör import</value>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>Valideringsregler</value>
+  </data>
+  <data name="DescriptionOfMinWeeklyRestRule" xml:space="preserve">
+    <value>Minsta veckovila</value>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>Möte, personlig aktivitet eller övertidsaktivitet i skift</value>
+  </data>
+  <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
+    <value>Tidsuppföljning</value>
+  </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>Tolerans för kontraktstid </value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>Staffing</value>
   </data>
 </root>
