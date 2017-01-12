@@ -10,12 +10,6 @@
 	input {
 		background-color: transparent;
 	}
-	.relative {
-		position: relative;
-	}
-	.inline-block {
-		display: inline-block;
-	}
 	.start-ellipsis, .end-ellipsis {
 		position: absolute;
 		top: 2px;
@@ -160,7 +154,6 @@
 		margin-right: 0;
 	}
 	.page-size-selector {
-		display: inline-block;
 		text-align: left;
 		margin: .8rem 2rem .8rem 0;
 	}
@@ -176,12 +169,10 @@
 		border-top: 1px solid $gray026;
 		min-height: 60px;
 
-		.notice-spacer {
+		.select-all {
 			float: left;
 			margin-bottom: 0;
 			padding: 5px;
-			width: auto;
-			display: inline-block;
 		}
 	}
 	.hidden-for-test {
@@ -227,7 +218,6 @@
 		height: 100%;
 	}
 	.people-search-container {
-		display: inline-block;
 		margin: 10px 10px 10px 0;
 
 		.advanced-input-dropdown {
@@ -258,7 +248,6 @@
 		}
 	}
 	.wfm-switch {
-		display: inline-block;
 		margin: 10px;
 		padding: 0 60px 0 0;
 		text-align: right;
@@ -270,7 +259,6 @@
 	}
 	.settings-container {
 		margin: 10px 20px;
-		display: inline-block;
 
 		i {
 			vertical-align: middle;
@@ -317,7 +305,7 @@
 			margin-right: .8em;
 		}
 		input.name.ng-invalid {
-			border-bottom: 1px solid red;
+			border-bottom: 1px solid $red-800;
 		}
 		button {
 			margin: 0;
@@ -331,14 +319,12 @@
 	.fav-search-item {
 		height: 2em;
 		padding: 0 !important;
+		border-bottom: 1px solid $gray012;
 		min-height: initial !important;
 
 		.fav-search-item-container {
 			padding: 0.2em $favsearchleftpadding 0;
 			width: 100%;
-		}
-		.default-favorite {
-			display: inline-block;
 		}
 		.default-favorite button {
 			font-size: 0.8em;
@@ -364,7 +350,6 @@
 	}
 }
 .organization-picker-container {
-	display: inline-block;
 	margin-right: .5em;
 
 	md-input-container {
@@ -472,16 +457,12 @@
 	}
 }
 team-schedule-datepicker {
-	display: inline-block;
 	vertical-align: top;
 	white-space: nowrap;
 	text-align: center;
 	width: auto;
 
 	> span {
-		display: inline-block;
-		position: relative;
-
 		#teamschedule-datepicker-input {
 			text-align: center;
 			width: 90px;
@@ -580,12 +561,10 @@ team-schedule-datepicker {
 //Table Body
 .con-row.teamschedule-body {
 	align-items: flex-start;
-	position: relative;
 	display: block !important;
 	overflow: hidden;
 }
 .teamschedule-body .big-table-wrapper {
-	position: relative;
 	overflow: hidden;
 	overflow-x: auto;
 	min-height: 500px;
@@ -630,7 +609,6 @@ team-schedule-datepicker {
 			min-width: 150px;
 
 			span.person-name-text {
-				display: inline-block;
 				word-break: break-word;
 				white-space: normal;
 			}
@@ -672,7 +650,6 @@ team-schedule-datepicker {
 			border-left: 1px solid $gray012;
 
 			& > span {
-				display: inline-block;
 				width: 20px;
 			}
 		}
@@ -791,6 +768,23 @@ teamschedule-command-container {
 		}
 	}
 }
+.shiftcat-shortname, .shiftcat-fullname {
+	display: table-cell;
+}
+.shiftcat-shortname {
+	width: 2em;
+	white-space: nowrap;
+	padding: 0 2px;
+	text-align: center;
+	border-radius: 2px;
+}
+.shiftcat-fullname {
+	padding-left: 0.5em;
+	max-width: 18em;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
 .add-activity i.mdi-alert-octagon {
 	vertical-align: middle;
 }
@@ -821,7 +815,6 @@ teamschedule-command-container {
 		margin-right: -7px;
 	}
 	.agent-list {
-		position: relative;
 		overflow: auto;
 		flex-grow: 1;
 
@@ -873,7 +866,13 @@ teamschedule-command-container {
 		}
 	}
 }
-//Tooltips and helping classes
+//Tooltips and helper classes
+.relative {
+	position: relative;
+}
+.inline-block {
+	display: inline-block;
+}
 md-tooltip.layer-summary {
 	text-align: center;
 }
@@ -890,23 +889,6 @@ md-tooltip.layer-summary {
 }
 .warning-icon {
 	color: $orange-600;
-}
-.shiftcat-shortname, .shiftcat-fullname {
-	display: table-cell;
-}
-.shiftcat-shortname {
-	width: 2em;
-	white-space: nowrap;
-	padding: 0 2px;
-	text-align: center;
-	border-radius: 2px;
-}
-.shiftcat-fullname {
-	padding-left: 0.5em;
-	max-width: 18em;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
 }
 md-select-menu md-option:first-child:not([disabled]):focus {
 	background: inherit;

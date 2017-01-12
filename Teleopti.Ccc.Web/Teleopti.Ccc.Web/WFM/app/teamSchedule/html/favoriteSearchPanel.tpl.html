@@ -15,7 +15,7 @@
 				</span>
 
 				<div class="pull-right" ng-click="$event.stopPropagation()">
-					<div class="default-favorite" ng-class="{'visible':showIcons || searchItem.IsDefault, 'invisible':!showIcons}">
+					<div class="default-favorite inline-block" ng-class="{'visible':showIcons || searchItem.IsDefault, 'invisible':!showIcons}">
 						<span ng-click="$ctrl.toggleDefault(searchItem.Name)">
 							<i ng-class="{ 'mdi-star':searchItem.IsDefault, 'mdi-star-outline':!searchItem.IsDefault}" class="mdi"></i>
 						</span>
