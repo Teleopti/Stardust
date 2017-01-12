@@ -68,6 +68,7 @@
 		WfmTeamSchedule_SwapShifts_36231,
 		WfmTeamSchedule_RemoveAbsence_36705,
 		WfmTeamSchedule_RemoveActivity_37743,
+		WfmTeamSchedule_RemoveOvertime_42481,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
 
 		WfmTeamSchedule_ShowShiftCategory_39796,

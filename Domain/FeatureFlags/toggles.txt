@@ -68,6 +68,7 @@ WfmTeamSchedule_MoveEntireShift_41632 = true
 WfmTeamSchedule_SwapShifts_36231 = true
 WfmTeamSchedule_RemoveAbsence_36705 = true
 WfmTeamSchedule_RemoveActivity_37743 = true
+WfmTeamSchedule_RemoveOvertime_42481 = DEV
 WfmTeamSchedule_RevertToPreviousSchedule_39002 = true
 
 WfmTeamSchedule_ShowShiftCategory_39796 = true
