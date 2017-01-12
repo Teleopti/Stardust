@@ -199,28 +199,23 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[LogInfo]
-		public virtual ViewResult SetCurrentTime(long ticks, string time)
+		public virtual ViewResult SetCurrentTime(long ticks, string time, bool? triggerRecurringJobs)
 		{
 			if (time != null)
 				_mutateNow.Is(time.Utc());
 			else
 				_mutateNow.Is(DateTime.SpecifyKind(new DateTime(ticks), DateTimeKind.Utc));
 
-			TriggerRecurringJobs();
+			if (triggerRecurringJobs ?? true)
+				_tenantTickEventPublisher.WithPublishingsForTest(() =>
+				{
+					_hangfire.TriggerReccuringJobs();
+				});
 
 			return View("Message", new TestMessageViewModel
 			{
 				Title = "Time changed on server!",
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
-			});
-		}
-		
-		[TestLogTime]
-		protected virtual void TriggerRecurringJobs()
-		{
-			_tenantTickEventPublisher.WithPublishingsForTest(() =>
-			{
-				_hangfire.TriggerReccuringJobs();
 			});
 		}
 
