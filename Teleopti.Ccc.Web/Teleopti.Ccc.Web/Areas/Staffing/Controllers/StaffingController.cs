@@ -9,21 +9,23 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
+	//[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebStaffing)]
 	public class StaffingController : ApiController
     {
 	    private readonly IStardustSender stardustSender;
+	    private readonly INow now;
 
-	    public StaffingController(IStardustSender stardustSender)
+	    public StaffingController(IStardustSender stardustSender, INow now)
 	    {
 		    this.stardustSender = stardustSender;
+		    this.now = now;
 	    }
 
-	    [UnitOfWork, HttpGet, Route("api/staffing/overtime")]
+	    [UnitOfWork, HttpPost, Route("api/staffing/overtime")]
 		//public virtual IHttpActionResult AddOvertime([FromBody]AddOverTimeModel model)
 		public virtual IHttpActionResult AddOvertime()
-	    {
-		    stardustSender.Send(new AddOverTimeEvent {Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), Skills = null});
+		{
+		    stardustSender.Send(new AddOverTimeEvent {Period = new DateTimePeriod(now.UtcDateTime(), now.UtcDateTime().AddDays(1))});
 			return Ok();
 		}
 
