@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
-								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(17, 15, 17, 30), 2)),
+								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(17, 0, 17, 15), 2)),
 								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 10))
 							 });
 
