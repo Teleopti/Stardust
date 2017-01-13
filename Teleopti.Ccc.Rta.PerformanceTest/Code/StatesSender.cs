@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			var now = stateChange.Time.Utc();
 			_now.Is(now);
-			_http.PostJson("/Test/SetCurrentTime", new {time = stateChange.Time, triggerRecurringJobs = true});
+			_http.PostJson("/Test/SetCurrentTime", new {time = stateChange.Time, triggerRecurringJobs = false});
 
 
 			_data.LogonsWorking()
