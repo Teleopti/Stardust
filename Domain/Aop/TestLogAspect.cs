@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Aop
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			_builder.BuildInvocationStart(invocation);
+			_log.Debug(_builder.BuildInvocationStart(invocation));
 			_stopwatch.Start();
 		}
 
