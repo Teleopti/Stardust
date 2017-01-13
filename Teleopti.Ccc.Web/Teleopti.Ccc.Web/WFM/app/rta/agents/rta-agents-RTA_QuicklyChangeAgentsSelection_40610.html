@@ -23,7 +23,6 @@
 	</div>
 </div>
 
-<div class="con-flex" style="padding-bottom:0">
 	<div class="panel material-depth-1">
 		<div class="con-row">
 			<div class="con-flex">
@@ -85,7 +84,7 @@
 				</div>
 				<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="vm.teamsSelected.length === 0" ng-click="vm.clearOrgSelection()">Clear All</button>
 				<md-optgroup ng-repeat="site in vm.sites | filter:vm.searchTerm" class="rta-option-group">
-					<span ng-click="vm.expandSite(site)" style="margin-right:6px"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
+					<span ng-click="vm.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
 					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
 					<md-option ng-show="site.isExpanded" ng-selected="vm.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
 				</md-optgroup>
@@ -111,7 +110,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="con-row" style="padding-top:10px">
+	<div class="con-row rta-filter-wrapper">
 		<div class="con-flex">
 			<label class="input-prepend" for="filter-agents">
 				<i class="mdi mdi-filter-outline"></i>
@@ -135,7 +134,7 @@
 			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
 		</div>
 	</div>
-	<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause" panel-options="vm.rightPanelOptions" style="min-height:400px">
+	<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause"  class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 		<div ng-repeat="state in vm.states">
 			<div class="wfm-checkbox">

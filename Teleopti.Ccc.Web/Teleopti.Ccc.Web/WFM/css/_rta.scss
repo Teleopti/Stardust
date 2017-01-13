@@ -207,4 +207,35 @@
 	padding: $full-padding*2 0;
 }
 
+.rta-filter-wrapper {
+	padding-top: $full-padding*2;
+}
+
+.rta-right-panel-wrapper {
+	min-height:400px;
+}
+
+.rta-options-prepend {
+	margin-right: $half-padding*2;
+}
+
+///////////End of rta-agents///////////////////////
+///////////rta-historical-adherence///////////////////////
+
+.rta-historical-adherence-row-wrapper {
+	position: relative; 
+	padding: 4px 0; 
+	height: $full-padding*4;
+}
+
+.rta-out-of-adherences-wrapper {
+	position: relative;
+}
+
+.rta-full-shift-wrapper {
+	height: $full-padding*10;
+}
+
+
+
 
