@@ -860,6 +860,7 @@
 				vm.rightPanelOptions = {
 					panelState: false,
 					panelTitle: " ",
+					sidePanelTitle: " ",
 					showCloseButton: true,
 					showBackdrop: true,
 					showResizer: true,

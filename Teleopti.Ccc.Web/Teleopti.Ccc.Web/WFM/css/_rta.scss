@@ -122,10 +122,6 @@
 	padding-left: 0;
 }
 
-.rta-alarm-switch-panel {
-	margin-top: $full-padding*3;
-}
-
 .rta-btn-clear-org-sel {
 	margin: 0;
 }
@@ -207,16 +203,16 @@
 	padding: $full-padding*2 0;
 }
 
-.rta-filter-wrapper {
-	padding-top: $full-padding*2;
-}
-
 .rta-right-panel-wrapper {
 	min-height:400px;
 }
 
 .rta-options-prepend {
 	margin-right: $half-padding*2;
+}
+
+.rta-agents-filter-wrapper {
+	margin-top: $full-padding*4;
 }
 
 ///////////End of rta-agents///////////////////////

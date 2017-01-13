@@ -5,22 +5,17 @@
 				<i class="mdi mdi-alarm"></i> <b>{{vm.agentName}}</b>
 			</h1>
 		</div>
-		<div class="rta-top-buttons-wrapper pull-left"></div>
 	</div>
 	<div class="fab-wrapper pull-right"></div>
 </div>
-<div class="con-row">
-	<div class="con-flex"></div>
-</div>
-<div class="panel material-depth-1">
-	<div class="sub-header">
-		<div>
-			Adherence for {{vm.date | amDateFormat: "YYYY-MM-DD"}}
-		</div>
-	</div>
-	<div class="con-row rta-filter-wrapper">
-		<div class="con-flex">
-			<div class="rta-historical-adherence-row-wrapper">
+
+ <div class="panel material-depth-1">
+  <div class="sub-header">
+    <h2>Adherence for {{vm.date | amDateFormat: "YYYY-MM-DD"}}</h2>
+  </div>
+ <div class="con-row">
+    <div class="con-flex">
+				<div class="rta-historical-adherence-row-wrapper">
 				<div ng-repeat="row in vm.fullTimeline" class="label label-info" ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%; width: 36px; margin-left: -18px;">{{row.Time | amDateFormat: 'HH.mm'}}</div>
 			</div>
 
@@ -53,6 +48,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
+			</div>
+ </div>
+ </div>
