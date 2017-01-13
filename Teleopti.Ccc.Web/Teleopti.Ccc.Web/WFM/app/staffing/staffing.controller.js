@@ -10,16 +10,20 @@
         var vm = this;
         vm.staffingDataAvailable = true;
         vm.selectedSkill;
+        vm.selectedSkillArea;
         vm.selectedSkillChange = selectedSkillChange;
-        vm.querySearch = querySearch;
-        
+        vm.querySearchSkills = querySearchSkills;
+        vm.querySearchAreas = querySearchAreas;
+
         var allSkills = [];
-        getSkills()
+        var allSkillAreas = [];
+        getSkills();
+        getSkillAreas();
         var getSkillStaffing = getSkillStaffing;
         var getSkillsForArea = getSkillAreaStaffing
         var staffingData = {};
         ////////////////
-        function generateChartForSkill(skillId) {
+        function generateChart(skillId) {
             if (!skillId) return;
             var query = getSkillStaffing(skillId);
             query.$promise.then(function (result) {
@@ -35,7 +39,7 @@
                         staffingData.time.push($filter('date')(value, 'shortTime'));
                     }, staffingData.time);
                     staffingData.time.unshift('x');
-                    generateChart();
+                    generateChartForView();
                 } else {
                     vm.staffingDataAvailable = false;
                 }
@@ -56,8 +60,15 @@
             var query = staffingService.getSkills.query();
             query.$promise.then(function (skills) {
                 vm.selectedSkill = skills[0].Name;
-                generateChartForSkill(skills[0].Id);
+                generateChart(skills[0].Id);
                 allSkills = skills;
+            })
+        }
+
+        function getSkillAreas() {
+            var query = staffingService.getSkillAreas.get();
+            query.$promise.then(function (response) {
+                allSkillAreas = response.SkillAreas;
             })
         }
 
@@ -70,12 +81,18 @@
         }
         function selectedSkillChange(skill) {
             if (!skill) return;
-            generateChartForSkill(skill.Id)
+            generateChart(skill.Id)
             vm.selectedSkill = skill;
         }
 
-        function querySearch(query) {
+        function querySearchSkills(query) {
             var results = query ? allSkills.filter(createFilterFor(query)) : allSkills,
+                deferred;
+            return results;
+        };
+        
+        function querySearchAreas(query) {
+            var results = query ? allSkillAreas.filter(createFilterFor(query)) : allSkillAreas,
                 deferred;
             return results;
         };
@@ -88,7 +105,7 @@
             };
         };
 
-        var generateChart = function () {
+        var generateChartForView = function () {
             c3.generate({
                 bindto: '#staffingChart',
                 data: {

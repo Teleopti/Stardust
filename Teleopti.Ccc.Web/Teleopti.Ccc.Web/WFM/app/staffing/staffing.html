@@ -28,6 +28,31 @@
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
                     </span>
+                    <span class="con-flex">
+						<md-autocomplete id="area-id"
+						class="autocomplete-skill"
+						md-selected-item="vm.selectedArea"
+						md-search-text="searchSkillAreaText"
+						md-selected-item-change="vm.querySearchAreas(area)"
+						md-items="area in vm.querySearchAreas(searchSkillAreaText)"
+						md-item-text="area.Name"
+						md-min-length="0"
+						placeholder="{{'SelectSkillArea'|translate}}">
+						<md-item-template>
+							<i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
+							<i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
+							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
+                    <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
+                    <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+                    </md-item-template>
+                    <md-not-found>
+                        {{'RepViewerNoMoreMatches'|translate}}
+                    </md-not-found>
+                    </md-autocomplete>
+                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
+						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+					</i>
+                    </span>
                 </div>
             </div>
         </div>
