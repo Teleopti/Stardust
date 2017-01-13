@@ -49,7 +49,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
             self.selectedDate(self.previousPeriodDate());
         };
 
-	    self.isInitFinished = ko.observable(false);
+        self.isInitFinished = ko.observable(false);
     };
 
 	function _initPeriodSelection() {
@@ -173,6 +173,9 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		editFormViewModel = new Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel(ajax, showMeridian);
 
 		editButton.click(function (e) {
+			if (_isDateSelected()) {
+				editFormViewModel.ValidationError('');
+			}
 		    editFormViewModel.ToggleAddAvailabilityFormVisible();
 		     e.preventDefault();
 		});
@@ -210,6 +213,22 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 		editFormViewModel.ValidationError('');
 
+		var applyButton = $("#Student-availability-apply");
+
+		if (!_isDateSelected()) {
+			editFormViewModel.ValidationError(applyButton.attr('data-DateErrorMessage'));
+			return false;
+		}
+
+		if (!editFormViewModel.StartTime()) {
+			editFormViewModel.ValidationError(applyButton.attr('data-StartTimeErrorMessage'));
+			return false;
+		}
+		else if (!editFormViewModel.EndTime()) {
+			editFormViewModel.ValidationError(applyButton.attr('data-EndTimeErrorMessage'));
+			return false;
+		}
+
 		$('#StudentAvailability-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
@@ -223,6 +242,10 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 					if (!editFormViewModel.ShowError() && studentAvailability.IsHostAMobile) studentAvailability.ToggleAddAvailabilityFormVisible();
 				});
 		}
+	}
+
+	function _isDateSelected() {
+		return $('#StudentAvailability-body-inner .ui-selected').length > 0;
 	}
 
 	function _activateSelectable() {

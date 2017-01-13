@@ -22164,6 +22164,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose a date.
+        /// </summary>
+        public static string PleaseChooseADate {
+            get {
+                return ResourceManager.GetString("PleaseChooseADate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please choose a report type..
         /// </summary>
         public static string PleaseChooseAReportType {
@@ -22214,6 +22223,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PleaseFindTheDownloadedExcelSheetToCheckTheError {
             get {
                 return ResourceManager.GetString("PleaseFindTheDownloadedExcelSheetToCheckTheError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please input end time.
+        /// </summary>
+        public static string PleaseInputEndTime {
+            get {
+                return ResourceManager.GetString("PleaseInputEndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please input start time.
+        /// </summary>
+        public static string PleaseInputStartTime {
+            get {
+                return ResourceManager.GetString("PleaseInputStartTime", resourceCulture);
             }
         }
         
