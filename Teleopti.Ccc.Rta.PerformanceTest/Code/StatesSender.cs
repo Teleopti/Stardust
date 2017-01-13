@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			});
 		}
 		
-		[LogInfo]
 		[TestLog]
 		protected virtual void SendStateChange(int batchSize, StateChange stateChange)
 		{
@@ -79,7 +78,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				.ForEach(x => Send(x.ToArray()));
 		}
 
-		[LogInfo]
 		[TestLog]
 		protected virtual void Send(IEnumerable<ExternalUserStateWebModel> states)
 		{
@@ -94,7 +92,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		// 2 state changes per call
 		// 160+5 state changes
 		// 17 adherence changes
-		public IEnumerable<StateChange> StateChanges()
+		[TestLog]
+		public virtual IEnumerable<StateChange> StateChanges()
 		{
 			var states = Enumerable.Empty<StateChange>();
 
