@@ -15435,4 +15435,8 @@ These options are activated:
     <value>Staffing</value>
     <comment>Module in web</comment>
   </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>Save Favorite Search</value>
+    <comment>name of function saving favorite search in Web</comment>
+  </data>
 </root>

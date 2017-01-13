@@ -12,7 +12,7 @@
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
-			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled && vm.searchEnabled" 
+			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled && vm.searchEnabled && vm.permissions.HasSaveFavoriteSearchPermission" 
 							 apply-favorite="vm.applyFavorite(teamIds, searchTerm)" 
 							 get-search="vm.getSearch()" 
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>

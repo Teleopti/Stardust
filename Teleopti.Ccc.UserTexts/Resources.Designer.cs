@@ -2908,7 +2908,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archive schedule from Default scenario to another scenario, overwriting any previous scheduling in the target scenario for the given period..
+        ///   Looks up a localized string similar to Archive schedule from default scenario to another scenario, overwriting any previous schedule in the target scenario for the given period..
         /// </summary>
         public static string ArchiveScheduleDescription {
             get {
@@ -2917,7 +2917,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to overwrite all existing scheduling for scenario &apos;{0}&apos; for the period {1} - {2} and the selected teams..
+        ///   Looks up a localized string similar to You are about to overwrite all existing schedule for scenario &apos;{0}&apos; for the period {1} - {2} and the selected teams..
         /// </summary>
         public static string ArchivingConfirmationWithParameters {
             get {
@@ -5160,7 +5160,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot apply change to agent in different timezones.
+        ///   Looks up a localized string similar to Cannot apply change to agents in other time zones.
         /// </summary>
         public static string CannotApplyChangeToAgentsInDifferentTimezone {
             get {
@@ -8735,7 +8735,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person account.
+        ///   Looks up a localized string similar to Personal account.
         /// </summary>
         public static string DescriptionOfNewPersonAccountRule {
             get {
@@ -8753,7 +8753,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Meeting, Person activity or Overtime activity in shift.
+        ///   Looks up a localized string similar to Meeting, personal activity or overtime activity in shift.
         /// </summary>
         public static string DescriptionOfNonMainShiftActivityRule {
             get {
@@ -8780,7 +8780,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Schedule contract time tolerance.
+        ///   Looks up a localized string similar to Contract time tolerance.
         /// </summary>
         public static string DescriptionOfShiftTradeTargetTimeSpecification {
             get {
@@ -13020,7 +13020,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to merge some existing scheduling for scenario &apos;{0}&apos; for the period {1} - {2} and the selected teams..
+        ///   Looks up a localized string similar to You are about to merge the schedule in scenario &apos;{0}&apos; with the existing schedule in the default scenario for the period {1} - {2} and the selected teams..
         /// </summary>
         public static string ImportingConfirmationWithParameters {
             get {
@@ -13047,7 +13047,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import schedule from another scenario to default scenario, merge some previous scheduling in the target scenario for the given period..
+        ///   Looks up a localized string similar to Import schedule from another scenario to default scenario, merging with the existing schedule in the default scenario for the given period..
         /// </summary>
         public static string ImportScheduleDescription {
             get {
@@ -21930,7 +21930,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick atleast one team..
+        ///   Looks up a localized string similar to Pick at least one team..
         /// </summary>
         public static string PickAtleastOneTeamDot {
             get {
@@ -25449,7 +25449,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Run importing.
+        ///   Looks up a localized string similar to Run import.
         /// </summary>
         public static string RunImporting {
             get {
@@ -25598,6 +25598,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SaveError {
             get {
                 return ResourceManager.GetString("SaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Favorite Search.
+        /// </summary>
+        public static string SaveFavoriteSearch {
+            get {
+                return ResourceManager.GetString("SaveFavoriteSearch", resourceCulture);
             }
         }
         
@@ -28376,7 +28385,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validating Rules.
+        ///   Looks up a localized string similar to Validation Rules.
         /// </summary>
         public static string ShiftTradeRequestValidatingRules {
             get {

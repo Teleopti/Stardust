@@ -17,9 +17,10 @@
 		'ScheduleNoteManagementService',
 		'teamsToggles',
 		'bootstrapCommon',
+		'teamsPermissions',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, teamsPermissions) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -297,7 +298,8 @@
 			vm.checkValidationWarningForCommandTargets(personIds);
 		}
 	
-		vm.toggles = teamsToggles.all();	
+		vm.toggles = teamsToggles.all();
+		
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
 		vm.searchOptions = {
@@ -318,7 +320,7 @@
 				|| vm.toggles.ModifyShiftCategoryEnabled;
 
 		vm.searchEnabled = $state.current.name !== 'teams.for';
-		vm.boostrap = bootstrapCommon.ready();
+	
 
 		vm.onSelectedTeamsChanged = function onSelectedTeamsChanged(teams) {
 			vm.selectedTeamIds = teams;
@@ -331,42 +333,45 @@
 			vm.resetSchedulePage();
 		};
 
-		vm.onSelectedTeamsInitDefer = $q.defer();		
-		vm.onFavoriteSearchInitDefer = $q.defer();
-			
-		var asyncData = {
-			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
-			defaultTeams: vm.onSelectedTeamsInitDefer.promise,
-			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise
-		};
+		vm.boostrap = bootstrapCommon.ready().then(function () {
+			vm.permissions = teamsPermissions.all();
+			vm.onSelectedTeamsInitDefer = $q.defer();
+			vm.onFavoriteSearchInitDefer = $q.defer();
 
-		if (!vm.searchEnabled) {
-			vm.onSelectedTeamsInitDefer.resolve();
-			vm.onFavoriteSearchInitDefer.resolve();
-		}
-		if (!vm.toggles.SaveFavoriteSearchesEnabled) {
-			vm.onFavoriteSearchInitDefer.resolve();
-		}
-		if (!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled) {
-			vm.onSelectedTeamsInitDefer.resolve();
-		}
-	
-		$q.all(asyncData).then(function init(data) {			
-			if (data.pageSetting.Agents > 0) {
-				vm.paginationOptions.pageSize = data.pageSetting.Agents;
+			var asyncData = {
+				pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
+				defaultTeams: vm.onSelectedTeamsInitDefer.promise,
+				defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise
+			};
+
+			if (!vm.searchEnabled) {
+				vm.onSelectedTeamsInitDefer.resolve();
+				vm.onFavoriteSearchInitDefer.resolve();
+			}
+			if (!(vm.toggles.SaveFavoriteSearchesEnabled && vm.permissions.HasSaveFavoriteSearchPermission)) {
+				vm.onFavoriteSearchInitDefer.resolve();
+			}
+			if (!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled) {
+				vm.onSelectedTeamsInitDefer.resolve();
 			}
 
-			var defaultFavoriteSearch = data.defaultFavoriteSearch;
-			var defaultTeams = data.defaultTeams;
+			$q.all(asyncData).then(function init(data) {
+				if (data.pageSetting.Agents > 0) {
+					vm.paginationOptions.pageSize = data.pageSetting.Agents;
+				}
 
-			if (!$stateParams.do && defaultFavoriteSearch) {
-				vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
-				vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
-			} else if (!$stateParams.do && defaultTeams) {
-				vm.selectedTeamIds = defaultTeams;
-			}
+				var defaultFavoriteSearch = data.defaultFavoriteSearch;
+				var defaultTeams = data.defaultTeams;
 
-			vm.resetSchedulePage();						
+				if (!$stateParams.do && defaultFavoriteSearch) {
+					vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
+					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+				} else if (!$stateParams.do && defaultTeams) {
+					vm.selectedTeamIds = defaultTeams;
+				}
+
+				vm.resetSchedulePage();
+			});
 		});
 
 		showReleaseNotification();

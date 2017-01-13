@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				HasRemoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity),
 				HasMoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity),
 				HasMoveInvalidOverlappedActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity),
-				HasEditShiftCategoryPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.EditShiftCategory)
+				HasEditShiftCategoryPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.EditShiftCategory),
+				HasSaveFavoriteSearchPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SaveFavoriteSearch)
 			};
 
 			return Json(permissions);

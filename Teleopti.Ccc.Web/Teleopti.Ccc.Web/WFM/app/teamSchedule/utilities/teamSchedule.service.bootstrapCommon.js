@@ -13,10 +13,12 @@
 		};
 
 		var readyDefer = $q.defer();
-		self.ready = function ready() { return readyDefer.promise; }
+		self.ready = function ready() {
+			return readyDefer.promise;
+		}
 
 		$q.all(tasks)
-			.then(function(data) {
+			.then(function (data) {
 				teamsPermissions.set(data.permissions);				
 				readyDefer.resolve();
 			});
