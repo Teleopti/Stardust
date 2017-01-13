@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				{
 					var toScheduleDay = schedulerScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
 					var fromScheduleDay = modifiedScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
-					var toAssignment = toScheduleDay.PersonAssignment(true);
-					toAssignment.FillWithDataFrom(modifiedAssignment);
+					toScheduleDay.Replace(modifiedAssignment);
 					schedulerScheduleDictionary.Modify(ScheduleModifier.Scheduler, toScheduleDay, NewBusinessRuleCollection.Minimum(),
 						new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(fromScheduleDay.ScheduleTag()));
 				}
@@ -124,10 +123,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				var fromScheduleDays = fromDic[agent].ScheduledDayCollection(period);
 				foreach (var fromScheduleDay in fromScheduleDays)
 				{
-					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);	
-					var toAssignment = toScheduleDay.PersonAssignment(true);
-					toAssignment.FillWithDataFrom(fromScheduleDay.PersonAssignment(true));
-
+					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);
+					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
 					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
 					fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
 					fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
