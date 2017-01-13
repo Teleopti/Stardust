@@ -193,14 +193,32 @@
 	}
 }
 
-
 /*refact*/
 .permissions-tabs{
+	md-tabs{
+		transition: height .01s!important;
+	}
+
 	md-tab-content, md-tabs-content-wrapper{
 		display: inline !important;
 	}
 }
 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.permission-radio-buttons > .wfm-radio {
+	    width: auto!important;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	}
+}
+
+@media only screen and (max-width: 1100px) {
+	.permission-radio-buttons {
+		display: inline;
+	}
+}
+
+//helpers to the styleguide
 .non-pointer{
 	pointer-events: none;
 }
@@ -210,3 +228,12 @@
 	cursor: not-allowed;
 	pointer-events:none;
 }
+
+.tree-handle-wrapper{
+	width:100%;
+}
+
+.margin-center{
+	margin: 0 auto;
+}
+//end refact

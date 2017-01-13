@@ -1,18 +1,17 @@
-<div ui-tree data-drag-enabled="false">
-	<ol ui-tree-nodes="" ng-model="$ctrl.functions">
-		<li ng-repeat="function in $ctrl.functions" ui-tree-node ng-hide="function.IsHidden">
-
-			<div ng-cloak class="modal-box">
-				<div ng-cloak ng-show="function.multiDeselectModal">
-					<div class="modalbg">
-						<div class="dialog-mini">
-							<div class="modal-inner-content">
+<div ui-tree data-drag-enabled="false" ng-if="$ctrl.functions.length > 0">
+	<ol ui-tree-nodes=" " ng-model="$ctrl.functions ">
+		<li ng-repeat="function in $ctrl.functions " ui-tree-node ng-hide="function.IsHidden ">
+			<div ng-cloak class="modal-box ">
+				<div ng-cloak ng-show="function.multiDeselectModal ">
+					<div class="modalbg ">
+						<div class="dialog-mini ">
+							<div class="modal-inner-content ">
 								{{'ConfirmToggleChildPermissions'|translate}}
 							</div>
-							<div class="modal-actions">
+							<div class="modal-actions ">
 								<aside>
-									<button ng-click="function.multiDeselectModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-									<button ng-click="$ctrl.toggleFunction(function); function.multiDeselectModal=false" class="wfm-btn wfm-btn-invis-primary">{{'Clear'|translate}}</button>
+									<button ng-click="function.multiDeselectModal=false " class="wfm-btn wfm-btn-invis-default ">{{'Cancel'|translate}}</button>
+									<button ng-click="$ctrl.toggleFunction(function); function.multiDeselectModal=false " class="wfm-btn wfm-btn-invis-primary ">{{'Clear'|translate}}</button>
 								</aside>
 							</div>
 						</div>
@@ -20,18 +19,21 @@
 				</div>
 			</div>
 
-			<div class="tree-toggle-group">
-				<div class="toggle-handle" ng-class="{open: function.IsOpen}" ng-click="function.IsOpen = !function.IsOpen"><i ng-class="{hideChevron: function.ChildFunctions.length === 0}" class="mdi mdi-chevron-right"></i></div>
-				<div class="tree-handle-wrapper">
-					<div ui-tree-handle ng-class="{selected: $ctrl.isSelected(function)}" ng-click="$ctrl.checkParent(function)">
+			<div class="tree-toggle-group ">
+				<div class="toggle-handle " ng-class="{open: function.IsOpen, 'non-pointer':function.ChildFunctions.length===0 } " ng-click="function.IsOpen=! function.IsOpen "><i ng-hide="function.ChildFunctions.length===0 " class="mdi mdi-chevron-right "></i></div>
+				<div class="tree-handle-wrapper ">
+					<div ui-tree-handle ng-class="{selected: $ctrl.isSelected(function)} " ng-click="$ctrl.checkParent(function) ">
 						{{function.LocalizedFunctionDescription}}
 					</div>
 				</div>
 			</div>
 
-			<div class="animate-show" ng-show="function.IsOpen">
-				<permissions-tree filter-func="$ctrl.filterFunc" selected-role="$ctrl.selectedRole" functions="function.ChildFunctions" parent="$ctrl.onSelect" is-selected="$ctrl.isSelected" select="$ctrl.select" on-click="$ctrl.onClick"></permissions-tree>
+			<div class="animate-show " ng-show="function.IsOpen ">
+				<permissions-tree filter-func="$ctrl.filterFunc " selected-role="$ctrl.selectedRole " functions="function.ChildFunctions " parent="$ctrl.onSelect " is-selected="$ctrl.isSelected " select="$ctrl.select " on-click="$ctrl.onClick "></permissions-tree>
 			</div>
 		</li>
 	</ol>
+</div>
+<div ng-if="$ctrl.functions.length < 1">
+	<md-progress-circular class="margin-center" md-mode="indeterminate"></md-progress-circular>
 </div>
