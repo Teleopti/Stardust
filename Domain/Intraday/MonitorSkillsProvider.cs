@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var interval in intervals)
 			{
-				summary.OfferedCalls += interval.OfferedCalls ?? 0;
+				summary.OfferedCalls += interval.CalculatedCalls ?? 0;
 				summary.HandleTime += interval.HandleTime ?? 0;
 				summary.SpeedOfAnswer += interval.SpeedOfAnswer ?? 0;
 				summary.AnsweredCalls += interval.AnsweredCalls ?? 0;
@@ -57,16 +57,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 				timeSeries.Add(interval.IntervalDate.AddMinutes(interval.IntervalId * intervalLength));
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
 				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
-				offeredCallsSeries.Add(interval.OfferedCalls);
-				averageHandleTimeSeries.Add(interval.OfferedCalls.HasValue ? interval.AverageHandleTime : null);
+				offeredCallsSeries.Add(interval.CalculatedCalls);
+				averageHandleTimeSeries.Add(interval.CalculatedCalls.HasValue ? interval.AverageHandleTime : null);
 
-				if (interval.OfferedCalls.HasValue)
+				if (interval.CalculatedCalls.HasValue)
 				{
 					latestQueueStatsIntervalId = interval.IntervalId;
 					latestQueueStatsIntervalDate = interval.IntervalDate;
 				}
 					
-				averageSpeedOfAnswer.Add(interval.AnsweredCalls == 0 ? 0 : (interval.SpeedOfAnswer.HasValue ? interval.SpeedOfAnswer / interval.AnsweredCalls : null));
+				averageSpeedOfAnswer.Add(interval.AnsweredCalls.HasValue ? interval.AverageSpeedOfAnswer : null);
 				abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate * 100 : null);
 				serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? interval.ServiceLevel * 100 : null);
 

@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			{
 				IntervalDate = latestStatsTime.Date,
 				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
-				OfferedCalls = 20,
+				CalculatedCalls = 20,
 				AnsweredCalls = 16,
 				AnsweredCallsWithinSL = 16,
 				SpeedOfAnswer = 10,
@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			{
 				IntervalDate = latestStatsTime.Date,
 				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
-				OfferedCalls = 22,
+				CalculatedCalls = 22,
 				ForecastedCalls = 20
 			});
 			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				IntervalDate = userNow.Date,
 				IntervalId = new IntervalBase(userNow, (60 / minutesPerInterval) * 24).Id,
 				ForecastedCalls = 0,
-				OfferedCalls = 1
+				CalculatedCalls = 1
 			});
 
 			SkillRepository.Has(skill);
@@ -433,7 +433,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			{
 				IntervalDate = latestStatsTime.Date,
 				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
-				OfferedCalls = 20,
+				CalculatedCalls = 20,
 				AnsweredCalls = 0,
 				AnsweredCallsWithinSL = 16,
 				SpeedOfAnswer = 10,
@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				{
 					IntervalDate = currentTime.Date,
 					IntervalId = new IntervalBase(currentTime, (60 / minutesPerInterval) * 24).Id,
-					OfferedCalls = shouldHaveStats ? (double?)22d : null,
+					CalculatedCalls = shouldHaveStats ? (double?)22d : null,
 					ForecastedCalls = 20
 				});
 			}

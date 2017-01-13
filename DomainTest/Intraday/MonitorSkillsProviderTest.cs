@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				IntervalId = 32,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 120,
-				OfferedCalls = 12,
+				CalculatedCalls = 12,
 				HandleTime = 80,
 				AnsweredCallsWithinSL = 10,
 				AbandonedCalls = 2,
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				IntervalId = 33,
 				ForecastedCalls = 16,
 				ForecastedHandleTime = 150,
-				OfferedCalls = 13,
+				CalculatedCalls = 13,
 				HandleTime = 180,
 				AnsweredCallsWithinSL = 8,
 				AbandonedCalls = 2,
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				IntervalId = 34,
 				ForecastedCalls = 15,
 				ForecastedHandleTime = 140,
-				OfferedCalls = null,
+				CalculatedCalls = null,
 				HandleTime = null
 			};
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var expectedForecastedCallsSum = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
 			var expectedForecastedHandleTimeSum = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
-			var expectedActualCallsSum = _firstInterval.OfferedCalls + _secondInterval.OfferedCalls;
+			var expectedActualCallsSum = _firstInterval.CalculatedCalls + _secondInterval.CalculatedCalls;
 			var expectedActualHandleTimeSum = _firstInterval.HandleTime + _secondInterval.HandleTime;
 
 			viewModel.Summary.ForecastedCalls.Should().Be.EqualTo(expectedForecastedCallsSum);
@@ -148,8 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.OfferedCalls.Length.Should().Be.EqualTo(2);
-			viewModel.DataSeries.OfferedCalls.First().Should().Be.EqualTo(_firstInterval.OfferedCalls);
-			viewModel.DataSeries.OfferedCalls.Second().Should().Be.EqualTo(_secondInterval.OfferedCalls);
+			viewModel.DataSeries.OfferedCalls.First().Should().Be.EqualTo(_firstInterval.CalculatedCalls);
+			viewModel.DataSeries.OfferedCalls.Second().Should().Be.EqualTo(_secondInterval.CalculatedCalls);
 		}
 
 		[Test]
@@ -175,10 +175,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				IntervalId = 34,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 140,
-				OfferedCalls = 12,
+				CalculatedCalls = 12,
 				HandleTime = 200
 			};
-			_secondInterval.OfferedCalls = null;
+			_secondInterval.CalculatedCalls = null;
 			_secondInterval.HandleTime = null;
 			_secondInterval.AverageHandleTime = null;
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
@@ -201,10 +201,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				IntervalId = 34,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 140,
-				OfferedCalls = 12,
+				CalculatedCalls = 12,
 				HandleTime = 200
 			};
-			_secondInterval.OfferedCalls = null;
+			_secondInterval.CalculatedCalls = null;
 			_secondInterval.HandleTime = null;
 			_secondInterval.AverageHandleTime = 0;
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnLatestStatsTime()
 		{
-			_secondInterval.OfferedCalls = null;
+			_secondInterval.CalculatedCalls = null;
 			_secondInterval.HandleTime = null;
 			_secondInterval.AverageHandleTime = null;
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 			double allForecastedCalls = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
-			double allOfferedCalls = _firstInterval.OfferedCalls.Value + _secondInterval.OfferedCalls.Value;
+			double allOfferedCalls = _firstInterval.CalculatedCalls.Value + _secondInterval.CalculatedCalls.Value;
 			var expectedDiff = (allOfferedCalls - allForecastedCalls) * 100 / allForecastedCalls;
 
 			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(expectedDiff);
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			double allForecastedCalls = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
-			double allOfferedCalls = _firstInterval.OfferedCalls.Value + _secondInterval.OfferedCalls.Value;
+			double allOfferedCalls = _firstInterval.CalculatedCalls.Value + _secondInterval.CalculatedCalls.Value;
 			double allForecastedHandleTime = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
 			double allHandleTime = _firstInterval.HandleTime.Value + _secondInterval.HandleTime.Value;
 			double forecastedAverageHandleTime = allForecastedHandleTime / allForecastedCalls;
@@ -318,8 +318,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSetAverageHandleTimeToZeroWhenOfferedCallsAreZero()
 		{
-			_firstInterval.OfferedCalls = 0;
-			_secondInterval.OfferedCalls = 0;
+			_firstInterval.CalculatedCalls = 0;
+			_secondInterval.CalculatedCalls = 0;
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.ServiceLevel.Should()
-					.Be.EqualTo((_firstInterval.AnsweredCallsWithinSL + _secondInterval.AnsweredCallsWithinSL) / (_firstInterval.OfferedCalls + _secondInterval.OfferedCalls));
+					.Be.EqualTo((_firstInterval.AnsweredCallsWithinSL + _secondInterval.AnsweredCallsWithinSL) / (_firstInterval.CalculatedCalls + _secondInterval.CalculatedCalls));
 		}
 
 		[Test]
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.AbandonRate.Should()
-					.Be.EqualTo((_firstInterval.AbandonedCalls + _secondInterval.AbandonedCalls) / (_firstInterval.OfferedCalls + _secondInterval.OfferedCalls));
+					.Be.EqualTo((_firstInterval.AbandonedCalls + _secondInterval.AbandonedCalls) / (_firstInterval.CalculatedCalls + _secondInterval.CalculatedCalls));
 		}
 
 		[Test]
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				IntervalId = 34,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 140,
-				OfferedCalls = 12,
+				CalculatedCalls = 12,
 				HandleTime = 200
 			};
 			_secondInterval.AbandonedCalls = null;

@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-09-05
 -- Description:	Get the offered calls & aht per skill for the given day. 
 -- =============================================
--- EXEC [mart].[web_intraday_calls_per_skill_interval] 'W. Europe Standard Time', '2016-10-06', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday_calls_per_skill_interval] 'W. Europe Standard Time', '2017-01-13', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
 CREATE PROCEDURE [mart].[web_intraday_calls_per_skill_interval]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -24,13 +24,20 @@ BEGIN
 	CREATE TABLE #skills(id uniqueidentifier)	
 	CREATE TABLE #queues(
 		skill_code uniqueidentifier,
-		queue_id int
+		queue_id int,
+		percentage_offered float,
+		percentage_overflow_in float,
+		percentage_overflow_out float,
+		percentage_abandoned float,
+		percentage_abandoned_short float,
+		percentage_abandoned_within_service_level float,
+		percentage_abandoned_after_service_level float
 		)
 	CREATE TABLE #queue_stats(
 		skill_code uniqueidentifier,
 		date_id int, 
 		utc_interval_id smallint,
-		offered_calls int,
+		calculated_calls int,
 		answered_calls int,
 		handle_time decimal(19,0)
 	)
@@ -50,7 +57,14 @@ BEGIN
 	INSERT INTO #queues
 	SELECT 
 		ds.skill_code,
-		qw.queue_id 
+		qw.queue_id,
+		w.percentage_offered,
+		percentage_overflow_in,
+		percentage_overflow_out,
+		percentage_abandoned,
+		percentage_abandoned_short,
+		percentage_abandoned_within_service_level,
+		percentage_abandoned_after_service_level 
 	FROM mart.bridge_queue_workload qw
 	INNER JOIN mart.dim_workload w ON qw.workload_id = w.workload_id
 	INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
@@ -66,7 +80,20 @@ BEGIN
 		skill_code = q.skill_code,
 		date_id = fq.date_id,
 		utc_interval_id = interval_id,
-		offered_calls = ISNULL(fq.offered_calls, 0),
+		calculated_calls = mart.CalculateQueueStatistics(
+			q.percentage_offered,
+			q.percentage_overflow_in,
+			q.percentage_overflow_out,
+			q.percentage_abandoned,
+			q.percentage_abandoned_short,
+			q.percentage_abandoned_within_service_level,
+			q.percentage_abandoned_after_service_level,
+			ISNULL(fq.offered_calls, 0),
+			ISNULL(fq.abandoned_calls, 0),
+			ISNULL(fq.abandoned_calls_within_SL, 0),
+			ISNULL(fq.abandoned_short_calls, 0),
+			ISNULL(fq.overflow_out_calls, 0),
+			ISNULL(fq.overflow_in_calls, 0)),
 		answered_calls =  ISNULL(fq.answered_calls, 0),
 		handle_time = ISNULL(fq.handle_time_s, 0)			
 	FROM 
@@ -74,13 +101,16 @@ BEGIN
 		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id
 	WHERE
 		date_id between @current_date_id - 1 and @current_date_id + 1
-		AND offered_calls IS NOT NULL
-		AND offered_calls > 0
-	
+		AND 
+			(offered_calls IS NOT NULL
+			AND offered_calls > 0)
+		OR
+			(overflow_in_calls IS NOT NULL
+			AND overflow_in_calls > 0)
 	SELECT
 		qs.skill_code AS SkillId,
 		DATEADD(mi, DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, i.interval_start), 0), i.interval_start), d.date_date) AS StartTime,
-		SUM(qs.offered_calls) AS Calls,
+		SUM(qs.calculated_calls) AS Calls,
 		CASE SUM(qs.answered_calls)
 				WHEN 
 					0 THEN 0

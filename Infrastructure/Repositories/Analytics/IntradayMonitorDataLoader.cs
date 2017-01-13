@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						.AddScalar("ForecastedCalls", NHibernateUtil.Double)
 						.AddScalar("ForecastedHandleTime", NHibernateUtil.Double)
 						.AddScalar("ForecastedAverageHandleTime", NHibernateUtil.Double)
-						.AddScalar("OfferedCalls", NHibernateUtil.Double)
+						.AddScalar("CalculatedCalls", NHibernateUtil.Double)
 						.AddScalar("HandleTime", NHibernateUtil.Double)
 						.AddScalar("AverageHandleTime", NHibernateUtil.Double)
 						.AddScalar("AnsweredCalls", NHibernateUtil.Double)
