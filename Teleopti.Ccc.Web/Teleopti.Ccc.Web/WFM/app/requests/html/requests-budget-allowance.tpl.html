@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div ng-if="!vm.isLoading && vm.budgetGroups.length > 0">
 	<span>
 		<team-schedule-datepicker class="pull-left" selected-date="vm.selectedDate" on-date-change="vm.selectedDateChanged()" />
 	</span>
