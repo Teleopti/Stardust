@@ -663,6 +663,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(assBefore.ShiftLayers.Single().Id);
 		}
 
+
+		[Test]
+		public void ShouldRollbackIfPeriodValueIsTheSameToAvoidDbUpdates()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = new Activity("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
+				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var assBefore = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17)).WithId();
+			assBefore.ShiftLayers.Single().WithId();
+			var optPref = new OptimizationPreferencesDefaultValueProvider().Fetch();
+			optPref.General.ScheduleTag = KeepOriginalScheduleTag.Instance;
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new[] { assBefore }, skillDay);
+
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optPref, null);
+
+			var assAfter = schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment();
+			assAfter.Id
+				.Should().Be.EqualTo(assBefore.Id);
+			assAfter.ShiftLayers.Single().Id
+				.Should().Be.EqualTo(assBefore.ShiftLayers.Single().Id);
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization>();

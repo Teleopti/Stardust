@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (newPeriodValue.HasValue)
 				newValidatedPeriodValue = newPeriodValue.Value;
 
-			bool isPeriodWorse = newValidatedPeriodValue > oldPeriodValue;
-			if (isPeriodWorse)
+			var isPeriodBetter = newValidatedPeriodValue < oldPeriodValue;
+			if (!isPeriodBetter)
 			{
 				_rollbackService.Rollback();
 				undoResCalcChanges.UndoAll();
