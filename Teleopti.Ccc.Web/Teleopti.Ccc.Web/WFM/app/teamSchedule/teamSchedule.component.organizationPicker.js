@@ -5,55 +5,62 @@
 		.component('organizationPicker', {
 			templateUrl: 'app/teamSchedule/html/organizationPicker.tpl.html',
 			controller: organizationPickerCtrl,
-			bindings: {
-				availableGroups: '<',
-				selectedTeamIds: '<?',
-				onPick: '&'
+			bindings: {			
+				date: '<',
+				preselectedTeamIds: '<?',
+				onPick: '&',
+				onInitAsync: '<?'
 			}
 		});
 
-	organizationPickerCtrl.$inject = ['$scope', '$translate'];
+	organizationPickerCtrl.$inject = ['$scope', '$translate', 'TeamSchedule'];
 
-	function organizationPickerCtrl($scope, $translate) {
+	function organizationPickerCtrl($scope, $translate, teamScheduleSvc) {
 		var ctrl = this,
 			currentSite,
 			initialSelectedTeamIds = [];
 
 		ctrl.groupList = [];
 		ctrl.availableTeamIds = [];
+		ctrl.selectedTeamIds = [];
+		ctrl.searchTerm = '';
 
-		ctrl.$onInit = function () { };
+		ctrl.$onInit = function init() {			
+			teamScheduleSvc.getAvailableHierarchy(moment(ctrl.date).format('YYYY-MM-DD'))
+				.then(function (resp) {					
+					populateGroupList({ sites: resp.data.Children });
 
-		ctrl.refresh = function() {
-			populateGroupList();
-			if (ctrl.selectedTeamIds) {
-				updateAllSiteSelection();
-				ctrl.onSelectionDone();
-			}
+					if (ctrl.preselectedTeamIds && ctrl.preselectedTeamIds.length > 0) {
+						ctrl.selectedTeamIds = angular.copy(ctrl.preselectedTeamIds);
+					} else if (resp.data.LogonUserTeamId) {
+						ctrl.selectedTeamIds.push(resp.data.LogonUserTeamId);
+					}
+
+					updateAllSiteSelection();
+					
+					if (ctrl.onInitAsync) {
+						if (ctrl.selectedTeamIds.length > 0) {
+							ctrl.onInitAsync.resolve(angular.copy(ctrl.selectedTeamIds));
+						} else {
+							ctrl.onInitAsync.resolve();
+						}
+					}
+					
+				});
 		};
 
-		ctrl.$onChanges = function(changesObj) {
-			if (!changesObj) return;
+		ctrl.$onChanges = function (changesObj) {
+			if (!changesObj.preselectedTeamIds) return;
+			if (changesObj.preselectedTeamIds.currentValue === changesObj.preselectedTeamIds.previousValue) return;
+			ctrl.selectedTeamIds = angular.copy(changesObj.preselectedTeamIds.currentValue);
+			updateAllSiteSelection();
+		}
 
-			var selectedTeamIdsNotChanged = !changesObj.selectedTeamIds 
-							|| !changesObj.selectedTeamIds.currentValue 
-							|| changesObj.selectedTeamIds.currentValue.length == 0 
-							|| changesObj.selectedTeamIds.currentValue.length == changesObj.selectedTeamIds.previousValue.length;
+		function populateGroupList(groupData) {			
+			var groupList = [];
+			var availableTeamIds = [];
 
-			if(selectedTeamIdsNotChanged) return;
-
-			ctrl.refresh();
-		};
-
-		ctrl.onPickerOpen = function() {
-			initialSelectedTeamIds = ctrl.selectedTeamIds.concat();
-		};
-
-		function populateGroupList() {
-			if (!ctrl.availableGroups || !ctrl.availableGroups.sites || ctrl.availableGroups.sites.length == 0) return;
-			ctrl.groupList = [];
-
-			ctrl.availableGroups.sites.forEach(function(g) {
+			groupData.sites.forEach(function (g) {
 				var site = {
 					id: g.Id,
 					name: g.Name,
@@ -66,10 +73,13 @@
 						id: t.Id,
 						name: t.Name
 					});
-					ctrl.availableTeamIds.push(t.Id);
+					availableTeamIds.push(t.Id);
 				});
-				ctrl.groupList.push(site);
+				groupList.push(site);
 			});
+
+			ctrl.groupList = groupList;
+			ctrl.availableTeamIds = availableTeamIds;
 		}
 
 		ctrl.formatSelectedDisplayName = function() {
@@ -145,12 +155,13 @@
 
 		$scope.$watchCollection(function() {
 			return ctrl.selectedTeamIds;
-		}, function(newValue, oldValue, scope) {
-			if (newValue)
-				updateGroupSelection(currentSite);
+		}, function (newValue) {
+			if (!newValue) return;
+			updateGroupSelection(currentSite);
 		});
 
 		function updateAllSiteSelection() {
+			if (!ctrl.selectedTeamIds || ctrl.selectedTeamIds.length === 0) return;
 			ctrl.groupList.forEach(updateGroupSelection);
 		}
 
@@ -168,7 +179,11 @@
 			$event.stopPropagation();
 		};
 
-		ctrl.onSelectionDone = function() {
+		ctrl.onPickerOpen = function () {
+			initialSelectedTeamIds = angular.copy(ctrl.selectedTeamIds);
+		};
+
+		ctrl.onPickerClose = function() {
 			ctrl.searchTerm = '';
 
 			if (ctrl.groupList.length > 0) {
@@ -178,16 +193,16 @@
 			}
 
 			//load the schedule data when team ids changed
-			if (ctrl.selectedTeamIds.length == initialSelectedTeamIds.length &&
+			if (ctrl.selectedTeamIds.length === initialSelectedTeamIds.length &&
 				ctrl.selectedTeamIds.every(function(id) {
 					return initialSelectedTeamIds.indexOf(id) > -1;
 				})) {
 				return;
-			}
-
+			}			
 			ctrl.onPick({
 				teams: angular.copy(ctrl.selectedTeamIds)
 			});
+			
 		};
 	}
 })();

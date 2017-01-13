@@ -6,9 +6,9 @@
 		{
 			templateUrl: 'app/teamSchedule/html/favoriteSearch.tpl.html',
 			controller: favoriteSearchCtrl,
-			bindings: {
-				onDataReady: '&?',
-				applyFavorite: '&',
+			bindings: {				
+				onInitAsync: '<?',
+				applyFavorite: '&?',
 				getSearch: '&'
 			}
 		});
@@ -50,6 +50,9 @@
 		ctrl.$onInit = function () {
 			FavoriteSearchDataService.getFavoriteSearchList().then(function (resp) {
 				refreshList(resp.data);
+				if (ctrl.onInitAsync) {
+					ctrl.onInitAsync.resolve(ctrl.currentFavorite);
+				}
 			});
 		};
 
@@ -170,11 +173,7 @@
 				return f.IsDefault;
 			});
 			ctrl.currentFavorite = defaults[0];
-			ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';
-
-			if (ctrl.onDataReady) {
-				ctrl.onDataReady({defaultSearch: defaults[0] || null});
-			}
+			ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';			
 		}
 
 		function reorderListAccordingToIsDefault(item1, item2){

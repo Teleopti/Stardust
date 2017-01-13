@@ -3,24 +3,24 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyController', TeamScheduleWeeklyController);
 
-	TeamScheduleWeeklyController.$inject = ['$stateParams', '$q','$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'teamsToggles'];
+	TeamScheduleWeeklyController.$inject = ['$stateParams', '$q', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'teamsToggles', 'bootstrapCommon'];
 
-	function TeamScheduleWeeklyController(params, $q, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, teamsToggles) {
+	function TeamScheduleWeeklyController($stateParams, $q, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, teamsToggles, bootstrapCommon) {
 		var vm = this;
 		vm.searchOptions = {
-			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
+			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
 			searchKeywordChanged: false,
 			searchFields : [
 				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBags',
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
 		};
-
+		vm.boostrap = bootstrapCommon.ready();
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
-		vm.scheduleDate = params.selectedDate || new Date();
-		vm.selectedTeamIds = params.selectedTeamIds || [];
+		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
@@ -71,32 +71,33 @@
 
 		vm.changeSelectedTeams = function(teams) {
 			vm.selectedTeamIds = teams;
-			params.selectedTeamIds = vm.selectedTeamIds;
+			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 			vm.resetSchedulePage();
 		};
 
-		vm.init = function () {
-			vm.toggles = teamsToggles.all();		
+		vm.toggles = teamsToggles.all();
+
+		vm.init = function () {					
 			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 			vm.paginationOptions.totalPages = 1;
 
-			if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled)
-				vm.loadSchedules();
-
+			vm.loadSchedules();
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 		};
 
-		$q.all([
-			teamScheduleSvc.getAvailableHierarchy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
-				.then(function (response) {
-					var data = response.data;
-					vm.selectedTeamIds = vm.selectedTeamIds.length > 0 ? vm.selectedTeamIds : [data.LogonUserTeamId];
+		vm.onSelectedTeamsInitDefer = $q.defer();
+		if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled) {
+			vm.onSelectedTeamsInitDefer.resolve();
+		}
 
-					vm.availableGroups = {
-						sites: data.Children,
-					};
-			})
-			]).then(vm.init);
+		$q.all([
+				vm.onSelectedTeamsInitDefer.promise.then(function (defaultTeams) {				
+					if (!$stateParams.do && defaultTeams) {
+						vm.selectedTeamIds = defaultTeams;
+					}
+				})
+			])
+			.then(vm.init);
 
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};

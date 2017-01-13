@@ -7,10 +7,15 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1 week-view">
+<div class="team-schedule panel wfm-block material-depth-1 week-view" wait-for="vm.boostrap">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
-			<organization-picker ng-if="vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" selected-team-ids="vm.selectedTeamIds" class="organization-picker-container" on-pick="vm.changeSelectedTeams(teams)"></organization-picker>
+			<organization-picker ng-if="vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled"
+								 preselected-team-ids="vm.selectedTeamIds" 
+								 class="organization-picker-container" 
+								 on-pick="vm.changeSelectedTeams(teams)"
+								 date="vm.scheduleDate"
+								 on-init-async="vm.onSelectedTeamsInitDefer"></organization-picker>
 
 			<span class="people-search-container">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>

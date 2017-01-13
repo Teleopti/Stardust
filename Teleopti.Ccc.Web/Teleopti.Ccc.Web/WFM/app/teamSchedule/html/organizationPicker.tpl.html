@@ -1,7 +1,7 @@
 ﻿<div layout="row">
 	<md-input-container>
 	<label>{{'Organization' | translate}}</label>
-		<md-select ng-model="$ctrl.selectedTeamIds" md-on-close="$ctrl.onSelectionDone()" md-on-open="$ctrl.onPickerOpen()" md-selected-text="$ctrl.formatSelectedDisplayName()" data-md-container-class="organization-picker" multiple>
+		<md-select ng-model="$ctrl.selectedTeamIds" md-on-close="$ctrl.onPickerClose()" md-on-open="$ctrl.onPickerOpen()" md-selected-text="$ctrl.formatSelectedDisplayName()" data-md-container-class="organization-picker" multiple>
 			<md-select-header class="picker-select-header">
 				<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$ctrl.onSearchOrganization($event)">
 			</md-select-header>

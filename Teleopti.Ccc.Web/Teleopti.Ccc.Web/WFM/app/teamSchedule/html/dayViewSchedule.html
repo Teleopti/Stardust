@@ -11,9 +11,17 @@
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
-			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled && vm.searchEnabled" apply-favorite="vm.applyFavorite(teamIds, searchTerm)" get-search="vm.getSearch()" on-data-ready="vm.onFavoriteSearchesLoaded(defaultSearch)"></favorite-search>
+			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled && vm.searchEnabled" 
+							 apply-favorite="vm.applyFavorite(teamIds, searchTerm)" 
+							 get-search="vm.getSearch()" 
+							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled" available-groups="vm.availableGroups" selected-team-ids="vm.selectedTeamIds" class="organization-picker-container inline-block" on-pick="vm.changeSelectedTeams(teams)"></organization-picker>
+			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled" 
+								 date="vm.scheduleDate" 
+								 class="organization-picker-container inline-block" 
+								 on-init-async="vm.onSelectedTeamsInitDefer" 
+								 on-pick="vm.onSelectedTeamsChanged(teams)"
+								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 
 			<span class="people-search-container inline-block" ng-if="vm.searchEnabled">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
@@ -66,7 +74,7 @@
 							show-warnings="vm.cmdConfigurations.validateWarningToggle"
 							cmd-configurations="vm.cmdConfigurations"
 							selected-timezone="vm.currentTimezone"
-							pagination-options="vm.paginationOptions"
+							pagination-options="vm.paginationOptions"							
 							/>
 		</div>
 

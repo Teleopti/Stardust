@@ -1,43 +1,78 @@
 ﻿'use strict';
 describe('organizationPicker component tests', function () {
 
-	var $componentController;
+	var $componentController, $q;
 
-
+	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
 	beforeEach(function () {
-		module("wfm.teamSchedule");
+		var fakeTeamSchedule = new FakeTeamSchedule();
+
+		module(function ($provide) {
+			$provide.service('TeamSchedule',
+				function () {
+					return fakeTeamSchedule;
+				});
+		});
 	});
 
-	beforeEach(inject(function (_$componentController_) {
+	beforeEach(inject(function (_$componentController_, _$q_) {
 		$componentController = _$componentController_;
+		$q = _$q_;
 	}));
 
-	it("should populate hierachy list", inject(function () {
-		var bindings = {
-			availableGroups: {
-				sites:[{
-					Id:'site1', Name:'site1', Children:[ {
-						Id: 'team1', Name:'team1'
-					}]
-				},
-				{
-					Id:"site2", Name:'site2', Children:[ {
-						Id: 'team2', Name:'team2'
+
+	function FakeTeamSchedule() {
+
+		this.getAvailableHierarchy = function () {
+			var data = {
+				Children: [
+					{
+						Id: 'site1',
+						Name: 'site1',
+						Children: [
+							{
+								Id: 'team1',
+								Name: 'team1'
+							}
+						]
 					},
 					{
-						Id: 'team3', Name:'team3'
-					}]
-				}],
+						Id: "site2",
+						Name: 'site2',
+						Children: [
+							{
+								Id: 'team2',
+								Name: 'team2'
+							},
+							{
+								Id: 'team3',
+								Name: 'team3'
+							}
+						]
+					}
+				],
 				logonUserTeamId: 'logonUserTeamId'
-			},
+			};
+			return {
+				then: function(cb) {
+					cb({ data: data });
+				}
+			}		
+		}				
+	}
 
-			onPick:function() {}
-		};
+
+	it("should populate hierachy list", inject(function () {		
+
+		var bindings = {
+			date: new Date('2015-09-01'),
+			onPick: angular.noop
+		}
 
 		var ctrl = $componentController('organizationPicker', null, bindings);
-		ctrl.refresh();
+		ctrl.$onInit();
 
 		expect(ctrl.groupList.length).toEqual(2);
 		expect(ctrl.groupList[0].id).toEqual("site1");
@@ -47,30 +82,14 @@ describe('organizationPicker component tests', function () {
 	}));
 
 	it("should extract the right abbreviation of the selected time zone ", inject(function () {
+		
 		var bindings = {
-			availableGroups: {
-				sites:[{
-					Id:'site1', Name:'site1', Children:[ {
-						Id: 'team1', Name:'team1'
-					}]
-				},
-				{
-					Id:"site2", Name:'site2', Children:[ {
-						Id: 'team2', Name:'team2'
-					},
-					{
-						Id: 'team3', Name:'team3'
-					}]
-				}],
-				logonUserTeamId: 'logonUserTeamId'
-			},
-			selectedTeamIds: [],
-
-			onPick:function() {}
-		};
+			date: new Date('2015-09-01'),
+			onPick: angular.noop
+		}
 
 		var ctrl = $componentController('organizationPicker', null, bindings);
-		ctrl.refresh();
+		ctrl.$onInit();
 
 		ctrl.onPickerOpen();
 		ctrl.selectedTeamIds = ['team1'];
@@ -83,72 +102,38 @@ describe('organizationPicker component tests', function () {
 	}));
 
 	it("Should trigger onPick when selection done", function () {
-		var selectedTeams=[];
+		var selectedTeams=[];		
 		var bindings = {
-			availableGroups: {
-				sites:[{
-					Id:'site1', Name:'site1', Children:[ {
-						Id: 'team1', Name:'team1'
-					}]
-				},
-				{
-					Id:"site2", Name:'site2', Children:[ {
-						Id: 'team2', Name:'team2'
-					},
-					{
-						Id: 'team3', Name:'team3'
-					}]
-				}],
-				logonUserTeamId: null
-			},
-			selectedTeamIds: [],
-
-			onPick: function(input) {
+			date: new Date('2015-09-01'),
+			onPick: function (input) {
 				selectedTeams = input.teams;
 			}
-		};
+		}
 
 		var ctrl = $componentController('organizationPicker', null, bindings);
-		ctrl.refresh();
+		ctrl.$onInit();
 
 		ctrl.onPickerOpen();
 		ctrl.selectedTeamIds = ['team1', 'team2'];
-		ctrl.onSelectionDone();
+		ctrl.onPickerClose();
 		expect(selectedTeams.length).toEqual(2);
 	});
 
 	it("should calculate selected team ids number correctly", function () {
-		var selectedTeams=[];
+		var selectedTeams=[];		
 		var bindings = {
-			availableGroups: {
-				sites:[{
-					Id:'site1', Name:'site1', Children:[ {
-						Id: 'team1', Name:'team1'
-					}]
-				},
-				{
-					Id:"site2", Name:'site2', Children:[ {
-						Id: 'team2', Name:'team2'
-					},
-					{
-						Id: 'team3', Name:'team3'
-					}]
-				}],
-				logonUserTeamId: 'logonUserTeamId'
-			},
-			selectedTeamIds: [],
-
-			onPick: function(input) {
+			date: new Date('2015-09-01'),
+			onPick: function (input) {
 				selectedTeams = input.teams;
 			}
-		};
+		}
 
 		var ctrl = $componentController('organizationPicker', null, bindings);
-		ctrl.refresh();
+		ctrl.$onInit();
 
 		ctrl.onPickerOpen();
 		ctrl.selectedTeamIds = ['team1', 'team2'];
-		ctrl.onSelectionDone();
+		ctrl.onPickerClose();
 		expect(selectedTeams.length).toEqual(2);
 	});
 
