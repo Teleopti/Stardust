@@ -32,15 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 			Logger.InfoMessage.Should().Not.Be.Null();
 		}
-
-		[Test]
-		public void ShouldNotLogClassName_AlreadyHandledInLog4Net()
-		{
-			Service.DoesSomething(null);
-
-			Logger.InfoMessage.Should().Not.Contain("Service");
-		}
-
+		
 		[Test]
 		public void ShouldLogMethodName()
 		{
