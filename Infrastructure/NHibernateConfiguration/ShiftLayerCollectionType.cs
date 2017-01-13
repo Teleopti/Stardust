@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	/// <summary>
 	/// Not needed when/if https://github.com/nhibernate/nhibernate-core/pull/545 is released on our nhib version
 	/// </summary>
-	public class ShiftLayerCollectionType : IUserCollectionType
+	public class ShiftLayerCollectionType : IUserCollectionType, ICustomCollectionMapperFactory
 	{
 		public const string ShiftLayerCollectionRole = "Teleopti.Ccc.Domain.Scheduling.Assignment.PersonAssignment.ShiftLayers";
 
@@ -119,10 +119,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			return anticipatedSize <= 0 ? new List<IShiftLayer>() : new List<IShiftLayer>(anticipatedSize + 1);
 		}
-	}
 
-	public class ShiftLayerEnversMapperFactory : ICustomCollectionMapperFactory
-	{
 		public IPropertyMapper Create(IEnversProxyFactory enversProxyFactory, CommonCollectionMapperData commonCollectionMapperData, MiddleComponentData elementComponentData, MiddleComponentData indexComponentData, bool embeddableElementType)
 		{
 			return new ListCollectionMapper<IShiftLayer>(enversProxyFactory, commonCollectionMapperData, typeof(IList<IShiftLayer>), elementComponentData, indexComponentData, embeddableElementType);

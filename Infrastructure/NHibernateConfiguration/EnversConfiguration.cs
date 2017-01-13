@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				.ExcludeRelationData("_dayOffTemplate")
 				//can be removed if https://github.com/nhibernate/nhibernate-core/pull/545 is part of our nhib release.
 				//can also be removed if we backout toggle ResourcePlanner_LessPersonAssignmentUpdates_42159
-				.SetCollectionMapper<ShiftLayerEnversMapperFactory>(x => x.ShiftLayers);
+				.SetCollectionMapper<ShiftLayerCollectionType>(x => x.ShiftLayers);
 			fluentCfg.Audit<ShiftLayer>()
 			   .ExcludeRelationData(l => l.Payload);
 			fluentCfg.Audit<MainShiftLayer>();
