@@ -54,7 +54,7 @@ WfmPermission_ReplaceOldPermission_34671 = true
 
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
-WfmTeamSchedule_SaveFavoriteSearches_42073 = DEV
+WfmTeamSchedule_SaveFavoriteSearches_42073 = RC
 WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260 = true
 WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252 = true
 
