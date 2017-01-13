@@ -103,6 +103,9 @@
 		var enableWatchOnTeam = false;
 		vm.selectFieldText = 'Select organization';
 		vm.searchTerm = "";
+
+		var updateStatesDelegate = updateStates;
+
 		toggleService.togglesLoaded.then(function () {
 			vm.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 			if (vm.showOrgSelection)
@@ -381,6 +384,58 @@
 		(function initialize() {
 			vm.pollingLock = false;
 			if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
+				toggleService.togglesLoaded.then(function () {
+					if (toggleService.RTA_FasterAgentsView_42039) {
+						getAgentStates()
+							.then(function (fn) {
+								return fn({
+									siteIds: siteIds,
+									teamIds: teamIds,
+									skillIds: skillIds,
+									skillAreaId: skillAreaId
+								});
+							})
+							.then(function (agentsInfo) {
+								vm.agentsInfo = agentsInfo;
+								vm.agents = agentsInfo;
+								$scope.$watchCollection(function () {
+									return vm.agents;
+								}, filterData);
+								updateBreadCrumb(agentsInfo);
+								vm.pollingLock = true;
+								return agentsInfo;
+							})
+							.then(function (data) {
+								updateStates2(data);
+							})
+							.then(updatePhoneStatesFromStateParams);
+
+						updateStatesDelegate = function () {
+							getAgentStates()
+								.then(function (fn) {
+									return fn({
+										siteIds: siteIds,
+										teamIds: teamIds,
+										skillIds: skillIds,
+										skillAreaId: skillAreaId
+									});
+								})
+								.then(function (agentsInfo) {
+									vm.agentsInfo = agentsInfo;
+									vm.agents = agentsInfo;
+									$scope.$watchCollection(function () {
+										return vm.agents;
+									}, filterData);
+									updateBreadCrumb(agentsInfo);
+									vm.pollingLock = true;
+									return agentsInfo;
+								})
+								.then(function (data) {
+									updateStates2(data);
+								})
+								.then(updatePhoneStatesFromStateParams);
+						}
+					} else {
 				getAgents()
 					.then(function (fn) {
 						return fn({
@@ -402,7 +457,19 @@
 					.then(updateStates)
 					.then(updatePhoneStatesFromStateParams);
 			}
+				});
+
+			}
 		})();
+
+		function updateStates2(agentStates) {
+			if (vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
+				return;
+			var excludedStates = excludedStateIds();
+			var excludeStates = excludedStates.length > 0;
+			setStatesInAgents2(agentStates);
+			updateUrlWithExcludedStateIds(excludedStates);
+		}
 
 		function updateStates() {
 			if (vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
@@ -434,7 +501,7 @@
 		function updatePhoneStatesFromStateParams() {
 			var stateIds = excludedStatesFromUrl();
 			addNoStateIfNeeded(stateIds);
-			getStateNamesForAnyExcludedStates(stateIds)
+			getStateNamesForAnyExcludedStates(stateIds);
 		}
 
 		function addNoStateIfNeeded(stateIds) {
@@ -491,6 +558,15 @@
 			return excludedStateIds;
 		}
 
+		function setStatesInAgents2(states) {
+			vm.agents = [];
+			lastUpdate = states.Time;
+			fillAgentsWithState2(states);
+			buildTimeline(states);
+			vm.isLoading = false;
+			vm.pollingLock = true;
+		}
+
 		function setStatesInAgents(states) {
 			vm.agents = [];
 			lastUpdate = states.Time;
@@ -499,6 +575,60 @@
 			buildTimeline(states);
 			vm.isLoading = false;
 			vm.pollingLock = true;
+		}
+
+
+		function fillAgentsWithState2(states) {
+			states.States.forEach(function (state, i) {
+				state.Shift = state.Shift || [];
+				state.OutOfAdherences = state.OutOfAdherences || [];
+
+				var now = moment(states.Time);
+				var timeInfo = {
+					time: states.Time,
+					windowStart: now.clone().add(-1, 'hours'),
+					windowEnd: now.clone().add(3, 'hours')
+				};
+
+				vm.agents.push({
+					PersonId: state.PersonId,
+					Name: state.Name,
+					SiteAndTeamName: state.SiteName + '/' + state.TeamName,
+					TeamName: state.TeamName,
+					SiteName: state.SiteName,
+					PersonId: state.PersonId,
+					TeamId: state.TeamId,
+					State: state.State,
+					Activity: state.Activity,
+					NextActivity: state.NextActivity,
+					NextActivityStartTime: state.NextActivityStartTime,
+					Alarm: state.Alarm,
+					Color: state.Color,
+					TimeInState: state.TimeInState,
+					TimeInAlarm: getTimeInAlarm(state),
+					TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
+					TimeOutOfAdherence: getTimeOutOfAdherence(state, timeInfo),
+					OutOfAdherences: getOutOfAdherences(state, timeInfo),
+					ShiftTimeBar: getShiftTimeBar(state),
+					Shift: getShift(state, timeInfo)
+				});
+
+				state.StateId = state.StateId || nullStateId;
+				state.State = state.State || "No State";
+				if (vm.states
+					.map(function (s) {
+						return s.Id;
+					})
+					.indexOf(state.StateId) === -1) {
+					vm.states.push({
+						Id: state.StateId,
+						Name: state.State,
+						Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
+					})
+				}
+
+			});
+			sortStatesByName();
 		}
 
 		function fillAgentsWithState(states) {
@@ -713,6 +843,19 @@
 			return rtaRouteService.urlForAgentDetails(personId);
 		};
 
+		function getAgentStates() {
+			var deferred = $q.defer();
+			if (skillAreaId) {
+				getSkillAreaInfo()
+					.then(function () {
+						deferred.resolve(rtaService.agentStatesFor);
+					});
+			} else {
+				deferred.resolve(rtaService.agentStatesFor);
+			}
+			return deferred.promise;
+		};
+
 		function getAgents() {
 			var deferred = $q.defer();
 			if (skillAreaId) {
@@ -721,7 +864,6 @@
 						deferred.resolve(rtaService.agentsFor);
 					});
 			} else {
-
 				deferred.resolve(rtaService.agentsFor);
 			}
 			return deferred.promise;

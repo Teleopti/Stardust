@@ -33,7 +33,7 @@ describe('RtaAgentsController', function() {
 		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		$fakeBackend.clear();
-
+		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 		spyOn($state, 'go');
 	}));
 
@@ -59,13 +59,12 @@ describe('RtaAgentsController', function() {
 			stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 			$fakeBackend
 				.withTime(example.time)
-				.withAgent({
+				.withAgentState({
 					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				});
 
 			vm = $controllerBuilder.createController().vm;
-
 			expect(vm.timeline.length).toEqual(example.expect.length);
 			example.expect.forEach(function(e, i) {
 				expect(vm.timeline[i].Time).toEqual(e);
@@ -88,7 +87,7 @@ describe('RtaAgentsController', function() {
 			stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 			$fakeBackend
 				.withTime(example.time)
-				.withAgent({
+				.withAgentState({
 					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				});
@@ -108,13 +107,11 @@ describe('RtaAgentsController', function() {
 
 		$fakeBackend
 			.withTime("2016-05-26T12:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			
 				Shift: [{
 					Color: "#80FF80",
 					StartTime: "2016-05-26T12:00:00",
@@ -137,14 +134,11 @@ describe('RtaAgentsController', function() {
 
 		$fakeBackend
 			.withTime("2016-05-26T09:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				Shift: [{
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+					Shift: [{
 						Color: "#80FF80",
 						StartTime: "2016-05-26T08:00:00",
 						EndTime: "2016-05-26T10:00:00"
@@ -175,14 +169,11 @@ describe('RtaAgentsController', function() {
 
 		$fakeBackend
 			.withTime("2014-01-21T12:45:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				Shift: [{
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+					Shift: [{
 						Color: "#80FF80",
 						StartTime: "2014-01-21T12:00:00",
 						EndTime: "2014-01-21T13:00:00"
@@ -206,13 +197,10 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T13:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				Shift: [{
 					Color: "#80FF80",
 					StartTime: "2016-05-30T08:00:00",
@@ -231,13 +219,10 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T08:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				Shift: [{
 					Color: "#80FF80",
 					StartTime: "2016-05-30T15:00:00",
@@ -256,14 +241,11 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T08:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				Shift: [{
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+					Shift: [{
 						StartTime: "2016-05-30T10:00:00",
 						EndTime: "2016-05-30T11:00:00"
 					},
@@ -293,13 +275,10 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T11:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				Shift: [{
 					Color: "#80FF80",
 					StartTime: "2016-05-30T08:00:00",
@@ -319,14 +298,11 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T15:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				Shift: [{
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+					Shift: [{
 					Color: "#80FF80",
 					StartTime: "2016-05-30T08:00:00",
 					EndTime: "2016-05-30T17:00:00"
@@ -345,13 +321,10 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T11:00:00")
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				Shift: [{
 					Name: 'Phone',
 					StartTime: "2016-05-30T08:00:00",

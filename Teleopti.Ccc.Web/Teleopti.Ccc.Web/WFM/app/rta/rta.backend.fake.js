@@ -1,5 +1,5 @@
 'use strict';
-(function() {
+(function () {
 	angular
 		.module('wfm.rta')
 		.factory('FakeRtaBackend', fakeRtaBackend);
@@ -12,8 +12,10 @@
 			clear: clear,
 			withToggle: withToggle,
 			withTime: withTime,
+			withAgentState: withAgentState,
 			withAgent: withAgent,
 			clearStates: clearStates,
+			clearAgentStates: clearAgentStates,
 			withState: withState,
 			withAdherence: withAdherence,
 			withPersonDetails: withPersonDetails,
@@ -41,6 +43,7 @@
 		var toggles = {};
 		var agents = [];
 		var states = [];
+		var agentStates = [];
 		var adherences = [];
 		var personDetails = [];
 		var activityAdherences = [];
@@ -54,14 +57,14 @@
 		var organizations = [];
 		var siteAdherencesForSkill = [];
 		var teamAdherencesForSkill = [];
-		var paramsOf = function(url) {
+		var paramsOf = function (url) {
 			var result = {};
 			var queryString = url.split("?")[1];
 			if (queryString == null) {
 				return result;
 			}
 			var params = queryString.split("&");
-			angular.forEach(params, function(t) {
+			angular.forEach(params, function (t) {
 				var kvp = t.split("=");
 				if (result[kvp[0]] != null)
 					result[kvp[0]] = [].concat(result[kvp[0]], kvp[1]);
@@ -71,68 +74,103 @@
 			return result;
 		};
 
-		var fake = function(url, response) {
+		var fake = function (url, response) {
 			$httpBackend.whenGET(url)
-				.respond(function(method, url, data, headers, params) {
+				.respond(function (method, url, data, headers, params) {
 					var params2 = paramsOf(url);
 					return response(params2, method, url, data, headers, params);
 				});
 		};
 
 		fake(/\.\.\/api\/Agents\/For(.*)/,
-			function(params) {
-				var ret = (function() {
+			function (params) {
+				var ret = (function () {
 					if (params.siteIds != null && params.skillIds != null)
-						return agents.filter(function(a) {
+						return agents.filter(function (a) {
 							return params.skillIds.indexOf(a.SkillId) >= 0
-						}).filter(function(a) {
+						}).filter(function (a) {
 							return params.siteIds.indexOf(a.SiteId) >= 0
 						});
 					if (params.siteIds != null)
-						return agents.filter(function(a) {
+						return agents.filter(function (a) {
 							return params.siteIds.indexOf(a.SiteId) >= 0
 						});
 					if (params.teamIds != null && params.skillIds != null)
-						return agents.filter(function(a) {
+						return agents.filter(function (a) {
 							return params.skillIds.indexOf(a.SkillId) >= 0
-						}).filter(function(a) {
+						}).filter(function (a) {
 							return params.teamIds.indexOf(a.TeamId) >= 0
 						});
 					if (params.teamIds != null)
-						return agents.filter(function(a) {
+						return agents.filter(function (a) {
 							return params.teamIds.indexOf(a.TeamId) >= 0
 						});
-					return agents.filter(function(a) {
+					return agents.filter(function (a) {
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
 				})();
 				return [200, ret];
 			});
 
-		fake(/\.\.\/api\/Agents\/StatesFor(.*)/,
-			function(params) {
-				var ret = (function() {
+		fake(/\.\.\/api\/AgentStates\/For(.*)/,
+			function (params) {
+				var ret = (function () {
 					if (params.siteIds != null && params.skillIds != null)
-						return statesForMultiple(params.siteIds, function(a) {
+						return agentStates.filter(function (a) {
+							return params.skillIds.indexOf(a.SkillId) >= 0
+						}).filter(function (a) {
+							return params.siteIds.indexOf(a.SiteId) >= 0
+						});
+					if (params.siteIds != null)
+						return agentStates.filter(function (a) {
+							return params.siteIds.indexOf(a.SiteId) >= 0
+						});
+					if (params.teamIds != null && params.skillIds != null)
+						return agentStates.filter(function (a) {
+							return params.skillIds.indexOf(a.SkillId) >= 0
+						}).filter(function (a) {
+							return params.teamIds.indexOf(a.TeamId) >= 0
+						});
+					if (params.teamIds != null)
+						return agentStates.filter(function (a) {
+							return params.teamIds.indexOf(a.TeamId) >= 0
+						});
+					return agentStates.filter(function (a) {
+						return params.skillIds.indexOf(a.SkillId) >= 0
+					});
+				})();
+				
+				return [200, {
+					Time: serverTime,
+					States: ret
+				}];
+				//return [200, ret];
+			});
+
+		fake(/\.\.\/api\/Agents\/StatesFor(.*)/,
+			function (params) {
+				var ret = (function () {
+					if (params.siteIds != null && params.skillIds != null)
+						return statesForMultiple(params.siteIds, function (a) {
 							return a.SiteId;
-						}, params.skillIds, function(a) {
+						}, params.skillIds, function (a) {
 							return a.SkillId;
 						});
 					if (params.siteIds != null)
-						return statesFor(params.siteIds, function(a) {
+						return statesFor(params.siteIds, function (a) {
 							return a.SiteId;
 						});
 					if (params.teamIds != null && params.skillIds != null)
-						return statesForMultiple(params.teamIds, function(a) {
+						return statesForMultiple(params.teamIds, function (a) {
 							return a.TeamId;
-						}, params.skillIds, function(a) {
+						}, params.skillIds, function (a) {
 							return a.SkillId;
 						});
 					if (params.teamIds != null)
-						return statesFor(params.teamIds, function(a) {
+						return statesFor(params.teamIds, function (a) {
 							return a.TeamId;
 						});
-					return statesFor(params.skillIds, function(a) {
+					return statesFor(params.skillIds, function (a) {
 						return a.SkillId;
 					});
 				})();
@@ -143,8 +181,8 @@
 			});
 
 		function statesFor(collection, map) {
-			return states.filter(function(s) {
-				var a = agents.find(function(a) {
+			return states.filter(function (s) {
+				var a = agents.find(function (a) {
 					return a.PersonId === s.PersonId;
 				});
 				return a != null && collection.indexOf(map(a)) >= 0;
@@ -152,8 +190,8 @@
 		};
 
 		function statesForMultiple(collection1, map1, collection2, map2) {
-			return states.filter(function(s) {
-				var a = agents.find(function(a) {
+			return states.filter(function (s) {
+				var a = agents.find(function (a) {
 					return a.PersonId === s.PersonId;
 				});
 				return a != null && collection1.indexOf(map1(a)) >= 0 && collection2.indexOf(map2(a)) >= 0;
@@ -161,29 +199,29 @@
 		}
 
 		fake(/\.\.\/api\/Agents\/InAlarmFor\?(.*)/,
-			function(params) {
-				var ret = (function() {
+			function (params) {
+				var ret = (function () {
 					if (params.siteIds != null && params.skillIds != null)
-						return alarmStatesForMultiple(params.siteIds, function(a) {
+						return alarmStatesForMultiple(params.siteIds, function (a) {
 							return a.SiteId;
-						}, params.skillIds, function(a) {
+						}, params.skillIds, function (a) {
 							return a.SkillId;
 						});
 					if (params.siteIds != null)
-						return alarmStatesFor(params.siteIds, function(a) {
+						return alarmStatesFor(params.siteIds, function (a) {
 							return a.SiteId;
 						});
 					if (params.teamIds != null && params.skillIds != null)
-						return alarmStatesForMultiple(params.teamIds, function(a) {
+						return alarmStatesForMultiple(params.teamIds, function (a) {
 							return a.TeamId;
-						}, params.skillIds, function(a) {
+						}, params.skillIds, function (a) {
 							return a.SkillId;
 						});
 					if (params.teamIds != null)
-						return alarmStatesFor(params.teamIds, function(a) {
+						return alarmStatesFor(params.teamIds, function (a) {
 							return a.TeamId;
 						});
-					return alarmStatesFor(params.skillIds, function(a) {
+					return alarmStatesFor(params.skillIds, function (a) {
 						return a.SkillId;
 					});
 				})();
@@ -194,39 +232,44 @@
 			});
 
 		fake(/\.\.\/api\/Agents\/InAlarmExcludingPhoneStatesFor(.*)/,
-			function(params) {
-				var ret = (function() {
+			function (params) {
+				var ret = (function () {
 					if (params.siteIds != null && params.skillIds != null)
-						return alarmStatesForMultiple(params.siteIds, function(a) {
-							return a.SiteId;
-						}, params.skillIds, function(a) {
-							return a.SkillId;
-						}).filter(function(s) {
+						return alarmStatesForMultiple(
+							params.siteIds,
+							function (a) { return a.SiteId; },
+							params.skillIds,
+							function (a) { return a.SkillId; }
+						).filter(function (s) {
 							return params.excludedStateIds.indexOf(s.StateId) === -1;
 						});
 					if (params.siteIds != null)
-						return alarmStatesFor(params.siteIds, function(a) {
-							return a.SiteId;
-						}).filter(function(s) {
+						return alarmStatesFor(
+							params.siteIds,
+							function (a) { return a.SiteId; }
+						).filter(function (s) {
 							return params.excludedStateIds.indexOf(s.StateId) === -1;
 						});
 					if (params.teamIds != null && params.skillIds != null)
-						return alarmStatesForMultiple(params.teamIds, function(a) {
-							return a.TeamId;
-						}, params.skillIds, function(a) {
-							return a.SkillId;
-						}).filter(function(s) {
+						return alarmStatesForMultiple(
+							params.teamIds,
+							function (a) { return a.TeamId; },
+							params.skillIds,
+							function (a) { return a.SkillId; }
+						).filter(function (s) {
 							return params.excludedStateIds.indexOf(s.StateId) === -1;
 						});
 					if (params.teamIds != null)
-						return alarmStatesFor(params.teamIds, function(a) {
-							return a.TeamId;
-						}).filter(function(s) {
+						return alarmStatesFor(
+							params.teamIds,
+							function (a) { return a.TeamId; }
+						).filter(function (s) {
 							return params.excludedStateIds.indexOf(s.StateId) === -1;
 						});
-					return alarmStatesFor(params.skillIds, function(a) {
-						return a.SkillId;
-					}).filter(function(s) {
+					return alarmStatesFor(
+						params.skillIds,
+						function (a) { return a.SkillId; }
+					).filter(function (s) {
 						return params.excludedStateIds.indexOf(s.StateId) === -1;
 					});
 				})();
@@ -238,30 +281,30 @@
 
 		function alarmStatesFor(collection, map) {
 			return statesFor(collection, map)
-				.filter(function(s) {
+				.filter(function (s) {
 					return s.TimeInAlarm > 0;
-				}).sort(function(s1, s2) {
+				}).sort(function (s1, s2) {
 					return s2.TimeInAlarm - s1.TimeInAlarm;
 				});
 		}
 
 		function alarmStatesForMultiple(collection1, map1, collection2, map2) {
 			return statesForMultiple(collection1, map1, collection2, map2)
-				.filter(function(s) {
+				.filter(function (s) {
 					return s.TimeInAlarm > 0;
-				}).sort(function(s1, s2) {
+				}).sort(function (s1, s2) {
 					return s2.TimeInAlarm - s1.TimeInAlarm;
 				});
 		}
 
 
 		fake(/\.\.\/api\/Skills\/NameFor(.*)/,
-			function(params) {
+			function (params) {
 				var result = skills
-					.filter(function(s) {
+					.filter(function (s) {
 						return params.skillId === s.Id
 					})
-					.map(function(s) {
+					.map(function (s) {
 						return s.Name;
 					});
 				return [200, {
@@ -270,56 +313,56 @@
 			});
 
 		fake(/\.\.\/api\/SkillArea\/For(.*)/,
-			function(params) {
+			function (params) {
 				var result = skillAreas
-					.filter(function(s) {
+					.filter(function (s) {
 						return params.skillAreaId === s.Id
 					});
 				return [200, result[0]];
 			});
 
 		fake(/\.\.\/api\/SkillAreas(.*)/,
-			function() {
+			function () {
 				return [200, {
 					SkillAreas: skillAreas
 				}];
 			});
 
 		fake(/\.\.\/api\/Skills(.*)/,
-			function() {
+			function () {
 				return [200, skills];
 			});
 
 		fake(/\.\.\/api\/Sites\/Organization(.*)/,
-			function() {
+			function () {
 				return [200, organizations];
 			});
 
 
 		fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
-			function(params) {
-				var result = adherences.find(function(a) {
+			function (params) {
+				var result = adherences.find(function (a) {
 					return a.PersonId === params.personId;
 				});
 				return [200, result];
 			});
 
 		fake(/\.\.\/api\/PhoneState\/InfoFor(.*)/,
-			function(data) {
+			function (data) {
 				if (data.ids.indexOf(null) > -1 || data.ids.indexOf("noState") > -1)
 					throw new Error('Nope, dont ask server for that')
 
-				var result = phoneStates.filter(function(s) {
+				var result = phoneStates.filter(function (s) {
 					return data.ids.indexOf(s.Id) > -1
 				});
 
 				if (result.length === 0) {
 					result = states
-						.filter(function(s) {
+						.filter(function (s) {
 							if (data.ids.indexOf(s.StateId) > -1)
 								return true;
 						})
-						.map(function(s) {
+						.map(function (s) {
 							return {
 								Name: s.State,
 								Id: s.StateId
@@ -332,59 +375,59 @@
 			});
 
 		fake(/ToggleHandler\/AllToggles(.*)/,
-			function(params) {
+			function (params) {
 				return [200, toggles];
 			});
 
 		fake(/\.\.\/api\/Agents\/PersonDetails(.*)/,
-			function(params) {
-				return [200, personDetails.find(function(p) {
+			function (params) {
+				return [200, personDetails.find(function (p) {
 					return p.PersonId === params.personId;
 				})];
 			});
 
 		fake(/\.\.\/api\/Adherence\/ForDetails(.*)/,
-			function(params) {
-				return [200, activityAdherences.filter(function(a) {
+			function (params) {
+				return [200, activityAdherences.filter(function (a) {
 					return a.PersonId === params.personId;
 				})];
 			});
 
 		fake(/\.\.\/api\/Sites$/,
-			function(params) {
+			function (params) {
 				return [200, sites];
 			});
 
 		function sitesOrTeamsForSkillOrSkillArea(adherences, adherenceKey, paramId, sitesOrTeams) {
-			var siteOrTeamIdsBySkillOrSkillAreaId = adherences.filter(function(a) {
+			var siteOrTeamIdsBySkillOrSkillAreaId = adherences.filter(function (a) {
 				return paramId.indexOf(a[adherenceKey]) > -1;
-			}).map(function(s) {
+			}).map(function (s) {
 				return s.Id;
 			});
-			return sitesOrTeams.filter(function(st) {
+			return sitesOrTeams.filter(function (st) {
 				return siteOrTeamIdsBySkillOrSkillAreaId.indexOf(st.Id) > -1;
 			});
 		}
 
 		function skillIdsFromTheSkillArea(skillAreacollection, skillAreaId) {
-			return skillAreacollection.find(function(sa) {
-					return sa.Id === skillAreaId;
-				})
+			return skillAreacollection.find(function (sa) {
+				return sa.Id === skillAreaId;
+			})
 				.Skills
-				.map(function(s) {
+				.map(function (s) {
 					return s.Id;
 				});
 		}
 
 		fake(/\.\.\/api\/Sites\/ForSkills(.*)/,
-			function(params) {
+			function (params) {
 				var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill, 'SkillId', params.skillIds, sites);
 				return [200, filteredSites];
 			});
 
 		fake(/\.\.\/api\/Teams\/ForSkills(.*)/,
-			function(params) {
-				var teamsBySite = teams.filter(function(t) {
+			function (params) {
+				var teamsBySite = teams.filter(function (t) {
 					return params.siteId.indexOf(t.SiteId) > -1;
 				});
 				var filteredSites = sitesOrTeamsForSkillOrSkillArea(teamAdherencesForSkill, 'SkillId', params.skillIds, teamsBySite);
@@ -392,15 +435,15 @@
 			});
 
 		fake(/\.\.\/api\/Sites\/InAlarmCountForSkills(.*)/,
-			function(params) {
+			function (params) {
 				var adherenceBySiteId = {};
 				var sAdherencesForMultipleSkills = [];
-				var sAdherencesForSkill = siteAdherencesForSkill.filter(function(sa) {
+				var sAdherencesForSkill = siteAdherencesForSkill.filter(function (sa) {
 					return params.skillIds.indexOf(sa.SkillId) > -1;
 				});
 
 				if (params.skillIds.length > 1) {
-					sAdherencesForSkill.forEach(function(sas) {
+					sAdherencesForSkill.forEach(function (sas) {
 						if (angular.isDefined(adherenceBySiteId[sas.Id]))
 							adherenceBySiteId[sas.Id] = adherenceBySiteId[sas.Id] + sas.OutOfAdherence;
 						else
@@ -420,28 +463,28 @@
 			});
 
 		fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
-			function(params) {
+			function (params) {
 				return [200, siteAdherences];
 			});
 
 		fake(/\.\.\/api\/Teams\/Build(.*)/,
-			function(params) {
-				return [200, teams.filter(function(team) {
+			function (params) {
+				return [200, teams.filter(function (team) {
 					return team.SiteId === params.siteId;
 				})];
 			});
 
 		fake(/\.\.\/api\/Teams\/InAlarmCountForSkills(.*)/,
-			function(params) {
+			function (params) {
 				var adherenceByTeamId = {};
 				var tAdherencesForMultipleSkills = [];
 
-				var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(ta) {
+				var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function (ta) {
 					return params.skillIds.indexOf(ta.SkillId) > -1 && ta.SiteId === params.siteId;
 				});
 
 				if (params.skillIds.length > 1) {
-					teamAdherencesBySkillId.forEach(function(tas) {
+					teamAdherencesBySkillId.forEach(function (tas) {
 						if (angular.isDefined(adherenceByTeamId[tas.Id]))
 							adherenceByTeamId[tas.Id] = adherenceByTeamId[tas.Id] + tas.OutOfAdherence;
 						else
@@ -462,10 +505,10 @@
 			});
 
 		fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/,
-			function(params) {
+			function (params) {
 				var result =
-					teamAdherences.filter(function(ta) {
-						var t = teams.find(function(team) {
+					teamAdherences.filter(function (ta) {
+						var t = teams.find(function (team) {
 							return team.Id === ta.Id;
 						});
 						return t != null && params.siteId === t.SiteId;
@@ -474,8 +517,8 @@
 			});
 
 		fake(/\.\.\/api\/HistoricalAdherence\/For(.*)/,
-			function(params) {
-				var result = agents.find(function(agent) {
+			function (params) {
+				var result = agents.find(function (agent) {
 					return params.personId == agent.PersonId;
 				});
 				if (result != null)
@@ -523,10 +566,20 @@
 			return this;
 		};
 
+		function clearAgentStates() {
+			agentStates = [];
+			return this;
+		};
+
 		function withState(state) {
 			states.push(state);
 			return this;
 		};
+
+		function withAgentState(state) {
+			agentStates.push(state);
+			return this;
+		}
 
 		function withAdherence(adherence) {
 			adherences.push(adherence);

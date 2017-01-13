@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
@@ -13,6 +13,7 @@
 			getSkills: getSkills,
 			getSkillAreas: getSkillAreas,
 			getOrganization: getOrganization,
+			agentStatesFor: agentStatesFor,
 			agentsFor: agentsFor,
 			statesFor: statesFor,
 			inAlarmFor: inAlarmFor,
@@ -66,6 +67,14 @@
 			}).query().$promise;
 		};
 
+		function agentStatesFor(data) {
+			return $resource('../api/AgentStates/For', {}, {
+				query: {
+					method: 'GET',
+					isArray: false
+				}
+			}).query(data).$promise;
+		};
 
 		function agentsFor(data) {
 			return $resource('../api/Agents/For', {}, {
@@ -94,46 +103,46 @@
 
 		function inAlarmExcludingPhoneStatesFor(data) {
 			return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query(data)
+				query: {
+					method: 'GET'
+				}
+			}).query(data)
 				.$promise;
 		};
 
 		function getAlarmStatesForSitesAndSkillsExcludingStates(data) {
 			return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query(data)
+				query: {
+					method: 'GET'
+				}
+			}).query(data)
 				.$promise;
 		};
 
 		function getAlarmStatesForTeamsAndSkillsExcludingStates(data) {
 			return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query(data)
+				query: {
+					method: 'GET'
+				}
+			}).query(data)
 				.$promise;
 		};
 
 		function getAlarmStatesForSkillsExcludingStates(data) {
 			return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query(data)
+				query: {
+					method: 'GET'
+				}
+			}).query(data)
 				.$promise;
 		};
 
 		function getAlarmStatesForTeamsExcludingStates(data) {
 			return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query(data)
+				query: {
+					method: 'GET'
+				}
+			}).query(data)
 				.$promise;
 		};
 
