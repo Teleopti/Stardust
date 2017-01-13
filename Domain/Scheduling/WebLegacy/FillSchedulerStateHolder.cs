@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
 		{
 			PreFill(schedulerStateHolderTo, period);

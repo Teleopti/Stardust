@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		[Test]
 		public void ShouldHaveLowestOrderOfThemAll()
 		{
-			var orderOfLogTime = new TestLogTimeAttribute().Order;
-			foreach (var attrType in typeof(TestLogTimeAttribute).Assembly.GetTypes()
-				.Where(t => t.IsSubclassOf(typeof(AspectAttribute)) && t != typeof(TestLogTimeAttribute)))
+			var orderOfLogTime = new TestLogAttribute().Order;
+			foreach (var attrType in typeof(TestLogAttribute).Assembly.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(AspectAttribute)) && t != typeof(TestLogAttribute)))
 			{
 				var attr = (AspectAttribute)Activator.CreateInstance(attrType);
 				if(attr.Order<=orderOfLogTime)

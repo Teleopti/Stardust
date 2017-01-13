@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_activities = activities;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void Create()
 		{
 			_now.Is("2016-02-25 08:00".Utc());

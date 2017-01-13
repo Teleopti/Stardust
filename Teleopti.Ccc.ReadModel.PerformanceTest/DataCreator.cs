@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			_database = database;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void Create()
 		{
 			_database

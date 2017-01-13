@@ -31,19 +31,19 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_http = http;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void SendAllAsSingles()
 		{
 			sendAll(1);
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void SendAllAsSmallBatches()
 		{
 			sendAll(50);
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void SendAllAsLargeBatches()
 		{
 			sendAll(1000);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		}
 		
 		[LogInfo]
-		[TestLogTime]
+		[TestLog]
 		protected virtual void SendStateChange(int batchSize, StateChange stateChange)
 		{
 			var now = stateChange.Time.Utc();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		}
 
 		[LogInfo]
-		[TestLogTime]
+		[TestLog]
 		protected virtual void Send(IEnumerable<ExternalUserStateWebModel> states)
 		{
 			if (states.Count() == 1)

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void Update(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual IList<SkillStaffingInterval> CreateReadModel(
 			ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
 		{

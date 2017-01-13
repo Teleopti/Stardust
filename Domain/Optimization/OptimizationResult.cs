@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulerStateHolder = schedulerStateHolder;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual OptimizationResultModel Create(DateOnlyPeriod period)
 		{
 			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;

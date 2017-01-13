@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
-		private readonly TestLog _log;
 		private readonly IMutateNow _mutateNow;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 
 		public TestController(
-			TestLog log,
 			IMutateNow mutateNow,
 			INow now,
 			ISessionSpecificDataProvider sessionSpecificDataProvider,
@@ -66,7 +64,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			HangfireUtilities hangfire,
 			TenantTickEventPublisher tenantTickEventPublisher)
 		{
-			_log = log;
 			_mutateNow = mutateNow;
 			_now = now;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -84,10 +81,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_tenantTickEventPublisher = tenantTickEventPublisher;
 		}
 
-		public ViewResult BeforeScenario(string name, bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
+		[TestLog]
+		public virtual ViewResult BeforeScenario(string name, bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
 		{
-			_log.Debug($"Before scenario: {name}");
-
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 			_mutateNow.Reset();
@@ -117,7 +113,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		public ViewResult Start()
+		[TestLog]
+		public virtual ViewResult Start()
 		{
 			return View("Message", new TestMessageViewModel
 			{
@@ -126,7 +123,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		public ViewResult ClearConnections()
+		[TestLog]
+		public virtual ViewResult ClearConnections()
 		{
 			clearAllConnectionPools();
 
@@ -137,8 +135,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
+		private static void clearAllConnectionPools()
+		{
+			SqlConnection.ClearAllPools();
+		}
+
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
+		[TestLog]
 		public virtual ViewResult Logon(string businessUnitName, string userName, string password, bool isPersistent = false, bool isLogonFromBrowser = true)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(userName, password);
@@ -167,14 +171,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		public EmptyResult ExpireMyCookie()
+		[TestLog]
+		public virtual EmptyResult ExpireMyCookie()
 		{
 			_sessionSpecificDataProvider.ExpireTicket();
 			_formsAuthentication.SignOut();
 			return new EmptyResult();
 		}
 
-		public ViewResult CorruptMyCookie()
+		[TestLog]
+		public virtual ViewResult CorruptMyCookie()
 		{
 			var wrong = Convert.ToBase64String(Convert.FromBase64String("Totally wrong"));
 			_sessionSpecificDataProvider.MakeCookie("UserName", wrong, false, true);
@@ -186,7 +192,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		public ViewResult NonExistingDatasourceCookie()
+		[TestLog]
+		public virtual ViewResult NonExistingDatasourceCookie()
 		{
 			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), "tenantpassword");
 			_sessionSpecificDataProvider.StoreInCookie(data, false, true);
@@ -198,7 +205,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		[LogInfo]
+		[TestLog]
 		[HttpGet]
 		public virtual ViewResult SetCurrentTime(long? ticks, string time)
 		{
@@ -210,8 +217,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
 		}
-
-		[LogInfo]
+		
+		[TestLog]
 		[HttpPost]
 		public virtual void SetCurrentTime(long? ticks, string time, bool? triggerRecurringJobs)
 		{
@@ -229,9 +236,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_tenantTickEventPublisher.WithPublishingsForTest(() => { _hangfire.TriggerReccuringJobs(); });
 		}
 
-		private static void clearAllConnectionPools()
-		{
-			SqlConnection.ClearAllPools();
-		}
 	}
 }

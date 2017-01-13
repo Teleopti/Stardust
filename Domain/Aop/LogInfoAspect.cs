@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop.Core;
 
 namespace Teleopti.Ccc.Domain.Aop
@@ -9,52 +6,28 @@ namespace Teleopti.Ccc.Domain.Aop
 	public class LogInfoAspect : IAspect
 	{
 		private readonly ILogManager _logManager;
+		private readonly InvocationInfoBuilder _builder;
 
 		public LogInfoAspect(ILogManager logManager)
 		{
 			_logManager = logManager;
+			_builder = new InvocationInfoBuilder();
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			var logger = _logManager.GetLogger(invocation.TargetType.ToString());
-			if (!logger.IsInfoEnabled)
+			var log = _logManager.GetLogger(invocation.TargetType.ToString());
+			if (!log.IsInfoEnabled)
 				return;
-			logger.Info($"{invocation.Method.Name}({string.Join(", ", getParametersAndArguments(invocation))})");
+			log.Info(_builder.BuildInvocationStart(invocation));
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
-			var type = invocation.TargetType;
-			var logger = _logManager.GetLogger(type.ToString());
-			if (!logger.IsInfoEnabled)
+			var log = _logManager.GetLogger(invocation.TargetType.ToString());
+			if (!log.IsInfoEnabled)
 				return;
-			if (invocation.Method.ReturnType == typeof(void))
-				logger.Info($"/{invocation.Method.Name}");
-			else
-				logger.Info($"/{invocation.Method.Name} resulted with {formatValue(invocation.ReturnValue)}");
+			log.Info(_builder.BuildInvocationEnd(exception, invocation, null));
 		}
-
-		private static IEnumerable<string> getParametersAndArguments(IInvocationInfo invocation)
-		{
-			return 
-				from @param in invocation.Method.GetParameters()
-				let pos = @param.Position
-				let argument = invocation.Arguments[pos]
-				let argumentValue = formatValue(argument)
-				select @param.Name + ": " + argumentValue;
-		}
-
-		private static object formatValue(object argument)
-		{
-			if (argument == null) 
-				return "null";
-			if (argument is Array)
-				return "Count = " + ((Array) argument).Length;
-			if (argument is IList)
-				return "Count = " + ((IList) argument).Count;
-			return argument;
-		}
-
 	}
 }

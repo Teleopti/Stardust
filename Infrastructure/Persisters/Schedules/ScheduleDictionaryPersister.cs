@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_transactionHooks = transactionHooks;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
 		{
 			var completeResult = new SchedulePersistResult();

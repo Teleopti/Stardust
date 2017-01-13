@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_gridlockManager = gridlockManager;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
 			using (CommandScope.Create(@event))

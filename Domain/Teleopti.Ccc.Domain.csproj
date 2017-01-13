@@ -166,6 +166,7 @@
     <Compile Include="Aop\IAnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Aop\ILogManager.cs" />
     <Compile Include="Aop\IMessageBrokerUnitOfWorkAspect.cs" />
+    <Compile Include="Aop\InvocationInfoBuilder.cs" />
     <Compile Include="Aop\LogInfoAspect.cs" />
     <Compile Include="Aop\LogInfoAttribute.cs" />
     <Compile Include="Aop\IUnitOfWorkAspect.cs" />
@@ -973,8 +974,8 @@
     <Compile Include="Common\IDataSourceScope.cs" />
     <Compile Include="Common\IBusinessUnitIdForRequest.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodChangedEvent.cs" />
-    <Compile Include="Aop\TestLogTimeAspect.cs" />
-    <Compile Include="Aop\TestLogTimeAttribute.cs" />
+    <Compile Include="Aop\TestLogAspect.cs" />
+    <Compile Include="Aop\TestLogAttribute.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />

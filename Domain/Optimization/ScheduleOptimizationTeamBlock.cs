@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[UnitOfWork]
-		[TestLogTime]
+		[TestLog]
 		protected virtual DateOnlyPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();

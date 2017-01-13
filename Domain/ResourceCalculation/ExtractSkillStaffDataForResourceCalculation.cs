@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return resCalcData;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
 			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, true, period))
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return resCalcData;
 		}
 
-		[TestLogTime]
+		[TestLog]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
 			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, false, period))

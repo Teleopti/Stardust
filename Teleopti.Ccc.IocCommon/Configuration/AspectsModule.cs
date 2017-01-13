@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LogManagerWrapper>().As<ILogManager>().SingleInstance();
 
 			builder.RegisterType<TestLog>().SingleInstance();
-			builder.RegisterType<TestLogTimeAspect>().InstancePerDependency();
+			builder.RegisterType<TestLogAspect>().InstancePerDependency();
 		}
 	}
 }
