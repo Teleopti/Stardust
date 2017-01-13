@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	public class AddOverTimeEvent : EventWithInfrastructureContext
 	{
-		public DateTimePeriod Period { get; set; }
+		public TimeSpan OvertimeDurationMin { get; set; }
+		public TimeSpan OvertimeDurationMax { get; set; }
+
+		public Guid OvertimeType { get; set; } //IMultiplicatorDefinitionSet OvertimeType { get; set; }
+
 		public IList<Guid> Skills { get; set; }
 	}
 }

@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IOvertimeAvailability> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
 		{
-			//impl when needed
-			return new List<IOvertimeAvailability>();
+			//impl period when needed
+			return _overtimeAvailabilities.Where(x => persons.Contains(x.Person)).ToList();
 		}
 
 		public IList<IOvertimeAvailability> Find(DateOnly dateOnly, IPerson person)
