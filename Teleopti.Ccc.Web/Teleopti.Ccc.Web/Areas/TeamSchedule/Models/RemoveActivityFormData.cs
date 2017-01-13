@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public Guid ShiftLayerId { get; set; }
 		public DateOnly Date { get; set; }
+        public bool IsOvertime { get; set; }
 	}
 
 	public class PersonActivityInfo

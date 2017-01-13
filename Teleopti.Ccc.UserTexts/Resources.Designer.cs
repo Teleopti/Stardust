@@ -5223,15 +5223,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot Delete Selected Activities.
-        /// </summary>
-        public static string CannotDeleteSelectedActivities {
-            get {
-                return ResourceManager.GetString("CannotDeleteSelectedActivities", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot delete site:.
         /// </summary>
         public static string CannotDeleteSiteColon {
@@ -18853,6 +18844,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionRemoveAgentActivity {
             get {
                 return ResourceManager.GetString("NoPermissionRemoveAgentActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to remove overtime activities for agent(s).
+        /// </summary>
+        public static string NoPermissionRemoveOvertimeActivity {
+            get {
+                return ResourceManager.GetString("NoPermissionRemoveOvertimeActivity", resourceCulture);
             }
         }
         

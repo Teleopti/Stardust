@@ -183,11 +183,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public List<ActionResult> RemoveActivity(RemoveActivityFormData input)
 		{
-			var permissions = new Dictionary<string, string>
-			{
-				{  DefinedRaptorApplicationFunctionPaths.RemoveActivity, Resources.NoPermissionRemoveAgentActivity}
-			};
-
 			var result = new List<ActionResult>();
 			foreach (var personActivity in input.PersonActivities)
 			{
@@ -197,9 +192,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				actionResult.ErrorMessages = new List<string>();
 				foreach(var shiftLayerDate in personActivity.ShiftLayers)
 				{
-					if (checkPermissionFn(permissions, shiftLayerDate.Date, person, actionResult.ErrorMessages))
+					if (checkRemoveActivityPermission(shiftLayerDate, person, actionResult.ErrorMessages))
 					{
-					
 						var command = new RemoveActivityCommand
 						{
 							PersonId = personActivity.PersonId,
@@ -214,7 +208,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						{
 							actionResult.ErrorMessages.AddRange(command.ErrorMessages);
 						}
-
 					}
 				}
 				if (actionResult.ErrorMessages.Any())
@@ -564,6 +557,29 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			messages.AddRange(newMessages);
 			return !newMessages.Any();
 		}
+		private bool checkRemoveActivityPermission(ShiftLayerDate layerDate, IPerson agent, IList<string> messages)
+		{
+			var date = layerDate.Date;
+			var newMessages = new List<string>();
+
+			if (agentScheduleIsWriteProtected(date, agent))
+			{
+				newMessages.Add(Resources.WriteProtectSchedule);
+			}
+
+			if (layerDate.IsOvertime && !_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveOvertime, date, agent))
+			{
+				newMessages.Add(Resources.NoPermissionRemoveOvertimeActivity);
+			}
+			else if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveActivity, date, agent))
+			{
+				newMessages.Add(Resources.NoPermissionRemoveAgentActivity);
+			}
+
+			messages.AddRange(newMessages);
+			return !newMessages.Any();
+		}
+
 	}
 
 	public interface ITeamScheduleCommandHandlingProvider

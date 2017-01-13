@@ -1009,6 +1009,62 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldNotAllowRemovingOvertimeWithoutPermission()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+
+			var date = new DateOnly(2016, 4, 16);
+
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.RemoveActivity, person, date);
+
+			var input = new RemoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<PersonActivityInfo>
+				{
+					new PersonActivityInfo
+					{
+						PersonId = person.Id.Value,
+						ShiftLayers = new List<ShiftLayerDate>
+						{
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							},
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							}
+						}
+					},
+					new PersonActivityInfo
+					{
+						PersonId = person.Id.Value,
+						ShiftLayers = new List<ShiftLayerDate>
+						{
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+								IsOvertime = true
+							}
+						}
+					}
+				}
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var result = Target.RemoveActivity(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
+			result.Count.Should().Be.EqualTo(1);
+			result[0].ErrorMessages[0].Should().Be.EqualTo(Resources.NoPermissionRemoveOvertimeActivity);
+		}
+
 		
 	}
 

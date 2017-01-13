@@ -33,7 +33,7 @@ function PersonSelectionService() {
 						} else if (projection.ShiftLayerIds && projection.Selectable()) {
 							var targetShiftLayerIds = projection.ShiftLayerIds;
 							targetShiftLayerIds.forEach(function (shiftLayerId) {
-								var targetSelectedActivity = new SelectedActivity(shiftLayerId, shift.Date);
+								var targetSelectedActivity = new SelectedActivity(shiftLayerId, shift.Date, projection.IsOvertime);
 								if (lookUpIndex(activities, targetSelectedActivity) < 0)
 									activities.push(targetSelectedActivity);
 							});
@@ -90,7 +90,7 @@ function PersonSelectionService() {
 						} else if (projection.ShiftLayerIds) {
 							projection.Selected =
 								!projection.ShiftLayerIds.some(function(shiftLayerId) {
-									var targetActivity = new SelectedActivity(shiftLayerId, shift.Date);
+									var targetActivity = new SelectedActivity(shiftLayerId, shift.Date, projection.IsOvertime);
 									return lookUpIndex(svc.personInfo[personId].SelectedActivities, targetActivity) < 0;
 								});
 						}
@@ -145,7 +145,7 @@ function PersonSelectionService() {
 				});
 			} else if (currentProjection.ShiftLayerIds && currentProjection.Selectable()) {
 				currentProjection.ShiftLayerIds.forEach(function(shiftLayerId) {
-					addActivity(personInfo.SelectedActivities, shiftLayerId, currentShift.Date);
+					addActivity(personInfo.SelectedActivities, shiftLayerId, currentShift.Date, currentProjection.IsOvertime);
 				});
 			}
 		} else {
@@ -155,7 +155,7 @@ function PersonSelectionService() {
 				});
 			} else if (currentProjection.ShiftLayerIds && currentProjection.Selectable()) {
 				currentProjection.ShiftLayerIds.forEach(function (shiftLayerId) {
-					deleteActivity(personInfo.SelectedActivities, shiftLayerId, currentShift.Date);
+					deleteActivity(personInfo.SelectedActivities, shiftLayerId, currentShift.Date, currentProjection.IsOvertime);
 				});
 			}
 		}
@@ -279,9 +279,10 @@ function SelectedAbsence(absenceId, date) {
 	}
 }
 
-function SelectedActivity(shiftLayerId, date) {
+function SelectedActivity(shiftLayerId, date, isOvertime) {
 	this.shiftLayerId = shiftLayerId;
 	this.date = date;
+	this.isOvertime = isOvertime;
 	this.equals = function (other) {
 		return this.shiftLayerId === other.shiftLayerId &&
 			moment(this.date).format('YYYY-MM-DD') === moment(other.date).format('YYYY-MM-DD');
@@ -331,16 +332,16 @@ function deleteAbsence(absences, absenceId, date) {
 	}
 }
 
-function addActivity(activities, shiftLayerId, date) {
-	var targetSelectedActivity = new SelectedActivity(shiftLayerId, date);
+function addActivity(activities, shiftLayerId, date, isOvertime) {
+	var targetSelectedActivity = new SelectedActivity(shiftLayerId, date, isOvertime);
 	var index = lookUpIndex(activities, targetSelectedActivity);
 	if (index < 0) {
 		activities.push(targetSelectedActivity);
 	}
 }
 
-function deleteActivity(activities, shiftLayerId, date) {
-	var targetSelectedActivity = new SelectedActivity(shiftLayerId, date);
+function deleteActivity(activities, shiftLayerId, date, isOvertime) {
+	var targetSelectedActivity = new SelectedActivity(shiftLayerId, date, isOvertime);
 	var index = lookUpIndex(activities, targetSelectedActivity);
 	while(index >= 0) {
 		activities.splice(index, 1);

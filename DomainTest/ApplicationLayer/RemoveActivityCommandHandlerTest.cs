@@ -146,45 +146,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldReportErrorWhenRemoveOvertimeShiftLayer()
-		{
-			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
-			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var otherActivity = ActivityFactory.CreateActivity("Admin");
-
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				personRepository.Single(),
-				mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16));
-			pa.AddOvertimeActivity(otherActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14), new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime));
-		
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
-
-			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-
-			var personAssignment = personAssignmentRepository.Single();
-			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
-
-			var target = new RemoveActivityCommandHandler(personAssignmentRepository,scenario,personRepository);
-			var otherActivityLayer = personAssignment.ShiftLayers.First(sl => sl.Payload == otherActivity);
-
-			var command = new RemoveActivityCommand
-			{
-				PersonId = personRepository.Single().Id.Value,
-				ShiftLayerId = otherActivityLayer.Id.Value,
-				Date = new DateOnly(2013,11,14),
-				TrackedCommandInfo = new TrackedCommandInfo
-				{
-					OperatedPersonId = Guid.NewGuid(),
-					TrackId = Guid.NewGuid()
-				}
-			};
-
-			target.Handle(command);
-
-			personAssignment.ShiftLayers.Count().Should().Be.EqualTo(2);
-			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.CannotDeleteSelectedActivities);
-		}
-		[Test]
 		public void ShouldReportErrorWhenRemoveBaseShiftLayer()
 		{
 			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };

@@ -50,12 +50,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var mainShiftLayer = shiftLayer as MainShiftLayer;
 
-			if (!(shiftLayer is MainShiftLayer) && !(shiftLayer is PersonalShiftLayer))
-			{
-				command.ErrorMessages.Add(Resources.CannotDeleteSelectedActivities);
-				return;
-			}
-
 			var minOrderIndex = personAssignment.ShiftLayers.Min(layer =>
 			{
 				var layerAsMain = layer as MainShiftLayer;

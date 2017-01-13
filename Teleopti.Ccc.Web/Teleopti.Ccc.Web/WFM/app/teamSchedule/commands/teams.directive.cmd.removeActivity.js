@@ -46,7 +46,8 @@
 						ShiftLayers: x.SelectedActivities.map(function(activity) {
 							return {
 								ShiftLayerId: activity.shiftLayerId,
-								Date: activity.date
+								Date: activity.date,
+								IsOvertime: activity.isOvertime
 							}
 						})
 					};

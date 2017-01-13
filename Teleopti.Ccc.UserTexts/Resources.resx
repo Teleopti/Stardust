@@ -9461,10 +9461,6 @@ exclusion</value>
     <value>The lowest possible work time is too high!</value>
     <comment>The lowest possible work time is too high!</comment>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Cannot Delete Selected Activities</value>
-    <comment>Cannot Delete Selected Activities</comment>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Selected activities cannot be deleted because the following skills are using them:</value>
     <comment>Selected activities cannot be deleted because the following skills are using them:</comment>
@@ -15442,5 +15438,9 @@ These options are activated:
   <data name="SaveFavoriteSearch" xml:space="preserve">
     <value>Save Favorite Search</value>
     <comment>name of function saving favorite search in Web</comment>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>No permission to remove overtime activities for agent(s)</value>
+    <comment>Error message to notify missing permission for removing overtime activity</comment>
   </data>
 </root>
