@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				.ExcludeRelationData(pa => pa.Scenario)
 				.ExcludeRelationData(pa => pa.ShiftCategory)
 				.ExcludeRelationData("_dayOffTemplate")
-				//can be removed if https://github.com/nhibernate/nhibernate-core/pull/545 is part of our nhib release.
-				//can also be removed if we backout toggle ResourcePlanner_LessPersonAssignmentUpdates_42159
+				//can be removed when we upgrade Envers to 2.3 (https://nhibernate.jira.com/projects/NHE/issues/NHE-157)
+				//also, remove ICustomCollectionMapperFactory impl from ShiftLayerCollectionType
 				.SetCollectionMapper<ShiftLayerCollectionType>(x => x.ShiftLayers);
 			fluentCfg.Audit<ShiftLayer>()
 			   .ExcludeRelationData(l => l.Payload);
