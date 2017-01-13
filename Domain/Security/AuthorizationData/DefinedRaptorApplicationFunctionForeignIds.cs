@@ -144,6 +144,7 @@
 		public const string WebModifySkillArea = "0128";
 		public const string WebCancelRequest = "0130";
 		public const string WebStaffing = "0140";
+		public const string RemoveOvertime = "0142";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";

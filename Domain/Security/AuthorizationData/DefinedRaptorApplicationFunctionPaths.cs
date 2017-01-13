@@ -132,6 +132,7 @@
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 		public const string EditShiftCategory = "Raptor/Anywhere/Schedules/EditShiftCategory";
 		public const string MoveInvalidOverlappedActivity = "Raptor/Anywhere/Schedules/MoveInvalidOverlappedActivity";
+		public const string RemoveOvertime = "Raptor/Anywhere/Schedules/RemoveOvertime";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";

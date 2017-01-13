@@ -23467,6 +23467,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Overtime.
+        /// </summary>
+        public static string RemoveOvertime {
+            get {
+                return ResourceManager.GetString("RemoveOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Selected Attendees.
         /// </summary>
         public static string RemoveParticipant {

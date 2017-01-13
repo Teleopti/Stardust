@@ -343,7 +343,7 @@
 				return true;
 			}
 
-			return toggles.all().WfmTeamSchedule_RemoveOvertime_42481;
+			return toggles.all().WfmTeamSchedule_RemoveOvertime_42481 && permissions.all().HasRemoveOvertimePermission;
 		};
 
 		ProjectionViewModel.prototype.ToggleSelection = function () {
