@@ -79,7 +79,7 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes();
 	});
 
-	this.IsHostAMobile = ko.observable((/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent)));
+	this.IsHostAMobile = ko.observable(Teleopti.MyTimeWeb.Common.IsHostAMobile());
 
 	this.IsStudentAvailabilityForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_StudentAvailabilityForMobile_42498');
 

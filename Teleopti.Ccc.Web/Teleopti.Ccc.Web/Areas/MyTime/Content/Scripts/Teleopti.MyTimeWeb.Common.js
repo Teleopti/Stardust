@@ -352,6 +352,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsRtl: function () {
 			return $("html").attr("dir") == "rtl";
 		},
+		IsHostAMobile: function () {
+			return (/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent));
+		},
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
 		GetUserData: _getUserData,
 		IsToggleEnabled: isToggleEnabled

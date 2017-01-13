@@ -27,7 +27,7 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
 	self.currentMustHaves = ko.observable(currentMustHave);
 	self.selectedDate = ko.observable(moment().startOf('day'));
 	self.IsPreferenceForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_PreferenceForMobile_40265');
-	self.IsHostAMobile = ko.observable((/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent)));
+	self.IsHostAMobile = ko.observable(Teleopti.MyTimeWeb.Common.IsHostAMobile());
 
     self.setCurrentDate = function (date) {
         self.selectedDate(date);
