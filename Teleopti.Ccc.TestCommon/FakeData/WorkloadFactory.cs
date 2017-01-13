@@ -75,5 +75,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			workload.TemplateWeekCollection.ForEach(x => x.Value.Close());
 			return workload;
 		}
-    }
+
+	    public static IWorkload CreateWorkloadClosedOnWeekendsWithOpenHours(ISkill skill, params TimePeriod[] openHours)
+	    {
+			var workload = CreateWorkload(skill);
+			for (var i = 0; i < workload.TemplateWeekCollection.Count; i++)
+			{
+				if (i == 0 || i == 6)
+				{
+					workload.TemplateWeekCollection[i].Close();
+				}
+				else
+				{
+					workload.TemplateWeekCollection[i].ChangeOpenHours(openHours);
+				}
+			}
+			return workload;
+		}
+
+	 }
 }
