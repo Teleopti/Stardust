@@ -359,6 +359,27 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		return message.replace(placeholderReg, '[' + name + ']');
 	};
 
+	_splitChunk = function (textSegs) {
+		var splitedTextSegs = [];
+		$.each(textSegs, function (index, line) {
+			var len = 68;
+			var curr = len;
+			var prev = 0;
+			if (line.length > len) {
+				while (line[curr]) {
+					if (line[curr++] === ' ') {
+						splitedTextSegs.push(line.substring(prev, curr));
+						prev = curr;
+						curr += len;
+					}
+				}
+				splitedTextSegs.push(line.substr(prev));
+			} else splitedTextSegs.push(line);
+		});
+
+		return splitedTextSegs;
+	}
+
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data, isProcessing) {
 			if (data.Text !== null) {
@@ -367,8 +388,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			var textNoBr = "";
 			var messageInList = [];
 
+			var splitedTextSegs = _splitChunk(textSegs);
+
 			//remove line breaks for summary display...
-			$.each(textSegs, function (index, text) {
+			$.each(splitedTextSegs, function (index, text) {
 				if (text !== undefined && text !== '') {
 					var updatedText = text;
 					if (index === 0) {
