@@ -18,7 +18,7 @@
 				<div class="con-flex">
 					<label for="createRole" class="input-icon">
 						<i class="mdi mdi-account-key">
-							<input type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="{{'Role'|translate}}" autofocus>
+							<input autofocus type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="{{'Role'|translate}}" tabindex="0">
 							<md-tooltip>{{'Name'|translate}}</md-tooltip>
 						</i>
 					</label>
@@ -27,7 +27,12 @@
 		</div>
 		<div class="modal-actions">
 			<aside>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.showCreateModal = false" type="submit" name="button">{{'Add'|translate}}</button>
+				<button ng-if="!vm.roleName" class="wfm-btn wfm-btn-invis-disabled" type="button">{{'Add'|translate}}
+					<md-tooltip>{{'TheInputTextCanNotBeEmptyDot'|translate}}</md-tooltip>
+				</button>
+				<button ng-if="vm.roleName" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.showCreateModal = false" type="submit" name="button">
+					{{'Add'|translate}}
+				</button>
 			</aside>
 		</div>
 	</form>
@@ -51,9 +56,9 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<ul class="wfm-list">
+					<ul class="wfm-list ">
 						<li ng-click="vm.selectRole(role)" ng-repeat="role in vm.roles | filter:roleFilter">
-							<span class="list-item-container">
+							<span class="list-item-container slice-text">
 								{{role.DescriptionText}}
 							</span>
 							<span ng-cloak ng-show="role.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
@@ -159,9 +164,7 @@
 									<div class="con-flex">
 										<form class="permission-radio-buttons inline-flex">
 											<div class="wfm-radio">
-												<label>
-													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
-												</label>
+												<span translate>Show</span>
 											</div>
 											<div class="wfm-radio">
 												<label>
@@ -217,9 +220,7 @@
 									<div class="con-flex">
 										<form class="permission-radio-buttons inline-flex">
 											<div class="wfm-radio">
-												<label>
-													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
-												</label>
+												<span translate>Show</span>
 											</div>
 											<div class="wfm-radio">
 												<label>

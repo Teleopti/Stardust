@@ -143,8 +143,12 @@ md-progress-circular{
 	.navbar .navbar-search{
 		padding-left: 1px;
 	}
+	.permission-radio-buttons > .wfm-radio {
+		    width: auto!important;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		}
 }
-
 @supports (-ms-accelerator:true) {
 	.navbar .navbar-search{
 		padding: 1px;

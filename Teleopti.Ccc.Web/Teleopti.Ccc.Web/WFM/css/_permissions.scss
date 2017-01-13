@@ -204,23 +204,18 @@
 	}
 }
 
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-	.permission-radio-buttons > .wfm-radio {
-	    width: auto!important;
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-	}
-}
-
-@media only screen and (max-width: 1100px) {
-	.permission-radio-buttons {
-		display: inline;
-	}
+.slice-text{
+	text-overflow: ellipsis;
+	width: 80%;
 }
 
 //helpers to the styleguide
 .non-pointer{
 	pointer-events: none;
+
+	&:focus{
+		display: none;
+	}
 }
 
 .locked {
