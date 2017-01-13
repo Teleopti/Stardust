@@ -35,53 +35,62 @@
 
 			requestsDataSvc.getBudgetAllowancePromise(moment(vm.selectedDate).format("YYYY-MM-DD"), vm.selectedBudgetGroupId)
 				.then(function (response) {
+					vm.linkedAbsences = [];
 					vm.budgetAllowanceList = [];
 					if (response.data.length === 0) return;
 
-					// Get absences linked to this budget group
-					vm.linkedAbsences = [];
 					var firstAllowance = response.data[0];
-					for (var absenceAllowance in firstAllowance.UsedAbsencesDictionary) {
-						if (absenceAllowance.indexOf("$") !== 0 &&
-							firstAllowance.UsedAbsencesDictionary.hasOwnProperty(absenceAllowance) &&
-							typeof (firstAllowance.UsedAbsencesDictionary[absenceAllowance]) === "number") {
-							vm.linkedAbsences.push(absenceAllowance);
-						}
-					}
+					parseLinkedAbsences(firstAllowance);
 
-					var fractionSize = 2;
-					var numberFilter = $filter("number");
 					for (var i = 0; i < response.data.length; i++) {
-						var allowance = response.data[i];
-
-						var relativeDifference = allowance.RelativeDifference !== null
-							? numberFilter(allowance.RelativeDifference * 100, fractionSize)
-							: "-";
-						if (relativeDifference !== "∞" && relativeDifference !== "-") {
-							relativeDifference = relativeDifference + "%";
-						}
-
-						var allowanceModel = {
-							date: moment(allowance.Date),
-							fullAllowance: numberFilter(allowance.FullAllowance, fractionSize),
-							shrinkedAllowance: numberFilter(allowance.ShrinkedAllowance, fractionSize),
-							usedTotal: numberFilter(allowance.UsedTotalAbsences, fractionSize),
-							absoluteDifference: numberFilter(allowance.AbsoluteDifference, fractionSize),
-							relativeDifference: relativeDifference,
-							totalHeadCounts: numberFilter(allowance.TotalHeadCounts, fractionSize),
-							isWeekend: allowance.IsWeekend
-						};
-
-						for (var j = 0; j < vm.linkedAbsences.length; j++) {
-							var absenceName = vm.linkedAbsences[j];
-							allowanceModel[absenceName] = numberFilter(allowance.UsedAbsencesDictionary[absenceName], 2);
-						}
-
-						vm.budgetAllowanceList.push(allowanceModel);
+						vm.budgetAllowanceList.push(createAllowance(response.data[i]));
 					}
 
 					vm.isLoading = false;
 				});
+		}
+
+		function parseLinkedAbsences(allowance) {
+			// Get absences linked to this budget group
+			for (var absenceAllowance in allowance.UsedAbsencesDictionary) {
+				if (absenceAllowance.indexOf("$") !== 0 &&
+					allowance.UsedAbsencesDictionary.hasOwnProperty(absenceAllowance) &&
+					typeof (allowance.UsedAbsencesDictionary[absenceAllowance]) === "number") {
+					vm.linkedAbsences.push(absenceAllowance);
+				}
+			}
+		}
+
+		function createAllowance(allowance) {
+			var fractionSize = 2;
+			var numberFilter = $filter("number");
+
+			var relativeDifference;
+			if (allowance.RelativeDifference == null) {
+				relativeDifference = "-";
+			} else if (allowance.RelativeDifference === "Infinity") {
+				relativeDifference = "∞";
+			} else {
+				relativeDifference = numberFilter(allowance.RelativeDifference * 100, fractionSize) + "%";
+			}
+
+			var allowanceModel = {
+				date: moment(allowance.Date),
+				fullAllowance: numberFilter(allowance.FullAllowance, fractionSize),
+				shrinkedAllowance: numberFilter(allowance.ShrinkedAllowance, fractionSize),
+				usedTotal: numberFilter(allowance.UsedTotalAbsences, fractionSize),
+				absoluteDifference: numberFilter(allowance.AbsoluteDifference, fractionSize),
+				relativeDifference: relativeDifference,
+				totalHeadCounts: numberFilter(allowance.TotalHeadCounts, fractionSize),
+				isWeekend: allowance.IsWeekend
+			};
+
+			for (var j = 0; j < vm.linkedAbsences.length; j++) {
+				var absenceName = vm.linkedAbsences[j];
+				allowanceModel[absenceName] = numberFilter(allowance.UsedAbsencesDictionary[absenceName], 2);
+			}
+
+			return allowanceModel;
 		}
 
 		function initialize() {
