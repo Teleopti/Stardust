@@ -103,7 +103,8 @@
 				Id: ctrl.currentFavorite.Id,
 				Name: ctrl.currentFavorite.Name,
 				TeamIds: currentSearch.teamIds,
-				SearchTerm: currentSearch.searchTerm
+				SearchTerm: currentSearch.searchTerm,
+				IsDefault: ctrl.currentFavorite.IsDefault
 			};
 			FavoriteSearchDataService.update(updatedCurrent)
 				.then(function () {
