@@ -153,9 +153,39 @@
 		margin-left: 0;
 		margin-right: 0;
 	}
+	.con-footer.teamschedule-footer {
+		border-top: 1px solid $gray026;
+		min-height: 60px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.select-all {
+			padding: 0 .5em;
+		}
+	}
+	.con-footer.teamschedule-footer.week-footer {
+		justify-content: flex-end;
+	}
+	.pagination-navigator {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.pagination {
+			margin: 0;
+		}
+	}
 	.page-size-selector {
 		text-align: left;
-		margin: .8rem 2rem .8rem 0;
+	}
+	// CSS hack for IE10, IE11
+	@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
+		.con-footer.teamschedule-footer {
+			.select-all, .pagination-navigator {
+				margin-top: 15px;
+			}
+		}
 	}
 	@media(max-width:768px) {
 		.pagination li {
@@ -164,16 +194,6 @@
 	}
 	.modal-box .wfm-simple-list {
 		max-height: 430px;
-	}
-	.con-footer.teamschedule-footer {
-		border-top: 1px solid $gray026;
-		min-height: 60px;
-
-		.select-all {
-			float: left;
-			margin-bottom: 0;
-			padding: 5px;
-		}
 	}
 	.hidden-for-test {
 		display: none;
