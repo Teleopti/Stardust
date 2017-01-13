@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Aop
 	{
 		public string BuildInvocationStart(IInvocationInfo invocation)
 		{
-			return $"{invocation.Method.Name}({string.Join(", ", getParametersAndArguments(invocation))})";
+			return $"{invocation.Method.DeclaringType}.{invocation.Method.Name}({string.Join(", ", getParametersAndArguments(invocation))})";
 		}
 
 		public string BuildInvocationEnd(Exception exception, IInvocationInfo invocation, TimeSpan? elapsed)
@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.Aop
 			if (exception != null)
 				exceptionOccured = " (exception occured during execution)";
 			if (elapsed.HasValue)
-				elapsedTime = $" ({elapsed.Value:hh:mm:ss)})";
+				elapsedTime = $" ({elapsed.Value:c})";
 			if (invocation.Method.ReturnType != typeof(void))
 				result = $" resulted with {formatValue(invocation.ReturnValue)}";
 
-			return $"/{invocation.Method.Name}{result}{elapsedTime}{exceptionOccured}";
+			return $"/{invocation.Method.DeclaringType}.{invocation.Method.Name}{result}{elapsedTime}{exceptionOccured}";
 		}
 
 		private static IEnumerable<string> getParametersAndArguments(IInvocationInfo invocation)
