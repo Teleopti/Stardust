@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		//public virtual IHttpActionResult AddOvertime([FromBody]AddOverTimeModel model)
 		public virtual IHttpActionResult AddOvertime()
 		{
-		    stardustSender.Send(new AddOverTimeEvent {Period = new DateTimePeriod(now.UtcDateTime(), now.UtcDateTime().AddDays(1))});
+		    stardustSender.Send(new AddOverTimeEvent {OvertimeDurationMin = TimeSpan.FromHours(1), OvertimeDurationMax = TimeSpan.FromHours(5)});
 			return Ok();
 		}
 
