@@ -28,6 +28,7 @@
 		RTA_FasterActivityCheck_41380,
 		RTA_QuicklyChangeAgentsSelection_40610,
 		RTA_SpreadTransactionLocksStrategy_41823,
+		RTA_FasterAgentsView_42039,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
