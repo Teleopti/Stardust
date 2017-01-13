@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scheduleProjectionReadOnlyPersister = new FakeScheduleProjectionReadOnlyPersister();
 			_fakeBudgetDayRepository = new FakeBudgetDayRepository();
 			var skillDayLoadHelper = new SkillDayLoadHelper(new FakeSkillDayRepository(),
-				new MultisiteDayRepository(new FakeUnitOfWork()));
+				new FakeMultisiteDayRepository());
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
 			_scenarioRepository = new FakeScenarioRepository(_currentScenario.Current());
