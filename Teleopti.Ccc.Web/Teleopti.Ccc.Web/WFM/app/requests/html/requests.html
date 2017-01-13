@@ -9,8 +9,10 @@
 	<div class="operation-container material-depth-1">
 		<div class="left-part">
 
-			<organization-picker ng-if="requests.businessHierarchyToggleEnabled" available-groups="requests.availableGroups" selected-team-ids="requests.selectedTeamIds" class="organization-picker-container"
-								on-pick="requests.changeSelectedTeams(teams)"></organization-picker>
+			<organization-picker ng-if="requests.businessHierarchyToggleEnabled" 
+								 on-init-async="requests.defaultTeamLoadedDefer"
+								 on-pick="requests.changeSelectedTeams(teams)"
+								 class="organization-picker-container"></organization-picker>
 
 
 			<wfm-multiple-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></wfm-multiple-search-input>

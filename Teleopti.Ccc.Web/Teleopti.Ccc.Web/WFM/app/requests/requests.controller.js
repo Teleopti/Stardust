@@ -3,36 +3,27 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
 
-	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
+	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
 		var shiftTradeRequestTabIndex = 1;
-		vm.selectedTeamIds = [];
+		vm.selectedTeamIds = [];		
+
+		vm.defaultTeamLoadedDefer = $q.defer();
+		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
+			vm.defaultTeamLoadedDefer.resolve();
+		}
 
 		toggleService.togglesLoaded
-			.then(loadBusinessHierarchy)
+			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeams) {
+				vm.selectedTeamIds = defaultTeams ? defaultTeams : [];
+			}))
 			.then(init);
-
-		function loadBusinessHierarchy() {
-			if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
-				return;
-			}
-			return requestsDataService.getAvailableHierarchy(moment().format('YYYY-MM-DD'))
-				.then(function (response) {
-					var data = response.data;
-
-					vm.selectedTeamIds = data.LogonUserTeamId ? [data.LogonUserTeamId] : [];
-
-					vm.availableGroups = {
-						sites: data.Children,
-					};
-				});
-		}
 
 		vm.dateRangeCustomValidators = [{
 			key: 'max60Days',

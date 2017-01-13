@@ -30,11 +30,10 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 					Wfm_Requests_ApproveDeny_36297: true,
 					Wfm_Requests_Approve_Based_On_Budget_Allotment_39626: true,
 					togglesLoaded: {
-						then: function (cb) {
-							var ret = cb();
+						then: function () {							
 							return {
 								then: function (cb) {
-									cb(ret);
+									cb();
 								}
 							};
 						}

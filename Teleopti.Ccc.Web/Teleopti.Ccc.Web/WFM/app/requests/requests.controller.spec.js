@@ -8,7 +8,7 @@ describe('RequestsControllerTests', function () {
 	var shiftTradeRequestTabIndex = 1;
 
 	beforeEach(function () {
-		module('wfm.requests');
+		module('wfm.requests');		
 
 		requestCommandParamsHolder = new fakeRequestCommandParamsHolder();
 
@@ -21,11 +21,10 @@ describe('RequestsControllerTests', function () {
 					Wfm_Requests_ApproveDeny_36297: true,
 					Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
 					togglesLoaded: {
-						then: function (cb) {
-							var ret = cb();
+						then: function () {							
 							return {
 								then: function (cb) {
-									cb(ret);
+									cb();
 								}
 							};
 						}
@@ -58,7 +57,8 @@ describe('RequestsControllerTests', function () {
 		var scope = $rootScope.$new();
 		var target = $controller('RequestsCtrl', {
 			$scope: scope
-		});
+		});		
+
 		return { target: target, scope: scope };
 	}
 
