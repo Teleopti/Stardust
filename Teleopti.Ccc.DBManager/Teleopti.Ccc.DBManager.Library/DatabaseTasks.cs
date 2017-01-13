@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), spid) + ';'
 				FROM master..sysprocesses 
 				WHERE dbid = db_id('{databaseName}')
+				AND spid < 50
 				EXEC(@kill);
 				GO
 				
