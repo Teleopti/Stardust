@@ -193,29 +193,16 @@
 	}
 }
 
+
 /*refact*/
 .permissions-tabs{
-	md-tabs{
-		transition: height .01s!important;
-	}
-
 	md-tab-content, md-tabs-content-wrapper{
 		display: inline !important;
 	}
 }
 
-.slice-text{
-	text-overflow: ellipsis;
-	width: 80%;
-}
-
-//helpers to the styleguide
 .non-pointer{
 	pointer-events: none;
-
-	&:focus{
-		display: none;
-	}
 }
 
 .locked {
@@ -223,12 +210,3 @@
 	cursor: not-allowed;
 	pointer-events:none;
 }
-
-.tree-handle-wrapper{
-	width:100%;
-}
-
-.margin-center{
-	margin: 0 auto;
-}
-//end refact

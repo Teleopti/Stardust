@@ -18,7 +18,7 @@
 				<div class="con-flex">
 					<label for="createRole" class="input-icon">
 						<i class="mdi mdi-account-key">
-							<input autofocus type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="{{'Role'|translate}}" tabindex="0">
+							<input type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="{{'Role'|translate}}" autofocus>
 							<md-tooltip>{{'Name'|translate}}</md-tooltip>
 						</i>
 					</label>
@@ -27,12 +27,7 @@
 		</div>
 		<div class="modal-actions">
 			<aside>
-				<button ng-if="!vm.roleName" class="wfm-btn wfm-btn-invis-disabled" type="button">{{'Add'|translate}}
-					<md-tooltip>{{'TheInputTextCanNotBeEmptyDot'|translate}}</md-tooltip>
-				</button>
-				<button ng-if="vm.roleName" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.showCreateModal = false" type="submit" name="button">
-					{{'Add'|translate}}
-				</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.showCreateModal = false" type="submit" name="button">{{'Add'|translate}}</button>
 			</aside>
 		</div>
 	</form>
@@ -56,9 +51,9 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<ul class="wfm-list ">
+					<ul class="wfm-list">
 						<li ng-click="vm.selectRole(role)" ng-repeat="role in vm.roles | filter:roleFilter">
-							<span class="list-item-container slice-text">
+							<span class="list-item-container">
 								{{role.DescriptionText}}
 							</span>
 							<span ng-cloak ng-show="role.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
@@ -110,7 +105,8 @@
 									<div class="modalbg">
 										<div class="dialog-mini">
 											<div class="modal-inner-content">
-												<h3>{{role.Name}}</h3> {{'AreYouSureYouWantToDelete' | translate}}
+												<h3>{{role.Name}}</h3>
+												{{'AreYouSureYouWantToDelete' | translate}}
 											</div>
 											<div class="modal-actions">
 												<aside>
@@ -135,7 +131,7 @@
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-border-bottom>
 						<md-tab label="{{'Functions' | translate}}">
-							<md-content class="md-padding perm-functions" ng-cloak>
+							<md-content class="md-padding perm-functions">
 								<div class="con-row">
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
@@ -147,24 +143,24 @@
 									</div>
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex line-right">
-										<div class="wfm-checkbox">
-											<span class="pointer" ng-click="toggleDangerModal = true">
-											<span class="non-pointer">
+										<div class="wfm-checkbox" ng-click="toggleDangerModal = true">
+											<span class="non-pointer pointer">
 												<input type="checkbox" id="check1" ng-model="vm.selectedOrNot" />
 												<label for="check1">
 													<span class="wfm-checkbox-toggle"></span>
-											<span class="wfm-checkbox-label">{{'AccessAllFunctions'|translate}}</span>
-											</label>
-											</span>
+													<span class="wfm-checkbox-label">{{'AccessAllFunctions'|translate}}</span>
+												</label>
 											</span>
 										</div>
 									</div>
 								</div>
 								<div class="con-row">
 									<div class="con-flex">
-										<form class="permission-radio-buttons inline-flex">
+										<form class="permission-radio-buttons">
 											<div class="wfm-radio">
-												<span translate>Show</span>
+												<label>
+													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
+												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
@@ -198,7 +194,7 @@
 							</md-content>
 						</md-tab>
 						<md-tab label="{{'Data' | translate}}">
-							<md-content class="md-padding" ng-cloak>
+							<md-content class="md-padding">
 								<div class="con-row">
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
@@ -211,16 +207,18 @@
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex">
 										<md-select ng-model="model" placeholder="Pick an option">
-											<h2 class="full-padding">{{'AddGlobalAuthorizationLabel'| translate}}</h2>
+											<h2>{{'AddGlobalAuthorizationLabel'| translate}}</h2>
 											<md-option selected ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)" ng-value="option.RangeOption">{{option.Name | translate}}</md-option>
 										</md-select>
 									</div>
 								</div>
 								<div class="con-row">
 									<div class="con-flex">
-										<form class="permission-radio-buttons inline-flex">
+										<form class="permission-radio-buttons">
 											<div class="wfm-radio">
-												<span translate>Show</span>
+												<label>
+													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
+												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
@@ -270,7 +268,7 @@
 				<div class="modal-actions">
 					<aside>
 						<button ng-click="toggleDangerModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-						<button ng-click="toggleDangerModal = false; vm.toggleAllFunction();" class="wfm-btn wfm-btn-invis-primary">{{'ToggleAll'|translate}}</button>
+						<button ng-click="toggleDangerModal = false; vm.toggleAllFunction();"  class="wfm-btn wfm-btn-invis-primary">{{'ToggleAll'|translate}}</button>
 					</aside>
 				</div>
 			</div>
