@@ -214,18 +214,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			clearStateHolder();
 		}
 
-		private static void addValidationResultToResponses(ShiftTradeRequestValidationResult validationResult,
-			List<IBusinessRuleResponse> ruleResponses, IPersonRequest personRequest)
-		{
-			if (!validationResult.IsOk)
-			{
-				ruleResponses.Add(new BusinessRuleResponse(null,
-					Resources.ResourceManager.GetString(validationResult.DenyReason,
-						personRequest.Person.PermissionInformation.Culture()), true, true, new DateTimePeriod(), personRequest.Person,
-					new DateOnlyPeriod(), string.Empty));
-			}
-		}
-
 		private static string getValidationMessage(ShiftTradeRequestValidationResult validationResult, IPersonRequest personRequest)
 		{
 			return Resources.ResourceManager.GetString(validationResult.DenyReason,
@@ -252,7 +240,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			var culture = personRequest.Person.PermissionInformation.UICulture();
 			var sb = new StringBuilder(personRequest.GetMessage(new NormalizeText()));
 			sb.AppendLine();
-			sb.AppendLine($"{UserTexts.Resources.ResourceManager.GetString("ViolationOfABusinessRule", culture)}:");
+			sb.AppendLine($"{Resources.ResourceManager.GetString("ViolationOfABusinessRule", culture)}:");
 			foreach (var brokenBusinessRuleMessage in brokenBusinessResponses.Select(m => m.Message).Distinct())
 			{
 				sb.AppendLine(brokenBusinessRuleMessage);

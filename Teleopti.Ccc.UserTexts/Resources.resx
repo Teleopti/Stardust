@@ -15455,4 +15455,8 @@ These options are activated:
     <value>Please input end time</value>
     <comment>Error message for not inputting end time in mytime</comment>
   </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value>Schedule contract time tolerance was exceeded.</value>
+    <comment>Pending reason when shifttrade is not valid because of the targettime</comment>
+  </data>
 </root>

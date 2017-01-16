@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		public abstract string DenyReason { get; }
 		public virtual bool Configurable { get; } = false;
 		public virtual string Description { get; } = string.Empty;
+		public virtual string PendingReason => DenyReason;
 
 		public ShiftTradeRequestValidationResult Validate(IEnumerable<IShiftTradeSwapDetail> obj)
 		{

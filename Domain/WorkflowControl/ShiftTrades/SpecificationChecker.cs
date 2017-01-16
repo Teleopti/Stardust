@@ -65,13 +65,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				if (ruleConfig == null ||
 					(ruleConfig.HandleOptionOnFailed != null && ruleConfig.HandleOptionOnFailed.Value == RequestHandleOption.AutoDeny))
 				{
-					return new ShiftTradeRequestValidationResult(false, true, result.DenyReason);
+					return new ShiftTradeRequestValidationResult(false, true, specification.DenyReason);
 				}
 
 				allSpecificationsSatisfied = false;
 				if (firstDenyReason == null)
 				{
-					firstDenyReason = result.DenyReason;
+					firstDenyReason = specification.PendingReason;
 				}
 			}
 

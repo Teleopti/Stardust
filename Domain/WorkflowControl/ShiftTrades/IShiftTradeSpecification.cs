@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
         /// </remarks>
         string DenyReason { get; }
 
+		string PendingReason { get; }
+
 		bool Configurable { get; }
 
 		string Description { get; }

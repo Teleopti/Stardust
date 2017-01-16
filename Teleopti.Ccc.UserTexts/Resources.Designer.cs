@@ -28484,6 +28484,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schedule contract time tolerance was exceeded..
+        /// </summary>
+        public static string ShiftTradeTargetTimePendingReason {
+            get {
+                return ResourceManager.GetString("ShiftTradeTargetTimePendingReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift with contract time betweeen.
         /// </summary>
         public static string ShiftWithContractTimeBetweeen {

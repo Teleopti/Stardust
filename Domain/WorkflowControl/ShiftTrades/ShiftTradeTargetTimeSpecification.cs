@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		public override string DenyReason => "ShiftTradeTargetTimeDenyReason";
 		public override bool Configurable => true;
 		public override string Description => Resources.DescriptionOfShiftTradeTargetTimeSpecification;
+		public override string PendingReason => "ShiftTradeTargetTimePendingReason";
 
 		public ShiftTradeTargetTimeSpecification(Func<ISchedulerStateHolder> schedulerStateHolder, IMatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
 		{

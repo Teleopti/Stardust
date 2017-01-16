@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
 			Assert.IsTrue(personRequest.IsPending);
 
-			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimeDenyReason");
+			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimePendingReason");
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
 		}
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
 			Assert.IsTrue(personRequest.IsPending);
 
-			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimeDenyReason");
+			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimePendingReason");
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
 		}
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(personRequest.IsDenied);
 			Assert.IsTrue(personRequest.DenyReason.Contains("No open hours for"));
 
-			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimeDenyReason");
+			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimePendingReason");
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
 		}
 
