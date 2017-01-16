@@ -80,16 +80,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			IMoveTimeDecisionMaker decisionMaker = new MoveTimeDecisionMaker2(_bitArrayConverter);
 
-			var scheduleService = _container.Resolve<IScheduleService>();
-
-			var scheduleResultDataExtractorProvider = new ScheduleResultDataExtractorProvider(_container.Resolve<PersonalSkillsProvider>(),
-				_container.Resolve<ISkillPriorityProvider>(), _container.Resolve<IUserTimeZone>());
-
-			IMoveTimeOptimizerCreator creator =
-				new MoveTimeOptimizerCreator(scheduleMatrixOriginalStateContainerList,
+			var creator = new MoveTimeOptimizerCreator(scheduleMatrixOriginalStateContainerList,
 					workShiftOriginalStateContainerList,
 					decisionMaker,
-					scheduleService,
+					_container.Resolve<IScheduleService>(),
 					optimizerPreferences,
 					rollbackService,
 					_stateHolder(),
@@ -97,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_container.Resolve<IResourceCalculation>(),
 					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>(),
-					scheduleResultDataExtractorProvider,
+					_container.Resolve<IScheduleResultDataExtractorProvider>(),
 					_container.Resolve<IUserTimeZone>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
