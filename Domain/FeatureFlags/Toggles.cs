@@ -56,6 +56,7 @@
 		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_SaveFavoriteSearches_42073,
+		WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576,
 		WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
 		WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
 
