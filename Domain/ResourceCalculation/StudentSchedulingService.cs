@@ -7,16 +7,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public interface IStudentSchedulingService
-    {
-        event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        IList<IWorkShiftFinderResult> FinderResults { get; }
-        void ClearFinderResults();
-        bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
+	public interface IStudentSchedulingService
+	{
+		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		IList<IWorkShiftFinderResult> FinderResults { get; }
+		void ClearFinderResults();
+		bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
 
-    }
+	}
 
-    /// <summary>
+	/// <summary>
 	/// Utilities for scheduling students
 	/// </summary>
 	/// /// 
@@ -25,80 +25,80 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	///  Created date: 2008-10-29    
 	/// /// </remarks>
 	public class StudentSchedulingService : IStudentSchedulingService
-    {
-	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-	    private readonly IScheduleService _scheduleService;
-    	private readonly IResourceCalculation _resourceOptimizationHelper;
-	    private readonly IUserTimeZone _userTimeZone;
+	{
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private readonly IScheduleService _scheduleService;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
+		private readonly IUserTimeZone _userTimeZone;
 
-	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
-		
-        public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
 
-		public StudentSchedulingService( ISchedulingResultStateHolder schedulingResultStateHolder,
-            IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService,
+		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+
+		public StudentSchedulingService(ISchedulingResultStateHolder schedulingResultStateHolder,
+				IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService,
 			IResourceCalculation resourceOptimizationHelper,
 			IUserTimeZone userTimeZone)
 		{
-		    _schedulingResultStateHolder = schedulingResultStateHolder;
-		    _effectiveRestrictionCreator = effectiveRestrictionCreator;
-		    _scheduleService = scheduleService;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_scheduleService = scheduleService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_userTimeZone = userTimeZone;
 		}
 
-	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
-		    bool breakIfPersonCannotSchedule,
-		    ISchedulePartModifyAndRollbackService rollbackService)
-	    {
-		    var skills = _schedulingResultStateHolder.Skills;
-		    if (skills.Length == 0) return false;
-		    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-			    schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
-
-
-		    schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-		    doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
-			    resourceCalculateDelayer, rollbackService);
-
-		    schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-		    doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
-			    resourceCalculateDelayer, rollbackService);
-
-		    schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-
-		    return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false,
-			    resourceCalculateDelayer, rollbackService);
-	    }
-
-
-	    public IList<IWorkShiftFinderResult> FinderResults => _scheduleService.FinderResults.ToList();
-
-	    public void ClearFinderResults()
-        {
-            _scheduleService.ClearFinderResults();
-        }
-
-        private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
-        {
-            EventHandler<SchedulingServiceBaseEventArgs> handler = DayScheduled;
-            if (handler != null)
-            {
-                handler(this, args);
-				if (args.Cancel) return new CancelSignal{ShouldCancel = true};
-            }
-			return new CancelSignal();
-        }
-
-        private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
-			bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours, IResourceCalculateDelayer resourceCalculateDelayer,
+		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+			bool breakIfPersonCannotSchedule,
 			ISchedulePartModifyAndRollbackService rollbackService)
-        {
+		{
+			var skills = _schedulingResultStateHolder.Skills;
+			if (skills.Length == 0) return false;
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+				schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
+
+
+			schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
+			doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
+				resourceCalculateDelayer, rollbackService);
+
+			schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
+			doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
+				resourceCalculateDelayer, rollbackService);
+
+			schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
+
+			return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false,
+				resourceCalculateDelayer, rollbackService);
+		}
+
+
+		public IList<IWorkShiftFinderResult> FinderResults => _scheduleService.FinderResults.ToList();
+
+		public void ClearFinderResults()
+		{
+			_scheduleService.ClearFinderResults();
+		}
+
+		private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
+		{
+			EventHandler<SchedulingServiceBaseEventArgs> handler = DayScheduled;
+			if (handler != null)
+			{
+				handler(this, args);
+				if (args.Cancel) return new CancelSignal { ShouldCancel = true };
+			}
+			return new CancelSignal();
+		}
+
+		private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+		 bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours, IResourceCalculateDelayer resourceCalculateDelayer,
+		 ISchedulePartModifyAndRollbackService rollbackService)
+		{
 			var everyPersonScheduled = true;
-	        var cancel = false;
+			var cancel = false;
 			var tempOnlyShiftsWhenUnderstaffed =
-                schedulingOptions.OnlyShiftsWhenUnderstaffed;
+					 schedulingOptions.OnlyShiftsWhenUnderstaffed;
 
 			// all list off Days and person that we don't want to try again, the person(s> could not be scheduled on that day
 			//IDictionary<ISkillDay, IList<IPerson>> daysAndPersonsToExclude = new Dictionary<ISkillDay, IList<IPerson>>();
@@ -107,13 +107,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IList<ISkillDay> daysToExclude = new List<ISkillDay>();
 
 			// get the day
-            ISkillDay theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
+			ISkillDay theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
 			if (theDay == null)
 				return false;
 			var dateOnly = theDay.CurrentDate;
 
 			// all person with the skill
-            IList<IPerson> persons = FilterPersonsOnSkill(dateOnly, GetAllPersons(selectedParts, excludeStudentsWithEnoughHours, dateOnly), theDay.Skill);
+			IList<IPerson> persons = FilterPersonsOnSkill.Filter(dateOnly, GetAllPersons(selectedParts, excludeStudentsWithEnoughHours, dateOnly), theDay.Skill);
 			// after a day is scheduled it is removed from the list
 			while (theDay != null && selectedParts.Count > 0)
 			{
@@ -127,9 +127,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					if (minTimeSchedulePeriod == new TimeSpan(0))
 					{
 						// if the MinTimeSchedulePeriod is not set we shall never overstaff
-                        schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
+						schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 					}
-                    IScheduleDay part = GetSchedulePartOnDateAndPerson(selectedParts,person, dateOnly);
+					IScheduleDay part = GetSchedulePartOnDateAndPerson(selectedParts, person, dateOnly);
 					// if success remove the part
 					if (part != null)
 					{
@@ -139,16 +139,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 					}
 					//reset for next person
-                    schedulingOptions.
-						OnlyShiftsWhenUnderstaffed = tempOnlyShiftsWhenUnderstaffed;
+					schedulingOptions.
+				 OnlyShiftsWhenUnderstaffed = tempOnlyShiftsWhenUnderstaffed;
 					if (schedulePersonOnDayResult)
 					{
-                        selectedParts.Remove(part);
-                        theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
+						selectedParts.Remove(part);
+						theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
 						if (theDay != null)
 						{
 							dateOnly = theDay.CurrentDate;
-                            persons = FilterPersonsOnSkill(dateOnly, GetAllPersons(selectedParts, excludeStudentsWithEnoughHours, dateOnly), theDay.Skill);
+							persons = FilterPersonsOnSkill.Filter(dateOnly, GetAllPersons(selectedParts, excludeStudentsWithEnoughHours, dateOnly), theDay.Skill);
 						}
 					}
 					else
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						persons.Remove(person);
 					}
 
-					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part,()=>cancel=true);
+					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part, () => cancel = true);
 					var progressResult = onDayScheduled(eventArgs);
 					if (cancel || progressResult.ShouldCancel) return everyPersonScheduled;
 				}
@@ -167,85 +167,85 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					//no one could be scheduled
 					daysToExclude.Add(theDay);
-                    theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
+					theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
 					while (theDay != null)
 					{
 						dateOnly = theDay.CurrentDate;
-                        persons = FilterPersonsOnSkill(dateOnly, GetAllPersons(selectedParts, excludeStudentsWithEnoughHours, dateOnly), theDay.Skill);
+						persons = FilterPersonsOnSkill.Filter(dateOnly, GetAllPersons(selectedParts, excludeStudentsWithEnoughHours, dateOnly), theDay.Skill);
 						if (persons.Count > 0)
 						{
 							break;
 						}
 
 						daysToExclude.Add(theDay);
-                        theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
+						theDay = FindMostUnderstaffedSkillDay(GetAllDates(selectedParts), daysToExclude);
 					}
 				}
 			}
 			return everyPersonScheduled;
 		}
 
-        public ICollection<IPerson> GetAllPersons(IList<IScheduleDay> selectedParts, bool excludeStudentsWithEnoughHours, DateOnly onDate)
-        {
-            var ret = new HashSet<IPerson>();
-            foreach (var part in selectedParts)
-            {
-                ret.Add(part.Person);
-            }
-            if (excludeStudentsWithEnoughHours)
-            {
-                IList<IPerson> personsToRemove = new List<IPerson>();
-                foreach (var person in ret)
-                {
-                    TimeSpan scheduledSoFar = TimeSpan.Zero;
-                    IVirtualSchedulePeriod virtualSchedulePeriod = person.VirtualSchedulePeriod(onDate);
-                    TimeSpan minTimeSchedulePeriod = virtualSchedulePeriod.MinTimeSchedulePeriod;
-                    if (minTimeSchedulePeriod > new TimeSpan(0))
-                    {
-                        DateOnlyPeriod dateOnlyPeriod = virtualSchedulePeriod.DateOnlyPeriod;
-
-                        foreach (var schedulePart in _schedulingResultStateHolder.Schedules[person].ScheduledDayCollection(dateOnlyPeriod))
-                        {
-                            IProjectionService projSvc = schedulePart.ProjectionService();
-                            IVisualLayerCollection res = projSvc.CreateProjection();
-                            scheduledSoFar = scheduledSoFar.Add(res.ContractTime());
-                        }
-
-                        if (scheduledSoFar >= minTimeSchedulePeriod)
-                            personsToRemove.Add(person);
-                    }
-                }
-
-                foreach (var person in personsToRemove)
-                {
-                    ret.Remove(person);
-                }
-            }
-            return ret;
-        }
-
-        public virtual IList<DateOnly> GetAllDates(IList<IScheduleDay> selectedParts)
-        {
-            IList<DateOnly> ret = new List<DateOnly>();
-            foreach (IScheduleDay part in selectedParts)
-            {
-                var dateOnly = part.DateOnlyAsPeriod.DateOnly;
-                if (!ret.Contains(part.DateOnlyAsPeriod.DateOnly))
-                    ret.Add(dateOnly);
-            }
-            return ret;
-        }
-
-        public virtual IScheduleDay GetSchedulePartOnDateAndPerson(IList<IScheduleDay> selectedParts, IPerson thePerson, DateOnly theDate)
+		public ICollection<IPerson> GetAllPersons(IList<IScheduleDay> selectedParts, bool excludeStudentsWithEnoughHours, DateOnly onDate)
 		{
-			return selectedParts.FirstOrDefault(part => part.DateOnlyAsPeriod.DateOnly.Equals(theDate) && part.Person.Equals(thePerson));	 
+			var ret = new HashSet<IPerson>();
+			foreach (var part in selectedParts)
+			{
+				ret.Add(part.Person);
+			}
+			if (excludeStudentsWithEnoughHours)
+			{
+				IList<IPerson> personsToRemove = new List<IPerson>();
+				foreach (var person in ret)
+				{
+					TimeSpan scheduledSoFar = TimeSpan.Zero;
+					IVirtualSchedulePeriod virtualSchedulePeriod = person.VirtualSchedulePeriod(onDate);
+					TimeSpan minTimeSchedulePeriod = virtualSchedulePeriod.MinTimeSchedulePeriod;
+					if (minTimeSchedulePeriod > new TimeSpan(0))
+					{
+						DateOnlyPeriod dateOnlyPeriod = virtualSchedulePeriod.DateOnlyPeriod;
+
+						foreach (var schedulePart in _schedulingResultStateHolder.Schedules[person].ScheduledDayCollection(dateOnlyPeriod))
+						{
+							IProjectionService projSvc = schedulePart.ProjectionService();
+							IVisualLayerCollection res = projSvc.CreateProjection();
+							scheduledSoFar = scheduledSoFar.Add(res.ContractTime());
+						}
+
+						if (scheduledSoFar >= minTimeSchedulePeriod)
+							personsToRemove.Add(person);
+					}
+				}
+
+				foreach (var person in personsToRemove)
+				{
+					ret.Remove(person);
+				}
+			}
+			return ret;
+		}
+
+		public virtual IList<DateOnly> GetAllDates(IList<IScheduleDay> selectedParts)
+		{
+			IList<DateOnly> ret = new List<DateOnly>();
+			foreach (IScheduleDay part in selectedParts)
+			{
+				var dateOnly = part.DateOnlyAsPeriod.DateOnly;
+				if (!ret.Contains(part.DateOnlyAsPeriod.DateOnly))
+					ret.Add(dateOnly);
+			}
+			return ret;
+		}
+
+		public virtual IScheduleDay GetSchedulePartOnDateAndPerson(IList<IScheduleDay> selectedParts, IPerson thePerson, DateOnly theDate)
+		{
+			return selectedParts.FirstOrDefault(part => part.DateOnlyAsPeriod.DateOnly.Equals(theDate) && part.Person.Equals(thePerson));
 		}
 
 		public ISkillDay FindMostUnderstaffedSkillDay(IList<DateOnly> theDates, IList<ISkillDay> skillDaysExcluded)
 		{
 			ISkillDay retSkillDay = null;
 			double highestValue = double.MinValue;
-			
+
 			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(theDates);
 
 			foreach (ISkillDay skillDay in skillDays)
@@ -273,45 +273,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return retSkillDay;
 		}
 
-        public IPerson GetRandomPerson(IList<IPerson> persons)
-        {
-            IPerson ret = null;
-            if (persons.Count > 0)
-            {
-                int index;
-                lock (_random)
-                {
-                    index = _random.Next(0, persons.Count);
-                }
-                ret = persons[index];
-            }
-            return ret;
-
-        }
-
-		public static IList<IPerson> FilterPersonsOnSkill(DateOnly onDate, IEnumerable<IPerson> persons, ISkill filterOnSkill)
+		public IPerson GetRandomPerson(IList<IPerson> persons)
 		{
-			IList<IPerson> ret = new List<IPerson>();
-			var period = new DateOnlyPeriod(onDate, onDate.AddDays(1));
-			foreach (IPerson person in persons)
+			IPerson ret = null;
+			if (persons.Count > 0)
 			{
-				bool found = false;
-				foreach (IPersonPeriod personPeriod in person.PersonPeriods(period))
+				int index;
+				lock (_random)
 				{
-					foreach (IPersonSkill skill in personPeriod.PersonSkillCollection)
-					{
-						if (skill.Skill.Equals(filterOnSkill) && !ret.Contains(person))
-						{
-							ret.Add(person);
-							found = true;
-							break;
-						}
-					}
-					if (found)
-						break;
+					index = _random.Next(0, persons.Count);
 				}
+				ret = persons[index];
 			}
 			return ret;
+
 		}
+
+
 	}
 }

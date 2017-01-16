@@ -158,6 +158,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			WasCalled = true;
 		}
 
+		public void UpdateFromResourceCalculationData(DateTimePeriod period, IResourceCalculationData resCalcData,
+			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IList<SkillStaffingInterval> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary,
 			DateTimePeriod period)
 		{

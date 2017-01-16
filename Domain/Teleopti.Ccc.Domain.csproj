@@ -537,6 +537,7 @@
     <Compile Include="Repositories\IScheduleStorageRepositoryWrapper.cs" />
     <Compile Include="Repositories\ISkillCombinationResourceRepository.cs" />
     <Compile Include="Repositories\ScheduleStorageRepositoryWrapper.cs" />
+    <Compile Include="ResourceCalculation\FilterPersonsOnSkill.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationExtensions.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />

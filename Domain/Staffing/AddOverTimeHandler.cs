@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
-		private readonly IActivityRepository _activityRepository;
+		private readonly IUpdateStaffingLevelReadModel _updateStaffingLevelReadModel;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IRuleSetBagRepository _ruleSetBagRepository;
 		private readonly INow _now;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			INow now, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository,
-			IActivityRepository activityRepository,
+			IUpdateStaffingLevelReadModel updateStaffingLevelReadModel,
 			ISkillRepository skillRepository,
 			IRuleSetBagRepository ruleSetBagRepository)
 		{
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
-			_activityRepository = activityRepository;
+			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_skillRepository = skillRepository;
 			_ruleSetBagRepository = ruleSetBagRepository;
 		}
@@ -68,11 +67,21 @@ namespace Teleopti.Ccc.Domain.Staffing
 			};
 
 			var stateHolder = _schedulerStateHolder();
+			var loadedTime = _now.UtcDateTime();
 			_fillSchedulerStateHolder.Fill(stateHolder, null, null, null, new DateOnlyPeriod(new DateOnly(_now.UtcDateTime().AddDays(-8)), new DateOnly(_now.UtcDateTime().AddDays(8))));
+			var filteredPersons = FilterPersonsOnSkill.Filter(new DateOnly(_now.UtcDateTime()), stateHolder.AllPermittedPersons,
+				skill);
 
 			var scheduleDays = stateHolder.Schedules.SchedulesForDay(new DateOnly(_now.UtcDateTime().Date)).ToList();
+			var scheduleDaysOnPersonsWithSkill = scheduleDays.Where(scheduleDay => filteredPersons.Select(pers => pers.Id).Contains(scheduleDay.Person.Id)).ToList();
 
-			_scheduleOvertime.Execute(overTimePreferences, new NoSchedulingProgress(), scheduleDays);
+			_scheduleOvertime.Execute(overTimePreferences, new NoSchedulingProgress(), scheduleDaysOnPersonsWithSkill);
+
+			var resCalcData = stateHolder.SchedulingResultState.ToResourceOptimizationData(true, false);
+			var period = new DateTimePeriod(_now.UtcDateTime(), _now.UtcDateTime());
+			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
+
+			_updateStaffingLevelReadModel.UpdateFromResourceCalculationData(period, resCalcData,periodDateOnly, loadedTime);
 		}
 	}
 }

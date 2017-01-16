@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Intraday;
@@ -36,6 +37,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
 			var resCalcData =
 				_extractSkillStaffDataForResourceCalculation.ExtractResourceCalculationData(periodDateOnly);
+
+			UpdateFromResourceCalculationData(period, resCalcData, periodDateOnly, timeWhenResourceCalcDataLoaded);
+		}
+
+		public void UpdateFromResourceCalculationData(DateTimePeriod period, IResourceCalculationData resCalcData,
+			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded)
+		{
 			var models = CreateReadModel(resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, period);
 
 			setUseShrinkage(resCalcData, period);
@@ -50,10 +58,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (resCalcData.SkillCombinationHolder != null)
 				{
 					_feedback.SendProgress("Starting SkillCombinationResource Read Model update.");
-					var filteredCombinations = resCalcData.SkillCombinationHolder.SkillCombinationResources.Where(x => x.StartDateTime > timeWhenResourceCalcDataLoaded.AddHours(-1) && x.StartDateTime < timeWhenResourceCalcDataLoaded.AddHours(25));
-					_skillCombinationResourceRepository.PersistSkillCombinationResource(timeWhenResourceCalcDataLoaded, filteredCombinations);
+					var filteredCombinations =
+						resCalcData.SkillCombinationHolder.SkillCombinationResources.Where(
+							x =>
+								x.StartDateTime > timeWhenResourceCalcDataLoaded.AddHours(-1) &&
+								x.StartDateTime < timeWhenResourceCalcDataLoaded.AddHours(25));
+					_skillCombinationResourceRepository.PersistSkillCombinationResource(timeWhenResourceCalcDataLoaded,
+						filteredCombinations);
 				}
-					
 			}
 			_feedback.SendProgress("Starting purge ForeCastSkill Read Model");
 			_scheduleForecastSkillReadModelRepository.Purge();
@@ -127,6 +139,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IUpdateStaffingLevelReadModel
 	{
 		void Update(DateTimePeriod period);
+
+		void UpdateFromResourceCalculationData(DateTimePeriod period, IResourceCalculationData resCalcData,
+			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded);
 
 		IList<SkillStaffingInterval> CreateReadModel(
 			ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period);
