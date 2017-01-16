@@ -10,9 +10,15 @@
 <div class="team-schedule panel wfm-block material-depth-1 week-view" wait-for="vm.boostrap">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
+
+			<favorite-search ng-if="vm.toggles.WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576"
+				apply-favorite="vm.applyFavorite(teamIds, searchTerm)"
+				get-search="vm.getSearch()"
+				on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
+
 			<organization-picker ng-if="vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled"
-								 preselected-team-ids="vm.selectedTeamIds" 
-								 class="organization-picker-container" 
+								 preselected-team-ids="vm.selectedTeamIds"
+								 class="organization-picker-container"
 								 on-pick="vm.changeSelectedTeams(teams)"
 								 date="vm.scheduleDate"
 								 on-init-async="vm.onSelectedTeamsInitDefer"></organization-picker>

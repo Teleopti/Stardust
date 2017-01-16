@@ -1,7 +1,7 @@
 ﻿'use strict';
 describe('favoriteSearch component tests', function () {
 
-	var $componentController, rootScope, $compile, favoriteSearchDataService;
+	var $componentController, rootScope, $compile, favoriteSearchDataService,fakePermissionsService;
 
 
 	beforeEach(module('wfm.templates'));
@@ -9,12 +9,17 @@ describe('favoriteSearch component tests', function () {
 
 	beforeEach(function () {
 		favoriteSearchDataService = new FakeFavoriteSearchDataService();
+		fakePermissionsService = new FakePermissionsService();
 
 		module(function ($provide) {
 			$provide.service('FavoriteSearchDataService',
 				function () {
 					return favoriteSearchDataService;
 				});
+
+			$provide.service('teamsPermissions',function(){
+				return fakePermissionsService;
+			})
 		});
 	});
 
@@ -171,6 +176,19 @@ describe('favoriteSearch component tests', function () {
 		this.changeDefault = function() {
 			return { then: function (cb) { cb(); } };
 		};
+	}
 
+	function FakePermissionsService() {
+		var fakeAllPermissions = {
+			HasSaveFavoriteSearchPermission: true
+		};
+
+		this.set = function (data) {
+			fakeAllPermissions = data;
+		};
+
+		this.all = function () {
+			return fakeAllPermissions;
+		};
 	}
 });

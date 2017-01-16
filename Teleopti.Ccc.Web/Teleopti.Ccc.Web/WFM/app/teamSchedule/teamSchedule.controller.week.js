@@ -76,28 +76,59 @@
 		};
 
 		vm.toggles = teamsToggles.all();
-
-		vm.init = function () {					
-			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
-			vm.paginationOptions.totalPages = 1;
-
-			vm.loadSchedules();
-			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
-		};
-
 		vm.onSelectedTeamsInitDefer = $q.defer();
 		if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled) {
 			vm.onSelectedTeamsInitDefer.resolve();
 		}
 
-		$q.all([
-				vm.onSelectedTeamsInitDefer.promise.then(function (defaultTeams) {				
-					if (!$stateParams.do && defaultTeams) {
-						vm.selectedTeamIds = defaultTeams;
-					}
-				})
-			])
-			.then(vm.init);
+		vm.onFavoriteSearchInitDefer = $q.defer();
+
+		vm.applyFavorite = function (teamIds, searchTerm) {
+			vm.selectedTeamIds = teamIds;
+			vm.searchOptions.keyword = searchTerm;
+			vm.resetSchedulePage();
+		};
+
+		vm.getSearch = function () {
+			return {
+				teamIds: vm.selectedTeamIds,
+				searchTerm: vm.searchOptions.keyword
+			};
+		};
+		vm.weekDays = Util.getWeekdays(vm.scheduleDate);
+		vm.paginationOptions.totalPages = 1;
+
+		var asyncData = {
+			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
+			defaultTeams: vm.onSelectedTeamsInitDefer.promise,
+			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise
+		};
+
+		if (!(vm.toggles.WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576)) {
+			vm.onFavoriteSearchInitDefer.resolve();
+		}
+		if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled) {
+			vm.onSelectedTeamsInitDefer.resolve();
+		}
+
+		$q.all(asyncData).then(function init(data) {
+			if (data.pageSetting.Agents > 0) {
+				vm.paginationOptions.pageSize = data.pageSetting.Agents;
+			}
+
+			var defaultFavoriteSearch = data.defaultFavoriteSearch;
+			var defaultTeams = data.defaultTeams;
+
+			if (!$stateParams.do && defaultFavoriteSearch) {
+				vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
+				vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+			} else if (!$stateParams.do && defaultTeams) {
+				vm.selectedTeamIds = defaultTeams;
+			}
+
+			vm.resetSchedulePage();
+			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
+		});
 
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};

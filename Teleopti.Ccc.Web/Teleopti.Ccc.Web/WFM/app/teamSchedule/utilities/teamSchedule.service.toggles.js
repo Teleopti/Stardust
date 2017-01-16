@@ -7,7 +7,7 @@
 
 	function teamsToggles(toggleSvc) {
 		var self = this;
-	
+
 		self.all = function getToggles() {
 			return {
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
@@ -56,6 +56,7 @@
 				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039,
 				SaveFavoriteSearchesEnabled: toggleSvc.WfmTeamSchedule_SaveFavoriteSearches_42073,
 				WfmTeamSchedule_RemoveOvertime_42481: toggleSvc.WfmTeamSchedule_RemoveOvertime_42481,
+				WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576: toggleSvc.WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576,
 			};
 		}
 
