@@ -3632,8 +3632,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, _container.Resolve<IMatrixListFactory>());
-
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, _container.Resolve<IMatrixListFactory>());
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));

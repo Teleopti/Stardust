@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private Func<IWorkShiftFinderResultHolder> _allResults;
 		private ISchedulingProgress _backgroundWorker;
 		private readonly ILifetimeScope _container;
-		private readonly OptimizerHelperHelper _optimizerHelper;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayDesktop;
 		private readonly IExtendReduceTimeHelper _extendReduceTimeHelper;
@@ -37,11 +36,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 
 
-		public ScheduleOptimizerHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper,
-			IMatrixListFactory matrixListFactory)
+		public ScheduleOptimizerHelper(ILifetimeScope container, IMatrixListFactory matrixListFactory)
 		{
 			_container = container;
-			_optimizerHelper = optimizerHelper;
 			_matrixListFactory = matrixListFactory;
 			_optimizeIntradayDesktop = _container.Resolve<OptimizeIntradayIslandsDesktop>();
 			_allResults = () => _container.Resolve<IWorkShiftFinderResultHolder>();
@@ -125,11 +122,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
 			var tagSetter = _container.Resolve<IScheduleTagSetter>();
 			tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
-			IList<IPerson> selectedPersons =
-				_container.Resolve<IPersonListExtractorFromScheduleParts>().ExtractPersons(selectedDays);
+			var selectedPersons = _container.Resolve<IPersonListExtractorFromScheduleParts>().ExtractPersons(selectedDays);
 
-			_optimizerHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
-
+			optimizerPreferences.Rescheduling.ConsiderShortBreaks = _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().CanHaveShortBreak(selectedPersons, selectedPeriod);
+		
 			var continuedStep = false;
 
 			if (optimizerPreferences.General.OptimizationStepDaysOff)
