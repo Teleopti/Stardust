@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public double ForecastedCalls { get; set; }
 		public double ForecastedAverageHandleTime { get; set; }
 		public double ForecastedHandleTime { get; set; }
-		public double OfferedCalls { get; set; }
+		public double CalculatedCalls { get; set; }
 		public double AverageHandleTime { get; set; }
 		public double HandleTime { get; set; }
 		public double ForecastedActualCallsDiff { get; set; }

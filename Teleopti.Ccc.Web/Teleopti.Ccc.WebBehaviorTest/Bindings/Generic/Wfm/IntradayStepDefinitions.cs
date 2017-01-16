@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeASummaryOfTodaySIncomingTraffic()
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.forecasted-calls').text().length > 0", "True");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.offered-calls').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.calculated-calls').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.calls-difference').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.forecasted-aht').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.aht').text().length > 0", "True");

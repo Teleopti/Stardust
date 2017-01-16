@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var timeSeries = new List<DateTime>();
 			var forecastedCallsSeries = new List<double>();
 			var forecastedAverageHandleTimeSeries = new List<double>();
-			var offeredCallsSeries = new List<double?>();
+			var calculatedCallsSeries = new List<double?>();
 			var averageHandleTimeSeries = new List<double?>();
 			var latestQueueStatsIntervalId = -1;
 			var latestQueueStatsIntervalDate = DateTime.MinValue;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var interval in intervals)
 			{
-				summary.OfferedCalls += interval.CalculatedCalls ?? 0;
+				summary.CalculatedCalls += interval.CalculatedCalls ?? 0;
 				summary.HandleTime += interval.HandleTime ?? 0;
 				summary.SpeedOfAnswer += interval.SpeedOfAnswer ?? 0;
 				summary.AnsweredCalls += interval.AnsweredCalls ?? 0;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				timeSeries.Add(interval.IntervalDate.AddMinutes(interval.IntervalId * intervalLength));
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
 				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
-				offeredCallsSeries.Add(interval.CalculatedCalls);
+				calculatedCallsSeries.Add(interval.CalculatedCalls);
 				averageHandleTimeSeries.Add(interval.CalculatedCalls.HasValue ? interval.AverageHandleTime : null);
 
 				if (interval.CalculatedCalls.HasValue)
@@ -81,13 +81,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 			summary.ForecastedAverageHandleTime = Math.Abs(summary.ForecastedCalls) < 0.0001
 					? 0
 					: summary.ForecastedHandleTime / summary.ForecastedCalls;
-			summary.AverageHandleTime = Math.Abs(summary.OfferedCalls) < 0.0001
+			summary.AverageHandleTime = Math.Abs(summary.CalculatedCalls) < 0.0001
 								? 0
-								: summary.HandleTime / summary.OfferedCalls;
+								: summary.HandleTime / summary.CalculatedCalls;
 
 			summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
 				 ? -99
-				 : (summary.OfferedCalls - summary.ForecastedCalls) * 100 / summary.ForecastedCalls;
+				 : (summary.CalculatedCalls - summary.ForecastedCalls) * 100 / summary.ForecastedCalls;
 
 			summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedAverageHandleTime) < 0.0001
 					? -99
@@ -98,13 +98,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 					? -99
 					: summary.SpeedOfAnswer / summary.AnsweredCalls;
 
-			summary.ServiceLevel = Math.Abs(summary.OfferedCalls) < 0.0001
+			summary.ServiceLevel = Math.Abs(summary.CalculatedCalls) < 0.0001
 					? -99
-					: summary.AnsweredCallsWithinSL / summary.OfferedCalls;
+					: summary.AnsweredCallsWithinSL / summary.CalculatedCalls;
 
-			summary.AbandonRate = Math.Abs(summary.OfferedCalls) < 0.0001
+			summary.AbandonRate = Math.Abs(summary.CalculatedCalls) < 0.0001
 					? -99
-					: summary.AbandonedCalls / summary.OfferedCalls;
+					: summary.AbandonedCalls / summary.CalculatedCalls;
 
 			return new IntradayIncomingViewModel()
 			{
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					Time = timeSeries.ToArray(),
 					ForecastedCalls = forecastedCallsSeries.ToArray(),
 					ForecastedAverageHandleTime = forecastedAverageHandleTimeSeries.ToArray(),
-					OfferedCalls = offeredCallsSeries.ToArray(),
+					CalculatedCalls = calculatedCallsSeries.ToArray(),
 					AverageHandleTime = averageHandleTimeSeries.ToArray(),
 					AverageSpeedOfAnswer = averageSpeedOfAnswer.ToArray(),
 					AbandonedRate = abandonedRate.ToArray(),

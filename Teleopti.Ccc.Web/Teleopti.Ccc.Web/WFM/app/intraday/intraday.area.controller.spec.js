@@ -85,7 +85,7 @@ describe('IntradayAreaCtrl', function () {
 				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				ForecastedAverageHandleTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 199.8660714285, 201.3520471464],
 				ForecastedCalls: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0112, 0.3224, 0.5169, 0.7337, 0.9672],
-				OfferedCalls: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				CalculatedCalls: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				ServiceLevel: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				Time: ["0001-01-01T00:00:00", "0001-01-01T00:15:00", "0001-01-01T00:30:00", "0001-01-01T00:45:00"]
 			},
@@ -102,7 +102,7 @@ describe('IntradayAreaCtrl', function () {
 				ForecastedCalls: 1392.2850999999998,
 				ForecastedHandleTime: 270880.99889999995,
 				HandleTime: 381970,
-				OfferedCalls: 1555,
+				CalculatedCalls: 1555,
 				ServiceLevel: 0.8392282958199357,
 				SpeedOfAnswer: 32296
 			}

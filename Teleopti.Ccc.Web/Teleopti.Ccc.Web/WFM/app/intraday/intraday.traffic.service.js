@@ -35,7 +35,7 @@
 			service.setTrafficData = function (result) {
 				clearData();
 				trafficData.forecastedCallsObj.series = result.DataSeries.ForecastedCalls;
-				trafficData.actualCallsObj.series = result.DataSeries.OfferedCalls;
+				trafficData.actualCallsObj.series = result.DataSeries.CalculatedCalls;
 				trafficData.forecastedAverageHandleTimeObj.series = result.DataSeries.ForecastedAverageHandleTime;
 				trafficData.actualAverageHandleTimeObj.series = result.DataSeries.AverageHandleTime;
 
@@ -48,6 +48,7 @@
 				trafficData.actualAverageHandleTimeObj.max = Math.max.apply(Math, trafficData.actualAverageHandleTimeObj.series);
 
 				trafficData.forecastedCallsObj.series.splice(0, 0, 'Forecasted_calls');
+				console.log("trafficdata:" + trafficData.actualCallsObj.series);
 				trafficData.actualCallsObj.series.splice(0, 0, 'Calls');
 				trafficData.forecastedAverageHandleTimeObj.series.splice(0, 0, 'Forecasted_AHT');
 				trafficData.actualAverageHandleTimeObj.series.splice(0, 0, 'AHT');
@@ -55,7 +56,7 @@
 				trafficData.summary = {
 					summaryForecastedCalls: $filter('number')(result.Summary.ForecastedCalls, 1),
 					summaryForecastedAverageHandleTime: $filter('number')(result.Summary.ForecastedAverageHandleTime, 1),
-					summaryOfferedCalls: $filter('number')(result.Summary.OfferedCalls, 1),
+					summaryCalculatedCalls: $filter('number')(result.Summary.CalculatedCalls, 1),
 					summaryAverageHandleTime: $filter('number')(result.Summary.AverageHandleTime, 1),
 					forecastActualCallsDifference: $filter('number')(result.Summary.ForecastedActualCallsDiff, 1),
 					forecastActualAverageHandleTimeDifference: $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1)
