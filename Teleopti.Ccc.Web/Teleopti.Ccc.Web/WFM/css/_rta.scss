@@ -114,9 +114,10 @@
 	}
 }
 
-.md-select-menu-container {
-	margin-top: $full-padding*3 !important;
-}
+// This targets all md select items
+// .md-select-menu-container {
+// 	margin-top: $full-padding*3 !important;
+// }
 
 .rta-multiple-selection-panel .md-icon-left {
 	padding-left: 0;
@@ -219,8 +220,8 @@
 ///////////rta-historical-adherence///////////////////////
 
 .rta-historical-adherence-row-wrapper {
-	position: relative; 
-	padding: 4px 0; 
+	position: relative;
+	padding: 4px 0;
 	height: $full-padding*4;
 }
 
@@ -231,7 +232,3 @@
 .rta-full-shift-wrapper {
 	height: $full-padding*10;
 }
-
-
-
-
