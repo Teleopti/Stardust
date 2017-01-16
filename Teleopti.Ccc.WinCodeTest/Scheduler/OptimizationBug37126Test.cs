@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public ILifetimeScope Scope;
 		public IOptimizationPreferences OptimizationPreferences;
 		public IMatrixListFactory MatrixListFactory;
-		public IRequiredScheduleHelper RequiredScheduleHelper;
 		public IResourceOptimizationHelperExtended ResourceCalculator;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
@@ -134,8 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				}),
 				new NoSchedulingProgress(), StateHolder,
 				new[] {dictionary[person].ScheduledDay(date)},
-				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(), RequiredScheduleHelper,
-					MatrixListFactory), OptimizationPreferences, false, new DaysOffPreferences(),
+				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(), MatrixListFactory), OptimizationPreferences, false, new DaysOffPreferences(),
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftLayers.Should().Be.Empty();

@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private ISchedulingProgress _backgroundWorker;
 		private readonly ILifetimeScope _container;
 		private readonly OptimizerHelperHelper _optimizerHelper;
-		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayDesktop;
 		private readonly IExtendReduceTimeHelper _extendReduceTimeHelper;
@@ -42,11 +41,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper,
-			IRequiredScheduleHelper requiredScheduleHelper, IMatrixListFactory matrixListFactory)
+			IMatrixListFactory matrixListFactory)
 		{
 			_container = container;
 			_optimizerHelper = optimizerHelper;
-			_requiredScheduleHelper = requiredScheduleHelper;
 			_matrixListFactory = matrixListFactory;
 			_optimizeIntradayDesktop = _container.Resolve<OptimizeIntradayIslandsDesktop>();
 			_allResults = () => _container.Resolve<IWorkShiftFinderResultHolder>();
@@ -118,36 +116,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public void ResetWorkShiftFinderResults()
 		{
 			_allResults().Clear();
-		}
-
-		public void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
-			ISchedulerStateHolder schedulerStateHolder,
-			ISchedulingProgress backgroundWorker,
-			ISchedulingOptions schedulingOptions,
-			DateOnlyPeriod selectedPeriod,
-			IList<IScheduleMatrixPro> allMatrixes)
-		{
-			if (matrixList == null) throw new ArgumentNullException("matrixList");
-			if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
-			if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-			foreach (IScheduleMatrixPro scheduleMatrix in matrixList)
-			{
-				ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(),
-						new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = _container.Resolve<WorkShiftBackToLegalStateServiceProFactory>().Create();
-				workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions, schedulePartModifyAndRollbackService);
-
-				backgroundWorker.ReportProgress(1);
-			}
-
-			if (optimizerPreferences.General.UseShiftCategoryLimitations)
-			{
-				_requiredScheduleHelper.RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker, optimizerPreferences,
-					schedulingOptions,
-					selectedPeriod, allMatrixes);
-			}
 		}
 
 		public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,

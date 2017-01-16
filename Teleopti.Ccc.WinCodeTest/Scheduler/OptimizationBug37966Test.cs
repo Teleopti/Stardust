@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public ILifetimeScope Scope;
 		public IOptimizationPreferences OptimizationPreferences;
 		public IMatrixListFactory MatrixListFactory;
-		public IRequiredScheduleHelper RequiredScheduleHelper;
 		public IResourceOptimizationHelperExtended ResourceCalculator;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
@@ -166,8 +164,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				}),
 				new NoSchedulingProgress(), StateHolder,
 				new[] {dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date)},
-				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(), RequiredScheduleHelper,
-					MatrixListFactory), OptimizationPreferences, false, new DaysOffPreferences(),
+				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(), MatrixListFactory), OptimizationPreferences, false, new DaysOffPreferences(),
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftLayers.Should().Be.Empty();

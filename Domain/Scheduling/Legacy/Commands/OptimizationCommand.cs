@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
+		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
+		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -40,7 +42,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			IUserTimeZone userTimeZone,
-			IGroupPagePerDateHolder groupPagePerDateHolder)
+			IGroupPagePerDateHolder groupPagePerDateHolder,
+			WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
+			IRequiredScheduleHelper requiredScheduleHelper)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
@@ -56,6 +60,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_userTimeZone = userTimeZone;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
+			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
+			_requiredScheduleHelper = requiredScheduleHelper;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
@@ -114,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						_matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value) : 
 						new List<IScheduleMatrixPro>();
 
-					scheduleOptimizerHelper.GetBackToLegalState(matrixList, schedulerStateHolder, backgroundWorker,
+					getBackToLegalState(matrixList, schedulerStateHolder, optimizationPreferences, backgroundWorker,
 						optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value,
 						allMatrixes);
 				}
@@ -163,6 +169,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			optimizationPreferences.Extra.BlockTypeValue = BlockFinderType.SingleDay;
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, 
 											selectedPeriod, allMatrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
+		}
+
+		public void getBackToLegalState(IList<IScheduleMatrixPro> matrixList,
+				ISchedulerStateHolder schedulerStateHolder,
+				IOptimizationPreferences optimizationPreferences,
+				ISchedulingProgress backgroundWorker,
+				ISchedulingOptions schedulingOptions,
+				DateOnlyPeriod selectedPeriod,
+				IList<IScheduleMatrixPro> allMatrixes)
+		{
+			if (matrixList == null) throw new ArgumentNullException("matrixList");
+			if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
+			if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
+			foreach (IScheduleMatrixPro scheduleMatrix in matrixList)
+			{
+				ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
+					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback,
+						new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = _workShiftBackToLegalStateServiceProFactory.Create();
+				workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions, schedulePartModifyAndRollbackService);
+
+				backgroundWorker.ReportProgress(1);
+			}
+
+			if (optimizationPreferences.General.UseShiftCategoryLimitations)
+			{
+				_requiredScheduleHelper.RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker, optimizationPreferences,
+					schedulingOptions,
+					selectedPeriod, allMatrixes);
+			}
 		}
 	}
 }

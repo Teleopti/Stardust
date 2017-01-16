@@ -10,13 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		void ResetWorkShiftFinderResults();
 
-		void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
-			ISchedulerStateHolder schedulerStateHolder,
-			ISchedulingProgress backgroundWorker,
-			ISchedulingOptions schedulingOptions,
-			DateOnlyPeriod selectedPeriod,
-			IList<IScheduleMatrixPro> allMatrixes);
-
 		void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
