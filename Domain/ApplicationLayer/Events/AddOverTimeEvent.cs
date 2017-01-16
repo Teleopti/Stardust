@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid OvertimeType { get; set; } //IMultiplicatorDefinitionSet OvertimeType { get; set; }
 
 		public IList<Guid> Skills { get; set; }
+		public Guid? ShiftBagToUse { get; set; }
 	}
 }

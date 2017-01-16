@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IRuleSetBagRepository _ruleSetBagRepository;
 		private readonly INow _now;
 
 		public AddOverTimeHandler(ScheduleOvertime scheduleOvertime,
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository,
 			IActivityRepository activityRepository,
-			ISkillRepository skillRepository)
+			ISkillRepository skillRepository,
+			IRuleSetBagRepository ruleSetBagRepository)
 		{
 			_scheduleOvertime = scheduleOvertime;
 			_now = now;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_activityRepository = activityRepository;
 			_skillRepository = skillRepository;
+			_ruleSetBagRepository = ruleSetBagRepository;
 		}
 
 		public void Handle(AddOverTimeEvent @event)
@@ -48,6 +51,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var multi = _multiplicatorDefinitionSetRepository.Load(@event.OvertimeType);
 			var skill = _skillRepository.Get(@event.Skills[0]);
 			var act = skill.Activity;
+			IRuleSetBag bag = null;
+			if (@event.ShiftBagToUse.HasValue)
+				bag = _ruleSetBagRepository.Get(@event.ShiftBagToUse.Value);
 			var overTimePreferences = new OvertimePreferences
 			{
 				SelectedTimePeriod = new TimePeriod(@event.OvertimeDurationMin, @event.OvertimeDurationMax) , // how long the overtime should be
@@ -57,7 +63,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 					new TimePeriod(_now.UtcDateTime().AddHours(1).Hour, _now.UtcDateTime().Minute, _now.UtcDateTime().AddHours(5).Hour,
 						_now.UtcDateTime().Minute), // when it can start earliest, and end latest
 				OvertimeType = multi,
-				SkillActivity = act
+				SkillActivity = act,
+				ShiftBagToUse = bag
 			};
 
 			var stateHolder = _schedulerStateHolder();
