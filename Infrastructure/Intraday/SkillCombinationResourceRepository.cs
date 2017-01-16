@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -17,12 +18,15 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 
-		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentBusinessUnit currentBusinessUnit)
+		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+			ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader)
 		{
 			_now = now;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_currentBusinessUnit = currentBusinessUnit;
+			_requestStrategySettingsReader = requestStrategySettingsReader;
 		}
 
 		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination)
@@ -89,6 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public virtual void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
+			var updateReadModelInterval = _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var skillCombinations = loadSkillCombination();
 
@@ -97,16 +102,18 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			{
 				connection.Open();
 
+
+				//Purge old intervals that is out of the scope
 				using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResource] 
-						WHERE StartDateTime < '{dataLoaded.AddHours(-1)}'", connection))
+						WHERE StartDateTime < '{dataLoaded.AddMinutes(-updateReadModelInterval * 2)}'", connection))
 				{
 					deleteCommand.ExecuteNonQuery();
 				}
 
 				using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResourceDelta] 
-						WHERE StartDateTime < '{dataLoaded.AddHours(-1)}'", connection))
+						WHERE StartDateTime < '{dataLoaded.AddMinutes(-updateReadModelInterval * 2)}'", connection))
 				{
 					deleteCommand.ExecuteNonQuery();
 				}
@@ -260,7 +267,8 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 		}
 
-		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentBusinessUnit currentBusinessUnit) : base(now, currentUnitOfWorkFactory, currentBusinessUnit)
+		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader) 
+			: base(now, currentUnitOfWorkFactory, currentBusinessUnit, requestStrategySettingsReader)
 		{
 		}
 	}
