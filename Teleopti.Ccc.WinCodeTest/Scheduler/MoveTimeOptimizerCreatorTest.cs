@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_decisionMaker = _mocks.StrictMock<IMoveTimeDecisionMaker>();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
@@ -65,16 +64,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scheduleDayPro1 = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix1);
 			_scheduleDayPro2 = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix2);
 
-			_target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
-												   _workShiftOriginalStateContainerList,
+			_target = new MoveTimeOptimizerCreator(
 												   _decisionMaker,
 												   _scheduleService,
-												   optimizerPreferences,
-												   _rollbackService,
-												   _schedulingResultStateHolder,
+												   () => _schedulingResultStateHolder,
 												   _effectiveRestrictionCreator,
 												   _resourceOptimizationHelper,
-												   _dayOffOptimizationPreferenceProvider,
 													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>(),
 													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider(), UserTimeZone.Make()), UserTimeZone.Make());
 		}
@@ -103,7 +98,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 			using (_mocks.Playback())
 			{
-				IList<IMoveTimeOptimizer> optimizers = _target.Create();
+				IList<IMoveTimeOptimizer> optimizers = _target.Create(_scheduleMatrixOriginalStateContainerList,
+													 _workShiftOriginalStateContainerList, new OptimizationPreferences(), _dayOffOptimizationPreferenceProvider, _rollbackService);
 				Assert.AreEqual(_scheduleMatrixOriginalStateContainerList.Count, optimizers.Count);
 			}
 		}
