@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var target = new ShareCalendarController(_calendarLinkIdGenerator, calendarLinkGenerator);
 
-			var result = target.iCal(calendarlinkid);
+			var result = (ContentResult)target.iCal(calendarlinkid);
 			result.Content.Should().Contain("test");
 		}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new ShareCalendarController(_calendarLinkIdGenerator, null);
 			target.ControllerContext = new ControllerContext(_context, new RouteData(), target);
 
-			var result = target.iCal(calendarlinkid);
+			var result = (ContentResult)target.iCal(calendarlinkid);
 			result.Content.Should().Contain("Invalid url");
 		}
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new ShareCalendarController(_calendarLinkIdGenerator, null);
 			target.ControllerContext = new ControllerContext(_context, new RouteData(), target);
 
-			var result = target.iCal(calendarlinkid);
+			var result = (ContentResult)target.iCal(calendarlinkid);
 			result.Content.Should().Contain("Invalid url");
 		}
 
@@ -76,8 +76,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new ShareCalendarController(_calendarLinkIdGenerator, calendarLinkGenerator);
 			target.ControllerContext = new ControllerContext(_context, new RouteData(), target);
 
-			var result = target.iCal(calendarlinkid);
+			var result = (ContentResult)target.iCal(calendarlinkid);
 			result.Content.Should().Contain("No permission");
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfIdIsNull()
+		{
+			var calendarLinkGenerator = MockRepository.GenerateMock<ICalendarLinkGenerator>();
+
+			var target = new ShareCalendarController(_calendarLinkIdGenerator, calendarLinkGenerator);
+			target.ControllerContext = new ControllerContext(_context, new RouteData(), target);
+			
+			var result = (ContentResult)target.iCal(null);
+			result.Content.Should().Contain("Invalid url");
 		}
 
 		[Test]
@@ -90,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var target = new ShareCalendarController(_calendarLinkIdGenerator, calendarLinkGenerator);
 			target.ControllerContext = new ControllerContext(_context, new RouteData(), target);
-			var result = target.iCal(calendarlinkid);
+			var result = (ContentResult)target.iCal(calendarlinkid);
 			result.Content.Should().Contain("inactive");
 		}
 	}

@@ -20,8 +20,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[HttpGet]
 		[NoCacheFilterMvc]
-		public ContentResult iCal(string id, string type = "text/calendar")
+		public ActionResult iCal(string id, string type = "text/calendar")
 		{
+			if (string.IsNullOrEmpty(id))
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return Content("Invalid url", "text/plain");
+			}
 			try
 			{
 				var calendarLinkId = _calendarLinkIdGenerator.Parse(id);
