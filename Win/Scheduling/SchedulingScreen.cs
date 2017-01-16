@@ -54,6 +54,7 @@ using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -3632,7 +3633,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, _container.Resolve<IMatrixListFactory>());
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, _container.Resolve<IMatrixListFactory>(), _container.Resolve<MoveTimeOptimizerCreator>(), _container.Resolve<PeriodExtractorFromScheduleParts>(), _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>(), _container.Resolve<IPersonListExtractorFromScheduleParts>(), _container.Resolve<IEqualNumberOfCategoryFairnessService>());
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));

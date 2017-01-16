@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 					scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
 						backgroundWorker, displayList[0], optimizerOriginalPreferences.SchedulingOptions,
-						dayOffOptimizationPreferenceProvider);
+						dayOffOptimizationPreferenceProvider, optimizationPreferences);
 
 					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
 						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
-						dayOffOptimizationPreferenceProvider, () =>
+						dayOffOptimizationPreferenceProvider, optimizationPreferences, () =>
 						{
 							var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value);
 							runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod.Value, allMatrixes,

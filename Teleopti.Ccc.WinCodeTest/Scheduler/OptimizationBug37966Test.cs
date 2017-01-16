@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -163,8 +164,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					GroupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(UserTexts.Resources.NoTeam)
 				}),
 				new NoSchedulingProgress(), StateHolder,
-				new[] {dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date)},
-				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(), MatrixListFactory), OptimizationPreferences, false, new DaysOffPreferences(),
+				new[] { dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date) },
+				new ScheduleOptimizerHelper(Scope, MatrixListFactory, Scope.Resolve<MoveTimeOptimizerCreator>(), Scope.Resolve<PeriodExtractorFromScheduleParts>(), Scope.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>(), Scope.Resolve<IPersonListExtractorFromScheduleParts>(), Scope.Resolve<IEqualNumberOfCategoryFairnessService>()), 
+				OptimizationPreferences, 
+				false, 
+				new DaysOffPreferences(),
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftLayers.Should().Be.Empty();
