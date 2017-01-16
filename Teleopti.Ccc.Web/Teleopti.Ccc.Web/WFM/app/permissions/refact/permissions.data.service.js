@@ -134,7 +134,7 @@
 			});
 		}
 
-		function selectOrganization(orgData, selectedRole) {
+		function selectOrganization(orgData, selectedRole, isSelected) {
 			var data = prepareData(orgData, selectedRole);
 
 			var selectedData = {
@@ -143,7 +143,7 @@
 				DataId: orgData.Id
 			}
 			if (orgData.Type === 'BusinessUnit') {
-				if (orgData.IsSelected) {
+				if (isSelected) {
 					PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {
 						if (result != null) {
 							return result;
@@ -153,10 +153,10 @@
 					PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function(result) {
 					});
 				}
-			} else if (orgData.IsSelected) {
+			} else if (isSelected) {
 				PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {
 				});
-			} else if (!orgData.IsSelected) {
+			} else if (!isSelected) {
 				PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function(result) {
 				});
 			}

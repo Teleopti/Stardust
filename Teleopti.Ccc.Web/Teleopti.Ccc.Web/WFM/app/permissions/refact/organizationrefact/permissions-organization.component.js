@@ -1,6 +1,5 @@
 function PermissionsListController(permissionsDataService, NoticeService, $translate) {
 	var ctrl = this;
-
 	ctrl.toggleNode = toggleNode;
 
 	function toggleNode(node) {
@@ -9,7 +8,6 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
       NoticeService.warning($translate.instant('NeedToSelectARoleFirst'), 5000, true);
       return;
     }
-
     if (ctrl.selectedRole != null && ctrl.selectedRole.BuiltIn) {
       NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
       return;
@@ -21,44 +19,40 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
 
 		toggleSelection(node);
 
-		// if (!angular.isUndefined(ctrl.datafilter) && ctrl.datafilter.isUnSelected) {
-		// 	ctrl.datafilter.unselectedDataFilter();
-		// }
-
 		ctrl.onClick(node);
 	}
 
 	function toggleSelection(node) {
-		node.IsSelected = !node.IsSelected;
-		var selectedOrNot = node.IsSelected;
+		ctrl.select(node);
+		var selectedOrNot = ctrl.isSelected(node);
 
 		if (node.Type === 'BusinessUnit') {
 			for (var i = 0; i < node.ChildNodes.length; i++) {
-				node.ChildNodes[i].IsSelected = selectedOrNot;
+				ctrl.select(node.ChildNodes[i], selectedOrNot);
 				for (var j = 0; j < node.ChildNodes[i].ChildNodes.length; j++) {
-					node.ChildNodes[i].ChildNodes[j].IsSelected = selectedOrNot;
+					ctrl.select(node.ChildNodes[i].ChildNodes[j], selectedOrNot);
 				}
 			}
 		}
 
 		if (node.Type === 'Site') {
-			if (!ctrl.org.BusinessUnit.IsSelected) {
-				ctrl.org.BusinessUnit.IsSelected = true;
+			if (!ctrl.isSelected(ctrl.org.BusinessUnit)) {
+				ctrl.select(ctrl.org.BusinessUnit);
 			}
 
 			for (var i = 0; i < node.ChildNodes.length; i++) {
-				node.ChildNodes[i].IsSelected = selectedOrNot;
+				ctrl.select(node.ChildNodes[i], selectedOrNot);
 			}
 			var noSiteSelected = ctrl.org.BusinessUnit.ChildNodes.every(function(site) {
-				return !site.IsSelected;
+				return !ctrl.isSelected(site);
 			});
 			if (noSiteSelected) {
-				ctrl.org.BusinessUnit.IsSelected = false;
+				ctrl.select(ctrl.org.BusinessUnit, false);
 			}
 		}
 		if (node.Type === 'Team') {
-			if (!ctrl.org.BusinessUnit.IsSelected) {
-				ctrl.org.BusinessUnit.IsSelected = true;
+			if (!ctrl.isSelected(ctrl.org.BusinessUnit)) {
+				ctrl.select(ctrl.org.BusinessUnit, true);
 			}
 			traverseNodes(node);
 		}
@@ -67,22 +61,23 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
 	function traverseNodes(node) {
 		var sites = ctrl.org.BusinessUnit.ChildNodes;
 
-
 		for (var i = 0; i < sites.length; i++) {
-			for (var j = 0; j < sites[i].ChildNodes.length; j++) {
-				if (sites[i].ChildNodes[j].Id === node.Id) {
-					var notAllTeamsInSiteSelected = sites[i].ChildNodes.some(function(team) {
-						return team.IsSelected;
+			var site = sites[i];
+			for (var j = 0; j < site.ChildNodes.length; j++) {
+				var team = site.ChildNodes[j];
+				if (team.Id === node.Id) {
+					var anyTeamSelected = site.ChildNodes.some(function(team) {
+						return ctrl.isSelected(team);
 					});
-					if (notAllTeamsInSiteSelected) {
-						sites[i].IsSelected = true;
+					if (anyTeamSelected) {
+						ctrl.select(site, true);
 					} else {
-						sites[i].IsSelected = false;
-						var notAllSitesInBuSelected = sites.some(function(site) {
-							return site.IsSelected;
+						ctrl.select(site, false);
+						var notAllSitesInBuSelected = sites.some(function(s) {
+							return ctrl.isSelected(s);
 						});
 						if (!notAllSitesInBuSelected) {
-							ctrl.org.BusinessUnit.IsSelected = false;
+							ctrl.select(ctrl.org.BusinessUnit, false);
 						}
 					}
 
@@ -99,6 +94,8 @@ angular.module('wfm.permissions').component('permissionsList', {
 		org: '=',
 		selectedRole: '=',
 		onClick: '=',
-		datafilter: '='
+		datafilter: '=',
+		isSelected: '=',
+		select: '='
 	}
 });

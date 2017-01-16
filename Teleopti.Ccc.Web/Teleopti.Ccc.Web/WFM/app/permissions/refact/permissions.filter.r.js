@@ -10,13 +10,13 @@
 	function dataFilter() {
 		var filter = this;
 
-		filter.unselected = function(orgData) {
+		filter.unselected = function(orgData, selectedOrgData) {
 			function reduce(nodes) {
 				return nodes.reduce(function(ret, node) {
 					if (node.ChildNodes != null) {
 						node.ChildNodes = reduce(node.ChildNodes);
 					}
-					if (!node.IsSelected || (node.ChildNodes != null && node.ChildNodes.length > 0)) {
+					if (!selectedOrgData[node.Id] || (node.ChildNodes != null && node.ChildNodes.length > 0)) {
 						return ret.concat(node);
 					}
 
@@ -30,19 +30,13 @@
 			return ret;
 		}
 
-		filter.selected = function(orgData) {
-			if (!orgData.BusinessUnit.IsSelected) {
-				var ret = $.extend(true, {}, orgData);
-				ret.BusinessUnit = {};
-				return ret;
-			}
-
+		filter.selected = function(orgData, selectedOrgData) {
 			function reduce(nodes) {
 				return nodes.reduce(function(ret, node) {
 					if (node.ChildNodes != null) {
 						node.ChildNodes = reduce(node.ChildNodes);
 					}
-					if (node.IsSelected) {
+					if (selectedOrgData[node.Id]) {
 						return ret.concat(node);
 					}
 

@@ -33,7 +33,7 @@ describe('component: permissionsList', function() {
 			fakeBackend.deleteAllAvailableOrgData();
 			return 200;
 		});
-		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData/Team/5d2cef4b-a994-4e6f-bb44-87c8306c2052').respond(function(method, url, data, headers) {
+		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData/Team/753a4452-0b5e-44d5-88db-1857d14c0c17').respond(function(method, url, data, headers) {
 			fakeBackend.deleteUnselectedOrgData('5d2cef4b-a994-4e6f-bb44-87c8306c2052', 'Team');
 			return 200;
 		});
@@ -77,8 +77,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -86,7 +88,7 @@ describe('component: permissionsList', function() {
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
 	});
 
 	it('should be able to deselect BusinessUnit', function() {
@@ -94,8 +96,7 @@ describe('component: permissionsList', function() {
 			ChildNodes: [],
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
-			Type: "BusinessUnit",
-			IsSelected: true
+			Type: "BusinessUnit"
 		};
 		var DynamicOptions = [];
 		fakeBackend
@@ -115,20 +116,26 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(undefined);
 	});
 
 	it('should select child sites and teams when selecting a BusinessUnit', function() {
 		var BusinessUnit = {
+			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
+			Name: "TeleoptiCCCDemo",
+			Type: "BusinessUnit",
 			ChildNodes: [{
 				Id: 'fe113bc0-979a-4b6c-9e7c-ef601c7e02d1',
 				Type: 'Site',
@@ -138,10 +145,7 @@ describe('component: permissionsList', function() {
 					Type: 'Team',
 					Name: 'Team1'
 				}]
-			}],
-			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
-			Name: "TeleoptiCCCDemo",
-			Type: "BusinessUnit"
+			}]
 		};
 		fakeBackend
 			.withRole({
@@ -160,8 +164,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -169,29 +175,26 @@ describe('component: permissionsList', function() {
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(true);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['fe113bc0-979a-4b6c-9e7c-ef601c7e02d1']).toEqual(true);
+		expect(vm.selectedOrgData['e6377d56-277d-4c22-97f3-b218741b2480']).toEqual(true);
 	});
 
 	it('should deselect child sites and teams when deselecting a BusinessUnit', function() {
 		var BusinessUnit = {
+			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
+			Name: "TeleoptiCCCDemo",
+			Type: "BusinessUnit",
 			ChildNodes: [{
 				Id: 'fe113bc0-979a-4b6c-9e7c-ef601c7e02d1',
 				Type: 'Site',
 				Name: 'Site1',
-				IsSelected: true,
 				ChildNodes: [{
 					Id: 'e6377d56-277d-4c22-97f3-b218741b2480',
 					Type: 'Team',
-					Name: 'Team1',
-					IsSelected: true
+					Name: 'Team1'
 				}]
-			}],
-			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
-			Name: "TeleoptiCCCDemo",
-			Type: "BusinessUnit",
-			IsSelected: true
+			}]
 		};
 		fakeBackend
 			.withRole({
@@ -210,20 +213,24 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['fe113bc0-979a-4b6c-9e7c-ef601c7e02d1'] = true;
+		vm.selectedOrgData['e6377d56-277d-4c22-97f3-b218741b2480'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(undefined);
+		expect(vm.selectedOrgData['fe113bc0-979a-4b6c-9e7c-ef601c7e02d1']).toEqual(undefined);
+		expect(vm.selectedOrgData['e6377d56-277d-4c22-97f3-b218741b2480']).toEqual(undefined);
 	});
-
 
 	it('should select businessunit when selecting site', function() {
 		var BusinessUnit = {
@@ -255,8 +262,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -264,8 +273,8 @@ describe('component: permissionsList', function() {
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(true);
 	});
 
 	it('should select businessunit and site when selecting team', function() {
@@ -302,8 +311,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -311,9 +322,9 @@ describe('component: permissionsList', function() {
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(true);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(true);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(true);
 	});
 
 	it('should select all teams when clicking parent site', function() {
@@ -354,8 +365,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -363,9 +376,10 @@ describe('component: permissionsList', function() {
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toEqual(true);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(true);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(true);
+		expect(vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937']).toEqual(true);
 	});
 
 	it('should deselect all teams when clicking parent site', function() {
@@ -377,18 +391,15 @@ describe('component: permissionsList', function() {
 				ChildNodes: [{
 					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
 					Name: "Team 1",
-					Type: "Team",
-					IsSelected: true
+					Type: "Team"
 				}, {
 					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
 					Name: "Team 2",
-					Type: "Team",
-					IsSelected: true
+					Type: "Team"
 				}],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
-				Type: "Site",
-				IsSelected: true
+				Type: "Site"
 			}]
 		};
 		var DynamicOptions = [];
@@ -409,18 +420,25 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
+		vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(undefined);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(undefined);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(undefined);
+		expect(vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937']).toEqual(undefined);
 	});
 
 	it('should deselect parent when no children selected', function() {
@@ -429,21 +447,18 @@ describe('component: permissionsList', function() {
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
 			ChildNodes: [{
-				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-					Name: "Team 1",
-					Type: "Team",
-					IsSelected: true
-				}, {
-					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
-					Name: "Team 2",
-					Type: "Team",
-					IsSelected: true
-				}],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
+				ChildNodes: [{
+					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
+					Name: "Team 1",
+					Type: "Team"
+				}, {
+					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
+					Name: "Team 2",
+					Type: "Team"
+				}]
 			}]
 		};
 		var DynamicOptions = [];
@@ -464,19 +479,28 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
+		vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
+		$httpBackend.flush();
+
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(undefined);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(undefined);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(undefined);
+		expect(vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937']).toEqual(undefined);
 	});
 
 	it('should save selected org data for selected role', function() {
@@ -484,26 +508,22 @@ describe('component: permissionsList', function() {
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: true,
 			ChildNodes: [{
 				ChildNodes: [],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
-				Type: "Site",
-				IsSelected: true
+				Type: "Site"
 			}]
 		};
 		var preparedObject = {
 			Id: '928dd0bc-bf40-412e-b970-9b5e015aadea',
 			Name: 'TeleoptiCCCDemo',
 			Type: 'BusinessUnit',
-			IsSelected: false,
 			ChildNodes: [{
 				ChildNodes: [],
 				Id: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c',
 				Name: 'London',
-				Type: 'Site',
-				IsSelected: false
+				Type: 'Site'
 			}]
 		};
 		fakeBackend
@@ -523,35 +543,39 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		spyOn(permissionsDataService, 'selectOrganization');
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 
-		expect(permissionsDataService.selectOrganization).toHaveBeenCalledWith(preparedObject, vm.selectedRole);
+		expect(permissionsDataService.selectOrganization).toHaveBeenCalledWith(preparedObject, vm.selectedRole, false);
 	});
 
 	it('should delete all org data for selected role', function() {
 		var BusinessUnit = {
-			Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
+			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
 			IsSelected: true,
 			ChildNodes: [{
+				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+				Name: "London",
+				Type: "Site",
+				IsSelected: true,
 				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
+					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
 					Name: "JagÄrEttTeam",
 					Type: "Team",
 					IsSelected: true
-				}],
-				Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
-				Name: "London",
-				Type: "Site",
-				IsSelected: true
+				}]
 			}]
 		};
 		fakeBackend
@@ -583,11 +607,16 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
 		$httpBackend.flush();
@@ -599,21 +628,18 @@ describe('component: permissionsList', function() {
 
 	it('should delete unselected data for selected role', function() {
 		var BusinessUnit = {
-			Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
+			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: true,
 			ChildNodes: [{
-				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-					Name: "JagÄrEttTeam",
-					Type: "Team",
-					IsSelected: true
-				}],
-				Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
+				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
+				ChildNodes: [{
+					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
+					Name: "JagÄrEttTeam",
+					Type: "Team"
+				}]
 			}]
 		};
 		fakeBackend
@@ -645,11 +671,16 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -694,15 +725,15 @@ describe('component: permissionsList', function() {
 				AvailableTeams: []
 			})
 			.withOrganizationSelection({
-				Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
+				Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 				Name: "TeleoptiCCCDemo",
 				Type: "BusinessUnit",
 				ChildNodes: [{
-					Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
+					Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 					Name: "London",
 					Type: "Site",
 					ChildNodes: [{
-						Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
+						Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
 						Name: "London-Team1",
 						Type: "Team"
 					}, {
@@ -715,11 +746,16 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
@@ -728,8 +764,8 @@ describe('component: permissionsList', function() {
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toEqual(true);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(undefined);
+		expect(vm.selectedOrgData['c6326a58-8876-497f-be97-8dce62cc0c11']).toEqual(true);
 	});
 
 	it('should not unselect bu when unselecting site when other site is selected', function() {
@@ -737,39 +773,32 @@ describe('component: permissionsList', function() {
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: true,
 			ChildNodes: [{
-				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-					Name: "Team 1",
-					Type: "Team",
-					IsSelected: true
-				}, {
-					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
-					Name: "Team 2",
-					Type: "Team",
-					IsSelected: true
-				}],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
+				ChildNodes: [{
+					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
+					Name: "Team 1",
+					Type: "Team"
+				}, {
+					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
+					Name: "Team 2",
+					Type: "Team"
+				}]
 			}, {
+				Id: "ef49b09c-363e-43fd-9a1e-58ef1cf656dd",
+				Name: "Paris",
+				Type: "Site",
 				ChildNodes: [{
 					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
 					Name: "Team A",
-					Type: "Team",
-					IsSelected: true
+					Type: "Team"
 				}, {
 					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
 					Name: "Team B",
-					Type: "Team",
-					IsSelected: true
-				}],
-				Id: "ef49b09c-363e-43fd-9a1e-58ef1cf656dd",
-				Name: "London",
-				Type: "Site",
-				IsSelected: true
+					Type: "Team"
+				}]
 			}]
 		};
 		var DynamicOptions = [];
@@ -790,17 +819,26 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['5d2cef4b-a994-4e6f-bb44-87c8306c2052'] = true;
+		vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937'] = true;
+		vm.selectedOrgData['ef49b09c-363e-43fd-9a1e-58ef1cf656dd'] = true;
+		vm.selectedOrgData['299ee5a5-8883-42e4-8c8b-9f82908375f4'] = true;
+		vm.selectedOrgData['d1b591a9-5ce6-4a4c-978e-caa79abf399e'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(undefined);
 	});
 
 	it('should not unselect site when unselecting team when other team in site is selected', function() {
@@ -808,39 +846,32 @@ describe('component: permissionsList', function() {
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: true,
 			ChildNodes: [{
-				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-					Name: "Team 1",
-					Type: "Team",
-					IsSelected: true
-				}, {
-					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
-					Name: "Team 2",
-					Type: "Team",
-					IsSelected: true
-				}],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
-			}, {
 				ChildNodes: [{
-					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
-					Name: "Team A",
-					Type: "Team",
-					IsSelected: true
+					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
+					Name: "Team 1",
+					Type: "Team"
 				}, {
-					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
-					Name: "Team B",
-					Type: "Team",
-					IsSelected: true
-				}],
+					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
+					Name: "Team 2",
+					Type: "Team"
+				}]
+			}, {
 				Id: "ef49b09c-363e-43fd-9a1e-58ef1cf656dd",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
+				ChildNodes: [{
+					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
+					Name: "Team A",
+					Type: "Team"
+				}, {
+					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
+					Name: "Team B",
+					Type: "Team"
+				}]
 			}]
 		};
 		var DynamicOptions = [];
@@ -861,18 +892,27 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
+		vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937'] = true;
+		vm.selectedOrgData['ef49b09c-363e-43fd-9a1e-58ef1cf656dd'] = true;
+		vm.selectedOrgData['299ee5a5-8883-42e4-8c8b-9f82908375f4'] = true;
+		vm.selectedOrgData['d1b591a9-5ce6-4a4c-978e-caa79abf399e'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(true);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(undefined);
 	});
 
 	it('should unselect BU when deselecting last site', function() {
@@ -880,39 +920,32 @@ describe('component: permissionsList', function() {
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: true,
 			ChildNodes: [{
-				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-					Name: "Team 1",
-					Type: "Team",
-					IsSelected: true
-				}, {
-					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
-					Name: "Team 2",
-					Type: "Team",
-					IsSelected: true
-				}],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
-			}, {
 				ChildNodes: [{
-					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
-					Name: "Team A",
-					Type: "Team",
-					IsSelected: false
+					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
+					Name: "Team 1",
+					Type: "Team"
 				}, {
-					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
-					Name: "Team B",
-					Type: "Team",
-					IsSelected: false
-				}],
+					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
+					Name: "Team 2",
+					Type: "Team"
+				}]
+			}, {
 				Id: "ef49b09c-363e-43fd-9a1e-58ef1cf656dd",
 				Name: "London",
 				Type: "Site",
-				IsSelected: false
+				ChildNodes: [{
+					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
+					Name: "Team A",
+					Type: "Team"
+				}, {
+					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
+					Name: "Team B",
+					Type: "Team"
+				}]
 			}]
 		};
 		var DynamicOptions = [];
@@ -933,18 +966,24 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
+		vm.selectedOrgData['360bb004-356f-44fa-be18-cb92aa84c937'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(undefined);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(undefined);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(undefined);
 	});
 
 	it('should deselect BU when selecting last team in last site', function() {
@@ -952,39 +991,32 @@ describe('component: permissionsList', function() {
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: true,
 			ChildNodes: [{
-				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-					Name: "Team 1",
-					Type: "Team",
-					IsSelected: true
-				}, {
-					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
-					Name: "Team 2",
-					Type: "Team",
-					IsSelected: false
-				}],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
-			}, {
 				ChildNodes: [{
-					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
-					Name: "Team A",
-					Type: "Team",
-					IsSelected: false
+					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
+					Name: "Team 1",
+					Type: "Team"
 				}, {
-					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
-					Name: "Team B",
-					Type: "Team",
-					IsSelected: false
-				}],
+					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
+					Name: "Team 2",
+					Type: "Team"
+				}]
+			}, {
 				Id: "ef49b09c-363e-43fd-9a1e-58ef1cf656dd",
 				Name: "London",
 				Type: "Site",
-				IsSelected: false
+				ChildNodes: [{
+					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
+					Name: "Team A",
+					Type: "Team"
+				}, {
+					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
+					Name: "Team B",
+					Type: "Team"
+				}]
 			}]
 		};
 		var DynamicOptions = [];
@@ -1005,18 +1037,23 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(undefined);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(undefined);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(undefined);
 	});
 
 	it('should not deselect BU when selecting last team in a site while there are other selected sites', function() {
@@ -1024,39 +1061,32 @@ describe('component: permissionsList', function() {
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: true,
 			ChildNodes: [{
-				ChildNodes: [{
-					Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-					Name: "Team 1",
-					Type: "Team",
-					IsSelected: true
-				}, {
-					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
-					Name: "Team 2",
-					Type: "Team",
-					IsSelected: false
-				}],
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
-			}, {
 				ChildNodes: [{
-					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
-					Name: "Team A",
-					Type: "Team",
-					IsSelected: false
+					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
+					Name: "Team 1",
+					Type: "Team"
 				}, {
-					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
-					Name: "Team B",
-					Type: "Team",
-					IsSelected: true
-				}],
+					Id: "360bb004-356f-44fa-be18-cb92aa84c937",
+					Name: "Team 2",
+					Type: "Team"
+				}]
+			}, {
 				Id: "ef49b09c-363e-43fd-9a1e-58ef1cf656dd",
 				Name: "London",
 				Type: "Site",
-				IsSelected: true
+				ChildNodes: [{
+					Id: "299ee5a5-8883-42e4-8c8b-9f82908375f4",
+					Name: "Team A",
+					Type: "Team"
+				}, {
+					Id: "d1b591a9-5ce6-4a4c-978e-caa79abf399e",
+					Name: "Team B",
+					Type: "Team"
+				}]
 			}]
 		};
 		var DynamicOptions = [];
@@ -1077,19 +1107,26 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
+		vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+		vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c'] = true;
+		vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17'] = true;
+		vm.selectedOrgData['ef49b09c-363e-43fd-9a1e-58ef1cf656dd'] = true;
+		vm.selectedOrgData['d1b591a9-5ce6-4a4c-978e-caa79abf399e'] = true;
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(undefined);
+		expect(vm.selectedOrgData['ef49b09c-363e-43fd-9a1e-58ef1cf656dd']).toEqual(true);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(undefined);
 	});
 
 	it('should not be able to select orgdata without selected role', function() {
@@ -1116,7 +1153,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 
 		ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
@@ -1148,8 +1188,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -1183,8 +1225,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -1194,23 +1238,19 @@ describe('component: permissionsList', function() {
 		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(undefined);
 	});
 
-	//TODO
 	it('should keep parents selected when switching role and then going back', function() {
 		var BusinessUnit = {
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 			Name: "TeleoptiCCCDemo",
 			Type: "BusinessUnit",
-			IsSelected: false,
 			ChildNodes: [{
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 				Name: "London",
 				Type: "Site",
-				IsSelected: false,
 				ChildNodes: [{
 					Id: "753a4452-0b5e-44d5-88db-1857d14c0c17",
 					Name: "Team 1",
-					Type: "Team",
-					IsSelected: false
+					Type: "Team"
 				}]
 			}]
 		};
@@ -1244,8 +1284,10 @@ describe('component: permissionsList', function() {
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
-			onClick: vm.onNodeClick,
-			selectedRole: vm.selectedRole
+			onClick: vm.nodeClick,
+			selectedRole: vm.selectedRole,
+			select: vm.selectOrgData,
+			isSelected: vm.isOrgDataSelected
 		});
 
 		ctrl.selectedRole = vm.roles[0];
@@ -1259,9 +1301,8 @@ describe('component: permissionsList', function() {
 		vm.selectRole(vm.roles[0]);
 		$httpBackend.flush();
 
-		expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
-		expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(true);
+		expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toEqual(true);
+		expect(vm.selectedOrgData['d970a45a-90ff-4111-bfe1-9b5e015ab45c']).toEqual(true);
+		expect(vm.selectedOrgData['753a4452-0b5e-44d5-88db-1857d14c0c17']).toEqual(true);
 	});
-
 });

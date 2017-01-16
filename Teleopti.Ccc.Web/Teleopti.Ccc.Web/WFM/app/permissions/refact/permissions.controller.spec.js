@@ -41,6 +41,11 @@ describe('PermissionsCtrl', function() {
 				DescriptionText: 'rolename'
 			}];
 		});
+
+		$httpBackend.whenDELETE('../api/Permissions/Roles/AvailableData/41815804-7c51-4f43-a1ae-ecb2a17a2177').respond(function(method, url, data, headers) {
+			return 200;
+		});
+
 		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function(method, url, data, headers) {
 			return 200;
 		});
@@ -48,11 +53,10 @@ describe('PermissionsCtrl', function() {
 			return 200;
 		});
 		$httpBackend.whenPUT('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64?newDescription=%7B%7D').respond(function(method, url, data, headers) {
-			//FUNKAR INTE
 			response = angular.fromJson(data);
-			vm.roles[0].DescriptionText = response.newDescription;
+			fakeBackend.setName(response.Id, response.newDescription)
 			return [200, {
-				newDescription: 'newRoleName'
+				newDescription: response.newDescription
 			}];
 		});
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Copy').respond(function(method, url, data, headers) {
@@ -72,8 +76,6 @@ describe('PermissionsCtrl', function() {
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function(method, url, data, headers) {
 			return 200;
 		});
-
-
 
 		allFunction = {
 			ChildFunctions: [],
@@ -147,15 +149,12 @@ describe('PermissionsCtrl', function() {
 				Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
 				Name: "TeleoptiCCCDemo",
 				Type: "BusinessUnit",
-				IsSelected: true,
 				ChildNodes: [{
 					Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
 					Name: 'Site1',
-					IsSelected: true,
 					ChildNodes: [{
 						Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
 						Name: 'Team1',
-						IsSelected: true,
 					}]
 				}]
 			},
@@ -283,7 +282,7 @@ describe('PermissionsCtrl', function() {
 			expect(vm.roles[0].DescriptionText).toBe('rolename');
 		});
 
-		xit('should be able to edit the name of a role', function() {
+		it('should be able to edit the name of a role', function() {
 			fakeBackend
 				.withRole(defaultRole);
 			$httpBackend.flush();
@@ -921,12 +920,15 @@ describe('PermissionsCtrl', function() {
 				})
 				.withOrganizationSelection(organizationSelection.BusinessUnit, organizationSelection.DynamicOptions);
 			$httpBackend.flush();
+			vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+			vm.selectedOrgData['41815804-7c51-4f43-a1ae-ecb2a17a2177'] = true;
+			vm.selectedOrgData['58643cfb-6f7d-4128-a014-0c8f82209d68'] = true;
 
 			vm.createRole('Johan Dam');
 			$httpBackend.flush();
 
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+			expect(vm.selectedOrgData['41815804-7c51-4f43-a1ae-ecb2a17a2177']).toEqual(undefined);
+			expect(vm.selectedOrgData['58643cfb-6f7d-4128-a014-0c8f82209d68']).toEqual(undefined);
 		});
 
 		it('should unselect selected org data for previous role when deleting that role', function() {
@@ -941,12 +943,15 @@ describe('PermissionsCtrl', function() {
 				})
 				.withOrganizationSelection(organizationSelection.BusinessUnit, organizationSelection.DynamicOptions);
 			$httpBackend.flush();
+			vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+			vm.selectedOrgData['41815804-7c51-4f43-a1ae-ecb2a17a2177'] = true;
+			vm.selectedOrgData['58643cfb-6f7d-4128-a014-0c8f82209d68'] = true;
 
 			vm.deleteRole(vm.roles[0]);
 			$httpBackend.flush();
 
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+			expect(vm.selectedOrgData['41815804-7c51-4f43-a1ae-ecb2a17a2177']).toEqual(undefined);
+			expect(vm.selectedOrgData['58643cfb-6f7d-4128-a014-0c8f82209d68']).toEqual(undefined);
 		});
 
 		it('should fetch organization info for selected role', function() {
@@ -975,26 +980,6 @@ describe('PermissionsCtrl', function() {
 			expect(vm.selectedRole.AvailableTeams[0].Id).toEqual('6a21c802-7a34-4917-8dfd-9b5e015ab461');
 		});
 
-		it('should indicate available business unit for selected role', function() {
-			fakeBackend
-				.withRole(defaultRole)
-				.withRoleInfo({
-					Id: defaultRole.Id,
-					AvailableFunctions: [],
-					AvailableBusinessUnits: [{
-						Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-						Name: "CarlCCDemo"
-					}, organizationSelection.BusinessUnit]
-				})
-				.withOrganizationSelection(organizationSelection.BusinessUnit, organizationSelection.DynamicOptions);
-			$httpBackend.flush();
-
-			vm.selectRole(vm.roles[0]);
-			$httpBackend.flush();
-
-			expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
-		});
-
 		it('should indicate available site for selected role', function() {
 			fakeBackend
 				.withRole(defaultRole)
@@ -1002,37 +987,25 @@ describe('PermissionsCtrl', function() {
 					Id: defaultRole.Id,
 					AvailableFunctions: [],
 					AvailableBusinessUnits: [{
-						Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
-						Name: "TeleoptiCCCDemo",
-						Type: "BusinessUnit",
-						ChildNodes: []
+						Id: organizationSelection.BusinessUnit.Id
 					}],
 					AvailableDataRange: 3,
 					AvailableSites: [{
-						Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
+						Id: organizationSelection.BusinessUnit.ChildNodes[0].Id
 					}],
 					AvailableTeams: [{
-						Id: '123'
+						Id: organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].Id
 					}]
 				})
-				.withOrganizationSelection({
-					Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
-					Name: "TeleoptiCCCDemo",
-					ChildNodes: [{
-						ChildNodes: [],
-						Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
-					}, {
-						ChildNodes: [],
-						Id: '8c2dfdc5-6f92-4fab-9a39-676b88c26a53'
-					}]
-				}, []);
+				.withOrganizationSelection(organizationSelection.BusinessUnit, organizationSelection.DynamicOptions);
 			$httpBackend.flush();
 
 			vm.selectRole(vm.roles[0]);
 			$httpBackend.flush();
 
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(true);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(false);
+			expect(vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea']).toBe(true);
+			expect(vm.selectedOrgData['41815804-7c51-4f43-a1ae-ecb2a17a2177']).toBe(true);
+			expect(vm.selectedOrgData[organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].Id]).toBe(true);
 		});
 
 		it('should indicate available org data when selecting a different role', function() {
@@ -1115,13 +1088,13 @@ describe('PermissionsCtrl', function() {
 			vm.selectRole(vm.roles[1]);
 			$httpBackend.flush();
 
-			expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(false);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toBe(false);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toBe(false);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(true);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[0].IsSelected).toBe(true);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[1].IsSelected).toBe(true);
+			expect(vm.selectedOrgData['729b9399-d80a-46a7-a0dd-df18b89b12b9']).toBe(true);
+			expect(vm.selectedOrgData['b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1']).toBe(undefined);
+			expect(vm.selectedOrgData['95de4e34-6f18-4129-a962-7cf0d57f1ac4']).toBe(undefined);
+			expect(vm.selectedOrgData['6f4cec84-f5ce-4e62-9fc2-274172ec385b']).toBe(undefined);
+			expect(vm.selectedOrgData['123f651b-5235-40d4-9d34-6be51b55df65']).toBe(true);
+			expect(vm.selectedOrgData['000478e4-d11f-42bc-9ead-435f2eab160a']).toBe(true);
+			expect(vm.selectedOrgData['930addd3-79c6-47ef-96e2-6c68c8f522f3']).toBe(true);
 		});
 
 		it('should indicate available org data when selecting a different role without selected BU', function() {
@@ -1189,9 +1162,9 @@ describe('PermissionsCtrl', function() {
 			vm.selectRole(vm.roles[1]);
 			$httpBackend.flush();
 
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toBe(false);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[0].IsSelected).toBe(true);
-			expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[1].IsSelected).toBe(true);
+			expect(vm.selectedOrgData['95de4e34-6f18-4129-a962-7cf0d57f1ac4']).toBe(undefined);
+			expect(vm.selectedOrgData['000478e4-d11f-42bc-9ead-435f2eab160a']).toBe(true);
+			expect(vm.selectedOrgData['930addd3-79c6-47ef-96e2-6c68c8f522f3']).toBe(true);
 		});
 	});
 
@@ -1302,6 +1275,9 @@ describe('PermissionsCtrl', function() {
 						AvailableTeams: []
 					})
 				$httpBackend.flush();
+				vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true
+				vm.selectedOrgData['41815804-7c51-4f43-a1ae-ecb2a17a2177'] = true
+				vm.selectedOrgData['58643cfb-6f7d-4128-a014-0c8f82209d68'] = true
 
 				vm.selectedDataFilter();
 
@@ -1353,6 +1329,9 @@ describe('PermissionsCtrl', function() {
 						AvailableTeams: []
 					})
 				$httpBackend.flush();
+				vm.selectedOrgData['928dd0bc-bf40-412e-b970-9b5e015aadea'] = true;
+				vm.selectedOrgData['41815804-7c51-4f43-a1ae-ecb2a17a2177'] = true;
+				vm.selectedOrgData['65894cfb-6f7d-4128-a014-0c8f82209d68'] = true;
 
 				vm.unselectedDataFilter();
 

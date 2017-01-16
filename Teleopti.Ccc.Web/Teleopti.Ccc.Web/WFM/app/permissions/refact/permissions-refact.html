@@ -246,7 +246,7 @@
 								</div>
 								<div class="con-row">
 									<div class="con-flex">
-										<permissions-list datafilter="vm.dataFilterObj" selected-role="vm.selectedRole" on-click="vm.onNodeClick" org="vm.filteredOrganizationSelection"></permissions-list>
+										<permissions-list is-selected="vm.isOrgDataSelected" select="vm.selectOrgData" datafilter="vm.dataFilterObj" selected-role="vm.selectedRole" on-click="vm.nodeClick" org="vm.filteredOrganizationSelection"></permissions-list>
 									</div>
 								</div>
 							</md-content>

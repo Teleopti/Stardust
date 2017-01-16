@@ -3,7 +3,7 @@
 		<span class="list-item-container">
 			{{$ctrl.org.BusinessUnit.Name}}
 		</span>
-		<span ng-cloak ng-show="$ctrl.org.BusinessUnit.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+		<span ng-cloak ng-show="$ctrl.isSelected($ctrl.org.BusinessUnit)" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
 	</li>
 </ul>
 
@@ -31,13 +31,13 @@
 			<span class="list-item-container">
 				{{site.Name}}
 			</span>
-			<span ng-cloak ng-show="site.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+			<span ng-cloak ng-show="$ctrl.isSelected(site)" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
 		</li>
 		<li ng-repeat="team in site.ChildNodes" ng-click="$ctrl.toggleNode(team)" style="margin-left:60px;">
 			<span class="list-item-container">
 				{{team.Name}}
 			</span>
-			<span ng-cloak ng-show="team.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+			<span ng-cloak ng-show="$ctrl.isSelected(team)" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
 		</li>
 	</span>
 </ul>

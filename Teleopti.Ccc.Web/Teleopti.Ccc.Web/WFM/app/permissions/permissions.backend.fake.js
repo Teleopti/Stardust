@@ -56,6 +56,14 @@
           return [200, roleInfos.find(function(info) { return info.Id === id; })];
         });
 
+      this.setName = function(id, name) {
+        var r = roles.find(function(role){
+          return role.Id === id;
+        })
+        if (r != null)  {
+          r.DescriptionText = name;
+        }
+      }
 
       this.withApplicationFunction = function (applicationFunction) {
         applicationFunctions.push(applicationFunction);

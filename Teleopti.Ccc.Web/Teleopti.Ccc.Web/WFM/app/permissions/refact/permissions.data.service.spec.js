@@ -135,7 +135,7 @@ describe('permissionsDataService', function () {
 	it('should send all org data to server when selecting bu', function () {
 		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
-		permissionsDataService.selectOrganization(BusinessUnit, role);
+		permissionsDataService.selectOrganization(BusinessUnit, role, true);
 		$httpBackend.flush();
 
 		expect(response).toEqual(data);
