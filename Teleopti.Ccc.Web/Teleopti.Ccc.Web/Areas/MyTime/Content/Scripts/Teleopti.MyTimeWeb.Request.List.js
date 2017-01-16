@@ -362,7 +362,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	_splitChunk = function (textSegs) {
 		var splitedTextSegs = [];
 		$.each(textSegs, function (index, line) {
-			var len = 68;
+			var len = 60;
 			var curr = len;
 			var prev = 0;
 			if (line.length > len) {
