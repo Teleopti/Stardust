@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	{
 		public IOptimizationCommand Target;
 		public ISchedulerStateHolder StateHolder;
-		public IGroupPagePerDateHolder GroupPagePerDateHolder;
 		public ILifetimeScope Scope;
 		public IOptimizationPreferences OptimizationPreferences;
 		public IMatrixListFactory MatrixListFactory;
@@ -135,7 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					GroupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(UserTexts.Resources.NoTeam)
 				}),
 				new NoSchedulingProgress(), StateHolder,
-				new[] {dictionary[person].ScheduledDay(date)}, GroupPagePerDateHolder,
+				new[] {dictionary[person].ScheduledDay(date)},
 				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(), RequiredScheduleHelper,
 					MatrixListFactory), OptimizationPreferences, false, new DaysOffPreferences(),
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));

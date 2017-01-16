@@ -3550,7 +3550,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			optimizationCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
 				_schedulerState,
-				argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
+				argument.SelectedScheduleDays, _scheduleOptimizerHelper,
 				_optimizationPreferences, argument.OptimizationMethod == OptimizationMethod.BackToLegalState,
 				argument.DaysOffPreferences,
 				dayOffOptimizationPreferenceProvider);

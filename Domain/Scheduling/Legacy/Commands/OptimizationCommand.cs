@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ScheduleMatrixOriginalStateContainerCreator _scheduleMatrixOriginalStateContainerCreator;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IPersonListExtractorFromScheduleParts personExtractor,
 			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			IGroupPagePerDateHolder groupPagePerDateHolder)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
@@ -53,12 +55,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleMatrixOriginalStateContainerCreator = scheduleMatrixOriginalStateContainerCreator;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_userTimeZone = userTimeZone;
+			_groupPagePerDateHolder = groupPagePerDateHolder;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
-			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
+			IScheduleOptimizerHelper scheduleOptimizerHelper, IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
 			IDaysOffPreferences daysOffPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -136,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 				else
 				{
-					groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
+					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
 						dayOffOptimizationPreferenceProvider, () =>
 						{
