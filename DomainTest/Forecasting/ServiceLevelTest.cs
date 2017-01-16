@@ -34,12 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			Assert.Throws<ArgumentOutOfRangeException>(() => target = new ServiceLevel(percent,target.Seconds));
         }
-
-        [Test]
-        public void VerifyProtectedConstructor()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
-        }
 		
         [Test]
         public void VerifyCloneWorks()

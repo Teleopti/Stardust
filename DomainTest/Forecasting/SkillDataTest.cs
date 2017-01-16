@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyEqualsWork()
         {
-            Percent percent = new Percent(0.1223);
+            Percent percent = new Percent(0.123);
             double seconds = 1234;
 
             ServiceLevel sl = new ServiceLevel(percent, seconds);
