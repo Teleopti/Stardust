@@ -262,7 +262,6 @@
     <Compile Include="Cascading\OrderedSkillGroups.cs" />
     <Compile Include="Cascading\ResourceCalculationThatThrows.cs" />
     <Compile Include="Cascading\ResourceDistributionForSkillGroupsWithSameIndex.cs" />
-    <Compile Include="Cascading\ReverseSkillRoutingPriorities.cs" />
     <Compile Include="Cascading\ShovelResourceDataExtensions.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />

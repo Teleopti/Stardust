@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LockDaysOnTeamBlockInfos>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityModel>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityPersister>().SingleInstance();
-			builder.RegisterType<ReverseSkillRoutingPriorities>().SingleInstance();
 
 			builder.RegisterType<ShovelResources>().SingleInstance();
 			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
