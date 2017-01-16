@@ -396,12 +396,12 @@
 								});
 							})
 							.then(function (agentsInfo) {
-								vm.agentsInfo = agentsInfo;
-								vm.agents = agentsInfo;
+								vm.agentsInfo = agentsInfo.States;
+								vm.agents = agentsInfo.States;
 								$scope.$watchCollection(function () {
 									return vm.agents;
 								}, filterData);
-								updateBreadCrumb(agentsInfo);
+								updateBreadCrumb(vm.agentsInfo);
 								vm.pollingLock = true;
 								return agentsInfo;
 							})

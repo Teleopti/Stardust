@@ -34,11 +34,13 @@ describe('RtaAgentsController', function() {
 		$fakeBackend.clear();
 
 		spyOn($state, 'go');
+
+		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 	}));
 
 	it('should set to team', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			TeamName: "Team Preferences"
@@ -51,7 +53,7 @@ describe('RtaAgentsController', function() {
 
 	it('should set to site', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 			SiteName: "London",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
@@ -132,7 +134,7 @@ describe('RtaAgentsController', function() {
 	it('should set team and site name', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			TeamName: "Team Preferences",
@@ -166,7 +168,7 @@ describe('RtaAgentsController', function() {
 	it('should have site link when selected one team', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				SiteId: "44590a63-6331-4921-bc9f-9b5e015ab495"
@@ -181,7 +183,7 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		stateParams.skillIds = ["3d5dd51a-8713-42e9-9f33-9b5e015ab71b"];
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				SiteId: "44590a63-6331-4921-bc9f-9b5e015ab495",
@@ -198,7 +200,7 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		stateParams.skillAreaId = "3d5dd51a-8713-42e9-9f33-9b5e015ab71b";
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				SiteId: "44590a63-6331-4921-bc9f-9b5e015ab495",
