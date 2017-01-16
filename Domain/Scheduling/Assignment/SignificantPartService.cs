@@ -41,14 +41,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     if (_source.HasMainShift()) return SchedulePartView.MainShift;
                     if (_source.HasPersonalShift())
                     {
-                        return
-                            _source.HasDayOff() ? SchedulePartView.DayOff : SchedulePartView.PersonalShift;
+                        return _source.HasDayOff() ? SchedulePartView.DayOff : SchedulePartView.PersonalShift;
                     }
                 }
                 if (_source.HasDayOff()) return SchedulePartView.DayOff;
-                if (_source.HasAbsence()) return SchedulePartView.Absence;
-                if (_source.HasPersonalShift()) return SchedulePartView.Absence;
-                if (_source.HasOvertimeShift()) return SchedulePartView.Overtime;
+				if (_source.HasOvertimeShift()) return SchedulePartView.Overtime;
+				if (_source.HasAbsence()) return SchedulePartView.Absence;
                 if (_source.HasPreferenceRestriction()) return SchedulePartView.PreferenceRestriction;
                 if (_source.HasStudentAvailabilityRestriction())
                     return SchedulePartView.StudentAvailabilityRestriction;

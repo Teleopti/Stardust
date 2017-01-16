@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -58,21 +57,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private static readonly Case contractDayOff = new Case("Contract Dayoff", scheduleDay =>
 		{
-			var contractScheduleWeek = new ContractScheduleWeek();
-			contractScheduleWeek.Add(DayOfWeek.Monday, true);
-			contractScheduleWeek.Add(DayOfWeek.Tuesday, true);
-			contractScheduleWeek.Add(DayOfWeek.Wednesday, true);
-			contractScheduleWeek.Add(DayOfWeek.Thursday, true);
-			contractScheduleWeek.Add(DayOfWeek.Friday, false);
-			contractScheduleWeek.Add(DayOfWeek.Saturday, true);
-			contractScheduleWeek.Add(DayOfWeek.Sunday, true);
 			scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly)
-				.PersonContract.ContractSchedule.AddContractScheduleWeek(contractScheduleWeek);
+				.PersonContract.ContractSchedule.AddContractScheduleWeek(ContractScheduleFactory.CreateContractScheduleWithoutWorkDays("AllDaysOff").ContractScheduleWeeks.First());
 		});
 
 		private static readonly Case preference = new Case("Preference", scheduleDay =>
-			scheduleDay.Add(new PreferenceDay(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly,
-				new PreferenceRestriction()))
+			scheduleDay.Add(new PreferenceDay(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, new PreferenceRestriction()))
 		);
 
 		private static readonly Case studentAvailability = new Case("Student Availability", scheduleDay =>
@@ -111,8 +101,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			new SignificantPartTestCase(shift(8, 17), studentAvailability).Returns(SchedulePartView.MainShift),
 
 			new SignificantPartTestCase(absence(0, 24), overtime(8, 17)).Returns(SchedulePartView.FullDayAbsence),
-			new SignificantPartTestCase(absence(10, 12), overtime(8, 17)).Returns(SchedulePartView.Absence),
-			new SignificantPartTestCase(absence(19,21), overtime(8, 17)).Returns(SchedulePartView.Absence),
+			new SignificantPartTestCase(absence(10, 12), overtime(8, 17)).Returns(SchedulePartView.Overtime),
+			new SignificantPartTestCase(absence(19,21), overtime(8, 17)).Returns(SchedulePartView.Overtime),
 
 			new SignificantPartTestCase(absence(0, 24), personalActivity(8, 17)).Returns(SchedulePartView.FullDayAbsence),
 			new SignificantPartTestCase(absence(10, 12), personalActivity(8, 17)).Returns(SchedulePartView.PersonalShift),
