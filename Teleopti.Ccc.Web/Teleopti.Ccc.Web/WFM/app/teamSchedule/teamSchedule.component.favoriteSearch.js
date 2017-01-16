@@ -6,16 +6,16 @@
 		{
 			templateUrl: 'app/teamSchedule/html/favoriteSearch.tpl.html',
 			controller: favoriteSearchCtrl,
-			bindings: {				
+			bindings: {
 				onInitAsync: '<?',
 				applyFavorite: '&?',
 				getSearch: '&'
 			}
 		});
 
-	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmModal', 'FavoriteSearchDataService'];
+	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmModal', 'teamsPermissions', 'FavoriteSearchDataService'];
 
-	function favoriteSearchCtrl($translate, $mdPanel, $wfmModal, FavoriteSearchDataService) {
+	function favoriteSearchCtrl($translate, $mdPanel, $wfmModal, permissionsSvc, FavoriteSearchDataService) {
 		var ctrl = this;
 		ctrl.favoriteSearchList = [];
 		ctrl.isTest = false;
@@ -48,6 +48,12 @@
 		};
 
 		ctrl.$onInit = function () {
+			ctrl.enabled = permissionsSvc.all().HasSaveFavoriteSearchPermission;
+
+			if ( !ctrl.enabled) {
+				return ctrl.onInitAsync.resolve();
+			}
+
 			FavoriteSearchDataService.getFavoriteSearchList().then(function (resp) {
 				refreshList(resp.data);
 				if (ctrl.onInitAsync) {
@@ -174,7 +180,7 @@
 				return f.IsDefault;
 			});
 			ctrl.currentFavorite = defaults[0];
-			ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';			
+			ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';
 		}
 
 		function reorderListAccordingToIsDefault(item1, item2){

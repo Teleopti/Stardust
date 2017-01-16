@@ -12,15 +12,15 @@
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
-			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled && vm.searchEnabled && vm.permissions.HasSaveFavoriteSearchPermission" 
-							 apply-favorite="vm.applyFavorite(teamIds, searchTerm)" 
-							 get-search="vm.getSearch()" 
+			<favorite-search ng-if="vm.toggles.SaveFavoriteSearchesEnabled && vm.searchEnabled"
+							 apply-favorite="vm.applyFavorite(teamIds, searchTerm)"
+							 get-search="vm.getSearch()"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled" 
-								 date="vm.scheduleDate" 
-								 class="organization-picker-container inline-block" 
-								 on-init-async="vm.onSelectedTeamsInitDefer" 
+			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled"
+								 date="vm.scheduleDate"
+								 class="organization-picker-container inline-block"
+								 on-init-async="vm.onSelectedTeamsInitDefer"
 								 on-pick="vm.onSelectedTeamsChanged(teams)"
 								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 
@@ -75,7 +75,7 @@
 							show-warnings="vm.cmdConfigurations.validateWarningToggle"
 							cmd-configurations="vm.cmdConfigurations"
 							selected-timezone="vm.currentTimezone"
-							pagination-options="vm.paginationOptions"							
+							pagination-options="vm.paginationOptions"
 							/>
 		</div>
 
@@ -92,9 +92,9 @@
 	</div>
 
 	<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
-							  schedule-date="vm.scheduleDate" 
+							  schedule-date="vm.scheduleDate"
 							  last-command-track-id="vm.lastCommandTrackId"
-							  ng-if="vm.toggles.SeeScheduleChangesByOthers"></schedule-change-notifier>	
+							  ng-if="vm.toggles.SeeScheduleChangesByOthers"></schedule-change-notifier>
 
 	<div class="con-footer teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
 		<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
