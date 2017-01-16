@@ -61,7 +61,7 @@
 		</div>
 	</div>
 
-	<div class="con-footer teamschedule-footer week-footer">
+	<div class="con-footer teamschedule-footer flex-end">
 		<div class="pagination-navigator" ng-if="vm.paginationOptions.totalPages > 0">
 			<md-select class="page-size-selector" ng-if="vm.toggles.SelectAgentsPerPageEnabled" ng-model="vm.paginationOptions.pageSize" ng-change="vm.selectorChanged()" aria-label="page size">
 				<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
