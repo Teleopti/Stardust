@@ -14,6 +14,7 @@
 			getSkillAreas: getSkillAreas,
 			getOrganization: getOrganization,
 			agentStatesFor: agentStatesFor,
+			agentStatesInAlarmFor: agentStatesInAlarmFor,
 			agentsFor: agentsFor,
 			statesFor: statesFor,
 			inAlarmFor: inAlarmFor,
@@ -68,12 +69,11 @@
 		};
 
 		function agentStatesFor(data) {
-			return $resource('../api/AgentStates/For', {}, {
-				query: {
-					method: 'GET',
-					isArray: false
-				}
-			}).query(data).$promise;
+			return $resource('../api/AgentStates/For', {}, { query: { method: 'GET' } }).query(data).$promise;
+		};
+
+		function agentStatesInAlarmFor(data) {
+			return $resource('../api/AgentStates/InAlarmFor', {}, { query: { method: 'GET' } }).query(data).$promise;
 		};
 
 		function agentsFor(data) {

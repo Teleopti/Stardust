@@ -396,6 +396,7 @@
 								});
 							})
 							.then(function (agentsInfo) {
+								console.log('agents info', agentsInfo);
 								vm.agentsInfo = agentsInfo.States;
 								vm.agents = agentsInfo.States;
 								$scope.$watchCollection(function () {
@@ -426,6 +427,7 @@
 									$scope.$watchCollection(function () {
 										return vm.agents;
 									}, filterData);
+									// REMOVE ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11111111111111111112222
 									updateBreadCrumb(agentsInfo);
 									vm.pollingLock = true;
 									return agentsInfo;
@@ -435,7 +437,13 @@
 								})
 								.then(updatePhoneStatesFromStateParams);
 						}
-					} else {
+					}
+
+
+
+
+
+					else {
 				getAgents()
 					.then(function (fn) {
 						return fn({
@@ -851,7 +859,11 @@
 						deferred.resolve(rtaService.agentStatesFor);
 					});
 			} else {
-				deferred.resolve(rtaService.agentStatesFor);
+				console.log(vm.agentsInAlarm);
+				if (vm.agentsInAlarm)
+					deferred.resolve(rtaService.agentStatesInAlarmFor);
+				else
+					deferred.resolve(rtaService.agentStatesFor);
 			}
 			return deferred.promise;
 		};
@@ -965,6 +977,10 @@
 				vm.goBackToTeamsWithUrl = urlForTeamsInBreadcrumbs(agentsInfo);
 				vm.goBackToRootWithUrl = urlForRootInBreadcrumbs(agentsInfo);
 				vm.showPath = true;
+			}
+			else if (agentsInfo.length === 0) {
+				vm.siteName = siteIds;
+				vm.TeamName = teamIds;
 			}
 		};
 

@@ -139,13 +139,56 @@
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
 				})();
-				
+
 				return [200, {
 					Time: serverTime,
 					States: ret
 				}];
-				//return [200, ret];
 			});
+
+		fake(/\.\.\/api\/AgentStates\/InAlarmFor(.*)/,
+			function (params) {
+				var ret = (function () {
+					if (params.siteIds != null && params.skillIds != null)
+						return agentStates.filter(function (a) {
+							return params.skillIds.indexOf(a.SkillId) >= 0
+						}).filter(function (a) {
+							return params.siteIds.indexOf(a.SiteId) >= 0
+						});
+					if (params.siteIds != null)
+						return agentStates.filter(function (a) {
+							return params.siteIds.indexOf(a.SiteId) >= 0
+						});
+					if (params.teamIds != null && params.skillIds != null)
+						return agentStates.filter(function (a) {
+							return params.skillIds.indexOf(a.SkillId) >= 0
+						}).filter(function (a) {
+							return params.teamIds.indexOf(a.TeamId) >= 0
+						});
+					if (params.teamIds != null)
+						return agentStates.filter(function (a) {
+							return params.teamIds.indexOf(a.TeamId) >= 0
+						});
+					return agentStates.filter(function (a) {
+						return params.skillIds.indexOf(a.SkillId) >= 0
+					});
+				})();
+				console.log('blbalab', agentStatesInAlarm(ret));
+
+				return [200, {
+					Time: serverTime,
+					States: agentStatesInAlarm(ret)
+				}];
+			});
+
+		function agentStatesInAlarm(collection){
+			return collection.filter(function (s) {
+						return s.TimeInAlarm > 0;
+					}).sort(function (s1, s2) {
+						return s2.TimeInAlarm - s1.TimeInAlarm;
+					});
+		}
+
 
 		fake(/\.\.\/api\/Agents\/StatesFor(.*)/,
 			function (params) {
@@ -280,6 +323,15 @@
 			});
 
 		function alarmStatesFor(collection, map) {
+			return statesFor(collection, map)
+				.filter(function (s) {
+					return s.TimeInAlarm > 0;
+				}).sort(function (s1, s2) {
+					return s2.TimeInAlarm - s1.TimeInAlarm;
+				});
+		}
+
+		function alarmStatesFor2(collection, map) {
 			return statesFor(collection, map)
 				.filter(function (s) {
 					return s.TimeInAlarm > 0;

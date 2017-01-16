@@ -33,7 +33,7 @@ describe('RtaAgentsController', function() {
 		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		$fakeBackend.clear();
-
+		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 		spyOn($state, 'go');
 	}));
 
@@ -41,17 +41,17 @@ describe('RtaAgentsController', function() {
 		stateParams.skillIds = ["emailGuid"];
 		stateParams.teamIds = ["teamRedGuid"];
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "BillGuid",
 				SkillId: "emailGuid",
 				TeamId: "teamGreenGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				SkillId: "phoneGuid",
 				TeamId: "teamRedGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "AshleyGuid",
 				SkillId: "emailGuid",
 				TeamId: "teamRedGuid"
@@ -70,17 +70,17 @@ describe('RtaAgentsController', function() {
 		stateParams.siteIds = ["siteLondonGuid"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "BillGuid",
 				SkillId: "emailGuid",
 				SiteId: "siteParisGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				SkillId: "phoneGuid",
 				SiteId: "siteLondonGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "AshleyGuid",
 				SkillId: "emailGuid",
 				SiteId: "siteLondonGuid"
@@ -99,15 +99,12 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["teamRedGuid"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "AshleyGuid",
 				SkillId: "emailGuid",
 				TeamId: "teamRedGuid",
 				TeamName: "Team Red",
-				SiteName: "London"
-			})
-			.withState({
-				PersonId: "AshleyGuid",
+				SiteName: "London",
 				State: "Ready",
 				Activity: "Phone",
 				NextActivity: "Short break",
@@ -137,14 +134,11 @@ describe('RtaAgentsController', function() {
 		stateParams.siteIds = ["londonGuid"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "AshleyGuid",
 				SkillId: "emailGuid",
 				SiteId: "londonGuid",
-				SiteName: "London"
-			})
-			.withState({
-				PersonId: "AshleyGuid",
+				SiteName: "London",
 				State: "Ready",
 				Activity: "Phone",
 				NextActivity: "Short break",
@@ -174,25 +168,19 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["teamRedGuid"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				Name: "Pierre Baldi",
 				SkillId: "emailGuid",
-				TeamId: "teamRedGuid"
-			})
-			.withAgent({
-				PersonId: "AshleyGuid",
-				Name: "Ashley Andeen",
-				SkillId: "emailGuid",
-				TeamId: "teamRedGuid"
-			})
-			.withState({
-				PersonId: "PierreGuid",
+				TeamId: "teamRedGuid",
 				State: "Break",
 				TimeInAlarm: 0
 			})
-			.withState({
+			.withAgentState({
 				PersonId: "AshleyGuid",
+				Name: "Ashley Andeen",
+				SkillId: "emailGuid",
+				TeamId: "teamRedGuid",
 				State: "Break",
 				TimeInAlarm: 60
 			});
@@ -211,25 +199,19 @@ describe('RtaAgentsController', function() {
 		stateParams.siteIds = ["siteLondonGuid"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				Name: "Pierre Baldi",
 				SkillId: "emailGuid",
-				SiteId: "siteLondonGuid"
-			})
-			.withAgent({
-				PersonId: "AshleyGuid",
-				Name: "Ashley Andeen",
-				SkillId: "emailGuid",
-				SiteId: "siteLondonGuid"
-			})
-			.withState({
-				PersonId: "PierreGuid",
+				SiteId: "siteLondonGuid",
 				State: "Break",
 				TimeInAlarm: 0
 			})
-			.withState({
+			.withAgentState({
 				PersonId: "AshleyGuid",
+				Name: "Ashley Andeen",
+				SkillId: "emailGuid",
+				SiteId: "siteLondonGuid",
 				State: "Break",
 				TimeInAlarm: 60
 			});
@@ -249,26 +231,20 @@ describe('RtaAgentsController', function() {
 		stateParams.es = ["StateGuid1"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				Name: "Pierre Baldi",
 				SkillId: "emailGuid",
-				TeamId: "teamGreenGuid"
-			})
-			.withAgent({
-				PersonId: "AshleyGuid",
-				Name: "Ashley Andeen",
-				SkillId: "emailGuid",
-				TeamId: "teamRedGuid"
-			})
-			.withState({
-				PersonId: "PierreGuid",
+				TeamId: "teamGreenGuid",
 				State: "StateGuid1",
 				StateId: 'StateGuid1',
 				TimeInAlarm: 15
 			})
-			.withState({
+			.withAgentState({
 				PersonId: "AshleyGuid",
+				Name: "Ashley Andeen",
+				SkillId: "emailGuid",
+				TeamId: "teamRedGuid",
 				State: "StateGuid2",
 				StateId: 'StateGuid2',
 				TimeInAlarm: 10
@@ -289,26 +265,20 @@ describe('RtaAgentsController', function() {
 		stateParams.es = ["StateGuid1"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				Name: "Pierre Baldi",
 				SkillId: "emailGuid",
-				SiteId: "siteLondonGuid"
-			})
-			.withAgent({
-				PersonId: "AshleyGuid",
-				Name: "Ashley Andeen",
-				SkillId: "emailGuid",
-				SiteId: "siteParisGuid"
-			})
-			.withState({
-				PersonId: "PierreGuid",
+				SiteId: "siteLondonGuid",
 				State: "StateGuid1",
 				StateId: 'StateGuid1',
 				TimeInAlarm: 15
 			})
-			.withState({
+			.withAgentState({
 				PersonId: "AshleyGuid",
+				Name: "Ashley Andeen",
+				SkillId: "emailGuid",
+				SiteId: "siteParisGuid",
 				State: "StateGuid2",
 				StateId: 'StateGuid2',
 				TimeInAlarm: 10
@@ -328,22 +298,22 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["teamRedGuid"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "BillGuid",
 				SkillId: "emailGuid",
 				TeamId: "teamGreenGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				SkillId: "phoneGuid",
 				TeamId: "teamRedGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "AshleyGuid",
 				SkillId: "emailGuid",
 				TeamId: "teamRedGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "JohnGuid",
 				SkillId: "invoiceGuid",
 				TeamId: "teamRedGuid"
@@ -371,22 +341,22 @@ describe('RtaAgentsController', function() {
 		stateParams.siteIds = ["siteLondonGuid"];
 
 		$fakeBackend
-			.withAgent({
+			.withAgentState({
 				PersonId: "BillGuid",
 				SkillId: "emailGuid",
 				SiteId: "siteParisGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "PierreGuid",
 				SkillId: "phoneGuid",
 				SiteId: "siteLondonGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "AshleyGuid",
 				SkillId: "emailGuid",
 				SiteId: "siteLondonGuid"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "JohnGuid",
 				SkillId: "invoiceGuid",
 				SiteId: "siteLondonGuid"
