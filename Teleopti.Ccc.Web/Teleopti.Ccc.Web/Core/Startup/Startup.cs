@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				SignalRConfiguration.Configure(SignalRSettings.Load(), () => application.MapSignalR(new HubConfiguration()));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
+				FederatedAuthentication.WSFederationAuthenticationModule.SignInError += WSFederationAuthenticationModule_SignInError;
 				FederatedAuthentication.FederationConfiguration.IdentityConfiguration.SecurityTokenHandlers.AddOrReplace(
 					new MachineKeySessionSecurityTokenHandler());
 
@@ -94,6 +95,18 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				log.Error(ex);
 				ApplicationStartModule.ErrorAtStartup = ex;
+			}
+		}
+
+		private void WSFederationAuthenticationModule_SignInError(object sender, System.IdentityModel.Services.ErrorEventArgs e)
+		{
+			// http://stackoverflow.com/questions/15904480/how-to-avoid-samlassertion-notonorafter-condition-is-not-satisfied-errors
+			if (e.Exception.Message.StartsWith("ID4148") ||
+				e.Exception.Message.StartsWith("ID4243") ||
+				e.Exception.Message.StartsWith("ID4223"))
+			{
+				FederatedAuthentication.SessionAuthenticationModule.DeleteSessionTokenCookie();
+				e.Cancel = true;
 			}
 		}
 

@@ -66,9 +66,6 @@ namespace Teleopti.Ccc.Web.Core
 			return result;
 		}
 
-		public string ReplicaSessionTokenContextPrefix
-		{
-			get { return "(" + typeof (WSFederationAuthenticationModule).Name + ")"; }
-		}
+		public string ReplicaSessionTokenContextPrefix => $"({typeof(WSFederationAuthenticationModule).Name})";
 	}
 }
