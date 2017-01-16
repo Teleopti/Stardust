@@ -96,7 +96,7 @@
 							  last-command-track-id="vm.lastCommandTrackId"
 							  ng-if="vm.toggles.SeeScheduleChangesByOthers"></schedule-change-notifier>
 
-	<div class="con-footer teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
+	<div class="teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
 		<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
 			<a href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
 		</div>
