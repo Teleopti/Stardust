@@ -2,7 +2,8 @@
 describe('RequestsControllerTests', function () {
 	var $rootScope,
 		$controller,
-		requestCommandParamsHolder;
+		requestCommandParamsHolder,
+		$q;
 
 	var absenceRequestTabIndex = 0;
 	var shiftTradeRequestTabIndex = 1;
@@ -20,15 +21,9 @@ describe('RequestsControllerTests', function () {
 					Wfm_Requests_Performance_36295: true,
 					Wfm_Requests_ApproveDeny_36297: true,
 					Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
-					togglesLoaded: {
-						then: function () {							
-							return {
-								then: function (cb) {
-									cb();
-								}
-							};
-						}
-					}
+					togglesLoaded: $q(function(resolve, reject) {
+						resolve();
+					})
 				}
 			});
 			$provide.service('requestCommandParamsHolder', function () {
@@ -37,20 +32,25 @@ describe('RequestsControllerTests', function () {
 			$provide.service('requestsDataService',
 				function() {
 					return {
-						getAvailableHierarchy: function () {
+						getAvailableHierarchy: function() {
 							var response = { data: {} };
 							return {
-								then: function (cb) { cb(response); }
+								then: function(cb) { cb(response); }
 							}
 						}
 					}
 				});
+
+			$provide.service('requestsPermissions', function() {
+				return new FakeRequestsPermissions();
+			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$controller_) {
+	beforeEach(inject(function (_$rootScope_, _$controller_, _$q_) {
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
+		$q = _$q_;
 	}));
 
 	function setUpTarget() {
@@ -114,4 +114,12 @@ describe('RequestsControllerTests', function () {
 		test.scope.$digest();
 		expect(controller.shiftTradePeriod).toEqual(periodForShiftTradeRequest);
 	});
+
+	function FakeRequestsPermissions() {
+		this.loadPermissions = function () {
+			return $q(function(resolve, reject) {
+				resolve();
+			});
+		};
+	}
 });

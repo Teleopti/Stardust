@@ -2,6 +2,7 @@
 describe('[RequestsCommandPaneDirectiveTests]', function () {
 	var $compile,
 		$rootScope,
+		$q,
 		$controller;
 	var requestsDataService,
 		requestsNotificationService,
@@ -29,15 +30,9 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 					Wfm_Requests_Performance_36295: true,
 					Wfm_Requests_ApproveDeny_36297: true,
 					Wfm_Requests_Approve_Based_On_Budget_Allotment_39626: true,
-					togglesLoaded: {
-						then: function () {							
-							return {
-								then: function (cb) {
-									cb();
-								}
-							};
-						}
-					}
+					togglesLoaded: $q(function (resolve, reject) {
+						resolve();
+					})
 				}
 			});
 			$provide.service('requestsDataService', function () {
@@ -58,14 +53,18 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 			$provide.service('showWeekdaysFilter', function () {
 				return null;
 			});
+			$provide.service('requestsPermissions', function () {
+				return new FakeRequestsPermissions();
+			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_, _requestCommandParamsHolder_) {
+	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_, _requestCommandParamsHolder_, _$q_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
 		requestCommandParamsHolder = _requestCommandParamsHolder_;
+		$q = _$q_;
 	}));
 
 	it('processWaitlistedRequests command submit scucess, should notify the result', function () {
@@ -592,5 +591,13 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 
 	function getRequestCommandPaneScope(targetElement) {
 		return targetElement.isolateScope().requestsCommandsPane;
+	}
+
+	function FakeRequestsPermissions() {
+		this.loadPermissions = function () {
+			return $q(function (resolve, reject) {
+				resolve();
+			});
+		};
 	}
 });

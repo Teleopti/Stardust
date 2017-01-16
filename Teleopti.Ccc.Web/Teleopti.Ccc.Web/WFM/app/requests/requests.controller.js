@@ -3,11 +3,12 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo", "requestsPermissions"];
 
-	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
+	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo, requestsPermissions) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
+		vm.permissionsReady = false;
 
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
@@ -19,8 +20,8 @@
 			vm.defaultTeamLoadedDefer.resolve();
 		}
 
-		toggleService.togglesLoaded
-			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeams) {
+		$q.all([toggleService.togglesLoaded, requestsPermissions.loadPermissions()])
+			.then(vm.defaultTeamLoadedDefer.promise.then(function(defaultTeams) {
 				vm.selectedTeamIds = defaultTeams ? defaultTeams : [];
 			}))
 			.then(init);
@@ -37,7 +38,22 @@
 			vm.selectedTeamIds = teams;
 		};
 
+		vm.applyFavorite = function (teamIds, searchTerm) {
+			vm.selectedTeamIds = teamIds;
+			vm.agentSearchOptions.keyword = searchTerm;
+		};
+
+		vm.getSearch = function () {
+			return {
+				teamIds: vm.selectedTeamIds,
+				searchTerm: vm.agentSearchOptions.keyword
+			};
+		};
+
+		vm.onFavoriteSearchInitDefer = $q.defer();
+
 		function init() {
+			vm.permissionsReady = true;
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
 			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
 			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
@@ -52,6 +68,18 @@
 			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
 			vm.filterEnabled = vm.filterToggleEnabled;
 			vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
+			vm.saveFavoriteSearchesEnabled = toggleService.Wfm_Requests_SaveFavoriteSearches_42578;
+
+			if (!vm.saveFavoriteSearchesEnabled) {
+				vm.onFavoriteSearchInitDefer.resolve();
+			}
+
+			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
+				if (defaultSearch) {
+					vm.selectedTeamIds = defaultSearch.TeamIds;
+					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
+				}
+			});
 
 			var defaultDateRange = {
 				startDate: moment().startOf('week')._d,
