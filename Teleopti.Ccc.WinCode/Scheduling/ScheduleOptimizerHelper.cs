@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
@@ -76,15 +74,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IPeriodValueCalculator periodValueCalculator =
 				_optimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
-			var creator = new MoveTimeOptimizerCreator(
-					_container.Resolve<IMoveTimeDecisionMaker>(),
-					_container.Resolve<IScheduleService>(),
-					_container.Resolve<Func<ISchedulingResultStateHolder>>(),
-					_container.Resolve<IEffectiveRestrictionCreator>(),
-					_container.Resolve<IResourceCalculation>(),
-					_container.Resolve<IDeleteAndResourceCalculateService>(),
-					_container.Resolve<IScheduleResultDataExtractorProvider>(),
-					_container.Resolve<IUserTimeZone>());
+			var creator = _container.Resolve<MoveTimeOptimizerCreator>();
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create(scheduleMatrixOriginalStateContainerList,
 					workShiftOriginalStateContainerList,

@@ -683,7 +683,6 @@
     <Compile Include="Scheduling\IGridSchedulesExtractor.cs" />
     <Compile Include="Scheduling\IRequestDetailsView.cs" />
     <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
-    <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
     <Compile Include="Common\TransparentControlMeetingHelper.cs" />
