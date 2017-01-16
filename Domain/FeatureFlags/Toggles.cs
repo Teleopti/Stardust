@@ -136,6 +136,7 @@
 		Wfm_Requests_ShowBudgetAllowanceDetail_41945,
 		Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309,
 		Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450,
+		Wfm_Requests_SaveFavoriteSearches_42578,
 
 		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
 
