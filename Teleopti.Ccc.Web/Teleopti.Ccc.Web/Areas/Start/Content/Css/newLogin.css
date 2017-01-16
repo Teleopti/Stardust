@@ -1,5 +1,4 @@
-﻿
-body {
+﻿body {
 	background: rgb(153,214,255);
 	background: -moz-linear-gradient(top, rgba(153,214,255,1) 0%, rgba(153,214,255,1) 45%, rgba(0,153,255,1) 100%);
 	background: -webkit-linear-gradient(top, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%);
@@ -9,6 +8,9 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
+	position: fixed;
+    left: 0;
+    right: 0;
 }
 
 .animate-material {
@@ -21,27 +23,36 @@ body {
 }
 
 @keyframes material {
-  to {
-    opacity: 1;
-	max-height: 100%;
-  }
+	from {
+		opacity: 0;
+		max-height: 54px;
+	}
+	to {
+		opacity: 1;
+		max-height: 100%;
+	}
 }
 
 .animate-content {
   animation-name: content;
   animation-duration: 0.5s;
-  animation-delay: 1s;
+  animation-delay: 0.7s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   margin: 0 20px;
-
   opacity: 0;
+	visibility: hidden;
 }
 
 @keyframes content {
-  to {
-    opacity: 1;
-  }
+	from {
+		visibility: hidden;
+		opacity: 0;
+	}
+	to {
+		visibility: visible;
+		opacity: 1;
+	}
 }
 
 .formError {
@@ -140,4 +151,7 @@ body {
   .con-flex {
     flex: 1 1 auto;
   }
+  	body {
+		background: #66C2FF!important;
+	}
 }
