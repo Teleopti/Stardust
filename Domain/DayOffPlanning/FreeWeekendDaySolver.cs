@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 return false;
 
             int iterationCounter = 0;
-            while (ResolvableState() == MinMaxNumberOfResult.ToMany)
+			IList<Point> weekendList = _functions.WeekendList();
+			while (ResolvableState() == MinMaxNumberOfResult.ToMany)
             {
-                IList<Point> weekendList = _functions.WeekendList();
                 int indexToMoveFrom = _functions.FindFirstNonLockedSingleDayWeekendDayOff(weekendList, true);
                 if (indexToMoveFrom == -1)
                     indexToMoveFrom = _functions.FindFirstWeekendDayDayOff(weekendList, true);
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 return false;
 
             int iterationCounter = 0;
-            while (ResolvableState() == MinMaxNumberOfResult.ToFew)
+			IList<Point> weekendList = _functions.WeekendList();
+			while (ResolvableState() == MinMaxNumberOfResult.ToFew)
             {
-                IList<Point> weekendList = _functions.WeekendList();
                 int indexToMoveFrom = _functions.FindFirstNonWeekendDayWithDayOff(weekendList, true);
                 int indexToMoveTo = _functions.FindFirstIndexOfFirstWeekendWithNoDayOff(weekendList, true);
                 if (indexToMoveTo == -1)
@@ -89,12 +89,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return true;
         }
 
-        public string ResolverDescriptionKey
-        {
-            get { return "FreeWeekendDayRule"; }
-        }
+        public string ResolverDescriptionKey => "FreeWeekendDayRule";
 
-        public bool SwapBits(int indexToMoveFrom, int indexToMoveTo)
+	    public bool SwapBits(int indexToMoveFrom, int indexToMoveTo)
         {
             if (indexToMoveFrom == -1 || indexToMoveTo == -1)
                 return false;

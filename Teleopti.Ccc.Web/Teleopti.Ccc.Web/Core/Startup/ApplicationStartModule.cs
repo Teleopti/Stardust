@@ -24,6 +24,17 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private readonly object _taskWaitLockObject = new object();
 		private bool _noStartupErrors;
 
+		private static readonly string[] keyWords = {
+			"/togglehandler/",
+			"/test/",
+			"/content/",
+			"/signalr/ping",
+			"/js/",
+			"/css/",
+			"/html/",
+			"/vendor/"
+		};
+
 		public void Init(HttpApplication application)
 		{
 			// this will run on every HttpApplication initialization in the application pool
@@ -44,18 +55,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private static bool isTestController(string url)
 		{
-			var keyWords = new[]
-			{
-				"/togglehandler/",
-				"/test/",
-				"/content/",
-				"/signalr/ping",
-				"/js/",
-				"/css/",
-				"/html/",
-				"/vendor/"
-			};
-
 			return keyWords.Any(url.Contains);
 		}
 

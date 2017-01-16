@@ -50,11 +50,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 return false;
 
             int iterationCounter = 0;
-            while (ResolvableState() == MinMaxNumberOfResult.ToMany)
+			IList<Point> weekendList = _functions.WeekendList();
+			while (ResolvableState() == MinMaxNumberOfResult.ToMany)
             {
                 int indexToMoveFrom = -1;
                 //find first full weekend
-                IList<Point> weekendList = _functions.WeekendList();
                 for (int i = 0; i < weekendList.Count; i++)
                 {
                     if (_bitArray[weekendList[i].X] && _bitArray[weekendList[i].Y])
@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 return false;
 
             int iterationCounter = 0;
-            while (ResolvableState() == MinMaxNumberOfResult.ToFew)
+			IList<Point> weekendList = _functions.WeekendList();
+			while (ResolvableState() == MinMaxNumberOfResult.ToFew)
             {
-                IList<Point> weekendList = _functions.WeekendList();
                 //find first none full weekend
                 int indexToMoveTo = _functions.FindFirstNoneLockedAccompanyingSingleDayWeekendDayOff(weekendList);
                 //else find first empty weekend ? eller som här

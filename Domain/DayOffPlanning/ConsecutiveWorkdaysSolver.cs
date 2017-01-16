@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             int lastIndexToMoveFrom = -1;
             int lastIndexToMoveTo = -1;
             int iterationCounter = 0;
-            while (ResolvableState() == MinMaxNumberOfResult.ToMany)
+			IList<Point> weekEndList = _functions.WeekendList();
+			while (ResolvableState() == MinMaxNumberOfResult.ToMany)
             {
                 IDictionary<int, int> weeklyList = _functions.CreateWeeklyDaysOffsDictionary(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
-                IList<Point> weekEndList = _functions.WeekendList();
-
+                
                 int indexToMoveFrom = _functions.FindFirstBestIndexToMoveDaysOffFromLocksConsidered(weeklyList, weekEndList);
                 Point longestBlock = _functions.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
                 

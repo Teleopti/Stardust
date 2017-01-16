@@ -7,17 +7,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 {
 	public class MyTimeAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get
-			{
-				return "MyTime";
-			}
-		}
+		public override string AreaName => "MyTime";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
-
 			var mapRoute = context.MapRoute(
 				"MyTime-authentication",
 				"MyTime/Authentication/{action}",
@@ -57,7 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 
 	public class GuidConstraint : IRouteConstraint
 	{
-
 		public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
 		{
 			if (values.ContainsKey(parameterName))

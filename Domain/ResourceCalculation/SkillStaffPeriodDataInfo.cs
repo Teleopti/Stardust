@@ -38,31 +38,32 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             get
             {
-                if (_originalDemandInMinutes == 0)
-                    return 1;
-
                 return _originalDemandInMinutes;
             }
-            set { _originalDemandInMinutes = value; }
+	        set
+	        {
+		        if (value == 0)
+		        {
+			        value = 1;
+		        }
+				_originalDemandInMinutes = value;
+	        }
         }
 
         public double TweakedCurrentDemand { get; set; }
         public bool Boost { get; set; }
         public double AssignedResourceInMinutes { get; set; }
 
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
+        public DateTimePeriod Period => _period;
 
-        public int MinimumPersons { get; set; }
+	    public int MinimumPersons { get; set; }
 
         public int MaximumPersons { get; set; }
 
         public double AbsoluteDifferenceScheduledHeadsAndMinMaxHeads { get; set; }
 
-	    public DateTime PeriodStartDateTime { get { return _period.StartDateTime; }}
-	    public DateTime PeriodEndDateTime { get { return _period.EndDateTime; } }
+	    public DateTime PeriodStartDateTime => _period.StartDateTime;
+	    public DateTime PeriodEndDateTime => _period.EndDateTime;
 
 	    public double PeriodValue(int currentResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons)
         {
@@ -76,8 +77,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                                     currentResourceInMinutes);
             double corrFactor;
 
-            if (AssignedResourceInMinutes == 0 && Boost)
-				corrFactor = SkillStaffPeriodCalculator.BigNumber;
+	        if (AssignedResourceInMinutes == 0 && Boost)
+		        corrFactor = SkillStaffPeriodCalculator.TheBigNumber;
             else
 				corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(useMinimumPersons, useMaximumPersons, AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, MinimumPersons, AssignedResourceInMinutes);
 
@@ -86,9 +87,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return calculatedValue;
         }
 
-        public IPeriodDistribution PeriodDistribution { get { return _periodDistribution; } }
+        public IPeriodDistribution PeriodDistribution => _periodDistribution;
 
-		public bool CanCalculateDeviations()
+	    public bool CanCalculateDeviations()
 	    {
 		    return PeriodDistribution != null;
 	    }
