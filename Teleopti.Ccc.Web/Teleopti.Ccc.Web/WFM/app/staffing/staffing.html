@@ -9,7 +9,7 @@
 						md-selected-item="vm.selectedSkill"
 						md-search-text="searchSkillText"
 						md-selected-item-change="vm.selectedSkillChange(skill)"
-						md-items="skill in vm.querySearch(searchSkillText)"
+						md-items="skill in vm.querySearchSkills(searchSkillText)"
 						md-item-text="skill.Name"
 						md-min-length="0"
 						placeholder="{{'SelectSkill'|translate}}">
@@ -33,7 +33,7 @@
 						class="autocomplete-skill"
 						md-selected-item="vm.selectedArea"
 						md-search-text="searchSkillAreaText"
-						md-selected-item-change="vm.querySearchAreas(area)"
+						md-selected-item-change="vm.selectedSkillChange(area)"
 						md-items="area in vm.querySearchAreas(searchSkillAreaText)"
 						md-item-text="area.Name"
 						md-min-length="0"

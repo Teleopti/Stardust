@@ -80,17 +80,19 @@
             return staffingService.getSkillStaffing.get({ id: skillId })
         }
         function selectedSkillChange(skill) {
-            if (!skill) return;
+            if (skill == null) return;
+
             generateChart(skill.Id)
             vm.selectedSkill = skill;
         }
+
 
         function querySearchSkills(query) {
             var results = query ? allSkills.filter(createFilterFor(query)) : allSkills,
                 deferred;
             return results;
         };
-        
+
         function querySearchAreas(query) {
             var results = query ? allSkillAreas.filter(createFilterFor(query)) : allSkillAreas,
                 deferred;
