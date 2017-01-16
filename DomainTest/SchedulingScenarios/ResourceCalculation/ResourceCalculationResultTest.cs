@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			{
 				skillStaffPeriod.Payload.UseShrinkage = true;
 				skillStaffPeriod.Payload.Shrinkage = new Percent(shrinkage);
-				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(serviceLevel);
+				skillStaffPeriod.Payload.ServiceAgreementData = skillStaffPeriod.Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(serviceLevel), 15 * 60));
 			}
 			var agents = Enumerable.Repeat(1,scheduledAgents).Select(i => new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill).WithSchedulePeriodOneDay(date)).ToArray();
 			var asses =
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			{
 				skillStaffPeriod.Payload.UseShrinkage = true;
 				skillStaffPeriod.Payload.Shrinkage = new Percent(0.05);
-				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(0.8);
+				skillStaffPeriod.Payload.ServiceAgreementData = skillStaffPeriod.Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(0.8), 15*60));
 				skillStaffPeriod.Payload.TaskData = new Task(7, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			}
 			var agent = new Person().WithId().WithPersonPeriod(skill).WithSchedulePeriodOneDay(date);

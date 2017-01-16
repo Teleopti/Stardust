@@ -399,7 +399,6 @@
     <Compile Include="Domain\ISchedulingResultService.cs" />
     <Compile Include="Domain\IScorecard.cs" />
     <Compile Include="Domain\IScorecardPeriod.cs" />
-    <Compile Include="Domain\IServiceLevel.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessHolder.cs" />
     <Compile Include="Domain\IShiftCategoryLimitation.cs" />
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />

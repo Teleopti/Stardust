@@ -10,29 +10,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
     public class ServiceLevelTest
     {
         private ServiceLevel target;
-
-        /// <summary>
-        /// Runs once per test
-        /// </summary>
+		
         [SetUp]
         public void Setup()
         {
             target = new ServiceLevel(new Percent(0.96), 123);
         }
-
-        [Test]
-        public void CanSetAndGetProperties()
-        {
-            Percent percent = new Percent(0.1234);
-            double seconds = 2322;
-
-            target.Percent = percent;
-            target.Seconds = seconds;
-
-            Assert.AreEqual(target.Percent,percent);
-            Assert.AreEqual(target.Seconds, seconds);
-        }
-
+		
         [Test]
         public void ConstructorWorks()
         {
@@ -42,29 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(target.Percent, percent);
             Assert.AreEqual(target.Seconds, seconds);
         }
-
-        /// <summary>
-        /// Verifies the service level above one hundred percent gives exception.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-07
-        /// </remarks>
-        [Test]
-        public void VerifyServiceLevelAboveOneHundredPercentGivesException()
-        {
-            Percent percent = new Percent(1.01);
-
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.Percent = percent);
-        }
-
-        /// <summary>
-        /// Verifies the service level above one hundred percent gives exception in constructor.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-07
-        /// </remarks>
+		
         [Test]
         public void VerifyServiceLevelAboveOneHundredPercentGivesExceptionInConstructor()
         {
@@ -78,14 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
         }
-
-        /// <summary>
-        /// Verifies the clone works.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-21
-        /// </remarks>
+		
         [Test]
         public void VerifyCloneWorks()
         {
@@ -93,14 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(target, clone);
             Assert.AreNotSame(target, clone);
         }
-
-        /// <summary>
-        /// Verifies the equals and not equals.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-21
-        /// </remarks>
+		
         [Test]
         public void VerifyEqualsAndNotEquals()
         {
@@ -111,14 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(sl1 == sl2);
             Assert.IsFalse(sl1 != sl2);
         }
-
-        /// <summary>
-        /// Verifies the get hash code.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-21
-        /// </remarks>
+		
         [Test]
         public void VerifyGetHashCode()
         {
@@ -127,14 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             Assert.AreEqual(7, dic[target]);
         }
-
-        /// <summary>
-        /// Verifies the overloaded equals.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-21
-        /// </remarks>
+		
         [Test]
         public void VerifyOverloadedEquals()
         {

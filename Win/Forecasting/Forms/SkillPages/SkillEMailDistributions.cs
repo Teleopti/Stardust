@@ -75,9 +75,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                                                          Convert.ToDouble(
                                                              maskedTimeSpanTextBox1.Value.TotalSeconds,
                                                              CultureInfo.CurrentCulture));
-            ServiceAgreement serviceAgreement = new ServiceAgreement();
-            serviceAgreement.ServiceLevel = serviceLevel;
-
+            var serviceAgreement = new ServiceAgreement(serviceLevel,new Percent(), new Percent());
+            
             int staffMin = (int) integerTextBoxMinimumAgents.IntegerValue;
             int staffMax = (int) integerTextBoxMaximumAgents.IntegerValue;
 
@@ -97,10 +96,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                                                                                           skillPersonData, timePeriod);
             templateSkillDataPeriod.Shrinkage = shrinkage;
             templateSkillDataPeriod.Efficiency = efficiency;
-
-            IList<ITemplateSkillDataPeriod> skillDataPeriods = new List<ITemplateSkillDataPeriod>();
-            skillDataPeriods.Add((ITemplateSkillDataPeriod) templateSkillDataPeriod.Clone());
-
+			
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof (DayOfWeek)))
             {
                 ISkillDayTemplate skillDayTemplate =

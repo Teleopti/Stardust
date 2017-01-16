@@ -91,13 +91,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			const double maxOccupancy = 0.9;
 			const double efficiencyPercent = 1.0;
 			var serviceLevel = new ServiceLevel(new Percent(serviceLevelPercent/100.0), serviceLevelSecond);
-			var serviceAgreement = new ServiceAgreement
-			{
-				ServiceLevel = serviceLevel,
-				MinOccupancy = new Percent(minOccupancy),
-				MaxOccupancy = new Percent(maxOccupancy)
-			};
-
+			var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(minOccupancy), new Percent(maxOccupancy));
+		
 			var shrinkage = new Percent(shrinkagePercent/100.0);
 			var efficiency = new Percent(efficiencyPercent);
 

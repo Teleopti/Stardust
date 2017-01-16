@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (value != _serviceAgreement.MinOccupancy)
 				{
-					_serviceAgreement.MinOccupancy = value;
+					_serviceAgreement = _serviceAgreement.WithMinOccupancy(value);
 					OnChangeSkillData();
 				}
 			}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (value != _serviceAgreement.MaxOccupancy)
 				{
-					_serviceAgreement.MaxOccupancy = value;
+					_serviceAgreement = _serviceAgreement.WithMaxOccupancy(value);
 					OnChangeSkillData();
 				}
 			}
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (value != _serviceAgreement.ServiceLevel.Percent)
 				{
-					_serviceAgreement.ServiceLevel.Percent = value;
+					_serviceAgreement = _serviceAgreement.WithServiceLevel(new ServiceLevel(value,_serviceAgreement.ServiceLevel.Seconds));
 					OnChangeSkillData();
 				}
 			}
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (value != _serviceAgreement.ServiceLevel.Seconds)
 				{
-					_serviceAgreement.ServiceLevel.Seconds = value;
+					_serviceAgreement = _serviceAgreement.WithServiceLevel(new ServiceLevel(_serviceAgreement.ServiceLevel.Percent, value));
 					OnChangeSkillData();
 				}
 			}

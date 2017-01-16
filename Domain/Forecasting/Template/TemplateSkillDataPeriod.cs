@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             {
                 if (value != _serviceAgreement.MinOccupancy)
                 {
-                    _serviceAgreement.MinOccupancy = value;
-                    OnChangeSkillData();
+					_serviceAgreement = _serviceAgreement.WithMinOccupancy(value);
+					OnChangeSkillData();
                 }
             }
         }
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             {
                 if (value != _serviceAgreement.MaxOccupancy)
                 {
-                    _serviceAgreement.MaxOccupancy = value;
-                    OnChangeSkillData();
+					_serviceAgreement = _serviceAgreement.WithMaxOccupancy(value);
+					OnChangeSkillData();
                 }
             }
         }
@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             {
                 if (value != _serviceAgreement.ServiceLevel.Percent)
                 {
-                    _serviceAgreement.ServiceLevel.Percent = value;
-                    OnChangeSkillData();
+					_serviceAgreement = _serviceAgreement.WithServiceLevel(new ServiceLevel(value, _serviceAgreement.ServiceLevel.Seconds));
+					OnChangeSkillData();
                 }
             }
         }
@@ -145,8 +145,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             {
                 if (value != _serviceAgreement.ServiceLevel.Seconds)
                 {
-                    _serviceAgreement.ServiceLevel.Seconds = value;
-                    OnChangeSkillData();
+					_serviceAgreement = _serviceAgreement.WithServiceLevel(new ServiceLevel(_serviceAgreement.ServiceLevel.Percent, value));
+					OnChangeSkillData();
                 }
             }
         }
@@ -299,10 +299,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         private void OnChangeSkillData()
         {
             ISkillDayTemplate skillDayTemplate = Parent as ISkillDayTemplate;
-            if (skillDayTemplate != null)
-            {
-                skillDayTemplate.IncreaseVersionNumber();
-            }
+	        skillDayTemplate?.IncreaseVersionNumber();
         }
 
         #region ICloneable Members

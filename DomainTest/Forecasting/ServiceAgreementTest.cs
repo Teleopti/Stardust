@@ -40,20 +40,5 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(minOcc, _target.MinOccupancy);
             Assert.AreEqual(maxOcc, _target.MaxOccupancy);
         }
-
-        [Test]
-        public void VerifyProperties()
-        {
-            ServiceLevel sl = new ServiceLevel(new Percent(0.90),15);
-            Percent minOcc = new Percent(0.40);
-            Percent maxOcc = new Percent(0.80);
-            _target = new ServiceAgreement();
-            _target.ServiceLevel = sl;
-            _target.MinOccupancy = minOcc;
-            _target.MaxOccupancy = maxOcc;
-            Assert.AreEqual(sl, _target.ServiceLevel);
-            Assert.AreEqual(minOcc, _target.MinOccupancy);
-            Assert.AreEqual(maxOcc, _target.MaxOccupancy);
-        }
     }
 }

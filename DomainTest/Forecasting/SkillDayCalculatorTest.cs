@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             skillDays[0].RecalculateDailyTasks();
             skillDays[1].RecalculateDailyTasks();
             skillDays[2].RecalculateDailyTasks();
-            skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.ServiceLevel.Seconds = 16*60;
+			skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData = skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(0.8), 16*60));
             var result = target.GetSkillStaffPeriodsForDayCalculation(skillDays[1]);
             Assert.AreEqual(3*96,target.SkillStaffPeriods.Count());
             Assert.AreEqual(120,result.Count()); //Skill staff periods for two days
@@ -379,8 +379,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             skillDays[0].RecalculateDailyTasks();
             skillDays[1].RecalculateDailyTasks();
             skillDays[2].RecalculateDailyTasks();
-            skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.ServiceLevel.Seconds = 16 * 60;
-            skillDays[2].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.ServiceLevel.Seconds = 16 * 60;
+			skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData = skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(0.8), 16 * 60));
+			skillDays[2].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData = skillDays[2].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(0.8), 16 * 60));
+			
             var result = target.GetSkillStaffPeriodsForDayCalculation(skillDays[1]);
             Assert.AreEqual(3 * 96, target.SkillStaffPeriods.Count());
             Assert.AreEqual(120, result.Count()); 

@@ -84,13 +84,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                                                          Convert.ToDouble(
                                                              integerTextBoxServiceLevelSeconds.IntegerValue,
                                                              CultureInfo.CurrentCulture));
-            var serviceAgreement = new ServiceAgreement
-                                       {
-                                           ServiceLevel = serviceLevel,
-                                           MinOccupancy = new Percent(minimumOccupancyPercentTextBox.DoubleValue),
-                                           MaxOccupancy = new Percent(maximunOccupancyPercentTextBox.DoubleValue)
-                                       };
-
+	        var serviceAgreement = new ServiceAgreement(serviceLevel,
+		        new Percent(minimumOccupancyPercentTextBox.DoubleValue),
+		        new Percent(maximunOccupancyPercentTextBox.DoubleValue));
+        
             var staffMin = (int) integerTextBoxMinimumAgents.IntegerValue;
             var staffMax = (int) integerTextBoxMaximumAgents.IntegerValue;
 
@@ -106,21 +103,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             endDateTime = endDateTime.Add(skill.MidnightBreakOffset);
             var timePeriod = new DateTimePeriod(startDateTime, endDateTime);
 
-            var templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement, skillPersonData, timePeriod);
-            templateSkillDataPeriod.Shrinkage = shrinkage;
-            templateSkillDataPeriod.Efficiency = efficiency;
-            var skillDataPeriods = new List<ITemplateSkillDataPeriod>();
-            skillDataPeriods.Add((ITemplateSkillDataPeriod) templateSkillDataPeriod.Clone());
-
-            foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof (DayOfWeek)))
+	        var templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement, skillPersonData, timePeriod)
+	        {
+		        Shrinkage = shrinkage,
+		        Efficiency = efficiency
+	        };
+	        
+	        foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof (DayOfWeek)))
             {
                 var skillDayTemplate =
                     (ISkillDayTemplate) skill.GetTemplate(TemplateTarget.Skill, dayOfWeek);
                 
                 skillDayTemplate.SetSkillDataPeriodCollection(new List<ITemplateSkillDataPeriod>
                                                                   {
-                                                                      (ITemplateSkillDataPeriod)
-                                                                      templateSkillDataPeriod.Clone()
+                                                                      (ITemplateSkillDataPeriod)templateSkillDataPeriod.Clone()
                                                                   });
                 skill.SetTemplateAt((int) dayOfWeek, skillDayTemplate);
             }
@@ -158,12 +154,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         public void SetEditMode()
         {
         }
-
-		private void panelMoreOptions_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-		{
-
-		}
-
+		
 		private void panelMain_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
 		{
 

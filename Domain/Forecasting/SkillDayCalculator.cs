@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             return
                 skillDay.SkillStaffPeriodCollection.All(
-                    s => s.Payload.ServiceAgreementData.ServiceLevel!=null && s.Payload.ServiceAgreementData.ServiceLevel.Seconds <= _skill.DefaultResolution*60);
+                    s => s.Payload.ServiceAgreementData.ServiceLevel.Seconds <= _skill.DefaultResolution*60);
         }
 
         public virtual void ClearSkillStaffPeriods()
