@@ -138,11 +138,17 @@ md-progress-circular{
 }
 
 /*Internet explorer Query*/
+/*Internet explorer Query*/
 @media all and (-ms-high-contrast: none),
 (-ms-high-contrast: active) {
 	.navbar .navbar-search{
 		padding-left: 1px;
 	}
+	.permission-radio-buttons > .wfm-radio {
+		    width: auto!important;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		}
 }
 
 @supports (-ms-accelerator:true) {
