@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						_matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value) : 
 						new List<IScheduleMatrixPro>();
 
-					getBackToLegalState(matrixList, schedulerStateHolder, optimizationPreferences, backgroundWorker,
+					backToLegalState(matrixList, schedulerStateHolder, optimizationPreferences, backgroundWorker,
 						optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value,
 						allMatrixes);
 				}
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 											selectedPeriod, allMatrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
-		public void getBackToLegalState(IList<IScheduleMatrixPro> matrixList,
+		private void backToLegalState(IList<IScheduleMatrixPro> matrixList,
 				ISchedulerStateHolder schedulerStateHolder,
 				IOptimizationPreferences optimizationPreferences,
 				ISchedulingProgress backgroundWorker,
@@ -182,12 +182,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (matrixList == null) throw new ArgumentNullException("matrixList");
 			if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
 			if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-			foreach (IScheduleMatrixPro scheduleMatrix in matrixList)
+			foreach (var scheduleMatrix in matrixList)
 			{
-				ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
+				var schedulePartModifyAndRollbackService =
 					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback,
 						new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = _workShiftBackToLegalStateServiceProFactory.Create();
+				var workShiftBackToLegalStateServicePro = _workShiftBackToLegalStateServiceProFactory.Create();
 				workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions, schedulePartModifyAndRollbackService);
 
 				backgroundWorker.ReportProgress(1);
