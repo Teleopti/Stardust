@@ -31,6 +31,52 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
+		public void ShouldBatchQueryForTooManyTeams()
+		{
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			ITeam team = TeamFactory.CreateSimpleTeam("Team");
+			team.Site = site;
+			team.Description = new Description("sdf");
+			WithUnitOfWork.Do(() =>
+			{
+				Sites.Add(site);
+				Teams.Add(team);
+			});
+
+			IPerson per = PersonFactory.CreatePerson("Ashley","Ardeen");
+
+			per.AddPersonPeriod(new PersonPeriod(new DateOnly(2011,1,1),createPersonContract(),team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				Persons.Add(per);
+			});
+
+			createAndSaveReadModel(per.Id.Value, per.Name.FirstName, per.Name.LastName, team.Id.Value, site.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2011, 1, 1));
+
+			var crit = new PersonFinderSearchCriteria(new Dictionary<PersonFinderField,string>(),10,
+				new DateOnly(2020,1,1),new Dictionary<string,bool>(),new DateOnly(2011,12,1));
+
+			var largeTeams = new List<Guid>();
+
+			largeTeams.Add(team.Id.Value);
+
+			for (var i = 0; i < 8000; i++)
+			{
+				largeTeams.Add(Guid.NewGuid());
+			}
+
+			var result = WithUnitOfWork.Get(() =>
+			{
+				Target.FindInTeams(crit, largeTeams.ToArray());
+				return crit.TotalRows;
+			});
+			
+
+			Assert.That(result,Is.EqualTo(1));
+		}
+
+		[Test]
 		public void ShouldMatchAllValuesInGivenTeamsWithEmptyCriteria()
 		{
 			ISite site = SiteFactory.CreateSimpleSite("d");

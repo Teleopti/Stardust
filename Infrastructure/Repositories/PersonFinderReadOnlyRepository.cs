@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Castle.Core.Internal;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -114,24 +115,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var minDate = new DateOnly(1753, 1, 1);
 			if (personFinderSearchCriteria.TerminalDate < minDate)
 				personFinderSearchCriteria.TerminalDate = minDate;
-			
-			var teamIdsString = Join(",", teamIds.Select(x => x.ToString())); 
 
-			var result = _currentUnitOfWork.Session().CreateSQLQuery(
-				"exec [ReadModel].[PersonFinderWithCriteriaAndTeams] @search_criterias=:searchCriterias_string, "
-				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id, @belongs_to_date=:belongs_to_date, @teamIds=:teamIds")
-				.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
-				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
-				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
-				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
-				.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
-				.SetInt32("culture", cultureId)
-				.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
-				.SetDateOnly("belongs_to_date", personFinderSearchCriteria.BelongsToDate)
-				.SetString("teamIds",teamIdsString)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
-				.SetReadOnly(true)
-				.List<IPersonFinderDisplayRow>();
+			var result = new List<IPersonFinderDisplayRow>();
+
+			foreach (var teamIdsBatch in teamIds.Batch(100))
+			{
+
+				var teamIdsString = Join(",", teamIdsBatch.Select(x => x.ToString()));
+				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
+						"exec [ReadModel].[PersonFinderWithCriteriaAndTeams] @search_criterias=:searchCriterias_string, "
+						+
+						"@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id, @belongs_to_date=:belongs_to_date, @teamIds=:teamIds")
+					.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
+					.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
+					.SetInt32("start_row", personFinderSearchCriteria.StartRow)
+					.SetInt32("end_row", personFinderSearchCriteria.EndRow)
+					.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
+					.SetInt32("culture", cultureId)
+					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetDateOnly("belongs_to_date", personFinderSearchCriteria.BelongsToDate)
+					.SetString("teamIds", teamIdsString)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
+					.SetReadOnly(true)
+					.List<IPersonFinderDisplayRow>();
+				result.AddRange(batchResult);
+			}
 
 			int row = 0;
 			foreach (var personFinderDisplayRow in result)
