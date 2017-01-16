@@ -11,13 +11,15 @@
         var monitorskillstaffing = $resource('../api/intraday/monitorskillstaffing/:id', { id: '@id' });
         var skills = $resource("../api/intraday/skills");
         var areas = $resource("../api/intraday/skillarea");
+        var overtime = $resource('../api/staffing/overtime')
         ////////////////
 
         var service = {
             getSkillAreaStaffing: monitorskillareastaffing, //skillAreas
             getSkillStaffing: monitorskillstaffing, //skillsStaffing
             getSkills : skills,
-            getSkillAreas : areas
+            getSkillAreas : areas,
+            addOvertime : overtime
         };
 
         return service;

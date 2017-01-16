@@ -14,6 +14,7 @@
         vm.selectedSkillChange = selectedSkillChange;
         vm.querySearchSkills = querySearchSkills;
         vm.querySearchAreas = querySearchAreas;
+        vm.addOvertime = addOvertime;
 
         var allSkills = [];
         var allSkillAreas = [];
@@ -45,6 +46,7 @@
                 }
             })
         }
+
         function staffingPrecheck(data) {
             if (!angular.equals(data, {}) && data != null) {
                 if (data.Time && data.ScheduledStaffing && data.ForecastedStaffing) {
@@ -76,16 +78,17 @@
             if (!areaId) return;
             return staffingService.getSkillAreaStaffing.get(areaId);
         }
+
         function getSkillStaffing(skillId) {
             return staffingService.getSkillStaffing.get({ id: skillId })
         }
+
         function selectedSkillChange(skill) {
             if (skill == null) return;
 
             generateChart(skill.Id)
             vm.selectedSkill = skill;
         }
-
 
         function querySearchSkills(query) {
             var results = query ? allSkills.filter(createFilterFor(query)) : allSkills,
@@ -106,6 +109,9 @@
                 return (lowercaseName.indexOf(lowercaseQuery) === 0);
             };
         };
+        function addOvertime(){
+           staffingService.addOvertime.save();
+        }
 
         var generateChartForView = function () {
             c3.generate({
@@ -117,9 +123,6 @@
                         staffingData.forcastedStaffing,
                         staffingData.scheduledStaffing
                     ],
-                    selection: {
-                        enabled: true,
-                    },
                 },
                 axis: {
                     x: {
