@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,12 +8,9 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
@@ -25,84 +19,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 	[TestWithStaticDependenciesAvoidUse]
 	public class ShiftTradeRequestHandlerNoMockTest
 	{
-		private ShiftTradeRequestHandler _target;
-		private IPersonRequestRepository _personRequestRepository;
 		private ICurrentScenario _currentScenario;
-		private ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private FakeRequestFactory _requestFactory;
 		private IPersonRepository _personRepository;
 		private IScheduleStorage _scheduleStorage;
 		private IBusinessRuleProvider _businessRuleProvider;
 		private INewBusinessRuleCollection _businessRuleCollection;
-		private IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
 		private ShiftTradeTestHelper _shiftTradeTestHelper;
 
 		[SetUp]
 		public void Setup()
-
 		{
-			_personRequestRepository = new FakePersonRequestRepository();
 			_currentScenario = new FakeCurrentScenario();
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_personRepository = new FakePersonRepository();
-			_requestFactory = new FakeRequestFactory();
 			_scheduleStorage = new FakeScheduleStorage();
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
-
-			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService();
-
-			_loadSchedulingDataForRequestWithoutResourceCalculation =
-				new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
-
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
 				_businessRuleProvider, _businessRuleCollection, _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
-		}
-
-		[Test]
-		public void ShouldGetAndHandleBrokenBusinessRules()
-		{
-			var personTo = PersonFactory.CreatePersonWithId();
-			var personFrom = PersonFactory.CreatePersonWithId();
-
-			var dateTimePeriod = new DateTimePeriod(DateTime.Today.AddHours(8).ToUniversalTime(), DateTime.Today.AddHours(8).ToUniversalTime());
-			_shiftTradeTestHelper.AddPersonAssignment(personTo, dateTimePeriod);
-
-			var ruleResponse1 = new BusinessRuleResponse(typeof(MinWeeklyRestRule), "no go", true, false,
-				new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
-			var ruleResponse2 = new BusinessRuleResponse(typeof(NewMaxWeekWorkTimeRule), "no go", true, false,
-				new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
-
-			prepareBusinessRuleProvider(ruleResponse1, ruleResponse2);
-
-			_personRepository.Add(personTo);
-
-			var personRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(personFrom, personTo, DateOnly.Today).WithId();
-			new ShiftTradeSwapScheduleDetailsMapper(_scheduleStorage, _currentScenario).Map((ShiftTradeRequest)personRequest.Request);
-			_personRequestRepository.Add(personRequest);
-
-			var approvalService = new ApprovalServiceForTest();
-			approvalService.SetBusinessRuleResponse(ruleResponse1, ruleResponse2);
-
-			_requestFactory.setRequestApprovalService(approvalService);
-
-			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
-			{
-				new ValidatorSpecificationForTest(true, "_openShiftTradePeriodSpecification")
-			};
-			var specificationChecker = new SpecificationChecker(shiftTradeSpecifications);
-			var validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
-
-			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, validator, _requestFactory, _currentScenario,
-				_personRequestRepository, _scheduleStorage, _personRepository, null,
-				_loadSchedulingDataForRequestWithoutResourceCalculation, _businessRuleProvider,
-				_shiftTradePendingReasonsService, new ShiftTradeApproveService(null, null, null, _requestFactory, _currentScenario));
-
-			_target.Handle(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
-
-			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.MinWeeklyRestRule));
-			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule));
 		}
 
 		[Test]
@@ -194,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				}
 			);
 			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider);
-			Assert.IsTrue(personRequest.IsPending);
+			Assert.IsTrue(personRequest.IsApproved);
 		}
 
 		[Test]
@@ -260,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var personRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, DateOnly.Today);
 
-			_shiftTradeTestHelper.SetApprovalService(scheduleDictionary);
+			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
 			_shiftTradeTestHelper.HandleRequest(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value), toggle39473IsOff);
 
@@ -281,12 +216,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
 			var personTo = createPerson(autoGrantShiftTrade);
-			setSiteOpenHours(personTo, 8, 17);
+			_shiftTradeTestHelper.SetSiteOpenHours(personTo, 8, 17);
 			setMinTimePerWeek(personTo, scheduleDateOnly);
 			var activityPersonTo = new Activity("Shift_PersonTo").WithId();
 
 			var personFrom = createPerson(autoGrantShiftTrade);
-			setSiteOpenHours(personFrom, 8, 17);
+			_shiftTradeTestHelper.SetSiteOpenHours(personFrom, 8, 17);
 			setMinTimePerWeek(personFrom, scheduleDateOnly);
 			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
 
@@ -309,8 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
-			var businessRules = businessRuleProvider.GetBusinessRulesForShiftTradeRequest(_schedulingResultStateHolder, useSiteOpenHoursRule);
-			_shiftTradeTestHelper.SetApprovalService(scheduleDictionary, businessRules);
+			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
 			_shiftTradeTestHelper.HandleRequest(@event, false, businessRuleProvider);
 			return personRequest;
@@ -333,20 +267,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRepository.Add(person);
 
 			return person;
-		}
-
-		private void setSiteOpenHours(IPerson person, int startHour, int endHour)
-		{
-			var startDate = new DateOnly(2016, 1, 1);
-			var team = person.MyTeam(startDate);
-			var siteOpenHour = new SiteOpenHour()
-			{
-				IsClosed = true,
-				Parent = team.Site,
-				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),
-				WeekDay = DayOfWeek.Monday
-			};
-			team.Site.AddOpenHour(siteOpenHour);
 		}
 
 		private void setMinTimePerWeek(IPerson person, DateOnly scheduleDateOnly)

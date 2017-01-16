@@ -1,6 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
@@ -10,9 +13,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
         IRequestApprovalServiceFactory approvalServiceFactory = new FakeRequestApprovalServiceFactory();
 
-        public IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario, ISchedulingResultStateHolder schedulingResultStateHolder)
+		IScheduleDictionary _scheduleDictionary = null;
+
+		public void SetScheduleDictionary(IScheduleDictionary scheduleDictionary)
 		{
-            return approvalServiceFactory.MakeRequestApprovalServiceScheduler(new FakeScheduleDictionary(), new Scenario("test"),new Person() );
+			_scheduleDictionary = scheduleDictionary;
+		}
+
+		public IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario, ISchedulingResultStateHolder schedulingResultStateHolder)
+		{
+			var approvalService = new RequestApprovalServiceScheduler(_scheduleDictionary, scenario,
+				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), allNewRules,
+				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null, null);
+	        return approvalService;
 		}
 
 		public IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker(
@@ -20,10 +33,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new ShiftTradeRequestStatusCheckerForTestDoesNothing();
 		}
-
-	    public void setRequestApprovalService(IRequestApprovalService approvalService)
-	    {
-            ((FakeRequestApprovalServiceFactory)approvalServiceFactory).SetApproveService(approvalService);
-        }
     }
 }

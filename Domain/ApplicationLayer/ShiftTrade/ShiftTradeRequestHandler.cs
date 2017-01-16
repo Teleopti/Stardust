@@ -157,13 +157,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;
 					var allEnabledRules = getAllEnabledBusinessRules(personRequest.Person.PermissionInformation.UICulture(), @event);
 
+					if (!validationResult.IsOk)
+					{
+						allEnabledRules.Add(new ShiftTradeValidationFailedRule(getValidationMessage(validationResult, personRequest)
+							, personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone())));
+					}
+
 					var approvalService = _requestFactory.GetRequestApprovalService(allEnabledRules, scenario,
 						_schedulingResultStateHolder);
 
 					personRequest.Pending();
 
 					var ruleResponses = new List<IBusinessRuleResponse>();
-					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest) && validationResult.IsOk)
+					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest) )
 					{
 						logger.DebugFormat("Approving ShiftTrade: {0}", personRequest.GetSubject(new NormalizeText()));
 						ruleResponses.AddRange(_shiftTradeApproveService.AutoApprove(personRequest, approvalService, _schedulingResultStateHolder));
@@ -178,7 +184,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					}
 					else
 					{
-						addValidationResultToResponses(validationResult, ruleResponses, personRequest);
 						ruleResponses.AddRange(_shiftTradeApproveService.SimulateApprove(shiftTradeRequest, allEnabledRules,
 							_schedulingResultStateHolder));
 					}
@@ -219,6 +224,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 						personRequest.Person.PermissionInformation.Culture()), true, true, new DateTimePeriod(), personRequest.Person,
 					new DateOnlyPeriod(), string.Empty));
 			}
+		}
+
+		private static string getValidationMessage(ShiftTradeRequestValidationResult validationResult, IPersonRequest personRequest)
+		{
+			return Resources.ResourceManager.GetString(validationResult.DenyReason,
+				personRequest.Person.PermissionInformation.Culture());
 		}
 
 		private void setUpdatedMessage(AcceptShiftTradeEvent @event, IPersonRequest personRequest)

@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IBusinessRuleProvider _businessRuleProvider;
 		private INewBusinessRuleCollection _businessRuleCollection;
 		private ShiftTradeTestHelper _shiftTradeTestHelper;
+		private IGlobalSettingDataRepository _globalSettingDataRepository;
 
 		[SetUp]
 		public void Setup()
@@ -44,12 +45,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
 				_businessRuleProvider, _businessRuleCollection, _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
+			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 		}
 
 		[Test]
 		public void ShouldDenyWhenSpecificationIsNotConfigured()
 		{
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new ShiftTradeBusinessRuleConfig());
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] { new ShiftTradeBusinessRuleConfig()});
 			Assert.IsTrue(personRequest.IsDenied);
 			Assert.IsTrue(personRequest.DenyReason == "ShiftTradeTargetTimeDenyReason");
 		}
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldDenyWhenUsingSpecificationChecker()
 		{
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new ShiftTradeBusinessRuleConfig(),
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] {new ShiftTradeBusinessRuleConfig()},
 				useSpecificationCheckerWithConfig: false);
 			Assert.IsTrue(personRequest.IsDenied);
 			Assert.IsTrue(personRequest.DenyReason == "ShiftTradeTargetTimeDenyReason");
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				Enabled = false,
 				HandleOptionOnFailed = RequestHandleOption.AutoDeny
 			};
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(shiftTradeBusinessRuleConfig);
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] { shiftTradeBusinessRuleConfig});
 			Assert.IsTrue(personRequest.IsPending);
 
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				Enabled = true,
 				HandleOptionOnFailed = RequestHandleOption.AutoDeny
 			};
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(shiftTradeBusinessRuleConfig);
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] { shiftTradeBusinessRuleConfig});
 			Assert.IsTrue(personRequest.IsDenied);
 			Assert.IsTrue(personRequest.DenyReason == "ShiftTradeTargetTimeDenyReason");
 		}
@@ -102,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				Enabled = true,
 				HandleOptionOnFailed = RequestHandleOption.Pending
 			};
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(shiftTradeBusinessRuleConfig);
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] {shiftTradeBusinessRuleConfig});
 			Assert.IsTrue(personRequest.IsPending);
 
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
@@ -121,7 +123,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				Enabled = true,
 				HandleOptionOnFailed = RequestHandleOption.Pending
 			};
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(shiftTradeBusinessRuleConfig, false);
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(
+				new[] {shiftTradeBusinessRuleConfig}, false);
 			Assert.IsTrue(personRequest.IsPending);
 
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
@@ -131,8 +134,38 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
 		}
 
+		[Test, SetCulture("en-US")]
+		public void ShouldDenyWhenSpecificationIsPendingAndThereIsOtherDeniableResponse()
+		{
+			var shiftTradeTargetTimeSpecificationRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(ShiftTradeTargetTimeSpecification).FullName,
+				Enabled = true,
+				HandleOptionOnFailed = RequestHandleOption.Pending
+			};
+			var siteOpenHourRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(SiteOpenHoursRule).FullName,
+				Enabled = true,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			};
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[]
+			{
+				shiftTradeTargetTimeSpecificationRuleConfig,
+				siteOpenHourRuleConfig
+			});
+			Assert.IsTrue(personRequest.IsPending);
+
+			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest, true);
+			Assert.IsTrue(personRequest.IsDenied);
+			Assert.IsTrue(personRequest.DenyReason.Contains("No open hours for"));
+
+			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimeDenyReason");
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
+		}
+
 		private IPersonRequest createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(
-			ShiftTradeBusinessRuleConfig shiftTradeBusinessRuleConfig
+			ShiftTradeBusinessRuleConfig[] shiftTradeBusinessRuleConfigs
 			, bool autoGrantShiftTrade = true, bool useSpecificationCheckerWithConfig = true)
 		{
 			var scheduleDate = new DateTime(2016, 7, 25);
@@ -162,15 +195,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var shiftTradeSpecifications = _shiftTradeTestHelper.GetDefaultShiftTradeSpecifications();
 			shiftTradeSpecifications.Add(createShiftTradeTargetTimeSpecification());
 
-			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
+			_globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
 			{
-				BusinessRuleConfigs = new[] {shiftTradeBusinessRuleConfig}
+				BusinessRuleConfigs = shiftTradeBusinessRuleConfigs
 			});
 
 			if (useSpecificationCheckerWithConfig)
 			{
-				_shiftTradeTestHelper.UseSpecificationCheckerWithConfig(shiftTradeSpecifications, globalSettingDataRepository);
+				_shiftTradeTestHelper.UseSpecificationCheckerWithConfig(shiftTradeSpecifications, _globalSettingDataRepository);
 			}
 			else
 			{
@@ -194,19 +226,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				, matrixListFactory, new SchedulePeriodTargetTimeCalculator());
 		}
 
-		private void acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(IPersonRequest personRequest)
+		private void acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(IPersonRequest personRequest, bool enableSiteOpenHoursRule = false)
 		{
 			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
 			var personTo = shiftTradeRequest.PersonTo;
 			var personFrom = shiftTradeRequest.PersonFrom;
 			var scheduleDate = shiftTradeRequest.Period.StartDateTime;
 			var @event = _shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
+			@event.UseSiteOpenHoursRule = enableSiteOpenHoursRule;
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
-			var businessRuleProvider = new BusinessRuleProvider();
-			var businessRules = businessRuleProvider.GetBusinessRulesForShiftTradeRequest(_schedulingResultStateHolder, false);
-			_shiftTradeTestHelper.SetApprovalService(scheduleDictionary, businessRules);
+			var businessRuleProvider = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
+			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
 			_shiftTradeTestHelper.HandleRequest(@event, false, businessRuleProvider);
 		}
@@ -220,6 +252,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, team);
 			person.WorkflowControlSet = workControlSet;
 			_personRepository.Add(person);
+
+			_shiftTradeTestHelper.SetSiteOpenHours(person, 8, 17);
 
 			return person;
 		}

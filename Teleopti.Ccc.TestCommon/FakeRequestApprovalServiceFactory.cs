@@ -19,11 +19,5 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<IRequestApprovalService>());
 		}
-
-	    public void SetApproveService(IRequestApprovalService approveService)
-	    {
-	        _approvalService = approveService;
-
-	    }
 	}
 }

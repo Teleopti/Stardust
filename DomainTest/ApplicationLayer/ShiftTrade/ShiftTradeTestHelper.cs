@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -158,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(allPeople, null,
 					new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
 
-			SetApprovalService(scheduleDictionary, businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder));
+			SetScheduleDictionary(scheduleDictionary);
 
 			HandleRequest(@event, false, businessRuleProvider);
 			return personRequest;
@@ -193,17 +192,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			new ShiftTradeSwapScheduleDetailsMapper(_scheduleStorage, _currentScenario).Map((ShiftTradeRequest)personRequest.Request);
 
+			var shiftTradeSwapDetails = ((ShiftTradeRequest)personRequest.Request).ShiftTradeSwapDetails;
+			foreach (var shiftTradeSwapDetail in shiftTradeSwapDetails)
+			{
+				shiftTradeSwapDetail.ChecksumFrom =
+					new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
+				shiftTradeSwapDetail.ChecksumTo =
+					new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
+			}
+
 			_personRequestRepository.Add(personRequest);
 			return personRequest;
 		}
 
-		internal void SetApprovalService(IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRules = null)
+		internal void SetScheduleDictionary(IScheduleDictionary scheduleDictionary)
 		{
-			var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(),
-				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), newBusinessRules ?? _businessRuleCollection,
-				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null, null);
-
-			_requestFactory.setRequestApprovalService(approvalService);
+			_requestFactory.SetScheduleDictionary(scheduleDictionary);
+			
 		}
 
 		internal void HandleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, bool toggle39473IsOff = false, IBusinessRuleProvider businessRuleProvider = null)
@@ -255,6 +260,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod).WithId();
 			_scheduleStorage.Add(personAssignment);
 			return personAssignment;
+		}
+
+		internal void SetSiteOpenHours(IPerson person, int startHour, int endHour)
+		{
+			var startDate = new DateOnly(2016, 1, 1);
+			var team = person.MyTeam(startDate);
+			var siteOpenHour = new SiteOpenHour()
+			{
+				IsClosed = true,
+				Parent = team.Site,
+				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),
+				WeekDay = DayOfWeek.Monday
+			};
+			team.Site.AddOpenHour(siteOpenHour);
 		}
 	}
 
