@@ -1,87 +1,197 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[TestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class ScheduleDaySignificantPartTest
 	{
-		private readonly DateTimePeriod rangePeriod = new DateTimePeriod(2000, 1, 1, 2001, 6, 1);
-
 		[Test]
-		public void SignificantPartWithoutMainShiftWithPersonalShift()
+		public void ShouldHandleAllCases([ValueSource(nameof(significantPartTestCases))] SignificantPartTestCase testCase)
 		{
-			var person1 = PersonFactory.CreatePerson();
-			var parameters = new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person1, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			var scenario = parameters.Scenario;
-			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-
-			var person = PersonFactory.CreatePerson();
-			var period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
-			var part = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2001, 1, 1));
-
-			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(person, scenario, ActivityFactory.CreateActivity("d"), period);
-			part.Add(ass);
-
-			Assert.AreEqual(SchedulePartView.PersonalShift, part.SignificantPart());
-
-			ass.SetDayOff(new DayOffTemplate(new Description()));
-			Assert.AreEqual(SchedulePartView.DayOff, part.SignificantPart());
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 12));
+			var scenario = ScenarioFactory.CreateScenario("Default", true, true);
+			var dateOnly = new DateOnly(2017, 01, 13);
+			var scheduleDay = ScheduleDayFactory.Create(dateOnly, person, scenario);
+			testCase.Cases.ForEach(c => c.Action(scheduleDay));
+			var result = scheduleDay.SignificantPart();
+			result.Should().Be.EqualTo(testCase.ExpectedResult);
 		}
 
-		[Test]
-		public void SignificantPartCallsService()
+		private static DateTimePeriod makePeriod(IScheduleDay scheduleDay, int startHour, int endHour)
 		{
-			var person1 = PersonFactory.CreatePerson();
-			var parameters = new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person1, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			var scenario = parameters.Scenario;
-			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-			var person = PersonFactory.CreatePerson();
-			var part = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2001, 1, 1));
+			return scheduleDay.DateOnlyAsPeriod.Period().ChangeStartTime(TimeSpan.FromHours(startHour)).ChangeEndTime(TimeSpan.FromHours(endHour-24));
+		}
+		private static readonly Case empty = new Case ("Empty",scheduleDay => { });
 
-			Assert.AreEqual(part.SignificantPart(), SchedulePartView.None);
+		private static readonly Func<int, int, Case> shift = (start, end) => new Case($"Shift ({start:D2} - {end:D2})", scheduleDay =>
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Person, scheduleDay.Scenario,
+				ActivityFactory.CreateActivity("Phone"), makePeriod(scheduleDay, start, end), ShiftCategoryFactory.CreateShiftCategory("Normal")))
+		);
 
-			var service = MockRepository.GenerateMock<ISignificantPartService>();
-			((ExtractedSchedule)part).ServiceForSignificantPart = service;
+		private static readonly Func<int, int, Case> absence = (start, end) => new Case($"Absence ({start:D2} - {end:D2})", scheduleDay =>
+			scheduleDay.Add(PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, makePeriod(scheduleDay, start, end), AbsenceFactory.CreateAbsence("Absence")))
+		);
 
-			service.Stub(x => x.SignificantPart()).Return(SchedulePartView.MainShift);
+		private static readonly Func<int, int, Case> overtime = (start, end) => new Case($"Overtime ({start:D2} - {end:D2})", scheduleDay =>
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithOvertimeShift(scheduleDay.Person, scheduleDay.Scenario,
+				ActivityFactory.CreateActivity("Overtime"), makePeriod(scheduleDay, start, end)))
+		);
 
-			Assert.AreEqual(SchedulePartView.MainShift, part.SignificantPart());
+		private static readonly Func<int, int, Case> personalActivity = (start, end) => new Case($"Personal Activity ({start:D2} - {end:D2})", scheduleDay =>
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithPersonalShift(scheduleDay.Person, scheduleDay.Scenario,
+				ActivityFactory.CreateActivity("Personal"), makePeriod(scheduleDay, start, end)))
+		);
+
+		private static readonly Case dayOff = new Case("Dayoff", scheduleDay =>
+			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Person, scheduleDay.Scenario,
+				scheduleDay.DateOnlyAsPeriod.DateOnly, DayOffFactory.CreateDayOff(new Description("Dayoff"))))
+		);
+
+		private static readonly Case contractDayOff = new Case("Contract Dayoff", scheduleDay =>
+		{
+			var contractScheduleWeek = new ContractScheduleWeek();
+			contractScheduleWeek.Add(DayOfWeek.Monday, true);
+			contractScheduleWeek.Add(DayOfWeek.Tuesday, true);
+			contractScheduleWeek.Add(DayOfWeek.Wednesday, true);
+			contractScheduleWeek.Add(DayOfWeek.Thursday, true);
+			contractScheduleWeek.Add(DayOfWeek.Friday, false);
+			contractScheduleWeek.Add(DayOfWeek.Saturday, true);
+			contractScheduleWeek.Add(DayOfWeek.Sunday, true);
+			scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly)
+				.PersonContract.ContractSchedule.AddContractScheduleWeek(contractScheduleWeek);
+		});
+
+		private static readonly Case preference = new Case("Preference", scheduleDay =>
+			scheduleDay.Add(new PreferenceDay(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly,
+				new PreferenceRestriction()))
+		);
+
+		private static readonly Case studentAvailability = new Case("Student Availability", scheduleDay =>
+			scheduleDay.Add(new StudentAvailabilityDay(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly,
+				new List<IStudentAvailabilityRestriction> { new StudentAvailabilityRestriction() }))
+		);
+
+		private static SignificantPartTestCase[] significantPartTestCases = {
+			new SignificantPartTestCase(empty).Returns(SchedulePartView.None),
+			new SignificantPartTestCase(shift(8, 17)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(10, 12)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(absence(0, 24)).Returns(SchedulePartView.FullDayAbsence),
+			new SignificantPartTestCase(absence(10, 12)).Returns(SchedulePartView.Absence),
+			new SignificantPartTestCase(overtime(8, 17)).Returns(SchedulePartView.Overtime),
+			new SignificantPartTestCase(personalActivity(8, 17)).Returns(SchedulePartView.PersonalShift),
+			new SignificantPartTestCase(dayOff).Returns(SchedulePartView.DayOff),
+			new SignificantPartTestCase(contractDayOff).Returns(SchedulePartView.None),
+			new SignificantPartTestCase(preference).Returns(SchedulePartView.PreferenceRestriction),
+			new SignificantPartTestCase(studentAvailability).Returns(SchedulePartView.StudentAvailabilityRestriction),
+
+			new SignificantPartTestCase(shift(10, 12), absence(10, 12)).Returns(SchedulePartView.FullDayAbsence),
+			new SignificantPartTestCase(shift(8, 17), absence(0, 24)).Returns(SchedulePartView.FullDayAbsence),
+			new SignificantPartTestCase(shift(8, 17), absence(10, 12)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), absence(19,21)).Returns(SchedulePartView.MainShift),
+
+			new SignificantPartTestCase(shift(8, 17), overtime(8, 17)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), overtime(10, 12)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), overtime(19, 21)).Returns(SchedulePartView.MainShift),
+
+			new SignificantPartTestCase(shift(8, 17), personalActivity(8, 17)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), personalActivity(10, 12)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), personalActivity(19, 21)).Returns(SchedulePartView.MainShift),
+
+			new SignificantPartTestCase(shift(8, 17), contractDayOff).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), preference).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), studentAvailability).Returns(SchedulePartView.MainShift),
+
+			new SignificantPartTestCase(absence(0, 24), overtime(8, 17)).Returns(SchedulePartView.FullDayAbsence),
+			new SignificantPartTestCase(absence(10, 12), overtime(8, 17)).Returns(SchedulePartView.Absence),
+			new SignificantPartTestCase(absence(19,21), overtime(8, 17)).Returns(SchedulePartView.Absence),
+
+			new SignificantPartTestCase(absence(0, 24), personalActivity(8, 17)).Returns(SchedulePartView.FullDayAbsence),
+			new SignificantPartTestCase(absence(10, 12), personalActivity(8, 17)).Returns(SchedulePartView.PersonalShift),
+			new SignificantPartTestCase(absence(19,21), personalActivity(8, 17)).Returns(SchedulePartView.PersonalShift),
+
+			new SignificantPartTestCase(absence(0, 24), dayOff).Returns(SchedulePartView.DayOff),
+			new SignificantPartTestCase(absence(0, 24), contractDayOff).Returns(SchedulePartView.ContractDayOff),
+			new SignificantPartTestCase(absence(0, 24), preference).Returns(SchedulePartView.FullDayAbsence),
+			new SignificantPartTestCase(absence(0, 24), studentAvailability).Returns(SchedulePartView.FullDayAbsence),
+
+			new SignificantPartTestCase(personalActivity(8, 17), overtime(8, 17)).Returns(SchedulePartView.PersonalShift),
+			new SignificantPartTestCase(personalActivity(10, 12), overtime(8, 17)).Returns(SchedulePartView.PersonalShift),
+			new SignificantPartTestCase(personalActivity(19, 21), overtime(8, 17)).Returns(SchedulePartView.PersonalShift),
+
+			new SignificantPartTestCase(overtime(8, 17), dayOff).Returns(SchedulePartView.Overtime),
+			new SignificantPartTestCase(overtime(8, 17), contractDayOff).Returns(SchedulePartView.Overtime),
+			new SignificantPartTestCase(overtime(8, 17), preference).Returns(SchedulePartView.Overtime),
+			new SignificantPartTestCase(overtime(8, 17), studentAvailability).Returns(SchedulePartView.Overtime),
+
+			new SignificantPartTestCase(personalActivity(8, 17), dayOff).Returns(SchedulePartView.PersonalShift),
+			new SignificantPartTestCase(personalActivity(8, 17), contractDayOff).Returns(SchedulePartView.PersonalShift),
+			new SignificantPartTestCase(personalActivity(8, 17), preference).Returns(SchedulePartView.PersonalShift),
+			new SignificantPartTestCase(personalActivity(8, 17), studentAvailability).Returns(SchedulePartView.PersonalShift),
+
+			new SignificantPartTestCase(dayOff, contractDayOff).Returns(SchedulePartView.DayOff),
+			new SignificantPartTestCase(dayOff, preference).Returns(SchedulePartView.DayOff),
+			new SignificantPartTestCase(dayOff, studentAvailability).Returns(SchedulePartView.DayOff),
+
+			new SignificantPartTestCase(contractDayOff, preference).Returns(SchedulePartView.PreferenceRestriction),
+			new SignificantPartTestCase(contractDayOff, studentAvailability).Returns(SchedulePartView.StudentAvailabilityRestriction),
+
+			new SignificantPartTestCase(preference, studentAvailability).Returns(SchedulePartView.PreferenceRestriction),
+
+			new SignificantPartTestCase(shift(8, 17),absence(10, 12), personalActivity(10, 12)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17),absence(10, 12), personalActivity(19, 21)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17),absence(10, 12), personalActivity(13, 15)).Returns(SchedulePartView.MainShift),
+
+			new SignificantPartTestCase(shift(8, 17), absence(10, 12), overtime(10, 12)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), absence(10, 12), overtime(19, 21)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), absence(10, 12), overtime(13, 15)).Returns(SchedulePartView.MainShift),
+													
+			new SignificantPartTestCase(shift(8, 17), absence(10, 12), overtime(19, 21), personalActivity(10, 12)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), absence(10, 12), overtime(19, 21), personalActivity(13, 15)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), absence(19, 21), overtime(19, 21), personalActivity(13, 15)).Returns(SchedulePartView.MainShift),
+			new SignificantPartTestCase(shift(8, 17), absence(0, 24), overtime(19, 21), personalActivity(13, 15)).Returns(SchedulePartView.FullDayAbsence)
+		};
+	}
+
+	public class Case
+	{
+		public string Name { get; set; }
+		public Action<IScheduleDay> Action { get; set; }
+
+		public Case(string name, Action<IScheduleDay> action)
+		{
+			Name = name;
+			Action = action;
+		}
+	}
+
+	public class SignificantPartTestCase
+	{
+		public readonly List<Case> Cases;
+		public SchedulePartView ExpectedResult;
+
+		public SignificantPartTestCase(params Case[] setups)
+		{
+			Cases = setups.ToList();
 		}
 
-		[Test]
-		public void SignificantPartEmptyShouldReturnNone()
+		public SignificantPartTestCase Returns(SchedulePartView returns)
 		{
-			var person1 = PersonFactory.CreatePerson();
-			var parameters = new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person1, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			var scenario = parameters.Scenario;
-			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-
-			var part = ExtractedSchedule.CreateScheduleDay(dic,
-				parameters.Person, new DateOnly(2000, 1, 1));
-			Assert.AreEqual(SchedulePartView.None, part.SignificantPart());
+			ExpectedResult = returns;
+			return this;
 		}
 
-		[Test]
-		public void ShouldReturnSignificantPartServiceForDisplay()
+		public override string ToString()
 		{
-			var person1 = PersonFactory.CreatePerson();
-			var parameters = new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person1, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			var scenario = parameters.Scenario;
-			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-
-			var part = ExtractedSchedule.CreateScheduleDay(dic,
-				parameters.Person, new DateOnly(2000, 1, 1));
-			Assert.That(part.SignificantPartForDisplay(), Is.Not.Null);
+			return $"{string.Join(", ", Cases.Select(x => x.Name))} -> {ExpectedResult}";
 		}
 	}
 }
