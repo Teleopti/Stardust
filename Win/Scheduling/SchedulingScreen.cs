@@ -2172,6 +2172,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setThreadCulture();
 			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
 			if (!_schedulerState.DaysToRecalculate.Any()) return;
+			if (_schedulerState.SchedulingResultState.SkillDays == null) return;
 
 			using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min(), _schedulerState.DaysToRecalculate.Max())))
 			{
