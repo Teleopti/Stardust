@@ -5321,7 +5321,7 @@ Periods</comment>
     <comment>Select your list of rule sets</comment>
   </data>
   <data name="Seniority" xml:space="preserve">
-    <value>Betriebszugehörigkeit</value>
+    <value>Seniorität</value>
     <comment>Seniority</comment>
   </data>
   <data name="SeriousUnderstaffing" xml:space="preserve">
@@ -12470,5 +12470,146 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="Performance" xml:space="preserve">
     <value>Performance</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Skill erstellen</value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Verwenden für</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>Die Felder für Vorname und Nachname sind leer</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>Leeres Passwortfeld</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>Benutzer importieren</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>Manuell verplant</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>Schitsammlung ändern</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>Schichtsammlung wählen</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>Import fehlgeschlagen:</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>Sie müssen mindestens einen Tag wählen</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>Als Hintergrundbild benutzen</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>Planungsperioden erstellen und verwalten</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>Gewählte Filter:</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>Die beste Methode</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistik</value>
+  </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>Freier Tag Wert:</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>Ungültiges Kennwort</value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>Manueller Plan</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>Bericht erstellen</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>Sitzplatzplan - Bericht</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>Achtung! Bearbeitung fehlgeschlagen!</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>Eine Start - und Endzeit muß definiert werden</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>Bericht einsehen</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>Personen verwalten</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>Skills anpassen</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>Keine Buchungen</value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>Sitzbuchungen</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>Wurde(n) erfolgreich importiert:</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>Grenzwerte für Kampagnen</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>Saisonalität</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Rotieren</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>Täglich</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>Gesamte NBZ</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>Achtung: Der Server ist Bereits mit der Planung beschäftigt, bitte versuchen Sie es später wieder</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>Planungsperiode ändern</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>Filter löschen</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Gesamte Anzahl von Anfragen</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>Nach Seniorität</value>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>Regeln zurücksetzen</value>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>Die Regeln werden geprüft</value>
+  </data>
+  <data name="DescriptionOfNewShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Schichtkategoriebegrenzungen für Periode</value>
+  </data>
+  <data name="DescriptionOfWeekShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Wöchentliche Schichtkategoriebegrenzung</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>Skills benutzen:</value>
+  </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>Filter...</value>
+  </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>Gesamte Nutzung</value>
   </data>
 </root>
