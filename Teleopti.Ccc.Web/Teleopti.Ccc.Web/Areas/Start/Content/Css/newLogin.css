@@ -34,13 +34,17 @@
 }
 
 .animate-content {
+  margin: 0 20px;
+}
+
+.animate-content, .wfm-checkbox-toggle::after, .animate-content input[type=text] {
   animation-name: content;
   animation-duration: 0.5s;
   animation-delay: 0.7s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-  margin: 0 20px;
   opacity: 0;
+  background: white;
 }
 
 @keyframes content {
@@ -150,5 +154,13 @@
   }
   	body {
 		background: #66C2FF!important;
+	}
+}
+
+@media all and (-ms-high-contrast: none),
+(-ms-high-contrast: active) {
+	.animate-material {
+		max-height: 100%!important;
+		animation: none;
 	}
 }
