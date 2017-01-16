@@ -347,6 +347,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>().SingleInstance();
+			builder.RegisterType<MoveTimeDecisionMaker2>().As<IMoveTimeDecisionMaker>().SingleInstance();
 			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().SingleInstance();
 			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().SingleInstance();
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().SingleInstance();

@@ -325,7 +325,6 @@
     <Compile Include="Domain\IKeyPerformanceIndicator.cs" />
     <Compile Include="Domain\IKpiTarget.cs" />
     <Compile Include="Domain\IMoveTimeOptimizer.cs" />
-    <Compile Include="Domain\IMoveTimeOptimizerCreator.cs" />
     <Compile Include="Domain\INewBusinessRule.cs" />
     <Compile Include="Domain\INewBusinessRuleCollection.cs" />
     <Compile Include="Domain\INewSkillStaffPeriodValues.cs" />

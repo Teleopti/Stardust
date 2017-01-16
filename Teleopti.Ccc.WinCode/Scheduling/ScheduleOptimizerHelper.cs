@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IDayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_scheduleDayChangeCallback = () => _container.Resolve<IScheduleDayChangeCallback>();
 			_resourceOptimizationHelper = _container.Resolve<IResourceCalculation>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
-			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 			_resourceCalculationContextFactory = _container.Resolve<CascadingResourceCalculationContextFactory>();
 			_dayOffOptimizationDesktop = _container.Resolve<IDayOffOptimizationDesktop>();
 			_daysOffBackToLegalState = _container.Resolve<DaysOffBackToLegalState>();
@@ -78,23 +76,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IPeriodValueCalculator periodValueCalculator =
 				_optimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
-			IMoveTimeDecisionMaker decisionMaker = new MoveTimeDecisionMaker2(_bitArrayConverter);
-
-			var creator = new MoveTimeOptimizerCreator(scheduleMatrixOriginalStateContainerList,
-					workShiftOriginalStateContainerList,
-					decisionMaker,
+			var creator = new MoveTimeOptimizerCreator(
+					_container.Resolve<IMoveTimeDecisionMaker>(),
 					_container.Resolve<IScheduleService>(),
-					optimizerPreferences,
-					rollbackService,
-					_stateHolder(),
+					_container.Resolve<Func<ISchedulingResultStateHolder>>(),
 					_container.Resolve<IEffectiveRestrictionCreator>(),
 					_container.Resolve<IResourceCalculation>(),
-					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>(),
 					_container.Resolve<IScheduleResultDataExtractorProvider>(),
 					_container.Resolve<IUserTimeZone>());
 
-			IList<IMoveTimeOptimizer> optimizers = creator.Create();
+			IList<IMoveTimeOptimizer> optimizers = creator.Create(scheduleMatrixOriginalStateContainerList,
+					workShiftOriginalStateContainerList,
+					optimizerPreferences,
+					dayOffOptimizationPreferenceProvider,
+					rollbackService);
 			var service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
 
 			service.ReportProgress += resourceOptimizerPersonOptimized;
