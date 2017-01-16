@@ -36,11 +36,11 @@
 		}
 
 		function getActivities() {
-			var getAct = skillPrioServiceNew.getActivites.query();
-			return getAct.$promise.then(function(data) {
-				vm.activites = data;
-				return vm.activites;
-			});
+		  var getAct = skillPrioServiceNew.getActivites.query();
+		  return getAct.$promise.then(function(data) {
+		    vm.activites = data.sort(sortByName);
+		    return vm.activites;
+		  });
 		}
 
 		function getSkills() {
@@ -146,9 +146,9 @@
 
 		function autoSortSkillByEachRow() {
 			for (var i = 0; i < vm.cascadeList.length - 1; i++) {
-				vm.cascadeList[i].Skills.sort(sortBySkillName);
+				vm.cascadeList[i].Skills.sort(sortByName);
 			}
-			vm.unsortedList.sort(sortBySkillName);
+			vm.unsortedList.sort(sortByName);
 		}
 
 		function findIndexInData(data, property, value) {
@@ -191,16 +191,16 @@
 			}
 		}
 
-		function sortBySkillName(a, b) {
-			var nameA = a.SkillName.toUpperCase();
-			var nameB = b.SkillName.toUpperCase();
-			if (nameA < nameB) {
-				return -1;
-			}
-			if (nameA > nameB) {
-				return 1;
-			}
-			return 0;
+		function sortByName(a, b) {
+		  var nameA = a.SkillName ? a.SkillName.toUpperCase() : a.ActivityName.toUpperCase();
+		  var nameB = b.SkillName ? b.SkillName.toUpperCase() : b.ActivityName.toUpperCase();
+		  if (nameA < nameB) {
+		    return -1;
+		  }
+		  if (nameA > nameB) {
+		    return 1;
+		  }
+		  return 0;
 		}
 
 		function sortByPriority(a, b) {
@@ -232,7 +232,7 @@
 				var index = findIndexInData(skills, 'SkillName', skill.SkillName);
 				skills.splice(index, 1);
 				vm.unsortedList.push(skill);
-				vm.unsortedList.sort(sortBySkillName);
+				vm.unsortedList.sort(sortByName);
 				autoDeleteEmptyRow();
 			}
 		}
