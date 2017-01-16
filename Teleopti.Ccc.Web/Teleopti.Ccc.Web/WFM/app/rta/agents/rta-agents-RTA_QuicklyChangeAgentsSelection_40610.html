@@ -99,7 +99,7 @@
 <div class="panel material-depth-1" ng-show="vm.showOrgSelection">
 	<div class="con-row">
 		<div class="con-flex">
-			<div class="sub-header" ng-show="vm.showBreadcrumb">
+			<div class="sub-header" ng-class="{'invisible' : !vm.showBreadcrumb}">
 				<div>
 					<a class="cursor-pointer" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
 					<a class="cursor-pointer" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>

@@ -88,7 +88,8 @@
 		vm.skillAreaName = "";
 		vm.openedMaxNumberOfAgents = false;
 		vm.maxNumberOfAgents = 50;
-		vm.isLoading = true;
+		vm.isLoading = angular.toJson($stateParams) !== '{}';
+		console.info(vm.isLoading);
 		vm.pollingLock = true;
 		// because angular cant handle an array of null in stateparams
 		var nullStateId = "noState";
