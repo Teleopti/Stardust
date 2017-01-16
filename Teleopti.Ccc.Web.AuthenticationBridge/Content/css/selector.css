@@ -103,16 +103,13 @@ body, .login-header {
   animation-fill-mode: forwards;
   margin: 0 20px;
   opacity: 0;
-	visibility: hidden;
 }
 
 @keyframes content {
 	from {
-		visibility: hidden;
 		opacity: 0;
 	}
 	to {
-		visibility: visible;
 		opacity: 1;
 	}
 }
