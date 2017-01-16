@@ -1396,6 +1396,7 @@
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.js" />
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.spec.js" />
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
+    <Content Include="WFM\app\requests\requests.service.permissions.js" />
     <Content Include="WFM\app\resourceplanner\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\planningperiods-overview.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.hierarchy.service.js" />
