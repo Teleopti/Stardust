@@ -167,7 +167,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
 		private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
 		private readonly IOptimizationPreferences _optimizationPreferences;
-		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private readonly IBudgetPermissionService _budgetPermissionService;
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
@@ -403,7 +402,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_temporarySelectedEntitiesFromTreeView = allSelectedEntities;
 			_virtualSkillHelper = _container.Resolve<IVirtualSkillHelper>();
 			_budgetPermissionService = _container.Resolve<IBudgetPermissionService>();
-			_groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
 			_requiredScheduleHelper = _container.Resolve<IRequiredScheduleHelper>();
