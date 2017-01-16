@@ -187,7 +187,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 				.SetDateTime("endDateTime", period.EndDateTime)
 		        .SetParameter("bu", bu)
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
-		        .SetTimeout(5)
+		        .SetTimeout(10)
 				.List<RawSkillCombinationResource>();
 
 			var mergedResult =
