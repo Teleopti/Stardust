@@ -158,6 +158,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\ArrangeRequestsBySortOrderTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsWithDifferentVersionTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayCascadingRequestProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsUpdaterWithValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidatorTest.cs" />

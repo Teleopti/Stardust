@@ -57,6 +57,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly IToggleManager _toggleManager;
 
+		private IEnumerable<IAbsenceRequestValidator> _absenceRequestValidators;
+
 		public MultiAbsenceRequestsUpdater(
 			ICurrentScenario scenarioRepository,
 			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
@@ -118,6 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
 		{
+			_absenceRequestValidators = new List<IAbsenceRequestValidator> { new AbsenceRequestNoneValidator() };
 			if (!personRequestsIds.Any()) return;
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			IList<IPersonRequest> personRequests;
@@ -170,6 +173,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			{
 				sendCommandWithRetries(personRequest);
 			}
+		}
+
+		public void UpdateAbsenceRequest(IList<Guid> personRequests, IEnumerable<IAbsenceRequestValidator> absenceRequestValidators)
+		{
+			_absenceRequestValidators = absenceRequestValidators;
+			UpdateAbsenceRequest(personRequests);
 		}
 
 		private void sendCommandWithRetries(IPersonRequest personRequest)
@@ -235,8 +244,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(NewBusinessRuleCollection.Minimum(), currentScenario, _schedulingResultStateHolder);
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				var validatorList = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
-				var processAbsenceRequest = mergedPeriod.AbsenceRequestProcess;
+				var validatorList = getValidatorList(mergedPeriod);
+				var processAbsenceRequest = getAbsenceRequestProcess(mergedPeriod);
 
 				if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
 				{
@@ -276,6 +285,21 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				_feedback.SendProgress($"processAbsenceRequest.process(..) took {stopwatch.Elapsed}");
 				//sendCommandWithRetries(personRequest);
 			}
+		}
+
+		private IProcessAbsenceRequest getAbsenceRequestProcess(IAbsenceRequestOpenPeriod mergedPeriod)
+		{
+			return !useSpecificValidators() ? mergedPeriod.AbsenceRequestProcess : new ApproveAbsenceRequestWithValidators();
+		}
+
+		private IEnumerable<IAbsenceRequestValidator> getValidatorList(IAbsenceRequestOpenPeriod mergedPeriod)
+		{
+			return !useSpecificValidators() ? _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod) : _absenceRequestValidators;
+		}
+
+		private bool useSpecificValidators()
+		{
+			return _absenceRequestValidators != null && _absenceRequestValidators.Any();
 		}
 
 		private void sendRequestCommand(IPersonRequest personRequest)

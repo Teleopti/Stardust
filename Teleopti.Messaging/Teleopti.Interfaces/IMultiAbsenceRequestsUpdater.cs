@@ -7,5 +7,7 @@ namespace Teleopti.Interfaces
 	public interface IMultiAbsenceRequestsUpdater
 	{
 		void UpdateAbsenceRequest(IList<Guid> personRequests);
+
+		void UpdateAbsenceRequest(IList<Guid> personRequests, IEnumerable<IAbsenceRequestValidator> absenceRequestValidators);
 	}
 }

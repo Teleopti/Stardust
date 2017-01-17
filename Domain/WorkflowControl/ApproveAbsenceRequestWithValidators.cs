@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using log4net;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -21,6 +23,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					requiredForHandlingAbsenceRequest);
 
 				if (validatedRequest.IsValid) continue;
+
+				appendErrorMessage(absenceRequest, validatedRequest.ValidationErrors);
 
 				if (logger.IsDebugEnabled)
 				{
@@ -59,6 +63,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public override IProcessAbsenceRequest CreateInstance()
 		{
 			return new ApproveAbsenceRequestWithValidators();
+		}
+
+		private void appendErrorMessage(IAbsenceRequest absenceRequest, string errorMessage)
+		{
+			var personRequest = (IPersonRequest) absenceRequest.Parent;
+			var originalMessage = personRequest.GetMessage(new NoFormatting());
+			if (string.IsNullOrWhiteSpace(originalMessage))
+			{
+				personRequest?.TrySetMessage(errorMessage);
+			}
+			else if (!originalMessage.Contains(errorMessage))
+			{
+				personRequest?.TrySetMessage(originalMessage.TrimEnd() + Environment.NewLine + errorMessage);
+			}
 		}
 	}
 }
