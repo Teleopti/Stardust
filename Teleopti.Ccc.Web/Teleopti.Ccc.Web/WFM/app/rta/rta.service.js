@@ -15,6 +15,7 @@
 			getOrganization: getOrganization,
 			agentStatesFor: agentStatesFor,
 			agentStatesInAlarmFor: agentStatesInAlarmFor,
+			agentStatesInAlarmExcludingPhoneStatesFor: agentStatesInAlarmExcludingPhoneStatesFor,
 			agentsFor: agentsFor,
 			statesFor: statesFor,
 			inAlarmFor: inAlarmFor,
@@ -79,6 +80,15 @@
 				}
 			}).query(data).$promise;
 		};
+
+		function agentStatesInAlarmExcludingPhoneStatesFor(data){
+			return $resource('../api/AgentStates/InAlarmExcludingPhoneStatesFor', {}, {
+				query: {
+					method: 'GET'
+				}
+			}).query(data)
+				.$promise;
+		}
 
 		function agentsFor(data) {
 			return $resource('../api/Agents/For', {}, {

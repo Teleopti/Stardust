@@ -179,13 +179,49 @@
 				}];
 			});
 
-		function agentStatesInAlarm(collection){
+		function agentStatesInAlarm(collection) {
 			return collection.filter(function (s) {
-						return s.TimeInAlarm > 0;
-					}).sort(function (s1, s2) {
-						return s2.TimeInAlarm - s1.TimeInAlarm;
-					});
+				return s.TimeInAlarm > 0;
+			}).sort(function (s1, s2) {
+				return s2.TimeInAlarm - s1.TimeInAlarm;
+			});
 		}
+
+		fake(/\.\.\/api\/AgentStates\/InAlarmExcludingPhoneStatesFor\?(.*)/,
+			function (params) {
+				var ret = (function () {
+					if (params.siteIds != null && params.skillIds != null)
+						return agentStates.filter(function (a) {
+							return params.skillIds.indexOf(a.SkillId) >= 0
+						}).filter(function (a) {
+							return params.siteIds.indexOf(a.SiteId) >= 0
+						});
+					if (params.siteIds != null)
+						return agentStates.filter(function (a) {
+							return params.siteIds.indexOf(a.SiteId) >= 0
+						});
+					if (params.teamIds != null && params.skillIds != null)
+						return agentStates.filter(function (a) {
+							return params.skillIds.indexOf(a.SkillId) >= 0
+						}).filter(function (a) {
+							return params.teamIds.indexOf(a.TeamId) >= 0
+						});
+					if (params.teamIds != null)
+						return agentStates.filter(function (a) {
+							return params.teamIds.indexOf(a.TeamId) >= 0
+						});
+					return agentStates.filter(function (a) {
+						return params.skillIds.indexOf(a.SkillId) >= 0
+					});
+				})();
+				return [200, {
+					Time: serverTime,
+					States: agentStatesInAlarm(ret).filter(function (s) {
+						return params.excludedStateIds.indexOf(s.StateId) === -1;
+					})
+				}];
+			});
+
 
 
 		fake(/\.\.\/api\/Agents\/StatesFor(.*)/,
@@ -412,6 +448,11 @@
 							if (data.ids.indexOf(s.StateId) > -1)
 								return true;
 						})
+						.concat(agentStates
+							.filter(function (s) {
+								if (data.ids.indexOf(s.StateId) > -1)
+									return true;
+							}))
 						.map(function (s) {
 							return {
 								Name: s.State,

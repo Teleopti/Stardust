@@ -393,8 +393,12 @@
 									siteIds: siteIds,
 									teamIds: teamIds,
 									skillIds: skillIds,
-									skillAreaId: skillAreaId
-								});
+									skillAreaId: skillAreaId,
+									excludedStateIds: excludedStateIds()
+										.map(function (s) {
+											return s === nullStateId ? null : s;
+										})
+								})
 							})
 							.then(function (agentsInfo) {
 								vm.agentsInfo = agentsInfo.States;
@@ -418,7 +422,11 @@
 										siteIds: siteIds,
 										teamIds: teamIds,
 										skillIds: skillIds,
-										skillAreaId: skillAreaId
+										skillAreaId: skillAreaId,
+										excludedStateIds: excludedStateIds()
+										.map(function (s) {
+											return s === nullStateId ? null : s;
+										})
 									});
 								})
 								.then(function (agentsInfo) {
@@ -438,27 +446,27 @@
 					}
 
 					else {
-				getAgents()
-					.then(function (fn) {
-						return fn({
-							siteIds: siteIds,
-							teamIds: teamIds,
-							skillIds: skillIds,
-							skillAreaId: skillAreaId
-						});
-					})
-					.then(function (agentsInfo) {
-						vm.agentsInfo = agentsInfo;
-						vm.agents = agentsInfo;
-						$scope.$watchCollection(function () {
-							return vm.agents;
-						}, filterData);
-						updateBreadCrumb(agentsInfo);
-						vm.pollingLock = true;
-					})
-					.then(updateStates)
-					.then(updatePhoneStatesFromStateParams);
-			}
+						getAgents()
+							.then(function (fn) {
+								return fn({
+									siteIds: siteIds,
+									teamIds: teamIds,
+									skillIds: skillIds,
+									skillAreaId: skillAreaId
+								});
+							})
+							.then(function (agentsInfo) {
+								vm.agentsInfo = agentsInfo;
+								vm.agents = agentsInfo;
+								$scope.$watchCollection(function () {
+									return vm.agents;
+								}, filterData);
+								updateBreadCrumb(agentsInfo);
+								vm.pollingLock = true;
+							})
+							.then(updateStates)
+							.then(updatePhoneStatesFromStateParams);
+					}
 				});
 
 			}
@@ -853,7 +861,9 @@
 						deferred.resolve(rtaService.agentStatesFor);
 					});
 			} else {
-				if (vm.agentsInAlarm)
+				if (excludedStateIds().length > 0)
+					deferred.resolve(rtaService.agentStatesInAlarmExcludingPhoneStatesFor);
+				else if (vm.agentsInAlarm)
 					deferred.resolve(rtaService.agentStatesInAlarmFor);
 				else
 					deferred.resolve(rtaService.agentStatesFor);
