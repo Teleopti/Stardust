@@ -120,7 +120,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
 		{
-			_absenceRequestValidators = new List<IAbsenceRequestValidator> { new AbsenceRequestNoneValidator() };
 			if (!personRequestsIds.Any()) return;
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			IList<IPersonRequest> personRequests;
