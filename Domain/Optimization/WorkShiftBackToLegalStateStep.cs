@@ -27,27 +27,27 @@ namespace Teleopti.Ccc.Domain.Optimization
             _deleteService = deleteService;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IScheduleDay ExecuteWeekStep(int weekIndex, IScheduleMatrixPro scheduleMatrix, ISchedulePartModifyAndRollbackService rollbackService)
         {
             ILockableBitArray weeklyBitArray = _bitArrayCreator.CreateWeeklyBitArray(weekIndex,  scheduleMatrix);
-			int? indexToRemove = _decisionMaker.Execute(weeklyBitArray, false, new DateOnlyPeriod(scheduleMatrix.FullWeeksPeriodDays[0].Day, scheduleMatrix.FullWeeksPeriodDays[scheduleMatrix.FullWeeksPeriodDays.Count - 1].Day));
+	        var scheduleMatrixFullWeeksPeriodDays = scheduleMatrix.FullWeeksPeriodDays;
+	        int? indexToRemove = _decisionMaker.Execute(weeklyBitArray, false, new DateOnlyPeriod(scheduleMatrixFullWeeksPeriodDays[0].Day, scheduleMatrixFullWeeksPeriodDays[scheduleMatrixFullWeeksPeriodDays.Length - 1].Day));
             if (!indexToRemove.HasValue)
                 return null;
-            IScheduleDayPro foundDay = scheduleMatrix.FullWeeksPeriodDays[indexToRemove.Value];
+            IScheduleDayPro foundDay = scheduleMatrixFullWeeksPeriodDays[indexToRemove.Value];
 			var scheduleDay = (IScheduleDay)foundDay.DaySchedulePart().Clone();
 			deleteWorkShift(scheduleDay, rollbackService);
 			return scheduleDay;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IScheduleDay ExecutePeriodStep(bool raise, IScheduleMatrixPro scheduleMatrix, ISchedulePartModifyAndRollbackService rollbackService)
         {
             ILockableBitArray periodBitArray = _bitArrayCreator.CreatePeriodBitArray(raise, scheduleMatrix);
-			int? indexToRemove = _decisionMaker.Execute(periodBitArray, raise, new DateOnlyPeriod(scheduleMatrix.FullWeeksPeriodDays[0].Day, scheduleMatrix.FullWeeksPeriodDays[scheduleMatrix.FullWeeksPeriodDays.Count - 1].Day));
+	        var scheduleMatrixFullWeeksPeriodDays = scheduleMatrix.FullWeeksPeriodDays;
+	        int? indexToRemove = _decisionMaker.Execute(periodBitArray, raise, new DateOnlyPeriod(scheduleMatrixFullWeeksPeriodDays[0].Day, scheduleMatrixFullWeeksPeriodDays[scheduleMatrixFullWeeksPeriodDays.Length - 1].Day));
             if (!indexToRemove.HasValue)
                 return null;
-            IScheduleDayPro foundDay = scheduleMatrix.FullWeeksPeriodDays[indexToRemove.Value];
+            IScheduleDayPro foundDay = scheduleMatrixFullWeeksPeriodDays[indexToRemove.Value];
 			var scheduleDay = (IScheduleDay)foundDay.DaySchedulePart().Clone();
 			deleteWorkShift(scheduleDay, rollbackService);
 			return scheduleDay;

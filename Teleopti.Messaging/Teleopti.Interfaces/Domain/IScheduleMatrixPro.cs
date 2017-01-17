@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -21,37 +20,37 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the contained schedule period days.
         /// </summary>
         /// <value>The schedule days.</value>
-        ReadOnlyCollection<IScheduleDayPro> EffectivePeriodDays { get; }
+        IScheduleDayPro[] EffectivePeriodDays { get; }
 
         /// <summary>
         /// Gets the unlocked days.
         /// </summary>
         /// <value>The un locked days.</value>
-        ReadOnlyCollection<IScheduleDayPro> UnlockedDays { get; }
+        IScheduleDayPro[] UnlockedDays { get; }
 
         /// <summary>
         /// Gets the full weeks period days.
         /// </summary>
         /// <value>The outer period days.</value>
-        ReadOnlyCollection<IScheduleDayPro> FullWeeksPeriodDays { get; }
+        IScheduleDayPro[] FullWeeksPeriodDays { get; }
 
         /// <summary>
         /// Gets the full weeks, extended by a week, period days.
         /// </summary>
         /// <value>The outer period days.</value>
-        ReadOnlyCollection<IScheduleDayPro> OuterWeeksPeriodDays { get; }
+        IScheduleDayPro[] OuterWeeksPeriodDays { get; }
 
         /// <summary>
         /// Gets the full week days plus the week before.
         /// </summary>
         /// <value>The full week days plus the week before.</value>
-        ReadOnlyCollection<IScheduleDayPro> WeekBeforeOuterPeriodDays { get; }
+        IScheduleDayPro[] WeekBeforeOuterPeriodDays { get; }
 
         /// <summary>
         /// Gets the full week days plus the week after.
         /// </summary>
         /// <value>The full week days plus the week after.</value>
-        ReadOnlyCollection<IScheduleDayPro> WeekAfterOuterPeriodDays { get; }
+        IScheduleDayPro[] WeekAfterOuterPeriodDays { get; }
 
         /// <summary>
         /// Gets the full week plus the week before the full week period dictionary.

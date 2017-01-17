@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         IScheduleDayPro _scheduleDay12;
         IScheduleDayPro _scheduleDay13;
         IScheduleDayPro _scheduleDay14;
-        private IList<IScheduleDayPro> _outerWeekList;
+        private IScheduleDayPro[] _outerWeekList;
 
         [SetUp]
         public void Setup()
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _scheduleDay13 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDay14 = _mocks.StrictMock<IScheduleDayPro>();
 
-            _outerWeekList = new List<IScheduleDayPro>
+            _outerWeekList = new []
                             {
                                 _scheduleDay1,
                                 _scheduleDay2,
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _bitArrayWorking.Set(3, true);
             using (_mocks.Record())
             {
-                Expect.Call(_matrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_outerWeekList))
+                Expect.Call(_matrix.OuterWeeksPeriodDays).Return(_outerWeekList)
                     .Repeat.Any();
                 Expect.Call(_scheduleDay10.Day).Return(new DateOnly(2010, 1, 3)).Repeat.Once();
                 Expect.Call(_scheduleDay11.Day).Return(new DateOnly(2010, 1, 4)).Repeat.Once();
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _bitArrayWorking.Set(3, true);
             using (_mocks.Record())
             {
-                Expect.Call(_matrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_outerWeekList))
+                Expect.Call(_matrix.OuterWeeksPeriodDays).Return(_outerWeekList)
                     .Repeat.Any();
                 Expect.Call(_scheduleDay3.Day).Return(new DateOnly(2010, 1, 3)).Repeat.Once();
                 Expect.Call(_scheduleDay4.Day).Return(new DateOnly(2010, 1, 4)).Repeat.Once();

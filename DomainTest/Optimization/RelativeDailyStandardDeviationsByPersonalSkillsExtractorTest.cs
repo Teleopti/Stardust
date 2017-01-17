@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -81,8 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>
-						(new List<IScheduleDayPro> { _scheduleDayPro }))
+					.Return(new [] { _scheduleDayPro })
 					.Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
@@ -135,8 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>
-						(new List<IScheduleDayPro> { _scheduleDayPro }))
+					.Return(new [] { _scheduleDayPro })
 					.Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
@@ -191,8 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>
-						(new List<IScheduleDayPro> { _scheduleDayPro }))
+					.Return(new [] { _scheduleDayPro })
 					.Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
@@ -245,8 +241,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>
-						(new List<IScheduleDayPro> { _scheduleDayPro }))
+					.Return(new [] { _scheduleDayPro })
 					.Repeat.Any();
 
 				Expect.Call(_scheduleDayPro.Day)
@@ -305,8 +300,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>
-						(new List<IScheduleDayPro> { _scheduleDayPro }))
+					.Return(new [] { _scheduleDayPro })
 					.Repeat.Any();
 
 				Expect.Call(_scheduleDayPro.Day)
@@ -355,8 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>
-						(new List<IScheduleDayPro> { _scheduleDayPro }))
+					.Return(new [] { _scheduleDayPro })
 					.Repeat.Any();
 
 				Expect.Call(_scheduleDayPro.Day)

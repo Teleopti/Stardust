@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyLockDayWithPersonMeetingTest()
         {
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 };
-            ReadOnlyCollection<IScheduleDayPro> unlockedDays = new ReadOnlyCollection<IScheduleDayPro>(unlockedList);
+            var unlockedDays = new []{ _scheduleDayPro1, _scheduleDayPro2 };
             DateTime lockDate = new DateTime(2000, 01, 01);
 
             using (_mockRepository.Record())

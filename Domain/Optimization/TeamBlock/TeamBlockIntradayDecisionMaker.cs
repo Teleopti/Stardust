@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					                                                                                               schedulingOptions, _schedulingResultStateHolder());
 				var values = scheduleResultDataExtractor.Values();
 				var periodDays = matrix.EffectivePeriodDays;
-				for (var i = 0; i < periodDays.Count; i++)
+				for (var i = 0; i < periodDays.Length; i++)
 				{
 					if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
 						standardDeviationData.Add(periodDays[i].Day, values[i]);

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(_matrix.Person).Return(_person);
 			Expect.Call(_matrix.EffectivePeriodDays)
-			      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+			      .Return(new [] {_scheduleDayPro});
 			Expect.Call(_scheduleDayPro.Day).Return(DateOnly.MinValue);
 			Expect.Call(_person.Period(DateOnly.MinValue)).Return(_personPeriod);
 			

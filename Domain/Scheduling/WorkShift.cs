@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		        var outPeriod = new DateTimePeriod(start, end);
 
 		        return new EditableShiftLayer(layer.Payload, outPeriod);
-	        }));
+	        }).ToArray());
 
             return ret;
         }

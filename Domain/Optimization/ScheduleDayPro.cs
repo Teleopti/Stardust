@@ -11,9 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </remarks>
     public class ScheduleDayPro : IScheduleDayPro
     {
-	    private readonly DateOnly _day;
-        private readonly IScheduleMatrixPro _scheduleMatrix;
-
 	    /// <summary>
         /// Initializes a new instance of the <see cref="ScheduleDayPro"/> class.
         /// </summary>
@@ -22,13 +19,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         public ScheduleDayPro(DateOnly day, IScheduleMatrixPro scheduleMatrix)
         {
             InParameter.NotNull(nameof(scheduleMatrix), scheduleMatrix);
-            _day = day;
-            _scheduleMatrix = scheduleMatrix; 
+            Day = day;
+            Parent = scheduleMatrix; 
         }
 
-	    public DateOnly Day => _day;
+	    public DateOnly Day { get; }
 
-	    public IScheduleMatrixPro Parent => _scheduleMatrix;
+	    public IScheduleMatrixPro Parent { get; }
 
 	    public IScheduleRange ActiveScheduleRange => Parent.ActiveScheduleRange;
 

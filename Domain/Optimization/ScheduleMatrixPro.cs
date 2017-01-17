@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
     public class ScheduleMatrixPro : IScheduleMatrixPro
     {
-        private readonly IPerson _person;
-        private readonly IVirtualSchedulePeriod _schedulePeriod;
-		private readonly IDictionary<DateOnly, IScheduleDayPro> _effectivePeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
+	    private readonly IDictionary<DateOnly, IScheduleDayPro> _effectivePeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
 	    private readonly IDictionary<DateOnly, IScheduleDayPro> _fullWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
 	    private readonly IDictionary<DateOnly, IScheduleDayPro> _outerWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
 	    private readonly IDictionary<DateOnly, IScheduleDayPro> _weekBeforeOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IDictionary<DateOnly, IScheduleDayPro> _weekAfterOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IDictionary<DateOnly, IScheduleDayPro> _unLockedDays = new Dictionary<DateOnly, IScheduleDayPro>();
-        private readonly IScheduleRange _activeScheduleRange;
 
 	    /// <summary>
         /// Initializes a new instance of the <see cref="ScheduleDayPro"/> class.
@@ -25,17 +22,17 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="schedulePeriod">The schedule period.</param>
         public ScheduleMatrixPro(ISchedulingResultStateHolder stateHolder, IFullWeekOuterWeekPeriodCreator periodCreator, IVirtualSchedulePeriod schedulePeriod)
         {
-            _person = periodCreator.Person;
-            _schedulePeriod = schedulePeriod;
-            _activeScheduleRange = stateHolder.Schedules[_person];
+            Person = periodCreator.Person;
+            SchedulePeriod = schedulePeriod;
+            ActiveScheduleRange = stateHolder.Schedules[Person];
             createScheduleDays(periodCreator);
         }
 
 		public ScheduleMatrixPro(IScheduleRange activeScheduleRange, IFullWeekOuterWeekPeriodCreator periodCreator, IVirtualSchedulePeriod schedulePeriod)
 		{
-			_person = periodCreator.Person;
-			_schedulePeriod = schedulePeriod;
-			_activeScheduleRange = activeScheduleRange;
+			Person = periodCreator.Person;
+			SchedulePeriod = schedulePeriod;
+			ActiveScheduleRange = activeScheduleRange;
 			createScheduleDays(periodCreator);
 		}
 
@@ -44,93 +41,37 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    return !_unLockedDays.ContainsKey(date);
 	    }
 
-        public IPerson Person
-        {
-            get { return _person; }
-        }
+        public IPerson Person { get; }
 
-        public ReadOnlyCollection<IScheduleDayPro> FullWeeksPeriodDays
-        {
-            get
-            {
-                IList<IScheduleDayPro> tempList = new List<IScheduleDayPro>(_fullWeeksPeriodDays.Values);
-                return new ReadOnlyCollection<IScheduleDayPro>(tempList);
-            }
-        }
+	    public IScheduleDayPro[] FullWeeksPeriodDays => _fullWeeksPeriodDays.Values.ToArray();
 
-        public ReadOnlyCollection<IScheduleDayPro> OuterWeeksPeriodDays
-        {
-            get
-            {
-                IList<IScheduleDayPro> tempList = new List<IScheduleDayPro>(_outerWeeksPeriodDays.Values);
-                return new ReadOnlyCollection<IScheduleDayPro>(tempList);
-            }
-        }
+	    public IScheduleDayPro[] OuterWeeksPeriodDays => _outerWeeksPeriodDays.Values.ToArray();
 
-        public ReadOnlyCollection<IScheduleDayPro> WeekBeforeOuterPeriodDays
-        {
-            get 
-            {
-                IList<IScheduleDayPro> tempList = new List<IScheduleDayPro>(_weekBeforeOuterPeriodDays.Values);
-                return new ReadOnlyCollection<IScheduleDayPro>(tempList);
-            }
-        }
+	    public IScheduleDayPro[] WeekBeforeOuterPeriodDays => _weekBeforeOuterPeriodDays.Values.ToArray();
 
-        public ReadOnlyCollection<IScheduleDayPro> WeekAfterOuterPeriodDays
-        {
-            get
-            {
-                IList<IScheduleDayPro> tempList = new List<IScheduleDayPro>(_weekAfterOuterPeriodDays.Values);
-                return new ReadOnlyCollection<IScheduleDayPro>(tempList);
-            }
-        }
+	    public IScheduleDayPro[] WeekAfterOuterPeriodDays => _weekAfterOuterPeriodDays.Values.ToArray();
 
-        public IDictionary<DateOnly, IScheduleDayPro> WeekBeforeOuterPeriodDictionary
-        {
-            get { return _weekBeforeOuterPeriodDays; }
-        }
+	    public IDictionary<DateOnly, IScheduleDayPro> WeekBeforeOuterPeriodDictionary => _weekBeforeOuterPeriodDays;
 
-        public IDictionary<DateOnly, IScheduleDayPro> WeekAfterOuterPeriodDictionary
-        {
-            get { return _weekAfterOuterPeriodDays; }
-        }
+	    public IDictionary<DateOnly, IScheduleDayPro> WeekAfterOuterPeriodDictionary => _weekAfterOuterPeriodDays;
 
-        public IDictionary<DateOnly, IScheduleDayPro> OuterWeeksPeriodDictionary
-        {
-            get { return _outerWeeksPeriodDays; }
-        }
+	    public IDictionary<DateOnly, IScheduleDayPro> OuterWeeksPeriodDictionary => _outerWeeksPeriodDays;
 
-        public IDictionary<DateOnly, IScheduleDayPro> FullWeeksPeriodDictionary
-        {
-            get { return _fullWeeksPeriodDays; }
-        }
+	    public IDictionary<DateOnly, IScheduleDayPro> FullWeeksPeriodDictionary => _fullWeeksPeriodDays;
 
-        public ReadOnlyCollection<IScheduleDayPro> EffectivePeriodDays
-        {
-            get
-            {
-                IList<IScheduleDayPro> tempList = new List<IScheduleDayPro>(_effectivePeriodDays.Values);
-                return new ReadOnlyCollection<IScheduleDayPro>(tempList);
-            }
-        }
+	    public IScheduleDayPro[] EffectivePeriodDays => _effectivePeriodDays.Values.ToArray();
 
-        public ReadOnlyCollection<IScheduleDayPro>  UnlockedDays
-        {
-            get
-            {
-                IList<IScheduleDayPro> tempList = new List<IScheduleDayPro>(_unLockedDays.Values);
-                return new ReadOnlyCollection<IScheduleDayPro>(tempList);
-            }
-        }
+	    public IScheduleDayPro[]  UnlockedDays => _unLockedDays.Values.ToArray();
 
-		public void UnlockPeriod(DateOnlyPeriod period)
+	    public void UnlockPeriod(DateOnlyPeriod period)
 		{
 			foreach (var dateOnly in period.DayCollection())
 			{
-				if (!_effectivePeriodDays.ContainsKey(dateOnly))
-					throw new ArgumentOutOfRangeException("period");
+				IScheduleDayPro scheduleDayPro;
+				if (!_effectivePeriodDays.TryGetValue(dateOnly, out scheduleDayPro))
+					throw new ArgumentOutOfRangeException(nameof(period));
 				if (!_unLockedDays.ContainsKey(dateOnly))
-					_unLockedDays.Add(dateOnly, _effectivePeriodDays[dateOnly]);
+					_unLockedDays.Add(dateOnly, scheduleDayPro);
 			}
 		}
 
@@ -138,8 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             foreach (var dateOnly in period.DayCollection())
             {
-                if (_unLockedDays.ContainsKey(dateOnly))
-                    _unLockedDays.Remove(dateOnly);
+	            _unLockedDays.Remove(dateOnly);
             }
         }
 
@@ -150,15 +90,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             return ret;
         }
 
-        public IVirtualSchedulePeriod SchedulePeriod
-        {
-            get { return _schedulePeriod; }
-        }
+        public IVirtualSchedulePeriod SchedulePeriod { get; }
 
-        public IScheduleRange ActiveScheduleRange
-        {
-            get { return _activeScheduleRange; }
-        }
+	    public IScheduleRange ActiveScheduleRange { get; }
 
 	    /// <summary>
         /// Creates the schedule days.

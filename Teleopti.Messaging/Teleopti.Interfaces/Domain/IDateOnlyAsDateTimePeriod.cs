@@ -1,3 +1,5 @@
+using System;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -29,5 +31,8 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-05-18
         /// </remarks>
         DateTimePeriod Period();
+
+	    bool Equals(IDateOnlyAsDateTimePeriod other);
+	    TimeZoneInfo TimeZone();
     }
 }

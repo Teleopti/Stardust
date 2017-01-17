@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamInfo _teamInfo;
 		private DateOnly _dateOnly;
 		private IList<IScheduleMatrixPro> _scheduleMatrixPros;
-		private IList<IScheduleDayPro> _scheduleDayPros;
+		private IScheduleDayPro[] _scheduleDayPros;
 		private IScheduleDay _scheduleDay;
 		private IPersonAssignment _personAssignment;
 			
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDayPro5 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro6 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro7 = _mock.StrictMock<IScheduleDayPro>();	
-			_scheduleDayPros = new List<IScheduleDayPro>{_scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6, _scheduleDayPro7};
+			_scheduleDayPros = new []{_scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6, _scheduleDayPro7};
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_personAssignment = _mock.StrictMock<IPersonAssignment>();
 		}
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mock.Record())
 			{
 				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_dateOnly)).Return(_scheduleMatrixPros);
-				Expect.Call(_scheduleMatrixPro.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros));
+				Expect.Call(_scheduleMatrixPro.FullWeeksPeriodDays).Return(_scheduleDayPros);
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay);
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mock.Record())
 			{
 				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_dateOnly)).Return(_scheduleMatrixPros);
-				Expect.Call(_scheduleMatrixPro.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros));
+				Expect.Call(_scheduleMatrixPro.FullWeeksPeriodDays).Return(_scheduleDayPros);
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay);
@@ -127,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mock.Record())
 			{
 				Expect.Call(_teamInfo.MatrixesForGroup()).Return(_scheduleMatrixPros);
-				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros));
+				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(_scheduleDayPros);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay);
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mock.Record())
 			{
 				Expect.Call(_teamInfo.MatrixesForGroup()).Return(_scheduleMatrixPros);
-				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros));
+				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(_scheduleDayPros);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay);

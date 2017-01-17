@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -81,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InEffective"), Test]
+        [Test]
         public void VerifyScheduleDayEquatorCalledForEachDayInEffectivePeriodDays()
         {
             IPerson person = PersonFactory.CreatePerson();
@@ -96,13 +94,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             SchedulePartFactoryForDomain schedulePartFactory = new SchedulePartFactoryForDomain(person, scenario, dateTimePeriod, skill);
             
             _part = schedulePartFactory.CreatePartWithMainShift();
-            IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> {_scheduleDayPro, scheduleDayPro2};
+            var periodDays = new [] {_scheduleDayPro, scheduleDayPro2};
 
-            int periodDayCount = periodDays.Count;
+            int periodDayCount = periodDays.Length;
 
             using(_mocks.Record())
             {
-                Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
+                Expect.Call(_matrix.EffectivePeriodDays).Return(periodDays).Repeat.Any();
                 Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 10)).Repeat.Any();
                 Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 10))).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
@@ -128,16 +126,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			IScheduleDayPro scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 
-			IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> {_scheduleDayPro, scheduleDayPro2};
+			var periodDays = new [] {_scheduleDayPro, scheduleDayPro2};
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
+				Expect.Call(_matrix.EffectivePeriodDays).Return(periodDays).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 10)).Repeat.Any();
-				//Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 10))).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 11)).Repeat.Any();
-				//Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 11))).Return(_scheduleDayPro);
 				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
 				Expect.Call(_part.Clone()).Return(_part).Repeat.Twice();
 				Expect.Call(_part.SignificantPart()).Return(SchedulePartView.DayOff);
@@ -157,58 +153,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Assert.AreEqual(.5, ret);
 		}
-
-        //[Test]
-        //public void VerifyScheduleDayEquatorShouldReturnTheNumberOfDayEquatorReturnTrue()
-        //{
-        //    IPerson person = PersonFactory.CreatePerson();
-        //    IScenario scenario = new Scenario("TestScenario");
-        //    DateTime startDate = new DateTime(2010, 01, 10, 0, 0, 0, DateTimeKind.Utc);
-        //    DateTime endDate = startDate.AddDays(10);
-        //    DateTimePeriod dateTimePeriod = new DateTimePeriod(startDate, endDate);
-        //    ISkill skill = SkillFactory.CreateSkill("TestSkill");
-
-        //    IScheduleDayPro scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
-
-        //    SchedulePartFactoryForDomain schedulePartFactory = new SchedulePartFactoryForDomain(person, scenario, dateTimePeriod, skill);
-
-        //    _part = schedulePartFactory.CreatePartWithMainShift();
-        //    IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> { _scheduleDayPro, scheduleDayPro2 };
-
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
-        //        Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 10)).Repeat.Any();
-        //        Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 10))).Return(_scheduleDayPro);
-        //        Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
-        //        Expect.Call(scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 11)).Repeat.Any();
-        //        Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 11))).Return(scheduleDayPro2);
-        //        Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
-        //        Expect.Call(_scheduleDayEquator.MainShiftEquals(null, null)).IgnoreArguments()
-        //            .Return(true)
-        //            .Repeat.Once();
-        //        Expect.Call(_scheduleDayEquator.MainShiftEquals(null, null)).IgnoreArguments()
-        //            .Return(false)
-        //            .Repeat.Once();
-
-        //    }
-
-        //    double result;
-        //    using (_mocks.Playback())
-        //    {
-        //        _target = new ScheduleMatrixOriginalStateContainer(_matrix, _scheduleDayEquator);
-        //        result = _target.ChangedWorkShiftsPercent();
-        //    }
-
-        //    Assert.AreEqual(1, result);
-        //}
-
+		
         private void mockExpectations()
         {
             
-            IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro>{_scheduleDayPro};
+            var periodDays = new []{_scheduleDayPro};
             
-            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
+            Expect.Call(_matrix.EffectivePeriodDays).Return(periodDays).Repeat.Any();
             Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 1)).Repeat.Any();
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
             Expect.Call(_part.Clone()).Return(_part).Repeat.Once();

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -25,9 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
         private IMatrixData _matrixData1;
         private IMatrixData _matrixData2;
         private ISchedulePartModifyAndRollbackService _rollbackService;
-        private IList<IScheduleDayData> _scheduleDayDataList;
-        private IScheduleDayData _scheduleDayData1;
-        private IScheduleDayData _scheduleDayData2;
         private IDayOffTemplate _dayOffTemplate;
         private IScheduleDayPro _scheduleDayPro1;
         private IScheduleDay _scheduleDay1;
@@ -51,17 +47,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
             _matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
             _matrix2 = _mock.StrictMock<IScheduleMatrixPro>();
             _schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
-            _matrixList = new List<IScheduleMatrixPro>() {_matrix1, _matrix2};
+            _matrixList = new List<IScheduleMatrixPro> {_matrix1, _matrix2};
 			_splitSchedulePeriodToWeekPeriod = _mock.StrictMock<ISplitSchedulePeriodToWeekPeriod>();
             _target = new TeamBlockMissingDayOffHandler(_missingDayOffBestSpotDecider,_matrixDataListCreator,_matrixDataWithToFewDaysOff,_splitSchedulePeriodToWeekPeriod);
             _matrixData1 = _mock.StrictMock<IMatrixData>();
             _matrixData2 = _mock.StrictMock<IMatrixData>();
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _scheduleDayData1 = _mock.StrictMock<IScheduleDayData>();
-            _scheduleDayData2 = _mock.StrictMock<IScheduleDayData>();
-            _scheduleDayDataList = new List<IScheduleDayData>() {_scheduleDayData1, _scheduleDayData2};
             _dayOffTemplate = _mock.StrictMock<IDayOffTemplate>();
-            _matrixDataList = new List<IMatrixData>() {_matrixData1, _matrixData2};
+            _matrixDataList = new List<IMatrixData> {_matrixData1, _matrixData2};
 		    _person = PersonFactory.CreatePerson();
         }
 
@@ -144,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
  
                 Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.Twice();
                 Expect.Call(_matrix1.GetScheduleDayByKey(today.Value)).Return(_scheduleDayPro1);
-                Expect.Call(_matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1 }));
+                Expect.Call(_matrix1.UnlockedDays).Return(new [] { _scheduleDayPro1 });
 				Expect.Call(_schedulingOptions.DayOffTemplate).Return(_dayOffTemplate);
                 Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
                 Expect.Call(() => _scheduleDay1.CreateAndAddDayOff(_dayOffTemplate)).IgnoreArguments();
@@ -184,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
 
 				Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.Twice();
 				Expect.Call(_matrix1.GetScheduleDayByKey(today.Value)).Return(_scheduleDayPro1);
-				Expect.Call(_matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1 }));
+				Expect.Call(_matrix1.UnlockedDays).Return(new [] { _scheduleDayPro1 });
 				Expect.Call(_schedulingOptions.DayOffTemplate).Return(_dayOffTemplate);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 				Expect.Call(() => _scheduleDay1.CreateAndAddDayOff(_dayOffTemplate)).IgnoreArguments();

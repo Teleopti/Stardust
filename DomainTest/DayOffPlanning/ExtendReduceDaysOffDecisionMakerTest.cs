@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 commonMocks();
                 Expect.Call(_validator.IsValid(_bitArray.ToLongBitArray(), 6)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(standardList());
-                Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWeekPeriodDays()))
+                Expect.Call(_matrix.FullWeeksPeriodDays).Return(fullWeekPeriodDays())
                .Repeat.AtLeastOnce();
             }
 
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 commonMocks();
                 Expect.Call(_validator.IsValid(_bitArray.ToLongBitArray(), 6)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(standardList());
-                Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWeekPeriodDays()))
+                Expect.Call(_matrix.FullWeeksPeriodDays).Return(fullWeekPeriodDays())
                .Repeat.AtLeastOnce();
             }
 
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 commonMocks();
                 Expect.Call(_validator.IsValid(_bitArray.ToLongBitArray(), 6)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(new List<double?> {1, 32, 32, 1, 10, 10, 0});
-                Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWeekPeriodDays()))
+                Expect.Call(_matrix.FullWeeksPeriodDays).Return(fullWeekPeriodDays())
                .Repeat.AtLeastOnce();
             }
 
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 commonMocks();
                 Expect.Call(_validator.IsValid(_bitArray.ToLongBitArray(), 6)).Return(true).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(new List<double?> { -1, -32, -32, -1, -10, -10, 0 });
-                Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWeekPeriodDays()))
+                Expect.Call(_matrix.FullWeeksPeriodDays).Return(fullWeekPeriodDays())
                .Repeat.AtLeastOnce();
             }
 
@@ -190,9 +189,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             return new List<double?>{ 1, -32, 32, -1, -10, 10, 0};
         }
 
-        private IList<IScheduleDayPro> fullWeekPeriodDays()
+        private IScheduleDayPro[] fullWeekPeriodDays()
         {
-            return new List<IScheduleDayPro>
+            return new []
                        {
                            _scheduleDayPro1,
                            _scheduleDayPro2,

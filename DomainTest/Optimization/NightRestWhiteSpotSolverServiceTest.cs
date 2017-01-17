@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldReturnFalseIfReschedulingFails()
         {
             NightRestWhiteSpotSolverResult nightRestWhiteSpotSolverResult = new NightRestWhiteSpotSolverResult();
-            nightRestWhiteSpotSolverResult.DaysToDelete.Add(new DateOnly(2011, 1, 1));
+            nightRestWhiteSpotSolverResult.AddDayToDelete(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 2));
 
@@ -54,12 +55,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mocks.Record())
             {
                 Expect.Call(_solver.Resolve(_matrix)).Return(nightRestWhiteSpotSolverResult);
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete[0])).Return(day1).Repeat.Twice();
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete.First())).Return(day1).Repeat.Twice();
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete).Repeat.Twice();
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete },
 															  _schedulePartModifyAndRollbackService, true, false));
 
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule().First())).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
                 Expect.Call(day2.DaySchedulePart()).Return(scheduleDayToFill);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, _resourceCalculateDelayer, _schedulePartModifyAndRollbackService)).Return(false);
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldRemoveIndicatedDaysAndRescheduleAllDays()
         {
             NightRestWhiteSpotSolverResult nightRestWhiteSpotSolverResult = new NightRestWhiteSpotSolverResult();
-            nightRestWhiteSpotSolverResult.DaysToDelete.Add(new DateOnly(2011, 1, 1));
+            nightRestWhiteSpotSolverResult.AddDayToDelete(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 2));
 
@@ -93,17 +94,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mocks.Record())
             {
                 Expect.Call(_solver.Resolve(_matrix)).Return(nightRestWhiteSpotSolverResult);
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete[0])).Return(day1);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete.First())).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete },
 															  _schedulePartModifyAndRollbackService, true, false));
 
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule().First())).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
                 Expect.Call(day2.DaySchedulePart()).Return(scheduleDayToFill);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, _resourceCalculateDelayer, _schedulePartModifyAndRollbackService)).Return(true);
 
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[1])).Return(day1);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule().ElementAt(1))).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToDelete, _schedulingOptions, _resourceCalculateDelayer, _schedulePartModifyAndRollbackService)).Return(true);
             }
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldRescheduleDeletedDays()
         {
             NightRestWhiteSpotSolverResult nightRestWhiteSpotSolverResult = new NightRestWhiteSpotSolverResult();
-            nightRestWhiteSpotSolverResult.DaysToDelete.Add(new DateOnly(2011, 1, 1));
+            nightRestWhiteSpotSolverResult.AddDayToDelete(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 2));
 
@@ -154,17 +155,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_solver.Resolve(_matrix)).Return(nightRestWhiteSpotSolverResult);
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete[0])).Return(day1);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete.First())).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
                 Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete },
                                                               _schedulePartModifyAndRollbackService, true, false));
 
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule().First())).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
                 Expect.Call(day2.DaySchedulePart()).Return(scheduleDayToFill);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, _resourceCalculateDelayer, _schedulePartModifyAndRollbackService)).Return(false);
 
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[1])).Return(day1);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule().ElementAt(1))).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToDelete, _schedulingOptions, _resourceCalculateDelayer, _schedulePartModifyAndRollbackService)).Return(true);
             }
@@ -183,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldReturnTrueIfTheBlankSpotIsResolved()
         {
             NightRestWhiteSpotSolverResult nightRestWhiteSpotSolverResult = new NightRestWhiteSpotSolverResult();
-            nightRestWhiteSpotSolverResult.DaysToDelete.Add(new DateOnly(2011, 1, 1));
+            nightRestWhiteSpotSolverResult.AddDayToDelete(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 1));
             nightRestWhiteSpotSolverResult.AddDayToReschedule(new DateOnly(2011, 1, 2));
 
@@ -195,17 +196,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_solver.Resolve(_matrix)).Return(nightRestWhiteSpotSolverResult);
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete[0])).Return(day1);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete.First())).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
                 Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete },
                                                               _schedulePartModifyAndRollbackService, true, false));
 
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule().First())).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
                 Expect.Call(day2.DaySchedulePart()).Return(scheduleDayToFill);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToFill, _schedulingOptions, _resourceCalculateDelayer, _schedulePartModifyAndRollbackService)).Return(true);
 
-                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[1])).Return(day1);
+                Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule().ElementAt(1))).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDayToDelete, _schedulingOptions, _resourceCalculateDelayer, _schedulePartModifyAndRollbackService)).Return(false);
             }

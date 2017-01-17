@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnIfFound()
 		{
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2014,9,3), TimeZoneInfo.Utc);
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
@@ -58,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2014, 9, 3))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, new DateOnly(2014, 9, 3),
-					TimeZoneInfo.Utc)).IgnoreArguments().Return(_shiftProjectionCache);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift,dateOnlyAsDateTimePeriod)).IgnoreArguments().Return(_shiftProjectionCache);
 			}
 
 			using (_mocks.Playback())

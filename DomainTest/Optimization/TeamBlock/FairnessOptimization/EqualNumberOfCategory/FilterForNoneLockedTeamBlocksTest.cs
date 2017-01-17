@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_teamInfo.MatrixForMemberAndDate(_person, DateOnly.MinValue)).Return(_matrix);
 				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_matrix.UnlockedDays)
-				      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+				      .Return(new []{_scheduleDayPro});
 			}
 
 			using (_mocks.Playback())
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_teamInfo.MatrixForMemberAndDate(_person, DateOnly.MinValue)).Return(_matrix);
 				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_matrix.UnlockedDays)
-				      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
+				      .Return(new IScheduleDayPro[0]);
 			}
 
 			using (_mocks.Playback())

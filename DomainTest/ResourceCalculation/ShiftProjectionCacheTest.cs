@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -41,9 +42,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 
 			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time"));
+			timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time");
 			// blir 7 - 16 med denna tidszon (W. Central Africa Standard Time)
-			target.SetDate(schedulingDate, timeZoneInfo);
+			target.SetDate(new DateOnlyAsDateTimePeriod(schedulingDate, timeZoneInfo));
 
 		}
 
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void VerifySetNewDate()
 		{
 			Assert.AreEqual(schedulingDate.Date, target.MainShiftProjection.Period().Value.StartDateTime.Date);
-			target.SetDate(schedulingDate.AddDays(1), timeZoneInfo);
+			target.SetDate(new DateOnlyAsDateTimePeriod(schedulingDate.AddDays(1), timeZoneInfo));
 			Assert.AreEqual(schedulingDate.Date.AddDays(1), target.MainShiftProjection.Period().Value.StartDateTime.Date);
 		}
 
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(lunch, lunchPeriod));
 
 			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			target.SetDate(schedulingDate, timeZoneInfo);
+			target.SetDate(new DateOnlyAsDateTimePeriod(schedulingDate, timeZoneInfo));
 
 			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc),
 			                                new DateTime(2009, 2, 2, 11, 30, 0, DateTimeKind.Utc));

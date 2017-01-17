@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var dayMain = MockRepository.GenerateMock<IScheduleDayPro>();
 			var partDo = MockRepository.GenerateMock<IScheduleDay>();
 			var partMain = MockRepository.GenerateMock<IScheduleDay>();
-            var periodDays = new List<IScheduleDayPro> { dayDo, dayDo, dayMain, dayDo };
+            var periodDays = new [] { dayDo, dayDo, dayMain, dayDo };
             var dateOnlyPeriod = new DateOnlyPeriod(2010, 1, 1, 2010, 1, 4);
             
 			CommonMocks(0.5);
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulePeriod.Stub(x => x.BalanceIn).Return(TimeSpan.FromHours(3));
 			_schedulePeriod.Stub(x => x.BalanceOut).Return(TimeSpan.FromHours(4));
             _contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-            _matrix.Stub(x => x.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays));
+            _matrix.Stub(x => x.EffectivePeriodDays).Return(periodDays);
             dayDo.Stub(x => x.DaySchedulePart()).Return(partDo);
             dayMain.Stub(x => x.DaySchedulePart()).Return(partMain);
             partDo.Stub(x => x.SignificantPart()).Return(SchedulePartView.DayOff);

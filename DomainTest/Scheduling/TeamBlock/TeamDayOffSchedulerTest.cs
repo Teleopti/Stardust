@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IMatrixData _matrixData1;
 		private IList<IMatrixData> _matrixDataList;
 		private IList<IScheduleMatrixPro> _matrixList;
-		private List<IScheduleDayPro> _scheduleDayProList;
+		private IScheduleDayPro[] _scheduleDayProList;
 		private Group _group;
 		private IScheduleDictionary _scheduleDictionary;
 		private IScheduleDay _scheduleDay;
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_matrixData1 = _mocks.StrictMock<IMatrixData>();
 			_matrixDataList = new List<IMatrixData> { _matrixData1 };
 			_matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			_scheduleDayProList = new List<IScheduleDayPro> {_scheduleDayPro};
+			_scheduleDayProList = new [] {_scheduleDayPro};
 			_group = new Group(_selectedPersons, "");
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -341,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_scheduleMatrixPro.Person).Return(_person1);
 
 			Expect.Call(_matrixData1.Matrix).Return(_scheduleMatrixPro);
-			Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayProList));
+			Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(_scheduleDayProList);
 			Expect.Call(_scheduleMatrixPro.Person).Return(_person1);
 		}
 

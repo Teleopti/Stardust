@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -131,9 +129,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private void ExpectationsOnlyMainShiftsUnlocked()
         {
-            IPerson person = PersonFactory.CreatePerson();
+            var person = PersonFactory.CreatePerson();
 
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
+            var unlockedList = new []
                                                         {
                                                             _scheduleDayPro1,
                                                             _scheduleDayPro2,
@@ -157,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                                                             _scheduleDayPro20,
                                                             _scheduleDayPro21
                                                         };
-            IList<IScheduleDayPro> fullWeeksList = new List<IScheduleDayPro>
+            var fullWeeksList = new []
                                                         {
                                                             _scheduleDayPro1,
                                                             _scheduleDayPro2,
@@ -181,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                                                             _scheduleDayPro20,
                                                             _scheduleDayPro21
                                                         };
-            IList<IScheduleDayPro> periodList = new List<IScheduleDayPro>
+            var periodList = new []
                                                         {
                                                             _scheduleDayPro1,
                                                             _scheduleDayPro2,
@@ -206,9 +204,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                                                             _scheduleDayPro21
                                                         };
 
-            Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedList)).Repeat.Any();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWeeksList)).Repeat.Any();
-            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
+            Expect.Call(_matrix.UnlockedDays).Return(unlockedList).Repeat.Any();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(fullWeeksList).Repeat.Any();
+            Expect.Call(_matrix.EffectivePeriodDays).Return(periodList).Repeat.Any();
 
             for (int i = 0; i < 21; i++)
             {

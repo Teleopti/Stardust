@@ -43,9 +43,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		    if (schedulingOptions.IsDayScheduled(scheduleDay))
 			    return false;
-
-		    var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
-		    assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly,
+			
+		    assignShiftProjection(shiftProjectionCache, scheduleDay,
 			    schedulePartModifyAndRollbackService, businessRules, schedulingOptions);
 
 			resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
@@ -53,9 +52,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
-		private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions)
+		private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions)
         {
-			shiftProjectionCache.SetDate(day, agentTimeZone);
+			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
 
 	        var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())

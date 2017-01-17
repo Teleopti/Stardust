@@ -5,12 +5,12 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IShiftProjectionCacheManager
 	{
-		IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(DateOnly scheduleDateOnly, TimeZoneInfo timeZone,
+		IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod,
 																						IEnumerable<IWorkShiftRuleSet> ruleSets, bool forRestrictionsOnly, bool checkExcluded);
 
-		IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(DateOnly scheduleDateOnly, TimeZoneInfo timeZone,
+		IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod,
 																										IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded);
 
-		IShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, DateOnly currentDate, TimeZoneInfo agentTimeZone);
+		IShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod);
 	}
 }

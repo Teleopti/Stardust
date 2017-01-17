@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IEditableShift MakeCopy()
 		{
 			var ret = new EditableShift(ShiftCategory);
-			ret.LayerCollection.AddRange(LayerCollection.Select(layer => new EditableShiftLayer(layer.Payload, layer.Period)));
+			ret.LayerCollection.AddRange(LayerCollection.Select(layer => new EditableShiftLayer(layer.Payload, layer.Period)).ToArray());
 
 			return ret;
 		}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var movedLayerPeriod = layer.Period.MovePeriod(datediff);
 				return new EditableShiftLayer(layer.Payload, movedLayerPeriod);
-			}));
+			}).ToArray());
 
 			return ret;
 		}

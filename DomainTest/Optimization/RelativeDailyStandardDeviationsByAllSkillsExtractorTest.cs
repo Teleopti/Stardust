@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -57,8 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>
-                        (new List<IScheduleDayPro> { _scheduleDayPro }))
+                    .Return(new [] { _scheduleDayPro })
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(_scheduleDayPro.Day)
@@ -108,8 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>
-                        (new List<IScheduleDayPro> { _scheduleDayPro }))
+                    .Return(new [] { _scheduleDayPro })
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(_scheduleDayPro.Day)
@@ -159,8 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>
-                        (new List<IScheduleDayPro> { _scheduleDayPro }))
+                    .Return(new [] { _scheduleDayPro })
                     .Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDayPro.Day)
                     .Return(scheduleDay).Repeat.AtLeastOnce();
@@ -209,8 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>
-                        (new List<IScheduleDayPro> { _scheduleDayPro }))
+                    .Return(new [] { _scheduleDayPro })
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(_scheduleDayPro.Day)
@@ -260,8 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>
-                        (new List<IScheduleDayPro> { _scheduleDayPro }))
+                    .Return(new [] { _scheduleDayPro })
                     .Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDayPro.Day)
                     .Return(scheduleDay).Repeat.AtLeastOnce();

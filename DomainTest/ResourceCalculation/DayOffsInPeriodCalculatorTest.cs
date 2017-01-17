@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -436,8 +435,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3})).Repeat.AtLeastOnce();
-				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3})).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new [] {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3}).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new [] {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3}).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro1.Day).Return(dateOnly1).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro2.Day).Return(dateOnly2).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro3.Day).Return(dateOnly3).Repeat.AtLeastOnce();
@@ -481,8 +480,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro, scheduleDayProNoDayOff})).Repeat.AtLeastOnce();
-				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro, scheduleDayProNoDayOff, scheduleDayProOutside}));
+				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new [] {scheduleDayPro, scheduleDayProNoDayOff}).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new [] {scheduleDayPro, scheduleDayProNoDayOff, scheduleDayProOutside});
 				Expect.Call(scheduleDayPro.Day).Return(dateOnly);
 				Expect.Call(scheduleDayProNoDayOff.Day).Return(dateOnlyNoDayOff);
 				Expect.Call(scheduleDayProOutside.Day).Return(dateOnlyOutside);

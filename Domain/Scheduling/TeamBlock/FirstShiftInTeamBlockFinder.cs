@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Common;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
@@ -26,8 +27,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 					{
 						IShiftProjectionCache foundRoleModel =
-							_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(scheduleDay.GetEditorShift(), dateForProjection,
-								person.PermissionInformation.DefaultTimeZone());
+							_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(scheduleDay.GetEditorShift(),
+								new DateOnlyAsDateTimePeriod(dateForProjection, person.PermissionInformation.DefaultTimeZone()));
 						return foundRoleModel;
 					}
 				}

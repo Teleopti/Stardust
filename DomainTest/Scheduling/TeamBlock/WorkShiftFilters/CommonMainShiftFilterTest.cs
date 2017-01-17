@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
 															  _activity, _category);
 			var shift = new ShiftProjectionCache(workShift3, _personalShiftMeetingTimeChecker);
-			shift.SetDate(_dateOnly, _timeZoneInfo);
+			shift.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo));
 			var effectiveRestriction = new EffectiveRestriction(
 				new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
@@ -109,10 +110,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var tmpList = getWorkShifts();
 			var retList = new List<IShiftProjectionCache>();
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
 				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(_dateOnly, _timeZoneInfo);
+				cache.SetDate(dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -38,8 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyLockDayWithPersonalShiftTest()
         {
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 };
-            ReadOnlyCollection<IScheduleDayPro> unlockedDays = new ReadOnlyCollection<IScheduleDayPro>(unlockedList);
+            var unlockedDays = new []{ _scheduleDayPro1, _scheduleDayPro2 };
             DateTime lockDate = new DateTime(2000, 01, 01);
 
             using(_mockRepository.Record())
@@ -69,8 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyLockDayWithNullPersonAssignment()
         {
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro> { _scheduleDayPro1 };
-            ReadOnlyCollection<IScheduleDayPro> unlockedDays = new ReadOnlyCollection<IScheduleDayPro>(unlockedList);
+            var unlockedDays = new []{ _scheduleDayPro1 };
 
             using (_mockRepository.Record())
             {
@@ -86,7 +83,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target.Execute();
             }
         }
-
-        // todo: Q: personAssignment.OvertimeShiftCollection is never null???
     }
 }

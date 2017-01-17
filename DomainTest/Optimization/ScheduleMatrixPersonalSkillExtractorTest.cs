@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_scheduleMatrix.Person).Return(_person);
                 Expect.Call(_scheduleMatrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+                    .Return(new [] { _scheduleDayPro });
                 Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 4, 1)).Repeat.Any();
             }
             using(_mock.Playback())

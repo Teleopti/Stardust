@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -181,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			IShiftCategory late = ShiftCategoryFactory.CreateShiftCategory("YY");
 			IPersonAssignment earlyAssignment = _mocks.StrictMock<IPersonAssignment>();
 			IPersonAssignment lateAssignment = _mocks.StrictMock<IPersonAssignment>();
-			IList<IScheduleDayPro> outerWeeksList = new List<IScheduleDayPro>
+			var outerWeeksList = new []
                                                         {
                                                             _scheduleDayPro1,
                                                             _scheduleDayPro2,
@@ -205,19 +203,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                             _scheduleDayPro20,
                                                             _scheduleDayPro21
                                                         };
-			IList<IScheduleDayPro> periodList = new List<IScheduleDayPro>
+			var periodList = new []
                                                     {
                                                         _scheduleDayPro10,
                                                         _scheduleDayPro11,
                                                         _scheduleDayPro12
                                                     };
-			IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
+			var unlockedList = new []
                                                       {
                                                           _scheduleDayPro11,
                                                           _scheduleDayPro12
                                                       };
 
-			IList<IScheduleDayPro> fullWeeksList = new List<IScheduleDayPro>
+			var fullWeeksList = new []
                                                        {
                                                            _scheduleDayPro8,
                                                            _scheduleDayPro9,
@@ -227,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                            _scheduleDayPro13,
                                                            _scheduleDayPro14
                                                        };
-			IList<IScheduleDayPro> weekBeforeOuterPeriodList = new List<IScheduleDayPro>
+			var weekBeforeOuterPeriodList = new []
                                                                    {
                                                                        _scheduleDayPro1,
                                                                        _scheduleDayPro2,
@@ -244,8 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                                        _scheduleDayPro13,
                                                                        _scheduleDayPro14
                                                                    };
-			IList<IScheduleDayPro> weekAfterOuterPeriodList = new List<IScheduleDayPro>
-                                                                  {
+			var weekAfterOuterPeriodList = new [] {
                                                                       _scheduleDayPro8,
                                                                       _scheduleDayPro9,
                                                                       _scheduleDayPro10,
@@ -262,12 +259,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                                       _scheduleDayPro21
                                                                   };
 
-			Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedList)).Repeat.Any();
-			Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
-			Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWeeksList)).Repeat.Any();
-			Expect.Call(_matrix.WeekBeforeOuterPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(weekBeforeOuterPeriodList)).Repeat.Any();
-			Expect.Call(_matrix.WeekAfterOuterPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(weekAfterOuterPeriodList)).Repeat.Any();
-			Expect.Call(_matrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeeksList)).Repeat.Any();
+			Expect.Call(_matrix.UnlockedDays).Return(unlockedList).Repeat.Any();
+			Expect.Call(_matrix.EffectivePeriodDays).Return(periodList).Repeat.Any();
+			Expect.Call(_matrix.FullWeeksPeriodDays).Return(fullWeeksList).Repeat.Any();
+			Expect.Call(_matrix.WeekBeforeOuterPeriodDays).Return(weekBeforeOuterPeriodList).Repeat.Any();
+			Expect.Call(_matrix.WeekAfterOuterPeriodDays).Return(weekAfterOuterPeriodList).Repeat.Any();
+			Expect.Call(_matrix.OuterWeeksPeriodDays).Return(outerWeeksList).Repeat.Any();
 
 			for (int i = 0; i < 21; i++)
 			{

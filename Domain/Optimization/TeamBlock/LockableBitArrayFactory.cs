@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
@@ -33,15 +34,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (IScheduleDayPro scheduleDayPro in list)
 			{
 				SchedulePartView significant = scheduleDayPro.DaySchedulePart().SignificantPart();
-				ret.Set(index, ((significant == SchedulePartView.DayOff) || (significant == SchedulePartView.ContractDayOff)));
+				ret.Set(index, (significant == SchedulePartView.DayOff) || (significant == SchedulePartView.ContractDayOff));
 				if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 					ret.Lock(index, true);
 
 				index++;
 			}
 
-			int periodAreaStart = list.IndexOf(matrix.EffectivePeriodDays[0]);
-			int periodAreaEnd = list.IndexOf(matrix.EffectivePeriodDays[matrix.EffectivePeriodDays.Count - 1]);
+			var matrixEffectivePeriodDays = matrix.EffectivePeriodDays;
+			int periodAreaStart = list.IndexOf(matrixEffectivePeriodDays[0]);
+			int periodAreaEnd = list.IndexOf(matrixEffectivePeriodDays[matrixEffectivePeriodDays.Length - 1]);
 			ret.PeriodArea = new MinMax<int>(periodAreaStart, periodAreaEnd);
 
 			return ret;

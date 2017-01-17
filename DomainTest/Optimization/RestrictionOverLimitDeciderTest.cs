@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IScheduleDayPro _scheduleDayPro8;
 		private IScheduleDayPro _scheduleDayPro9;
 		private IScheduleDayPro _scheduleDayPro10;
-		private IList<IScheduleDayPro> _effectivePeriodDays;
+		private IScheduleDayPro[] _effectivePeriodDays;
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;
 		private IScheduleDay _scheduleDay3;
@@ -67,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_scheduleDayPro9 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro10 = _mock.StrictMock<IScheduleDayPro>();
 
-			_effectivePeriodDays = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6, _scheduleDayPro7, _scheduleDayPro8, _scheduleDayPro9, _scheduleDayPro10 };
+			_effectivePeriodDays = new [] { _scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6, _scheduleDayPro7, _scheduleDayPro8, _scheduleDayPro9, _scheduleDayPro10 };
 			
 			_scheduleDay1 = _mock.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mock.StrictMock<IScheduleDay>();
@@ -484,7 +482,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void commonExpects()
 		{
-			Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_effectivePeriodDays));
+			Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(_effectivePeriodDays);
 			Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 			Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
 			Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay3);

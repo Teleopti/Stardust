@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -127,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             IWorkTimeMinMax wtMinMax = new WorkTimeMinMax();
             wtMinMax.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(9));
 
-            IList<IScheduleDayPro> scheduleDayPros = createFullWeekList();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.Any();
+            var scheduleDayPros = createFullWeekList();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(scheduleDayPros).Repeat.Any();
 
 			IList<IScheduleDay> scheduleDays = createScheduleDayList();
             for (int i = 0; i < 7; i++)
@@ -152,8 +151,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			if (noShiftInBag)
 				wtMinMax = null;
 
-            IList<IScheduleDayPro> scheduleDayPros = createFullWeekList();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros))
+            var scheduleDayPros = createFullWeekList();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(scheduleDayPros)
                 .Repeat.Any();
 
             IList<IScheduleDay> scheduleDays = createScheduleDayList();
@@ -174,19 +173,18 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
         }
 
-        private IList<IScheduleDayPro> createFullWeekList()
+        private IScheduleDayPro[] createFullWeekList()
         {
-            IList<IScheduleDayPro> ret = new List<IScheduleDayPro>
-                                             {
-                                                 _scheduleDayPro0,
-                                                 _scheduleDayPro1,
-                                                 _scheduleDayPro2,
-                                                 _scheduleDayPro3,
-                                                 _scheduleDayPro4,
-                                                 _scheduleDayPro5,
-                                                 _scheduleDayPro6
-                                             };
-            return ret;
+	        return new[]
+	        {
+		        _scheduleDayPro0,
+		        _scheduleDayPro1,
+		        _scheduleDayPro2,
+		        _scheduleDayPro3,
+		        _scheduleDayPro4,
+		        _scheduleDayPro5,
+		        _scheduleDayPro6
+	        };
         }
 
         private IList<IScheduleDay> createScheduleDayList()

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -41,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         [Test]
         public void ShouldReturnNullIfListIsEmpty()
         {
-            var matrxiList = new List<IScheduleMatrixPro>() {_matrix1};
-            var scheduleDayList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>( ){_scheduleDayPro1,_scheduleDayPro2});
+            var matrxiList = new List<IScheduleMatrixPro> {_matrix1};
+            var scheduleDayList = new [] {_scheduleDayPro1,_scheduleDayPro2};
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfo1.MatrixesForGroupAndBlock()).Return(matrxiList);

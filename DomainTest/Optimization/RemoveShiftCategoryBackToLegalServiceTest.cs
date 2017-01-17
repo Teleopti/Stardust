@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -22,8 +21,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IShiftCategoryLimitation _shiftCategoryLimitation;
         private IShiftCategory _shiftCategory;
         private IScheduleDayPro _scheduleDayPro;
-        private IList<IScheduleDayPro> _extendedPeriodDays;
-        private IList<IScheduleDayPro> _periodDays;
+        private IScheduleDayPro[] _extendedPeriodDays;
+        private IScheduleDayPro[] _periodDays;
         private IList<bool> _correctCategory;
     	private ISchedulingOptions _schedulingOptions;
 
@@ -40,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("xx");
             _shiftCategory.SetId(Guid.NewGuid());
             _shiftCategoryLimitation = new ShiftCategoryLimitation(_shiftCategory);
-            _extendedPeriodDays = new List<IScheduleDayPro>();
-            _periodDays = new List<IScheduleDayPro>();
+            var extendedPeriodDays = new List<IScheduleDayPro>();
+            var periodDays = new List<IScheduleDayPro>();
 			_schedulingOptions = new SchedulingOptions();
             
             
@@ -49,9 +48,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             for (int i = 0; i < 21; i++)
             {
                 IScheduleDayPro day = _mocks.StrictMock<IScheduleDayPro>();
-                _extendedPeriodDays.Add(day);
+                extendedPeriodDays.Add(day);
                 if(i > 3 && i < 18)
-                    _periodDays.Add(day);
+                    periodDays.Add(day);
                 if(i == 2 || i == 3 || i == 4 || i == 8 || i == 16 || i == 17)
                 {
                     _correctCategory.Add(true);
@@ -62,6 +61,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 }
             }
 
+	        _extendedPeriodDays = extendedPeriodDays.ToArray();
+	        _periodDays = periodDays.ToArray();
+
             using (_mocks.Record())
             {
                 mockExpectations();
@@ -71,9 +73,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void mockExpectations()
         {
-            Expect.Call(_scheduleMatrixMock.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_periodDays))
+            Expect.Call(_scheduleMatrixMock.EffectivePeriodDays).Return(_periodDays)
                     .Repeat.Any();
-            Expect.Call(_scheduleMatrixMock.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_extendedPeriodDays))
+            Expect.Call(_scheduleMatrixMock.FullWeeksPeriodDays).Return(_extendedPeriodDays)
                     .Repeat.Any();
             for (int i = 0; i < 21; i++)
             {

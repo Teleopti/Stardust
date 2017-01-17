@@ -20,6 +20,7 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
+using System.Linq;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
@@ -233,15 +234,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			var clipHandler = new ClipHandler<IScheduleDay>();
 			GridHelper.GridCopySelection(ViewGrid, clipHandler, true);
 			var list = DeleteList(clipHandler);
-			IList<IScheduleDay> strippedList = new List<IScheduleDay>();
-			foreach (var scheduleDay in list)
-			{
-				IScheduleDayPro scheduleDayPro = matrix.GetScheduleDayByKey(scheduleDay.DateOnlyAsPeriod.DateOnly);
-				if(matrix.UnlockedDays.Contains(scheduleDayPro))
-				{
-					strippedList.Add(scheduleDay);
-				}
-			}
+			IList<IScheduleDay> strippedList = list.Where(s => matrix.UnlockedDays.Any(m => m.Day == s.DateOnlyAsPeriod.DateOnly)).ToList();
 
 			undoRedo.CreateBatch(string.Format(CultureInfo.CurrentCulture, Resources.UndoRedoDeleteSchedules,
 											   strippedList.Count));
@@ -279,15 +272,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 				IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
 
-				IList<IScheduleDay> strippedList = new List<IScheduleDay>();
-				foreach (var scheduleDay in pasteList)
-				{
-					IScheduleDayPro scheduleDayPro = matrix.GetScheduleDayByKey(scheduleDay.DateOnlyAsPeriod.DateOnly);
-					if (matrix.UnlockedDays.Contains(scheduleDayPro))
-					{
-						strippedList.Add(scheduleDay);
-					}
-				}
+				IList<IScheduleDay> strippedList = pasteList.Where(s => matrix.UnlockedDays.Any(m => m.Day == s.DateOnlyAsPeriod.DateOnly)).ToList();
 
 				if (!pasteList.IsEmpty())
 					Presenter.TryModify(strippedList);

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mockRepository.Record())
             {
                 Expect.Call(_scheduleMatrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro1, _scheduleDayPro2}));
+                    .Return(new [] {_scheduleDayPro1, _scheduleDayPro2});
                 Expect.Call(_scheduleDayPro1.DaySchedulePart())
                     .Return(_scheduleDay1);
 				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2010, 1, 1));
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_scheduleMatrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
+                    .Return(new [] { _scheduleDayPro1, _scheduleDayPro2 });
                 Expect.Call(_scheduleDayPro1.DaySchedulePart())
                     .Return(_scheduleDay1);
 				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2010, 1, 1));
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mockRepository.Record())
 			{
 				Expect.Call(_scheduleMatrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
+					.Return(new [] { _scheduleDayPro1, _scheduleDayPro2 });
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2010, 1, 1));
 				Expect.Call(_scheduleDay1.IsScheduled()).Return(true);

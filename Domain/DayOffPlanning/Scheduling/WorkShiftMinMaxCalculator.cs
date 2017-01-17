@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
         {
             DateOnly startDate = matrix.FullWeeksPeriodDays[0].Day;
             int index = 0;
-            while (startDate <= matrix.FullWeeksPeriodDays[matrix.FullWeeksPeriodDays.Count - 1].Day)
+            while (startDate <= matrix.FullWeeksPeriodDays[matrix.FullWeeksPeriodDays.Length - 1].Day)
             {
                 if (dateInWeek >= startDate && dateInWeek <= startDate.AddDays(6))
                     return IsWeekInLegalState(index, matrix, schedulingOptions);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
                 startDate = startDate.AddDays(7);
             }
 
-            throw new ArgumentOutOfRangeException("dateInWeek", dateInWeek, "Value is outside matrix fullweek period");
+            throw new ArgumentOutOfRangeException(nameof(dateInWeek), dateInWeek, "Value is outside matrix fullweek period");
         }
 
         private static DateOnly firstDateInWeekIndex(int weekIndex, IScheduleMatrixPro matrix)
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
         {
             DateOnly startDate = matrix.FullWeeksPeriodDays[0].Day;
             int index = 0;
-            while (startDate <= matrix.FullWeeksPeriodDays[matrix.FullWeeksPeriodDays.Count - 1].Day)
+            while (startDate <= matrix.FullWeeksPeriodDays[matrix.FullWeeksPeriodDays.Length - 1].Day)
             {
                 if (dateInWeek >= startDate && dateInWeek <= startDate.AddDays(6))
                     return index;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
                 startDate = startDate.AddDays(7);
             }
 
-            throw new ArgumentOutOfRangeException("dateInWeek", dateInWeek, "Value is outside matrix fullweek period");
+            throw new ArgumentOutOfRangeException(nameof(dateInWeek), dateInWeek, "Value is outside matrix fullweek period");
         }
 
         public MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(DateOnly dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
         public int WeekCount(IScheduleMatrixPro matrix)
         {
-            return matrix.FullWeeksPeriodDays.Count / 7; 
+            return matrix.FullWeeksPeriodDays.Length / 7; 
         }
 
         public void ResetCache()

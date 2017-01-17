@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
@@ -56,10 +57,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var tmpList = getWorkShifts();
 			var retList = new List<IShiftProjectionCache>();
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
 				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(_dateOnly, _timeZoneInfo);
+				cache.SetDate(dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

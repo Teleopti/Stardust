@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -104,11 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs args)
 		{
-			var handler = DayScheduled;
-			if (handler != null)
-			{
-				handler(this, args);
-			}
+			DayScheduled?.Invoke(this, args);
 		}
 	}
 }

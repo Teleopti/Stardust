@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -349,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             using(_mocks.Record())
             {
                 Expect.Call(_matrix.UnlockedDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { day1, day2, day3, day4 }));
+                    .Return(new [] { day1, day2, day3, day4 });
 
                 Expect.Call(day1.DaySchedulePart()).Return(dayOff);
                 Expect.Call(day2.DaySchedulePart()).Return(dayOff);
@@ -407,8 +406,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private void mockExpectationsForAll(IExtractedRestrictionResult extractedRestrictionResult)
         {
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-            var unlockedDays = new List<IScheduleDayPro>{scheduleDayPro};
-            Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays)).Repeat.Any();
+            var unlockedDays = new []{scheduleDayPro};
+            Expect.Call(_matrix.UnlockedDays).Return(unlockedDays).Repeat.Any();
             Expect.Call(scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.Any();
             Expect.Call(_extractor.Extract(_schedulePart)).Return(extractedRestrictionResult).Repeat.Any();
             Expect.Call(scheduleDayPro.Day).Return(_dayToCheck).Repeat.Any();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
 
@@ -113,8 +114,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(filteredRuleSetList,
 				teamBlockInfo.TeamInfo, dateOnly).ToList();
 
-			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,
-				person.PermissionInformation.DefaultTimeZone(), filteredRuleSetList, false, false);
+			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
+			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsPeriod, filteredRuleSetList, false, false);
 
 			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
 				person, matrixList, isSameOpenHoursInBlock);
@@ -124,8 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
-				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,
-						person.PermissionInformation.DefaultTimeZone(), filteredRuleSetList, true, false);
+				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsPeriod, filteredRuleSetList, true, false);
 				shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
 						person, matrixList, isSameOpenHoursInBlock);
 				shiftList = runPersonalShiftFilterForEachMember(schedules, shiftList, teamBlockInfo, finderResult);
@@ -167,16 +167,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForTeamMember(person, dateOnly, schedulingOptions, useShiftsForRestrictions);
 			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.Filter(filteredRuleSetList, person.Period(dateOnly), dateOnly);
 
-			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,
-				person.PermissionInformation.DefaultTimeZone(), filteredRuleSetList, false, false);
+			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
+			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsPeriod, filteredRuleSetList, false, false);
 
 			shiftList = runFilters(schedules, dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList,
 				true);
 
 			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
-				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,
-					person.PermissionInformation.DefaultTimeZone(), filteredRuleSetList, true, false);
+				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsPeriod, filteredRuleSetList, true, false);
 				shiftList = runFilters(schedules, dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person,
 					matrixList, true);
 			}

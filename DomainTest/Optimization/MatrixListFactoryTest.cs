@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
 
-			matrixList[0].UnlockedDays.Count.Should().Be.EqualTo(1);
+			matrixList[0].UnlockedDays.Length.Should().Be.EqualTo(1);
 			matrixList[0].UnlockedDays[0].Day.Should().Be.EqualTo(new DateOnly(2015, 10, 12));
 		}
 

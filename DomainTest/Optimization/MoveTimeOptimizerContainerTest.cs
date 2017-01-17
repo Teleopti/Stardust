@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_moveTimeOptimizer1.Matrix).Return(_matrix).Repeat.AtLeastOnce();
 				Expect.Call(_moveTimeOptimizer2.Matrix).Return(_matrix).Repeat.AtLeastOnce();
 				Expect.Call(_matrix.UnlockedDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()))
+					  .Return(new IScheduleDayPro[] {})
 					  .Repeat.AtLeastOnce();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }))
+					  .Return(new [] { _scheduleDayPro })
 					  .Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_moveTimeOptimizer1.Matrix).Return(_matrix).Repeat.Any();
 				Expect.Call(_moveTimeOptimizer2.ContainerOwner).Return(_person).Repeat.Any();
 				Expect.Call(_moveTimeOptimizer2.Matrix).Return(_matrix).Repeat.Any();
-				Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.AtLeastOnce();
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro })).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.UnlockedDays).Return(new IScheduleDayPro[] {}).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new [] { _scheduleDayPro }).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -124,10 +124,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_moveTimeOptimizer1.Matrix).Return(_matrix).Repeat.AtLeastOnce();
 				Expect.Call(_moveTimeOptimizer2.Matrix).Return(_matrix).Repeat.AtLeastOnce();
 				Expect.Call(_matrix.UnlockedDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()))
+					  .Return(new IScheduleDayPro[0])
 					  .Repeat.AtLeastOnce();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }))
+					  .Return(new [] { _scheduleDayPro })
 					  .Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
@@ -154,10 +154,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_moveTimeOptimizer1.ContainerOwner).Return(_person).Repeat.Any();
 				Expect.Call(_moveTimeOptimizer1.Matrix).Return(_matrix).Repeat.AtLeastOnce();
 				Expect.Call(_matrix.UnlockedDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()))
+					  .Return(new IScheduleDayPro[0])
 					  .Repeat.AtLeastOnce();
 				Expect.Call(_matrix.EffectivePeriodDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }))
+					  .Return(new [] { _scheduleDayPro })
 					  .Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())

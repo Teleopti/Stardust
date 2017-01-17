@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 				var person = selectedTeamBlock.TeamInfo.GroupMembers.First();
 				var date = selectedTeamBlock.BlockInfo.BlockPeriod.StartDate;
-				var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 				var ruleSetBag = person.Period(date).RuleSetBag;
 
 				processedBlocks++;
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 				var scheduleDay = schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
 
-				if (_legalShiftDecider.IsLegalShift(date, timeZoneInfo, ruleSetBag, roleModel, scheduleDay))
+				if (_legalShiftDecider.IsLegalShift(ruleSetBag, roleModel, scheduleDay))
 				{
 					progressResult = onProgress(selectedTeamBlocks.Count, processedBlocks);
 					if (progressResult.ShouldCancel) return;

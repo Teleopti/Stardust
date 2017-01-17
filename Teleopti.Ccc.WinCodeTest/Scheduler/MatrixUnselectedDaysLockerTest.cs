@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
-
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -29,16 +27,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
-
 		}
 
 		[Test]
 		public void ShouldLockDaysOutsideSelection()
 		{
-			IList<IScheduleDayPro> list = new List<IScheduleDayPro>{_scheduleDayPro1, _scheduleDayPro2,_scheduleDayPro3};
+			var list = new [] {_scheduleDayPro1, _scheduleDayPro2,_scheduleDayPro3};
 			using (_mocks.Record())
 			{
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(list));
+				Expect.Call(_matrix.EffectivePeriodDays).Return(list);
 
 				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2013, 6, 13));
 				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2013, 6, 13, 2013, 6, 13)));

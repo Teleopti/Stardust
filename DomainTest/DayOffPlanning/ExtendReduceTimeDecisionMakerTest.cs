@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private IScheduleDayPro _scheduleDayPro3;
         private IScheduleDayPro _scheduleDayPro4;
         private IScheduleDayPro _scheduleDayPro5;
-        private IList<IScheduleDayPro> _days;
+        private IScheduleDayPro[] _days;
 	    private IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
 
 	    [SetUp]
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro4 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro5 = _mocks.StrictMock<IScheduleDayPro>();
-            _days = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5 };
+            _days = new [] { _scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5 };
         }
 
         [Test]
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         {
             Expect.Call(_bitArrayConverter.Convert(_matrix, false, false)).Return(_lockableBitArray);
             Expect.Call(_scheduleResultDataExtractor.Values()).Return(_data).Repeat.AtLeastOnce();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_days)).Repeat.Any();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(_days).Repeat.Any();
             Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2011, 1, 1)).Repeat.Any();
             Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2011, 1, 2)).Repeat.Any();
             Expect.Call(_scheduleDayPro3.Day).Return(new DateOnly(2011, 1, 3)).Repeat.Any();

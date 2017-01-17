@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -10,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ProTest")]
     public class WorkShiftBackToLegalStateServiceProTest
     {
         private WorkShiftBackToLegalStateServicePro _target;
@@ -86,17 +83,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private void commonMocks()
 		{
 			IScheduleDayPro scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-			IList<IScheduleDayPro> fullWekPeriodDays = new List<IScheduleDayPro>{scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro};
+
+			var fullWekPeriodDays = new []{scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro, scheduleDayPro};
 			IVirtualSchedulePeriod schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var contract = new Contract("hej");
 			var person = _mocks.StrictMock<IPerson>();
 			var personPeriod = _mocks.StrictMock<IPersonPeriod>();
 			var personContract = _mocks.StrictMock<IPersonContract>();
 
-			Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWekPeriodDays));
+			Expect.Call(_matrix.FullWeeksPeriodDays).Return(fullWekPeriodDays);
 			Expect.Call(scheduleDayPro.Day).Return(_dateMinValue);
 			Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
-			//Expect.Call(schedulePeriod.Contract).Return(contract);
 			Expect.Call(_matrix.Person).Return(person).Repeat.AtLeastOnce();
 			Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
 			Expect.Call(schedulePeriod.DateOnlyPeriod)

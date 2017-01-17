@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -893,14 +891,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void commonMocks()
         {
-            Expect.Call(_matrix.EffectivePeriodDays).Return(
-                new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
-                                                            {
-                                                                _scheduleDayPro1,
-                                                                _scheduleDayPro2,
-                                                                _scheduleDayPro3,
-                                                                _scheduleDayPro4
-                                                            }));
+	        Expect.Call(_matrix.EffectivePeriodDays).Return(
+		        new[]
+		        {
+			        _scheduleDayPro1,
+			        _scheduleDayPro2,
+			        _scheduleDayPro3,
+			        _scheduleDayPro4
+		        });
 
             Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
             Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
@@ -915,14 +913,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void commonMocks2()
 		{
-			Expect.Call(_matrix.EffectivePeriodDays).Return(
-				new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
-                                                            {
-                                                                _scheduleDayPro1,
-                                                                _scheduleDayPro2,
-                                                                _scheduleDayPro3,
-                                                                _scheduleDayPro4
-                                                            }));
+			Expect.Call(_matrix.EffectivePeriodDays).Return(new[]
+			{
+				_scheduleDayPro1,
+				_scheduleDayPro2,
+				_scheduleDayPro3,
+				_scheduleDayPro4
+			});
 
 			Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 			Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
@@ -938,13 +935,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private void commonMocks3()
 		{
 			Expect.Call(_matrix.EffectivePeriodDays).Return(
-				new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
-                                                            {
-                                                                _scheduleDayPro1,
-                                                                _scheduleDayPro2,
-                                                                _scheduleDayPro3,
-                                                                _scheduleDayPro4
-                                                            }));
+				new[]
+				{
+					_scheduleDayPro1,
+					_scheduleDayPro2,
+					_scheduleDayPro3,
+					_scheduleDayPro4
+				});
 
 			Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 			Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);

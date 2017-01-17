@@ -60,14 +60,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
 			_teamBlockInfo = new TeamBlockInfo(_teaminfo, _blockInfo);
 			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone());
-
         }
-
-		//void targetDayScheduledCanceled(object sender, SchedulingServiceBaseEventArgs e)
-		//{
-		//	e.Cancel = true;
-		//}
-
+		
         [Test]
         public void ShouldSchedulePerDayAndPerson()
         {
@@ -79,14 +73,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	            Expect.Call(_matrix.SchedulePeriod).Return(_person.VirtualSchedulePeriod(DateOnly.MinValue));
 	            Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 	            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-	            Expect.Call(_matrix.UnlockedDays)
-	                  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+	            Expect.Call(_matrix.UnlockedDays).Return(new [] {_scheduleDayPro});
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call( () => _shiftProjectionCache.SetDate(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone()));
+				Expect.Call( () => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
 	            Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
 	            Expect.Call(() => _scheduleDay.AddMainShift(_mainShift));
 	            Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay, rules));
-	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 	            Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
 	            _resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false);
 
@@ -113,8 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrix.SchedulePeriod).Return(_person.VirtualSchedulePeriod(DateOnly.MinValue));
 				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_matrix.UnlockedDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_matrix.UnlockedDays).Return(new [] { _scheduleDayPro });
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
@@ -140,12 +132,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			    Expect.Call(_matrix.SchedulePeriod).Return(_person.VirtualSchedulePeriod(DateOnly.MinValue));
 			    Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 			    Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-			    Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+			    Expect.Call(_matrix.UnlockedDays).Return(new [] {_scheduleDayPro});
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call(() => _shiftProjectionCache.SetDate(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone()));
+				Expect.Call(() => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
 			    Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
 
-			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 			    Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
 			    _resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false);
 
@@ -172,12 +164,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrix.SchedulePeriod).Return(_person.VirtualSchedulePeriod(DateOnly.MinValue));
 				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_matrix.UnlockedDays).Return(new [] { _scheduleDayPro });
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call(() => _shiftProjectionCache.SetDate(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone()));
+				Expect.Call(() => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
 				Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
 
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
 				_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false);
 

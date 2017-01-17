@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -51,10 +49,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 		private void commonMocks()
 		{
-			IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> {_scheduleDayPro1, _scheduleDayPro2};
+			var matrixDays = new [] {_scheduleDayPro1, _scheduleDayPro2};
 			Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 			Expect.Call(_schedulePeriod.DaysOff()).Return(8);
-			Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
+			Expect.Call(_matrix.FullWeeksPeriodDays).Return(matrixDays);
 			Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
 				new ScheduleDayData(DateOnly.MinValue));
 			Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro2, _schedulingOptions)).Return(

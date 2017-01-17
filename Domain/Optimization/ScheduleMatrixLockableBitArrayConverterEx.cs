@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 
 			int periodAreaStart = list.IndexOf(matrix.EffectivePeriodDays[0]);
-			int periodAreaEnd = list.IndexOf(matrix.EffectivePeriodDays[matrix.EffectivePeriodDays.Count - 1]);
+			int periodAreaEnd = list.IndexOf(matrix.EffectivePeriodDays[matrix.EffectivePeriodDays.Length - 1]);
 			ret.PeriodArea = new MinMax<int>(periodAreaStart, periodAreaEnd);
 
 			return ret;

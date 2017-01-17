@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 }
 
                 var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-                if(person == null )
-                    person = schedulePart.Person;
+                person = person ?? schedulePart.Person;
+
                 if (effectiveRestriction == null)
                 {
                     IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using(_mocks.Record())
             {
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new IScheduleDayPro[0]);
             }
 
             using(_mocks.Playback())
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation() , null, null, null, new List<IActivityRestriction>()) { IsPreferenceDay = true };
             var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro});
+            var scheduleDayProList = new [] {_scheduleDayPro};
 
             using(_mocks.Record())
             {
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation() , null, null, null, new List<IActivityRestriction>()) { IsPreferenceDay = false };
             var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+            var scheduleDayProList = new [] { _scheduleDayPro };
             
             using (_mocks.Record())
             {
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var absence = new Absence();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, absence,new List<IActivityRestriction>()) { IsPreferenceDay = true };
             var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+            var scheduleDayProList = new [] { _scheduleDayPro };
             var date = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(date, date.AddDays(1));
 			var absenceLayer = new AbsenceLayer(absence, period);
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var absence = new Absence();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, absence, new List<IActivityRestriction>()) { IsPreferenceDay = true };
             var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro2 });
+            var scheduleDayProList = new [] { _scheduleDayPro, _scheduleDayPro2 };
             var date = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(date, date.AddDays(1));
             _target.DayScheduled += targetDayScheduled;

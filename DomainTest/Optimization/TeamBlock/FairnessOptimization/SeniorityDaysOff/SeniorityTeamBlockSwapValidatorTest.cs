@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
@@ -71,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_dayOffRulesValidator.Validate(_bitArray, _optimizationPreferences, _daysOffPreferences)).Return(false);
 
 				Expect.Call(_matrix.Person).Return(_person);
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new [] { _scheduleDayPro });
 			}
 
 			using (_mocks.Playback())
@@ -103,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				      .Return(false);
 
 				Expect.Call(_matrix.Person).Return(_person);
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new[] { _scheduleDayPro });
 			}
 
 			using (_mocks.Playback())
@@ -135,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 					  .Return(true);
 
 				Expect.Call(_matrix.Person).Return(_person);
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new [] {_scheduleDayPro});
 			}
 
 			using (_mocks.Playback())

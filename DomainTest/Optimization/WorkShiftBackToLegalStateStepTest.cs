@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_bitArrayCreator.CreateWeeklyBitArray(_weekIndex, _scheduleMatrix)).Return(_lockableBitArray);
 				Expect.Call(_decisionMaker.Execute(_lockableBitArray, false, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_day1})).Repeat.AtLeastOnce();
+                    new [] {_day1}).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
             	Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
 				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 })).Repeat.AtLeastOnce();
+                    new [] { _day1 }).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
 				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _day1 })).Repeat.AtLeastOnce();
+                    new [] { _day1 }).Repeat.AtLeastOnce();
                 Expect.Call(_day1.DaySchedulePart()).Return(_scheduleDay);
             	Expect.Call(_day1.Day).Return(DateOnly.MaxValue).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);

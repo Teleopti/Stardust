@@ -1,13 +1,11 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Optimization;
+﻿using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 {
 	public interface ILegalShiftDecider
 	{
-		bool IsLegalShift(DateOnly date, TimeZoneInfo timeZoneInfo, IRuleSetBag rulesetBag, IShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay);
+		bool IsLegalShift(IRuleSetBag rulesetBag, IShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay);
 	}
 
 	public class LegalShiftDecider : ILegalShiftDecider
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
-		public bool IsLegalShift(DateOnly date, TimeZoneInfo timeZoneInfo, IRuleSetBag rulesetBag, IShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay)
+		public bool IsLegalShift(IRuleSetBag rulesetBag, IShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay)
 		{
 			var personAssignment = scheduleDay.PersonAssignment(true);
 			foreach (var personalShiftLayer in personAssignment.PersonalActivities())
@@ -43,14 +41,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				}
 			}
 
-			var shifts = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, timeZoneInfo, rulesetBag, false,
+			var shifts = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(scheduleDay.DateOnlyAsPeriod, rulesetBag, false,
 				true);
 
-			var period = new DateOnlyAsDateTimePeriod(date, timeZoneInfo);
-			foreach (var shiftProjectionCach in shifts)
+			foreach (var shiftProjectionCache in shifts)
 			{
-				if (_scheduleDayEquator.MainShiftEquals(shiftProjectionCach.TheWorkShift.ToEditorShift(period, timeZoneInfo), currentShiftProjectionCache.TheWorkShift.ToEditorShift(period, timeZoneInfo)))
-					return true;
+				if (
+					_scheduleDayEquator.MainShiftEquals(
+						shiftProjectionCache.TheWorkShift.ToEditorShift(scheduleDay.DateOnlyAsPeriod,
+							scheduleDay.DateOnlyAsPeriod.TimeZone()),
+						currentShiftProjectionCache.TheWorkShift.ToEditorShift(scheduleDay.DateOnlyAsPeriod,
+							scheduleDay.DateOnlyAsPeriod.TimeZone())))
+				return true;
 			}
 
 			return false;

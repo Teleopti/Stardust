@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -212,9 +212,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             }
 
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDays)
-                .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>(fullWeekPeriodDictionary.Values))).Repeat.Any();
+                .Return(fullWeekPeriodDictionary.Values.ToArray()).Repeat.Any();
             Expect.Call(_scheduleMatrix.UnlockedDays)
-                .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>(unlockedDaysDictionary.Values))).Repeat.Any();
+                .Return(unlockedDaysDictionary.Values.ToArray()).Repeat.Any();
             addWorkShiftExpectationsToScheduleDay(_schedulePartShortMainShift, new TimeSpan());
 
         }
@@ -335,9 +335,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 }
             }
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDays)
-                .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>(fullWeekPeriodDictionary.Values))).Repeat.Any();
+                .Return(fullWeekPeriodDictionary.Values.ToArray()).Repeat.Any();
             Expect.Call(_scheduleMatrix.UnlockedDays)
-                .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>(unlockedDaysDictionary.Values))).Repeat.Any();
+                .Return(unlockedDaysDictionary.Values.ToArray()).Repeat.Any();
 
             Expect.Call(_schedulePartDayOff.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
@@ -71,10 +72,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c1.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
 			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-			c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c2.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -110,10 +112,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c1.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
 			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-			c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c2.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -146,10 +149,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c1.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
 			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-			c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c2.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -191,10 +195,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c1.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
 			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-			c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c2.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -221,10 +226,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c1.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
 			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-			c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+			c2.SetDate(dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())

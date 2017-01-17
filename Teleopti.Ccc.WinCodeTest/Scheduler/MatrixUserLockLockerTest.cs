@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -14,13 +13,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private MockRepository _mockRepository;
         private IScheduleMatrixPro _scheduleMatrix;
         private IScheduleDayPro _scheduleDayPro1;
-        private IScheduleDay _scheduleDay1;
         private IList<IScheduleMatrixPro> _scheduleMatrixList;
-        private IList<IScheduleDay> _scheduleDays;
         private IGridlockManager _gridlockManager;
         private IPerson _person;
         private DateOnly _dateOnly;
-        private ReadOnlyCollection<IScheduleDayPro> _effectiveDays;
+        private IScheduleDayPro[] _effectiveDays;
         private GridlockDictionary _gridlockDictionary;
         private Gridlock _gridLock;
 
@@ -31,11 +28,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _person = _mockRepository.StrictMock<IPerson>();
             _scheduleMatrix = _mockRepository.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro1 = _mockRepository.StrictMock<IScheduleDayPro>();
-            _scheduleDay1 = _mockRepository.StrictMock<IScheduleDay>();
             _scheduleMatrixList = new List<IScheduleMatrixPro> { _scheduleMatrix };
-            _scheduleDays = new List<IScheduleDay> {_scheduleDay1};
             _dateOnly = new DateOnly(2011, 1, 1);
-            _effectiveDays = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro1});
+            _effectiveDays = new [] {_scheduleDayPro1};
             _gridLock = new Gridlock(_person, _dateOnly, LockType.Normal);
             _gridlockDictionary = new GridlockDictionary();
             _gridlockDictionary.Add("key", _gridLock);
@@ -83,11 +78,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void MatrixShouldContainSelectedPeriod()
 		{
-			var scheduleDay2 = _mockRepository.StrictMock<IScheduleDay>();
 			var dateOnly2 = new DateOnly(2011, 1, 2);
 			_scheduleMatrixList = new List<IScheduleMatrixPro> { _scheduleMatrix };
-			_scheduleDays = new List<IScheduleDay> { _scheduleDay1, scheduleDay2 };
-
+			
 			Expect.Call(_scheduleMatrix.Person).Return(_person).Repeat.AtLeastOnce();
 			Expect.Call(_scheduleMatrix.EffectivePeriodDays).Return(_effectiveDays);
 			Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);

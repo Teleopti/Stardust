@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +11,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private Lazy<IEditableShift> _mainShift;
         private readonly IWorkShift _workShift;
 	    private Lazy<IVisualLayerCollection> _mainshiftProjection;
-        private TimeZoneInfo _localTimeZoneInfo;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
 	    private readonly Lazy<IVisualLayerCollection> _workShiftProjection;
@@ -27,65 +25,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
         }
 
-        public void SetDate(DateOnly schedulingDate, TimeZoneInfo localTimeZoneInfo)
+        public void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
         {
-            if (_dateOnlyAsPeriod == null || _dateOnlyAsPeriod.DateOnly != schedulingDate || _localTimeZoneInfo.Id != localTimeZoneInfo.Id)
-            {
-                _localTimeZoneInfo = localTimeZoneInfo;
-				_mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _localTimeZoneInfo));
-				_mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
-	            _dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(schedulingDate, localTimeZoneInfo);
-            }           
+	        if (_dateOnlyAsPeriod!=null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
+
+	        _dateOnlyAsPeriod = dateOnlyAsDateTimePeriod;
+	        _mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _dateOnlyAsPeriod.TimeZone()));
+	        _mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
         }
 
-        public IEditableShift TheMainShift
-        {
-	        get
-	        {
-				return _mainShift.Value;
-	        }
-        }
+        public IEditableShift TheMainShift => _mainShift.Value;
 
-        public IWorkShift TheWorkShift
-        {
-	        get
-	        { return _workShift; }
-        }
+	    public IWorkShift TheWorkShift => _workShift;
 
-        public TimeSpan WorkShiftProjectionContractTime
-        {
-            get
-            {
-                return _workShiftProjection.Value.ContractTime();
-            }
-        }
+	    public TimeSpan WorkShiftProjectionContractTime => _workShiftProjection.Value.ContractTime();
 
-	    public TimeSpan WorkShiftProjectionWorkTime
-	    {
-		    get { return _workShiftProjection.Value.WorkTime(); }
-	    }
+	    public TimeSpan WorkShiftProjectionWorkTime => _workShiftProjection.Value.WorkTime();
 
-        public DateTimePeriod WorkShiftProjectionPeriod
-        {
-            get 
-            {
-                return _workShiftProjection.Value.Period().Value;
-            }
-        }
+	    public DateTimePeriod WorkShiftProjectionPeriod => _workShiftProjection.Value.Period().Value;
 
-        public IVisualLayerCollection MainShiftProjection
-        {
-            get {
-	            return _mainshiftProjection.Value;
-            }
-        }
+	    public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
 
-		IEnumerable<IWorkShiftCalculatableLayer> IWorkShiftCalculatableProjection.WorkShiftCalculatableLayers
-		{
-			get { return new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection); }
-		}
+	    IEnumerable<IWorkShiftCalculatableLayer> IWorkShiftCalculatableProjection.WorkShiftCalculatableLayers => new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection);
 
-        public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
+	    public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
         {
             if (meetings.Count == 0 && personAssignment == null)
             {
@@ -101,19 +64,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return true;
         }
 
-    	public TimeSpan WorkShiftStartTime
-    	{
-			get { return WorkShiftProjectionPeriod.StartDateTime.TimeOfDay; }
-    	}
+    	public TimeSpan WorkShiftStartTime => WorkShiftProjectionPeriod.StartDateTime.TimeOfDay;
 
-		public TimeSpan WorkShiftEndTime
-    	{
-			get
-			{
-				return WorkShiftProjectionPeriod.EndDateTime.Subtract(WorkShiftProjectionPeriod.StartDateTime.Date);
-			}
-    	}
+	    public TimeSpan WorkShiftEndTime => WorkShiftProjectionPeriod.EndDateTime.Subtract(WorkShiftProjectionPeriod.StartDateTime.Date);
 
-	    public DateOnly SchedulingDate { get { return _dateOnlyAsPeriod == null ? DateOnly.MinValue : _dateOnlyAsPeriod.DateOnly; } }
+	    public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
     }
 }

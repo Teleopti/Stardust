@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			var effectiveRestriction = new EffectiveRestriction();
 			var adjustedEffectiveRestriction = new EffectiveRestriction();
 			var matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var unlocked = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var unlocked = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -102,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			var adjustedEffectiveRestriction = new EffectiveRestriction();
 
 			var matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var unlocked = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
+			var unlocked = new [] {_scheduleDayPro};
 
 			using (_mocks.Record())
 			{
@@ -158,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		{
 			var effectiveRestriction = new EffectiveRestriction();
 			var matrixes = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
-			var unlocked = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>());
+			var unlocked = new IScheduleDayPro[0];
 
 			using (_mocks.Record())
 			{

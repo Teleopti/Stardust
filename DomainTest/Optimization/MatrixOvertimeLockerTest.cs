@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldLockDaysWithOvertime()
         {
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>{_scheduleDayPro};
-            var unlockedDays = new ReadOnlyCollection<IScheduleDayPro>(unlockedList);   
+            var unlockedDays = new [] {_scheduleDayPro};
             var personAssignment = _mockRepository.StrictMock<IPersonAssignment>(); 
             var dateOnly = new DateOnly(2010,1,1);
            

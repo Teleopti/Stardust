@@ -12,9 +12,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Sets the date.
         /// </summary>
-        /// <param name="schedulingDate">The scheduling date.</param>
-        /// <param name="localTimeZoneInfo">The local time zone info.</param>
-        void SetDate(DateOnly schedulingDate, TimeZoneInfo localTimeZoneInfo);
+        void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod);
 
         /// <summary>
         /// Gets the main shift.

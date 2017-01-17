@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					skillDays.Add(skillDay);
 					skillDaysToRepository.Add(skillDay);
 				}
-				if (optionalAction!=null) optionalAction(skillDaysToRepository);
+				optionalAction?.Invoke(skillDaysToRepository);
 			}
 
 			_workloadDayHelper.CreateLongtermWorkloadDays(skill, skillDays);

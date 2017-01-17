@@ -43,10 +43,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		public void ShouldReturnTrueIfShiftIsLegal()
 		{
 			var editableShift = new EditableShift(new ShiftCategory("hej"));
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), TimeZoneInfo.Utc);
 			using (_mocks.Record())
 			{
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnly(), TimeZoneInfo.Utc,
-					_ruleSetBag, false, true)).Return(new List<IShiftProjectionCache> {_shiftProjectionCache});
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsDateTimePeriod,_ruleSetBag, false, true))
+					.Return(new List<IShiftProjectionCache> {_shiftProjectionCache});
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
 				Expect.Call(_workShift.ToEditorShift(null, TimeZoneInfo.Utc))
 					.IgnoreArguments()
@@ -58,12 +59,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 					.Return(editableShift);
 				Expect.Call(_scheduleDayEquator.MainShiftEquals(editableShift, editableShift)).Return(true);
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.PersonMeetingCollection())
 					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.IsLegalShift(new DateOnly(), TimeZoneInfo.Utc, _ruleSetBag, _shiftProjectionCache, _scheduleDay));
+				Assert.IsTrue(_target.IsLegalShift(_ruleSetBag, _shiftProjectionCache, _scheduleDay));
 			}
 		}
 
@@ -71,10 +73,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		public void ShouldReturnFalseIfShiftIsNotLegal()
 		{
 			var editableShift = new EditableShift(new ShiftCategory("hej"));
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), TimeZoneInfo.Utc);
 			using (_mocks.Record())
 			{
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnly(), TimeZoneInfo.Utc,
-					_ruleSetBag, false, true)).Return(new List<IShiftProjectionCache> { _shiftProjectionCache });
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsDateTimePeriod, _ruleSetBag,
+					false, true)).Return(new List<IShiftProjectionCache> {_shiftProjectionCache});
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
 				Expect.Call(_workShift.ToEditorShift(null, TimeZoneInfo.Utc))
 					.IgnoreArguments()
@@ -86,12 +89,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 					.Return(editableShift);
 				Expect.Call(_scheduleDayEquator.MainShiftEquals(editableShift, editableShift)).Return(false);
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.PersonMeetingCollection())
 					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.IsLegalShift(new DateOnly(), TimeZoneInfo.Utc, _ruleSetBag, _shiftProjectionCache, _scheduleDay));
+				Assert.IsFalse(_target.IsLegalShift(_ruleSetBag, _shiftProjectionCache, _scheduleDay));
 			}
 		}
 	}

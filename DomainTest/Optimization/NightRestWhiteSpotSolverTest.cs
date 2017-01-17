@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -66,15 +65,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(2, result.DaysToDelete.Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToDelete[0]);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[1]);
+            Assert.AreEqual(2, result.DaysToDelete.Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToDelete.ElementAt(0));
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete.ElementAt(1));
 
-            Assert.AreEqual(4, result.DaysToReschedule().Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
-            Assert.AreEqual(new DateOnly(2010, 1, 3), result.DaysToReschedule()[2]);
-            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToReschedule()[3]);
+            Assert.AreEqual(4, result.DaysToReschedule().Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule().ElementAt(0));
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule().ElementAt(1));
+            Assert.AreEqual(new DateOnly(2010, 1, 3), result.DaysToReschedule().ElementAt(2));
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToReschedule().ElementAt(3));
         }
 
         [Test]
@@ -92,12 +91,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(1, result.DaysToDelete.Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+            Assert.AreEqual(1, result.DaysToDelete.Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete.ElementAt(0));
 
-            Assert.AreEqual(2, result.DaysToReschedule().Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+            Assert.AreEqual(2, result.DaysToReschedule().Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule().ElementAt(0));
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule().ElementAt(1));
         }
 
         [Test]
@@ -115,12 +114,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(1, result.DaysToDelete.Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+            Assert.AreEqual(1, result.DaysToDelete.Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete.ElementAt(0));
 
-            Assert.AreEqual(2, result.DaysToReschedule().Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+            Assert.AreEqual(2, result.DaysToReschedule().Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule().ElementAt(0));
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule().ElementAt(1));
         }
 
         [Test]
@@ -138,12 +137,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(1, result.DaysToDelete.Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToDelete[0]);
+            Assert.AreEqual(1, result.DaysToDelete.Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToDelete.ElementAt(0));
 
-            Assert.AreEqual(2, result.DaysToReschedule().Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 3), result.DaysToReschedule()[0]);
-            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToReschedule()[1]);
+            Assert.AreEqual(2, result.DaysToReschedule().Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 3), result.DaysToReschedule().ElementAt(0));
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToReschedule().ElementAt(1));
         }
 
         [Test]
@@ -161,12 +160,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(1, result.DaysToDelete.Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+            Assert.AreEqual(1, result.DaysToDelete.Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete.ElementAt(0));
 
-            Assert.AreEqual(2, result.DaysToReschedule().Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+            Assert.AreEqual(2, result.DaysToReschedule().Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule().ElementAt(0));
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule().ElementAt(1));
         }
 
         [Test]
@@ -184,12 +183,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(1, result.DaysToDelete.Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+            Assert.AreEqual(1, result.DaysToDelete.Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete.ElementAt(0));
 
-            Assert.AreEqual(2, result.DaysToReschedule().Count);
-            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
-            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+            Assert.AreEqual(2, result.DaysToReschedule().Count());
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule().ElementAt(0));
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule().ElementAt(1));
         }
 
         [Test]
@@ -207,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(0, result.DaysToDelete.Count);
+            Assert.AreEqual(0, result.DaysToDelete.Count());
         }
 
         [Test]
@@ -225,17 +224,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 result = _target.Resolve(_matrix);
             }
 
-            Assert.AreEqual(0, result.DaysToDelete.Count);
+            Assert.AreEqual(0, result.DaysToDelete.Count());
 
-            Assert.AreEqual(0, result.DaysToReschedule().Count);
+            Assert.AreEqual(0, result.DaysToReschedule().Count());
         }
 
-        private void mockExpectations(IList<IScheduleDayPro> unlockedList)
+        private void mockExpectations(IScheduleDayPro[] unlockedList)
         {
             IPerson person = PersonFactory.CreatePerson();
 
-            IList<IScheduleDayPro> periodList = new List<IScheduleDayPro>
-                                                    {
+            var periodList = new []{
                                                         _scheduleDayPro1,
                                                         _scheduleDayPro2,
                                                         _scheduleDayPro3,
@@ -244,10 +242,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                         _scheduleDayPro6,
                                                         _scheduleDayPro7,
                                                     };
-
-
-
-            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
+			
+            Expect.Call(_matrix.EffectivePeriodDays).Return(periodList).Repeat.Any();
             for (int i = 0; i < 7; i++)
             {
                 var day = periodList[i];
@@ -266,17 +262,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulePartContractDo.IsScheduled()).Return(true).Repeat.Any();
             Expect.Call(_schedulePartAbsence.IsScheduled()).Return(true).Repeat.Any();
             Expect.Call(_schedulePartShift.IsScheduled()).Return(true).Repeat.Any();
-            //Expect.Call(earlyAssignment.MainShift).Return(earlyShift).Repeat.Any();
-            //Expect.Call(_schedulePartLate.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-            //Expect.Call(_schedulePartLate.AssignmentHighZOrder()).Return(lateAssignment).Repeat.Any();
-            //Expect.Call(lateAssignment.MainShift).Return(lateShift).Repeat.Any();
-            //Expect.Call(lateShift.ShiftCategory).Return(late).Repeat.Any();
-            Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedList)).Repeat.Any();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
-            //Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2009, 12, 31))).Return(null).
-            //        Repeat.Any();
-            //Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 01, 11))).Return(null).
-            //        Repeat.Any();
+            Expect.Call(_matrix.UnlockedDays).Return(unlockedList).Repeat.Any();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(periodList).Repeat.Any();
             Expect.Call(_matrix.Person).Return(person).Repeat.Any();
 
         }
@@ -353,50 +340,47 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
         }
 
-        private IList<IScheduleDayPro> allUnlocked()
+        private IScheduleDayPro[] allUnlocked()
         {
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
-                                                    {
-                                                        _scheduleDayPro1,
-                                                        _scheduleDayPro2,
-                                                        _scheduleDayPro3,
-                                                        _scheduleDayPro4,
-                                                        _scheduleDayPro5,
-                                                        _scheduleDayPro6,
-                                                        _scheduleDayPro7, 
-                                                        _scheduleDayPro8
-                                                    };
-            return unlockedList;
+	        return new[]
+	        {
+		        _scheduleDayPro1,
+		        _scheduleDayPro2,
+		        _scheduleDayPro3,
+		        _scheduleDayPro4,
+		        _scheduleDayPro5,
+		        _scheduleDayPro6,
+		        _scheduleDayPro7,
+		        _scheduleDayPro8
+	        };
         }
 
-        private IList<IScheduleDayPro> lockDay2()
+        private IScheduleDayPro[] lockDay2()
         {
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
-                                                    {
-                                                        _scheduleDayPro1,
-                                                        _scheduleDayPro3,
-                                                        _scheduleDayPro4,
-                                                        _scheduleDayPro5,
-                                                        _scheduleDayPro6,
-                                                        _scheduleDayPro7, 
-                                                        _scheduleDayPro8
-                                                    };
-            return unlockedList;
+	        return new[]
+	        {
+		        _scheduleDayPro1,
+		        _scheduleDayPro3,
+		        _scheduleDayPro4,
+		        _scheduleDayPro5,
+		        _scheduleDayPro6,
+		        _scheduleDayPro7,
+		        _scheduleDayPro8
+	        };
         }
 
-        private IList<IScheduleDayPro> lockDay3()
+        private IScheduleDayPro[] lockDay3()
         {
-            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
-                                                    {
-                                                        _scheduleDayPro1,
-                                                        _scheduleDayPro2,
-                                                        _scheduleDayPro4,
-                                                        _scheduleDayPro5,
-                                                        _scheduleDayPro6,
-                                                        _scheduleDayPro7, 
-                                                        _scheduleDayPro8
-                                                    };
-            return unlockedList;
+	        return new[]
+	        {
+		        _scheduleDayPro1,
+		        _scheduleDayPro2,
+		        _scheduleDayPro4,
+		        _scheduleDayPro5,
+		        _scheduleDayPro6,
+		        _scheduleDayPro7,
+		        _scheduleDayPro8
+	        };
         }
     }
 }

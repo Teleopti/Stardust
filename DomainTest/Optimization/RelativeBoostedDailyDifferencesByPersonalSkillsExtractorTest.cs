@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1 }));
+                    .Return(new [] { _scheduleDayPro1 });
                 Expect.Call(_scheduleDayPro1.Day).Return(day);
                 Expect.Call(_skillExtractor.ExtractSkills())
                     .Return(_skillList);
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.EffectivePeriodDays)
-                    .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
+                    .Return(new [] { _scheduleDayPro1, _scheduleDayPro2 });
                 Expect.Call(_scheduleDayPro1.Day).Return(day1);
                 Expect.Call(_scheduleDayPro2.Day).Return(day2);
                 Expect.Call(_skillExtractor.ExtractSkills())

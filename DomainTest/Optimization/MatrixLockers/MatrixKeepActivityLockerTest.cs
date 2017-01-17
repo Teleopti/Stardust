@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -23,15 +22,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		private IList<IActivity> _activities;
 		private DateOnly _dateOnly;
 		private IScheduleDayPro _scheduleDayPro;
-		private ReadOnlyCollection<IScheduleDayPro> _unlockedScheduleDayPros;
+		private IScheduleDayPro[] _unlockedScheduleDayPros;
 		private IScheduleDay _scheduleDay;
 		private IPerson _person;
 		private DateTimePeriod _period;
 		private IProjectionService _projectionService;
 		private IVisualLayerCollection _visualLayerCollection;
 		private IVisualLayer _visualLayer;
-
-
+		
 		[SetUp]
 		public void SetUp()
 		{
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 			_target = new MatrixKeepActivityLocker(_scheduleMatrixPros, _activities);
 			_dateOnly = new DateOnly(2014, 1, 1);
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
-			_unlockedScheduleDayPros = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
+			_unlockedScheduleDayPros = new []{_scheduleDayPro};
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_person = new Person();
 			_period = new DateTimePeriod(new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc));

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -64,8 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_matrix.Person).Return(_person1);
 				Expect.Call(_matrix.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
-				Expect.Call(_matrix.UnlockedDays)
-				      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+				Expect.Call(_matrix.UnlockedDays).Return(new [] {_scheduleDayPro});
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_toRemoveList,
@@ -104,8 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_matrix.Person).Return(_person1);
 				Expect.Call(_matrix.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
-				Expect.Call(_matrix.UnlockedDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
+				Expect.Call(_matrix.UnlockedDays).Return(new IScheduleDayPro[0]);
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(),
 																							 _rollbackService,
 																							 _schedulingOptions.ConsiderShortBreaks, false));

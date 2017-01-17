@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			_schedulingOptions.RotationDaysOnly = true;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -158,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -187,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			_schedulingOptions.RotationDaysOnly = true;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -213,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
 			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
 
@@ -258,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
 			var dayOffPeriods = new List<IDayOffOnPeriod>{dayOffOnPeriod};
 
@@ -304,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro2 });
+			var scheduleDayProList = new [] { _scheduleDayPro, _scheduleDayPro2 };
 			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
 			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
 
@@ -351,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro2 });
+			var scheduleDayProList = new [] { _scheduleDayPro, _scheduleDayPro2 };
 			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
 			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
 
@@ -395,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -417,7 +416,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new [] { _scheduleDayPro };
 
 			using (_mocks.Record())
 			{
@@ -443,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new[] {_scheduleDayPro};
 
 			using (_mocks.Record())
 			{

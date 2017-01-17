@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_target = new ActivityRestrictionsShiftFilter();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldFilterActivityRestriction()
 		{
 			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 2));
@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod.MovePeriod(new TimeSpan(1, 0, 0))));
 			IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> { ws1, ws2 };
 
-			var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			var timeZoneInfo = TimeZoneInfo.Utc;
 			var casheList = new List<IShiftProjectionCache>();
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, timeZoneInfo);
 			foreach (IWorkShift shift in listOfWorkShifts)
 			{
 				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(_dateOnly, timeZoneInfo);
+				cache.SetDate(dateOnlyAsDateTimePeriod);
 				casheList.Add(cache);
 			}
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_target = new TeamBlockIntradayDecisionMaker(_dataExtractorProvider, () => _schedulingResultStateHolder);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldRecalculateStandardDeviationOfOneTeamBlock()
 		{
 			var dateOnly = new DateOnly();
@@ -48,10 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             var teamBlockInfo1 = new TeamBlockInfo(teaminfo, blockInfo1);
 			var dataExtractor1 = _mocks.StrictMock<IScheduleResultDataExtractor>();
 			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
-			IList<IScheduleDayPro> periodList1 = new List<IScheduleDayPro>
-				{
-					scheduleDayPro1
-				};
+			var periodList1 = new [] {scheduleDayPro1};
 			
 			using (_mocks.Record())
 			{
@@ -59,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				                                                                                             _schedulingOptions, _schedulingResultStateHolder))
 				      .Return(dataExtractor1);
 				Expect.Call(dataExtractor1.Values()).Return(new List<double?> {0.2, 0.2, 0.2});
-				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1));
+				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(periodList1);
 				Expect.Call(scheduleDayPro1.Day).Return(dateOnly).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
@@ -70,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldDecideInADescendOrder()
 		{
 			var dateOnly = new DateOnly();
@@ -92,16 +88,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var dataExtractor2 = _mocks.StrictMock<IScheduleResultDataExtractor>();
 
 			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
-			IList<IScheduleDayPro> periodList1 = new List<IScheduleDayPro>
-				{
-					scheduleDayPro1
-				};
+			var periodList1 = new []{scheduleDayPro1};
 
 			var scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
-			IList<IScheduleDayPro> periodList2 = new List<IScheduleDayPro>
-				{
-					scheduleDayPro2
-				};
+			var periodList2 = new []{scheduleDayPro2};
 
 			using (_mocks.Record())
 			{
@@ -113,8 +103,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 																											 _schedulingOptions, _schedulingResultStateHolder))
 					  .Return(dataExtractor2).Repeat.Twice();
 				Expect.Call(dataExtractor2.Values()).Return(new List<double?> { 0.4, 0.4, 0.4 }).Repeat.Twice();
-				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1)).Repeat.Twice();
-				Expect.Call(scheduleMatrixPro2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList2)).Repeat.Twice();
+				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(periodList1).Repeat.Twice();
+				Expect.Call(scheduleMatrixPro2.EffectivePeriodDays).Return(periodList2).Repeat.Twice();
 				Expect.Call(scheduleDayPro1.Day).Return(dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro2.Day).Return(dateOnly.AddDays(1)).Repeat.AtLeastOnce();
 			}

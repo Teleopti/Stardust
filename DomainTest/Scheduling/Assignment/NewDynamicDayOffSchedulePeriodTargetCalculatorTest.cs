@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -15,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private MockRepository _mocks;
 		private IScheduleMatrixPro _matrix;
 		private IScheduleDayPro _scheduleDayPro;
-		private IList<IScheduleDayPro> _days;
+		private IScheduleDayPro[] _days;
 		private IScheduleDay _scheduleDay;
 		private IVirtualSchedulePeriod _schedulePeriod;
 
@@ -26,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_target = new NewDynamicDayOffSchedulePeriodTargetCalculator(_matrix);
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-			_days = new List<IScheduleDayPro> { _scheduleDayPro };
+			_days = new [] { _scheduleDayPro };
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 		}
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_days));
+				Expect.Call(_matrix.EffectivePeriodDays).Return(_days);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);

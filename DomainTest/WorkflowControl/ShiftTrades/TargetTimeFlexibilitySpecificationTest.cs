@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -144,13 +143,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             IScheduleDayPro dayMain = _mocks.StrictMock<IScheduleDayPro>();
             IScheduleDay partDO = _mocks.StrictMock<IScheduleDay>();
             IScheduleDay partMain = _mocks.StrictMock<IScheduleDay>();
-            IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> { dayMain, dayDO };
+            var periodDays = new [] { dayMain, dayDO };
             IProjectionService projection1 = _mocks.StrictMock<IProjectionService>();
             IProjectionService projection2 = _mocks.StrictMock<IProjectionService>();
             IVisualLayerCollection visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
             IVisualLayerCollection visualLayerCollection2 = _mocks.StrictMock<IVisualLayerCollection>();
 
-            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays));
+            Expect.Call(_matrix.EffectivePeriodDays).Return(periodDays);
             Expect.Call(dayMain.DaySchedulePart()).Return(partMain).Repeat.Any();
             Expect.Call(dayDO.DaySchedulePart()).Return(partDO).Repeat.Any();
             Expect.Call(partMain.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();

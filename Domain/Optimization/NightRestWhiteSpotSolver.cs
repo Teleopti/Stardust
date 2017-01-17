@@ -11,19 +11,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class NightRestWhiteSpotSolver : INightRestWhiteSpotSolver
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public NightRestWhiteSpotSolverResult Resolve(IScheduleMatrixPro matrix)
         {
             NightRestWhiteSpotSolverResult result = new NightRestWhiteSpotSolverResult();
 
-            for (int i = 1; i < matrix.EffectivePeriodDays.Count; i++)
+            for (int i = 1; i < matrix.EffectivePeriodDays.Length; i++)
             {
-
-                if (matrix.EffectivePeriodDays[i].DaySchedulePart().IsScheduled())
+	            var matrixEffectivePeriodDay = matrix.EffectivePeriodDays[i];
+	            if (matrixEffectivePeriodDay.DaySchedulePart().IsScheduled())
                     continue;
 
                 bool multipleFound = false;
-                while (i < matrix.EffectivePeriodDays.Count && !matrix.GetScheduleDayByKey(matrix.EffectivePeriodDays[i].Day.AddDays(1)).DaySchedulePart().IsScheduled())
+                while (i < matrix.EffectivePeriodDays.Length && !matrix.GetScheduleDayByKey(matrix.EffectivePeriodDays[i].Day.AddDays(1)).DaySchedulePart().IsScheduled())
                 {
                     i++;
                     multipleFound = true;
@@ -32,18 +31,19 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (multipleFound)
                     continue;
 
-                if (!matrix.UnlockedDays.Contains(matrix.EffectivePeriodDays[i - 1]))
+	            var previousMatrixEffectivePeriodDay = matrix.EffectivePeriodDays[i - 1];
+	            if (!matrix.UnlockedDays.Contains(previousMatrixEffectivePeriodDay))
                     continue;
 
-                if (!matrix.UnlockedDays.Contains(matrix.EffectivePeriodDays[i]))
+                if (!matrix.UnlockedDays.Contains(matrixEffectivePeriodDay))
                     continue;
 
-                if (matrix.EffectivePeriodDays[i - 1].DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
+                if (previousMatrixEffectivePeriodDay.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
                     continue;
-                if (matrix.GetScheduleDayByKey(matrix.EffectivePeriodDays[i].Day.AddDays(-1)).DaySchedulePart().IsScheduled())
-                    result.DaysToDelete.Add(matrix.EffectivePeriodDays[i].Day.AddDays(-1));
-                result.AddDayToReschedule(matrix.EffectivePeriodDays[i].Day.AddDays(-1));
-                result.AddDayToReschedule(matrix.EffectivePeriodDays[i].Day);
+                if (matrix.GetScheduleDayByKey(matrixEffectivePeriodDay.Day.AddDays(-1)).DaySchedulePart().IsScheduled())
+                    result.AddDayToDelete(matrixEffectivePeriodDay.Day.AddDays(-1));
+                result.AddDayToReschedule(matrixEffectivePeriodDay.Day.AddDays(-1));
+                result.AddDayToReschedule(matrixEffectivePeriodDay.Day);
             }
 
             return result;
@@ -61,21 +61,21 @@ namespace Teleopti.Ccc.Domain.Optimization
             _daysToReschedule = new List<DateOnly>();
         }
 
-        public IList<DateOnly> DaysToDelete
-        {
-            get { return _daysToDelete; }
-        }
+        public IEnumerable<DateOnly> DaysToDelete => _daysToDelete;
 
-        public IList<DateOnly> DaysToReschedule()
-        {
-            return _daysToReschedule.OrderByDescending(d => d).ToList(); 
-        }
+	    public IEnumerable<DateOnly> DaysToReschedule()
+	    {
+		    return _daysToReschedule.OrderByDescending(d => d);
+	    }
 
         public void AddDayToReschedule(DateOnly dateOnly)
         {
             _daysToReschedule.Add(dateOnly);
         }
 
-        
+	    public void AddDayToDelete(DateOnly dateOnly)
+	    {
+		    _daysToDelete.Add(dateOnly);
+	    }
     }
 }

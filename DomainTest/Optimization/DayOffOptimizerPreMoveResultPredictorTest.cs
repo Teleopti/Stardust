@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -53,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(2012, 1, 1),
 																					  new DateOnly(2012, 1, 2)));
-				Expect.Call(_matrix.EffectivePeriodDays).Return(
-					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new [] { _scheduleDayPro1, _scheduleDayPro2 });
 				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
 				//Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2012, 1, 2)).Repeat.AtLeastOnce();
 				Expect.Call(_matrix.Person).Return(_person);
@@ -92,8 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_matrix.EffectivePeriodDays).Return(
-					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new [] { _scheduleDayPro1, _scheduleDayPro2 });
 				Expect.Call(_matrix.Person).Return(_person);
 
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(2012, 1, 1),
@@ -105,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_matrix.OuterWeeksPeriodDays).Return(
-					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {
+					new [] {
 						_scheduleDayPro1, 
 						_scheduleDayPro1, 
 						_scheduleDayPro1, 
@@ -113,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 						_scheduleDayPro1, 
 						_scheduleDayPro1, 
 						_scheduleDayPro1,
-						_scheduleDayPro1, _scheduleDayPro2 }));
+						_scheduleDayPro1, _scheduleDayPro2 });
 				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2012, 1, 2)).Repeat.AtLeastOnce();
 			}

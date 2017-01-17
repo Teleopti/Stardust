@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
     {
         public bool IsInLegalState(int weekIndex, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths, IScheduleMatrixPro matrix)
         {
-			int weekCount = matrix.FullWeeksPeriodDays.Count / 7;
+			int weekCount = matrix.FullWeeksPeriodDays.Length / 7;
 			if (weekIndex == 0 || weekIndex == weekCount - 1)
 			{
 				var skipThisWeek = new WorkShiftMinMaxCalculatorSkipWeekCheck().SkipWeekCheck(matrix, matrix.FullWeeksPeriodDays[weekIndex * 7].Day);

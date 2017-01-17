@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -347,8 +346,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         {
             Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
             Expect.Call(_schedulePeriod.Contract).Return(_personContract.Contract).Repeat.Any();
-            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(createPeriodList())).Repeat.Any();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(createCompleteList())).Repeat.Any();
+            Expect.Call(_matrix.EffectivePeriodDays).Return(createPeriodList()).Repeat.Any();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(createCompleteList()).Repeat.Any();
             Expect.Call(_schedulePartEmpty.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
             Expect.Call(_schedulePartDo.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             Expect.Call(_schedulePartAbsence.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.Any();
@@ -384,11 +383,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         {
             Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
             Expect.Call(_schedulePeriod.Contract).Return(_newContract).Repeat.Any();
-            //Expect.Call(_schedulePeriod.PersonPeriod).Return(_personPeriod).Repeat.Any();
-            //Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Any();
-
-            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(createPeriodList())).Repeat.Any();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(createCompleteList())).Repeat.Any();
+            
+            Expect.Call(_matrix.EffectivePeriodDays).Return(createPeriodList()).Repeat.Any();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(createCompleteList()).Repeat.Any();
             Expect.Call(_schedulePartEmpty.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
             Expect.Call(_schedulePartDo.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             Expect.Call(_schedulePartAbsence.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.Any();
@@ -452,13 +449,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
         private void verifyMinMaxAllowedShiftContractTimeWithWeekCorrectionMocksNotFullWeeks(DateOnly day)
         {
-            //TimeSpan? weeklyMax = TimeSpan.FromHours(9);
-
-            //Expect.Call(_workShiftWeekMinMaxCalculator.MaxAllowedLength(0, possibleShiftLengths(), day, _matrix)).Return(weeklyMax).Repeat.Any();
-
 			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
-            //Expect.Call(_workShiftWeekMinMaxCalculator.CorrectionDiff(0, possibleShiftLengths(), day, _matrix)).Return(TimeSpan.FromHours(0)).Repeat.Once();
-            Expect.Call(_workShiftWeekMinMaxCalculator.CorrectionDiff(1, possibleShiftLengths(), day, _matrix)).IgnoreArguments().Return(TimeSpan.FromHours(0)).Repeat.Any();
+
+	        Expect.Call(_workShiftWeekMinMaxCalculator.CorrectionDiff(1, possibleShiftLengths(), day, _matrix))
+		        .IgnoreArguments()
+		        .Return(TimeSpan.FromHours(0))
+		        .Repeat.Any();
 
             Expect.Call(_scheduleDayPro0.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
             Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
@@ -629,44 +625,42 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
                 .Return(new TimeSpan(0)).Repeat.AtLeastOnce();
         }
 
-        private IList<IScheduleDayPro> createPeriodList()
+        private IScheduleDayPro[] createPeriodList()
         {
-            IList<IScheduleDayPro> ret = new List<IScheduleDayPro>
-                                             {
-                                                 _scheduleDayPro3,
-                                                 _scheduleDayPro4,
-                                                 _scheduleDayPro5,
-                                                 _scheduleDayPro6,
-                                                 _scheduleDayPro7,
-                                                 _scheduleDayPro8,
-                                                 _scheduleDayPro9,
-                                                 _scheduleDayPro10,
-                                                 _scheduleDayPro11,
-                                                 _scheduleDayPro12,
-                                             };
-            return ret;
+	        return new[]
+	        {
+		        _scheduleDayPro3,
+		        _scheduleDayPro4,
+		        _scheduleDayPro5,
+		        _scheduleDayPro6,
+		        _scheduleDayPro7,
+		        _scheduleDayPro8,
+		        _scheduleDayPro9,
+		        _scheduleDayPro10,
+		        _scheduleDayPro11,
+		        _scheduleDayPro12,
+	        };
         }
 
-        private IList<IScheduleDayPro> createCompleteList()
+        private IScheduleDayPro[] createCompleteList()
         {
-            IList<IScheduleDayPro> ret = new List<IScheduleDayPro>
-                                             {
-                                                 _scheduleDayPro0,
-                                                 _scheduleDayPro1,
-                                                 _scheduleDayPro2,
-                                                 _scheduleDayPro3,
-                                                 _scheduleDayPro4,
-                                                 _scheduleDayPro5,
-                                                 _scheduleDayPro6,
-                                                 _scheduleDayPro7,
-                                                 _scheduleDayPro8,
-                                                 _scheduleDayPro9,
-                                                 _scheduleDayPro10,
-                                                 _scheduleDayPro11,
-                                                 _scheduleDayPro12,
-                                                 _scheduleDayPro13
-                                             };
-            return ret;
+	        return new[]
+	        {
+		        _scheduleDayPro0,
+		        _scheduleDayPro1,
+		        _scheduleDayPro2,
+		        _scheduleDayPro3,
+		        _scheduleDayPro4,
+		        _scheduleDayPro5,
+		        _scheduleDayPro6,
+		        _scheduleDayPro7,
+		        _scheduleDayPro8,
+		        _scheduleDayPro9,
+		        _scheduleDayPro10,
+		        _scheduleDayPro11,
+		        _scheduleDayPro12,
+		        _scheduleDayPro13
+	        };
         }
 
         private IDictionary<DateOnly, MinMax<TimeSpan>> possibleShiftLengths()

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -91,10 +90,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					.Repeat.Any();
 
 				Expect.Call(_matrix1.Person).Return(_person);
-				Expect.Call(_matrix1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro1}));
+				Expect.Call(_matrix1.EffectivePeriodDays).Return(new []{_scheduleDayPro1});
 
 				Expect.Call(_matrix2.Person).Return(_person);
-				Expect.Call(_matrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro2 }));
+				Expect.Call(_matrix2.EffectivePeriodDays).Return(new[] { _scheduleDayPro2 });
 			}
 			using (_mocks.Playback())
 			{

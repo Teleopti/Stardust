@@ -52,52 +52,52 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void TestConstructorsWithDateOnlyPeriod()
         {
             Assert.AreSame(_person, _target.Person);
-            Assert.AreEqual(7, _target.EffectivePeriodDays.Count);
+            Assert.AreEqual(7, _target.EffectivePeriodDays.Length);
             Assert.AreSame(_schedulePeriod, _target.SchedulePeriod);
         }
 
 		[Test]
 		public void VerifyAllDaysAreLockedWhenCreated()
 		{
-			Assert.AreEqual(0, _target.UnlockedDays.Count);
+			Assert.AreEqual(0, _target.UnlockedDays.Length);
 		}
 
 		[Test]
 		public void VerifyPeriodCouldBeUnlocked()
 		{
 			_target.UnlockPeriod(_period);
-			Assert.AreEqual(7, _target.UnlockedDays.Count);
+			Assert.AreEqual(7, _target.UnlockedDays.Length);
 		}
 
         [Test]
         public void VerifyFullWeeksPeriodIsSet()
         {
-            Assert.IsTrue(_target.FullWeeksPeriodDays.Count >= _target.EffectivePeriodDays.Count);
-            Assert.IsTrue(_target.FullWeeksPeriodDays.Count >= 7);
-            Assert.IsTrue(_target.FullWeeksPeriodDays.Count % 7 == 0);
+            Assert.IsTrue(_target.FullWeeksPeriodDays.Length >= _target.EffectivePeriodDays.Length);
+            Assert.IsTrue(_target.FullWeeksPeriodDays.Length >= 7);
+            Assert.IsTrue(_target.FullWeeksPeriodDays.Length % 7 == 0);
             Assert.AreSame(_target.EffectivePeriodDays[0], _target.FullWeeksPeriodDays[4]);
         }
 
         [Test]
         public void VerifyOuterWeeksPeriodIsSet()
         {
-            Assert.AreEqual(_target.FullWeeksPeriodDays.Count + 14, _target.OuterWeeksPeriodDays.Count);
+            Assert.AreEqual(_target.FullWeeksPeriodDays.Length + 14, _target.OuterWeeksPeriodDays.Length);
             Assert.AreSame(_target.FullWeeksPeriodDays[0], _target.OuterWeeksPeriodDays[7]);
         }
 
         [Test]
         public void VerifyWeekBeforeOuterPeriodIsSet()
         {
-            Assert.AreEqual(_target.FullWeeksPeriodDays.Count + 7, _target.WeekBeforeOuterPeriodDays.Count);
+            Assert.AreEqual(_target.FullWeeksPeriodDays.Length + 7, _target.WeekBeforeOuterPeriodDays.Length);
             Assert.AreSame(_target.OuterWeeksPeriodDays[0], _target.WeekBeforeOuterPeriodDays[0]);
         }
 
         [Test]
         public void VerifyWeekAfterOuterPeriodIsSet()
         {
-            Assert.AreEqual(_target.FullWeeksPeriodDays.Count + 7, _target.WeekBeforeOuterPeriodDays.Count);
+            Assert.AreEqual(_target.FullWeeksPeriodDays.Length + 7, _target.WeekBeforeOuterPeriodDays.Length);
             Assert.AreSame(_target.OuterWeeksPeriodDays[7], _target.WeekAfterOuterPeriodDays[0]);
-            Assert.AreSame(_target.OuterWeeksPeriodDays[_target.OuterWeeksPeriodDays.Count - 1], _target.WeekAfterOuterPeriodDays[_target.WeekAfterOuterPeriodDays.Count - 1]);
+            Assert.AreSame(_target.OuterWeeksPeriodDays[_target.OuterWeeksPeriodDays.Length - 1], _target.WeekAfterOuterPeriodDays[_target.WeekAfterOuterPeriodDays.Length - 1]);
         }
 
         [Test]
@@ -110,25 +110,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyWeekBeforeOuterPeriodDictionary()
         {
-            Assert.AreEqual(_target.WeekBeforeOuterPeriodDays.Count, _target.WeekBeforeOuterPeriodDictionary.Values.Count);
+            Assert.AreEqual(_target.WeekBeforeOuterPeriodDays.Length, _target.WeekBeforeOuterPeriodDictionary.Values.Count);
         }
 
         [Test]
         public void VerifyWeekAfterOuterPeriodDictionary()
         {
-            Assert.AreEqual(_target.WeekAfterOuterPeriodDays.Count, _target.WeekAfterOuterPeriodDictionary.Values.Count);
+            Assert.AreEqual(_target.WeekAfterOuterPeriodDays.Length, _target.WeekAfterOuterPeriodDictionary.Values.Count);
         }
 
         [Test]
         public void VerifyOuterWeeksPeriodDictionary()
         {
-            Assert.AreEqual(_target.OuterWeeksPeriodDays.Count, _target.OuterWeeksPeriodDictionary.Values.Count);
+            Assert.AreEqual(_target.OuterWeeksPeriodDays.Length, _target.OuterWeeksPeriodDictionary.Values.Count);
         }
 
         [Test]
         public void VerifyFullWeeksPeriodDictionary()
         {
-            Assert.AreEqual(_target.FullWeeksPeriodDays.Count, _target.FullWeeksPeriodDictionary.Values.Count);
+            Assert.AreEqual(_target.FullWeeksPeriodDays.Length, _target.FullWeeksPeriodDictionary.Values.Count);
         }
 
 		[Test]
@@ -142,19 +142,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void VerifyPeriodCouldBeLocked()
 		{
 			_target.UnlockPeriod(_period);
-			Assert.AreEqual(7, _target.UnlockedDays.Count);
+			Assert.AreEqual(7, _target.UnlockedDays.Length);
 			DateOnlyPeriod twoDayPeriod = new DateOnlyPeriod(2010, 1, 10, 2010, 1, 11);
 			_target.LockPeriod(twoDayPeriod);
-			Assert.AreEqual(5, _target.UnlockedDays.Count);
+			Assert.AreEqual(5, _target.UnlockedDays.Length);
 		}
-
-
-        //[Test]
-        //public void ShouldLockUserDate()
-        //{
-        //    var dateOnly = new DateOnly(2011, 1, 1);
-        //    _target.LockUserDate(dateOnly);
-        //    Assert.IsTrue(_target.UserLockedDates.Contains(dateOnly));
-        //}
     }
 }

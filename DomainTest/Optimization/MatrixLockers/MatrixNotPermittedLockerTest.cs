@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		private IScheduleDay _scheduleDay;
 		private IPersistableScheduleData _persistableScheduleData;
 		private IList<IPersistableScheduleData> _persistableScheduleDataList;
-		
 		
 		[SetUp]
 		public void Setup()
@@ -82,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		private void commonMocks()
 		{
 			Expect.Call(_matrix.UnlockedDays)
-				.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+				.Return(new [] {_scheduleDayPro});
 			Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 			Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(_persistableScheduleDataList);
 			Expect.Call(_persistableScheduleData.FunctionPath).Return(_function);

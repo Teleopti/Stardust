@@ -94,8 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
                 Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
                     DateOnly.MinValue);
 
-                Expect.Call(_matrix1.UnlockedDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro })).Repeat.AtLeastOnce();
+                Expect.Call(_matrix1.UnlockedDays).Return(new [] { _scheduleDayPro }).Repeat.AtLeastOnce();
                 Expect.Call(_matrix1.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
@@ -145,8 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
                 Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
                     DateOnly.MinValue);
                 Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.AtLeastOnce();
-                Expect.Call(_matrix1.UnlockedDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+                Expect.Call(_matrix1.UnlockedDays).Return(new [] { _scheduleDayPro });
                 Expect.Call(_matrix1.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
@@ -184,8 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
 					DateOnly.MinValue);
 				Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.AtLeastOnce();
-				Expect.Call(_matrix1.UnlockedDays).Return(
-					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_matrix1.UnlockedDays).Return(new [] { _scheduleDayPro });
 				Expect.Call(_matrix1.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
@@ -222,8 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
                 Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
                     DateOnly.MinValue);
                 Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.AtLeastOnce();
-                Expect.Call(_matrix1.UnlockedDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
+                Expect.Call(_matrix1.UnlockedDays).Return(new IScheduleDayPro[0]);
                 Expect.Call(_matrix1.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
             }
 
@@ -279,8 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
                 Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(secondMatrixDataList)).Return(
                     new List<IMatrixData>());
 
-                Expect.Call(_matrix1.UnlockedDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro })).Repeat.AtLeastOnce();
+                Expect.Call(_matrix1.UnlockedDays).Return(new [] { _scheduleDayPro }).Repeat.AtLeastOnce();
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 				Expect.Call(_personAssignment.FunctionPath).Return("functionPath").Repeat.AtLeastOnce();

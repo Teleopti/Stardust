@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         //private IPersonPeriod _personPeriod;
         private DateOnly _startDate;
         private IPersonContract _personContract;
-        private ReadOnlyCollection<IScheduleDayPro> _periodList;
+        private IScheduleDayPro[] _periodList;
         private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
@@ -64,9 +63,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _schedulingOptions = new SchedulingOptions();
             _target = new WorkShiftWeekMinMaxCalculator();
-            IList<IScheduleDayPro> tmpList = new List<IScheduleDayPro> { _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6 };
-            _periodList = new ReadOnlyCollection<IScheduleDayPro>(tmpList);
-        }
+            _periodList = new[] { _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6 };
+		}
 
         [Test]
         public void VerifyIsInLegalState()

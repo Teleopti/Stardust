@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift = new WorkShift(new ShiftCategory("hepp"));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
 			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			c1.SetDate(_dateOnly, TimeZoneInfo.Utc);
+			c1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
 			var shifts = new List<IShiftProjectionCache> {c1};
 
 			using (_mocks.Record())
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift = new WorkShift(new ShiftCategory("hepp"));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
 			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			c1.SetDate(_dateOnly, TimeZoneInfo.Utc);
+			c1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
 			var shifts = new List<IShiftProjectionCache> { c1 };
 			
 			using (_mocks.Record())

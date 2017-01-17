@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             }
 
             int periodAreaStart = daysList.IndexOf(scheduleMatrix.EffectivePeriodDays[0]);
-            int periodAreaEnd = daysList.IndexOf(scheduleMatrix.EffectivePeriodDays[scheduleMatrix.EffectivePeriodDays.Count - 1]);
+            int periodAreaEnd = daysList.IndexOf(scheduleMatrix.EffectivePeriodDays[scheduleMatrix.EffectivePeriodDays.Length - 1]);
             ret.PeriodArea = new MinMax<int>(periodAreaStart, periodAreaEnd);
 
             return ret;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             }
 
             int periodAreaStart = daysList.IndexOf(scheduleMatrix.EffectivePeriodDays[0]);
-            int periodAreaEnd = daysList.IndexOf(scheduleMatrix.EffectivePeriodDays[scheduleMatrix.EffectivePeriodDays.Count - 1]);
+            int periodAreaEnd = daysList.IndexOf(scheduleMatrix.EffectivePeriodDays[scheduleMatrix.EffectivePeriodDays.Length - 1]);
             ret.PeriodArea = new MinMax<int>(periodAreaStart, periodAreaEnd);
 
             return ret;

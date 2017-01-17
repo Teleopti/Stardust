@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix);
             // om inte solvern returnerar något så returnera false
-            if (solverResult.DaysToDelete.Count == 0)
+            if (!solverResult.DaysToDelete.Any())
                 return false;
 
 	        var daysToDelete =
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             bool success = false;
             IPerson person = matrix.Person;
 
-		    var daysInConsideration = solverResult.DaysToReschedule();
+	        var daysInConsideration = solverResult.DaysToReschedule().ToList();
             foreach (var dateOnly in solverResult.DaysToReschedule())
             {
                 if (!daysInConsideration.Contains(dateOnly)) continue;

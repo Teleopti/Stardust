@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -20,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private MockRepository _mock;
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private IScheduleDayPro _scheduleDayPro;
-		private IList<IScheduleDayPro> _scheduleDayPros;
+		private IScheduleDayPro[] _scheduleDayPros;
 		private ITeamBlockRemoveShiftCategoryOnBestDateService _teamBlockRemoveShiftCategoryOnBestDateService;
 		private DateOnly _dateOnly;
 		private DateOnlyPeriod _dateOnlyPeriod;
@@ -37,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_mock = new MockRepository();
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
-			_scheduleDayPros = new List<IScheduleDayPro> {_scheduleDayPro};
+			_scheduleDayPros = new [] {_scheduleDayPro};
 			_teamBlockRemoveShiftCategoryOnBestDateService = _mock.StrictMock<ITeamBlockRemoveShiftCategoryOnBestDateService>();
 			_dateOnly = new DateOnly(2015, 1, 1);
 			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
@@ -56,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros)).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(_scheduleDayPros).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro, _shiftCategory)).Return(true);

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff;
 		private ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
 		private IScheduleDayPro _scheduleDayPro;
-		private ReadOnlyCollection<IScheduleDayPro> _effectiveDays;
+		private IScheduleDayPro[] _effectiveDays;
 		private IScheduleDay _scheduleDay;
 		private IProjectionService _projectionService;
 		private IVisualLayerCollection _visualLayerCollection;
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
 			_schedulingOptions = new RestrictionSchedulingOptions(){UseScheduling = true};
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-			_effectiveDays = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
+			_effectiveDays = new []{_scheduleDayPro};
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_projectionService = _mocks.StrictMock<IProjectionService>();
 			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();

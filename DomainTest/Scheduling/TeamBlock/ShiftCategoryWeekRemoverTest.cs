@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -28,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleDayPro _scheduleDayPro5;
 		private IScheduleDayPro _scheduleDayPro6;
 		private IScheduleDayPro _scheduleDayPro7;
-		private IList<IScheduleDayPro> _scheduleDayPros;
+		private IScheduleDayPro[] _scheduleDayPros;
 		private DateOnly _dateOnly;
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private ShiftCategoryWeekRemover _target;
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDayPro5 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro6 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro7 = _mock.StrictMock<IScheduleDayPro>();
-			_scheduleDayPros = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6, _scheduleDayPro7 };
+			_scheduleDayPros = new [] { _scheduleDayPro1, _scheduleDayPro2, _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6, _scheduleDayPro7 };
 			_dateOnly = new DateOnly(2015, 1, 1);
 			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(6));
 			_optimizationPreferences = new OptimizationPreferences();
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleMatrixPro.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros));
+				Expect.Call(_scheduleMatrixPro.FullWeeksPeriodDays).Return(_scheduleDayPros);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro1, _shiftCategory)).Return(true);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro2, _shiftCategory)).Return(false);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro3, _shiftCategory)).Return(false);

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_scheduleDay.Period)
 					.Return(_dayDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.UnlockedDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { unlockedDayPro }));
+					.Return(new [] { unlockedDayPro });
 				Expect.Call(unlockedDayPro.DaySchedulePart())
 					.Return(unlockedDay).Repeat.AtLeastOnce();
 
@@ -74,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_scheduleDay.Period)
 					.Return(_dayDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.UnlockedDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { unlockedDayPro }));
+					.Return(new [] { unlockedDayPro });
 				Expect.Call(unlockedDayPro.DaySchedulePart())
 					.Return(unlockedDay).Repeat.AtLeastOnce();
 				Expect.Call(unlockedDay.Period)

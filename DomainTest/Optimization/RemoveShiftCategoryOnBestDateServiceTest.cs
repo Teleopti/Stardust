@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(firstDate, skill));
 			IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_interface = new RemoveShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleDayService);
-			IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro> { _scheduleDayPro};
+			var unlockedDays = new [] { _scheduleDayPro};
 
 			IScheduleDayPro result;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays));
+				Expect.Call(scheduleMatrix.UnlockedDays).Return(unlockedDays);
 				matchingShiftCategoryMock();
 				Expect.Call(scheduleMatrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(firstDate).Repeat.Any();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleMatrixValueCalculatorPro.DayValueForSkills(firstDate, new List<ISkill> {skill}))
 					.Repeat.Once()
 					.Return(2);
-				Expect.Call(scheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays)).Repeat.Once();
+				Expect.Call(scheduleMatrix.EffectivePeriodDays).Return(unlockedDays).Repeat.Once();
 			}
 
 			using (_mocks.Playback())
@@ -92,13 +92,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(firstDate, skill));
 			IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_interface = new RemoveShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleDayService);
-			IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro> { _scheduleDayPro};
+			var unlockedDays = new [] { _scheduleDayPro};
 
 			IScheduleDayPro result;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays));
+				Expect.Call(scheduleMatrix.UnlockedDays).Return(unlockedDays);
 				matchingShiftCategoryMock();
 				Expect.Call(scheduleMatrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(firstDate).Repeat.Any();
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(double.MaxValue)
 					.Repeat.Once();
 				Expect.Call(scheduleMatrix.EffectivePeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays))
+					.Return(unlockedDays)
 					.Repeat.Once();
 			}
 
@@ -182,15 +182,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void VerifyDaysToWorkWithUsesUnlockedDays()
 		{
-			IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_target = new RemoveShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleDayService);
-			IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro>{_scheduleDayPro, _scheduleDayPro};
+			var unlockedDays = new [] {_scheduleDayPro, _scheduleDayPro};
 
 			IList<IScheduleDayPro> daysToWorkWith;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays));
+				Expect.Call(scheduleMatrix.UnlockedDays).Return(unlockedDays);
 				matchingShiftCategoryMock();
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 1)).Repeat.Once();
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 2)).Repeat.Once();
@@ -209,13 +209,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			IScheduleMatrixPro scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_target = new RemoveShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculatorPro, _scheduleDayService);
-			IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro };
+			var unlockedDays = new [] { _scheduleDayPro, _scheduleDayPro };
 
 			IList<IScheduleDayPro> daysToWorkWith;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays));
+				Expect.Call(scheduleMatrix.UnlockedDays).Return(unlockedDays);
 				matchingShiftCategoryMock();
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 1)).Repeat.Once();
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 2)).Repeat.Once();

@@ -21,10 +21,22 @@ namespace Teleopti.Ccc.Domain.Common
         {
             if(!_period.HasValue)
             {
-				_period = new DateOnly(_dateOnly.Date).ToDateTimePeriod(_sourceTimeZone);                
+				_period = _dateOnly.ToDateTimePeriod(_sourceTimeZone);                
             }
             return _period.Value;
         }
+
+	    public TimeZoneInfo TimeZone()
+	    {
+		    return _sourceTimeZone;
+	    }
+
+	    public bool Equals(IDateOnlyAsDateTimePeriod other)
+	    {
+		    var otherCasted = other as DateOnlyAsDateTimePeriod;
+		    return otherCasted != null && otherCasted._dateOnly == _dateOnly &&
+				   otherCasted._sourceTimeZone.Id == _sourceTimeZone.Id;
+	    }
     }
 
 	public interface IDateOnlyPeriodAsDateTimePeriod
