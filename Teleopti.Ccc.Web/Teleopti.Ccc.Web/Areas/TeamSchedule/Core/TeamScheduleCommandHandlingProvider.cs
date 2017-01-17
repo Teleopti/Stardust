@@ -571,7 +571,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				newMessages.Add(Resources.NoPermissionRemoveOvertimeActivity);
 			}
-			else if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveActivity, date, agent))
+			else if (!layerDate.IsOvertime && !_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveActivity, date, agent))
 			{
 				newMessages.Add(Resources.NoPermissionRemoveAgentActivity);
 			}
