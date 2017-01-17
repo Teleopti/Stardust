@@ -167,7 +167,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				new NoSchedulingProgress(), StateHolder,
 				new[] { dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date) },
 				new ScheduleOptimizerHelper(
-					Scope,
 					Scope.Resolve<IMatrixListFactory>(),
 					Scope.Resolve<MoveTimeOptimizerCreator>(),
 					Scope.Resolve<PeriodExtractorFromScheduleParts>(),
@@ -188,7 +187,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					Scope.Resolve<IUserTimeZone>(),
 					Scope.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>(),
 					Scope.Resolve<IScheduleDayEquator>(),
-					Scope.Resolve<ITeamBlockSeniorityFairnessOptimizationService>()),
+					Scope.Resolve<ITeamBlockSeniorityFairnessOptimizationService>(),
+					Scope.Resolve<IIntraIntervalOptimizationCommand>()),
 				 
 					OptimizationPreferences, 
 					false, 

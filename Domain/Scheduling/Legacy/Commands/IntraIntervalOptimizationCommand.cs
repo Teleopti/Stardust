@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly IIntraIntervalOptimizationService _intervalOptimizationService;
 		private ISchedulingProgress _backgroundWorker;
-		private string _optimizationstep;
 
 		public IntraIntervalOptimizationCommand(IIntraIntervalOptimizationService intervalOptimizationService)
 		{
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, 
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker)
 		{
-			_optimizationstep = UserTexts.Resources.IntraIntervalOptimization + ": ";
 			_backgroundWorker = backgroundWorker;
 			_intervalOptimizationService.ReportProgress += intervalOptimizationServiceReportProgress;
 			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				e.Cancel = true;
 			}
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, _optimizationstep + e.Message);
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.IntraIntervalOptimization + ": " + e.Message);
 			_backgroundWorker.ReportProgress(1, args);
 		}
 	}

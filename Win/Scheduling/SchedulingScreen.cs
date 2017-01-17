@@ -3634,7 +3634,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container,
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(
 				_container.Resolve<IMatrixListFactory>() ,
 				_container.Resolve < MoveTimeOptimizerCreator>(),
 				_container.Resolve < PeriodExtractorFromScheduleParts>(),
@@ -3655,7 +3655,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_container.Resolve<IUserTimeZone>(),
 				_container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>(),
 				_container.Resolve<IScheduleDayEquator>(),
-				_container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>());
+				_container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>(),
+				_container.Resolve<IIntraIntervalOptimizationCommand>());
 
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{

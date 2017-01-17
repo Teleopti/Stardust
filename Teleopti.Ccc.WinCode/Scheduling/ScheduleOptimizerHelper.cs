@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		private Func<IWorkShiftFinderResultHolder> _allResults;
 		private ISchedulingProgress _backgroundWorker;
-		private readonly ILifetimeScope _container;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly MoveTimeOptimizerCreator _moveTimeOptimizerCreator;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractorFromScheduleParts;
@@ -43,10 +41,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
+		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 
-
-		public ScheduleOptimizerHelper(ILifetimeScope container,
-				IMatrixListFactory matrixListFactory,
+		public ScheduleOptimizerHelper(IMatrixListFactory matrixListFactory,
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
 				PeriodExtractorFromScheduleParts periodExtractorFromScheduleParts,
 				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
@@ -66,9 +63,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IUserTimeZone userTimeZone,
 				ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
 				IScheduleDayEquator scheduleDayEquator,
-				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService)
+				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
+				IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand)
 		{
-			_container = container;
 			_matrixListFactory = matrixListFactory;
 			_moveTimeOptimizerCreator = moveTimeOptimizerCreator;
 			_periodExtractorFromScheduleParts = periodExtractorFromScheduleParts;
@@ -90,6 +87,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_teamBlockDayOffFairnessOptimizationServiceFacade = teamBlockDayOffFairnessOptimizationServiceFacade;
 			_scheduleDayEquator = scheduleDayEquator;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
+			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 			_stateHolder = () => _schedulerStateHolder().SchedulingResultState;
 		}
 
@@ -354,8 +352,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 				schedulingOptions.ConsiderShortBreaks, _stateHolder(), _userTimeZone);
-			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
-			intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays,
+			_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays,
 				_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer,
 				_backgroundWorker);
 		}
