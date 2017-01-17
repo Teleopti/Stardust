@@ -15,6 +15,8 @@
         vm.querySearchSkills = querySearchSkills;
         vm.querySearchAreas = querySearchAreas;
         vm.addOvertime = addOvertime;
+        vm.draggable = false;
+        vm.toggleDraggable = toggleDraggable;
         var allSkills = [];
         var allSkillAreas = [];
         getSkills();
@@ -122,15 +124,21 @@
             staffingService.addOvertime.save({ Skills: [currentSkills.Id] });
         }
 
-        var generateChartForView = function () {
+        function toggleDraggable(){
+            vm.draggable = !vm.draggable
+            console.log('dragable: ',vm.draggable);
+            generateChartForView();
+        }
+
+        function generateChartForView(){
             c3.generate({
                 bindto: '#staffingChart',
                 data: {
                     selection: {
-                        enabled: true,
-                        draggable: true,
-                        multiple: true,
-                        grouped: true
+                        enabled: vm.draggable,
+                        draggable: vm.draggable,
+                        multiple: vm.draggable,
+                        grouped: vm.draggable
 
                     },
                     x: "x",

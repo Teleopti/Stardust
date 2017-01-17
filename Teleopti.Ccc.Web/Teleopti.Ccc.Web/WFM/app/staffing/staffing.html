@@ -63,6 +63,13 @@
         </div>
         <div class="con-row">
             <div class="con-flex">
+                <div class="wfm-switch con-flex split-3-1">
+                    <input type="checkbox" id="switch1" ng-click="vm.toggleDraggable()" />
+                    <label for="switch1">
+		<span class="wfm-switch-label">Allow interval select</span>
+		<span class="wfm-switch-toggle"></span>
+	</label>
+                </div>
                 <div ng-show="vm.staffingDataAvailable" class="wfm-chart intraday-chart" id="staffingChart">
 
                 </div>
@@ -72,7 +79,9 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
         <div class="con-footer">
             <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.addOvertime()">Add overtime</button>
         </div>
