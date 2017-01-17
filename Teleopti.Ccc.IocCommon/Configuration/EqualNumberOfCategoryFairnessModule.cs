@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EqualNumberOfCategoryFairnessService>().As<IEqualNumberOfCategoryFairnessService>();
 			builder.RegisterType<DistributionForPersons>().As<IDistributionForPersons>();
 			builder.RegisterType<FilterForEqualNumberOfCategoryFairness>().As<IFilterForEqualNumberOfCategoryFairness>();
-			builder.RegisterType<FilterForTeamBlockInSelection>().As<IFilterForTeamBlockInSelection>();
-			builder.RegisterType<FilterOnSwapableTeamBlocks>().As<IFilterOnSwapableTeamBlocks>();
+			builder.RegisterType<FilterForTeamBlockInSelection>().As<IFilterForTeamBlockInSelection>().SingleInstance();
+			builder.RegisterType<FilterOnSwapableTeamBlocks>().As<IFilterOnSwapableTeamBlocks>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSwapper>().As<ITeamBlockSwapper>();
 			builder.RegisterType<EqualCategoryDistributionBestTeamBlockDecider>()
 				.As<IEqualCategoryDistributionBestTeamBlockDecider>();
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FilterPersonsForTotalDistribution>().As<IFilterPersonsForTotalDistribution>();
 			builder.RegisterType<DistributionReportService>().As<IDistributionReportService>();
 			builder.RegisterType<EqualCategoryDistributionValue>().As<IEqualCategoryDistributionValue>();
-			builder.RegisterType<FilterForFullyScheduledBlocks>().As<IFilterForFullyScheduledBlocks>();
+			builder.RegisterType<FilterForFullyScheduledBlocks>().As<IFilterForFullyScheduledBlocks>().SingleInstance();
 			builder.RegisterType<FilterForNoneLockedTeamBlocks>().As<IFilterForNoneLockedTeamBlocks>();
 			builder.RegisterType<TeamBlockShiftCategoryLimitationValidator>().As<ITeamBlockShiftCategoryLimitationValidator>().InstancePerLifetimeScope();
 			//ITeamBlockShiftCategoryLimitationValidator
