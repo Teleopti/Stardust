@@ -613,6 +613,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IMaxSeatBoostingFactorCalculator>()
 					.As<IMaxSeatsCalculationForTeamBlock>()
 					.SingleInstance();
+				builder.RegisterType<DontFillStateHolderWithMaxSeatSkills>().As<IFillStateHolderWithMaxSeatSkills>();
 			}
 			else
 			{
@@ -625,6 +626,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>().SingleInstance();
 				builder.RegisterType<MaxSeatBoostingFactorCalculator>().As<IMaxSeatBoostingFactorCalculator>().SingleInstance();
 				builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().SingleInstance();
+				builder.RegisterType<FillStateHolderWithMaxSeatSkills>().As<IFillStateHolderWithMaxSeatSkills>();
 			}
 			builder.RegisterType<MaxSeatSkillDataFactory>().SingleInstance();
 			builder.RegisterType<SkillsFromMaxSeatSite>().SingleInstance();

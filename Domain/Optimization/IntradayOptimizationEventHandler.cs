@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
@@ -19,18 +20,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeIntradayOptimizationResult _synchronizeIntradayOptimizationResult;
 		private readonly IGridlockManager _gridlockManager;
+		private readonly IFillStateHolderWithMaxSeatSkills _fillStateHolderWithMaxSeatSkills;
 
 		public IntradayOptimizationEventHandler(IntradayOptimization intradayOptimization,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									IFillSchedulerStateHolder fillSchedulerStateHolder,
 									ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult,
-									IGridlockManager gridlockManager)
+									IGridlockManager gridlockManager,
+									IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills)
 		{
 			_intradayOptimization = intradayOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_synchronizeIntradayOptimizationResult = synchronizeIntradayOptimizationResult;
 			_gridlockManager = gridlockManager;
+			_fillStateHolderWithMaxSeatSkills = fillStateHolderWithMaxSeatSkills;
 		}
 
 		[TestLog]
@@ -53,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, _gridlockManager, locks, period, onlyUseSkills);
+			_fillStateHolderWithMaxSeatSkills.Execute(schedulerStateHolder.SchedulingResultState.MinimumSkillIntervalLength());
 			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize), runResolveWeeklyRestRule);
 		}
 	}

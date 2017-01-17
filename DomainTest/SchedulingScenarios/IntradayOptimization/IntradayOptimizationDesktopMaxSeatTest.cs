@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					optPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent);
 					break;
 				case teamBlockStyle.Classic:
-					Assert.Ignore("To be fixed - 42592");
 					optPreferences.Extra.UseTeamBlockOption = false;
 					optPreferences.Extra.UseTeams = false;
 					break;

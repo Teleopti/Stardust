@@ -557,6 +557,7 @@
     <Compile Include="Scheduling\Rules\ShiftTradeValidationFailedRule.cs" />
     <Compile Include="Scheduling\SeatLimitation\DesktopMaxSeatCallback.cs" />
     <Compile Include="Scheduling\SeatLimitation\DoubleExtensions.cs" />
+    <Compile Include="Scheduling\SeatLimitation\IFillStateHolderWithMaxSeatSkills.cs" />
     <Compile Include="Scheduling\SeatLimitation\IMaxSeatCallback.cs" />
     <Compile Include="Scheduling\SeatLimitation\IsOverMaxSeat.cs" />
     <Compile Include="Scheduling\SeatLimitation\IUsedSeats.cs" />

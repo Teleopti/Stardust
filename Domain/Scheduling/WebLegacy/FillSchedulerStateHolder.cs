@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
+			schedulerStateHolderTo.SetRequestedScenario(scenario);
 			FillAgents(schedulerStateHolderTo, agentsInIsland, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
 			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period, onlyUseSkills);
