@@ -9,7 +9,7 @@
         $stateProvider.state('staffing', {
             url: '/staffing',
             templateUrl: 'app/staffing/staffing.html',
-            controller: 'staffingController as vm'
+            controller: 'StaffingController as vm'
         });
     }
 })();

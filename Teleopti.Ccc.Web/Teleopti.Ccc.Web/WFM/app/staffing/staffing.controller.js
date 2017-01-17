@@ -3,10 +3,10 @@
 
     angular
         .module('wfm.staffing')
-        .controller('staffingController', staffingController);
+        .controller('StaffingController', StaffingController);
 
-    staffingController.inject = ['staffingService', '$filter', '$translate'];
-    function staffingController(staffingService, $filter, $translate) {
+    StaffingController.inject = ['staffingService', '$filter', '$translate'];
+    function StaffingController(staffingService, $filter, $translate) {
         var vm = this;
         vm.staffingDataAvailable = true;
         vm.selectedSkill;
@@ -58,13 +58,13 @@
             return false;
         }
 
-        function selectSkillOrArea(skill, area){
-            if(!skill){
+        function selectSkillOrArea(skill, area) {
+            if (!skill) {
                 currentSkills = area;
                 vm.selectedSkillArea = area;
-            }else{
+            } else {
                 currentSkills = skill;
-                 vm.selectedSkill = currentSkills;
+                vm.selectedSkill = currentSkills;
             }
         }
 
@@ -118,14 +118,21 @@
                 return (lowercaseName.indexOf(lowercaseQuery) === 0);
             };
         };
-        function addOvertime(){
-           staffingService.addOvertime.save({Skills:[currentSkills.Id]});
+        function addOvertime() {
+            staffingService.addOvertime.save({ Skills: [currentSkills.Id] });
         }
 
         var generateChartForView = function () {
             c3.generate({
                 bindto: '#staffingChart',
                 data: {
+                    selection: {
+                        enabled: true,
+                        draggable: true,
+                        multiple: true,
+                        grouped: true
+
+                    },
                     x: "x",
                     columns: [
                         staffingData.time,
@@ -151,7 +158,7 @@
                     }
                 },
                 zoom: {
-                    enabled: true,
+                    enabled: false,
                 },
             });
 
