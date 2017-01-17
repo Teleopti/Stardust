@@ -1628,8 +1628,6 @@
     <Compile Include="Scheduling\Legacy\Commands\GroupScheduleGroupPageDataProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ICommonStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IDisableDeletedFilter.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IExtendReduceDaysOffHelper.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPageCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPageFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPersonBuilderForOptimizationFactory.cs" />

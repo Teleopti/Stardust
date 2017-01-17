@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public class ExtendReduceDaysOffHelper : IExtendReduceDaysOffHelper
+	public class ExtendReduceDaysOffHelper 
 	{
 		private readonly ILifetimeScope _container;
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;

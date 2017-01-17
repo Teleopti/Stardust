@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IPersonListExtractorFromScheduleParts _personListExtractorFromScheduleParts;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairnessService;
 		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayDesktop;
-		private readonly IExtendReduceTimeHelper _extendReduceTimeHelper;
-		private readonly IExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
+		private readonly ExtendReduceTimeHelper _extendReduceTimeHelper;
+		private readonly ExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly IResourceCalculation _resourceOptimizationHelper;

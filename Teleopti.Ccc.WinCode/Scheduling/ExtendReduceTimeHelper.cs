@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public class ExtendReduceTimeHelper : IExtendReduceTimeHelper
+	public class ExtendReduceTimeHelper
 	{
 		private readonly ILifetimeScope _container;
 		private ISchedulingProgress _backgroundWorker;
