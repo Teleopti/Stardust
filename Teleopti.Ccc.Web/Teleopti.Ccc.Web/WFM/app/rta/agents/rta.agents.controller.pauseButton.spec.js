@@ -35,18 +35,15 @@ describe('RtaAgentsController', function() {
 		$fakeBackend.clear();
 
 		scope = $controllerBuilder.setup('RtaAgentsController');
-
+		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 		spyOn($state, 'go');
 	}));
 
 	it('should stop polling agent states when paused', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				State: "Phone"
 			});
 
@@ -57,8 +54,8 @@ describe('RtaAgentsController', function() {
 			.apply(vm.pause = true)
 			.apply(function() {
 				$fakeBackend
-					.clearStates()
-					.withState({
+					.clearAgentStates()
+					.withAgentState({
 						PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 						State: "Ready"
 					})
@@ -70,7 +67,7 @@ describe('RtaAgentsController', function() {
 
 	it('should restart polling when unpausing', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
@@ -82,10 +79,13 @@ describe('RtaAgentsController', function() {
 			.wait(5000)
 			.apply(vm.pause = false)
 			.apply(function() {
-				$fakeBackend.withState({
-					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-					State: "Ready"
-				})
+				$fakeBackend
+					.clearAgentStates()
+					.withAgentState({
+						PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+						TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+						State: "Ready"
+					})
 			})
 			.wait(5000);
 
@@ -95,7 +95,7 @@ describe('RtaAgentsController', function() {
 	it('should display time from when paused', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withTime('2016-06-13T16:00:00')
-			.withAgent({
+			.withAgentState({
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
 
@@ -114,7 +114,7 @@ describe('RtaAgentsController', function() {
 	it('should not display time when not paused', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withTime('2016-06-13T16:00')
-			.withAgent({
+			.withAgentState({
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
 
@@ -178,12 +178,9 @@ describe('RtaAgentsController', function() {
 
 	it('should not update when paused and toggling agents in alarm', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				State: "Phone"
 			});
 
@@ -193,37 +190,31 @@ describe('RtaAgentsController', function() {
 			.wait(5000)
 			.apply(vm.pause = true)
 			.apply(function() {
-				$fakeBackend.clearStates()
-					.withState({
+				$fakeBackend.clearAgentStates()
+					.withAgentState({
 						PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 						TimeInAlarm: 1,
-						State: "Ready"
+						State: "Ready",
+						TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 					})
-			})
-			.apply(vm.agentsInAlarm = true);
+			});
 
 		expect(vm.agents[0].State).toEqual("Phone");
 	});
 
 	it('should sort by time in alarm when paused and toggling agents in alarm', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				Name: "Asley Andeen",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withAgent({
-				PersonId: "164abe5d-ce1a-48ee-ba3a-9b5e015b2585",
-				Name: "Dmitry Pavlov",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				State: "Phone",
 				TimeInAlarm: 70
 			})
-			.withState({
+			.withAgentState({
 				PersonId: "164abe5d-ce1a-48ee-ba3a-9b5e015b2585",
+				Name: "Dmitry Pavlov",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				State: "Phone",
 				TimeInAlarm: 90
 			});
