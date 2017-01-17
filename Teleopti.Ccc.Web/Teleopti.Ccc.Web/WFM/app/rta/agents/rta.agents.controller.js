@@ -89,7 +89,6 @@
 		vm.openedMaxNumberOfAgents = false;
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
-		console.info(vm.isLoading);
 		vm.pollingLock = true;
 		// because angular cant handle an array of null in stateparams
 		var nullStateId = "noState";
@@ -326,7 +325,8 @@
 			return vm.agentsInAlarm;
 		}, function (newValue, oldValue) {
 			if (newValue !== oldValue) {
-				updateStates();
+				updateStatesDelegate();
+				//updateStates();
 				filterData();
 				if (newValue && vm.pause) {
 					vm.filteredData.sort(function (a, b) {
@@ -787,7 +787,8 @@
 			polling = $interval(function () {
 				if (vm.pollingLock) {
 					vm.pollingLock = false;
-					updateStates();
+					//updateStates();
+					updateStatesDelegate();
 				}
 
 			}, 5000);
