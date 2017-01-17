@@ -60,15 +60,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             { }
         }
 
-        /// <summary>
-        /// Gets the base date.
-        /// </summary>
-        /// <value>The base date.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-02-18
-        /// </remarks>
-        public static DateOnly BaseDate => new DateOnly(1800, 1, 1);
+	    /// <summary>
+	    /// Gets the base date.
+	    /// </summary>
+	    /// <value>The base date.</value>
+	    /// <remarks>
+	    /// Created by: robink
+	    /// Created date: 2008-02-18
+	    /// </remarks>
+	    public static DateOnly BaseDate { get; } = new DateOnly(1800, 1, 1);
 
 	    /// <summary>
         /// Initializes a new instance of the <see cref="SkillDayTemplate"/> class for NHibernate.

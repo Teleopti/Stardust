@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				 return null;
 
 			 var retShift = new EditableShift(personassignment.ShiftCategory);
-			 foreach (var mainShiftActivityLayer in personassignment.MainActivities())
-			 {
-				 retShift.LayerCollection.Add(new EditableShiftLayer(mainShiftActivityLayer.Payload, mainShiftActivityLayer.Period));
-			 }
+			 retShift.LayerCollection.AddRange(
+				 personassignment.MainActivities()
+					 .Select(
+						 mainShiftActivityLayer => new EditableShiftLayer(mainShiftActivityLayer.Payload, mainShiftActivityLayer.Period)));
 
 			 return retShift;
 		 }

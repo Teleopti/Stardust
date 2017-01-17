@@ -8,9 +8,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class WorkShift : IWorkShift
-    {
-
-        private readonly IShiftCategory _shiftCategory;
+	{
+		private readonly IShiftCategory _shiftCategory;
         private IVisualLayerCollection _visualLayerCollection;
 		private IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
@@ -60,9 +59,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return retObj;
 		}
 
-        public static DateTime BaseDate => DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc);
+	    public static DateTime BaseDate { get; } = DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc);
 
-	    public IShiftCategory ShiftCategory => _shiftCategory;
+		public IShiftCategory ShiftCategory => _shiftCategory;
 
 	    public TimePeriod? ToTimePeriod()
        {
@@ -94,15 +93,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 return toMainShiftOnDaylightSavingChange(dateOnlyAsDateTimePeriod.DateOnly.Date, localTimeZone);
 
             var ret = new EditableShift(ShiftCategory);
-            foreach (var layer in LayerCollection)
-            {
-                var start = utcDateBaseDate.Add(layer.Period.StartDateTime - BaseDate);
-                var end = start.Add(layer.Period.ElapsedTime());
-                var outPeriod = new DateTimePeriod(start, end);
+	        ret.LayerCollection.AddRange(LayerCollection.Select(layer =>
+	        {
+		        var start = utcDateBaseDate.Add(layer.Period.StartDateTime - BaseDate);
+		        var end = start.Add(layer.Period.ElapsedTime());
+		        var outPeriod = new DateTimePeriod(start, end);
 
-                var mainShiftLayer = new EditableShiftLayer(layer.Payload, outPeriod);
-                ret.LayerCollection.Add(mainShiftLayer);
-            }
+		        return new EditableShiftLayer(layer.Payload, outPeriod);
+	        }));
 
             return ret;
         }
@@ -125,8 +123,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 if (localTimeZoneInfo.IsInvalidTime(localEnd))
                     hoursToChange = 1;
-
-
+				
                 localEnd = localEnd.AddHours(hoursToChange);
 
                 var start = localTimeZoneInfo.SafeConvertTimeToUtc(localStart);

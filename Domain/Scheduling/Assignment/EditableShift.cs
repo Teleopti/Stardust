@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -19,14 +20,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		public IShiftCategory ShiftCategory { get; set; }
-		public IList<IEditableShiftLayer> LayerCollection { get; private set; }
+		public List<IEditableShiftLayer> LayerCollection { get; }
 		public IEditableShift MakeCopy()
 		{
 			var ret = new EditableShift(ShiftCategory);
-			foreach (var layer in LayerCollection)
-			{
-				ret.LayerCollection.Add(new EditableShiftLayer(layer.Payload, layer.Period));
-			}
+			ret.LayerCollection.AddRange(LayerCollection.Select(layer => new EditableShiftLayer(layer.Payload, layer.Period)));
+
 			return ret;
 		}
 
@@ -34,11 +33,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var datediff = destinationDate.Date.Subtract(currentDate.Date);
 			var ret = new EditableShift(ShiftCategory);
-			foreach (var layer in LayerCollection)
+
+			ret.LayerCollection.AddRange(LayerCollection.Select(layer =>
 			{
 				var movedLayerPeriod = layer.Period.MovePeriod(datediff);
-				ret.LayerCollection.Add(new EditableShiftLayer(layer.Payload, movedLayerPeriod));
-			}
+				return new EditableShiftLayer(layer.Payload, movedLayerPeriod);
+			}));
+
 			return ret;
 		}
 	}

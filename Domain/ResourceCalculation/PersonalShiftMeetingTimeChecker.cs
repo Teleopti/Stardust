@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -74,12 +75,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 
-			foreach (var personalLayer in personAssignment.PersonalActivities())
-			{
-				var layer = new EditableShiftLayer(personalLayer.Payload, personalLayer.Period);
-				clone.LayerCollection.Add(layer);
-			}
-
+			clone.LayerCollection.AddRange(personAssignment.PersonalActivities().Select(personalLayer => new EditableShiftLayer(personalLayer.Payload, personalLayer.Period)));
+			
 			var mainWithPersonalShiftProjection = clone.ProjectionService().CreateProjection();
 			var mainWithPersonalShiftWorkTime = mainWithPersonalShiftProjection.WorkTime();
 			var mainWithPersonalShiftContractTime = mainWithPersonalShiftProjection.ContractTime();

@@ -57,16 +57,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
 			shiftProjectionCache.SetDate(day, agentTimeZone);
 
-			if (destinationScheduleDay.PersonAssignment() != null && destinationScheduleDay.PersonAssignment().PersonalActivities().Any())
+	        var personAssignment = destinationScheduleDay.PersonAssignment();
+	        if (personAssignment != null && personAssignment.PersonalActivities().Any())
 			{
 				var mainShiftPeriod = shiftProjectionCache.TheMainShift.ProjectionService().CreateProjection().Period().GetValueOrDefault();
-				if (destinationScheduleDay.PersonAssignment().PersonalActivities().Any(personalShiftLayer => !mainShiftPeriod.Contains(personalShiftLayer.Period))) return;
+				if (personAssignment.PersonalActivities().Any(personalShiftLayer => !mainShiftPeriod.Contains(personalShiftLayer.Period))) return;
 			}
 
-			if (destinationScheduleDay.PersonMeetingCollection().Any())
+	        var personMeetingCollection = destinationScheduleDay.PersonMeetingCollection();
+	        if (personMeetingCollection.Any())
 			{
 				var mainShiftPeriod = shiftProjectionCache.TheMainShift.ProjectionService().CreateProjection().Period().GetValueOrDefault();
-				if (destinationScheduleDay.PersonMeetingCollection().Any(personMeeting => !mainShiftPeriod.Contains(personMeeting.Period))) return;		
+				if (personMeetingCollection.Any(personMeeting => !mainShiftPeriod.Contains(personMeeting.Period))) return;		
 			}
 			_assignScheduledLayers.Execute(schedulingOptions, destinationScheduleDay, shiftProjectionCache.TheMainShift);
 					

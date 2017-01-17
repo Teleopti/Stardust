@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
-
-
+		
         public FreeWeekendSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
             _maxIterations = maxIterations;
@@ -20,8 +19,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             _bitArray = bitArray;
             _daysOffPreferences = daysOffPreferences;
         }
-
-
+		
         public MinMaxNumberOfResult ResolvableState()
         {
             IList<Point> weekendList = _functions.WeekendList();
@@ -55,21 +53,21 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             {
                 int indexToMoveFrom = -1;
                 //find first full weekend
-                for (int i = 0; i < weekendList.Count; i++)
+                foreach (Point weekend in weekendList)
                 {
-                    if (_bitArray[weekendList[i].X] && _bitArray[weekendList[i].Y])
-                    {
-                        if (!_bitArray.IsLocked(weekendList[i].Y, true))
-                        {
-                            indexToMoveFrom = weekendList[i].Y;
-                            break;
-                        }
-                        if (!_bitArray.IsLocked(weekendList[i].X, true))
-                        {
-                            indexToMoveFrom = weekendList[i].X;
-                            break;
-                        }
-                    }
+	                if (_bitArray[weekend.X] && _bitArray[weekend.Y])
+	                {
+		                if (!_bitArray.IsLocked(weekend.Y, true))
+		                {
+			                indexToMoveFrom = weekend.Y;
+			                break;
+		                }
+		                if (!_bitArray.IsLocked(weekend.X, true))
+		                {
+			                indexToMoveFrom = weekend.X;
+			                break;
+		                }
+	                }
                 }
 
                 int indexToMoveTo = -1;

@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IScheduleDay _scheduleDayFrom;
 		private IScheduleDay _scheduleDayTo;
 		private IEditableShift _mainShift;
-		private IList<IEditableShiftLayer> _layerCollectionFrom;
-		private IList<IEditableShiftLayer> _layerCollectionTo;
+		private List<IEditableShiftLayer> _layerCollectionFrom;
+		private List<IEditableShiftLayer> _layerCollectionTo;
 		private DateTimePeriod _periodFrom;
 		private DateTimePeriod _periodTo;
 		private ReadOnlyCollection<IPersonMeeting> _personMeetings;
