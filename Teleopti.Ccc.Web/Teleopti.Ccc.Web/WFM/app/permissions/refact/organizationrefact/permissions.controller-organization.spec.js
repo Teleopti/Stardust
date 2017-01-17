@@ -21,7 +21,7 @@ describe('component: permissionsList', function() {
 		permissionsDataService = _permissionsDataService_;
 
 		fakeBackend.clear();
-		vm = $controller('PermissionsCtrlRefact');
+		vm = $controller('PermissionsRefactController');
 
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData').respond(function(method, url, data, headers) {
 			return 200;

@@ -22,7 +22,7 @@ describe('component: permissionsTree', function() {
 		permissionsDataService = _permissionsDataService_;
 
 		fakeBackend.clear();
-		vm = $controller('PermissionsCtrlRefact');
+		vm = $controller('PermissionsRefactController');
 
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function(method, url, data, headers) {
 			response = angular.fromJson(data);
@@ -634,7 +634,7 @@ describe('component: permissionsTree', function() {
 
 		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
 	});
-	//fix better expect - same for selected
+	
 	it('should remove selected function when unselected functions filter is active', function() {
 		fakeBackend
 			.withRole({

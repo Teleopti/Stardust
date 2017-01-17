@@ -15,7 +15,7 @@ describe('permissionsFilter', function() {
 		$controller = _$controller_;
 		$filter = _$filter_;
 		fakeBackend.clear();
-		vm = $controller('PermissionsCtrlRefact');
+		vm = $controller('PermissionsRefactController');
 	}));
 
 	afterEach(function() {

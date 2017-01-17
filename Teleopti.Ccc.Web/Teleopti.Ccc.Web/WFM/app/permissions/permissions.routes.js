@@ -5,14 +5,6 @@
   .module('wfm.permissions')
   .config(stateConfig);
 
-  // function stateConfig($stateProvider) {
-  //   $stateProvider.state('permissions', {
-	// 		url: '/permissions',
-	// 		templateUrl: 'app/permissions/refact/permissions-refact.html',
-	// 		controller: 'PermissionsCtrlRefact as vm'
-	// 	})
-  // }
-
   function stateConfig($stateProvider) {
    $stateProvider.state('permissions', {
      url: '/permissions',
@@ -22,9 +14,7 @@
    .state('permissions-refact', {
      url: '/permissions/v2',
      templateUrl: 'app/permissions/refact/permissions-refact.html',
-     controller: 'PermissionsCtrlRefact as vm'
+     controller: 'PermissionsRefactController as vm'
    })
  }
-
-
 })();

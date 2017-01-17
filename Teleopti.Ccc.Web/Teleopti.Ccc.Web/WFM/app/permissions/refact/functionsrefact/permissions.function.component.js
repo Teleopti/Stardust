@@ -23,11 +23,11 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 
     ctrl.select(func);
 
-    if (!angular.isUndefined(ctrl.filterFunc) && ctrl.filterFunc.isSelected) {
+    if (angular.isDefined(ctrl.filterFunc) && ctrl.filterFunc.isSelected) {
       ctrl.filterFunc.selectedFunctionsFilter();
     }
 
-    if (!angular.isUndefined(ctrl.filterFunc) && ctrl.filterFunc.isUnSelected) {
+    if (angular.isDefined(ctrl.filterFunc) && ctrl.filterFunc.isUnSelected) {
       ctrl.filterFunc.unSelectedFunctionsFilter();
     }
 
