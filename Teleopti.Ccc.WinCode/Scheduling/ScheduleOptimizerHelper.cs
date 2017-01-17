@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
@@ -40,15 +39,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IDayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
+		private readonly IUserTimeZone _userTimeZone;
 
 
-		public ScheduleOptimizerHelper(ILifetimeScope container, 
+		public ScheduleOptimizerHelper(ILifetimeScope container,
 				IMatrixListFactory matrixListFactory,
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
 				PeriodExtractorFromScheduleParts periodExtractorFromScheduleParts,
 				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
 				IPersonListExtractorFromScheduleParts personListExtractorFromScheduleParts,
-				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService)
+				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService,
+				OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop,
+				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
+				ExtendReduceTimeHelper extendReduceTimeHelper,
+				ExtendReduceDaysOffHelper extendReduceDaysOffHelper,
+				Func<ISchedulerStateHolder> schedulerStateHolder,
+				Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
+				IResourceCalculation resourceOptimizationHelper,
+				IOptimizerHelperHelper optimizerHelperHelper,
+				CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory,
+				IDayOffOptimizationDesktop dayOffOptimizationDesktop,
+				DaysOffBackToLegalState daysOffBackToLegalState,
+				IUserTimeZone userTimeZone)
 		{
 			_container = container;
 			_matrixListFactory = matrixListFactory;
@@ -57,18 +69,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 			_personListExtractorFromScheduleParts = personListExtractorFromScheduleParts;
 			_equalNumberOfCategoryFairnessService = equalNumberOfCategoryFairnessService;
-			_optimizeIntradayDesktop = _container.Resolve<OptimizeIntradayIslandsDesktop>();
-			_allResults = () => _container.Resolve<IWorkShiftFinderResultHolder>();
-			_extendReduceTimeHelper = _container.Resolve<ExtendReduceTimeHelper>();
-			_extendReduceDaysOffHelper = _container.Resolve<ExtendReduceDaysOffHelper>();
-			_schedulerStateHolder = () => _container.Resolve<ISchedulerStateHolder>();
+			_optimizeIntradayDesktop = optimizeIntradayIslandsDesktop;
+			_allResults = workShiftFinderResultHolder;
+			_extendReduceTimeHelper = extendReduceTimeHelper;
+			_extendReduceDaysOffHelper = extendReduceDaysOffHelper;
+			_schedulerStateHolder = schedulerStateHolder;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_optimizerHelperHelper = optimizerHelperHelper;
+			_resourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
+			_dayOffOptimizationDesktop = dayOffOptimizationDesktop;
+			_daysOffBackToLegalState = daysOffBackToLegalState;
+			_userTimeZone = userTimeZone;
 			_stateHolder = () => _schedulerStateHolder().SchedulingResultState;
-			_scheduleDayChangeCallback = () => _container.Resolve<IScheduleDayChangeCallback>();
-			_resourceOptimizationHelper = _container.Resolve<IResourceCalculation>();
-			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
-			_resourceCalculationContextFactory = _container.Resolve<CascadingResourceCalculationContextFactory>();
-			_dayOffOptimizationDesktop = _container.Resolve<IDayOffOptimizationDesktop>();
-			_daysOffBackToLegalState = _container.Resolve<DaysOffBackToLegalState>();
 		}
 
 		private void optimizeWorkShifts(
@@ -333,7 +346,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-				schedulingOptions.ConsiderShortBreaks, _stateHolder(), _container.Resolve<IUserTimeZone>());
+				schedulingOptions.ConsiderShortBreaks, _stateHolder(), _userTimeZone);
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
 			intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays,
 				_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer,

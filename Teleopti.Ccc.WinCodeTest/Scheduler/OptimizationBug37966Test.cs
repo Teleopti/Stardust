@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public ISchedulerStateHolder StateHolder;
 		public ILifetimeScope Scope;
 		public IOptimizationPreferences OptimizationPreferences;
-		public IMatrixListFactory MatrixListFactory;
 		public IResourceOptimizationHelperExtended ResourceCalculator;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
@@ -165,11 +164,31 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				}),
 				new NoSchedulingProgress(), StateHolder,
 				new[] { dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date) },
-				new ScheduleOptimizerHelper(Scope, MatrixListFactory, Scope.Resolve<MoveTimeOptimizerCreator>(), Scope.Resolve<PeriodExtractorFromScheduleParts>(), Scope.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>(), Scope.Resolve<IPersonListExtractorFromScheduleParts>(), Scope.Resolve<IEqualNumberOfCategoryFairnessService>()), 
-				OptimizationPreferences, 
-				false, 
-				new DaysOffPreferences(),
-				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+				new ScheduleOptimizerHelper(
+					Scope,
+					Scope.Resolve<IMatrixListFactory>(),
+					Scope.Resolve<MoveTimeOptimizerCreator>(),
+					Scope.Resolve<PeriodExtractorFromScheduleParts>(),
+					Scope.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>(),
+					Scope.Resolve<IPersonListExtractorFromScheduleParts>(),
+					Scope.Resolve<IEqualNumberOfCategoryFairnessService>(),
+					Scope.Resolve<OptimizeIntradayIslandsDesktop>(),
+					() => Scope.Resolve<IWorkShiftFinderResultHolder>(),
+					Scope.Resolve<ExtendReduceTimeHelper>(),
+					Scope.Resolve<ExtendReduceDaysOffHelper>(),
+					() => Scope.Resolve<ISchedulerStateHolder>(),
+					() => Scope.Resolve<IScheduleDayChangeCallback>(),
+					Scope.Resolve<IResourceCalculation>(),
+					Scope.Resolve<IOptimizerHelperHelper>(),
+					Scope.Resolve<CascadingResourceCalculationContextFactory>(),
+					Scope.Resolve<IDayOffOptimizationDesktop>(),
+					Scope.Resolve<DaysOffBackToLegalState>(),
+					Scope.Resolve<IUserTimeZone>()),
+				 
+					OptimizationPreferences, 
+					false, 
+					new DaysOffPreferences(),
+					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftLayers.Should().Be.Empty();
 			dictionary[person2].ScheduledDay(date).PersonAssignment().ShiftLayers.Should().Be.Empty();

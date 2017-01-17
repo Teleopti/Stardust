@@ -3633,7 +3633,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, _container.Resolve<IMatrixListFactory>(), _container.Resolve<MoveTimeOptimizerCreator>(), _container.Resolve<PeriodExtractorFromScheduleParts>(), _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>(), _container.Resolve<IPersonListExtractorFromScheduleParts>(), _container.Resolve<IEqualNumberOfCategoryFairnessService>());
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container,
+				_container.Resolve<IMatrixListFactory>() ,
+				_container.Resolve < MoveTimeOptimizerCreator>(),
+				_container.Resolve < PeriodExtractorFromScheduleParts>(),
+				_container.Resolve < IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>(),
+				_container.Resolve < IPersonListExtractorFromScheduleParts>(),
+				_container.Resolve < IEqualNumberOfCategoryFairnessService>(),
+				_container.Resolve < OptimizeIntradayIslandsDesktop>(),
+				() => _container.Resolve< IWorkShiftFinderResultHolder >() ,
+				_container.Resolve < ExtendReduceTimeHelper>(),
+				_container.Resolve < ExtendReduceDaysOffHelper>(),
+				() => _container.Resolve < ISchedulerStateHolder >(),
+				() => _container.Resolve < IScheduleDayChangeCallback >() ,
+				_container.Resolve < IResourceCalculation>(),
+				_container.Resolve < IOptimizerHelperHelper>(),
+				_container.Resolve < CascadingResourceCalculationContextFactory>(),
+				_container.Resolve < IDayOffOptimizationDesktop>(),
+				_container.Resolve < DaysOffBackToLegalState>(),
+				_container.Resolve<IUserTimeZone>());
+
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
