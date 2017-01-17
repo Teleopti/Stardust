@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -152,7 +154,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					Scope.Resolve<CascadingResourceCalculationContextFactory>(),
 					Scope.Resolve<IDayOffOptimizationDesktop>(),
 					Scope.Resolve<DaysOffBackToLegalState>(),
-					Scope.Resolve<IUserTimeZone>()),
+					Scope.Resolve<IUserTimeZone>(),
+					Scope.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>(),
+					Scope.Resolve<IScheduleDayEquator>(),
+					Scope.Resolve<ITeamBlockSeniorityFairnessOptimizationService>()),
 
 					OptimizationPreferences, false, new DaysOffPreferences(),
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));

@@ -40,6 +40,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IDayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 
 
 		public ScheduleOptimizerHelper(ILifetimeScope container,
@@ -60,7 +63,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory,
 				IDayOffOptimizationDesktop dayOffOptimizationDesktop,
 				DaysOffBackToLegalState daysOffBackToLegalState,
-				IUserTimeZone userTimeZone)
+				IUserTimeZone userTimeZone,
+				ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
+				IScheduleDayEquator scheduleDayEquator,
+				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService)
 		{
 			_container = container;
 			_matrixListFactory = matrixListFactory;
@@ -81,6 +87,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_dayOffOptimizationDesktop = dayOffOptimizationDesktop;
 			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_userTimeZone = userTimeZone;
+			_teamBlockDayOffFairnessOptimizationServiceFacade = teamBlockDayOffFairnessOptimizationServiceFacade;
+			_scheduleDayEquator = scheduleDayEquator;
+			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
 			_stateHolder = () => _schedulerStateHolder().SchedulingResultState;
 		}
 
@@ -318,8 +327,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				schedulingOptions, _schedulerStateHolder().Schedules, rollbackService,
 				optimizationPreferences, dayOffOptimizationPreferenceProvider);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
-			var teamBlockDayOffFairnessOptimizationService =
-				_container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
+			var teamBlockDayOffFairnessOptimizationService = _teamBlockDayOffFairnessOptimizationServiceFacade;
 			teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 				schedulingOptions,
@@ -327,8 +335,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				dayOffOptimizationPreferenceProvider);
 			teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
-			var teamBlockSeniorityFairnessOptimizationService =
-				_container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
+			var teamBlockSeniorityFairnessOptimizationService = _teamBlockSeniorityFairnessOptimizationService;
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 				schedulingOptions, _stateHolder().ShiftCategories.ToList(),
@@ -356,7 +363,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(
 			IEnumerable<IScheduleMatrixPro> matrixList)
 		{
-			var scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
+			var scheduleDayEquator = _scheduleDayEquator;
 			IList<IScheduleMatrixOriginalStateContainer> result =
 				matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();

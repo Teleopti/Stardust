@@ -478,16 +478,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<TeamBlockSeniorityValidator>().As<ITeamBlockSeniorityValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockSeniorityFairnessOptimizationService>().As<ITeamBlockSeniorityFairnessOptimizationService>();
+			builder.RegisterType<TeamBlockSeniorityFairnessOptimizationService>().As<ITeamBlockSeniorityFairnessOptimizationService>().InstancePerLifetimeScope();
 			builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>().SingleInstance();
-			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
-			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>();
-			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>();
+			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();
-			builder.RegisterType<TeamBlockLockValidator>().As<ITeamBlockLockValidator>();
+			builder.RegisterType<TeamBlockLockValidator>().As<ITeamBlockLockValidator>().SingleInstance();
 			builder.RegisterType<SeniorityTeamBlockSwapValidator>().As<ISeniorityTeamBlockSwapValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<SeniorityTeamBlockSwapper>().As<ISeniorityTeamBlockSwapper>().InstancePerLifetimeScope();

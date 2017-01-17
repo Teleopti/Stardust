@@ -55,6 +55,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -3651,7 +3652,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_container.Resolve < CascadingResourceCalculationContextFactory>(),
 				_container.Resolve < IDayOffOptimizationDesktop>(),
 				_container.Resolve < DaysOffBackToLegalState>(),
-				_container.Resolve<IUserTimeZone>());
+				_container.Resolve<IUserTimeZone>(),
+				_container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>(),
+				_container.Resolve<IScheduleDayEquator>(),
+				_container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>());
 
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
