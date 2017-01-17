@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
 
-		[Test]
+		[Test, SetCulture("sv-SE")]
 		public void DenyWithIntervalsInAgentsTimezone()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -624,7 +624,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
 
-		[Test]
+		[Test, SetCulture("sv-SE")]
 		public void DenyIfRequestIsOvernightWithProperDenyReason()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));

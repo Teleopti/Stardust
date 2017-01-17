@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 Test]
+		 Test, SetCulture("sv-SE")]
 		public void VerifyValidateActivityStartingBeforeOpenHours()
 		{
 			var activity = ActivityFactory.CreateActivity("adf");
