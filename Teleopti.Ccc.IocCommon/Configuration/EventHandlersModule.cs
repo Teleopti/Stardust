@@ -23,6 +23,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
@@ -112,6 +113,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				{
 					ct.As(
 							typeof(IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>))
+							.AsSelf()
+							.InstancePerLifetimeScope()
+							.ApplyAspects();
+				})
+				.Except<AddOverTimeHandler>(ct =>
+				{
+					ct.As(
+							typeof(IHandleEvent<AddOverTimeEvent>))
 							.AsSelf()
 							.InstancePerLifetimeScope()
 							.ApplyAspects();
