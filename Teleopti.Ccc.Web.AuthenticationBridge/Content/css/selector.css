@@ -1,15 +1,13 @@
 body {
-	position: relative !important;
-
-	background: rgb(153,214,255)!important;
-	background: -moz-linear-gradient(top, rgba(153,214,255,1) 0%, rgba(153,214,255,1) 45%, rgba(0,153,255,1) 100%)!important;
-	background: -webkit-linear-gradient(top, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%)!important;
-	background: linear-gradient(to bottom, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%)!important;
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99d6ff', endColorstr='#0099ff',GradientType=0 )!important;
-	height: 100%!important;
+	background: rgb(153,214,255);
+	background: -moz-linear-gradient(top, rgba(153,214,255,1) 0%, rgba(153,214,255,1) 45%, rgba(0,153,255,1) 100%);
+	background: -webkit-linear-gradient(top, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%);
+	background: linear-gradient(to bottom, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99d6ff', endColorstr='#0099ff',GradientType=0 );
+	height: 100%;
     margin: 0;
     background-repeat: no-repeat;
-    background-attachment: fixed!important;
+    background-attachment: fixed;
 	position: fixed;
     left: 0;
     right: 0;
@@ -138,16 +136,6 @@ body, .login-header {
   40%, 60% {
     transform: translate3d(4px, 0, 0);
   }
-}
-
-body{
-  background: #ebebeb;
-  background-size: cover;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
 }
 
 #spinnerwrapper {
