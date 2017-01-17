@@ -352,6 +352,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().SingleInstance();
 			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().SingleInstance();
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().SingleInstance();
+			builder.RegisterType<ExtendReduceDaysOffHelper>().InstancePerLifetimeScope();
+			builder.RegisterType<ExtendReduceTimeHelper>().InstancePerLifetimeScope();
 
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
