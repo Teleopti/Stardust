@@ -4,6 +4,7 @@ using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Interfaces.Infrastructure;
 
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
@@ -11,16 +12,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 	public class AddOverTimeHandler : IHandle<AddOverTimeEvent>
 	{
 		private readonly IComponentContext _componentContext;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
-		public AddOverTimeHandler(IComponentContext componentContext)
+		public AddOverTimeHandler(IComponentContext componentContext, IStardustJobFeedback stardustJobFeedback)
 		{
 			_componentContext = componentContext;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		public void Handle(AddOverTimeEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
+			_stardustJobFeedback.SendProgress = sendProgress;
 			var theRealOne = _componentContext.Resolve<IHandleEvent<AddOverTimeEvent>>();
 			theRealOne.Handle(parameters);
+			_stardustJobFeedback.SendProgress = null;
 		}
 	}
 }

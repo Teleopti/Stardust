@@ -50,6 +50,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var persons = selectedPersons.Randomize();
 				foreach (var person in persons)
 				{
+					if (person.Id.GetValueOrDefault() == new Guid("826F2A46-93BB-4B04-8D5E-9B5E015B2577"))
+					{
+						Console.WriteLine("test");
+					}
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
 
 					var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
