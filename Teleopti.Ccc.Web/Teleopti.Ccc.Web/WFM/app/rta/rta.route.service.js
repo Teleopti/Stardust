@@ -20,6 +20,7 @@
 			urlForHistoricalAdherence: urlForHistoricalAdherence,
 			urlForAgentDetails: urlForAgentDetails,
 			urlForSites: urlForSites,
+			urlForSite: urlForSite,
 			urlForTeams: urlForTeams,
 			urlForSelectSkill: urlForSelectSkill,
 			urlForSitesBySkills: urlForSitesBySkills,
@@ -80,6 +81,10 @@
 
 		function urlForSites() {
 			return '#/rta';
+		};
+
+		function urlForSite(siteId) {
+			return '#/rta/teams/' + siteId;
 		};
 
 		function urlForTeams(siteId) {

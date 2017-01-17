@@ -108,12 +108,13 @@
 
 		toggleService.togglesLoaded.then(function () {
 			vm.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
-			if (vm.showOrgSelection)
-				rtaService.getOrganization()
-					.then(function (organization) {
-						vm.sites = organization;
+
+			rtaService.getOrganization()
+				.then(function (organization) {
+					vm.sites = organization;
+					if (vm.showOrgSelection)
 						keepSelectionForOrganization();
-					});
+				});
 		});
 
 		function stateGoToAgents(selection) {
@@ -396,7 +397,6 @@
 								});
 							})
 							.then(function (agentsInfo) {
-								console.log('agents info', agentsInfo);
 								vm.agentsInfo = agentsInfo.States;
 								vm.agents = agentsInfo.States;
 								$scope.$watchCollection(function () {
@@ -427,8 +427,6 @@
 									$scope.$watchCollection(function () {
 										return vm.agents;
 									}, filterData);
-									// REMOVE ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11111111111111111112222
-									updateBreadCrumb(agentsInfo);
 									vm.pollingLock = true;
 									return agentsInfo;
 								})
@@ -438,10 +436,6 @@
 								.then(updatePhoneStatesFromStateParams);
 						}
 					}
-
-
-
-
 
 					else {
 				getAgents()
@@ -859,7 +853,6 @@
 						deferred.resolve(rtaService.agentStatesFor);
 					});
 			} else {
-				console.log(vm.agentsInAlarm);
 				if (vm.agentsInAlarm)
 					deferred.resolve(rtaService.agentStatesInAlarmFor);
 				else
@@ -968,7 +961,10 @@
 			if (siteIds.length > 1) {
 				vm.goBackToRootWithUrl = urlForRootInBreadcrumbs(agentsInfo);
 				vm.siteName = "Multiple Sites";
-			} else if (teamIds.length > 1 || (siteIds.length === 1 && teamIds.length !== 1)) {
+			} else if (
+				(teamIds.length > 0 && siteIds.length > 0) ||
+				(teamIds.length > 1 || siteIds.length > 0) ||
+				teamIds.length > 1 || (siteIds.length === 1 && teamIds.length !== 1)) {
 				vm.goBackToRootWithUrl = urlForRootInBreadcrumbs(agentsInfo);
 				vm.teamName = "Multiple Teams";
 			} else if (agentsInfo.length > 0) {
@@ -978,9 +974,17 @@
 				vm.goBackToRootWithUrl = urlForRootInBreadcrumbs(agentsInfo);
 				vm.showPath = true;
 			}
-			else if (agentsInfo.length === 0) {
-				vm.siteName = siteIds;
-				vm.TeamName = teamIds;
+			else {
+				vm.sites.forEach(function (s) {
+					s.Teams.forEach(function (t) {
+						if (t.Id === teamIds[0]) {
+							vm.siteName = s.Name;
+							vm.teamName = t.Name;
+							vm.goBackToTeamsWithUrl = urlForTeamsInBreadcrumbs2(s.Id);
+							vm.goBackToRootWithUrl = urlForRootInBreadcrumbs();
+						}
+					})
+				})
 			}
 		};
 
@@ -1000,7 +1004,15 @@
 			return rtaRouteService.urlForTeams(agentsInfo[0].SiteId);
 		}
 
-		function urlForRootInBreadcrumbs(agentsInfo) {
+		function urlForTeamsInBreadcrumbs2(siteId) {
+			if (skillAreaId != null)
+				return rtaRouteService.urlForTeamsBySkillArea(siteId, skillAreaId);
+			if (skillIds.length > 0)
+				return rtaRouteService.urlForTeamsBySkills(siteId, skillIds[0]);
+			return rtaRouteService.urlForTeams(siteId);
+		}
+
+		function urlForRootInBreadcrumbs() {
 			if (skillAreaId != null)
 				return rtaRouteService.urlForSitesBySkillArea(skillAreaId);
 			if (skillIds.length > 0)

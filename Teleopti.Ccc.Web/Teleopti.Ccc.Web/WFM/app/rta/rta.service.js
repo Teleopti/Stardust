@@ -73,7 +73,11 @@
 		};
 
 		function agentStatesInAlarmFor(data) {
-			return $resource('../api/AgentStates/InAlarmFor', {}, { query: { method: 'GET' } }).query(data).$promise;
+			return $resource('../api/AgentStates/InAlarmFor', {}, {
+				query: {
+					method: 'GET'
+				}
+			}).query(data).$promise;
 		};
 
 		function agentsFor(data) {

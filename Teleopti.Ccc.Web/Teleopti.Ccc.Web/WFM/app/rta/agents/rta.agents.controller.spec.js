@@ -38,18 +38,6 @@ describe('RtaAgentsController', function () {
 		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 	}));
 
-	it('should get agent for team', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgentState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		});
-
-		vm = $controllerBuilder.createController().vm;
-
-		expect(vm.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
-	});
-
 	it('should get agent states', function () {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgentState({
@@ -70,6 +58,7 @@ describe('RtaAgentsController', function () {
 		vm = c.vm;
 		c.apply(vm.agentsInAlarm = false);
 
+		expect(vm.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 		expect(vm.agents[0].TeamName).toEqual("Team Preferences");
 		expect(vm.agents[0].SiteName).toEqual("London");
 		expect(vm.agents[0].State).toEqual("Ready");

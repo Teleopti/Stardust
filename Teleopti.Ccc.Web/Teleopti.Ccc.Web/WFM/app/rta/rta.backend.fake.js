@@ -146,7 +146,7 @@
 				}];
 			});
 
-		fake(/\.\.\/api\/AgentStates\/InAlarmFor(.*)/,
+		fake(/\.\.\/api\/AgentStates\/InAlarmFor\?(.*)/,
 			function (params) {
 				var ret = (function () {
 					if (params.siteIds != null && params.skillIds != null)
@@ -173,8 +173,6 @@
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
 				})();
-				console.log('blbalab', agentStatesInAlarm(ret));
-
 				return [200, {
 					Time: serverTime,
 					States: agentStatesInAlarm(ret)
