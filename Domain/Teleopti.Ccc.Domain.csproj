@@ -542,6 +542,8 @@
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleDayExtensions.cs" />
     <Compile Include="Scheduling\DoNothingResourceCalculateDelayer.cs" />
+    <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
+    <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Scheduling\Overtime\AllPersonSkillForNonOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\IPersonSkillsForNonOvertimeProvider.cs" />
