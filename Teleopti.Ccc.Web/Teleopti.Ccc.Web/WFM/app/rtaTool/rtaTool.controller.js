@@ -1,14 +1,17 @@
 (function () {
 	'use strict';
-	angular.module('wfm.rtaTool')
-		.controller('RtaToolController', [
+	angular
+	.module('wfm.rtaTool')
+	.controller('RtaToolController', RtaToolController);
+	
+	RtaToolController.$inject = [
 			'rtaToolService',
 			'$scope',
-			'$resource',
 			'$q',
 			'$interval',
-			'$filter',
-			function (rtaToolService, $scope, $resource, $q, $interval, $filter) {
+			'$filter'];
+
+	function RtaToolController (rtaToolService, $scope, $q, $interval, $filter) {
 				var vm = this;
 
 				vm.pause = true;
@@ -156,6 +159,5 @@
 				vm.togglePause = function () {
 					vm.pause = !vm.pause;
 				}
-			}
-		]);
+			};
 })();
