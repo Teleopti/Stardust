@@ -5,8 +5,8 @@
         .module('wfm.staffing')
         .controller('StaffingController', StaffingController);
 
-    StaffingController.inject = ['staffingService', '$filter', '$translate'];
-    function StaffingController(staffingService, $filter, $translate) {
+    StaffingController.$inject = ['staffingService', 'Toggle', '$filter', 'NoticeService', '$translate'];
+    function StaffingController(staffingService, toggleService, $filter, NoticeService, $translate) {
         var vm = this;
         vm.staffingDataAvailable = true;
         vm.selectedSkill;
@@ -17,6 +17,7 @@
         vm.addOvertime = addOvertime;
         vm.draggable = false;
         vm.toggleDraggable = toggleDraggable;
+        vm.triggerResourceCalc = triggerResourceCalc;
         var allSkills = [];
         var allSkillAreas = [];
         getSkills();
@@ -25,7 +26,16 @@
         var getSkillStaffing = getSkillStaffing;
         var getSkillsForArea = getSkillAreaStaffing
         var staffingData = {};
+        vm.devTogglesEnabled = false;
+        checkToggles();
         ////////////////
+        function checkToggles() {
+            toggleService.togglesLoaded.then(function () {
+                console.log(toggleService.WfmStaffing_AllowActions_42524)
+                vm.devTogglesEnabled = toggleService.WfmStaffing_AllowActions_42524;
+            });
+        }
+
         function generateChart(skillId) {
             if (!skillId) return;
             var query = getSkillStaffing(skillId);
@@ -48,6 +58,8 @@
                 }
             })
         }
+
+
 
         function staffingPrecheck(data) {
             if (!angular.equals(data, {}) && data != null) {
@@ -124,13 +136,17 @@
             staffingService.addOvertime.save({ Skills: [currentSkills.Id] });
         }
 
-        function toggleDraggable(){
+        function toggleDraggable() {
             vm.draggable = !vm.draggable
-            console.log('dragable: ',vm.draggable);
             generateChartForView();
         }
+        function triggerResourceCalc() {
+            staffingService.triggerResourceCalculate.get();
+            NoticeService.success('ResourceCalculation Triggered', 5000, true);
 
-        function generateChartForView(){
+        }
+
+        function generateChartForView() {
             c3.generate({
                 bindto: '#staffingChart',
                 data: {
