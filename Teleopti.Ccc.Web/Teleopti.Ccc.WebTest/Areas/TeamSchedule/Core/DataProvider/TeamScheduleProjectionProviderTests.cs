@@ -242,6 +242,42 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldOvertimeActivityContainsOnlyOverTimeShiftLayerIdWhenIntersectingWithAnotherSameTypeNormalActivity()
+		{
+			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
+
+			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
+			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
+			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(15));
+			var overTimePhoneActivityPeriod = new DateTimePeriod(date.AddHours(14), date.AddHours(16));
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			var overTimePhoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+
+			phoneActivity.InContractTime = true;
+			overTimePhoneActivity.InContractTime = true;
+			overTimePhoneActivity.InWorkTime = true;
+			phoneActivity.InWorkTime = true;
+
+			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
+			assignment1Person1.AddOvertimeActivity(phoneActivity, overTimePhoneActivityPeriod, def);
+			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
+			scheduleDayOnePerson1.Add(assignment1Person1);
+
+			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
+
+			vm.PersonId.Should().Be(person1.Id.ToString());
+			vm.Projection.Count().Should().Be(2);
+			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.Last().Description.Should().Be(overTimePhoneActivity.Description.Name);
+			vm.Projection.First().IsOvertime.Should().Be(false);
+			vm.Projection.Last().IsOvertime.Should().Be(true);
+			vm.Projection.Last().ShiftLayerIds.Length.Should().Be(1);
+			vm.Projection.Last().ShiftLayerIds.First().Should().Be(assignment1Person1.ShiftLayers.Last().Id);
+		}
+
+		[Test]
 		public void ShouldProjectionStillBeOvertimeWhenAddingASecondSameTypeOvertimeActivityWithAnOvertimeActivityNeighboringOutsideShift()
 		{
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);

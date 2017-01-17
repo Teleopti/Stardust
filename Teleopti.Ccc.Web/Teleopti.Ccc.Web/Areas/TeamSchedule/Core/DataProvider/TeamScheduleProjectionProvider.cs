@@ -158,10 +158,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					}
 					else
 					{
+						var isOvertime = overtimeActivities != null
+										 &&
+										 overtimeActivities.Any(overtime => (layer.DefinitionSet != null && layer.Period.Intersect(overtime.Period)));
 						projections.Add(new GroupScheduleProjectionViewModel
 						{
 							ParentPersonAbsences = isPayloadAbsence ? _projectionHelper.GetMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
-							ShiftLayerIds = isMainShiftLayer ? _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).ToArray() : null,
+							ShiftLayerIds = isMainShiftLayer ? _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer, isOvertime).ToArray() : null,
 							Description = description.Name,
 							Color = isPayloadAbsence
 							? (isAbsenceConfidential && !canViewConfidential
@@ -171,8 +174,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							Start = startDateTimeInUserTimeZone.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
-							IsOvertime = overtimeActivities != null
-									 && overtimeActivities.Any(overtime => (layer.DefinitionSet != null && layer.Period.Intersect(overtime.Period)))
+							IsOvertime = isOvertime
 						});
 					}
 				}

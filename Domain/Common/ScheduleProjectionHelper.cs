@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class ScheduleProjectionHelper : IScheduleProjectionHelper
 	{
-		public IList<Guid> GetMatchedShiftLayerIds(IScheduleDay scheduleDay, IVisualLayer layer)
+		public IList<Guid> GetMatchedShiftLayerIds(IScheduleDay scheduleDay, IVisualLayer layer, bool isOvertime = false)
 		{
 			var matchedLayerIds = new List<Guid>();
 			var personAssignment = scheduleDay.PersonAssignment();
@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			foreach (var shiftLayer in shiftLayersList)
 			{
+				if (isOvertime && !(shiftLayer is IOvertimeShiftLayer))
+				{
+					continue;
+				}
+
 				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && layer.Period.Intersect(shiftLayer.Period))
 				{
 					matchedLayerIds.Add(shiftLayer.Id.GetValueOrDefault());
