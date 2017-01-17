@@ -495,7 +495,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			//ITeamBlockSameTimeZoneValidator
 
 			//common
-			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>().InstancePerLifetimeScope();
