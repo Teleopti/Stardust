@@ -35,29 +35,23 @@ describe('RtaAgentsController', function() {
 		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		$fakeBackend.clear();
-
+		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 		spyOn($state, 'go');
 	}));
 
 	it('should display states in alarm only', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withAgent({
-				Name: "Charley Caper",
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				State: "Break",
 				TimeInAlarm: 0
 			})
-			.withState({
+			.withAgentState({
+				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				State: "Break",
 				TimeInAlarm: 60
 			});
@@ -73,23 +67,17 @@ describe('RtaAgentsController', function() {
 
 	it('should display states in alarm only for site', function() {
 		stateParams.siteIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withAgent({
-				Name: "Charley Caper",
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				State: "Break",
 				TimeInAlarm: 0
 			})
-			.withState({
+			.withAgentState({
+				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				State: "Break",
 				TimeInAlarm: 60
 			});
@@ -105,13 +93,10 @@ describe('RtaAgentsController', function() {
 
 	it('should display nothing', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				State: "Break",
 				TimeInAlarm: 0
 			});
@@ -125,22 +110,16 @@ describe('RtaAgentsController', function() {
 
 	it('should display states with alarm time in desc order when agentsInAlarm is turned on', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				TimeInAlarm: 30
 			})
-			.withAgent({
+			.withAgentState({
 				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TimeInAlarm: 30
-			})
-			.withState({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				TimeInAlarm: 60
 			});
 
@@ -164,12 +143,9 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		for (var i = 0; i < 50; i++) {
-			$fakeBackend.withAgent({
+			$fakeBackend.withAgentState({
 					PersonId: i,
-					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-				})
-				.withState({
-					PersonId: i,
+					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 					TimeInAlarm: 30
 				});
 		}
@@ -183,12 +159,9 @@ describe('RtaAgentsController', function() {
 	it('should not set bool to indicate if user opened max number of agents', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				PersonId: "1",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "1",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				TimeInAlarm: 30
 			});
 
@@ -203,12 +176,10 @@ describe('RtaAgentsController', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		for (var i = 0; i < 51; i++) {
-			$fakeBackend.withAgent({
+			$fakeBackend.withAgentState({
 					PersonId: i,
-					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-				})
-				.withState({
-					PersonId: i
+					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+					TimeInAlarm: 30
 				});
 		}
 		spyOn(NoticeService, 'warning');
