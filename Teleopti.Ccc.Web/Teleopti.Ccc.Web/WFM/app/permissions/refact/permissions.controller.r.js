@@ -107,7 +107,9 @@
 		}
 
 		function selectDynamicOption(option) {
-			permissionsDataService.selectDynamicOption(option);
+			if (vm.selectedRole.Id) {
+				permissionsDataService.selectDynamicOption(option, vm.selectedRole);
+			}
 		}
 
 		function listHandler(arr) {
@@ -193,6 +195,10 @@
 		}
 
 		function createRole(roleName) {
+			if (angular.isUndefined(roleName)) {
+				return;
+			}
+
 			var roleData = {
 				Description: roleName
 			};
@@ -285,14 +291,11 @@
 
 				if (vm.functionsFilterObj.isSelected) {
 					selectedFunctionsFilter();
-				}
-				else if (vm.functionsFilterObj.isUnSelected)	{
+				} else if (vm.functionsFilterObj.isUnSelected) {
 					unSelectedFunctionsFilter();
-				}
-				else if (vm.dataFilterObj.isSelected)	{
+				} else if (vm.dataFilterObj.isSelected) {
 					selectedDataFilter();
-				}
-				else if (vm.dataFilterObj.isUnSelected)	{
+				} else if (vm.dataFilterObj.isUnSelected) {
 					unselectedDataFilter();
 				}
 			});

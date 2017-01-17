@@ -21,14 +21,15 @@
 			</div>
 
 			<div class="tree-toggle-group">
-				<div class="toggle-handle" ng-class="{open: function.IsOpen, 'non-pointer':function.ChildFunctions.length===0 } " ng-click="function.IsOpen=! function.IsOpen "><i ng-hide="function.ChildFunctions.length===0 " class="mdi mdi-chevron-right "></i></div>				<div class="tree-handle-wrapper">
+				<div class="toggle-handle" ng-class="{open: $ctrl.isFunctionOpen(function), 'non-pointer':function.ChildFunctions.length===0 } " ng-click="$ctrl.toggleFunctionOpen(function)"><i ng-hide="function.ChildFunctions.length===0 " class="mdi mdi-chevron-right "></i></div>
+				<div class="tree-handle-wrapper">
 					<div ui-tree-handle ng-class="{selected: $ctrl.isSelected(function)}" ng-click="$ctrl.checkParent(function)">
 						{{function.LocalizedFunctionDescription}}
 					</div>
 				</div>
 			</div>
 
-			<div class="animate-show" ng-show="function.IsOpen">
+			<div class="animate-show" ng-show="$ctrl.isFunctionOpen(function)">
 				<permissions-tree filter-func="$ctrl.filterFunc" selected-role="$ctrl.selectedRole" functions="function.ChildFunctions" parent="$ctrl.onSelect" is-selected="$ctrl.isSelected" select="$ctrl.select" on-click="$ctrl.onClick"></permissions-tree>
 			</div>
 		</li>

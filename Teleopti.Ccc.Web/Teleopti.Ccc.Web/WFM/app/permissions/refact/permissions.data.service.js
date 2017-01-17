@@ -105,27 +105,25 @@
 				PermissionsServiceRefact.postFunctions.query({
 					Id: selectedRole.Id,
 					Functions: allFunctions
-				}).$promise.then(function(result) {
-				});
+				}).$promise.then(function(result) {});
 			} else {
 				PermissionsServiceRefact.deleteAllFunction.delete({
 					Id: selectedRole.Id,
 					FunctionId: functions[0].FunctionId,
 					Functions: allFunctions
-				}).$promise.then(function(result) {
-				});
+				}).$promise.then(function(result) {});
 			}
 		}
 
-		function prepareDynamicOption(option) {
+		function prepareDynamicOption(option, selectedRole) {
 			return {
 				Id: selectedRole.Id,
 				RangeOption: option.RangeOption
 			}
 		}
 
-		function selectDynamicOption(option) {
-			var preparedObject = prepareDynamicOption(option);
+		function selectDynamicOption(option, selectedRole) {
+			var preparedObject = prepareDynamicOption(option, selectedRole);
 
 			PermissionsServiceRefact.assignOrganizationSelection.postData(preparedObject).$promise.then(function(result) {
 				if (result != null) {
@@ -150,15 +148,12 @@
 						}
 					});
 				} else {
-					PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function(result) {
-					});
+					PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function(result) {});
 				}
 			} else if (isSelected) {
-				PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {
-				});
+				PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {});
 			} else if (!isSelected) {
-				PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function(result) {
-				});
+				PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function(result) {});
 			}
 		}
 

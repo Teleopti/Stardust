@@ -105,8 +105,7 @@
 									<div class="modalbg">
 										<div class="dialog-mini">
 											<div class="modal-inner-content">
-												<h3>{{role.Name}}</h3>
-												{{'AreYouSureYouWantToDelete' | translate}}
+												<h3>{{role.Name}}</h3> {{'AreYouSureYouWantToDelete' | translate}}
 											</div>
 											<div class="modal-actions">
 												<aside>
@@ -143,13 +142,15 @@
 									</div>
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex line-right">
-										<div class="wfm-checkbox" ng-click="toggleDangerModal = true">
-											<span class="non-pointer pointer">
+										<div class="wfm-checkbox" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id}">
+											<span class="pointer" ng-click="toggleDangerModal = true">
+											<span class="non-pointer">
 												<input type="checkbox" id="check1" ng-model="vm.selectedOrNot" />
 												<label for="check1">
 													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label">{{'AccessAllFunctions'|translate}}</span>
-												</label>
+											<span class="wfm-checkbox-label">{{'AccessAllFunctions'|translate}}</span>
+											</label>
+											</span>
 											</span>
 										</div>
 									</div>
@@ -268,7 +269,7 @@
 				<div class="modal-actions">
 					<aside>
 						<button ng-click="toggleDangerModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-						<button ng-click="toggleDangerModal = false; vm.toggleAllFunction();"  class="wfm-btn wfm-btn-invis-primary">{{'ToggleAll'|translate}}</button>
+						<button ng-click="toggleDangerModal = false; vm.toggleAllFunction();" class="wfm-btn wfm-btn-invis-primary">{{'ToggleAll'|translate}}</button>
 					</aside>
 				</div>
 			</div>

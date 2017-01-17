@@ -1,6 +1,6 @@
 'use strict';
 
-describe('permissionsDataService', function () {
+describe('permissionsDataService', function() {
 	var $httpBackend,
 		fakeBackend,
 		permissionsDataService,
@@ -72,49 +72,52 @@ describe('permissionsDataService', function () {
 		Name: "Test"
 	};
 
-	beforeEach(function () {
+	beforeEach(function() {
 		module('wfm.permissions');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _permissionsDataService_) {
+	beforeEach(inject(function(_$httpBackend_, _fakePermissionsBackend_, _permissionsDataService_) {
 		$httpBackend = _$httpBackend_;
 		fakeBackend = _fakePermissionsBackend_;
 		permissionsDataService = _permissionsDataService_;
 
-		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function (method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function(method, url, data, headers) {
 			response = angular.fromJson(data);
 			return 200;
 		});
-		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/f19bb790-b000-4deb-97db-9b5e015b2e8c').respond(function (method, url, data, headers) {
+		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/f19bb790-b000-4deb-97db-9b5e015b2e8c').respond(function(method, url, data, headers) {
 			response = true;
 			return 200;
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData').respond(function (method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData').respond(function(method, url, data, headers) {
 			response = angular.fromJson(data);
 			return 200;
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/DeleteData').respond(function (method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/DeleteData').respond(function(method, url, data, headers) {
 			return 200;
 		});
 
 	}));
 
-	afterEach(function () {
+	afterEach(function() {
 		response = null;
 		$httpBackend.verifyNoOutstandingExpectation();
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	it('should send functions to server', function () {
+	it('should send functions to server', function() {
 		var functions = [defaultApplicationFunction.FunctionId];
 
 		permissionsDataService.selectFunction(role, functions, defaultApplicationFunction);
 		$httpBackend.flush();
 
-		expect(response).toEqual({ Id: role.Id, Functions: functions });
+		expect(response).toEqual({
+			Id: role.Id,
+			Functions: functions
+		});
 	});
 
-	it('should delete function', function () {
+	it('should delete function', function() {
 		var functions = [];
 
 		permissionsDataService.selectFunction(role, functions, defaultApplicationFunction);
@@ -123,7 +126,7 @@ describe('permissionsDataService', function () {
 		expect(response).toEqual(true);
 	});
 
-	it('should prepare all org data for sending to server when selecting bu', function () {
+	it('should prepare all org data for sending to server when selecting bu', function() {
 		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
 		expect(data.Id).toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
@@ -132,7 +135,7 @@ describe('permissionsDataService', function () {
 		expect(data.Teams[0]).toEqual('e6377d56-277d-4c22-97f3-b218741b2480');
 	});
 
-	it('should send all org data to server when selecting bu', function () {
+	it('should send all org data to server when selecting bu', function() {
 		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
 		permissionsDataService.selectOrganization(BusinessUnit, role, true);
@@ -141,11 +144,10 @@ describe('permissionsDataService', function () {
 		expect(response).toEqual(data);
 	});
 
-	it('should not persist previously sent bu', function () {
+	it('should not persist previously sent bu', function() {
 		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
-		permissionsDataService.selectOrganization(
-			{
+		permissionsDataService.selectOrganization({
 				ChildNodes: [{
 					Id: 'fe113bc0-979a-4b6c-9e7c-ef601c7e02d1',
 					Type: 'Site',
@@ -170,11 +172,10 @@ describe('permissionsDataService', function () {
 		expect(data.BusinessUnits.length).toEqual(1);
 	});
 
-	it('should send dynamic option data to server', function () {
-		permissionsDataService.setSelectedRole(role);
-		var data  = permissionsDataService.prepareDynamicOption(dynamicOption);
+	it('should send dynamic option data to server', function() {
+		var data = permissionsDataService.prepareDynamicOption(dynamicOption, role);
 
-		permissionsDataService.selectDynamicOption(dynamicOption);
+		permissionsDataService.selectDynamicOption(dynamicOption, role);
 		$httpBackend.flush();
 
 		expect(response).toEqual(data)
@@ -192,7 +193,9 @@ describe('permissionsDataService', function () {
 		};
 
 		var result = permissionsDataService.findChildFunctions(fn)
-			.map(function(func) { return func.Name; });
+			.map(function(func) {
+				return func.Name;
+			});
 		expect(result).toEqual(["Second", "Third"]);
 	});
 
@@ -209,7 +212,9 @@ describe('permissionsDataService', function () {
 		};
 
 		var result = permissionsDataService.findParentFunctions([fn], third)
-			.map(function(func) { return func.Name; });
+			.map(function(func) {
+				return func.Name;
+			});
 		expect(result).toEqual(["First", "Second"]);
 	});
 
@@ -238,7 +243,9 @@ describe('permissionsDataService', function () {
 		};
 
 		var result = permissionsDataService.findParentFunctions([fn], clicked)
-			.map(function(func) { return func.Name; });
+			.map(function(func) {
+				return func.Name;
+			});
 		expect(result).toEqual(["A", "B", "C-1"]);
 	});
 

@@ -202,6 +202,16 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toBe(1);
 		});
 
+		it('should not be able to create role with no name', function() {
+			fakeBackend
+				.withOrganizationSelection(organizationSelection.BusinessUnit);
+			$httpBackend.flush();
+
+			vm.createRole();
+
+			expect(vm.roles.length).toBe(0);
+		});
+
 		it('should select newly created role', function() {
 			fakeBackend
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
@@ -896,13 +906,15 @@ describe('PermissionsController', function() {
 
 		it('should send selected dynamic option to the server', function() {
 			fakeBackend
+				.withRole(defaultRole)
 				.withOrganizationSelection(organizationSelection.BusinessUnit, organizationSelection.DynamicOptions);
 			$httpBackend.flush();
+			vm.selectedRole = vm.roles[0];
 			spyOn(permissionsDataService, 'selectDynamicOption');
 
 			vm.selectDynamicOption(organizationSelection.DynamicOptions[0]);
 
-			expect(permissionsDataService.selectDynamicOption).toHaveBeenCalledWith(organizationSelection.DynamicOptions[0]);
+			expect(permissionsDataService.selectDynamicOption).toHaveBeenCalledWith(organizationSelection.DynamicOptions[0], vm.selectedRole);
 		});
 
 		it('should unselect selected org data for previous role when creating new role', function() {
@@ -1633,11 +1645,9 @@ describe('PermissionsController', function() {
 						Id: defaultRole.Id,
 						AvailableFunctions: [{
 							Id: '111bb790-b000-4deb-97db-9b5e015b2e8c'
-						},
-						{
-							Id:	'222bb790-b000-4deb-97db-9b5e015b2e8c'
-						},
-						{
+						}, {
+							Id: '222bb790-b000-4deb-97db-9b5e015b2e8c'
+						}, {
 							Id: '333bb790-b000-4deb-97db-9b5e015b2e8c'
 						}]
 					})
@@ -1645,8 +1655,7 @@ describe('PermissionsController', function() {
 						Id: defaultRole2.Id,
 						AvailableFunctions: [{
 							Id: '444bb790-b000-4deb-97db-9b5e015b2e8c'
-						},
-						{
+						}, {
 							Id: '555bb790-b000-4deb-97db-9b5e015b2e8c'
 						}]
 					})
@@ -1657,7 +1666,7 @@ describe('PermissionsController', function() {
 							FunctionId: '222bb790-b000-4deb-97db-9b5e015b2e8c',
 							LocalizedFunctionDescription: 'Child1',
 							ChildFunctions: []
-						},{
+						}, {
 							FunctionId: '333bb790-b000-4deb-97db-9b5e015b2e8c',
 							LocalizedFunctionDescription: 'Child2',
 							ChildFunctions: []
@@ -1670,7 +1679,7 @@ describe('PermissionsController', function() {
 							FunctionId: '555bb790-b000-4deb-97db-9b5e015b2e8c',
 							LocalizedFunctionDescription: 'ChildA',
 							ChildFunctions: []
-						},{
+						}, {
 							FunctionId: '666bb790-b000-4deb-97db-9b5e015b2e8c',
 							LocalizedFunctionDescription: 'ChildB',
 							ChildFunctions: []
@@ -1694,38 +1703,35 @@ describe('PermissionsController', function() {
 					.withRole(defaultRole)
 					.withRole(defaultRole2)
 					.withOrganizationSelection({
-							Id: "111dd0bc-bf40-412e-b970-9b5e015aadea",
-							Name: "TestParent",
-							Type: "BusinessUnit",
+						Id: "111dd0bc-bf40-412e-b970-9b5e015aadea",
+						Name: "TestParent",
+						Type: "BusinessUnit",
+						ChildNodes: [{
+							Id: '22225804-7c51-4f43-a1ae-ecb2a17a2177',
+							Name: 'Site1',
 							ChildNodes: [{
-								Id: '22225804-7c51-4f43-a1ae-ecb2a17a2177',
-								Name: 'Site1',
-								ChildNodes: [{
-									Id: '3333cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'Team1'
-								},
-								{
-									Id: '4444cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'Team2'
-								}]
-							},
-							{
-								Id: '66625804-7c51-4f43-a1ae-ecb2a17a2177',
-								Name: 'Site2',
-								ChildNodes: [{
-									Id: '7773cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'TeamA'
-								},
-								{
-									Id: '88884cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'TeamB'
-								}]
+								Id: '3333cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'Team1'
+							}, {
+								Id: '4444cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'Team2'
 							}]
+						}, {
+							Id: '66625804-7c51-4f43-a1ae-ecb2a17a2177',
+							Name: 'Site2',
+							ChildNodes: [{
+								Id: '7773cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'TeamA'
+							}, {
+								Id: '88884cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'TeamB'
+							}]
+						}]
 					})
 					.withRoleInfo({
 						Id: defaultRole.Id,
 						AvailableBusinessUnits: [{
-							Id:	"111dd0bc-bf40-412e-b970-9b5e015aadea"
+							Id: "111dd0bc-bf40-412e-b970-9b5e015aadea"
 						}],
 						AvailableSites: [{
 							Id: '22225804-7c51-4f43-a1ae-ecb2a17a2177'
@@ -1737,7 +1743,7 @@ describe('PermissionsController', function() {
 					.withRoleInfo({
 						Id: defaultRole2.Id,
 						AvailableBusinessUnits: [{
-							Id:	"111dd0bc-bf40-412e-b970-9b5e015aadea"
+							Id: "111dd0bc-bf40-412e-b970-9b5e015aadea"
 						}],
 						AvailableSites: [{
 							Id: '66625804-7c51-4f43-a1ae-ecb2a17a2177'
@@ -1764,38 +1770,35 @@ describe('PermissionsController', function() {
 					.withRole(defaultRole)
 					.withRole(defaultRole2)
 					.withOrganizationSelection({
-							Id: "111dd0bc-bf40-412e-b970-9b5e015aadea",
-							Name: "TestParent",
-							Type: "BusinessUnit",
+						Id: "111dd0bc-bf40-412e-b970-9b5e015aadea",
+						Name: "TestParent",
+						Type: "BusinessUnit",
+						ChildNodes: [{
+							Id: '22225804-7c51-4f43-a1ae-ecb2a17a2177',
+							Name: 'Site1',
 							ChildNodes: [{
-								Id: '22225804-7c51-4f43-a1ae-ecb2a17a2177',
-								Name: 'Site1',
-								ChildNodes: [{
-									Id: '3333cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'Team1'
-								},
-								{
-									Id: '4444cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'Team2'
-								}]
-							},
-							{
-								Id: '66625804-7c51-4f43-a1ae-ecb2a17a2177',
-								Name: 'Site2',
-								ChildNodes: [{
-									Id: '7773cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'TeamA'
-								},
-								{
-									Id: '88884cfb-6f7d-4128-a014-0c8f82209d68',
-									Name: 'TeamB'
-								}]
+								Id: '3333cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'Team1'
+							}, {
+								Id: '4444cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'Team2'
 							}]
+						}, {
+							Id: '66625804-7c51-4f43-a1ae-ecb2a17a2177',
+							Name: 'Site2',
+							ChildNodes: [{
+								Id: '7773cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'TeamA'
+							}, {
+								Id: '88884cfb-6f7d-4128-a014-0c8f82209d68',
+								Name: 'TeamB'
+							}]
+						}]
 					})
 					.withRoleInfo({
 						Id: defaultRole.Id,
 						AvailableBusinessUnits: [{
-							Id:	"111dd0bc-bf40-412e-b970-9b5e015aadea"
+							Id: "111dd0bc-bf40-412e-b970-9b5e015aadea"
 						}],
 						AvailableSites: [{
 							Id: '22225804-7c51-4f43-a1ae-ecb2a17a2177'
@@ -1807,7 +1810,7 @@ describe('PermissionsController', function() {
 					.withRoleInfo({
 						Id: defaultRole2.Id,
 						AvailableBusinessUnits: [{
-							Id:	"111dd0bc-bf40-412e-b970-9b5e015aadea"
+							Id: "111dd0bc-bf40-412e-b970-9b5e015aadea"
 						}],
 						AvailableSites: [{
 							Id: '66625804-7c51-4f43-a1ae-ecb2a17a2177'
