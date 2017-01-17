@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false);
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
-				Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings)).Repeat.Twice();
+				Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings));
 				Expect.Call(personMeeting.Period).Return(_dateOnlyAsDateTimePeriod.Period().MovePeriod(TimeSpan.FromHours(1)));
 			}
 
