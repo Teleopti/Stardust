@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			ScheduleOptimizerHelper scheduleOptimizerHelper,
 			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
 			IDaysOffPreferences daysOffPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);

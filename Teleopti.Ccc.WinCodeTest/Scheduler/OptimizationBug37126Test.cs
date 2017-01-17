@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -23,7 +19,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -33,7 +28,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	{
 		public IOptimizationCommand Target;
 		public ISchedulerStateHolder StateHolder;
-		public ILifetimeScope Scope;
 		public IOptimizationPreferences OptimizationPreferences;
 		public IResourceOptimizationHelperExtended ResourceCalculator;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
@@ -135,30 +129,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				}),
 				new NoSchedulingProgress(), StateHolder,
 				new[] {dictionary[person].ScheduledDay(date)},
-				new ScheduleOptimizerHelper(
-					Scope.Resolve<IMatrixListFactory>(),
-					Scope.Resolve<MoveTimeOptimizerCreator>(),
-					Scope.Resolve<PeriodExtractorFromScheduleParts>(),
-					Scope.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>(),
-					Scope.Resolve<IPersonListExtractorFromScheduleParts>(),
-					Scope.Resolve<IEqualNumberOfCategoryFairnessService>(),
-					Scope.Resolve<OptimizeIntradayIslandsDesktop>(),
-					() => Scope.Resolve<IWorkShiftFinderResultHolder>(),
-					Scope.Resolve<ExtendReduceTimeHelper>(),
-					Scope.Resolve<ExtendReduceDaysOffHelper>(),
-					() => Scope.Resolve<ISchedulerStateHolder>(),
-					() => Scope.Resolve<IScheduleDayChangeCallback>(),
-					Scope.Resolve<IResourceCalculation>(),
-					Scope.Resolve<IOptimizerHelperHelper>(),
-					Scope.Resolve<CascadingResourceCalculationContextFactory>(),
-					Scope.Resolve<IDayOffOptimizationDesktop>(),
-					Scope.Resolve<DaysOffBackToLegalState>(),
-					Scope.Resolve<IUserTimeZone>(),
-					Scope.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>(),
-					Scope.Resolve<IScheduleDayEquator>(),
-					Scope.Resolve<ITeamBlockSeniorityFairnessOptimizationService>(),
-					Scope.Resolve<IIntraIntervalOptimizationCommand>()),
-
 					OptimizationPreferences, false, new DaysOffPreferences(),
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 

@@ -2,17 +2,19 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[TestFixture(false, true)]
 	[TestFixture(true, false)]
 	[TestFixture(false, false)]
-	public class IntradayOptimizationMaxSeatTest : IConfigureToggleManager
+	public class IntradayOptimizationDesktopMaxSeatTest : IConfigureToggleManager, ISetup
 	{
 		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private readonly bool _resourcePlannerMaxSeatsNew40939;
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 		public IResourceCalculation ResourceOptimization;
 
-		public IntradayOptimizationMaxSeatTest(bool resourcePlannerMaxSeatsNew40939, bool resourcePlannerSplitBigIslands42049)
+		public IntradayOptimizationDesktopMaxSeatTest(bool resourcePlannerMaxSeatsNew40939, bool resourcePlannerSplitBigIslands42049)
 		{
 			_resourcePlannerMaxSeatsNew40939 = resourcePlannerMaxSeatsNew40939;
 			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			InitMaxSeatForStateHolder.Execute(15);
 			ResourceOptimization.ResourceCalculate(dateOnly, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
-			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, null, optPreferences, false, null, null);
+			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, false, null, null);
 
 			var wasGivenNewShift = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9);
 			return wasGivenNewShift;
@@ -122,6 +124,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				toggleManager.Enable(Toggles.ResourcePlanner_MaxSeatsNew_40939);
 			if (_resourcePlannerSplitBigIslands42049)
 				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization>();
 		}
 	}
 }

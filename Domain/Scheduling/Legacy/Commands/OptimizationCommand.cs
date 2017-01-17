@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
+		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IUserTimeZone userTimeZone,
 			IGroupPagePerDateHolder groupPagePerDateHolder,
 			WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
-			IRequiredScheduleHelper requiredScheduleHelper)
+			IRequiredScheduleHelper requiredScheduleHelper,
+			ScheduleOptimizerHelper scheduleOptimizerHelper)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
@@ -62,11 +64,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
 			_requiredScheduleHelper = requiredScheduleHelper;
+			_scheduleOptimizerHelper = scheduleOptimizerHelper;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			ScheduleOptimizerHelper scheduleOptimizerHelper, IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
+			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
 			IDaysOffPreferences daysOffPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					var scheduleMatrixOriginalStateContainers =
 						_scheduleMatrixOriginalStateContainerCreator.CreateScheduleMatrixOriginalStateContainers(schedulerStateHolder.Schedules, selectedSchedules, selectedPeriod.Value);
 					IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
-					scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
+					_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
 						backgroundWorker, displayList[0], optimizerOriginalPreferences.SchedulingOptions,
 						dayOffOptimizationPreferenceProvider, optimizationPreferences);
 
@@ -145,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				else
 				{
 					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
-					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
+					_scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
 						dayOffOptimizationPreferenceProvider, optimizationPreferences, () =>
 						{
 							var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value);

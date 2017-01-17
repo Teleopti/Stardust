@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleCommand>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationCommand>().As<IOptimizationCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicDaysOffOptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftBackToLegalStateServiceFactory>().As<IWorkShiftBackToLegalStateServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();
