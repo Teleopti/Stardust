@@ -545,6 +545,7 @@
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MoveTimeOptimizerCreator.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ScheduleOptimizerHelper.cs" />
     <Compile Include="Scheduling\Overtime\AllPersonSkillForNonOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\IPersonSkillsForNonOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\IPersonSkillsForScheduleDaysOvertimeProvider.cs" />

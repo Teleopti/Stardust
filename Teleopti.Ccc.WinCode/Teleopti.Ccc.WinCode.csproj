@@ -634,7 +634,6 @@
     <Compile Include="Scheduling\PublishScheduleDatePresenter.cs" />
     <Compile Include="Scheduling\Restriction\HourlyAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />
-    <Compile Include="Scheduling\ScheduleOptimizerHelper.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IReportData.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />

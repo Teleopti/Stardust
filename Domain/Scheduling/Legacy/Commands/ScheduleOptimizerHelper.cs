@@ -7,13 +7,11 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumbe
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class ScheduleOptimizerHelper : IScheduleOptimizerHelper
 	{
