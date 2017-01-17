@@ -74,11 +74,27 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		}
 
 		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
-													ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
+			ISchedulingResultStateHolder schedulingResultStateHolder)
+		{
+			var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
+			var mergedPeriod = workflowControlSet?.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
+			var validatorList = mergedPeriod != null ? _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod) : null;
+			var process = mergedPeriod?.AbsenceRequestProcess;
+			return processAbsenceRequest(personRequest, absenceRequest, unitOfWork, schedulingResultStateHolder, process, validatorList);
+		}
+
+		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
+			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IAbsenceRequestValidator> validators)
+		{
+			var process = new ApproveAbsenceRequestWithValidators();
+			return processAbsenceRequest(personRequest, absenceRequest, unitOfWork, schedulingResultStateHolder, process, validators);
+		}
+
+		private bool processAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
+			ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
-			List<IAbsenceRequestValidator> validatorList = null;
 			IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
 			IRequestApprovalService requestApprovalServiceScheduler = null;
 			IPersonAbsenceAccount affectedPersonAbsenceAccount = null;
@@ -102,14 +118,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
 				affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
 
-				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				validatorList = (validators ?? _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod)).ToList();
-				_process = process ?? mergedPeriod.AbsenceRequestProcess;
+				_process = process;
 
 				loadDataForResourceCalculation(absenceRequest, validatorList);
 
 				personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
-																										 personRequest, dateOnlyPeriod);
+					personRequest, dateOnlyPeriod);
 
 				setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
 
@@ -117,7 +131,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
-				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current(), schedulingResultStateHolder);
+				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules,
+					_scenarioRepository.Current(), schedulingResultStateHolder);
 				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
 				//Will issue a rollback for simulated schedule data
@@ -144,7 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 
 			var returnValue = processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest,
-														requiredForHandlingAbsenceRequest, validatorList);
+				requiredForHandlingAbsenceRequest, validatorList);
 
 			//Ugly fix to get the number updated for person account. Don't try this at home!
 			if (personRequest.IsApproved)
@@ -156,7 +171,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 
 				var approvedPersonAbsence = requestApprovalServiceScheduler.GetApprovedPersonAbsence();
-				approvedPersonAbsence?.IntradayAbsence(personRequest.Person,new TrackedCommandInfo
+				approvedPersonAbsence?.IntradayAbsence(personRequest.Person, new TrackedCommandInfo
 				{
 					OperatedPersonId = personRequest.Person.Id.GetValueOrDefault(),
 					TrackId = Guid.NewGuid()
@@ -164,7 +179,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 
 			return returnValue;
-
 		}
 
 		private void trackAccounts(IPersonAbsenceAccount personAbsenceAccount, DateOnlyPeriod period, IAbsenceRequest absenceRequest)

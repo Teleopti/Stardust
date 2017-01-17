@@ -6,9 +6,13 @@ namespace Teleopti.Interfaces.Domain
 	public interface IAbsenceRequestUpdater
 	{
 		bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest,
-		   IUnitOfWork unitOfWork,
-		   ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process,
-		   IEnumerable<IAbsenceRequestValidator> validators);
+			IUnitOfWork unitOfWork,
+			ISchedulingResultStateHolder schedulingResultStateHolder);
+
+		bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest,
+			IUnitOfWork unitOfWork,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEnumerable<IAbsenceRequestValidator> validators);
 
 	}
 }

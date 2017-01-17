@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			var absenceRequest = request.Request as IAbsenceRequest;
 			_absenceRequestUpdater.UpdateAbsenceRequest(request, absenceRequest, unitOfWork,
-				_schedulingResultStateHolder, null, null);
+				_schedulingResultStateHolder);
 		}
 	}
 }

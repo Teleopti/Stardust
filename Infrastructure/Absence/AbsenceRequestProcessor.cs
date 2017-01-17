@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void ProcessAbsenceRequest(IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest, IPersonRequest personRequest)
 		{
-			if (!_absenceRequestUpdater.UpdateAbsenceRequest(personRequest, absenceRequest, unitOfWork, _scheduleResultStateHolder(), null, null))
+			if (!_absenceRequestUpdater.UpdateAbsenceRequest(personRequest, absenceRequest, unitOfWork, _scheduleResultStateHolder()))
 			{
 				return;
 			}
@@ -39,9 +39,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void ApproveAbsenceRequestWithValidators(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork, IEnumerable<IAbsenceRequestValidator> validators)
 		{
-			var grantAbsenceRequest = new ApproveAbsenceRequestWithValidators();
 			if (!_absenceRequestUpdater.UpdateAbsenceRequest(personRequest, absenceRequest, unitOfWork,
-				_scheduleResultStateHolder(), grantAbsenceRequest, validators))
+				_scheduleResultStateHolder(), validators))
 			{
 				return;
 			}
