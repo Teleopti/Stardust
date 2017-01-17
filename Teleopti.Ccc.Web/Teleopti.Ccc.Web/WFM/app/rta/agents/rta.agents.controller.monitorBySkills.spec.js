@@ -35,13 +35,13 @@ describe('RtaAgentsController', function() {
 		$fakeBackend.clear();
 
 		scope = $controllerBuilder.setup('RtaAgentsController');
-
+		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 		spyOn($state, 'go');
 	}));
 
 	it('should get agent for skill', function() {
 		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
 		});
@@ -55,12 +55,9 @@ describe('RtaAgentsController', function() {
 
 	it('should get state for skill', function() {
 		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				State: "Ready"
 			});
 
@@ -73,23 +70,17 @@ describe('RtaAgentsController', function() {
 
 	it('should state in alarm for skill', function() {
 		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				State: "Break",
 				TimeInAlarm: 0
 			})
-			.withAgent({
+			.withAgentState({
 				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
-			})
-			.withState({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				State: "Break",
 				TimeInAlarm: 60
 			});
@@ -116,11 +107,11 @@ describe('RtaAgentsController', function() {
 					Name: "Phone"
 				}]
 			}])
-			.withAgent({
+			.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				SkillId: "d08d75b3-fdb4-484a-ae4c-9f0800e2f753"
 			})
-			.withAgent({
+			.withAgentState({
 				PersonId: "22610fe4-0130-4568-97de-9b5e015b2564",
 				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f"
 			});
@@ -143,12 +134,9 @@ describe('RtaAgentsController', function() {
 					Name: "Phone"
 				}]
 			}])
-			.withAgent({
+			.withAgentState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f",
 				State: "Ready"
 			});
 
@@ -170,23 +158,17 @@ describe('RtaAgentsController', function() {
 					Name: "Phone"
 				}]
 			}])
-			.withAgent({
+			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SkillId: "d08d75b3-fdb4-484a-ae4c-9f0800e2f753"
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SkillId: "d08d75b3-fdb4-484a-ae4c-9f0800e2f753",
 				State: "Break",
 				TimeInAlarm: 60
 			})
-			.withAgent({
+			.withAgentState({
 				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f"
-			})
-			.withState({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f",
 				State: "Break",
 				TimeInAlarm: 60
 			});
