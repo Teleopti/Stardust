@@ -1267,7 +1267,6 @@
     <Compile Include="Scheduling\Legacy\Commands\IDisableBusinessUnitFilter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleDayForPerson.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IScheduleOptimizerHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleRangeForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleMatrixOriginalStateContainerCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulingProgress.cs" />

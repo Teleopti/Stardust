@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class ScheduleOptimizerHelper : IScheduleOptimizerHelper
+	public class ScheduleOptimizerHelper
 	{
 		private Func<IWorkShiftFinderResultHolder> _allResults;
 		private ISchedulingProgress _backgroundWorker;
