@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -17,12 +15,42 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class ExtendReduceTimeHelper
 	{
-		private readonly ILifetimeScope _container;
+		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly IScheduleService _scheduleService;
+		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
+		private readonly IResourceCalculation _resourceCalculation;
+		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
+		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
+		private readonly IUserTimeZone _userTimeZone;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private ISchedulingProgress _backgroundWorker;
 
-		public ExtendReduceTimeHelper(ILifetimeScope container)
+		public ExtendReduceTimeHelper(IMatrixListFactory matrixListFactory, 
+										IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+										IScheduleService scheduleService,
+										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+										IDeleteSchedulePartService deleteSchedulePartService,
+										IResourceCalculation resourceCalculation,
+										IEffectiveRestrictionCreator effectiveRestrictionCreator,
+										ScheduleChangesAffectedDates scheduleChangesAffectedDates,
+										IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
+										IUserTimeZone userTimeZone,
+										IScheduleDayEquator scheduleDayEquator)
 		{
-			_container = container;
+			_matrixListFactory = matrixListFactory;
+			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_scheduleService = scheduleService;
+			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+			_deleteSchedulePartService = deleteSchedulePartService;
+			_resourceCalculation = resourceCalculation;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
+			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
+			_userTimeZone = userTimeZone;
+			_scheduleDayEquator = scheduleDayEquator;
 		}
 
 		public void RunExtendReduceTimeOptimization(IOptimizationPreferences optimizerPreferences,
@@ -37,13 +65,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			_backgroundWorker = backgroundWorker;
 
-			IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(schedulingResultStateHolder.Schedules, selectedDays);
+			IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulingResultStateHolder.Schedules, selectedDays);
 			lockDaysForExtendReduceOptimization(matrixList, selectedPeriod);
 
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);
 
-			IScheduleResultDataExtractorProvider dataExtractorProvider =
-				_container.Resolve<IScheduleResultDataExtractorProvider>();
+			IScheduleResultDataExtractorProvider dataExtractorProvider = _scheduleResultDataExtractorProvider;
 
 			IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, schedulingResultStateHolder, optimizerPreferences.Advanced);
 
@@ -52,29 +79,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
 			IExtendReduceTimeOptimizerService extendReduceTimeOptimizerService = new ExtendReduceTimeOptimizerService(allSkillsPeriodValueCalculator);
-
-			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
-				_container.Resolve<IPossibleMinMaxWorkShiftLengthExtractor>();
-			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
-				_container.Resolve<ISchedulePeriodTargetTimeCalculator>();
-			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator =
-				_container.Resolve<IWorkShiftWeekMinMaxCalculator>();
-			IWorkShiftMinMaxCalculator workShiftMinMaxCalculatorForFlexibleAgents = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator, workShiftWeekMinMaxCalculator);
-			IWorkShiftFinderService workShiftFinderServiceForFlexibleAgents =
-				_container.Resolve<IWorkShiftFinderService>(new TypedParameter(typeof(IWorkShiftMinMaxCalculator), workShiftMinMaxCalculatorForFlexibleAgents));
-			IScheduleService scheduleServiceForFlexibleAgents =
-				_container.Resolve<IScheduleService>(new TypedParameter(typeof(IWorkShiftFinderService), workShiftFinderServiceForFlexibleAgents));
-
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-				_container.Resolve<ISchedulePartModifyAndRollbackService>();
-			IDeleteSchedulePartService deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
-			IResourceCalculation resourceOptimizationHelper = _container.Resolve<IResourceCalculation>();
-			IEffectiveRestrictionCreator effectiveRestrictionCreator =
-				_container.Resolve<IEffectiveRestrictionCreator>();
-			var resourceCalculateDaysDecider =
-				_container.Resolve<ScheduleChangesAffectedDates>();
-			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx =
-				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
+			IScheduleService scheduleServiceForFlexibleAgents = _scheduleService;
+				
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService = _schedulePartModifyAndRollbackService;
+			IDeleteSchedulePartService deleteSchedulePartService = _deleteSchedulePartService;
+			IResourceCalculation resourceOptimizationHelper = _resourceCalculation;
+			IEffectiveRestrictionCreator effectiveRestrictionCreator = _effectiveRestrictionCreator;
+			var resourceCalculateDaysDecider = _scheduleChangesAffectedDates;
+			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx = _scheduleMatrixLockableBitArrayConverterEx;
 
 			IList<IExtendReduceTimeOptimizer> optimizers = new List<IExtendReduceTimeOptimizer>();
 			for (int i = 0; i < matrixList.Count; i++)
@@ -107,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				ISchedulingOptions schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _container.Resolve<IUserTimeZone>());
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
 
 				IExtendReduceTimeOptimizer optimizer = new ExtendReduceTimeOptimizer(
 					personalSkillsPeriodValueCalculator,
@@ -157,7 +169,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
 		{
-			IScheduleDayEquator scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
+			IScheduleDayEquator scheduleDayEquator = _scheduleDayEquator;
 			IList<IScheduleMatrixOriginalStateContainer> result =
 				matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
