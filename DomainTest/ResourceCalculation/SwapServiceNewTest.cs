@@ -66,13 +66,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             IList<IScheduleDay> list = new List<IScheduleDay> {_p1D1};
         	var service = new SwapServiceNew();
-            service.Init(list);
-            Assert.IsFalse(service.CanSwapAssignments());
+            Assert.IsFalse(service.CanSwapAssignments(list));
             list.Add(_p2D1);
             list.Add(_p2D2);
             service = new SwapServiceNew();
-            service.Init(list);
-            Assert.IsFalse(service.CanSwapAssignments());
+            Assert.IsFalse(service.CanSwapAssignments(list));
         }
 
         [Test]
@@ -84,14 +82,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             list.Add(_p2D1);
             list.Add(_p1D2);
             var service = new SwapServiceNew();
-            service.Init(list);
 
             using (_mocks.Record())
             {
                 _mocks.BackToRecord(_dic);
                 Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
             }
-            Assert.IsTrue(service.CanSwapAssignments());
+            Assert.IsTrue(service.CanSwapAssignments(list));
 
         }
 
@@ -100,14 +97,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             IList<IScheduleDay> list = new List<IScheduleDay> {_p1D1, _p2D2};
         	var service = new SwapServiceNew();
-            service.Init(list);
 
             using (_mocks.Record())
             {
                 _mocks.BackToRecord(_dic);
                 Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
             }
-            Assert.IsTrue(service.CanSwapAssignments());
+            Assert.IsTrue(service.CanSwapAssignments(list));
         }
 
 		[Test]
@@ -115,8 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_list = new List<IScheduleDay>();
 			var service = new SwapServiceNew();
-			service.Init(_list);
-			Assert.Throws<ConstraintException>(() => service.Swap(_dictionary));
+			Assert.Throws<ConstraintException>(() => service.Swap(_dictionary, _list));
 		}
 
         [Test]
@@ -139,7 +134,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
 
             var service = new SwapServiceNew();
-            service.Init(_list);
             Assert.AreEqual("kalle", _list[0].Person.Name.LastName);
 
             using (_mocks.Record())
@@ -147,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 _mocks.BackToRecord(_dic);
                 Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
             }
-            var retList = service.Swap(_dictionary);
+            var retList = service.Swap(_dictionary, _list);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
         }
@@ -168,7 +162,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             assignments = new List<IPersonAssignment>();
             ((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
             var service = new SwapServiceNew();
-            service.Init(_list);
             Assert.AreEqual("kalle", _list[0].Person.Name.LastName);
 
             using (_mocks.Record())
@@ -176,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 _mocks.BackToRecord(_dic);
                 Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
             }
-            var retList = service.Swap(_dictionary);
+            var retList = service.Swap(_dictionary, _list);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
 						Assert.AreEqual(0, retList[0].PersonAssignment().MainActivities().Count());
@@ -201,7 +194,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			((ScheduleRange)_dictionary[_person2]).AddRange(personAssignments);
 
 			var service = new SwapServiceNew();
-			service.Init(_list);
 			Assert.AreEqual("kalle", _list[0].Person.Name.LastName);
 			Assert.IsNotNull(_list[0].PersonAssignment().DayOff());
 		
@@ -211,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
 			}
 
-			var retList = service.Swap(_dictionary);
+			var retList = service.Swap(_dictionary, _list);
 
 			Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
 			retList[0].HasDayOff().Should().Be.False();
@@ -254,7 +246,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
-			service.Init(_list);
 
 			using (_mocks.Record())
 			{
@@ -262,8 +253,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_dic.PermissionsEnabled).Return(true).Repeat.Any();
 				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
 			}
-			Assert.IsTrue(service.CanSwapAssignments());
-			var retList = service.Swap(_dictionary);
+			Assert.IsTrue(service.CanSwapAssignments(_list));
+			var retList = service.Swap(_dictionary, _list);
 
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
@@ -309,7 +300,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
-			service.Init(_list);
 
 			using (_mocks.Record())
 			{
@@ -317,8 +307,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_dic.PermissionsEnabled).Return(true).Repeat.Any();
 				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
 			}
-			Assert.IsTrue(service.CanSwapAssignments());
-			var retList = service.Swap(_dictionary);
+			Assert.IsTrue(service.CanSwapAssignments(_list));
+			var retList = service.Swap(_dictionary, _list);
 
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
@@ -361,7 +351,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
-			service.Init(_list);
 
 			using (_mocks.Record())
 			{
@@ -369,8 +358,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_dic.PermissionsEnabled).Return(true).Repeat.Any();
 				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
 			}
-			Assert.IsTrue(service.CanSwapAssignments());
-			var retList = service.Swap(_dictionary);
+			Assert.IsTrue(service.CanSwapAssignments(_list));
+			var retList = service.Swap(_dictionary, _list);
 
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
@@ -404,15 +393,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(0, p2assignments[0].PersonalActivities().Count());
 
 			var service = new SwapServiceNew();
-			service.Init(_list);
 
 			using (_mocks.Record())
 			{
 				_mocks.BackToRecord(_dic);
 				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
 			}
-			Assert.IsTrue(service.CanSwapAssignments());
-			var retList = service.Swap(_dictionary);
+			Assert.IsTrue(service.CanSwapAssignments(_list));
+			var retList = service.Swap(_dictionary, _list);
 
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
@@ -458,15 +446,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_person2.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 
 			var service = new SwapServiceNew();
-			service.Init(_list);
 
 			using (_mocks.Record())
 			{
 				_mocks.BackToRecord(_dic);
 				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
 			}
-			Assert.IsTrue(service.CanSwapAssignments());
-			var retList = service.Swap(_dictionary);
+			Assert.IsTrue(service.CanSwapAssignments(_list));
+			var retList = service.Swap(_dictionary, _list);
 
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);

@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().SingleInstance();
 			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().SingleInstance();
 			builder.RegisterType<GroupCreator>().As<IGroupCreator>().SingleInstance();
-			builder.RegisterType<SwapServiceNew>().As<ISwapServiceNew>();
+			builder.RegisterType<SwapServiceNew>().As<ISwapServiceNew>().SingleInstance();
 			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>().SingleInstance();

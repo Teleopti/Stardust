@@ -70,8 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private IEnumerable<IScheduleDay> SwapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules, TrackedCommandInfo trackedCommandInfo)
 		{
-			_swapService.Init(selectedSchedules);
-			return _swapService.Swap(scheduleDictionary, trackedCommandInfo);
+			return _swapService.Swap(scheduleDictionary, selectedSchedules, trackedCommandInfo);
 		}
 	}
 }

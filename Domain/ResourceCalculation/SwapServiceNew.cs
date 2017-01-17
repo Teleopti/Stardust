@@ -7,32 +7,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SwapServiceNew : ISwapServiceNew
 	{
-		private IList<IScheduleDay> _selectedSchedules;
-
-		public void Init(IList<IScheduleDay> selectedSchedules)
+		public bool CanSwapAssignments(IList<IScheduleDay> selectedSchedules)
 		{
-			_selectedSchedules = selectedSchedules;
-		}
-
-		public bool CanSwapAssignments()
-		{
-			if (!CheckBasicRules())
+			if (!CheckBasicRules(selectedSchedules))
 				return false;
 			return true;
 		}
 
-		public IList<IScheduleDay> Swap(IScheduleDictionary schedules, TrackedCommandInfo trackedCommandInfo = null)
+		public IList<IScheduleDay> Swap(IScheduleDictionary schedules, IList<IScheduleDay> selectedSchedules, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			if(schedules == null)
 				throw new ArgumentNullException("schedules");
 
-			if (!CanSwapAssignments())
+			if (!CanSwapAssignments(selectedSchedules))
 				throw new ConstraintException("Can not swap assignments");
 
 			var retList = new List<IScheduleDay>();
 
-			var schedulePart0 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
-			var schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
+			var schedulePart0 = schedules[selectedSchedules[0].Person].ReFetch(selectedSchedules[0]);
+			var schedulePart1 = schedules[selectedSchedules[1].Person].ReFetch(selectedSchedules[1]);
 
 			var assignment0 = schedulePart0.PersonAssignment(true);
 			var assignment1 = schedulePart1.PersonAssignment(true);
@@ -78,16 +71,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules)
 		{
-			Init(selectedSchedules);
-			return Swap(schedules);
+			return Swap(schedules, selectedSchedules);
 		}
 
-		private bool CheckBasicRules()
+		private bool CheckBasicRules(IList<IScheduleDay> selectedSchedules)
 		{
-			if (_selectedSchedules.Count != 2)
+			if (selectedSchedules.Count != 2)
 				return false;
 
-			if (_selectedSchedules[0].Person == _selectedSchedules[1].Person)
+			if (selectedSchedules[0].Person == selectedSchedules[1].Person)
 				return false;
 
 			return true;
