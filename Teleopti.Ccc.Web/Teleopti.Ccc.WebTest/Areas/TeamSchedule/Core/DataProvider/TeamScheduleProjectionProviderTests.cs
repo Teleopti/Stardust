@@ -253,11 +253,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(15));
 			var overTimePhoneActivityPeriod = new DateTimePeriod(date.AddHours(14), date.AddHours(16));
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
-			var overTimePhoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
-
+			
 			phoneActivity.InContractTime = true;
-			overTimePhoneActivity.InContractTime = true;
-			overTimePhoneActivity.InWorkTime = true;
 			phoneActivity.InWorkTime = true;
 
 			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
@@ -270,7 +267,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
 			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
-			vm.Projection.Last().Description.Should().Be(overTimePhoneActivity.Description.Name);
+			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
 			vm.Projection.First().IsOvertime.Should().Be(false);
 			vm.Projection.Last().IsOvertime.Should().Be(true);
 			vm.Projection.Last().ShiftLayerIds.Length.Should().Be(1);
