@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.RtaTool.Controllers
 	{
 		public RedirectResult Index()
 		{
-			return Redirect("/WFM/#/rtaTool");
+			return Redirect("WFM/#/rtaTool");
 		}
 
 		[HttpGet]
