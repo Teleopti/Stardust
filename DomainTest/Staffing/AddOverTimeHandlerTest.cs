@@ -98,18 +98,25 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			skill.DefaultResolution = 60;
 			var agent = PersonRepository.Has(skill);
+			var agentB = PersonRepository.Has(skill);
 
 			var team = new Team();
 			var contract = ContractFactory.CreateContract("con");
 			contract.AddMultiplicatorDefinitionSetCollection(multi);
 			var personContract = PersonContractFactory.CreatePersonContract(contract);
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			var personPeriodB = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			personPeriodB.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			agent.AddPersonPeriod(personPeriod);
+			agentB.AddPersonPeriod(personPeriodB);
 
 			OvertimeAvailabilityRepository.Add(new OvertimeAvailability(agent, new DateOnly(2017, 1, 11), TimeSpan.FromHours(12), TimeSpan.FromHours(20)));
+			OvertimeAvailabilityRepository.Add(new OvertimeAvailability(agentB, new DateOnly(2017, 1, 11), TimeSpan.FromHours(12), TimeSpan.FromHours(20)));
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnly(period.StartDateTime), 5));
+			
+
 			var ruleSetBag =
 				new RuleSetBag(
 					new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 16, 0, 60),
@@ -128,7 +135,66 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var days = SchedulingResultStateHolder().Schedules[agent];
 			var overtimes = days.ScheduledDay(new DateOnly(2017, 1, 11)).PersonAssignment().OvertimeActivities();
 			overtimes.Should().Not.Be.Empty();
-
+			days = SchedulingResultStateHolder().Schedules[agentB];
+			overtimes = days.ScheduledDay(new DateOnly(2017, 1, 11)).PersonAssignment().OvertimeActivities();
+			overtimes.Should().Not.Be.Empty();
 		}
+
+		[Test]
+		public void ShouldOnlyAddOverTimeOnPersonWithSkill()
+		{
+			Now.Is("2017-1-11 13:00");
+			var multi = new MultiplicatorDefinitionSet("kulti", MultiplicatorType.Overtime).WithId();
+			MultiplicatorDefinitionSetRep.Add(multi);
+			var period = new DateTimePeriod(2017, 1, 11, 7, 2017, 01, 11, 15);
+
+			var category = ShiftCategoryFactory.CreateShiftCategory("katten");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var skillB = SkillRepository.Has("skillB", activity).WithId();
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var agentB = PersonRepository.Has(skillB);
+
+			var team = new Team();
+			var contract = ContractFactory.CreateContract("con");
+			contract.AddMultiplicatorDefinitionSetCollection(multi);
+			var personContract = PersonContractFactory.CreatePersonContract(contract);
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			var personPeriodB = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			personPeriodB.AddPersonSkill(new PersonSkill(skillB, new Percent(1)));
+			agent.AddPersonPeriod(personPeriod);
+			agentB.AddPersonPeriod(personPeriodB);
+
+			OvertimeAvailabilityRepository.Add(new OvertimeAvailability(agent, new DateOnly(2017, 1, 11), TimeSpan.FromHours(12), TimeSpan.FromHours(20)));
+			OvertimeAvailabilityRepository.Add(new OvertimeAvailability(agentB, new DateOnly(2017, 1, 11), TimeSpan.FromHours(12), TimeSpan.FromHours(20)));
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnly(period.StartDateTime), 5));
+			SkillDayRepository.Has(skillB.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnly(period.StartDateTime), 5));
+			var ruleSetBag =
+				new RuleSetBag(
+					new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 16, 0, 60),
+						new TimePeriodWithSegment(16, 0, 22, 0, 60), category))).WithId();
+
+			RuleSetBagRepository.Add(ruleSetBag);
+
+			Target.Handle(new AddOverTimeEvent
+			{
+				OvertimeDurationMin = TimeSpan.FromHours(1),
+				OvertimeDurationMax = TimeSpan.FromHours(3),
+				OvertimeType = multi.Id.Value,
+				Skills = new[] { skill.Id.GetValueOrDefault() },
+				ShiftBagToUse = ruleSetBag.Id
+			});
+			var days = SchedulingResultStateHolder().Schedules[agent];
+			var daysB = SchedulingResultStateHolder().Schedules[agentB];
+			var overtimes = days.ScheduledDay(new DateOnly(2017, 1, 11)).PersonAssignment().OvertimeActivities();
+			overtimes.Should().Not.Be.Empty();
+			var ass = daysB.ScheduledDay(new DateOnly(2017, 1, 11)).PersonAssignment();
+			ass.Should().Be.Null();
+		}
+
 	}
 }
