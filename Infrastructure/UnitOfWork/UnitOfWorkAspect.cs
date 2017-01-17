@@ -34,9 +34,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				if (id.HasValue)
 					_businessUnitOverrideScope = _overrider.OverrideWith(id.Value);
 			}
-			finally
+			catch (Exception)
 			{
 				_unitOfWork.Dispose();
+				throw;
 			}
 		}
 
