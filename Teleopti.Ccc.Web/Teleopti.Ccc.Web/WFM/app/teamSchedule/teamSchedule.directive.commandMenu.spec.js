@@ -51,7 +51,7 @@
 	}));
 
 	it('should not view menu without any permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -69,7 +69,7 @@
 	});
 
 	it('should view menu when add absence is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -97,7 +97,7 @@
 	});
 
 	it('should view menu when add activity is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -124,7 +124,7 @@
 	});
 
 	it('should view menu when add personal activity is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -150,7 +150,7 @@
 	});
 
 	it('should view menu when move activity is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -176,7 +176,7 @@
 	});
 
 	it('should view menu when swap shift is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -202,7 +202,7 @@
 	});
 
 	it('should view menu when remove absence is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -228,7 +228,7 @@
 	});
 
 	it('should view menu when remove activity is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -254,7 +254,7 @@
 	});
 
 	it('should view menu when undo schedule is permitted', function() {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -274,7 +274,7 @@
 	});
 
 	it('should not show menu item when toggle is disabled', function () {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -296,7 +296,7 @@
 	});
 
 	it('should view menu when move invalid overlapped activity is permitted', function () {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -322,7 +322,7 @@
 	});
 
 	it('should make Move Invalid Overlapped Activity command menu clickable when requirements are met', function () {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var html = '<teamschedule-command-menu validate-warning-enabled="validateWarningEnabled"></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -335,14 +335,8 @@
 		permissions.set({
 			HasMoveInvalidOverlappedActivityPermission: true
 		});
-
-		var config = {			
-			validateWarningToggle: true
-		};
-
-		scope.getConfigurations = function() {
-			return config;
-		};
+		
+		scope.validateWarningEnabled = true;
 
 		personSelectionSvc.hasAgentSelected(true);
 		personSelectionSvc.fakeSetCheckedPersonIds(overlappedWarningPersonId);
@@ -360,7 +354,7 @@
 	});
 
 	it('should make Move Invalid Overlapped Activity command menu clickable when there exits overlap warnings', function () {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var html = '<teamschedule-command-menu validate-warning-enabled="validateWarningEnabled""></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
@@ -374,13 +368,7 @@
 			HasMoveInvalidOverlappedActivityPermission: true
 		});
 
-		var config = {			
-			validateWarningToggle: true
-		};
-
-		scope.getConfigurations = function() {
-			return config;
-		};
+		scope.validateWarningEnabled = true;
 
 		personSelectionSvc.hasAgentSelected(true);		
 		personSelectionSvc.fakeSetCheckedPersonIds(overlappedWarningPersonId);
@@ -399,24 +387,12 @@
 
 	// Don't check this, as it performs badly when select all agents on every page is set.
 	xit('should make Move Invalid Overlapped Activity command menu clickable when there is none overlap warning', function () {
-		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		var config = {
-			toggles: {
-				MoveInvalidOverlappedActivityEnabled: true
-			},
-			permissions: {
-				HasMoveInvalidOverlappedActivityPermission: true
-			},
-			validateWarningToggle: true
-		};
-
-		scope.getConfigurations = function() {
-			return config;
-		};
+		
 
 		personSelectionSvc.hasAgentSelected(true);		
 		personSelectionSvc.fakeSetCheckedPersonIds(noneOverlappedWarningPersonId);

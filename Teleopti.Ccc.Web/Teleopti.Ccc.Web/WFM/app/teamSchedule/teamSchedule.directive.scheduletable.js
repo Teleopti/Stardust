@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('ScheduleTableController', ['$scope', 'Toggle', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','teamsToggles', ScheduleTableController]);
+		.controller('ScheduleTableController', ScheduleTableController);
 
 	function scheduleTableDirective() {
 		return {
@@ -10,8 +10,7 @@
 				selectMode: '=',
 				selectedDate: '=',
 				selectedTimezone: '<',
-				showWarnings: '=?',
-				cmdConfigurations: '=',
+				showWarnings: '=?',				
 				paginationOptions: '<?'
 			},
 			restrict: 'E',
@@ -22,7 +21,8 @@
 		};
 	}
 
-	function ScheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, teamsToggles) {
+	ScheduleTableController.$inject = ['$scope', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','teamsToggles', 'teamsPermissions'];
+	function ScheduleTableController($scope, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, teamsToggles, teamsPermissions) {
 		var vm = this;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -77,7 +77,7 @@
 		};
 
 		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
-			if (!(vm.toggles.ModifyShiftCategoryEnabled && vm.cmdConfigurations.permissions.HasEditShiftCategoryPermission)) {
+			if (!(vm.toggles.ModifyShiftCategoryEnabled && vm.permissions.HasEditShiftCategoryPermission)) {
 				return;
 			}
 
@@ -171,7 +171,7 @@
 			}
 
 			vm.toggles = teamsToggles.all();
-
+			vm.permissions = teamsPermissions.all();
 			vm.enbleAllProjectionSelection = vm.toggles.ManageScheduleForDistantTimezonesEnabled;
 		};
 

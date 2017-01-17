@@ -39,7 +39,7 @@
 
 		<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
 			<div id="show-warnings" class="wfm-switch inline-block">
-				<input type="checkbox" id="validateWarning" ng-model="vm.cmdConfigurations.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()"/>
+				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()"/>
 				<label for="validateWarning">
 					<span class="wfm-switch-label" translate>ShowWarnings</span>
 					<span class="wfm-switch-toggle"></span>
@@ -60,7 +60,9 @@
 				<i class="mdi mdi-settings"></i>
 			</span>
 
-			<teamschedule-command-menu class="teamschedule-command" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
+			<teamschedule-command-menu class="teamschedule-command" 
+									   validate-warning-enabled="vm.validateWarningEnabled"									  
+									   trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 		</div>
 	</div>
 	<div class="con-row teamschedule-body relative">
@@ -72,8 +74,7 @@
 			<schedule-table ng-show="vm.scheduleFullyLoaded"
 							select-mode="vm.scheduleTableSelectMode"
 							selected-date="vm.scheduleDate"
-							show-warnings="vm.cmdConfigurations.validateWarningToggle"
-							cmd-configurations="vm.cmdConfigurations"
+							show-warnings="vm.validateWarningEnabled"							
 							selected-timezone="vm.currentTimezone"
 							pagination-options="vm.paginationOptions"
 							/>
@@ -82,7 +83,7 @@
 		<teamschedule-command-container date="vm.scheduleDate"
 										timezone="vm.currentTimezone"
 										action-callback="vm.commonCommandCallback(trackId, personIds)"
-										configurations="vm.cmdConfigurations" on-ready="vm.onCommandContainerReady()">
+										on-ready="vm.onCommandContainerReady()">
 		</teamschedule-command-container>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">

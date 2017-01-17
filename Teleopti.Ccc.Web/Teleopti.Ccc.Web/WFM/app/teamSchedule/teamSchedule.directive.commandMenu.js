@@ -6,7 +6,7 @@
 		return {
 			restrict: 'E',
 			scope: {
-				configurations: '=',
+				validateWarningEnabled: '=?',
 				triggerCommand: '&?'
 			},
 			controller: ['$scope', 'PersonSelection', 'ValidateRulesService','ShortCuts', 'keyCodes', 'teamsPermissions', 'teamsToggles',  teamscheduleCommandMenuCtrl],
@@ -186,7 +186,7 @@
 		};
 
 		vm.canMoveInvalidOverlappedActivity = function () {			
-			return personSelectionSvc.anyAgentChecked() && vm.configurations.validateWarningToggle;
+			return personSelectionSvc.anyAgentChecked() && vm.validateWarningEnabled;
 		};
 
 		vm.canMoveShift = function() {

@@ -236,7 +236,7 @@
 		};
 
 		vm.checkValidationWarningForCurrentPage = function () {
-			if (vm.cmdConfigurations.validateWarningToggle) {
+			if (vm.validateWarningEnabled) {
 				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) {
 					return schedule.PersonId;
 				});
@@ -245,7 +245,7 @@
 		};
 
 		vm.checkValidationWarningForCommandTargets = function (personIds) {
-			if (vm.cmdConfigurations.validateWarningToggle) {
+			if (vm.validateWarningEnabled) {
 				ValidateRulesService.updateValidateRulesResultForPeople(vm.scheduleDateMoment(), personIds);
 			}
 		};
@@ -307,10 +307,7 @@
 			searchKeywordChanged: false
 		};
 
-		vm.cmdConfigurations = {
-			validateWarningToggle: false,
-			currentCommandName: null
-		};
+		vm.validateWarningEnabled = false;
 
 		vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
 				|| vm.toggles.AddActivityEnabled
