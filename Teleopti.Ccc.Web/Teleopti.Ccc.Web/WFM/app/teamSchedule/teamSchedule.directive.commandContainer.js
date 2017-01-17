@@ -10,8 +10,7 @@
 			scope: {
 				date: '=',
 				timezone: '=',
-				actionCallback: '&?',
-				configurations: '=?',
+				actionCallback: '&?',			
 				onReady: '&'
 			},
 			controllerAs: 'vm',
@@ -29,9 +28,9 @@
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$filter',  'guidgenerator', 'CommandCheckService'];
+	teamscheduleCommandContainerCtrl.$inject = ['$filter',  'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService'];
 
-	function teamscheduleCommandContainerCtrl($filter, guidgenerator, CommandCheckService) {
+	function teamscheduleCommandContainerCtrl($filter, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService) {
 		var vm = this;
 
 		vm.getDate = function () {
@@ -72,13 +71,11 @@
 		};
 
 		vm.hasPermission = function (permission) {
-			if (!vm.configurations || !vm.configurations.permissions) return false;
-			return vm.configurations.permissions[permission];
+			return teamsPermissions.all()[permission];		
 		};
 
 		vm.hasToggle = function (toggle) {
-			if (!vm.configurations || !vm.configurations.toggles) return false;
-			return vm.configurations.toggles[toggle];
+			return teamsToggles.all()[toggle];
 		};
 
 		vm.activeCommandCheck = function(){

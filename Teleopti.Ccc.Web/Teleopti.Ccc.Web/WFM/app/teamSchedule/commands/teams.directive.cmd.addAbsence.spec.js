@@ -1,7 +1,8 @@
 ﻿describe('teamschedule add absence diretive test', function() {
  
 	var	fakeAbsenceService,
-		fakeScheduleManagementSvc;
+		fakeScheduleManagementSvc,
+		fakePermissions;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -9,6 +10,7 @@
 	beforeEach(function() {
 		fakeAbsenceService = new FakePersonAbsence();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
+		fakePermissions = new FakePermissions();
 
 		module(function($provide) {
 			$provide.service('PersonAbsence', function() {
@@ -17,7 +19,9 @@
 			$provide.service('ScheduleManagement', function() {
 				return fakeScheduleManagementSvc;
 			});
-
+			$provide.service('teamsPermissions', function () {
+				return fakePermissions;
+			});
 		});
 	});
 
@@ -39,7 +43,10 @@
 
 	it('should handle default start and end time attribute', function () {
 		fakeScheduleManagementSvc.setEarliestStartTime(new Date('2015-01-01 10:00:00'));
-		var result = setUp(moment('2015-01-01T00:00:00').toDate(), { permissions: { IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true } });
+
+		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
+
+		var result = setUp(moment('2015-01-01T00:00:00').toDate());
 
 		var startDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[0].value,
 
@@ -58,15 +65,19 @@
 		expect(endTimeString).toBe('1100');
 	});
 
-	it('should display full day absence check box with only full day absence permission', function() {
-		var result = setUp(new Date('2015-01-01 10:00:00'), { permissions: { IsAddIntradayAbsenceAvailable: false, IsAddFullDayAbsenceAvailable: true } });
+	it('should display full day absence check box with only full day absence permission', function () {
+		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: false, IsAddFullDayAbsenceAvailable: true });
+
+		var result = setUp(new Date('2015-01-01 10:00:00'));
 		var checkBoxInput = result.container[0].querySelectorAll('.wfm-checkbox input#is-full-day');
 		expect(checkBoxInput[0].value).toBe('on');
 		expect(checkBoxInput[0].disabled).toBe(true);
 	});
 
 	it('should not display full day absence check box with only intraday absence permission', function () {
-		var result = setUp(new Date('2015-01-01 10:00:00'), { permissions: { IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false } });		
+		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
+
+		var result = setUp(new Date('2015-01-01 10:00:00'));		
 		var checkBoxInput = result.container[0].querySelectorAll('.wfm-checkbox input#is-full-day');
 		expect(checkBoxInput.length).toBe(0);
 	});
@@ -149,6 +160,18 @@
 
 		this.getEarliestStartOfSelectedSchedule = function() {
 			return earliestStartTime;
+		}
+	}
+
+	function FakePermissions() {
+		var _permissions = {}
+
+		this.all = function() {
+			return _permissions;
+		}
+
+		this.setPermissions = function(permissions) {
+			_permissions = permissions;
 		}
 	}
 
