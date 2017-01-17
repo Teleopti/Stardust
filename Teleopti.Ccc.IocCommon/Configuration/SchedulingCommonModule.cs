@@ -454,10 +454,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private static void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
+			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade>().InstancePerLifetimeScope();
 			builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
-			builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
-			builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();
+			builder.RegisterType<DayOffStep1>().As<IDayOffStep1>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffStep2>().As<IDayOffStep2>().InstancePerLifetimeScope();
 			builder.RegisterType<SeniorTeamBlockLocator>().As<ISeniorTeamBlockLocator>().SingleInstance();
 			builder.RegisterType<SeniorityCalculatorForTeamBlock>().As<ISeniorityCalculatorForTeamBlock>().SingleInstance();
 			builder.RegisterType<TeamBlockLocatorWithHighestPoints>().As<ITeamBlockLocatorWithHighestPoints>().SingleInstance();
@@ -490,7 +490,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockLockValidator>().As<ITeamBlockLockValidator>();
 			builder.RegisterType<SeniorityTeamBlockSwapValidator>().As<ISeniorityTeamBlockSwapValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<SeniorityTeamBlockSwapper>().As<ISeniorityTeamBlockSwapper>();
+			builder.RegisterType<SeniorityTeamBlockSwapper>().As<ISeniorityTeamBlockSwapper>().InstancePerLifetimeScope();
 
 			//ITeamBlockSameTimeZoneValidator
 

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DistributionReportService>().As<IDistributionReportService>();
 			builder.RegisterType<EqualCategoryDistributionValue>().As<IEqualCategoryDistributionValue>();
 			builder.RegisterType<FilterForFullyScheduledBlocks>().As<IFilterForFullyScheduledBlocks>().SingleInstance();
-			builder.RegisterType<FilterForNoneLockedTeamBlocks>().As<IFilterForNoneLockedTeamBlocks>();
+			builder.RegisterType<FilterForNoneLockedTeamBlocks>().As<IFilterForNoneLockedTeamBlocks>().SingleInstance();
 			builder.RegisterType<TeamBlockShiftCategoryLimitationValidator>().As<ITeamBlockShiftCategoryLimitationValidator>().InstancePerLifetimeScope();
 			//ITeamBlockShiftCategoryLimitationValidator
 		}
