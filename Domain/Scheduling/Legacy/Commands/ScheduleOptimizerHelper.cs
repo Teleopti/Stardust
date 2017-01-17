@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
+		private readonly MaxSeatOptimization _maxSeatOptimization;
+		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 
 		public ScheduleOptimizerHelper(IMatrixListFactory matrixListFactory,
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
@@ -62,7 +65,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
 				IScheduleDayEquator scheduleDayEquator,
 				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
-				IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand)
+				IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
+				MaxSeatOptimization maxSeatOptimization,
+				IWeeklyRestSolverCommand weeklyRestSolverCommand)
 		{
 			_matrixListFactory = matrixListFactory;
 			_moveTimeOptimizerCreator = moveTimeOptimizerCreator;
@@ -86,6 +91,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayEquator = scheduleDayEquator;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
+			_maxSeatOptimization = maxSeatOptimization;
+			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_stateHolder = () => _schedulerStateHolder().SchedulingResultState;
 		}
 
@@ -144,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
-			IOptimizationPreferences optimizationPreferences, Action runLast)
+			IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_backgroundWorker = backgroundWorker;
 			_progressEvent = null;
@@ -245,8 +252,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				//set back
 				optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
 
-				runLast();
+				var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
+				runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,
+					selectedPersons, rollbackService, resourceCalculateDelayer, backgroundWorker,
+					dayOffOptimizationPreferenceProvider);
+
+				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _stateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences, new DesktopMaxSeatCallback(_schedulerStateHolder()));
 			}
+		}
+
+		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
+								IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
+								IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker,
+								IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		{
+			var singleAgentEntry = GroupPageLight.SingleAgentGroup(String.Empty);
+			optimizationPreferences.Extra.TeamGroupPage = singleAgentEntry;
+			optimizationPreferences.Extra.BlockTypeValue = BlockFinderType.SingleDay;
+			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer,
+											selectedPeriod, allMatrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
 		private bool runFlexibleTime(IOptimizationPreferences optimizerPreferences, bool continuedStep,

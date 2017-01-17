@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
-		private readonly IMaxSeatOptimization _maxSeatOptimization;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -38,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
 			IMatrixListFactory matrixListFactory,
-			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IPersonListExtractorFromScheduleParts personExtractor,
@@ -48,8 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPagePerDateHolder groupPagePerDateHolder,
 			WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
 			IRequiredScheduleHelper requiredScheduleHelper,
-			ScheduleOptimizerHelper scheduleOptimizerHelper,
-			IMaxSeatOptimization maxSeatOptimization)
+			ScheduleOptimizerHelper scheduleOptimizerHelper)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
@@ -57,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockOptimizationCommand = teamBlockOptimizationCommand;
 			_matrixListFactory = matrixListFactory;
-			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_periodExtractor = periodExtractor;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_personExtractor = personExtractor;
@@ -68,7 +62,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
 			_requiredScheduleHelper = requiredScheduleHelper;
 			_scheduleOptimizerHelper = scheduleOptimizerHelper;
-			_maxSeatOptimization = maxSeatOptimization;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
@@ -153,31 +146,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 					_scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
-						dayOffOptimizationPreferenceProvider, optimizationPreferences, () =>
-						{
-							var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value);
-							runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod.Value, allMatrixes,
-								selectedPersons, rollbackService, resourceCalculateDelayer, backgroundWorker,
-								dayOffOptimizationPreferenceProvider);
-
-							_maxSeatOptimization.Optimize(selectedPeriod.Value, selectedPersons, schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.AllSkillDays(), optimizationPreferences, new DesktopMaxSeatCallback(schedulerStateHolder));
-						});
+						dayOffOptimizationPreferenceProvider, optimizationPreferences, resourceCalculateDelayer, rollbackService);
 				}
 			}
 
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
-		}
-
-		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, 
-										IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
-										IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker, 
-										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
-		{
-			var singleAgentEntry = GroupPageLight.SingleAgentGroup(String.Empty);
-			optimizationPreferences.Extra.TeamGroupPage = singleAgentEntry;
-			optimizationPreferences.Extra.BlockTypeValue = BlockFinderType.SingleDay;
-			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, 
-											selectedPeriod, allMatrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
 		private void backToLegalState(IList<IScheduleMatrixPro> matrixList,
