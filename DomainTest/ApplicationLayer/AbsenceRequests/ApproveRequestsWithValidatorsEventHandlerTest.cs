@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			setup();
 			_personRequest = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime), false);
 			_personRequest.Deny("test", new PersonRequestAuthorizationCheckerForTest(), null, PersonRequestDenyOption.AutoDeny);
-			_event.PersonRequestIdList = new Guid[] { _personRequest.Id.GetValueOrDefault() };
+			_event.PersonRequestIdList = new[] { _personRequest.Id.GetValueOrDefault() };
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);
 			_personRequest.IsApproved.Should().Be.True();
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var personRequest1 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] { personRequest1.Id.GetValueOrDefault() };
+			_event.PersonRequestIdList = new[] { personRequest1.Id.GetValueOrDefault() };
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);
 			personRequest1.IsApproved.Should().Be.True();
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_endDateTime = new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc);
 			var personRequest1 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] { personRequest1.Id.GetValueOrDefault() };
+			_event.PersonRequestIdList = new[] { personRequest1.Id.GetValueOrDefault() };
 			_target.Handle(_event);
 			personRequest1.IsApproved.Should().Be.True();
 
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_endDateTime = new DateTime(2016, 3, 1, 14, 0, 0, DateTimeKind.Utc);
 			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] { personRequest2.Id.GetValueOrDefault() };
+			_event.PersonRequestIdList = new[] { personRequest2.Id.GetValueOrDefault() };
 			_target.Handle(_event);
 			personRequest2.IsApproved.Should().Be.True();
 

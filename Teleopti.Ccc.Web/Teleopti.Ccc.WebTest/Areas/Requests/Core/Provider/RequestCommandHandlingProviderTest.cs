@@ -27,6 +27,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 {
 #pragma warning disable 0649
+
 	[TestFixture, RequestsTest]
 	public class RequestCommandHandlingProviderTest
 	{
@@ -182,8 +183,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			cmdDispatcher.AssertWasCalled(
 				dispatcher => dispatcher.Execute(
 					Arg<ApproveBatchRequestsCommand>.Matches(
-						cmd => (cmd.PersonRequestIdList.Equals(requestIds)
-								&& (cmd.Validator == RequestValidatorsFlag.BudgetAllotmentValidator)))));
+						cmd => cmd.PersonRequestIdList.Equals(requestIds)
+								&& (cmd.Validator == RequestValidatorsFlag.BudgetAllotmentValidator))));
 
 			result.AffectedRequestIds.Count().Should().Be(0);
 			result.ErrorMessages.Count().Should().Be(0);
@@ -612,5 +613,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			return workflowControlSet;
 		}
 	}
+
 #pragma warning restore 0649
 }

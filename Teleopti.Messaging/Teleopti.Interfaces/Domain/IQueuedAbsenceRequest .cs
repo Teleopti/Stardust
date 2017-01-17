@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IQueuedAbsenceRequest  :IAggregateRoot
+	public interface IQueuedAbsenceRequest : IAggregateRoot
 	{
 		Guid PersonRequest { get; set; }
 		DateTime Created { get; set; }
@@ -12,5 +12,7 @@ namespace Teleopti.Interfaces.Domain
 		DateTime EndDateTime { get; set; }
 
 		DateTime? Sent { get; set; }
+
+		RequestValidatorsFlag MandatoryValidators { get; set; }
 	}
 }

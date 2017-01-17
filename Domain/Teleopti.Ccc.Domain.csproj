@@ -276,7 +276,6 @@
     <Compile Include="ApplicationLayer\Commands\PersonRequestCommandExtensions.cs" />
     <Compile Include="ApplicationLayer\Commands\ReplyRequestCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\ReplyRequestCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\Commands\RequestValidatorsFlag.cs" />
     <Compile Include="Common\IScheduleProjectionHelper.cs" />
     <Compile Include="Common\ScheduleDayProvider.cs" />
     <Compile Include="ApplicationLayer\Events\ApproveRequestsWithValidatorsEvent.cs" />
