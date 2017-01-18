@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly IToggleManager _toggleManager;
 
-		private IEnumerable<IAbsenceRequestValidator> _absenceRequestValidators;
+		private IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> _absenceRequestValidators;
 
 		public MultiAbsenceRequestsUpdater(
 			ICurrentScenario scenarioRepository,
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		public void UpdateAbsenceRequest(IList<Guid> personRequests, IEnumerable<IAbsenceRequestValidator> absenceRequestValidators)
+		public void UpdateAbsenceRequest(IList<Guid> personRequests, IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> absenceRequestValidators)
 		{
 			_absenceRequestValidators = absenceRequestValidators;
 			UpdateAbsenceRequest(personRequests);
@@ -243,8 +243,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(NewBusinessRuleCollection.Minimum(), currentScenario, _schedulingResultStateHolder);
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				var validatorList = getValidatorList(mergedPeriod);
-				var processAbsenceRequest = getAbsenceRequestProcess(mergedPeriod);
+				var validatorList = getValidatorList(personRequest.Id.Value, mergedPeriod);
+				var processAbsenceRequest = getAbsenceRequestProcess(personRequest.Id.Value, mergedPeriod);
 
 				if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
 				{
@@ -286,19 +286,25 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private IProcessAbsenceRequest getAbsenceRequestProcess(IAbsenceRequestOpenPeriod mergedPeriod)
+		private IProcessAbsenceRequest getAbsenceRequestProcess(Guid personRequestId, IAbsenceRequestOpenPeriod mergedPeriod)
 		{
-			return !useSpecificValidators() ? mergedPeriod.AbsenceRequestProcess : new ApproveAbsenceRequestWithValidators();
+			return useSpecificValidators(personRequestId)
+				? new ApproveAbsenceRequestWithValidators()
+				: mergedPeriod.AbsenceRequestProcess;
 		}
 
-		private IEnumerable<IAbsenceRequestValidator> getValidatorList(IAbsenceRequestOpenPeriod mergedPeriod)
+		private IEnumerable<IAbsenceRequestValidator> getValidatorList(Guid personRequestId,
+			IAbsenceRequestOpenPeriod mergedPeriod)
 		{
-			return !useSpecificValidators() ? _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod) : _absenceRequestValidators;
+			return useSpecificValidators(personRequestId)
+				? _absenceRequestValidators[personRequestId]
+				: _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 		}
 
-		private bool useSpecificValidators()
+		private bool useSpecificValidators(Guid personRequestsId)
 		{
-			return _absenceRequestValidators != null && _absenceRequestValidators.Any();
+			return _absenceRequestValidators != null && _absenceRequestValidators.ContainsKey(personRequestsId)
+				   && _absenceRequestValidators[personRequestsId].Any();
 		}
 
 		private void sendRequestCommand(IPersonRequest personRequest)

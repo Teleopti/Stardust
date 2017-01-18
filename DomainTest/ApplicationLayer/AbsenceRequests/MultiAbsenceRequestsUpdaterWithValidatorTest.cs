@@ -95,7 +95,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 
 			Target.UpdateAbsenceRequest(new List<Guid> {personRequest.Id.GetValueOrDefault()},
-				new[] {new StaffingThresholdValidator()});
+				new Dictionary<Guid, IEnumerable<IAbsenceRequestValidator>>
+				{
+					[personRequest.Id.GetValueOrDefault()] = new[] {new StaffingThresholdValidator()}
+				});
 			return personRequest;
 		}
 

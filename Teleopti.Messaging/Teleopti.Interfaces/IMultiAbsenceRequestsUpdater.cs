@@ -8,6 +8,6 @@ namespace Teleopti.Interfaces
 	{
 		void UpdateAbsenceRequest(IList<Guid> personRequests);
 
-		void UpdateAbsenceRequest(IList<Guid> personRequests, IEnumerable<IAbsenceRequestValidator> absenceRequestValidators);
+		void UpdateAbsenceRequest(IList<Guid> personRequests, IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> absenceRequestValidators);
 	}
 }
