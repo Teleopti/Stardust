@@ -139,7 +139,6 @@
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
 				})();
-
 				return [200, {
 					Time: serverTime,
 					States: ret
