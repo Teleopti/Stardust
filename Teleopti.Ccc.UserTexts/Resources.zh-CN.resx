@@ -13315,13 +13315,4 @@ Teleopti R&amp;D</value>
   <data name="UsedBy" xml:space="preserve">
     <value>{0} 已使用</value>
   </data>
-  <data name="PleaseChooseADate" xml:space="preserve">
-    <value>请选择一个日期</value>
-  </data>
-  <data name="PleaseInputStartTime" xml:space="preserve">
-    <value>请输入开始时间</value>
-  </data>
-  <data name="PleaseInputEndTime" xml:space="preserve">
-    <value>请输入结束时间</value>
-  </data>
 </root>

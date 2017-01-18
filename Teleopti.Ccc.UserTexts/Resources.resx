@@ -15443,15 +15443,15 @@ These options are activated:
     <value>No permission to remove overtime activities for agent(s)</value>
     <comment>Error message to notify missing permission for removing overtime activity</comment>
   </data>
-  <data name="PleaseChooseADate" xml:space="preserve">
+  <data name="PleaseChooseADate">
     <value>Please choose a date</value>
     <comment>Error message for no selected date in mytime</comment>
   </data>
-  <data name="PleaseInputStartTime" xml:space="preserve">
+  <data name="PleaseInputStartTime">
     <value>Please input start time</value>
     <comment>Error message for not inputting start time in mytime</comment>
   </data>
-  <data name="PleaseInputEndTime" xml:space="preserve">
+  <data name="PleaseInputEndTime">
     <value>Please input end time</value>
     <comment>Error message for not inputting end time in mytime</comment>
   </data>
