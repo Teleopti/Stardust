@@ -52,8 +52,7 @@
 		};
 
 		vm.canToggleSelection = function (currentProjection, viewDate) {
-			if ((!vm.toggles.RemoveAbsenceEnabled && !vm.toggles.RemoveActivityEnabled) || !currentProjection.Selectable())
-				return false;
+			if (!currentProjection.Selectable()) return false;
 
 			var isSameDay = currentProjection.Parent && currentProjection.Parent.Date === moment(viewDate).format('YYYY-MM-DD');
 			return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;

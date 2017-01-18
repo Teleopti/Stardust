@@ -333,17 +333,19 @@
 		};
 
 		ProjectionViewModel.prototype.Selectable = function () {
-			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0) {
+			if ((this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0) && (toggles.all().RemoveAbsenceEnabled && permissions.all().IsRemoveAbsenceAvailable)) 
 				return true;
-			}
-			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) {
-				return false;
-			}
-			if (!this.IsOvertime) {
-				return true;
-			}
 
-			return toggles.all().WfmTeamSchedule_RemoveOvertime_42481 && permissions.all().HasRemoveOvertimePermission;
+			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) 
+				return false;
+
+			if ((!this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0) && (toggles.all().RemoveActivityEnabled && permissions.all().HasRemoveActivityPermission)) 
+				return true;
+
+			if((this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0) && (toggles.all().WfmTeamSchedule_RemoveOvertime_42481 && permissions.all().HasRemoveOvertimePermission))
+				return true;
+
+			return false;
 		};
 
 		ProjectionViewModel.prototype.ToggleSelection = function () {

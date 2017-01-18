@@ -2,18 +2,26 @@
 	'use strict';
 
 	describe('teamschedule move activity validator tests: ', function() {
-		var target, personSelection, scheduleMgmt;
+		var target, personSelection, scheduleMgmt, fakeTeamsToggles, fakeTeamsPermissions;
 		var defaultUserTimeZone = 'Asia/Hong_Kong';  //UTC+8
 		beforeEach(function () {
 			module("wfm.teamSchedule");
 		});
 
 		beforeEach(function() {
+			fakeTeamsToggles = new FakeTeamsToggles();
+			fakeTeamsPermissions = new FakeTeamsPermissions();
 			module(function($provide) {
 				$provide.service('Toggle', function () {
 					return {
 						WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305: true
 					};
+				});
+				$provide.service('teamsToggles',function(){
+					return fakeTeamsToggles;
+				})
+				$provide.service('teamsPermissions', function () {
+					return fakeTeamsPermissions;
 				});
 				$provide.service('CurrentUserInfo',
 					function() {
@@ -26,11 +34,34 @@
 			});
 		});
 
+		function FakeTeamsToggles(){
+			this.all = function(){
+				return {
+					RemoveAbsenceEnabled: true,
+					RemoveActivityEnabled: true,
+					RemoveOvertimeEnabled: true
+				};
+			};
+		}
+
+		function FakeTeamsPermissions(){
+			this.all = function(){
+				return {
+					IsRemoveAbsenceAvailable: true,
+					IsModifyScheduleAvailable: true,
+					HasRemoveActivityPermission: true,
+					HasMoveActivityPermission: true,
+					HasRemoveOvertimePermission: true
+				};
+			};
+		}
+
 		beforeEach(inject(function (PersonSelection, ScheduleManagement, ActivityValidator) {
 			personSelection = PersonSelection;
 			scheduleMgmt = ScheduleManagement;
 			target = ActivityValidator;
 		}));
+		
 		var scheduleDate = "2016-05-12";
 		var schedule = {
 			"PersonId": "221B-Baker-SomeoneElse",
