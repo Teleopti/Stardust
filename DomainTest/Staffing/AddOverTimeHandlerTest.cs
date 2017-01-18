@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -8,7 +9,11 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
 	[TestFixture]
-	public class AddOverTimeHandlerTest
+	public class AddOverTimeHandlerTest : ISetup
 	{
 		public AddOverTimeHandler Target;
 		public MutableNow Now;
@@ -34,6 +39,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 		public IScheduleStorage ScheduleStorage;
 		public Func<ISchedulingResultStateHolder> SchedulingResultStateHolder;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<AddOverTimeHandler>().For<AddOverTimeHandler>();
+		}
 
 		[Test] 
 		public void ShouldAddOverTimeForPeriodAndSkill()
