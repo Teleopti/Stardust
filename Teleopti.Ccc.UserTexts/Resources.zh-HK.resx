@@ -13297,4 +13297,13 @@ Teleopti R&amp;D</value>
   <data name="DenyDueToTechnicalProblems" xml:space="preserve">
     <value>人力資訊沒有在系統中更新。請聯繫系統管理員。</value>
   </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>請選擇一個日期</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>請輸入開始時間</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>請輸入結束時間</value>
+  </data>
 </root>
