@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".wfm-btn-invis-primary.do-forecast");
-			Browser.Interactions.AssertNotVisibleUsingJQuery(".do-forecast");
 		}
 
 		[Given(@"I use default forecast period and forecast for one workload")]
