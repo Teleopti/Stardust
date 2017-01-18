@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -62,13 +62,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 			IRuleSetBag bag = null;
 			if (@event.ShiftBagToUse.HasValue)
 				bag = _ruleSetBagRepository.Get(@event.ShiftBagToUse.Value);
+			var loadedTime = _now.UtcDateTime();
 			var overTimePreferences = new OvertimePreferences
 			{
 				SelectedTimePeriod = new TimePeriod(@event.OvertimeDurationMin, @event.OvertimeDurationMax) , // how long the overtime should be
 				ScheduleTag = new ScheduleTag(),
 				AvailableAgentsOnly = true,
 				SelectedSpecificTimePeriod =
-					new TimePeriod(_now.UtcDateTime().AddHours(1).Hour,0, _now.UtcDateTime().AddHours(5).Hour,
+					new TimePeriod(loadedTime.AddHours(1).Hour,0, loadedTime.AddHours(5).Hour,
 						0), // when it can start earliest, and end latest
 				OvertimeType = multi,
 				SkillActivity = act,
@@ -76,12 +77,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 			};
 
 			var stateHolder = _schedulerStateHolder();
-			var loadedTime = _now.UtcDateTime();
-			_fillSchedulerStateHolder.Fill(stateHolder, null, null, null, new DateOnlyPeriod(new DateOnly(_now.UtcDateTime().AddDays(-8)), new DateOnly(_now.UtcDateTime().AddDays(8))));
-			var filteredPersons = FilterPersonsOnSkill.Filter(new DateOnly(_now.UtcDateTime()), stateHolder.AllPermittedPersons,
+			var localDateOnly = _now.LocalDateOnly();
+			_fillSchedulerStateHolder.Fill(stateHolder, null, null, null, new DateOnlyPeriod(localDateOnly.AddDays(-8), localDateOnly.AddDays(8)));
+			var filteredPersons = FilterPersonsOnSkill.Filter(localDateOnly, stateHolder.AllPermittedPersons,
 				skill);
 
-			var scheduleDays = stateHolder.Schedules.SchedulesForDay(new DateOnly(_now.UtcDateTime().Date)).ToList();
+			var scheduleDays = stateHolder.Schedules.SchedulesForDay(localDateOnly);
 			var scheduleDaysOnPersonsWithSkill = scheduleDays.Where(scheduleDay => filteredPersons.Select(pers => pers.Id).Contains(scheduleDay.Person.Id)).ToList();
 
 			_scheduleOvertime.Execute(overTimePreferences, new NoSchedulingProgress(), scheduleDaysOnPersonsWithSkill);
@@ -89,9 +90,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			var resCalcData = stateHolder.SchedulingResultState.ToResourceOptimizationData(true, false);
 
-			var period = new DateTimePeriod(_now.UtcDateTime().AddHours(-25), _now.UtcDateTime().AddHours(25));
+			var period = new DateTimePeriod(loadedTime.AddHours(-25), loadedTime.AddHours(25));
 			var periodDateOnly = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
-			//var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));  
 			
 			_updateStaffingLevelReadModel.UpdateFromResourceCalculationData(period, resCalcData,periodDateOnly, loadedTime);
 		}
