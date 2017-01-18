@@ -7,7 +7,7 @@
 			</md-select-header>
 			<md-optgroup ng-repeat="site in $ctrl.groupList | filter: $ctrl.searchTerm">
 				<div class="group-header pointer">
-					<md-checkbox ng-model="site.isChecked" ng-change="$ctrl.updateSiteCheck(site)" ng-style="{'background-color': site.isChecked ? '#c2e085':'transparent'}" ng-disabled="site.teams.length == 0" ng-class="$ctrl.partialTeamsSelected(site) ? 'partial-selected':''"> {{site.name}} </md-checkbox>
+					<md-checkbox ng-model="site.isChecked" ng-change="$ctrl.updateSiteCheck(site)" ng-disabled="site.teams.length == 0" ng-class="{'partial-selected':$ctrl.partialTeamsSelected(site),'site-checked': site.isChecked }"> {{site.name}} </md-checkbox>
 					<span class="dropdown-icon" ng-hide="site.teams.length == 0" ng-click="$ctrl.showTeamListOfSite(site, $event)">
 						<i class="mdi" ng-class="site.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
 					</span>
