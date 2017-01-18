@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 																									ITeamBlockMaxSeatChecker, 
 																									IIsMaxSeatsReachedOnSkillStaffPeriodSpecification, 
 																									IMaxSeatBoostingFactorCalculator,
-																									IMaxSeatsCalculationForTeamBlock
+																									IMaxSeatsCalculationForTeamBlock,
+																									ISeatLimitationWorkShiftCalculator2
 	{
 		public HashSet<ISkill> GetAggregatedSkills(IList<IPerson> teamMembers, DateOnlyPeriod dateOnlyPeriod)
 		{
@@ -43,6 +44,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			bool requiresSeat, double maxSeatBoostingFactor)
 		{
 			throw new NotSupportedException("Shouldn't end up here - if we do, investigate why and see what more to toggle.");
+		}
+
+		public double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods, MaxSeatsFeatureOptions option)
+		{
+			return 0;
 		}
 	}
 }
