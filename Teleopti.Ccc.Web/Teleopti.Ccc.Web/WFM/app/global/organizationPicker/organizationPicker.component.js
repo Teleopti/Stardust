@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module("wfm.teamSchedule")
+	angular.module('wfm.organizationPicker')
 		.component('organizationPicker', {
-			templateUrl: 'app/teamSchedule/html/organizationPicker.tpl.html',
+			templateUrl: 'app/global/organizationPicker/organizationPicker.tpl.html',
 			controller: organizationPickerCtrl,
 			bindings: {			
 				date: '<',
@@ -13,9 +13,9 @@
 			}
 		});
 
-	organizationPickerCtrl.$inject = ['$scope', '$translate', 'TeamSchedule'];
+	organizationPickerCtrl.$inject = ['$scope', '$translate', 'organizationPickerSvc'];
 
-	function organizationPickerCtrl($scope, $translate, teamScheduleSvc) {
+	function organizationPickerCtrl($scope, $translate, orgPickerSvc) {
 		var ctrl = this,
 			currentSite,
 			initialSelectedTeamIds = [];
@@ -26,7 +26,7 @@
 		ctrl.searchTerm = '';
 
 		ctrl.$onInit = function init() {			
-			teamScheduleSvc.getAvailableHierarchy(moment(ctrl.date).format('YYYY-MM-DD'))
+			orgPickerSvc.getAvailableHierarchy(moment(ctrl.date).format('YYYY-MM-DD'))
 				.then(function (resp) {					
 					populateGroupList({ sites: resp.data.Children });
 

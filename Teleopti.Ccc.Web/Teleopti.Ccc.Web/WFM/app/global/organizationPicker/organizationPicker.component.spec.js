@@ -4,15 +4,15 @@ describe('organizationPicker component tests', function () {
 	var $componentController, $q;
 
 	beforeEach(module('wfm.templates'));
-	beforeEach(module('wfm.teamSchedule'));
+	beforeEach(module('wfm.organizationPicker'));
 
 	beforeEach(function () {
-		var fakeTeamSchedule = new FakeTeamSchedule();
+		var fakeOrgPickerSvc = new FakeOrgPickerSvc();
 
 		module(function ($provide) {
-			$provide.service('TeamSchedule',
+			$provide.service('organizationPickerSvc',
 				function () {
-					return fakeTeamSchedule;
+					return fakeOrgPickerSvc;
 				});
 		});
 	});
@@ -23,7 +23,7 @@ describe('organizationPicker component tests', function () {
 	}));
 
 
-	function FakeTeamSchedule() {
+	function FakeOrgPickerSvc() {
 
 		this.getAvailableHierarchy = function () {
 			var data = {

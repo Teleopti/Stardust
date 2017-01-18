@@ -191,16 +191,6 @@ describe("teamschedule controller tests", function() {
 				return { $promise: queryDeferred.promise };
 			}
 		};
-
-		teamScheduleService.getAvailableHierarchy = function(date) {
-			return $q(function (resolve, reject) {
-				resolve({
-					data: {
-						LogonUserTeamId: '111'
-					}
-				});
-			});
-		}
 	};
 
 	function setupMockLocale() {

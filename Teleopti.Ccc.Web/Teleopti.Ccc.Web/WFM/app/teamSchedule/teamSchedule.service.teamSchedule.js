@@ -6,11 +6,8 @@
 
 	function TeamScheduleService($resource, $q, $http) {
 
-		var service = this;
-		var getTeamsHierachyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
+		var service = this;	
 		var searchDayViewScheduleUrl = '../api/TeamSchedule/SearchSchedules';
-
-		service.getAvailableHierarchy = getAvailableHierarchy;
 
 		service.searchSchedules = searchSchedule;
 
@@ -77,9 +74,6 @@
 			return service.getPermissions.query().$promise;
 		};
 
-		function getAvailableHierarchy(dateStr) {
-			var input = getTeamsHierachyUrl + "?date=" + dateStr;
-			return $http.get(input);
-		}
+		
 	}
 })();

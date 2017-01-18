@@ -28,22 +28,7 @@ describe('RequestsControllerTests', function () {
 			});
 			$provide.service('requestCommandParamsHolder', function () {
 				return requestCommandParamsHolder;
-			});
-			$provide.service('requestsDataService',
-				function() {
-					return {
-						getAvailableHierarchy: function() {
-							var response = { data: {} };
-							return {
-								then: function(cb) { cb(response); }
-							}
-						}
-					}
-				});
-
-			$provide.service('requestsPermissions', function() {
-				return new FakeRequestsPermissions();
-			});
+			});			
 		});
 	});
 
@@ -113,13 +98,5 @@ describe('RequestsControllerTests', function () {
 		controller.selectedTabIndex = shiftTradeRequestTabIndex;
 		test.scope.$digest();
 		expect(controller.shiftTradePeriod).toEqual(periodForShiftTradeRequest);
-	});
-
-	function FakeRequestsPermissions() {
-		this.loadPermissions = function () {
-			return $q(function(resolve, reject) {
-				resolve();
-			});
-		};
-	}
+	});	
 });

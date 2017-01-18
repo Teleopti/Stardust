@@ -527,13 +527,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 					Enabled: true
 				}
 			];
-		}
-		this.getAvailableHierarchy = function () {
-			var response = { data: {} };
-			return {
-				then: function (cb) { cb(response); }
-			}
-		}
+		}		
 		this.getBudgetGroupsPromise = function () { return []; }
 	}
 

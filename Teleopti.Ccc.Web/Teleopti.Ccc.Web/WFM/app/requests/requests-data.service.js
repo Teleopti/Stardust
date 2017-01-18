@@ -17,8 +17,7 @@
 		var getSitesUrl = '../api/sites';
 		var maintainOpenHoursUrl = '../api/Sites/MaintainOpenHours';
 		var getLastCaluclatedDateUrl = '../GetLastCaluclatedDateTime';
-		var resourceCalculateUrl = '../TriggerResourceCalculate';
-		var getTeamsHierachyUrl = '../api/Requests/FetchPermittedTeamHierachy';
+		var resourceCalculateUrl = '../TriggerResourceCalculate';		
 		var getBudgetGroupsUrl = "../api/RequestAllowance/budgetGroups";
 		var getBudgetAllowanceUrl = "../api/RequestAllowance/allowances";
 
@@ -146,11 +145,6 @@
 					Enabled: toggleSvc.Wfm_Requests_Check_Expired_Requests_40274
 				}
 			];
-		};
-
-		this.getAvailableHierarchy = function (dateStr) {
-			var input = getTeamsHierachyUrl + "?date=" + dateStr;
-			return $http.get(input);
-		};
+		};		
 	}
 })();
