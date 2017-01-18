@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentsInAlarmForTeamsViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
-			builder.RegisterType<AdherenceDetailsViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();

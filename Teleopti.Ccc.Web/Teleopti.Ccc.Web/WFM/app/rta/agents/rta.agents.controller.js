@@ -69,7 +69,6 @@
 		vm.formatDuration = rtaFormatService.formatDuration;
 		vm.formatToSeconds = rtaFormatService.formatToSeconds;
 		vm.hexToRgb = rtaFormatService.formatHexToRgb;
-		vm.agentDetailsUrl = rtaRouteService.urlForAgentDetails;
 		vm.agentsInAlarm = !$stateParams.showAllAgents;
 		var allGrid = rtaGridService.makeAllGrid();
 		allGrid.data = 'vm.filteredData';
@@ -847,10 +846,6 @@
 		};
 		vm.historicalAdherenceUrl = function (personId) {
 			return rtaRouteService.urlForHistoricalAdherence(personId);
-		};
-
-		vm.agentDetailsUrl = function (personId) {
-			return rtaRouteService.urlForAgentDetails(personId);
 		};
 
 		function getAgentStates() {

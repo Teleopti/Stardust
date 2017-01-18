@@ -11,16 +11,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class AdherenceController : ApiController
 	{
 		private readonly IAdherencePercentageViewModelBuilder _adherencePercentageViewModelBuilder;
-		private readonly IAdherenceDetailsViewModelBuilder _adherenceDetailsViewModelBuilder;
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 
 		public AdherenceController(
 			IAdherencePercentageViewModelBuilder adherencePercentageViewModelBuilder, 
-			IAdherenceDetailsViewModelBuilder adherenceDetailsViewModelBuilder,
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder)
 		{
 			_adherencePercentageViewModelBuilder = adherencePercentageViewModelBuilder;
-			_adherenceDetailsViewModelBuilder = adherenceDetailsViewModelBuilder;
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
 		}
 
@@ -28,13 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public virtual IHttpActionResult ForToday(Guid personId)
 		{
 			var model = _adherencePercentageViewModelBuilder.Build(personId);
-			return Ok(model);
-		}
-
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Adherence/ForDetails")]
-		public virtual IHttpActionResult ForDetails(Guid personId)
-		{
-			var model = _adherenceDetailsViewModelBuilder.Build(personId);
 			return Ok(model);
 		}
 

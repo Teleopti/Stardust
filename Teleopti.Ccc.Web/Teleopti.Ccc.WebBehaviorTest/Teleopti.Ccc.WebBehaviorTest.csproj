@@ -149,11 +149,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\Details.feature.cs">
-      <DependentUpon>Details.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Anywhere\ScheduleChangePermissionControl.feature.cs">
       <DependentUpon>ScheduleChangePermissionControl.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -940,11 +935,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\Details.feature.cs">
-      <DependentUpon>Details.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\MultiBusinessUnits.feature.cs">
       <DependentUpon>MultiBusinessUnits.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1128,10 +1118,6 @@
     <None Include="Anywhere\RealTimeAdherence\Percentage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Percentage.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\Details.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Details.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ScheduleChangePermissionControl.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1493,10 +1479,6 @@
     <None Include="Wfm\RealTimeAdherence\ChangeSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ChangeSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\Details.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Details.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\MultiBusinessUnits.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

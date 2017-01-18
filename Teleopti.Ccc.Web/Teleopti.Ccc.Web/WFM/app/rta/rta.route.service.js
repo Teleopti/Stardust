@@ -18,7 +18,6 @@
 			goToSitesBySkillArea: goToSitesBySkillArea,
 			urlForChangingSchedule: urlForChangingSchedule,
 			urlForHistoricalAdherence: urlForHistoricalAdherence,
-			urlForAgentDetails: urlForAgentDetails,
 			urlForSites: urlForSites,
 			urlForSite: urlForSite,
 			urlForTeams: urlForTeams,
@@ -73,10 +72,6 @@
 
 		function urlForHistoricalAdherence(personId) {
 			return "#/rta/agent-historical/" + personId;
-		};
-
-		function urlForAgentDetails(personId) {
-			return "#/rta/agent-details/" + personId;
 		};
 
 		function urlForSites() {

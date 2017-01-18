@@ -117,11 +117,6 @@ angular
 					url: '/agent-historical/:personId',
 					templateUrl: 'app/rta/historical/rta-historical-SeeAllOutOfAdherences_39146.html',
 					controller: 'RtaHistoricalController as vm',
-				})
-				.state('rta.agent-details', {
-					url: '/agent-details/:personId',
-					templateUrl: 'app/rta/details/rta-agent-details.html',
-					controller: 'RtaAgentDetailsController as vm'
 				});
 		};
 	});

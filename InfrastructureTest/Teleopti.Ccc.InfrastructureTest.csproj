@@ -297,7 +297,6 @@
     <Compile Include="Rta\MappingReadModelReaderSelectionTest.cs" />
     <Compile Include="Rta\MappingReadModelReaderTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\PerformanceMeasurementTestBase.cs" />
-    <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelReaderTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterConcurrencyTest.cs" />
     <Compile Include="RetryingQueueSimulator.cs" />
@@ -338,7 +337,6 @@
     <Compile Include="Repositories\SeatBookingRepositoryTest.cs" />
     <Compile Include="Repositories\SeatPlanRepositoryTest.cs" />
     <Compile Include="Rta\ScheduleReaderTest.cs" />
-    <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusAsSyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />

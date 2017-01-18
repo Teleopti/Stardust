@@ -141,10 +141,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                 .As<IAdherencePercentageReadModelPersister>()
                 .As<IAdherencePercentageReadModelReader>()
                 .SingleInstance();
-            builder.RegisterType<AdherenceDetailsReadModelPersister>()
-                .As<IAdherenceDetailsReadModelPersister>()
-                .As<IAdherenceDetailsReadModelReader>()
-                .SingleInstance();
 			
 			builder.RegisterType<SiteInAlarmReader>()
 					.As<ISiteInAlarmReader>()

@@ -37,7 +37,6 @@
 			getPhoneStates: getPhoneStates,
 			forToday: forToday,
 			getPersonDetails: getPersonDetails,
-			getAdherenceDetails: getAdherenceDetails,
 			getAgentHistoricalData: getAgentHistoricalData
 		}
 
@@ -298,17 +297,6 @@
 			}).$promise;
 		};
 
-		function getAdherenceDetails(data) {
-			return $resource('../api/Adherence/ForDetails', {}, {
-				query: {
-					method: 'GET',
-					isArray: true
-				}
-			}).query({
-				personId: data.personId
-			}).$promise;
-		};
-
 		function getAgentHistoricalData(id) {
 			return $resource('../api/HistoricalAdherence/For', {}, {
 				query: {
@@ -319,58 +307,5 @@
 				personId: id
 			}).$promise;
 		};
-		//
-		// this.getAgentHistoricalData = function (id) {
-		// 	return $q(function(resolve) {
-		// 		resolve({
-		// 			Name: 'Mikkey Dee',
-		// 			Schedule: [{
-		// 				Color: 'lightgreen',
-		// 				StartTime: '2016-10-10 08:00:00',
-		// 				EndTime: '2016-10-10 09:00:00'
-		// 			}, {
-		// 				Color: 'red',
-		// 				StartTime: '2016-10-10 09:00:00',
-		// 				EndTime: '2016-10-10 09:30:00'
-		// 			}, {
-		// 				Color: 'lightgreen',
-		// 				StartTime: '2016-10-10 09:30:00',
-		// 				EndTime: '2016-10-10 11:00:00'
-		// 			}, {
-		// 				Color: 'yellow',
-		// 				StartTime: '2016-10-10 11:00:00',
-		// 				EndTime: '2016-10-10 12:00:00'
-		// 			}, {
-		// 				Color: 'lightgreen',
-		// 				StartTime: '2016-10-10 12:00:00',
-		// 				EndTime: '2016-10-10 14:00:00'
-		// 			}, {
-		// 				Color: 'red',
-		// 				StartTime: '2016-10-10 14:00:00',
-		// 				EndTime: '2016-10-10 15:00:00'
-		// 			}, {
-		// 				Color: 'lightgreen',
-		// 				StartTime: '2016-10-10 15:00:00',
-		// 				EndTime: '2016-10-10 17:00:00'
-		// 			}],
-		// 			OutOfAdherences: [{
-		// 				StartTime: '2016-10-10 08:00:00',
-		// 				EndTime: '2016-10-10 08:03:00'
-		// 			}, {
-		// 				StartTime: '2016-10-10 08:10:00',
-		// 				EndTime: '2016-10-10 08:15:00'
-		// 			}, {
-		// 				StartTime: '2016-10-10 11:58:00',
-		// 				EndTime: '2016-10-10 12:00:00'
-		// 			}, {
-		// 				StartTime: '2016-10-10 12:00:00',
-		// 				EndTime: '2016-10-10 12:05:00'
-		// 			}, {
-		// 				StartTime: '2016-10-10 16:00:00',
-		// 				EndTime: '2016-10-10 16:05:00'
-		// 			}]
-		// 		})
-		// 	});
-		// };
 	};
 })();

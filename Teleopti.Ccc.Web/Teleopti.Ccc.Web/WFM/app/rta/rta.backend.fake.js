@@ -476,13 +476,6 @@
 				})];
 			});
 
-		fake(/\.\.\/api\/Adherence\/ForDetails(.*)/,
-			function (params) {
-				return [200, activityAdherences.filter(function (a) {
-					return a.PersonId === params.personId;
-				})];
-			});
-
 		fake(/\.\.\/api\/Sites$/,
 			function (params) {
 				return [200, sites];

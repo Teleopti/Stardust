@@ -36,11 +36,6 @@ describe('rtaRouteService', function() {
 			.toEqual("#/teams/?personId=11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
-	it('should get agent details url', function() {
-		expect(target.urlForAgentDetails('11610fe4-0130-4568-97de-9b5e015b2564'))
-			.toEqual('#/rta/agent-details/11610fe4-0130-4568-97de-9b5e015b2564');
-	});
-
 	it('should get sites overview url', function() {
 		expect(target.urlForSites()).toEqual('#/rta');
 	});

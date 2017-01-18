@@ -459,7 +459,6 @@
     <Compile Include="SeatManagement\SeatBookingReportModel.cs" />
     <Compile Include="Repositories\SeatBookingRepository.cs" />
     <Compile Include="Repositories\SeatPlanRepository.cs" />
-    <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersister.cs" />
     <Compile Include="Repositories\SeatMapLocationRepository.cs" />
     <Compile Include="Repositories\GamificationSettingRepository.cs" />

@@ -26,9 +26,6 @@
 		};
 
 		function makeGridOptions(alarmOnly) {
-			//if (toggleService.RTA_AdherenceDetails_34267)
-			//	rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AdherenceDetails_34267.html';
-
 			var rowTemplate = 'app/rta/agents/rta-agents-rowtemplate.html';
 			if (toggleService.RTA_SeeAllOutOfAdherencesToday_39146)
 				rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html';

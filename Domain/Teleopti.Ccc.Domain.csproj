@@ -830,9 +830,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailViewModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetailsReadModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetailsReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModel.cs" />
@@ -840,12 +837,10 @@
     <Compile Include="ApplicationLayer\Rta\Service\AgentState.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Mapping.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\CurrentBelongsToDate.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ControllableReadModelTransactionSyncronization.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IInitializeble.cs" />
     <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />
