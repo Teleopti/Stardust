@@ -58,8 +58,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (!_shiftProjectionCacheFilter.CheckRestrictions(schedulingOptions, effectiveRestriction, finderResult))
 				return new WorkShiftFinderServiceResult(null, finderResult);
 
-            var timeZone = person.PermissionInformation.DefaultTimeZone();
-
             var personPeriod = person.Period(scheduleDateOnly);
             IRuleSetBag bag = personPeriod.RuleSetBag;
 
