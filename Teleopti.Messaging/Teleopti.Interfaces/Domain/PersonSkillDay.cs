@@ -31,7 +31,8 @@
 		{
 			return _skills;
 		}
-
+		
+		//REMOVE WHEN MAXSEATTOGGLE IS GONE!
 		public ISkill MaxSeatSkill()
 		{
 			return _maxSeatSkill;

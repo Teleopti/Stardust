@@ -179,9 +179,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>()
 				.As<ILongestPeriodForAssignmentCalculator>()
 				.SingleInstance();
-			builder.RegisterType<PersonSkillPeriodsDataHolderManager>()
-				.As<IPersonSkillPeriodsDataHolderManager>()
-				.InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftFromMasterActivityService>()
 				.As<IShiftFromMasterActivityService>()
@@ -614,6 +611,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IMaxSeatsCalculationForTeamBlock>()
 					.SingleInstance();
 				builder.RegisterType<DontFillStateHolderWithMaxSeatSkills>().As<IFillStateHolderWithMaxSeatSkills>();
+				builder.RegisterType<PersonSkillPeriodsDataHolderManager>().As<IPersonSkillPeriodsDataHolderManager>().InstancePerLifetimeScope();
 			}
 			else
 			{
@@ -627,6 +625,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<MaxSeatBoostingFactorCalculator>().As<IMaxSeatBoostingFactorCalculator>().SingleInstance();
 				builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().SingleInstance();
 				builder.RegisterType<FillStateHolderWithMaxSeatSkills>().As<IFillStateHolderWithMaxSeatSkills>();
+				builder.RegisterType<PersonSkillPeriodsDataHolderManagerOld>().As<IPersonSkillPeriodsDataHolderManager>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<MaxSeatSkillDataFactory>().SingleInstance();
 			builder.RegisterType<SkillsFromMaxSeatSite>().SingleInstance();

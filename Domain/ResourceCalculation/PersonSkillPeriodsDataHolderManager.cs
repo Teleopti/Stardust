@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
+		[RemoveMeWithToggle("Remove maxseatskills from PersonSkillDay below", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public PersonSkillDay Create(DateOnly date, IVirtualSchedulePeriod currentSchedulePeriod)
 		{
 			var personPeriod = currentSchedulePeriod.Person.Period(date);
@@ -50,19 +52,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffDataPerActivity(personSkillDay.Period(), personSkillDay.Skills(), _skillPriorityProvider);
         }
 
-		public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(
-			PersonSkillDay personSkillDay)
+		[RemoveMeWithToggle("Remove this method from interface all together",Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		public virtual IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(PersonSkillDay personSkillDay)
 		{
-			var site = personSkillDay.Team().Site;
-			if (site.MaxSeatSkill == null)
-				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
-
-			var maxSeatSkill = personSkillDay.MaxSeatSkill();
-			if (maxSeatSkill == null)
-				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
-
-			return _schedulingResultStateHolder()
-				.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(new[] {maxSeatSkill}, personSkillDay.Period());
+			return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 		}
 
 		public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonNonBlendSkillSkillStaffPeriods(PersonSkillDay personSkillDay)
@@ -74,4 +67,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodDictionary(nonBlendSkills, personSkillDay.Period());
         }
     }
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+	public class PersonSkillPeriodsDataHolderManagerOld : PersonSkillPeriodsDataHolderManager
+	{
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+
+		public PersonSkillPeriodsDataHolderManagerOld(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, ISkillPriorityProvider skillPriorityProvider) : 
+			base(schedulingResultStateHolder, skillPriorityProvider)
+		{
+			_schedulingResultStateHolder = schedulingResultStateHolder;
+		}
+
+		public override IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(PersonSkillDay personSkillDay)
+		{
+			var site = personSkillDay.Team().Site;
+			if (site.MaxSeatSkill == null)
+				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
+
+			var maxSeatSkill = personSkillDay.MaxSeatSkill();
+			if (maxSeatSkill == null)
+				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
+
+			return _schedulingResultStateHolder()
+				.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(new[] { maxSeatSkill }, personSkillDay.Period());
+		}
+	}
 }

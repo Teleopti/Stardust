@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.UserTexts;
@@ -93,6 +94,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return new WorkShiftFinderServiceResult(result,finderResult);
         }
 
+		[RemoveMeWithToggle("Remove param maxSeatSkillPeriods", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
         private IWorkShiftCalculationResultHolder findHighestValueMainShift(
             DateOnly dateOnly,  
             IList<IShiftProjectionCache> shiftProjectionCaches,
