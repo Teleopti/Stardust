@@ -1525,25 +1525,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public virtual ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength)
         {
-            IList<ISkillStaffPeriodView> views = new List<ISkillStaffPeriodView>();
-            TimeSpan myPeriodLength = new TimeSpan();
+            var views = new List<ISkillStaffPeriodView>();
+            TimeSpan myPeriodLength = TimeSpan.Zero;
             if(SkillStaffPeriodCollection.Count > 0)
             {
                 myPeriodLength = SkillStaffPeriodCollection[0].Period.ElapsedTime();
             }
-            if (myPeriodLength >= periodLength)
-            {
-                foreach (ISkillStaffPeriod period in SkillStaffPeriodCollection)
-                {
-                    IList<ISkillStaffPeriodView> tmpViews = period.Split(periodLength);
-                    foreach (ISkillStaffPeriodView view in tmpViews)
-                    {
-                        views.Add(view);
-                    }
-                }  
-            }
-            
-            return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
+	        if (myPeriodLength < periodLength) return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
+
+	        views.AddRange(SkillStaffPeriodCollection.SelectMany(period => period.Split(periodLength)).ToArray());
+
+	        return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
         }
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]

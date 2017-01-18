@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			createStatistics(userNow.AddMinutes(-minutesPerInterval), userNow.AddMinutes(minutesPerInterval), latestStatsTime);
 
-			var result = Target.Load(new Guid[] { skill1.Id.Value, skill2.Id.Value });
+			var result = Target.Load(new[] { skill1.Id.Value, skill2.Id.Value });
 
 			var forecastedCallsSkill1 = skillDay1.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
 			var forecastedCallsSkill2 = skillDay2.WorkloadDayCollection.First().TaskPeriodList[1].Tasks;
@@ -573,14 +573,17 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), agents, new Tuple<TimePeriod, double>(openHours, agents)).WithId();
 			var index = 0;
 
+			var workloadDay = skillDay.WorkloadDayCollection.First();
+			skillDay.Lock();
 			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))
 			{
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].Tasks = random.Next(195, 210);
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(120);
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(140);
+				workloadDay.TaskPeriodList[index].Tasks = random.Next(195, 210);
+				workloadDay.TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(120);
+				workloadDay.TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(140);
 				index++;
 			}
-
+			skillDay.Release();
+			
 			return skillDay;
 		}
 
