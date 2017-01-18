@@ -39,9 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		public IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 		                                       IShiftProjectionCache roleModel)
 		{
-			if (teamBlockInfo == null)
-				return null;
-			var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
+			var dateOnlyList = teamBlockInfo?.BlockInfo.BlockPeriod.DayCollection();
 			if (dateOnlyList == null) return null;
 
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();

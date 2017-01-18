@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.PayrollTest
 		[Test]
 		public void BatchingShouldNotHaveIntersection()
 		{
-			var mocks = new MockRepository();
-			var schedulingService = mocks.DynamicMock<ITeleoptiSchedulingService>();
+			var schedulingService = MockRepository.GenerateMock<ITeleoptiSchedulingService>();
 
 			var payrollExportDto = new PayrollExportDto
 			{
@@ -34,16 +33,16 @@ namespace Teleopti.Ccc.PayrollTest
 			for (var i = 0; i < 51; i++)
 				payrollExportDto.PersonCollection.Add(new PersonDto());
 
-			schedulingService.Expect(s => s.GetTeleoptiActivitiesExportData(null, null, null, null))
+			schedulingService.Stub(s => s.GetTeleoptiActivitiesExportData(null, null, null, null))
 							 .IgnoreArguments()
 							 .Return(new List<PayrollBaseExportDto>
 			                     {
 				                     new PayrollBaseExportDto(),
 				                     new PayrollBaseExportDto()
 			                     });
-			mocks.ReplayAll();
-
+			
 			Target.ProcessPayrollData(schedulingService, null, payrollExportDto);
+			
 			var argumentsUsed =
 				schedulingService.GetArgumentsForCallsMadeOn(s => s.GetTeleoptiActivitiesExportData(null, null, null, null));
 
@@ -53,6 +52,5 @@ namespace Teleopti.Ccc.PayrollTest
 			var intersection = firstList.Intersect(secondList);
 			intersection.Count().Should().Be.EqualTo(0);
 		}
-
 	}
 }
