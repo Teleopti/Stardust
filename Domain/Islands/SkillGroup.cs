@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -33,6 +34,11 @@ namespace Teleopti.Ccc.Domain.Islands
 		public void RemoveSkill(ISkill skill)
 		{
 			_skills.Remove(skill);
+		}
+
+		public bool HasAnySkillSameAs(SkillGroup skillGroup)
+		{
+			return Skills.Intersect(skillGroup.Skills).Any();
 		}
 	}
 }
