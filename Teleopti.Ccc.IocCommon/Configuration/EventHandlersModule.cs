@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	                select i)
                 .AsSelf()
                 .SingleInstance()
-                .ApplyAspects()
                 .Except<IntradayOptimizationEventHandler>(ct =>
                 {
                     ct.As<IHandleEvent<OptimizationWasOrdered>>()
@@ -124,7 +123,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 							.AsSelf()
 							.InstancePerLifetimeScope()
 							.ApplyAspects();
-				});
+				})
+				.ApplyAspects();
 
 
             builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
