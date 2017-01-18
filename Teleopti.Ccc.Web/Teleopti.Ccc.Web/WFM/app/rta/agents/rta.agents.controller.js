@@ -182,18 +182,21 @@
 		vm.selectedSkillChange = function (skill) {
 			var selectedSkillId = undefined;
 			var selectedSkillAreaId = skillAreaId;
+
 			if (skill) {
 				selectedSkillId = skill.Id;
 				selectedSkillAreaId = undefined
 			}
 
+			var params = {
+				skillIds: selectedSkillId,
+				skillAreaId: selectedSkillAreaId,
+				siteIds: siteIds,
+				teamIds: teamIds
+			};
+
 			if (!skill || (skill.Id != skillIds[0] || $stateParams.skillAreaId))
-				stateGoToAgents({
-					skillIds: selectedSkillId,
-					skillAreaId: selectedSkillAreaId,
-					siteIds: siteIds,
-					teamIds: teamIds
-				});
+				stateGoToAgents(params);
 		}
 
 		vm.selectedSkillAreaChange = function (skillArea) {
@@ -204,13 +207,15 @@
 				selectedSkillAreaId = skillArea.Id
 			}
 
+			var params = {
+				skillIds: selectedSkillId,
+				skillAreaId: selectedSkillAreaId,
+				siteIds: siteIds,
+				teamIds: teamIds
+			};
+
 			if (!skillArea || !(skillArea.Id == $stateParams.skillAreaId))
-				stateGoToAgents({
-					skillAreaId: selectedSkillAreaId,
-					skillIds: selectedSkillId,
-					siteIds: siteIds,
-					teamIds: teamIds
-				});
+				stateGoToAgents(params);
 		}
 
 		/***********MULTI-SELECT************/
@@ -513,15 +518,17 @@
 
 		function getSkillAreaInfo() {
 			return rtaService.getSkillArea(skillAreaId)
-				.then(function (skillArea) {
-					if (skillArea.Skills != null) {
-						vm.skillAreaName = skillArea.Name || '?';
-						vm.skillArea = true;
-						skillIds = skillArea.Skills.map(function (skill) {
-							return skill.Id;
-						});
-					}
+				.then(getSkillIdsFromSkillArea);
+		}
+
+		function getSkillIdsFromSkillArea(skillArea) {
+			if (skillArea.Skills != null) {
+				vm.skillAreaName = skillArea.Name || '?';
+				vm.skillArea = true;
+				skillIds = skillArea.Skills.map(function (skill) {
+					return skill.Id;
 				});
+			}
 		}
 
 		function updateStates2(agentStates) {
