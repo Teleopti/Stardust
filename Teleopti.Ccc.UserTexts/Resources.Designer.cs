@@ -28952,6 +28952,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign in with.
+        /// </summary>
+        public static string SignInWithNoColon {
+            get {
+                return ResourceManager.GetString("SignInWithNoColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign out.
         /// </summary>
         public static string SignOut {

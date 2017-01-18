@@ -15459,4 +15459,8 @@ These options are activated:
     <value>Schedule contract time tolerance was exceeded.</value>
     <comment>Pending reason when shifttrade is not valid because of the targettime</comment>
   </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>Sign in with</value>
+    <comment>login screen</comment>
+  </data>
 </root>

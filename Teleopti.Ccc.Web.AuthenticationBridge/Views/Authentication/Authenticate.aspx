@@ -19,7 +19,7 @@
 						<div id="selector">
 							<form action="" method="get">
 								<input type="hidden" name="action" value="verify" />
-								<span><%=Resources.SignInWith %></span>
+								<span><%=Resources.SignInWithNoColon %></span>
 			
 									<% foreach (var provider in Model.Providers)
 										{ %>
