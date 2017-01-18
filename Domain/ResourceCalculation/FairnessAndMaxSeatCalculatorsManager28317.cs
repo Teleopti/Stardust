@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 IShiftProjectionCache shiftProjection = thisShiftValue.ShiftProjection;
 	            double shiftValue = thisShiftValue.Value;
 
+				//REMOVE THIS BLOCK WITH MAXSEAT TOGGLE
 				if (shiftValue > highestShiftValue && schedulingOptions.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
                 {
                     var seatVal =
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                     shiftValue += seatVal.Value;
                 }
+				////////////////////////////////////////
 
                 if (shiftValue > highestShiftValue)
                 {

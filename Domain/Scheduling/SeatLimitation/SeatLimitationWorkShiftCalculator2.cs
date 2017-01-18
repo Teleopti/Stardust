@@ -1,13 +1,16 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface ISeatLimitationWorkShiftCalculator2
 	{
 		double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods, MaxSeatsFeatureOptions option);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class SeatLimitationWorkShiftCalculator2 : ISeatLimitationWorkShiftCalculator2
 	{
 		private readonly ISeatImpactOnPeriodForProjection _seatImpactOnPeriodForProjection;
