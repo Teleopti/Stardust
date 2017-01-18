@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
@@ -10,16 +14,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 	public class FavoriteSearchController : ApiController
 	{
 		private readonly IFavoriteSearchProvider _favoriteSearchProvider;
+		private readonly IAuthorization _authorization;
 
-		public FavoriteSearchController(IFavoriteSearchProvider favoriteSearchProvider)
+		public FavoriteSearchController(IFavoriteSearchProvider favoriteSearchProvider, IAuthorization authorization)
 		{
 			_favoriteSearchProvider = favoriteSearchProvider;
+			_authorization = authorization;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/FavoriteSearch/FetchAvailableFavorites")]
 		public virtual IList<FavoriteSearchViewModel> FetchAvailableFavorites()
 		{
 			return _favoriteSearchProvider.GetAllForCurrentUser();
+		}
+
+		[UnitOfWork, HttpGet, Route("api/FavoriteSearch/GetPermission")]
+		public virtual JsonResult<bool> GetPermission()
+		{
+			return Json(_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SaveFavoriteSearch));
 		}
 
 		[UnitOfWork,HttpPost, Route("api/FavoriteSearch/AddFavorite")]

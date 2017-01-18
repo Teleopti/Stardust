@@ -1,32 +1,29 @@
 ﻿'use strict';
 describe('favoriteSearch component tests', function () {
 
-	var $componentController, rootScope, $compile, favoriteSearchDataService,fakePermissionsService;
+	var $componentController, rootScope, $compile, favoriteSearchDataService,httpBackend;
 
 
 	beforeEach(module('wfm.templates'));
-	beforeEach(module('wfm.teamSchedule'));
+	beforeEach(module('wfm.favoriteSearch'));
 
 	beforeEach(function () {
 		favoriteSearchDataService = new FakeFavoriteSearchDataService();
-		fakePermissionsService = new FakePermissionsService();
 
 		module(function ($provide) {
 			$provide.service('FavoriteSearchDataService',
 				function () {
 					return favoriteSearchDataService;
 				});
-
-			$provide.service('teamsPermissions',function(){
-				return fakePermissionsService;
-			})
 		});
 	});
 
-	beforeEach(inject(function (_$componentController_, _$rootScope_, _$compile_) {
+	beforeEach(inject(function (_$componentController_, _$rootScope_, _$compile_, _$httpBackend_) {
 		$componentController = _$componentController_;
 		rootScope = _$rootScope_;
 		$compile = _$compile_;
+		httpBackend = _$httpBackend_;
+
 	}));
 
 	it("should populate favorite list", inject(function () {
@@ -127,6 +124,10 @@ describe('favoriteSearch component tests', function () {
 		expect(ctrl.favoriteSearchList[0].Id).toEqual('2');
 	});
 
+	//afterEach(function() {
+	//	httpBackend.flush();
+	//});
+
 
 	function FakeFavoriteSearchDataService() {
 		var fakeData = [
@@ -176,19 +177,10 @@ describe('favoriteSearch component tests', function () {
 		this.changeDefault = function() {
 			return { then: function (cb) { cb(); } };
 		};
-	}
 
-	function FakePermissionsService() {
-		var fakeAllPermissions = {
-			HasSaveFavoriteSearchPermission: true
-		};
-
-		this.set = function (data) {
-			fakeAllPermissions = data;
-		};
-
-		this.all = function () {
-			return fakeAllPermissions;
+		this.getPermission = function() {
+			return { then: function (cb) { cb({data: true}); } };
 		};
 	}
+
 });

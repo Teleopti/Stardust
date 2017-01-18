@@ -1,10 +1,10 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule')
+	angular.module('wfm.favoriteSearch')
 		.component('favoriteSearch',
 		{
-			templateUrl: 'app/teamSchedule/html/favoriteSearch.tpl.html',
+			templateUrl: 'app/global/favoriteSearch/favoriteSearch.tpl.html',
 			controller: favoriteSearchCtrl,
 			bindings: {
 				onInitAsync: '<?',
@@ -13,9 +13,9 @@
 			}
 		});
 
-	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmModal', 'teamsPermissions', 'FavoriteSearchDataService'];
+	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmModal', 'FavoriteSearchDataService'];
 
-	function favoriteSearchCtrl($translate, $mdPanel, $wfmModal, permissionsSvc, FavoriteSearchDataService) {
+	function favoriteSearchCtrl($translate, $mdPanel, $wfmModal, FavoriteSearchDataService) {
 		var ctrl = this;
 		ctrl.favoriteSearchList = [];
 		ctrl.isTest = false;
@@ -33,7 +33,7 @@
 				}
 				],
 				controllerAs: '$ctrl',
-				templateUrl: 'app/teamSchedule/html/favoriteSearchPanel.tpl.html',
+				templateUrl: 'app/global/favoriteSearch/favoriteSearchPanel.tpl.html',
 				panelClass: 'fav-search-panel',
 				position: position,
 				openFrom: ev,
@@ -43,23 +43,24 @@
 				zIndex: 150
 			};
 			$mdPanel.open(config);
-
-			//ctrl.favoriteSearchList.sort(reorderListAccordingToIsDefault);
 		};
 
 		ctrl.$onInit = function () {
-			ctrl.enabled = permissionsSvc.all().HasSaveFavoriteSearchPermission;
+			FavoriteSearchDataService.getPermission()
+				.then(function(response) {
+					ctrl.enabled = response.data;
+					if (!ctrl.enabled) {
+						ctrl.onInitAsync.resolve();
+						return;
+					}
 
-			if ( !ctrl.enabled) {
-				return ctrl.onInitAsync.resolve();
-			}
-
-			FavoriteSearchDataService.getFavoriteSearchList().then(function (resp) {
-				refreshList(resp.data);
-				if (ctrl.onInitAsync) {
-					ctrl.onInitAsync.resolve(ctrl.currentFavorite);
-				}
-			});
+					FavoriteSearchDataService.getFavoriteSearchList().then(function (resp) {
+						refreshList(resp.data);
+						if (ctrl.onInitAsync) {
+							ctrl.onInitAsync.resolve(ctrl.currentFavorite);
+						}
+					});
+				});
 		};
 
 		ctrl.save = function () {

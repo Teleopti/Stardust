@@ -5,34 +5,38 @@ describe('HttpTest', function() {
 		$httpBackend,
 		$http,
 		httpInterceptor,
-		NoticeService;
+		NoticeService,
+		Settings;
 
 	beforeEach(function() {
 		module('wfm.http');
 		module(function($provide) {
 			$provide.service('NoticeService', function() {
 				return {
-					error: function() {}
+					error: function() {
+					}
 				};
 			});
 		});
 	});
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$http_, _httpInterceptor_, _NoticeService_) {
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$http_, _httpInterceptor_, _NoticeService_, _Settings_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		$http = _$http_;
 		httpInterceptor = _httpInterceptor_;
 		NoticeService = _NoticeService_;
+		Settings = _Settings_;
 	}));
 
-	it('Should react to http error 500', function(done) {
+	it('Should react to http error 500', function (done) {
 		var scope = $rootScope.$new();
 		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200,'mock');
 		spyOn(NoticeService, 'error');
 		var rejection = {
 			status: 500
 		};
+		Settings.init();
 		var response = httpInterceptor.responseError(rejection);
 		var successCallback = function() {};
 		var errorCallback = function(resolved) {
@@ -42,7 +46,9 @@ describe('HttpTest', function() {
 
 		response.then(successCallback, errorCallback);
 		scope.$digest();
+
 		$httpBackend.flush();
+		
 	});
 
 	it('Should react to all 4.XX http errors', function(done) {

@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo", "requestsPermissions"];
+	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
 
-	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo, requestsPermissions) {
+	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 		vm.permissionsReady = false;
@@ -20,7 +20,7 @@
 			vm.defaultTeamLoadedDefer.resolve();
 		}
 
-		$q.all([toggleService.togglesLoaded, requestsPermissions.loadPermissions()])
+		$q.all([toggleService.togglesLoaded])
 			.then(vm.defaultTeamLoadedDefer.promise.then(function(defaultTeams) {
 				vm.selectedTeamIds = defaultTeams ? defaultTeams : [];
 			}))

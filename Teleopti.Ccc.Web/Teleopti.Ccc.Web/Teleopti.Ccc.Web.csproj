@@ -1386,6 +1386,14 @@
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
     <Content Include="WFM\app\global\current-user\settings.service.js" />
     <Content Include="WFM\app\global\current-user\_modules.js" />
+    <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.js" />
+    <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.spec.js" />
+    <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.service.js" />
+    <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.tpl.html" />
+    <Content Include="WFM\app\global\favoriteSearch\favoriteSearchPanel.tpl.html" />
+    <Content Include="WFM\app\global\favoriteSearch\_modules.js" />
+    <Content Include="WFM\app\global\modal\miniConfirmModal.tpl.html" />
+    <Content Include="WFM\app\global\modal\modal.service.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.js" />
@@ -1396,7 +1404,6 @@
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.js" />
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.spec.js" />
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
-    <Content Include="WFM\app\requests\requests.service.permissions.js" />
     <Content Include="WFM\app\resourceplanner\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\planningperiods-overview.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.hierarchy.service.js" />
@@ -1504,8 +1511,6 @@
     <Content Include="WFM\app\staffing\staffing.service.js" />
     <Content Include="WFM\app\staffing\_modules.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.html" />
-    <Content Include="WFM\app\teamSchedule\html\favoriteSearch.tpl.html" />
-    <Content Include="WFM\app\teamSchedule\html\favoriteSearchPanel.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\organizationPicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsDatetimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.moveShift.html" />
@@ -1513,8 +1518,6 @@
     <Content Include="WFM\app\teamSchedule\html\timezonePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.moveShift.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.component.favoriteSearch.spec.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.component.favoriteSearch.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.organizationPicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.teamsDatetimePicker.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timeline.js" />
@@ -1672,10 +1675,8 @@
     <Content Include="WFM\app\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.commandCheck.html" />
-    <Content Include="WFM\app\teamSchedule\html\commandConfirmDialog.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.settings.html" />
     <Content Include="WFM\app\teamSchedule\html\dayViewSchedule.html" />
-    <Content Include="WFM\app\teamSchedule\html\miniConfirmModal.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.moveActivity.html" />
     <Content Include="WFM\app\teamSchedule\html\commandMenu.tpl.html" />

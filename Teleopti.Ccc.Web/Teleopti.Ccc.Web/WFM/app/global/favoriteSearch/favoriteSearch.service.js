@@ -1,7 +1,7 @@
 ﻿(function () {
 	"use strict";
 
-	angular.module('wfm.teamSchedule').service('FavoriteSearchDataService', ['$http', FavoriteSearchService]);
+	angular.module('wfm.favoriteSearch').service('FavoriteSearchDataService', ['$http', FavoriteSearchService]);
 
 	function FavoriteSearchService($http) {
 		var svc = this;
@@ -11,6 +11,11 @@
 		var updateFavoriteUrl = '../api/FavoriteSearch/Update';
 		var makeDefaultFavoriteUrl = '../api/FavoriteSearch/ChangeDefault';
 		var deleteFavoriteUrl = '../api/FavoriteSearch/Delete';
+		var getFavoriteSearchPermissionUrl = '../api/FavoriteSearch/GetPermission';
+
+		svc.getPermission = function() {
+			return $http.get(getFavoriteSearchPermissionUrl);
+		}
 
 		svc.getFavoriteSearchList = function () {
 			return $http.get(fetchAvailableFavoritesUrl);
