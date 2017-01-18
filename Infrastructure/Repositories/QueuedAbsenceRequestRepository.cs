@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.Collection;
@@ -27,6 +28,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Or(startCriteria, endCriteria))
 				.AddOrder(Order.Asc("Created"))
 				.List<IQueuedAbsenceRequest>();
+		}
+
+		public IList<IQueuedAbsenceRequest> FindByPersonRequestIds(IEnumerable<Guid> personRequestIds)
+		{
+			var returnQueuedAbsenceRequests = new List<IQueuedAbsenceRequest>();
+			foreach (var idBatch in personRequestIds.Batch(1000))
+			{
+				returnQueuedAbsenceRequests.AddRange(Session.CreateCriteria(typeof(QueuedAbsenceRequest), "req")
+					.Add(Restrictions.In("PersonRequest", idBatch.ToArray()))
+					.List<IQueuedAbsenceRequest>());
+			}
+			return returnQueuedAbsenceRequests;
 		}
 
 		public void Send(List<Guid> requestIds, DateTime timeStamp)

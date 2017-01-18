@@ -49,5 +49,15 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 			return validators;
 		}
+
+		public IEnumerable<IAbsenceRequestValidator> GetValidatorList(RequestValidatorsFlag validator)
+		{
+			if (validator.HasFlag(RequestValidatorsFlag.BudgetAllotmentValidator))
+				yield return new BudgetGroupHeadCountValidator();
+			if (validator.HasFlag(RequestValidatorsFlag.IntradayValidator))
+				yield return new StaffingThresholdValidator();
+			if (validator.HasFlag(RequestValidatorsFlag.ExpirationValidator))
+				yield return new RequestExpirationValidator(_expiredRequestValidator);
+		}
 	}
 }

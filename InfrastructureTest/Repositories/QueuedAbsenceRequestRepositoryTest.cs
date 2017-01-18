@@ -112,6 +112,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().PersonRequest.Should().Be.EqualTo(notDeletedId);
 		}
 
+		[Test]
+		public void ShouldFindQueuedAbsenceRequestsByPersonRequestIds()
+		{
+			var sent = DateTime.UtcNow;
+
+			var personRequest1 = createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0), sent);
+			var personRequest2 = createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0), sent);
+
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			var queuedAbsenceRequests = target.FindByPersonRequestIds(new[] {personRequest1});
+
+			queuedAbsenceRequests.Count.Should().Be(1);
+			queuedAbsenceRequests.First().PersonRequest.Should().Be(personRequest1);
+		}
+
 		private Guid createQueduedRequest(DateTime start, DateTime end, DateTime? sentDateTime)
 		{
 			var period = new DateTimePeriod(

@@ -118,5 +118,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			queuedReq.EndDateTime = period.EndDateTime;
 			return 1;
 		}
+
+		public IList<IQueuedAbsenceRequest> FindByPersonRequestIds(IEnumerable<Guid> personRequestIds)
+		{
+			return _queuedRequests.Where(q => personRequestIds.Contains(q.PersonRequest)).ToList();
+		}
 	}
 }

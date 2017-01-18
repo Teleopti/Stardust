@@ -23,11 +23,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IMultiAbsenceRequestsUpdater _multiAbsenceRequestsUpdater;
+		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository,
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_workflowControlSetRepository = workflowControlSetRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_multiAbsenceRequestsUpdater = multiAbsenceRequestsUpdater;
+			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 		}
 
 		[AsSystem]
@@ -46,8 +48,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			
 			_feedback.SendProgress($"Done Checking Person Requests. {personRequests.Count} will be processed.");
 			if (!personRequests.IsNullOrEmpty())
-				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequests);
-
+			{
+				IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> requestValidators;
+				using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					requestValidators = getMandatoryValidators(personRequests);
+				}
+				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequests, requestValidators);
+			}
+				
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				_queuedAbsenceRequestRepository.Remove(@event.Sent);
@@ -117,6 +126,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				
 			}
 			return requests.Select(x => x.Id.GetValueOrDefault()).ToList();
+		}
+
+		private IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> getMandatoryValidators(IEnumerable<Guid> personRequestIds)
+		{
+			var requestValidators = new Dictionary<Guid, IEnumerable<IAbsenceRequestValidator>>();
+			var queuedAbsenceRequests = _queuedAbsenceRequestRepository.FindByPersonRequestIds(personRequestIds);
+			foreach (var queuedAbsenceRequest in queuedAbsenceRequests)
+			{
+				var mandatoryValidators = queuedAbsenceRequest.MandatoryValidators;
+				if (requestValidators.ContainsKey(queuedAbsenceRequest.PersonRequest))
+					continue;
+				requestValidators.Add(queuedAbsenceRequest.PersonRequest,
+					_absenceRequestValidatorProvider.GetValidatorList(mandatoryValidators));
+			}
+			return requestValidators;
 		}
 
 		private class isNullOrNotNewSpecification : Specification<IPersonRequest>
