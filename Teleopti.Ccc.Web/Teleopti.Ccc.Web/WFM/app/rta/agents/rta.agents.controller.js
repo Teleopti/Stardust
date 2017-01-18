@@ -598,7 +598,6 @@
 					SiteAndTeamName: state.SiteName + '/' + state.TeamName,
 					TeamName: state.TeamName,
 					SiteName: state.SiteName,
-					PersonId: state.PersonId,
 					TeamId: state.TeamId,
 					State: state.State,
 					Activity: state.Activity,
