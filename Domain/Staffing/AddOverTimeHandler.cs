@@ -3,10 +3,12 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IRuleSetBagRepository _ruleSetBagRepository;
 		private readonly INow _now;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 
 		public AddOverTimeHandler(ScheduleOvertime scheduleOvertime,
 								  INow now, IFillSchedulerStateHolder fillSchedulerStateHolder,
@@ -36,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository,
 								  IUpdateStaffingLevelReadModel updateStaffingLevelReadModel,
 								  ISkillRepository skillRepository,
-								  IRuleSetBagRepository ruleSetBagRepository, IStardustJobFeedback stardustJobFeedback, ICurrentUnitOfWork currentUnitOfWork)
+								  IRuleSetBagRepository ruleSetBagRepository, IStardustJobFeedback stardustJobFeedback, 
+								  IScheduleDifferenceSaver scheduleDifferenceSaver)
 		{
 			_scheduleOvertime = scheduleOvertime;
 			_now = now;
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_skillRepository = skillRepository;
 			_ruleSetBagRepository = ruleSetBagRepository;
 			_stardustJobFeedback = stardustJobFeedback;
-			_currentUnitOfWork = currentUnitOfWork;
+			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 		}
 
 		[AsSystem]
@@ -63,14 +66,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (@event.ShiftBagToUse.HasValue)
 				bag = _ruleSetBagRepository.Get(@event.ShiftBagToUse.Value);
 			var loadedTime = _now.UtcDateTime();
+			var startTime = TimeSpan.FromHours(loadedTime.AddHours(1).Hour);
 			var overTimePreferences = new OvertimePreferences
 			{
 				SelectedTimePeriod = new TimePeriod(@event.OvertimeDurationMin, @event.OvertimeDurationMax) , // how long the overtime should be
-				ScheduleTag = new ScheduleTag(),
+				ScheduleTag = new NullScheduleTag(),
 				AvailableAgentsOnly = true,
 				SelectedSpecificTimePeriod =
-					new TimePeriod(loadedTime.AddHours(1).Hour,0, loadedTime.AddHours(5).Hour,
-						0), // when it can start earliest, and end latest
+					new TimePeriod(startTime, startTime.Add(TimeSpan.FromHours(24))), // when it can start earliest, and end latest
 				OvertimeType = multi,
 				SkillActivity = act,
 				ShiftBagToUse = bag
@@ -82,11 +85,20 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var filteredPersons = FilterPersonsOnSkill.Filter(localDateOnly, stateHolder.AllPermittedPersons,
 				skill);
 
-			var scheduleDays = stateHolder.Schedules.SchedulesForDay(localDateOnly);
+			var scheduleDays = stateHolder.Schedules.SchedulesForDay(localDateOnly).ToList();
+			if (!scheduleDays.Any()) return;
 			var scheduleDaysOnPersonsWithSkill = scheduleDays.Where(scheduleDay => filteredPersons.Select(pers => pers.Id).Contains(scheduleDay.Person.Id)).ToList();
-
+			
 			_scheduleOvertime.Execute(overTimePreferences, new NoSchedulingProgress(), scheduleDaysOnPersonsWithSkill);
-			_currentUnitOfWork.Current().PersistAll();
+
+			var changes = stateHolder.Schedules.DifferenceSinceSnapshot();
+			foreach (var change in changes)
+			{
+				if(change.CurrentItem == null || change.CurrentItem.GetType() != typeof(PersonAssignment)) continue;
+				IDifferenceCollection<IPersistableScheduleData> changeCollection = new DifferenceCollection<IPersistableScheduleData>() {change};
+				_scheduleDifferenceSaver.SaveChanges(changeCollection, (IUnvalidatedScheduleRangeUpdate)stateHolder.Schedules[change.CurrentItem.Person]);
+			}
+			
 
 			var resCalcData = stateHolder.SchedulingResultState.ToResourceOptimizationData(true, false);
 
