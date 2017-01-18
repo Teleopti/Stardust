@@ -45,14 +45,14 @@ describe('RtaAgentsController', function () {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			TeamName: "Team Preferences"
 		})
-		.withOrganization({
-			Id: 'LondonSiteId',
-			Name: 'London',
-			Teams: [{
-				Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
-				Name: 'Team Preferences'
-			}]
-		});
+			.withOrganization({
+				Id: 'LondonSiteId',
+				Name: 'London',
+				Teams: [{
+					Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
+					Name: 'Team Preferences'
+				}]
+			});
 
 		var vm = $controllerBuilder.createController().vm;
 
@@ -65,14 +65,14 @@ describe('RtaAgentsController', function () {
 			SiteName: "London",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		})
-		.withOrganization({
-			Id: 'LondonId',
-			Name: 'London',
-			Teams: [{
-				Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
-				Name: 'Team Preferences'
-			}]
-		});
+			.withOrganization({
+				Id: 'LondonId',
+				Name: 'London',
+				Teams: [{
+					Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
+					Name: 'Team Preferences'
+				}]
+			});
 
 		var vm = $controllerBuilder.createController().vm;
 
@@ -112,7 +112,7 @@ describe('RtaAgentsController', function () {
 
 	it('should set to multiple teams when selecting teams', function () {
 		stateParams.teamIds = ["e5f968d7-6f6d-407c-81d5-9b5e015ab495", "d7a9c243-8cd8-406e-9889-9b5e015ab495"];
-			$fakeBackend.withOrganization({
+		$fakeBackend.withOrganization({
 			Id: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c',
 			Name: 'London',
 			Teams: [{
@@ -164,22 +164,23 @@ describe('RtaAgentsController', function () {
 			SiteId: "LondonId",
 			SiteName: "London"
 		})
-		.withOrganization({
-			Id: 'LondonId',
-			Name: 'London',
-			Teams: [{
-				Id: 'TeamPreferencesId',
-				Name: 'Team Preferences'
-			}]
-		},
-		{
-			Id: 'ParisId',
-			Name: 'Paris',
-			Teams: [{
-				Id: 'Team1Id',
-				Name: 'Team 1'
-			}]
-		});
+			.withOrganization({
+				Id: 'LondonId',
+				Name: 'London',
+				Teams: [{
+					Id: 'TeamPreferencesId',
+					Name: 'Team Preferences'
+				}]
+			})
+			.withOrganization(
+			{
+				Id: 'ParisId',
+				Name: 'Paris',
+				Teams: [{
+					Id: 'Team1Id',
+					Name: 'Team 1'
+				}]
+			});
 
 		vm = $controllerBuilder.createController().vm;
 
@@ -212,13 +213,13 @@ describe('RtaAgentsController', function () {
 				SiteId: "44590a63-6331-4921-bc9f-9b5e015ab495"
 			})
 			.withOrganization({
-			Id: '44590a63-6331-4921-bc9f-9b5e015ab495',
-			Name: 'London',
-			Teams: [{
-				Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
-				Name: 'Team Preferences'
-			}]
-		});
+				Id: '44590a63-6331-4921-bc9f-9b5e015ab495',
+				Name: 'London',
+				Teams: [{
+					Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
+					Name: 'Team Preferences'
+				}]
+			});
 
 		vm = $controllerBuilder.createController().vm;
 
@@ -234,15 +235,15 @@ describe('RtaAgentsController', function () {
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				SiteId: "44590a63-6331-4921-bc9f-9b5e015ab495",
 				SkillId: "3d5dd51a-8713-42e9-9f33-9b5e015ab71b"
-			})	
+			})
 			.withOrganization({
-			Id: '44590a63-6331-4921-bc9f-9b5e015ab495',
-			Name: 'London',
-			Teams: [{
-				Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
-				Name: 'Team Preferences'
-			}]
-		});
+				Id: '44590a63-6331-4921-bc9f-9b5e015ab495',
+				Name: 'London',
+				Teams: [{
+					Id: '34590a63-6331-4921-bc9f-9b5e015ab495',
+					Name: 'Team Preferences'
+				}]
+			});
 
 		vm = $controllerBuilder.createController().vm;
 
