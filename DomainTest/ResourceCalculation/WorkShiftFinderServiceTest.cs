@@ -242,7 +242,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_preSchedulingStatusChecker.CheckStatus(null, null, _schedulingOptions)).Return(true).IgnoreArguments();
                 Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
-                Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, false, true)).Return(new List<IShiftProjectionCache>());
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, true, true)).Return(new List<IShiftProjectionCache>()); 
@@ -264,7 +263,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
 			Expect.Call(_preSchedulingStatusChecker.CheckStatus(null, null, _schedulingOptions)).Return(true).IgnoreArguments();
 			Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
-			Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
 			Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, false, true)).Return(new List<IShiftProjectionCache>());
 		}
@@ -411,7 +409,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
             Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_part.DateOnlyAsPeriod).Return(_scheduleDateOnlyPeriod).Repeat.AtLeastOnce();
-			Expect.Call(_person.PermissionInformation).Return(_info);
             Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, (IRuleSetBag) null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, (IRuleSetBag) null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
