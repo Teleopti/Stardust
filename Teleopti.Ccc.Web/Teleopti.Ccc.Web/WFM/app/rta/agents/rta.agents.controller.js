@@ -137,83 +137,14 @@
 			if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 				toggleService.togglesLoaded.then(function () {
 					if (toggleService.RTA_FasterAgentsView_42039) {
-						getAgentStates()
-							.then(function (fn) {
-								return fn({
-									siteIds: siteIds,
-									teamIds: teamIds,
-									skillIds: skillIds,
-									skillAreaId: skillAreaId,
-									excludedStateIds: excludedStateIds()
-										.map(function (s) {
-											return s === nullStateId ? null : s;
-										})
-								})
-							})
-							.then(function (agentsInfo) {
-								vm.agentsInfo = agentsInfo.States;
-								vm.agents = agentsInfo.States;
-								$scope.$watchCollection(function () {
-									return vm.agents;
-								}, filterData);
-								updateBreadCrumb(vm.agentsInfo);
-								vm.pollingLock = true;
-								return agentsInfo;
-							})
-							.then(function (data) {
-								updateStates2(data);
-							})
-							.then(updatePhoneStatesFromStateParams);
-
-						updateStatesDelegate = function () {
-							getAgentStates()
-								.then(function (fn) {
-									return fn({
-										siteIds: siteIds,
-										teamIds: teamIds,
-										skillIds: skillIds,
-										skillAreaId: skillAreaId,
-										excludedStateIds: excludedStateIds()
-											.map(function (s) {
-												return s === nullStateId ? null : s;
-											})
-									});
-								})
-								.then(function (agentsInfo) {
-									vm.agentsInfo = agentsInfo;
-									vm.agents = agentsInfo;
-									$scope.$watchCollection(function () {
-										return vm.agents;
-									}, filterData);
-									vm.pollingLock = true;
-									return agentsInfo;
-								})
-								.then(function (data) {
-									updateStates2(data);
-								})
-								.then(updatePhoneStatesFromStateParams);
-						}
+						agentState();
+						updateStatesDelegate = agentState;
 					}
 
 					else {
 						getAgents()
-							.then(function (fn) {
-								return fn({
-									siteIds: siteIds,
-									teamIds: teamIds,
-									skillIds: skillIds,
-									skillAreaId: skillAreaId
-								});
-							})
-							.then(function (agentsInfo) {
-								vm.agentsInfo = agentsInfo;
-								vm.agents = agentsInfo;
-								$scope.$watchCollection(function () {
-									return vm.agents;
-								}, filterData);
-								updateBreadCrumb(agentsInfo);
-								vm.pollingLock = true;
-							})
+							.then(agentsByParams)
+							.then(agentsInfo)
 							.then(updateStates)
 							.then(updatePhoneStatesFromStateParams);
 					}
@@ -221,6 +152,25 @@
 
 			}
 		})();
+
+		function agentsByParams(fn) {
+			return fn({
+				siteIds: siteIds,
+				teamIds: teamIds,
+				skillIds: skillIds,
+				skillAreaId: skillAreaId
+			});
+		}
+
+		function agentsInfo(agentsInfo) {
+			vm.agentsInfo = agentsInfo;
+			vm.agents = agentsInfo;
+			$scope.$watchCollection(function () {
+				return vm.agents;
+			}, filterData);
+			updateBreadCrumb(agentsInfo);
+			vm.pollingLock = true;
+		}
 
 
 		/*********AUTOCOMPLETE*****/
@@ -490,6 +440,37 @@
 		);
 
 		///////////////////////////////////////////////////////////////////
+		function agentState() {
+			getAgentStates()
+				.then(getAgentStatesByParams)
+				.then(getAgentsInfo)
+				.then(updateStates2)
+				.then(updatePhoneStatesFromStateParams);
+		}
+
+		function getAgentStatesByParams(fn) {
+			return fn({
+				siteIds: siteIds,
+				teamIds: teamIds,
+				skillIds: skillIds,
+				skillAreaId: skillAreaId,
+				excludedStateIds: excludedStateIds()
+					.map(function (s) {
+						return s === nullStateId ? null : s;
+					})
+			})
+		}
+
+		function getAgentsInfo(agentsInfo) {
+			vm.agentsInfo = agentsInfo.States;
+			vm.agents = agentsInfo.States;
+			$scope.$watchCollection(function () {
+				return vm.agents;
+			}, filterData);
+			updateBreadCrumb(vm.agentsInfo);
+			vm.pollingLock = true;
+			return agentsInfo;
+		}
 
 		function getAgentStates() {
 			var deferred = $q.defer();
@@ -508,7 +489,7 @@
 			}
 			return deferred.promise;
 		};
-	
+
 		function getAgents() {
 			var deferred = $q.defer();
 			if (skillAreaId) {
