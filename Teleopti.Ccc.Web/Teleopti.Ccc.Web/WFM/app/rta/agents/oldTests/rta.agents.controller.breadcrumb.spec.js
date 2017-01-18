@@ -129,7 +129,7 @@ describe('RtaAgentsController', function() {
 		expect(vm.siteName).toEqual("Multiple Sites");
 	});
 
-	xit('should set team and site name', function() {
+	it('should set team and site name', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
 		$fakeBackend.withAgent({
@@ -139,11 +139,8 @@ describe('RtaAgentsController', function() {
 			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 			SiteName: "London"
 		});
-
 		vm = $controllerBuilder.createController().vm;
-
-		expect(vm.teamName).toEqual("Team Preferences");
-		expect(vm.siteName).toEqual("London");
+		expect(vm.teamName).toEqual("Multiple Teams");
 	});
 
 	it('should hide Breadcrumb', function() {
