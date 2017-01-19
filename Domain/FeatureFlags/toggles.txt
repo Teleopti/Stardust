@@ -135,7 +135,7 @@ wfm_Requests_ReadModelOldData_42046 = true
 Wfm_Requests_ShowBudgetAllowanceDetail_41945 = RC
 Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309 = true
 Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450 = RC
-Wfm_Requests_SaveFavoriteSearches_42578 = DEV
+Wfm_Requests_SaveFavoriteSearches_42578 = RC
 
 Wfm_Seatplan_UseDatePeriodForPlanning_42167 = DEV
 
