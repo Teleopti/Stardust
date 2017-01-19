@@ -31555,6 +31555,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TimeOOA.
+        /// </summary>
+        public static string TimeOOA {
+            get {
+                return ResourceManager.GetString("TimeOOA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value of gold threshold for AHT should be smaller than the rest..
         /// </summary>
         public static string TimeSpanTextBoxGoldThresholdForAHT {

@@ -4,9 +4,9 @@
 		.module('wfm.rta')
 		.factory('rtaGridService', rtaGridService);
 
-	rtaGridService.$inject = ['Toggle', 'uiGridConstants', 'rtaLocaleLanguageSortingService'];
+	rtaGridService.$inject = ['$translate', 'Toggle', 'uiGridConstants', 'rtaLocaleLanguageSortingService'];
 
-	function rtaGridService(toggleService, uiGridConstants, rtaLocaleLanguageSortingService) {
+	function rtaGridService($translate, toggleService, uiGridConstants, rtaLocaleLanguageSortingService) {
 
 		var service = {
 			makeAllGrid: makeAllGrid,
@@ -35,51 +35,46 @@
 			var columnDefs = [];
 
 			var name = {
-				displayName: 'Name',
+				displayName: $translate.instant('Name'),
 				field: 'Name',
 				headerCellTemplate: headerCellTemplate,
 				cellTemplate: coloredCellTemplate,
-				headerCellFilter: 'translate',
 				sort: alarmOnly ? null : {
 					direction: 'asc'
 				},
 				sortingAlgorithm: rtaLocaleLanguageSortingService.sort
 			};
 			var siteAndTeam = {
-				displayName: 'Site/Team',
+				displayName: $translate.instant('SiteTeam'),
 				field: 'SiteAndTeamName',
 				headerCellTemplate: headerCellTemplate,
 				cellTemplate: coloredCellTemplate,
-				headerCellFilter: 'translate',
 				sortingAlgorithm: rtaLocaleLanguageSortingService.sort
 			};
 
 			var state = {
-				displayName: 'State',
+				displayName: $translate.instant('State'),
 				field: 'State',
 				headerCellTemplate: headerCellTemplate,
 				cellTemplate: coloredCellTemplate,
-				headerCellFilter: 'translate'
 			};
 
 			var alarm = {
-				displayName: 'Alarm',
+				displayName: $translate.instant('Alarm'),
 				field: 'Alarm',
 				headerCellTemplate: headerCellTemplate,
 				cellTemplate: alarmCellTemplate,
-				headerCellFilter: 'translate'
 			};
 
 			var timeOutOfAdherence = {
-				displayName: 'Time OOA',
+				displayName: $translate.instant('TimeOOA'),
 				field: 'TimeOutOfAdherence',
 				headerCellTemplate: headerCellTemplate,
 				cellTemplate: coloredCellTemplate,
-				headerCellFilter: 'translate'
 			};
 
 			var timeInAlarm = {
-				displayName: 'Time in Alarm',
+				displayName: $translate.instant('TimeInAlarm'),
 				field: 'TimeInAlarm',
 				headerCellTemplate: headerCellTemplate,
 				sort: alarmOnly ?  {
@@ -87,17 +82,15 @@
 				}
 				 : null,
 				cellTemplate: coloredCellTemplate,
-				headerCellFilter: 'translate'
 			};
 
 			var shift = {
-				displayName: 'Shift',
+				displayName: $translate.instant('Shift'),
 				field: 'Shift',
 				enableColumnMenu: false,
 				headerCellTemplate: 'app/rta/agents/rta-agents-headershiftcelltemplate.html',
 				cellClass: 'shift-class',
 				cellTemplate: 'app/rta/agents/rta-agents-shiftcelltemplate.html',
-				headerCellFilter: 'translate',
 				width: "42%",
 				headerCellClass: 'white-cell-header',
 				enableHiding: false
