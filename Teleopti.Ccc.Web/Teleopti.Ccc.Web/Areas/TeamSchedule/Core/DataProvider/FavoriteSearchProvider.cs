@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_favoriteSearchRepo = favoriteSearchRepo;
 		}
 
-		public IList<FavoriteSearchViewModel> GetAllForCurrentUser()
+		public IList<FavoriteSearchViewModel> GetAllForCurrentUser(WfmArea area)
 		{
 			var currentUser = _loggonUser.CurrentUser();
-			return _favoriteSearchRepo.FindAllForPerson(currentUser.Id.GetValueOrDefault()).Select(f => new FavoriteSearchViewModel
+			return _favoriteSearchRepo.FindAllForPerson(currentUser.Id.GetValueOrDefault(), area).Select(f => new FavoriteSearchViewModel
 			{
 				Id =f.Id.GetValueOrDefault(),
 				Name = f.Name,
@@ -33,14 +33,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}).OrderBy(f => f.Name).ToList();
 		}
 
-		public IFavoriteSearch AddFavoriteSearch(FavoriteSearchFormData input)
+		public IFavoriteSearch AddFavoriteSearch(FavoriteSearchFormData input, WfmArea area)
 		{
 			var fav = new FavoriteSearch(input.Name)
 			{
 				SearchTerm = input.SearchTerm,
-				TeamIds = String.Join(",", input.TeamIds.Select(t => t.ToString())),
+				TeamIds = string.Join(",", input.TeamIds.Select(t => t.ToString())),
 				Creator = _loggonUser.CurrentUser(),
-				Status = FavoriteSearchStatus.Normal
+				Status = FavoriteSearchStatus.Normal,
+				WfmArea = area
 			};
 			_favoriteSearchRepo.Add(fav);
 
@@ -75,8 +76,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 	public interface IFavoriteSearchProvider
 	{
-		IList<FavoriteSearchViewModel> GetAllForCurrentUser();
-		IFavoriteSearch AddFavoriteSearch(FavoriteSearchFormData input);
+		IList<FavoriteSearchViewModel> GetAllForCurrentUser(WfmArea area);
+		IFavoriteSearch AddFavoriteSearch(FavoriteSearchFormData input, WfmArea area);
 		void UpdateFavoriteSearch(FavoriteSearchFormData input);
 		void DeleteFavoriteSearch(Guid id);
 		void ChangeDefaultFavorite(ChangeDefaultFormData input);

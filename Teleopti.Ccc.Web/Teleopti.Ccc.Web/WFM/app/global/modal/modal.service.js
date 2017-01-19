@@ -2,8 +2,8 @@
 
     'use strict';
 
-    angular.module('wfm.modal', [])
-        .factory('$wfmModal', wfmModalService);
+    angular.module('wfm.confirmModal', [])
+        .factory('$wfmConfirmModal', wfmModalService);
 
     wfmModalService.$inject = ['$rootScope', '$compile', '$controller', '$templateRequest', '$q'];
 

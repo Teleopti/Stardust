@@ -13,7 +13,7 @@
 			}
 		});
 
-	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmModal', 'FavoriteSearchDataService'];
+	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmConfirmModal', 'FavoriteSearchDataService'];
 
 	function favoriteSearchCtrl($translate, $mdPanel, $wfmModal, FavoriteSearchDataService) {
 		var ctrl = this;
@@ -83,7 +83,6 @@
 
 			var isNameValid = ctrl.currentName && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
 			var hasTeamIds = angular.isArray(currentSearch.teamIds) && currentSearch.teamIds.length > 0;
-
 			if (!ctrl.currentFavorite) return isNameValid && hasTeamIds;
 
 			var nameChanged = ctrl.currentName != ctrl.currentFavorite.Name;

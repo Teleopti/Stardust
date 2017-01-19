@@ -28,7 +28,7 @@
 		}
 	}
 
-	removeAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScenarioTestUtil'];
+	removeAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScenarioTestUtil'];
 
 	function removeAbsenceCtrl(PersonAbsenceSvc, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
 		var vm = this;

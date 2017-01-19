@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+﻿using System;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private string _searchTerm;
 		private FavoriteSearchStatus _status = FavoriteSearchStatus.Normal;
 		private IPerson _createdBy;
+		private WfmArea _wfmArea;
 
 		public FavoriteSearch(string name) : this()
 		{
@@ -64,12 +66,25 @@ namespace Teleopti.Ccc.Domain.Common
 			get { return _createdBy; }
 			set { _createdBy = value; }
 		}
+
+		public virtual WfmArea WfmArea
+		{
+			get { return _wfmArea; }
+			set { _wfmArea = value; }
+		}
 	}
 
-
+	[Flags]
 	public enum FavoriteSearchStatus
 	{
 		Normal = 0,
-		Default
+		Default = 1
+	}
+
+	[Flags]
+	public enum WfmArea
+	{		
+		Teams = 1,
+		Requests = 2
 	}
 }

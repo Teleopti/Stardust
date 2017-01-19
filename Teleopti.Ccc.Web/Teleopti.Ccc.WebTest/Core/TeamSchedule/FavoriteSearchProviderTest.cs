@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldGetSortedFavoritesCreatedByUser()
+		public void ShouldGetSortedFavoritesCreatedByUserInGivenArea()
 		{
 			me = PersonFactory.CreatePerson("ashley").WithId();
 			var john = PersonFactory.CreatePerson("john").WithId();
@@ -37,16 +37,19 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var fav1 = new FavoriteSearch("ashley1").WithId();
 			fav1.Creator = me;
+			fav1.WfmArea = WfmArea.Teams;
 			var fav2 = new FavoriteSearch("john").WithId();
 			fav2.Creator = john;
+			fav2.WfmArea = WfmArea.Teams;
 			var fav3 = new FavoriteSearch("ashley0").WithId();
 			fav3.Creator = me;
+			fav3.WfmArea = WfmArea.Teams;
 
 			FavoriteSearchRepository.Add(fav1);
 			FavoriteSearchRepository.Add(fav2);
 			FavoriteSearchRepository.Add(fav3);
 
-			var results = Target.GetAllForCurrentUser();
+			var results = Target.GetAllForCurrentUser(WfmArea.Teams);
 
 			Assert.AreEqual(2, results.Count());
 			results[0].Name.Should().Be.EqualTo("ashley0");

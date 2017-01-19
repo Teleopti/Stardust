@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Common
 		string TeamIds { get; set; }
 		string SearchTerm { get; set; }
 		FavoriteSearchStatus Status { get; set; }
+		WfmArea WfmArea { get; set; }
 		IPerson Creator { get; set; }
 	}
 }

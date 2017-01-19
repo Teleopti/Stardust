@@ -39,6 +39,11 @@
 	<property name="Status"
           type="int"
           not-null="true"/>
+
+	<property name="WfmArea"
+          type="int"
+          not-null="true"/>		
+
 	<many-to-one name="Creator"
 			 class="Teleopti.Ccc.Domain.Common.Person"
 			 not-null="true"

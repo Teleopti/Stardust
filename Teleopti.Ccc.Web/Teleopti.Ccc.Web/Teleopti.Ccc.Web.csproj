@@ -428,6 +428,9 @@
     <Compile Include="Areas\Forecasting\Core\IForecastMisc.cs" />
     <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
+    <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
+    <Compile Include="Areas\Global\FavoriteSearchController.cs" />
+    <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
     <Compile Include="Areas\Global\ScenarioViewModel.cs" />
     <Compile Include="Areas\Global\ThemeController.cs" />
@@ -702,7 +705,6 @@
     <Compile Include="Areas\Staffing\AddOverTimeModel.cs" />
     <Compile Include="Areas\Staffing\Controllers\StaffingController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
-    <Compile Include="Areas\TeamSchedule\Controllers\FavoriteSearchController.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\FavoriteSearchProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />

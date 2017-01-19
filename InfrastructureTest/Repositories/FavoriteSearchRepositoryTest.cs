@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NHibernate.Exceptions;
+﻿using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -23,6 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person);
 			var fav = new FavoriteSearch("testFav");
 			fav.Creator = person;
+			fav.WfmArea = WfmArea.Teams;
 
 			return fav;
 		}
@@ -47,7 +42,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SearchTerm = "agent",
 				TeamIds = "team1,team2",
 				Status = FavoriteSearchStatus.Default,
-				Creator = person
+				Creator = person,
+				WfmArea = WfmArea.Teams
 			};
 			PersistAndRemoveFromUnitOfWork(person);
 			PersistAndRemoveFromUnitOfWork(fav);
@@ -62,21 +58,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void CanFindFavoritesByPerson()
+		public void CanFindFavoritesByPersonInArea()
 		{
 			var person = PersonFactory.CreatePerson("test");
 			PersistAndRemoveFromUnitOfWork(person);
 			var fav = new FavoriteSearch("myFav");
 			fav.Creator = person;
+			fav.WfmArea = WfmArea.Teams;
+
 			PersistAndRemoveFromUnitOfWork(fav);
 
-			var allByPerson = new FavoriteSearchRepository(UnitOfWork).FindAllForPerson(person.Id.Value);
+			var allByPerson = new FavoriteSearchRepository(UnitOfWork).FindAllForPerson(person.Id.Value, WfmArea.Teams);
 
 			Assert.AreEqual(1, allByPerson.Count());
 		}
 
 		[Test]
-		public void CanFindFavoritesByPersonAndName()
+		public void CanFindFavoritesByPersonAndNameInGivenArea()
 		{
 			var name1 = "myfav";
 			var name2 = "search1";
@@ -85,17 +83,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var fav1 = new FavoriteSearch(name1);
 			var fav2 = new FavoriteSearch(name2);
 			fav1.Creator = person;
+			fav1.WfmArea = WfmArea.Teams;
 			fav2.Creator = person;
+			fav2.WfmArea = WfmArea.Requests;
 			PersistAndRemoveFromUnitOfWork(fav1);
 			PersistAndRemoveFromUnitOfWork(fav2);
 
-			var results = new FavoriteSearchRepository(UnitOfWork).FindByPersonAndName(person.Id.Value, name1);
+			var results = new FavoriteSearchRepository(UnitOfWork).FindByPersonAndName(person.Id.Value, name1, WfmArea.Teams);
 
 			Assert.AreEqual(1, results.Count());
 		}
 
 		[Test]
-		public void ShouldThrowExceptionWhenAddingFavoriteSearchWithSameNameForSamePerson()
+		public void ShouldThrowExceptionWhenAddingFavoriteSearchWithSameNameForSamePersonInSameArea()
 		{
 			var name = "myfav";
 			var person = PersonFactory.CreatePerson("test");
@@ -103,7 +103,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var fav1 = new FavoriteSearch(name);
 			var duplicate = new FavoriteSearch(name);
 			fav1.Creator = person;
+			fav1.WfmArea = WfmArea.Teams;
 			duplicate.Creator = person;
+			duplicate.WfmArea = WfmArea.Teams;
 			PersistAndRemoveFromUnitOfWork(fav1);
 
 			var target = new FavoriteSearchRepository(UnitOfWork);

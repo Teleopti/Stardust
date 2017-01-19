@@ -20,21 +20,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId)
+		public IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId, WfmArea area)
 		{
 			ICollection<IFavoriteSearch> retList = Session.CreateCriteria<FavoriteSearch>()
 				.Add(Restrictions.Eq("Creator.Id", personId))
+				.Add(Restrictions.Eq("WfmArea", (int)area))
 				.List<IFavoriteSearch>();
 
 			return retList;
 		}
 
-		public IEnumerable<IFavoriteSearch> FindByPersonAndName(Guid personId, string name)
+		public IEnumerable<IFavoriteSearch> FindByPersonAndName(Guid personId, string name, WfmArea area)
 		{
 			var searches =
 				Session.CreateCriteria<FavoriteSearch>()
 					.Add(Restrictions.Eq("Creator.Id", personId))
-					.Add(Restrictions.Eq("Name", name)).List<IFavoriteSearch>();
+					.Add(Restrictions.Eq("Name", name))
+					.Add(Restrictions.Eq("WfmArea", (int)area))
+					.List<IFavoriteSearch>();
 			return searches;
 		}
 	}
@@ -42,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public interface IFavoriteSearchRepository:IRepository<IFavoriteSearch>
 	{
-		IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId);
-		IEnumerable<IFavoriteSearch> FindByPersonAndName(Guid personId, string name);
+		IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId, WfmArea area);
+		IEnumerable<IFavoriteSearch> FindByPersonAndName(Guid personId, string name, WfmArea area);
 	}
 }

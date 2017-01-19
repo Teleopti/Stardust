@@ -14,17 +14,17 @@
         'wfm.signalR',
         'wfm.teamSchedule',
 		'wfm.multiplesearchinput',
-		'wfm.modal',
 		'wfm.favoriteSearch',
 		'wfm.organizationPicker'
 	]).run(moduleRun);
 
-	moduleRun.$inject = ['$rootScope', 'organizationPickerSvc']; 
-	function moduleRun($rootScope, organizationPickerSvc) {		
+	moduleRun.$inject = ['$rootScope', 'organizationPickerSvc', 'FavoriteSearchDataService'];
+	function moduleRun($rootScope, organizationPickerSvc, FavoriteSearchDataService) {
 		$rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
 				if (toState.name === "requests") {
 					organizationPickerSvc.setModule("wfm.requests");
+					FavoriteSearchDataService.setModule("wfm.requests");
 				}
 			});
 	}

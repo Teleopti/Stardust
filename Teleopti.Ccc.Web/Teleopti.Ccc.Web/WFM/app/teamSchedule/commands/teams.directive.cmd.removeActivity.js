@@ -25,7 +25,7 @@
 		};
 	}
 
-	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScheduleManagement', 'ScenarioTestUtil'];
+	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScheduleManagement', 'ScenarioTestUtil'];
 
 	function removeActivityCtrl(ActivityService, PersonSelection, notification, $wfmModal, scheduleManagementSvc, ScenarioTestUtil) {
 		var vm = this;

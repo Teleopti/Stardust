@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private IList<IFavoriteSearch> storage = new List<IFavoriteSearch>();
 
-		public IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId)
+		public IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId, WfmArea area)
 		{
-			return storage.Where(f => f.Creator.Id == personId);
+			return storage.Where(f => f.Creator.Id == personId && f.WfmArea == area);
 		}
 
-		public IEnumerable<IFavoriteSearch> FindByPersonAndName(Guid personId, string name)
+		public IEnumerable<IFavoriteSearch> FindByPersonAndName(Guid personId, string name, WfmArea area)
 		{
-			return storage.Where(f => f.Creator.Id == personId && f.Name == name);
+			return storage.Where(f => f.Creator.Id == personId && f.Name == name && f.WfmArea == area);
 		}
 
 		public IEnumerator<IFavoriteSearch> GetEnumerator()
