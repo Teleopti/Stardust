@@ -223,4 +223,4 @@ No_UnitOfWork_Nesting_42175 = true
 Wfm_Intraday_ESL_41827 = RC
 AbsenceRequests_Intraday_UseCascading_41969 = RC
 AbsenceRequests_ValidateAllAgentSkills_42392 = true
-WfmStaffing_AllowActions_42524 = DEV
+WfmStaffing_AllowActions_42524 = RC
