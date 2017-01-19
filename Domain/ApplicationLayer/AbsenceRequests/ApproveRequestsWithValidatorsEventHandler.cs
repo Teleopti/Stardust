@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -17,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		IRunOnStardust
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IList<BeforeApproveAction> _beforeApproveActions;
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
@@ -34,12 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_messageBroker = messageBroker;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
-
-			_beforeApproveActions = new List<BeforeApproveAction>
-			{
-				personRequestIsSatisfied,
-				checkAbsenceRequest
-			};
 		}
 
 		[AsSystem]
@@ -50,12 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				foreach (var personRequestId in @event.PersonRequestIdList)
 				{
 					var personRequest = _personRequestRepository.Get(personRequestId);
-
-					if (_beforeApproveActions.Any(action => action.Invoke(personRequest)) ||
-						!requestIsOkForBasicValidation(personRequest))
-					{
-						continue;
-					}
+					if (!isValidAbsenceRequest(personRequest)) continue;
 
 					var queuedAbsenceRequest = new QueuedAbsenceRequest
 					{
@@ -75,24 +61,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			sendMessage(@event);
 		}
 
-		private bool requestIsOkForBasicValidation(IPersonRequest personRequest)
+		private bool isValidAbsenceRequest(IPersonRequest personRequest)
 		{
-			var result = _writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
+			if (!(personRequest?.Request is IAbsenceRequest)) return false;
+			if (!personRequest.IsPending && !personRequest.IsWaitlisted) return false;
+
+			return _writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
 				personRequest.Person, new ApproveBatchRequestsCommand());
-			return result;
 		}
-
-		private static bool personRequestIsSatisfied(IPersonRequest personRequest)
-		{
-			return personRequest == null || !(personRequest.IsPending || personRequest.IsWaitlisted);
-		}
-
-		private static bool checkAbsenceRequest(IPersonRequest personRequest)
-		{
-			return !(personRequest.Request is IAbsenceRequest);
-		}
-
-		private delegate bool BeforeApproveAction(IPersonRequest personRequest);
 
 		private void sendMessage(ApproveRequestsWithValidatorsEvent @event)
 		{
