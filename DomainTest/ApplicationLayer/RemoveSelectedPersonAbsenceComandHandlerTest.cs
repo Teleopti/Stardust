@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
@@ -29,12 +30,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private PersonAbsenceCreator _personAbsenceCreator;
 		private PersonAbsenceRemover _personAbsenceRemover;
 		private IPerson _person;
+		private ICurrentUnitOfWork _currentUnitOfWork;
 
 		[SetUp]
 		public void Setup()
 		{
 
 			_scenario = new FakeCurrentScenario();
+			_currentUnitOfWork = CurrentUnitOfWork.Make();
 
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository,
@@ -97,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover);
+				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
 
 			target.Handle(command);
 
@@ -132,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover);
+				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
 
 			target.Handle(command);
 
@@ -173,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover);
+				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
 
 			target.Handle(command);
 
@@ -212,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover);
+				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
 
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{

@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -12,14 +13,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPersonAbsenceRemover _personAbsenceRemover;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public RemoveSelectedPersonAbsenceCommandHandler(ICurrentScenario currentScenario, IPersonAbsenceRepository personAbsenceRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IPersonAbsenceRemover personAbsenceRemover)
+		public RemoveSelectedPersonAbsenceCommandHandler(ICurrentScenario currentScenario, IPersonAbsenceRepository personAbsenceRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IPersonAbsenceRemover personAbsenceRemover, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_currentScenario = currentScenario;
 			_personAbsenceRepository = personAbsenceRepository;
 			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_personAbsenceRemover = personAbsenceRemover;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 		
 		public void Handle(RemoveSelectedPersonAbsenceCommand command)
@@ -45,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				scheduleDay.Period;
 
 			command.ErrorMessages = _personAbsenceRemover.RemovePartPersonAbsence(command.Date, person,personAbsences, periodToMove,scheduleRange, command.TrackedCommandInfo).ToList() ;
+			_currentUnitOfWork.Current().PersistAll();
 		}
 	}
 }

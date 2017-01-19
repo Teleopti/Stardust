@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             public IUnitOfWork CurrentUnitOfWork()
             {
-                throw new NotImplementedException();
+               return new FakeUnitOfWork();
             }
 
 	        public bool HasCurrentUnitOfWork()
