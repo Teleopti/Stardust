@@ -342,6 +342,12 @@
 		border-bottom: 1px solid $gray012;
 		min-height: initial !important;
 
+		.fav-search-name {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
 		.fav-search-item-container {
 			padding: 0.2em $favsearchleftpadding 0;
 			width: 100%;

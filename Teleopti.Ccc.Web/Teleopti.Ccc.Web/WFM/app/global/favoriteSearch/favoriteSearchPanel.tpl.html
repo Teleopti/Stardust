@@ -10,10 +10,6 @@
 	<md-list ng-if="$ctrl.favoriteSearchList.length > 0">
 		<md-list-item ng-repeat="searchItem in $ctrl.favoriteSearchList" class="fav-search-item pointer" ng-mouseenter="showIcons = true" ng-mouseleave="showIcons = false">
 			<div class="fav-search-item-container" ng-click="$ctrl.select(searchItem)">
-				<span>
-					{{searchItem.Name}}
-				</span>
-
 				<div class="pull-right" ng-click="$event.stopPropagation()">
 					<div class="default-favorite inline-block" ng-class="{'visible':showIcons || searchItem.IsDefault, 'invisible':!showIcons}">
 						<span ng-click="$ctrl.toggleDefault(searchItem.Name)">
@@ -29,6 +25,7 @@
 						<md-tooltip><span translate>Remove</span></md-tooltip>
 					</span>
 				</div>
+				<div class="fav-search-name">{{searchItem.Name}}</div>
 			</div>
 		</md-list-item>
 	</md-list>
