@@ -231,6 +231,67 @@ and ad.TagDate < @MaxDate
 if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 	return
 
+--Audit trails must be purged as part of schedules, at least until they get their own setting. Purge based on schedule date, not change date.
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Auditing.PersonAssignment_AUD
+	from Auditing.PersonAssignment_AUD pa
+	where pa.date < @KeepUntil
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Auditing.PersonDayOff_AUD
+	from Auditing.PersonDayOff_AUD pa
+	where pa.anchor < @KeepUntil
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Auditing.PersonAbsence_AUD
+	from Auditing.PersonAbsence_AUD pa
+	where pa.maximum < @KeepUntil
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+/* ToDo - Make it work... Too slow right now
+--Empty revisions?
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(100) auditing.Revision
+	from auditing.Revision r
+	where not exists (	select 1 from auditing.PersonAbsence_AUD pab
+						where pab.REV = r.id)
+	and not exists (	select 1 from auditing.PersonAssignment_AUD pa
+						where pa.REV = r.id)
+	and not exists (	select 1 from auditing.PersonDayOff_AUD pdo
+						where pdo.REV = r.id)
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+*/
+
+/*
+exec Purge
+*/
+
 --Remove deleted skills from persons
 delete PersonSkill
 from PersonSkill ps
