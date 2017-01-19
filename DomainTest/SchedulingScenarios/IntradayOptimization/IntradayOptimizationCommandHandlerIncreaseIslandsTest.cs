@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -263,6 +264,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentsInIsland.Count()
 				.Should().Be.EqualTo(1);
+		}
+
+		[Test, Timeout(5000)]
+		[Ignore("Too be fixed - #42634. Currently it works acceptable if numberofagents below ~200")]
+		public void ShouldNotHangWhenHavingManySkillGroups_Bug42634()
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(2, 2);
+
+			const int numberOfAgents = 300;
+			var allAgents = new List<IPerson>();
+			var skillA = new Skill("A");
+			for (var i = 0; i < numberOfAgents; i++)
+			{
+				var skillB = new Skill("B" + i);
+				allAgents.Add(new Person().WithPersonPeriod(skillA, skillB));
+			}
+			allAgents.ForEach(x => PersonRepository.Has(x));
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			EventPublisher.PublishedEvents.Count()
+				.Should().Be.EqualTo(numberOfAgents);
 		}
 	}
 }
