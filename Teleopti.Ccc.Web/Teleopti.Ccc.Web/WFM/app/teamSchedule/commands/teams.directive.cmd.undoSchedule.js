@@ -25,9 +25,9 @@
 		};
 	}
 
-	undoScheduleCtrl.$inject = ['PersonSelection', 'ActivityService', '$wfmConfirmModal', 'ScheduleManagement', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
+	undoScheduleCtrl.$inject = ['$scope', 'PersonSelection', 'ActivityService', '$wfmConfirmModal', 'ScheduleManagement', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
-	function undoScheduleCtrl(PersonSelection, ActivityService, $wfmModal, scheduleManagementSvc, notification, ScenarioTestUtil) {
+	function undoScheduleCtrl($scope, PersonSelection, ActivityService, $wfmModal, scheduleManagementSvc, notification, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'Undo';
 

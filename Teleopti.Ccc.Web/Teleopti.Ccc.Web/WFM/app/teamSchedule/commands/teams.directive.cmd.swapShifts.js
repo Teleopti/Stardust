@@ -26,9 +26,9 @@
 		};
 	}
 
-	swapShiftsCtrl.$inject = ['SwapShifts', 'PersonSelection', 'teamScheduleNotificationService'];
+	swapShiftsCtrl.$inject = ['$scope', 'SwapShifts', 'PersonSelection', 'teamScheduleNotificationService'];
 
-	function swapShiftsCtrl(SwapShiftsSvc, PersonSelection, notification) {
+	function swapShiftsCtrl($scope, SwapShiftsSvc, PersonSelection, notification) {
 		var vm = this;
 		vm.label = 'SwapShifts';
 

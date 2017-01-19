@@ -25,9 +25,9 @@
 		};
 	}
 
-	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScheduleManagement', 'ScenarioTestUtil'];
+	removeActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScheduleManagement', 'ScenarioTestUtil'];
 
-	function removeActivityCtrl(ActivityService, PersonSelection, notification, $wfmModal, scheduleManagementSvc, ScenarioTestUtil) {
+	function removeActivityCtrl($scope, ActivityService, PersonSelection, notification, $wfmModal, scheduleManagementSvc, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveActivity';
 
@@ -57,6 +57,7 @@
 
 			ActivityService.removeActivity(requestData).then(function (response) {
 				$scope.$emit('teamSchedule.hide.loading');
+
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
@@ -88,7 +89,7 @@
 			$wfmModal.confirm(message, title).then(function (result) {
 				vm.resetActiveCmd();
 
-				if (result) {
+				if (result) {					
 					$scope.$emit('teamSchedule.show.loading');
 					vm.removeActivity();
 				}
