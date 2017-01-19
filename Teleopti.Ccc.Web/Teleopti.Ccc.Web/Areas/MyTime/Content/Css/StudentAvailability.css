@@ -89,10 +89,6 @@
 		margin-right: 5px;
 		max-height: 70%;
 	}
-	.phone-form-availability .bootstrap-timepicker {
-		margin: 5px auto;
-		display: inherit !important;
-	}
 
 	.phone-form-availability .phone-background {
 		height: 200%;
