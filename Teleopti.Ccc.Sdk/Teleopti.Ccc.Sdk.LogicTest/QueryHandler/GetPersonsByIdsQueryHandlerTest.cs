@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -6,16 +7,17 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetPersonsByEmploymentNumbersQueryHandlerTest
+	public class GetPersonsByIdsQueryHandlerTest
 	{
 		[Test]
-		public void ShouldGetPeopleByEmploymentNumbers()
+		public void ShouldGetPeopleByTheirIds()
 		{
 			var personRepository = new FakePersonRepository();
 
@@ -24,23 +26,23 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var person1 = PersonFactory.CreatePerson().WithId(personId1);
+			personRepository.Add(person1);
+			var person2 = PersonFactory.CreatePerson().WithId(personId2);
+			personRepository.Add(person2);
 
-			var person = PersonFactory.CreatePerson();
-			person.EmploymentNumber = "1234";
-			personRepository.Add(person);
-			person = PersonFactory.CreatePerson();
-			person.EmploymentNumber = "2234";
-			personRepository.Add(person);
+			var target = new GetPersonsByIdsQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
 
-			var target = new GetPersonsByEmploymentNumbersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
-
-			var result = target.Handle(new GetPersonsByEmploymentNumbersQueryDto()
+			var result = target.Handle(new GetPersonsByIdsQueryDto
 			{
-				EmploymentNumbers = new[] { "1234", "2234" }
+				PersonIds = new [] { personId1, personId2 }
 			});
 
 			result.Count.Should().Be.EqualTo(2);
-			result.Last().Name.Should().Be.EqualTo(person.Name.ToString());
+			result.Any(x => x.Id == personId1).Should().Be.True();
+			result.Any(x => x.Id == personId2).Should().Be.True();
 		}
 	}
 }

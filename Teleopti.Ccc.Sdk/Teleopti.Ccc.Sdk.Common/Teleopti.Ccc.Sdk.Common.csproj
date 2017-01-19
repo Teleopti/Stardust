@@ -193,6 +193,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleByGroupPageGroupForDateRangeQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPersonsByIdsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByEmailQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonsByEmploymentNumbersQueryDto.cs" />
