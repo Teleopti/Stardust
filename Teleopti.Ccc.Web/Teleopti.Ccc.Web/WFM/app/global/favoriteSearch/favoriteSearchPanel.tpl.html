@@ -1,13 +1,13 @@
 ﻿<div class="fav-search-panel material-depth-2">
 	<div class="fav-search-header">
 		<input type="text" class="name" placeholder="{{'Name'|translate}}..." ng-keydown="$event.which === 13 && $ctrl.save()" ng-model="$ctrl.currentName" ng-maxlength="50" ng-required="true"/>
-		
+
 		<button class="wfm-btn wfm-btn-sm pull-right" ng-click="$ctrl.save()" ng-class="{'wfm-btn-invis-primary':$ctrl.enableSave(), 'wfm-btn-invis-disabled':!$ctrl.enableSave()}" ng-disabled="!$ctrl.enableSave()" ng-cloak translate>
 			Save
 		</button>
 	</div>
 	<md-divider ng-if="$ctrl.favoriteSearchList.length > 0"></md-divider>
-	<md-list>
+	<md-list ng-if="$ctrl.favoriteSearchList.length > 0">
 		<md-list-item ng-repeat="searchItem in $ctrl.favoriteSearchList" class="fav-search-item pointer" ng-mouseenter="showIcons = true" ng-mouseleave="showIcons = false">
 			<div class="fav-search-item-container" ng-click="$ctrl.select(searchItem)">
 				<span>
