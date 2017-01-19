@@ -13,6 +13,11 @@
     right: 0;
 }
 
+.list-group {
+	max-height: 220px;
+	overflow-y: auto;
+}
+
 .animate-material {
   animation-name: material;
   animation-duration: 0.5s;
