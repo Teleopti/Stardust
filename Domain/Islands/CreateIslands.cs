@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 				if (!reduceSkillGroups.Execute(skillGroupsInIslands, noAgentsKnowingSkill))
 				{
-					return skillGroupsInIslands.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
+					return skillGroupsInIslands.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToArray();
 				}
 			}
 		}
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			foreach (var skillGroupInIsland in skillGroupsInIslands)
 			{
-				foreach (var skillGroup in skillGroupInIsland.ToList())
+				foreach (var skillGroup in skillGroupInIsland)
 				{
 					var allOtherIslands = skillGroupsInIslands.Except(new[] { skillGroupInIsland });
 					foreach (var otherIsland in allOtherIslands)
