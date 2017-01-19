@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 			var unitOfWork = _unitOfWork.Current();
 			try
 			{
+				if (exception != null) return;
 				unitOfWork.PersistAll();
 			}
 			finally
