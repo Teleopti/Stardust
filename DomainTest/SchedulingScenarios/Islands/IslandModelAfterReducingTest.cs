@@ -11,18 +11,19 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.Islands
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
-	public class IslandModelBeforeReducingTest
+	public class IslandModelAfterReducingTest
 	{
 		public IslandModelFactory IslandModelFactory;
 		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
 
+
 		[Test]
-		public void ShouldNotReduce()
+		public void ShouldNotLeaveDuplicateSkillgroupsAfterReducing()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 2);
 			var skillA = new Skill("A");
@@ -30,10 +31,11 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			Enumerable.Range(0, 3).Select(x => new Person().WithPersonPeriod(skillA))
 				.ForEach(x => PersonRepository.Has(x));
 			PersonRepository.Has(new Person().WithPersonPeriod(skillA, skillB));
+			PersonRepository.Has(new Person().WithPersonPeriod(skillB));
 
 			var model = IslandModelFactory.Create();
-			model.BeforeReducing.Islands.Count()
-				.Should().Be.EqualTo(1);
+			model.AfterReducing.Islands.All(x => x.SkillGroups.Count() == 1) //two islands with one skillgroup each
+				.Should().Be.True();
 		}
 	}
 }

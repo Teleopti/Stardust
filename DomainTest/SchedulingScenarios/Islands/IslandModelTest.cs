@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Ccc.DomainTest.Islands
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
