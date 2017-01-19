@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
 					GlobalHost.DependencyResolver =
-						new Autofac.Integration.SignalR.AutofacDependencyResolver(container.BeginLifetimeScope());
+						new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
 					container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
 				}
 
@@ -133,6 +133,5 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				HttpContext.Current.ApplicationInstance.CompleteRequest();
 			}
 		}
-
 	}
 }
