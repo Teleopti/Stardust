@@ -89,7 +89,7 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 	}
 
 	function hasAllFunction() {
-		if (!ctrl.selectedRole.Id && !ctrl.selectedRole.AvailableFunctions) {
+		if (!ctrl.selectedRole.Id || !ctrl.selectedRole.AvailableFunctions) {
 			return;
 		}
 
