@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(2, 2);
 
-			const int numberOfAgents = 300;
+			const int numberOfAgents = 700;
 			var allAgents = new List<IPerson>();
 			var skillA = new Skill("A");
 			for (var i = 0; i < numberOfAgents; i++)

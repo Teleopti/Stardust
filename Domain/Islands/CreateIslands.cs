@@ -42,15 +42,20 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		private static bool moveSkillGroupToCorrectIsland(ICollection<SkillGroup> allSkillGroups, IEnumerable<ICollection<SkillGroup>> skillGroupsInIslands)
 		{
+			var touchedIslands = new HashSet<ICollection<SkillGroup>>();
+
 			foreach (var skillGroupInIsland in skillGroupsInIslands)
 			{
-				foreach (var skillGroup in skillGroupInIsland)
+				foreach (var skillGroup in skillGroupInIsland.ToArray())
 				{
 					var allOtherIslands = skillGroupsInIslands.Except(new[] { skillGroupInIsland });
 					foreach (var otherIsland in allOtherIslands)
 					{
-						foreach (var otherSkillGroup in otherIsland)
+						foreach (var otherSkillGroup in otherIsland.ToArray())
 						{
+							if(touchedIslands.Contains(skillGroupInIsland)) //move this if "earlier"
+								continue;
+							
 							if (otherSkillGroup.HasAnySkillSameAs(skillGroup)) 
 							{
 								if (skillGroup.HasSameSkillsAs(otherSkillGroup))
@@ -62,14 +67,15 @@ namespace Teleopti.Ccc.Domain.Islands
 								{
 									otherIsland.Add(skillGroup);
 								}
+								touchedIslands.Add(skillGroupInIsland);
+								touchedIslands.Add(otherIsland);
 								skillGroupInIsland.Remove(skillGroup);
-								return true;
 							}
 						}
 					}
 				}
 			}
-			return false;
+			return touchedIslands.Any();
 		}
 	}
 }
