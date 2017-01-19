@@ -101,7 +101,7 @@
 		vm.skillsLoaded = false;
 		vm.skillAreasLoaded = false;
 		vm.teamsSelected = [];
-		vm.selectFieldText = 'Select organization';
+		vm.selectFieldText = $translate.instant('SelectOrganization');
 		vm.searchTerm = "";
 
 		allGrid.data = 'vm.filteredData';
@@ -142,7 +142,7 @@
 
 		function updateSelectFieldText() {
 			var howManyTeamsSelected = countTeamsSelected();
-			vm.selectFieldText = howManyTeamsSelected === 0 ? 'Select organization' : howManyTeamsSelected + ' teams selected';
+			vm.selectFieldText = howManyTeamsSelected === 0 ? vm.selectFieldText : howManyTeamsSelected + ' teams selected';
 		}
 
 		function countTeamsSelected() {
@@ -353,7 +353,7 @@
 					site.isChecked = false;
 			});
 			vm.teamsSelected = [];
-			vm.selectFieldText = $translate.instant('SelectOrganization');
+			updateSelectFieldText();
 		};
 
 		vm.clearSearchTerm = function () { vm.searchTerm = ''; }
@@ -477,10 +477,7 @@
 				teamIds: teamIds,
 				skillIds: skillIds,
 				skillAreaId: skillAreaId,
-				excludedStateIds: excludedStateIds()
-					.map(function (s) {
-						return s === nullStateId ? null : s;
-					})
+				excludedStateIds: excludedStateIds().map(mapNullStates)
 			})
 		}
 
@@ -515,10 +512,8 @@
 		};
 
 		function updateAgentStates(agentStates) {
-			if (vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
-				return;
+			if (skip()) return;
 			var excludedStates = excludedStateIds();
-			var excludeStates = excludedStates.length > 0;
 			setAgentStates(agentStates);
 			updateUrlWithExcludedStateIds(excludedStates);
 		};
@@ -556,22 +551,26 @@
 			}
 		}
 
+		function skip() {
+			return vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId)
+		}
+
 		function updateStates() {
-			if (vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
-				return;
+			if (skip()) return;
 			var excludedStates = excludedStateIds();
-			var excludeStates = excludedStates.length > 0;
-			getStates(vm.agentsInAlarm, excludeStates)({
+			getStates(vm.agentsInAlarm, excludedStates.length > 0)({
 				siteIds: siteIds,
 				teamIds: teamIds,
 				skillIds: skillIds,
 				skillAreaId: skillAreaId,
-				excludedStateIds: excludedStates.map(function (s) {
-					return s === nullStateId ? null : s;
-				})
+				excludedStateIds: excludedStates.map(mapNullStates)
 			})
 				.then(setStatesInAgents)
 				.then(updateUrlWithExcludedStateIds(excludedStates));
+		}
+
+		function mapNullStates(s) {
+			return s === nullStateId ? null : s;
 		}
 
 		function updatePhoneStatesFromStateParams() {
