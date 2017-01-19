@@ -260,6 +260,8 @@
 			if (vm.organizationSelection !== null && vm.organizationSelection.BusinessUnit !== null) {
 				toggleOrganizationSelecton(vm.organizationSelection.BusinessUnit, false);
 			}
+			vm.selectedRole = {};
+			vm.selectedOrNot = false;
 		}
 
 		function copyRole(role) {
