@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				{
 					requestValidators = getMandatoryValidators(personRequests);
 				}
-				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequests, requestValidators);
+				var personRequestIds = personRequests.Select(p => p.Id.GetValueOrDefault()).ToList();
+				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequestIds, requestValidators);
 			}
 				
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 
-		private List<Guid> checkPersonRequest(NewMultiAbsenceRequestsCreatedEvent @event)
+		private List<IPersonRequest> checkPersonRequest(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			DateTime min = DateTime.MaxValue;
 			DateTime max = DateTime.MinValue;
@@ -125,12 +126,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				
 			}
-			return requests.Select(x => x.Id.GetValueOrDefault()).ToList();
+			return requests;
 		}
 
-		private IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> getMandatoryValidators(IEnumerable<Guid> personRequestIds)
+		private IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> getMandatoryValidators(IList<IPersonRequest> personRequests)
 		{
 			var requestValidators = new Dictionary<Guid, IEnumerable<IAbsenceRequestValidator>>();
+			var personRequestIds = personRequests.Select(p => p.Id.GetValueOrDefault()).ToList();
 			var queuedAbsenceRequests = _queuedAbsenceRequestRepository.FindByPersonRequestIds(personRequestIds);
 			foreach (var queuedAbsenceRequest in queuedAbsenceRequests)
 			{
@@ -138,9 +140,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (requestValidators.ContainsKey(queuedAbsenceRequest.PersonRequest))
 					continue;
 				requestValidators.Add(queuedAbsenceRequest.PersonRequest,
-					_absenceRequestValidatorProvider.GetValidatorList(mandatoryValidators));
+					_absenceRequestValidatorProvider.GetValidatorList(
+						personRequests.FirstOrDefault(p => p.Id == queuedAbsenceRequest.PersonRequest), mandatoryValidators));
 			}
 			return requestValidators;
+		}
+
+		private IList<IPersonRequest> getPersonRequests(IEnumerable<Guid> personRequestIds)
+		{
+			return _personRequestRepository.Find(personRequestIds);
 		}
 
 		private class isNullOrNotNewSpecification : Specification<IPersonRequest>

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			IProcessAbsenceRequest processAbsenceRequest, bool waitlistingIsEnabled)
 		{
 			var startDate = new DateTime(2016, 1, 1, 00, 00, 00, DateTimeKind.Utc);
-			var endDate = new DateTime(2016, 12, 31, 00, 00, 00, DateTimeKind.Utc);
+			var endDate = new DateTime(DateTime.Now.Year + 1, 12, 31, 00, 00, 00, DateTimeKind.Utc);
 
 			var workflowControlSet = new WorkflowControlSet {AbsenceRequestWaitlistEnabled = waitlistingIsEnabled};
 

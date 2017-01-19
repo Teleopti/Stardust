@@ -6,6 +6,6 @@ namespace Teleopti.Interfaces.Domain
 	{
 		IEnumerable<IAbsenceRequestValidator> GetValidatorList(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod);
 
-		IEnumerable<IAbsenceRequestValidator> GetValidatorList(RequestValidatorsFlag validator);
+		IEnumerable<IAbsenceRequestValidator> GetValidatorList(IPersonRequest personRequest, RequestValidatorsFlag validator);
 	}
 }

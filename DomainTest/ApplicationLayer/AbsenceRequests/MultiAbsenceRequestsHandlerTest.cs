@@ -131,16 +131,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var absenceRequestValidator1 = MockRepository.GenerateMock<IAbsenceRequestValidator>();
 			absenceRequestValidator1.Stub(a => a.Validate(null, new RequiredForHandlingAbsenceRequest()))
-				.IgnoreArguments().Return(new ValidatedRequest { IsValid = false, ValidationErrors = "validatorErrors1" });
+				.IgnoreArguments().Return(new ValidatedRequest {IsValid = false, ValidationErrors = "validatorErrors1"});
 
 			var absenceRequestValidator2 = MockRepository.GenerateMock<IAbsenceRequestValidator>();
 			absenceRequestValidator2.Stub(a => a.Validate(null, new RequiredForHandlingAbsenceRequest()))
-				.IgnoreArguments().Return(new ValidatedRequest { IsValid = false, ValidationErrors = "validatorErrors2" });
+				.IgnoreArguments().Return(new ValidatedRequest {IsValid = false, ValidationErrors = "validatorErrors2"});
 
-			AbsenceRequestValidatorProvider.Stub(a => a.GetValidatorList(RequestValidatorsFlag.IntradayValidator))
-				.Return(new[] { absenceRequestValidator1 });
-			AbsenceRequestValidatorProvider.Stub(a => a.GetValidatorList(RequestValidatorsFlag.BudgetAllotmentValidator))
-				.Return(new[] { absenceRequestValidator2 });
+
+			AbsenceRequestValidatorProvider.Stub(
+				a =>
+					a.GetValidatorList(Arg<IPersonRequest>.Is.Anything,
+						Arg<RequestValidatorsFlag>.Is.Equal(RequestValidatorsFlag.IntradayValidator)))
+				.Return(new[] {absenceRequestValidator1});
+			AbsenceRequestValidatorProvider.Stub(
+				a =>
+					a.GetValidatorList(Arg<IPersonRequest>.Is.Anything,
+						Arg<RequestValidatorsFlag>.Is.Equal(RequestValidatorsFlag.BudgetAllotmentValidator)))
+				.Return(new[] {absenceRequestValidator2});
 		}
 
 		private void setDataSource()

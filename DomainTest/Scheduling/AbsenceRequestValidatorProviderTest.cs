@@ -1,0 +1,97 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Absence;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Scheduling
+{
+	[TestFixture]
+	public class AbsenceRequestValidatorProviderTest
+	{
+		[Test]
+		public void ShouldStaffingThresholdValidatorByIntradayValidatorFlag()
+		{
+			var staffingThresholdValidator = getStaffingThresholdValidator(true, false);
+			Assert.IsNotNull(staffingThresholdValidator);
+			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidator));
+		}
+
+		[Test]
+		public void ShouldGetStaffingThresholdValidatorCascadingSkillsByIntradayValidatorFlag()
+		{
+			var staffingThresholdValidator = getStaffingThresholdValidator(false, false);
+			Assert.IsNotNull(staffingThresholdValidator);
+			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkills));
+		}
+
+		[Test]
+		public void ShouldGetStaffingThresholdWithShrinkageValidatorByIntradayValidatorFlag()
+		{
+			var staffingThresholdValidator = getStaffingThresholdValidator(true, true);
+			Assert.IsNotNull(staffingThresholdValidator);
+			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
+		}
+
+		[Test]
+		public void ShouldGetStaffingThresholdValidatorCascadingSkillsWithShrinkageByIntradayValidatorFlag()
+		{
+			var staffingThresholdValidator = getStaffingThresholdValidator(false, true);
+			Assert.IsNotNull(staffingThresholdValidator);
+			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkillsWithShrinkage));
+		}
+
+		private IAbsenceRequestValidator getStaffingThresholdValidator(bool validateAllAgentSkills, bool useShrinkage)
+		{
+			var toggleManager = new FakeToggleManager();
+			if (validateAllAgentSkills)
+			{
+				toggleManager.Enable(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
+			}
+			var absenceRequestValidatorProvider = new AbsenceRequestValidatorProvider(toggleManager, null);
+
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			var person = createPerson();
+			person.WorkflowControlSet = createWorkflowControlSet(absence, useShrinkage);
+			var personRequest = createPersonRequest(person, absence);
+
+			var validatorList = absenceRequestValidatorProvider.GetValidatorList(personRequest, RequestValidatorsFlag.IntradayValidator);
+			return validatorList.FirstOrDefault();
+		}
+
+		private IPersonRequest createPersonRequest(IPerson person, IAbsence absence)
+		{
+			var personRequestFactory = new PersonRequestFactory();
+			var personRequest = personRequestFactory.CreatePersonRequest(person).WithId();
+			var absenceRequest = personRequestFactory.CreateAbsenceRequest(absence,
+				new DateTimePeriod(DateTime.Now.AddDays(1).Date.ToUniversalTime(), DateTime.Now.AddDays(2).Date.ToUniversalTime()))
+				.WithId();
+			personRequest.Request = absenceRequest;
+			absenceRequest.SetParent(personRequest);
+			return personRequest;
+		}
+
+		private IPerson createPerson()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			return person;
+		}
+
+		private IWorkflowControlSet createWorkflowControlSet(IAbsence absence, bool useShrinkage)
+		{
+			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), false);
+			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = !useShrinkage
+				? new StaffingThresholdValidator()
+				: new StaffingThresholdWithShrinkageValidator();
+			return workflowControlSet;
+		}
+	}
+}

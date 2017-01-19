@@ -22,21 +22,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			var validators = absenceRequestOpenPeriod.GetSelectedValidatorList().ToList();
 
-			if (!_toggleManager.IsEnabled(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392))
+			if (!validateAllAgentSkills())
 			{
 				var staffingThresholdValidator = validators.FirstOrDefault(x => x.GetType() == typeof(StaffingThresholdValidator));
 				if (staffingThresholdValidator != null)
-				{	
+				{
 					var index = validators.IndexOf(staffingThresholdValidator);
-
-					if (staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator))
-					{
-						validators[index] = new StaffingThresholdValidatorCascadingSkillsWithShrinkage();
-					}
-					else
-					{
-						validators[index] = new StaffingThresholdValidatorCascadingSkills();
-					}
+					validators[index] = getStaffingThresholdValidatorCascadingSkills(staffingThresholdValidator);
 				}
 			}
 
@@ -50,14 +42,47 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			return validators;
 		}
 
-		public IEnumerable<IAbsenceRequestValidator> GetValidatorList(RequestValidatorsFlag validator)
+		public IEnumerable<IAbsenceRequestValidator> GetValidatorList(IPersonRequest personRequest, RequestValidatorsFlag validator)
 		{
 			if (validator.HasFlag(RequestValidatorsFlag.BudgetAllotmentValidator))
 				yield return new BudgetGroupHeadCountValidator();
 			if (validator.HasFlag(RequestValidatorsFlag.IntradayValidator))
-				yield return new StaffingThresholdValidator();
+			{
+				yield return getIntradayValidator(personRequest);
+			}
 			if (validator.HasFlag(RequestValidatorsFlag.ExpirationValidator))
 				yield return new RequestExpirationValidator(_expiredRequestValidator);
+		}
+
+		private IAbsenceRequestValidator getIntradayValidator(IPersonRequest personRequest)
+		{
+			var validators = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(
+				(IAbsenceRequest) personRequest.Request).GetSelectedValidatorList();
+			var staffingThresholdValidator = validators.FirstOrDefault(x => x.GetType() == typeof(StaffingThresholdValidator));
+			if (staffingThresholdValidator == null)
+			{
+				return new AbsenceRequestNoneValidator();
+			}
+			if (!validateAllAgentSkills())
+			{
+				staffingThresholdValidator = getStaffingThresholdValidatorCascadingSkills(staffingThresholdValidator);
+			}
+			return staffingThresholdValidator;
+		}
+
+		private bool validateAllAgentSkills()
+		{
+			return _toggleManager.IsEnabled(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
+		}
+
+		private IAbsenceRequestValidator getStaffingThresholdValidatorCascadingSkills(
+			IAbsenceRequestValidator staffingThresholdValidator)
+		{
+			if (staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator))
+			{
+				return new StaffingThresholdValidatorCascadingSkillsWithShrinkage();
+			}
+			return new StaffingThresholdValidatorCascadingSkills();
 		}
 	}
 }
