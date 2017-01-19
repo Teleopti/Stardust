@@ -14118,4 +14118,31 @@ Dessa val är aktiverade:
   <data name="WebStaffing" xml:space="preserve">
     <value>Staffing</value>
   </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primär</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>Ta bort övertid</value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>Spara favoritsökning</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>Rättigheter för att ta bort övertidsaktivitet för agent(er) saknas</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>Välj ett datum</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>Ange starttid</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>Ange sluttid</value>
+  </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value>Toleransen för kontraktstiden har överskridits</value>
+  </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>Logga in med</value>
+  </data>
 </root>
