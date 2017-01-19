@@ -413,6 +413,9 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+	<Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
+	<Compile Include="Areas\Global\FavoriteSearchController.cs" />
+	<Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereAgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
@@ -428,9 +431,6 @@
     <Compile Include="Areas\Forecasting\Core\IForecastMisc.cs" />
     <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
-    <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
-    <Compile Include="Areas\Global\FavoriteSearchController.cs" />
-    <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
     <Compile Include="Areas\Global\ScenarioViewModel.cs" />
     <Compile Include="Areas\Global\ThemeController.cs" />
@@ -1455,12 +1455,13 @@
     <Content Include="WFM\app\rta\agents\rta-agents-headercelltemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-headershiftcelltemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-HideAgentsByStateGroup_40469.html" />
-    <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate-AdherenceDetails_34267.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate-AllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-shiftcelltemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents.html" />
+    <Content Include="WFM\app\rta\agents\rta.agents.breadCrumb.service.js" />
+    <Content Include="WFM\app\rta\agents\rta.agents.build.service.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.alarmcontext.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.breadcrumb.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.byOrganizationAndSkills.spec.js" />
@@ -1478,6 +1479,9 @@
     <Content Include="WFM\app\rta\agents\rta.agents.filters.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.filters.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.grid.service.js" />
+    <Content Include="WFM\app\rta\details\rta-agent-details.html" />
+    <Content Include="WFM\app\rta\details\rta.agentdetails.controller.js" />
+    <Content Include="WFM\app\rta\details\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.spec.js" />
@@ -1499,7 +1503,6 @@
     <Content Include="WFM\app\rta\rta.resource.factory.js" />
     <Content Include="WFM\app\rta\rta.route.service.js" />
     <Content Include="WFM\app\rta\rta.route.service.spec.js" />
-    <Content Include="WFM\app\rta\rta.routes.js" />
     <Content Include="WFM\app\rta\rta.service.js" />
     <Content Include="WFM\app\rta\rta.sorting.localelanguage.service.js" />
     <Content Include="WFM\app\rta\rta.state.provider.js" />

@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
@@ -11,7 +11,10 @@
 			formatDuration: formatDuration,
 			formatToSeconds: formatToSeconds,
 			formatHexToRgb: formatHexToRgb,
-			numberToPercent: numberToPercent
+			numberToPercent: numberToPercent,
+			timeToPercent: timeToPercent,
+			secondsToPercent: secondsToPercent,
+			timePeriodToPercent: timePeriodToPercent
 		}
 
 		return service;
@@ -50,5 +53,20 @@
 		function numberToPercent(num1, num2) {
 			return (Math.floor((num1 / num2) * 100));
 		};
+
+		function secondsToPercent(seconds) {
+			return seconds / 3600 * 25;
+		}
+
+		function timeToPercent(currentTime, time) {
+			var offset = moment(currentTime).add(-1, 'hour');
+			return secondsToPercent(moment(time).diff(offset, 'seconds'));
+		}
+
+		function timePeriodToPercent(windowStart, startTime, endTime) {
+			var start = moment(startTime) > windowStart ? moment(startTime) : windowStart;
+			var lengthSeconds = moment(endTime).diff(start, 'seconds');
+			return secondsToPercent(lengthSeconds);
+		}
 	};
 })();

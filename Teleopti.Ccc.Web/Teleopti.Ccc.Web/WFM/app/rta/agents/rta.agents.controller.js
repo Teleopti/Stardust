@@ -16,14 +16,16 @@
 			'$q',
 			'$translate',
 			'$location',
+			'$timeout',
 			'rtaService',
 			'rtaGridService',
 			'rtaFormatService',
+			'rtaAgentsBuildService',
+			'rtaBreadCrumbService',
 			'rtaRouteService',
 			'fakeTimeService',
 			'Toggle',
-			'NoticeService',
-			'$timeout'
+			'NoticeService'
 		];
 
 	function RtaAgentsController(
@@ -36,14 +38,16 @@
 		$q,
 		$translate,
 		$location,
+		$timeout,
 		rtaService,
 		rtaGridService,
 		rtaFormatService,
+		rtaAgentsBuildService,
+		rtaBreadCrumbService,
 		rtaRouteService,
 		fakeTimeService,
 		toggleService,
-		NoticeService,
-		$timeout
+		NoticeService
 	) {
 
 		var vm = this;
@@ -53,9 +57,7 @@
 		var teamIds = $stateParams.teamIds || [];
 		var skillIds = $stateParams.skillIds || [];
 		var skillAreaId = $stateParams.skillAreaId || undefined;
-		var excludedStatesFromUrl = function () {
-			return $stateParams.es || []
-		};
+		var excludedStatesFromUrl = function () { return $stateParams.es || [] };
 		var propertiesForFiltering = ["Name", "State", "Activity", "Alarm", "SiteAndTeamName"];
 		var allGrid = rtaGridService.makeAllGrid();
 		var inAlarmGrid = rtaGridService.makeInAlarmGrid();
@@ -64,6 +66,7 @@
 		var nullStateId = "noState";
 		var enableWatchOnTeam = false;
 		var updateStatesDelegate = updateStates;
+		var agentsInfo = [];
 
 		vm.adherence = {};
 		vm.adherencePercent = null;
@@ -107,7 +110,6 @@
 		/*******REQUESTS*****/
 		toggleService.togglesLoaded.then(function () {
 			vm.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
-
 			rtaService.getOrganization()
 				.then(function (organization) {
 					vm.sites = organization;
@@ -121,7 +123,7 @@
 				vm.skillsLoaded = true;
 				vm.skills = skills;
 				if (skillIds.length > 0 && skillAreaId == null)
-					vm.selectedSkill = getSelected(skills, skillIds[0]);
+					vm.selectedSkill = skills.find(function (s) { return s.Id === skillIds[0] });
 			});
 
 		rtaService.getSkillAreas()
@@ -129,22 +131,22 @@
 				vm.skillAreasLoaded = true;
 				vm.skillAreas = skillAreas.SkillAreas;
 				if (skillAreaId != null)
-					vm.selectedSkillArea = getSelected(vm.skillAreas, skillAreaId);
+					vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
 			});
 
 		(function initialize() {
 			vm.pollingLock = false;
+
+			removeMeWithToggle('RTA_QuicklyChangeAgentsSelection_40610');
 			if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 				toggleService.togglesLoaded.then(function () {
 					if (toggleService.RTA_FasterAgentsView_42039) {
 						agentState();
 						updateStatesDelegate = agentState;
-					}
-
-					else {
+					} else {
 						getAgents()
 							.then(agentsByParams)
-							.then(agentsInfo)
+							.then(updateStuff)
 							.then(updateStates)
 							.then(updatePhoneStatesFromStateParams);
 					}
@@ -152,6 +154,16 @@
 
 			}
 		})();
+
+		function removeMeWithToggle() {
+			if (skillIds.length === 1) {
+				rtaService.getSkillName(skillIds[0])
+					.then(function (skill) {
+						vm.skillName = skill.Name || '?';
+						vm.skill = true;
+					});
+			}
+		}
 
 		function agentsByParams(fn) {
 			return fn({
@@ -162,16 +174,15 @@
 			});
 		}
 
-		function agentsInfo(agentsInfo) {
-			vm.agentsInfo = agentsInfo;
-			vm.agents = agentsInfo;
-			$scope.$watchCollection(function () {
-				return vm.agents;
-			}, filterData);
-			updateBreadCrumb(agentsInfo);
+		function updateStuff(data) {
+			agentsInfo = data;
+			vm.agents = data;
+			$scope.$watchCollection(
+				function () { return vm.agents; },
+				filterData);
+			updateBreadCrumb(data);
 			vm.pollingLock = true;
 		}
-
 
 		/*********AUTOCOMPLETE*****/
 		vm.querySearch = function (query, myArray) {
@@ -179,49 +190,36 @@
 			return results;
 		};
 
-		vm.selectedSkillChange = function (skill) {
-			var selectedSkillId = undefined;
-			var selectedSkillAreaId = skillAreaId;
-
-			if (skill) {
-				selectedSkillId = skill.Id;
-				selectedSkillAreaId = undefined
-			}
-
-			var params = {
-				skillIds: selectedSkillId,
-				skillAreaId: selectedSkillAreaId,
-				siteIds: siteIds,
-				teamIds: teamIds
+		function createFilterFor(query) {
+			var lowercaseQuery = angular.lowercase(query);
+			return function filterFn(item) {
+				var lowercaseName = angular.lowercase(item.Name);
+				return (lowercaseName.indexOf(lowercaseQuery) === 0);
 			};
+		};
 
+		vm.selectedSkillChange = function (skill) {
 			if (!skill || (skill.Id != skillIds[0] || $stateParams.skillAreaId))
-				stateGoToAgents(params);
+				stateGoToAgents({
+					skillIds: skill ? skill.Id : undefined,
+					skillAreaId: skill ? undefined : skillAreaId,
+					siteIds: siteIds,
+					teamIds: teamIds
+				});
 		}
 
 		vm.selectedSkillAreaChange = function (skillArea) {
-			var selectedSkillId = $stateParams.skillIds;
-			var selectedSkillAreaId = undefined;
-			if (skillArea) {
-				selectedSkillId = [];
-				selectedSkillAreaId = skillArea.Id
-			}
-
-			var params = {
-				skillIds: selectedSkillId,
-				skillAreaId: selectedSkillAreaId,
-				siteIds: siteIds,
-				teamIds: teamIds
-			};
-
 			if (!skillArea || !(skillArea.Id == $stateParams.skillAreaId))
-				stateGoToAgents(params);
+				stateGoToAgents({
+					skillIds: skillArea ? [] : $stateParams.skillIds,
+					skillAreaId: skillArea ? skillArea.Id : undefined,
+					siteIds: siteIds,
+					teamIds: teamIds
+				});
 		}
 
 		/***********MULTI-SELECT************/
-		vm.expandSite = function (site) {
-			site.isExpanded = !site.isExpanded;
-		};
+		vm.expandSite = function (site) { site.isExpanded = !site.isExpanded; };
 
 		vm.goToAgents = function () {
 			var selection = {};
@@ -250,12 +248,21 @@
 				});
 		}
 
+		function unselectTeamsInSite(site) {
+			site.Teams.forEach(function (team) {
+				var index = vm.teamsSelected.indexOf(team.Id);
+				if (index > -1) {
+					vm.teamsSelected.splice(index, 1);
+				}
+			});
+		}
+
 		vm.teamChecked = function (site, team) {
 			var selectedTeamsChecked = site.Teams.filter(function (t) {
 				return t.isChecked;
 			});
 			var isAllTeamsCheckedForSite = selectedTeamsChecked.length === site.Teams.length;
-			site.isMarked = selectedTeamsChecked.length > 0 && !isAllTeamsCheckedForSite && !site.isChecked ? true : false;
+			site.isMarked = (selectedTeamsChecked.length > 0 && !isAllTeamsCheckedForSite && !site.isChecked);
 			if (site.isChecked)
 				return true;
 			if (isAllTeamsCheckedForSite)
@@ -265,16 +272,12 @@
 
 		vm.forTest_selectSite = function (site) {
 			site.isChecked = !site.isChecked;
-			var selectedSite = vm.sites.find(function (s) {
-				return s.Id === site.Id;
-			});
-
+			var selectedSite = vm.sites.find(function (s) { return s.Id === site.Id; });
 			selectedSite.Teams.forEach(function (team) {
 				team.isChecked = selectedSite.isChecked;
 				if (selectedSite.isChecked) {
 					vm.teamsSelected.push(team.Id);
-				}
-				else {
+				} else {
 					var index = vm.teamsSelected.indexOf(team.Id);
 					vm.teamsSelected.splice(index, 1);
 				}
@@ -287,15 +290,11 @@
 				site.Teams.forEach(function (team) {
 					team.isChecked = vm.teamsSelected.indexOf(team.Id) > -1;
 					var teamChanged = (vm.teamsSelected.indexOf(team.Id) > -1 !== oldTeamsSelected.indexOf(team.Id) > -1);
-					if (oldTeamsSelected.length > 0 && teamChanged) {
+					if (oldTeamsSelected.length > 0 && teamChanged)
 						anyChangeForThatSite = true;
-					}
 				});
 
-				var checkedTeams = site.Teams.filter(function (team) {
-					return team.isChecked;
-				});
-
+				var checkedTeams = site.Teams.filter(function (team) { return team.isChecked; });
 				if (checkedTeams.length > 0 || anyChangeForThatSite)
 					site.isChecked = checkedTeams.length === site.Teams.length;
 			});
@@ -353,25 +352,12 @@
 			}
 		};
 
-		vm.changeScheduleUrl = function (personId) {
-			return rtaRouteService.urlForChangingSchedule(personId);
-		};
-		vm.historicalAdherenceUrl = function (personId) {
-			return rtaRouteService.urlForHistoricalAdherence(personId);
-		};
-
-		vm.agentDetailsUrl = function (personId) {
-			return rtaRouteService.urlForAgentDetails(personId);
-		};
+		vm.changeScheduleUrl = function (personId) { return rtaRouteService.urlForChangingSchedule(personId); };
+		vm.historicalAdherenceUrl = function (personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
 
 		/****************GO TOS**************/
-		vm.goToOverview = function () {
-			rtaRouteService.goToSites();
-		}
-
-		vm.goToSelectItem = function () {
-			rtaRouteService.goToSelectSkill();
-		}
+		vm.goToOverview = function () { rtaRouteService.goToSites(); }
+		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
 
 		/**************RIGHT PANEL**************/
 
@@ -388,55 +374,53 @@
 		///////////////////////////////////////////////////////////////////
 
 		/*****************WATCHES*****************/
-		$scope.$watch(function () {
-			return vm.pause;
-		}, function () {
-			if (vm.pause) {
-				vm.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
-				var template = $translate.instant('RtaPauseEnabledNotice')
-				var noticeText = template.replace('{0}', vm.pausedAt)
-				notice = NoticeService.info(noticeText, null, true);
-				cancelPolling();
-			} else {
-				vm.pausedAt = null;
-				if (notice != null) {
-					notice.destroy();
+		$scope.$watch(
+			function () { return vm.pause; },
+			function () {
+				if (vm.pause) {
+					vm.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
+					var template = $translate.instant('RtaPauseEnabledNotice')
+					var noticeText = template.replace('{0}', vm.pausedAt)
+					notice = NoticeService.info(noticeText, null, true);
+					cancelPolling();
+				} else {
+					vm.pausedAt = null;
+					if (notice != null) {
+						notice.destroy();
+					}
+					NoticeService.info($translate.instant('RtaPauseDisableNotice'), 5000, true);
+					setupPolling();
 				}
-				NoticeService.info($translate.instant('RtaPauseDisableNotice'), 5000, true);
-				setupPolling();
-			}
-		});
-
-		$scope.$watch(function () {
-			return vm.agentsInAlarm;
-		}, function (newValue, oldValue) {
-			if (newValue !== oldValue) {
-				updateStatesDelegate();
-				filterData();
-				if (newValue && vm.pause) {
-					vm.filteredData.sort(function (a, b) {
-						return vm.formatToSeconds(b.TimeInAlarm) - vm.formatToSeconds(a.TimeInAlarm);
-					});
-				}
-			}
-		});
-
-		$scope.$watch(function () {
-			return vm.teamsSelected;
-		}, function (newValue, oldValue) {
-			if (angular.toJson(newValue) !== angular.toJson(oldValue) && enableWatchOnTeam) {
-				vm.updateSite(oldValue);
-			}
-		});
-
-		$scope.$watch(function () {
-			return vm.filterText;
-		}, filterData);
+			});
 
 		$scope.$watch(
-			function () {
-				return $sessionStorage.buid;
-			},
+			function () { return vm.agentsInAlarm; },
+			function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					updateStatesDelegate();
+					filterData();
+					if (newValue && vm.pause) {
+						vm.filteredData.sort(function (a, b) {
+							return vm.formatToSeconds(b.TimeInAlarm) - vm.formatToSeconds(a.TimeInAlarm);
+						});
+					}
+				}
+			});
+
+		$scope.$watch(
+			function () { return vm.teamsSelected; },
+			function (newValue, oldValue) {
+				if (angular.toJson(newValue) !== angular.toJson(oldValue) && enableWatchOnTeam) {
+					vm.updateSite(oldValue);
+				}
+			});
+
+		$scope.$watch(
+			function () { return vm.filterText; },
+			filterData);
+
+		$scope.$watch(
+			function () { return $sessionStorage.buid; },
 			function (newValue, oldValue) {
 				if (angular.isDefined(oldValue) && newValue !== oldValue) {
 					rtaRouteService.goToSites();
@@ -448,8 +432,8 @@
 		function agentState() {
 			getAgentStates()
 				.then(getAgentStatesByParams)
-				.then(getAgentsInfo)
-				.then(updateStates2)
+				.then(updateStuff2)
+				.then(updateAgentStates)
 				.then(updatePhoneStatesFromStateParams);
 		}
 
@@ -466,21 +450,22 @@
 			})
 		}
 
-		function getAgentsInfo(agentsInfo) {
-			vm.agentsInfo = agentsInfo.States;
-			vm.agents = agentsInfo.States;
-			$scope.$watchCollection(function () {
-				return vm.agents;
-			}, filterData);
-			updateBreadCrumb(vm.agentsInfo);
+		function updateStuff2(data) {
+			agentsInfo = data.States;
+			vm.agents = data.States;
+			$scope.$watchCollection(
+				function () { return vm.agents; },
+				filterData);
+			updateBreadCrumb(data.States);
 			vm.pollingLock = true;
-			return agentsInfo;
+			return data;
 		}
 
 		function getAgentStates() {
 			var deferred = $q.defer();
 			if (skillAreaId) {
-				getSkillAreaInfo()
+				rtaService.getSkillArea(skillAreaId)
+					.then(getSkillIdsFromSkillArea)
 					.then(function () {
 						deferred.resolve(rtaService.agentStatesFor);
 					});
@@ -495,10 +480,21 @@
 			return deferred.promise;
 		};
 
+		function updateAgentStates(agentStates) {
+			if (vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
+				return;
+			var excludedStates = excludedStateIds();
+			var excludeStates = excludedStates.length > 0;
+			setAgentStates(agentStates);
+			updateUrlWithExcludedStateIds(excludedStates);
+		};
+
 		function getAgents() {
 			var deferred = $q.defer();
 			if (skillAreaId) {
-				getSkillAreaInfo()
+				rtaService
+					.getSkillArea(skillAreaId)
+					.then(getSkillIdsFromSkillArea)
 					.then(function () {
 						deferred.resolve(rtaService.agentsFor);
 					});
@@ -516,11 +512,6 @@
 			return rtaService.inAlarmFor;
 		};
 
-		function getSkillAreaInfo() {
-			return rtaService.getSkillArea(skillAreaId)
-				.then(getSkillIdsFromSkillArea);
-		}
-
 		function getSkillIdsFromSkillArea(skillArea) {
 			if (skillArea.Skills != null) {
 				vm.skillAreaName = skillArea.Name || '?';
@@ -529,15 +520,6 @@
 					return skill.Id;
 				});
 			}
-		}
-
-		function updateStates2(agentStates) {
-			if (vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
-				return;
-			var excludedStates = excludedStateIds();
-			var excludeStates = excludedStates.length > 0;
-			setStatesInAgents2(agentStates);
-			updateUrlWithExcludedStateIds(excludedStates);
 		}
 
 		function updateStates() {
@@ -566,62 +548,45 @@
 
 		function addNoStateIfNeeded(stateIds) {
 			if (stateIds.indexOf(nullStateId) > -1 &&
-				vm.states.filter(function (s) {
-					return s.Id === nullStateId;
-				}).length === 0) {
+				vm.states.filter(function (s) { return s.Id === nullStateId; }).length === 0) {
 				vm.states.push({
 					Id: nullStateId,
 					Name: nullState,
 					Selected: false
 				});
-				sortStatesByName();
+				sortPhoneStatesByName();
 			}
 		}
 
 		function getStateNamesForAnyExcludedStates(stateIds) {
-			var stateIdsWithoutNull = stateIds.filter(function (s) {
-				return s !== nullStateId;
-			})
+			var stateIdsWithoutNull = stateIds.filter(function (s) { return s !== nullStateId; })
 			if (stateIdsWithoutNull.length !== 0) {
 				rtaService.getPhoneStates(stateIdsWithoutNull)
 					.then(function (states) {
 						vm.states = vm.states.concat(states.PhoneStates);
-						sortStatesByName();
+						sortPhoneStatesByName();
 					});
 			}
 		}
 
 		function excludedStateIds() {
 			var included = vm.states
-				.filter(function (s) {
-					return s.Selected === true;
-				})
-				.map(function (s) {
-					return s.Id;
-				});
+				.filter(function (s) { return s.Selected === true; })
+				.map(function (s) { return s.Id; });
 			var excludedViaUrlAndNotManuallyIncluded = excludedStatesFromUrl()
-				.filter(function (s) {
-					return included.indexOf(s) === -1;
-				});
+				.filter(function (s) { return included.indexOf(s) === -1; });
 			var excluded = vm.states
-				.filter(function (s) {
-					return s.Selected === false;
-				})
-				.map(function (s) {
-					return s.Id;
-				});
+				.filter(function (s) { return s.Selected === false; })
+				.map(function (s) { return s.Id; });
 			var excludedUnique = excludedViaUrlAndNotManuallyIncluded
-				.filter(function (s) {
-					return excluded.indexOf(s) === -1;
-				});
-			var excludedStateIds = excludedUnique.concat(excluded);
-			return excludedStateIds;
+				.filter(function (s) { return excluded.indexOf(s) === -1; });
+			return excludedUnique.concat(excluded);
 		}
 
-		function setStatesInAgents2(states) {
+		function setAgentStates(states) {
 			vm.agents = [];
 			lastUpdate = states.Time;
-			fillAgentsWithState2(states);
+			fillAgentState(states);
 			buildTimeline(states);
 			vm.isLoading = false;
 			vm.pollingLock = true;
@@ -637,118 +602,57 @@
 			vm.pollingLock = true;
 		}
 
-
-		function fillAgentsWithState2(states) {
+		function fillAgentState(states) {
+			var now = moment(states.Time);
 			states.States.forEach(function (state, i) {
-				state.Shift = state.Shift || [];
-				state.OutOfAdherences = state.OutOfAdherences || [];
-
-				var now = moment(states.Time);
-				var timeInfo = {
-					time: states.Time,
-					windowStart: now.clone().add(-1, 'hours'),
-					windowEnd: now.clone().add(3, 'hours')
-				};
-
-				vm.agents.push({
-					PersonId: state.PersonId,
-					Name: state.Name,
-					SiteAndTeamName: state.SiteName + '/' + state.TeamName,
-					TeamName: state.TeamName,
-					SiteName: state.SiteName,
-					TeamId: state.TeamId,
-					State: state.State,
-					Activity: state.Activity,
-					NextActivity: state.NextActivity,
-					NextActivityStartTime: state.NextActivityStartTime,
-					Alarm: state.Alarm,
-					Color: state.Color,
-					TimeInState: state.TimeInState,
-					TimeInAlarm: getTimeInAlarm(state),
-					TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
-					TimeOutOfAdherence: getTimeOutOfAdherence(state, timeInfo),
-					OutOfAdherences: getOutOfAdherences(state, timeInfo),
-					ShiftTimeBar: getShiftTimeBar(state),
-					Shift: getShift(state, timeInfo)
-				});
-
-				state.StateId = state.StateId || nullStateId;
-				state.State = state.State || nullState;
-				if (vm.states
-					.map(function (s) {
-						return s.Id;
-					})
-					.indexOf(state.StateId) === -1) {
-					vm.states.push({
-						Id: state.StateId,
-						Name: state.State,
-						Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
-					})
-				}
-
+				vm.agents.push(rtaAgentsBuildService.buildAgentState(now, state));
+				if (stateIsNotAdded(vm.states, state))
+					vm.states.push(mapState(state));
 			});
-			sortStatesByName();
+			sortPhoneStatesByName();
 		}
 
 		function fillAgentsWithState(states) {
+			var now = moment(states.Time);
 			states.States.forEach(function (state, i) {
-				var agentInfo = $filter('filter')(vm.agentsInfo, {
+				var agentInfo = $filter('filter')(agentsInfo, {
 					PersonId: state.PersonId
 				});
 
-				state.Shift = state.Shift || [];
-				state.OutOfAdherences = state.OutOfAdherences || [];
-
-				var now = moment(states.Time);
-				var timeInfo = {
-					time: states.Time,
-					windowStart: now.clone().add(-1, 'hours'),
-					windowEnd: now.clone().add(3, 'hours')
-				};
-
 				if (agentInfo.length > 0) {
-					vm.agents.push({
-						Name: agentInfo[0].Name,
-						SiteAndTeamName: agentInfo[0].SiteName + '/' + agentInfo[0].TeamName,
-						TeamName: agentInfo[0].TeamName,
-						SiteName: agentInfo[0].SiteName,
-						PersonId: agentInfo[0].PersonId,
-						TeamId: agentInfo[0].TeamId,
-						State: state.State,
-						Activity: state.Activity,
-						NextActivity: state.NextActivity,
-						NextActivityStartTime: state.NextActivityStartTime,
-						Alarm: state.Alarm,
-						Color: state.Color,
-						TimeInState: state.TimeInState,
-						TimeInAlarm: getTimeInAlarm(state),
-						TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
-						TimeOutOfAdherence: getTimeOutOfAdherence(state, timeInfo),
-						OutOfAdherences: getOutOfAdherences(state, timeInfo),
-						ShiftTimeBar: getShiftTimeBar(state),
-						Shift: getShift(state, timeInfo)
-					});
+					state.Name = agentInfo[0].Name;
+					state.SiteAndTeamName = agentInfo[0].SiteName + '/' + agentInfo[0].TeamName;
+					state.TeamName = agentInfo[0].TeamName;
+					state.SiteName = agentInfo[0].SiteName;
+					state.PersonId = agentInfo[0].PersonId;
+					state.TeamId = agentInfo[0].TeamId;
 
-					state.StateId = state.StateId || nullStateId;
-					state.State = state.State || nullState;
-					if (vm.states
-						.map(function (s) {
-							return s.Id;
-						})
-						.indexOf(state.StateId) === -1) {
-						vm.states.push({
-							Id: state.StateId,
-							Name: state.State,
-							Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
-						})
-					}
+					vm.agents.push(rtaAgentsBuildService.buildAgentState(now, state));
+					if (stateIsNotAdded(vm.states, state))
+						vm.states.push(mapState(state));
 				}
 			});
-			sortStatesByName();
+			sortPhoneStatesByName();
+		}
+
+		function stateIsNotAdded(existingStates, state) {
+			state.StateId = state.StateId || nullStateId;
+			state.State = state.State || nullState;
+			return (existingStates
+				.map(function (s) { return s.Id; })
+				.indexOf(state.StateId) === -1)
+		}
+
+		function mapState(state) {
+			return {
+				Id: state.StateId,
+				Name: state.State,
+				Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
+			};
 		}
 
 		function fillAgentsWithoutState() {
-			vm.agentsInfo.forEach(function (agentInfo) {
+			agentsInfo.forEach(function (agentInfo) {
 				var agentFilled = $filter('filter')(vm.agents, {
 					PersonId: agentInfo.PersonId
 				});
@@ -764,28 +668,6 @@
 			});
 		}
 
-		function keepSelectionForOrganization() {
-			if (!vm.showOrgSelection)
-				return;
-			selectSiteAndTeamsUnder();
-
-			if (teamIds.length > 0)
-				vm.teamsSelected = teamIds;
-			enableWatchOnTeam = true;
-			updateSelectFieldText();
-		}
-
-		function countTeamsSelected() {
-			var checkedTeamsCount = 0;
-			vm.sites.forEach(function (site) {
-				if (siteIds.indexOf(site.Id) > -1) {
-					checkedTeamsCount = checkedTeamsCount + site.Teams.length;
-				}
-			});
-			checkedTeamsCount = checkedTeamsCount + vm.teamsSelected.length;
-			return checkedTeamsCount;
-		}
-
 		function stateGoToAgents(selection) {
 			var stateName = vm.showOrgSelection ? 'rta.select-skill' : 'rta.agents';
 			var options = vm.showOrgSelection ? {
@@ -793,6 +675,14 @@
 				notify: true
 			} : {};
 			$state.go(stateName, selection, options);
+		}
+
+		function keepSelectionForOrganization() {
+			selectSiteAndTeamsUnder();
+			if (teamIds.length > 0)
+				vm.teamsSelected = teamIds;
+			enableWatchOnTeam = true;
+			updateSelectFieldText();
 		}
 
 		function selectSiteAndTeamsUnder() {
@@ -809,92 +699,25 @@
 			});
 		}
 
-		function unselectTeamsInSite(site) {
-			site.Teams.forEach(function (team) {
-				var index = vm.teamsSelected.indexOf(team.Id);
-				if (index > -1) {
-					vm.teamsSelected.splice(index, 1);
-				}
-			});
-		}
-
 		function updateSelectFieldText() {
 			var howManyTeamsSelected = countTeamsSelected();
 			vm.selectFieldText = howManyTeamsSelected === 0 ? 'Select organization' : howManyTeamsSelected + ' teams selected';
 		}
 
-
-		function getSelected(outOf, shouldMatch) {
-			return outOf.find(function (o) {
-				return o.Id === shouldMatch;
-			})
-		};
-
-		function createFilterFor(query) {
-			var lowercaseQuery = angular.lowercase(query);
-			return function filterFn(item) {
-				var lowercaseName = angular.lowercase(item.Name);
-				return (lowercaseName.indexOf(lowercaseQuery) === 0);
-			};
-		};
-
-		function getTimeOutOfAdherence(state, timeInfo) {
-			if (state.OutOfAdherences.length > 0) {
-				var lastOOA = state.OutOfAdherences[state.OutOfAdherences.length - 1];
-				if (lastOOA.EndTime == null) {
-					var seconds = moment(timeInfo.time).diff(moment(lastOOA.StartTime), 'seconds');
-					return vm.formatDuration(seconds);
+		function countTeamsSelected() {
+			var checkedTeamsCount = 0;
+			vm.sites.forEach(function (site) {
+				if (siteIds.indexOf(site.Id) > -1) {
+					checkedTeamsCount = checkedTeamsCount + site.Teams.length;
 				}
-			}
-		}
-
-		function getTimeInAlarm(state) {
-			if (state.TimeInAlarm !== null)
-				return vm.formatDuration(state.TimeInAlarm);
-		}
-
-		function getOutOfAdherences(state, timeInfo) {
-			return state.OutOfAdherences
-				.filter(function (t) {
-					return t.EndTime == null || moment(t.EndTime) > timeInfo.windowStart;
-				})
-				.map(function (t) {
-					var endTime = t.EndTime || timeInfo.time;
-					return {
-						Offset: Math.max(timeToPercent(timeInfo.time, t.StartTime), 0) + '%',
-						Width: Math.min(timePeriodToPercent(timeInfo.windowStart, t.StartTime, endTime), 100) + "%",
-						StartTime: moment(t.StartTime).format('HH:mm:ss'),
-						EndTime: t.EndTime ? moment(t.EndTime).format('HH:mm:ss') : null,
-					};
-				});
-		}
-
-		function getShiftTimeBar(state) {
-			var percentForTimeBar = function (seconds) {
-				return Math.min(secondsToPercent(seconds), 25);
-			}
-			return (state.TimeInAlarm ? percentForTimeBar(state.TimeInRule) : 0) + "%";
-		}
-
-		function getShift(state, timeInfo) {
-			return state.Shift
-				.filter(function (layer) {
-					return timeInfo.windowStart < moment(layer.EndTime) && timeInfo.windowEnd > moment(layer.StartTime);
-				})
-				.map(function (s) {
-					return {
-						Color: s.Color,
-						Offset: Math.max(timeToPercent(timeInfo.time, s.StartTime), 0) + '%',
-						Width: Math.min(timePeriodToPercent(timeInfo.windowStart, s.StartTime, s.EndTime), 100) + "%",
-						Name: s.Name,
-						Class: getClassForActivity(timeInfo.time, s.StartTime, s.EndTime)
-					};
-				});
+			});
+			checkedTeamsCount = checkedTeamsCount + vm.teamsSelected.length;
+			return checkedTeamsCount;
 		}
 
 		function buildTimeline(states) {
 			var timeline = function (time) {
-				var percent = timeToPercent(states.Time, time);
+				var percent = rtaFormatService.timeToPercent(states.Time, time);
 				if (percent <= 94)
 					return {
 						Time: time.format('HH:mm'),
@@ -948,72 +771,20 @@
 			}
 		}
 
-		function secondsToPercent(seconds) {
-			return seconds / 3600 * 25;
-		}
-
-		function timeToPercent(currentTime, time) {
-			var offset = moment(currentTime).add(-1, 'hour');
-			return secondsToPercent(moment(time).diff(offset, 'seconds'));
-		}
-
-		function timePeriodToPercent(windowStart, startTime, endTime) {
-			var start = moment(startTime) > windowStart ? moment(startTime) : windowStart;
-			var lengthSeconds = moment(endTime).diff(start, 'seconds');
-			return secondsToPercent(lengthSeconds);
-		}
-
-		function getClassForActivity(currentTime, startTime, endTime) {
-			var now = moment(currentTime).unix(),
-				start = moment(startTime).unix(),
-				end = moment(endTime).unix();
-
-			if (now < start)
-				return 'next-activity';
-			else if (now > end)
-				return 'previous-activity';
-			return 'current-activity';
-		}
-
-		(function getSkillName() {
-			if (skillIds.length === 1) {
-				rtaService.getSkillName(skillIds[0])
-					.then(function (skill) {
-						vm.skillName = skill.Name || '?';
-						vm.skill = true;
-					});
-			}
-		})();
-
-		function updateBreadCrumb(agentsInfo) {
-			if (siteIds.length > 1 && teamIds.length === 0) {
-				vm.goBackToRootWithUrl = urlForRootInBreadcrumbs(agentsInfo);
-				vm.siteName = "Multiple Sites";
-			} else if (
-				(teamIds.length > 0 && siteIds.length > 0) ||
-				(teamIds.length > 1 || siteIds.length > 0) ||
-				teamIds.length > 1 || (siteIds.length === 1 && teamIds.length !== 1)) {
-				vm.goBackToRootWithUrl = urlForRootInBreadcrumbs(agentsInfo);
-				vm.teamName = "Multiple Teams";
-			} else if (agentsInfo.length > 0) {
-				vm.siteName = agentsInfo[0].SiteName;
-				vm.teamName = agentsInfo[0].TeamName;
-				vm.goBackToTeamsWithUrl = urlForTeamsInBreadcrumbs(agentsInfo);
-				vm.goBackToRootWithUrl = urlForRootInBreadcrumbs(agentsInfo);
-				vm.showPath = true;
-			}
-			else {
-				vm.sites.forEach(function (s) {
-					s.Teams.forEach(function (t) {
-						if (t.Id === teamIds[0]) {
-							vm.siteName = s.Name;
-							vm.teamName = t.Name;
-							vm.goBackToTeamsWithUrl = urlForTeamsInBreadcrumbs2(s.Id);
-							vm.goBackToRootWithUrl = urlForRootInBreadcrumbs();
-						}
-					})
-				})
-			}
+		function updateBreadCrumb(data) {
+			var breadCrumbInfo = rtaBreadCrumbService.getBreadCrumb({
+				organization: vm.sites,
+				skillAreaId: skillAreaId,
+				skillIds: skillIds,
+				siteIds: siteIds,
+				teamIds: teamIds,
+				agentsInfo: data
+			});
+			vm.goBackToRootWithUrl = breadCrumbInfo.goBackToRootWithUrl;
+			vm.siteName = breadCrumbInfo.siteName;
+			vm.teamName = breadCrumbInfo.teamName;
+			vm.goBackToTeamsWithUrl = breadCrumbInfo.goBackToTeamsWithUrl;
+			vm.showPath = breadCrumbInfo.showPath;
 		};
 
 		function updateUrlWithExcludedStateIds(excludedStates) {
@@ -1024,34 +795,8 @@
 				});
 		};
 
-		function urlForTeamsInBreadcrumbs(agentsInfo) {
-			if (skillAreaId != null)
-				return rtaRouteService.urlForTeamsBySkillArea(agentsInfo[0].SiteId, skillAreaId);
-			if (skillIds.length > 0)
-				return rtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0]);
-			return rtaRouteService.urlForTeams(agentsInfo[0].SiteId);
-		}
-
-		function urlForTeamsInBreadcrumbs2(siteId) {
-			if (skillAreaId != null)
-				return rtaRouteService.urlForTeamsBySkillArea(siteId, skillAreaId);
-			if (skillIds.length > 0)
-				return rtaRouteService.urlForTeamsBySkills(siteId, skillIds[0]);
-			return rtaRouteService.urlForTeams(siteId);
-		}
-
-		function urlForRootInBreadcrumbs() {
-			if (skillAreaId != null)
-				return rtaRouteService.urlForSitesBySkillArea(skillAreaId);
-			if (skillIds.length > 0)
-				return rtaRouteService.urlForSitesBySkills(skillIds[0]);
-			return rtaRouteService.urlForSites();
-		}
-
-		function sortStatesByName() {
-			vm.states = $filter('orderBy')(vm.states, function (state) {
-				return state.Name;
-			});
+		function sortPhoneStatesByName() {
+			vm.states = $filter('orderBy')(vm.states, function (state) { return state.Name; });
 		};
 
 		$scope.$on('$destroy', function () {
