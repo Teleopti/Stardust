@@ -306,7 +306,7 @@
 					site.isChecked = false;
 			});
 			vm.teamsSelected = [];
-			vm.selectFieldText = 'Select organization';
+			vm.selectFieldText = $translate.instant('SelectOrganization');
 		};
 
 		vm.clearSearchTerm = function () {

@@ -27176,6 +27176,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select organization.
+        /// </summary>
+        public static string SelectOrganization {
+            get {
+                return ResourceManager.GetString("SelectOrganization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select People to Add to Role.
         /// </summary>
         public static string SelectPeopleToAddToRole {
