@@ -267,7 +267,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test, Timeout(5000)]
-		[Ignore("Too be fixed - #42634. Currently it works acceptable if numberofagents below ~200")]
 		public void ShouldNotHangWhenHavingManySkillGroups_Bug42634()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(2, 2);

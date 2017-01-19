@@ -15,8 +15,11 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public bool Execute(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
+			var success = false;
+		
 			foreach (var skillGroupsOnIsland in groupedSkillGroups)
 			{
+				var removed = 0;
 				var numberOfAgentsInIsland = skillGroupsOnIsland.Sum(x => x.Agents.Count());
 				if (numberOfAgentsInIsland < _reduceIslandsLimits.MinimumNumberOfAgentsInIsland)
 					continue;
@@ -33,11 +36,17 @@ namespace Teleopti.Ccc.Domain.Islands
 
 						skillGroupAndNumberOfAgents.SkillGroup.RemoveSkill(skillGroupSkill);
 						noAgentsKnowingSkill[skillGroupSkill] -= skillGroupAndNumberOfAgents.NumberOfAgentsOnSkillGroup;
-						return true;
+						removed += skillGroupAndNumberOfAgents.NumberOfAgentsOnSkillGroup;
+
+						success = true;
+
+						if ((numberOfAgentsInIsland - removed) < _reduceIslandsLimits.MinimumNumberOfAgentsInIsland)
+							return true;
+
 					}
 				}
 			}
-			return false;
+			return success;
 		}
 	}
 }
