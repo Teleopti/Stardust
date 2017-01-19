@@ -224,6 +224,25 @@ describe('PermissionsController', function() {
 			expect(vm.selectedRole.DescriptionText).toEqual('rolename');
 		});
 
+		it('should toggle input if role has all function available', function() {
+			fakeBackend
+				.withRole(defaultRole)
+				.withRoleInfo({
+					Id: defaultRole.Id,
+					AvailableFunctions: [{
+						Id: '123',
+						FunctionCode: 'All'
+					}]
+				})
+				.withApplicationFunction(defaultRole);
+			$httpBackend.flush();
+
+			vm.selectRole(defaultRole);
+			$httpBackend.flush()
+
+			expect(vm.selectedOrNot).toEqual(true);
+		});
+
 		it('should unselect previous selected role when creating new role', function() {
 			fakeBackend
 				.withRole(defaultRole)

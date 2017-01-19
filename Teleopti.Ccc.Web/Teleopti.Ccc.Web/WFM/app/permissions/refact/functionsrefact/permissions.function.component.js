@@ -7,6 +7,7 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 	ctrl.toggleFunctionOpen = toggleFunctionOpen;
 	ctrl.openFunctions = {};
 	ctrl.isFunctionOpen = isFunctionOpen;
+	ctrl.hasAllFunction = hasAllFunction;
 
 	function isFunctionOpen(func) {
 		if (func.FunctionDescription === 'xxOpenRaptorApplication') {
@@ -84,6 +85,20 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 		} else {
 			toggleFunction(func);
 			func.multiDeselectModal = false;
+		}
+	}
+
+	function hasAllFunction() {
+		if (!ctrl.selectedRole.Id && !ctrl.selectedRole.AvailableFunctions) {
+			return;
+		}
+
+		var hasAll = ctrl.selectedRole.AvailableFunctions.find(function(func) {
+			return func.FunctionCode === 'All';
+		});
+
+		if (hasAll) {
+			return true;
 		}
 	}
 }

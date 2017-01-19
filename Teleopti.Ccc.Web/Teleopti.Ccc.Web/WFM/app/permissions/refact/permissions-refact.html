@@ -142,16 +142,15 @@
 									</div>
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex line-right">
-										<div class="wfm-checkbox" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id}">
-											<span class="pointer" ng-click="toggleDangerModal = true">
-											<span class="non-pointer">
-												<input type="checkbox" id="check1" ng-model="vm.selectedOrNot" />
-												<label for="check1">
+
+										<div class="wfm-checkbox" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
+											<input type="checkbox" checked="true" ng-model="vm.selectedOrNot" />
+											<label ng-click="toggleDangerModal = true" class="pointer">
+												<span class="non-pointer">
 													<span class="wfm-checkbox-toggle"></span>
-											<span class="wfm-checkbox-label">{{'AccessAllFunctions'|translate}}</span>
+													<span class="wfm-checkbox-label">{{'AccessAllFunctions'|translate}}</span>
+												</span>
 											</label>
-											</span>
-											</span>
 										</div>
 									</div>
 								</div>

@@ -298,6 +298,20 @@
 				} else if (vm.dataFilterObj.isUnSelected) {
 					unselectedDataFilter();
 				}
+
+				if (vm.selectedRole.AvailableFunctions) {
+					var hasAll = vm.selectedRole.AvailableFunctions.find(function(func) {
+						return func.FunctionCode === 'All';
+					});
+					if (hasAll) {
+						vm.selectedOrNot = true;
+					} else {
+						vm.selectedOrNot = false;
+					}
+				}
+
+
+
 			});
 		}
 
