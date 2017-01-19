@@ -92,6 +92,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			foreach (var skillId in @event.Skills)
 			{
 				var skill = _skillRepository.Get(skillId);
+				if (skill == null) continue;
 				skills.Add(skill);
 				var act = skill.Activity;
 				if (!activities.Contains(act))

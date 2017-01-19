@@ -12,6 +12,7 @@
         vm.selectedSkill;
         vm.selectedSkillArea;
         vm.selectedSkillChange = selectedSkillChange;
+        vm.selectedAreaChange = selectedAreaChange;
         vm.querySearchSkills = querySearchSkills;
         vm.querySearchAreas = querySearchAreas;
         vm.addOvertime = addOvertime;
@@ -31,15 +32,18 @@
         ////////////////
         function checkToggles() {
             toggleService.togglesLoaded.then(function () {
-                console.log(toggleService.WfmStaffing_AllowActions_42524)
                 vm.devTogglesEnabled = toggleService.WfmStaffing_AllowActions_42524;
             });
         }
 
-        function generateChart(skillId) {
-            if (!skillId) return;
-            var query = getSkillStaffing(skillId);
+        function generateChart(skillId, areaId) {
+            if (skillId) {
+                var query = getSkillStaffing(skillId);
+            } else if (areaId) {
+                var query = getSkillAreaStaffing(areaId);
+            }
             query.$promise.then(function (result) {
+                console.log(result);
                 staffingData.time = [];
                 staffingData.scheduledStaffing = [];
                 staffingData.forcastedStaffing = [];
@@ -76,9 +80,11 @@
             if (!skill) {
                 currentSkills = area;
                 vm.selectedSkillArea = area;
+                vm.selectedSkill = "";
             } else {
                 currentSkills = skill;
                 vm.selectedSkill = currentSkills;
+                vm.selectedArea = "";
             }
         }
 
@@ -86,7 +92,7 @@
             var query = staffingService.getSkills.query();
             query.$promise.then(function (skills) {
                 selectSkillOrArea(skills[0])
-                generateChart(skills[0].Id);
+                generateChart(skills[0].Id, null);
                 allSkills = skills;
             })
         }
@@ -100,17 +106,23 @@
 
         function getSkillAreaStaffing(areaId) {
             if (!areaId) return;
-            return staffingService.getSkillAreaStaffing.get(areaId);
+            return staffingService.getSkillAreaStaffing.get({id: areaId});
         }
 
         function getSkillStaffing(skillId) {
+            if (!skillId) return;
             return staffingService.getSkillStaffing.get({ id: skillId })
         }
 
-        function selectedSkillChange(skill, area) {
+        function selectedSkillChange(skill) {
             if (skill == null) return;
-            generateChart(skill.Id)
-            selectSkillOrArea(skill, area)
+            generateChart(skill.Id, null)
+            selectSkillOrArea(skill, null)
+        }
+        function selectedAreaChange(area) {
+            if (area == null) return;
+            generateChart(null, area.Id)
+            selectSkillOrArea(null, area)
         }
 
         function querySearchSkills(query) {
@@ -133,7 +145,16 @@
             };
         };
         function addOvertime() {
-            staffingService.addOvertime.save({ Skills: [currentSkills.Id] });
+            var skillIds;
+            if (currentSkills.Skills) {
+                skillIds = currentSkills.Skills.map(function (skill) {
+                    return skill.Id
+                });
+                // staffingService.addOvertime.save({ Skills: [skillIds] });
+            } else {
+                skillIds = [currentSkills.Id];
+            }
+            staffingService.addOvertime.save({ Skills: skillIds });
         }
 
         function toggleDraggable() {
