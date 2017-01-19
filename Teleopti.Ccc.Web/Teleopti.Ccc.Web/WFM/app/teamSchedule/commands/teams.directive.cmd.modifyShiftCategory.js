@@ -33,7 +33,7 @@
 		var vm = this;
 
 		vm.label = 'EditShiftCategory';
-		
+		vm.runningCommand = false;
 		vm.shiftCategoriesLoaded = false;
 		vm.selectedAgents = [];
 		vm.invalidAgents = [];
@@ -83,7 +83,11 @@
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
 
-			shiftCategorySvc.modifyShiftCategories(requestData).then(function(response){
+			vm.runningCommand = true;
+
+			shiftCategorySvc.modifyShiftCategories(requestData).then(function (response) {
+				vm.runningCommand = false;
+
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
@@ -97,6 +101,8 @@
 						Name: agent.Name
 					}
 				}), response.data);
+
+				
 			});
 		};
 	}

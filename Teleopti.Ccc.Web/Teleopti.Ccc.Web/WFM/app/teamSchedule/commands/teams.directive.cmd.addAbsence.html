@@ -2,6 +2,7 @@
 	<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
 	<md-content class="command-panel-content" layout-padding>
 		<form name="newAbsenceForm">
+			<md-progress-linear ng-if="vm.runningCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'Absence'|translate}}: </h3>
 			<div class="con-row">
 				<md-select class="absence-selector" ng-model="vm.selectedAbsenceId" required placeholder="{{'PickAnAbsence'|translate}}" md-autofocus="::vm.containerCtrl.onReady()">
@@ -30,7 +31,7 @@
 			</div>
 
 			<div class="wfm-checkbox" ng-if="vm.isAddFullDayAbsenceAvailable()">
-				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()" />
+				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"/>
 				<label for="is-full-day">
 					<span class="wfm-checkbox-toggle"></span>
 					<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>
@@ -45,8 +46,8 @@
 		</form>
 
 		<button id="applyAbsence" class="wfm-btn form-submit"
-				ng-class="{'wfm-btn-primary': newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent(), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent())}"
-				ng-disabled="newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() ?'':'disabled'"
+				ng-class="{'wfm-btn-primary': newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (!vm.runningCommand), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (!vm.runningCommand))}"
+				ng-disabled="newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (! vm.runningCommand)?'':'disabled'"
 				ng-click="vm.addAbsence()">
 			{{'Apply' | translate}}
 		</button>

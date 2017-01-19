@@ -72,6 +72,7 @@
 		var vm = this;
 
 		vm.label = 'AddAbsence';
+		vm.runningCommand = false;
 		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 		vm.invalidAgents = [];
 
@@ -153,9 +154,9 @@
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
-				return;
+				return null;
 			}
-			PersonAbsenceSvc.addAbsence(requestData, vm.isFullDayAbsence).then(function (response) {
+			return PersonAbsenceSvc.addAbsence(requestData, vm.isFullDayAbsence).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
@@ -194,14 +195,25 @@
 			}
 			requestData.IsFullDay = vm.isFullDayAbsence;
 
+			vm.runningCommand = true;
+
+			var commandExecutionPromise;
+
 			if (vm.checkPersonalAccountEnabled) {
-				CommandCheckService.checkPersonalAccounts(requestData)
+				commandExecutionPromise = CommandCheckService.checkPersonalAccounts(requestData)
 					.then(function (data) {
-						addAbsence(data);
+						return addAbsence(data);
 					});
 			} else {
-				addAbsence(requestData);
+				commandExecutionPromise = addAbsence(requestData);
 			}
+
+			if (commandExecutionPromise) {
+				commandExecutionPromise.then(function() { vm.runningCommand = false; });
+			} else {
+				vm.runningCommand = false;
+			}
+
 		};
 
 		vm.updateDateAndTimeFormat = function() {
