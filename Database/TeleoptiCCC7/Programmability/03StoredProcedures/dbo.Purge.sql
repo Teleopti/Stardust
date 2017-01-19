@@ -21,6 +21,7 @@ declare @MaxDate datetime
 declare @SuperRole uniqueidentifier
 declare @Start smalldatetime
 declare @TheDate smalldatetime
+declare @RowCount int
 
 set @start = getdate()
 set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
@@ -89,22 +90,49 @@ begin
 	from PersonPeriod pp
 	inner join #Deleted p on pp.Parent = p.Id
 
-	delete top (100) Auditing.Revision
-	from Auditing.Revision r
-	inner join Auditing.PersonAssignment_AUD pa on pa.REV = r.Id
-	inner join person p on pa.Person = p.Id
-	where p.IsDeleted = 1
-
-	delete top (100) Auditing.Revision
-	from Auditing.Revision r
-	inner join Auditing.PersonAbsence_AUD pa on pa.REV = r.Id
-	inner join person p on pa.Person = p.Id
-	where p.IsDeleted = 1
-
 	delete ReadModel.PersonScheduleDay
 	from ReadModel.PersonScheduleDay ps
 	inner join #Deleted d on d.Id = ps.PersonId
 
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Auditing.PersonAssignment_AUD
+	from Auditing.PersonAssignment_AUD pa
+	inner join person p on pa.Person = p.Id
+	where p.IsDeleted = 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Auditing.PersonDayOff_AUD
+	from Auditing.PersonDayOff_AUD pa
+	inner join person p on pa.Person = p.Id
+	where p.IsDeleted = 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Auditing.PersonAbsence_AUD
+	from Auditing.PersonAbsence_AUD pa
+	inner join person p on pa.Person = p.Id
+	where p.IsDeleted = 1
+
+	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 		return
 end
