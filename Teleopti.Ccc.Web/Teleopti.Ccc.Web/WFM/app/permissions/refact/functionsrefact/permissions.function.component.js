@@ -90,16 +90,11 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 
 	function hasAllFunction() {
 		if (!ctrl.selectedRole.Id || !ctrl.selectedRole.AvailableFunctions) {
-			return;
+			return false;
 		}
-
-		var hasAll = ctrl.selectedRole.AvailableFunctions.find(function(func) {
+		return ctrl.selectedRole.AvailableFunctions.find(function(func) {
 			return func.FunctionCode === 'All';
 		});
-
-		if (hasAll) {
-			return true;
-		}
 	}
 }
 

@@ -52,7 +52,7 @@
 			<div class="con-row">
 				<div class="con-flex">
 					<ul class="wfm-list">
-						<li ng-click="vm.selectRole(role)" ng-repeat="role in vm.roles | filter:roleFilter">
+						<li ng-click="vm.selectRole(role, false)" ng-repeat="role in vm.roles | filter:roleFilter">
 							<span class="list-item-container">
 								{{role.DescriptionText}}
 							</span>

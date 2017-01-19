@@ -155,7 +155,9 @@
 			toggleSelection(vm.applicationFunctions, vm.selectedOrNot);
 
 			if (vm.selectedRole != null) {
-				permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, vm.selectedOrNot);
+				permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, vm.selectedOrNot).then(function() {
+					selectRole(vm.selectedRole, true);
+				});
 			}
 		}
 
@@ -215,7 +217,6 @@
 			if (vm.organizationSelection !== null && vm.organizationSelection.BusinessUnit !== null) {
 				toggleOrganizationSelecton(vm.organizationSelection.BusinessUnit, false);
 			}
-
 		}
 
 		function editRole(newRoleName, role) {
@@ -273,8 +274,10 @@
 			});
 		}
 
-		function selectRole(role) {
-			markSelectedRole(role);
+		function selectRole(role, keepSelectedRole) {
+			if (!keepSelectedRole) {
+				markSelectedRole(role);
+			}
 
 			PermissionsServiceRefact.manage.getRoleInformation({
 				Id: role.Id
@@ -309,9 +312,6 @@
 						vm.selectedOrNot = false;
 					}
 				}
-
-
-
 			});
 		}
 

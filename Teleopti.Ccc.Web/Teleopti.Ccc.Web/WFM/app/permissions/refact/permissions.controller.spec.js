@@ -67,6 +67,10 @@ describe('PermissionsController', function() {
 		$httpBackend.whenPOST('../api/Permissions/Roles/DeleteFunction/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function(method, url, data, headers) {
 			return 200;
 		});
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/DeleteFunction/8ecf6029-4f3c-409c-89db-46bd8d7d402d').respond(function(method, url, data, headers) {
+			response = angular.fromJson(data);
+			return 200;
+		});
 		$httpBackend.whenPOST('../api/Permissions/Roles/Functions').respond(function(method, url, data, headers) {
 			return 200;
 		});
@@ -74,6 +78,7 @@ describe('PermissionsController', function() {
 			return 200;
 		});
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function(method, url, data, headers) {
+			response = angular.fromJson(data);
 			return 200;
 		});
 
@@ -795,13 +800,25 @@ describe('PermissionsController', function() {
 					}]
 				});
 			$httpBackend.flush();
-			spyOn(permissionsDataService, 'selectAllFunction');
+			var expectedResponse = {
+				Id: "e7f360d3-c4b6-41fc-9b2d-9b5e015aae64",
+				Functions: ["8ecf6029-4f3c-409c-89db-46bd8d7d402d",
+					"63656f9a-be16-4bb7-9012-9bde01232075",
+					"6856320f-1391-4332-bcaa-6cf16cbcb8dc",
+					"52b6f3de-55e0-45b2-922e-316f8538f60c",
+					"6856320f-1391-4332-bcaa-6cf16cbcb8dc",
+					"52b6f3de-55e0-45b2-922e-316f8538f60c",
+					"f73154af-8d6d-4250-b066-d6ead56bfc16",
+					"f73154af-8d6d-4250-b066-d6ead56bfc16"
+				]
+			};
 
 			vm.selectRole(vm.roles[0]);
 			$httpBackend.flush();
 			vm.toggleAllFunction();
+			$httpBackend.flush();
 
-			expect(permissionsDataService.selectAllFunction).toHaveBeenCalled();
+			expect(response).toEqual(expectedResponse);
 		});
 
 		it('should delete all functions for role when untoggle all function', function() {
@@ -809,23 +826,7 @@ describe('PermissionsController', function() {
 				.withRole(defaultRole)
 				.withRoleInfo({
 					Id: defaultRole.Id,
-					AvailableFunctions: [{
-						Id: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7'
-					}, {
-						Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-					}, {
-						Id: '7656320f-1391-4332-bcaa-6cf16cbcb8dc'
-					}, {
-						Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-					}, {
-						Id: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-					}, {
-						Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-					}, {
-						Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-					}, {
-						Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-					}]
+					AvailableFunctions: []
 				})
 				.withApplicationFunction(allFunction)
 				.withApplicationFunction({
@@ -848,13 +849,28 @@ describe('PermissionsController', function() {
 					}]
 				});
 			$httpBackend.flush();
-			spyOn(permissionsDataService, 'selectAllFunction');
+			var expectedResponse = {
+				Id: "e7f360d3-c4b6-41fc-9b2d-9b5e015aae64",
+				FunctionId: "8ecf6029-4f3c-409c-89db-46bd8d7d402d",
+				Functions: ["8ecf6029-4f3c-409c-89db-46bd8d7d402d",
+					"63656f9a-be16-4bb7-9012-9bde01232075",
+					"7656320f-1391-4332-bcaa-6cf16cbcb8dc",
+					"52b6f3de-55e0-45b2-922e-316f8538f60c",
+					"6856320f-1391-4332-bcaa-6cf16cbcb8dc",
+					"52b6f3de-55e0-45b2-922e-316f8538f60c",
+					"f73154af-8d6d-4250-b066-d6ead56bfc16",
+					"f73154af-8d6d-4250-b066-d6ead56bfc16"
+				]
+			}
 
 			vm.selectRole(vm.roles[0]);
 			$httpBackend.flush();
 			vm.toggleAllFunction();
+			$httpBackend.flush();
+			vm.toggleAllFunction();
+			$httpBackend.flush();
 
-			expect(permissionsDataService.selectAllFunction).toHaveBeenCalled();
+			expect(response).toEqual(expectedResponse);
 		});
 
 		it('should deselect all functions when toggle all function', function() {

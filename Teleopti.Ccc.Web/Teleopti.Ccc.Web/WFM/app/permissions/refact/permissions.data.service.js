@@ -99,19 +99,20 @@
 		}
 
 		function selectAllFunction(selectedRole, functions, selected) {
+			allFunctions = [];
 			selectAllFunctionHelper(functions);
 
 			if (selected) {
-				PermissionsServiceRefact.postFunctions.query({
+				return PermissionsServiceRefact.postFunctions.query({
 					Id: selectedRole.Id,
 					Functions: allFunctions
-				}).$promise.then(function(result) {});
+				}).$promise;
 			} else {
-				PermissionsServiceRefact.deleteAllFunction.delete({
+				return PermissionsServiceRefact.deleteAllFunction.delete({
 					Id: selectedRole.Id,
 					FunctionId: functions[0].FunctionId,
 					Functions: allFunctions
-				}).$promise.then(function(result) {});
+				}).$promise;
 			}
 		}
 
