@@ -63,7 +63,9 @@
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
 			       
+			
 			ActivityService.undoScheduleChange(requestData).then(function (reponse) {
+				$scope.$emit('teamSchedule.hide.loading');
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
@@ -91,8 +93,8 @@
 			);
 			$wfmModal.confirm(message, title).then(function (result) {
 				vm.resetActiveCmd();
-
 				if (result) {
+					$scope.$emit('teamSchedule.show.loading');
 					vm.undoSchedule();
 				}
 			});

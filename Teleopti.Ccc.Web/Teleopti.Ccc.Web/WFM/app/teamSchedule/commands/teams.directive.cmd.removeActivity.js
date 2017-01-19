@@ -56,6 +56,7 @@
 			};
 
 			ActivityService.removeActivity(requestData).then(function (response) {
+				$scope.$emit('teamSchedule.hide.loading');
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
@@ -88,6 +89,7 @@
 				vm.resetActiveCmd();
 
 				if (result) {
+					$scope.$emit('teamSchedule.show.loading');
 					vm.removeActivity();
 				}
 			});

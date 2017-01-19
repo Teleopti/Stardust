@@ -8,9 +8,9 @@
 		controller: MoveOverlappedActivityCtrl
 	});
 
-	MoveOverlappedActivityCtrl.$inject = ['PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
+	MoveOverlappedActivityCtrl.$inject = ['$scope', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
 
-	function MoveOverlappedActivityCtrl(PersonSelection, ActivityService, notification) {
+	function MoveOverlappedActivityCtrl($scope, PersonSelection, ActivityService, notification) {
 		this.$onInit = function () {
 			var CmdContainerCtrl = this.CmdContainerCtrl;
 			var cmdName = 'MoveInvalidOverlappedActivity';
@@ -27,11 +27,12 @@
 				TrackedCommandInfo: { TrackId: trackId }
 			};
 
+			$scope.$emit('teamSchedule.show.loading');
 			ActivityService.moveInvalidOverlappedActivity(cmdInput).then(function (response) {
+				$scope.$emit('teamSchedule.hide.loading');
 				if (CmdContainerCtrl.getActionCb(cmdName)) {
 					CmdContainerCtrl.getActionCb(cmdName)(trackId, personIds);
-				}
-
+				}				
 				notification.reportActionResult({
 					'success': 'MoveInvalidOverlappedActivitySuccess',
 					'warning': 'MoveInvalidOverlappedActivityWarning'

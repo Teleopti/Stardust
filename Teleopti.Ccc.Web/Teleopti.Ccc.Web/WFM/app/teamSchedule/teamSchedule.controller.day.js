@@ -61,7 +61,7 @@
 				vm.onCommandContainerReady = function () {
 					$scope.$applyAsync(function () {
 						if (needToOpenSidePanel)
-							openSidePanel();
+							openSidePanel();						
 					});
 					return true;
 				};
@@ -72,12 +72,22 @@
 			});
 		};
 
+		$scope.$on('teamSchedule.show.loading',
+			function() {
+				vm.isLoading = true;
+			});
+		$scope.$on('teamSchedule.hide.loading',
+			function () {
+				vm.isLoading = false;
+			});
+
+
 		vm.openSettingsPanel = function () {
 			closeAllCommandSidenav();
 			$mdSidenav(settingsContainerId).toggle();
 		};
 
-		vm.commonCommandCallback = function (trackId, personIds) {
+		vm.commonCommandCallback = function (trackId, personIds) {			
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 
 			vm.lastCommandTrackId = trackId != null ? trackId : null;

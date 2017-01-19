@@ -43,8 +43,9 @@
 				ScheduleDate: vm.selectedDate(),
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
-
+			$scope.$emit('teamSchedule.show.loading');
 			SwapShiftsSvc.swapShifts(requestData).then(function (response) {
+				$scope.$emit('teamSchedule.hide.loading');
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}

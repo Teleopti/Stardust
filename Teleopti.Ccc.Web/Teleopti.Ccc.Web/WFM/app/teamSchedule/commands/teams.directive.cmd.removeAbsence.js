@@ -28,9 +28,9 @@
 		}
 	}
 
-	removeAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScenarioTestUtil'];
+	removeAbsenceCtrl.$inject = ['$scope', 'PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScenarioTestUtil'];
 
-	function removeAbsenceCtrl(PersonAbsenceSvc, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
+	function removeAbsenceCtrl($scope, PersonAbsenceSvc, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveAbsence';
 
@@ -59,7 +59,8 @@
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 
-			PersonAbsenceSvc.removeAbsence(requestData).then(function (response) {
+			return PersonAbsenceSvc.removeAbsence(requestData).then(function (response) {
+				$scope.$emit('teamSchedule.hide.loading');
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
@@ -84,11 +85,10 @@
 				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount,
 				true
 			);
-			$wfmModal.confirm(message, title).then(function (result) {
-				
+			$wfmModal.confirm(message, title).then(function (result) {				
 				vm.resetActiveCmd();
-
 				if (result) {
+					$scope.$emit('teamSchedule.show.loading');
 					vm.removeAbsence();
 				}
 			});
