@@ -118,6 +118,44 @@
 				});
 		});
 
+		function keepSelectionForOrganization() {
+			selectSiteAndTeamsUnder();
+			if (teamIds.length > 0)
+				vm.teamsSelected = teamIds;
+			enableWatchOnTeam = true;
+			updateSelectFieldText();
+		}
+
+		function selectSiteAndTeamsUnder() {
+			if (siteIds.length === 0)
+				return;
+			siteIds.forEach(function (sid) {
+				var theSite = vm.sites.find(function (site) {
+					return site.Id == sid;
+				});
+				theSite.isChecked = true;
+				theSite.Teams.forEach(function (team) {
+					team.isChecked = true;
+				});
+			});
+		}
+
+		function updateSelectFieldText() {
+			var howManyTeamsSelected = countTeamsSelected();
+			vm.selectFieldText = howManyTeamsSelected === 0 ? 'Select organization' : howManyTeamsSelected + ' teams selected';
+		}
+
+		function countTeamsSelected() {
+			var checkedTeamsCount = 0;
+			vm.sites.forEach(function (site) {
+				if (siteIds.indexOf(site.Id) > -1) {
+					checkedTeamsCount = checkedTeamsCount + site.Teams.length;
+				}
+			});
+			checkedTeamsCount = checkedTeamsCount + vm.teamsSelected.length;
+			return checkedTeamsCount;
+		}
+
 		rtaService.getSkills()
 			.then(function (skills) {
 				vm.skillsLoaded = true;
@@ -230,6 +268,15 @@
 			stateGoToAgents(selection);
 		}
 
+		function stateGoToAgents(selection) {
+			var stateName = vm.showOrgSelection ? 'rta.select-skill' : 'rta.agents';
+			var options = vm.showOrgSelection ? {
+				reload: true,
+				notify: true
+			} : {};
+			$state.go(stateName, selection, options);
+		}
+
 		vm.selectedSites = function () {
 			return vm.sites
 				.filter(function (site) {
@@ -309,13 +356,9 @@
 			vm.selectFieldText = $translate.instant('SelectOrganization');
 		};
 
-		vm.clearSearchTerm = function () {
-			vm.searchTerm = '';
-		}
+		vm.clearSearchTerm = function () { vm.searchTerm = ''; }
+		vm.onSearchOrganization = function ($event) { $event.stopPropagation(); };
 
-		vm.onSearchOrganization = function ($event) {
-			$event.stopPropagation();
-		};
 
 		/************AGENTS GRID************/
 		vm.getTableHeight = function () {
@@ -325,18 +368,6 @@
 			return {
 				height: (vm.filteredData.length * rowHeight + headerHeight + agentMenuHeight + rowHeight / 2) + "px"
 			};
-		};
-
-		vm.selectAgent = function (personId) {
-			selectedPersonId = vm.isSelected(personId) ? '' : personId;
-		};
-
-		vm.isSelected = function (personId) {
-			return selectedPersonId === personId;
-		};
-
-		vm.showAdherenceUpdates = function () {
-			return vm.adherencePercent !== null;
 		};
 
 		vm.getAdherenceForAgent = function (personId) {
@@ -352,6 +383,9 @@
 			}
 		};
 
+		vm.selectAgent = function (personId) { selectedPersonId = vm.isSelected(personId) ? '' : personId; };
+		vm.isSelected = function (personId) { return selectedPersonId === personId; };
+		vm.showAdherenceUpdates = function () { return vm.adherencePercent !== null; };
 		vm.changeScheduleUrl = function (personId) { return rtaRouteService.urlForChangingSchedule(personId); };
 		vm.historicalAdherenceUrl = function (personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
 
@@ -668,52 +702,6 @@
 			});
 		}
 
-		function stateGoToAgents(selection) {
-			var stateName = vm.showOrgSelection ? 'rta.select-skill' : 'rta.agents';
-			var options = vm.showOrgSelection ? {
-				reload: true,
-				notify: true
-			} : {};
-			$state.go(stateName, selection, options);
-		}
-
-		function keepSelectionForOrganization() {
-			selectSiteAndTeamsUnder();
-			if (teamIds.length > 0)
-				vm.teamsSelected = teamIds;
-			enableWatchOnTeam = true;
-			updateSelectFieldText();
-		}
-
-		function selectSiteAndTeamsUnder() {
-			if (siteIds.length === 0)
-				return;
-			siteIds.forEach(function (sid) {
-				var theSite = vm.sites.find(function (site) {
-					return site.Id == sid;
-				});
-				theSite.isChecked = true;
-				theSite.Teams.forEach(function (team) {
-					team.isChecked = true;
-				});
-			});
-		}
-
-		function updateSelectFieldText() {
-			var howManyTeamsSelected = countTeamsSelected();
-			vm.selectFieldText = howManyTeamsSelected === 0 ? 'Select organization' : howManyTeamsSelected + ' teams selected';
-		}
-
-		function countTeamsSelected() {
-			var checkedTeamsCount = 0;
-			vm.sites.forEach(function (site) {
-				if (siteIds.indexOf(site.Id) > -1) {
-					checkedTeamsCount = checkedTeamsCount + site.Teams.length;
-				}
-			});
-			checkedTeamsCount = checkedTeamsCount + vm.teamsSelected.length;
-			return checkedTeamsCount;
-		}
 
 		function buildTimeline(states) {
 			var timeline = function (time) {
@@ -759,15 +747,12 @@
 			else
 				vm.filteredData = $filter('agentFilter')(vm.agents, vm.filterText, propertiesForFiltering);
 			if (vm.agentsInAlarm) {
-				vm.filteredData = $filter('filter')(vm.filteredData, {
-					TimeInAlarm: ''
-				});
+				vm.filteredData = $filter('filter')(vm.filteredData, { TimeInAlarm: '' });
 				vm.openedMaxNumberOfAgents = (vm.filteredData.length === vm.maxNumberOfAgents);
 				if (!vm.notifySwitchDisabled && vm.agents.length > vm.maxNumberOfAgents) {
 					NoticeService.warning($translate.instant('It is possible to view maximum ' + vm.maxNumberOfAgents + ' agents. The "In alarm" switch is enabled if the number of agents does not exceed ' + vm.maxNumberOfAgents + '.'), null, true);
 					vm.notifySwitchDisabled = true;
 				}
-
 			}
 		}
 
@@ -788,11 +773,9 @@
 		};
 
 		function updateUrlWithExcludedStateIds(excludedStates) {
-			$state.go($state.current.name, {
-				es: excludedStates
-			}, {
-					notify: false
-				});
+			$state.go($state.current.name,
+				{ es: excludedStates },
+				{ notify: false });
 		};
 
 		function sortPhoneStatesByName() {
