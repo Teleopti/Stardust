@@ -413,9 +413,9 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-	<Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
-	<Compile Include="Areas\Global\FavoriteSearchController.cs" />
-	<Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
+    <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
+    <Compile Include="Areas\Global\FavoriteSearchController.cs" />
+    <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereAgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
@@ -1452,8 +1452,6 @@
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
     <Content Include="WFM\app\rta\agents\rta-agents-AgentsOnOrganizationAndSkills_41586.html" />
-    <Content Include="WFM\app\rta\agents\rta-agents-headercelltemplate.html" />
-    <Content Include="WFM\app\rta\agents\rta-agents-headershiftcelltemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-HideAgentsByStateGroup_40469.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate-AllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate.html" />

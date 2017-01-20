@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 	angular
 		.module('wfm.rta')
@@ -31,13 +31,29 @@
 				rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html';
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 			var alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.vm.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
-			var headerCellTemplate = 'app/rta/agents/rta-agents-headercelltemplate.html';
+			
+			var shiftHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div class="shift-cell-header rta-default-cursor"><div col-index="renderIndex" title="TOOLTIP">'
+				+ '<label ng-repeat="row in grid.appScope.vm.timeline" class="label label-info"'
+				+ 'ng-attr-style="position: absolute; left: {{row.Offset}}">{{row.Time}}</label></div></div>';
+				
+			var cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader" ng-class="{ \'sortable\': sortable }" ui-grid-one-bind-aria-labelledby-grid="col.uid + \'-header-text \' + col.uid + \'-sortdir-text\'"'
+				+ 'aria-sort="{{col.sort.direction == asc ? \'ascending\' : ( col.sort.direction == desc ? \'descending\' : (!col.sort.direction ? \'none\' : \'other\'))}}">'
+				+ '<div role="button" tabindex="0" class="ui-grid-cell-contents ui-grid-header-cell-primary-focus" col-index="renderIndex" title="TOOLTIP" style="width: 84%">'
+				+ '<span class="ui-grid-header-cell-label" ui-grid-one-bind-id-grid="col.uid + \'-header-text\'">{{ col.colDef.displayName }}</span>'
+				+ '<span ui-grid-one-bind-id-grid="col.uid + \'-sortdir-text\'" ui-grid-visible="col.sort.direction" aria-label="{{getSortDirectionAriaLabel()}}">'
+				+ '<i ng-class="{ \'ui-grid-icon-up-dir\': col.sort.direction == asc, \'ui-grid-icon-down-dir\': col.sort.direction == desc, \'ui-grid-icon-blank\': !col.sort.direction }"'
+				+ 'title="{{isSortPriorityVisible() ? i18n.headerCell.priority + \' \' + ( col.sort.priority + 1 )  : null}}" aria-hidden="true"></i>'
+				+ '<sub ui-grid-visible="isSortPriorityVisible()" class="ui-grid-sort-priority-number">{{col.sort.priority + 1}}</sub></span></div>'
+				+ '<div role="button" tabindex="0" ui-grid-one-bind-id-grid="col.uid + \'-menu-button\'" class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false"'
+				+ 'ng-click="toggleMenu($event)" ng-class=" {\'ui-grid-column-menu-button-last-col\': isLastCol}" ui-grid-one-bind-aria-label="i18n.headerCell.aria.columnMenuButtonLabel" aria-haspopup="true">'
+				+ '<i class="ui-grid-icon-angle-down" aria-hidden="true">&nbsp;</i></div><div ui-grid-filter></div></div></div>';
+				
 			var columnDefs = [];
 
 			var name = {
 				displayName: $translate.instant('Name'),
 				field: 'Name',
-				headerCellTemplate: headerCellTemplate,
+				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 				sort: alarmOnly ? null : {
 					direction: 'asc'
@@ -47,7 +63,7 @@
 			var siteAndTeam = {
 				displayName: $translate.instant('SiteTeam'),
 				field: 'SiteAndTeamName',
-				headerCellTemplate: headerCellTemplate,
+				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 				sortingAlgorithm: rtaLocaleLanguageSortingService.sort
 			};
@@ -55,32 +71,32 @@
 			var state = {
 				displayName: $translate.instant('State'),
 				field: 'State',
-				headerCellTemplate: headerCellTemplate,
+				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 			};
 
 			var alarm = {
 				displayName: $translate.instant('Alarm'),
 				field: 'Alarm',
-				headerCellTemplate: headerCellTemplate,
+				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: alarmCellTemplate,
 			};
 
 			var timeOutOfAdherence = {
 				displayName: $translate.instant('TimeOOA'),
 				field: 'TimeOutOfAdherence',
-				headerCellTemplate: headerCellTemplate,
+				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 			};
 
 			var timeInAlarm = {
 				displayName: $translate.instant('TimeInAlarm'),
 				field: 'TimeInAlarm',
-				headerCellTemplate: headerCellTemplate,
-				sort: alarmOnly ?  {
+				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
+				sort: alarmOnly ? {
 					direction: 'desc'
 				}
-				 : null,
+					: null,
 				cellTemplate: coloredCellTemplate,
 			};
 
@@ -88,13 +104,14 @@
 				displayName: $translate.instant('Shift'),
 				field: 'Shift',
 				enableColumnMenu: false,
-				headerCellTemplate: 'app/rta/agents/rta-agents-headershiftcelltemplate.html',
+				headerCellTemplate: shiftHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellClass: 'shift-class',
 				cellTemplate: 'app/rta/agents/rta-agents-shiftcelltemplate.html',
 				width: "42%",
 				headerCellClass: 'white-cell-header',
 				enableHiding: false
 			};
+
 
 			columnDefs.push(name);
 			columnDefs.push(siteAndTeam);
@@ -116,6 +133,5 @@
 				enableSorting: !alarmOnly
 			};
 		};
-
 	};
 })();
