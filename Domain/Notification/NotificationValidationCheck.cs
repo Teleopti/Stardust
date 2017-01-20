@@ -31,9 +31,11 @@ namespace Teleopti.Ccc.Domain.Notification
 				return;
 			}
 
+			var licenseActivator = DefinedLicenseDataFactory
+				.GetLicenseActivator(dataSource);
+
 			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-			if (DefinedLicenseDataFactory
-				.GetLicenseActivator(dataSource)
+			if (licenseActivator
 				.EnabledLicenseOptionPaths
 				.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 			{
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				if (hasVisibleSignificantChange(changeNotificationMessage))
 				{
 					logger.Info($"Found significant change on {date.ToShortDateString(CultureInfo.InvariantCulture)} for {person.Name}");
+					changeNotificationMessage.CustomerName = licenseActivator.CustomerName;
 					_notifier.Notify(changeNotificationMessage, person);
 				}
 				else

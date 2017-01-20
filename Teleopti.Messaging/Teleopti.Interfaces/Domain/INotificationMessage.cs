@@ -6,5 +6,6 @@ namespace Teleopti.Interfaces.Domain
 	{
 		string Subject { get; set; }
 		IList<string> Messages { get; }
+		string CustomerName { get; set; }
 	}
 }

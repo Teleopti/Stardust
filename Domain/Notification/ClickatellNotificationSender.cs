@@ -47,7 +47,10 @@ namespace Teleopti.Ccc.Domain.Notification
 		public IList<string> GetSmsMessagesToSend(INotificationMessage message, bool containUnicode)
 		{
 			IList<string> messagesToSendList = new List<string>();
-			var temp = message.Subject + " ";
+			var customerName = "";
+			if (!string.IsNullOrWhiteSpace(message.CustomerName))
+				customerName = $"[{message.CustomerName}] ";
+			var temp = $"{customerName}{message.Subject} ";
 
 			var maxSmsLength = 160;
 			if (containUnicode)

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Interfaces.Domain;
 
@@ -106,6 +108,20 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			IList<string> messages = _target.GetSmsMessagesToSend(msg, false);
 			Assert.That(messages.Count, Is.EqualTo(2));
+		}
+
+		[Test]
+		public void ShouldAddCustomerNameIfSetInMessage()
+		{
+			INotificationMessage msg = new NotificationMessage();
+			msg.CustomerName = "Teleopti Test";
+			msg.Subject = "Your Working Hours have changed";
+			msg.Messages.Add("Monday 2012-01-01 08:00-17:00");
+
+			string message = _target.GetSmsMessagesToSend(msg, false).FirstOrDefault();
+			message.Should().Not.Be.Null();
+			message.Should().StartWith("[Teleopti Test]");
+
 		}
 
 		[Test]
