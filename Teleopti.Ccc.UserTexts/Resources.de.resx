@@ -241,7 +241,7 @@
     <comment>Actual</comment>
   </data>
   <data name="ActualAgents" xml:space="preserve">
-    <value>Ist Agenten</value>
+    <value>Ist Mitarbeiter</value>
     <comment>Actual agents</comment>
   </data>
   <data name="ActualHandlingTime" xml:space="preserve">
@@ -467,23 +467,23 @@
     <comment>AFW</comment>
   </data>
   <data name="Agent" xml:space="preserve">
-    <value>Agent</value>
+    <value>Mitarbeiter</value>
     <comment>Agent</comment>
   </data>
   <data name="AgentInfo" xml:space="preserve">
-    <value>Agenten-Info</value>
+    <value>Mitarbeiter-Info</value>
     <comment>Agent Info</comment>
   </data>
   <data name="AgentInformation" xml:space="preserve">
-    <value>Agenteninformation</value>
+    <value>Mitarbeiterinformation</value>
     <comment>Agent information</comment>
   </data>
   <data name="AgentInfoThreeDots" xml:space="preserve">
-    <value>Agenten-Info…</value>
+    <value>Mitarbeiter-Info…</value>
     <comment>Agent info...</comment>
   </data>
   <data name="AgentName" xml:space="preserve">
-    <value>Agentenname</value>
+    <value>Mitarbeitername</value>
     <comment>Agent Name</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
@@ -491,11 +491,11 @@
     <comment>MyTime</comment>
   </data>
   <data name="AgentPortalOptions" xml:space="preserve">
-    <value>Optionen Agentenportal</value>
+    <value>Optionen Mitarbeiterportal</value>
     <comment>Open the Agent Portal Settings form</comment>
   </data>
   <data name="Agents" xml:space="preserve">
-    <value>Agenten</value>
+    <value>Mitarbeiter</value>
     <comment>Agents</comment>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
@@ -503,31 +503,31 @@
     <comment>Agent Schedule Messenger</comment>
   </data>
   <data name="AgentSelectDialog" xml:space="preserve">
-    <value>Agent auswählen</value>
+    <value>Mitarbeiter auswählen</value>
     <comment>Agent Select</comment>
   </data>
   <data name="AgentSettings" xml:space="preserve">
-    <value>Agenteneinstellungen</value>
+    <value>Mitarbeitereinstellungen</value>
     <comment>Agent settings</comment>
   </data>
   <data name="AgentsInc" xml:space="preserve">
-    <value>Agenten ein.</value>
+    <value>Mitarbeiter ein.</value>
     <comment>Agents inc</comment>
   </data>
   <data name="AgentsIncWithShrinkage" xml:space="preserve">
-    <value>Agenten inkl. Shrinkage (Anpassung)</value>
+    <value>Mitarbeiter inkl. Shrinkage (Anpassung)</value>
     <comment>Agents inc with shrinkage</comment>
   </data>
   <data name="AgentState" xml:space="preserve">
-    <value>Agentenstatus</value>
+    <value>Mitarbeiterstatus</value>
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="AgentsWithShrinkage" xml:space="preserve">
-    <value>Agenten mit Shrinkage (Anpassung)</value>
+    <value>Mitarbeiter mit Shrinkage (Anpassung)</value>
     <comment>Agents with shrinkage</comment>
   </data>
   <data name="AgentTeam" xml:space="preserve">
-    <value>Agenten Team</value>
+    <value>Mitarbeiter Team</value>
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="Alarm" xml:space="preserve">
@@ -1245,7 +1245,7 @@
     <comment>Comma Separated Text File</comment>
   </data>
   <data name="CommonAgentDescription" xml:space="preserve">
-    <value>Allgemeine Agentendaten</value>
+    <value>Allgemeine Mitarbeiterdaten</value>
     <comment>CommonAgentDescription</comment>
   </data>
   <data name="CommunicationErrorEndPoint" xml:space="preserve">
@@ -1918,7 +1918,7 @@ Ausnahme</value>
     <comment>Edit</comment>
   </data>
   <data name="EditCommonAgentNameDescription" xml:space="preserve">
-    <value>Einstellungen für das Format der Agentennamen bearbeiten</value>
+    <value>Einstellungen für das Format der Mitarbeiternamen bearbeiten</value>
     <comment>Edit Common Agent Name Description</comment>
   </data>
   <data name="EditForecast" xml:space="preserve">
@@ -2125,7 +2125,7 @@ Ausnahme</value>
     <comment>Error Message</comment>
   </data>
   <data name="ErrorMessageFromToTimeIsInvalidParameter" xml:space="preserve">
-    <value>Fehler! Von  {0} bis {1} ist kein gültiger Bereich.</value>
+    <value>Fehler! Von {0} bis {1} ist kein gültiger Bereich.</value>
     <comment>Error message to show when user try to set invalid time ranges!</comment>
   </data>
   <data name="ErrorMessagePreferenceDateLimit" xml:space="preserve">
@@ -2169,7 +2169,7 @@ Ausnahme</value>
     <comment>Exit</comment>
   </data>
   <data name="ExitAgentPortal" xml:space="preserve">
-    <value>Agentenportal beenden</value>
+    <value>Mitarbeiterportal beenden</value>
     <comment>Exit from Agent Portal</comment>
   </data>
   <data name="ExitOrClose" xml:space="preserve">
@@ -2216,7 +2216,7 @@ Ausnahme</value>
     <comment>Find all</comment>
   </data>
   <data name="FiAmpersandndWhatColon" xml:space="preserve">
-    <value>Finde:</value>
+    <value>Suche:</value>
     <comment>Find what:</comment>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
@@ -2280,15 +2280,15 @@ Ausnahme</value>
     <comment>Find</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Finden</value>
+    <value>Suchen</value>
     <comment>Find ribbon menu</comment>
   </data>
   <data name="FindAmpersandReplace" xml:space="preserve">
-    <value>Finden &amp; Ersetzen</value>
+    <value>Suchen &amp; Ersetzen</value>
     <comment>Find and replace ribbon item</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
-    <value>Finden und Ersetzen</value>
+    <value>Suchen und Ersetzen</value>
     <comment>Find and replace</comment>
   </data>
   <data name="FinishAmpersand" xml:space="preserve">
@@ -2327,15 +2327,15 @@ Ausnahme</value>
     <comment>Forecasted ACW</comment>
   </data>
   <data name="ForecastedAgents" xml:space="preserve">
-    <value>Prognostizierte Agenten</value>
+    <value>Prognostizierte Mitarbeiter</value>
     <comment>Forecasted agents</comment>
   </data>
   <data name="ForecastedAgentsIncoming" xml:space="preserve">
-    <value>Prognostizierte Agenten eingehend</value>
+    <value>Prognostizierte Mitarbeitern eingehend</value>
     <comment>Forecasted agents incoming</comment>
   </data>
   <data name="ForecastedAgentsWithShrinkage" xml:space="preserve">
-    <value>Prognostizierte Agenten mit Shrinkage (Anpassung)</value>
+    <value>Prognostizierte Mitarbeiter mit Shrinkage (Anpassung)</value>
     <comment>Forecasted agents with shrinkage</comment>
   </data>
   <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
@@ -2784,7 +2784,7 @@ Ausschließlich</value>
     <comment>Part time percentage settings page</comment>
   </data>
   <data name="InvalidRecepient" xml:space="preserve">
-    <value>Ungültiger Empfänger, wählen Sie einen bestehenden Agenten</value>
+    <value>Ungültiger Empfänger, wählen Sie einen bestehenden Mitarbeiter</value>
     <comment>Invalid Recepient</comment>
   </data>
   <data name="InvalidRequest" xml:space="preserve">
@@ -3184,7 +3184,7 @@ Ausschließlich</value>
     <comment>Max Duration</comment>
   </data>
   <data name="MaximumAgents" xml:space="preserve">
-    <value>Maximum Agenten</value>
+    <value>Maximum Mitarbeiter</value>
     <comment>Maximum agents</comment>
   </data>
   <data name="MaximumOccupancy" xml:space="preserve">
@@ -3298,7 +3298,7 @@ Ausschließlich</value>
     <comment>Min Improvement Per Iteration</comment>
   </data>
   <data name="MinimumAgents" xml:space="preserve">
-    <value>Minimum Agenten</value>
+    <value>Minimum Mitarbeiter</value>
     <comment>Minimum agents</comment>
   </data>
   <data name="MinimumOccupancy" xml:space="preserve">
@@ -3988,7 +3988,7 @@ Ausschließlich</value>
     <comment>Open</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
-    <value>Agentenportal</value>
+    <value>Mitarbeiterportal</value>
     <comment>Function name Agent Portal</comment>
   </data>
   <data name="OpenASM" xml:space="preserve">
@@ -4868,7 +4868,7 @@ Periods</comment>
     <value>Abbrüche und Antwortgeschwindigkeit</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Agenten Queue Statistik</value>
+    <value>Mitarbeiter Queue Statistik</value>
     <comment>Agent Queue Statistics</comment>
   </data>
   <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
@@ -4876,11 +4876,11 @@ Periods</comment>
     <comment>Agent - Schedule Adherence</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>Agent Kennzahlen</value>
+    <value>Mitarbeiter Kennzahlen</value>
     <comment>Agent Schedule Result</comment>
   </data>
   <data name="ResReportAgentStatistics" xml:space="preserve">
-    <value>Agenten Statistiken</value>
+    <value>Mitarbeiter Statistiken</value>
     <comment>Agent Statistics</comment>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
@@ -4892,7 +4892,7 @@ Periods</comment>
     <comment>Forecast vs Scheduled Hours</comment>
   </data>
   <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>Präferenzen pro Agent</value>
+    <value>Präferenzen pro Mitarbeiter</value>
     <comment>Preference Per Agent</comment>
   </data>
   <data name="ResReportPreferencesPerDay" xml:space="preserve">
@@ -4904,7 +4904,7 @@ Periods</comment>
     <comment>Queue Statistics</comment>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Geplante Agenten pro Intervall und Team</value>
+    <value>Geplante Mitarbeiter pro Intervall und Team</value>
     <comment>Scheduled Agents per Interval and Team</comment>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
@@ -4912,15 +4912,15 @@ Periods</comment>
     <comment>Scheduled Time per Activity</comment>
   </data>
   <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
-    <value>Geplante Zeit pro Agent</value>
+    <value>Geplante Zeit pro Mitarbeiter</value>
     <comment>Scheduled Time per Agent</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Servicelevel und Agenten Ready</value>
+    <value>Servicelevel und Mitarbeiter Ready</value>
     <comment>Service Level  and Agents Ready</comment>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>Schichtkategorie und Ganztagesabwesenheit pro Agent</value>
+    <value>Schichtkategorie und Ganztagesabwesenheit pro Mitarbeiter</value>
     <comment>Shift Category And Full Day Absence per Agent</comment>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
@@ -4932,7 +4932,7 @@ Periods</comment>
     <comment>Team Metrics</comment>
   </data>
   <data name="RestoreAgentPortal" xml:space="preserve">
-    <value>Agentenportal wiederherstellen</value>
+    <value>Mitarbeiterportal wiederherstellen</value>
     <comment>Restore Agent Portal from  System Tray</comment>
   </data>
   <data name="RestoreASM" xml:space="preserve">
@@ -5076,7 +5076,7 @@ Periods</comment>
     <comment>Schedule:</comment>
   </data>
   <data name="ScheduledAgentsIncoming" xml:space="preserve">
-    <value>Geplante Agenten eingehend</value>
+    <value>Geplante Mitarbeiter eingehend</value>
     <comment>Scheduled agents incoming</comment>
   </data>
   <data name="ScheduleDate" xml:space="preserve">
@@ -5104,7 +5104,7 @@ Periods</comment>
     <comment>Scheduled hours incoming</comment>
   </data>
   <data name="ScheduledStaff" xml:space="preserve">
-    <value>Geplante Agenten</value>
+    <value>Geplante Mitarbeiter</value>
     <comment>Scheduled agents</comment>
   </data>
   <data name="ScheduledTime" xml:space="preserve">
@@ -5557,7 +5557,7 @@ Periods</comment>
     <comment>Skill data grids</comment>
   </data>
   <data name="SkillDayIsInvalidOneParameter" xml:space="preserve">
-    <value>Fehler: {0} Bitte prüfen Sie, dass die Anzahl max. Agents 0 ist oder höher als die Anzahl der min. Agents sowie das die Verteilung zwischen den Sub-Skills insgesamt 100% ist.</value>
+    <value>Fehler: {0} Bitte prüfen Sie, dass die Anzahl max. Mitarbeiter 0 ist oder höher als die Anzahl der min. Mitarbeiter sowie das die Verteilung zwischen den Sub-Skills insgesamt 100% ist.</value>
     <comment>Error information: {0} Check that max agents are 0 or higher than min agents, or that the distribution between the sub skills adds to 100%.</comment>
   </data>
   <data name="SkillDaysLoaded" xml:space="preserve">
@@ -5569,7 +5569,7 @@ Periods</comment>
     <comment>Skill day template</comment>
   </data>
   <data name="SkillDayTemplateIsInvalidOneParameter" xml:space="preserve">
-    <value>Die Vorlage kann wegen eines Fehlers in der Validierung nicht gespeichert werden. Prüfen Sie bitte, ob die Anzahl max. Agenten höher als die Anzahl der min. Agenten ist oder zumindest 0 ist. Fehler Information: {0}</value>
+    <value>Die Vorlage kann wegen eines Fehlers in der Validierung nicht gespeichert werden. Prüfen Sie bitte, ob die Anzahl max. Mitarbeiter höher als die Anzahl der min. Mitarbeiter ist oder zumindest 0 ist. Fehler Information: {0}</value>
     <comment>The templates cannot be saved because of an error in validation. Check that max agents are higher than min agents or 0. Error information: {0}</comment>
   </data>
   <data name="SkillDayTemplates" xml:space="preserve">
@@ -7173,7 +7173,7 @@ Datum</value>
     <value>Ändere schreibgeschützten Plan</value>
   </data>
   <data name="Maximum5Scenarios" xml:space="preserve">
-    <value>*Maximal 5 Szenarios für die Berichterstattung verwenden.</value>
+    <value>*Maximal 5 Szenarien für die Berichterstattung verwenden.</value>
   </data>
   <data name="xxx" xml:space="preserve">
     <value>Ändere schreibgeschützten Plan</value>
@@ -7302,7 +7302,7 @@ Datum</value>
     <value>IMPROVE</value>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>Agenten Scorecard</value>
+    <value>Mitarbeiter Scorecard</value>
   </data>
   <data name="FilterOnWorkTimeLimitationsWithParams" xml:space="preserve">
     <value>Filter für Arbeitszeitbegrenzung (Schicht mit Vertrag zwischen {0} und {1})</value>
@@ -7419,7 +7419,7 @@ Datum</value>
     <value>&lt; wähle optionale Spalte aus&gt;</value>
   </data>
   <data name="BuildInStandardAgentRole" xml:space="preserve">
-    <value>Agent</value>
+    <value>Mitarbeiter</value>
   </data>
   <data name="BuiltInAdministratorRole" xml:space="preserve">
     <value>Administrator</value>
@@ -7616,7 +7616,7 @@ Teleopti R&amp;D</value>
     <value>Quick Access Toolbar unter dem Band zeigen.</value>
   </data>
   <data name="ExportNoOfAgentInfo" xml:space="preserve">
-    <value>Ausgewählter Bereich für {0} Agenten</value>
+    <value>Ausgewählter Bereich für {0} Mitarbeiter</value>
   </data>
   <data name="ImportQueueFromFile" xml:space="preserve">
     <value>Importiere Warteschlange von Datei</value>
@@ -7652,7 +7652,7 @@ Teleopti R&amp;D</value>
     <value>Exportiere zu anderem Szenario</value>
   </data>
   <data name="FilterAgents" xml:space="preserve">
-    <value>Agenten-Filter</value>
+    <value>Mitarbeiter-Filter</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>Info</value>
@@ -8117,7 +8117,7 @@ Periode: {3}</value>
     <value>Performance vorhersagen</value>
   </data>
   <data name="AgentPerformance" xml:space="preserve">
-    <value>Agenten - Performance</value>
+    <value>Mitarbeiter - Performance</value>
   </data>
   <data name="Improve" xml:space="preserve">
     <value>Improve</value>
@@ -8132,7 +8132,7 @@ Periode: {3}</value>
     <value>Servicelevel Analyse</value>
   </data>
   <data name="HistoricalReports" xml:space="preserve">
-    <value>Historische Reporte</value>
+    <value>Historische Berichte</value>
   </data>
   <data name="WorkflowControlSet" xml:space="preserve">
     <value>Workflow Control Set</value>
@@ -8321,7 +8321,7 @@ Periode: {3}</value>
     <value>Toleranz für passende Vertragszeit</value>
   </data>
   <data name="AgentColon" xml:space="preserve">
-    <value>Agent:</value>
+    <value>Mitarbeiter:</value>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
     <value>Aktivität für erweiterte Präferenz verfügbar</value>
@@ -8535,7 +8535,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Die Woche hat nicht die vereinbarte ({0}) wöchentliche Ruhezeit</value>
   </data>
   <data name="ActiveAgentsInUseColon" xml:space="preserve">
-    <value>Aktive Agenten verwendet:</value>
+    <value>Aktive Mitarbeiter verwendet:</value>
   </data>
   <data name="OptimizingShiftLengths" xml:space="preserve">
     <value>Schicht-Längen optimieren</value>
@@ -8736,7 +8736,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Netto Netto Personal</value>
   </data>
   <data name="AgentsColon" xml:space="preserve">
-    <value>Agenten:</value>
+    <value>Mitarbeiter:</value>
   </data>
   <data name="ChangeDateFromUtcColon" xml:space="preserve">
     <value>Von- Datum ändern (UTC):</value>
@@ -8748,7 +8748,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Benutzer:</value>
   </data>
   <data name="CouldNotAddOverTimeNoPersonPeriods" xml:space="preserve">
-    <value>Konnte aufgrund von Agenten ohne Personen-Periode keine Überstunden hinzugeben </value>
+    <value>Konnte aufgrund von Mitarbeitern ohne Personen-Periode keine Überstunden hinzugeben </value>
   </data>
   <data name="ChangeDate" xml:space="preserve">
     <value>Datum ändern</value>
@@ -8835,7 +8835,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Exportieren in grafische pdf</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Agent Queue Kennzahlen</value>
+    <value>Mitarbeiter Queue Kennzahlen</value>
   </data>
   <data name="AllDaysOff" xml:space="preserve">
     <value>Alle  freien Tage</value>
@@ -8985,10 +8985,10 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Der Server ist momentan nicht verfügbar, bitte probieren Sie es später erneut.</value>
   </data>
   <data name="ReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>Geplante Überstunden pro Agent</value>
+    <value>Geplante Überstunden pro Mitarbeiter</value>
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>Geplante Überstunden pro Agent</value>
+    <value>Geplante Überstunden pro Mitarbeiter</value>
   </data>
   <data name="Illegal" xml:space="preserve">
     <value>Ungültig</value>
@@ -9084,10 +9084,10 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Tatsächliches Servicelevel</value>
   </data>
   <data name="CommonAgentDescriptionForScheduleExports" xml:space="preserve">
-    <value>Allgemeine Agentendaten für Berichte</value>
+    <value>Allgemeine Mitarbeiterdaten für Berichte</value>
   </data>
   <data name="EditCommonAgentDescriptionForScheduleExportsFormat" xml:space="preserve">
-    <value>Einstellungen für das Format der Agentennamen in den Berichten bearbeiten</value>
+    <value>Einstellungen für das Format der Mitarbeiternamen in den Berichten bearbeiten</value>
   </data>
   <data name="AdjustedDifference" xml:space="preserve">
     <value>angepasste Differenz</value>
@@ -9099,7 +9099,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Alle Notwendigkeiten</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Aktivitäten-Zeit pro Agent</value>
+    <value>Aktivitäten-Zeit pro Mitarbeiter</value>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
     <value>{0} hat die Applikation vor dem Schließen bewahrt. Möchten Sie das Schließen der Applikation erzwingen?</value>
@@ -9213,7 +9213,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Kann nicht alle Meetings zu dieser Zeit darstellen!</value>
   </data>
   <data name="InvalidTimeValue" xml:space="preserve">
-    <value>ungültiger Zeitwert '{0}' </value>
+    <value>Ungültiger Zeitwert '{0}' </value>
   </data>
   <data name="UseStandardDeviation" xml:space="preserve">
     <value>Standardabweichung nutzen</value>
@@ -9429,7 +9429,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Am Anfang anheften</value>
   </data>
   <data name="ExtendingAndReducingTime" xml:space="preserve">
-    <value>Erweitern und reduzieren der Zeit für flexible Agenten</value>
+    <value>Erweitern und reduzieren der Zeit für flexible Mitarbeiter</value>
   </data>
   <data name="ExtendReduceTimeForFlexibleAgents" xml:space="preserve">
     <value>Nutze Toleranz der Arbeitszeit aus Vertrag</value>
@@ -9444,7 +9444,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Es konnte keine Schicht gefunden werden</value>
   </data>
   <data name="FindThreeDots" xml:space="preserve">
-    <value>Finde...</value>
+    <value>Suche...</value>
   </data>
   <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
     <value>Ein Fehler ist beim Speichern der Einstellungen aufgetreten.</value>
@@ -9462,7 +9462,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Job wird im Hintergrund ausgeführt</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Anfragen pro Agent</value>
+    <value>Anfragen pro Mitarbeiter</value>
   </data>
   <data name="TargetValue" xml:space="preserve">
     <value>Ziel-Wert</value>
@@ -9474,7 +9474,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Toleranz freie Tage -</value>
   </data>
   <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
-    <value>Erweitern und Reduzieren der freien Tage für flexible Agenten</value>
+    <value>Erweitern und Reduzieren der freien Tage für flexible Mitarbeiter</value>
   </data>
   <data name="ExtendReduceDaysoffForFlexibleAgents" xml:space="preserve">
     <value>Nutze Toleranz der freien Tage aus Vertrag</value>
@@ -9768,7 +9768,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Fehlender Abwesenheitstyp</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
-    <value>Soll/Ist Agenten</value>
+    <value>Soll/Ist Mitarbeiter</value>
   </data>
   <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
     <value>Keine Personen-Periode gefunden für den Nutzer.</value>
@@ -9798,7 +9798,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Übertragen</value>
   </data>
   <data name="OverridePeriod" xml:space="preserve">
-    <value>überschreibe Periodenzeit</value>
+    <value>Überschreibe Periodenzeit</value>
   </data>
   <data name="OverrideHoursPerDay" xml:space="preserve">
     <value>Stunden/Tag überschreiben</value>
@@ -9816,7 +9816,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>verwalten</value>
   </data>
   <data name="ManualAgents" xml:space="preserve">
-    <value>Agents (überschreiben)</value>
+    <value>Mitarbeiter (überschreiben)</value>
   </data>
   <data name="RequestCannotUpdateDelete" xml:space="preserve">
     <value>Der Status der Anfrage hat sich geändert. Sie können diese nicht verändern oder löschen.</value>
@@ -10020,7 +10020,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>aus der Planperiode</value>
   </data>
   <data name="FullDayAbsence" xml:space="preserve">
-    <value>ganztägige Abwesenheit</value>
+    <value>Ganztägige Abwesenheit</value>
   </data>
   <data name="InsufficientPermissionForWeb" xml:space="preserve">
     <value>Sie haben nicht die entsprechenden Nutzerrechte, um das Web-Portal zu nutzen.</value>
@@ -10047,7 +10047,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>gleiche freie Tage</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>Planeinhaltung pro Agent</value>
+    <value>Planeinhaltung pro Mitarbeiter</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>Planeinhaltung pro Tag</value>
@@ -10086,13 +10086,13 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Die Verteilung innerhalb der Teil-Skills muss in Summe 100% ergeben</value>
   </data>
   <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
-    <value>Maximale Agent Auslastung muss größer oder gleich der minimalen Agent Auslastung sein.</value>
+    <value>Maximale Mitarbeiter Auslastung muss größer oder gleich der minimalen Mitarbeiter Auslastung sein.</value>
   </data>
   <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
-    <value>Maximum Agenten müssen größer oder gleich der Minimum Agenten sein.</value>
+    <value>Maximum Mitarbeiter müssen größer oder gleich der Minimum Mitarbeiter sein.</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
-    <value>Geplante Agenten pro Aktivität</value>
+    <value>Geplante Mitarbeiter pro Aktivität</value>
   </data>
   <data name="YourScheduleHasChanged" xml:space="preserve">
     <value>Ihr Dienstplan wurde geändert!</value>
@@ -10356,7 +10356,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Ganztags-Abwesenheit hinzufügen</value>
   </data>
   <data name="InvalidEndDate" xml:space="preserve">
-    <value>ungültiges Enddatum</value>
+    <value>Ungültiges Enddatum</value>
   </data>
   <data name="ResolutionMin" xml:space="preserve">
     <value>Auflösung (Minuten)</value>
@@ -10404,7 +10404,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Der Empfänger hat auf eine Ihrer früheren Nachrichten geantwortet. Aktualisieren Sie das Fenster um die Antwort zu sehen. Ihre Nachricht wird nicht gesendet. </value>
   </data>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
-    <value>Verfügbarkeit pro Agent</value>
+    <value>Verfügbarkeit pro Mitarbeiter</value>
   </data>
   <data name="TeamBlockNotInLegalState" xml:space="preserve">
     <value>Die Block-Periode des Teams ist nicht im gültigen Status. </value>
@@ -10419,7 +10419,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Max. parallele Aufgaben:</value>
   </data>
   <data name="ViewActiveAgents" xml:space="preserve">
-    <value>Sehe aktive Agents</value>
+    <value>Sehe aktive Mitarbeiter</value>
   </data>
   <data name="SkillTypeChat" xml:space="preserve">
     <value>Chat</value>
@@ -10533,13 +10533,13 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Export</value>
   </data>
   <data name="RepViewerFind" xml:space="preserve">
-    <value>Finde</value>
+    <value>Suche</value>
   </data>
   <data name="RepViewerFindNext" xml:space="preserve">
-    <value>Finde nächste</value>
+    <value>Suche nächste</value>
   </data>
   <data name="RepViewerFindText" xml:space="preserve">
-    <value>Finde Text in Bericht</value>
+    <value>Suche Text in Bericht</value>
   </data>
   <data name="RepViewerFirstPage" xml:space="preserve">
     <value>erste Seite</value>
@@ -10629,7 +10629,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Überstunden-Verfügbarkeit</value>
   </data>
   <data name="PaidTimeHeader" xml:space="preserve">
-    <value>bezahte Zeit</value>
+    <value>Bezahte Zeit</value>
   </data>
   <data name="PartTimePercentageHeader" xml:space="preserve">
     <value>Teilzeitprozentwert</value>
@@ -10671,7 +10671,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Verteilung Schichtkategorie</value>
   </data>
   <data name="PerAgent" xml:space="preserve">
-    <value>pro Agent</value>
+    <value>pro Mitarbeiter</value>
   </data>
   <data name="PerShiftCategory" xml:space="preserve">
     <value>pro Schichtkategorie</value>
@@ -10701,7 +10701,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>benutze Tag des Monats Saisonalität</value>
   </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
-    <value>Agent-Skills</value>
+    <value>Mitarbeiter-Skills</value>
   </data>
   <data name="BudgetGroupMissing" xml:space="preserve">
     <value>Es gibt keine Budgetgruppe für Sie.</value>
@@ -10725,7 +10725,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Vergleichsteam:</value>
   </data>
   <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
-    <value>Zeit in Status pro Agent</value>
+    <value>Zeit in Status pro Mitarbeiter</value>
   </data>
   <data name="DetailedAdherence" xml:space="preserve">
     <value>Detaillierte Einhaltung</value>
@@ -10734,13 +10734,13 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>MyReport</value>
   </data>
   <data name="ActiveAgents" xml:space="preserve">
-    <value>aktive Agents</value>
+    <value>aktive Mitarbeiter</value>
   </data>
   <data name="NoPeriodPresent" xml:space="preserve">
     <value>keine Periode verfügbar</value>
   </data>
   <data name="InvalidEndTime" xml:space="preserve">
-    <value>ungültige Endzeit</value>
+    <value>Ungültige Endzeit</value>
   </data>
   <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
     <value>Bitte fügen Sie eine Intratag-Abwesenheit zur bestehenden Schicht hinzu.</value>
@@ -10749,7 +10749,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Sie können keine zweite Schicht durch hinzufügen einer Aktivität erzeugen.</value>
   </data>
   <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
-    <value>An diesem Datum sind sie nicht als aktiver Agent hinterlegt.</value>
+    <value>An diesem Datum sind sie nicht als aktiver Mitarbeiter hinterlegt.</value>
   </data>
   <data name="Metric" xml:space="preserve">
     <value>Kennzahlen</value>
@@ -10947,7 +10947,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Alle Teams</value>
   </data>
   <data name="AgentBadgeSetting" xml:space="preserve">
-    <value>Agent Badge</value>
+    <value>Mitarbeiter Badge</value>
   </data>
   <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
     <value>Schwellenwert beantwortete Anrufe:</value>
@@ -10965,7 +10965,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Anzahl der Silbersterne, die einem Goldstern entsprechen:</value>
   </data>
   <data name="EnableBadge" xml:space="preserve">
-    <value>Agent Badge anzeigen</value>
+    <value>Mitarbeiter Badge anzeigen</value>
   </data>
   <data name="AddingActivityFor" xml:space="preserve">
     <value>Füge eine Aktivität ein für </value>
@@ -11245,13 +11245,13 @@ Folgende Optionen und Module sind aktiviert:
 {4}</value>
   </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>Sie haben {0} aktive Agenten, jedoch eine Lizenz für nur {1} Agenten. Bitte erweitern Sie ihre Lizenz rechtzeitig.</value>
+    <value>Sie haben {0} aktive Mitarbeiter, jedoch eine Lizenz für nur {1} Mitarbeiter. Bitte erweitern Sie ihre Lizenz rechtzeitig.</value>
   </data>
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>Sie haben {0} aktive Agenten, jedoch eine Lizenz für nur {1} Agenten. Sie müssen ihre Lizenz erweitern, bevor Sie fortfahren können.</value>
+    <value>Sie haben {0} aktive Mitarbeiter, jedoch eine Lizenz für nur {1} Mitarbeiter. Sie müssen ihre Lizenz erweitern, bevor Sie fortfahren können.</value>
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Sie haben {0} aktive Agenten, jedoch eine Lizenz für nur {1} Agenten. Sie müssen einen Product Activation Key erhalten, der ausreichend aktive Agenten ermöglicht.</value>
+    <value>Sie haben {0} aktive Mitarbeiter, jedoch eine Lizenz für nur {1} Mitarbeiter. Sie müssen einen Product Activation Key erhalten, der ausreichend aktive Mitarbeiter ermöglicht.</value>
   </data>
   <data name="Invalid" xml:space="preserve">
     <value>Ungültig</value>
@@ -11275,7 +11275,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Sie nutzen zuviele Plätze, Ihre Lizenz ist nur für {0} Plätze. Sie müssen ihre Lizenz erweitern, bevor Sie fortfahren können.</value>
   </data>
   <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>Sie nutzen mehr Agenten ({0}) als Sie lizensiert haben ({1}). Sie haben {2} Tage um die Agenten zu reduzieren oder einen neuen Product Activation Key mit ausreichend viel lizensierten Agenten hinzuzufügen.</value>
+    <value>Sie nutzen mehr Mitarbeiter ({0}) als Sie lizensiert haben ({1}). Sie haben {2} Tage um die Mitarbeiter zu reduzieren oder einen neuen Product Activation Key mit ausreichend viel lizensierten Mitarbeiter hinzuzufügen.</value>
   </data>
   <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
     <value>Nutze Badge für beantwortete Anrufe</value>
@@ -11368,7 +11368,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Teleopti Product Activation Key Fehler</value>
   </data>
   <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
-    <value>Zur Agent-Perspektive wechseln</value>
+    <value>Zur Mitarbeiter-Perspektive wechseln</value>
   </data>
   <data name="CalculateBadgeWithRank" xml:space="preserve">
     <value>Badge Rangfolge</value>
@@ -11473,7 +11473,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Andere Schwellenwerte nutzen</value>
   </data>
   <data name="ConfirmDeleteRequest" xml:space="preserve">
-    <value>Sind Sie sicher, dass Sie diese Anfrage löschen wollen?</value>
+    <value>Sind Sie sicher, dass Sie diese Anfrage löschen möchten?</value>
   </data>
   <data name="ShiftExchangeAnnouncement" xml:space="preserve">
     <value>Schichttausch-Angebot</value>
@@ -11833,7 +11833,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Alle gewählte Mitarbeiter haben Sitze zugeordnet bekommen</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
-    <value>Agenten</value>
+    <value>Mitarbeiter</value>
   </data>
   <data name="FilterLocations" xml:space="preserve">
     <value>Einheitsfilter</value>
@@ -11881,7 +11881,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Planung wird durchgeführt</value>
   </data>
   <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
-    <value>Agenten wurden erfolgreich verplant</value>
+    <value>Mitarbeiter wurden erfolgreich verplant</value>
   </data>
   <data name="CriticalUnderstaffingColon" xml:space="preserve">
     <value>Kritische Unterbesetzung</value>
@@ -11953,7 +11953,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Aktivität löschen</value>
   </data>
   <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
-    <value>Sie müssen mindestens einen Agenten wählen</value>
+    <value>Sie müssen mindestens einen Mitarbeiter wählen</value>
   </data>
   <data name="Cancelled" xml:space="preserve">
     <value>Abgebrochen</value>
@@ -12034,7 +12034,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Historische Planeinhaltung</value>
   </data>
   <data name="TooManySelectedAgents" xml:space="preserve">
-    <value>Sie haben zu viele Agenten gewählt. Bitte wählen Sie weniger alls 55 Agenten.</value>
+    <value>Sie haben zu viele Mitarbeiter gewählt. Bitte wählen Sie weniger alls 55 Agenten.</value>
   </data>
   <data name="EmploymentNumber" xml:space="preserve">
     <value>Mitarbeiternummer</value>
@@ -12220,7 +12220,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Position in der Warteliste</value>
   </data>
   <data name="ToggleDarkTheme" xml:space="preserve">
-    <value>Dunkles Thema An/Aus</value>
+    <value>Dunkles Farbthema An/Aus</value>
   </data>
   <data name="CanNotModifyMyRole" xml:space="preserve">
     <value>Sie können nicht Ihre eigene Rolle ändern</value>
@@ -12235,10 +12235,10 @@ Folgende Optionen und Module sind aktiviert:
     <value>Grund ablehnen</value>
   </data>
   <data name="YouHaveSelectedXAgent" xml:space="preserve">
-    <value>Sie haben {0} Agent(en) gewählt</value>
+    <value>Sie haben {0} Mitarbeiter gewählt</value>
   </data>
   <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
-    <value>Sie müssen zwei Agenten wählen um einen Schichttausch durchzuführen</value>
+    <value>Sie müssen zwei Mitarbeiter wählen um einen Schichttausch durchzuführen</value>
   </data>
   <data name="ModifySkillArea" xml:space="preserve">
     <value>Skillbereich ändern</value>
@@ -12265,10 +12265,10 @@ Folgende Optionen und Module sind aktiviert:
     <value>Genehmigte Abwesenheitsanfrage stornieren</value>
   </data>
   <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
-    <value>Probieren Sie unser neues und verbessertes Modul Teams</value>
+    <value>Probieren Sie unser neues und verbessertes Modul Teams!</value>
   </data>
   <data name="SelectedAgentsColon" xml:space="preserve">
-    <value>Gewählte Agenten:</value>
+    <value>Gewählte Mitarbeiter:</value>
   </data>
   <data name="RequestInvalidStateTransition" xml:space="preserve">
     <value>Eine Anfrage, dass {0} ist, kann nicht {1} sein</value>
@@ -12289,7 +12289,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Datumperiode</value>
   </data>
   <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
-    <value>Nur Agenten ohne Sitzplatz zeigen</value>
+    <value>Nur Mitarbeiter ohne Sitzplatz zeigen</value>
   </data>
   <data name="DeletePerson" xml:space="preserve">
     <value>Personen löschen</value>
@@ -12370,7 +12370,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Ihre Abwesenheitsanfrage wurde automatisch abgelehnt. Die Startzeit der Anfrage ist {0}, sie muss mindestens {1} Minute(n) später als die aktuelle Zeit sein</value>
   </data>
   <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
-    <value>Die Personalkonten der folgenden Agenten werden betroffen:</value>
+    <value>Die Personalkonten der folgenden Mitarbeiter werden betroffen:</value>
   </data>
   <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
     <value>Diese Abwesenheit wird die Grenzwerte der Personalkonten überschreiten</value>
@@ -12406,7 +12406,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Weiter</value>
   </data>
   <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
-    <value>Archivierung für {0} Agenten beendet</value>
+    <value>Archivierung für {0} Mitarbeiter beendet</value>
   </data>
   <data name="FromScenarioColon" xml:space="preserve">
     <value>Von Szenario</value>
@@ -12436,7 +12436,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Service Level</value>
   </data>
   <data name="AgentsInAlarm" xml:space="preserve">
-    <value>Agenten in Alarm</value>
+    <value>Mitarbeiter in Alarm</value>
   </data>
   <data name="Staffing" xml:space="preserve">
     <value>Besetzung</value>
@@ -12611,5 +12611,377 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="UsedTotal" xml:space="preserve">
     <value>Gesamte Nutzung</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Angebotene durchschnittliche Bearbeitungszeit</value>
+  </data>
+  <data name="RPCAHT" xml:space="preserve">
+    <value>RP-DBZ</value>
+  </data>
+  <data name="RPCR" xml:space="preserve">
+    <value>RPKQ</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Auf Intra-Interval filtern</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Intra Interval Balance Fehler</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>Kampagne erstellen</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>Kampagne editieren</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>Falsche Start - oder Endzeit</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>Kampagne {0} wurde erstellt</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>Kampagne {0} konnte nicht erstellt werden</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>Kampagne {0} konnte nicht geladen werden</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>Kampagne {0} konnte nicht aktualisiert werden</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>Kampagne {0} wurde aktualisiert</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>Neue Aktivitätsname</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>Bestehende Aktivität benutzen</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>Neue Kampagnenname</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>Der eingegebene Kampagnenname ist ungültig. Der Name kann höchstens 255 Zeichen beinhalten</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>Ihnen fehlt die Berechtigung jegliche Aktivitäten für die Mitarbeiter zu löschen</value>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>Backlog manuell verwalten</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>Backlog</value>
+  </data>
+  <data name="SuccessfulMessageForMovingShift" xml:space="preserve">
+    <value>Die Schichten für die markierten Mitarbeiter wurden erfolgreich verschoben</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingShift" xml:space="preserve">
+    <value>Schichten für {0} Mitarbeiter werden verschoben. {1} war(en) erfolgreich und {2} war(en) nicht erfolgreich</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>Alle personen sind markiert worden</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>Klicken Sie hier um alle Personen auf der Seite zu markieren</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>Probieren Sie das neue Intra-Tag Modul</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>Markierte Personen</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>Markierung zurücksetzen</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>Fehlende Kolumne: {0}</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>Markierte Objekte gruppieren</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>Benötigte Anzahl an Mitarbeitern</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>Vorwärts verschieben</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Die vordefinierten Rollen können nicht geändert werden</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Mitarbeiter-Details</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>Intervalllänge zur Prüfung der Sitzplatznutzung</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Max. Anzahl Sitze prüfen</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>Filter editieren</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>Zuordnung der Regeln</value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>Neu-prognostizierte Mitarbeiter</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>Keine Ergebnisse konnten gefunden werden</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>Workflow Control Set</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>Alle Tage sind geschlossen</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>Die Woche enthält nicht die eingestellte wöchentliche Ruhezeit</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>Die markierte Abwesenheit konnte nicht gelöscht werden</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>Die Aktivität ist ausserhalb der Öffnungszeiten für den Skill</value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>Ihnen fehlt die Berechtigung Intra-Tag-Abwesenheiten für {0} einzufügen</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>Die Woche enthält zu wenig Arbeitszeit</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>Ihnen fehlt die Berechtigung für {0} ganztags-Abwesenheiten hinzuzufügen</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>In zeitlicher Reihenfolge zugeordnet</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} Anfragen wurden nicht abgelehnt</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>Probieren Sie das neue Anfragenmodul!</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Rollen filtern</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>Kategorie wählen</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>Erfolgreiche Buchungen</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>Zusammenfassung der Sitzplatzbuchungen</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>Mitarbeiter ohne jegliche Buchung</value>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>Schichtaktivität</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>Probieren Sie das neue Personenmodul!</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Ungültige Nummer</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Sitzplatz-Eigenschaften</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Regeln für Freie Tage</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>Der Server ist nicht verfügbar! Bitte überprüfen Sie Ihre Internetverbindung oder kontatieren Sie Ihren IT-Administrator.</value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>Die Applikation hat einen unbekannten Fehler zurückgeliefert. Bitte senden Sie uns eine Fehlermeldung.</value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>{0} Anfrage(n) wurden genehmigt.</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>Bitte wählen Sie einen Zeitraum</value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>{0} von {1} Anfrage(n) wurden gewählt</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Von {0} benutzt</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>Die Schichttauschanfrage für {0} muss erneut akzeptiert werden. Der Dienstplan des anderen Mitarbeiters hat sich geändert.</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~ 100</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>Meine Teampläne</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>Kampagne {0} konnte nicht gelöscht werden</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>Fortlaufend</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Auf die zuletzt gespeicherte Version zurückgreifen</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Anrufe oder Kampagnen für ein bestimmtes Szenario überschreiben</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>Eine Hierarchie kann für das aktuelle Business Unit nicht gefunden werden</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{0} Tage gewählt von {1} bis {2}</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>Vorname zu lang;</value>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>Nachname zu lang;</value>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>Windows Loginname ungültig</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>Eine neue Regelsammlung erstellen</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>Rechtzeitig</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Forecast</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>Anhand von Betriebsregeln genehmigen</value>
+  </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>Mitarbeiter informieren</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Genauigkeit</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>Diese Mitarbeiter benötigen keine Sitze</value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>Bitte ein Filter hinzufügen</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Wöchentliche Ruheziet für {0} {1} wird geprüft</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Präferenz-Einstellungen können nicht geladen werden.</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>Teams oder Standorte sind umarkiert</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>Rolle {0} existiert nicht;</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>Verwerfen</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>Nach hinten verschieben</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>Nächste starten</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>Die Absenheitsanfrage von {0} kann im Moment nicht genehmigt werden un ist auf die Warteliste gesetzt worden.</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>Abwesenheiten für {0} Mitarbeiter werden gelöscht: {1} erfolgreich, {2} fehlgeschlagen.</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>Die Abwesenheitsanfrage für Mitarbeiter {0} kann nicht am {1} gelöscht werden, da es nicht genehmigt worden ist.</value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>{0} ist verbessert worden! Wir sind für Ihren {1}Feedback sehr dankbar. {2} Das alte Modul {3} ist für eine begrenzte Zeit zugänglich.</value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Sie können keine Aktivität an {0} ohne Schicht für den nächsten Tag hinzufügen</value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>Vorhandene Schicht verlängern</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>Mehrere Aktivitäten für Mitarbeiter {0} können nicht verschoben werden.</value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>Der Plan für Mitarbeiter {0} kann nicht am {1} geändert werden. Der Plan ist schreibgeschützt. </value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>Ihnen fehlt die Berechtigung persönliche Aktivitäten für Mitarbeiter {0} hinzuzufügen.</value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>{0} ist verbessert worden! Wir sind für Ihren {1}Feedback sehr dankbar.{2}</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>Anfragen basierend auf Budgetzuteilung validieren.</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>Für diese Mitarbeiter überschreiben.</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>Keine Öffnungszeiten für {0} an Standort {1} zwischen {2} - {3} können gefunden werden.</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>Die nicht-überschreibbare Aktivität {0} im Intervall {1} ist von {2} im Intervall {3} überschrieben worden.</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>Die neu angelegte Aktivität überlappt Aktivitäten, die nicht überlappt werden dürfen.</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>Die Aktivität ist ausserhalb der Öffnungszeiten des Standorts</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Ungültige und überlappende Aktivität verschieben</value>
+  </data>
+  <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Sie haben nicht die Berechtigung die ungültige und überlappende Aktivität zu verschieben.</value>
+  </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>Es gibt noch überlappende nicht-überschreibbare Aktivitäten</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>Die ungültigen und überlappenden Aktivitäten wurden für die markierten Mitarbeitern verschoben.</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>Ungültige und überlappende Aktivitäten werden für {0} Mitarbeiter(n) verschoben. {1} erfolgreich, {2} fehlgeschlagen</value>
+  </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value>{0} Person(en) von {1} werden validiert.</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
+    <value>Überstundenaktivitäten werden für {0} Mitarbeiter hinzugefügt. {1} erfolgreich, {2} fehlgeschlagen</value>
+  </data>
+  <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
+    <value>Wählen Sie einen Multiplikatordefinitionsset.</value>
+  </data>
+  <data name="DescriptionOfNotOverwriteLayerRule" xml:space="preserve">
+    <value>Nicht-überschreibbare Schicht in Aktivität</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>Wählen Sie eine kürzere Datumsperiode</value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>Wählen Sie mindestens ein Team</value>
+  </data>
+  <data name="DenyDueToTechnicalProblems" xml:space="preserve">
+    <value>Die Besetzungsinformation ist im System nicht aktualisiert worden. Bitte kontaktieren Sie einen Systemadministrator.</value>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>Mitarbeiter nach Status inkludieren:</value>
   </data>
 </root>
