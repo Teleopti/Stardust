@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules.SchedulesForDay(dateOnly).Count(x => x.IsScheduled()).Should().Be.EqualTo(2);
 		}
 
-		[Test, Ignore("Failing test for 42681")]
+		[Test]
 		public void ShouldNotThouchLockedDays()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
