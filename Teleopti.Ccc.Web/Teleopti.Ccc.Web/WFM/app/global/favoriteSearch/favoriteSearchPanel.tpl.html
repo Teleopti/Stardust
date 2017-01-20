@@ -11,7 +11,7 @@
 		<div class="fav-search-list">
 			<md-list-item ng-repeat="searchItem in $ctrl.favoriteSearchList" class="fav-search-item pointer" ng-mouseenter="showIcons = true" ng-mouseleave="showIcons = false" ng-click="$ctrl.select(searchItem)">
 				<p class="fav-search-name">{{searchItem.Name}}</p>
-				<div class="md-secondary xdefault-favorite xinline-block" ng-class="{'visible':showIcons || searchItem.IsDefault, 'invisible':!showIcons}" ng-click="$ctrl.toggleDefault(searchItem.Name)" aria-label="Set or remove default">
+				<div class="md-secondary" ng-class="{'visible':showIcons || searchItem.IsDefault, 'invisible':!showIcons}" ng-click="$ctrl.toggleDefault(searchItem.Name)" aria-label="Set or remove default">
 					<i ng-class="{ 'mdi-star':searchItem.IsDefault, 'mdi-star-outline':!searchItem.IsDefault}" class="mdi"></i>
 					<md-tooltip class="multiline-tooltip">
 						<div ng-if="!searchItem.IsDefault" translate>SetAsDefault</div>
