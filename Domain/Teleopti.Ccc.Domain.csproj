@@ -696,6 +696,7 @@
     <Compile Include="Repositories\IAnalyticsBridgeGroupPagePersonRepository.cs" />
     <Compile Include="Repositories\IAnalyticsGroupPageRepository.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
+    <Compile Include="Scheduling\Overtime\AddOverTime.cs" />
     <Compile Include="Staffing\AddOverTimeHandler.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
