@@ -753,10 +753,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.ResetCalledCount();
 			var results = Target.RemoveActivity(input);
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
-			results.Count.Should().Be.EqualTo(1);
-			results.First().ErrorMessages.Count.Should().Be.EqualTo(2);
-			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
-			results.First().ErrorMessages[1].Should().Be.EqualTo(Resources.NoPermissionRemoveAgentActivity);
+			results.Count.Should().Be.EqualTo(2);
+			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
+			results.First().ErrorMessages.Single().Should().Be.EqualTo(Resources.WriteProtectSchedule);
 		}
 
 		[Test]
