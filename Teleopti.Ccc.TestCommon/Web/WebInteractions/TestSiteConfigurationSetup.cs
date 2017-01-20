@@ -153,8 +153,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		public static void RecycleApplication()
 		{
-			var file = Path.Combine(Paths.WebBinPath(), "touch");
-			File.WriteAllText(file, "can't touch this");
+			var file = Path.Combine(Paths.WebPath(), "app_offline.htm");
+			File.WriteAllText(file, "<html><body>Offline!</body></html>");
 			File.Delete(file);
 		}
 

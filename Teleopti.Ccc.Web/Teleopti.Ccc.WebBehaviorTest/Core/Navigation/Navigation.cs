@@ -134,8 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoWeekSchedulePage(DateTime date)
 		{
-			GoToPage(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}",
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+			GoToPage($"MyTime#Schedule/Week/{date.Year:0000}/{date.Month:00}/{date.Day:00}",
 				 new WaitUntilCompletelyLoaded());
 		}
 
@@ -146,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoAvailability(DateTime date)
 		{
-			GoToPage(string.Format("MyTime#Availability/Index/{0}/{1}/{2}", date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")));
+			GoToPage($"MyTime#Availability/Index/{date.Year:0000}/{date.Month:00}/{date.Day:00}");
 		}
 
 		public static void GotoPreference()
@@ -156,9 +155,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoPreference(DateTime date)
 		{
-			GoToPage(string.Format("MyTime#Preference/Index/{0}/{1}/{2}",
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				 new WaitUntilReadyForInteraction());
+			GoToPage($"MyTime#Preference/Index/{date.Year:0000}/{date.Month:00}/{date.Day:00}",
+				new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoRegionalSettings()
@@ -183,8 +181,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoTeamSchedule(DateTime date)
 		{
-			GoToPage(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}",
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00"))
+			GoToPage(
+				$"MyTime#TeamSchedule/Index/{date.Year:0000}/{date.Month:00}/{date.Day:00}"
 				, new WaitUntilReadyForInteraction());
 		}
 
