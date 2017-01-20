@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		private readonly TeamBlockType _teamBlockType;
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+		public Func<IGridlockManager> LockManager;
 
 		public MaxSeatOptimizationTest(TeamBlockType teamBlockType)
 		{
@@ -613,6 +614,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 
 			schedules.SchedulesForDay(dateOnly).Count(x => x.IsScheduled()).Should().Be.EqualTo(2);
+		}
+
+		[Test, Ignore("Failing test for 42681")]
+		public void ShouldNotThouchLockedDays()
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
+			var optPreferences = createOptimizationPreferences();
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+			LockManager().AddLock(agentData.Agent, dateOnly, LockType.Normal);
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(9));
 		}
 
 		private OptimizationPreferences createOptimizationPreferences()
