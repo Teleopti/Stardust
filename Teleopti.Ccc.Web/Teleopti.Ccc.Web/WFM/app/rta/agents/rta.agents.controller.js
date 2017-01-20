@@ -533,6 +533,7 @@
 
 		function getSkillIdsFromSkillArea(skillArea) {
 			if (skillArea.Skills != null) {
+				//remove vm.skillAreaNAme when Quickly toggle is released
 				vm.skillAreaName = skillArea.Name || '?';
 				vm.skillArea = true;
 				skillIds = skillArea.Skills.map(function (skill) {
