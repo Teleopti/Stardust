@@ -156,7 +156,6 @@
 			return checkedTeamsCount;
 		}
 
-
 		(function initialize() {
 			rtaService.getSkills()
 				.then(function (skills) {
@@ -462,7 +461,7 @@
 				teamIds: teamIds,
 				skillIds: skillIds,
 				skillAreaId: skillAreaId,
-				excludedStateIds: excludedStateIds().map(mapNullStates)
+				excludedStateIds: excludedStateIds().map(function (s) { return s === nullStateId ? null : s; })
 			})
 		}
 
@@ -498,15 +497,24 @@
 				deferred.resolve(rtaService.agentStatesInAlarmFor);
 			else
 				deferred.resolve(rtaService.agentStatesFor);
-			return deferred;
 		}
 
 		function updateAgentStates(agentStates) {
 			if (skip()) return;
 			var excludedStates = excludedStateIds();
-			setAgentStates(agentStates);
+			setStatesAndStuff(fillAgentState, agentStates);
 			updateUrlWithExcludedStateIds(excludedStates);
 		};
+
+		function fillAgentState(states) {
+			var now = moment(states.Time);
+			states.States.forEach(function (state, i) {
+				vm.agents.push(rtaAgentsBuildService.buildAgentState(now, state));
+				if (stateIsNotAdded(vm.states, state))
+					vm.states.push(mapState(state));
+			});
+			sortPhoneStatesByName();
+		}
 
 		function getAgents() {
 			var deferred = $q.defer();
@@ -536,9 +544,7 @@
 				//remove vm.skillAreaNAme when Quickly toggle is released
 				vm.skillAreaName = skillArea.Name || '?';
 				vm.skillArea = true;
-				skillIds = skillArea.Skills.map(function (skill) {
-					return skill.Id;
-				});
+				skillIds = skillArea.Skills.map(function (skill) { return skill.Id; });
 			}
 		}
 
@@ -554,14 +560,10 @@
 				teamIds: teamIds,
 				skillIds: skillIds,
 				skillAreaId: skillAreaId,
-				excludedStateIds: excludedStates.map(mapNullStates)
+				excludedStateIds: excludedStates.map(function (s) { return s === nullStateId ? null : s; })
 			})
 				.then(setStatesInAgents)
 				.then(updateUrlWithExcludedStateIds(excludedStates));
-		}
-
-		function mapNullStates(s) {
-			return s === nullStateId ? null : s;
 		}
 
 		function updatePhoneStatesFromStateParams() {
@@ -607,34 +609,24 @@
 			return excludedUnique.concat(excluded);
 		}
 
-		function setAgentStates(states) {
-			vm.agents = [];
-			lastUpdate = states.Time;
-			fillAgentState(states);
-			vm.timeline = rtaFormatService.buildTimeline(states.Time);
-			vm.isLoading = false;
-			vm.pollingLock = true;
-		}
-
 		function setStatesInAgents(states) {
+			setStatesAndStuff(
+				function (data) {
+					fillAgentsWithState(data);
+					fillAgentsWithoutState();
+				},
+				states);
+		}
+
+		function setStatesAndStuff(fillFunction, states) {
 			vm.agents = [];
 			lastUpdate = states.Time;
-			fillAgentsWithState(states);
-			fillAgentsWithoutState();
+			fillFunction(states)
 			vm.timeline = rtaFormatService.buildTimeline(states.Time);
 			vm.isLoading = false;
 			vm.pollingLock = true;
 		}
 
-		function fillAgentState(states) {
-			var now = moment(states.Time);
-			states.States.forEach(function (state, i) {
-				vm.agents.push(rtaAgentsBuildService.buildAgentState(now, state));
-				if (stateIsNotAdded(vm.states, state))
-					vm.states.push(mapState(state));
-			});
-			sortPhoneStatesByName();
-		}
 
 		function fillAgentsWithState(states) {
 			var now = moment(states.Time);
