@@ -39,7 +39,7 @@
 		};
 
 		svc.add = function(name, curSearch) {
-			return $http.post(moduleMap[currentModule].addFavoriteUrl, { Name: name, TeamIds: curSearch.teamIds, SearchTerm: curSearch.searchTerm });
+			return $http.post(moduleMap[currentModule].addFavoriteUrl, { Name: name, TeamIds: curSearch.TeamIds, SearchTerm: curSearch.SearchTerm });
 		};
 
 		svc.update = function(curFavorite) {
