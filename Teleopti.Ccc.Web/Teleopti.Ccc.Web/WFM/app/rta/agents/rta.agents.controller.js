@@ -620,7 +620,7 @@
 			vm.agents = [];
 			lastUpdate = states.Time;
 			fillAgentState(states);
-			buildTimeline(states);
+			vm.timeline = rtaFormatService.buildTimeline(states.Time);
 			vm.isLoading = false;
 			vm.pollingLock = true;
 		}
@@ -630,7 +630,7 @@
 			lastUpdate = states.Time;
 			fillAgentsWithState(states);
 			fillAgentsWithoutState();
-			buildTimeline(states);
+			vm.timeline = rtaFormatService.buildTimeline(states.Time);
 			vm.isLoading = false;
 			vm.pollingLock = true;
 		}
@@ -698,28 +698,6 @@
 						TeamId: agentInfo.TeamId,
 						SiteName: agentInfo.SiteName
 					});
-			});
-		}
-
-
-		function buildTimeline(states) {
-			var timeline = function (time) {
-				var percent = rtaFormatService.timeToPercent(states.Time, time);
-				if (percent <= 94)
-					return {
-						Time: time.format('HH:mm'),
-						Offset: percent + "%"
-					};
-			};
-
-			var time = moment(states.Time).startOf('hour');
-			vm.timeline = [
-				timeline(time),
-				timeline(time.add(1, 'hour')),
-				timeline(time.add(1, 'hour')),
-				timeline(time.add(1, 'hour'))
-			].filter(function (tl) {
-				return tl != null;
 			});
 		}
 

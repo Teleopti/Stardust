@@ -14,7 +14,8 @@
 			numberToPercent: numberToPercent,
 			timeToPercent: timeToPercent,
 			secondsToPercent: secondsToPercent,
-			timePeriodToPercent: timePeriodToPercent
+			timePeriodToPercent: timePeriodToPercent,
+			buildTimeline: buildTimeline
 		}
 
 		return service;
@@ -67,6 +68,27 @@
 			var start = moment(startTime) > windowStart ? moment(startTime) : windowStart;
 			var lengthSeconds = moment(endTime).diff(start, 'seconds');
 			return secondsToPercent(lengthSeconds);
+		}
+
+		function buildTimeline(statesTime) {
+			var timeline = function (time) {
+				var percent = timeToPercent(statesTime, time);
+				if (percent <= 94)
+					return {
+						Time: time.format('HH:mm'),
+						Offset: percent + "%"
+					};
+			};
+
+			var time = moment(statesTime).startOf('hour');
+			return [
+				timeline(time),
+				timeline(time.add(1, 'hour')),
+				timeline(time.add(1, 'hour')),
+				timeline(time.add(1, 'hour'))
+			].filter(function (tl) {
+				return tl != null;
+			});
 		}
 	};
 })();
