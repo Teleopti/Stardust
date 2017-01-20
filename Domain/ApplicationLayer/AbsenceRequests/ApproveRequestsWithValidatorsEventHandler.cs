@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 
 			@event.EndTime = DateTime.Now;
-			sendMessage(@event);
 		}
 
 		private bool isValidAbsenceRequest(IPersonRequest personRequest)
@@ -68,23 +67,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			return _writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
 				personRequest.Person, new ApproveBatchRequestsCommand());
-		}
-
-		private void sendMessage(ApproveRequestsWithValidatorsEvent @event)
-		{
-			_messageBroker.Send(
-				@event.LogOnDatasource,
-				@event.LogOnBusinessUnitId,
-				@event.StartTime,
-				@event.EndTime,
-				Guid.Empty,
-				@event.InitiatorId,
-				typeof(Person),
-				Guid.Empty,
-				typeof(IApproveRequestsWithValidatorsEventMessage),
-				DomainUpdateType.NotApplicable,
-				null,
-				@event.TrackedCommandInfo.TrackId);
 		}
 	}
 }
