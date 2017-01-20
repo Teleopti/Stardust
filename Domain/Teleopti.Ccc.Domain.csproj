@@ -515,6 +515,7 @@
     <Compile Include="Islands\Island.cs" />
     <Compile Include="Islands\IslandLimits.cs" />
     <Compile Include="Islands\Legacy\CreateIslandsOld.cs" />
+    <Compile Include="Islands\MoveSkillGroupToCorrectIsland.cs" />
     <Compile Include="Islands\NumberOfAgentsKnowingSkill.cs" />
     <Compile Include="Islands\ReduceIslandsLimits.cs" />
     <Compile Include="Islands\ReduceNoSkillGroups.cs" />
