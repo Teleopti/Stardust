@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
                 for (; currentDate < endDate; currentDate = new DateOnly(calendar.AddMonths(currentDate.Date,IncrementCount)))
                 {
                     DateTime lastDateInMonth = DateHelper.GetLastDateInMonth(currentDate.Date, calendar);
-                    do
-                    {
+					while (lastDateInMonth.DayOfWeek != _dayOfWeek)
+					{
                         lastDateInMonth = calendar.AddDays(lastDateInMonth, -1);
-                    } while (lastDateInMonth.DayOfWeek != _dayOfWeek);
-                    if (lastDateInMonth>startDate.Date && lastDateInMonth<endDate.Date)
+                    }
+                    if (lastDateInMonth>=startDate.Date && lastDateInMonth<=endDate.Date)
                         listToReturn.Add(new DateOnly(lastDateInMonth));
                 }
             }

@@ -133,10 +133,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.AreEqual(new DateOnly(2009, 11, 28), meetingDays[1]);
         }
 
-		[Test, Ignore("#42667")]
+		[Test]
 	    public void ShouldConsiderLastDateOfMonthWhenGettingLastOccurenceOfDay()
 	    {
 			var startDate = new DateOnly(2017, 1, 1);
+			var endDate = new DateOnly(2017, 1, 31);
+			_target.DayOfWeek = DayOfWeek.Tuesday;
+			_target.IncrementCount = 1;
+			_target.DayOfWeek = DayOfWeek.Tuesday;
+			_target.WeekOfMonth = WeekNumber.Last;
+			var meetingDays = _target.GetMeetingDays(startDate, endDate);
+			Assert.AreEqual(1, meetingDays.Count);
+			Assert.AreEqual(endDate, meetingDays[0]);
+		}
+
+		[Test]
+	    public void ShouldConsiderFirstDateInSelectedPeriodWhenGettingLastCoccurenceOfDay()
+	    {
+			var startDate = new DateOnly(2017, 1, 31);
 			var endDate = new DateOnly(2017, 1, 31);
 			_target.DayOfWeek = DayOfWeek.Tuesday;
 			_target.IncrementCount = 1;
