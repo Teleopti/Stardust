@@ -147,7 +147,7 @@ describe('RtaAgentsController', function() {
 		expect(vm.agents[0].State).toEqual("Ready");
 	});
 
-	it('should state in alarm for skill area', function() {
+	it('should get state in alarm for skill area', function() {
 		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
 		$fakeBackend
 			.withSkillAreas([{
@@ -161,9 +161,8 @@ describe('RtaAgentsController', function() {
 			.withAgentState({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SkillId: "d08d75b3-fdb4-484a-ae4c-9f0800e2f753",
-				State: "Break",
-				TimeInAlarm: 60
+				SkillId: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+				State: "Break"
 			})
 			.withAgentState({
 				Name: "Charley Caper",

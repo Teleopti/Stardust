@@ -452,4 +452,260 @@ describe('RtaAgentsController', function () {
 		});
 
 	});
+
+
+
+
+
+
+/**********************************************************/
+
+	it('should hide states when unselecting state for skill area', function () {
+		stateParams.skillAreaId = "skillAreaGuid";
+		$fakeBackend
+			.withSkillAreas([{
+				Id: "skillAreaGuid",
+				Skills: [{
+					Id: "phoneGuid",
+					Name: "Phone"
+				}]
+			}])
+			.withAgentState({
+				PersonId: "person1",
+				State: "Training",
+				StateId: 'TrainingGuid',
+				TimeInAlarm: 15,
+				SkillId: "phoneGuid"
+			})
+			.withAgentState({
+				PersonId: "person2",
+				State: "LoggedOut",
+				StateId: 'LoggedOutGuid',
+				TimeInAlarm: 10,
+				SkillId: "phoneGuid"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true)
+			.apply(function () {
+				vm.states.filter(function (s) {
+					return s.Id === 'LoggedOutGuid';
+				})[0].Selected = false;
+			});
+		c.wait(5000);
+
+		expect(vm.filteredData.length).toEqual(1);
+		expect(vm.filteredData[0].PersonId).toEqual("person1");
+	});
+
+	it('should take excluded states as stateParam for skill area', function () {
+		stateParams.skillAreaId = "skillAreaGuid";
+		stateParams.es = ["StateGuid2"];
+		$fakeBackend
+			.withSkillAreas([{
+				Id: "skillAreaGuid",
+				Skills: [{
+					Id: "phoneGuid",
+					Name: "Phone"
+				}]
+			}])
+			.withAgentState({
+				PersonId: "person1",
+				State: "StateGuid1",
+				StateId: 'StateGuid1',
+				TimeInAlarm: 15,
+				SkillId: "phoneGuid"
+			})
+			.withAgentState({
+				PersonId: "person2",
+				State: "StateGuid2",
+				StateId: 'StateGuid2',
+				TimeInAlarm: 10,
+				SkillId: "phoneGuid"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true);
+		c.wait(5000);
+
+		expect(vm.filteredData.length).toEqual(1);
+		expect(vm.filteredData[0].PersonId).toEqual("person1");
+	});
+
+	it('should update url when deselecting state for skill area', function () {
+		stateParams.skillAreaId = "skillAreaGuid";
+		$fakeBackend
+			.withSkillAreas([{
+				Id: "skillAreaGuid",
+				Skills: [{
+					Id: "phoneGuid",
+					Name: "Phone"
+				}]
+			}])
+			.withAgentState({
+				PersonId: "person1",
+				State: "Training",
+				StateId: 'TrainingGuid',
+				TimeInAlarm: 15,
+				SkillId: "phoneGuid"
+			})
+			.withAgentState({
+				PersonId: "person2",
+				State: "LoggedOut",
+				StateId: 'LoggedOutGuid',
+				TimeInAlarm: 10,
+				SkillId: "phoneGuid"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply('agentsInAlarm = true')
+			.apply(function () {
+				vm.states.filter(function (s) {
+					return s.Id === 'LoggedOutGuid';
+				})[0].Selected = false;
+			});
+		c.wait(5000);
+
+		expect($state.go).toHaveBeenCalledWith($state.current.name, {
+			es: ['LoggedOutGuid']
+		}, {
+				notify: false
+			});
+	});
+
+	it('should be able to deselect if sending in excluded state in param skil area', function () {
+		stateParams.skillAreaId = "skillAreaGuid";
+		stateParams.es = ["LoggedOutGuid"];
+		$fakeBackend
+			.withSkillAreas([{
+				Id: "skillAreaGuid",
+				Skills: [{
+					Id: "phoneGuid",
+					Name: "Phone"
+				}]
+			}])
+			.withAgentState({
+				PersonId: "person1",
+				State: "Training",
+				StateId: 'TrainingGuid',
+				TimeInAlarm: 15,
+				SkillId: "phoneGuid"
+			})
+			.withAgentState({
+				PersonId: "person2",
+				State: "Logged out",
+				StateId: 'LoggedOutGuid',
+				TimeInAlarm: 10,
+				SkillId: "phoneGuid"
+			})
+			.withAgentState({
+				PersonId: "person3",
+				State: "Phone",
+				StateId: 'PhoneGuid',
+				TimeInAlarm: 5,
+				SkillId: "phoneGuid"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true)
+			.apply(function () {
+				vm.states.filter(function (s) {
+					return s.Id === 'LoggedOutGuid';
+				})[0].Selected = true;
+			})
+			.apply(function () {
+				vm.states.filter(function (s) {
+					return s.Id === 'PhoneGuid';
+				})[0].Selected = false;
+			});
+		c.wait(5000);
+
+		expect(vm.filteredData.length).toEqual(2);
+		expect(vm.filteredData[0].PersonId).toEqual("person1");
+		expect(vm.filteredData[1].PersonId).toEqual("person2");
+	});
+
+	it('should deselect No State for skill area', function () {
+		stateParams.skillAreaId = "skillAreaGuid";
+		$fakeBackend
+			.withSkillAreas([{
+				Id: "skillAreaGuid",
+				Skills: [{
+					Id: "phoneGuid",
+					Name: "Phone"
+				}]
+			}])
+			.withAgentState({
+				PersonId: "person1",
+				State: "Training",
+				StateId: 'TrainingGuid',
+				TimeInAlarm: 15,
+				SkillId: "phoneGuid"
+			})
+			.withAgentState({
+				PersonId: "person2",
+				State: "",
+				StateId: null,
+				TimeInAlarm: 10,
+				SkillId: "phoneGuid"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true)
+			.apply(function () {
+				vm.states.filter(function (s) {
+					return s.Id === "noState";
+				})[0].Selected = false;
+			});
+		c.wait(5000);
+
+		expect(vm.filteredData.length).toEqual(1);
+		expect(vm.filteredData[0].PersonId).toEqual("person1");
+	});
+
+	it('should select after deselecting No State for skill area', function () {
+		stateParams.skillAreaId = "skillAreaGuid";
+		stateParams.es = ["noState"];
+		$fakeBackend
+			.withSkillAreas([{
+				Id: "skillAreaGuid",
+				Skills: [{
+					Id: "phoneGuid",
+					Name: "Phone"
+				}]
+			}])
+			.withAgentState({
+				PersonId: "person1",
+				State: "Training",
+				StateId: 'TrainingGuid',
+				TimeInAlarm: 15,
+				SkillId: "phoneGuid"
+			})
+			.withAgentState({
+				PersonId: "person2",
+				State: "",
+				StateId: null,
+				TimeInAlarm: 10,
+				SkillId: "phoneGuid"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(vm.agentsInAlarm = true)
+			.apply(function () {
+				vm.states.filter(function (s) {
+					return s.Id === "noState";
+				})[0].Selected = true;
+			});
+		c.wait(5000);
+
+		expect(vm.filteredData.length).toEqual(2);
+	});
+
+
 });
