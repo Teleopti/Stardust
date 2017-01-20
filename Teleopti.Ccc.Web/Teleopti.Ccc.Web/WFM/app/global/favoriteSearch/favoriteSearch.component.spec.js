@@ -124,10 +124,31 @@ describe('favoriteSearch component tests', function () {
 		expect(ctrl.favoriteSearchList[0].Id).toEqual('2');
 	});
 
-	//afterEach(function() {
-	//	httpBackend.flush();
-	//});
+	it('should reset current favorite when its deleted', function () {
+		var scope = rootScope.$new();
+		scope.getSearch = function () { return {teamIds:['team1', 'team2'],searchTerm:""}};
+		scope.applyFavorite = function () { };
 
+		var element = angular.element('<favorite-search get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
+		element = $compile(element)(scope);
+		scope.$digest();
+
+
+		var ctrl = element.isolateScope().$ctrl;
+		ctrl.isTest = true;
+		ctrl.select({
+			Id: '1',
+			Name: 'test1',
+			TeamIds: ['Team1Id', 'Team2Id'],
+			SearchTerm: '',
+			IsDefault: true
+		});
+		var nameToBeDeleted = 'test1';
+		ctrl.delete(nameToBeDeleted);
+
+		expect(ctrl.enableSave()).toEqual(true);
+		expect(ctrl.currentFavorite).toEqual(undefined);
+	});
 
 	function FakeFavoriteSearchDataService() {
 		var fakeData = [

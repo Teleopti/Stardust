@@ -158,13 +158,16 @@
 				.then(function () {
 					ctrl.favoriteSearchList.splice(index, 1);
 					favoriteSearchNameList.splice(index, 1);
+					if (ctrl.currentFavorite.Name === name)
+						ctrl.currentFavorite = undefined;
 				});
 		};
 
 		ctrl.select = function (item) {
 			ctrl.currentFavorite = item;
 			ctrl.currentName = item.Name;
-			ctrl.mdPanelRef.close();
+			if (ctrl.mdPanelRef)
+				ctrl.mdPanelRef.close();
 			ctrl.applyFavorite({ teamIds: angular.copy(item.TeamIds), searchTerm: item.SearchTerm });
 		};
 
