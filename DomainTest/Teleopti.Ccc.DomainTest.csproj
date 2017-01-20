@@ -1523,7 +1523,7 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="Staffing\AddOverTimeHandlerTest.cs" />
-    <Compile Include="Staffing\AddOverTimeTest.cs" />
+    <Compile Include="Scheduling\Overtime\ScheduleOvertimeWithoutStateHolderTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="OneTimeSetUp.cs" />
