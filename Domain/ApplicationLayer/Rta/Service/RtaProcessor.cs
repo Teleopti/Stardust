@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 
@@ -6,6 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class RtaProcessor
 	{
+		private static readonly ILog _logger = LogManager.GetLogger("PerfLog.Rta");
 		private readonly ShiftEventPublisher _shiftEventPublisher;
 		private readonly ActivityEventPublisher _activityEventPublisher;
 		private readonly StateEventPublisher _stateEventPublisher;
@@ -63,10 +67,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
 					}
 
+					var stopwatch = new Stopwatch();
+					stopwatch.Start();
 					var events = eventCollector.Publish();
+					stopwatch.Stop();
+					_logger.Debug($"Publish completed, eventsize: {events.Count()}, time: {stopwatch.ElapsedMilliseconds}");
 					trace.EventsPublished(events);
-					
+
+					stopwatch.Restart();
 					_agentStateReadModelUpdater.Update(context, events, context.DeadLockVictim);
+					stopwatch.Stop();
+					_logger.Debug($"Update readmodel, agent: {context.PersonId}, time: {stopwatch.ElapsedMilliseconds}");
 				}
 				catch(Exception)
 				{

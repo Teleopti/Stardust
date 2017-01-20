@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -85,6 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ContextLoader : IContextLoader
 	{
+		private static readonly ILog _logger = LogManager.GetLogger("PerfLog.Rta");
 		private readonly IScheduleCacheStrategy _scheduleCacheStrategy;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly IDatabaseLoader _databaseLoader;
@@ -239,6 +242,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_batch = batch;
 				ParallelTransactions = _config.ReadValue("RtaBatchParallelTransactions", 7);
 				MaxTransactionSize = _config.ReadValue("RtaBatchMaxTransactionSize", 100);
+
+				var realUpdater = UpdateAgentState;
+				UpdateAgentState = context =>
+				{
+					var stopwatch = new Stopwatch();
+					stopwatch.Start();
+					realUpdater(context);
+					stopwatch.Stop();
+					_logger.Debug($"Update agentstate completed, agent: {context.PersonId}, update schedule: {context.CacheSchedules}, time: {stopwatch.ElapsedMilliseconds}");
+				};
 			}
 
 			public override IEnumerable<BatchStateInputModel> AllItems()
@@ -256,7 +269,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						UserCode = x.UserCode
 					})
 					.ToArray();
+				var stopwatch = new Stopwatch();
+				stopwatch.Start();
 				var agentStates = _persister.Find(userCodes, DeadLockVictim);
+				stopwatch.Stop();
+				_logger.Debug($"Load agents completed, time: {stopwatch.ElapsedMilliseconds}");
 
 				userCodes
 					.Where(x => agentStates.All(s => s.UserCode != x.UserCode))

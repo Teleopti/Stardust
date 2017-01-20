@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(TeleoptiRtaService));
+		private static readonly ILog _logger = LogManager.GetLogger("PerfLog.Rta");
 
 		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
@@ -67,7 +69,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch)
 		{
-			return handleRtaExceptions(() =>
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+
+			var response = handleRtaExceptions(() =>
 			{
 				IEnumerable<BatchStateInputModel> states = (
 					from s in externalUserStateBatch
@@ -101,6 +106,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						SourceId = sourceId
 					});
 			});
+
+			stopwatch.Stop();
+			_logger.Info($"Request completed, batchsize: {externalUserStateBatch.Count}, time: {stopwatch.ElapsedMilliseconds} => {stopwatch.ElapsedMilliseconds / externalUserStateBatch.Count} ms / state");
+
+			return response;
 		}
 
 		private static bool isClosingSnapshot(string userCode, bool isSnapshot)
