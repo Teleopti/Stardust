@@ -307,22 +307,33 @@
 	}
 }
 .fav-search-panel {
-	$favsearchleftpadding: .8em;
-	background: $white;
+	$fav-search-padding-unit: .8em;
+	$list-item-height: 2em;
+	$panel-width: 30em;
 
-	md-list {
+	background: $white;
+	width: $panel-width;
+
+	.fav-search-list {
 		padding: 0;
-		min-width: 300px;
-		max-height: 400px;
+		width: 100%;
+		max-height: 10 * $list-item-height;
 		overflow-y: auto;
+		-ms-overflow-style: -ms-autohiding-scrollbar; // or Edge/IE always shows scrollbar
 	}
+
 	.fav-search-header {
-		padding: 1.2em $favsearchleftpadding $favsearchleftpadding;
+		padding: 1.2em $fav-search-padding-unit $fav-search-padding-unit;
 		display: flex;
+		align-items: baseline;
+
+		button.save-btn {
+			flex-grow: 1;
+		}
 
 		input.name {
-			flex-grow: 1;
-			margin-right: .8em;
+			flex-grow: 10;
+			margin-right: $fav-search-padding-unit;
 		}
 		input.name.ng-invalid {
 			border-bottom: 1px solid $red-800;
@@ -336,20 +347,44 @@
 			font-size: .8em;
 		}
 	}
+
+	// override default heights of md-list-item
 	.fav-search-item {
-		height: 2em;
-		padding: 0 !important;
-		border-bottom: 1px solid $gray012;
-		min-height: initial !important;
+		height: $list-item-height;
+		min-height: 100%;
+		width: 100%;
+
+		.md-button, .md-list-item-inner, .md-secondary-container {
+			height: $list-item-height;
+			min-height: 100%;
+			line-height: 100%;
+		}
+
+		div.md-button {
+			padding: 0 2*$fav-search-padding-unit 0 $fav-search-padding-unit !important; // double right padding for IE and Edge's scrollbar
+		}
+
+		.md-secondary {
+			line-height: 100%;
+		}
+
+		button.md-secondary {
+			padding: 0;
+			width: auto;
+		}
+	}
+
+	.fav-search-item {
 
 		.fav-search-name {
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
+			max-width: .74 * $panel-width; // to clip very long names
 		}
 
 		.fav-search-item-container {
-			padding: 0.2em $favsearchleftpadding 0;
+			padding: 0.2em $fav-search-padding-unit 0;
 			width: 100%;
 		}
 		.default-favorite button {
@@ -370,9 +405,6 @@
 		.visible {
 			visibility: visible;
 		}
-	}
-	.fav-search-item:hover {
-		background: $gray012;
 	}
 }
 .organization-picker-container {
