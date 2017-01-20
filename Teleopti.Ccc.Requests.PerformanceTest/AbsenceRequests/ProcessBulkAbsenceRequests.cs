@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -53,6 +51,80 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests()
+		{
+			var personReqs = processMultipleAbsenceRequests(false);
+
+			var expectedStatuses = new Dictionary<Guid, int>();
+			var resultStatuses = new Dictionary<Guid, int>();
+
+			expectedStatuses.Add(new Guid("BF50C741-A780-4930-A64B-A5E00105F325"), 2);
+			expectedStatuses.Add(new Guid("6069902E-5760-4DF4-B733-A5E00105B099"), 2);
+			expectedStatuses.Add(new Guid("12728761-0ED6-422B-B2B5-A5E001051F1E"), 2);
+			expectedStatuses.Add(new Guid("E4C7A7A7-8D2C-4591-ACA4-A53D00F82C88"), 2);
+			expectedStatuses.Add(new Guid("1EBFEE75-CE35-40FB-975E-A3BF00D0577C"), 4);
+			expectedStatuses.Add(new Guid("AE476FA3-7A6C-4948-89C2-A3BF00D0577C"), 2);
+			expectedStatuses.Add(new Guid("F25262A1-E3C3-4A54-B202-A33200B2E94F"), 4); //
+			expectedStatuses.Add(new Guid("42394840-F905-4B22-915F-A332008A5288"), 4); //
+			expectedStatuses.Add(new Guid("A35F2179-9A4B-40C9-BF7B-A27400997C79"), 4); //
+			expectedStatuses.Add(new Guid("CADD42C6-5419-48DD-8514-A25B009AD59D"), 4);
+			expectedStatuses.Add(new Guid("C922055A-B4D0-4C06-B9AD-A1410113C47D"), 4); //
+			expectedStatuses.Add(new Guid("4886AEDD-E30F-416C-B5E8-A1410113C47D"), 4);
+			expectedStatuses.Add(new Guid("DCF2EA04-3031-4436-A229-A1410113C47D"), 4);
+			expectedStatuses.Add(new Guid("47721DE4-A0CB-45EE-A123-A1410113C47D"), 4); //
+			expectedStatuses.Add(new Guid("391DB822-3936-4C4D-9634-A1410113C47D"), 4); //
+			expectedStatuses.Add(new Guid("87E6CEF0-388A-4365-94FA-A1410113C47D"), 4);
+			expectedStatuses.Add(new Guid("55E3A133-6305-4C9A-8AEA-A1410113C47D"), 2);
+
+			fillResultStatuses(personReqs, resultStatuses);
+
+			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
+		}
+
+		[Test]
+		public void ShouldProcessMultipleAbsenceRequestsWithIntradayValidator()
+		{
+			var personReqs = processMultipleAbsenceRequests(true, RequestValidatorsFlag.IntradayValidator);
+
+			var expectedStatuses = new Dictionary<Guid, int>();
+			var resultStatuses = new Dictionary<Guid, int>();
+
+			expectedStatuses.Add(new Guid("BF50C741-A780-4930-A64B-A5E00105F325"), 2);
+			expectedStatuses.Add(new Guid("6069902E-5760-4DF4-B733-A5E00105B099"), 2);
+			expectedStatuses.Add(new Guid("12728761-0ED6-422B-B2B5-A5E001051F1E"), 2);
+			expectedStatuses.Add(new Guid("E4C7A7A7-8D2C-4591-ACA4-A53D00F82C88"), 2);
+			expectedStatuses.Add(new Guid("1EBFEE75-CE35-40FB-975E-A3BF00D0577C"), 4);
+			expectedStatuses.Add(new Guid("AE476FA3-7A6C-4948-89C2-A3BF00D0577C"), 2);
+			expectedStatuses.Add(new Guid("F25262A1-E3C3-4A54-B202-A33200B2E94F"), 0); //
+			expectedStatuses.Add(new Guid("42394840-F905-4B22-915F-A332008A5288"), 4); //
+			expectedStatuses.Add(new Guid("A35F2179-9A4B-40C9-BF7B-A27400997C79"), 0); //
+			expectedStatuses.Add(new Guid("CADD42C6-5419-48DD-8514-A25B009AD59D"), 4);
+			expectedStatuses.Add(new Guid("C922055A-B4D0-4C06-B9AD-A1410113C47D"), 4); //
+			expectedStatuses.Add(new Guid("4886AEDD-E30F-416C-B5E8-A1410113C47D"), 0);
+			expectedStatuses.Add(new Guid("DCF2EA04-3031-4436-A229-A1410113C47D"), 0);
+			expectedStatuses.Add(new Guid("47721DE4-A0CB-45EE-A123-A1410113C47D"), 0); //
+			expectedStatuses.Add(new Guid("391DB822-3936-4C4D-9634-A1410113C47D"), 4); //
+			expectedStatuses.Add(new Guid("87E6CEF0-388A-4365-94FA-A1410113C47D"), 0);
+			expectedStatuses.Add(new Guid("55E3A133-6305-4C9A-8AEA-A1410113C47D"), 2);
+
+			fillResultStatuses(personReqs, resultStatuses);
+
+			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
+		}
+
+		private void fillResultStatuses(List<IPersonRequest> personReqs, Dictionary<Guid, int> resultStatuses)
+		{
+			WithUnitOfWork.Do(() =>
+			{
+				foreach (var req in personReqs)
+				{
+					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
+					var requestStatus = getRequestStatus(request);
+					resultStatuses.Add(request.Person.Id.GetValueOrDefault(), requestStatus);
+				}
+			});
+		}
+
+		private List<IPersonRequest> processMultipleAbsenceRequests(bool queueRequest, RequestValidatorsFlag requestValidatorsFlag = RequestValidatorsFlag.None)
 		{
 			IEnumerable<Guid> personIds = new List<Guid>
 			{
@@ -125,47 +197,19 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
 					Sent = DateTime.UtcNow
 				};
-				//queueRequests(absenceRequestIds);
+				if (queueRequest)
+				{
+					queueRequests(absenceRequestIds, requestValidatorsFlag);
+				}
 
 				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 			});
-
-			var expectedStatuses = new Dictionary<Guid, int>();
-			var resultStatuses = new Dictionary<Guid, int>();
-
-			expectedStatuses.Add(new Guid("BF50C741-A780-4930-A64B-A5E00105F325"), 2);
-			expectedStatuses.Add(new Guid("6069902E-5760-4DF4-B733-A5E00105B099"), 2);
-			expectedStatuses.Add(new Guid("12728761-0ED6-422B-B2B5-A5E001051F1E"), 2);
-			expectedStatuses.Add(new Guid("E4C7A7A7-8D2C-4591-ACA4-A53D00F82C88"), 2);
-			expectedStatuses.Add(new Guid("1EBFEE75-CE35-40FB-975E-A3BF00D0577C"), 4);
-			expectedStatuses.Add(new Guid("AE476FA3-7A6C-4948-89C2-A3BF00D0577C"), 2);
-			expectedStatuses.Add(new Guid("F25262A1-E3C3-4A54-B202-A33200B2E94F"), 4); //
-			expectedStatuses.Add(new Guid("42394840-F905-4B22-915F-A332008A5288"), 4); //
-			expectedStatuses.Add(new Guid("A35F2179-9A4B-40C9-BF7B-A27400997C79"), 4); //
-			expectedStatuses.Add(new Guid("CADD42C6-5419-48DD-8514-A25B009AD59D"), 4);
-			expectedStatuses.Add(new Guid("C922055A-B4D0-4C06-B9AD-A1410113C47D"), 4); //
-			expectedStatuses.Add(new Guid("4886AEDD-E30F-416C-B5E8-A1410113C47D"), 4);
-			expectedStatuses.Add(new Guid("DCF2EA04-3031-4436-A229-A1410113C47D"), 4);
-			expectedStatuses.Add(new Guid("47721DE4-A0CB-45EE-A123-A1410113C47D"), 4); //
-			expectedStatuses.Add(new Guid("391DB822-3936-4C4D-9634-A1410113C47D"), 4); //
-			expectedStatuses.Add(new Guid("87E6CEF0-388A-4365-94FA-A1410113C47D"), 4);
-			expectedStatuses.Add(new Guid("55E3A133-6305-4C9A-8AEA-A1410113C47D"), 2);
-
-			WithUnitOfWork.Do(() =>
-			{
-				foreach (var req in personReqs)
-				{
-					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
-					var requestStatus = getRequestStatus(request);
-					resultStatuses.Add(request.Person.Id.GetValueOrDefault(), requestStatus);
-				}
-			});
-
-			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
+			return personReqs;
 		}
 
 		//Don't remove this, nice to have for manual debugging
-		private void queueRequests(List<Guid> absenceRequestIds)
+		private void queueRequests(IEnumerable<Guid> absenceRequestIds,
+			RequestValidatorsFlag requestValidatorsFlag)
 		{
 			foreach (var requestId in absenceRequestIds)
 			{
@@ -174,115 +218,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					PersonRequest = requestId,
 					Created = new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 					StartDateTime = new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
-					EndDateTime = new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)
+					EndDateTime = new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc),
+					MandatoryValidators = requestValidatorsFlag
 				};
 				QueuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
 			}
 			CurrentUnitOfWork.Current().PersistAll();
-		}
-
-		[Test]
-		public void ShouldProcessMultipleAbsenceRequestsWithWaitList()
-		{
-			IPersonRequest waitListedRequest = null;
-			var personReqs = new List<IPersonRequest>();
-			var absenceRequestIds = new List<Guid>();
-
-			IEnumerable<Guid> personIds = new List<Guid>
-			{
-				// people from team FL_Online_CC1_97905(Lul)
-				//DO NOT CHANGE THE ORDER OF THE GUIDS!
-				new Guid("C7015A40-F300-42F3-98B3-A14100FFA30A"), //Stefan Haupt
-				new Guid("811ACA34-B256-4E72-9E69-A141010DDC78"), //Susanne Eriksson
-				new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413") //Sara Andersson
-			};
-
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-
-			WithUnitOfWork.Do(() =>
-			{
-				var persons = PersonRepository.FindPeople(personIds);
-				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")); //Semester
-
-				var wfcs = WorkflowControlSetRepository.Get(new Guid("7485EEAB-72D6-43D3-8B6F-A47A00C7D496")); //Consumer Online
-				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
-				{
-					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
-					period.StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
-					period.AbsenceRequestProcess = new GrantAbsenceRequest();
-					var datePeriod = period as AbsenceRequestOpenDatePeriod;
-					if (datePeriod != null)
-						datePeriod.Period = period.OpenForRequestsPeriod;
-				}
-				wfcs.AbsenceRequestWaitlistEnabled = true;
-
-				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
-				var budgetGroup = BudgetGroupRepository.Get(new Guid("F6EA1653-8C48-4F5B-9214-A53A00FFF8C6")); //Digital support
-				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
-														  new DateOnlyPeriod(new DateOnly(2016, 3, 9), new DateOnly(2016, 3, 11)));
-
-				budgetDays.ForEach(budgetDay =>
-				{
-					budgetDay.ShrinkedAllowance = 0;
-				});
-
-				//Add a request to waitlist
-				waitListedRequest = createAbsenceRequest(persons.FirstOrDefault(x => x.Name.ToString().Contains("Sara")), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
-																										   new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
-				waitListedRequest.Deny("Deny Monster says: DENY!", new PersonRequestAuthorizationCheckerForTest(), waitListedRequest.Person, PersonRequestDenyOption.AutoDeny);
-				PersonRequestRepository.Add(waitListedRequest);
-				personReqs.Add(waitListedRequest);
-
-				CurrentUnitOfWork.Current().PersistAll();
-
-				Thread.Sleep(1000); // 1 sec sleep to make sure 'first come first serve'
-
-				//give one request the opprtunity to be approved
-				budgetDays.ForEach(budgetDay =>
-				{
-					budgetDay.ShrinkedAllowance = 1;
-				});
-
-				foreach (var person in persons.Where(x => !x.Name.ToString().Contains("Sara")))
-				{
-					var pReq = createAbsenceRequest(person, absence);
-					personReqs.Add(pReq);
-					PersonRequestRepository.Add(pReq);
-					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
-				}
-				CurrentUnitOfWork.Current().PersistAll();
-
-				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
-				{
-					PersonRequestIds = absenceRequestIds,
-					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
-					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
-					LogOnDatasource = "Teleopti WFM",
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
-					Sent = DateTime.UtcNow
-				};
-
-				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
-			});
-
-			var expectedStatuses = new Dictionary<Guid, int>();
-			var resultStatuses = new Dictionary<Guid, int>();
-
-			expectedStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), 2); //was in waitList, should be approved, Sara
-			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("C7015A40-F300-42F3-98B3-A14100FFA30A")).Id.GetValueOrDefault(), 4); //already absent, Stefan
-			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("811ACA34-B256-4E72-9E69-A141010DDC78")).Id.GetValueOrDefault(), 5); //Susanne
-
-			WithUnitOfWork.Do(() =>
-			{
-				foreach (var req in personReqs)
-				{
-					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
-					resultStatuses.Add(request.Id.GetValueOrDefault(), getRequestStatus(request));
-				}
-			});
-
-			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
 		}
 
 		private int getRequestStatus(IPersonRequest request)
