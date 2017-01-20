@@ -44,16 +44,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			_feedback.SendProgress($"Received {@event.PersonRequestIds.Count} Absence Requests.");
 
-			var personRequests = checkPersonRequest(@event);
-			
+			IList<IPersonRequest> personRequests;
+			IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> requestValidators;
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				personRequests = checkPersonRequest(@event);
+				requestValidators = getMandatoryValidators(personRequests);
+			}
+
 			_feedback.SendProgress($"Done Checking Person Requests. {personRequests.Count} will be processed.");
 			if (!personRequests.IsNullOrEmpty())
 			{
-				IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> requestValidators;
-				using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-				{
-					requestValidators = getMandatoryValidators(personRequests);
-				}
 				var personRequestIds = personRequests.Select(p => p.Id.GetValueOrDefault()).ToList();
 				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequestIds, requestValidators);
 			}
@@ -72,60 +73,60 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var requests = new List<IPersonRequest>();
 			var atleastOneWaitlistedWfc = false;
 
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+
+			var wfcs = _workflowControlSetRepository.LoadAll();
+			if (wfcs.Any(x => x.AbsenceRequestWaitlistEnabled))
 			{
-				var wfcs = _workflowControlSetRepository.LoadAll();
-				if (wfcs.Any(x => x.AbsenceRequestWaitlistEnabled))
+				atleastOneWaitlistedWfc = true;
+				var queuedRequests = _queuedAbsenceRequestRepository.LoadAll().Where(x => x.Sent == @event.Sent);
+
+				foreach (var request in queuedRequests)
 				{
-					atleastOneWaitlistedWfc = true;
-					var queuedRequests = _queuedAbsenceRequestRepository.LoadAll().Where(x => x.Sent == @event.Sent);
-
-					foreach (var request in queuedRequests)
-					{
-						if (request.StartDateTime < min)
-							min = request.StartDateTime;
-						if (request.EndDateTime > max)
-							max = request.EndDateTime;
-					}
+					if (request.StartDateTime < min)
+						min = request.StartDateTime;
+					if (request.EndDateTime > max)
+						max = request.EndDateTime;
 				}
-
-				var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
-
-				foreach (var personRequest in personRequests)
-				{
-					if (personRequestSpecification.IsSatisfiedBy(personRequest))
-					{
-						string warning = $"No person request found with the supplied Id or the request is not in pending status mode. (Id = {personRequest.Id})";
-						_feedback.SendProgress(warning);
-					}
-					else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
-					{
-						string warning = $"The found person request is not of type absence request. (Id = {personRequest.Id})";
-						_feedback.SendProgress(warning);
-					}
-					else
-					{
-						requests.Add(personRequest);
-					}
-
-				}
-				if (requests.Any())
-				{
-					if (requests.Min(x => x.Request.Period.StartDateTime) < min)
-						min = requests.Min(x => x.Request.Period.StartDateTime);
-					if (requests.Max(x => x.Request.Period.EndDateTime) > max)
-						max = requests.Max(x => x.Request.Period.EndDateTime);
-				}
-
-				if (max > min && atleastOneWaitlistedWfc)
-				{
-					DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
-					var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
-					requests.AddRange(_personRequestRepository.Find(waitListIds));
-					_feedback.SendProgress($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
-				}
-				
 			}
+
+			var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
+
+			foreach (var personRequest in personRequests)
+			{
+				if (personRequestSpecification.IsSatisfiedBy(personRequest))
+				{
+					string warning =
+						$"No person request found with the supplied Id or the request is not in pending status mode. (Id = {personRequest.Id})";
+					_feedback.SendProgress(warning);
+				}
+				else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
+				{
+					string warning = $"The found person request is not of type absence request. (Id = {personRequest.Id})";
+					_feedback.SendProgress(warning);
+				}
+				else
+				{
+					requests.Add(personRequest);
+				}
+
+			}
+			if (requests.Any())
+			{
+				if (requests.Min(x => x.Request.Period.StartDateTime) < min)
+					min = requests.Min(x => x.Request.Period.StartDateTime);
+				if (requests.Max(x => x.Request.Period.EndDateTime) > max)
+					max = requests.Max(x => x.Request.Period.EndDateTime);
+			}
+
+			if (max > min && atleastOneWaitlistedWfc)
+			{
+				DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
+				var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
+				requests.AddRange(_personRequestRepository.Find(waitListIds));
+				_feedback.SendProgress($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
+			}
+
+
 			return requests;
 		}
 
@@ -139,9 +140,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var mandatoryValidators = queuedAbsenceRequest.MandatoryValidators;
 				if (requestValidators.ContainsKey(queuedAbsenceRequest.PersonRequest))
 					continue;
+				var personRequest = personRequests.FirstOrDefault(p => p.Id == queuedAbsenceRequest.PersonRequest);
 				requestValidators.Add(queuedAbsenceRequest.PersonRequest,
 					_absenceRequestValidatorProvider.GetValidatorList(
-						personRequests.FirstOrDefault(p => p.Id == queuedAbsenceRequest.PersonRequest), mandatoryValidators));
+						personRequest, mandatoryValidators));
 			}
 			return requestValidators;
 		}

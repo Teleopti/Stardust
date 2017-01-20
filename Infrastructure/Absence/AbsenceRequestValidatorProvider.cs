@@ -44,14 +44,20 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public IEnumerable<IAbsenceRequestValidator> GetValidatorList(IPersonRequest personRequest, RequestValidatorsFlag validator)
 		{
+			var absenceRequestValidatorList = new List<IAbsenceRequestValidator>();
+
 			if (validator.HasFlag(RequestValidatorsFlag.BudgetAllotmentValidator))
-				yield return new BudgetGroupHeadCountValidator();
+				absenceRequestValidatorList.Add(new BudgetGroupHeadCountValidator());
+
 			if (validator.HasFlag(RequestValidatorsFlag.IntradayValidator))
 			{
-				yield return getIntradayValidator(personRequest);
+				absenceRequestValidatorList.Add(getIntradayValidator(personRequest));
 			}
+
 			if (validator.HasFlag(RequestValidatorsFlag.ExpirationValidator))
-				yield return new RequestExpirationValidator(_expiredRequestValidator);
+				absenceRequestValidatorList.Add(new RequestExpirationValidator(_expiredRequestValidator));
+
+			return absenceRequestValidatorList;
 		}
 
 		private IAbsenceRequestValidator getIntradayValidator(IPersonRequest personRequest)
