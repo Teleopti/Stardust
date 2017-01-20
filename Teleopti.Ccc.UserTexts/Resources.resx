@@ -15468,7 +15468,7 @@ These options are activated:
     <comment>Text displayed in the multiselect for organization RTA</comment>
   </data>
   <data name="TimeOOA" xml:space="preserve">
-    <value>TimeOOA</value>
+    <value>Time OOA</value>
     <comment>Header for Time in Out of Adherence column in agents grid RTA</comment>
   </data>
 </root>

@@ -13861,7 +13861,7 @@ Dessa val är aktiverade:
     <value>Importera schema</value>
   </data>
   <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
-    <value>Flytta otillåted överlappad aktivitet</value>
+    <value>Flytta otillåtet överlappad aktivitet</value>
   </data>
   <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
     <value>Du har inte rättigheter för att flytta otillåtet överlappade aktiviteter.</value>
@@ -14144,5 +14144,11 @@ Dessa val är aktiverade:
   </data>
   <data name="SignInWithNoColon" xml:space="preserve">
     <value>Logga in med</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Välj organisation</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>Avvikelsetid</value>
   </data>
 </root>
