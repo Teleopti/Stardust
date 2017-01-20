@@ -37,8 +37,8 @@
 
 		vm.getSearch = function () {
 			return {
-				teamIds: vm.selectedTeamIds,
-				searchTerm: vm.searchOptions.keyword
+				TeamIds: vm.selectedTeamIds,
+				SearchTerm: vm.searchOptions.keyword
 			};
 		};
 
@@ -205,8 +205,6 @@
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 
-
-
 		vm.loadSchedules = function () {
 			vm.isLoading = true;
 			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
@@ -316,6 +314,7 @@
 			keyword: $stateParams.keyword || '',
 			searchKeywordChanged: false
 		};
+		vm.selectedFavorite = $stateParams.selectedFavorite || null;
 
 		vm.validateWarningEnabled = false;
 
@@ -331,12 +330,14 @@
 
 		vm.onSelectedTeamsChanged = function onSelectedTeamsChanged(teams) {
 			vm.selectedTeamIds = teams;
+			vm.readyToSearch = true;
 			vm.resetSchedulePage();
 		};
 
-		vm.applyFavorite = function (teamIds, searchTerm) {
-			vm.selectedTeamIds = teamIds;
-			vm.searchOptions.keyword = searchTerm;
+		vm.applyFavorite = function (currentFavorite) {
+			vm.selectedFavorite = currentFavorite;
+			vm.selectedTeamIds = currentFavorite.TeamIds;
+			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
 		};
 
@@ -372,6 +373,7 @@
 			if (!$stateParams.do && defaultFavoriteSearch) {
 				vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
 				vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+				vm.selectedFavorite = defaultFavoriteSearch;
 			} else if (!$stateParams.do && defaultTeams) {
 				vm.selectedTeamIds = defaultTeams;
 			}

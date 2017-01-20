@@ -46,7 +46,7 @@ describe('favoriteSearch component tests', function () {
 
 	it('should save new favorite', function () {
 		var scope = rootScope.$new();
-		scope.getSearch = function () { return { teamIds: ["team1"], searchTerm: "agent" }; };
+		scope.getSearch = function () { return { TeamIds: ["team1"], SearchTerm: "agent" }; };
 		scope.applyFavorite = function () { };
 
 		var element = angular.element('<favorite-search get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
@@ -67,7 +67,7 @@ describe('favoriteSearch component tests', function () {
 
 	it('should update current favorite search', function () {
 		var scope = rootScope.$new();
-		scope.getSearch = function () { return { teamIds: ["fakeTeamId"], searchTerm: "agent" }; };
+		scope.getSearch = function () { return { TeamIds: ["fakeTeamId"], SearchTerm: "agent" }; };
 		scope.applyFavorite = function () { };
 
 		var element = angular.element('<favorite-search get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
@@ -87,7 +87,7 @@ describe('favoriteSearch component tests', function () {
 
 	it('should make specific favorite default', function () {
 		var scope = rootScope.$new();
-		scope.getSearch = function () { return { teamIds: ["fakeTeamId"], searchTerm: "agent" }; };
+		scope.getSearch = function () { return { TeamIds: ["fakeTeamId"], SearchTerm: "agent" }; };
 		scope.applyFavorite = function () { };
 
 		var element = angular.element('<favorite-search get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
@@ -126,7 +126,7 @@ describe('favoriteSearch component tests', function () {
 
 	it('should reset current favorite when its deleted', function () {
 		var scope = rootScope.$new();
-		scope.getSearch = function () { return {teamIds:['team1', 'team2'],searchTerm:""}};
+		scope.getSearch = function () { return {TeamIds:['team1', 'team2'],SearchTerm:""}};
 		scope.applyFavorite = function () { };
 
 		var element = angular.element('<favorite-search get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
@@ -178,8 +178,8 @@ describe('favoriteSearch component tests', function () {
 			var result = {
 				Id: 'id',
 				Name: currentName,
-				TeamIds: currentSearch.teamIds,
-				SearchTerm: currentSearch.searchTerm,
+				TeamIds: currentSearch.TeamIds,
+				SearchTerm: currentSearch.SearchTerm,
 				IsDefault: false
 			};
 			return {

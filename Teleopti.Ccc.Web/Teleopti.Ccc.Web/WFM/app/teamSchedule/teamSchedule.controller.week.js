@@ -21,6 +21,7 @@
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
+		vm.selectedFavorite = $stateParams.selectedFavorite || null;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
@@ -83,9 +84,10 @@
 
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
-		vm.applyFavorite = function (teamIds, searchTerm) {
-			vm.selectedTeamIds = teamIds;
-			vm.searchOptions.keyword = searchTerm;
+		vm.applyFavorite = function (currentFavorite) {
+			vm.selectedFavorite = currentFavorite;
+			vm.selectedTeamIds = currentFavorite.TeamIds;
+			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
 		};
 
@@ -122,6 +124,7 @@
 			if (!$stateParams.do && defaultFavoriteSearch) {
 				vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
 				vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+				vm.selectedFavorite = defaultFavoriteSearch;
 			} else if (!$stateParams.do && defaultTeams) {
 				vm.selectedTeamIds = defaultTeams;
 			}

@@ -15,7 +15,8 @@
 				keyword: undefined,
 				selectedDate: undefined,
 				selectedTeamIds: undefined,
-				do: undefined,
+				selectedFavorite: undefined,
+				do: false,
 			}
 		}).state('teams.for', {
 			url: '/?personId',
@@ -27,10 +28,11 @@
 		}).state('teams.weekView', {
 			url: '/week',
 			params: {
-				keyword: '',
-				selectedDate: new Date(),
-				selectedTeamIds: [],
-				do: undefined,
+				keyword: undefined,
+				selectedDate: undefined,
+				selectedTeamIds: undefined,
+				selectedFavorite: undefined,
+				do: false,
 			},
 			templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',
 			controller: 'TeamScheduleWeeklyController as vm'

@@ -12,7 +12,8 @@
 		<div class="leftside-part">
 
 			<favorite-search ng-if="vm.toggles.WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576"
-				apply-favorite="vm.applyFavorite(teamIds, searchTerm)"
+				current-favorite="vm.selectedFavorite"
+				apply-favorite="vm.applyFavorite(currentFavorite)"
 				get-search="vm.getSearch()"
 				on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
@@ -31,7 +32,7 @@
 				<team-schedule-datepicker selected-date="vm.startOfWeek" on-date-change="vm.onStartOfWeekChanged()" step="7"></team-schedule-datepicker>
 			</span>
 
-			<view-changer selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword" selected-team-ids="vm.selectedTeamIds"></view-changer>
+			<view-changer selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword" selected-team-ids="vm.selectedTeamIds" selected-favorite="vm.selectedFavorite"></view-changer>
 		</div>
 	</div>
 

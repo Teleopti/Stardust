@@ -7,6 +7,7 @@
 			templateUrl: 'app/global/favoriteSearch/favoriteSearch.tpl.html',
 			controller: favoriteSearchCtrl,
 			bindings: {
+				currentFavorite: '<?',
 				onInitAsync: '<?',
 				applyFavorite: '&?',
 				getSearch: '&'
@@ -55,7 +56,7 @@
 					}
 
 					FavoriteSearchDataService.getFavoriteSearchList().then(function (resp) {
-						refreshList(resp.data);
+						initializeFavoriteList(resp.data);
 						if (ctrl.onInitAsync) {
 							ctrl.onInitAsync.resolve(ctrl.currentFavorite);
 						}
@@ -63,8 +64,14 @@
 				});
 		};
 
+		ctrl.$onChanges = function(changObj){
+			if(!changObj || !changObj.currentFavorite || !changObj.currentFavorite.currentValue) return;
+			updateCurrentFavorite(changObj.currentFavorite.currentValue);
+		};
+
 		ctrl.save = function () {
 			if(!ctrl.enableSave()) return;
+
 			var currentSearch = angular.copy(ctrl.getSearch());
 			if (favoriteSearchNameList.indexOf(ctrl.currentName) === -1) {
 				FavoriteSearchDataService.add(ctrl.currentName, currentSearch)
@@ -82,12 +89,12 @@
 			var currentSearch = ctrl.getSearch();
 
 			var isNameValid = ctrl.currentName && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
-			var hasTeamIds = angular.isArray(currentSearch.teamIds) && currentSearch.teamIds.length > 0;
+			var hasTeamIds = angular.isArray(currentSearch.TeamIds) && currentSearch.TeamIds.length > 0;
 			if (!ctrl.currentFavorite) return isNameValid && hasTeamIds;
 
 			var nameChanged = ctrl.currentName != ctrl.currentFavorite.Name;
-			var notSameTeamIdsAndSearchTerm = !angular.equals(ctrl.currentFavorite.TeamIds, currentSearch.teamIds) ||
-				ctrl.currentFavorite.SearchTerm != currentSearch.searchTerm;
+			var notSameTeamIdsAndSearchTerm = !angular.equals(ctrl.currentFavorite.TeamIds, currentSearch.TeamIds) ||
+				ctrl.currentFavorite.SearchTerm != currentSearch.SearchTerm;
 
 			return (nameChanged || notSameTeamIdsAndSearchTerm) && isNameValid && hasTeamIds;
 		};
@@ -104,18 +111,20 @@
 
 		function updateFavorite() {
 			var currentSearch = angular.copy(ctrl.getSearch());
-
 			var updatedCurrent = {
 				Id: ctrl.currentFavorite.Id,
 				Name: ctrl.currentFavorite.Name,
-				TeamIds: currentSearch.teamIds,
-				SearchTerm: currentSearch.searchTerm,
+				TeamIds: currentSearch.TeamIds,
+				SearchTerm: currentSearch.SearchTerm,
 				IsDefault: ctrl.currentFavorite.IsDefault
 			};
 			FavoriteSearchDataService.update(updatedCurrent)
 				.then(function () {
 					ctrl.currentFavorite.SearchTerm = updatedCurrent.SearchTerm;
 					ctrl.currentFavorite.TeamIds = updatedCurrent.TeamIds;
+
+					var index = favoriteSearchNameList.indexOf(ctrl.currentFavorite.Name);
+					ctrl.favoriteSearchList[index] = angular.copy(ctrl.currentFavorite);
 				});
 		}
 
@@ -168,10 +177,10 @@
 			ctrl.currentName = item.Name;
 			if (ctrl.mdPanelRef)
 				ctrl.mdPanelRef.close();
-			ctrl.applyFavorite({ teamIds: angular.copy(item.TeamIds), searchTerm: item.SearchTerm });
+			ctrl.applyFavorite({currentFavorite: angular.copy(ctrl.currentFavorite)});
 		};
 
-		function refreshList(data) {
+		function initializeFavoriteList(data) {
 			if (!angular.isArray(data)) return;
 
 			ctrl.favoriteSearchList = data.sort(reorderListAccordingToIsDefault);
@@ -182,8 +191,15 @@
 			var defaults = ctrl.favoriteSearchList.filter(function (f) {
 				return f.IsDefault;
 			});
-			ctrl.currentFavorite = defaults[0];
-			ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';
+
+			if(!ctrl.currentFavorite){
+				updateCurrentFavorite(defaults[0]);
+			}
+		}
+
+		function updateCurrentFavorite(curFavorite){
+			ctrl.currentFavorite = angular.copy(curFavorite);
+			ctrl.currentName = curFavorite ? curFavorite.Name : '';
 		}
 
 		function reorderListAccordingToIsDefault(item1, item2){
