@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,19 +16,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
-		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public ApproveRequestsWithValidatorsEventHandler(IPersonRequestRepository personRequestRepository,
 			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator,
-			IMessageBrokerComposite messageBroker,
 			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_personRequestRepository = personRequestRepository;
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
-			_messageBroker = messageBroker;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
@@ -38,20 +35,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				var alreadyQueuedRequests = _queuedAbsenceRequestRepository.FindByPersonRequestIds(@event.PersonRequestIdList);
+
 				foreach (var personRequestId in @event.PersonRequestIdList)
 				{
 					var personRequest = _personRequestRepository.Get(personRequestId);
 					if (!isValidAbsenceRequest(personRequest)) continue;
 
-					var queuedAbsenceRequest = new QueuedAbsenceRequest
-					{
-						PersonRequest = personRequest.Id.GetValueOrDefault(),
-						Created = personRequest.CreatedOn.GetValueOrDefault(),
-						StartDateTime = personRequest.Request.Period.StartDateTime,
-						EndDateTime = personRequest.Request.Period.EndDateTime,
-						MandatoryValidators = @event.Validator
-					};
-					_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+					var validators = @event.Validator;
+					addToQueuedRequests(alreadyQueuedRequests, personRequest, validators);
 				}
 
 				uow.PersistAll();
@@ -67,6 +59,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			return _writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
 				personRequest.Person, new ApproveBatchRequestsCommand());
+		}
+
+		private void addToQueuedRequests(IEnumerable<IQueuedAbsenceRequest> alreadyQueuedRequests, IPersonRequest personRequest,
+			RequestValidatorsFlag validators)
+		{
+			// If the request already queued, then update it in QueuedAbsenceRequest
+			var queuedAbsenceRequest = alreadyQueuedRequests.FirstOrDefault(x => x.PersonRequest == personRequest.Id);
+			if (queuedAbsenceRequest != null)
+			{
+				queuedAbsenceRequest.Created = personRequest.CreatedOn.GetValueOrDefault();
+				queuedAbsenceRequest.StartDateTime = personRequest.Request.Period.StartDateTime;
+				queuedAbsenceRequest.EndDateTime = personRequest.Request.Period.EndDateTime;
+				queuedAbsenceRequest.MandatoryValidators = validators;
+			}
+			else
+			{
+				_queuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+				{
+					PersonRequest = personRequest.Id.GetValueOrDefault(),
+					Created = personRequest.CreatedOn.GetValueOrDefault(),
+					StartDateTime = personRequest.Request.Period.StartDateTime,
+					EndDateTime = personRequest.Request.Period.EndDateTime,
+					MandatoryValidators = validators
+				});
+			}
 		}
 	}
 }

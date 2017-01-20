@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -23,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IPersonRequestRepository _personRequestRepository;
 		private IPersonRepository _personRepository;
 		private IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
-		private FakeMessageBrokerComposite _messageBroker;
 		private FakeQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 
 		private IPerson _person;
@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_writeProtectedScheduleCommandValidator.Stub(x => x.ValidateCommand(new DateTime(),
 				new Person(), new ApproveBatchRequestsCommand())).IgnoreArguments().Return(scheduleIsProtected);
 			_personRequestRepository = new FakePersonRequestRepository();
-			_messageBroker = new FakeMessageBrokerComposite();
 			_queuedAbsenceRequestRepository = new FakeQueuedAbsenceRequestRepository();
 
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
@@ -57,8 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				TrackedCommandInfo = new TrackedCommandInfo { TrackId = new Guid() }
 			};
 
-			_target = new ApproveRequestsWithValidatorsEventHandler(_personRequestRepository,
-				_writeProtectedScheduleCommandValidator, _messageBroker,
+			_target = new ApproveRequestsWithValidatorsEventHandler(_personRequestRepository, _writeProtectedScheduleCommandValidator,
 				_queuedAbsenceRequestRepository, new FakeCurrentUnitOfWorkFactory());
 		}
 
@@ -117,6 +115,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			queuedRequest.StartDateTime.Should().Be.EqualTo(_personRequest.Request.Period.StartDateTime);
 			queuedRequest.EndDateTime.Should().Be.EqualTo(_personRequest.Request.Period.EndDateTime);
 			queuedRequest.MandatoryValidators.Should().Be.EqualTo(_event.Validator);
+		}
+
+		[Test]
+		public void ShouldUpdateQueuedRequestIfAbsenceRequestHasAlreadyQueued()
+		{
+			prepareTestData(true, true);
+			_queuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				PersonRequest = _personRequest.Id.GetValueOrDefault(),
+				Created = DateTime.Now,
+				StartDateTime = DateTime.Now,
+				EndDateTime = DateTime.Now,
+				MandatoryValidators = RequestValidatorsFlag.None
+			});
+
+			var newEvent = new ApproveRequestsWithValidatorsEvent
+			{
+				Validator = RequestValidatorsFlag.BudgetAllotmentValidator,
+				PersonRequestIdList = new[] { _personRequest.Id.GetValueOrDefault() },
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = new Guid() }
+			};
+
+			_target.Handle(newEvent);
+
+			var queuedRequests = _queuedAbsenceRequestRepository.LoadAll();
+			queuedRequests.Count.Should().Be(1);
+
+			var queuedRequest = queuedRequests.First();
+			queuedRequest.Created.Should().Be.EqualTo(_personRequest.CreatedOn.GetValueOrDefault());
+			queuedRequest.StartDateTime.Should().Be.EqualTo(_personRequest.Request.Period.StartDateTime);
+			queuedRequest.EndDateTime.Should().Be.EqualTo(_personRequest.Request.Period.EndDateTime);
+
+			queuedRequest.MandatoryValidators.Should().Be.EqualTo(newEvent.Validator);
 		}
 
 		private IPerson createAndSetupPerson()
