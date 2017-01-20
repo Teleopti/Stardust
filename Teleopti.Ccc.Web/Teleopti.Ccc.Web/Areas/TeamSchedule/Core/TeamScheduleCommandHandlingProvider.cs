@@ -210,8 +210,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						}
 					}
 				}
-				if (actionResult.ErrorMessages.Any())
-					result.Add(actionResult);
+
+				actionResult.ErrorMessages.ForEach(e =>
+				{
+					result.Add(new ActionResult
+					{
+						ErrorMessages = new List<string> { e },
+						PersonId = personActivity.PersonId
+					});
+				});
 			}
 
 			return result;

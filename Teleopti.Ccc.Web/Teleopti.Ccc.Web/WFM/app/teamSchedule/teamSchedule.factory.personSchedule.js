@@ -333,16 +333,16 @@
 		};
 
 		ProjectionViewModel.prototype.Selectable = function () {
-			if ((this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0) && (toggles.all().RemoveAbsenceEnabled && permissions.all().IsRemoveAbsenceAvailable)) 
+			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0 && toggles.all().RemoveAbsenceEnabled) 
 				return true;
 
 			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) 
 				return false;
 
-			if ((!this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0) && (toggles.all().RemoveActivityEnabled && permissions.all().HasRemoveActivityPermission)) 
+			if (!this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0 && (toggles.all().RemoveActivityEnabled || toggles.all().MoveActivityEnabled ))
 				return true;
 
-			if((this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0) && (toggles.all().WfmTeamSchedule_RemoveOvertime_42481 && permissions.all().HasRemoveOvertimePermission))
+			if((this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0) && toggles.all().WfmTeamSchedule_RemoveOvertime_42481 )
 				return true;
 
 			return false;
