@@ -26,7 +26,9 @@
 		};
 
 		this.getAllRequestsPromise = function (filter, sortingOrders, paging) {
-			return $http.post(listRequestsUrl, requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging));
+			return $http.get(listRequestsUrl,
+				{ params: requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging) }
+			);
 		};
 
 		this.getSitesPromise = function () {
@@ -38,7 +40,9 @@
 		};
 
 		this.getShiftTradeRequestsPromise = function (filter, sortingOrders, paging) {
-			return $http.post(listShiftTradeRequestsUrl, requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging));
+			return $http.get(listShiftTradeRequestsUrl,
+				{ params: requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging) }
+			);
 		};
 
 		this.getBudgetGroupsPromise = function () {
