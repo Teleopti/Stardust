@@ -8,11 +8,11 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using static Teleopti.Interfaces.Domain.DateHelper;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
@@ -31,11 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IProxyForId<IAbsence> _absenceRepository;
 		private readonly IAbsenceCommandConverter _absenceCommandConverter;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
+		private readonly ICurrentUnitOfWork _unitOfWork;
+
 		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
 			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId, 
 			INonoverwritableLayerChecker nonoverwritableLayerChecker, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
-			IProxyForId<IAbsence> absenceRepository, IAbsenceCommandConverter absenceCommandConverter, IPersonAccountUpdater personAccountUpdater)
+			IProxyForId<IAbsence> absenceRepository, IAbsenceCommandConverter absenceCommandConverter, IPersonAccountUpdater personAccountUpdater, ICurrentUnitOfWork unitOfWork)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_absenceRepository = absenceRepository;
 			_absenceCommandConverter = absenceCommandConverter;
 			_personAccountUpdater = personAccountUpdater;
+			_unitOfWork = unitOfWork;
 		}
 
 		public IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
@@ -179,7 +182,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						Name = _personNameProvider.BuildNameFromSetting(person.Name)
 					});
 				}
-				_personAccountUpdater.UpdateForAbsence(person, abs, new DateOnly(input.Start));
+
+
+				var personAbsenceAccount = _personAccountUpdater.FetchPersonAbsenceAccount(person, abs);
+				if (personAbsenceAccount != null)
+				{
+					_unitOfWork.Current().Remove(personAbsenceAccount);
+				}				
 			}
 			return results;
 		}

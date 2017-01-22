@@ -13,5 +13,6 @@
 
 		bool UpdateForAbsence (IPerson person, IAbsence absence, DateOnly personAbsenceStartDate);
 
+		IPersonAbsenceAccount FetchPersonAbsenceAccount(IPerson person, IAbsence absence);
 	}
 }

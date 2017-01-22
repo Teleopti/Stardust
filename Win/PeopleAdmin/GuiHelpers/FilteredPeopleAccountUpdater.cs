@@ -40,5 +40,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			throw new System.NotImplementedException();
 		}
 
+		public IPersonAbsenceAccount FetchPersonAbsenceAccount(IPerson person, IAbsence absence)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

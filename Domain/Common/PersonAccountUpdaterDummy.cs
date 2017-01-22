@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Domain.Common
 			return true;
 		}
 
+		public IPersonAbsenceAccount FetchPersonAbsenceAccount(IPerson person, IAbsence absence)
+		{
+			return null;
+		}
+
 		public int CallCount { get; private set; }
 	}
 }	

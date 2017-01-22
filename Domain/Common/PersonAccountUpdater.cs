@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 
+
 namespace Teleopti.Ccc.Domain.Common
 {
 	public class PersonAccountUpdater : IPersonAccountUpdater
@@ -31,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public bool UpdateForAbsence(IPerson person, IAbsence absence, DateOnly personAbsenceStartDate)
 		{
-			var personAccounts = _provider.Find(person);
-			var accountsForAbsence = personAccounts.Find(absence);
+			var accountsForAbsence = FetchPersonAbsenceAccount(person, absence);
 
 			if (accountsForAbsence == null) return false;
 
@@ -43,8 +43,15 @@ namespace Teleopti.Ccc.Domain.Common
 			if (!accountCollection.Any()) return false;
 
 			accountCollection.ForEach(_traceableRefreshService.Refresh);
-
+		
 			return true;
 		}
+
+		public IPersonAbsenceAccount FetchPersonAbsenceAccount(IPerson person, IAbsence absence)
+		{
+			var personAccounts = _provider.Find(person);
+			return personAccounts.Find(absence);
+		}
+
 	}
 }
