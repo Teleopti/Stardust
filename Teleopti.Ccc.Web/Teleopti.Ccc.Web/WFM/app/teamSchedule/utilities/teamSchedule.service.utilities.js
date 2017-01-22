@@ -1,4 +1,5 @@
 ﻿(function() {
+	'use strict';
 	angular.module("wfm.teamSchedule").service("UtilityService", utilityService);
 
 	utilityService.$inject = ['CurrentUserInfo'];
