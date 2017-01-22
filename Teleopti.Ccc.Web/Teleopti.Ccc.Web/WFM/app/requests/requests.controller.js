@@ -215,12 +215,23 @@
 		$scope.$watch(function() {
 			return vm.period;
 		}, function (newValue) {
-			$scope.$evalAsync(function() {
+			$scope.$evalAsync(function () {
 				if (isShiftTradeViewActive()) {
 					vm.shiftTradePeriod = newValue;
 				} else {
 					vm.absencePeriod = newValue;
 				}
+
+				//fix for bug 42633, need removed when styleguide ready for this
+				if ($('#Request-period').hasClass('request-date-range-picker')
+					&& $('#Request-period').hasClass('ng-dirty')
+					&& $('#Request-period').hasClass('ng-valid'))
+				{
+					$('.wfm-datepicker-container').hide();
+				}
+				$('.wfm-datepicker-controllers-container').focusin(function () {
+					$('.wfm-datepicker-container').show();
+				});
 			});
 		});
 	}

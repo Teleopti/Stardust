@@ -23,7 +23,7 @@
 
 			<wfm-multiple-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></wfm-multiple-search-input>
 
-			<date-range-picker class="request-date-range-picker" ng-model="requests.period"
+			<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="requests.period"
 							   template-type="requests.dateRangeTemplateType"
 							   custom-validators="requests.dateRangeCustomValidators"></date-range-picker>
 
