@@ -242,7 +242,7 @@
 
 		.advanced-input-dropdown {
 			top: 14px;
-			left: 17px;
+			left: -5px;
 		}
 		.advanced-input {
 			width: 150px;
@@ -252,6 +252,13 @@
 		}
 		.expand-advanced-input {
 			max-width: 100%;
+		}
+		//Temp fix:remove this when styleguide updated wfm-multiple-search-input
+		wfm-multiple-search-input i.mdi-magnify {
+			display: none;
+		}
+		.focusing-search {
+			color: $blue-500;
 		}
 	}
 	.rightside-part {
@@ -310,7 +317,6 @@
 	$fav-search-padding-unit: .8em;
 	$list-item-height: 2em;
 	$panel-width: 30em;
-
 	background: $white;
 	width: $panel-width;
 
@@ -319,9 +325,9 @@
 		width: 100%;
 		max-height: 10 * $list-item-height;
 		overflow-y: auto;
-		-ms-overflow-style: -ms-autohiding-scrollbar; // or Edge/IE always shows scrollbar
+		// or Edge/IE always shows scrollbar
+		-ms-overflow-style: -ms-autohiding-scrollbar;
 	}
-
 	.fav-search-header {
 		padding: 1.2em $fav-search-padding-unit $fav-search-padding-unit;
 		display: flex;
@@ -330,7 +336,6 @@
 		button.save-btn {
 			flex-grow: 1;
 		}
-
 		input.name {
 			flex-grow: 10;
 			margin-right: $fav-search-padding-unit;
@@ -347,7 +352,6 @@
 			font-size: .8em;
 		}
 	}
-
 	// override default heights of md-list-item
 	.fav-search-item {
 		height: $list-item-height;
@@ -359,30 +363,26 @@
 			min-height: 100%;
 			line-height: 100%;
 		}
-
 		div.md-button {
-			padding: 0 2*$fav-search-padding-unit 0 $fav-search-padding-unit !important; // double right padding for IE and Edge's scrollbar
+			// double right padding for IE and Edge's scrollbar
+			padding: 0 2*$fav-search-padding-unit 0 $fav-search-padding-unit !important;
 		}
-
 		.md-secondary {
 			line-height: 100%;
 		}
-
 		button.md-secondary {
 			padding: 0;
 			width: auto;
 		}
 	}
-
 	.fav-search-item {
-
 		.fav-search-name {
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
-			max-width: .74 * $panel-width; // to clip very long names
+			max-width: .74 * $panel-width;
+			// to clip very long names
 		}
-
 		.fav-search-item-container {
 			padding: 0.2em $fav-search-padding-unit 0;
 			width: 100%;
@@ -423,7 +423,7 @@ md-select .md-select-value.md-select-placeholder {
 }
 .organization-picker {
 	min-width: 200px !important;
-	margin: 0 0 0 2.3em;
+	margin: -.5em 0 0 2.3em;
 	color: inherit;
 
 	.must-hide {

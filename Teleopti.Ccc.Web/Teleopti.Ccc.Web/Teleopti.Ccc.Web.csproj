@@ -1543,7 +1543,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timezonePicker.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personWeekView.spec.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.favoriteSearch.js" />
+    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.directive.focusInput.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.directive.scheduleChangeNotifier.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.directive.scheduleChangeNotifier.spec.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.directive.waitFor.js" />
@@ -1742,7 +1742,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.moveActivityValidator.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.notification.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.notification.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.modal.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.br.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.actionnoticeservice.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.actionnoticeservice.spec.js" />

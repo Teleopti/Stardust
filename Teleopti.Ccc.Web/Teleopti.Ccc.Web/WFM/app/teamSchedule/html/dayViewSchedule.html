@@ -8,7 +8,7 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)" wait-for="vm.boostrap">
+<div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.focusToSearch && vm.resetFocusSearch();vm.showDatePicker && (vm.showDatePicker = false)" wait-for="vm.boostrap">
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
@@ -25,8 +25,12 @@
 								 on-pick="vm.onSelectedTeamsChanged(teams)"
 								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 
-			<span class="people-search-container inline-block" ng-if="vm.searchEnabled">
+			<span class="people-search-container inline-block" ng-if="vm.searchEnabled" focus-input="vm.focusToSearch" ng-click="$event.stopPropagation()" ng-keydown="vm.focusSearch($event)">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
+				<span class="pointer" ng-class="{'focusing-search':vm.focusToSearch, 'not-focusing-search':!vm.focusToSearch}" ng-click="vm.onKeyWordInSearchInputChanged()">
+					<i class="mdi mdi-magnify"></i>
+					<md-tooltip>{{'Search' | translate}}</md-tooltip>
+				</span>
 			</span>
 
 			<span class="datepicker-container" ng-click="$event.stopPropagation()">

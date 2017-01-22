@@ -25,6 +25,7 @@
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
+		vm.focusToSearch = false;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
@@ -157,6 +158,16 @@
 				personSelectionSvc.clearPersonInfo();
 			}
 			vm.resetSchedulePage();
+			vm.resetFocusSearch();
+		};
+
+		vm.resetFocusSearch = function(){
+			vm.focusToSearch = false;
+		};
+
+		vm.focusSearch = function($event){
+			vm.focusToSearch = true;
+			if($event && $event.which == 13) vm.focusToSearch = false;
 		};
 
 		vm.resetSchedulePage = function () {
@@ -328,10 +339,9 @@
 		vm.searchEnabled = $state.current.name !== 'teams.for';
 
 
-		vm.onSelectedTeamsChanged = function onSelectedTeamsChanged(teams) {
+		vm.onSelectedTeamsChanged = function (teams) {
 			vm.selectedTeamIds = teams;
-			vm.readyToSearch = true;
-			vm.resetSchedulePage();
+			vm.focusSearch();
 		};
 
 		vm.applyFavorite = function (currentFavorite) {

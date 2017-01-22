@@ -27,13 +27,23 @@
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
 
 		vm.onKeyWordInSearchInputChanged = function() {
-			vm.loadSchedules();
+			vm.resetSchedulePage();
+			vm.resetFocusSearch();
 		};
 
 		vm.selectorChanged = function () {
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.resetSchedulePage();
 			});
+		};
+
+		vm.resetFocusSearch = function(){
+			vm.focusToSearch = false;
+		};
+
+		vm.focusSearch = function($event){
+			vm.focusToSearch = true;
+			if($event && $event.which == 13) vm.focusToSearch = false;
 		};
 
 		vm.resetSchedulePage = function () {
@@ -70,10 +80,10 @@
 			});
 		};
 
-		vm.changeSelectedTeams = function(teams) {
+		vm.onSelectedTeamsChanged = function(teams) {
 			vm.selectedTeamIds = teams;
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
-			vm.resetSchedulePage();
+			vm.focusSearch();
 		};
 
 		vm.toggles = teamsToggles.all();
