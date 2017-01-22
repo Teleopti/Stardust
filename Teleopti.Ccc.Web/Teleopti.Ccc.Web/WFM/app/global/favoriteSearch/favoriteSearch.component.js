@@ -88,7 +88,7 @@
 		ctrl.enableSave = function () {
 			var currentSearch = ctrl.getSearch();
 
-			var isNameValid = ctrl.currentName && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
+			var isNameValid = !!(ctrl.currentName) && ctrl.currentName !== '' && ctrl.currentName.length <= 50;
 			var hasTeamIds = angular.isArray(currentSearch.TeamIds) && currentSearch.TeamIds.length > 0;
 			if (!ctrl.currentFavorite) return isNameValid && hasTeamIds;
 

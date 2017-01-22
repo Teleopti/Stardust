@@ -93,8 +93,8 @@
 
 		vm.getSearch = function () {
 			return {
-				teamIds: vm.selectedTeamIds,
-				searchTerm: vm.searchOptions.keyword
+				TeamIds: vm.selectedTeamIds,
+				SearchTerm: vm.searchOptions.keyword
 			};
 		};
 		vm.weekDays = Util.getWeekdays(vm.scheduleDate);
