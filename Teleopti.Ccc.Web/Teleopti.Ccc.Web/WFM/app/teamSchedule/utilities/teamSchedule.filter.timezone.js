@@ -1,5 +1,5 @@
 ﻿(function() {
-
+	'use strict';
 	angular.module('wfm.teamSchedule').filter('timezone', timezoneFilter);
 
 	timezoneFilter.$inject = ['CurrentUserInfo'];
