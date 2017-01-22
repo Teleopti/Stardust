@@ -153,6 +153,224 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			requestStatusesAssert(personReqs, expectedStatuses);
 		}
 
+		[Test]
+		public void ShouldDenyBecauseOfPersonAccountIsFull()
+		{
+			logonSystem();
+
+			//Consumer Online
+			var personRequests = new List<IPersonRequest>();
+			WithUnitOfWork.Do(() =>
+			{
+				//load  Halvdag 16h/år
+				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
+
+				// person  Vinblad, Christian has a person account that on that absence
+				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
+
+				var req4 = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 4, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 4, 12, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req4);
+				personRequests.Add(req4);
+
+				var req5 = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 5, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 5, 12, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req5);
+				personRequests.Add(req5);
+
+				var req6 = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 6, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 6, 12, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req6);
+				personRequests.Add(req6);
+
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					if (!period.Absence.Equals(absence)) continue;
+
+					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+					period.StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+					period.PersonAccountValidator = new PersonAccountBalanceValidator();
+					period.AbsenceRequestProcess = new GrantAbsenceRequest();
+					var datePeriod = period as AbsenceRequestOpenDatePeriod;
+					if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
+				}
+
+				CurrentUnitOfWork.Current().PersistAll();
+
+				var absenceRequestIds = new List<Guid>
+				{
+					req4.Id.GetValueOrDefault(),
+					req5.Id.GetValueOrDefault(),
+					req6.Id.GetValueOrDefault()
+				};
+
+				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent
+				{
+					PersonRequestIds = absenceRequestIds,
+					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+					LogOnBusinessUnitId = businessUnitId,
+					LogOnDatasource = tenantName,
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
+				};
+
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
+			});
+
+			checkDeniedAndApprovedRequestCount(personRequests, 1, 2);
+		}
+
+		[Test]
+		public void ShouldDenyBecuaseOfLowAllowanceInBudgetHeadCount()
+		{
+			logonSystem();
+
+			//Consumer Online
+			var personRequests = new List<IPersonRequest>();
+			WithUnitOfWork.Do(() =>
+			{
+				//load  Halvdag 16h/år
+				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
+
+				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
+				var budgetGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
+				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
+					new DateOnlyPeriod(new DateOnly(2016, 4, 15), new DateOnly(2016, 4, 15)));
+				budgetDays.ForEach(budgetDay =>
+				{
+					budgetDay.ShrinkedAllowance = 1;
+					budgetDay.FullAllowance = 1;
+					budgetDay.AbsenceOverride = 1;
+				});
+
+				// person Englund, Rasmus
+				var person1 = PersonRepository.Load(new Guid("90FA4DCD-65CA-4599-B1EB-A276008EC775"));
+				//Persson, Josefin
+				var person2 = PersonRepository.Load(new Guid("F2588126-373C-47CC-BD78-A3E000AACF79"));
+
+				var req1 = createAbsenceRequest(person1, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 15, 11, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 15, 13, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req1);
+				personRequests.Add(req1);
+				var req2 = createAbsenceRequest(person2, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 15, 14, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 15, 16, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req2);
+				personRequests.Add(req2);
+
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					if (!period.Absence.Equals(absence)) continue;
+
+					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+					period.StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+					period.PersonAccountValidator = new AbsenceRequestNoneValidator();
+					period.AbsenceRequestProcess = new GrantAbsenceRequest();
+					var datePeriod = period as AbsenceRequestOpenDatePeriod;
+					if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
+				}
+
+				CurrentUnitOfWork.Current().PersistAll();
+
+				var absenceRequestIds = new List<Guid>
+				{
+					req1.Id.GetValueOrDefault(),
+					req2.Id.GetValueOrDefault()
+				};
+
+				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent
+				{
+					PersonRequestIds = absenceRequestIds,
+					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+					LogOnBusinessUnitId = businessUnitId,
+					LogOnDatasource = tenantName,
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
+				};
+
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
+			});
+
+			checkDeniedAndApprovedRequestCount(personRequests, 1, 1);
+		}
+
+		[Test]
+		public void ShouldDenyBecauseOfBudgetIsUsed()
+		{
+			logonSystem();
+
+			//Consumer Online
+			var personRequests = new List<IPersonRequest>();
+			WithUnitOfWork.Do(() =>
+			{
+				//load  Halvdag 16h/år
+				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
+
+				var bu = BusinessUnitRepository.Load(businessUnitId);
+				var scenario = ScenarioRepository.LoadDefaultScenario(bu);
+				var bGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
+				var bDay = BudgetDayRepository.Find(scenario, bGroup,
+					new DateOnlyPeriod(new DateOnly(2016, 4, 11), new DateOnly(2016, 4, 11)));
+
+				bDay.First().ShrinkedAllowance = 1;
+
+				var person = PersonRepository.Load(new Guid("BD2400CC-0FFE-4E30-8D4F-A141010651CB"));
+				var person2 = PersonRepository.Load(new Guid("8080B4A4-785D-44FD-B7F9-A141010651CB"));
+
+				var req4Th = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req4Th);
+				personRequests.Add(req4Th);
+				var req4Th2 = createAbsenceRequest(person2, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req4Th2);
+				personRequests.Add(req4Th2);
+
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					if (!period.Absence.Equals(absence)) continue;
+
+					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+					period.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+					period.PersonAccountValidator = new AbsenceRequestNoneValidator();
+					period.AbsenceRequestProcess = new GrantAbsenceRequest();
+					var datePeriod = period as AbsenceRequestOpenDatePeriod;
+					if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
+				}
+
+				CurrentUnitOfWork.Current().PersistAll();
+				
+				var absenceRequestIds = new List<Guid>
+				{
+					req4Th.Id.GetValueOrDefault(),
+					req4Th2.Id.GetValueOrDefault()
+				};
+				
+				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent
+				{
+					PersonRequestIds = absenceRequestIds,
+					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+					LogOnBusinessUnitId = businessUnitId,
+					LogOnDatasource = tenantName,
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
+				};
+
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
+			});
+
+			checkDeniedAndApprovedRequestCount(personRequests, 1, 1, "Otillräcklig bemanning");
+		}
+
 		private void requestStatusesAssert(IReadOnlyCollection<IPersonRequest> personRequests,
 			IDictionary<Guid, int> expectedStatuses)
 		{
@@ -317,223 +535,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				requestStatus = statusDenied;
 
 			return requestStatus;
-		}
-
-		[Test]
-		public void ShouldDenyBecauseOfPersonAccountIsFull()
-		{
-			logonSystem();
-
-			//Consumer Online
-			var personRequests = new List<IPersonRequest>();
-			WithUnitOfWork.Do(() =>
-			{
-				//load  Halvdag 16h/år
-				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
-
-				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
-				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
-				{
-					if (!period.Absence.Equals(absence)) continue;
-
-					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
-					period.StaffingThresholdValidator = new AbsenceRequestNoneValidator();
-					period.PersonAccountValidator = new PersonAccountBalanceValidator();
-					period.AbsenceRequestProcess = new GrantAbsenceRequest();
-					var datePeriod = period as AbsenceRequestOpenDatePeriod;
-					if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
-				}
-				// person  Vinblad, Christian has a person account that on that absence
-				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
-
-				var req4 = createAbsenceRequest(person, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 4, 8, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 4, 12, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req4);
-				personRequests.Add(req4);
-
-				var req5 = createAbsenceRequest(person, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 5, 8, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 5, 12, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req5);
-				personRequests.Add(req5);
-
-				var req6 = createAbsenceRequest(person, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 6, 8, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 6, 12, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req6);
-				personRequests.Add(req6);
-
-				CurrentUnitOfWork.Current().PersistAll();
-
-				var absenceRequestIds = new List<Guid>
-				{
-					req4.Id.GetValueOrDefault(),
-					req5.Id.GetValueOrDefault(),
-					req6.Id.GetValueOrDefault()
-				};
-
-				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent
-				{
-					PersonRequestIds = absenceRequestIds,
-					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
-					LogOnBusinessUnitId = businessUnitId,
-					LogOnDatasource = tenantName,
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
-					Sent = DateTime.UtcNow
-				};
-
-				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
-			});
-
-			checkDeniedAndApprovedRequestCount(personRequests, 1, 2);
-		}
-
-		[Test]
-		public void ShouldDenyBecuaseOfLowAllowanceInBudgetHeadCount()
-		{
-			logonSystem();
-
-			//Consumer Online
-			var personRequests = new List<IPersonRequest>();
-			WithUnitOfWork.Do(() =>
-			{
-				//load  Halvdag 16h/år
-				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
-
-				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
-				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
-				{
-					if (!period.Absence.Equals(absence)) continue;
-
-					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
-					period.StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
-					period.PersonAccountValidator = new AbsenceRequestNoneValidator();
-					period.AbsenceRequestProcess = new GrantAbsenceRequest();
-					var datePeriod = period as AbsenceRequestOpenDatePeriod;
-					if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
-				}
-
-				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
-				var budgetGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
-				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
-					new DateOnlyPeriod(new DateOnly(2016, 4, 15), new DateOnly(2016, 4, 15)));
-				budgetDays.ForEach(budgetDay =>
-				{
-					budgetDay.ShrinkedAllowance = 1;
-					budgetDay.FullAllowance = 1;
-					budgetDay.AbsenceOverride = 1;
-				});
-
-				// person Englund, Rasmus
-				var person1 = PersonRepository.Load(new Guid("90FA4DCD-65CA-4599-B1EB-A276008EC775"));
-				//Persson, Josefin
-				var person2 = PersonRepository.Load(new Guid("F2588126-373C-47CC-BD78-A3E000AACF79"));
-
-				var req1 = createAbsenceRequest(person1, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 15, 11, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 15, 13, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req1);
-				personRequests.Add(req1);
-				var req2 = createAbsenceRequest(person2, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 15, 14, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 15, 16, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req2);
-				personRequests.Add(req2);
-
-				CurrentUnitOfWork.Current().PersistAll();
-
-				var absenceRequestIds = new List<Guid>
-				{
-					req1.Id.GetValueOrDefault(),
-					req2.Id.GetValueOrDefault()
-				};
-
-				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent
-				{
-					PersonRequestIds = absenceRequestIds,
-					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
-					LogOnBusinessUnitId = businessUnitId,
-					LogOnDatasource = tenantName,
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
-					Sent = DateTime.UtcNow
-				};
-
-				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
-			});
-
-			checkDeniedAndApprovedRequestCount(personRequests, 1, 1);
-		}
-
-		[Test]
-		public void ShouldDenyBecauseOfBudgetIsUsed()
-		{
-			logonSystem();
-
-			//Consumer Online
-			var personRequests = new List<IPersonRequest>();
-			WithUnitOfWork.Do(() =>
-			{
-				//load  Halvdag 16h/år
-				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
-
-				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
-				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
-				{
-					if (!period.Absence.Equals(absence)) continue;
-
-					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
-					period.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
-					period.PersonAccountValidator = new AbsenceRequestNoneValidator();
-					period.AbsenceRequestProcess = new GrantAbsenceRequest();
-					var datePeriod = period as AbsenceRequestOpenDatePeriod;
-					if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
-				}
-
-				var bu = BusinessUnitRepository.Load(businessUnitId);
-				var scenario = ScenarioRepository.LoadDefaultScenario(bu);
-				var bGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
-				var bDay = BudgetDayRepository.Find(scenario, bGroup,
-					new DateOnlyPeriod(new DateOnly(2016, 4, 11), new DateOnly(2016, 4, 11)));
-
-				bDay.First().ShrinkedAllowance = 1;
-
-				var person = PersonRepository.Load(new Guid("BD2400CC-0FFE-4E30-8D4F-A141010651CB"));
-				var person2 = PersonRepository.Load(new Guid("8080B4A4-785D-44FD-B7F9-A141010651CB"));
-
-				var req4Th = createAbsenceRequest(person, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req4Th);
-				personRequests.Add(req4Th);
-				var req4Th2 = createAbsenceRequest(person2, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req4Th2);
-				personRequests.Add(req4Th2);
-
-				CurrentUnitOfWork.Current().PersistAll();
-
-				var absenceRequestIds = new List<Guid>
-				{
-					req4Th.Id.GetValueOrDefault(),
-					req4Th2.Id.GetValueOrDefault()
-				};
-
-				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent
-				{
-					PersonRequestIds = absenceRequestIds,
-					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
-					LogOnBusinessUnitId = businessUnitId,
-					LogOnDatasource = tenantName,
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
-					Sent = DateTime.UtcNow
-				};
-
-				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
-			});
-
-			checkDeniedAndApprovedRequestCount(personRequests, 1, 1, "Otillräcklig bemanning");
 		}
 
 		private void checkDeniedAndApprovedRequestCount(IEnumerable<IPersonRequest> personRequests, int expectedDeniedCount,
