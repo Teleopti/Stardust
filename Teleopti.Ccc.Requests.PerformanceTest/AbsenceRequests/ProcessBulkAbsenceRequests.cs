@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
+		public IAbsenceRequestProcessor AbsenceRequestProcessor;
+		public IAbsenceRequestValidatorProvider AbsenceRequestValidatorProvider;
 
 		[SetUp]
 		public void Setup()
@@ -86,18 +88,18 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			var expectedStatuses = new Dictionary<Guid, int>
 			{
 				// people from team 'FL_SaveDesk_Far4_00282' and 'OM_D_SME_MBS_45428'
-				[new Guid("889F7A33-BE61-4FA7-BFAD-A14100FFA30F")] = 2,
+				[new Guid("889F7A33-BE61-4FA7-BFAD-A14100FFA30F")] = 0,
 				[new Guid("7843C186-3DB9-4D91-9F34-A14100FFA313")] = 4,
 				[new Guid("51552353-F770-4340-88FA-A1CE00B56199")] = 2,
 				[new Guid("C6232E9E-9234-4983-8055-A1AF0090A8D7")] = 4,
 				[new Guid("DD0FE7BF-B56A-4309-BED2-A51A010E01BB")] = 4,
-				[new Guid("189295E6-6AFF-41C5-87CF-A49C01026BD0")] = 2,
+				[new Guid("189295E6-6AFF-41C5-87CF-A49C01026BD0")] = 0,
 				[new Guid("1CFD93FB-7ABF-4839-BBFC-A4C3009216A2")] = 4,
-				[new Guid("C89644EF-371F-45BB-9F01-A47500C13EB4")] = 2,
+				[new Guid("C89644EF-371F-45BB-9F01-A47500C13EB4")] = 0,
 				[new Guid("B21D5EA1-7CD9-4237-B451-A65900EB4857")] = 2,
 				[new Guid("3606EB98-53E3-4323-BC47-A3A1009DE023")] = 2,
-				[new Guid("35E1A58D-97CB-4117-B9C3-A141010AA74C")] = 2,
-				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = 2,
+				[new Guid("35E1A58D-97CB-4117-B9C3-A141010AA74C")] = 0,
+				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = 0,
 				[new Guid("144F887C-5AFF-4CC1-93F4-A65900F1C833")] = 2,
 				[new Guid("4AA6D8E5-B679-4F60-98F8-A65900F41B8B")] = 2,
 				[new Guid("1B53C821-2837-4893-8ACC-A65900F41C93")] = 2,
@@ -110,10 +112,44 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			requestStatusesAssert(personReqs, expectedStatuses);
 		}
 
+		[Test, Ignore("for comparing with ShouldProcessMultipleAbsenceRequestsWithIntradayValidator")]
+		public void ShouldProcessMultipleAbsenceRequestsWithIntradayValidatorByOldWay()
+		{
+			var expectedStatuses = new Dictionary<Guid, int>
+			{
+				// people from team 'FL_SaveDesk_Far4_00282' and 'OM_D_SME_MBS_45428'
+				[new Guid("889F7A33-BE61-4FA7-BFAD-A14100FFA30F")] = 0,
+				[new Guid("7843C186-3DB9-4D91-9F34-A14100FFA313")] = 4,
+				[new Guid("51552353-F770-4340-88FA-A1CE00B56199")] = 2,
+				[new Guid("C6232E9E-9234-4983-8055-A1AF0090A8D7")] = 4,
+				[new Guid("DD0FE7BF-B56A-4309-BED2-A51A010E01BB")] = 4,
+				[new Guid("189295E6-6AFF-41C5-87CF-A49C01026BD0")] = 0,
+				[new Guid("1CFD93FB-7ABF-4839-BBFC-A4C3009216A2")] = 4,
+				[new Guid("C89644EF-371F-45BB-9F01-A47500C13EB4")] = 0,
+				[new Guid("B21D5EA1-7CD9-4237-B451-A65900EB4857")] = 2,
+				[new Guid("3606EB98-53E3-4323-BC47-A3A1009DE023")] = 2,
+				[new Guid("35E1A58D-97CB-4117-B9C3-A141010AA74C")] = 0,
+				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = 0,
+				[new Guid("144F887C-5AFF-4CC1-93F4-A65900F1C833")] = 2,
+				[new Guid("4AA6D8E5-B679-4F60-98F8-A65900F41B8B")] = 2,
+				[new Guid("1B53C821-2837-4893-8ACC-A65900F41C93")] = 2,
+				[new Guid("4FD5816A-CB41-418B-837E-A65900F0F1FA")] = 2,
+				[new Guid("32E2CCEF-7D00-45DC-8E0B-A65900F2EC3F")] = 2
+			};
+
+			var personReqs = processMultipleAbsenceRequestsByOldWay(expectedStatuses.Keys);
+
+			requestStatusesAssert(personReqs, expectedStatuses);
+		}
+
 		private void requestStatusesAssert(List<IPersonRequest> personRequests, Dictionary<Guid, int> expectedStatuses)
 		{
 			var resultStatuses = new Dictionary<Guid, int>();
 			fillResultStatuses(personRequests, resultStatuses);
+			foreach (var resultStatuse in resultStatuses)
+			{
+				Console.WriteLine($"key:{resultStatuse.Key},value:{resultStatuse.Value}");
+			}
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
 		}
 
@@ -140,36 +176,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 
 			WithUnitOfWork.Do(() =>
 			{
-				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19")); //Consumer Support
-				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
-				{
-					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
-					period.StaffingThresholdValidator = new StaffingThresholdValidator();
-					period.AbsenceRequestProcess = new GrantAbsenceRequest();
-					var datePeriod = period as AbsenceRequestOpenDatePeriod;
-					if (datePeriod != null)
-						datePeriod.Period = period.OpenForRequestsPeriod;
-				}
-				CurrentUnitOfWork.Current().PersistAll();
-
-				// load some persons
-				var persons = PersonRepository.FindPeople(personIds);
-
-				//load vacation
-				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
-
-				foreach (var person in persons)
-				{
-					personReqs.Add(createAbsenceRequest(person, absence));
-				}
-
-				foreach (var pReq in personReqs)
-				{
-					PersonRequestRepository.Add(pReq);
-					CurrentUnitOfWork.Current().PersistAll();
-
-					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
-				}
+				prepareAbsenceRequests(personIds, personReqs, absenceRequestIds);
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -180,6 +187,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
 					Sent = DateTime.UtcNow
 				};
+
 				if (queueRequest)
 				{
 					queueRequests(absenceRequestIds, requestValidatorsFlag);
@@ -188,6 +196,71 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 			});
 			return personReqs;
+		}
+
+		private List<IPersonRequest> processMultipleAbsenceRequestsByOldWay(IEnumerable<Guid> personIds)
+		{
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+
+			var personReqs = new List<IPersonRequest>();
+			var absenceRequestIds = new List<Guid>();
+
+			WithUnitOfWork.Do(() =>
+			{
+				prepareAbsenceRequests(personIds, personReqs, absenceRequestIds);
+
+				foreach (var absenceRequestId in absenceRequestIds)
+				{
+					var personRequest = PersonRequestRepository.Get(absenceRequestId);
+					var absenceRequest = personRequest.Request as IAbsenceRequest;
+					AbsenceRequestProcessor.ApproveAbsenceRequestWithValidators(personRequest, absenceRequest,
+						CurrentUnitOfWork.Current(),
+						AbsenceRequestValidatorProvider.GetValidatorList(personRequest, RequestValidatorsFlag.IntradayValidator));
+				}
+			});
+			return personReqs;
+		}
+
+		private void prepareAbsenceRequests(IEnumerable<Guid> personIds, List<IPersonRequest> personReqs, List<Guid> absenceRequestIds)
+		{
+			var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19")); //Consumer Support
+			setAbsenceRequestOpenPeriods(wfcs);
+
+			// load some persons
+			var persons = PersonRepository.FindPeople(personIds);
+
+			//load vacation
+			var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
+
+			foreach (var person in persons)
+			{
+				personReqs.Add(createAbsenceRequest(person, absence));
+				setAbsenceRequestOpenPeriods(person.WorkflowControlSet);
+			}
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			foreach (var pReq in personReqs)
+			{
+				PersonRequestRepository.Add(pReq);
+				CurrentUnitOfWork.Current().PersistAll();
+
+				absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
+			}
+		}
+
+		private static void setAbsenceRequestOpenPeriods(IWorkflowControlSet wfcs)
+		{
+			foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+			{
+				period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+				period.StaffingThresholdValidator = new StaffingThresholdValidator();
+				period.AbsenceRequestProcess = new GrantAbsenceRequest();
+				var datePeriod = period as AbsenceRequestOpenDatePeriod;
+				if (datePeriod != null)
+					datePeriod.Period = period.OpenForRequestsPeriod;
+			}
 		}
 
 		//Don't remove this, nice to have for manual debugging
