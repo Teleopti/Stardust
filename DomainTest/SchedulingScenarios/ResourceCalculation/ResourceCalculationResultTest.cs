@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -84,6 +85,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
 			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value.Should().Be.EqualTo(0);
+		}
+
+		[Test] //, Ignore("#42665")]
+		public void ShouldCalculateEslCorrectOnLowVolumesWithShrinkageBug42665()
+		{
+			var scenario = new Scenario("_");
+			var date = DateOnly.Today;
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(9, 17);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 7.0643);
+			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+			{
+				skillStaffPeriod.Payload.UseShrinkage = true;
+				skillStaffPeriod.Payload.Shrinkage = new Percent(0.3);
+				skillStaffPeriod.Payload.ServiceAgreementData = skillStaffPeriod.Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(0.8), 40));
+				skillStaffPeriod.Payload.TaskData = new Task(50, TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(0));
+			}
+			var agents = new List<IPerson>();
+			var asses = new List<IPersonAssignment>();
+			for (int i = 0; i < 10; i++) //this will give me a slight understaffing and ESL should be below 80%
+			{
+				agents.Add(new Person().WithId().WithPersonPeriod(skill).WithSchedulePeriodOneDay(date));
+				asses.Add(new PersonAssignment(agents[i], scenario, date).WithLayer(activity, new TimePeriod(9, 17)));
+			}
+			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), agents, asses, skillDay);
+
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value.Should().Be.IncludedIn(0.75, 0.8);
 		}
 
 		[Test]

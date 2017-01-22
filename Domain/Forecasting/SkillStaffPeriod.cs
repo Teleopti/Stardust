@@ -397,8 +397,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				}
 				else
 				{
-					var shrinkage = Payload.UseShrinkage ? 1 + Payload.Shrinkage.Value : 1;
-					var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming / shrinkage;
+					var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
+					var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
 					_estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
 						scheduledAgentsIncomingWithShrinkage,
 						Payload.ServiceAgreementData.ServiceLevel.Seconds,
