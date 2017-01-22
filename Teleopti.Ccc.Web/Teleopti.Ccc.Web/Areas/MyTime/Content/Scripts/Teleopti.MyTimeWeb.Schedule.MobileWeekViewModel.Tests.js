@@ -117,4 +117,50 @@ $(document).ready(function () {
 		});
 		equal(vm.dayViewModels()[0].weekDayHeaderTitle(), "Monday");
 	});
+
+
+	test("should read summary timespan when there is overtime and overtime availability", function () {
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+		vm.readData({
+			PeriodSelection: [
+				{
+					Display: null
+				}
+			],
+			Days: [
+				{
+					Summary: {
+						Color: null,
+						TimeSpan:null
+					},
+					Periods: [
+						{
+							IsOvertime: true,
+							TimeSpan: "9:00 AM - 11:30 AM",
+							Title: "Phone"
+						},
+						{
+							IsOvertime: true,
+							TimeSpan: "11:30 AM - 11:45 AM",
+							Title: "Short Break"
+						},
+						{
+							IsOvertime: true,
+							TimeSpan: "11:45 AM - 2:00 PM",
+							Title: "Phone"
+						},
+						{
+							IsOvertimeAvailability: true,
+							TimeSpan: "7:00 AM - 2:00 PM",
+							Title: "Overtime Availability"
+						}
+					],
+					HasOvertime: true
+				}
+			]
+		});
+
+		equal(vm.dayViewModels()[0].summaryTimeSpan(), "9:00 AM -  2:00 PM");
+	});
 });

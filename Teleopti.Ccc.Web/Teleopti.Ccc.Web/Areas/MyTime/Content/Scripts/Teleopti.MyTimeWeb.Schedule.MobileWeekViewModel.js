@@ -5,13 +5,13 @@
 /// <reference path="~/Content/moment/moment.js" />
 
 if (typeof (Teleopti) === 'undefined') {
-    Teleopti = {};
+	Teleopti = {};
 }
 if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
-    Teleopti.MyTimeWeb = {};
+	Teleopti.MyTimeWeb = {};
 }
 if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
-    Teleopti.MyTimeWeb.Schedule = {};
+	Teleopti.MyTimeWeb.Schedule = {};
 }
 
 Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, reloadData) {
@@ -159,6 +159,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission, overtimeAvailabilityPermission, parent) {
 	var self = this;
+
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
 	self.summaryTimeSpan = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.TimeSpan : null);
 	self.summaryColor = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Color : null);
@@ -181,24 +182,25 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
 		var timespan = [];
 		var count = scheduleDay.Periods.length;
 		for (var i = 0; i < count; i++) {
-			timespan.push(scheduleDay.Periods[i].TimeSpan);
+			var period = scheduleDay.Periods[i];
+			if (!period.IsOvertimeAvailability)
+				timespan.push(scheduleDay.Periods[i].TimeSpan);
 		}
-		timespan.sort();
-		self.summaryTimeSpan(timespan[0].slice(0,-8) + timespan[count-1].slice(-8));
+		self.summaryTimeSpan(timespan[0].slice(0,-8) + timespan[timespan.length - 1].slice(-8));
 	}
-
+	
 	self.hasShift = self.summaryColor() != null ? true : false;
 
-    self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
-    self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
+	self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
+	self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
 
-    self.absenceReportPermission = ko.observable(absenceReportPermission != undefined ? absenceReportPermission : false);
-    self.overtimeAvailabilityPermission = ko.observable(overtimeAvailabilityPermission != undefined ? overtimeAvailabilityPermission : false);
-    self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
+	self.absenceReportPermission = ko.observable(absenceReportPermission != undefined ? absenceReportPermission : false);
+	self.overtimeAvailabilityPermission = ko.observable(overtimeAvailabilityPermission != undefined ? overtimeAvailabilityPermission : false);
+	self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
 
-    self.hasOvertimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.HasOvertimeAvailability : false);
-    self.overtimeAvailabilityStart = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.StartTime : null);
-    self.overtimeAvailabilityEnd = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.EndTime : null);
+	self.hasOvertimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.HasOvertimeAvailability : false);
+	self.overtimeAvailabilityStart = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.StartTime : null);
+	self.overtimeAvailabilityEnd = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.EndTime : null);
 
 	self.isPermittedToReportAbsence = ko.computed(function () {
 		var momentToday = (new Date().getTeleoptiTime == undefined)
@@ -220,9 +222,6 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
 };
 
 var MobileWeekLayerViewModel = function (layer, parent) {
-	var scheduleHeight = 668;
-	var pixelToDisplayAll = 38;
-	var pixelToDisplayTitle = 16;
 	var self = this;
 
 	self.title = ko.observable(layer.Title);
