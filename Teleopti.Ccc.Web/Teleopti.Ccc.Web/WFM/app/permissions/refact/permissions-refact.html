@@ -171,16 +171,16 @@
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" name="tree-toggle" ng-click="vm.unSelectedFunctionsFilter()">
+													<input type="radio" name="tree-toggle" ng-click="vm.selectedFunctionsFilter()" value="true">
 													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>UnselectedItems</span>
+													<span class="wfm-radio-label" translate>SelectedItems</span>
 												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" name="tree-toggle" ng-click="vm.selectedFunctionsFilter()" value="true">
+													<input type="radio" name="tree-toggle" ng-click="vm.unSelectedFunctionsFilter()">
 													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>SelectedItems</span>
+													<span class="wfm-radio-label" translate>UnselectedItems</span>
 												</label>
 											</div>
 										</form>
