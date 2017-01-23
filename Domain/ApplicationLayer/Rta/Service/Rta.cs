@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -73,6 +74,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private bool scheduleChangeToday(ScheduleChangedEvent @event)
 		{
+			if (@event.StartDateTime == DateTime.MinValue)
+				return true;
 			var now = _now.UtcDateTime();
 			return new DateTimePeriod(@event.StartDateTime, @event.EndDateTime)
 				.Intersect(new DateTimePeriod(now.AddDays(-2), now.AddDays(2)));

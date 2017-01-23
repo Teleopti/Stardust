@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -79,10 +80,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					}
 				}, true);
 			});
-			Publisher.Publish(new ProjectionChangedEvent
+			Publisher.Publish(new ScheduleChangedEvent
 			{
 				PersonId = person,
-				ScheduleDays = new ProjectionChangedEventScheduleDay[] { }
+				StartDateTime = "2016-09-06 00:00".Utc(),
+				EndDateTime = "2016-09-06 23:59".Utc(),
 			});
 
 			WithUnitOfWork.Get(() => AgentStatePersister.Find(new ExternalLogon {DataSourceId = 9, UserCode = "user"}, DeadLockVictim.Yes).Single())
