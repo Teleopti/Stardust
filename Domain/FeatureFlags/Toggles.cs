@@ -18,7 +18,7 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
-		
+
 		RTA_HideAgentsByStateGroup_40469,
 		RTA_FasterUpdateOfScheduleChanges_40536,
 		RTA_SiteAndTeamOnSkillOverview_40817,
@@ -40,6 +40,7 @@
 		MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747,
 		MyTimeWeb_ShowContractTime_41462,
 		MyTimeWeb_SortRequestList_40711,
+		MyTimeWeb_ViewAbsencePossibilityOnIntradayLevel_41608,
 
 		Backlog_Module_23980,
 
