@@ -28,6 +28,23 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 		}
 
 		[Test]
+		public void ShouldNotReturnMultiSiteParentSkillsOnlyChildSkills()
+		{
+			var activity = new Activity("activity").WithId();
+			var parentSkill = SkillFactory.CreateMultisiteSkill("_").WithId();
+			parentSkill.Activity = activity;
+			var childSkill = SkillFactory.CreateChildSkill("child", parentSkill).WithId();
+			childSkill.Activity = activity;
+			parentSkill.AddChildSkill(childSkill);		
+			SkillRepository.Add(parentSkill);
+			SkillRepository.Add(childSkill);
+
+			var result = Target.SkillRoutingPriorityModelRows();
+			result.Count.Should().Be.EqualTo(1);
+			result[0].SkillName.Should().Be.EqualTo("child");
+		}
+
+		[Test]
 		public void ShouldMapSkillWithCascadingIndex()
 		{
 			var activity = new Activity("activity").WithId();

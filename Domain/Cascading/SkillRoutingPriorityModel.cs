@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
@@ -22,6 +23,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var skillList = new List<SkillRoutingPriorityModelRow>();
 			foreach (var skill in allSkills)
 			{
+				if (skill is IMultisiteSkill)
+					continue;
+
 				var modelRow = new SkillRoutingPriorityModelRow();
 				modelRow.ActivityGuid = skill.Activity.Id.Value;
 				modelRow.ActivityName = skill.Activity.Name;
