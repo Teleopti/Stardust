@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Aop
 			if (invocation.Method.ReturnType != typeof(void))
 				result = $" resulted with {formatValue(invocation.ReturnValue)}";
 
-			return $"/{invocation.Method.DeclaringType}.{invocation.Method.Name}{result}{elapsedTime}{exceptionOccured}";
+			return $"{invocation.Method.DeclaringType}./{invocation.Method.Name}{result}{elapsedTime}{exceptionOccured}";
 		}
 
 		private static IEnumerable<string> getParametersAndArguments(IInvocationInfo invocation)
