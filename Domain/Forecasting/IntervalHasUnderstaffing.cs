@@ -18,7 +18,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public override bool IsSatisfiedBy(IValidatePeriod obj)
         {
-	        var skillStaffignInterval = obj as SkillStaffingInterval;
+	        var skillStaffPeriod = obj as SkillStaffPeriod;
+			if (skillStaffPeriod != null)
+			{
+				logger.Info($"IsSatisfiedBy -- _skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {((SkillStaffPeriod)obj).SkillDay.Skill.Id} -- {obj.DateTimePeriod} -- rel diff: {obj.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
+			}
+
+			var skillStaffignInterval = obj as SkillStaffingInterval;
 	        if (skillStaffignInterval != null)
 	        {
 				logger.Info($"IsSatisfiedBy -- _skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {((SkillStaffingInterval)obj).SkillId} -- {obj.DateTimePeriod} -- rel diff: {obj.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
