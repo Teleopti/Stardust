@@ -294,7 +294,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			}			
 		},
 		GetNotificationDisplayTime:loadAlertNotificationDisplayingTimeSetting,
-		AbortAjax: function() {
+		AbortAjax: function () {
+			if (currentTimeout !== null) clearTimeout(currentTimeout);
 			ajax.AbortAll();
 		}
 	};

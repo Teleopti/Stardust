@@ -101,18 +101,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	}
 
-	function pareseUrlDate(str) {
-		if (!/^(\d){8}$/.test(str)) return undefined;
-		var y = str.substr(0, 4),
-			m = str.substr(4, 2),
-			d = str.substr(6, 2);
-		return new Date(y, m, d);
-	}
-
 	function _setupRoutes() {
 		var viewRegex = '[a-z]+';
 		var actionRegex = '[a-z]+';
-		var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
 		var dateRegex = '\\d{8}';
 		var yearsRegex = '\\d{4}';
 		var monthRegex = '\\d{2}';

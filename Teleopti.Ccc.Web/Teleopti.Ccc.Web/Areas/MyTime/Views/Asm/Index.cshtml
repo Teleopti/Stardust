@@ -7,7 +7,7 @@
 		{
 			baseUrl: '@Url.Content("~/MyTime#")'
 		});
-		@if (  ViewBag.HasAsmPermission)
+		@if (ViewBag.HasAsmPermission)
 		{
 			<text>
 		Teleopti.MyTimeWeb.AsmMessage.ListenForMessages(function (data) {
@@ -54,6 +54,13 @@
 			},
 			header: '@Resources.Teleopti'
 		});
+
+			    $(window)
+			        .on("unload",
+			            function() {
+
+			                Teleopti.MyTimeWeb.AlertActivity.AbortAjax();
+			            });
 		</text>
 	}
 	});
