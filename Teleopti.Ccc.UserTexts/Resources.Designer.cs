@@ -5930,6 +5930,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear All.
+        /// </summary>
+        public static string ClearAll {
+            get {
+                return ResourceManager.GetString("ClearAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear Background Image.
         /// </summary>
         public static string ClearBackgroundImage {
@@ -25341,6 +25350,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is possible to view maximum {0} agents. The &quot;In alarm&quot; switch is enabled if the number of agents does not exceed {1}..
+        /// </summary>
+        public static string RTAMaxNumberOfAgentsNotice {
+            get {
+                return ResourceManager.GetString("RTAMaxNumberOfAgentsNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Real time adherence monitoring activated.
         /// </summary>
         public static string RtaPauseDisableNotice {
@@ -31564,7 +31582,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TimeOOA.
+        ///   Looks up a localized string similar to Time OOA.
         /// </summary>
         public static string TimeOOA {
             get {

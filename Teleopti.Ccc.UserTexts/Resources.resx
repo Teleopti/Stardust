@@ -15471,4 +15471,12 @@ These options are activated:
     <value>Time OOA</value>
     <comment>Header for Time in Out of Adherence column in agents grid RTA</comment>
   </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Clear All</value>
+    <comment>Used in RTA multiselect for organization to clear all selected items</comment>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>It is possible to view maximum {0} agents. The "In alarm" switch is enabled if the number of agents does not exceed {1}.</value>
+    <comment>Notice text for max number of agents to be displayed in view</comment>
+  </data>
 </root>

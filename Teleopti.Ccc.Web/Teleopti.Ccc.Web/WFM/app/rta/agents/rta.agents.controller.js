@@ -142,7 +142,7 @@
 
 		function updateSelectFieldText() {
 			var howManyTeamsSelected = countTeamsSelected();
-			vm.selectFieldText = howManyTeamsSelected === 0 ? vm.selectFieldText : howManyTeamsSelected + ' teams selected';
+			vm.selectFieldText = howManyTeamsSelected === 0 ? vm.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected);
 		}
 
 		function countTeamsSelected() {
@@ -710,7 +710,7 @@
 				vm.filteredData = $filter('filter')(vm.filteredData, { TimeInAlarm: '' });
 				vm.openedMaxNumberOfAgents = (vm.filteredData.length === vm.maxNumberOfAgents);
 				if (!vm.notifySwitchDisabled && vm.agents.length > vm.maxNumberOfAgents) {
-					NoticeService.warning($translate.instant('It is possible to view maximum ' + vm.maxNumberOfAgents + ' agents. The "In alarm" switch is enabled if the number of agents does not exceed ' + vm.maxNumberOfAgents + '.'), null, true);
+					NoticeService.warning($translate.instant('RTAMaxNumberOfAgentsNotice').replace('{0}', vm.maxNumberOfAgents, '{1}', vm.maxNumberOfAgents), null, true);
 					vm.notifySwitchDisabled = true;
 				}
 			}
