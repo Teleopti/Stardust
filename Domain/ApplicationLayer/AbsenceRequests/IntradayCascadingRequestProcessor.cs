@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class IntradayCascadingRequestProcessor : IIntradayRequestProcessor
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayCascadingRequestProcessor));
 		private readonly IActivityRepository _activityRepository;
 		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ICommandDispatcher _commandDispatcher;
@@ -31,12 +31,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
+		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
 		public IntradayCascadingRequestProcessor(ICommandDispatcher commandDispatcher,
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 												 ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills,
-			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, SkillGroupPerActivityProvider skillGroupPerActivityProvider)
+			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
+			SkillGroupPerActivityProvider skillGroupPerActivityProvider, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_primarySkillOverstaff = primarySkillOverstaff;
 			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
+			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
@@ -141,10 +144,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 
-				var mergedPeriod = personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest) personRequest.Request);
-				var aggregatedValidatorList = mergedPeriod.GetSelectedValidatorList();
-				
-				var staffingThresholdValidator = aggregatedValidatorList.OfType<StaffingThresholdValidator>().FirstOrDefault();
+				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+
+				var staffingThresholdValidator = validators.OfType<StaffingThresholdValidator>().FirstOrDefault();
 				if (staffingThresholdValidator != null)
 				{
 					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);

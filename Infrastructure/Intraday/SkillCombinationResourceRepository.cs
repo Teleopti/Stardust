@@ -247,16 +247,17 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 	public class RawSkillCombinationResource
 	{
-		public Guid SkillCombinationId;
-		public DateTime StartDateTime;
-		public DateTime EndDateTime;
-		public double Resource;
-		public Guid SkillId;
+		public Guid SkillCombinationId { get; set; }
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double Resource { get; set; }
+		public Guid SkillId { get; set; }
 	}
+
 
 	public class SkillCombinationResourceWithCombinationId : SkillCombinationResource
 	{
-		public Guid SkillCombinationId;
+		public Guid SkillCombinationId { get; set; }
 	}
 
 
