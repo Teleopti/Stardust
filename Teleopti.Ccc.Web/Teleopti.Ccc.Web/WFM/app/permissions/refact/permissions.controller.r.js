@@ -215,7 +215,9 @@
 		}
 
 		function isOrgDataSelected(org) {
-			return !!vm.selectedOrgData[org.Id];
+			if (org) {
+				return !!vm.selectedOrgData[org.Id];
+			}
 		}
 
 		function selectOrgData(org, selected) {

@@ -89,12 +89,14 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 	}
 
 	function hasAllFunction() {
+		
 		if (!ctrl.selectedRole.Id || !ctrl.selectedRole.AvailableFunctions) {
 			return false;
+		}	else {
+			return ctrl.selectedRole.AvailableFunctions.find(function(func) {
+				return func.FunctionCode === 'All';
+		});	
 		}
-		return ctrl.selectedRole.AvailableFunctions.find(function(func) {
-			return func.FunctionCode === 'All';
-		});
 	}
 }
 
