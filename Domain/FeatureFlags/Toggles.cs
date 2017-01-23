@@ -23,7 +23,6 @@
 		RTA_SiteAndTeamOnSkillOverview_40817,
 		RTA_AgentsOnOrganizationAndSkills_41586,
 		RTA_SeeAllOutOfAdherencesToday_39146,
-		RTA_FasterActivityCheck_41380,
 		RTA_QuicklyChangeAgentsSelection_40610,
 		RTA_SpreadTransactionLocksStrategy_41823,
 		RTA_FasterAgentsView_42039,

@@ -53,8 +53,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim);
 
 		// rta service stuff
-		[RemoveMeWithToggle(Toggles.RTA_FasterActivityCheck_41380)]
-		IEnumerable<ExternalLogon> FindAll();
 		IEnumerable<ExternalLogonForCheck> FindForCheck();
 		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
 		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);

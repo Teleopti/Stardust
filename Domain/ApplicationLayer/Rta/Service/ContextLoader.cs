@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoaderWithFasterActivityCheck
+	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
 		public ContextLoaderWithSpreadTransactionLockStrategy(IScheduleCacheStrategy scheduleCacheStrategy,
 			ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper,
@@ -59,28 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 		
 	}
-
-	public class ContextLoaderWithFasterActivityCheck : ContextLoader
-	{
-		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy,
-			ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper,
-			IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader,
-			ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier)
-			: base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister,
-				mappingReader, scheduleReader, appliedAlarm, config, deadLockRetrier)
-		{
-		}
-
-		public override void ForActivityChanges(Action<Context> action)
-		{
-			var time = _now.UtcDateTime();
-			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck())
-				.Where(x => x.NextCheck == null || x.NextCheck <= time)
-				.ToArray();
-			process(new activityChangesStrategyWithoutDeadlock(_config, _agentStatePersister, action, logons, time));
-		}
-
-	}
+	
 
 
 
@@ -142,12 +121,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, logons, _now.UtcDateTime()));
 		}
 
-		public virtual void ForActivityChanges(Action<Context> action)
+		public void ForActivityChanges(Action<Context> action)
 		{
-			var logons = WithUnitOfWork(() => _agentStatePersister.FindAll());
-			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons, _now.UtcDateTime()));
+			var time = _now.UtcDateTime();
+			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck())
+				.Where(x => x.NextCheck == null || x.NextCheck <= time)
+				.ToArray();
+			process(new activityChangesStrategyWithoutDeadlock(_config, _agentStatePersister, action, logons, time));
 		}
-		
+
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]
 		[AnalyticsUnitOfWork]

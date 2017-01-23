@@ -76,20 +76,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			}
 		}
 
-		public IEnumerable<ExternalLogon> FindAll()
-		{
-			lock (_lock)
-				return _data
-					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.Select(x => new ExternalLogon
-					{
-						DataSourceId = x.DataSourceId,
-						UserCode = x.UserCode,
-						PersonId = x.PersonId
-					})
-					.ToArray();
-		}
-
 		public IEnumerable<ExternalLogonForCheck> FindForCheck()
 		{
 			lock (_lock)

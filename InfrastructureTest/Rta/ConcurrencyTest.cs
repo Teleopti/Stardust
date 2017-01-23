@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	[Toggle(Toggles.RTA_FasterActivityCheck_41380)]
 	[Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
 	[Explicit]
 	[Category("LongRunning")]

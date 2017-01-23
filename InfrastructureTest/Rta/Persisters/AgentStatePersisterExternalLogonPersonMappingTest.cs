@@ -414,7 +414,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.No);
 
-			var result = Target.FindAll();
+			var result = Target.FindForCheck();
 			(result.Any(x => x.DataSourceId == 1 && x.UserCode == usercodeA) ^ 
 				result.Any(x => x.DataSourceId == 2 && x.UserCode == usercodeA))
 				.Should().Be.True();

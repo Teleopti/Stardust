@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual void AddOneToAll()
 			{
-				var all = _persister.Find(_persister.FindAll(), DeadLockVictim.Yes);
+				var all = _persister.Find(_persister.FindForCheck(), DeadLockVictim.Yes);
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
 				addOneTo(all);
 			}
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual IEnumerable<AgentState> GetAll()
 			{
-				var logons = _persister.FindAll();
+				var logons = _persister.FindForCheck();
 				return _persister.Find(logons, DeadLockVictim.Yes);
 			}
 

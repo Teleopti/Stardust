@@ -228,19 +228,6 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<ExternalLogon> FindAll()
-		{
-			var sql = "SELECT PersonId, DataSourceIdUserCode FROM [dbo].[AgentState] WITH (NOLOCK)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogon)))
-				.SetReadOnly(true)
-				.List<internalExternalLogon>()
-				.GroupBy(x => x.PersonId, (guid, states) => states.First())
-				.ToArray()
-				;
-		}
-
-		[LogInfo]
 		public virtual IEnumerable<ExternalLogonForCheck> FindForCheck()
 		{
 			var sql = "SELECT PersonId, DataSourceIdUserCode, NextCheck FROM [dbo].[AgentState] WITH (NOLOCK)";
