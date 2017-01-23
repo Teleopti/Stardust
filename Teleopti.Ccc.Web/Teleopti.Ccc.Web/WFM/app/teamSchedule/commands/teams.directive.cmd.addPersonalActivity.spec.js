@@ -186,7 +186,7 @@
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 		expect(vm.anyValidAgent()).toBe(false);
-	});	
+	});
 
 	it('should call add personal activity when click apply with correct data',function() {
 		var result = setUp();
@@ -224,7 +224,7 @@
 		expect(activityData.PersonDates.length).toEqual(vm.selectedAgents.length);
 		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
 		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
-		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));		
+		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
 
@@ -348,7 +348,7 @@
 			return latestEndTime;
 		}
 
-		this.getLatestStartOfSelectedSchedule = function () {
+		this.getLatestStartOfSelectedSchedules = function () {
 			return latestStartTime;
 		}
 

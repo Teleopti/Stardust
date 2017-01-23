@@ -163,7 +163,7 @@ describe("teamschedule move activity directive tests", function () {
 
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
 		applyButton.triggerHandler('click');
-		
+
 		result.scope.$apply();
 
 		var activityData = fakeActivityService.getMoveActivityCalledWith();
@@ -277,11 +277,11 @@ describe("teamschedule move activity directive tests", function () {
 			return latestEndTime;
 		}
 
-		this.getLatestStartTimeOfSelectedScheduleProjection = function () {
+		this.getLatestStartTimeOfSelectedSchedulesProjections = function () {
 			return latestStartTime;
 		}
 
-		this.getLatestStartOfSelectedSchedule = function () {
+		this.getLatestStartOfSelectedSchedules = function () {
 			return latestStartTime;
 		}
 	}

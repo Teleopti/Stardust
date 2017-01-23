@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
-	
+
 	function addActivityDirective() {
 		return {
 			restrict: 'E',
@@ -70,7 +70,7 @@
 			vm.availableActivitiesLoaded = true;
 		});
 
-		function decidePersonBelongsToDates(agents, targetTimeRange) {			
+		function decidePersonBelongsToDates(agents, targetTimeRange) {
 			return agents.map(function (selectedAgent) {
 				var belongsToDate = vm.manageScheduleForDistantTimezonesEnabled
 					? belongsToDateDecider.decideBelongsToDate(targetTimeRange,
@@ -159,7 +159,7 @@
 			}
 		};
 
-		function getRequestData() {		
+		function getRequestData() {
 			var invalidPersonIds = vm.invalidAgents.map(function (agent) {
 				return agent.PersonId;
 			});
@@ -196,7 +196,7 @@
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
-			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, personIds);
+			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedules(curDateMoment, personIds);
 
 			// Set to 08:00 for empty schedule or day off
 			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();

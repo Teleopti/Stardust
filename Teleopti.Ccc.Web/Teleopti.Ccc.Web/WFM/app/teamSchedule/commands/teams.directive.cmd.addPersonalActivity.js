@@ -50,7 +50,7 @@
 			}
 		};
 	}
-	
+
 	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
 
 	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
@@ -165,8 +165,8 @@
 			var validAgents = vm.selectedAgents.filter(function (agent) {
 				return invalidPersonIds.indexOf(agent.PersonId) < 0;
 			});
-			return {				
-				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),				
+			return {
+				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),
 				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
 				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
 				ActivityId: vm.selectedActivityId,
@@ -193,7 +193,7 @@
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
-			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, personIds);
+			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedules(curDateMoment, personIds);
 
 			// Set to 08:00 for empty schedule or day off
 			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();

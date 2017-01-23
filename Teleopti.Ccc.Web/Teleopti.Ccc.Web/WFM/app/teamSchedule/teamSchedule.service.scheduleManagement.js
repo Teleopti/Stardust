@@ -15,10 +15,10 @@
 		svc.mergeSchedules = mergeSchedules;
 		svc.updateScheduleForPeoples = updateScheduleForPeoples;
 		svc.resetSchedulesForPeople = resetSchedulesForPeople;
-		svc.getEarliestStartOfSelectedSchedule = getEarliestStartOfSelectedSchedule;
-		svc.getLatestStartOfSelectedSchedule = getLatestStartOfSelectedSchedule;
+		svc.getEarliestStartOfSelectedSchedules = getEarliestStartOfSelectedSchedules;
+		svc.getLatestStartOfSelectedSchedules = getLatestStartOfSelectedSchedules;
 		svc.getLatestPreviousDayOvernightShiftEnd = getLatestPreviousDayOvernightShiftEnd;
-		svc.getLatestStartTimeOfSelectedScheduleProjection = getLatestStartTimeOfSelectedScheduleProjection;
+		svc.getLatestStartTimeOfSelectedSchedulesProjections = getLatestStartTimeOfSelectedSchedulesProjections;
 
 		function findPersonScheduleVmForPersonId(personId) {
 			var result = svc.groupScheduleVm.Schedules.filter(function(vm) {
@@ -104,7 +104,7 @@
 			});
 		}
 
-		function getEarliestStartOfSelectedSchedule(scheduleDateMoment, selectedPersonIds) {
+		function getEarliestStartOfSelectedSchedules(scheduleDateMoment, selectedPersonIds) {
 			selectedPersonIds.forEach(function(x) {
 				if (!angular.isString(x))
 					throw 'Invalid parameter.';
@@ -130,7 +130,7 @@
 			return earlistStart.toDate();
 		}
 
-		function getLatestStartOfSelectedSchedule(scheduleDateMoment, selectedPersonIds) {
+		function getLatestStartOfSelectedSchedules(scheduleDateMoment, selectedPersonIds) {
 			selectedPersonIds.forEach(function(x) {
 				if (!angular.isString(x))
 					throw 'Invalid parameter.';
@@ -183,7 +183,7 @@
 			return latestEndTimeMoment ? latestEndTimeMoment.toDate() : null;
 		}
 
-		function getLatestStartTimeOfSelectedScheduleProjection(scheduleDateMoment, selectedPersonIds) {
+		function getLatestStartTimeOfSelectedSchedulesProjections(scheduleDateMoment, selectedPersonIds) {
 
 			selectedPersonIds.forEach(function(x) {
 				if (!angular.isString(x))

@@ -1,5 +1,5 @@
 ﻿describe('teamschedule add absence diretive test', function() {
- 
+
 	var	fakeAbsenceService,
 		fakeScheduleManagementSvc,
 		fakePermissions;
@@ -77,7 +77,7 @@
 	it('should not display full day absence check box with only intraday absence permission', function () {
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
 
-		var result = setUp(new Date('2015-01-01 10:00:00'));		
+		var result = setUp(new Date('2015-01-01 10:00:00'));
 		var checkBoxInput = result.container[0].querySelectorAll('.wfm-checkbox input#is-full-day');
 		expect(checkBoxInput.length).toBe(0);
 	});
@@ -117,7 +117,7 @@
 		};
 
 		return obj;
-	}	
+	}
 
 	function getAvailableAbsenceTypes() {
 		return [
@@ -154,11 +154,11 @@
 			return latestEndTime;
 		}
 
-		this.getLatestStartOfSelectedSchedule = function() {
+		this.getLatestStartOfSelectedSchedules = function() {
 			return latestStartTime;
 		}
 
-		this.getEarliestStartOfSelectedSchedule = function() {
+		this.getEarliestStartOfSelectedSchedules = function() {
 			return earliestStartTime;
 		}
 	}

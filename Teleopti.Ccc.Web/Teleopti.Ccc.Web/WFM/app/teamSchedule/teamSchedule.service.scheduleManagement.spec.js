@@ -135,10 +135,10 @@ describe("teamschedule schedule management service tests", function() {
 		target.resetSchedules([schedule1], scheduleDateMoment);
 
 		var timezone = 'Europe/Berlin';
-		
+
 		target.recreateScheduleVm(scheduleDateMoment, timezone);
 		var schedule = target.groupScheduleVm.Schedules[0];
-	
+
 		expect(schedule.Shifts[0].Projections[0].Start).toEqual(scheduleDate + "T04:00");
 	});
 
@@ -169,7 +169,7 @@ describe("teamschedule schedule management service tests", function() {
 
 	it("Should get latest shift start in given schedules", function() {
 		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
-		expect(moment(target.getLatestStartOfSelectedSchedule(scheduleDateMoment, [schedule1.PersonId,schedule2.PersonId])).format("HH:mm")).toEqual(moment(schedule2.Projection[0].Start).format("HH:mm"));
+		expect(moment(target.getLatestStartOfSelectedSchedules(scheduleDateMoment, [schedule1.PersonId,schedule2.PersonId])).format("HH:mm")).toEqual(moment(schedule2.Projection[0].Start).format("HH:mm"));
 	});
 
 	it('should get latest previous day overnight shift end', function() {
@@ -180,7 +180,7 @@ describe("teamschedule schedule management service tests", function() {
 	it('Should get latest shift start independent of timepart of schedule date', function() {
 		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
 		scheduleDateMoment.hour(17);
-		expect(moment(target.getLatestStartOfSelectedSchedule(scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])).format("HH:mm")).toEqual(moment(schedule2.Projection[0].Start).format("HH:mm"));
+		expect(moment(target.getLatestStartOfSelectedSchedules(scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])).format("HH:mm")).toEqual(moment(schedule2.Projection[0].Start).format("HH:mm"));
 	});
 
 });

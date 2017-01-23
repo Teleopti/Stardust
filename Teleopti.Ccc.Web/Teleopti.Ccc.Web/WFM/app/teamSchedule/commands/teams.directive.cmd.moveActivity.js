@@ -67,7 +67,7 @@
 		vm.getDefaultMoveToStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
-			var selectedDateProjectionLatestStart = scheduleManagementSvc.getLatestStartTimeOfSelectedScheduleProjection(curDateMoment, personIds);
+			var selectedDateProjectionLatestStart = scheduleManagementSvc.getLatestStartTimeOfSelectedSchedulesProjections(curDateMoment, personIds);
 			var previousDateProjectionLatestEnd = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
 			var time = new Date();
 

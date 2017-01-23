@@ -168,7 +168,7 @@
 			Date: '2016-06-15',
 			PersonId: 'agent1',
 			Timezone: timezone1,
-			Shifts: [			
+			Shifts: [
 			{
 				Date: '2016-06-15',
 				Projections: [
@@ -182,7 +182,7 @@
 					End: '2016-06-15 17:00',
 				}
 			}]
-		});	
+		});
 
 		result.scope.$apply();
 
@@ -209,7 +209,7 @@
 				PersonId: 'agent1',
 				Name: 'agent1',
 				ScheduleStartTime: null,
-				ScheduleEndTime: null				
+				ScheduleEndTime: null
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
@@ -276,7 +276,7 @@
 				PersonId: 'agent1',
 				Name: 'agent1',
 				ScheduleStartTime: null,
-				ScheduleEndTime: null,							
+				ScheduleEndTime: null,
 			}];
 
 		var timezone1 = {
@@ -406,7 +406,7 @@
 			return latestEndTime;
 		}
 
-		this.getLatestStartOfSelectedSchedule = function () {
+		this.getLatestStartOfSelectedSchedules = function () {
 			return latestStartTime;
 		}
 

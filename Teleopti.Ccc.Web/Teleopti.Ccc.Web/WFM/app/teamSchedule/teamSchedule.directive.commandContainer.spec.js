@@ -106,7 +106,7 @@
 			return latestEndTime;
 		}
 
-		this.getLatestStartOfSelectedSchedule = function() {
+		this.getLatestStartOfSelectedSchedules = function() {
 			return latestStartTime;
 		}
 	}

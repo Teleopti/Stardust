@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('addAbsence', addAbsenceDirective);
-	
+
 	function addAbsenceDirective() {
 		return {
 			restrict: 'E',
@@ -66,7 +66,7 @@
 		};
 	}
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];	
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
 
 	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
@@ -107,7 +107,7 @@
 		vm.getDefaultAbsenceStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
-			return scheduleManagementSvc.getEarliestStartOfSelectedSchedule(curDateMoment, personIds);
+			return scheduleManagementSvc.getEarliestStartOfSelectedSchedules(curDateMoment, personIds);
 		};
 
 		vm.getDefaultAbsenceEndTime = function() {
