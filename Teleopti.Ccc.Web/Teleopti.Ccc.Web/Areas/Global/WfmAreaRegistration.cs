@@ -4,11 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class WfmAreaRegistration : AreaRegistration
 	{
-
-		public override string AreaName
-		{
-            get { return "WFM"; }
-		}
+		public override string AreaName => "WFM";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
