@@ -6,11 +6,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateReadModel
 	{
 		public Guid PersonId { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string EmploymentNumber { get; set; }
 		public Guid? BusinessUnitId { get; set; }
-		public Guid? TeamId { get; set; }
-		public Guid? SiteId { get; set; }
-		public DateTime ReceivedTime { get; set; }
 
+		public Guid? SiteId { get; set; }
+		public string SiteName { get; set; }
+
+		public Guid? TeamId { get; set; }
+		public string TeamName { get; set; }
+
+		public DateTime ReceivedTime { get; set; }
+		
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public DateTime? NextActivityStartTime { get; set; }
@@ -34,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public IEnumerable<AgentStateOutOfAdherenceReadModel> OutOfAdherences { get; set; }
 		public bool IsDeleted { get; set; }
 		public DateTime? ExpiresAt { get; set; }
-
+		
 		public override string ToString()
 		{
 			return string.Format(

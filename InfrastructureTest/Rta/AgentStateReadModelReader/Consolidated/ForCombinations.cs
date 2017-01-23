@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 	[Toggle(Toggles.RTA_QuicklyChangeAgentsSelection_40610)]
 	public class ForCombinations
 	{
-		public IGroupingReadOnlyRepository Groupings;
 		public Database Database;
 		public IAgentStateReadModelPersister StatePersister;
 		public MutableNow Now;
@@ -145,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new[] { siteId }, new[] { teamId }, null))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(new[] { siteId }, new[] { teamId }, null))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1, personId2);
 		}

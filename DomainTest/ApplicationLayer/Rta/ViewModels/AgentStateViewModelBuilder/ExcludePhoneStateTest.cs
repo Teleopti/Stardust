@@ -281,4 +281,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 		}
 
 	}
+
 }

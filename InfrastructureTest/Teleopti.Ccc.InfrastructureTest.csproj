@@ -282,6 +282,7 @@
     <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForOrganization.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForOrganizationAndSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForSkill.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\WithNames.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroups.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroupsForTeamAndSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForSkill.cs" />

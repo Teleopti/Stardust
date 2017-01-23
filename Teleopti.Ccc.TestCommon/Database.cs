@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Guid CurrentSiteId()
 		{
-			return site().Id.Value;
+			return site(_site).Id.Value;
 		}
 
 		[UnitOfWork]
@@ -163,21 +163,37 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-
-		
 		[UnitOfWork]
-		public virtual Database WithSite()
+		public virtual Database WithSite(string name)
 		{
-			site();
+			site(name);
 			return this;
 		}
 
-		private ISite site()
+		[UnitOfWork]
+		public virtual Database WithSite()
 		{
-			if (_site != null)
-				return _sites.LoadAll().Single(x => x.Description.Name == _site);
-			_site = RandomName.Make();
-			var s = new Site(_site);
+			site(_site);
+			return this;
+		}
+
+		private ISite site(string name)
+		{
+			if (name != null)
+			{
+				var existing = _sites.LoadAll().SingleOrDefault(x => x.Description.Name == name);
+				if (existing != null)
+					return existing;
+			}
+			else
+			{
+				var existing = _sites.LoadAll().SingleOrDefault(x => x.Description.Name == _site);
+				if (existing != null)
+					return existing;
+			}
+			name = RandomName.Make();
+			_site = name;
+			var s = new Site(name);
 			_sites.Add(s);
 			return s;
 		}
@@ -206,7 +222,7 @@ namespace Teleopti.Ccc.TestCommon
 				return existing;
 			}
 			_team = name;
-			var s = site();
+			var s = site(_site);
 			var t = new Team
 			{
 				Description = new Description(_team),
@@ -252,12 +268,18 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[UnitOfWork]
-		public virtual Database WithTerminatedAgent(string date)
+		public virtual Database WithAgent(string name, string employmentNumber)
 		{
-			return withAgent(RandomName.Make(), date.Date());
+			return withAgent(name, employmentNumber);
 		}
 
-		private Database withAgent(string name, DateOnly? terminationDate = null)
+		[UnitOfWork]
+		public virtual Database WithTerminatedAgent(string date)
+		{
+			return withAgent(RandomName.Make(), null, date.Date());
+		}
+
+		private Database withAgent(string name, string employmentNumber = null, DateOnly? terminationDate = null)
 		{
 			var existing = _persons.LoadAll().SingleOrDefault(x => x.Name.FirstName == name);
 			if (existing != null)
@@ -269,6 +291,7 @@ namespace Teleopti.Ccc.TestCommon
 			var person = new Person { Name = new Name(name, name) };
 			_person = person.Name.ToString();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person.EmploymentNumber = employmentNumber ?? string.Empty;
 
 			var personPeriod = withPeriod(person, "2001-01-01".Date());
 			if (terminationDate != null)
