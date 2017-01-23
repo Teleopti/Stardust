@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<ScheduleProjectionReadOnlyChangedEvent>,
 		IHandleEvent<ScheduleChangedEvent>,
 		IHandleEventOnQueue<ScheduleChangedEvent>
 	{
@@ -61,14 +60,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[UnitOfWork]
-		[DisabledBy(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-		public virtual void Handle(ScheduleProjectionReadOnlyChangedEvent @event)
-		{
-			_persister.InvalidateSchedules(@event.PersonId, DeadLockVictim.Yes);
-		}
-
-		[UnitOfWork]
-		[EnabledBy(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			if (scheduleChangeToday(@event))

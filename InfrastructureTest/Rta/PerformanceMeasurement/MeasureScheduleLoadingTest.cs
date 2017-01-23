@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
 	[Category("LongRunning")]
 	public class MeasureScheduleLoadingTest : PerformanceMeasurementTestBase, ISetup
@@ -94,7 +92,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		private static IEnumerable<string> stateCodes => Enumerable.Range(0, 2).Select(x => $"code{x}").ToArray();
 
 		[Test]
-		//[ToggleOff(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
 		public void Measure(
 			[Values(50, 500, 1000)] int batchSize,

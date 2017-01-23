@@ -336,7 +336,6 @@
     <Compile Include="Repositories\PlanningPeriodRepositoryTest.cs" />
     <Compile Include="Repositories\SeatBookingRepositoryTest.cs" />
     <Compile Include="Repositories\SeatPlanRepositoryTest.cs" />
-    <Compile Include="Rta\ScheduleReaderTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusAsSyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />

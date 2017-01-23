@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -152,57 +150,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 			public new long ContractTime { set { base.ContractTime = TimeSpan.FromTicks(value); } }
 			public new DateTime BelongsToDate { set { base.BelongsToDate = new DateOnly(value); } }
 		}
-
-		public IEnumerable<ScheduledActivity> ForPerson(DateOnly from, DateOnly to, Guid personId)
-		{
-			return _unitOfWork.Current()
-				.Session()
-				.CreateSQLQuery(scheduleQuery("PersonId = :PersonId"))
-				.SetParameter("PersonId", personId)
-				.SetParameter("StartDate", from.Date)
-				.SetParameter("EndDate", to.Date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalScheduledActivity)))
-				.List<ScheduledActivity>();
-		}
-
-		public IEnumerable<ScheduledActivity> ForPersons(DateOnly from, DateOnly to, IEnumerable<Guid> personIds)
-		{
-			return _unitOfWork.Current()
-				.Session()
-				.CreateSQLQuery(scheduleQuery("PersonId IN (:PersonIds)"))
-				.SetParameterList("PersonIds", personIds)
-				.SetParameter("StartDate", from.Date)
-				.SetParameter("EndDate", to.Date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalScheduledActivity)))
-				.List<ScheduledActivity>();
-		}
 		
-		private static string scheduleQuery(string constraint)
-		{
-			return $@"
-SELECT
-	PersonId,
-	PayloadId,
-	StartDateTime as start,
-	EndDateTime as [end],
-	Name,
-	ShortName,
-	DisplayColor, 
-	BelongsToDate as date
-FROM ReadModel.ScheduleProjectionReadOnly
-WHERE 
-	{constraint} AND
-	BelongsToDate BETWEEN :StartDate AND :EndDate
-ORDER BY EndDateTime ASC";
-		}
-
-		private class internalScheduledActivity : ScheduledActivity
-		{
-			public DateTime date { set { base.BelongsToDate = new DateOnly(value); } }
-			public DateTime start { set { base.StartDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
-			public DateTime end { set { base.EndDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
-		}
-
 	}
 
 	public class ActivityPeriod

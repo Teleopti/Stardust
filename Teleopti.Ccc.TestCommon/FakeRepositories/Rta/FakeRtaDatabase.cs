@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.Select(l => JsonConvert.DeserializeObject<ScheduleProjectionReadOnlyModel>(JsonConvert.SerializeObject(l)))
 				.ForEach(x => _schedules.AddActivity(x));
 
-			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
+			_agentStateMaintainer.Handle(new ScheduleChangedEvent
 			{
 				PersonId = personId
 			});
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			_schedules.Clear(personId);
 			ClearScheduleData(personId);
-			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
+			_agentStateMaintainer.Handle(new ScheduleChangedEvent
 			{
 				PersonId = personId
 			});

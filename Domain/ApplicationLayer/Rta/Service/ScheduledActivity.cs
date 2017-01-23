@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -14,12 +12,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IScheduleReader
 	{
-		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-		IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId);
-
-		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-		IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds);
-
 		IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons);
 	}
 
@@ -28,37 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid PersonId;
 		public Guid BusinessUnitId;
 	}
-
-	[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-	public class FromReadModel : IScheduleReader
-	{
-		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjection;
-
-		public FromReadModel(IScheduleProjectionReadOnlyPersister scheduleProjection)
-		{
-			_scheduleProjection = scheduleProjection;
-		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
-		{
-			var from = new DateOnly(utcNow.Date.AddDays(-1));
-			var to = new DateOnly(utcNow.Date.AddDays(1));
-			return _scheduleProjection.ForPerson(from, to, personId);
-		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
-		{
-			var from = new DateOnly(utcNow.Date.AddDays(-1));
-			var to = new DateOnly(utcNow.Date.AddDays(1));
-			return _scheduleProjection.ForPersons(from, to, personIds);
-		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons)
-		{
-			return GetCurrentSchedules(utcNow, persons.Select(x => x.PersonId).ToArray());
-		}
-	}
-
+	
 	public class FromPersonAssignment : IScheduleReader
 	{
 		private readonly IScheduleStorage _scheduleStorage;
@@ -77,17 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_scenarios = scenarios;
 			_businessUnits = businessUnits;
 		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
-		{
-			throw new NotImplementedException();
-		}
-
+		
 		[LogInfo]
 		[FullPermissions]
 		public virtual IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons)

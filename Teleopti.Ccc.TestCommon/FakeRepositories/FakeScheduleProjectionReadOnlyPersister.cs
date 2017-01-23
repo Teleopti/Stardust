@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Interfaces.Domain;
@@ -49,30 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
 		{
 			return _data.Where(x => x.PersonId == personId).ToArray();
-		}
-
-		public IEnumerable<ScheduledActivity> ForPerson(DateOnly from, DateOnly to, Guid personId)
-		{
-			return (
-				from l in _data
-				where
-					l.PersonId == personId &&
-					l.BelongsToDate >= @from &&
-					l.BelongsToDate <= to
-				select JsonConvert.DeserializeObject<ScheduledActivity>(JsonConvert.SerializeObject(l))
-				).ToList();
-		}
-
-		public IEnumerable<ScheduledActivity> ForPersons(DateOnly from, DateOnly to, IEnumerable<Guid> personIds)
-		{
-			return (
-				from l in _data
-				where
-					personIds.Contains(l.PersonId) &&
-					l.BelongsToDate >= @from &&
-					l.BelongsToDate <= to
-				select JsonConvert.DeserializeObject<ScheduledActivity>(JsonConvert.SerializeObject(l))
-				).ToList();
 		}
 
 		public bool IsInitialized()

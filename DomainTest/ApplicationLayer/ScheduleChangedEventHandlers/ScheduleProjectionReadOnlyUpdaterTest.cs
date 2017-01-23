@@ -57,20 +57,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			layer.StartDateTime.Should().Be("2016-04-29 08:00".Utc());
 			layer.EndDateTime.Should().Be("2016-04-29 17:00".Utc());
 		}
-
-		[Test]
-		public void ShouldPublishEvent()
-		{
-			var person = Guid.NewGuid();
-
-			Target.Handle(new ProjectionChangedEvent
-			{
-				PersonId = person,
-				ScheduleDays = new ProjectionChangedEventScheduleDay[] {}
-			});
-
-			EventPublisher.PublishedEvents.OfType<ScheduleProjectionReadOnlyChangedEvent>()
-				.Single().PersonId.Should().Be.EqualTo(person);
-		}
+		
 	}
 }

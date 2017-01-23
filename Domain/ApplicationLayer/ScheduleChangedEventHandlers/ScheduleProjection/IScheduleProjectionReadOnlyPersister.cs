@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
@@ -18,11 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);
 
 		IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId);
-
-		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-		IEnumerable<ScheduledActivity> ForPerson(DateOnly from, DateOnly to, Guid personId);
-		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-		IEnumerable<ScheduledActivity> ForPersons(DateOnly from, DateOnly to, IEnumerable<Guid> personIds);
 	}
 
 	public class ScheduleProjectionReadOnlyModel : IEquatable<ScheduleProjectionReadOnlyModel>

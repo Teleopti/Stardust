@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	public class UnrecognizedStatesTest : ISetup
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
