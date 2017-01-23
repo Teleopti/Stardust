@@ -115,6 +115,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
+			if (siteIds != null && teamIds != null && skillIds != null)
+				return ReadForSitesTeamsAndSkills(siteIds, teamIds, skillIds);
+			if (siteIds != null && teamIds != null)
+				 return ReadForSitesAndTeams(siteIds, teamIds);
 			if (siteIds != null && skillIds != null)
 				return ReadForSitesAndSkills(siteIds, skillIds);
 			if (siteIds != null )
@@ -182,6 +186,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select model;
 		}
 
+		private IEnumerable<AgentStateReadModel> ReadForSitesAndTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
+		{
+			return
+				from model in _data.Values
+				from siteId in siteIds
+				from teamId in teamIds
+				where model.SiteId == siteId || model.TeamId == teamId
+				select model;
+
+		}
+
 		public IEnumerable<AgentStateReadModel> ReadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
 			return
@@ -208,6 +223,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select model;
 		}
 
+
+		private IEnumerable<AgentStateReadModel> ReadForSitesTeamsAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return
+			from model in _data.Values
+			from personSkill in _personSkills
+			from skillId in skillIds
+			from siteId in siteIds
+			from teamId in teamIds
+			where model.PersonId == personSkill.PersonId &&
+				  personSkill.SkillId == skillId &&
+				  (model.SiteId == siteId || model.TeamId == teamId)
+
+			select model;
+		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmForSites(IEnumerable<Guid> siteIds)
 		{

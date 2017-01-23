@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
@@ -16,8 +17,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	public class AgentStateViewModel
 	{
 		public Guid PersonId { get; set; }
-		public string State { get; set; }
+		public string Name { get; set; }
+
+		public string TeamId { get; set; }
+		public string TeamName { get; set; }
+		public string SiteId { get; set; }
+		public string SiteName { get; set; }
+
 		public Guid? StateId { get; set; }
+		public string State { get; set; }
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public string NextActivityStartTime { get; set; }
@@ -59,6 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly ProperAlarm _appliedAlarm;
 		private readonly IAgentStateReadModelLegacyReader _legacyReader;
 		private readonly IAgentStateReadModelReader _reader;
+		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 
 		public AgentStatesViewModelBuilder(
 			INow now,
@@ -66,7 +75,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IUserCulture culture,
 			ProperAlarm appliedAlarm,
 			IAgentStateReadModelLegacyReader legacyReader,
-			IAgentStateReadModelReader reader
+			IAgentStateReadModelReader reader,
+			ICommonAgentNameProvider nameDisplaySetting
 			)
 		{
 			_now = now;
@@ -75,6 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_appliedAlarm = appliedAlarm;
 			_legacyReader = legacyReader;
 			_reader = reader;
+			_nameDisplaySetting = nameDisplaySetting;
 		}
 		
 		public AgentStatesViewModel For(ViewModelFilter filter)
@@ -114,12 +125,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentStateViewModel> buildStates(IEnumerable<AgentStateReadModel> states)
 		{
+			var nameDisplayedAs = _nameDisplaySetting.CommonAgentNameSettings;
 			return from state in states
 				   where !state.IsDeleted
 				   let timeInAlarm = calculateTimeInAlarm(state)
 				   select new AgentStateViewModel
 				   {
 					   PersonId = state.PersonId,
+					   Name = nameDisplayedAs.BuildCommonNameDescription(state.FirstName, state.LastName, state.EmploymentNumber),
+					   SiteId = state.SiteId.ToString(),
+					   SiteName = state.SiteName,
+					   TeamId = state.TeamId.ToString(),
+					   TeamName = state.TeamName,
 					   State = state.StateName,
 					   StateId = state.StateGroupId,
 					   Activity = state.Activity,
