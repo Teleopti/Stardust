@@ -28,7 +28,9 @@ describe('component: permissionsTree', function() {
 			response = angular.fromJson(data);
 			return 200;
 		});
-
+		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/5ad43bfa-7842-4cca-ae9e-8d03ddc789e9').respond(function(method, url, data, headers) {
+			return 200;
+		});
 		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/f19bb790-b000-4deb-97db-9b5e015b2e8c').respond(function(method, url, data, headers) {
 			return 200;
 		});
@@ -681,6 +683,54 @@ describe('component: permissionsTree', function() {
 		$httpBackend.flush();
 
 		expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toEqual(true);
+	});
+
+	it('should be able to deselect functions while all function toggle is active', function() {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'Agent',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: false,
+				IsMyRole: false,
+				Name: 'Agent'
+			})
+			.withApplicationFunction({
+				FunctionCode: 'Raptor',
+				FunctionDescription: 'xxOpenRaptorApplication',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				IsOpen: false,
+				ChildFunctions: [{
+					ChildFunctions: [],
+					FunctionCode: 'ChildFunction',
+					FunctionDescription: 'ChildFunction',
+					FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+					IsDisabled: false,
+					LocalizedFunctionDescription: 'I am A child function',
+					IsOpen: false
+				}]
+			});
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, {
+			functions: vm.applicationFunctions,
+			select: vm.selectFunction,
+			isSelected: vm.isFunctionSelected,
+			onClick: vm.onFunctionClick,
+			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj
+		});
+		ctrl.selectedRole = vm.roles[0];
+		vm.selectedRole = vm.roles[0];
+
+		vm.toggleAllFunction();
+		$httpBackend.flush();
+		ctrl.toggleFunction(vm.applicationFunctions[0]);
+		$httpBackend.flush();
+		 
+		expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toEqual(undefined);
+		expect(vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c']).toEqual(undefined);
 	});
 
 });
