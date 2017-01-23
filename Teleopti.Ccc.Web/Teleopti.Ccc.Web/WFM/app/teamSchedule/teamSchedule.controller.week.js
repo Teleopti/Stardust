@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyController', TeamScheduleWeeklyController);
 
-	TeamScheduleWeeklyController.$inject = ['$stateParams', '$q', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'teamsToggles', 'bootstrapCommon'];
+	TeamScheduleWeeklyController.$inject = ['$window', '$stateParams', '$q', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'teamsToggles', 'bootstrapCommon'];
 
-	function TeamScheduleWeeklyController($stateParams, $q, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, teamsToggles, bootstrapCommon) {
+	function TeamScheduleWeeklyController($window, $stateParams, $q, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, teamsToggles, bootstrapCommon) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
@@ -25,7 +25,7 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
-
+	
 		vm.onKeyWordInSearchInputChanged = function() {
 			vm.resetSchedulePage();
 			vm.resetFocusSearch();
@@ -142,6 +142,18 @@
 			vm.resetSchedulePage();
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 		});
+
+	
+		if (vm.toggles.WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557) {
+			vm.enableClickableCell = true;
+			vm.onCellClick = openSelectedAgentDayInNewWindow;
+		}		
+
+		function openSelectedAgentDayInNewWindow(personId, scheduleDate) {
+			if (!vm.enableClickableCell) return;
+			$window.open('#/teams/?personId=' + personId + '&selectedDate=' + moment(scheduleDate).format('YYYY-MM-DD'),
+				'_blank');
+		}
 
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};

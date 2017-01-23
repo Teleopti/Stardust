@@ -10,6 +10,12 @@
 	input {
 		background-color: transparent;
 	}
+	.full-size {
+		width: 100% !important;
+		height: 100% !important;
+		margin: 0 !important;
+	}
+
 	.start-ellipsis, .end-ellipsis {
 		position: absolute;
 		top: 2px;

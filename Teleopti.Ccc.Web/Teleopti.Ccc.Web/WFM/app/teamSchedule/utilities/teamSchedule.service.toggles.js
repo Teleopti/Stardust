@@ -57,6 +57,7 @@
 				SaveFavoriteSearchesEnabled: toggleSvc.WfmTeamSchedule_SaveFavoriteSearches_42073,
 				WfmTeamSchedule_RemoveOvertime_42481: toggleSvc.WfmTeamSchedule_RemoveOvertime_42481,
 				WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576: toggleSvc.WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576,
+				WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557: toggleSvc.WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557
 			};
 		}
 

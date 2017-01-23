@@ -19,11 +19,12 @@
 				do: false,
 			}
 		}).state('teams.for', {
-			url: '/?personId',
+			url: '/?personId&{selectedDate:date}',
 			templateUrl: 'app/teamSchedule/html/dayViewSchedule.html',
 			controller: 'TeamScheduleController as vm',
 			params: {
-				personId: ''
+				personId: '',
+				selectedDate: undefined
 			}
 		}).state('teams.weekView', {
 			url: '/week',
