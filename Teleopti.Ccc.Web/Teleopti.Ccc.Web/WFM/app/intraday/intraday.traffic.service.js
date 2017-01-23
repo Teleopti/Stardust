@@ -48,7 +48,6 @@
 				trafficData.actualAverageHandleTimeObj.max = Math.max.apply(Math, trafficData.actualAverageHandleTimeObj.series);
 
 				trafficData.forecastedCallsObj.series.splice(0, 0, 'Forecasted_calls');
-				console.log("trafficdata:" + trafficData.actualCallsObj.series);
 				trafficData.actualCallsObj.series.splice(0, 0, 'Calls');
 				trafficData.forecastedAverageHandleTimeObj.series.splice(0, 0, 'Forecasted_AHT');
 				trafficData.actualAverageHandleTimeObj.series.splice(0, 0, 'AHT');
