@@ -22,6 +22,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings;
 	var userTimeZoneMinuteOffset = 0;
+	var currentPage = Math.random().toString(36).slice(2);
 	var _notificationTrackIdList = [];
 
 	function resize() {
@@ -207,7 +208,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			notifyOptions[domainType].timeout = displayTime * 1000;
 			Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 				successCallback: eventListeners,
-				domainType: domainType
+				domainType: domainType,
+				page: currentPage
 			});
 		});
 	}
@@ -234,7 +236,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _makeSureWeAreLoggedOn() {
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
 		ajax.Ajax({
 			url: 'UserData/FetchUserData',
 			dataType: "json",
@@ -281,6 +282,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				vm.unreadMessageCount(data.UnreadMessagesCount);
 			}
 		},
-		MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn
+		MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn,
+		Dispose: function () {
+			ajax.AbortAll();
+			Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
+		}
 	};
 })(jQuery);

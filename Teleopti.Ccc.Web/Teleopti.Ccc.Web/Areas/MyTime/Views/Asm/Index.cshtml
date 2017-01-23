@@ -58,8 +58,8 @@
 			    $(window)
 			        .on("unload",
 			            function() {
-
-			                Teleopti.MyTimeWeb.AlertActivity.AbortAjax();
+			            	Teleopti.MyTimeWeb.AlertActivity.AbortAjax();
+			                Teleopti.MyTimeWeb.Asm.Dispose();
 			            });
 		</text>
 	}

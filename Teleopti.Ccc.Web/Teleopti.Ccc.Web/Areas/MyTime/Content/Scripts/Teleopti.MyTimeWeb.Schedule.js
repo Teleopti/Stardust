@@ -848,7 +848,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			};
 		},
 		PartialDispose: function () {
-		    _cleanBindings();
+			_cleanBindings();
+			ajax.AbortAll();
 		    Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 		},
 		SetTimeIndicator: function (date) {
