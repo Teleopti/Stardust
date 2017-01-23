@@ -4,13 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck
 {
 	public class HealthCheckAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get
-			{
-				return "HealthCheck";
-			}
-		}
+		public override string AreaName => "HealthCheck";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{

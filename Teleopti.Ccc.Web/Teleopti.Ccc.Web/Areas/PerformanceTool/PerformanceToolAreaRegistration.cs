@@ -4,10 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool
 {
 	public class PerformanceToolAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get { return "PerformanceTool"; }
-		}
+		public override string AreaName => "PerformanceTool";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{

@@ -4,13 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
 	public class MultiTenancyAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get
-			{
-				return "MultiTenancy";
-			}
-		}
+		public override string AreaName => "MultiTenancy";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{

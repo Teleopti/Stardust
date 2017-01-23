@@ -80,9 +80,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private void registerAreas()
 		{
-			if (_registerAreas == null) return;
-
-			_registerAreas.Execute();
+			_registerAreas?.Execute();
 		}
 	}
 }

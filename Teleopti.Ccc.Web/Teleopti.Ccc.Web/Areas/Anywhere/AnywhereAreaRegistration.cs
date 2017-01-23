@@ -4,10 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere
 {
 	public class AnywhereAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get { return "Anywhere"; }
-		}
+		public override string AreaName => "Anywhere";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{

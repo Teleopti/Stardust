@@ -4,13 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO
 {
 	public class SSOAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get
-			{
-				return "SSO";
-			}
-		}
+		public override string AreaName => "SSO";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{

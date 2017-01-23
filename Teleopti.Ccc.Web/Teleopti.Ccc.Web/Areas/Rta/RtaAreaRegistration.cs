@@ -6,13 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 {
 	public class RtaAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get
-			{
-				return "Rta";
-			}
-		}
+		public override string AreaName => "Rta";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{

@@ -4,13 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 {
 	public class ReportingAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get
-			{
-				return "Reporting";
-			}
-		}
+		public override string AreaName => "Reporting";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
@@ -26,17 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			 "Reporting_default",
 			  "Reporting/{controller}/{id}",
 			  new { Controller = "Report", action = "Index", id = UrlParameter.Optional }
-
 			);
 
 			context.MapRoute(
 			 "Reporting_index",
 			  "Reporting/{controller}/{action}/{id}",
 			  new { Controller = "Report", action = "Index", id = UrlParameter.Optional }
-
 			);
-
-
 		}
 	}
 }

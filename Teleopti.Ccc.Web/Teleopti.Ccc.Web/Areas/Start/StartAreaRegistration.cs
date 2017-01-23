@@ -4,13 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.Start
 {
 	public class StartAreaRegistration : AreaRegistration
 	{
-		public override string AreaName
-		{
-			get
-			{
-				return "Start";
-			}
-		}
+		public override string AreaName => "Start";
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
