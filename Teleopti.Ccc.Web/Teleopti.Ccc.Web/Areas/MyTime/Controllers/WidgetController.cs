@@ -8,13 +8,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	public class CiscoWidgetController : Controller
+	public class WidgetController : Controller
 	{
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IAsmViewModelFactory _asmModelFactory;
 		private readonly IMyReportViewModelFactory _myReportViewModelFactory;
 		private readonly IUserCulture _userCulture;
-		public CiscoWidgetController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IAsmViewModelFactory asmModelFactory, IUserCulture userCulture, IMyReportViewModelFactory myReportViewModelFactory)
+		public WidgetController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IAsmViewModelFactory asmModelFactory, IUserCulture userCulture, IMyReportViewModelFactory myReportViewModelFactory)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_asmModelFactory = asmModelFactory;

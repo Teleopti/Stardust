@@ -20,6 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 			mapRoute.DataTokens["area"] = "Start";
 
 			context.MapRoute(
+				"MyTime-widget-alias",
+				"MyTime/CiscoWidget/{action}",
+				new { controller = "Widget", action = "Index" }
+				);
+
+			context.MapRoute(
 				"MyTime-calendar",
 				"MyTime/Share",
 				new { controller = "ShareCalendar", action = "iCal" }
