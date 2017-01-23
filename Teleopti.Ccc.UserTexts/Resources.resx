@@ -15479,4 +15479,8 @@ These options are activated:
     <value>It is possible to view maximum {0} agents. The "In alarm" switch is enabled if the number of agents does not exceed {1}.</value>
     <comment>Notice text for max number of agents to be displayed in view</comment>
   </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>Favorite Search</value>
+    <comment>Favorite Search function name showing in icon tooltip. </comment>
+  </data>
 </root>

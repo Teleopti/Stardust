@@ -10958,6 +10958,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Favorite Search.
+        /// </summary>
+        public static string FavoriteSearch {
+            get {
+                return ResourceManager.GetString("FavoriteSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fi&amp;nd what:.
         /// </summary>
         public static string FiAmpersandndWhatColon {
