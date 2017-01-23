@@ -408,6 +408,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopMaxSeatTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TrackIntradayOptimizationCallback.cs" />
     <Compile Include="SchedulingScenarios\TrackOptimizeDaysForAgents.cs" />
