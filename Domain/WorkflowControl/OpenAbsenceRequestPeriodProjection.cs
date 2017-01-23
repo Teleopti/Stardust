@@ -133,10 +133,17 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (isPeriodOpensLater(absenceRequestOpenPeriod) && isNextOpenPeriod(absenceRequestOpenPeriod))
 			{
-				denyReason = string.Format(_languageCultureInfo,
-				                           UserTexts.Resources.ResourceManager.GetString(
-					                           "RequestDenyReasonPeriodOpenAfterSendRequest", _languageCultureInfo),
-				                           absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_dateCultureInfo));
+				if (isAbsenceRequestOpenPeriodAutoDeny(absenceRequestOpenPeriod))
+				{
+					denyReason = UserTexts.Resources.RequestDenyReasonAutodeny;
+				}
+				else
+				{
+					denyReason = string.Format(_languageCultureInfo,
+						UserTexts.Resources.ResourceManager.GetString(
+							"RequestDenyReasonPeriodOpenAfterSendRequest", _languageCultureInfo),
+						absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_dateCultureInfo));
+				}
 			}
 			return denyReason;
 		}
@@ -175,15 +182,27 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private string checkingForPeriod(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			string denyReason = null;
-			DateOnlyPeriod period = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate);
+			var period = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate);
 
 			if (isPeriodOutside(requestPeriod, absenceRequestOpenPeriod) && isNextPeriod(absenceRequestOpenPeriod))
 			{
-				denyReason = string.Format(_languageCultureInfo,
-				                           UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _languageCultureInfo),
-				                           period.ToShortDateString(_dateCultureInfo));
+				if (isAbsenceRequestOpenPeriodAutoDeny(absenceRequestOpenPeriod))
+				{
+					denyReason = UserTexts.Resources.RequestDenyReasonAutodeny;
+				}
+				else
+				{
+					denyReason = string.Format(_languageCultureInfo,
+						UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _languageCultureInfo),
+						period.ToShortDateString(_dateCultureInfo));
+				}
 			}
 			return denyReason;
+		}
+
+		private bool isAbsenceRequestOpenPeriodAutoDeny(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			return absenceRequestOpenPeriod?.AbsenceRequestProcess is DenyAbsenceRequest;
 		}
 
 		private DateOnly findLayerEndTime(int currentLayerIndex,
