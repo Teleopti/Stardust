@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 			var allSkillDays = _skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, s =>
 				{ 
 					s.ForEach(sd => sd.SplitSkillDataPeriods(sd.SkillDataPeriodCollection.ToList()));
-					_skillDayRepository.AddRange(s);
 				});
 
             var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(allSkillDays, skill.WorkloadCollection.First());
@@ -43,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                     setTargetBusinessUnit(skillDay, skill.BusinessUnit);
                 }
             }
-	    }
+			_skillDayRepository.AddRange(allSkillDays);
+		}
 
 	    private static void setTargetBusinessUnit(ISkillDay skillDay, IBusinessUnit businessUnit)
 		{
