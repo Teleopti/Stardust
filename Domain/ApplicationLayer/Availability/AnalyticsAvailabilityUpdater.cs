@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		public virtual void Handle(AvailabilityChangedEvent @event)
 		{
 			var person = _personRepository.Get(@event.PersonId);
+			if (person == null)
+			{
+				logger.Debug($"No person found for personId {@event.PersonId}");
+				return;
+			}
 			var analyticsPersonPeriod = getAnalyticsPersonPeriod(@event, person);
 			var availabilityDays = _availabilityDayRepository.Find(@event.Date, person);
 			var date = getAnalyticsDate(@event);
