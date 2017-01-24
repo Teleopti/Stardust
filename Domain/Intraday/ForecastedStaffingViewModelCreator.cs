@@ -97,7 +97,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 					UpdatedForecastedStaffing = updatedForecastedSeries,
 					ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries),
 					ScheduledStaffing = _scheduledStaffingProvider.DataSeries(scheduledStaffingPerSkill, timeSeries)
-				}
+				},
+				StaffingHasData = forecastedStaffing.Any()
 			};
 		}
 

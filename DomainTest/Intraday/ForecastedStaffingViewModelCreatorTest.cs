@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldReturnForecastedStaffingForTwoIntervals()
+		public void ShouldReturnForecastedStaffing()
 		{
 			TimeZone.IsSweden();
 			var scenario = fakeScenarioAndIntervalLength();
@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
 			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
+			vm.StaffingHasData.Should().Be.EqualTo(true);
 		}
 
 		[Test]
@@ -188,6 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var vm = Target.Load(new[] { skill.Id.Value });
 
 			vm.DataSeries.Should().Be.EqualTo(null);
+			vm.StaffingHasData.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -377,20 +379,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldReturnEmptyDataSeriesWhenNoForecastOnSkill()
-		{
-			fakeScenarioAndIntervalLength();
-
-			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			SkillRepository.Has(skill);
-
-			var vm = Target.Load(new[] { skill.Id.Value });
-
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(0);
-			vm.DataSeries.ForecastedStaffing.Should().Be.Empty();
-		}
-
-		[Test]
 		public void ShouldHandleSkill30MinutesIntervalLengthAndTarget15()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
@@ -510,6 +498,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.Should().Be.Empty();
 			vm.DataSeries.UpdatedForecastedStaffing.Should().Be.Empty();
 			vm.DataSeries.ActualStaffing.Should().Be.Empty();
+			vm.StaffingHasData.Should().Be.EqualTo(false);
 		}
 
 		[Test]

@@ -125,7 +125,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 					AverageSpeedOfAnswer = averageSpeedOfAnswer.ToArray(),
 					AbandonedRate = abandonedRate.ToArray(),
 					ServiceLevel = serviceLevel.ToArray()
-				}
+				},
+				IncomingTrafficHasData = intervals.Any()
 			};
 		}
 	}

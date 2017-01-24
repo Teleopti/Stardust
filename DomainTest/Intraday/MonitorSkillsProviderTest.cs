@@ -262,17 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(expectedDiff);
 		}
-
-		[Test]
-		public void ShouldReturnPredefinedDifferenceBetweenForecastedAndActualCallsWhenNoData()
-		{
-			IntervalLengthFetcher.Has(minutesPerInterval);
-
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
-
-			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(-99);
-		}
-
+		
 		[Test]
 		public void ShouldReturnDifferenceBetweenForecastedAndActualAverageHandleTime()
 		{
@@ -293,17 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(expectedDiff);
 		}
-
-		[Test]
-		public void ShouldReturnPredefinedDifferenceBetweenForecastedAndActualHandleTimeWhenNoData()
-		{
-			IntervalLengthFetcher.Has(minutesPerInterval);
-
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
-
-			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(-99);
-		}
-
+		
 		[Test]
 		public void ShouldSetForecastedAverageHandleTimeToZeroWhenForecastedCallsAreZero()
 		{
@@ -380,17 +360,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			viewModel.Summary.AverageSpeedOfAnswer.Should()
 					.Be.EqualTo((_firstInterval.SpeedOfAnswer + _secondInterval.SpeedOfAnswer) / (_firstInterval.AnsweredCalls + _secondInterval.AnsweredCalls));
 		}
-
-		[Test]
-		public void ShouldReturnPredefinedAverageSpeedOfAnswerWhenNoData()
-		{
-			IntervalLengthFetcher.Has(minutesPerInterval);
-
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
-
-			viewModel.Summary.AverageSpeedOfAnswer.Should().Be.EqualTo(-99);
-		}
-
+		
 		[Test]
 		public void ShouldSetSummaryForServiceLevel()
 		{
@@ -405,13 +375,38 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldReturnPredefinedServiceLevelWhenNoData()
+		public void ShouldReturnPredefinedSummaryValuesWhenNoData()
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.ServiceLevel.Should().Be.EqualTo(-99);
+			viewModel.Summary.AbandonRate.Should().Be.EqualTo(-99);
+			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(-99);
+			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(-99);
+			viewModel.Summary.AverageSpeedOfAnswer.Should().Be.EqualTo(-99);
+		}
+
+		[Test]
+		public void ShouldShowThatIncomingTrafficHasData()
+		{
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+			viewModel.IncomingTrafficHasData.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldShowThatIncomingTrafficHasNoData()
+		{
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+			viewModel.IncomingTrafficHasData.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -425,16 +420,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			viewModel.Summary.AbandonRate.Should()
 					.Be.EqualTo((_firstInterval.AbandonedCalls + _secondInterval.AbandonedCalls) / (_firstInterval.CalculatedCalls + _secondInterval.CalculatedCalls));
-		}
-
-		[Test]
-		public void ShouldReturnPredefinedAbandonRateWhenNoData()
-		{
-			IntervalLengthFetcher.Has(minutesPerInterval);
-
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
-
-			viewModel.Summary.AbandonRate.Should().Be.EqualTo(-99);
 		}
 
 		[Test]

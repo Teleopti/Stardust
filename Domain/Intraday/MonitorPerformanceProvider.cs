@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -65,7 +66,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 					AverageSpeedOfAnswer = queueStatistics.Summary.AverageSpeedOfAnswer,
 					ServiceLevel = queueStatistics.Summary.ServiceLevel,
 					EstimatedServiceLevel = _estimatedServiceLevelProvider.EslSummary(eslIntervals)
-				}
+				},
+				PerformanceHasData = queueStatistics.DataSeries.CalculatedCalls.Any(x => x.HasValue)
 			};
 		}
 	}

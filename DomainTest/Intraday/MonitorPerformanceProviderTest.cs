@@ -329,6 +329,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.Summary.AbandonRate.Should().Be.GreaterThan(0);
 			result.LatestActualIntervalStart.Should().Be.EqualTo(latestStatsTime);
 			result.LatestActualIntervalEnd.Should().Be.EqualTo(latestStatsTime.AddMinutes(minutesPerInterval));
+			result.PerformanceHasData.Should().Be.EqualTo(true);
 		}
 
 		[Test]
@@ -494,8 +495,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.DataSeries.ServiceLevel.Should().Be.Empty();
 			result.DataSeries.AverageSpeedOfAnswer.Should().Be.Empty();
 			result.DataSeries.EstimatedServiceLevels.Should().Be.Empty();
+			result.PerformanceHasData.Should().Be.EqualTo(false);
 		}
-
 
 		private double calculateEsl(IList<SkillStaffingInterval> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
 		{
