@@ -66,9 +66,9 @@
 		};
 	}
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'ScheduleHelper','teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleManagementSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
 
 		vm.label = 'AddAbsence';
@@ -107,7 +107,8 @@
 		vm.getDefaultAbsenceStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
-			return scheduleManagementSvc.getEarliestStartOfSelectedSchedules(curDateMoment, personIds);
+			var schedules = scheduleManagementSvc.schedules();
+			return scheduleHelper.getEarliestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
 		};
 
 		vm.getDefaultAbsenceEndTime = function() {

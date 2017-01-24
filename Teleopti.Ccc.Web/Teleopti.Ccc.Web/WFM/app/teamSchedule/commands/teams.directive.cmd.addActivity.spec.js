@@ -7,7 +7,8 @@
 		fakeActivityService,
 		fakeScheduleManagementSvc,
 		fakePersonSelectionService,
-		fakeCommandCheckService;
+		fakeCommandCheckService,
+		scheduleHelper;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
@@ -23,6 +24,7 @@
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeCommandCheckService = new FakeCommandCheckService();
+		scheduleHelper = new FakeScheduleHelper();
 
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
@@ -30,6 +32,9 @@
 			});
 			$provide.service('ScheduleManagement', function () {
 				return fakeScheduleManagementSvc;
+			});
+			$provide.service('ScheduleHelper', function () {
+				return scheduleHelper;
 			});
 			$provide.service('PersonSelection', function () {
 				return fakePersonSelectionService;
@@ -315,8 +320,8 @@
 
 	it('should have correct default start time when no other shifts on today', function () {
 		var date = new Date(utility.nowInUserTimeZone());
-		fakeScheduleManagementSvc.setLatestEndTime(null);
-		fakeScheduleManagementSvc.setLatestStartTime(null);
+		scheduleHelper.setLatestEndTime(null);
+		scheduleHelper.setLatestStartTime(null);
 
 		var result = setUp(date);
 		var vm = result.commandControl;
@@ -330,8 +335,8 @@
 
 	it('should have correct default start time when no other shifts on selected date which is not today', function () {
 		var today = new Date(moment(utility.nowInUserTimeZone()).add(1, 'day'));
-		fakeScheduleManagementSvc.setLatestEndTime(null);
-		fakeScheduleManagementSvc.setLatestStartTime(null);
+		scheduleHelper.setLatestEndTime(null);
+		scheduleHelper.setLatestStartTime(null);
 
 		var result = setUp(today);
 		var vm = result.commandControl;
@@ -348,8 +353,8 @@
 	it('should have later default start time than previous day over night shift end', function () {
 		var date = moment(utility.nowInUserTimeZone()).add(7, 'day');
 
-		fakeScheduleManagementSvc.setLatestEndTime(date.clone().hour(10).toDate());
-		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(9).toDate());
+		scheduleHelper.setLatestEndTime(date.clone().hour(10).toDate());
+		scheduleHelper.setLatestStartTime(date.clone().hour(9).toDate());
 
 		var result = setUp(date);
 		var vm = result.commandControl;
@@ -390,25 +395,8 @@
 	}
 
 	function FakeScheduleManagementService() {
-		var latestEndTime = null;
 		var latestStartTime = null;
 		var savedPersonScheduleVm = {};
-
-		this.setLatestEndTime = function (date) {
-			latestEndTime = date;
-		}
-
-		this.setLatestStartTime = function (date) {
-			latestStartTime = date;
-		}
-
-		this.getLatestPreviousDayOvernightShiftEnd = function () {
-			return latestEndTime;
-		}
-
-		this.getLatestStartOfSelectedSchedules = function () {
-			return latestStartTime;
-		}
 
 		this.setPersonScheduleVm = function(personId, vm) {
 			savedPersonScheduleVm[personId] = vm;
@@ -417,6 +405,40 @@
 		this.findPersonScheduleVmForPersonId = function(personId) {
 			return savedPersonScheduleVm[personId];
 		}
+
+		this.schedules = function () {
+			return null;
+		};
+	}
+
+	function FakeScheduleHelper() {
+		var earliestStartTime = null;
+		var latestStartTime = null;
+		var latestEndTime = null;
+
+		this.setEarliestStartTime = function(date) {
+			earliestStartTime = date;
+		};
+
+		this.setLatestStartTime = function(date) {
+			latestStartTime = date;
+		};
+
+		this.setLatestEndTime = function (date) {
+			latestEndTime = date;
+		};
+
+		this.getEarliestStartOfSelectedSchedules = function() {
+			return earliestStartTime;
+		};
+
+		this.getLatestStartOfSelectedSchedules = function() {
+			return latestStartTime;
+		};
+
+		this.getLatestPreviousDayOvernightShiftEnd = function () {
+			return latestEndTime;
+		};
 	}
 
 	function FakeCommandCheckService() {

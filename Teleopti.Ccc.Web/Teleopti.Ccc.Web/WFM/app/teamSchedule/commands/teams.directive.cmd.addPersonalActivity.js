@@ -51,9 +51,9 @@
 		};
 	}
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
+	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
 
-	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
+	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleManagementSvc, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
 
 		vm.label = 'AddPersonalActivity';
@@ -192,8 +192,10 @@
 		vm.getDefaultActvityStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
-			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
-			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedules(curDateMoment, personIds);
+			var schedules = scheduleManagementSvc.schedules();
+
+			var overnightEnds = scheduleHelper.getLatestPreviousDayOvernightShiftEnd(schedules, curDateMoment, personIds);
+			var latestShiftStart = scheduleHelper.getLatestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
 
 			// Set to 08:00 for empty schedule or day off
 			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();

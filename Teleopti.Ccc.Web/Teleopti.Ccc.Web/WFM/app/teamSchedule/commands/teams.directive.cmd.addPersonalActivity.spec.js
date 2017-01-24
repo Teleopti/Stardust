@@ -1,15 +1,18 @@
-﻿describe("teamschedule add personal activity directive test", function () {
+﻿describe('teamschedule add personal activity directive test', function () {
+	'use strict';
 
 	var $compile,
 		$rootScope,
+		$httpBackend,
 		fakeActivityService,
 		utility,
 		fakeScheduleManagementSvc,
-		fakePersonSelectionService;
+		fakePersonSelectionService,
+		scheduleHelper;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
-			return { DefaultTimeZone: "Asia/Hong_Kong" };
+			return { DefaultTimeZone: 'Asia/Hong_Kong' };
 		}
 	};
 
@@ -20,6 +23,7 @@
 		fakeActivityService = new FakeActivityService();
 		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
+		scheduleHelper = new FakeScheduleHelper();
 
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
@@ -30,6 +34,9 @@
 			});
 			$provide.service('ScheduleManagement', function () {
 				return fakeScheduleManagementSvc;
+			});
+			$provide.service('ScheduleHelper', function () {
+				return scheduleHelper;
 			});
 			$provide.service('CurrentUserInfo', function () {
 				return mockCurrentUserInfo;
@@ -43,7 +50,7 @@
 		$httpBackend = _$httpBackend_;
 		utility = _UtilityService_;
 
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
 	it('add-personal-activity should render correctly', function () {
@@ -69,7 +76,7 @@
 	it('should see a disabled button when no activity selected', function () {
 		var result = setUp();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector('.add-activity .form-submit'));
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
@@ -84,7 +91,7 @@
 
 		result.scope.$apply();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector('.add-activity .form-submit'));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
@@ -152,8 +159,8 @@
 			}];
 
 		var timezone1 = {
-			IanaId: "Asia/Hong_Kong",
-			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			IanaId: 'Asia/Hong_Kong',
+			DisplayName: '(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi'
 		};
 
 		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
@@ -273,8 +280,8 @@
 
 	it('should have correct default start time when no other shifts on today', function () {
 		var date = new Date(utility.nowInUserTimeZone());
-		fakeScheduleManagementSvc.setLatestEndTime(null);
-		fakeScheduleManagementSvc.setLatestStartTime(null);
+		scheduleHelper.setLatestEndTime(null);
+		scheduleHelper.setLatestStartTime(null);
 
 		var result = setUp(date);
 		var vm = result.commandControl;
@@ -290,8 +297,8 @@
 	it('should have later default start time than previous day over night shift end', function () {
 		var date = moment(utility.nowInUserTimeZone()).add(7, 'day');
 
-		fakeScheduleManagementSvc.setLatestEndTime(date.clone().hour(10).toDate());
-		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(9).toDate());
+		scheduleHelper.setLatestEndTime(date.clone().hour(10).toDate());
+		scheduleHelper.setLatestStartTime(date.clone().hour(9).toDate());
 
 		var result = setUp(date);
 		var vm = result.commandControl;
@@ -332,25 +339,7 @@
 	}
 
 	function FakeScheduleManagementService() {
-		var latestEndTime = null;
-		var latestStartTime = null;
 		var savedPersonScheduleVm = {};
-
-		this.setLatestEndTime = function (date) {
-			latestEndTime = date;
-		}
-
-		this.setLatestStartTime = function (date) {
-			latestStartTime = date;
-		}
-
-		this.getLatestPreviousDayOvernightShiftEnd = function () {
-			return latestEndTime;
-		}
-
-		this.getLatestStartOfSelectedSchedules = function () {
-			return latestStartTime;
-		}
 
 		this.setPersonScheduleVm = function (personId, vm) {
 			savedPersonScheduleVm[personId] = vm;
@@ -359,6 +348,40 @@
 		this.findPersonScheduleVmForPersonId = function (personId) {
 			return savedPersonScheduleVm[personId];
 		}
+
+		this.schedules = function () {
+			return null;
+		};
+	}
+
+	function FakeScheduleHelper() {
+		var earliestStartTime = null;
+		var latestStartTime = null;
+		var latestEndTime = null;
+
+		this.setEarliestStartTime = function (date) {
+			earliestStartTime = date;
+		};
+
+		this.setLatestStartTime = function (date) {
+			latestStartTime = date;
+		};
+
+		this.setLatestEndTime = function (date) {
+			latestEndTime = date;
+		};
+
+		this.getEarliestStartOfSelectedSchedules = function () {
+			return earliestStartTime;
+		};
+
+		this.getLatestStartOfSelectedSchedules = function () {
+			return latestStartTime;
+		};
+
+		this.getLatestPreviousDayOvernightShiftEnd = function () {
+			return latestEndTime;
+		};
 	}
 
 	function FakePersonSelectionService(){

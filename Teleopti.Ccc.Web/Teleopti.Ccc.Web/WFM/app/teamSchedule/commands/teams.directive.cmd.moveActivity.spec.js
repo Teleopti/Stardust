@@ -1,19 +1,19 @@
-﻿"use strict";
-
-describe("teamschedule move activity directive tests", function () {
+﻿
+describe('teamschedule move activity directive tests', function () {
+	'use strict';
 
 	var $compile,
 		$rootScope,
 		fakeActivityService,
 		$httpBackend,
-		fakeScheduleManagementSvc,
+		scheduleHelper,
 		fakePersonSelectionService,
 		utility,
 		fakeMoveActivityValidator;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
-			return { DefaultTimeZone: "Asia/Hong_Kong" };
+			return { DefaultTimeZone: 'Asia/Hong_Kong' };
 		}
 	};
 
@@ -22,7 +22,7 @@ describe("teamschedule move activity directive tests", function () {
 
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
-		fakeScheduleManagementSvc = new FakeScheduleManagementService();
+		scheduleHelper = new FakeScheduleHelper();
 		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeMoveActivityValidator = new FakeMoveActivityValidator();
 
@@ -30,8 +30,8 @@ describe("teamschedule move activity directive tests", function () {
 			$provide.service('ActivityService', function () {
 				return fakeActivityService;
 			});
-			$provide.service('ScheduleManagement', function () {
-				return fakeScheduleManagementSvc;
+			$provide.service('ScheduleHelper', function () {
+				return scheduleHelper;
 			});
 			$provide.service('PersonSelection', function () {
 				return fakePersonSelectionService;
@@ -51,7 +51,7 @@ describe("teamschedule move activity directive tests", function () {
 		$httpBackend = _$httpBackend_;
 		utility = UtilityService;
 
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
 	it('move-activity should render correctly', function () {
@@ -139,7 +139,7 @@ describe("teamschedule move activity directive tests", function () {
 			shiftLayerId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 		};
 
-		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(10).toDate());
+		scheduleHelper.setLatestStartTime(date.clone().hour(10).toDate());
 
 		vm.nextDay = false;
 		vm.moveToTime = vm.getDefaultMoveToStartTime();
@@ -220,8 +220,8 @@ describe("teamschedule move activity directive tests", function () {
 	it('should have later default start time than previous day over night shift end', function () {
 		var date = moment(utility.nowInUserTimeZone()).add(7, 'day');
 
-		fakeScheduleManagementSvc.setLatestEndTime(date.clone().hour(10).toDate());
-		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(9).toDate());
+		scheduleHelper.setLatestEndTime(date.clone().hour(10).toDate());
+		scheduleHelper.setLatestStartTime(date.clone().hour(9).toDate());
 
 		var result = setUp(date.toDate());
 		var vm = result.commandControl;
@@ -261,7 +261,7 @@ describe("teamschedule move activity directive tests", function () {
 		return obj;
 	}
 
-	function FakeScheduleManagementService() {
+	function FakeScheduleHelper() {
 		var latestEndTime = null;
 		var latestStartTime = null;
 
@@ -278,10 +278,6 @@ describe("teamschedule move activity directive tests", function () {
 		}
 
 		this.getLatestStartTimeOfSelectedSchedulesProjections = function () {
-			return latestStartTime;
-		}
-
-		this.getLatestStartOfSelectedSchedules = function () {
 			return latestStartTime;
 		}
 	}

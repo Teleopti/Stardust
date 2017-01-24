@@ -3,22 +3,16 @@
 	var $compile,
 		$rootScope,
 		$httpBackend,
-		fakeCommandCheckService,
-		fakeScheduleManagementSvc;
+		fakeCommandCheckService;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
 	beforeEach(module('wfm.teamSchedule', function($provide) {
 		fakeCommandCheckService = new FakeCommandCheckService();
-		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 
 		$provide.factory('addPersonalActivityDirective', function() {
 			return {};
-		});
-
-		$provide.service('ScheduleManagement', function() {
-			return fakeScheduleManagementSvc;
 		});
 
 		$provide.service('CommandCheckService', function() {
@@ -85,31 +79,6 @@
 		var result = target[0].querySelector('.command-check');
 		expect(result).not.toBeNull();
 	});
-
-	function FakeScheduleManagementService() {
-		var latestEndTime = null;
-		var latestStartTime = null;
-
-		this.groupScheduleVm = {
-			Schedules: []
-		}
-
-		this.setLatestEndTime = function(date) {
-			latestEndTime = date;
-		}
-
-		this.setLatestStartTime = function(date) {
-			latestStartTime = date;
-		}
-
-		this.getLatestPreviousDayOvernightShiftEnd = function() {
-			return latestEndTime;
-		}
-
-		this.getLatestStartOfSelectedSchedules = function() {
-			return latestStartTime;
-		}
-	}
 
 	function FakeCommandCheckService() {
 		var fakeResponse = {

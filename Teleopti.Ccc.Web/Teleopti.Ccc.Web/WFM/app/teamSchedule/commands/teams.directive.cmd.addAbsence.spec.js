@@ -1,8 +1,14 @@
 ﻿describe('teamschedule add absence diretive test', function() {
+	'use strict';
 
 	var	fakeAbsenceService,
 		fakeScheduleManagementSvc,
-		fakePermissions;
+		fakePermissions,
+		scheduleHelper,
+		$compile,
+		$rootScope,
+		$httpBackend,
+		PersonSelection;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -11,6 +17,7 @@
 		fakeAbsenceService = new FakePersonAbsence();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 		fakePermissions = new FakePermissions();
+		scheduleHelper = new FakeScheduleHelper();
 
 		module(function($provide) {
 			$provide.service('PersonAbsence', function() {
@@ -18,6 +25,9 @@
 			});
 			$provide.service('ScheduleManagement', function() {
 				return fakeScheduleManagementSvc;
+			});
+			$provide.service('ScheduleHelper', function() {
+				return scheduleHelper;
 			});
 			$provide.service('teamsPermissions', function () {
 				return fakePermissions;
@@ -42,7 +52,7 @@
 	});
 
 	it('should handle default start and end time attribute', function () {
-		fakeScheduleManagementSvc.setEarliestStartTime(new Date('2015-01-01 10:00:00'));
+		scheduleHelper.setEarliestStartTime(new Date('2015-01-01 10:00:00'));
 
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
 
@@ -134,33 +144,41 @@
 
 
 	function FakeScheduleManagementService() {
-		var latestEndTime = null;
-		var latestStartTime = null;
+
+		this.schedules = function () {
+			return null;
+		};
+
+	}
+
+	function FakeScheduleHelper() {
 		var earliestStartTime = null;
-
-		this.setLatestEndTime = function(date) {
-			latestEndTime = date;
-		}
-
-		this.setLatestStartTime = function(date) {
-			latestStartTime = date;
-		}
+		var latestStartTime = null;
+		var latestEndTime = null;
 
 		this.setEarliestStartTime = function(date) {
 			earliestStartTime = date;
-		}
+		};
 
-		this.getLatestPreviousDayOvernightShiftEnd = function() {
-			return latestEndTime;
-		}
+		this.setLatestStartTime = function(date) {
+			latestStartTime = date;
+		};
 
-		this.getLatestStartOfSelectedSchedules = function() {
-			return latestStartTime;
-		}
+		this.setLatestEndTime = function(date) {
+			latestEndTime = date;
+		};
 
 		this.getEarliestStartOfSelectedSchedules = function() {
 			return earliestStartTime;
-		}
+		};
+
+		this.getLatestStartOfSelectedSchedules = function() {
+			return latestStartTime;
+		};
+
+		this.getLatestPreviousDayOvernightShiftEnd = function() {
+			return latestEndTime;
+		};
 	}
 
 	function FakePermissions() {
