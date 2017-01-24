@@ -27,17 +27,16 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override DateTimePeriod DtoToDomainEntity(DateTimePeriodDto dto)
         {
-            DateTimePeriod period = new DateTimePeriod();
             if (dto.UtcStartTime == DateTime.MinValue)
             {
-                period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dto.LocalStartDateTime,
+                return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dto.LocalStartDateTime,
                                                                               dto.LocalEndDateTime, TimeZone);
             }
             if (dto.UtcStartTime != DateTime.MinValue)
             {
-                period = new DateTimePeriod(dto.UtcStartTime,dto.UtcEndTime);
+                return new DateTimePeriod(dto.UtcStartTime,dto.UtcEndTime);
             }
-            return period;
+            return new DateTimePeriod();
         }
     }
 }
