@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public IResourceCalculation ResourceCalculation; //TODO: can probably be replaced by running "first rescalc once" in code instead
 
-		[Test, Ignore("to be fixed")]
+		[Test]
 		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);

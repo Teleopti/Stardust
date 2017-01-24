@@ -20,8 +20,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IShiftCategoryLimitCounter _shiftCategoryLimitCounter;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
-		public TeamBlockRetryRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockClearer teamBlockClearer, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IShiftCategoryWeekRemover shiftCategoryWeekRemover, IShiftCategoryPeriodRemover shiftCategoryPeriodRemover, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IShiftCategoryLimitCounter shiftCategoryLimitCounter, IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		public TeamBlockRetryRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, 
+			ITeamInfoFactory teamInfoFactory, 
+			ITeamBlockInfoFactory teamBlockInfoFactory, 
+			ITeamBlockClearer teamBlockClearer, 
+			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, 
+			IShiftCategoryWeekRemover shiftCategoryWeekRemover, 
+			IShiftCategoryPeriodRemover shiftCategoryPeriodRemover, 
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, 
+			IShiftCategoryLimitCounter shiftCategoryLimitCounter, 
+			IWorkShiftSelector workShiftSelector, 
+			IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService) //TODO: remove! just nu fel pga fel/annorlunda "tag" än förrut
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamInfoFactory = teamInfoFactory;
@@ -34,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_shiftCategoryLimitCounter = shiftCategoryLimitCounter;
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
@@ -41,49 +54,68 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences)
 		{
-			var removedScheduleDayPros = new List<IScheduleDayPro>();
+
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
-			var schedulePeriod = scheduleMatrixPro.SchedulePeriod;
-			var person = scheduleMatrixPro.Person;
 
-			foreach (var limitation in schedulePeriod.ShiftCategoryLimitationCollection())
+			foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
 			{
-				removedScheduleDayPros.Clear();
-
-				if (limitation.Weekly) removedScheduleDayPros.AddRange(_shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences));
-				else removedScheduleDayPros.AddRange(_shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences));
-
-				foreach (var removedScheduleDayPro in removedScheduleDayPros)
+				while(!executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, _schedulePartModifyAndRollbackService, resourceCalculateDelayer, allScheduleMatrixPros, 
+					shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam))
 				{
-					rollbackService.ClearModificationCollection();
-
-					if (removedScheduleDayPro.DaySchedulePart().IsScheduled()) continue;
-
-					var dateOnly = removedScheduleDayPro.Day;
-					var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-					var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization, person, dateOnlyPeriod, allScheduleMatrixPros);
-					var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), isSingleAgentTeam);
-					if (teamBlockInfo == null) continue;
-
-					schedulingOptions.NotAllowedShiftCategories.Clear();
-
-					foreach (var lim in schedulePeriod.ShiftCategoryLimitationCollection())
-					{
-						var isOnMax = _shiftCategoryLimitCounter.HaveMaxOfShiftCategory(lim, teamInfo, dateOnly);
-						if (isOnMax) schedulingOptions.NotAllowedShiftCategories.Add(lim.ShiftCategory);
-					}
-
-					var allSkillDays = schedulingResultStateHolder.AllSkillDays();
-					var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
-					if (success) continue;
-
-					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-					success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
-					if (success) continue;
-
-					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				}
 			}
+		}
+
+		private bool executePerShiftCategoryLimitation(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
+			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
+			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
+			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
+			IShiftCategoryLimitation limitation, bool isSingleAgentTeam)
+		{
+			//TODO: ändra så att rollbackservice skickas in hela vägen här
+			var removedScheduleDayPros = limitation.Weekly
+				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences)
+				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences);
+
+			foreach (var removedScheduleDayPro in removedScheduleDayPros)
+			{
+				if (removedScheduleDayPro.DaySchedulePart().IsScheduled()) continue;
+
+				var dateOnly = removedScheduleDayPro.Day;
+				var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization,
+					scheduleMatrixPro.Person, dateOnlyPeriod, allScheduleMatrixPros);
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(),
+					isSingleAgentTeam);
+				if (teamBlockInfo == null) continue;
+
+				schedulingOptions.NotAllowedShiftCategories.Clear();
+
+				foreach (var lim in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
+				{
+					var isOnMax = _shiftCategoryLimitCounter.HaveMaxOfShiftCategory(lim, teamInfo, dateOnly);
+					if (isOnMax) schedulingOptions.NotAllowedShiftCategories.Add(lim.ShiftCategory);
+				}
+
+				var allSkillDays = schedulingResultStateHolder.AllSkillDays();
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
+					rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective,
+					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
+				if (success) continue;
+
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+				success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
+					rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective,
+					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
+				if (success) continue;
+
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+
+				scheduleMatrixPro.LockPeriod(removedScheduleDayPro.Day.ToDateOnlyPeriod());
+
+				return false;
+			}
+			return true;
 		}
 	}
 }
