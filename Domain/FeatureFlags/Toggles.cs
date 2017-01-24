@@ -159,6 +159,7 @@
 		ResourcePlanner_SplitBigIslands_42049,
 		ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318,
 		ResourcePlanner_LessPersonAssignmentUpdates_42159,
+		ResourcePlanner_ShiftCategoryLimitations_42680,
 
 		Wfm_DisplayOnlineHelp_39402,
 

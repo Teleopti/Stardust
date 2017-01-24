@@ -288,7 +288,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockDayOffOptimizerService>().As<ITeamBlockDayOffOptimizerService>().InstancePerLifetimeScope();
 
 			builder.RegisterType<TeamBlockRemoveShiftCategoryOnBestDateService>().As<ITeamBlockRemoveShiftCategoryOnBestDateService>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockRemoveShiftCategoryBackToLegalService>().As<ITeamBlockRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope();
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680))
+			{
+				builder.RegisterType<TeamBlockRetryRemoveShiftCategoryBackToLegalService>().As<ITeamBlockRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<TeamBlockRemoveShiftCategoryBackToLegalService>().As<ITeamBlockRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope();
+			}
+
 			builder.RegisterType<ShiftCategoryWeekRemover>().As<IShiftCategoryWeekRemover>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryPeriodRemover>().As<IShiftCategoryPeriodRemover>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryLimitCounter>().As<IShiftCategoryLimitCounter>().SingleInstance();
