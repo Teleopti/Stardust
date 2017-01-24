@@ -59,6 +59,22 @@
 				Teleopti.MyTimeWeb.TeamScheduleOld.Init();
 			}
 		});
+
+    	StoreDeviceInstanceToken = function (token) {
+	        var optionForBusinessUnits = {
+	            url: "../Start/UserToken",
+	            dataType: "json",
+	            type: 'POST',
+	            cache: false,
+	            data: JSON.stringify({ token: token }),
+	            success: function(responseData, textStatus, jqXHR) {
+	            },
+	            error: function() {
+	            }
+	        };
+
+	        $.ajax(optionForBusinessUnits);
+	    }
 	</script>
 }
 

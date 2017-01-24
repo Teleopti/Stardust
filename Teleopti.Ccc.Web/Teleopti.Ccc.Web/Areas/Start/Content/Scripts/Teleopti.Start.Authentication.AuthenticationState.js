@@ -1,10 +1,4 @@
-﻿
-RetrieveDeviceInstanceToken = function(currentToken) {
-	return {store: false,token: ''};
-}
-
-
-Teleopti.Start.Authentication.AuthenticationState = function (data) {
+﻿Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 	var self = this;
 
@@ -79,24 +73,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		$.ajax(optionForBusinessUnits);
 	};
 
-	this.storeDeviceInstanceToken = function(options, token) {
-		var optionForBusinessUnits = {
-			url: data.baseUrl + "Start/UserToken",
-			dataType: "json",
-			type: 'POST',
-			cache: false,
-			data: JSON.stringify({ token: token }),
-			success: function(responseData, textStatus, jqXHR) {
-			},
-			error: function() {
-			}
-		}
-
-		$.ajax(optionForBusinessUnits);
-	};
-
 	var logonAjax = function (options) {
-
 		$.extend(options, {
 			url: data.baseUrl + "Start/AuthenticationApi/Logon",
 			dataType: "json",
@@ -105,14 +82,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			data: authenticationModel
 		});
 
-		$.ajax(options).then(function() {
-			var result = RetrieveDeviceInstanceToken(null);
-			if (result.store) {
-				self.storeDeviceInstanceToken(options, result.token);
-			}
-		});
-
-
+		$.ajax(options);
 	};
 
 	var applicationsAjax = function (options) {
@@ -238,7 +208,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		logonAjax(options);
 	};
 
-
 	function keepUrlAfterLogon(applicationsData, textState, jqXHR) {
 
 		var areaToGo;
@@ -313,7 +282,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		}
 	}
 
-
 	var authenticationDetailsAjax = function (buId) {
 		$.ajax({
 			type: "GET",
@@ -324,7 +292,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			}
 		});
 	};
-
 
 	this.GetDataForBusinessUnitSelectionView = function (options) {
 		if (authenticationModel)
