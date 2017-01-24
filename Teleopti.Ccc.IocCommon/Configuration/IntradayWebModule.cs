@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ForecastedStaffingViewModelCreator>().SingleInstance();
+			builder.RegisterType<StaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<ForecastedCallsProvider>().SingleInstance();
 			builder.RegisterType<RequiredStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingProvider>().SingleInstance();
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
 			builder.RegisterType<LatestStatisticsIntervalIdLoader>().As<ILatestStatisticsIntervalIdLoader>().SingleInstance();
-			builder.RegisterType<MonitorSkillsProvider>().SingleInstance();
-			builder.RegisterType<MonitorPerformanceProvider>().SingleInstance();
+			builder.RegisterType<IncomingTrafficViewModelCreator>().SingleInstance();
+			builder.RegisterType<PerformanceViewModelCreator>().SingleInstance();
 			builder.RegisterType<EstimatedServiceLevelProvider>().SingleInstance();
 			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();

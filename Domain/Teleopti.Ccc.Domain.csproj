@@ -480,7 +480,7 @@
     <Compile Include="Intraday\ForecastedCallsModel.cs" />
     <Compile Include="Intraday\ForecastedCallsProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingProvider.cs" />
-    <Compile Include="Intraday\ForecastedStaffingViewModelCreator.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreator.cs" />
     <Compile Include="Intraday\IJobStartTimeRepository.cs" />
     <Compile Include="Intraday\IntradayPerformanceDataSeries.cs" />
     <Compile Include="Intraday\IntradayPerformanceSummary.cs" />
@@ -492,7 +492,7 @@
     <Compile Include="Intraday\LatestStatisticsTimeAndWorkload.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
     <Compile Include="Intraday\LatestStatitsticsTimeModel.cs" />
-    <Compile Include="Intraday\MonitorPerformanceProvider.cs" />
+    <Compile Include="Intraday\PerformanceViewModelCreator.cs" />
     <Compile Include="Intraday\ReforecastedStaffingProvider.cs" />
     <Compile Include="Intraday\RequiredStaffingProvider.cs" />
     <Compile Include="Intraday\ScheduledStaffingProvider.cs" />
@@ -809,7 +809,7 @@
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
     <Compile Include="Islands\CreateIslands.cs" />
     <Compile Include="Intraday\IntradayIncomingViewModel.cs" />
-    <Compile Include="Intraday\MonitorSkillsProvider.cs" />
+    <Compile Include="Intraday\IncomingTrafficViewModelCreator.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarm.cs" />
@@ -2707,7 +2707,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forecasting\SkillDataPeriod.hbm.xml" />
+    <EmbeddedResource Include="Forecasting\SkillDataPeriod.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\AuthorizationEntities\ApplicationRole.hbm.xml" />

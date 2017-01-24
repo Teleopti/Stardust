@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class MonitorSkillsProvider
+	public class IncomingTrafficViewModelCreator
 	{
 		private readonly IIntradayMonitorDataLoader _intradayMonitorDataLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
-		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, SupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+		public IncomingTrafficViewModelCreator(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, SupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;

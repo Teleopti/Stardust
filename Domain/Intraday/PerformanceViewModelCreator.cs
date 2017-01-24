@@ -6,23 +6,23 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class MonitorPerformanceProvider
+	public class PerformanceViewModelCreator
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly MonitorSkillsProvider _monitorSkillsProvider;
+		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
 		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly EstimatedServiceLevelProvider _estimatedServiceLevelProvider;
 
-		public MonitorPerformanceProvider(INow now,
+		public PerformanceViewModelCreator(INow now,
 			IUserTimeZone timeZone,
 			ISkillDayRepository skillDayRepository,
 			IScenarioRepository scenarioRepository,
 			IIntervalLengthFetcher intervalLengthFetcher,
-			MonitorSkillsProvider monitorSkillsProvider,
+			IncomingTrafficViewModelCreator incomingTrafficViewModelCreator,
 			SupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			EstimatedServiceLevelProvider estimatedServiceLevelProvider)
 		{
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillDayRepository = skillDayRepository;
 			_scenarioRepository = scenarioRepository;
 			_intervalLengthFetcher = intervalLengthFetcher;
-			_monitorSkillsProvider = monitorSkillsProvider;
+			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_estimatedServiceLevelProvider = estimatedServiceLevelProvider;
 		}
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday.AddDays(-1), usersToday.AddDays(1)), skills, scenario);
-			var queueStatistics = _monitorSkillsProvider.Load(skillIdList);
+			var queueStatistics = _incomingTrafficViewModelCreator.Load(skillIdList);
 
 			var eslIntervals = _estimatedServiceLevelProvider.CalculateEslIntervals(skills, skillDays, queueStatistics, minutesPerInterval);
 

@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class IntradayMonitorStaffingController : ApiController
 	{
 		private readonly ISkillAreaRepository _skillAreaRepository;
-		private readonly ForecastedStaffingViewModelCreator _forecastedStaffingViewModelCreator;
+		private readonly StaffingViewModelCreator _staffingViewModelCreator;
 
-		public IntradayMonitorStaffingController(ISkillAreaRepository skillAreaRepository, ForecastedStaffingViewModelCreator forecastedStaffingViewModelCreator)
+		public IntradayMonitorStaffingController(ISkillAreaRepository skillAreaRepository, StaffingViewModelCreator staffingViewModelCreator)
 		{
 			_skillAreaRepository = skillAreaRepository;
-			_forecastedStaffingViewModelCreator = forecastedStaffingViewModelCreator;
+			_staffingViewModelCreator = staffingViewModelCreator;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{id}")]
@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			var skillArea = _skillAreaRepository.Get(Id);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(_forecastedStaffingViewModelCreator.Load(skillIdList));
+			return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing/{id}")]
 		public virtual IHttpActionResult MonitorSkillStaffing(Guid Id)
 		{
-			return Ok(_forecastedStaffingViewModelCreator.Load(new[] { Id }));
+			return Ok(_staffingViewModelCreator.Load(new[] { Id }));
 		}
 	}
 }

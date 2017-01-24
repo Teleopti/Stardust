@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	[TestWithStaticDependenciesAvoidUse]
-	public class MonitorPerformanceProviderTest : ISetup
+	public class PerformanceViewModelCreatorTest : ISetup
 	{
-		public MonitorPerformanceProvider Target;
+		public PerformanceViewModelCreator Target;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeScenarioRepository ScenarioRepository;

@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	[TestWithStaticDependenciesAvoidUse]
-	public class MonitorSkillsProviderTest
+	public class IncomingTrafficViewModelCreatorTest
 	{
-		public MonitorSkillsProvider Target;
+		public IncomingTrafficViewModelCreator Target;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillRepository SkillRepository;

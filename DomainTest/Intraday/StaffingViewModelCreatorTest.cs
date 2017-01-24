@@ -20,9 +20,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	public class ForecastedStaffingViewModelCreatorTest : ISetup
+	public class StaffingViewModelCreatorTest : ISetup
 	{
-		public ForecastedStaffingViewModelCreator Target;
+		public StaffingViewModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;

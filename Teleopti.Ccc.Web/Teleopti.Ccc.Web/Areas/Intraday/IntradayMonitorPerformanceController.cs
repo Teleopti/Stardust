@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class IntradayMonitorPerformanceController : ApiController
 	{
 		private readonly ISkillAreaRepository _skillAreaRepository;
-		private readonly MonitorPerformanceProvider _monitorPerformanceProvider;
+		private readonly PerformanceViewModelCreator _performanceViewModelCreator;
 
 		public IntradayMonitorPerformanceController(ISkillAreaRepository skillAreaRepository,
-			MonitorPerformanceProvider monitorPerformanceProvider)
+			PerformanceViewModelCreator performanceViewModelCreator)
 		{
 			_skillAreaRepository = skillAreaRepository;
-			_monitorPerformanceProvider = monitorPerformanceProvider;
+			_performanceViewModelCreator = performanceViewModelCreator;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}")]
@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			var skillArea = _skillAreaRepository.Get(id);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(_monitorPerformanceProvider.Load(skillIdList));
+			return Ok(_performanceViewModelCreator.Load(skillIdList));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillperformance/{id}")]
 		public virtual IHttpActionResult MonitorSkillPerformance(Guid Id)
 		{
-			return Ok(_monitorPerformanceProvider.Load(new Guid[] {Id}));
+			return Ok(_performanceViewModelCreator.Load(new Guid[] {Id}));
 		}
 	}
 }

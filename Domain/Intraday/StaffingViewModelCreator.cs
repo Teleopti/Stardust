@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class ForecastedStaffingViewModelCreator
+	public class StaffingViewModelCreator
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ReforecastedStaffingProvider _reforecastedStaffingProvider;
 		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
-		public ForecastedStaffingViewModelCreator(
+		public StaffingViewModelCreator(
 			INow now,
 			IUserTimeZone timeZone,
 			ForecastedCallsProvider forecastedCallsProvider,
