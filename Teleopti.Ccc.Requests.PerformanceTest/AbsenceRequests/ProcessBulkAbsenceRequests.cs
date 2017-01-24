@@ -283,6 +283,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		{
 			var resultStatuses = new Dictionary<Guid, int>();
 			fillResultStatuses(personRequests, resultStatuses);
+			foreach (var resultStatuse in resultStatuses)
+			{
+				Console.WriteLine($"key:{resultStatuse.Key},value:{resultStatuse.Value}");
+			}
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
 		}
 
