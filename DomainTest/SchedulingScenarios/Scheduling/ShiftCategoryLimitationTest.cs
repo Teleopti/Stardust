@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftCategoryB = new ShiftCategory("B").WithId();
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
-			var nightRest = TimeSpan.FromHours(11); //why different result if 1 or 11?
+			var nightRest = TimeSpan.FromHours(11);
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), nightRest, TimeSpan.FromHours(16)) };
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
 			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 1); //should try with this one first
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assA = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
 			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
-			stateholder.SchedulingResultState.UseValidation = true; //anders thought this was a bug - should probably not be necessary. check with micke?
+			stateholder.SchedulingResultState.UseValidation = true; //to make nightrest to be checked
 			var scheduleDays = stateholder.Schedules[agent].ScheduledDayCollection(period).ToList();
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), scheduleDays, new OptimizationPreferences(), null);
