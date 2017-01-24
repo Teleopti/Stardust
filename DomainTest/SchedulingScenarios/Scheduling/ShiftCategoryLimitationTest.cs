@@ -24,18 +24,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test, Ignore("Starting with some experimention for 42680")]
-		public void fOo()
+		public void ShouldTryToReplaceSecondShiftIfFirstOneWasNotSuccessful()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
-			var secondDate = new DateOnly(2017, 1, 23);
-			var shiftCategoryA = new ShiftCategory("_").WithId();
-			var shiftCategoryB = new ShiftCategory("_").WithId();
+			var secondDate = firstDate.AddDays(1);
+			var shiftCategoryA = new ShiftCategory("A").WithId();
+			var shiftCategoryB = new ShiftCategory("B").WithId();
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var skillDayA = skill.CreateSkillDayWithDemand(scenario, firstDate, 1);
-			var skillDayB = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
+			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 1);
+			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryB));
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var period = new DateOnlyPeriod(firstDate, secondDate);
 			var assA = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
 			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
-			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayA, skillDayB });
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
 			var scheduleDays = stateholder.Schedules[agent].ScheduledDayCollection(period).ToList();
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), scheduleDays, new OptimizationPreferences(), null);
