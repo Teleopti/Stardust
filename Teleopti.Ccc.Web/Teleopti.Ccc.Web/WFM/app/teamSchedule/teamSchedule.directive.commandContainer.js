@@ -1,6 +1,6 @@
 ﻿(function () {
 
-	'use strict';
+	"use strict";
 	angular.module('wfm.teamSchedule').directive('teamscheduleCommandContainer', teamscheduleCommandContainer);
 
 	function teamscheduleCommandContainer() {
@@ -28,12 +28,10 @@
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$filter',  'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService', 'ScheduleManagement'];
+	teamscheduleCommandContainerCtrl.$inject = ['$filter',  'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService'];
 
-	function teamscheduleCommandContainerCtrl($filter, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc) {
+	function teamscheduleCommandContainerCtrl($filter, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService) {
 		var vm = this;
-
-		vm.scheduleManagementSvc = scheduleManagementSvc;
 
 		vm.getDate = function () {
 			return moment(vm.date).format('YYYY-MM-DD');

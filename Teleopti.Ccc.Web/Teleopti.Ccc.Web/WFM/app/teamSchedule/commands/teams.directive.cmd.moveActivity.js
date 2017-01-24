@@ -51,9 +51,9 @@
 		};
 	}
 
-	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection',  'ScheduleHelper', 'teamScheduleNotificationService', 'ActivityValidator', 'CommandCheckService'];
+	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection',  'ScheduleManagement', 'ScheduleHelper', 'teamScheduleNotificationService', 'ActivityValidator', 'CommandCheckService'];
 
-	function moveActivityCtrl($attrs, $locale, $translate, activityService, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, validator, CommandCheckService) {
+	function moveActivityCtrl($attrs, $locale, $translate, activityService, personSelectionSvc, scheduleManagementSvc, scheduleHelper, teamScheduleNotificationService, validator, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'MoveActivity';
@@ -67,7 +67,7 @@
 		vm.getDefaultMoveToStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
-			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
+			var schedules = scheduleManagementSvc.schedules();
 
 			var selectedDateProjectionLatestStart = scheduleHelper.getLatestStartTimeOfSelectedSchedulesProjections(schedules, curDateMoment, personIds);
 			var previousDateProjectionLatestEnd = scheduleHelper.getLatestPreviousDayOvernightShiftEnd(schedules, curDateMoment, personIds);

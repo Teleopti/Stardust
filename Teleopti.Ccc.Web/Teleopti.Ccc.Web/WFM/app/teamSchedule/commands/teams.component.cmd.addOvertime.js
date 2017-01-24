@@ -9,9 +9,9 @@
 		controller: AddOvertimeCtrl
 	});
 
-	AddOvertimeCtrl.$inject = ['PersonSelection', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService'];
+	AddOvertimeCtrl.$inject = ['PersonSelection', 'ScheduleManagement', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService'];
 
-	function AddOvertimeCtrl(personSelectionSvc, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService) {
+	function AddOvertimeCtrl(personSelectionSvc, ScheduleMgmt, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService) {
 		var ctrl = this;
 		ctrl.label = 'AddOvertimeActivity';
 		ctrl.processingCommand = false;
@@ -112,7 +112,7 @@
 					startTime: moment(ctrl.fromTime),
 					endTime: moment(ctrl.toTime)
 				};
-				var personSchedule = ctrl.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
+				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(agent.PersonId);
 				var normalizedScheduleVm = belongsToDateDecider.normalizePersonScheduleVm(personSchedule, timezone);
 				var belongsToDate = belongsToDateDecider.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleVm);
 				return {

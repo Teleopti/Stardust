@@ -50,9 +50,9 @@
 		};
 	}
 
-	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper','teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
+	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'ScheduleHelper','teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
 
-	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
+	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleManagementSvc, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -74,7 +74,7 @@
 			return agents.map(function (selectedAgent) {
 				var belongsToDate = vm.manageScheduleForDistantTimezonesEnabled
 					? belongsToDateDecider.decideBelongsToDate(targetTimeRange,
-						belongsToDateDecider.normalizePersonScheduleVm(vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
+						belongsToDateDecider.normalizePersonScheduleVm(scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
 						vm.selectedDate())
 					: vm.selectedDate();
 
@@ -195,7 +195,7 @@
 		vm.getDefaultActvityStartTime =  function () {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
-			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
+			var schedules = scheduleManagementSvc.schedules();
 
 			var overnightEnds = scheduleHelper.getLatestPreviousDayOvernightShiftEnd(schedules, curDateMoment, personIds);
 			var latestShiftStart = scheduleHelper.getLatestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
