@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public IResourceCalculation ResourceCalculation; //TODO: can probably be replaced by running "first rescalc once" in code instead
 
 		[Test]
 		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful()
@@ -56,7 +55,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
 			var scheduleDays = stateholder.Schedules[agent].ScheduledDayCollection(period).ToList();
-			ResourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateholder.SchedulingResultState, false, false));
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), scheduleDays, new OptimizationPreferences(), null);
 
