@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var scheduleDayPro in daysToWorkWith)
 			{
 				IList<ISkill> skillList = new List<ISkill>();
-				foreach (var personSkill in scheduleMatrixPro.Person.Period(scheduleDayPro.Day).PersonSkillCollection)
+				foreach (var personSkill in scheduleMatrixPro.Person.Period(scheduleDayPro.Day).PersonSkillCollection) //TODO: cascading issues?
 				{
 					skillList.Add(personSkill.Skill);
 				}
