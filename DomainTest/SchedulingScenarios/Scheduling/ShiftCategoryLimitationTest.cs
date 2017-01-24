@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = new Activity("_");
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var skillDayA = skill.CreateSkillDayWithDemand(scenario, firstDate, 10);
-			var skillDayB = skill.CreateSkillDayWithDemand(scenario, secondDate, 1);
+			var skillDayA = skill.CreateSkillDayWithDemand(scenario, firstDate, 1);
+			var skillDayB = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryB));
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{
