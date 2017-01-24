@@ -596,5 +596,55 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 				((DenyAbsenceRequest) projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess).DenyReason);
 		}
 
-    }
+		[Theory]
+		public void ShouldSuggestRequestPeriodWhenRequestIsOutsideOpenPeriodWithAtLeastOneNonAutoDenyPeriod(DateOnly openPeriodStartDate)
+		{
+			var today = DateOnly.Today;
+			var absence = AbsenceFactory.CreateAbsence("holiday").WithId();
+			var nonAutoDenyAbsenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new PendingAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 5),
+				OpenForRequestsPeriod = new DateOnlyPeriod(openPeriodStartDate, today.AddDays(6)),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator()
+			};
+
+			var autoDenyAbsenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new DenyAbsenceRequest(),
+				Period = new DateOnlyPeriod(today.AddDays(1), today.AddDays(2)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(openPeriodStartDate, today.AddDays(6)),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator()
+			};
+
+			_openAbsenceRequestPeriods.Clear();
+			_openAbsenceRequestPeriods.Add(nonAutoDenyAbsenceRequestOpenPeriod);
+			_openAbsenceRequestPeriods.Add(autoDenyAbsenceRequestOpenPeriod);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_openAbsenceRequestPeriodExtractor.AvailablePeriods).Return(_openAbsenceRequestPeriods);
+				Expect.Call(_openAbsenceRequestPeriodExtractor.AllPeriods).Return(_openAbsenceRequestPeriods);
+				Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
+			}
+
+			var requestPeriod = new DateOnlyPeriod(today.AddDays(6), today.AddDays(6));
+
+			var projectedOpenAbsenceRequestPeriods = _target.GetProjectedPeriods(requestPeriod, _cultureInfo, _cultureInfo);
+
+			Assert.AreEqual(1, projectedOpenAbsenceRequestPeriods.Count);
+			Assert.AreEqual(new DateOnlyPeriod(today.AddDays(6), today.AddDays(6)),
+				projectedOpenAbsenceRequestPeriods[0].GetPeriod(DateOnly.Today));
+
+			var expectedReason = Resources.RequestDenyReasonAutodeny;
+			Assert.IsTrue(projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess is DenyAbsenceRequest);
+			Assert.AreNotEqual(expectedReason,
+				((DenyAbsenceRequest)projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess).DenyReason);
+		}
+
+	}
 }

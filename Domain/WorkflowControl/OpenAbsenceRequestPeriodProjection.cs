@@ -86,22 +86,29 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 
 			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _languageCultureInfo);
+			CheckAbsenceRequestOpenPeriodResult lastCheckPeriodResult = null;
 		
 			foreach (var absenceRequestOpenPeriod in _openAbsenceRequestPeriodExtractor.AllPeriods)
 			{
 				
-				var result = checkingForOpenPeriod(absenceRequestOpenPeriod);
-				if (!string.IsNullOrEmpty(result))
+				var checkPeriodResult = checkingForOpenPeriod(absenceRequestOpenPeriod);
+				if (!string.IsNullOrEmpty(checkPeriodResult.DenyReason))
 				{
-					denyReason = result;
+					if (lastCheckPeriodResult == null || checkPeriodResult.HasSuggestedPeriod)
+					{
+						lastCheckPeriodResult = checkPeriodResult;
+					}
+					denyReason = lastCheckPeriodResult.DenyReason;
 					continue;
 				}
 				
-
-				result = checkingForPeriod(limitToPeriod, absenceRequestOpenPeriod);
-				if (!string.IsNullOrEmpty(result))
-					denyReason = result;
-
+				checkPeriodResult = checkingForPeriod(limitToPeriod, absenceRequestOpenPeriod);
+				if (string.IsNullOrEmpty(checkPeriodResult.DenyReason)) continue;
+				if (lastCheckPeriodResult == null || checkPeriodResult.HasSuggestedPeriod)
+				{
+					lastCheckPeriodResult = checkPeriodResult;
+				}
+				denyReason = lastCheckPeriodResult.DenyReason;
 			}
 
 	        _layerCollectionOriginal.Insert(0,
@@ -127,8 +134,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
         }
 
-		private string checkingForOpenPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		private CheckAbsenceRequestOpenPeriodResult checkingForOpenPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
+			var checkAbsenceRequestOpenPeriodResult = new CheckAbsenceRequestOpenPeriodResult();
 			string denyReason = null;
 
 			if (isPeriodOpensLater(absenceRequestOpenPeriod) && isNextOpenPeriod(absenceRequestOpenPeriod))
@@ -143,9 +151,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						UserTexts.Resources.ResourceManager.GetString(
 							"RequestDenyReasonPeriodOpenAfterSendRequest", _languageCultureInfo),
 						absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_dateCultureInfo));
+					checkAbsenceRequestOpenPeriodResult.HasSuggestedPeriod = true;
 				}
 			}
-			return denyReason;
+			checkAbsenceRequestOpenPeriodResult.DenyReason = denyReason;
+			return checkAbsenceRequestOpenPeriodResult;
 		}
 
 		private DateOnly earlierOpenDate = DateOnly.MaxValue;
@@ -179,8 +189,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return !isPeriodInsideOrEqual;
 		}
 
-		private string checkingForPeriod(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		private CheckAbsenceRequestOpenPeriodResult checkingForPeriod(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
+			var checkAbsenceRequestOpenPeriodResult = new CheckAbsenceRequestOpenPeriodResult();
 			string denyReason = null;
 			var period = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate);
 
@@ -195,9 +206,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					denyReason = string.Format(_languageCultureInfo,
 						UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _languageCultureInfo),
 						period.ToShortDateString(_dateCultureInfo));
+					checkAbsenceRequestOpenPeriodResult.HasSuggestedPeriod = true;
 				}
 			}
-			return denyReason;
+			checkAbsenceRequestOpenPeriodResult.DenyReason = denyReason;
+			return checkAbsenceRequestOpenPeriodResult;
 		}
 
 		private bool isAbsenceRequestOpenPeriodAutoDeny(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
