@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck())
 				.Where(x => x.NextCheck == null || x.NextCheck <= time)
 				.ToArray();
-			process(new activityChangesStrategyWithoutDeadlock(_config, _agentStatePersister, action, logons, time));
+			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons, time));
 		}
 
 		[AllBusinessUnitsUnitOfWork]
@@ -280,11 +280,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		protected class activityChangesStrategyWithoutDeadlock : baseStrategy<ExternalLogonForCheck>
+		protected class activityChangesStrategy : baseStrategy<ExternalLogonForCheck>
 		{
 			private readonly IEnumerable<ExternalLogonForCheck> _things;
 
-			public activityChangesStrategyWithoutDeadlock(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogonForCheck> things, DateTime time) : base(config, persister, action, time)
+			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogonForCheck> things, DateTime time) : base(config, persister, action, time)
 			{
 				_things = things;
 				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
@@ -307,35 +307,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return null;
 			}
 		}
-
-		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
-		{
-			private readonly IEnumerable<ExternalLogon> _things;
-
-			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogon> things, DateTime time) : base(config, persister, action, time)
-			{
-				_things = things;
-				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
-				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
-				DeadLockVictim = DeadLockVictim.Yes;
-			}
-
-			public override IEnumerable<ExternalLogon> AllItems()
-			{
-				return _things.OrderBy(x => x.NormalizedString()).ToArray();
-			}
-
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
-			{
-				return _persister.Find(ids, DeadLockVictim);
-			}
-
-			public override InputInfo GetInputFor(AgentState state)
-			{
-				return null;
-			}
-		}
-
+		
 		private class closingSnapshotStrategy : baseStrategy<ExternalLogon>
 		{
 			private readonly DateTime _snapshotId;
