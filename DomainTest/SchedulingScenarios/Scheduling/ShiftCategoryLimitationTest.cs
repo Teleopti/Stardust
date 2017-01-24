@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test, Ignore("to be fixed")]
-		public void ShouldTryToReplaceFirstShiftIfSecondWasUnsuccessful()
+		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
 			var secondDate = firstDate.AddDays(1);
