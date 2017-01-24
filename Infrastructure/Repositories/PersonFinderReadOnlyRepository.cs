@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Castle.Core.Internal;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using static System.String;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var matches = Regex.Matches(notParsedSearchValue, splitPattern);
 			var result =
 				(from object match in matches select match.ToString().Replace("\"", "").Trim())
-				.Where(x => !IsNullOrEmpty(x));
+				.Where(x => !string.IsNullOrEmpty(x));
 
 			return new HashSet<string>(result);
 		}
@@ -49,19 +47,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var criteria in criterias)
 			{
 				var values = parse(criteria.Value)
-					.Aggregate("", (current, value) => Concat(current, value, splitter))
+					.Aggregate("", (current, value) => string.Concat(current, value, splitter))
 					.TrimEnd(splitter);
 
 				builder.AppendFormat("{0}:{1},", criteria.Key, values);
 			}
 
-			var searchString = builder.ToString();
-			if (searchString.EndsWith(","))
+			if (builder.Length > 0)
 			{
-				searchString = searchString.Substring(0, searchString.Length - 1);
+				builder.Length = builder.Length - 1;
 			}
 
-			return searchString;
+			return builder.ToString();
 		}
 
 		public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
@@ -118,19 +115,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var result = new List<IPersonFinderDisplayRow>();
 
+			var orderByString = generateOrderByString(personFinderSearchCriteria.SortColumns);
+			var searchString = createSearchString(personFinderSearchCriteria.SearchCriterias);
 			foreach (var teamIdsBatch in teamIds.Batch(100))
 			{
 
-				var teamIdsString = Join(",", teamIdsBatch.Select(x => x.ToString()));
+				var teamIdsString = string.Join(",", teamIdsBatch.Select(x => x.ToString()));
 				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
 						"exec [ReadModel].[PersonFinderWithCriteriaAndTeams] @search_criterias=:searchCriterias_string, "
 						+
 						"@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id, @belongs_to_date=:belongs_to_date, @teamIds=:teamIds")
-					.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
+					.SetString("searchCriterias_string", searchString)
 					.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
 					.SetInt32("start_row", personFinderSearchCriteria.StartRow)
 					.SetInt32("end_row", personFinderSearchCriteria.EndRow)
-					.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
+					.SetString("order_by", orderByString)
 					.SetInt32("culture", cultureId)
 					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetDateOnly("belongs_to_date", personFinderSearchCriteria.BelongsToDate)
@@ -167,7 +166,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{"terminaldate", 4}
 			};
 
-			var orderBy = Empty;
+			var orderBy = new StringBuilder();
 
 			var terminalDateExist = false;
 			foreach (var col in sortColumns)
@@ -175,21 +174,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var columnName = col.Key.Trim().ToLower();
 				if (columnMapping.ContainsKey(columnName))
 				{
-					orderBy += Format("{0}:{1},", columnMapping[columnName], col.Value ? 1 : 0);
+					orderBy.Append($"{columnMapping[columnName]}:{(col.Value ? 1 : 0)},");
 				}
 				else if (!terminalDateExist)
 				{
-					orderBy += Format("{0}:{1},", columnMapping["terminaldate"], col.Value ? 1 : 0);
+					orderBy.Append($"{columnMapping["terminaldate"]}:{(col.Value ? 1 : 0)},");
 					terminalDateExist = true;
 				}
 			}
 
-			if (orderBy.EndsWith(","))
+			if (orderBy.Length > 0)
 			{
-				orderBy = orderBy.Remove(orderBy.Length - 1, 1);
+				orderBy.Length = orderBy.Length - 1;
 			}
 
-			return orderBy;
+			return orderBy.ToString();
 		}
 
 		public void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria)
@@ -227,7 +226,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void UpdateFindPerson(ICollection<Guid> ids)
 		{
-			string inputIds = Join(",", (from p in ids select p.ToString()));
+			string inputIds = string.Join(",", from p in ids select p.ToString());
 			var uow = _currentUnitOfWork.Current();
 
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
@@ -237,7 +236,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void UpdateFindPersonData(ICollection<Guid> ids)
 		{
-			string inputIds = Join(",", (from p in ids select p.ToString()));
+			string inputIds = string.Join(",", from p in ids select p.ToString());
 			var uow = _currentUnitOfWork.Current();
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPersonData] :inputIds")
 				.SetString("inputIds", inputIds)
@@ -246,83 +245,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	}
 	 public class PeoplePersonFinderSearchCriteria : IPeoplePersonFinderSearchCriteria
 	 {
-		 private readonly PersonFinderField _field;
-		 private readonly string _searchValue;
-		 private int _pageSize;
-		 private int _currentPage;
 		 private readonly IList<IPersonFinderDisplayRow> _displayRows;
-		 private DateOnly _terminalDate;
 
-		 public PeoplePersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, int sortColumn, int sortDirection)
+		 public PeoplePersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize,
+			 DateOnly terminalDate, int sortColumn, int sortDirection)
 		 {
-			 _field = field;
-			 _searchValue = searchValue;
-			 _pageSize = pageSize;
-			 _displayRows = new List<IPersonFinderDisplayRow>();
-			 _terminalDate = terminalDate;
+			 Field = field;
+			 SearchValue = searchValue;
+			 PageSize = pageSize;
+			 _displayRows =
+				 Enumerable.Range(0, pageSize).Select<int, IPersonFinderDisplayRow>(i => new PersonFinderDisplayRow()).ToList();
+			 TerminalDate = terminalDate;
 			 SortColumn = sortColumn;
 			 SortDirection = sortDirection;
-			 _currentPage = 1;
-
-			 for (var i = 0; i < _pageSize; i++)
-			 {
-				 _displayRows.Add(new PersonFinderDisplayRow());
-			 }
+			 CurrentPage = 1;
 		 }
 
-		 public PersonFinderField Field
-		 {
-			 get { return _field; }
-		 }
+		 public PersonFinderField Field { get; }
 
-		 public string SearchValue
-		 {
-			 get { return _searchValue; }
-		 }
+		 public string SearchValue { get; }
 
-		 public int PageSize
-		 {
-			 get { return _pageSize; }
-			 set { _pageSize = value; }
-		 }
+		 public int PageSize { get; set; }
 
-		 public int CurrentPage
-		 {
-			 get { return _currentPage; }
-			 set { _currentPage = value; }
-		 }
+		 public int CurrentPage { get; set; }
 
-		 public ReadOnlyCollection<IPersonFinderDisplayRow> DisplayRows
-		 {
-			 get { return new ReadOnlyCollection<IPersonFinderDisplayRow>(_displayRows); }
-		 }
+		 public ReadOnlyCollection<IPersonFinderDisplayRow> DisplayRows => new ReadOnlyCollection<IPersonFinderDisplayRow>(_displayRows);
 
-		 public DateOnly TerminalDate
-		 {
-			 get { return _terminalDate; }
-			 set { _terminalDate = value; }
-		 }
+		 public DateOnly TerminalDate { get; set; }
 
 		 public int TotalPages
 		 {
 			 get
 			 {
 				 if (TotalRows == 0) return 0;
-				 return (TotalRows - 1) / _pageSize + 1;
+				 return (TotalRows - 1) / PageSize + 1;
 			 }
 		 }
 
 		 public int TotalRows { get; set; }
 
-		 public int StartRow
-		 {
-			 get { return _currentPage * _pageSize - _pageSize + 1; }
-		 }
+		 public int StartRow => CurrentPage * PageSize - PageSize + 1;
 
-		 public int EndRow
-		 {
-			 get { return StartRow + _pageSize; }
-		 }
+		 public int EndRow => StartRow + PageSize;
 
 		 public void SetRow(int rowNumber, IPersonFinderDisplayRow theRow)
 		 {
@@ -337,100 +301,56 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public class PersonFinderSearchCriteria : IPersonFinderSearchCriteria
 	{
-		private readonly IDictionary<PersonFinderField, string> _searchCriterias;
-		private int _pageSize;
-		private int _currentPage;
-		private readonly IList<IPersonFinderDisplayRow> _displayRows;
-		private DateOnly _terminalDate;
+		private readonly List<IPersonFinderDisplayRow> _displayRows;
 
-		public PersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, IDictionary<string, bool> sortColumns, DateOnly belongsToDate)
+		public PersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate,
+			IDictionary<string, bool> sortColumns, DateOnly belongsToDate)
+			: this(
+				new Dictionary<PersonFinderField, string> {{field, searchValue}}, pageSize, terminalDate, sortColumns, belongsToDate
+			)
 		{
-			_searchCriterias = new Dictionary<PersonFinderField, string>();
-			_searchCriterias.Add(field, searchValue);
-			_pageSize = pageSize;
-			_displayRows = new List<IPersonFinderDisplayRow>();
-			_terminalDate = terminalDate;
-			SortColumns = sortColumns;
-			_currentPage = 1;
-
-			for (var i = 0; i < _pageSize; i++)
-			{
-				_displayRows.Add(new PersonFinderDisplayRow());
-			}
-
-			BelongsToDate = belongsToDate;
 		}
 
 		public PersonFinderSearchCriteria(IDictionary<PersonFinderField, string> searchCriterias, int pageSize,
 			DateOnly terminalDate, IDictionary<string, bool> sortColumns, DateOnly belongsToDate)
 		{
-			_searchCriterias = searchCriterias;
-			_pageSize = pageSize;
-			_displayRows = new List<IPersonFinderDisplayRow>();
-			_terminalDate = terminalDate;
+			SearchCriterias = searchCriterias;
+			PageSize = pageSize;
+			_displayRows = Enumerable.Range(0, pageSize).Select<int, IPersonFinderDisplayRow>(i => new PersonFinderDisplayRow()).ToList();
+			TerminalDate = terminalDate;
 			SortColumns = sortColumns;
-			_currentPage = 1;
-
-			for (var i = 0; i < _pageSize; i++)
-			{
-				_displayRows.Add(new PersonFinderDisplayRow());
-			}
-
+			CurrentPage = 1;
+			
 			BelongsToDate = belongsToDate;
 		}
 
-		public IDictionary<PersonFinderField, string> SearchCriterias
-		{
-			get { return _searchCriterias; }
-		}
+		public IDictionary<PersonFinderField, string> SearchCriterias { get; }
 
-		public int PageSize
-		{
-			get { return _pageSize; }
-			set { _pageSize = value; }
-		}
+		public int PageSize { get; set; }
 
-		public int CurrentPage
-		{
-			get { return _currentPage; }
-			set { _currentPage = value; }
-		}
+		public int CurrentPage { get; set; }
 
-		public ReadOnlyCollection<IPersonFinderDisplayRow> DisplayRows
-		{
-			get { return new ReadOnlyCollection<IPersonFinderDisplayRow>(_displayRows); }
-		}
+		public ReadOnlyCollection<IPersonFinderDisplayRow> DisplayRows => new ReadOnlyCollection<IPersonFinderDisplayRow>(_displayRows);
 
-		public DateOnly TerminalDate
-		{
-			get { return _terminalDate; }
-			set { _terminalDate = value; }
-		}
+		public DateOnly TerminalDate { get; set; }
 
 		public int TotalPages
 		{
 			get
 			{
 				if (TotalRows == 0) return 0;
-				return (TotalRows - 1) / _pageSize + 1;
+				return (TotalRows - 1) / PageSize + 1;
 			}
 		}
 
 		public int TotalRows { get; set; }
 
-		public int StartRow
-		{
-			get { return _currentPage * _pageSize - _pageSize + 1; }
-		}
+		public int StartRow => CurrentPage * PageSize - PageSize + 1;
 
-		public int EndRow
-		{
-			get { return StartRow + _pageSize; }
-		}
+		public int EndRow => StartRow + PageSize;
 
 		public DateOnly BelongsToDate { get; set; }
-
-
+		
 		public void SetRow(int rowNumber, IPersonFinderDisplayRow theRow)
 		{
 			if (rowNumber >= _displayRows.Count)

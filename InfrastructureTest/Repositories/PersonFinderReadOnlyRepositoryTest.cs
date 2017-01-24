@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-
 	[TestFixture, Category("BucketB")]
 	[DatabaseTest]
 	public class PersonFinderReadOnlyRepositoryWithTeamsTest
@@ -57,22 +56,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var crit = new PersonFinderSearchCriteria(new Dictionary<PersonFinderField,string>(),10,
 				new DateOnly(2020,1,1),new Dictionary<string,bool>(),new DateOnly(2011,12,1));
 
-			var largeTeams = new List<Guid>();
-
-			largeTeams.Add(team.Id.Value);
-
-			for (var i = 0; i < 8000; i++)
-			{
-				largeTeams.Add(Guid.NewGuid());
-			}
-
+			var largeTeams = new List<Guid> {team.Id.Value};
+			largeTeams.AddRange(Enumerable.Range(0,8000).Select(i => Guid.NewGuid()).ToArray());
+			
 			var result = WithUnitOfWork.Get(() =>
 			{
 				Target.FindInTeams(crit, largeTeams.ToArray());
 				return crit.TotalRows;
 			});
 			
-
 			Assert.That(result,Is.EqualTo(1));
 		}
 
