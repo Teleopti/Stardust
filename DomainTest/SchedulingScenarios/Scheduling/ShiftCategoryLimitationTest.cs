@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assA = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
 			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
+			stateholder.SchedulingResultState.UseValidation = true;	
 			var scheduleDays = stateholder.Schedules[agent].ScheduledDayCollection(period).ToList();
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), scheduleDays, new OptimizationPreferences(), null);
