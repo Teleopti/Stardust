@@ -61,5 +61,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public IList<IOvertimeAvailability> Find(DateOnlyPeriod period)
+		{
+			return _overtimeAvailabilities.Where(x => period.Contains(x.DateOfOvertime)).ToList();
+		}
 	}
 }

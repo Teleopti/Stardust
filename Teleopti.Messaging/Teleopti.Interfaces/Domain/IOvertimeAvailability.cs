@@ -8,5 +8,6 @@ namespace Teleopti.Interfaces.Domain
 		TimeSpan? StartTime { get; }
 		TimeSpan? EndTime { get; }
 		bool IsDeleted { get; }
+		DateOnly DateOfOvertime { get; }
 	}
 }
