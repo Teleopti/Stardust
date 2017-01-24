@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 			Now.Is("2016-02-01 00:00");
-			Data.WithAgent(personId, "pierre")
+			Data
+				.WithPerson(personId, "pierre")
 				.WithPeriod("2016-01-02", Guid.NewGuid(), siteId, businessUnitId)
 				.WithPeriod("2016-02-01", teamId, siteId, businessUnitId);
 
@@ -57,6 +58,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			@event.TeamId.Should().Be(teamId);
 			@event.SiteId.Should().Be(siteId);
 			@event.BusinessUnitId.Should().Be(businessUnitId);
+		}
+
+		[Test]
+		public void ShouldPublishWithTeamAndSiteName()
+		{
+			var previousTeam = Guid.NewGuid();
+			var newTeam = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			Now.Is("2016-02-01 00:00");
+			Data
+				.WithPerson("pierre")
+				.WithSite(siteId, "siteName")
+				.WithPeriod("2016-01-02", previousTeam, siteId)
+				.WithTeam(newTeam, "teamName")
+				.WithPeriod("2016-02-01", newTeam, siteId);
+
+			Target.Handle(new TenantHourTickEvent());
+
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+
+			@event.TeamId.Should().Be(newTeam);
+			@event.SiteId.Should().Be(siteId);
+			@event.TeamName.Should().Be("teamName");
+			@event.SiteName.Should().Be("siteName");
 		}
 
 		[Test]

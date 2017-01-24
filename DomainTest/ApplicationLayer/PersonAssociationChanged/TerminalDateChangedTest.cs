@@ -72,8 +72,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 
 			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
 			result.PersonId.Should().Be(personId);
-			result.TeamId.Should().Be(null);
 			result.SiteId.Should().Be(null);
+			result.SiteName.Should().Be(null);
+			result.TeamId.Should().Be(null);
+			result.TeamName.Should().Be(null);
 			result.Timestamp.Should().Be("2016-01-18 08:15".Utc());
 		}
 
@@ -145,12 +147,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				TerminationDate = "2016-12-31".Utc(),
 				TeamId = teamId,
 				SiteId = siteId,
-				BusinessUnitId = businessUnitId
+				BusinessUnitId = businessUnitId,
+				SiteName = "site",
+				TeamName = "team"
 			});
 
 			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			result.TeamId.Should().Be(teamId);
 			result.SiteId.Should().Be(siteId);
+			result.SiteName.Should().Be("site");
+			result.TeamId.Should().Be(teamId);
+			result.TeamName.Should().Be("team");
 			result.BusinessUnitId.Should().Be(businessUnitId);
 		}
 

@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string TimeZoneInfoId { get; set; }
 		public DateTime? PreviousTerminationDate { get; set; }
 		public DateTime? TerminationDate { get; set; }
+		public string SiteName { get; set; }
+		public string TeamName { get; set; }
 
 		public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
 

@@ -35,7 +35,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				PersonId = personId,
 				CurrentBusinessUnitId = businessUnitId,
 				CurrentSiteId = siteId,
-				CurrentTeamId = teamId
+				CurrentTeamId = teamId,
+				CurrentSiteName = "site",
+				CurrentTeamName = "team"
 			});
 
 			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
@@ -44,6 +46,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			result.BusinessUnitId.Should().Be(businessUnitId);
 			result.SiteId.Should().Be(siteId);
 			result.TeamId.Should().Be(teamId);
+			result.SiteName.Should().Be("site");
+			result.TeamName.Should().Be("team");
 		}
 	}
 }

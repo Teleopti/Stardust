@@ -11,8 +11,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid? CurrentBusinessUnitId { get; set; }
 		public Guid? CurrentSiteId { get; set; }
 		public Guid? CurrentTeamId { get; set; }
+		public string CurrentSiteName { get; set; }
+		public string CurrentTeamName { get; set; }
 
 		public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
-
 	}
 }

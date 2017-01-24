@@ -120,15 +120,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 					var teamId = data.currentPeriod?.Team.Id;
 					var siteId = data.currentPeriod?.Team.Site.Id;
+					var siteName = data.currentPeriod?.Team.Site.Description.Name;
+					var teamName = data.currentPeriod?.Team.Description.Name;
 					var businessUnitId = data.currentPeriod?.Team.Site.BusinessUnit.Id;
 
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
 						PersonId = data.person.Id.Value,
-						Timestamp = now,
-						TeamId = teamId,
-						SiteId = siteId,
 						BusinessUnitId = businessUnitId,
+						SiteId = siteId,
+						SiteName = siteName,
+						TeamId = teamId,
+						TeamName = teamName,
+						Timestamp = now,
 						ExternalLogons = (data.currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
 							.Select(x => new ExternalLogon
 							{
@@ -176,10 +180,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
 				PersonId = @event.PersonId,
-				Timestamp = now,
-				TeamId = @event.TeamId,
-				SiteId = @event.SiteId,
 				BusinessUnitId = @event.BusinessUnitId,
+				SiteId = @event.SiteId,
+				SiteName = @event.SiteName,
+				TeamId = @event.TeamId,
+				TeamName = @event.TeamName,
+				Timestamp = now,
 				ExternalLogons = @event.ExternalLogons
 			});
 		}
@@ -205,11 +211,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
 				PersonId = @event.PersonId,
-				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
+				SiteName = @event.CurrentSiteName,
 				TeamId = @event.CurrentTeamId,
-				ExternalLogons = @event.ExternalLogons
+				TeamName = @event.CurrentTeamName,
+				Timestamp = @event.Timestamp,
+				ExternalLogons = @event.ExternalLogons,
 			});
 		}
 
@@ -218,10 +226,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
 				PersonId = @event.PersonId,
-				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
+				SiteName = @event.CurrentSiteName,
 				TeamId = @event.CurrentTeamId,
+				TeamName = @event.CurrentTeamName,
+				Timestamp = @event.Timestamp,
 				ExternalLogons = @event.ExternalLogons
 			});
 		}
