@@ -4163,6 +4163,8 @@
     <None Include="Resources\shiftEditor_16x16.png" />
     <None Include="Resources\Shifts.ico" />
     <None Include="Resources\Shifts_filled_16x16.png" />
+    <None Include="Resources\SkillPrio.bmp" />
+    <None Include="Resources\SkillPrio.png" />
     <Content Include="Resources\Skill_Inactive_8bit_BG.png" />
     <Content Include="Resources\skill_retail.png" />
     <Content Include="Resources\Sort.TIF" />

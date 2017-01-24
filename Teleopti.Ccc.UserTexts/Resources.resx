@@ -15483,4 +15483,8 @@ These options are activated:
     <value>Favorite Search</value>
     <comment>Favorite Search function name showing in icon tooltip. </comment>
   </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>Configure Skill Priorities</value>
+    <comment>Configure Skill Priorities</comment>
+  </data>
 </root>

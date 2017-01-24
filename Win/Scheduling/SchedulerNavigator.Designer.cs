@@ -32,7 +32,6 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulerNavigator));
 			this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.toolStripPeople = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -46,13 +45,13 @@
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButtonAddMeeting = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonShowMeetings = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripRefresh = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonOrganizeCascadingSkills = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonArchiveSchedule = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonImportSchedule = new System.Windows.Forms.ToolStripButton();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripButtonImportSchedule = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonArchiveSchedule = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripButtonOrganizeCascadingSkills = new System.Windows.Forms.ToolStripButton();
+			this.toolStripRefresh = new System.Windows.Forms.ToolStripButton();
+			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
 			this.splitContainerAdv1.Panel2.SuspendLayout();
 			this.splitContainerAdv1.SuspendLayout();
@@ -113,8 +112,8 @@
             this.toolStripButtonImportSchedule,
             this.toolStripButtonArchiveSchedule,
             this.toolStripSeparator1,
-            this.toolStripRefresh,
-            this.toolStripButtonOrganizeCascadingSkills});
+            this.toolStripButtonOrganizeCascadingSkills,
+            this.toolStripRefresh});
 			this.toolStripPeople.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripPeople.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripPeople.Location = new System.Drawing.Point(10, 0);
@@ -241,10 +240,50 @@
 			this.toolStripButtonShowMeetings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonShowMeetings.Click += new System.EventHandler(this.toolStripButtonShowMeetingsClick);
 			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(250, 6);
+			// 
+			// toolStripButtonImportSchedule
+			// 
+			this.toolStripButtonImportSchedule.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Skill_Backoffice_16x16;
+			this.toolStripButtonImportSchedule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonImportSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonImportSchedule.Name = "toolStripButtonImportSchedule";
+			this.toolStripButtonImportSchedule.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripButtonImportSchedule.Size = new System.Drawing.Size(139, 29);
+			this.toolStripButtonImportSchedule.Text = "xxImportSchedule";
+			this.toolStripButtonImportSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonImportSchedule.Click += new System.EventHandler(this.toolStripButtonImportScheduleClick);
+			// 
+			// toolStripButtonArchiveSchedule
+			// 
+			this.toolStripButtonArchiveSchedule.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Skill_Backoffice_16x16;
+			this.toolStripButtonArchiveSchedule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonArchiveSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonArchiveSchedule.Name = "toolStripButtonArchiveSchedule";
+			this.toolStripButtonArchiveSchedule.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripButtonArchiveSchedule.Size = new System.Drawing.Size(142, 29);
+			this.toolStripButtonArchiveSchedule.Text = "xxArchiveSchedule";
+			this.toolStripButtonArchiveSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonArchiveSchedule.Click += new System.EventHandler(this.toolStripButtonArchiveScheduleClick);
+			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(250, 6);
+			// 
+			// toolStripButtonOrganizeCascadingSkills
+			// 
+			this.toolStripButtonOrganizeCascadingSkills.Image = global::Teleopti.Ccc.Win.Properties.Resources.SkillPrio;
+			this.toolStripButtonOrganizeCascadingSkills.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonOrganizeCascadingSkills.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonOrganizeCascadingSkills.Name = "toolStripButtonOrganizeCascadingSkills";
+			this.toolStripButtonOrganizeCascadingSkills.Size = new System.Drawing.Size(170, 21);
+			this.toolStripButtonOrganizeCascadingSkills.Text = "xxConfigureSkillPriorities";
+			this.toolStripButtonOrganizeCascadingSkills.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonOrganizeCascadingSkills.Click += new System.EventHandler(this.toolStripButtonOrganizeCascadingSkillsClick);
 			// 
 			// toolStripRefresh
 			// 
@@ -258,51 +297,11 @@
 			this.toolStripRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripRefresh.Click += new System.EventHandler(this.toolStripRefreshClick);
 			// 
-			// toolStripButtonOrganizeCascadingSkills
-			// 
-			this.toolStripButtonOrganizeCascadingSkills.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonOrganizeCascadingSkills.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonOrganizeCascadingSkills.Image")));
-			this.toolStripButtonOrganizeCascadingSkills.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonOrganizeCascadingSkills.Name = "toolStripButtonOrganizeCascadingSkills";
-			this.toolStripButtonOrganizeCascadingSkills.Size = new System.Drawing.Size(158, 21);
-			this.toolStripButtonOrganizeCascadingSkills.Text = "Organize cascading skills";
-			this.toolStripButtonOrganizeCascadingSkills.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonOrganizeCascadingSkills.Click += new System.EventHandler(this.toolStripButtonOrganizeCascadingSkillsClick);
-			// 
-			// toolStripButtonArchiveSchedule
-			// 
-			this.toolStripButtonArchiveSchedule.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Skill_Backoffice_16x16;
-			this.toolStripButtonArchiveSchedule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonArchiveSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonArchiveSchedule.Name = "toolStripButtonArchiveSchedule";
-			this.toolStripButtonArchiveSchedule.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonArchiveSchedule.Size = new System.Drawing.Size(250, 29);
-			this.toolStripButtonArchiveSchedule.Text = "xxArchiveSchedule";
-			this.toolStripButtonArchiveSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonArchiveSchedule.Click += new System.EventHandler(this.toolStripButtonArchiveScheduleClick);
-			// 
-			// toolStripButtonImportSchedule
-			// 
-			this.toolStripButtonImportSchedule.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Skill_Backoffice_16x16;
-			this.toolStripButtonImportSchedule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonImportSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonImportSchedule.Name = "toolStripButtonImportSchedule";
-			this.toolStripButtonImportSchedule.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonImportSchedule.Size = new System.Drawing.Size(250, 29);
-			this.toolStripButtonImportSchedule.Text = "xxImportSchedule";
-			this.toolStripButtonImportSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonImportSchedule.Click += new System.EventHandler(this.toolStripButtonImportScheduleClick);
-			// 
 			// imageList1
 			// 
 			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
 			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// toolStripSeparator3
-			// 
-			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(250, 6);
 			// 
 			// SchedulerNavigator
 			// 

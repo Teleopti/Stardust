@@ -6255,6 +6255,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure Skill Priorities.
+        /// </summary>
+        public static string ConfigureSkillPriorities {
+            get {
+                return ResourceManager.GetString("ConfigureSkillPriorities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure validation warnings.
         /// </summary>
         public static string ConfigureValidationWarnings {
