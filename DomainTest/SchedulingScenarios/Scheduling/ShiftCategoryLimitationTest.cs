@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		[Test, Ignore("Still fails if local timezone is Denver")]
+		[Test]
 		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					UseShiftCategoryLimitations = true
 				}
 			};
-			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill);
+			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
 			agent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
 			var period = new DateOnlyPeriod(firstDate, secondDate);
 			var assA = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
