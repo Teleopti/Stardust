@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReturnEmptyListWhenTeamIsEmpty()
 		{
-			WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new Guid[] {}))
+			WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new Guid[0]))
 				.Should().Be.Empty();
 		}
 

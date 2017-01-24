@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
         public void ShouldSaveRebuildReadModelForPersonToQueue()
         {
             var person = new Person();
-            var ids = new Guid[] {};
+            var ids = new Guid[0];
             var message = new PersonCollectionChangedEvent();
             message.SetPersonIdCollection(ids);
             
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		public void ShouldNotSaveRebuildReadModelForPersonWriteProtectionToQueue()
 		{
 			var personWriteProtectionInfo = new PersonWriteProtectionInfo(new Person());
-			var ids = new Guid[] { };
+			var ids = new Guid[0];
 			var message = new PersonCollectionChangedEvent();
 			message.SetPersonIdCollection(ids);
 

@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.For(new ViewModelFilter {TeamIds = new Guid[] { } })
+			Target.For(new ViewModelFilter {TeamIds = new Guid[0] })
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.For(new ViewModelFilter { SiteIds = new Guid[] { } })
+			Target.For(new ViewModelFilter { SiteIds = new Guid[0] })
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			Now.Is("2016-05-28 12:00");
 			TimeZone.IsSweden();
 
-			Target.For(new ViewModelFilter { TeamIds = new Guid[] { } })
+			Target.For(new ViewModelFilter { TeamIds = new Guid[0] })
 				.Time.Should().Be("2016-05-28 14:00".Utc());
 		}
 

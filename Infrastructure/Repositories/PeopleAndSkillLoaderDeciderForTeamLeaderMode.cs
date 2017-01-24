@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 		    public emptyLoaderDeciderResult()
 		    {
-				var list = new Guid[]{};
+				var list = new Guid[0];
 				PeopleGuidDependencies = list;
 				SkillGuidDependencies = list;
 				SiteGuidDependencies = list;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			    return 0;
 		    }
 
-		    public double PercentageOfPeopleFiltered { get { return 0; } }
+		    public double PercentageOfPeopleFiltered => 0;
 	    }
     }
 }

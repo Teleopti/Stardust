@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
         public void ShouldSaveRebuildReadModelForGroupPageToQueue()
         {
             var page = new GroupPage("Page");
-            var ids = new Guid[] { };
+            var ids = new Guid[0];
             var message = new GroupPageCollectionChangedEvent();
             message.SetGroupPageIdCollection(ids);
 

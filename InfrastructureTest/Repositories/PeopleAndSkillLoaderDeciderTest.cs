@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Guid guidToAdd = Guid.NewGuid();
             personToAdd.SetId(guidToAdd);
 
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new[] { valid }, new Guid[] { }, new[] { guidToAdd });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new[] { valid }, new Guid[0], new[] { guidToAdd });
             IList<IPerson> listToFilter = new List<IPerson> { nonValidPerson, validPerson, new Person(), personToAdd };
 
             Assert.AreEqual(4, listToFilter.Count);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyFilterSkills()
         {
             var valid = Guid.NewGuid();
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] {  }, new[] { valid }, new Guid[] { });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid }, new Guid[0]);
 
             ISkill validSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
             validSkill.SetId(valid);
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyParentReturnedIfMatchForChildSkill()
         {
             Guid valid = Guid.NewGuid();
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { valid }, new Guid[] { });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid }, new Guid[0]);
 
             IChildSkill validSkill = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
             validSkill.SetId(valid);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyParentReturnedIfMatchForChildSkillOnly()
         {
             Guid valid = Guid.NewGuid();
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { valid }, new Guid[] { });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid }, new Guid[0]);
 			
             IChildSkill validSkill = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
             validSkill.SetId(valid);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			parent.AddChildSkill(validSkill2);
 
 			IList<ISkill> list2Filter = new List<ISkill> { validSkill1, validSkill2 };
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { valid1, valid2 }, new Guid[] { });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid1, valid2 }, new Guid[0]);
 			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);
 			Assert.AreEqual(-1, removed);
 			Assert.AreEqual(3, list2Filter.Count);
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyParentNotReturnedIfNoMatchForChildSkill()
         {
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() }, new Guid[] { });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() }, new Guid[0]);
 
             IMultisiteSkill parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
             parent.SetId(Guid.NewGuid());
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldShowZeroPercentageWhenFilterPeopleIsNotCalled()
         {
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new Guid[] { }, new Guid[] { });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new Guid[0], new Guid[0]);
             Assert.AreEqual(0, target.PercentageOfPeopleFiltered);
         }
 

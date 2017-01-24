@@ -675,7 +675,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				PageSize = 20,
 				CurrentPageIndex = 1,
 				IsOnlyAbsences = false,
-				SelectedTeamIds = new Guid[] {}
+				SelectedTeamIds = new Guid[0]
 			}).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(0);

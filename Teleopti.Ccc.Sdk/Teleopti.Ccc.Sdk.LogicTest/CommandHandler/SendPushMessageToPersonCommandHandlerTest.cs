@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			using (mock.Record())
 			{
-				Expect.Call(personRepository.FindPeople(new Guid[]{})).IgnoreArguments().Repeat.Never();
+				Expect.Call(personRepository.FindPeople(new Guid[0])).IgnoreArguments().Repeat.Never();
 				Expect.Call(() => pushMessageRepository.Add(null, null)).IgnoreArguments().Repeat.Never();
 			}
 			using (mock.Playback())
