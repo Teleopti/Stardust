@@ -656,6 +656,23 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
 		});
 
+		it('should not select all functions checkbox when selecting second to last unselected function', function() {
+			$httpBackend.whenDELETE('../api/Permissions/Roles/Function/5ad43bfa-7842-4cca-ae9e-8d03ddc789e9').respond(200);
+			fakeBackend
+				.withRole(defaultRole)
+				.withRoleInfo({
+						Id: defaultRole.Id
+					})
+				.withApplicationFunction(allFunction)
+				.withApplicationFunction(defaultApplicationFunction)
+				.withApplicationFunction(defaultApplicationFunction2)
+
+				$httpBackend.flush();
+				vm.onFunctionClick(vm.applicationFunctions[1].ChildFunctions[0]);
+				$httpBackend.flush();
+
+				expect(vm.selectedOrNot).toEqual(false);
+		});
 
 		it('should indicate all available functions for selected role but BETTER', function() {
 			fakeBackend

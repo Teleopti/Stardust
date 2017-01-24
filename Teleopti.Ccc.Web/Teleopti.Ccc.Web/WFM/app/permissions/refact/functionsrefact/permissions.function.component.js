@@ -7,7 +7,7 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 	ctrl.toggleFunctionOpen = toggleFunctionOpen;
 	ctrl.openFunctions = {};
 	ctrl.isFunctionOpen = isFunctionOpen;
-	ctrl.hasAllFunction = hasAllFunction;
+	ctrl.shouldFunctionBeSelected = shouldFunctionBeSelected;
 
 	function isFunctionOpen(func) {
 		if (func.FunctionDescription === 'xxOpenRaptorApplication') {
@@ -88,15 +88,16 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 		}
 	}
 
-	function hasAllFunction() {
-		
+	function shouldFunctionBeSelected(func) {
 		if (!ctrl.selectedRole.Id || !ctrl.selectedRole.AvailableFunctions) {
 			return false;
-		}	else {
+		} else if (ctrl.selectedRole.BuiltIn) {
 			return ctrl.selectedRole.AvailableFunctions.find(function(func) {
 				return func.FunctionCode === 'All';
-		});	
+			});
 		}
+
+		return ctrl.isSelected(func);
 	}
 }
 

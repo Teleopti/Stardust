@@ -636,7 +636,7 @@ describe('component: permissionsTree', function() {
 
 		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
 	});
-	
+
 	it('should remove selected function when unselected functions filter is active', function() {
 		fakeBackend
 			.withRole({
@@ -728,9 +728,58 @@ describe('component: permissionsTree', function() {
 		$httpBackend.flush();
 		ctrl.toggleFunction(vm.applicationFunctions[0]);
 		$httpBackend.flush();
-		 
+
 		expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toEqual(undefined);
 		expect(vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c']).toEqual(undefined);
+		expect(vm.selectedOrNot).toEqual(false);
+	});
+
+	it('should select all toggle when all functions are active', function() {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'Agent',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: false,
+				IsMyRole: false,
+				Name: 'Agent'
+			})
+			.withApplicationFunction({
+				FunctionCode: 'Raptor',
+				FunctionDescription: 'xxOpenRaptorApplication',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				IsOpen: false,
+				ChildFunctions: [{
+					ChildFunctions: [],
+					FunctionCode: 'ChildFunction',
+					FunctionDescription: 'ChildFunction',
+					FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+					IsDisabled: false,
+					LocalizedFunctionDescription: 'I am A child function',
+					IsOpen: false
+				}]
+			});
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, {
+			functions: vm.applicationFunctions,
+			select: vm.selectFunction,
+			isSelected: vm.isFunctionSelected,
+			onClick: vm.onFunctionClick,
+			selectedRole: vm.selectedRole,
+			filterFunc: vm.functionsFilterObj
+		});
+		ctrl.selectedRole = vm.roles[0];
+		vm.selectedRole = vm.roles[0];
+		vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9'] = true;
+
+		ctrl.toggleFunction(vm.applicationFunctions[0].ChildFunctions[0]);
+		$httpBackend.flush();
+
+		expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toEqual(true);
+		expect(vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c']).toEqual(true);
+		expect(vm.selectedOrNot).toEqual(true);
 	});
 
 });
