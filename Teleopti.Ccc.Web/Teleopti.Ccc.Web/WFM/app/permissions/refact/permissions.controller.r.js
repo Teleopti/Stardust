@@ -129,6 +129,7 @@
 				Id: role.Id
 			}).$promise.then(function(data) {
 				vm.selectedRole = data;
+				vm.selectedRole.IsMyRole = role.IsMyRole;
 
 				if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length > 0) {
 					matchOrganizationData();
@@ -344,7 +345,7 @@
 				functions = parents.concat(fn.FunctionId);
 			}
 			createFlatFunctions(vm.applicationFunctions, flatFunctions);
-			
+
 			vm.selectedOrNot = flatFunctions.every(function(func) {
 				return isFunctionSelected(func);
 			});
