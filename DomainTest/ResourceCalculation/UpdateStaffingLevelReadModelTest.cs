@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -215,6 +216,43 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
 			persistedCombinationResources.Single().SkillCombination.Count().Should().Be.EqualTo(1);
+		}
+
+
+		[Test]
+		public void ShouldIgnoreResourcesThatDoesNotHaveAnActivityForItsSkill()
+		{
+			Now.Is("2016-12-19 00:00");
+			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
+			var scenario = ScenarioRepository.Has("default");
+
+			var activity = ActivityFactory.CreateActivity("phone");
+			var activity2 = ActivityFactory.CreateActivity("email");
+
+			var saleSkill = SkillRepository.Has("sales", activity);
+			var buySkill = SkillRepository.Has("buy", activity2);
+			saleSkill.DefaultResolution = buySkill.DefaultResolution = 60;
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill}).WithId();
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { buySkill}).WithId();
+
+			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
+			person2.PermissionInformation.SetDefaultTimeZone(buySkill.TimeZone);
+			
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory());
+			PersonAssignmentRepository.Has(ass);
+			var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory());
+			PersonAssignmentRepository.Has(ass2);
+
+			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+			SkillDayRepository.Has(buySkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+
+			PersonRepository.Has(person);
+			PersonRepository.Has(person2);
+			Target.Update(period);
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
+			persistedCombinationResources.Count().Should().Be.EqualTo(1);
+			persistedCombinationResources.First().Resource.Should().Be.EqualTo(1);
 		}
 	}
 }
