@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -32,8 +31,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftCategoryB = new ShiftCategory("B").WithId();
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
-			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(11), TimeSpan.FromHours(16)) };
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var nightRest = TimeSpan.FromHours(11); //why different result if 1 or 11?
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), nightRest, TimeSpan.FromHours(16)) };
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
 			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 1); //should try with this one first
 			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10); 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryB));
@@ -47,15 +47,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				}
 			};
 			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill);
-			agent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryA)
-			{
-				MaxNumberOf = 1
-			});
+			agent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryA) { MaxNumberOf = 1 });
 			var period = new DateOnlyPeriod(firstDate, secondDate);
 			var assA = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
 			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryA).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
-			stateholder.SchedulingResultState.UseValidation = true;	
+			stateholder.SchedulingResultState.UseValidation = true; //anders thought this was a bug - should probably not be necessary. check with micke?
 			var scheduleDays = stateholder.Schedules[agent].ScheduledDayCollection(period).ToList();
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), scheduleDays, new OptimizationPreferences(), null);
