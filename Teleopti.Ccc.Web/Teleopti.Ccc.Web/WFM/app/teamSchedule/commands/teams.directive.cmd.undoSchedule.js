@@ -15,6 +15,8 @@
 					var containerCtrl = ctrls[0],
 						selfCtrl = ctrls[1];
 
+					scope.vm.containerCtrl = containerCtrl;
+
 					scope.vm.selectedDate = containerCtrl.getDate;
 					scope.vm.trackId = containerCtrl.getTrackId();
 					scope.vm.getActionCb = containerCtrl.getActionCb;
@@ -25,9 +27,9 @@
 		};
 	}
 
-	undoScheduleCtrl.$inject = ['$scope', 'PersonSelection', 'ActivityService', '$wfmConfirmModal', 'ScheduleManagement', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
+	undoScheduleCtrl.$inject = ['$scope', 'PersonSelection', 'ActivityService', '$wfmConfirmModal', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
-	function undoScheduleCtrl($scope, PersonSelection, ActivityService, $wfmModal, scheduleManagementSvc, notification, ScenarioTestUtil) {
+	function undoScheduleCtrl($scope, PersonSelection, ActivityService, $wfmModal, notification, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'Undo';
 
@@ -39,7 +41,7 @@
 
 			var personDates = [];
 			personIds.forEach(function(personId) {
-				var personScheduleVm = scheduleManagementSvc.findPersonScheduleVmForPersonId(personId);
+				var personScheduleVm = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(personId);
 
 				personDates.push({
 					PersonId: personId,

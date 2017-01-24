@@ -66,9 +66,9 @@
 		};
 	}
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'ScheduleHelper','teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleHelper','teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleManagementSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
 
 		vm.label = 'AddAbsence';
@@ -107,7 +107,7 @@
 		vm.getDefaultAbsenceStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
-			var schedules = scheduleManagementSvc.schedules();
+			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
 			return scheduleHelper.getEarliestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
 		};
 
@@ -119,7 +119,7 @@
 			vm.invalidAgents = [];
 			var invalidAgentNameList = [];
 			vm.selectedAgents.forEach(function (agent) {
-				if (vm.getCurrentTimezone() != scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
+				if (vm.getCurrentTimezone() != vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
 					vm.invalidAgents.push(agent);
 					invalidAgentNameList.push(agent.Name);
 				}
@@ -134,7 +134,7 @@
 				endTime: moment(vm.timeRange.endTime)
 			}
 			vm.selectedAgents.forEach(function (agent) {
-				var personSchedule = scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
+				var personSchedule = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
 				if (!belongsToDateDecider
 					.checkTimeRangeAllowedForIntradayAbsence(timeRangeMoment,
 						belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.getCurrentTimezone())))

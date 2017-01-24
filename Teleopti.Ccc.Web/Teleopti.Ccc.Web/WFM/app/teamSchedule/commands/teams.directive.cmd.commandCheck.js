@@ -14,15 +14,17 @@
 			link: function (scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0];
 
+				scope.vm.containerCtrl = containerCtrl;
+
 				scope.vm.currentCommandLabel = containerCtrl.activeCmd;
 				scope.vm.getDate = containerCtrl.getDate;
 			}
 		};
 	}
 
-	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService', 'ScheduleManagement'];
+	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService'];
 
-	function commandCheckCtrl($scope, $translate, CommandCheckService, ScheduleManagementSvc) {
+	function commandCheckCtrl($scope, $translate, CommandCheckService) {
 		var vm = this;
 		vm.showCheckbox = false;
 
@@ -91,7 +93,7 @@
 
 		vm.init = function() {
 
-			var groupSchedules = ScheduleManagementSvc.groupScheduleVm.Schedules;
+			var groupSchedules = vm.containerCtrl.scheduleManagementSvc.schedules();
 
 			function getScheduleVm(personId) {
 				var filtered = groupSchedules.filter(function(schedule) {
