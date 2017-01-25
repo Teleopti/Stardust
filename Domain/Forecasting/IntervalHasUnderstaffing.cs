@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
     public class IntervalHasUnderstaffing : Specification<IValidatePeriod>
     {
         private readonly ISkill _skill;
-		private static readonly ILog logger = LogManager.GetLogger(typeof(IntervalHasUnderstaffing));
 		private static readonly ILog requestLogger = LogManager.GetLogger("Requests");
 
 		public IntervalHasUnderstaffing(ISkill skill)
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var skillStaffignInterval = obj as SkillStaffingInterval;
 	        if (skillStaffignInterval != null)
 	        {
-				logger.Info($"IsSatisfiedBy -- _skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {((SkillStaffingInterval)obj).SkillId} -- {obj.DateTimePeriod} -- rel diff: {obj.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
+				requestLogger.Debug($"IsSatisfiedBy -- _skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {((SkillStaffingInterval)obj).SkillId} -- {obj.DateTimePeriod} -- rel diff: {obj.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
 			}
 			return obj.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
         }

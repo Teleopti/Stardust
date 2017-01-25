@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
 		{
-			requestLogger.Debug("Test :)");
 			if (!personRequestsIds.Any()) return;
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			IList<IPersonRequest> personRequests;
@@ -227,6 +226,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			var stopwatch = new Stopwatch();
 			foreach (var personRequest in requests)
 			{
+				requestLogger.Debug($"Start processing absence request for {personRequest.Person.Name} for period {personRequest.Request.Period}");
 				var absenceRequest = personRequest.Request as IAbsenceRequest;
 				if(absenceRequest == null) continue;
 
@@ -285,7 +285,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 											  validatorList);
 				stopwatch.Stop();
 				_feedback.SendProgress($"processAbsenceRequest.process(..) took {stopwatch.Elapsed}");
-				//sendCommandWithRetries(personRequest);
 			}
 		}
 
