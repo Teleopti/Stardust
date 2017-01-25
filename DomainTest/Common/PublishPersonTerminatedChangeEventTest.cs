@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			Now.Is("2017-01-25");
-			
+
 			person.TerminatePerson("2017-01-31".Date(), new PersonAccountUpdaterDummy());
 
 			((Person) person).PopAllEvents().OfType<PersonTerminalDateChangedEvent>().Should().Not.Be.Empty();
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			var organization = OrganizationFactory.Create(businessUnitId, siteId, "siteName", teamId, "teamName");
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(personId, "2017-01-01".Date(), organization.Team);
-			
+
 			person.TerminatePerson("2017-01-31".Date(), new PersonAccountUpdaterDummy());
 
 			var @event = ((Person) person).PopAllEvents().OfType<PersonTerminalDateChangedEvent>().Single();

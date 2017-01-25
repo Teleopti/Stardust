@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Now.Is("2017-01-25");
 			var team = TeamFactory.CreateSimpleTeam();
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam("2017-01-01".Date(), team);
-			
+
 			person.ChangeTeam(team, person.Period("2017-01-25".Date()));
 
-			((Person)person).PopAllEvents().OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
+			((Person) person).PopAllEvents().OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.ChangeTeam(organization.Team, person.Period("2017-01-25".Date()));
 
-			var @event = ((Person)person).PopAllEvents().OfType<PersonTeamChangedEvent>().Single();
+			var @event = ((Person) person).PopAllEvents().OfType<PersonTeamChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 			@event.CurrentBusinessUnitId.Should().Be(businessUnitId);
 			@event.CurrentSiteId.Should().Be(siteId);
