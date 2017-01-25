@@ -181,6 +181,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(numberOfSeats);
 		}
 
+		[Test, Ignore("#42753: Seats not counted")]
+		[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		public void ShouldSetCalculatedMaxUsedSeatsWhenPersonPeriodStartAfterSelectedPeriod()
+		{
+			var scenario = new Scenario("_");
+			var date = DateOnly.Today;
+			var activity = new Activity("_") { RequiresSeat = true };
+			var personPeriod = new PersonPeriod(date.AddDays(1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") { MaxSeats = 10 }.WithId() });
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPersonPeriod(personPeriod);
+			var ass = new PersonAssignment(agent, scenario, date.AddDays(1)).WithLayer(activity, new TimePeriod(9, 17));
+			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date.AddDays(1)), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
+			InitMaxSeatForStateHolder.Execute(15);
+
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			SchedulerStateHolder()
+				.SchedulingResultState.SkillDays.Single()
+				.Value.Single(x => x.CurrentDate == date.AddDays(1))
+				.SkillStaffPeriodCollection.Single(x => x.Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
+				.Payload.CalculatedUsedSeats
+				.Should().Be.EqualTo(1);
+		}
+
 		[Ignore("#42060")]
 		[Test]
 		public void ShouldCalculateResourcesOnSkillWithTimeZoneKathmandu([Values(15, 30)] int intervalLength)
