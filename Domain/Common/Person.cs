@@ -313,7 +313,16 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual string EmploymentNumber
         {
             get { return _employmentNumber; }
-            set { _employmentNumber = value; }
+	        set
+	        {
+		        if (_employmentNumber != value)
+			        AddEvent(() => new PersonEmploymentNumberChangedEvent()
+			        {
+				        PersonId = Id.GetValueOrDefault(),
+				        EmploymentNumber = _employmentNumber
+			        });
+		        _employmentNumber = value;
+			}
         }
 
 		public virtual void AddSchedulePeriod(ISchedulePeriod period)

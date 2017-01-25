@@ -17,4 +17,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
 	
 	}
+
+	public class PersonEmploymentNumberChangedEvent : IEvent
+	{
+		public Guid PersonId { get; set; }
+		public string EmploymentNumber { get; set; }
+	}
 }
