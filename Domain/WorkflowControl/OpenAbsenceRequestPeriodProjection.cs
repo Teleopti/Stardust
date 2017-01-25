@@ -87,7 +87,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _languageCultureInfo);
 			CheckAbsenceRequestOpenPeriodResult lastCheckPeriodResult = null;
-		
+			var denyDays = getDenyDays();
+
 			foreach (var absenceRequestOpenPeriod in _openAbsenceRequestPeriodExtractor.AllPeriods)
 			{
 				
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					continue;
 				}
 				
-				checkPeriodResult = checkingForPeriod(limitToPeriod, absenceRequestOpenPeriod);
+				checkPeriodResult = checkingForPeriod(limitToPeriod, absenceRequestOpenPeriod, denyDays);
 				if (string.IsNullOrEmpty(checkPeriodResult.DenyReason)) continue;
 				if (lastCheckPeriodResult == null || checkPeriodResult.HasSuggestedPeriod)
 				{
@@ -133,6 +134,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		                                        });
 
         }
+
+		private IList<DateOnly> getDenyDays()
+		{
+			var denyDayCollection = new List<DateOnly>();
+			_openAbsenceRequestPeriodExtractor.AllPeriods.Where(isAbsenceRequestOpenPeriodAutoDeny)
+				.ToList()
+				.ForEach(
+					p => denyDayCollection.AddRange(p.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate).DayCollection()));
+			return denyDayCollection;
+		}
 
 		private CheckAbsenceRequestOpenPeriodResult checkingForOpenPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
@@ -189,7 +200,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return !isPeriodInsideOrEqual;
 		}
 
-		private CheckAbsenceRequestOpenPeriodResult checkingForPeriod(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		private CheckAbsenceRequestOpenPeriodResult checkingForPeriod(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod, IList<DateOnly> denyDays)
 		{
 			var checkAbsenceRequestOpenPeriodResult = new CheckAbsenceRequestOpenPeriodResult();
 			string denyReason = null;
@@ -205,7 +216,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				{
 					denyReason = string.Format(_languageCultureInfo,
 						UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _languageCultureInfo),
-						period.ToShortDateString(_dateCultureInfo));
+						getSuggestedPeriodDateString(period, denyDays));
 					checkAbsenceRequestOpenPeriodResult.HasSuggestedPeriod = true;
 				}
 			}
@@ -251,6 +262,35 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					retTime = layerTime;
 			}
 			return retTime;
+		}
+
+		private string getSuggestedPeriodDateString(DateOnlyPeriod suggestedPeriod, IList<DateOnly> denyDays)
+		{
+			var dayCollection = suggestedPeriod.DayCollection();
+			foreach (var denyDay in denyDays)
+			{
+				dayCollection.Remove(denyDay);
+			}
+			var periods = splitToContinuousPeriods(dayCollection);
+			return string.Join(",", periods.Select(p => p.ToShortDateString(_dateCultureInfo)));
+		}
+
+		private IList<DateOnlyPeriod> splitToContinuousPeriods(IList<DateOnly> dayCollection)
+		{
+			var periodList = new List<DateOnlyPeriod>();
+			DateOnly? startDate = null;
+			for (var i = 0; i < dayCollection.Count; i++)
+			{
+				if (!startDate.HasValue)
+				{
+					startDate = dayCollection[i];
+				}
+				var nextDate = dayCollection[i].AddDays(1);
+				if (dayCollection.Contains(nextDate)) continue;
+				periodList.Add(new DateOnlyPeriod(startDate.Value, nextDate.AddDays(-1)));
+				startDate = null;
+			}
+			return periodList;
 		}
 
 		private class DateOnlyPeriodWithAbsenceRequestPeriod
