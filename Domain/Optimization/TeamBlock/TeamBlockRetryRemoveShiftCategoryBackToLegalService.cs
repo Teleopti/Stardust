@@ -62,11 +62,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
 			{
 				var unsuccessfulDays = new List<Tuple<IScheduleMatrixPro, DateOnlyPeriod>>();
-				while (!executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, _schedulePartModifyAndRollbackService, resourceCalculateDelayer, allScheduleMatrixPros, 
-					shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays))
-				{
-				}
-
+				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder,
+					_schedulePartModifyAndRollbackService, resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays);
 				if (unsuccessfulDays.Any())
 				{
 					unsuccessfulDays.ForEach(x => x.Item1.UnlockPeriod(x.Item2));
@@ -76,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 
-		private bool executePerShiftCategoryLimitation(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
+		private void executePerShiftCategoryLimitation(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
@@ -122,9 +119,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				scheduleMatrixPro.LockPeriod(removedScheduleDayPro.Day.ToDateOnlyPeriod());
 				lockedDays.Add(new Tuple<IScheduleMatrixPro, DateOnlyPeriod>(scheduleMatrixPro, removedScheduleDayPro.Day.ToDateOnlyPeriod()));
 
-				return false;
+				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, rollbackService,
+					resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation,
+					isSingleAgentTeam, lockedDays);
 			}
-			return true;
 		}
 
 		private IList<IScheduleDayPro> removeScheduleDayPros(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
