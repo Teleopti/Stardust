@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore("#42752: Crashes if not all sites have max seat limit")]
+		[Test]
 		public void ShouldNotCrashWhenMixingAgentOnMaxSeatSiteWithAgentOnSiteWithNoMaxSeat()
 		{
 			var siteMaxSeat = new Site("MaxSeat") { MaxSeats = 1 }.WithId();

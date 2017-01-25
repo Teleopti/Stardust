@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				var personPeriod = agent.Period(personPeriodDate);
 				var site = personPeriod.Team.Site;
-				_maxSeatSkillDataPerSkills.Single(x => x.Site.Equals(site)).SkillDays.ForEach(x => skillDays.Add(x));
+				_maxSeatSkillDataPerSkills.SingleOrDefault(x => x.Site.Equals(site))?.SkillDays.ForEach(x => skillDays.Add(x));
 			}
 			return skillDays;
 		}
