@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!unsuccessfulDays.Any()) continue;
 
 				unsuccessfulDays.ForEach(x => x.Item1.UnlockPeriod(x.Item2));
-				if (limitation.Weekly) _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences);
-				else _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences);
+				removeScheduleDayPros(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
 			}
 		}
+
 
 		private bool executePerShiftCategoryLimitation(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
@@ -82,9 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IShiftCategoryLimitation limitation, bool isSingleAgentTeam, ICollection<Tuple<IScheduleMatrixPro, DateOnlyPeriod>> lockedDays )
 		{
 			//TODO: ändra så att rollbackservice skickas in hela vägen här
-			var removedScheduleDayPros = limitation.Weekly
-				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences)
-				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences);
+			var removedScheduleDayPros = removeScheduleDayPros(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
 
 			foreach (var removedScheduleDayPro in removedScheduleDayPros)
 			{
@@ -126,6 +124,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				return false;
 			}
 			return true;
+		}
+
+		private IList<IScheduleDayPro> removeScheduleDayPros(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
+			IOptimizationPreferences optimizationPreferences, IShiftCategoryLimitation limitation)
+		{
+			var removedScheduleDayPros = limitation.Weekly
+				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences)
+				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro,
+					optimizationPreferences);
+			return removedScheduleDayPros;
 		}
 	}
 }
