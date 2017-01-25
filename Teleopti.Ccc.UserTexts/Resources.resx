@@ -15487,4 +15487,12 @@ These options are activated:
     <value>Configure Skill Priorities</value>
     <comment>Configure Skill Priorities</comment>
   </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>No skill areas found</value>
+    <comment>message when no matching area can be found</comment>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>No skill found</value>
+    <comment>message when no matching skill can be found</comment>
+  </data>
 </root>

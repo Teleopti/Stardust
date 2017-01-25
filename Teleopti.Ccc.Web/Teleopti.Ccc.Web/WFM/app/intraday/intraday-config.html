@@ -2,11 +2,6 @@
 	<div class="view-title">
 		<h1><i class="mdi mdi-compass-outline"></i> {{'CreateSkillArea'|translate}}</h1>
 	</div>
-	<div class="fab-wrapper">
-		<button ng-if="skillAreaName && skillSelected()" class="wfm-fab grow-out material-depth-1 success skill-area-save" type="submit" ng-click="saveSkillArea()"><i class="mdi mdi-check"></i>
-			<md-tooltip>{{'Create'|translate}} {{skillAreaName}}</md-tooltip>
-		</button>
-	</div>
 </div>
 
 <div class="con-row">
@@ -61,6 +56,7 @@
 				</div>
 				<div class="con-footer">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="exitConfigMode()">{{'Cancel'|translate}}</button>
+					<button ng-if="skillAreaName && skillSelected()" class="wfm-btn wfm-btn-invis-primary skill-area-save" type="submit" ng-click="saveSkillArea()">{{'Create'|translate}} {{skillAreaName}}</button>
 				</div>
 			</form>
 		</div>

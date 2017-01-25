@@ -42,7 +42,7 @@
 							<md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
 						</md-item-template>
 						<md-not-found>
-							{{'RepViewerNoMoreMatches'|translate}}
+							{{'NoSkillFound'|translate}}
 						</md-not-found>
 					</md-autocomplete>
 					<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
@@ -64,7 +64,7 @@
 						<span md-highlight-text="searchSkillAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 					</md-item-template>
 					<md-not-found>
-						{{'RepViewerNoMoreMatches'|translate}}
+						{{'NoSkillAreasFound'|translate}}
 					</md-not-found>
 				</md-autocomplete>
 				<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkillArea" ng-click="clearSkillAreaHelper()">
