@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var result = new Dictionary<string, AffectedSkills>();
 
 			var activityKey = activity.Id.GetValueOrDefault();
+			var divider = periodToCalculate.ElapsedTime().TotalMinutes/MinSkillResolution;
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							AffectedSkills value;
 							double previousResource = 0;
 							double previousCount = 0;
-							var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource);
+							var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource/divider);
 							if (result.TryGetValue(pair.SkillKey, out value))
 							{
 								previousResource = value.Resource;
@@ -156,7 +157,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							value = new AffectedSkills
 							{
 								Skills = skills,
-								Resource = previousResource + pair.Resource.Resource,
+								Resource = previousResource + pair.Resource.Resource/divider,
 								Count = previousCount + pair.Resource.Count,
 								SkillEffiencies = accumulatedEffiencies
 							};
