@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -59,10 +61,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
 			{
-				while(!executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, _schedulePartModifyAndRollbackService, resourceCalculateDelayer, allScheduleMatrixPros, 
-					shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam))
+				var unsuccessfulDays = new List<Tuple<IScheduleMatrixPro, DateOnlyPeriod>>();
+				while (!executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, _schedulePartModifyAndRollbackService, resourceCalculateDelayer, allScheduleMatrixPros, 
+					shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays))
 				{
 				}
+
+				if (!unsuccessfulDays.Any()) continue;
+
+				unsuccessfulDays.ForEach(x => x.Item1.UnlockPeriod(x.Item2));
+				if (limitation.Weekly) _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences);
+				else _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences);
 			}
 		}
 
@@ -70,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
-			IShiftCategoryLimitation limitation, bool isSingleAgentTeam)
+			IShiftCategoryLimitation limitation, bool isSingleAgentTeam, ICollection<Tuple<IScheduleMatrixPro, DateOnlyPeriod>> lockedDays )
 		{
 			//TODO: ändra så att rollbackservice skickas in hela vägen här
 			var removedScheduleDayPros = limitation.Weekly
@@ -112,6 +121,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 
 				scheduleMatrixPro.LockPeriod(removedScheduleDayPro.Day.ToDateOnlyPeriod());
+				lockedDays.Add(new Tuple<IScheduleMatrixPro, DateOnlyPeriod>(scheduleMatrixPro, removedScheduleDayPro.Day.ToDateOnlyPeriod()));
 
 				return false;
 			}

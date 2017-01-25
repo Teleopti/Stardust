@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			stateholder.Schedules[agent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
 		}
 
-		[Test, Ignore("to be fixed")]
+		[Test]
 		public void ShouldRemoveShiftToFulfillLimitation()
 		{
 			var date = new DateOnly(2017, 1, 22);
