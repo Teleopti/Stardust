@@ -52,7 +52,7 @@
 			});
 		}
 
-		vm.options = {
+		vm.optionDrop = {
 			moveItem: function(parent_id, source_id, dest_parent_id) {
 				if (parent_id == dest_parent_id) {
 					if (vm.ismodified === true) {
@@ -65,11 +65,10 @@
 					vm.ismodified = true;
 					var item = vm.cascadeList[parent_id].Skills.splice(source_id, 1);
 					var moved = vm.cascadeList[dest_parent_id].Skills.push(item[0]);
-
 					if (moved) {
+						autoNewRow();
 						sortSkill(dest_parent_id);
 						deleteEmptyRow(parent_id);
-						autoNewRow();
 					}
 				}
 			}
@@ -104,7 +103,7 @@
 		}
 
 		function autoNewRow() {
-			if (vm.cascadeList.length > 0 && vm.cascadeList[vm.cascadeList.length - 1].Skills.length > 0) {
+			if (vm.cascadeList.length > 1 && vm.cascadeList[vm.cascadeList.length - 1].Skills.length > 0) {
 				addNewRow();
 			}
 		}
@@ -147,8 +146,8 @@
 					}
 				}
 				vm.cascadeList.sort(sortByPriority);
-				addNewRow();
 			}
+			addNewRow();
 		}
 
 		function sortByName(a, b) {
@@ -192,8 +191,10 @@
 				var index = findIndexInData(skills, 'SkillName', skill.SkillName);
 				skills.splice(index, 1);
 				vm.cascadeList[0].Skills.push(skill);
-				vm.cascadeList[0].Skills.sort(sortByName);
-				deleteEmptyRow(parent_id);
+				var moved = vm.cascadeList[0].Skills.sort(sortByName);
+				if (moved) {
+					deleteEmptyRow(parent_id);
+				}
 			}
 		}
 

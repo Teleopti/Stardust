@@ -60,15 +60,15 @@
 			  </div>
 				<div class="con-row">
 					<div class="con-flex" ng-hide="vm.cascadeList[0].Skills.length === 0">
-							<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable= "vm.options">
+							<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable= "vm.optionDrop">
 								<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills | filter:skillFilter" class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
 										{{Skill.SkillName}}
 								</li>
 							</ol>
 					</div>
-					<div class="con-flex" ng-show="vm.cascadeList.length > 2" ng-class="{'skill-group-divider':vm.unsortedList.length > 0}">
+					<div class="con-flex" ng-show="vm.cascadeList.length >= 2" ng-class="{'skill-group-divider':vm.unsortedList.length > 0}">
 						<div ng-repeat="sortedRow in vm.cascadeList" ng-if="$index >= 1" class="skill-divider">
-							<ol parent-id="{{$parent.$index}}" ng-model="sortedRow.Skills" source="vm.cascadeList" class="cascadeList-container" droppable="vm.options">
+							<ol parent-id="{{$parent.$index}}" ng-model="sortedRow.Skills" source="vm.cascadeList" class="cascadeList-container" droppable="vm.optionDrop">
 								{{sortedRow.Priority}}
 								<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
 									{{Skill.SkillName}}
