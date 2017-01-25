@@ -268,7 +268,6 @@ begin
 		return
 end
 
-/* ToDo - Make it work... Too slow right now
 --Empty revisions?
 set @RowCount = 1
 while @RowCount > 0
@@ -286,7 +285,6 @@ begin
 	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 		return
 end
-*/
 
 /*
 exec Purge
