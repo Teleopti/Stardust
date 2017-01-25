@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class StaffingThresholdValidatorHelper
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(StaffingThresholdValidatorHelper));
+		private static readonly ILog requestsLogger = LogManager.GetLogger("Requests");
 		readonly Func<ISkill, Specification<IValidatePeriod>> _getIntervalsForUnderstaffing;
 		readonly Func<ISkill, Specification<IValidatePeriod>> _getIntervalsForSeriousUnderstaffing;
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods.Where(x => ((SkillStaffingInterval)x).SkillId == skill.Id.GetValueOrDefault()), timeZone, result);
 				if (!validatedUnderStaffingResult.IsValid)
 				{
-					logger.Info($"Understaffed on skill: {skill.Name}, Intervals: {string.Join(",", result.UnderstaffingTimes.Select(x => x.StartTime))}");
+					requestsLogger.Debug($"Understaffed on skill: {skill.Name}, Intervals: {string.Join(",", result.UnderstaffingTimes.Select(x => x.StartTime))}");
 					result.AddUnderstaffingDay(date);
 				}
 			}
