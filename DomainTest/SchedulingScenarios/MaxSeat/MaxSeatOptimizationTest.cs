@@ -317,8 +317,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var site = new Site("_").WithId();
 			var teamMaxSeat = new Team { Description = new Description("_"), Site = siteMaxSeat };
 			var team = new Team { Description = new Description("_"), Site = site };
-			var bu = BusinessUnitFactory.CreateBusinessUnitAndAppend(teamMaxSeat);
-			bu.AddSite(site);
+			var bu = BusinessUnitFactory.CreateBusinessUnitAndAppend(teamMaxSeat, team);
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(bu);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
