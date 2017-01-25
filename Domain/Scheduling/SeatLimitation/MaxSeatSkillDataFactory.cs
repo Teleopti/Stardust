@@ -29,10 +29,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				var skill = _skillsFromMaxSeatSite.CreateMaxSeatSkill(site, intervalLength);
 				foreach (var agent in allAgents)
 				{
-					var personPeriod = agent.Period(period.StartDate);
-					if (personPeriod != null && personPeriod.Team.Site.Equals(site))
+					foreach (var personPeriod in agent.PersonPeriods(period))
 					{
-						personPeriod.SetMaxSeatSkill(skill);
+						if (personPeriod.Team.Site.Equals(site))
+						{
+							personPeriod.SetMaxSeatSkill(skill);
+						}
 					}
 				}
 				var skillDays = createMaxSeatSkillDays(period, skill, scenario);

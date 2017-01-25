@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(numberOfSeats);
 		}
 
-		[Test, Ignore("#42753: Seats not counted")]
+		[Test]
 		public void ShouldSetCalculatedMaxUsedSeatsWhenPersonPeriodStartAfterSelectedPeriod()
 		{
 			var scenario = new Scenario("_");
