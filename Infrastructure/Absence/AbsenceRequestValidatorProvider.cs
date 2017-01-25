@@ -64,10 +64,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			var validators = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(
 				(IAbsenceRequest) personRequest.Request).GetSelectedValidatorList();
-			var staffingThresholdValidator = validators.FirstOrDefault(x => x.GetType() == typeof(StaffingThresholdValidator));
+			var staffingThresholdValidator =
+				validators.FirstOrDefault(x => x is StaffingThresholdValidator);
 			if (staffingThresholdValidator == null)
 			{
-				return new AbsenceRequestNoneValidator();
+				return new StaffingThresholdValidator();
 			}
 			if (!validateAllAgentSkills())
 			{

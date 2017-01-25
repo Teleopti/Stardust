@@ -17,12 +17,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	[TestFixture]
 	public class AbsenceRequestValidatorProviderTest
 	{
+		private readonly IAbsence _absence = AbsenceFactory.CreateAbsence("holiday");
+
 		[Test]
 		public void ShouldStaffingThresholdValidatorByIntradayValidatorFlag()
 		{
 			var staffingThresholdValidator = getStaffingThresholdValidator(true, false);
 			Assert.IsNotNull(staffingThresholdValidator);
-			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidator));
+			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidator));
 		}
 
 		[Test]
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			var staffingThresholdValidator = getStaffingThresholdValidator(false, false);
 			Assert.IsNotNull(staffingThresholdValidator);
-			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkills));
+			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkills));
 		}
 
 		[Test]
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			var staffingThresholdValidator = getStaffingThresholdValidator(true, true);
 			Assert.IsNotNull(staffingThresholdValidator);
-			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
+			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
 		}
 
 		[Test]
@@ -46,10 +48,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			var staffingThresholdValidator = getStaffingThresholdValidator(false, true);
 			Assert.IsNotNull(staffingThresholdValidator);
-			Assert.IsNotNull(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkillsWithShrinkage));
+			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkillsWithShrinkage));
 		}
 
-		private IAbsenceRequestValidator getStaffingThresholdValidator(bool validateAllAgentSkills, bool useShrinkage)
+		[Test]
+		public void ShouldGetStaffingThresholdValidatorWhenCheckStaffingIsNoByIntradayValidatorFlag()
+		{
+			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(_absence, new GrantAbsenceRequest(), false);
+			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+			var staffingThresholdValidator = getStaffingThresholdValidator(true, false, workflowControlSet);
+			Assert.IsNotNull(staffingThresholdValidator);
+			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidator));
+		}
+
+		private IAbsenceRequestValidator getStaffingThresholdValidator(bool validateAllAgentSkills, bool useShrinkage,
+			IWorkflowControlSet workflowControlSet = null)
 		{
 			var toggleManager = new FakeToggleManager();
 			if (validateAllAgentSkills)
@@ -58,12 +71,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			}
 			var absenceRequestValidatorProvider = new AbsenceRequestValidatorProvider(toggleManager, null);
 
-			var absence = AbsenceFactory.CreateAbsence("holiday");
 			var person = createPerson();
-			person.WorkflowControlSet = createWorkflowControlSet(absence, useShrinkage);
-			var personRequest = createPersonRequest(person, absence);
+			person.WorkflowControlSet = workflowControlSet ?? createWorkflowControlSet(_absence, useShrinkage);
+			var personRequest = createPersonRequest(person, _absence);
 
-			var validatorList = absenceRequestValidatorProvider.GetValidatorList(personRequest, RequestValidatorsFlag.IntradayValidator);
+			var validatorList = absenceRequestValidatorProvider.GetValidatorList(personRequest,
+				RequestValidatorsFlag.IntradayValidator);
 			return validatorList.FirstOrDefault();
 		}
 
