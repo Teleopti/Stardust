@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// DateTimePeriod structure that holds information on an action with a certain start and end time in UTC. 
     /// </summary>
     [Serializable]
-	public struct DateTimePeriod
+	public struct DateTimePeriod : IEquatable<DateTimePeriod>
     {
         private readonly MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
@@ -501,7 +501,7 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public bool AdjacentTo(DateTimePeriod adjacentPeriod)
         {
-            return (StartDateTime == adjacentPeriod.EndDateTime || EndDateTime == adjacentPeriod.StartDateTime);
+            return StartDateTime == adjacentPeriod.EndDateTime || EndDateTime == adjacentPeriod.StartDateTime;
         }
 
         /// <summary>
