@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 	public class MultiAbsenceRequestsUpdater : IMultiAbsenceRequestsUpdater
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsUpdater));
-		private static readonly ILog requestLogger = LogManager.GetLogger("Requests");
+		private static readonly ILog requestLogger = LogManager.GetLogger("Teleopti.Requests");
 
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;

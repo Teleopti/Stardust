@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class StaffingThresholdValidatorHelper
 	{
-		private static readonly ILog requestsLogger = LogManager.GetLogger("Requests");
+		private static readonly ILog requestsLogger = LogManager.GetLogger("Teleopti.Requests");
 		readonly Func<ISkill, Specification<IValidatePeriod>> _getIntervalsForUnderstaffing;
 		readonly Func<ISkill, Specification<IValidatePeriod>> _getIntervalsForSeriousUnderstaffing;
 

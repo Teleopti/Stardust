@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     public class IntervalHasUnderstaffing : Specification<IValidatePeriod>
     {
         private readonly ISkill _skill;
-		private static readonly ILog requestLogger = LogManager.GetLogger("Requests");
+		private static readonly ILog requestLogger = LogManager.GetLogger("Teleopti.Requests");
 
 		public IntervalHasUnderstaffing(ISkill skill)
         {
