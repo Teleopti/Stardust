@@ -3,15 +3,7 @@
 
 	angular
 		.module('wfm.skillPrio')
-		.controller('skillPrioControllerNew', skillPrioController)
-		.filter('highlight', function($sce) {
-	    return function(text, phrase) {
-	      if (phrase) text = text.replace(new RegExp('('+phrase+')', 'gi'),
-	        '<span class="highlighted">$1</span>')
-
-	      return $sce.trustAsHtml(text)
-	    }
-	  });
+		.controller('skillPrioControllerNew', skillPrioController);
 
 	skillPrioController.$inject = ['$filter', 'Toggle', '$location', 'NoticeService', '$translate', '$q', 'skillPrioServiceNew'];
 
@@ -31,23 +23,22 @@
 		getSkills();
 
 		function resetAllList() {
-			vm.unsortedList = [];
 			vm.cascadeList = [];
 		}
 
 		function getActivities() {
-		  var getAct = skillPrioServiceNew.getActivites.query();
-		  return getAct.$promise.then(function(data) {
-		    vm.activites = data.sort(sortByName);
-		    return vm.activites;
-		  });
+			var getAct = skillPrioServiceNew.getActivites.query();
+			return getAct.$promise.then(function(data) {
+				vm.activites = data.sort(sortByName);
+				return vm.activites;
+			});
 		}
 
 		function getSkills() {
 			var getSki = skillPrioServiceNew.getSkills.query();
 			return getSki.$promise.then(function(data) {
 				vm.skills = data;
-				selectActivity(vm.activites[0]); //for default setting
+				selectActivity(vm.activites[0]);
 				return vm.skills;
 			});
 		}
@@ -61,59 +52,54 @@
 			});
 		}
 
-		vm.unsortedOpt = {
-			dragStart: function(event) {
-				if (event.source.nodesScope.$id === event.dest.nodesScope.$id) {
-					event.dest.nodesScope.nodropEnabled = true;
-					event.elements.placeholder.remove();
-				}
-			},
-			dropped: function(event) {
-				if (event.pos.moving || vm.ismodified === true) {
-					vm.ismodified = true;
-					autoDeleteEmptyRow();
-					autoSortSkillByEachRow();
-					autoNewRow();
+		vm.options = {
+			moveItem: function(parent_id, source_id, dest_parent_id) {
+				if (parent_id == dest_parent_id) {
+					if (vm.ismodified === true) {
+						vm.ismodified = true;
+					} else {
+						vm.ismodified = false;
+					}
+					return;
 				} else {
-					vm.ismodified = false;
-				}
-			},
-			dragMove: function(event) {
-				var placeholder = document.getElementsByClassName("angular-ui-tree-placeholder");
-				for (var i = 0; i < placeholder.length; i++) {
-					placeholder[i].innerHTML = "<div class='flip mdi mdi-exit-to-app'></div>";
-				}
-				if (vm.cascadeList.length === 0) {
-					addNewRow();
-				}
-			}
-		};
+					vm.ismodified = true;
+					var item = vm.cascadeList[parent_id].Skills.splice(source_id, 1);
+					var moved = vm.cascadeList[dest_parent_id].Skills.push(item[0]);
 
-		vm.cascadeOpt = {
-			dropped: function(event) {
-				if (event.pos.moving || vm.ismodified === true) {
-					vm.ismodified = true;
-					autoDeleteEmptyRow();
-					autoSortSkillByEachRow();
-					autoNewRow();
-				} else {
-					vm.ismodified = false;
-				}
-			},
-			dragStart: function(event) {
-				var placeholder = document.getElementsByClassName("angular-ui-tree-placeholder");
-				for (var i = 0; i < placeholder.length; i++) {
-					placeholder[i].innerHTML = "<div class='flip mdi mdi-exit-to-app'></div>";
+					if (moved) {
+						sortSkill(dest_parent_id);
+						deleteEmptyRow(parent_id);
+						autoNewRow();
+					}
 				}
 			}
-		};
+		}
+
+		function deleteEmptyRow(parent_id) {
+			if (parent_id > 0 && vm.cascadeList[parent_id].Skills.length === 0) {
+				vm.cascadeList.splice(parent_id, 1);
+				resetLevel(parent_id);
+			}
+		}
+
+		function resetLevel(parent_id) {
+			for (var i = parent_id; i < vm.cascadeList.length; i++) {
+				vm.cascadeList[i].Priority = parseInt(i);
+			}
+		}
+
+		function sortSkill(dest_parent_id) {
+			if (dest_parent_id) {
+				vm.cascadeList[dest_parent_id].Skills.sort(sortByName);
+			}
+		}
 
 		function addNewRow() {
 			var newRow = {
-				Priority: 1,
+				Priority: 0,
 				Skills: []
 			};
-			newRow.Priority = vm.cascadeList.length ? vm.cascadeList[vm.cascadeList.length - 1].Priority + 1 : 1;
+			newRow.Priority = vm.cascadeList.length ? vm.cascadeList[vm.cascadeList.length - 1].Priority + 1 : 0;
 			vm.cascadeList.push(newRow);
 		}
 
@@ -121,34 +107,6 @@
 			if (vm.cascadeList.length > 0 && vm.cascadeList[vm.cascadeList.length - 1].Skills.length > 0) {
 				addNewRow();
 			}
-		}
-
-		function autoDeleteEmptyRow() {
-			if (vm.cascadeList.length > 0) {
-				var i = vm.cascadeList.length
-				while (i--) {
-					if (vm.cascadeList[i].Skills.length === 0) {
-						vm.cascadeList.splice(i, 1);
-						resetCascadeLevel();
-						if (vm.cascadeList.length > 0) {
-							autoNewRow();
-						}
-					}
-				}
-			}
-		}
-
-		function resetCascadeLevel() {
-			for (var i = 0; i < vm.cascadeList.length; i++) {
-				vm.cascadeList[i].Priority = i + 1;
-			}
-		}
-
-		function autoSortSkillByEachRow() {
-			for (var i = 0; i < vm.cascadeList.length - 1; i++) {
-				vm.cascadeList[i].Skills.sort(sortByName);
-			}
-			vm.unsortedList.sort(sortByName);
 		}
 
 		function findIndexInData(data, property, value) {
@@ -166,15 +124,17 @@
 			if (activity !== null) {
 				resetAllList();
 				vm.selectedActivity = activity;
-				var skillsOfSelectedActivity = vm.skills.filter(belongsToActivity);
-				vm.unsortedList = skillsOfSelectedActivity.filter(lacksPriority);
-				var storedCascadeSkills = skillsOfSelectedActivity.filter(hasPriority);
-				loadCascadeList(storedCascadeSkills);
-				autoSortSkillByEachRow();
+				var skillsOfSelectedActivity = vm.skills.filter(belongsToActivity).sort(sortByName);
+				if (skillsOfSelectedActivity.length !== 0) {
+					addNewRow();
+					vm.cascadeList[0].Skills = skillsOfSelectedActivity.filter(lacksPriority);
+					var skillsHasPriority = skillsOfSelectedActivity.filter(hasPriority);
+					createCascadeLevel(skillsHasPriority);
+				}
 			}
 		}
 
-		function loadCascadeList(skills) {
+		function createCascadeLevel(skills) {
 			if (skills.length > 0) {
 				for (var i = 0; i < skills.length; i++) {
 					var index = findIndexInData(vm.cascadeList, 'Priority', skills[i].Priority);
@@ -192,15 +152,15 @@
 		}
 
 		function sortByName(a, b) {
-		  var nameA = a.SkillName ? a.SkillName.toUpperCase() : a.ActivityName.toUpperCase();
-		  var nameB = b.SkillName ? b.SkillName.toUpperCase() : b.ActivityName.toUpperCase();
-		  if (nameA < nameB) {
-		    return -1;
-		  }
-		  if (nameA > nameB) {
-		    return 1;
-		  }
-		  return 0;
+			var nameA = a.SkillName ? a.SkillName.toUpperCase() : a.ActivityName.toUpperCase();
+			var nameB = b.SkillName ? b.SkillName.toUpperCase() : b.ActivityName.toUpperCase();
+			if (nameA < nameB) {
+				return -1;
+			}
+			if (nameA > nameB) {
+				return 1;
+			}
+			return 0;
 		}
 
 		function sortByPriority(a, b) {
@@ -226,19 +186,18 @@
 			return results;
 		}
 
-		function moveBackToUnsort(skills, skill) {
+		function moveBackToUnsort(skills, skill, parent_id) {
 			if (skill) {
 				vm.ismodified = true;
 				var index = findIndexInData(skills, 'SkillName', skill.SkillName);
 				skills.splice(index, 1);
-				vm.unsortedList.push(skill);
-				vm.unsortedList.sort(sortByName);
-				autoDeleteEmptyRow();
+				vm.cascadeList[0].Skills.push(skill);
+				vm.cascadeList[0].Skills.sort(sortByName);
+				deleteEmptyRow(parent_id);
 			}
 		}
 
 		function save() {
-			vm.ismodified = false;
 			var allData = setPriorityForSkill();
 			var query = skillPrioServiceNew.saveSkills.save(allData);
 			query.$promise.then(function() {
@@ -249,14 +208,12 @@
 
 		function setPriorityForSkill() {
 			var prepareSkills = [];
-			if (vm.unsortedList.length > 0) {
-				vm.unsortedList.forEach(function(skill) {
+			if (vm.cascadeList.length > 1) {
+				vm.cascadeList[0].Skills.forEach(function(skill) {
 					skill.Priority = null;
-				})
-				prepareSkills = angular.copy(vm.unsortedList);
-			}
-			if (vm.cascadeList.length > 0) {
-				for (var i = 0; i < vm.cascadeList.length; i++) {
+					prepareSkills.push(skill);
+				});
+				for (var i = 1; i < vm.cascadeList.length; i++) {
 					vm.cascadeList[i].Skills.forEach(function(skill) {
 						skill.Priority = vm.cascadeList[i].Priority;
 						prepareSkills.push(skill);

@@ -1,8 +1,8 @@
 <div ng-if="vm.toggledOptimization">
 	<div class="view-header with-desc">
 		<div class="view-title">
-			<h1><i class="mdi mdi-account"></i>Skill Priority</h1>
-			<p>Manage the way your skills are handled</p>
+			<h1><i class="mdi mdi-account"></i>Skill Priorities</h1>
+			<p>Define chains of prioritized skills per activity</p>
 			<div class="wfm-chip-wrap" ng-if="vm.ismodified">
 				<span class="wfm-chip">
 			<span class="chip-handle chip-warning">
@@ -44,47 +44,45 @@
 				<div class="sub-header">
 					<label for="filter">
 					 <i class="mdi mdi-filter-outline inline-flex">
-					   <input type="text" id="filter" ng-model="search.text" placeholder="filter skills...">
+					   <input type="text" id="filter" ng-model="skillFilter.SkillName" placeholder="filter skills...">
 					   <md-tooltip>Filter</md-tooltip>
 					 </i>
 					</label>
 			    <div class="head-actions panel-menu">
+						<i class="mdi mdi-checkbox-blank-circle skillPrio"></i> Top priority skills
 			      <div tabindex=0 class="context-menu card-context">
 			        <i class="mdi mdi-information-outline"></i>
-							<md-tooltip>Drag and drop skills to create or sort cascade skills</md-tooltip>
+							<md-tooltip class="skillPrio">
+								Drag and drop skill to create or sort chains of prioritized skills<br>
+							</md-tooltip>
 			      </div>
 			    </div>
 			  </div>
-				<div class="con-row" ng-show="true">
-					<div class="con-flex" ng-hide="vm.unsortedList.length === 0">
-						<b>Unsorted Skills</b>
-						<div ui-tree="vm.unsortedOpt" data-drag-enabled="true" data-max-depth="0">
-							<ol ui-tree-nodes ng-model="vm.unsortedList" class="horizontal-list" data-horizontal>
-								<li ui-tree-node ng-repeat="Skill in vm.unsortedList" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
-									<span ng-bind-html="Skill.SkillName | highlight:search.text" id="card">
+				<div class="con-row">
+					<div class="con-flex" ng-hide="vm.cascadeList[0].Skills.length === 0">
+							<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable= "vm.options">
+								<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills | filter:skillFilter" class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
 										{{Skill.SkillName}}
-									</span>
+								</li>
+							</ol>
+					</div>
+					<div class="con-flex" ng-show="vm.cascadeList.length > 2" ng-class="{'skill-group-divider':vm.unsortedList.length > 0}">
+						<div ng-repeat="sortedRow in vm.cascadeList" ng-if="$index >= 1" class="skill-divider">
+							<ol parent-id="{{$parent.$index}}" ng-model="sortedRow.Skills" source="vm.cascadeList" class="cascadeList-container" droppable="vm.options">
+								{{sortedRow.Priority}}
+								<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
+									{{Skill.SkillName}}
+									<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill, $parent.$index)" class="mdi mdi-close drag-handle-delete">
+										<md-tooltip>Move skill to unsorted list</md-tooltip>
+									</i>
 								</li>
 							</ol>
 						</div>
 					</div>
-					<div class="con-flex" ng-hide="vm.cascadeList.length === 0" ng-class="{'skill-group-devider':vm.unsortedList.length > 0}">
-						<b>Cascade Skills</b>
-						<div ng-repeat="sortedRow in vm.cascadeList" class="skill-devider">
-							<div ui-tree="vm.cascadeOpt" data-drag-enabled="true" data-max-depth="0">
-								<ol ui-tree-nodes ng-model="sortedRow.Skills" class="horizontal-list" data-horizontal>
-									{{sortedRow.Priority}}
-									<li ui-tree-node ng-repeat="Skill in sortedRow.Skills" ui-tree-node class="drag-handle horizontal-list drop-card material-depth-1">
-										<span ng-bind-html="Skill.SkillName | highlight:search.text" id="card">
-											{{Skill.SkillName}}
-										</span>
-										<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill)" class="mdi mdi-close drag-handle-delete">
-											<md-tooltip>Move skill to unsorted list</md-tooltip>
-										</i>
-									</li>
-								</ol>
-							</div>
-						</div>
+				</div>
+				<div class="con-row" ng-show="vm.cascadeList.length === 0">
+					<div class="con-flex">
+						No skills for selected activity.
 					</div>
 				</div>
 			</div>

@@ -1,37 +1,5 @@
-.skill-devider{
+.skill-divider{
 	border-top: 1px dashed $gray-500;
-}
-
-.angular-ui-tree-nodes {
-	width: 100% !important;
-	display: inline-table;
-}
-
-.angular-ui-tree-placeholder {
-	background: $gray012;
-	width: 100%!important;
-	display: inline-table!important;
-	float: right;
-	position: relative;
-	top: 10px !important;
-	border-style: dotted;
-	border-color: $gray087;
-	border-width: thin;
-	text-align: center;
-	transition: $transition-timing;
-	padding: $full-padding*10 0;
-	color: $gray087;
-}
-
-.flip{
-	transform: rotate(90deg);
-}
-
-.angular-ui-tree-empty {
-	background-image: none;
-	background: none;
-	border: none;
-	min-height: 40px;
 }
 
 .horizontal-list {
@@ -55,10 +23,29 @@
 	width: auto;
 }
 
-.skill-group-devider {
+.drop-card-1 {
+    margin: 5px;
+    padding: 5px;
+    width: auto;
+    background-color: #f5f5dc;
+		color: $gray100;
+}
+
+.skill-group-divider {
 	border-left: 1px solid gray;
 }
 
-.highlighted {
-	background: yellow
+ol.unsortedList-container {
+	height:100%;
+	padding: 0;
+	margin: 0;
+}
+
+ol.cascadeList-container {
+	min-height: 55px;
+	padding: 0;
+}
+
+i.skillPrio{
+	color:#f5f5dc !important;
 }

@@ -149,7 +149,7 @@ describe('skillPrioControllerNew', function () {
 		$httpBackend.flush();
 		vm.selectActivity(vm.activites[0]);
 
-		expect(vm.unsortedList.length).toBe(2);
+		expect(vm.cascadeList[0].Skills.length).toBe(2);
 	});
 
   it('should get cascade skills for selected activity', function () {
@@ -165,7 +165,7 @@ describe('skillPrioControllerNew', function () {
     }).withSkill({
       ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
       ActivityName: "Phone",
-      Priority: 4,
+      Priority: 3,
       SkillGuid: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
       SkillName: "Channel Sales"
     }).withSkill({
@@ -179,7 +179,8 @@ describe('skillPrioControllerNew', function () {
 		$httpBackend.flush();
 		vm.selectActivity(vm.activites[0]);
 
-		expect(vm.cascadeList.length).toBe(3); //autoNewRow
+		expect(vm.cascadeList[0].Skills.length).toBe(1);
+		expect(vm.cascadeList[1].Skills.length).toBe(2);
 	});
 
   it('should remove skill from cascade skills and move it back to unsortedList', function () {
@@ -195,7 +196,7 @@ describe('skillPrioControllerNew', function () {
     }).withSkill({
       ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
       ActivityName: "Phone",
-      Priority: 4,
+      Priority: 3,
       SkillGuid: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
       SkillName: "Channel Sales"
     }).withSkill({
@@ -208,10 +209,10 @@ describe('skillPrioControllerNew', function () {
     var vm = $controller('skillPrioControllerNew');
     $httpBackend.flush();
     vm.selectActivity(vm.activites[0]);
-    vm.moveBackToUnsort(vm.cascadeList[0].Skills, vm.skills[2]);
+    vm.moveBackToUnsort(vm.cascadeList[1].Skills, vm.skills[2]);
 
-    expect(vm.cascadeList.length).toBe(2); //should be 1 but function auto add new row when list is not totally empty 
-    expect(vm.unsortedList.length).toBe(2);
+    expect(vm.cascadeList[0].Skills.length).toBe(2); //should be 1 but function auto add new row when list is not totally empty
+    expect(vm.cascadeList[1].Skills.length).toBe(1);
   });
 
   it('should reset the priority for skill that move from cascadeList to unsortedList', function () {
@@ -227,7 +228,7 @@ describe('skillPrioControllerNew', function () {
     }).withSkill({
       ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
       ActivityName: "Phone",
-      Priority: 4,
+      Priority: 3,
       SkillGuid: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
       SkillName: "Channel Sales"
     }).withSkill({
@@ -240,7 +241,7 @@ describe('skillPrioControllerNew', function () {
     var vm = $controller('skillPrioControllerNew');
     $httpBackend.flush();
     vm.selectActivity(vm.activites[0]);
-    vm.moveBackToUnsort(vm.cascadeList[0].Skills, vm.skills[2]);
+    vm.moveBackToUnsort(vm.cascadeList[1].Skills, vm.skills[2]);
     vm.save();
 
     expect(vm.skills[2].SkillName).toBe("BTS");
@@ -277,6 +278,6 @@ describe('skillPrioControllerNew', function () {
     vm.save();
 
     expect(vm.skills[0].SkillName).toBe("Channel Sales");
-    expect(vm.skills[0].Priority).toBe(4);
+    expect(vm.skills[0].Priority).toBe(3);
   });
 });
