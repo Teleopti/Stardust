@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void Persist(AgentStateReadModel model, DeadLockVictim deadLockVictim);
 		void SetDeleted(Guid personId, DateTime expiresAt);
 		void DeleteOldRows(DateTime now);
-		void UpsertAssociation(Guid personId, Guid teamId, Guid? siteId, Guid? businessUnitId);
+		void UpsertAssociation(AssociationInfo info);
 	}
 }

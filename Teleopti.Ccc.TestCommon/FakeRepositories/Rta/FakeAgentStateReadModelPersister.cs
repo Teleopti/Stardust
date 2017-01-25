@@ -75,26 +75,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return _data.ContainsKey(personId) ? _data[personId].CopyBySerialization() : null;
 		}
 
-		public void UpsertAssociation(Guid personId, Guid teamId, Guid? siteId, Guid? businessUnitId)
+		public void UpsertAssociation(AssociationInfo info)
 		{
 			AgentStateReadModel removed;
-			if (!_data.TryRemove(personId, out removed))
+			if (!_data.TryRemove(info.PersonId, out removed))
 			{
-				_data.TryAdd(personId, new AgentStateReadModel
+				_data.TryAdd(info.PersonId, new AgentStateReadModel
 				{
-					PersonId = personId,
-					BusinessUnitId = businessUnitId,
-					SiteId = siteId,
-					TeamId = teamId
+					PersonId = info.PersonId,
+					BusinessUnitId = info.BusinessUnitId,
+					SiteId = info.SiteId,
+					SiteName = info.SiteName,
+					TeamId = info.TeamId,
+					TeamName = info.TeamName
 				});
 				return;
 			}
-			removed.TeamId = teamId;
-			removed.SiteId = siteId;
-			removed.BusinessUnitId = businessUnitId.GetValueOrDefault();
+			removed.SiteId = info.SiteId;
+			removed.SiteName = info.SiteName;
+			removed.TeamId = info.TeamId;
+			removed.TeamName = info.TeamName;
+			removed.BusinessUnitId = info.BusinessUnitId.GetValueOrDefault();
 			removed.IsDeleted = false;
 			removed.ExpiresAt = null;
-			_data.AddOrUpdate(personId, removed.CopyBySerialization(), (g, m) => removed);
+			_data.AddOrUpdate(info.PersonId, removed.CopyBySerialization(), (g, m) => removed);
 		}
 
 

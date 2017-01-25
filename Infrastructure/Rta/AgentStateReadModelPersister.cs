@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return internalModel;
 		}
 
-		public void UpsertAssociation(Guid personId, Guid teamId, Guid? siteId, Guid? businessUnitId)
+		public void UpsertAssociation(AssociationInfo info)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -238,10 +238,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			IsDeleted = null,
 			ExpiresAt = null
 		;")
-				.SetParameter("PersonId", personId)
-				.SetParameter("BusinessUnitId", businessUnitId)
-				.SetParameter("SiteId", siteId)
-				.SetParameter("TeamId", teamId)
+				.SetParameter("PersonId", info.PersonId)
+				.SetParameter("BusinessUnitId", info.BusinessUnitId)
+				.SetParameter("SiteId", info.SiteId)
+				.SetParameter("TeamId", info.TeamId)
 				.ExecuteUpdate();
 		}
 

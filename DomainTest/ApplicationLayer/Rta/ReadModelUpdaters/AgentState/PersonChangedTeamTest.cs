@@ -69,7 +69,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			});
 
 			Persister.Models.Single().BusinessUnitId.Should().Be(businessUnit);
+		}
+		 
+		[Test]
+		public void ShouldUpdateWithNames()
+		{
+			var personId = Guid.NewGuid();
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				TeamName = "team",
+				SiteId = Guid.NewGuid(),
+				SiteName = "site",
+				ExternalLogons = new[] { new ExternalLogon() }
+			});
+
+			Persister.Models.Single().TeamName.Should().Be("team");
+			Persister.Models.Single().SiteName.Should().Be("site");
 		}
 	}
 }

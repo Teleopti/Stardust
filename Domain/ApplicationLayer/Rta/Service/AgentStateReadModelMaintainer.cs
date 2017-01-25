@@ -49,7 +49,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 			var model = _persister.Load(@event.PersonId);
 			if (model == null || expirationFor(@event) >= model.ExpiresAt.GetValueOrDefault())
-				_persister.UpsertAssociation(@event.PersonId, @event.TeamId.Value, @event.SiteId, @event.BusinessUnitId);
+				_persister.UpsertAssociation(new AssociationInfo()
+				{
+					PersonId = @event.PersonId,
+					BusinessUnitId = @event.BusinessUnitId,
+					SiteId = @event.SiteId,
+					SiteName = @event.SiteName,
+					TeamId = @event.TeamId.Value,
+					TeamName = @event.TeamName
+				});
 		}
 
 		private static DateTime expirationFor(IEvent @event)
@@ -57,5 +65,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return ((dynamic) @event).Timestamp.AddMinutes(30);
 		}
 
+	}
+
+	public class AssociationInfo
+	{
+		public Guid PersonId { get; set; }
+		public Guid? BusinessUnitId { get; set; }
+		public Guid? SiteId { get; set; }
+		public string SiteName { get; set; }
+		public Guid TeamId { get; set; }
+		public string TeamName { get; set; }
 	}
 }

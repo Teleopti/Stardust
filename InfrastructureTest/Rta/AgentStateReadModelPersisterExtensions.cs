@@ -6,7 +6,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	{
 		public static void PersistWithAssociation(this IAgentStateReadModelPersister instance, AgentStateReadModel model)
 		{
-			instance.UpsertAssociation(model.PersonId, model.TeamId.GetValueOrDefault(), model.SiteId, model.BusinessUnitId);
+			instance.UpsertAssociation(new AssociationInfo()
+			{
+				PersonId = model.PersonId,
+				BusinessUnitId = model.BusinessUnitId,
+				SiteId = model.SiteId,
+				SiteName = model.SiteName,
+				TeamId = model.TeamId.GetValueOrDefault(),
+				TeamName = model.TeamName
+			});
 			instance.Persist(model, DeadLockVictim.Yes);
 		}
 	}

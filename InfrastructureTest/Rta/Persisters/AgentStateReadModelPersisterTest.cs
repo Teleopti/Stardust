@@ -324,7 +324,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var businessUnitId = Guid.NewGuid();
 			Target.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
 
-			Target.UpsertAssociation(personId, teamId, siteId, businessUnitId);
+			Target.UpsertAssociation(new AssociationInfo()
+			{
+				PersonId = personId,
+				BusinessUnitId = businessUnitId,
+				SiteId = siteId,
+				TeamId = teamId,
+			});
 
 			var result = Target.Load(personId);
 			result.TeamId.Should().Be(teamId);
@@ -340,7 +346,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 
-			Target.UpsertAssociation(personId, teamId, siteId, businessUnitId);
+			Target.UpsertAssociation(new AssociationInfo()
+			{
+				PersonId = personId,
+				BusinessUnitId = businessUnitId,
+				SiteId = siteId,
+				TeamId = teamId,
+			});
 
 			var result = Target.Load(personId);
 			result.TeamId.Should().Be(teamId);
@@ -354,8 +366,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = personId});
 			Target.SetDeleted(personId, "2016-10-05 08:00".Utc());
-			
-			Target.UpsertAssociation(personId, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+
+			Target.UpsertAssociation(new AssociationInfo()
+			{
+				PersonId = personId
+			});
 
 			var result = Target.Load(personId);
 			result.IsDeleted.Should().Be.False();
