@@ -67,10 +67,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 				}
 
-				if (!unsuccessfulDays.Any()) continue;
-
-				unsuccessfulDays.ForEach(x => x.Item1.UnlockPeriod(x.Item2));
-				removeScheduleDayPros(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
+				if (unsuccessfulDays.Any())
+				{
+					unsuccessfulDays.ForEach(x => x.Item1.UnlockPeriod(x.Item2));
+					removeScheduleDayPros(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
+				}
 			}
 		}
 
