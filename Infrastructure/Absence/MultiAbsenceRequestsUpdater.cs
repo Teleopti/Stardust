@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 	public class MultiAbsenceRequestsUpdater : IMultiAbsenceRequestsUpdater
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsUpdater));
+		private static readonly ILog requestLogger = LogManager.GetLogger("Requests");
 
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly IToggleManager _toggleManager;
+		
 
 		private IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> _absenceRequestValidators;
 
@@ -120,6 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
 		{
+			requestLogger.Debug("Test :)");
 			if (!personRequestsIds.Any()) return;
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			IList<IPersonRequest> personRequests;
