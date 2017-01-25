@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 
-		[Test, Ignore("To be fixed. Part of PBI 42680")]
+		[Test]
 		public void ShouldReplaceBestDayFirst()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);

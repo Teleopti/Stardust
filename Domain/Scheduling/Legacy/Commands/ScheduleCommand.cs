@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
 		public ScheduleCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_periodExtractor = periodExtractor;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_userTimeZone = userTimeZone;
+			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
 		}
 
 		[TestLog]
@@ -71,6 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
+			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
 
 			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
 			var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
