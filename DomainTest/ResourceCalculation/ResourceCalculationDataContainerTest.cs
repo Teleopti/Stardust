@@ -206,9 +206,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			var affectedSkill = result.First().Value;
-			affectedSkill.Resource.Should().Be.EqualTo(1.6d);
+			affectedSkill.Resource.Should().Be.EqualTo(0.8d);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
-			affectedSkill.SkillEffiencies[_skill.Id.Value].Should().Be.EqualTo(2d);
+			affectedSkill.SkillEffiencies[_skill.Id.Value].Should().Be.EqualTo(1d);
 		}
 
 		[Test]
@@ -266,8 +266,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 								 });
 			var result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			var affectedSkill = result.First().Value;
-			affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.EqualTo(1.8);
-			affectedSkill.Resource.Should().Be.EqualTo(1.5);
+			affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.EqualTo(0.9);
+			affectedSkill.Resource.Should().Be.EqualTo(0.75);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
 
@@ -396,6 +396,52 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					      _period.ChangeStartTime(TimeSpan.FromMinutes(3)),
 					      _period.MovePeriod(TimeSpan.FromMinutes(15)).ChangeStartTime(TimeSpan.FromMinutes(-6))
 				      });
+		}
+
+	    [Test]
+	    public void ShouldGetTheDistributedCountForHourSkill()
+	    {
+		    var period = new DateTimePeriod(2013, 08, 06, 12, 2013, 8, 06, 13);
+			_person.ChangeSkillProficiency(_skill, new Percent(0.9), _person.Period(_date));
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = new DateTimePeriod(period.StartDateTime,period.StartDateTime.AddMinutes(15)),
+									 RequiresSeat = false,
+									 Resource = 1
+								 });
+
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = new DateTimePeriod(period.StartDateTime.AddMinutes(15), period.StartDateTime.AddMinutes(30)),
+									 RequiresSeat = false,
+									 Resource = 1
+								 });
+
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(45)),
+									 RequiresSeat = false,
+									 Resource = 1
+								 });
+
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = new DateTimePeriod(period.StartDateTime.AddMinutes(45), period.StartDateTime.AddMinutes(60)),
+									 RequiresSeat = false,
+									 Resource = 1
+								 });
+			var result = _target.AffectedResources(_activity, period );
+			var affectedSkill = result.First().Value;
+			affectedSkill.Resource.Should().Be.EqualTo(1);
+			affectedSkill.Count.Should().Be.EqualTo(1);
 		}
     }
 }

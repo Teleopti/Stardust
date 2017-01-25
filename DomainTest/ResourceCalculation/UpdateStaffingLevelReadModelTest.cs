@@ -254,5 +254,48 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			persistedCombinationResources.Count().Should().Be.EqualTo(1);
 			persistedCombinationResources.First().Resource.Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldDistributeResourceEvenlyToCompleteInterval()
+		{
+			Now.Is("2016-12-19 00:00");
+			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
+			var scenario = ScenarioRepository.Has("default");
+
+			var activity = ActivityFactory.CreateActivity("phone");
+			var activity2 = ActivityFactory.CreateActivity("email");
+
+			var phoneSkill = SkillRepository.Has("sales", activity);
+			var emailSkill = SkillRepository.Has("buy", activity2);
+			phoneSkill.DefaultResolution = 15;
+			emailSkill.DefaultResolution = 60;
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { phoneSkill }).WithId();
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { emailSkill }).WithId();
+
+			person.PermissionInformation.SetDefaultTimeZone(phoneSkill.TimeZone);
+			person2.PermissionInformation.SetDefaultTimeZone(emailSkill.TimeZone);
+
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory());
+			PersonAssignmentRepository.Has(ass);
+			var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity2, period, ShiftCategoryFactory.CreateShiftCategory());
+			PersonAssignmentRepository.Has(ass2);
+
+			SkillDayRepository.Has(phoneSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+			SkillDayRepository.Has(emailSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+
+			PersonRepository.Has(person);
+			PersonRepository.Has(person2);
+			Target.Update(period);
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
+			persistedCombinationResources.Count().Should().Be.EqualTo(5);
+			persistedCombinationResources
+				.First(x => x.SkillCombination.NonSequenceEquals(new[] {emailSkill.Id.GetValueOrDefault()}))
+				.Resource.Should()
+				.Be.EqualTo(1);
+		}
 	}
+
+
+
 }

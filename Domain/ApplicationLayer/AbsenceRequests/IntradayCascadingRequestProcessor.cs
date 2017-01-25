@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
 
-				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
+				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period);
 				if (!combinationResources.Any())
 				{
 					logger.Warn(Resources.DenyDueToTechnicalProblems + " Can not find any skillcombinations.");
@@ -84,11 +85,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 				var allSkills = _skillRepository.LoadAll();
-				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkills(allSkills.Select(x => x.Id.GetValueOrDefault()).ToArray(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime).ToList();
+				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkills(allSkills.Select(x => x.Id.GetValueOrDefault()).ToArray(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
 				skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
-				var skillCombinationResource = combinationResources.FirstOrDefault();
-				var skillInterval = (int) skillCombinationResource.EndDateTime.Subtract(skillCombinationResource.StartDateTime).TotalMinutes;
+				var skillIds = new HashSet<Guid>();
+				foreach (var skillCombinationResource in combinationResources)
+				{
+					foreach (var skillId in skillCombinationResource.SkillCombination)
+					{
+						skillIds.Add(skillId);
+					}
+				}
+				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.Value)).Min(x => x.DefaultResolution);
 
 				var relevantSkillStaffPeriods =
 					skillStaffingIntervals.GroupBy(s => allSkills.First(a => a.Id.GetValueOrDefault() == s.SkillId))
@@ -112,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var activity = _activityRepository.Get(layer.PayloadId);
 						if (nonSkillActivityForWholeInterval(activity, layer))
 						{
-							zeroDemandForIntervalsCoveredByNonSkillActivity(skillStaffingIntervals, layer);
+							zeroDemandForIntervalsCoveredByNonSkillActivity(skillStaffingIntervals.ToList(), layer);
 							continue;
 						}
 						var skillCombination =
@@ -120,12 +128,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 								.ForActivity(layer.PayloadId);
 						if (!skillCombination.Skills.Any()) continue;
 						
-							var skillCombinationResourceByAgentAndLayer =
-								combinationResources.Single(
-									x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
-										 && x.StartDateTime == layer.Period.StartDateTime);
-							skillCombinationResourceByAgentAndLayer.Resource -= 1;
-							skillCombinationResourcesForAgent.Add(skillCombinationResourceByAgentAndLayer);
+						var skillCombinationResourceByAgentAndLayer = distributeResourceSmartly(combinationResources, skillCombination, layer);
+						skillCombinationResourcesForAgent.Add(skillCombinationResourceByAgentAndLayer);
 						
 						var scheduleResourceOptimizer = new ScheduleResourceOptimizer(resourcesForCalculation, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods),new AffectedPersonSkillService(allSkills), false, new ActivityDivider());
 						scheduleResourceOptimizer.Optimize(layer.Period);
@@ -190,6 +194,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				logger.Error(Resources.DenyDueToTechnicalProblems + exp);
 				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 			}
+		}
+
+		private static SkillCombinationResource distributeResourceSmartly(IEnumerable<SkillCombinationResource> combinationResources,
+			SkillCombination skillCombination, ResourceLayer layer)
+		{
+			var skillCombinationResourceByAgentAndLayer =
+				combinationResources.Single(
+					x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
+						 && (layer.Period.StartDateTime >= x.StartDateTime && layer.Period.EndDateTime <= x.EndDateTime) );
+
+			var part = layer.Period.ElapsedTime().TotalMinutes / skillCombinationResourceByAgentAndLayer.GetTimeSpan().TotalMinutes;
+			skillCombinationResourceByAgentAndLayer.Resource -= 1*part;
+			return skillCombinationResourceByAgentAndLayer;
 		}
 
 		private static bool nonSkillActivityForWholeInterval(IActivity activity, ResourceLayer layer)

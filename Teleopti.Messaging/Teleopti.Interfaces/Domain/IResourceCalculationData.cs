@@ -22,6 +22,11 @@ namespace Teleopti.Interfaces.Domain
 		public DateTime EndDateTime { get; set; }
 		public double Resource { get; set; }
 		public IEnumerable<Guid> SkillCombination { get; set; }
+
+		public TimeSpan GetTimeSpan()
+		{
+			return EndDateTime.Subtract(StartDateTime);
+		}
 	}
 
 	public class SkillCombinationHolder

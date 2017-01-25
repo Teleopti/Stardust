@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dateTime = new DateTime(2016, 10, 03, 11, 0, 0, DateTimeKind.Utc);
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime,dateTime.AddMinutes(15)), getSkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(15))) );
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30))));
-			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60))));
+			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45))));
 
 			skillStaffPeriodExt.Add(skill,skillStaffPeriodDic);
 			var fakeholder = new FakeSkillStaffPeriodHolder();
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime, dateTime.AddMinutes(15)), getSkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(15))));
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30))));
-			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60))));
+			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45))));
 
 			skillStaffPeriodExt.Add(skill, skillStaffPeriodDic);
 			var fakeholder = new FakeSkillStaffPeriodHolder();
@@ -117,12 +117,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			changes.FirstOrDefault().EndDateTime.Should().Be.EqualTo(dateTime.AddMinutes(60));
 		}
 
-
 		private ISkillStaffPeriod getSkillStaffPeriod(DateTimePeriod period)
 		{
 			var skillStaffperiod = new SkillStaffPeriod(period, new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
 			return skillStaffperiod;
 		}
-
+		
 	}
 }
