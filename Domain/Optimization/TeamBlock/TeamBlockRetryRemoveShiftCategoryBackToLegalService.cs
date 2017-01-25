@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -61,12 +62,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
 			{
-				var unsuccessfulDays = new List<Tuple<IScheduleMatrixPro, DateOnlyPeriod>>();
+				var unsuccessfulDays = new HashSet<DateOnly>();
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder,
 					_schedulePartModifyAndRollbackService, resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays);
 				if (unsuccessfulDays.Any())
 				{
-					unsuccessfulDays.ForEach(x => x.Item1.UnlockPeriod(x.Item2));
+					unsuccessfulDays.ForEach(x => scheduleMatrixPro.UnlockPeriod(x.ToDateOnlyPeriod()));
 					removeScheduleDayPros(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
 				}
 			}
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
-			IShiftCategoryLimitation limitation, bool isSingleAgentTeam, ICollection<Tuple<IScheduleMatrixPro, DateOnlyPeriod>> lockedDays )
+			IShiftCategoryLimitation limitation, bool isSingleAgentTeam, HashSet<DateOnly> lockedDays)
 		{
 			//TODO: ändra så att rollbackservice skickas in hela vägen här
 			var removedScheduleDayPros = removeScheduleDayPros(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 
 				scheduleMatrixPro.LockPeriod(removedScheduleDayPro.Day.ToDateOnlyPeriod());
-				lockedDays.Add(new Tuple<IScheduleMatrixPro, DateOnlyPeriod>(scheduleMatrixPro, removedScheduleDayPro.Day.ToDateOnlyPeriod()));
+				lockedDays.Add(removedScheduleDayPro.Day);
 
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, rollbackService,
 					resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation,
