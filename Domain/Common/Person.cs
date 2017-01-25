@@ -113,7 +113,9 @@ namespace Teleopti.Ccc.Domain.Common
 					PersonId = Id.GetValueOrDefault(),
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
+					CurrentSiteName = info.SiteName,
 					CurrentTeamId = info.TeamId,
+					CurrentTeamName = info.TeamName,
 					ExternalLogons = info.ExternalLogons
 				};
 			});

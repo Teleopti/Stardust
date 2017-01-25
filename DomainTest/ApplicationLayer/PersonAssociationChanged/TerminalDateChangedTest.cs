@@ -145,10 +145,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				PersonId = personId,
 				PreviousTerminationDate = "2016-01-01".Utc(),
 				TerminationDate = "2016-12-31".Utc(),
-				TeamId = teamId,
-				SiteId = siteId,
 				BusinessUnitId = businessUnitId,
+				SiteId = siteId,
 				SiteName = "site",
+				TeamId = teamId,
 				TeamName = "team"
 			});
 
