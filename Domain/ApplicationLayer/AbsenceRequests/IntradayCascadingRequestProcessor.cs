@@ -90,7 +90,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var skillCombinationResource = combinationResources.FirstOrDefault();
 				var skillInterval = (int) skillCombinationResource.EndDateTime.Subtract(skillCombinationResource.StartDateTime).TotalMinutes;
 
-				var relevantSkillStaffPeriods = skillStaffingIntervals.GroupBy(s => allSkills.First(a => a.Id.GetValueOrDefault() == s.SkillId)).ToDictionary(k => k.Key, v => (IResourceCalculationPeriodDictionary)new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod, s => (IResourceCalculationPeriod)s)));
+				var relevantSkillStaffPeriods =
+					skillStaffingIntervals.GroupBy(s => allSkills.First(a => a.Id.GetValueOrDefault() == s.SkillId))
+						.ToDictionary(k => k.Key,
+							v =>
+								(IResourceCalculationPeriodDictionary)
+								new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
+									s => (IResourceCalculationPeriod) s)));
 				var resourcesForShovelAndCalculation = new ResourcesExtractor(combinationResources, allSkills, skillInterval);
 
 				var skillCombinationResourcesForAgent = new List<SkillCombinationResource>();
