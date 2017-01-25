@@ -30,39 +30,41 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                     TimeSpan totalTime = TimeSpan.Zero;
 
                     var selectedTags = new List<IScheduleTag>();
+					if(selectedSchedules.Count <= 30000)
+					{
+						foreach (IScheduleDay scheduleDay in selectedSchedules)
+						{
+							IProjectionService projSvc = scheduleDay.ProjectionService();
+							IVisualLayerCollection visualLayerCollection = projSvc.CreateProjection();
+							switch (scheduleTimeType)
+							{
+								case ScheduleTimeType.ContractTime:
+									totalTime += visualLayerCollection.ContractTime();
+									break;
 
-                    foreach (IScheduleDay scheduleDay in selectedSchedules)
-                    {
-                        IProjectionService projSvc = scheduleDay.ProjectionService();
-                        IVisualLayerCollection visualLayerCollection = projSvc.CreateProjection();
-                        switch (scheduleTimeType)
-                        {
-                            case ScheduleTimeType.ContractTime:
-                                totalTime += visualLayerCollection.ContractTime();
-                                break;
+								case ScheduleTimeType.WorkTime:
+									totalTime += visualLayerCollection.WorkTime();
+									break;
 
-                            case ScheduleTimeType.WorkTime:
-                                totalTime += visualLayerCollection.WorkTime();
-                                break;
+								case ScheduleTimeType.PaidTime:
+									totalTime += visualLayerCollection.PaidTime();
+									break;
 
-                            case ScheduleTimeType.PaidTime:
-                                totalTime += visualLayerCollection.PaidTime();
-                                break;
-
-                            case ScheduleTimeType.OverTime:
-                                totalTime += visualLayerCollection.Overtime();
-                                break;
-                        }
-
-
-                        dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-                        if (!personDic.ContainsKey(scheduleDay.Person))
-                            personDic.Add(scheduleDay.Person, schedulerStateHolder.Schedules[scheduleDay.Person]);
+								case ScheduleTimeType.OverTime:
+									totalTime += visualLayerCollection.Overtime();
+									break;
+							}
 
 
-                        if (!selectedTags.Contains(scheduleDay.ScheduleTag()))
-                            selectedTags.Add(scheduleDay.ScheduleTag());
-                    }
+							dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
+							if (!personDic.ContainsKey(scheduleDay.Person))
+								personDic.Add(scheduleDay.Person, schedulerStateHolder.Schedules[scheduleDay.Person]);
+
+
+							if (!selectedTags.Contains(scheduleDay.ScheduleTag()))
+								selectedTags.Add(scheduleDay.ScheduleTag());
+						}
+					}
 
                     string label = string.Empty;
                     switch (scheduleTimeType)

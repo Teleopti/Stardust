@@ -383,25 +383,27 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void AddWholeWeekAsSelected(int rowIndex, int colIndex)
         {
             if (_grid.Model.ColCount < colIndex) return;
-            _grid.Model.Selections.Clear(true);
             var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             int weekNumWeekHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex, colIndex].Tag).Date, culture);
+			var weekColumns = new List<int>();
             for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)
             {
                 int weekNumDateHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex + 1, i].Tag).Date, culture);
                 if (weekNumWeekHeader == weekNumDateHeader)
                 {
-                    _grid.Model.Selections.Add(GridRangeInfo.Cols(i, i));
-
-                    _grid.CurrentCell.MoveTo(_grid.Model.SelectedRanges[0].Top,
-                                             _grid.Model.SelectedRanges[0].Left);
+					weekColumns.Add(i);               
                 }
             }
-            var start = _grid.Model.Selections.Ranges[0].Left;
-            var end = _grid.Model.Selections.Ranges[_grid.Model.Selections.Ranges.Count - 1].Right;
+	        if (!weekColumns.Any())
+		        return;
+
+	        var start = weekColumns.Min();
+	        var end = weekColumns.Max();
             _grid.Model.Selections.Clear(true);
             _grid.Model.Selections.Add(GridRangeInfo.Cols(start, end));
-        }
+			_grid.CurrentCell.MoveTo(_grid.Model.SelectedRanges[0].Top,
+											 _grid.Model.SelectedRanges[0].Left);
+		}
 
         internal virtual void MouseUp(object sender, MouseEventArgs e)
         {

@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private ScheduleOptimizerHelper _scheduleOptimizerHelper;
-		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly IVirtualSkillHelper _virtualSkillHelper;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
 		private readonly IGridlockManager _gridLockManager;
@@ -406,7 +405,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_budgetPermissionService = _container.Resolve<IBudgetPermissionService>();
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
-			_requiredScheduleHelper = _container.Resolve<IRequiredScheduleHelper>();
 			_scheduleOptimizerHelper = _container.Resolve<ScheduleOptimizerHelper>();
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
@@ -2288,23 +2286,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private GridRangeInfo _lastGridSelection;
-
+		private bool gridSelectionChangedRunning;
 		private void grid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
 			if (e.Range == _lastGridSelection)
 				return;
 
-			if (e.Reason == GridSelectionReason.SelectRange) return;
-			if (_scheduleView == null) return;
+			if (_scheduleView == null)
+				return;
+
+			if (gridSelectionChangedRunning)
+				return;
 
 			using (PerformanceOutput.ForOperation("Changing selection in view"))
 			{
 				if (_scheduleView != null &&
 					(e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) ||
-					e.Reason == GridSelectionReason.ArrowKey)
+					e.Reason == GridSelectionReason.ArrowKey || e.Reason == GridSelectionReason.SelectRange)
 				{
+					gridSelectionChangedRunning = true;
+
 					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
-						_teamLeaderMode, _container.Resolve<IToggleManager>());
+						_teamLeaderMode);
 
 					disableButtonsIfTeamLeaderMode();
 					_scheduleView.Presenter.UpdateFromEditor();
@@ -2320,10 +2323,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						_scheduleView.AddWholeWeekAsSelected(currentCell.RowIndex, currentCell.ColIndex);
 					}
-					var selectedSchedules = _scheduleView.SelectedSchedules();
-					updateSelectionInfo(selectedSchedules);
-					enableSwapButtons(selectedSchedules);
-
+					
 					var selectedDate = _scheduleView.SelectedDateLocal();
 					if (_currentIntraDayDate != selectedDate)
 					{
@@ -2336,12 +2336,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_currentIntraDayDate = selectedDate;
 					}
 
+					var selectedSchedules = _scheduleView.SelectedSchedules();
+					updateSelectionInfo(selectedSchedules);
+					enableSwapButtons(selectedSchedules);
 					if (selectedSchedules.Any())
 						_dateNavigateControl.SetSelectedDateNoInvoke(selectedSchedules[0].DateOnlyAsPeriod.DateOnly);
 
 					_lastGridSelection = e.Range;
 				}
 			}
+			gridSelectionChangedRunning = false;
 		}
 
 		private void saveAllChartSetting()

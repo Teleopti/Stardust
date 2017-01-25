@@ -7,7 +7,6 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -224,8 +223,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ToolStripDropDownItem schedulerToolStripButton, 
 			ScheduleViewBase scheduleView, 
 			SplitterManagerRestrictionView splitterManagerView, 
-			bool teamLeaderMode,
-			IToggleManager toggleManager)
+			bool teamLeaderMode)
 		{
 			bool enabled = 
 				isEnabledScheduleButton(scheduleView, splitterManagerView, teamLeaderMode);
