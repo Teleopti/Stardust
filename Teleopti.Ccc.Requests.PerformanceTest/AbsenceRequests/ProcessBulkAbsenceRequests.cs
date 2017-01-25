@@ -117,15 +117,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				[new Guid("189295E6-6AFF-41C5-87CF-A49C01026BD0")] = statusPending,
 				[new Guid("1CFD93FB-7ABF-4839-BBFC-A4C3009216A2")] = statusAutoDenied,
 				[new Guid("C89644EF-371F-45BB-9F01-A47500C13EB4")] = statusPending,
-				[new Guid("B21D5EA1-7CD9-4237-B451-A65900EB4857")] = statusApproved,
 				[new Guid("3606EB98-53E3-4323-BC47-A3A1009DE023")] = statusApproved,
 				[new Guid("35E1A58D-97CB-4117-B9C3-A141010AA74C")] = statusPending,
-				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = statusPending,
-				[new Guid("144F887C-5AFF-4CC1-93F4-A65900F1C833")] = statusApproved,
-				[new Guid("4AA6D8E5-B679-4F60-98F8-A65900F41B8B")] = statusApproved,
-				[new Guid("1B53C821-2837-4893-8ACC-A65900F41C93")] = statusApproved,
-				[new Guid("4FD5816A-CB41-418B-837E-A65900F0F1FA")] = statusApproved,
-				[new Guid("32E2CCEF-7D00-45DC-8E0B-A65900F2EC3F")] = statusApproved
+				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = statusPending
 			};
 
 			var personReqs = processMultipleAbsenceRequests(expectedStatuses.Keys, true, RequestValidatorsFlag.IntradayValidator);
@@ -147,15 +141,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				[new Guid("189295E6-6AFF-41C5-87CF-A49C01026BD0")] = statusPending,
 				[new Guid("1CFD93FB-7ABF-4839-BBFC-A4C3009216A2")] = statusAutoDenied,
 				[new Guid("C89644EF-371F-45BB-9F01-A47500C13EB4")] = statusPending,
-				[new Guid("B21D5EA1-7CD9-4237-B451-A65900EB4857")] = statusApproved,
 				[new Guid("3606EB98-53E3-4323-BC47-A3A1009DE023")] = statusApproved,
 				[new Guid("35E1A58D-97CB-4117-B9C3-A141010AA74C")] = statusPending,
-				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = statusPending,
-				[new Guid("144F887C-5AFF-4CC1-93F4-A65900F1C833")] = statusApproved,
-				[new Guid("4AA6D8E5-B679-4F60-98F8-A65900F41B8B")] = statusApproved,
-				[new Guid("1B53C821-2837-4893-8ACC-A65900F41C93")] = statusApproved,
-				[new Guid("4FD5816A-CB41-418B-837E-A65900F0F1FA")] = statusApproved,
-				[new Guid("32E2CCEF-7D00-45DC-8E0B-A65900F2EC3F")] = statusApproved
+				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = statusPending
 			};
 
 			var personReqs = processMultipleAbsenceRequestsByOldWay(expectedStatuses.Keys);
