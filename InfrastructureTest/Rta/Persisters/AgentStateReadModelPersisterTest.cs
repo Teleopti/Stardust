@@ -73,8 +73,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				BusinessUnitId = Guid.NewGuid(),
-				TeamId = null,
 				SiteId = null,
+				SiteName = null,
+				TeamId = null,
+				TeamName = null,
+				
 				ReceivedTime = "2015-01-02 10:00".Utc(),
 
 				StateCode = null,
@@ -329,12 +332,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = personId,
 				BusinessUnitId = businessUnitId,
 				SiteId = siteId,
+				SiteName = "site",
 				TeamId = teamId,
+				TeamName = "team"
 			});
 
 			var result = Target.Load(personId);
-			result.TeamId.Should().Be(teamId);
 			result.SiteId.Should().Be(siteId);
+			result.SiteName.Should().Be("site");
+			result.TeamId.Should().Be(teamId);
+			result.TeamName.Should().Be("team");
 			result.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -351,15 +358,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = personId,
 				BusinessUnitId = businessUnitId,
 				SiteId = siteId,
+				SiteName = "site",
 				TeamId = teamId,
+				TeamName = "team"
 			});
 
 			var result = Target.Load(personId);
-			result.TeamId.Should().Be(teamId);
 			result.SiteId.Should().Be(siteId);
+			result.SiteName.Should().Be("site");
+			result.TeamId.Should().Be(teamId);
+			result.TeamName.Should().Be("team");
 			result.BusinessUnitId.Should().Be(businessUnitId);
 		}
-		
+
 		[Test]
 		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
 		{

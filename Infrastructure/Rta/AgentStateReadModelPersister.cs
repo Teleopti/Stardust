@@ -207,13 +207,17 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			:PersonId,
 			:BusinessUnitId,
 			:SiteId,
-			:TeamId
+			:SiteName,
+			:TeamId,
+			:TeamName
 		)
 	) AS S (
 			PersonId,
 			BusinessUnitId,
 			SiteId,
-			TeamId
+			SiteName,
+			TeamId,
+			TeamName
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -223,25 +227,33 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			PersonId,
 			BusinessUnitId,
 			SiteId,
-			TeamId
+			SiteName,
+			TeamId,
+			TeamName
 		) VALUES (
 			S.PersonId,
 			S.BusinessUnitId,
 			S.SiteId,
-			S.TeamId
+			S.SiteName,
+			S.TeamId,
+			S.TeamName
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
 			BusinessUnitId = S.BusinessUnitId,
 			SiteId = S.SiteId,
+			SiteName = S.SiteName,
 			TeamId = S.TeamId,
+			TeamName = S.TeamName,
 			IsDeleted = null,
 			ExpiresAt = null
 		;")
 				.SetParameter("PersonId", info.PersonId)
 				.SetParameter("BusinessUnitId", info.BusinessUnitId)
 				.SetParameter("SiteId", info.SiteId)
+				.SetParameter("SiteName", info.SiteName)
 				.SetParameter("TeamId", info.TeamId)
+				.SetParameter("TeamName", info.TeamName)
 				.ExecuteUpdate();
 		}
 
