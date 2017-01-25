@@ -310,6 +310,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(0);
 		}
 
+		[Test, Ignore("#42752: Crashes if not all sites have max seat limit")]
+		public void ShouldNotCrashWhenMixingAgentOnMaxSeatSiteWithAgentOnSiteWithNoMaxSeat()
+		{
+			var siteMaxSeat = new Site("MaxSeat") { MaxSeats = 1 }.WithId();
+			var site = new Site("_").WithId();
+			var teamMaxSeat = new Team { Description = new Description("_"), Site = siteMaxSeat };
+			var team = new Team { Description = new Description("_"), Site = site };
+			var bu = BusinessUnitFactory.CreateBusinessUnitAndAppend(teamMaxSeat);
+			bu.AddSite(site);
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(bu);
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
+			var agentDataMaxSeat = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamMaxSeat, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentDataMaxSeat.Assignment, agentData.Assignment});
+			var optPreferences = createOptimizationPreferences();
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentDataMaxSeat.Agent, agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+			});
+		}
+
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldConsiderActivityRequireSeat(bool ruleSetOrder)
