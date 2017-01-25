@@ -7,35 +7,23 @@ namespace Teleopti.Interfaces.Domain
     /// TimePeriod struct
     /// </summary>
     [Serializable]
-    public struct TimePeriod : IComparable
+    public struct TimePeriod : IComparable, IEquatable<TimePeriod>
     {
-        #region Fields
-        private MinMax<TimeSpan> period;
-        #endregion
+	    private MinMax<TimeSpan> period;
 
-        #region Properties
-
-        /// <summary>
+	    /// <summary>
         /// Gets the end time.
         /// </summary>
         /// <value>The end time.</value>
-        public TimeSpan EndTime
-        {
-            get { return period.Maximum; }
-        }
+        public TimeSpan EndTime => period.Maximum;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the start time.
         /// </summary>
         /// <value>The start time.</value>
-        public TimeSpan StartTime
-        {
-            get { return period.Minimum; }
-        }
+        public TimeSpan StartTime => period.Minimum;
 
-        #endregion
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="TimePeriod"/> struct.
         /// </summary>
         /// <param name="start">The start.</param>
@@ -44,8 +32,7 @@ namespace Teleopti.Interfaces.Domain
         {
             period = new MinMax<TimeSpan>(start, end);
         }
-
-
+		
         /// <summary>
         /// Initializes a new instance of the <see cref="TimePeriod"/> struct.
         /// </summary>
@@ -129,9 +116,7 @@ namespace Teleopti.Interfaces.Domain
             return true;
         }
 
-        #region IEquatable<TimePeriod> Implementation
-
-        /// <summary>
+	    /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -290,13 +275,8 @@ namespace Teleopti.Interfaces.Domain
             return TimeHelper.TimeOfDayFromTimeSpan(StartTime, culture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(EndTime, culture);
         }
 
-        #endregion
 
-
-        #region Contains
-
-
-        /// <summary>
+	    /// <summary>
         /// Determines whether this period contains the specified time span.
         /// </summary>
         /// <param name="timeSpan">The time span.</param>
@@ -309,7 +289,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public bool Contains(TimeSpan timeSpan)
         {
-            return (StartTime <= timeSpan && EndTime > timeSpan);
+            return StartTime <= timeSpan && EndTime > timeSpan;
         }
         /// <summary>
         /// Determines whether [contains] [the specified period].
@@ -324,7 +304,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public bool Contains(TimePeriod containsPeriod)
         {
-            return (ContainsPart(containsPeriod.StartTime) && ContainsPart(containsPeriod.EndTime));
+            return ContainsPart(containsPeriod.StartTime) && ContainsPart(containsPeriod.EndTime);
         }
 
         /// <summary>
@@ -340,12 +320,10 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public bool ContainsPart(TimeSpan timeSpan)
         {
-            return (timeSpan <= EndTime && timeSpan >= StartTime);
+            return timeSpan <= EndTime && timeSpan >= StartTime;
         }
 
-        #endregion
-
-        /// <summary>
+	    /// <summary>
         /// Does the two periods intersect.
         /// </summary>
         /// <param name="intersectPeriod">The period.</param>
@@ -360,8 +338,6 @@ namespace Teleopti.Interfaces.Domain
                 return true;
             if (intersectPeriod.Contains(this))
                 return true;
-            //if (Contains(period)) this is the same as the row before
-            //    return true;
             return false;
         }
 

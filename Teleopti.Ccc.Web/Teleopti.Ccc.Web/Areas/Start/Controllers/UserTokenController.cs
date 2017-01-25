@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting;
@@ -30,6 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_settingsRepository.PersistSettingValue(UserDevices.Key, currentSetting);
 			}
 			return Ok();
+		}
+
+		[Route("start/usertoken"), HttpGet, UnitOfWork]
+		public virtual IHttpActionResult Get()
+		{
+			var currentSetting = _settingsRepository.FindValueByKey(UserDevices.Key, new UserDevices());
+			return Ok(currentSetting.TokenList.ToArray());
 		}
 	}
 
