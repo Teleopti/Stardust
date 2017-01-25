@@ -53,10 +53,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 				var actualStatsStartTimeUtc = TimeZoneHelper.ConvertToUtc(actualInterval.StartTime, _timeZone.TimeZone());
 
 				var skillData =
-					skillDay.SkillDataPeriodCollection.SingleOrDefault(
-						skillDataPeriod => skillDataPeriod.Period.StartDateTime <= actualStatsStartTimeUtc &&
-										   skillDataPeriod.Period.EndDateTime > actualStatsStartTimeUtc
-					);
+					skillDay.SkillDataPeriodCollection
+					.FirstOrDefault(skillDataPeriod => skillDataPeriod.Period.StartDateTime <= actualStatsStartTimeUtc &&
+										   skillDataPeriod.Period.EndDateTime > actualStatsStartTimeUtc);
 
 				if (skillData == null)
 					continue;

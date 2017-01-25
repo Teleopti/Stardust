@@ -10,11 +10,3 @@ WITH cte as(
   FROM   dbo.SkillDataPeriod
   )
 DELETE FROM cte WHERE RN>1
-
-ALTER TABLE dbo.SkillDataPeriod ADD CONSTRAINT UQ_SkillDataPeriod_Parent_StartDateTime UNIQUE NONCLUSTERED 
-(
-	[Parent] ASC,
-	[StartDateTime] ASC
-) ON [PRIMARY]
-
-GO

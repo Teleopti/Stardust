@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
 			SkillRepository.Has(skill);
 
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 			SkillDayRepository.Has(skillDay);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
 			var actualCalls = createStatistics(skillDay, latestStatsTime);
 
 			SkillRepository.Has(skill);
@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), true);
-			var skillDayFriday = createSkillDay(skill, scenario, userNowFriday, new TimePeriod(8, 0, 8, 30));
-			var skillDaySaturday = createSkillDay(skill, scenario, userNowFriday.AddDays(1), new TimePeriod());
+			var skillDayFriday = createSkillDay(skill, scenario, userNowFriday, new TimePeriod(8, 0, 8, 30), false);
+			var skillDaySaturday = createSkillDay(skill, scenario, userNowFriday.AddDays(1), new TimePeriod(), false);
 			var actualCalls = createStatistics(skillDayFriday, latestStatsTimeFriday);
 
 			SkillRepository.Has(skill);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
 			skillDay.WorkloadDayCollection.First().CampaignTasks = new Percent(-0.5);
 			var actualCalls = new List<SkillIntervalStatistics>()
 				{
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
 			SkillRepository.Has(skill);
 
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
 			SkillDayRepository.Has(skillDay);
 
 			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
 			SkillRepository.Has(skill);
 
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
 			SkillDayRepository.Has(skillDay);
 
 			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
 			SkillRepository.Has(skill);
 
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
 
 			IWorkload workload = new Workload(skill);
 			workload.Description = "second workload";
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
 			skillDay.SkillStaffPeriodCollection[0].Payload.Efficiency = new Percent(0.50);
 			skillDay.SkillStaffPeriodCollection[1].Payload.Efficiency = new Percent(0.50);
 
@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(30, "skill", new TimePeriod(8, 0, 9, 0), false);
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 9, 0));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 9, 0), false);
 
 			var actualCalls = createStatistics(skillDay, latestStatsTime);
 
@@ -418,8 +418,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill2 = createSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30), false);
 			SkillRepository.Has(skill1, skill2);
 
-			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
-			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
+			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 			SkillDayRepository.Has(skillDay1, skillDay2);
 
 			var vm = Target.Load(new[] { skill1.Id.Value, skill2.Id.Value });
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 45), false);
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45), false);
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
@@ -465,7 +465,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 45), false);
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45), false);
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
@@ -513,9 +513,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillWithReforecast2 = createSkill(minutesPerInterval, "skill with reforecast 2", new TimePeriod(7, 0, 8, 15), false);
 			var skillWithoutReforecast = createSkill(minutesPerInterval, "skill without reforecast", new TimePeriod(7, 45, 8, 15), false);
 
-			var skillDayWithReforecast1 = createSkillDay(skillWithReforecast1, scenario, Now.UtcDateTime(), new TimePeriod(7, 0, 8, 15));
-			var skillDayWithReforecast2 = createSkillDay(skillWithReforecast2, scenario, Now.UtcDateTime(), new TimePeriod(7, 0, 8, 15));
-			var skillDayWithoutReforecast = createSkillDay(skillWithoutReforecast, scenario, Now.UtcDateTime(), new TimePeriod(7, 45, 8, 15));
+			var skillDayWithReforecast1 = createSkillDay(skillWithReforecast1, scenario, Now.UtcDateTime(), new TimePeriod(7, 0, 8, 15), false);
+			var skillDayWithReforecast2 = createSkillDay(skillWithReforecast2, scenario, Now.UtcDateTime(), new TimePeriod(7, 0, 8, 15), false);
+			var skillDayWithoutReforecast = createSkillDay(skillWithoutReforecast, scenario, Now.UtcDateTime(), new TimePeriod(7, 45, 8, 15), false);
 
 			var actualCalls1 = createStatistics(skillDayWithReforecast1, latestStatsTime);
 			var actualCalls2 = createStatistics(skillDayWithReforecast2, latestStatsTime);
@@ -555,7 +555,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
 			var skillStats = new List<SkillIntervalStatistics>
 				{
 					 new SkillIntervalStatistics
@@ -588,7 +588,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 45), false);
-			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45));
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45), false);
 			var skillStats = new List<SkillIntervalStatistics>
 				{
 					 new SkillIntervalStatistics
@@ -613,6 +613,38 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ShouldReturnActualStaffingWhenSkillDataPeriodsHaveDuplicates()
+		{
+			var userNow = new DateTime(2016, 8, 26, 0, 30, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 0, 30), false);
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(0, 0, 0, 30), true);
+			var skillStats = new List<SkillIntervalStatistics>
+				{
+					 new SkillIntervalStatistics
+					 {
+						  SkillId = skill.Id.Value,
+						  StartTime = latestStatsTime,
+						  Calls = 123,
+						  AverageHandleTime = 40d
+					 }
+				};
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Has(skillDay);
+			IntradayQueueStatisticsLoader.Has(skillStats);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ActualStaffing.First().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
+		}
+
+		[Test]
 		public void ShouldSummariseActualStaffingForTwoSkills()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
@@ -624,8 +656,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill1 = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false);
 			var skill2 = createSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30), false);
 
-			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
-			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
+			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 
 			var actualCalls1 = createStatistics(skillDay1, latestStatsTime);
 			var actualCalls2 = createStatistics(skillDay2, latestStatsTime);
@@ -659,8 +691,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var phoneSkill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false);
 			var emailSkill = createEmailSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
 
-			var skillDayPhone = createSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
-			var skillDayEmail = createSkillDay(emailSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDayPhone = createSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
+			var skillDayEmail = createSkillDay(emailSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 
 			var actualPhoneStats = createStatistics(skillDayPhone, latestStatsTime);
 			var actualEmailStats = createStatistics(skillDayEmail, latestStatsTime);
@@ -764,7 +796,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = fakeScenarioAndIntervalLength();
 
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
@@ -818,7 +850,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = fakeScenarioAndIntervalLength();
 
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
@@ -860,7 +892,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = fakeScenarioAndIntervalLength();
 
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
@@ -903,7 +935,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = fakeScenarioAndIntervalLength();
 
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
@@ -997,10 +1029,19 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skill;
 		}
 
-		private ISkillDay createSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours)
+		private ISkillDay createSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, bool addSkillDataPeriodDuplicate)
 		{
 			var random = new Random();
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, 3)).WithId();
+			ISkillDay skillDay = null;
+			if (addSkillDataPeriodDuplicate)
+				skillDay =
+					skill.CreateSkillDayWithDemandOnIntervalWithSkillDataPeriodDuplicate(scenario, new DateOnly(userNow), 3,
+						new Tuple<TimePeriod, double>(openHours, 3)).WithId();
+			else
+				skillDay =
+					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3,
+						new Tuple<TimePeriod, double>(openHours, 3)).WithId();
+
 			var index = 0;
 
 			var workloadDay = skillDay.WorkloadDayCollection.First();
@@ -1047,9 +1088,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var skillStats = new List<SkillIntervalStatistics>();
 			var timePeriod = new TimePeriod(0, 0, 24, 0);
-			var skillYesterday = createSkillDay(skill, scenario, userNow.AddDays(-1), timePeriod);
-			var skillToday = createSkillDay(skill, scenario, userNow, timePeriod);
-			var skillTomorrow = createSkillDay(skill, scenario, userNow.AddDays(1), timePeriod);
+			var skillYesterday = createSkillDay(skill, scenario, userNow.AddDays(-1), timePeriod, false);
+			var skillToday = createSkillDay(skill, scenario, userNow, timePeriod, false);
+			var skillTomorrow = createSkillDay(skill, scenario, userNow.AddDays(1), timePeriod, false);
 			SkillDayRepository.Has(skillYesterday, skillToday, skillTomorrow);
 			skillStats.AddRange(createStatistics(skillYesterday, latestStatsTime));
 			skillStats.AddRange(createStatistics(skillToday, latestStatsTime));
