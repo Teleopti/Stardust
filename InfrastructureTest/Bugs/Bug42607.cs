@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 		public IActivityRepository ActivityRepository;
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 
-		[Test, Ignore("Strange failing test for mr nhibernate to look at.")]
+		[Test]
 		public void ShouldNotGenerateDuplicateSkillDataPeriod()
 		{
 			var scenario = new Scenario("scenario") {DefaultScenario = true};
