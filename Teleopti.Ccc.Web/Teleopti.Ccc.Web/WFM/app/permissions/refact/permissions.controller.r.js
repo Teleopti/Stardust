@@ -314,12 +314,13 @@
 
 		function selectFunction(func) {
 			if (vm.selectedFunctions[func.FunctionId]) {
-				delete vm.selectedFunctions[func.FunctionId];
+				var fn = permissionsDataService.findFunction(vm.applicationFunctions, func.FunctionId);
+				delete vm.selectedFunctions[fn.FunctionId];
+				toggleSelection([fn], false)
 			} else {
 				vm.selectedFunctions[func.FunctionId] = true;
 			}
 		}
-
 
 		function createFlatFunctions(functions, flatFunctions) {
 			for (var i = 0; i < functions.length; i++) {
@@ -331,6 +332,7 @@
 		}
 
 		function functionClick(fn) {
+			console.log(vm.selectedFunctions);
 			var flatFunctions = [];
 
 			if (vm.selectedRole === null) {
@@ -361,9 +363,7 @@
 					} else {
 						delete vm.selectedFunctions[func.FunctionId];
 					}
-					if (functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
-						toggleSelection(functions[i].ChildFunctions, selectedOrNot);
-					}
+					toggleSelection(func.ChildFunctions, selectedOrNot);
 				}
 			}
 		}

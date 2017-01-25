@@ -65,7 +65,7 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 
 	function onSelect(func) {
 		var parent = ctrl.functions.find(function(fn) {
-			return fn.ChildFunctions != null && fn.ChildFunctions.indexOf(func) !== -1;
+			return fn.ChildFunctions != null && fn.ChildFunctions.map(function(f) { return f.FunctionId; }).indexOf(func.FunctionId) !== -1;
 		});
 
 		if (parent != null && !ctrl.isSelected(parent)) {

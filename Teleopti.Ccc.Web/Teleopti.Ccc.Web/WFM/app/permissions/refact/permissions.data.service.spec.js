@@ -201,12 +201,15 @@ describe('permissionsDataService', function() {
 
 	it('should find all parent functions for a function', function() {
 		var third = {
+			FunctionId: '123',
 			Name: "Third"
 		};
 		var fn = {
 			Name: "First",
+			FunctionId: '456',
 			ChildFunctions: [{
 				Name: "Second",
+				FunctionId: '789',
 				ChildFunctions: [third]
 			}]
 		};
@@ -221,22 +224,29 @@ describe('permissionsDataService', function() {
 	it('should find all parent functions for a function', function() {
 		var clicked = {
 			Name: "D",
+			FunctionId: '123',
 			ChildFunctions: [{
 				Name: "C",
+				FunctionId: '456',
 				ChildFunctions: []
 			}]
 		};
 		var fn = {
 			Name: "A",
+			FunctionId: '789',
 			ChildFunctions: [{
 				Name: "B",
+				FunctionId: '101',
 				ChildFunctions: [{
 					Name: "C-1",
+					FunctionId: '102',
 					ChildFunctions: [clicked]
 				}, {
 					Name: "C-2",
+					FunctionId: '103',
 					ChildFunctions: [{
-						Name: "D"
+						Name: "D",
+						FunctionId: '104'
 					}]
 				}]
 			}]

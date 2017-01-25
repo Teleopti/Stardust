@@ -18,6 +18,8 @@
 		this.prepareDynamicOption = prepareDynamicOption;
 		this.findChildFunctions = findChildFunctions;
 		this.findParentFunctions = findParentFunctions;
+		this.findFunction = findFunction;
+		this.findOrgData = findOrgData;
 
 		var selectedRole;
 
@@ -41,7 +43,7 @@
 					return null;
 				}
 				var match = toCheck.find(function(f) {
-					return f === func;
+					return f.FunctionId === func.FunctionId;
 				});
 				if (match != null) {
 					return parents;
@@ -64,7 +66,20 @@
 			}
 
 			return result;
+		}
 
+		function findFunction(functions, functionId) {
+			var children = [].concat(functions);
+			while (children.length > 0) {
+				var current = children.shift();
+				if (current.FunctionId === functionId) {
+					return current;
+				}
+
+				if (current.ChildFunctions != null) {
+					children = children.concat(current.ChildFunctions);
+				}
+			}
 		}
 
 		function matchFunction(functions, func) {
@@ -131,6 +146,20 @@
 					return result;
 				}
 			});
+		}
+
+		function findOrgData(orgData, orgDataId) {
+			var children = [].concat(orgData);
+			while (children.length > 0) {
+				var current = children.shift();
+				if (current.Id === orgDataId) {
+					return current
+				}
+
+				if (current.ChildNodes != null) {
+					children = children.concat(current.ChildNodes);
+				}
+			}
 		}
 
 		function selectOrganization(orgData, selectedRole, isSelected) {
