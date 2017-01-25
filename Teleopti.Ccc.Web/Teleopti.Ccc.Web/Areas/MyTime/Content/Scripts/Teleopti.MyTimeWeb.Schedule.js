@@ -17,9 +17,8 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
-
 	var timeIndicatorDateTime;
-	var scheduleHeight = 668;
+	var scheduleHeight = 668; // Same value as height of class 'weekview-day-schedule'
 	var timeLineOffset = 110;
 	var pixelToDisplayAll = 38;
 	var pixelToDisplayTitle = 16;
@@ -28,10 +27,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var completelyLoaded;
 	var daylightSavingAdjustment;
 	var baseUtcOffsetInMinutes;
-    var currentPage = 'Teleopti.MyTimeWeb.Schedule';
-	
-	function _bindData(data) {
-		vm.Initialize(data);
+	var currentPage = 'Teleopti.MyTimeWeb.Schedule';
+
+	function _bindData(data, possibility) {
+		vm.Initialize(data, possibility);
 		daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 		_initTimeIndicator();
@@ -39,24 +38,48 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		completelyLoaded();
 	}
 
-	function _fetchData() {
+	function _fetchData(dataHandler) {
+		var selectedDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		ajax.Ajax({
-			url: '../api/Schedule/FetchData',
+			url: "../api/Schedule/FetchData",
 			dataType: "json",
-			type: 'GET',
+			type: "GET",
 			data: {
-				date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+				date: selectedDate
 			},
 			success: function (data) {
-				_bindData(data);
+				// by default, selectedDate is empty
+				var selectedDateMoment = moment(selectedDate);
+				var isCurrentWeek = !selectedDateMoment.isValid() || selectedDateMoment.isSame(moment(), "week");
+				if (vm.staffingPossibilityEnabled && isCurrentWeek && vm.possibilityType > 0) {
+					var possibilityUrl = vm.possibilityType === 1
+						? "../api/IntradayStaffingPossibility/Absence"
+						: "../api/IntradayStaffingPossibility/Overtime";
+
+					ajax.Ajax({
+						url: possibilityUrl,
+						dataType: "json",
+						type: "GET",
+						success: function (possibilities) {
+							_bindData(data, possibilities);
+							if (dataHandler != undefined) {
+								dataHandler(data);
+							}
+						}
+					});
+				} else {
+					_bindData(data);
+					if (dataHandler != undefined) {
+						dataHandler(data);
+					}
+				}
 			}
 		});
 	}
 
 	function _ensureDST(userTime) {
 		//whether in DST is judged in UTC time
-
-		if (daylightSavingAdjustment != null) {
+		if (daylightSavingAdjustment !== null) {
 			var userTimestamp = userTime.valueOf();
 			var dstStartTimestamp = moment(daylightSavingAdjustment.StartDateTime + '+00:00').valueOf();
 			var dstEndTimestamp = moment(daylightSavingAdjustment.EndDateTime + '+00:00').add(-daylightSavingAdjustment.AdjustmentOffsetInMinutes, 'minutes').valueOf();// EndDateTime has DST
@@ -75,7 +98,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					adjustToDST(userTime);
 				}
 			}
-
 		}
 	};
 
@@ -89,34 +111,27 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function stripTeleoptiTimeToUTCForScenarioTest() {
 		var timeWithTimezone = moment(Date.prototype.getTeleoptiTime()).format();
-		var timeWithoutTimezone = timeWithTimezone.substr(0,19);// btw, timezone info is wrong
+		var timeWithoutTimezone = timeWithTimezone.substr(0, 19);// btw, timezone info is wrong
 		return moment(timeWithoutTimezone + "+00:00");
 	}
 
 	function _startUpTimeIndicator() {
 		setInterval(function () {
-
 			var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
-								? stripTeleoptiTimeToUTCForScenarioTest().zone(-baseUtcOffsetInMinutes)
-								: moment().zone(-baseUtcOffsetInMinutes);//work in user timezone, just make life easier
-
+				? stripTeleoptiTimeToUTCForScenarioTest().zone(-baseUtcOffsetInMinutes)
+				: moment().zone(-baseUtcOffsetInMinutes);//work in user timezone, just make life easier
 
 			_ensureDST(currentUserDateTime);
 
-			if (timeIndicatorDateTime == undefined || currentUserDateTime.minutes() != timeIndicatorDateTime.minutes()) {
+			if (timeIndicatorDateTime === undefined || currentUserDateTime.minutes() !== timeIndicatorDateTime.minutes()) {
 				timeIndicatorDateTime = currentUserDateTime;
 				_setTimeIndicator(timeIndicatorDateTime);
 			}
-
 		}, 1000);
 	};
 
 	function _initTimeIndicator() {
 		_startUpTimeIndicator();
-	};
-
-	function getDateFormat() {
-		return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? "DD/MM/YYYY" : Teleopti.MyTimeWeb.Common.DateFormat;
 	};
 
 	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart, undefined) {
@@ -151,14 +166,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.initialRequestDay = ko.observable();
 		self.selectedDateSubscription = null;
+		self.possibilityType = 0; // Show which possibility, 0: None; 1: Absence possibility; 2: Overtime possibility;
 
 		self.showAddRequestToolbar = ko.computed(function () {
-			return (self.requestViewModel() || '') != '';
+			return (self.requestViewModel() || '') !== '';
 		});
 
-		self.increaseRequestCount = function(fixedDate) {
-			var arr = $.grep(self.days(), function(item, index) {
-				return item.fixedDate() == fixedDate;
+		self.increaseRequestCount = function (fixedDate) {
+			var arr = $.grep(self.days(), function (item, index) {
+				return item.fixedDate() === fixedDate;
 			});
 			if (arr.length > 0) {
 				arr[0].textRequestCount(arr[0].textRequestCount() + 1);
@@ -169,36 +185,36 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (self.selectedDateSubscription)
 				self.selectedDateSubscription.dispose();
 			self.selectedDate(date);
-			self.selectedDateSubscription = self.selectedDate.subscribe(function(d) {
+			self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
 			});
 		};
 
-		self.nextWeek = function() {
+		self.nextWeek = function () {
 			self.selectedDate(self.nextWeekDate());
 		};
 
 		self.previousWeek = function () {
 			self.selectedDate(self.previousWeekDate());
 		};
-		
+
 		self.today = function () {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 		};
 
-		self.week = function(date) {
+		self.week = function (date) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
 		};
-		
+
 		self.month = function () {
 			var d = self.selectedDate();
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
 		};
-		
+
 		self.isWithinSelected = function (startDate, endDate) {
 			return (startDate <= self.maxDate() && endDate >= self.minDate());
 		};
-		
+
 		self.mobile = function () {
 			var date = self.selectedDate();
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
@@ -208,7 +224,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var requestViewModel = self.requestViewModel().model;
 			requestViewModel.DateFormat(self.datePickerFormat());
 			var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
-			
+
 			requestViewModel.DateFrom(requestDay);
 			requestViewModel.DateTo(requestDay);
 			if (requestViewModel.LoadRequestData) {
@@ -216,7 +232,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					requestViewModel.LoadRequestData(data);
 				} else {
 					var day = ko.utils.arrayFirst(self.days(), function (item) {
-						return item.fixedDate() == self.initialRequestDay();
+						return item.fixedDate() === self.initialRequestDay();
 					});
 					var oaData = day.overtimeAvailability();
 					requestViewModel.LoadRequestData(oaData);
@@ -225,20 +241,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		self.isAbsenceReportAvailable = ko.computed(function () {
-			if (self.initialRequestDay() == null)
+			if (self.initialRequestDay() === null)
 				return false;
 
 			var momentToday = moment(new Date(new Date().getTeleoptiTime())).startOf('day');
 			var momentInitialRequestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
-			
+
 			var dateDiff = momentInitialRequestDay.diff(momentToday, 'days');
 
 			//Absence report is available only for today and tomorrow.
-			var isPermittedDate = (dateDiff == 0 || dateDiff == 1);
+			var isPermittedDate = (dateDiff === 0 || dateDiff === 1);
 			return self.absenceReportPermission() && isPermittedDate;
 		});
 
-		self.showAddTextRequestForm = function(data) {
+		self.showAddTextRequestForm = function (data) {
 			if (self.textPermission() !== true) {
 				return;
 			}
@@ -247,7 +263,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.requestViewModel().model.AddTextRequest(false);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
-		
+
 		self.showAddAbsenceRequestForm = function (data) {
 			if (self.absenceRequestPermission() !== true) {
 				return;
@@ -259,7 +275,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.showAddAbsenceReportForm = function(data) {
+		self.showAddAbsenceReportForm = function (data) {
 			if (self.absenceReportPermission() !== true) {
 				return;
 			}
@@ -272,7 +288,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		function displayOvertimeAvailability() {
-		    self.CancelAddingNewRequest();
+			self.CancelAddingNewRequest();
 			_fetchData();
 		}
 
@@ -281,7 +297,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var addRequestModel = { model: innerRequestModel, type: innerRequestModel.TypeEnum, CancelAddingNewRequest: self.CancelAddingNewRequest };
 		var addAbsenceReportModel = { model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule), type: function () { return 'absenceReport'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 
-		self.showAddShiftExchangeOfferForm = function(data) {
+		self.showAddShiftExchangeOfferForm = function (data) {
 			if (!self.shiftExchangePermission()) {
 				return;
 			}
@@ -290,7 +306,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_fillFormData(data);
 		}
 
-		self.showAddOvertimeAvailabilityForm = function(data) {
+		self.showAddOvertimeAvailabilityForm = function (data) {
 			if (!self.overtimeAvailabilityPermission()) {
 				return;
 			}
@@ -299,7 +315,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.showAddRequestForm = function (day) {
-
 			self.showAddRequestFormWithData(day.fixedDate(), day.overtimeAvailability());
 		};
 
@@ -312,14 +327,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return self.showAddTextRequestForm;
 		}
 
-		self.showAddRequestFormWithData = function(date, data) {
+		self.showAddRequestFormWithData = function (date, data) {
 			self.initialRequestDay(date);
 
-			if ((self.requestViewModel() != undefined) && (self.requestViewModel().type() == 'absenceReport') && !self.isAbsenceReportAvailable()) {
+			if ((self.requestViewModel() !== undefined) && (self.requestViewModel().type() === 'absenceReport') && !self.isAbsenceReportAvailable()) {
 				self.requestViewModel(null);
 			}
 
-			if ((self.requestViewModel() || '') != '') {
+			if ((self.requestViewModel() || '') !== '') {
 				_fillFormData(data);
 				return;
 			}
@@ -337,13 +352,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function reloadSchedule() {
-		    self.CancelAddingNewRequest();
+			self.CancelAddingNewRequest();
 			_fetchData();
 		}
 	};
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
-		Initialize: function (data) {
+		Initialize: function (data, possibility) {
 			var self = this;
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
 			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
@@ -374,7 +389,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 			self.timeLines(timelines);
 			var days = ko.utils.arrayMap(data.Days, function (item) {
-				return new DayViewModel(item, self);
+				var isToday = moment(item.FixedDate).isSame(moment(), "day");
+				return new DayViewModel(item, isToday ? possibility : undefined, self);
 			});
 			self.days(days);
 			var minDateArr = data.PeriodSelection.SelectedDateRange.MinDate.split('-');
@@ -385,11 +401,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 	});
 
-	var DayViewModel = function (day, parent) {
+	var DayViewModel = function (day, possibility, parent) {
 		var self = this;
 
 		self.fixedDate = ko.observable(day.FixedDate);
-		
+
 		self.date = ko.observable(day.Date);
 		self.state = ko.observable(day.State);
 
@@ -398,27 +414,26 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var dayDate = moment(day.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
-
 			self.headerTitle = ko.observable(dayDate.format("jdddd"));
 			self.dayOfWeek = ko.observable(dayDate.weekday());
 			dayNumberDisplay = dayDate.jDate();
-			
-			if (dayNumberDisplay == 1 || self.dayOfWeek() == parent.weekStart) {
+
+			if (dayNumberDisplay === 1 || self.dayOfWeek() === parent.weekStart) {
 				dayDescription = dayDate.format("jMMMM");
 			}
 		} else {
 			self.headerTitle = ko.observable(day.Header.Title);
 			self.dayOfWeek = ko.observable(day.DayOfWeekNumber);
 			dayNumberDisplay = dayDate.date();
-			if (dayNumberDisplay == 1 || self.dayOfWeek() == parent.weekStart) {
+			if (dayNumberDisplay === 1 || self.dayOfWeek() === parent.weekStart) {
 				dayDescription = dayDate.format("MMMM");
 			}
 		}
-		
+
 		self.headerDayDescription = ko.observable(dayDescription);
-	
+
 		self.headerDayNumber = ko.observable(dayNumberDisplay);
-		
+
 		self.textRequestPermission = ko.observable(parent.textPermission());
 		self.requestPermission = ko.observable(parent.requestPermission());
 
@@ -427,12 +442,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.summaryTimeSpan = ko.observable(day.Summary.TimeSpan);
 		self.summary = ko.observable(day.Summary.Summary);
 		self.hasOvertime = day.HasOvertime && !day.IsFullDayAbsence;
-		self.hasShift = day.Summary.Color != null ? true : false;
+		self.hasShift = day.Summary.Color !== null ? true : false;
 		self.noteMessage = ko.computed(function () {
 			//need to html encode due to not bound to "text" in ko
 			return $('<div/>').text(day.Note.Message).html();
 		});
-		
+
 		self.textRequestCount = ko.observable(day.TextRequestCount);
 		self.overtimeAvailability = ko.observable(day.OvertimeAvailabililty);
 		self.probabilityClass = ko.observable(day.ProbabilityClass);
@@ -444,18 +459,18 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return parent.userTexts.chanceOfGettingAbsencerequestGranted + probabilityText;
 			return probabilityText;
 		});
-		
+
 		self.holidayChanceColor = ko.computed(function () {
 			return self.probabilityClass();
 		});
-		
+
 		self.hasTextRequest = ko.computed(function () {
 			return self.textRequestCount() > 0;
 		});
 
 		self.hasNote = ko.observable(day.HasNote);
 		self.seatBookings = ko.observableArray(day.SeatBookings);
-		
+
 		self.seatBookingIconVisible = ko.computed(function () {
 			return self.seatBookings().length > 0;
 		});
@@ -464,13 +479,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return object || '';
 		}
 
-		var formatSeatBooking = function(seatBooking) {
-
+		var formatSeatBooking = function (seatBooking) {
 			var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
-			var fullSeatName = seatBooking.LocationPath != '' ? seatBooking.LocationPath + '/' : '';
+			var fullSeatName = seatBooking.LocationPath !== '' ? seatBooking.LocationPath + '/' : '';
 			fullSeatName += getValueOrEmptyString(seatBooking.LocationPrefix) + seatBooking.SeatName + getValueOrEmptyString(seatBooking.LocationSuffix);
-				
+
 			return bookingText.format(
 					Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
 					Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),
@@ -481,10 +495,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.seatBookingMessage = ko.computed(function () {
 			var message = '<div class="seatbooking-tooltip">' +
 								'<span class="tooltip-header">{0}</span><table>'.format(parent.userTexts.seatBookingsTitle);
-			
+
 			var messageEnd = '</table></div>';
 
-			if (self.seatBookings() != null ) {
+			if (self.seatBookings() !== null) {
 				self.seatBookings().forEach(function (seatBooking) {
 					message += formatSeatBooking(seatBooking);
 				});
@@ -492,20 +506,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			message += messageEnd;
 
 			return message;
-
 		});
 
 		self.textRequestText = ko.computed(function () {
 			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});
-		
+
 		self.textOvertimeAvailabilityText = ko.computed(function () {
 			return self.overtimeAvailability().StartTime + " - " + self.overtimeAvailability().EndTime;
 		});
 
 		self.classForDaySummary = ko.computed(function () {
 			var showRequestClass = self.requestPermission() ? 'weekview-day-summary weekview-day-show-request ' : 'weekview-day-summary ';
-			if (self.summaryStyleClassName() != null && self.summaryStyleClassName() != 'undefined') {
+			if (self.summaryStyleClassName() !== null && self.summaryStyleClassName() !== undefined) {
 				return showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
 			}
 			return showRequestClass; //last one needs to be becuase of "stripes" and similar
@@ -516,37 +529,31 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 
 		self.textColor = ko.computed(function () {
-
 			var backgroundColor = parent.styles()[self.summaryStyleClassName()];
-			if (backgroundColor != null && backgroundColor != 'undefined') {
+			if (backgroundColor !== null && backgroundColor !== undefined) {
 				return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
 			}
 			return 'black';
 		});
-
-		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
-			return new LayerViewModel(item, parent);
-		});
-		
 		self.availability = ko.observable(day.Availability);
-		
+
 		self.absenceRequestPermission = ko.computed(function () {
 			return (parent.absenceRequestPermission() && self.availability());
 		});
 
-		self.navigateToRequests = function() {
+		self.navigateToRequests = function () {
 			parent.navigateToRequestsMethod();
 		};
 
 		self.showOvertimeAvailability = function (data) {
 			var date = self.fixedDate();
 			var momentDate = moment(date, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
-			if (data.startPositionPercentage() == 0 && data.overtimeAvailabilityYesterday) {
+			if (data.startPositionPercentage() === 0 && data.overtimeAvailabilityYesterday) {
 				momentDate.add('days', -1);
 			}
 			date = Teleopti.MyTimeWeb.Common.FormatServiceDate(momentDate);
 			var day = ko.utils.arrayFirst(parent.days(), function (item) {
-				return item.fixedDate() == date;
+				return item.fixedDate() === date;
 			});
 			if (day) {
 				parent.showAddRequestForm(day);
@@ -554,13 +561,93 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				parent.showAddRequestFormWithData(date, data.overtimeAvailabilityYesterday);
 			}
 		};
+
+		var createPossibilityModel = function (rawPossibility) {
+			if (rawPossibility == undefined || rawPossibility.length === 0) return [];
+
+			var timeSpan = day.Summary.TimeSpan;
+			var shiftStartTime = timeSpan === null ? "00:00" : timeSpan.substring(0, 5);
+			var shiftEndTime = timeSpan === null ? "00:00" : timeSpan.substring(8, 13);
+
+			var shiftStartPosition = 1;
+			var shiftEndPosition = 0;
+			for (var i = 0; i < day.Periods.length; i++) {
+				var period = day.Periods[i];
+				if (shiftStartPosition > period.StartPositionPercentage) {
+					shiftStartPosition = period.StartPositionPercentage;
+				}
+				if (shiftEndPosition < period.EndPositionPercentage) {
+					shiftEndPosition = period.EndPositionPercentage;
+				}
+			}
+
+			var possibilityNames = ["fair", "good"];
+			var possibilityLabels = [parent.userTexts.fair, parent.userTexts.good];
+			var possibilities = [];
+			possibilities.push({
+				styleJson: {
+					"top": 0,
+					"height": Math.round(scheduleHeight * shiftStartPosition) + "px"
+				},
+				cssClass: "possibility-none",
+				tooltips: ""
+			});
+
+			var totalHeight = shiftEndPosition - shiftStartPosition;
+
+			var tooltipsTitle = "";
+			if (parent.possibilityType === 1) {
+				tooltipsTitle = parent.userTexts.possibilityForAbsence;
+			} else if (parent.possibilityType === 2) {
+				tooltipsTitle = parent.userTexts.possibilityForOvertime;
+			}
+
+			for (var j = 0; j < rawPossibility.Possibilities.length; j++) {
+				var intervalPossibility = rawPossibility.Possibilities[j];
+				var intervalStartTime = moment(intervalPossibility.StartTime).format("HH:mm");
+				var intervalEndTime = moment(intervalPossibility.EndTime).format("HH:mm");
+
+				var visible = intervalStartTime >= shiftStartTime && intervalEndTime <= shiftEndTime;
+				if (!visible) continue;
+
+				var index = intervalPossibility.Possibility;
+				var tooltips = "<div style='text-align: center'>" +
+					"  <div>" + tooltipsTitle + "</div>" +
+					"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + possibilityLabels[index] + "</div>" +
+					"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalStartTime + " - " + intervalEndTime + "</div>" +
+					"</div>";
+
+				possibilities.push({
+					cssClass: "possibility-" + possibilityNames[index],
+					tooltips: tooltips
+				});
+			}
+
+			var heightPerInterval = totalHeight / (possibilities.length - 1);
+			for (var k = 1; k < possibilities.length; k++) {
+				var topPositionPercentage = shiftStartPosition + heightPerInterval * (k - 1);
+				possibilities[k].styleJson = {
+					"top": scheduleHeight * topPositionPercentage + "px",
+					"height": scheduleHeight * heightPerInterval + "px"
+				};
+			}
+
+			return possibilities;
+		}
+
+		self.possibility = createPossibilityModel(possibility);
+
+		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
+			return new LayerViewModel(item, parent.userTexts, self);
+		});
 	};
-	var LayerViewModel = function (layer, parent) {
+
+	var LayerViewModel = function (layer, userTexts, parent) {
 		var self = this;
 
 		self.title = ko.observable(layer.Title);
 		self.hasMeeting = ko.computed(function () {
-			return layer.Meeting != null;
+			return layer.Meeting !== null;
 		});
 		self.meetingTitle = ko.computed(function () {
 			if (self.hasMeeting()) {
@@ -601,11 +688,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					'<div class="tooltip-wordwrap" style="white-space: normal"><i>{5}</i> {6}</div>' +
 					'</div>')
 					.format(self.timeSpan(),
-							parent.userTexts.subjectColon,
+							userTexts.subjectColon,
 							$('<div/>').text(self.meetingTitle()).html(),
-							parent.userTexts.locationColon,
+							userTexts.locationColon,
 							$('<div/>').text(self.meetingLocation()).html(),
-							parent.userTexts.descriptionColon,
+							userTexts.descriptionColon,
 							$('<div/>').text(self.meetingDescription()).html());
 			} else {
 				text = self.timeSpan();
@@ -616,13 +703,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.backgroundColor = ko.observable('rgb(' + layer.Color + ')');
 		self.textColor = ko.computed(function () {
-			if (layer.Color != null && layer.Color != 'undefined') {
+			if (layer.Color !== null && layer.Color !== undefined) {
 				var backgroundColor = 'rgb(' + layer.Color + ')';
 				return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
 			}
 			return 'black';
 		});
-		
+
 		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
 		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
 		self.overtimeAvailabilityYesterday = layer.OvertimeAvailabilityYesterday;
@@ -636,18 +723,25 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var top = self.top();
 			return bottom > top ? bottom - top : 0;
 		});
-		self.width = ko.observable(layer.IsOvertimeAvailability ? '20' : '127');
 		self.topPx = ko.computed(function () {
 			return self.top() + 'px';
 		});
 		self.widthPx = ko.computed(function () {
-			return self.width() + 'px';
+			var width;
+			if (layer.IsOvertimeAvailability) {
+				width = 20;
+			} else if (parent.possibility && parent.possibility.length > 0) {
+				width = 116;
+			} else {
+				width = 127;
+			}
+			return width + "px";
 		});
 		self.heightPx = ko.computed(function () {
 			return self.height() + 'px';
 		});
 		self.overTimeLighterBackgroundStyle = ko.computed(function () {
-			var rgbTohex = function(rgb) {
+			var rgbTohex = function (rgb) {
 				if (rgb.charAt(0) === '#')
 					return rgb;
 				var ds = rgb.split(/\D+/);
@@ -674,12 +768,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return useLighterStyle;
 		});
 
-		self.overTimeDarkerBackgroundStyle = ko.computed(function() { return !self.overTimeLighterBackgroundStyle(); });
+		self.overTimeDarkerBackgroundStyle = ko.computed(function () { return !self.overTimeLighterBackgroundStyle(); });
 
 		self.styleJson = ko.computed(function () {
 			return {
 				'top': self.topPx,
-				'width':self.widthPx,
+				'width': self.widthPx,
 				'height': self.heightPx,
 				'color': self.textColor,
 				'background-size': self.isOvertime ? '11px 11px' : 'initial',
@@ -711,13 +805,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
 		});
 		self.evenHour = ko.computed(function () {
-			return timeFromMinutes.format('mm') == 0;
+			return timeFromMinutes.minute() === 0;
 		});
 	};
 
 	function _setTimeIndicator(theDate) {
-		if ($('.week-schedule-ASM-permission-granted').text().indexOf('yes') == -1 ||
-			$('.week-schedule-current-week').text().indexOf('yes') == -1) {
+		if ($('.week-schedule-ASM-permission-granted').text().indexOf('yes') === -1 ||
+			$('.week-schedule-current-week').text().indexOf('yes') === -1) {
 			return;
 		}
 
@@ -734,7 +828,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
 		var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
-		if (position == -1) {
+		if (position === -1) {
 			position = 0;
 		}
 
@@ -767,31 +861,29 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function _subscribeForChanges() {
-		
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 			successCallback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
 			domainType: 'IScheduleChangedInDefaultScenario',
 			page: currentPage
 		});
-
 	}
-	
+
 	function _cleanBindings() {
 		ko.cleanNode($('#page')[0]);
-		if (vm != null) {
+		if (vm !== null) {
 			vm.days([]);
 			vm.timeLines([]);
 			vm = null;
 		}
 	}
-	
+
 	function _displayRequest(data) {
 		var date = moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
 		var formattedDate = date.format('YYYY-MM-DD');
 		vm.increaseRequestCount(formattedDate);
 		vm.CancelAddingNewRequest();
 	}
-	
+
 	function _navigateToRequests() {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index");
 	}
@@ -806,11 +898,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
 		},
-		SetupViewModel: function (userTexts, defaultDateTimes,callback) {
-
+		SetupViewModel: function (userTexts, defaultDateTimes, callback) {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-				
-				var addRequestViewModel = function() {
+				var addRequestViewModel = function () {
 					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, data.WeekStart, defaultDateTimes);
 					model.AddRequestCallback = _displayRequest;
 
@@ -818,25 +908,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				};
 
 				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
+				vm.staffingPossibilityEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingPossibility_41608');
 				callback();
 				$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 				ko.applyBindings(vm, $('#page')[0]);
-
 			});
 		},
 		LoadAndBindData: function () {
-			ajax.Ajax({
-				url: '../api/Schedule/FetchData',
-				dataType: "json",
-				type: 'GET',
-				data: {
-					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
-				},
-				success: function (data) {
-					_bindData(data);
-					_subscribeForChanges();
-				}
-			});
+			_fetchData(_subscribeForChanges);
 		},
 
 		ReloadScheduleListener: function (notification) {
@@ -850,18 +929,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		PartialDispose: function () {
 			_cleanBindings();
 			ajax.AbortAll();
-		    Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
+			Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
 		}
 	};
-
 })(jQuery);
 
-
 Teleopti.MyTimeWeb.Schedule.Layout = (function ($) {
-
 	function _setDayState(curDay) {
 		switch ($(curDay).data('mytime-state')) {
 			case 1:
@@ -881,8 +957,8 @@ Teleopti.MyTimeWeb.Schedule.Layout = (function ($) {
 	return {
 		SetSchemaItemsHeights: function () {
 			var currentTallest = 0; // Tallest li per row
-			var currentLength = 0;  // max amount of li's
-			var currentHeight = 0;  // max height of ul
+			var currentLength = 0; // max amount of li's
+			var currentHeight = 0; // max height of ul
 			var i = 0;
 			$('.weekview-day').each(function () {
 				if ($('li', this).length > currentLength) {
@@ -897,7 +973,6 @@ Teleopti.MyTimeWeb.Schedule.Layout = (function ($) {
 					if ($(this).height() > currentTallest) {
 						currentTallest = $(this).height();
 					}
-
 				});
 				$('>div', $(currentLiRow)).css({ 'min-height': currentTallest - 20 }); // remove padding from height
 				currentTallest = 0;
@@ -916,5 +991,4 @@ Teleopti.MyTimeWeb.Schedule.Layout = (function ($) {
 			});
 		}
 	};
-
 })(jQuery);

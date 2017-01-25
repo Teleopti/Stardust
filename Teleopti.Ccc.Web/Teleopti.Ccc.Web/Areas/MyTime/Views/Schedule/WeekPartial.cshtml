@@ -2,189 +2,211 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 @model RequestsViewModel
 @{
-	Layout = null;
+    Layout = null;
 }
 <script>
 	$(function () {
 		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
-            {
-            	xRequests: '@Resources.XRequests',
-            	subjectColon: '@Resources.SubjectColon',
-            	locationColon: '@Resources.LocationColon',
-            	descriptionColon: '@Resources.DescriptionColon',
-            	chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
-            	seatBookingsTitle: '@Resources.SeatBookings',
-            	noSeatBookingsForDate : '@Resources.YouHaveNotBeenAllocatedSeat',
-            	fair: '@Resources.Fair',
-            	poor: '@Resources.Poor',
-            	good: '@Resources.Good'
-            },
-			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues
-            ,
+			{
+				xRequests: '@Resources.XRequests',
+				subjectColon: '@Resources.SubjectColon',
+				locationColon: '@Resources.LocationColon',
+				descriptionColon: '@Resources.DescriptionColon',
+				chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
+				seatBookingsTitle: '@Resources.SeatBookings',
+				noSeatBookingsForDate: '@Resources.YouHaveNotBeenAllocatedSeat',
+				fair: '@Resources.Fair',
+				poor: '@Resources.Poor',
+				good: '@Resources.Good',
+				possibilityForAbsence: '@Resources.PossibilityToGetAbsenceColon',
+				possibilityForOvertime: '@Resources.PossibilityToGetOvertimeColon'
+			},
+			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
-        );
+		);
 	});
 </script>
 
 <script type="text/html" id="add-new-request-detail-template">
-	@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewRequestDetailView.cshtml")
+    @Html.Partial("~/Areas/MyTime/Views/Requests/AddNewRequestDetailView.cshtml")
 </script>
 <script type="text/html" id="add-overtime-availability-template">
-	@Html.Partial("AddOvertimeAvailabilityPartial")
+    @Html.Partial("AddOvertimeAvailabilityPartial")
 </script>
 <script type="text/html" id="add-absence-report-detail-template">
-	@Html.Partial("AddAbsenceReportPartial")
+    @Html.Partial("AddAbsenceReportPartial")
 </script>
 <script type="text/html" id="shift-exchange-offer-template">
-	@Html.Partial("AddShiftExchangeOfferPartial")
+    @Html.Partial("AddShiftExchangeOfferPartial")
 </script>
 
-<!--<input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat" />-->
-
 <div class="navbar navbar-teleopti subnavbar">
-	<div class="container">
-		<ul class="nav navbar-nav navbar-teleopti row submenu">
-			<li class="col-xs-12 col-sm-4">
-				<span class="input-group " style="max-width: 329px;">
-					<span class="input-group-btn">
-						<button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
-							<i class="glyphicon glyphicon-chevron-left"></i>
-						</button>
-					</span>
-					<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
-					<span class="input-group-btn">
-						<button class="btn btn-default moment-datepicker" type="button">
-							<i class="glyphicon glyphicon-calendar"></i>
-						</button>
-						<button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
-							<i class="glyphicon glyphicon-chevron-right"></i>
-						</button>
-					</span>
-				</span>
-			</li>
-			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-			<li class="col-xs-12 col-sm-4 active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
-			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month, visible: !Teleopti.MyTimeWeb.Common.UseJalaaliCalendar">@Resources.Month</a></li>
-		</ul>
-	</div>
+    <div class="container">
+        <ul class="nav navbar-nav navbar-teleopti row submenu">
+            <li class="col-xs-12 col-sm-4">
+                <span class="input-group " style="max-width: 329px;">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                        </button>
+                    </span>
+                    <input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default moment-datepicker" type="button">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                        <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </span>
+                </span>
+            </li>
+            <li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+            <li class="col-xs-12 col-sm-4 active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
+            <li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month, visible: !Teleopti.MyTimeWeb.Common.UseJalaaliCalendar">@Resources.Month</a></li>
+            <li class="col-xs-12 col-sm-4 pull-right" data-bind="visible: staffingPossibilityEnabled">
+                <div class="input-group pull-right" style="width: 200px; margin-left: 50px;">
+                    <div class="btn-group" role="group" aria-describedby="basic-addon1">
+                        <a class="btn btn-default dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': possibilityType > 0, 'glyphicon-eye-close': possibilityType === 0}"></i>
+                            <span>@Resources.HideStaffingPossibility</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript: void(0);">@Resources.HideStaffingPossibility</a></li>
+                            <li><a href="javascript: void(0);">@Resources.ShowAbsencePossibility</a></li>
+                            <li><a href="javascript: void(0);">@Resources.ShowOvertimePossibility</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div class="container pagebody">
 
-	<ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
-		<li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'overtime' }">
-			<a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
-		</li>
-		<li data-bind="visible: textPermission, css: {active: requestViewModel()!=undefined && requestViewModel().type() == 0}">
-			<a id="addTextRequest" class="text-request-add" href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-		</li>
-		<li data-bind="visible: absenceRequestPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 1 }">
-			<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: showAddAbsenceRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-		</li>
-		<li data-bind="visible: shiftExchangePermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'shiftOffer' }">
-			<a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-		</li>
-		<li data-bind="visible: isAbsenceReportAvailable, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'absenceReport' }">
-			<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: showAddAbsenceReportForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
-		</li>
-	</ul>
-	<!-- ko with: requestViewModel -->
-	<div data-bind="with: model">
-		<div id="Request-add-section" class="well well-sm clearfix">
-			<div data-bind="template: Template">
-			</div>
-		</div>
-	</div>
-	<!-- /ko -->
-	<div class="schedule-table-container">
-		<div class="container fixed-non-responsive">
-			<div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
-			<div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
-			<div class="body-weekview-inner clearfix well-sm" style="padding: 0">
-				<div class="weekview-timeline floatleft">
-					<div class="weekview-day-time-indicator-small absolute">
-					</div>
-					<!-- ko foreach: timeLines -->
-					<div class="weekview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
-					</div>
-					<!-- /ko -->
-				</div>
-				<!-- ko foreach: days -->
-				<div class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate, 'data-mytime-state': state, 'data-mytime-dayofweek': dayOfWeek}">
-					<div class="weekview-day-header" data-bind="text: headerTitle"></div>
-					<div class="weekview-day-date clearfix">
-						<label class="weekview-day-month pull-left badge day-header-text" data-bind="text: headerDayDescription"></label>
-						<label class="weekview-day-dayofmonth pull-right badge day-header-text" data-bind="text: headerDayNumber"></label>
-					</div>
-					<div data-bind="css: { 'show-request': requestPermission}, attr: { 'class': classForDaySummary },
+    <ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
+        <li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'overtime' }">
+            <a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+        </li>
+        <li data-bind="visible: textPermission, css: {active: requestViewModel()!=undefined && requestViewModel().type() == 0}">
+            <a id="addTextRequest" class="text-request-add" href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+        </li>
+        <li data-bind="visible: absenceRequestPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 1 }">
+            <a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: showAddAbsenceRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+        </li>
+        <li data-bind="visible: shiftExchangePermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'shiftOffer' }">
+            <a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+        </li>
+        <li data-bind="visible: isAbsenceReportAvailable, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'absenceReport' }">
+            <a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: showAddAbsenceReportForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+        </li>
+    </ul>
+    <!-- ko with: requestViewModel -->
+    <div data-bind="with: model">
+        <div id="Request-add-section" class="well well-sm clearfix">
+            <div data-bind="template: Template">
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+    <div class="schedule-table-container">
+        <div class="container fixed-non-responsive">
+            <div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
+            <div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
+            <div class="body-weekview-inner clearfix well-sm" style="padding: 0">
+                <div class="weekview-timeline floatleft">
+                    <div class="weekview-day-time-indicator-small absolute">
+                    </div>
+                    <!-- ko foreach: timeLines -->
+                    <div class="weekview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
+                    </div>
+                    <!-- /ko -->
+                </div>
+                <!-- ko foreach: days -->
+                <div class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate, 'data-mytime-state': state, 'data-mytime-dayofweek': dayOfWeek}">
+                    <div class="weekview-day-header" data-bind="text: headerTitle"></div>
+                    <div class="weekview-day-date clearfix">
+                        <label class="weekview-day-month pull-left badge day-header-text" data-bind="text: headerDayDescription"></label>
+                        <label class="weekview-day-dayofmonth pull-right badge day-header-text" data-bind="text: headerDayNumber"></label>
+                    </div>
+                    <div data-bind="css: { 'show-request': requestPermission}, attr: { 'class': classForDaySummary },
 		            style: { backgroundColor: colorForDaySummary, color: textColor }, click: $parent.showAddRequestForm"
-						  class="weekview-day-summary">
+                         class="weekview-day-summary">
 
-						<strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
-						<span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
-						<span data-bind="text: summary"></span>
-						<!-- ko if: hasOvertime && hasShift -->
-						<strong class="fullwidth displayblock">@Resources.Overtime</strong>
-						<!-- /ko -->					
-						<!-- ko if: hasOvertime && !hasShift-->
-						<strong class="fullwidth displayblock overtime">@Resources.Overtime</strong>
-						<!-- /ko -->
-					</div>
-					<div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
-						<div class="weekview-day-symbol-request pull-right weekview-day-icon" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
-							<i class="glyphicon glyphicon-comment"></i>
-						</div>
-						<div class="holiday-agents weekview-day-show-request pull-right weekview-day-icon" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
-							<div class="small-circle" data-bind="style: {background: holidayChanceColor()}">
-							</div>
-						</div>
-						<div class="overtime-availability-symbol floatright weekview-day-icon" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
-							<i class="glyphicon glyphicon-time floatright" />
-						</div>
-						
-						<div class="seatbooking-symbol pull-right weekview-day-icon " data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
-							<i class="mdi mdi-chair-school" />
-						</div>
+                        <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
+                        <span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
+                        <span data-bind="text: summary"></span>
+                        <!-- ko if: hasOvertime && hasShift -->
+                        <strong class="fullwidth displayblock">@Resources.Overtime</strong>
+                        <!-- /ko -->
+                        <!-- ko if: hasOvertime && !hasShift-->
+                        <strong class="fullwidth displayblock overtime">@Resources.Overtime</strong>
+                        <!-- /ko -->
+                    </div>
+                    <div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
+                        <div class="weekview-day-symbol-request pull-right weekview-day-icon" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
+                            <i class="glyphicon glyphicon-comment"></i>
+                        </div>
+                        <div class="holiday-agents weekview-day-show-request pull-right weekview-day-icon" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
+                            <div class="small-circle" data-bind="style: {background: holidayChanceColor()}">
+                            </div>
+                        </div>
+                        <div class="overtime-availability-symbol floatright weekview-day-icon" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
+                            <i class="glyphicon glyphicon-time floatright" />
+                        </div>
 
-						<!-- ko if: hasNote -->
-						<div class="pull-right weekview-day-icon" data-bind="tooltip: { title: noteMessage, html: true }">
-							<i class="glyphicon glyphicon-exclamation-sign"></i>
-						</div>
-						<!-- /ko -->
-						<div id="add-request-cell" data-bind="css:{'add-request-space show-request': requestPermission}">
-						</div>
-					</div>
-					<div class="weekview-day-schedule relative">
-						<div class="weekview-day-time-indicator relative">
-						</div>
-						<!-- ko foreach: layers -->
-						<!-- ko if: isOvertimeAvailability() -->
-						<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, click: $parent.showOvertimeAvailability">
-							<i class="glyphicon glyphicon-time"></i>
-						</div>
-						<!-- /ko -->
-						<!-- ko ifnot: isOvertimeAvailability() -->
-						<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
-							<div data-bind="visible: showTitle">
-								<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
-								<!-- ko if: hasMeeting -->
-								<div class="meeting floatright">
-									<i class="meeting-icon icon-user mr10">
-										<i class="glyphicon glyphicon-user ml10"></i>
-									</i>
-								</div>
-								<!-- /ko -->
-								<span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
-							</div>
-						</div>
-						<!-- /ko -->
-						<!-- /ko -->
-					</div>
-					<!-- /ko -->
-				</div>
-				<!-- /ko -->
-			</div>
-		</div>
-	</div>
-	<div class="mobile-foot" style="padding-top:10px;"><a href="#" id="mobile" data-bind="click: mobile">@Resources.Mobile</a> | @Resources.Desktop</div>
+                        <div class="seatbooking-symbol pull-right weekview-day-icon " data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
+                            <i class="mdi mdi-chair-school" />
+                        </div>
+
+                        <!-- ko if: hasNote -->
+                        <div class="pull-right weekview-day-icon" data-bind="tooltip: { title: noteMessage, html: true }">
+                            <i class="glyphicon glyphicon-exclamation-sign"></i>
+                        </div>
+                        <!-- /ko -->
+                        <div id="add-request-cell" data-bind="css:{'add-request-space show-request': requestPermission}">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="weekview-day-schedule relative" data-bind="style: {width: possibility.length > 0 ? '114px' : '129px'}">
+                            <div class="weekview-day-time-indicator relative" data-bind="style: {width: possibility.length > 0 ? '119px' : '129px'}">
+                            </div>
+                            <!-- ko foreach: layers -->
+                            <!-- ko if: isOvertimeAvailability() -->
+                            <div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, click: $parent.showOvertimeAvailability">
+                                <i class="glyphicon glyphicon-time"></i>
+                            </div>
+                            <!-- /ko -->
+                            <!-- ko ifnot: isOvertimeAvailability() -->
+                            <div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
+                                <div data-bind="visible: showTitle">
+                                    <strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
+                                    <!-- ko if: hasMeeting -->
+                                    <div class="meeting floatright">
+                                        <i class="meeting-icon icon-user mr10">
+                                            <i class="glyphicon glyphicon-user ml10"></i>
+                                        </i>
+                                    </div>
+                                    <!-- /ko -->
+                                    <span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+                                </div>
+                            </div>
+                            <!-- /ko -->
+                            <!-- /ko -->
+                        </div>
+                        <div class="possibility-pane">
+                            <!--ko foreach: possibility-->
+                            <div data-bind="css:cssClass, tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+                            <!-- /ko -->
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+    <div class="mobile-foot" style="padding-top:10px;"><a href="#" id="mobile" data-bind="click: mobile">@Resources.Mobile</a> | @Resources.Desktop</div>
 </div>

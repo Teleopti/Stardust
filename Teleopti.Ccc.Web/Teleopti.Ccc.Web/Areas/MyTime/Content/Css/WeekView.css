@@ -1,10 +1,12 @@
 ﻿.overtime-availability-symbol {
 	cursor: pointer;
 }
+
 .overtime-availability-bar {
 	cursor: pointer;
 	opacity: 0.6;
 }
+
 .body-weekview-inner {
 	background-color: #f9f9f9;
 	border: 1px solid #dfdfdf;
@@ -12,13 +14,12 @@
 	font-size: 0;
 	display: none;
 	position: relative;
-    width: 100%
+	width: 100%;
 }
 
-.weekview-day
-{
+.weekview-day {
 	margin: 0;
-	padding: 0; 
+	padding: 0;
 	display: inline-block;
 	font-size: 12px;
 	text-align: center;
@@ -26,74 +27,111 @@
 	width: 129px;
 	border-left: 1px solid #f9f9f9;
 	border-right: 1px solid #dfdfdf;
-	border-top: 1px solid  #f9f9f9;
+	border-top: 1px solid #f9f9f9;
 	border-bottom: 1px solid #dfdfdf;
 }
+
 .weekview-day-header {
 	text-transform: uppercase;
 	border-bottom: 1px solid #dfdfdf;
 	font-size: 11px;
 	height: 19px;
 }
+
 .weekview-day-date {
 	min-height: 19px;
 }
+
 .weekview-day-month {
 	margin-top: 2px;
 	margin-bottom: -2px;
 	margin-left: 2px;
 }
+
 .weekview-day-dayofmonth {
 	margin-top: 2px;
 	margin-bottom: -2px;
 	margin-right: 2px;
 }
+
 .weekview-day-summary {
 	height: 66px;
 	overflow: hidden;
 }
+
 .overtime {
 	padding-top: 30px;
 }
+
 .overtime-background-image-dark {
 	background: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, .5) 6px, transparent 10px, transparent);
 }
+
 .overtime-background-image-light {
 	background: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, .5) 6px, transparent 10px, transparent);
 }
-.dayoff
-{
+
+.dayoff {
 	background-color: beige;
 	background-image: url(../Images/stripe.png);
 }
-.weekview-day-summary.striped
-{
+
+.weekview-day-summary.striped {
 	background-image: url(../Images/stripe.png);
 }
+
 .weekview-day-show-request {
 	cursor: pointer;
 }
+
 .weekview-day-symbol {
 	height: 18px;
 	border-bottom: 1px solid #dfdfdf;
 }
-.weekview-day-symbol div[class="tooltip-inner"] {
-    max-width: none;
-}
+
+	.weekview-day-symbol div[class="tooltip-inner"] {
+		max-width: none;
+	}
+
 .weekview-day-schedule {
-	width: 129px;
+	display: inline-block;
 	height: 668px;
 }
-.weekview-day-schedule .tooltip {
-	position: absolute;
+
+	.weekview-day-schedule .tooltip {
+		position: absolute;
+	}
+
+.possibility-pane {
+	display: inline-block;
+	width: 10px;
+	height: 668px;
 }
+
+.possibility-none {
+	background-color: #F9F9F9;
+}
+
+.possibility-poor {
+	background-color: red;
+}
+
+.possibility-good {
+	background-color: yellow;
+}
+
+.possibility-fair {
+	background-color: green;
+}
+
 .weekview-timeline {
 	width: 31px;
 	height: 792px;
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
-    position: relative;
+	position: relative;
 }
+
 .weekview-timeline-label {
 	font-size: 7pt;
 	width: 30px;
@@ -101,16 +139,15 @@
 	text-align: center;
 	white-space: pre-wrap;
 }
-.weekview-day-time-indicator
-{
-	width: 129px;
+
+.weekview-day-time-indicator {
 	float: left;
 	z-index: 2;
 	border-bottom: 2px dashed black;
 	display: none;
 }
-.weekview-day-time-indicator-small
-{
+
+.weekview-day-time-indicator-small {
 	width: 31px;
 	float: left;
 	z-index: 2;
@@ -125,25 +162,28 @@
 	border-top: 1px solid #DFDFDF;
 	border-bottom: 1px solid #DFDFDF;
 }
-.week-schedule-ASM-permission-granted, .week-schedule-current-week
-{
+
+.week-schedule-ASM-permission-granted, .week-schedule-current-week {
 	display: none;
 }
+
 #wish-list span {
 	margin-right: 10px;
 }
+
 #wish-list + .dropdown-backdrop + .dropdown-menu {
 	margin: 0 15px 0;
 }
 
-.tooltip-wordwrap { 
-   white-space: pre-wrap;      /* CSS3 */   
-   white-space: -moz-pre-wrap; /* Firefox */    
-   white-space: -pre-wrap;     /* Opera <7 */   
-   white-space: -o-pre-wrap;   /* Opera 7 */    
-   word-wrap: break-word;      /* IE */
-   min-width: 184px;
+.tooltip-wordwrap {
+	white-space: pre-wrap; /* CSS3 */
+	white-space: -moz-pre-wrap; /* Firefox */
+	white-space: -pre-wrap; /* Opera <7 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* IE */
+	min-width: 184px;
 }
+
 .cover-me:before {
 	content: '';
 	display: block;
@@ -154,16 +194,18 @@
 	top: 0;
 	left: 0;
 }
+
 .cover-me img {
 	position: absolute;
 	top: 40%;
 	left: 45%;
 }
+
 .night-rest-violation {
-	position:absolute;
-	height:3px;
-	width:100%;
-	top:0;
-	left:0;
-	background-color:red;
+	position: absolute;
+	height: 3px;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: red;
 }

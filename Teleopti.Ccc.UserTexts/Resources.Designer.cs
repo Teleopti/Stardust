@@ -12768,6 +12768,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide staffing possibility.
+        /// </summary>
+        public static string HideStaffingPossibility {
+            get {
+                return ResourceManager.GetString("HideStaffingPossibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to High.
         /// </summary>
         public static string High {
@@ -22425,6 +22434,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Possibility to get absence:.
+        /// </summary>
+        public static string PossibilityToGetAbsenceColon {
+            get {
+                return ResourceManager.GetString("PossibilityToGetAbsenceColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Possibility to get overtime:.
+        /// </summary>
+        public static string PossibilityToGetOvertimeColon {
+            get {
+                return ResourceManager.GetString("PossibilityToGetOvertimeColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Possible Matches.
         /// </summary>
         public static string PossibleMatches {
@@ -28646,6 +28673,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show absence possibility.
+        /// </summary>
+        public static string ShowAbsencePossibility {
+            get {
+                return ResourceManager.GetString("ShowAbsencePossibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show All.
         /// </summary>
         public static string ShowAll {
@@ -28849,6 +28885,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowOvertime {
             get {
                 return ResourceManager.GetString("ShowOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show overtime possibility.
+        /// </summary>
+        public static string ShowOvertimePossibility {
+            get {
+                return ResourceManager.GetString("ShowOvertimePossibility", resourceCulture);
             }
         }
         
