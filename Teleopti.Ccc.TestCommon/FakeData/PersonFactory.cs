@@ -39,17 +39,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return CreatePerson(name, name);
         }
 
-        /// <summary>
-        /// Creates a person.
-        /// </summary>
-        /// <param name="firstName">Name of the first.</param>
-        /// <param name="lastName">Name of the last.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: tamasb
-        /// Created date: 12/4/2007
-        /// </remarks>
-        public static IPerson CreatePerson(string firstName, string lastName)
+
+		/// <summary>
+		/// Creates a person.
+		/// </summary>
+		/// <param name="firstName">Name of the first.</param>
+		/// <param name="lastName">Name of the last.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 12/4/2007
+		/// </remarks>
+		public static IPerson CreatePerson(string firstName, string lastName)
         {
             Name name = new Name(firstName, lastName);
             return CreatePerson(name);
@@ -94,6 +95,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return CreatePerson().WithId();
 		}
 
+		public static IPerson CreatePersonWithId(Guid personId)
+		{
+			var person = CreatePerson();
+			person.SetId(personId);
+			return person;
+		}
+
 		public static IPerson CreatePersonWithSchedulePublishedToDate(DateOnly dateOnly)
 		{
 			var ret = CreatePerson().WithId();
@@ -133,14 +141,20 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
 			return person;
 		}
-
+		
 		public static IPerson CreatePersonWithPersonPeriodFromTeam(DateOnly personPeriodStart, ITeam team)
 		{
 			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
 			return person.WithId();
 		}
 
-	    public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
+		public static IPerson CreatePersonWithPersonPeriodFromTeam(Guid personId, DateOnly personPeriodStart, ITeam team)
+		{
+			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
+			return person.WithId(personId);
+		}
+
+		public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
 	    {
 				return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, skillsInPersonPeriod, new Contract("ctr"), new PartTimePercentage("ptc"));
 	    }
@@ -243,5 +257,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 												team);
 			person.AddPersonPeriod(per);
 		}
+
     }
 }

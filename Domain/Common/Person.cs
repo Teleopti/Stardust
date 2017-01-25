@@ -89,7 +89,9 @@ namespace Teleopti.Ccc.Domain.Common
 						PersonId = Id.GetValueOrDefault(),
 						BusinessUnitId = info.BusinessUnitId,
 						SiteId = info.SiteId,
+						SiteName = info.SiteName,
 						TeamId = info.TeamId,
+						TeamName = info.TeamName,
 						TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
 						PreviousTerminationDate = valueBefore,
 						TerminationDate = valueAfter,
@@ -124,9 +126,11 @@ namespace Teleopti.Ccc.Domain.Common
 			if (period?.Team != null)
 			{
 				info.TeamId = period.Team.Id.GetValueOrDefault();
+				info.TeamName = period.Team.Description.Name;
 				if (period.Team.Site != null)
 				{
 					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
+					info.SiteName = period.Team.Site.Description.Name;
 					if (period.Team.Site.BusinessUnit != null)
 					{
 						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
@@ -149,7 +153,9 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			public Guid? BusinessUnitId { get; set; }
 			public Guid? SiteId { get; set; }
+			public string SiteName { get; set; }
 			public Guid? TeamId { get; set; }
+			public string TeamName { get; set; }
 			public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
 		}
 

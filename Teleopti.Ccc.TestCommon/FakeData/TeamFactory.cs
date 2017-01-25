@@ -57,5 +57,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			team.SetId(Guid.NewGuid());
 		    return team;
 	    }
-    }
+		
+		public static ITeam CreateTeamWithId(Guid teamId, string teamName)
+		{
+			return CreateSimpleTeam(teamName).WithId(teamId);
+		}
+	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -44,11 +45,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return newSite;
         }
 
-        /// <summary>
-        /// Creates a unit with one team.
-        /// </summary>
-        /// <returns></returns>
-        public static Site CreateSiteWithOneTeam()
+		public static ISite CreateSiteWithTeam(Guid siteId, string siteName, ITeam team)
+		{
+			var newSite = CreateSiteWithId(siteId, siteName);
+			newSite.AddTeam(team);
+			return newSite;
+		}
+
+	    /// <summary>
+		/// Creates a unit with one team.
+		/// </summary>
+		/// <returns></returns>
+		public static Site CreateSiteWithOneTeam()
         {
             return CreateSiteWithTeams(new List<ITeam> {TeamFactory.CreateSimpleTeam()});
         }
@@ -63,5 +71,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             newSite.AddTeam(TeamFactory.CreateSimpleTeam(teamName));
             return newSite;
         }
+
+	    public static Site CreateSiteWithId(Guid siteId, string sitename)
+	    {
+		    return CreateSimpleSite(sitename).WithId(siteId);
+	    }
     }
 }

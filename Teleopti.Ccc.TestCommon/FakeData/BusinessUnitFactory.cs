@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-    public static class BusinessUnitFactory
+	public static class BusinessUnitFactory
     {
 	    private const string businessUnitUsedInTest = "Business unit used in test";
 	    private static Lazy<IBusinessUnit> _businessUnitUsedInTest = new Lazy<IBusinessUnit>(()=>CreateSimpleBusinessUnit(businessUnitUsedInTest).WithId());
@@ -36,7 +36,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return businessUnit;
 		}
 
-        public static BusinessUnit CreateSimpleBusinessUnit()
+		public static IBusinessUnit CreateWithId(Guid businessUnitId)
+		{
+			return CreateSimpleBusinessUnit().WithId(businessUnitId);
+		}
+
+		public static BusinessUnit CreateSimpleBusinessUnit()
         {
             return CreateSimpleBusinessUnit("Sweden");
         }
