@@ -297,6 +297,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<TeamBlockRemoveShiftCategoryBackToLegalService>().As<ITeamBlockRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope();
 			}
+			builder.RegisterType<RemoveScheduleDayProsBasedOnShiftCategoryLimitation>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ShiftCategoryWeekRemover>().As<IShiftCategoryWeekRemover>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryPeriodRemover>().As<IShiftCategoryPeriodRemover>().InstancePerLifetimeScope();
