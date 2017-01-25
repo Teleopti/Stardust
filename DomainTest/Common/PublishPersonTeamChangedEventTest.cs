@@ -20,17 +20,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldPublishWhenChangingTeam()
 		{
-			
-			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-
-			var organization = OrganizationFactory.Create(businessUnitId, siteId, "siteName", teamId, "teamName");
-			
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(personId, "2017-01-01".Date(), organization.Team);
 			Now.Is("2017-01-25");
-			person.ChangeTeam(organization.Team, person.Period("2017-01-25".Date()));
+			var team = TeamFactory.CreateSimpleTeam();
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam("2017-01-01".Date(), team);
+			
+			person.ChangeTeam(team, person.Period("2017-01-25".Date()));
 
 			((Person)person).PopAllEvents().OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
 		}
@@ -43,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-
 			var organization = OrganizationFactory.Create(businessUnitId, siteId, "siteName", teamId, "teamName");
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(personId, "2017-01-01".Date(), organization.Team);
 
