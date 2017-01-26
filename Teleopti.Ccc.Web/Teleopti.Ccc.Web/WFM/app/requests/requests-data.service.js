@@ -138,7 +138,7 @@
 					Checked: false,
 					Name: "ExpirationValidator",
 					Description: $translate.instant("ValidateRequestsBasedOnExpiration"),
-					Enabled: toggleSvc.Wfm_Requests_Check_Expired_Requests_40274
+					Enabled: toggleSvc.Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274
 				}
 			];
 		};		
