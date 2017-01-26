@@ -165,7 +165,7 @@
 
 		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
 
-		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
 			Date: '2016-06-16',
 			PersonId: 'agent1',
 			Timezone: timezone1,
@@ -324,10 +324,12 @@
 		var container = $compile(html)(scope);
 		scope.$apply();
 
-		container.isolateScope().vm.setActiveCmd('AddPersonalActivity');
+		var vm = container.isolateScope().vm;
+		vm.setReady(true);
+		vm.setActiveCmd('AddPersonalActivity');
 		scope.$apply();
 
-		var commandControl = angular.element(container[0].querySelector(".add-activity")).scope().vm;
+		var commandControl = angular.element(container[0].querySelector('.add-activity')).scope().vm;
 
 		var obj = {
 			container: container,
@@ -352,6 +354,26 @@
 		this.schedules = function () {
 			return null;
 		};
+
+		this.newService = function () {
+			return new FakeScheduleManagementService();
+		};
+
+		function FakeScheduleManagementService() {
+			var savedPersonScheduleVm = {};
+
+			this.setPersonScheduleVm = function (personId, vm) {
+				savedPersonScheduleVm[personId] = vm;
+			}
+
+			this.findPersonScheduleVmForPersonId = function (personId) {
+				return savedPersonScheduleVm[personId];
+			}
+
+			this.schedules = function () {
+				return null;
+			};
+		}
 	}
 
 	function FakeScheduleHelper() {

@@ -43,7 +43,7 @@
 
 		PersonSelection = _PersonSelection_;
 		PersonSelection.clearPersonInfo();
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
 	it('add-absence should render correctly', function() {
@@ -115,10 +115,12 @@
 		var container = $compile(html)(scope);
 		scope.$apply();
 
-		container.isolateScope().vm.setActiveCmd('AddAbsence');
+		var vm = container.isolateScope().vm;
+		vm.setReady(true);
+		vm.setActiveCmd('AddAbsence');
 		scope.$apply();
 
-		var commandControl = angular.element(container[0].querySelector(".add-absence")).scope().vm;
+		var commandControl = angular.element(container[0].querySelector('.add-absence')).scope().vm;
 
 		var obj = {
 			container: container,
@@ -132,12 +134,12 @@
 	function getAvailableAbsenceTypes() {
 		return [
 			{
-				"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
-				"Name": "Sick"
+				Id: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6',
+				Name: 'Sick'
 			},
 			{
-				"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
-				"Name": "Holiday"
+				Id: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6',
+				Name: 'Holiday'
 			}
 		];
 	}
@@ -148,6 +150,18 @@
 		this.schedules = function () {
 			return null;
 		};
+
+		this.newService = function () {
+			return new FakeScheduleManagementService();
+		};
+
+		function FakeScheduleManagementService() {
+
+			this.schedules = function () {
+				return null;
+			};
+
+		}
 
 	}
 

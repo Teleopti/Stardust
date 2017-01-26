@@ -1,7 +1,8 @@
-﻿(function () {
+﻿(function (angular, moment) {
 
 	'use strict';
-	angular.module('wfm.teamSchedule').directive('teamscheduleCommandContainer', teamscheduleCommandContainer);
+	angular.module('wfm.teamSchedule')
+		.directive('teamscheduleCommandContainer', teamscheduleCommandContainer);
 
 	function teamscheduleCommandContainer() {
 		return {
@@ -10,30 +11,53 @@
 			scope: {
 				date: '=',
 				timezone: '=',
-				actionCallback: '&?',			
+				actionCallback: '&?',
 				onReady: '&'
 			},
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/teamscheduleCommandContainer.html',
 			link: function (scope, elem) {
-					scope.$on('teamSchedule.init.command', function (e, d) {
-						scope.vm.setActiveCmd(d.activeCmd);
-					});
+				scope.$on('teamSchedule.init.command', function (e, d) {
+					scope.vm.initCmd(d.activeCmd);
+				});
 
-					scope.$on('teamSchedule.reset.command', function (e, d) {
-						scope.vm.resetActiveCmd();
-					});
-				}
+				scope.$on('teamSchedule.reset.command', function (e, d) {
+					scope.vm.resetActiveCmd();
+				});
+			}
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$filter',  'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService', 'ScheduleManagement'];
+	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$scope', 'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule'];
 
-	function teamscheduleCommandContainerCtrl($filter, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc) {
+	function teamscheduleCommandContainerCtrl($q, $filter, $scope, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc) {
 		var vm = this;
 
-		vm.scheduleManagementSvc = scheduleManagementSvc;
+		vm.scheduleManagementSvc = scheduleManagementSvc.newService();
+
+		vm.ready = false;
+
+		vm.initCmd = function (cmd) {
+			var checked = personSelectionSvc.getCheckedPersonIds();
+
+			var unavailable = checked;
+
+			if (unavailable.length === 0) {
+				vm.setReady(true);
+			} else {
+				teamScheduleSvc.getSchedules(vm.date, unavailable).then(function (data) {
+					vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date));
+					vm.setReady(true);
+				});
+			}
+
+			vm.setActiveCmd(cmd);
+		};
+
+		vm.setReady = function (value) {
+			vm.ready = value;
+		};
 
 		vm.getDate = function () {
 			return moment(vm.date).format('YYYY-MM-DD');
@@ -53,7 +77,10 @@
 			vm.activeCmd = label;
 		};
 
-		vm.resetActiveCmd = function () { vm.activeCmd = null; };
+		vm.resetActiveCmd = function () {
+			vm.activeCmd = null;
+			vm.setReady(false);
+		};
 
 		vm.getActionCb = function (_) {
 			var returnFn = function (trackId, personIds) {
@@ -73,7 +100,7 @@
 		};
 
 		vm.hasPermission = function (permission) {
-			return teamsPermissions.all()[permission];		
+			return teamsPermissions.all()[permission];
 		};
 
 		vm.hasToggle = function (toggle) {
@@ -84,4 +111,4 @@
 			return CommandCheckService.getCommandCheckStatus();
 		};
 	}
-})();
+})(angular, moment);

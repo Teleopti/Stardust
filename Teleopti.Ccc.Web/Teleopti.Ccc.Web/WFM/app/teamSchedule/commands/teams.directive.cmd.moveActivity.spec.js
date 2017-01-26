@@ -1,5 +1,4 @@
-﻿
-describe('teamschedule move activity directive tests', function () {
+﻿describe('teamschedule move activity directive tests', function () {
 	'use strict';
 
 	var $compile,
@@ -247,7 +246,9 @@ describe('teamschedule move activity directive tests', function () {
 		var container = $compile(html)(scope);
 		scope.$apply();
 
-		container.isolateScope().vm.setActiveCmd('MoveActivity');
+		var vm = container.isolateScope().vm;
+		vm.setReady(true);
+		vm.setActiveCmd('MoveActivity');
 		scope.$apply();
 
 		var commandControl = angular.element(container[0].querySelector(".move-activity")).scope().vm;

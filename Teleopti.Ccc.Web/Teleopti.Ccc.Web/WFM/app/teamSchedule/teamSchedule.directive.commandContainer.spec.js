@@ -1,4 +1,5 @@
-﻿describe("team schedule command container test", function() {
+﻿describe('team schedule command container test', function() {
+	'use strict';
 
 	var $compile,
 		$rootScope,
@@ -25,7 +26,7 @@
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
 	it('container should render correctly', function() {

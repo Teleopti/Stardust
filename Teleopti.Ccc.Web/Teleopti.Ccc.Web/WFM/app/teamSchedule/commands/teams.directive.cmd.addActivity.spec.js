@@ -1,4 +1,5 @@
-﻿describe("teamschedule add activity directive test", function () {
+﻿describe('teamschedule add activity directive test', function () {
+	'use strict';
 
 	var $compile,
 		$rootScope,
@@ -12,7 +13,7 @@
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
-			return { DefaultTimeZone: "Asia/Hong_Kong" };
+			return { DefaultTimeZone: 'Asia/Hong_Kong' };
 		}
 	};
 
@@ -54,7 +55,7 @@
 		$httpBackend = _$httpBackend_;
 		utility = _UtilityService_;
 
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
 	it('add-activity should render correctly', function () {
@@ -169,7 +170,7 @@
 			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
 		};
 
-		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
 			Date: '2016-06-15',
 			PersonId: 'agent1',
 			Timezone: timezone1,
@@ -226,7 +227,7 @@
 			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
 		};
 
-		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
 			Date: '2016-06-15',
 			PersonId: 'agent1',
 			Timezone: timezone1,
@@ -289,7 +290,7 @@
 			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
 		};
 
-		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
 			Date: '2016-06-15',
 			PersonId: 'agent1',
 			Timezone: timezone1,
@@ -380,7 +381,9 @@
 		var container = $compile(html)(scope);
 		scope.$apply();
 
-		container.isolateScope().vm.setActiveCmd('AddActivity');
+		var vm = container.isolateScope().vm;
+		vm.setReady(true);
+		vm.setActiveCmd('AddActivity');
 		scope.$apply();
 
 		var commandControl = angular.element(container[0].querySelector(".add-activity")).scope().vm;
@@ -395,20 +398,39 @@
 	}
 
 	function FakeScheduleManagementService() {
-		var latestStartTime = null;
 		var savedPersonScheduleVm = {};
 
-		this.setPersonScheduleVm = function(personId, vm) {
+		this.setPersonScheduleVm = function (personId, vm) {
 			savedPersonScheduleVm[personId] = vm;
 		}
 
-		this.findPersonScheduleVmForPersonId = function(personId) {
+		this.findPersonScheduleVmForPersonId = function (personId) {
 			return savedPersonScheduleVm[personId];
 		}
 
 		this.schedules = function () {
 			return null;
 		};
+
+		this.newService = function () {
+			return new FakeScheduleManagementService();
+		};
+
+		function FakeScheduleManagementService() {
+			var savedPersonScheduleVm = {};
+
+			this.setPersonScheduleVm = function (personId, vm) {
+				savedPersonScheduleVm[personId] = vm;
+			}
+
+			this.findPersonScheduleVmForPersonId = function (personId) {
+				return savedPersonScheduleVm[personId];
+			}
+
+			this.schedules = function () {
+				return null;
+			};
+		}
 	}
 
 	function FakeScheduleHelper() {
