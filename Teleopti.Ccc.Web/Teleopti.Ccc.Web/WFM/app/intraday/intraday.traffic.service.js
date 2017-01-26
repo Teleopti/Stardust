@@ -69,7 +69,7 @@
 					trafficData.timeSeries.splice(0, 0, 'x');
 				}
 
-				trafficData.hasMonitorData = true;
+				trafficData.hasMonitorData = result.IncomingTrafficHasData;
 				getCurrent();
 				service.loadTrafficChart(trafficData);
 				return trafficData;

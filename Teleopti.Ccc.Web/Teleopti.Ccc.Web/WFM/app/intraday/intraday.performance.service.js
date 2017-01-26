@@ -31,7 +31,7 @@
 			var hiddenArray = [];
 			var intervalStart;
 			service.setPerformanceData = function (result, showEsl) {
-				resetData();
+				clearData();
 
 				performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
 				performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
@@ -69,7 +69,7 @@
 					performanceData.timeSeries.splice(0, 0, 'x');
 				}
 
-				performanceData.hasMonitorData = true;
+				performanceData.hasMonitorData = result.PerformanceHasData;
 				getCurrent();
 				service.loadPerformanceChart(performanceData);
 				return performanceData;
@@ -91,7 +91,7 @@
 				performanceData.currentInterval[0] = 'Current';
 			};
 
-			var resetData = function () {
+			var clearData = function () {
 				performanceData.timeSeries = [];
 				performanceData.averageSpeedOfAnswerObj.series = [];
 				performanceData.abandonedRateObj.series = [];

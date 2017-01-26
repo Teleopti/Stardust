@@ -79,6 +79,7 @@ describe('IntradayAreaCtrl', function () {
 		trafficAndPerformanceData = {
 			LatestActualIntervalEnd: "0001-01-01T16:00:00",
 			LatestActualIntervalStart: "0001-01-01T15:45:00",
+			IncomingTrafficHasData: true,
 			DataSeries: {
 				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				AverageHandleTime: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
@@ -111,6 +112,7 @@ describe('IntradayAreaCtrl', function () {
 		performanceData = {
 			LatestActualIntervalEnd: "0001-01-01T16:00:00",
 			LatestActualIntervalStart: "0001-01-01T15:45:00",
+			PerformanceHasData: true,
 			DataSeries: {
 				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
@@ -133,6 +135,7 @@ describe('IntradayAreaCtrl', function () {
 			}
 		};
 		staffingData = {
+			StaffingHasData: true,
 			DataSeries: {
 				ForecastedStaffing: [1, 2, 3],
 				UpdatedForecastedStaffing: [2, 3, 4],
@@ -300,7 +303,6 @@ describe('IntradayAreaCtrl', function () {
 
 		scope.selectedSkillChange(scope.skills[0]);
 		$httpBackend.flush();
-
 		expect(scope.viewObj.hasMonitorData).toEqual(true);
 	});
 

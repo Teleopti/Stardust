@@ -135,7 +135,7 @@
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-selected="activeTab">
 						<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content ng-cloak class="md-padding" ng-show="viewObj.timeSeries.length > 2 && viewObj.forecastedCallsObj.max > 0">
+							<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="trafficChart"></div>
@@ -174,7 +174,7 @@
 									<div class="con-flex"></div>
 								</div>
 							</md-content>
-							<md-content ng-cloak class="md-padding" ng-if="viewObj.timeSeries.length < 2 || viewObj.forecastedCallsObj.max == 0">
+							<md-content ng-cloak class="md-padding" ng-if="!viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex no-data-available">
 										{{'NoDataAvailable'|translate}}
@@ -183,7 +183,7 @@
 							</md-content>
 						</md-tab>
 						<md-tab label="{{'Performance'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content class="md-padding" ng-show="viewObj.timeSeries.length > 2 && viewObj.averageSpeedOfAnswerObj.max > 0">
+							<md-content class="md-padding" ng-show="viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="performanceChart"></div>
@@ -224,7 +224,7 @@
 									<div class="con-flex"></div>
 								</div>
 							</md-content>
-							<md-content ng-cloak class="md-padding" ng-if="viewObj.timeSeries.length < 2 || viewObj.averageSpeedOfAnswerObj.max == 0">
+							<md-content ng-cloak class="md-padding" ng-if="!viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex no-data-available">
 										{{'NoDataAvailable'|translate}}
@@ -233,14 +233,14 @@
 							</md-content>
 						</md-tab>
 						<md-tab label="{{'Staffing'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content class="md-padding" ng-show="viewObj.timeSeries.length > 2 && viewObj.forecastedStaffing.max > 0">
+							<md-content class="md-padding" ng-show="viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 									</div>
 								</div>
 							</md-content>
-							<md-content ng-cloak class="md-padding" ng-if="viewObj.timeSeries.length < 2 || viewObj.forecastedStaffing.max == 0">
+							<md-content ng-cloak class="md-padding" ng-if="!viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex no-data-available">
 										{{'NoDataAvailable'|translate}}

@@ -21,6 +21,8 @@
 			var hiddenArray = [];
 
 			service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing) {
+				clearData();
+
 				staffingData.timeSeries = [];
 				staffingData.forecastedStaffing.series = [];
 				staffingData.forecastedStaffing.updatedSeries = [];
@@ -46,7 +48,7 @@
 					staffingData.timeSeries.splice(0, 0, 'x');
 				}
 
-				staffingData.hasMonitorData = true;
+				staffingData.hasMonitorData = result.StaffingHasData;
 				var forecastedStaffingMax = Math.max.apply(Math, staffingData.forecastedStaffing.series);
 				var updatedForecastedStaffingMax = Math.max.apply(Math, result.DataSeries.UpdatedForecastedStaffing);
 				if (forecastedStaffingMax > updatedForecastedStaffingMax) {
@@ -67,6 +69,14 @@
 			service.getData = function () {
 				return staffingData;
 			}
+
+			var clearData = function () {
+				staffingData.timeSeries = [];
+				staffingData.forecastedStaffing.series = [];
+				staffingData.forecastedStaffing.updatedSeries = [];
+				staffingData.actualStaffingSeries = [];
+				staffingData.scheduledStaffing.series = [];
+			};
 
 			service.pollSkillData = function (selectedItem, toggles) {
 				intradayService.getSkillStaffingData.query(
