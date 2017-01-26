@@ -17,13 +17,13 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
       return;
     }
 
-		toggleSelection(node);
+		var orgNode = toggleSelection(node);
 
-		ctrl.onClick(node);
+		ctrl.onClick(orgNode);
 	}
 
 	function toggleSelection(node) {
-		ctrl.select(node);
+		var originalNode = ctrl.select(node);
 		var selectedOrNot = ctrl.isSelected(node);
 
 		if (node.Type === 'BusinessUnit') {
@@ -56,6 +56,8 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
 			}
 			traverseNodes(node);
 		}
+		return originalNode;
+		
 	}
 
 	function traverseNodes(node) {

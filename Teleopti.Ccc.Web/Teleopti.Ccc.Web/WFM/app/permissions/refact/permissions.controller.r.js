@@ -205,12 +205,14 @@
 
 		function toggleOrganizationSelecton(businessUnit, selectedOrNot) {
 			vm.selectOrgData(businessUnit, selectedOrNot);
-
-			for (var i = 0; i < businessUnit.ChildNodes.length; i++) {
-				vm.selectOrgData(businessUnit.ChildNodes[i], selectedOrNot)
-
-				for (var j = 0; j < businessUnit.ChildNodes[i].ChildNodes.length; j++) {
-					vm.selectOrgData(businessUnit.ChildNodes[i].ChildNodes[j], selectedOrNot)
+			if (businessUnit.ChildNodes != null) {
+				for (var i = 0; i < businessUnit.ChildNodes.length; i++) {
+					vm.selectOrgData(businessUnit.ChildNodes[i], selectedOrNot)
+					if (businessUnit.ChildNodes[i].ChildNodes != null) {
+						for (var j = 0; j < businessUnit.ChildNodes[i].ChildNodes.length; j++) {
+							vm.selectOrgData(businessUnit.ChildNodes[i].ChildNodes[j], selectedOrNot)
+						}
+					}
 				}
 			}
 		}
@@ -222,19 +224,24 @@
 		}
 
 		function selectOrgData(org, selected) {
+			var selectedOriginalNode = permissionsDataService.findOrgData(vm.organizationSelection.BusinessUnit, org.Id)
+
 			if (selected != null) {
 				if (selected) {
 					vm.selectedOrgData[org.Id] = true;
 				} else {
-					delete vm.selectedOrgData[org.Id];
+					delete vm.selectedOrgData[selectedOriginalNode.Id];
 				}
 			} else {
 				if (vm.selectedOrgData[org.Id]) {
-					delete vm.selectedOrgData[org.Id];
+					delete vm.selectedOrgData[selectedOriginalNode.Id];
+					toggleOrganizationSelecton(selectedOriginalNode, false);
 				} else {
 					vm.selectedOrgData[org.Id] = true;
 				}
 			}
+			return selectedOriginalNode;
+
 		}
 
 		function matchOrganizationData() {
@@ -332,7 +339,6 @@
 		}
 
 		function functionClick(fn) {
-			console.log(vm.selectedFunctions);
 			var flatFunctions = [];
 
 			if (vm.selectedRole === null) {
