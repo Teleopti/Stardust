@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			stateholder.Schedules[agent].ScheduledDay(date.AddDays(1)).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategory);
 		}
 
-
 		[Test]
 		public void ShouldReplaceBestDayFirst()
 		{
@@ -132,6 +131,53 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			stateholder.Schedules[agent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
 			stateholder.Schedules[agent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
+		}
+
+		[Test, Ignore("#42680")]
+		public void ShouldHandleMultipleAgents()
+		{
+			var firstDate = new DateOnly(2017, 1, 22);
+			var secondDate = firstDate.AddDays(1);
+			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
+			var shiftCategoryAfter = new ShiftCategory("After").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var nightRest = TimeSpan.FromHours(11);
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), nightRest, TimeSpan.FromHours(16)) };
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 2); //should try with this one first
+			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
+			{
+				SchedulingOptions =
+				{
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("not interesting", GroupPageType.SingleAgent),
+					UseTeam = true,
+					UseShiftCategoryLimitations = true
+				}
+			};
+			
+			var firstAgent = new Person {Name = new Name("first", "first")}.WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
+			var secondAgent = new Person {Name = new Name("second", "second")}.WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
+			firstAgent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
+			secondAgent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
+			var period = new DateOnlyPeriod(firstDate, secondDate);
+			var firstAgentAssA = new PersonAssignment(firstAgent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var firstAgentAssB = new PersonAssignment(firstAgent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var secondAgentAssA = new PersonAssignment(secondAgent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var secondAgentAssB = new PersonAssignment(secondAgent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { firstAgent, secondAgent }, new[] { firstAgentAssA, firstAgentAssB, secondAgentAssA, secondAgentAssB }, new[] { skillDayFirstDay, skillDaySecondDay });
+			var firstAgentScheduleDays = stateholder.Schedules[firstAgent].ScheduledDayCollection(period).ToList();
+			var secondAgentScheduleDays = stateholder.Schedules[secondAgent].ScheduledDayCollection(period).ToList();
+			var scheduleDays = firstAgentScheduleDays.Union(secondAgentScheduleDays).ToList();
+
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), scheduleDays, new OptimizationPreferences(), null);
+
+			stateholder.Schedules[firstAgent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
+			stateholder.Schedules[firstAgent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
+			stateholder.Schedules[secondAgent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
+			stateholder.Schedules[secondAgent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
 		}
 	}
 }
