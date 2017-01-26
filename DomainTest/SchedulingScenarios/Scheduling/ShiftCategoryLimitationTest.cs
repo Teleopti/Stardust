@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			stateholder.Schedules[agent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
 		}
 
-		[Test, Ignore("#42680")]
+		[Test]
 		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful_MultipleAgents()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);

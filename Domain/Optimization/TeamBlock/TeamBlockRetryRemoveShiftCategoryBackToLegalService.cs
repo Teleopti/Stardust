@@ -73,8 +73,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
 			IShiftCategoryLimitation limitation, bool isSingleAgentTeam, HashSet<DateOnly> lockedDays)
 		{
+			rollbackService.ClearModificationCollection(); //TODO: this is maybe wrong - let's see...
+
 			//TODO: ändra så att rollbackservice skickas in hela vägen här
 			var removedScheduleDayPros = _removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
+
 
 			foreach (var removedScheduleDayPro in removedScheduleDayPros)
 			{
