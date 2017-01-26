@@ -214,7 +214,8 @@
 		Wfm_Intraday_ESL_41827,
 		AbsenceRequests_Intraday_UseCascading_41969,
 		AbsenceRequests_ValidateAllAgentSkills_42392,
-		WfmStaffing_AllowActions_42524
+		WfmStaffing_AllowActions_42524,
+		Staffing_ReadModel_UseSkillCombination_42663
 		// ReSharper restore InconsistentNaming
 	}
 }
