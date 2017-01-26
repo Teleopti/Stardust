@@ -18,6 +18,7 @@
 			'rtaRouteService',
 			'rtaFormatService',
 			'rtaAdherenceService',
+			'rtaLocaleLanguageSortingService',
 			'Toggle'
 		]
 
@@ -35,6 +36,7 @@
 				rtaRouteService,
 				rtaFormatService,
 				rtaAdherenceService,
+				rtaLocaleLanguageSortingService,
 				toggleService
 			) {
 
@@ -49,6 +51,7 @@
 				vm.siteIds = $stateParams.siteIds || [];
 				vm.getAdherencePercent = rtaFormatService.numberToPercent;
 				vm.selectedItemIds = [];
+				vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
 
 				var stateForTeamsBySkill = 'rta.teams-by-skill({siteIds: site.Id, skillIds: vm.selectedSkill.Id})';
 				var stateForTeamsBySkillArea = 'rta.teams-by-skillArea({siteIds: site.Id, skillAreaId: vm.selectedSkillArea.Id})';
