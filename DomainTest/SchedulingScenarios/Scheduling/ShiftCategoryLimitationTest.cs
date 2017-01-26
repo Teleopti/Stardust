@@ -189,6 +189,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 1);
 			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var tag = new ScheduleTag();
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{
 				SchedulingOptions =
@@ -196,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("not interesting", GroupPageType.SingleAgent),
 					UseTeam = true,
 					UseShiftCategoryLimitations = true,
-					TagToUseOnScheduling = KeepOriginalScheduleTag.Instance
+					TagToUseOnScheduling = tag
 				}
 			};
 			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
@@ -204,7 +205,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var period = new DateOnlyPeriod(firstDate, secondDate);
 			var assFirstDate = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var assSecondDate = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
-			var tag = new ScheduleTag();
 			var tagFirstDate = new AgentDayScheduleTag(agent, firstDate, scenario, tag);
 			var tagSecondDate = new AgentDayScheduleTag(agent, secondDate, scenario, tag);
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { assFirstDate, assSecondDate, tagFirstDate, tagSecondDate }, new[] { skillDayFirstDay, skillDaySecondDay });
@@ -230,6 +230,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 1); //should try with this one first
 			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var tag = new ScheduleTag();
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{
 				SchedulingOptions =
@@ -237,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("not interesting", GroupPageType.SingleAgent),
 					UseTeam = true,
 					UseShiftCategoryLimitations = true,
-					TagToUseOnScheduling = KeepOriginalScheduleTag.Instance
+					TagToUseOnScheduling = tag
 				}
 			};
 			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
@@ -245,7 +246,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var period = new DateOnlyPeriod(firstDate, secondDate);
 			var assFirstDate = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var assSecondDate = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
-			var tag = new ScheduleTag();
 			var tagFirstDate = new AgentDayScheduleTag(agent, firstDate, scenario, tag);
 			var tagSecondDate = new AgentDayScheduleTag(agent, secondDate, scenario, tag);
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { assFirstDate, assSecondDate, tagFirstDate, tagSecondDate }, new[] { skillDayFirstDay, skillDaySecondDay });
