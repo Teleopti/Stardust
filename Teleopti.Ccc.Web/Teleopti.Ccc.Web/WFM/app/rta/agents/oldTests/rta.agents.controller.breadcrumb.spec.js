@@ -4,6 +4,7 @@ describe('RtaAgentsController', function() {
 		$httpBackend,
 		$state,
 		$sessionStorage,
+		$translate,
 		$fakeBackend,
 		$controllerBuilder,
 		scope,
@@ -21,10 +22,11 @@ describe('RtaAgentsController', function() {
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
+	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _$translate_, _FakeRtaBackend_, _ControllerBuilder_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
+		$translate = _$translate_
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
@@ -97,7 +99,7 @@ describe('RtaAgentsController', function() {
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.teamName).toEqual("Multiple Teams");
+		expect(vm.teamName).toEqual($translate.instant('MultipleTeams'));
 	});
 
 	it('should set to multiple teams when selecting one site', function() {
@@ -105,7 +107,7 @@ describe('RtaAgentsController', function() {
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.teamName).toEqual("Multiple Teams");
+		expect(vm.teamName).toEqual($translate.instant('MultipleTeams'));
 	});
 
 	xit('should set site name when selecting one site', function() {
@@ -126,7 +128,7 @@ describe('RtaAgentsController', function() {
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.siteName).toEqual("Multiple Sites");
+		expect(vm.siteName).toEqual($translate.instant('MultipleSites'));
 	});
 
 	it('should set team and site name', function() {
@@ -140,7 +142,7 @@ describe('RtaAgentsController', function() {
 			SiteName: "London"
 		});
 		vm = $controllerBuilder.createController().vm;
-		expect(vm.teamName).toEqual("Multiple Teams");
+		expect(vm.teamName).toEqual($translate.instant('MultipleTeams'));
 	});
 
 	it('should hide Breadcrumb', function() {
