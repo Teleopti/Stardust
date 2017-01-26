@@ -13,6 +13,10 @@ body {
     right: 0;
 }
 
+html {
+	background: #66C2FF!important;
+}
+
 #selector div {
 	display: block;
 	padding-bottom: 25px;

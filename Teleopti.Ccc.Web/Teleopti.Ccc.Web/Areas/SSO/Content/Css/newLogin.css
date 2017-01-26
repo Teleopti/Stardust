@@ -12,6 +12,10 @@
     left: 0;
     right: 0;
 }
+
+html {
+	background: #66C2FF!important;
+}
 .login-form {
 	max-width: 100%!important;	
 }
