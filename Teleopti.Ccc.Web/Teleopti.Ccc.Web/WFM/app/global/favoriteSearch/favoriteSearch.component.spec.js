@@ -146,7 +146,8 @@ describe('favoriteSearch component tests', function () {
 		var nameToBeDeleted = 'test1';
 		ctrl.delete(nameToBeDeleted);
 
-		expect(ctrl.enableSave()).toEqual(true);
+		expect(ctrl.currentName).toEqual('');
+		expect(ctrl.enableSave()).toEqual(false);
 		expect(ctrl.currentFavorite).toEqual(undefined);
 	});
 

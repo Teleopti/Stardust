@@ -7,13 +7,13 @@
 
 	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
 		var vm = this;
-		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 		vm.permissionsReady = false;
 
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
 		var shiftTradeRequestTabIndex = 1;
-		vm.selectedTeamIds = [];		
+		vm.selectedTeamIds = [];
+		var internalSelectedTeamIds = [];
 
 		vm.defaultTeamLoadedDefer = $q.defer();
 		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
@@ -21,8 +21,9 @@
 		}
 
 		$q.all([toggleService.togglesLoaded])
-			.then(vm.defaultTeamLoadedDefer.promise.then(function(defaultTeams) {
-				vm.selectedTeamIds = defaultTeams ? defaultTeams : [];
+			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeams) {
+				internalSelectedTeamIds = defaultTeams ? defaultTeams : [];
+				vm.selectedTeamIds = internalSelectedTeamIds;
 			}))
 			.then(init);
 
@@ -34,23 +35,43 @@
 			}
 		}];
 
-		vm.changeSelectedTeams = function(teams) {
-			vm.selectedTeamIds = teams;
+		vm.changeSelectedTeams = function (teams) {
+			internalSelectedTeamIds = teams;
+			vm.keyDownOnSearchInputFocus();
 		};
 
-		vm.applyFavorite = function (teamIds, searchTerm) {
-			vm.selectedTeamIds = teamIds;
-			vm.agentSearchOptions.keyword = searchTerm;
+		vm.applyFavorite = function (currentFavorite) {
+			internalSelectedTeamIds = currentFavorite.TeamIds;
+			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
+			setSearchFilter();
+			vm.toggleSearchFocus = false;
 		};
 
 		vm.getSearch = function () {
 			return {
-				teamIds: vm.selectedTeamIds,
-				searchTerm: vm.agentSearchOptions.keyword
+				TeamIds: internalSelectedTeamIds,
+				SearchTerm: vm.agentSearchOptions.keyword
 			};
 		};
+		vm.toggleSearchFocus = false;
+
+		vm.keyDownOnSearchInputFocus = function ($event) {
+			vm.toggleSearchFocus = true;
+			if ($event && $event.which == 13) {
+				vm.keyDownOnSearchTermChanged();
+			}
+		};
+		vm.keyDownOnSearchTermChanged = function() {
+			vm.toggleSearchFocus = false;
+			setSearchFilter();
+		}
 
 		vm.onFavoriteSearchInitDefer = $q.defer();
+
+		function setSearchFilter() {
+			vm.selectedTeamIds = internalSelectedTeamIds;
+			vm.agentSearchTerm = vm.agentSearchOptions.keyword;
+		}
 
 		function init() {
 			vm.permissionsReady = true;
@@ -125,10 +146,6 @@
 		function canApproveOrDenyRequest() {
 			return (vm.selectedTabIndex === absenceRequestTabIndex) ||
 				(vm.selectedTabIndex === shiftTradeRequestTabIndex && vm.canApproveOrDenyShiftTradeRequest);
-		}
-
-		function onAgentSearchTermChanged(agentSearchTerm) {
-			vm.agentSearchTerm = agentSearchTerm;
 		}
 
 		function forceRequestsReloadWithoutSelection() {

@@ -62,10 +62,27 @@
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
+			scope.requestsOverview.selectedTeamIds = ["team"];
 			scope.requestsOverview.init();
 			targetScope.$digest();
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
+		});
+
+		it("should not populate requests data from requests data service when no team selected", function () {
+			var request = {
+				Id: 1,
+				Type: requestsDefinitions.REQUEST_TYPES.TEXT
+			};
+
+			requestsDataService.setRequests([request]);
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isActive = true;
+			scope.requestsOverview.init();
+			targetScope.$digest();
+			expect(scope.requestsOverview.requests.length).toEqual(0);
 		});
 
 		it("should not populate requests data from requests data service when inactive", function () {
@@ -92,6 +109,7 @@
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
+			scope.requestsOverview.selectedTeamIds = ["team"];
 			requestsDataService.reset();
 			targetScope.period = {
 				startDate: moment().add(1, 'day').toDate(),
@@ -111,6 +129,7 @@
 
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
+			scope.requestsOverview.selectedTeamIds = ["team"];
 
 			requestsDataService.reset();
 
@@ -133,6 +152,7 @@
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
+			scope.requestsOverview.selectedTeamIds = ["team"];
 			requestsDataService.reset();
 
 			targetScope.agentSearchTerm = "search term";
@@ -186,8 +206,10 @@
 				startDate: moment().startOf('week')._d,
 				endDate: moment().endOf('week')._d
 			};
+			targetScope.selectedTeams = ["team"];
 			targetElement = $compile('<requests-overview ' +
 				'is-active="selectedTabIndex == 0" ' +
+				'selected-team-ids="selectedTeams"' +
 				'period="absencePeriod"></requests-overview>')(targetScope);
 			targetScope.$digest();
 
@@ -205,8 +227,9 @@
 				startDate: moment().add(-1, 'd')._d,
 				endDate: moment().add(1, 'd')._d
 			};
+			targetScope.selectedTeams = ["team"];
 			targetElement = $compile('<requests-overview is-active="selectedTabIndex == 0" period="absencePeriod"></requests-overview>' +
-				'<requests-overview is-active="selectedTabIndex == 1" period="shiftTradePeriod"></requests-overview>')(targetScope);
+				'<requests-overview is-active="selectedTabIndex == 1" period="shiftTradePeriod" selected-team-ids="selectedTeams"></requests-overview>')(targetScope);
 			targetScope.$digest();
 
 			requestsDataService.reset();

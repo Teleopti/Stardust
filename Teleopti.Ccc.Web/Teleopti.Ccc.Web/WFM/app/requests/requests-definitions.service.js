@@ -72,26 +72,28 @@
 		}
 
 		this.fillTermItem = function(key, item, output) {
-			output[key] = item.substring(item.indexOf(":") + 2, item.length);
+			output[key] = item.indexOf(":") > -1 ? item.substring(item.indexOf(":") + 2, item.length) : item;
 		}
 		this.formatAgentSearchTerm = function(terms) {
 			var formated = {};
-			var strlist = terms.split(";");
-			strlist.pop();
+			var strlist = terms.indexOf(";") > -1 ? terms.split(";"): [terms];
+			if (strlist.indexOf("") > -1)
+				strlist.pop();
 			for (var i in strlist) {
 				if (strlist.hasOwnProperty(i)) {
 					if (strlist[i].includes("FirstName")) this.fillTermItem('FirstName', strlist[i], formated);
-					if (strlist[i].includes("LastName")) this.fillTermItem('LastName', strlist[i], formated);
-					if (strlist[i].includes("EmploymentNumber")) this.fillTermItem('EmploymentNumber', strlist[i], formated);
-					if (strlist[i].includes("Organization")) this.fillTermItem('Organization', strlist[i], formated);
-					if (strlist[i].includes("Role")) this.fillTermItem('Role', strlist[i], formated);
-					if (strlist[i].includes("Contract")) this.fillTermItem('Contract', strlist[i], formated);
-					if (strlist[i].includes("ContractSchedule")) this.fillTermItem('ContractSchedule', strlist[i], formated);
-					if (strlist[i].includes("ShiftBags")) this.fillTermItem('ShiftBag', strlist[i], formated);
-					if (strlist[i].includes("PartTimePercentage")) this.fillTermItem('PartTimePercentage', strlist[i], formated);
-					if (strlist[i].includes("Skill")) this.fillTermItem('Skill', strlist[i], formated);
-					if (strlist[i].includes("BudgetGroup")) this.fillTermItem('BudgetGroup', strlist[i], formated);
-					if (strlist[i].includes("Note")) this.fillTermItem('Note', strlist[i], formated);
+					else if (strlist[i].includes("LastName")) this.fillTermItem('LastName', strlist[i], formated);
+					else if (strlist[i].includes("EmploymentNumber")) this.fillTermItem('EmploymentNumber', strlist[i], formated);
+					else if (strlist[i].includes("Organization")) this.fillTermItem('Organization', strlist[i], formated);
+					else if (strlist[i].includes("Role")) this.fillTermItem('Role', strlist[i], formated);
+					else if (strlist[i].includes("Contract")) this.fillTermItem('Contract', strlist[i], formated);
+					else if (strlist[i].includes("ContractSchedule")) this.fillTermItem('ContractSchedule', strlist[i], formated);
+					else if (strlist[i].includes("ShiftBags")) this.fillTermItem('ShiftBag', strlist[i], formated);
+					else if (strlist[i].includes("PartTimePercentage")) this.fillTermItem('PartTimePercentage', strlist[i], formated);
+					else if (strlist[i].includes("Skill")) this.fillTermItem('Skill', strlist[i], formated);
+					else if (strlist[i].includes("BudgetGroup")) this.fillTermItem('BudgetGroup', strlist[i], formated);
+					else if (strlist[i].includes("Note")) this.fillTermItem('Note', strlist[i], formated);
+					else this.fillTermItem('All', strlist[i], formated);
 				}
 			}
 			return formated;
@@ -100,7 +102,6 @@
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {
 			var filters = this.formatFilters(filter.filters);
 			var terms = this.formatAgentSearchTerm(filter.agentSearchTerm);
-
 			var target = {
 				StartDate: moment(filter.period.startDate).format('YYYY-MM-DD'),
 				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),

@@ -167,8 +167,13 @@
 				.then(function () {
 					ctrl.favoriteSearchList.splice(index, 1);
 					favoriteSearchNameList.splice(index, 1);
-					if (ctrl.currentFavorite.Name === name)
+
+					if (ctrl.currentFavorite.Name === name) {
 						ctrl.currentFavorite = undefined;
+						ctrl.currentName = "";
+					}
+					
+						
 				});
 		};
 
@@ -177,7 +182,12 @@
 			ctrl.currentName = item.Name;
 			if (ctrl.mdPanelRef)
 				ctrl.mdPanelRef.close();
-			ctrl.applyFavorite({currentFavorite: angular.copy(ctrl.currentFavorite)});
+			ctrl.applyFavorite({
+				currentFavorite: {
+					TeamIds: angular.copy(ctrl.currentFavorite.TeamIds),
+					SearchTerm: angular.copy(ctrl.currentFavorite.SearchTerm)
+				}
+			});
 		};
 
 		function initializeFavoriteList(data) {

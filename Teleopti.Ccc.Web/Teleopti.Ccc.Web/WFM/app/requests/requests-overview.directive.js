@@ -121,7 +121,7 @@
 		}
 
 		function reload(callback) {
-			if (!vm.isActive) {
+			if (!vm.isActive || !(angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0)) {
 				return;
 			}
 
@@ -133,7 +133,6 @@
 			}
 
 			vm.loaded = false;
-
 			if (vm.isPaginationEnabled) {
 				getRequests(requestsFilter, vm.sortingOrders, vm.paging, callback);
 			} else {

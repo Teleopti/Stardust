@@ -10,7 +10,7 @@
 		<div class="left-part">
 			
 			<favorite-search ng-if="requests.saveFavoriteSearchesEnabled"
-							 apply-favorite="requests.applyFavorite(teamIds, searchTerm)"
+							 apply-favorite="requests.applyFavorite(currentFavorite)"
 							 get-search="requests.getSearch()"
 							 on-init-async="requests.onFavoriteSearchInitDefer"></favorite-search>
 
@@ -21,14 +21,18 @@
 								 class="organization-picker-container"></organization-picker>
 
 
-			<wfm-multiple-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></wfm-multiple-search-input>
+			<wfm-multiple-search-input class="request-filter inline-block" focus-input="requests.toggleSearchFocus" ng-click="$event.stopPropagation()" ng-keydown="requests.keyDownOnSearchInputFocus($event)" search-options="requests.agentSearchOptions"></wfm-multiple-search-input>
+			<span class="pointer" ng-class="{'focusing-search':requests.toggleSearchFocus, 'not-focusing-search':!requests.toggleSearchFocus}" ng-click="requests.keyDownOnSearchTermChanged()">
+				<i class="mdi mdi-magnify"></i>
+				<md-tooltip>{{'Search' | translate}}</md-tooltip>
+			</span>
 
 			<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="requests.period"
 							   template-type="requests.dateRangeTemplateType"
 							   custom-validators="requests.dateRangeCustomValidators"></date-range-picker>
 
 			<div class="wfm-switch filter-switch" ng-if="requests.filterToggleEnabled">
-				<input type="checkbox" id="filter-switch" ng-model="requests.filterEnabled"/>
+				<input type="checkbox" id="filter-switch" ng-model="requests.filterEnabled" />
 				<label for="filter-switch">
 					<span class="wfm-switch-toggle"></span>
 					<span style="width: 55px; display: inline-block;"></span>
@@ -37,7 +41,7 @@
 				</label>
 			</div>
 
-		</div>
+</div>
 		<div class="right-part">
 			<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled && requests.canApproveOrDenyRequest()"
 									before-command="requests.onBeforeCommand()"

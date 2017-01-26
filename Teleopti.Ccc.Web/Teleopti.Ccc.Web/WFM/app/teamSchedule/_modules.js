@@ -14,7 +14,8 @@
 			'wfm.utilities',
 			'wfm.confirmModal',
 			'wfm.favoriteSearch',
-			'wfm.organizationPicker'
+			'wfm.organizationPicker',
+			'wfm.inputFocus'
 		])
 	.config(['$mdThemingProvider', teamScheduleConfig])
 		.run(['$rootScope', '$state', '$location', 'organizationPickerSvc', 'FavoriteSearchDataService', teamScheduleRun]);;

@@ -15,7 +15,8 @@
         'wfm.teamSchedule',
 		'wfm.multiplesearchinput',
 		'wfm.favoriteSearch',
-		'wfm.organizationPicker'
+		'wfm.organizationPicker',
+		'wfm.inputFocus'
 	]).run(moduleRun);
 
 	moduleRun.$inject = ['$rootScope', 'organizationPickerSvc', 'FavoriteSearchDataService'];

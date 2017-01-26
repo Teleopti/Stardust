@@ -130,6 +130,7 @@
             -moz-border-radius: 4px 4px 4px 4px;
             border-radius: 4px 4px 4px 4px;
         }
+
     }
 
     [id="time-zone-switch"] {
@@ -167,6 +168,15 @@
             wfm-multiple-search-input {
                 margin: 0;
             }
+
+			
+		//Temp fix:remove this when styleguide updated wfm-multiple-search-input
+		wfm-multiple-search-input i.mdi-magnify {
+			display: none;
+		}
+		.focusing-search {
+			color: $blue-500;
+		}
 
             .request-date-range-picker {
                 margin-right: 1em;
