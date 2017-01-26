@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		}
 
 		[Test]
-		public void ShouldDeleteReadModelIfSoftDeletedForMoreThanThirtyMinutes()
+		public void ShouldDeleteReadModelIfSoftDeletedForMoreThanSevenDays()
 		{
 			var personId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel { PersonId = personId });
@@ -91,10 +91,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				Timestamp = "2016-10-04 08:00".Utc()
 			});
 
-			Now.Is("2016-10-04 08:30");
+			Now.Is("2016-10-11 08:00");
 			Target.Handle(new TenantHourTickEvent());
 			
 			Persister.Load(personId).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotDeleteReadModelIfSoftDeletedForLessThanSevenDays()
+		{
+			var personId = Guid.NewGuid();
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = null,
+				Timestamp = "2016-10-04 08:00".Utc()
+			});
+
+			Now.Is("2016-10-11 07:59");
+			Target.Handle(new TenantHourTickEvent());
+
+			Persister.Load(personId).Should().Not.Be.Null();
 		}
 
 		[Test]

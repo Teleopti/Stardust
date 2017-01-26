@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static DateTime expirationFor(IEvent @event)
 		{
-			return ((dynamic) @event).Timestamp.AddMinutes(30);
+			return ((dynamic) @event).Timestamp.AddDays(7);
 		}
 
 		[UnitOfWork]
