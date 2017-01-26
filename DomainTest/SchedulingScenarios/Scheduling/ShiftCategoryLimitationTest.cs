@@ -195,7 +195,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				{
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("not interesting", GroupPageType.SingleAgent),
 					UseTeam = true,
-					UseShiftCategoryLimitations = true
+					UseShiftCategoryLimitations = true,
+					TagToUseOnScheduling = KeepOriginalScheduleTag.Instance
 				}
 			};
 			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
@@ -235,7 +236,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				{
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("not interesting", GroupPageType.SingleAgent),
 					UseTeam = true,
-					UseShiftCategoryLimitations = true
+					UseShiftCategoryLimitations = true,
+					TagToUseOnScheduling = KeepOriginalScheduleTag.Instance
 				}
 			};
 			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
