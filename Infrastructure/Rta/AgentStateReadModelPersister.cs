@@ -257,6 +257,11 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
+		{
+			throw new NotImplementedException();
+		}
+
 		private class internalModel : AgentStateReadModel
 		{
 			public new string Shift { get; set; }

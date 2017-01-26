@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
-
 			if (!@event.TeamId.HasValue)
 			{
 				_persister.SetDeleted(@event.PersonId, expirationFor(@event));
@@ -65,6 +64,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return ((dynamic) @event).Timestamp.AddMinutes(30);
 		}
 
+		[UnitOfWork]
+		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
+		{
+			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
+		}
 	}
 
 	public class AssociationInfo

@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void UpsertAssociation(AssociationInfo info)
 		{
-			AgentStateReadModel removed;
-			if (!_data.TryRemove(info.PersonId, out removed))
+			AgentStateReadModel existing;
+			if (!_data.TryRemove(info.PersonId, out existing))
 			{
 				_data.TryAdd(info.PersonId, new AgentStateReadModel
 				{
@@ -91,16 +91,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 				return;
 			}
-			removed.SiteId = info.SiteId;
-			removed.SiteName = info.SiteName;
-			removed.TeamId = info.TeamId;
-			removed.TeamName = info.TeamName;
-			removed.BusinessUnitId = info.BusinessUnitId.GetValueOrDefault();
-			removed.IsDeleted = false;
-			removed.ExpiresAt = null;
-			_data.AddOrUpdate(info.PersonId, removed.CopyBySerialization(), (g, m) => removed);
+			existing.SiteId = info.SiteId;
+			existing.SiteName = info.SiteName;
+			existing.TeamId = info.TeamId;
+			existing.TeamName = info.TeamName;
+			existing.BusinessUnitId = info.BusinessUnitId.GetValueOrDefault();
+			existing.IsDeleted = false;
+			existing.ExpiresAt = null;
+			_data.AddOrUpdate(info.PersonId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
+		{
+			AgentStateReadModel existing;
+			if (!_data.TryRemove(personId, out existing))
+			{
+				_data.TryAdd(personId, new AgentStateReadModel
+				{
+					PersonId = personId,
+					EmploymentNumber = employmentNumber
+				});
+				return;
+			}
+			existing.EmploymentNumber = employmentNumber;
+			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
+		}
 
 		public IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons)
 		{

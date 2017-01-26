@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void SetDeleted(Guid personId, DateTime expiresAt);
 		void DeleteOldRows(DateTime now);
 		void UpsertAssociation(AssociationInfo info);
+		void UpsertEmploymentNumber(Guid personId, string employmentNumber);
 	}
 }

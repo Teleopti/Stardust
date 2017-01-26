@@ -179,6 +179,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPreferenceMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsRequestMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonEmploymentNumberChangedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\MeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
