@@ -15495,4 +15495,12 @@ These options are activated:
     <value>No skill found</value>
     <comment>message when no matching skill can be found</comment>
   </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>Multiple Sites</value>
+    <comment>Text displayed in RTA breadcrumb</comment>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>Multiple Teams</value>
+    <comment>Text displayed in RTA breadcrumb</comment>
+  </data>
 </root>

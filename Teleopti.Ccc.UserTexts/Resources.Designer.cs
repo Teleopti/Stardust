@@ -17045,6 +17045,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multiple Sites.
+        /// </summary>
+        public static string MultipleSites {
+            get {
+                return ResourceManager.GetString("MultipleSites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Teams.
+        /// </summary>
+        public static string MultipleTeams {
+            get {
+                return ResourceManager.GetString("MultipleTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (multiple values).
         /// </summary>
         public static string MultipleValuesParanteses {

@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.factory('rtaBreadCrumbService', rtaBreadCrumbService);
 
-	rtaBreadCrumbService.$inject = ['rtaRouteService'];
+	rtaBreadCrumbService.$inject = ['rtaRouteService', '$translate'];
 
-	function rtaBreadCrumbService(rtaRouteService) {
+	function rtaBreadCrumbService(rtaRouteService, $translate) {
 
 		var service = {
 			getBreadCrumb: getBreadCrumb
@@ -19,11 +19,11 @@
 			var result = {};
 			result.goBackToRootWithUrl = rtaRouteService.urlForRootInBreadcrumbs(info);
 			if (info.siteIds.length > 1 && info.teamIds.length === 0) {
-				result.siteName = "Multiple Sites";
+				result.siteName = $translate.instant('MultipleSites');
 			} else if (
 				(info.teamIds.length > 0 && info.siteIds.length > 0) ||
 				(info.teamIds.length > 1 || info.siteIds.length > 0)) {
-				result.teamName = "Multiple Teams";
+				result.teamName = $translate.instant('MultipleTeams');
 			} else if (info.agentsInfo.length > 0) {
 				result.siteName = info.agentsInfo[0].SiteName;
 				result.teamName = info.agentsInfo[0].TeamName;
