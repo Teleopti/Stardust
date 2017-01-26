@@ -81,8 +81,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var removedScheduleDayPro in removedScheduleDayPros)
 			{
-				if (removedScheduleDayPro.DaySchedulePart().IsScheduled()) continue;
-
 				var dateOnly = removedScheduleDayPro.Day;
 				var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization,
 					scheduleMatrixPro.Person, dateOnly.ToDateOnlyPeriod(), allScheduleMatrixPros);
