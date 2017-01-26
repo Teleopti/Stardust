@@ -60,33 +60,42 @@ BEGIN
 		speed_of_answer decimal(19,0)
 	)
 
-	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code
+	SELECT @time_zone_id = time_zone_id 
+	FROM mart.dim_time_zone WITH (NOLOCK)
+	WHERE time_zone_code = @time_zone_code
 
 	INSERT INTO #skills
 	SELECT * FROM mart.SplitStringGuid(@skill_list)
 
-	SELECT @bu_id = business_unit_id FROM mart.dim_skill WHERE skill_code = (SELECT TOP 1 id FROM #skills)
+	SELECT @bu_id = business_unit_id 
+	FROM mart.dim_skill WITH (NOLOCK) 
+	WHERE skill_code = (SELECT TOP 1 id FROM #skills)
 
 	SELECT @default_scenario_id = scenario_id 
-	FROM mart.dim_scenario 
+	FROM mart.dim_scenario WITH (NOLOCK)
 	WHERE business_unit_id = @bu_id
 		AND default_scenario = 1
                          
 	INSERT INTO #queues
 	SELECT DISTINCT 
-	qw.queue_id,
-	w.percentage_offered,
-	percentage_overflow_in,
-	percentage_overflow_out,
-	percentage_abandoned,
-	percentage_abandoned_short,
-	percentage_abandoned_within_service_level,
-	percentage_abandoned_after_service_level
-	FROM mart.bridge_queue_workload qw
-	INNER JOIN mart.dim_workload w ON qw.workload_id = w.workload_id
-	INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
-	INNER JOIN #skills s ON ds.skill_code = s.id
-	WHERE w.is_deleted = 0
+		qw.queue_id,
+		w.percentage_offered,
+		percentage_overflow_in,
+		percentage_overflow_out,
+		percentage_abandoned,
+		percentage_abandoned_short,
+		percentage_abandoned_within_service_level,
+		percentage_abandoned_after_service_level
+	FROM 
+		mart.bridge_queue_workload qw WITH (NOLOCK)
+		INNER JOIN mart.dim_workload w WITH (NOLOCK) 
+			ON qw.workload_id = w.workload_id
+		INNER JOIN mart.dim_skill ds WITH (NOLOCK) 
+			ON qw.skill_id = ds.skill_id
+		INNER JOIN #skills s 
+			ON ds.skill_code = s.id
+	WHERE 
+		w.is_deleted = 0
 
 	-- Forecast
 	INSERT INTO #result([date], interval_id, forecasted_calls, forecasted_handle_time_s)
@@ -96,12 +105,17 @@ BEGIN
 		SUM(ISNULL(fw.forecasted_calls, 0)),
 		SUM(ISNULL(fw.forecasted_handling_time_s, 0))
 	FROM
-		mart.fact_forecast_workload fw
-		INNER JOIN mart.dim_skill ds ON fw.skill_id = ds.skill_id
-		INNER JOIN #skills s ON ds.skill_code = s.id
-		INNER JOIN mart.bridge_time_zone bz ON fw.date_id = bz.date_id AND fw.interval_id = bz.interval_id
-		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
-		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
+		mart.fact_forecast_workload fw WITH (NOLOCK) 
+		INNER JOIN mart.dim_skill ds WITH (NOLOCK) 
+			ON fw.skill_id = ds.skill_id
+		INNER JOIN #skills s 
+			ON ds.skill_code = s.id
+		INNER JOIN mart.bridge_time_zone bz WITH (NOLOCK) 
+			ON fw.date_id = bz.date_id AND fw.interval_id = bz.interval_id
+		INNER JOIN mart.dim_date d WITH (NOLOCK) 
+			ON bz.local_date_id = d.date_id
+		INNER JOIN mart.dim_interval i WITH (NOLOCK) 
+			ON bz.local_interval_id = i.interval_id
 	WHERE
 		fw.scenario_id = @default_scenario_id
 		AND bz.time_zone_id = @time_zone_id
@@ -139,13 +153,13 @@ BEGIN
 		speed_of_answer_s
 	FROM 
 		#queues q
-		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id
+		INNER JOIN mart.fact_queue fq 
+			ON q.queue_id = fq.queue_id
 	WHERE
 		date_id between @current_date_id - 1 and @current_date_id + 1
-	order by date_id,
+	ORDER BY date_id,
 		interval_id,
 		fq.queue_id
-		
 
 		
 	-- Queue stats - update result
@@ -173,10 +187,14 @@ BEGIN
 				date_id,
 				interval_id
 		) AS fq
-		INNER JOIN mart.bridge_time_zone bz ON fq.date_id = bz.date_id AND fq.interval_id = bz.interval_id
-		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
-		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
-		INNER JOIN #result r ON i.interval_id = r.interval_id
+		INNER JOIN mart.bridge_time_zone bz WITH (NOLOCK) 
+			ON fq.date_id = bz.date_id AND fq.interval_id = bz.interval_id
+		INNER JOIN mart.dim_date d WITH (NOLOCK) 
+			ON bz.local_date_id = d.date_id
+		INNER JOIN mart.dim_interval i WITH (NOLOCK) 
+			ON bz.local_interval_id = i.interval_id
+		INNER JOIN #result r 
+			ON i.interval_id = r.interval_id
 	WHERE
 		bz.time_zone_id = @time_zone_id 
 		AND d.date_date = @today
