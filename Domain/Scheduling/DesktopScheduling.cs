@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
-			ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedScheduleDays,
+			ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays,
 			IOptimizationPreferences optimizationPreferences,
 			IDaysOffPreferences dayOffsPreferences)
 		{

@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules,
+			IList<IPerson> selectedPersons, IEnumerable<IScheduleDay> selectedSchedules,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_schedulingOptions = schedulingOptions;

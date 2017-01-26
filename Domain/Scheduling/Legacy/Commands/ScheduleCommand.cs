@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		[TestLog]
 		public virtual void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
 			ISchedulingProgress backgroundWorker,
-			IList<IScheduleDay> selectedScheduleDays,
+			IEnumerable<IScheduleDay> selectedScheduleDays,
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{

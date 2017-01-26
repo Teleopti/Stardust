@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IRequiredScheduleHelper
 	{
-		void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
+		void ScheduleSelectedStudents(IEnumerable<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions);
 
 		void RemoveShiftCategoryBackToLegalState(
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes);
 
-		void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
+		void ScheduleSelectedPersonDays(IEnumerable<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions);
 	}
 
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
+		public void ScheduleSelectedPersonDays(IEnumerable<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions)
 		{
 			if (matrixList == null) throw new ArgumentNullException("matrixList");
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
+		public void ScheduleSelectedStudents(IEnumerable<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions)
 		{
 			if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");

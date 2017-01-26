@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IClassicScheduleCommand
 	{
 		void Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, 
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IEnumerable<IScheduleDay> selectedSchedules, 
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, 
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IEnumerable<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 
-		private void solveWeeklyRest(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, 
+		private void solveWeeklyRest(ISchedulingOptions schedulingOptions, IEnumerable<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, 
 									DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
