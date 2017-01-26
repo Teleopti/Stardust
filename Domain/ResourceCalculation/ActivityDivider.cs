@@ -53,16 +53,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (var skill in skills)
 				{
-					var traff = periodResource.Value.Resource;
+					var intervalPart = (double) filteredProjections.MinSkillResolution/skill.DefaultResolution;
+					var traff = periodResource.Value.Resource*intervalPart;
 
 					double skillEfficiencyValue;
 					if (!periodResource.Value.SkillEffiencies.TryGetValue(skill.Id.GetValueOrDefault(), out skillEfficiencyValue))
 					{
-						skillEfficiencyValue = 1;
+						skillEfficiencyValue = intervalPart;
 					}
 					else
 					{
-						skillEfficiencyValue = (skillEfficiencyValue/headCount);
+						skillEfficiencyValue = (skillEfficiencyValue/headCount)*intervalPart;
 					}
 
 					double personSkillResourceValue = traff;

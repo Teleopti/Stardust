@@ -206,9 +206,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			var affectedSkill = result.First().Value;
-			affectedSkill.Resource.Should().Be.EqualTo(0.8d);
+			affectedSkill.Resource.Should().Be.EqualTo(1.6d);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
-			affectedSkill.SkillEffiencies[_skill.Id.Value].Should().Be.EqualTo(1d);
+			affectedSkill.SkillEffiencies[_skill.Id.Value].Should().Be.EqualTo(2d);
 		}
 
 		[Test]
@@ -266,8 +266,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 								 });
 			var result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			var affectedSkill = result.First().Value;
-			affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.EqualTo(0.9);
-			affectedSkill.Resource.Should().Be.EqualTo(0.75);
+			affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.EqualTo(1.8);
+			affectedSkill.Resource.Should().Be.EqualTo(1.5);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
 
