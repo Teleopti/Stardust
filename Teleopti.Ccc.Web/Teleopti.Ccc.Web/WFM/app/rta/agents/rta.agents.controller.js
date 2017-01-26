@@ -24,6 +24,7 @@
 			'rtaBreadCrumbService',
 			'rtaRouteService',
 			'fakeTimeService',
+			'rtaLocaleLanguageSortingService',
 			'Toggle',
 			'NoticeService'
 		];
@@ -46,6 +47,7 @@
 		rtaBreadCrumbService,
 		rtaRouteService,
 		fakeTimeService,
+		rtaLocaleLanguageSortingService,
 		toggleService,
 		NoticeService
 	) {
@@ -103,6 +105,7 @@
 		vm.teamsSelected = [];
 		vm.selectFieldText = $translate.instant('SelectOrganization');
 		vm.searchTerm = "";
+		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
 
 		allGrid.data = 'vm.filteredData';
 		inAlarmGrid.data = 'vm.filteredData';
@@ -711,8 +714,8 @@
 				vm.openedMaxNumberOfAgents = (vm.filteredData.length === vm.maxNumberOfAgents);
 				if (!vm.notifySwitchDisabled && vm.agents.length > vm.maxNumberOfAgents) {
 					NoticeService.warning($translate.instant('RTAMaxNumberOfAgentsNotice')
-					.replace('{0}', vm.maxNumberOfAgents)
-					.replace('{1}', vm.maxNumberOfAgents), null, true);
+						.replace('{0}', vm.maxNumberOfAgents)
+						.replace('{1}', vm.maxNumberOfAgents), null, true);
 					vm.notifySwitchDisabled = true;
 				}
 			}
