@@ -448,8 +448,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Load(personId).Should().Be.Null();
 		}
-
-
+		
 		[Test]
 		public void ShouldRemoveLotsOfRowsAtATime()
 		{
@@ -470,6 +469,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			personIds
 				.ForEach(personId =>
 				Target.Load(personId).Should().Be.Null());
+		}
+
+		[Test]
+		public void ShouldPersistEmploymentNumber()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.UpsertEmploymentNumber(personId, "123");
+
+			Target.Load(personId)
+				.EmploymentNumber.Should().Be("123");
+		}
+
+		[Test]
+		public void ShouldUpdateEmploymentNumber()
+		{
+			var personId = Guid.NewGuid();
+			Target.UpsertEmploymentNumber(personId, "123");
+
+			Target.UpsertEmploymentNumber(personId, "abc");
+
+			Target.Load(personId)
+				.EmploymentNumber.Should().Be("abc");
 		}
 	}
 }
