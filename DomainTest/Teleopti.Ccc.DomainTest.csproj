@@ -191,7 +191,6 @@
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonPeriodChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonTerminatedChangeEventTest.cs" />
-    <Compile Include="Intraday\MonitorPerformanceProviderTest.cs" />
     <Compile Include="Intraday\SkillStaffingIntervalProviderTest.cs" />
     <Compile Include="Intraday\SplitSkillStaffIntervalTest.cs" />
     <Compile Include="ApplicationLayer\ApproveBatchRequestsCommandHandlerTest.cs" />
