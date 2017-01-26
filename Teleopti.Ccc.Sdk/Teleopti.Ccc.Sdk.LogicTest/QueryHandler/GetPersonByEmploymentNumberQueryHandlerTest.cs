@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 
 			var person = PersonFactory.CreatePerson();
-			person.EmploymentNumber = "1234";
+			person.SetEmploymentNumber("1234");
 			personRepository.Add(person);
 
 			var target = new GetPersonByEmploymentNumberQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());

@@ -1540,7 +1540,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IPerson person = PersonFactory.CreatePerson("Fname","lname");
 			var employmentNumber = "987392";
-			person.EmploymentNumber = employmentNumber;
+			person.SetEmploymentNumber(employmentNumber);
 			PersistAndRemoveFromUnitOfWork(person);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
@@ -1553,12 +1553,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IPerson person1 = PersonFactory.CreatePerson("Fname","lname");
 			var employmentNumber1 = "987392";
-			person1.EmploymentNumber = employmentNumber1;
+			person1.SetEmploymentNumber(employmentNumber1);
 			PersistAndRemoveFromUnitOfWork(person1);
 
 			IPerson person2 = PersonFactory.CreatePerson("Fname","lname");
 			var employmentNumber2 = "987393";
-			person2.EmploymentNumber = employmentNumber2;
+			person2.SetEmploymentNumber(employmentNumber2);
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));

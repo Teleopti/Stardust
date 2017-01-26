@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
         public void CanBuildCommonNameDescription()
         {
             IPerson person = PersonFactory.CreatePerson("Kalle", "Kula");
-            person.EmploymentNumber = "10";
+            person.SetEmploymentNumber("10");
             //System.Console.Out.WriteLine(_target.BuildCommonNameDescription(person));
             Assert.AreEqual("Kalle Kula", _target.BuildCommonNameDescription(person));
             Assert.AreEqual("Kalle Kula", _target2.BuildCommonNameDescription(person));

@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		public string EmployeeNumber
 		{
 			get { return ContainedEntity.EmploymentNumber; }
-			set { ContainedEntity.EmploymentNumber = value; }
+			set { ContainedEntity.SetEmploymentNumber(value); }
 		}
 
 		public string Note

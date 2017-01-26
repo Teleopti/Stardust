@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var person = PersonFactory.CreatePerson();
 
-			person.EmploymentNumber = "123";
+			person.SetEmploymentNumber("123");
 
 			((Person)person).PopAllEvents().OfType<PersonEmploymentNumberChangedEvent>().Should().Not.Be.Empty();
 		}
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var personId = Guid.NewGuid();
 			var person = PersonFactory.CreatePersonWithId(personId);
 
-			person.EmploymentNumber = "123";
+			person.SetEmploymentNumber("123");
 
 			var @event = ((Person)person).PopAllEvents().OfType<PersonEmploymentNumberChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldNotPublishIfNotChanged()
 		{
 			var person = PersonFactory.CreatePerson();
-			person.EmploymentNumber = "123";
+			person.SetEmploymentNumber("123");
 			((Person)person).PopAllEvents();
 
-			person.EmploymentNumber = "123";
+			person.SetEmploymentNumber("123");
 
 			((Person)person).PopAllEvents().OfType<PersonEmploymentNumberChangedEvent>().Should().Be.Empty();
 		}

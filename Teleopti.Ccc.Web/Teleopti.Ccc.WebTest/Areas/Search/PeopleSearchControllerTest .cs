@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				team);
 			person.Name = new Name("Ashley", "Andeen");
 			person.Email = "ashley.andeen@abc.com";
-			person.EmploymentNumber = "1011";
+			person.SetEmploymentNumber("1011");
 
 			var personId = person.Id.Value;
 			var leavingDate = DateOnly.Today.AddDays(1);
@@ -113,11 +113,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		public void ShouldSortPeopleByThreeCriterials()
 		{
 			var firstPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
-			firstPerson.EmploymentNumber = "1";
+			firstPerson.SetEmploymentNumber("1");
 			var secondPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
-			secondPerson.EmploymentNumber = "3";
+			secondPerson.SetEmploymentNumber("3");
 			var thirdPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
-			thirdPerson.EmploymentNumber = "2";
+			thirdPerson.SetEmploymentNumber("2");
 
 			target =
 				new PeopleSearchController(

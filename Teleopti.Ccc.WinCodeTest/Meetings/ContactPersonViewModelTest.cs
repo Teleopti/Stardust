@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _site2 = SiteFactory.CreateSimpleSite("Site2");
             _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2005, 1, 1), _skill1));
             _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(DateOnly.Today, _skill1, _skill2));
-            _person.EmploymentNumber = "001234";
+            _person.SetEmploymentNumber("001234");
             _person.Email = "barack.obama@whitehouse.gov";
             _person.PersonPeriodCollection[0].Team.Description = new Description("Team1");
             _person.PersonPeriodCollection[1].Team.Description = new Description("Team2");

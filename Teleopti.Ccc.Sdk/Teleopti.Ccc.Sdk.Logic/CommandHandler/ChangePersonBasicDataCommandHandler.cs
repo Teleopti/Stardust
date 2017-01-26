@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				if (command.Email != null)
 					person.Email = command.Email;
 				if (command.EmploymentNumber != null)
-					person.EmploymentNumber = command.EmploymentNumber;
+					person.SetEmploymentNumber(command.EmploymentNumber);
 				if (command.Note != null)
 					person.Note = command.Note;
 				if (command.IsDeleted)

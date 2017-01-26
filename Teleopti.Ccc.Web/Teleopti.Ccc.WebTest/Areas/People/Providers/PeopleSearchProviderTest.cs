@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				});
 			person.Name = new Name("Ashley", "Andeen");
 			person.Email = "ashley.andeen@abc.com";
-			person.EmploymentNumber = "1011";
+			person.SetEmploymentNumber("1011");
 
 			var personId = person.Id.Value;
 			person.TerminatePerson(new DateOnly(2025, 4, 9), MockRepository.GenerateMock<IPersonAccountUpdater>());
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				});
 			person.Name = new Name("John", "Smith");
 			person.Email = "john.smith@abc.com";
-			person.EmploymentNumber = "1012";
+			person.SetEmploymentNumber("1012");
 
 			var personId = person.Id.Value;
 			var personFinderDisplayRow = new PersonFinderDisplayRow
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
 					person.SetId(Guid.NewGuid());
 					person.Name = new Name(string.Format("Agent{0:000}", i), string.Format("Andeen{0:000}", i));
-					person.EmploymentNumber = i.ToString("0000");
+					person.SetEmploymentNumber(i.ToString("0000"));
 					personRepository.Add(person);
 
 					var personFinderDisplayRow = new PersonFinderDisplayRow

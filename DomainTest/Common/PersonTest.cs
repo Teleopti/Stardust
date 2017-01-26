@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			target.Name = name;
 			target.Email = email;
 			target.Note = note;
-			target.EmploymentNumber = employmentNumber;
+			target.SetEmploymentNumber(employmentNumber);
 			target.TerminatePerson(date, new PersonAccountUpdaterDummy());
 			Assert.AreEqual(date, target.TerminalDate);
 			Assert.AreEqual(name, target.Name);

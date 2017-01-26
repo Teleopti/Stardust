@@ -35,7 +35,9 @@
 		<property name="EmploymentNumber"
 				  type="string"
 				  length="50"
-				  not-null="true"/>
+				  not-null="true"
+				  access="nosetter.camelcase-underscore"
+				  />
 
 		<property name="TerminalDate"
 				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"

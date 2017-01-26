@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			_person = new Person {Name = setName};
 			_person.SetId(id ?? Guid.NewGuid());
-			_person.EmploymentNumber = employeeNumber?.ToString();
+			_person.SetEmploymentNumber(employeeNumber?.ToString());
 			_persons.Has(_person);
 			
 			_person.InTimeZone(timeZone ?? TimeZoneInfo.Utc);

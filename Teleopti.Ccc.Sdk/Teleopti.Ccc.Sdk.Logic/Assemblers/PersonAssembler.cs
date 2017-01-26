@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			if (!string.IsNullOrEmpty(dto.Email))
 				person.Email = dto.Email;
 			if (!string.IsNullOrEmpty(dto.EmploymentNumber))
-				person.EmploymentNumber = dto.EmploymentNumber;
+				person.SetEmploymentNumber(dto.EmploymentNumber);
 			if (personTerminated(dto, person))
 				person.TerminatePerson(dto.TerminationDate.ToDateOnly(), _personAccountUpdater);
 			if (personActivated(dto, person))

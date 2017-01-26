@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var aName = new Name("John", "Smith");
 			_johnSmithPerson.Name = aName;
-			_johnSmithPerson.EmploymentNumber = "10";
+			_johnSmithPerson.SetEmploymentNumber("10");
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

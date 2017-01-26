@@ -57,13 +57,19 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The note.</value>
         string Note { get; set; }
 
-        /// <summary>
-        /// Gets or sets the employment number.
-        /// </summary>
-        /// <value>The employment number.</value>
-        string EmploymentNumber { get; set; }
+	    /// <summary>
+	    /// Sets the employment number.
+	    /// </summary>
+	    /// <param name="value">The employment number.</param>
+	    void SetEmploymentNumber(string value);
 
-        /// <summary>
+	    /// <summary>
+	    /// Gets the employment number.
+	    /// </summary>
+	    /// <value>The employment number.</value>
+	    string EmploymentNumber { get; }
+
+	    /// <summary>
         /// Gets a value indicating whether this person is an agent.
         /// </summary>
         bool IsAgent(DateOnly theDate);

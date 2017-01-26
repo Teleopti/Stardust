@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var person = new Person
 				{
 					Name = new Name(command.FirstName, command.LastName),
-					Email = command.Email,
-					EmploymentNumber = command.EmploymentNumber
+					Email = command.Email
 				};
+				person.SetEmploymentNumber(command.EmploymentNumber);
 				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(command.TimeZoneId));
 				if (command.CultureLanguageId.HasValue)
 					person.PermissionInformation.SetCulture(new CultureInfo(command.CultureLanguageId.Value));

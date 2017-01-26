@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.TestCommon
 			var person = new Person { Name = new Name(name, name) };
 			_person = person.Name.ToString();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person.EmploymentNumber = employmentNumber ?? string.Empty;
+			person.SetEmploymentNumber(employmentNumber ?? string.Empty);
 
 			var personPeriod = withPeriod(person, "2001-01-01".Date());
 			if (terminationDate != null)

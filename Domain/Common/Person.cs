@@ -310,22 +310,23 @@ namespace Teleopti.Ccc.Domain.Common
 	        return !isTerminated(theDate) && _personPeriodCollection.Keys.Any(k => k <= theDate);
         }
 
-        public virtual string EmploymentNumber
-        {
-            get { return _employmentNumber; }
-	        set
-	        {
-		        if (_employmentNumber != value)
-			        AddEvent(() => new PersonEmploymentNumberChangedEvent()
-			        {
-				        PersonId = Id.GetValueOrDefault(),
-				        EmploymentNumber = _employmentNumber
-			        });
-		        _employmentNumber = value;
-			}
-        }
+	    public virtual void SetEmploymentNumber(string value)
+	    {
+		    if (_employmentNumber != value)
+			    AddEvent(() => new PersonEmploymentNumberChangedEvent()
+			    {
+				    PersonId = Id.GetValueOrDefault(),
+				    EmploymentNumber = _employmentNumber
+			    });
+		    _employmentNumber = value;
+	    }
 
-		public virtual void AddSchedulePeriod(ISchedulePeriod period)
+	    public virtual string EmploymentNumber
+	    {
+		    get { return _employmentNumber; }
+	    }
+
+	    public virtual void AddSchedulePeriod(ISchedulePeriod period)
 		{
 			InParameter.NotNull(nameof(period), period);
 

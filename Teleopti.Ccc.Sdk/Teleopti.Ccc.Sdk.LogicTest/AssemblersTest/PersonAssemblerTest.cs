@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			person.PermissionInformation.SetUICulture(new CultureInfo(1025));
 			person.Name = new Name("aaa", "bbb");
 			person.Email = "email";
-			person.EmploymentNumber = "email";
+			person.SetEmploymentNumber("email");
 			person.Note = "A very good agent";
 			person.TerminatePerson(new DateOnly(2011, 8, 20), new PersonAccountUpdaterDummy());
 			((IDeleteTag)person).SetDeleted();

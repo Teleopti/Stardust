@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
             //Agent with two periods
             IPerson person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("kalle", "kula");
             person.SetId(Guid.NewGuid());
-            person.EmploymentNumber = "4321";
+            person.SetEmploymentNumber("4321");
             person.PermissionInformation.SetDefaultTimeZone(
                 //(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
                 (TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time")));
@@ -154,7 +154,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			  //Agent with two periods
 			  IPerson person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("kalle", "kula");
 			  person.SetId(Guid.NewGuid());
-			  person.EmploymentNumber = "4321";
+			  person.SetEmploymentNumber("4321");
 			  person.PermissionInformation.SetDefaultTimeZone(
 				  //(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 					(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time")));

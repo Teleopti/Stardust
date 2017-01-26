@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.LastName} {CommonNameDescriptionSetting.FirstName}"));
 
 			var person = PersonFactory.CreatePerson("First", "Last");
-			person.EmploymentNumber = "123";
+			person.SetEmploymentNumber("123");
 			_target.GetPersonName(person).Should().Be.EqualTo("Last First");
 
 			_globalSettingDataRepository.PersistSettingValue("CommonNameDescription",

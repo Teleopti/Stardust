@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 8, 0, 0, 0, DateTimeKind.Utc), 0);
             _person = PersonFactory.CreatePerson("Kalle", "Kula");
-            _person.EmploymentNumber = "10";
+            _person.SetEmploymentNumber("10");
             _team = _mocks.StrictMock<ITeam>();
 			_layerViewModelCollection = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             _commonNameDescriptionSetting = new CommonNameDescriptionSetting { AliasFormat = CommonNameDescriptionSetting.LastName };
