@@ -31,5 +31,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok();
 		}
 
+		[UnitOfWork, HttpPost, Route("api/staffing/staffing")]
+		public virtual IHttpActionResult GetStaffingData()
+		{
+
+			return Ok();
+		}
+
 	}
 }

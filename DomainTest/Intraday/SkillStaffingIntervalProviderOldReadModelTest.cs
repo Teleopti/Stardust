@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	[TestFixture]
-	public class SkillStaffingIntervalProviderTest : ISetup
+	public class SkillStaffingIntervalProviderOldReadModelTest : ISetup
 	{
-		public SkillStaffingIntervalProvider Target;
+		public SkillStaffingIntervalProviderOldReadModel Target;
 		public IScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<SkillStaffingIntervalProvider>().For<SkillStaffingIntervalProvider>();
+			system.UseTestDouble<SkillStaffingIntervalProviderOldReadModel>().For<SkillStaffingIntervalProviderOldReadModel>();
 		}
 
 		[Test]

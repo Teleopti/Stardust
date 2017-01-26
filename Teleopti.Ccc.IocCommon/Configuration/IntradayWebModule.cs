@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
@@ -47,12 +45,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
-			builder.RegisterType<SkillStaffingIntervalProvider>().As<SkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
 			if (_configuration.Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969))
 				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>().SingleInstance();
 			else
 				builder.RegisterType<SkillCombinationResourceRepositoryEmpty>().As<ISkillCombinationResourceRepository>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663))
+				builder.RegisterType<SkillStaffingIntervalProvider>().As<ISkillStaffingIntervalProvider>().SingleInstance();
+			else
+				builder.RegisterType<SkillStaffingIntervalProviderOldReadModel>().As<ISkillStaffingIntervalProvider>().SingleInstance();
 		}
 	}
 
