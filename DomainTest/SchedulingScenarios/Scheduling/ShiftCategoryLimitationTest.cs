@@ -154,7 +154,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					UseShiftCategoryLimitations = true
 				}
 			};
-			
 			var firstAgent = new Person {Name = new Name("first", "first")}.WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
 			var secondAgent = new Person {Name = new Name("second", "second")}.WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
 			firstAgent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
@@ -165,11 +164,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var secondAgentAssA = new PersonAssignment(secondAgent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var secondAgentAssB = new PersonAssignment(secondAgent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { firstAgent, secondAgent }, new[] { firstAgentAssA, firstAgentAssB, secondAgentAssA, secondAgentAssB }, new[] { skillDayFirstDay, skillDaySecondDay });
-			var firstAgentScheduleDays = stateholder.Schedules[firstAgent].ScheduledDayCollection(period);
-			var secondAgentScheduleDays = stateholder.Schedules[secondAgent].ScheduledDayCollection(period);
-			var scheduleDays = firstAgentScheduleDays.Union(secondAgentScheduleDays);
 
-			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), scheduleDays, new OptimizationPreferences(), null);
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, firstAgent, secondAgent), new OptimizationPreferences(), null);
 
 			stateholder.Schedules[firstAgent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
 			stateholder.Schedules[firstAgent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
