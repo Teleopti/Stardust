@@ -13395,7 +13395,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>New Campaign Name</comment>
   </data>
   <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
-    <value>both firstname and lastname are empty;</value>
+    <value>both first name and last name are empty;</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
   <data name="CampaignNameInvalid" xml:space="preserve">
@@ -13415,7 +13415,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
   <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
-    <value>role {0} not exist;</value>
+    <value>role {0} does not exist;</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
   <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
@@ -15322,7 +15322,7 @@ These options are activated:
     <comment>Friendly description of OpenHoursRule to show in shift trade system setting</comment>
   </data>
   <data name="SearchAnOrganization" xml:space="preserve">
-    <value>Search an organization</value>
+    <value>Search by organization</value>
     <comment>Placeholder text for organization picker search box in WFM/Teams</comment>
   </data>
   <data name="DenyDueToTechnicalProblems" xml:space="preserve">

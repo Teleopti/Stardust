@@ -14151,4 +14151,85 @@ Dessa val är aktiverade:
   <data name="TimeOOA" xml:space="preserve">
     <value>Avvikelsetid</value>
   </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>Bortrensad då förfrågan inte hanterades i tid. </value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>Tilldelning - total</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>Tilldelning - tillgänglig</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>både förnamn och efternamn är tomma;</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>tomt lösenord;</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>inloggninguppgifter saknas;</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>rollen {0} finns ej;</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>för många tecken i applikationsanvändar-ID;</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>för många tecken i förnamnet;</value>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>för många tecken i efternamnet;</value>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>ogiltig windowsanvändare;</value>
+  </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>duplicerat applikationsanvändar-ID;</value>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>duplicerad windowsanvändare;</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>ogiltigt lösenord;</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>applikationsanvändar-ID saknas;</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>internt fel har inträffat:{0};</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>ApplicationUserId måste vara en giltig e-postadress;</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>för många tecken i windowsanvändarnamnet;</value>
+  </data>
+  <data name="SearchAnOrganization" xml:space="preserve">
+    <value>Sök organisation</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Rensa alla</value>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>Det går maximalt att visa {0} agenter. Switchen "Agenter med larm" aktiveras om antalet agenter inte överskrider {1}.</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>Favoritsökning</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>Sätt upp kompetensprioritering</value>
+  </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>Inga kompetensareor hittades</value>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>Inga kompetenser hittades</value>
+  </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>Flera enheter</value>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>Flera team</value>
+  </data>
 </root>
