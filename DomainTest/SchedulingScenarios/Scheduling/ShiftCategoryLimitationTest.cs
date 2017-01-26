@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -131,10 +132,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test, Ignore("#42680")]
-		public void ShouldHandleMultipleAgents()
+		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful_MultipleAgents()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
 			var secondDate = firstDate.AddDays(1);
+			var period = new DateOnlyPeriod(firstDate, secondDate);
 			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
 			var shiftCategoryAfter = new ShiftCategory("After").WithId();
 			var scenario = new Scenario("_");
@@ -142,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var nightRest = TimeSpan.FromHours(11);
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), nightRest, TimeSpan.FromHours(16)) };
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
-			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 2); //should try with this one first
+			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 2); //should try with this one first, but can't because of night rest
 			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
@@ -158,7 +160,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var secondAgent = new Person {Name = new Name("second", "second")}.WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
 			firstAgent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
 			secondAgent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
-			var period = new DateOnlyPeriod(firstDate, secondDate);
 			var firstAgentAssA = new PersonAssignment(firstAgent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var firstAgentAssB = new PersonAssignment(firstAgent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var secondAgentAssA = new PersonAssignment(secondAgent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
@@ -167,10 +168,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, firstAgent, secondAgent), new OptimizationPreferences(), null);
 
-			stateholder.Schedules[firstAgent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
-			stateholder.Schedules[firstAgent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
-			stateholder.Schedules[secondAgent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
-			stateholder.Schedules[secondAgent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
+			stateholder.Schedules.SchedulesForDay(firstDate).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryBefore))
+				.Should().Be.True();
+			stateholder.Schedules.SchedulesForDay(secondDate).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter))
+				.Should().Be.True();
 		}
 	}
 }
