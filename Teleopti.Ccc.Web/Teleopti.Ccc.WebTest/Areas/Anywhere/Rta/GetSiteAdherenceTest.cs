@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
 	[TestFixture]
-	[IoCTest]
+	[DomainTest]
 	public class GetSiteAdherenceTest : ISetup
 	{
 		public AgentsInAlarmForSiteViewModelBuilder Target;
@@ -57,6 +57,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			result.Single().Id.Should().Be(site.Id);
 			result.Single().OutOfAdherence.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldSotSitesBasedOnName()
+		{
+			var site1 = new Site("Å").WithId();
+			var site2 = new Site("Ä").WithId();
+			var site3 = new Site("A").WithId();
+			
+			Sites.Has(site1);
+			Sites.Has(site2);
+			Sites.Has(site3);
+
+			var result = Target.Build().Select(x=>x.Id);
+
+			result.Should().Have.SameSequenceAs(new [] {site3.Id.GetValueOrDefault(), site2.Id.GetValueOrDefault() , site1.Id.GetValueOrDefault() });
 		}
 	}
 
