@@ -229,16 +229,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_batch = batch;
 				ParallelTransactions = _config.ReadValue("RtaBatchParallelTransactions", 7);
 				MaxTransactionSize = _config.ReadValue("RtaBatchMaxTransactionSize", 100);
-
-				var realUpdater = UpdateAgentState;
-				UpdateAgentState = context =>
-				{
-					var stopwatch = new Stopwatch();
-					stopwatch.Start();
-					realUpdater(context);
-					stopwatch.Stop();
-					_logger.Debug($"Update agentstate completed, agent: {context.PersonId}, time: {stopwatch.ElapsedMilliseconds}");
-				};
 			}
 
 			public override IEnumerable<BatchStateInputModel> AllItems(strategyContext context)
@@ -336,7 +326,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Action = action;
 				CurrentTime = time;
 				DeadLockVictim = DeadLockVictim.No;
-				UpdateAgentState = c => _persister.Update(c.MakeAgentState());
 			}
 
 			public DateTime CurrentTime { get; }
@@ -349,14 +338,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public abstract IEnumerable<AgentState> LockNLoad(IEnumerable<T> things, strategyContext context);
 
 			public abstract InputInfo GetInputFor(AgentState state);
-
-			public virtual Func<AgentState> GetStored(AgentState state)
-			{
-				return () => state;
-			}
-
-			public Action<Context> UpdateAgentState { get; protected set; }
-
+			
 			public Action<Context> Action { get; }
 		}
 		
@@ -374,11 +356,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			InputInfo GetInputFor(AgentState state);
 
-			Action<Context> UpdateAgentState { get; }
-
 			Action<Context> Action { get; }
-
-			Func<AgentState> GetStored(AgentState state);
 		}
 
 		public class strategyContext
@@ -485,14 +463,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						strategy.CurrentTime,
 						strategy.DeadLockVictim,
 						strategy.GetInputFor(state),
-						state.PersonId,
-						state.BusinessUnitId,
-						state.TeamId.GetValueOrDefault(),
-						state.SiteId.GetValueOrDefault(),
-						strategy.GetStored(state),
+						state,
 						() => data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(),
 						data.mappings,
-						strategy.UpdateAgentState,
+						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,
 						_appliedAlarm
 					));

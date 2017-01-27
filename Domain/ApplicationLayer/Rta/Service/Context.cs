@@ -14,11 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			DateTime utcNow,
 			DeadLockVictim deadLockVictim,
 			InputInfo input, 
-			Guid personId, 
-			Guid businessUnitId, 
-			Guid teamId, 
-			Guid siteId, 
-			Func<AgentState> stored, 
+			AgentState stored, 
 			Func<IEnumerable<ScheduledActivity>> schedule,
 			IEnumerable<Mapping> mappings,
 			Action<Context> updateState, 
@@ -26,28 +22,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ProperAlarm appliedAlarm)
 		{
 
-			// on synchronze, the func is null
-			// and that is fine
-			// it means there's no previous state
-			if (stored != null)
-			{
-				Stored = stored.Invoke();
-				_found = Stored as AgentStateFound;
-				// if the stored state has no time
-				// its just a prepared state
-				// and there's no real previous state
-				// throws if Stored is null, which is by design
-				if (Stored.ReceivedTime == null)
-					Stored = null;
-			}
+			Stored = stored;
+			_found = Stored as AgentStateFound;
+			// if the stored state has no time
+			// its just a prepared state
+			// and there's no real previous state
+			// throws if Stored is null, which is by design
+			if (Stored.ReceivedTime == null)
+				Stored = null;
 
 			Input = input ?? new InputInfo();
 			CurrentTime = utcNow;
 			DeadLockVictim = deadLockVictim;
-			PersonId = personId;
-			BusinessUnitId = businessUnitId;
-			TeamId = teamId;
-			SiteId = siteId;
+			PersonId = stored.PersonId;
+			BusinessUnitId = stored.BusinessUnitId;
+			TeamId = stored.TeamId.GetValueOrDefault();
+			SiteId = stored.SiteId.GetValueOrDefault();
 			StateMapper = stateMapper;
 
 			_updateState = updateState ?? (c => {});
