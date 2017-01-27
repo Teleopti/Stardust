@@ -296,7 +296,43 @@ MERGE INTO [ReadModel].[AgentState] AS T
 
 		public void UpsertName(Guid personId, string firstName, string lastName)
 		{
-			throw new NotImplementedException();
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+MERGE INTO [ReadModel].[AgentState] AS T
+	USING (
+		VALUES
+		(
+			:PersonId,
+			:FirstName,
+			:LastName
+		)
+	) AS S (
+			PersonId,
+			FirstName,
+			LastName
+		)
+	ON 
+		T.PersonId = S.PersonId
+	WHEN NOT MATCHED THEN
+		INSERT
+		(
+			PersonId,
+			FirstName,
+			LastName
+		) VALUES (
+			S.PersonId,
+			S.FirstName,
+			S.LastName
+		)
+	WHEN MATCHED THEN
+		UPDATE SET
+			FirstName = S.FirstName,
+			LastName = S.LastName
+		;")
+				.SetParameter("PersonId", personId)
+				.SetParameter("FirstName", firstName)
+				.SetParameter("LastName", lastName)
+				.ExecuteUpdate();
 		}
 
 		private class internalModel : AgentStateReadModel

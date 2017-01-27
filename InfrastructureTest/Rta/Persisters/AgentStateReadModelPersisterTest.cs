@@ -493,5 +493,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Load(personId)
 				.EmploymentNumber.Should().Be("abc");
 		}
+
+		[Test]
+		public void ShouldPersistFirstAndLastName()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.UpsertName(personId,"bill","gates");
+
+			Target.Load(personId).FirstName.Should().Be("bill");
+			Target.Load(personId).LastName.Should().Be("gates");
+		}
+
+		[Test]
+		public void ShouldUpdateFirstAndLastName()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.UpsertName(personId, "bill", "clinton");
+			Target.UpsertName(personId, "bill", "gates");
+
+			Target.Load(personId).FirstName.Should().Be("bill");
+			Target.Load(personId).LastName.Should().Be("gates");
+		}
 	}
 }
