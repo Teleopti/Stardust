@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
-			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences)
+			IOptimizationPreferences optimizationPreferences)
 		{
-
+			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
 
 			foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
