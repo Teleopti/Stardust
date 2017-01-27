@@ -138,8 +138,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.True();
 		}
 
-		[Test, Ignore("Fix later")]
-		public void ShouldSetCorrectTagWhenReplacingShift()
+		[Test]
+		public void ShouldKeepTagWhenReplacingShift()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
 			var secondDate = firstDate.AddDays(1);
@@ -171,8 +171,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.True();
 		}
 
-		[Test, Ignore("Fix later")]
-		public void ShouldSetCorrectTagWhenReplacingShiftAndRollback()
+		[Test]
+		public void ShouldKeepTagWhenReplacingShiftAndRollback()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
 			var secondDate = firstDate.AddDays(1);
