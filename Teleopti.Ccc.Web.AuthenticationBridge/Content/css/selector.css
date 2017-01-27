@@ -13,6 +13,10 @@ body {
     right: 0;
 }
 
+h1, h2, h3, h4, h5 {
+	font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif!important;
+}
+
 html {
 	background: #66C2FF!important;
 }
