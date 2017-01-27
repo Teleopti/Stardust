@@ -189,6 +189,7 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
+    <Compile Include="Common\PublishPersonNameChangedEventTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonPeriodChangedEventTest.cs" />

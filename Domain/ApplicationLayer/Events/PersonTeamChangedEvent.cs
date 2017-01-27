@@ -23,4 +23,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonId { get; set; }
 		public string EmploymentNumber { get; set; }
 	}
+
+	public class PersonNameChangedEvent : IEvent
+	{
+		public Guid PersonId { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+	}
 }

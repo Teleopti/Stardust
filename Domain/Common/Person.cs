@@ -273,7 +273,17 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual Name Name
         {
             get { return _name; }
-            set { _name = value; }
+	        set
+	        {
+				if (_name != value)
+					AddEvent(() => new PersonNameChangedEvent()
+					{
+						PersonId = Id.GetValueOrDefault(),
+						FirstName = value.FirstName,
+						LastName = value.LastName
+					});
+				_name = value;
+	        }
         }
 
         public virtual IPermissionInformation PermissionInformation => _permissionInformation;
