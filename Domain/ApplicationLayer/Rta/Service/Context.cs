@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			InputInfo input, 
 			AgentState stored, 
 			Func<IEnumerable<ScheduledActivity>> schedule,
-			IEnumerable<Mapping> mappings,
 			Action<Context> updateState, 
 			StateMapper stateMapper,
 			ProperAlarm appliedAlarm)
@@ -46,8 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule.Value);
 			Schedule = new ScheduleInfo(this, schedules);
-			State = new StateRuleInfo(this, mappings);
-			Adherence = new AdherenceInfo(this, mappings);
+			State = new StateRuleInfo(this);
+			Adherence = new AdherenceInfo(this);
 		}
 
 		public DateTime CurrentTime { get; }

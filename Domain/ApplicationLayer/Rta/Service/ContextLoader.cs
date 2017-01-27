@@ -340,7 +340,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public class transactionData
 		{
 			public IEnumerable<AgentState> agentStates;
-			public IEnumerable<Mapping> mappings;
 			public IEnumerable<ScheduledActivity> schedules;
 		}
 
@@ -387,10 +386,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private transactionData loadTransactionData<T>(IStrategy<T> strategy, strategyContext context, IEnumerable<T> items)
 		{
 			var agentStates = strategy.LockNLoad(items, context);
+			_stateMapper.RefreshMappingCache();
 			return new transactionData
 			{
 				agentStates = agentStates,
-				mappings = _mappingReader.Read(),
 				schedules = _scheduleReader.Read()
 			};
 		}
@@ -437,7 +436,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						strategy.GetInputFor(state),
 						state,
 						() => data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(),
-						data.mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,
 						_appliedAlarm
@@ -476,6 +474,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new InvalidSourceException($"Source id \"{input.SourceId}\" not found");
 			return dataSourceId;
 		}
-
 	}
 }

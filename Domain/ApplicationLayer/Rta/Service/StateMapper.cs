@@ -27,31 +27,84 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateMapper
 	{
 		private readonly IStateCodeAdder _stateCodeAdder;
+		private readonly IMappingReader _reader;
+		private readonly IKeyValueStorePersister _keyValues;
+		private string _version;
+		private IDictionary<ruleMappingKey, MappedRule> _ruleMappingDictionary = new Dictionary<ruleMappingKey, MappedRule>();
+		private IDictionary<stateMappingKey, MappedState> _stateMappingDictionary = new Dictionary<stateMappingKey, MappedState>();
 
-		public StateMapper(IStateCodeAdder stateCodeAdder)
+		public StateMapper(IStateCodeAdder stateCodeAdder, IMappingReader reader, IKeyValueStorePersister keyValues)
 		{
 			_stateCodeAdder = stateCodeAdder;
+			_reader = reader;
+			_keyValues = keyValues;
 		}
 
-		public MappedRule RuleFor(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		public MappedRule RuleFor(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
-			var match = queryRule(mappings, businessUnitId, platformTypeId, stateCode, activityId);
+			var match = queryRule(businessUnitId, platformTypeId, stateCode, activityId);
 			if (activityId != null && match == null)
-				match = queryRule(mappings, businessUnitId, platformTypeId, stateCode, null);
+				match = queryRule(businessUnitId, platformTypeId, stateCode, null);
 			return match;
 		}
 
-		private MappedRule queryRule(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		private MappedRule queryRule(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
-			return (from m in mappings
-				let illegal = m.StateCode == null && m.StateGroupId != Guid.Empty
-				where
-					!illegal &&
-					m.BusinessUnitId == businessUnitId &&
-					m.PlatformTypeId == platformTypeId &&
-					m.StateCode == stateCode &&
-					m.ActivityId == activityId
-				select new MappedRule
+			var key = new ruleMappingKey
+			{
+				businessUnitId = businessUnitId,
+				platformTypeId = platformTypeId,
+				stateCode = stateCode,
+				activityId = activityId
+			};
+			MappedRule result;
+			_ruleMappingDictionary.TryGetValue(key, out result);
+			return result;
+		}
+
+		public MappedState StateFor(Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
+		{
+			if (stateCode == null)
+				return null;
+			var match = queryState(businessUnitId, platformTypeId, stateCode);
+			if (match != null) return match;
+			return _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
+		}
+
+		private MappedState queryState(Guid businessUnitId, Guid platformTypeId, string stateCode)
+		{
+			var key = new stateMappingKey
+			{
+				businessUnitId = businessUnitId,
+				platformTypeId = platformTypeId,
+				stateCode = stateCode
+			};
+			MappedState result;
+			_stateMappingDictionary.TryGetValue(key, out result);
+			return result;
+		}
+
+		public void RefreshMappingCache()
+		{
+			var version = _keyValues.Get("RuleMappingsVersion");
+
+			if (version == _version && _ruleMappingDictionary.Any())
+				return;
+
+			var mappings = _reader.Read();
+			_ruleMappingDictionary = mappings
+				.Where(m =>
+				{
+					var illegal = m.StateCode == null && m.StateGroupId != Guid.Empty;
+					return !illegal;
+				})
+				.ToDictionary(x => new ruleMappingKey
+				{
+					businessUnitId = x.BusinessUnitId,
+					platformTypeId = x.PlatformTypeId,
+					stateCode = x.StateCode,
+					activityId = x.ActivityId
+				}, m => new MappedRule
 				{
 					RuleId = m.RuleId,
 					RuleName = m.RuleName,
@@ -61,33 +114,101 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					IsAlarm = m.IsAlarm,
 					ThresholdTime = m.ThresholdTime,
 					AlarmColor = m.AlarmColor
-				})
-				.SingleOrDefault();
-		}
-
-		public MappedState StateFor(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
-		{
-			if (stateCode == null)
-				return null;
-			var match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
-			if (match != null) return match;
-			return _stateCodeAdder.AddUnknownStateCode(mappings, businessUnitId, platformTypeId, stateCode, stateDescription);
-		}
-
-		private MappedState queryState(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode)
-		{
-			return (from m in mappings
-				where
-					m.BusinessUnitId == businessUnitId &&
-					m.PlatformTypeId == platformTypeId &&
-					m.StateCode == stateCode
-				select new MappedState
+				});
+			_stateMappingDictionary = mappings
+				.GroupBy(x => new stateMappingKey
 				{
-					StateGroupId = m.StateGroupId,
-					StateGroupName = m.StateGroupName
+					businessUnitId = x.BusinessUnitId,
+					platformTypeId = x.PlatformTypeId,
+					stateCode = x.StateCode
 				})
-				.FirstOrDefault();
+				.ToDictionary(x => x.Key, m =>
+				{
+					var mapping = m.First();
+					return new MappedState
+					{
+						StateGroupId = mapping.StateGroupId,
+						StateGroupName = mapping.StateGroupName
+					};
+				});
+			_version = version;
 		}
 
+		private class ruleMappingKey
+		{
+			public Guid businessUnitId;
+			public Guid platformTypeId;
+			public string stateCode;
+			public Guid? activityId;
+
+			#region
+
+			protected bool Equals(ruleMappingKey other)
+			{
+				return businessUnitId.Equals(other.businessUnitId) 
+					&& platformTypeId.Equals(other.platformTypeId) 
+					&& string.Equals(stateCode, other.stateCode) 
+					&& activityId.Equals(other.activityId);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj)) return false;
+				if (ReferenceEquals(this, obj)) return true;
+				if (obj.GetType() != GetType()) return false;
+				return Equals((ruleMappingKey) obj);
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					var hashCode = businessUnitId.GetHashCode();
+					hashCode = (hashCode*397) ^ platformTypeId.GetHashCode();
+					hashCode = (hashCode*397) ^ (stateCode?.GetHashCode() ?? 0);
+					hashCode = (hashCode*397) ^ activityId.GetHashCode();
+					return hashCode;
+				}
+			}
+
+			#endregion
+		}
+
+		private class stateMappingKey
+		{
+			public Guid businessUnitId;
+			public Guid platformTypeId;
+			public string stateCode;
+
+			#region 
+
+			protected bool Equals(stateMappingKey other)
+			{
+				return businessUnitId.Equals(other.businessUnitId) 
+					&& platformTypeId.Equals(other.platformTypeId) 
+					&& string.Equals(stateCode, other.stateCode);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj)) return false;
+				if (ReferenceEquals(this, obj)) return true;
+				if (obj.GetType() != GetType()) return false;
+				return Equals((stateMappingKey) obj);
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					var hashCode = businessUnitId.GetHashCode();
+					hashCode = (hashCode*397) ^ platformTypeId.GetHashCode();
+					hashCode = (hashCode*397) ^ (stateCode?.GetHashCode() ?? 0);
+					return hashCode;
+				}
+			}
+
+			#endregion
+		}
 	}
 }

@@ -9,16 +9,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceInfo
 	{
 		private readonly Context _context;
-		private readonly IEnumerable<Mapping> _mappings;
 		private readonly Lazy<IEnumerable<AdherenceChange>> _adherenceChanges;
 		private readonly Lazy<EventAdherence> _adherenceForStoredStateAndCurrentActivity;
 		private readonly Lazy<EventAdherence> _adherenceForNewStateAndPreviousActivity;
 		private readonly Lazy<EventAdherence> _adherenceForNewStateAndCurrentActivity;
 
-		public AdherenceInfo(Context context, IEnumerable<Mapping> mappings)
+		public AdherenceInfo(Context context)
 		{
 			_context = context;
-			_mappings = mappings;
 			_adherenceChanges = new Lazy<IEnumerable<AdherenceChange>>(buildAdherenceChanges);
 			_adherenceForStoredStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Stored?.StateCode, _context.Stored.PlatformTypeId(), _context.Schedule.CurrentActivity()));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Input.StateCode, _context.Input.ParsedPlatformTypeId(), _context.Schedule.PreviousActivity()));
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
-			var rule = _context.StateMapper.RuleFor(_mappings, _context.BusinessUnitId, platformTypeId, stateCode, activityId);
+			var rule = _context.StateMapper.RuleFor(_context.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (rule == null)
 				return adherenceFor(null, null);
 			return adherenceFor(rule.Adherence, rule.StaffingEffect);

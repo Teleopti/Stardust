@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<bool> _stateChanged;
 		private readonly Context _context;
 
-		public StateRuleInfo(Context context, IEnumerable<Mapping> mappings)
+		public StateRuleInfo(Context context)
 		{
 			_context = context;
-			_mappedState = new Lazy<MappedState>(() => context.StateMapper.StateFor(mappings, context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Input.StateDescription));
-			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(mappings, context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Schedule.CurrentActivityId()));
+			_mappedState = new Lazy<MappedState>(() => context.StateMapper.StateFor(context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Input.StateDescription));
+			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Schedule.CurrentActivityId()));
 			_stateChanged = new Lazy<bool>(() =>
 			{
 				var mappedStateGroupId = _mappedState.Value?.StateGroupId;
