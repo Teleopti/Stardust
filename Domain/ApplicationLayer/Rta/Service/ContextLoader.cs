@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -137,8 +138,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
-			var logons = WithUnitOfWork(() => _agentStatePersister.FindForClosingSnapshot(snapshotId, sourceId, Rta.LogOutBySnapshot));
-			process(new closingSnapshotStrategy(logons, snapshotId, action, _now.UtcDateTime(), _config, _agentStatePersister));
+			process(new closingSnapshotStrategy(snapshotId, sourceId, action, _now.UtcDateTime(), _config, _agentStatePersister));
 		}
 
 		public void ForActivityChanges(Action<Context> action)
@@ -248,19 +248,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private class closingSnapshotStrategy : baseStrategy<ExternalLogon>
 		{
 			private readonly DateTime _snapshotId;
-			private readonly IEnumerable<ExternalLogon> _things;
+			private readonly string _sourceId;
 
-			public closingSnapshotStrategy(IEnumerable<ExternalLogon> things, DateTime snapshotId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister) : base(config, persister, action, time)
+			public closingSnapshotStrategy(DateTime snapshotId, string sourceId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister) : base(config, persister, action, time)
 			{
 				_snapshotId = snapshotId;
-				_things = things;
+				_sourceId = sourceId;
 				ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 				MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 			}
 
 			public override IEnumerable<ExternalLogon> AllItems(strategyContext context)
 			{
-				return _things.OrderBy(x => x.NormalizedString()).ToArray();
+				IEnumerable<ExternalLogon> logons = null;
+				context.withUnitOfWork(() =>
+				{
+					logons = Persister.FindForClosingSnapshot(_snapshotId, _sourceId, Rta.LogOutBySnapshot);
+				});
+				return logons.OrderBy(x => x.NormalizedString()).ToArray();
 			}
 
 			public override IEnumerable<AgentState> LockNLoad(IEnumerable<ExternalLogon> ids, strategyContext context)
