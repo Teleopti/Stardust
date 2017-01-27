@@ -105,34 +105,56 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void For(StateInputModel input, Action<Context> action)
 		{
-			process(new singleStrategy(_config, _agentStatePersister, action, _databaseLoader, input, _now.UtcDateTime()));
+			process(new batchStrategy(
+				new BatchInputModel
+				{
+					AuthenticationKey = input.AuthenticationKey,
+					PlatformTypeId = input.PlatformTypeId,
+					SnapshotId = input.SnapshotId,
+					SourceId = input.SourceId,
+					States = new[]
+					{
+						new BatchStateInputModel
+						{
+							StateCode = input.StateCode,
+							StateDescription = input.StateDescription,
+							UserCode = input.UserCode
+						}
+					}
+				},
+				action,
+				_now.UtcDateTime(),
+				_config,
+				_agentStatePersister,
+				_databaseLoader
+			));
 		}
 
 		public void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
-			process(new batchStrategy(_config, _agentStatePersister, _databaseLoader, action, batch, _now.UtcDateTime()));
+			process(new batchStrategy(batch, action, _now.UtcDateTime(), _config, _agentStatePersister, _databaseLoader));
 		}
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
 			var logons = WithUnitOfWork(() => _agentStatePersister.FindForClosingSnapshot(snapshotId, sourceId, Rta.LogOutBySnapshot));
-			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, logons, _now.UtcDateTime()));
+			process(new closingSnapshotStrategy(logons, snapshotId, action, _now.UtcDateTime(), _config, _agentStatePersister));
 		}
 
 		public void ForActivityChanges(Action<Context> action)
 		{
-			process(new activityChangesStrategy(_config, _agentStatePersister, _scheduleReader, action, _now.UtcDateTime()));
+			process(new activityChangesStrategy(action, _now.UtcDateTime(), _config, _agentStatePersister, _scheduleReader));
 		}
 
 		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
 		{
 			private readonly IScheduleReader _scheduleReader;
 
-			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, IScheduleReader scheduleReader, Action<Context> action, DateTime time) : base(config, persister, action, time)
+			public activityChangesStrategy(Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IScheduleReader scheduleReader) : base(config, persister, action, time)
 			{
 				_scheduleReader = scheduleReader;
-				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
-				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
+				ParallelTransactions = Config.ReadValue("RtaActivityChangesParallelTransactions", 7);
+				MaxTransactionSize = Config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
 				DeadLockVictim = DeadLockVictim.Yes;
 			}
 
@@ -142,7 +164,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				IEnumerable<ScheduledActivity> schedule = null;
 				context.withUnitOfWork(() =>
 				{
-					externalLogons = _persister.FindForCheck();
+					externalLogons = Persister.FindForCheck();
 					schedule = _scheduleReader.Read();
 				});
 				return externalLogons
@@ -157,7 +179,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<AgentState> LockNLoad(IEnumerable<ExternalLogon> ids, strategyContext context)
 			{
-				return _persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim);
+				return Persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -165,70 +187,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return null;
 			}
 		}
-
-		private class singleStrategy : baseStrategy<StateInputModel>
-		{
-			private readonly IDatabaseLoader _databaseLoader;
-			private readonly StateInputModel _model;
-
-			public singleStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IDatabaseLoader databaseLoader, StateInputModel model, DateTime time) : base(config, persister, action, time)
-			{
-				_databaseLoader = databaseLoader;
-				_model = model;
-				ParallelTransactions = 1;
-				MaxTransactionSize = 1;
-			}
-
-			public override IEnumerable<StateInputModel> AllItems(strategyContext context)
-			{
-				return new[] {_model};
-			}
-
-			public override IEnumerable<AgentState> LockNLoad(IEnumerable<StateInputModel> things, strategyContext context)
-			{
-				try
-				{
-					var dataSourceId = ValidateSourceId(_databaseLoader, _model);
-
-					var userCode = _model.UserCode;
-					var agentStates = _persister.Find(new ExternalLogon {DataSourceId = dataSourceId, UserCode = userCode}, DeadLockVictim);
-					if (agentStates.IsEmpty())
-						throw new InvalidUserCodeException($"No person found for SourceId {_model.SourceId} and UserCode {_model.UserCode}");
-
-					return agentStates;
-				}
-				catch (Exception e)
-				{
-					context.addException(e);
-				}
-
-				return Enumerable.Empty<AgentState>();
-			}
-
-			public override InputInfo GetInputFor(AgentState state)
-			{
-				return new InputInfo
-				{
-					PlatformTypeId = _model.PlatformTypeId,
-					SourceId = _model.SourceId,
-					SnapshotId = _model.SnapshotId,
-					StateCode = _model.StateCode,
-					StateDescription = _model.StateDescription
-				};
-			}
-		}
-
+		
 		private class batchStrategy : baseStrategy<BatchStateInputModel>
 		{
 			private readonly IDatabaseLoader _databaseLoader;
 			private readonly BatchInputModel _batch;
 
-			public batchStrategy(IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader, Action<Context> action, BatchInputModel batch, DateTime time) : base(config, persister, action, time)
+			public batchStrategy(BatchInputModel batch, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader) : base(config, persister, action, time)
 			{
 				_databaseLoader = databaseLoader;
 				_batch = batch;
-				ParallelTransactions = _config.ReadValue("RtaBatchParallelTransactions", 7);
-				MaxTransactionSize = _config.ReadValue("RtaBatchMaxTransactionSize", 100);
+				ParallelTransactions = Config.ReadValue("RtaBatchParallelTransactions", 7);
+				MaxTransactionSize = Config.ReadValue("RtaBatchMaxTransactionSize", 100);
 			}
 
 			public override IEnumerable<BatchStateInputModel> AllItems(strategyContext context)
@@ -248,7 +218,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ToArray();
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-				var agentStates = _persister.Find(userCodes, DeadLockVictim);
+				var agentStates = Persister.Find(userCodes, DeadLockVictim);
 				stopwatch.Stop();
 				_logger.Debug($"Load agents completed, time: {stopwatch.ElapsedMilliseconds}");
 
@@ -280,12 +250,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			private readonly DateTime _snapshotId;
 			private readonly IEnumerable<ExternalLogon> _things;
 
-			public closingSnapshotStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, DateTime snapshotId, IEnumerable<ExternalLogon> things, DateTime time) : base(config, persister, action, time)
+			public closingSnapshotStrategy(IEnumerable<ExternalLogon> things, DateTime snapshotId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister) : base(config, persister, action, time)
 			{
 				_snapshotId = snapshotId;
 				_things = things;
-				ParallelTransactions = _config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
-				MaxTransactionSize = _config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
+				ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
+				MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 			}
 
 			public override IEnumerable<ExternalLogon> AllItems(strategyContext context)
@@ -295,7 +265,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<AgentState> LockNLoad(IEnumerable<ExternalLogon> ids, strategyContext context)
 			{
-				return _persister.Find(ids, DeadLockVictim);
+				return Persister.Find(ids, DeadLockVictim);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -311,9 +281,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		protected abstract class baseStrategy<T> : IStrategy<T>
 		{
-			protected readonly IConfigReader _config;
-			protected readonly IAgentStatePersister _persister;
-
 			protected baseStrategy(
 				IConfigReader config,
 				IAgentStatePersister persister,
@@ -321,25 +288,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				DateTime time
 			)
 			{
-				_config = config;
-				_persister = persister;
+				Config = config;
+				Persister = persister;
 				Action = action;
 				CurrentTime = time;
 				DeadLockVictim = DeadLockVictim.No;
 			}
 
 			public DateTime CurrentTime { get; }
+			protected IConfigReader Config { get; }
+			protected IAgentStatePersister Persister { get; }
 			public DeadLockVictim DeadLockVictim { get; protected set; }
 			public int ParallelTransactions { get; protected set; }
 			public int MaxTransactionSize { get; protected set; }
+			public Action<Context> Action { get; }
 
 			public abstract IEnumerable<T> AllItems(strategyContext context);
-
 			public abstract IEnumerable<AgentState> LockNLoad(IEnumerable<T> things, strategyContext context);
-
 			public abstract InputInfo GetInputFor(AgentState state);
 			
-			public Action<Context> Action { get; }
 		}
 		
 		public interface IStrategy<T>
