@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			foreach (var skillDay in skillDays)
 			{
 				skillData = skillDay.SkillDataPeriodCollection
-					.SingleOrDefault(
+					.FirstOrDefault(
 						skillDataPeriod => skillDataPeriod.Period.StartDateTime <= intervalStartTimeUtc &&
 												 skillDataPeriod.Period.EndDateTime > intervalStartTimeUtc
 					);
