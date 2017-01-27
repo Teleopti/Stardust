@@ -10,6 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 	public interface ITeamBlockRemoveShiftCategoryBackToLegalService
 	{
 		void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, IOptimizationPreferences optimizationPreferences);
