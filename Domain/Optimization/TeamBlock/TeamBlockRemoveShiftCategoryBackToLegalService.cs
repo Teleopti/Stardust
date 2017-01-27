@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRemoveShiftCategoryBackToLegalService
 	{
-		void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, IOptimizationPreferences optimizationPreferences);
+		void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, IOptimizationPreferences optimizationPreferences);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
@@ -28,8 +30,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-		public TeamBlockRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockClearer teamBlockClearer,  ITeamBlockSchedulingOptions teamBlockSchedulingOptions, ShiftCategoryWeekRemover shiftCategoryWeekRemover, ShiftCategoryPeriodRemover shiftCategoryPeriodRemover, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IShiftCategoryLimitCounter shiftCategoryLimitCounter, IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		public TeamBlockRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, 
+			ITeamInfoFactory teamInfoFactory, 
+			ITeamBlockInfoFactory teamBlockInfoFactory, 
+			ITeamBlockClearer teamBlockClearer,  
+			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, 
+			ShiftCategoryWeekRemover shiftCategoryWeekRemover, 
+			ShiftCategoryPeriodRemover shiftCategoryPeriodRemover, 
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, 
+			IShiftCategoryLimitCounter shiftCategoryLimitCounter, 
+			IWorkShiftSelector workShiftSelector, 
+			IGroupPersonSkillAggregator groupPersonSkillAggregator, 
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamInfoFactory = teamInfoFactory;
@@ -43,11 +58,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, IOptimizationPreferences optimizationPreferences)
+		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, IOptimizationPreferences optimizationPreferences)
 		{
 			var shiftNudgeDirective = new ShiftNudgeDirective();
+			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			var removedScheduleDayPros = new List<IScheduleDayPro>();
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod;
