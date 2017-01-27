@@ -50,17 +50,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return MappingReadModelUpdater.MakeMappings(_businessUnits, _activities, _stateGroups, _mapRepository)
 				.ToArray();
 		}
-
-		public IEnumerable<Mapping> ReadFor(IEnumerable<string> stateCodes, IEnumerable<Guid?> activities)
-		{
-			return (
-				from m in Read()
-				where
-				stateCodes.Contains(m.StateCode) &&
-				activities.Contains(m.ActivityId)
-				select m
-			);
-		}
 	}
 
 	public class AutoFillCurrentScheduleReadModelReader : IScheduleReader

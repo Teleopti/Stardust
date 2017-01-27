@@ -40,17 +40,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return _cache;
 		}
 
-		public IEnumerable<Mapping> ReadFor(IEnumerable<string> stateCodes, IEnumerable<Guid?> activities)
-		{
-			return (
-				from m in Read()
-				where
-					stateCodes.Contains(m.StateCode) &&
-					activities.Contains(m.ActivityId)
-				select m
-				).ToArray();
-		}
-
 		private class internalModel : Mapping
 		{
 			public new Guid? ActivityId

@@ -39,10 +39,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return _data;
 		}
-
-		public IEnumerable<Mapping> ReadFor(IEnumerable<string> stateCodes, IEnumerable<Guid?> activities)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }
