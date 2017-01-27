@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_schedulePartModifyAndRollbackService, resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays);
 
 				unsuccessfulDays.ForEach(x => scheduleMatrixPro.UnlockPeriod(x.ToDateOnlyPeriod()));
-				_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
+				_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, _schedulePartModifyAndRollbackService);
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			rollbackService.ClearModificationCollection(); //TODO: this is maybe wrong - let's see...
 
 			//TODO: ändra så att rollbackservice skickas in hela vägen här
-			var removedScheduleDayPros = _removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation);
+			var removedScheduleDayPros = _removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, _schedulePartModifyAndRollbackService);
 
 
 			foreach (var removedScheduleDayPro in removedScheduleDayPros)
