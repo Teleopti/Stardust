@@ -27,11 +27,29 @@
 
 <ul class="wfm-list">
 	<span ng-repeat="site in $ctrl.org.BusinessUnit.ChildNodes | orderBy:'Name' ">
-		<li ng-click="$ctrl.toggleNode(site)" style="margin-left:30px;">
+		<li ng-click="confirmModal2 = true" style="margin-left:30px;">
 			<span class="list-item-container">
 				{{site.Name}}
 			</span>
 			<span ng-cloak ng-show="$ctrl.isSelected(site)" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+
+			<div ng-cloak class="modal-box">
+				<div ng-cloak ng-show="confirmModal2">
+					<div class="modalbg">
+						<div class="dialog-mini">
+							<div class="modal-inner-content">
+								{{'ConfirmToggleAllPermissions'|translate}}
+							</div>
+							<div class="modal-actions">
+								<aside>
+									<button ng-click="confirmModal2 = false;$event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+									<button ng-click="confirmModal2=false;$ctrl.toggleNode(site);$event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'ToggleAll'|translate}}</button>
+								</aside>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</li>
 		<li ng-repeat="team in site.ChildNodes | orderBy:'Name'" ng-click="$ctrl.toggleNode(team)" style="margin-left:60px;">
 			<span class="list-item-container">
