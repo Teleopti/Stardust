@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public class RemoveScheduleDayProsBasedOnShiftCategoryLimitation
 	{
-		private readonly IShiftCategoryWeekRemover _shiftCategoryWeekRemover;
-		private readonly IShiftCategoryPeriodRemover _shiftCategoryPeriodRemover;
+		private readonly ShiftCategoryWeekRemover _shiftCategoryWeekRemover;
+		private readonly ShiftCategoryPeriodRemover _shiftCategoryPeriodRemover;
 
-		public RemoveScheduleDayProsBasedOnShiftCategoryLimitation(IShiftCategoryWeekRemover shiftCategoryWeekRemover,
-			IShiftCategoryPeriodRemover shiftCategoryPeriodRemover)
+		public RemoveScheduleDayProsBasedOnShiftCategoryLimitation(ShiftCategoryWeekRemover shiftCategoryWeekRemover,
+			ShiftCategoryPeriodRemover shiftCategoryPeriodRemover)
 		{
 			_shiftCategoryWeekRemover = shiftCategoryWeekRemover;
 			_shiftCategoryPeriodRemover = shiftCategoryPeriodRemover;
