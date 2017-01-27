@@ -44,7 +44,7 @@
 				<div class="sub-header">
 					<label for="filter">
 					 <i class="mdi mdi-filter-outline inline-flex">
-					   <input type="text" id="filter" ng-model="skillFilter.SkillName" placeholder="filter skills...">
+					   <input type="text" id="filter" ng-model="skillFilter" placeholder="filter skills...">
 					   <md-tooltip>Filter</md-tooltip>
 					 </i>
 					</label>
@@ -61,7 +61,7 @@
 				<div class="con-row">
 					<div class="con-flex" ng-hide="vm.cascadeList[0].Skills.length === 0">
 							<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable= "vm.optionDrop">
-								<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills | filter:skillFilter" class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
+								<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length" class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
 										{{Skill.SkillName}}
 								</li>
 							</ol>
@@ -70,7 +70,7 @@
 						<div ng-repeat="sortedRow in vm.cascadeList" ng-if="$index >= 1" class="skill-divider">
 							<ol parent-id="{{$parent.$index}}" ng-model="sortedRow.Skills" source="vm.cascadeList" class="cascadeList-container" droppable="vm.optionDrop">
 								{{sortedRow.Priority}}
-								<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills | filter:skillFilter" class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
+								<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"  class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
 									{{Skill.SkillName}}
 									<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill, $parent.$index)" class="mdi mdi-close drag-handle-delete">
 										<md-tooltip>Move skill to unsorted list</md-tooltip>
