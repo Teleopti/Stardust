@@ -8,12 +8,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly IShiftCategoryWeekRemover _shiftCategoryWeekRemover;
 		private readonly IShiftCategoryPeriodRemover _shiftCategoryPeriodRemover;
+		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
 		public RemoveScheduleDayProsBasedOnShiftCategoryLimitation(IShiftCategoryWeekRemover shiftCategoryWeekRemover,
-			IShiftCategoryPeriodRemover shiftCategoryPeriodRemover)
+			IShiftCategoryPeriodRemover shiftCategoryPeriodRemover, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			_shiftCategoryWeekRemover = shiftCategoryWeekRemover;
 			_shiftCategoryPeriodRemover = shiftCategoryPeriodRemover;
+			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		}
 
 		public IEnumerable<IScheduleDayPro> Execute(ISchedulingOptions schedulingOptions, 
@@ -22,9 +24,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IShiftCategoryLimitation limitation)
 		{
 			var removedScheduleDayPros = limitation.Weekly
-				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences)
-				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro,
-					optimizationPreferences);
+				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences, _schedulePartModifyAndRollbackService)
+				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences, _schedulePartModifyAndRollbackService);
 			return removedScheduleDayPros;
 		}
 	}
