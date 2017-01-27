@@ -41,9 +41,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
 		public SkillCombinationHolder SkillCombinationHolder { get; }
-		public IShovelResourceData ToShovelResourceData()
-		{
-			return (IShovelResourceData)SkillStaffPeriodHolder;
-		}
 	}
 }
