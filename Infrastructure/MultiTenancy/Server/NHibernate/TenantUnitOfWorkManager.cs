@@ -107,8 +107,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			if (_sessionFactory == null || !_sessionFactory.IsValueCreated) return;
 			//to end just current transaction doesn't make sense in real code, but makes testing easier
 			CancelAndDisposeCurrent();
-			_sessionFactory.Value.Dispose();
+			if (_sessionFactory.IsValueCreated)
+			{
+				_sessionFactory.Value.Dispose();
+			}
 		}
-		
 	}
 }
