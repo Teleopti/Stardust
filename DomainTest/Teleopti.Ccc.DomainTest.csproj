@@ -915,8 +915,6 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounterTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\ShiftCategoryPeriodRemoverTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\ShiftCategoryWeekRemoverTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDataPerDateAndActivityTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDatasPerActivtyForDateTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\OpenHourForDateTest.cs" />

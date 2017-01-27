@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRemoveShiftCategoryOnBestDateService
 	{
-		IScheduleDayPro Execute(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences);
+		IScheduleDayPro Execute(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
 		bool IsThisDayCorrectShiftCategory(IScheduleDayPro scheduleDayPro, IShiftCategory shiftCategory);
 	}
 
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly IScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorProFactory;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
-		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceCalculation _resourceCalculation;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public TeamBlockRemoveShiftCategoryOnBestDateService(
 									IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
 									Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
-									ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 									ITimeZoneGuard timeZoneGuard,
 									IDeleteSchedulePartService deleteSchedulePartService,
 									IResourceCalculation resourceCalculation)
@@ -35,13 +33,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 			_scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_timeZoneGuard = timeZoneGuard;
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceCalculation = resourceCalculation;
 		}
 
-		public IScheduleDayPro Execute(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences)
+		public IScheduleDayPro Execute(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			
 			IList<IScheduleDayPro> daysToWorkWith = scheduleMatrixPro.UnlockedDays.Where(scheduleDayPro => dateOnlyPeriod.Contains(scheduleDayPro.Day) && IsThisDayCorrectShiftCategory(scheduleDayPro, shiftCategory)).ToList();
@@ -68,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			if (currentDay == null) return null;
 
-			deleteMainShift(currentDay.DaySchedulePart(), schedulingOptions);
+			deleteMainShift(currentDay.DaySchedulePart(), schedulingOptions, schedulePartModifyAndRollbackService);
 
 			return currentDay;
 
@@ -80,12 +77,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return part.SignificantPart() == SchedulePartView.MainShift && part.PersonAssignment().ShiftCategory.Equals(shiftCategory);
 		}
 
-		private void deleteMainShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
+		private void deleteMainShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			//copied from ScheduleDayService
 			var options = new DeleteOption { MainShift = true };
 
-			_deleteSchedulePartService.Delete(new [] {schedulePart}, options, _schedulePartModifyAndRollbackService, new NoSchedulingProgress());
+			_deleteSchedulePartService.Delete(new [] {schedulePart}, options, schedulePartModifyAndRollbackService, new NoSchedulingProgress());
 
 			var daysToRecalculate = new HashSet<DateOnly>();
 			var date = new DateOnly(schedulePart.Period.StartDateTimeLocal(_timeZoneGuard.CurrentTimeZone()));

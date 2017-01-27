@@ -12,10 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class ShiftCategoryPeriodRemover : IShiftCategoryPeriodRemover
 	{
 		private readonly ITeamBlockRemoveShiftCategoryOnBestDateService _teamBlockRemoveShiftCategoryOnBestDateService;
+		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
-		public ShiftCategoryPeriodRemover(ITeamBlockRemoveShiftCategoryOnBestDateService teamBlockRemoveShiftCategoryOnBestDateService)
+		public ShiftCategoryPeriodRemover(ITeamBlockRemoveShiftCategoryOnBestDateService teamBlockRemoveShiftCategoryOnBestDateService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			_teamBlockRemoveShiftCategoryOnBestDateService = teamBlockRemoveShiftCategoryOnBestDateService;
+			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		}
 
 		public IList<IScheduleDayPro> RemoveShiftCategoryOnPeriod(IShiftCategoryLimitation limitation, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences)
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
 			while (isShiftCategoryOverPeriodLimit(limitation, scheduleMatrixPro))
 			{
-				var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(limitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod, optimizationPreferences);
+				var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(limitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod, optimizationPreferences, _schedulePartModifyAndRollbackService);
 				if (thisResult != null) result.Add(thisResult);
 				else break;	
 			}
