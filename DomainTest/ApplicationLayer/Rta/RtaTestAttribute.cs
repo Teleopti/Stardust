@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -19,9 +20,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			base.Setup(system, configuration);
 
+			system.UseTestDouble<AutoFillKeyValueStore>().For<IKeyValueStorePersister>();
 			system.UseTestDouble<AutoFillMappingReader>().For<IMappingReader>();
 			system.UseTestDouble<AutoFillCurrentScheduleReadModelReader>().For<IScheduleReader>();
 			system.UseTestDouble<AutoFillAgentStatePersister>().For<FakeAgentStatePersister, IAgentStatePersister>();
+		}
+	}
+
+	// if this one always is empty caches will always be refreshed
+	public class AutoFillKeyValueStore : IKeyValueStorePersister
+	{
+		public void Update(string key, string value)
+		{
+		}
+
+		public string Get(string key)
+		{
+			return null;
+		}
+
+		public void Delete(string key)
+		{
 		}
 	}
 

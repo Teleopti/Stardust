@@ -16,9 +16,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly IJsonDeserializer _deserializer;
 		private readonly IKeyValueStorePersister _keyValues;
 
-		private string _version;
-		private IEnumerable<ScheduledActivity> _cache = Enumerable.Empty<ScheduledActivity>();
-
 		public CurrentScheduleReadModelPersister(
 			ICurrentReadModelUnitOfWork unitOfWork, 
 			IJsonSerializer serializer, 
@@ -33,18 +30,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<ScheduledActivity> Read()
 		{
-			var version = _keyValues.Get("CurrentScheduleReadModelVersion");
-			if (_version == version && _cache.Any())
-				return _cache;
-
-			_cache = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery("SELECT Schedule FROM ReadModel.CurrentSchedule")
 				.List<string>()
 				.SelectMany(x => _deserializer.DeserializeObject<IEnumerable<ScheduledActivity>>(x ?? "[]"))
 				.ToArray();
-			_version = version;
-
-			return _cache;
 		}
 
 		public void Invalidate(Guid personId)

@@ -19,12 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(
-			ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper,
-			IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader,
-			ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier)
-			: base(dataSource, databaseLoader, now, stateMapper, agentStatePersister,
-				mappingReader, scheduleReader, appliedAlarm, config, deadLockRetrier)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier) : base(dataSource, databaseLoader, now, stateMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier)
 		{
 		}
 
@@ -73,9 +68,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseLoader _databaseLoader;
 		protected readonly INow _now;
 		private readonly StateMapper _stateMapper;
+		private readonly ScheduleCache _scheduleCache;
 		protected readonly IAgentStatePersister _agentStatePersister;
-		private readonly IMappingReader _mappingReader;
-		private readonly IScheduleReader _scheduleReader;
 		private readonly ProperAlarm _appliedAlarm;
 		protected readonly IConfigReader _config;
 		protected readonly DeadLockRetrier _deadLockRetrier;
@@ -85,9 +79,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseLoader databaseLoader,
 			INow now,
 			StateMapper stateMapper,
+			ScheduleCache scheduleCache,
 			IAgentStatePersister agentStatePersister,
-			IMappingReader mappingReader,
-			IScheduleReader scheduleReader,
 			ProperAlarm appliedAlarm,
 			IConfigReader config,
 			DeadLockRetrier deadLockRetrier)
@@ -96,9 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseLoader = databaseLoader;
 			_now = now;
 			_stateMapper = stateMapper;
+			_scheduleCache = scheduleCache;
 			_agentStatePersister = agentStatePersister;
-			_mappingReader = mappingReader;
-			_scheduleReader = scheduleReader;
 			_appliedAlarm = appliedAlarm;
 			_config = config;
 			_deadLockRetrier = deadLockRetrier;
@@ -143,16 +135,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForActivityChanges(Action<Context> action)
 		{
-			process(new activityChangesStrategy(action, _now.UtcDateTime(), _config, _agentStatePersister, _scheduleReader));
+			process(new activityChangesStrategy(action, _now.UtcDateTime(), _config, _agentStatePersister, _scheduleCache));
 		}
 
 		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
 		{
-			private readonly IScheduleReader _scheduleReader;
+			private readonly ScheduleCache _scheduleCache;
 
-			public activityChangesStrategy(Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IScheduleReader scheduleReader) : base(config, persister, action, time)
+			public activityChangesStrategy(Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, ScheduleCache scheduleCache) : base(config, persister, action, time)
 			{
-				_scheduleReader = scheduleReader;
+				_scheduleCache = scheduleCache;
 				ParallelTransactions = Config.ReadValue("RtaActivityChangesParallelTransactions", 7);
 				MaxTransactionSize = Config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
 				DeadLockVictim = DeadLockVictim.Yes;
@@ -161,16 +153,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public override IEnumerable<ExternalLogon> AllItems(strategyContext context)
 			{
 				IEnumerable<ExternalLogonForCheck> externalLogons = null;
-				IEnumerable<ScheduledActivity> schedule = null;
 				context.withUnitOfWork(() =>
 				{
+					_scheduleCache.Refresh();
 					externalLogons = Persister.FindForCheck();
-					schedule = _scheduleReader.Read();
 				});
 				return externalLogons
 					.Where(x =>
 					{
-						var activities = schedule.Where(a => a.PersonId == x.PersonId).ToArray();
+						var activities = _scheduleCache.Read(x.PersonId);
 						var nextCheck = ScheduleInfo.NextCheck(activities, x.LastTimeWindowCheckSum, x.LastCheck);
 						return nextCheck == null || nextCheck <= CurrentTime;
 					})
@@ -340,7 +331,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public class transactionData
 		{
 			public IEnumerable<AgentState> agentStates;
-			public IEnumerable<ScheduledActivity> schedules;
 		}
 
 		protected void process<T>(IStrategy<T> strategy)
@@ -387,10 +377,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var agentStates = strategy.LockNLoad(items, context);
 			_stateMapper.RefreshMappingCache();
+			_scheduleCache.Refresh();
 			return new transactionData
 			{
 				agentStates = agentStates,
-				schedules = _scheduleReader.Read()
 			};
 		}
 
@@ -435,7 +425,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						strategy.DeadLockVictim,
 						strategy.GetInputFor(state),
 						state,
-						() => data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(),
+						() => _scheduleCache.Read(state.PersonId),
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,
 						_appliedAlarm

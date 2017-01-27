@@ -257,6 +257,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ICurrentScheduleReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IScheduleReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ScheduleCache.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilder.cs" />

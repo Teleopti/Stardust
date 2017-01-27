@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
+			builder.RegisterType<ScheduleCache>().SingleInstance();
 			builder.RegisterType<EventualStateCodeAdder>()
 				.As<IStateCodeAdder>()
 				.SingleInstance();

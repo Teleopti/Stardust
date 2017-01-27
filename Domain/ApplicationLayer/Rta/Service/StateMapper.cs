@@ -88,7 +88,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var version = _keyValues.Get("RuleMappingsVersion");
 
-			if (version == _version && _ruleMappingDictionary.Any())
+			var refresh = version != _version || _version == null;
+			if (!refresh)
 				return;
 
 			var mappings = _reader.Read();
