@@ -97,7 +97,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 								(IResourceCalculationPeriodDictionary)
 								new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 									s => (IResourceCalculationPeriod) s)));
-				var resourcesForShovelAndCalculation = new ResourcesExtractor(combinationResources, allSkills, skillInterval);
+				var resourcesForCalculation = new ResourcesExtractorCalculation(combinationResources, allSkills, skillInterval);
+				var resourcesForShovel = new ResourcesExtractorShovel(combinationResources, allSkills, skillInterval);
 
 				var skillCombinationResourcesForAgent = new List<SkillCombinationResource>();
 				foreach (var day in scheduleDays)
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							skillCombinationResourceByAgentAndLayer.Resource -= 1;
 							skillCombinationResourcesForAgent.Add(skillCombinationResourceByAgentAndLayer);
 						
-						var scheduleResourceOptimizer = new ScheduleResourceOptimizer(resourcesForShovelAndCalculation,new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods),new AffectedPersonSkillService(allSkills), false, new ActivityDivider());
+						var scheduleResourceOptimizer = new ScheduleResourceOptimizer(resourcesForCalculation, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods),new AffectedPersonSkillService(allSkills), false, new ActivityDivider());
 						scheduleResourceOptimizer.Optimize(layer.Period);
 						
 						//Shovling
@@ -140,7 +141,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						if (!cascadingSkills.Any()) continue;
 
 						var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills,
-							resourcesForShovelAndCalculation, activity, layer.Period);
+							resourcesForShovel, activity, layer.Period);
 						var allSkillGroups = orderedSkillGroups.AllSkillGroups();
 						foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 						{

@@ -61,7 +61,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 									  (IResourceCalculationPeriodDictionary)
 									  new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 																							 s => (IResourceCalculationPeriod) s)));
-			var resourcesForShovelAndCalculation = new ResourcesExtractor(combinationResources, skills, skillInterval);
+			var resourcesForCalculation = new ResourcesExtractorCalculation(combinationResources, skills, skillInterval);
+			var resourcesForShovel = new ResourcesExtractorShovel(combinationResources, skills, skillInterval);
 
 
 			var activities = skills.Select(x => x.Activity).Distinct();
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				//	continue;
 				//}
 
-				var scheduleResourceOptimizer = new ScheduleResourceOptimizer(resourcesForShovelAndCalculation, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods), new AffectedPersonSkillService(skills), false, new ActivityDivider());
+				var scheduleResourceOptimizer = new ScheduleResourceOptimizer(resourcesForCalculation, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods), new AffectedPersonSkillService(skills), false, new ActivityDivider());
 				scheduleResourceOptimizer.Optimize(period);
 
 				//Shovling
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				var cascadingSkills = new CascadingSkills(skills);
 				if (!cascadingSkills.Any()) continue;
 
-				var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, resourcesForShovelAndCalculation, activity, period);
+				var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, resourcesForShovel, activity, period);
 				var allSkillGroups = orderedSkillGroups.AllSkillGroups();
 				foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 				{

@@ -308,6 +308,7 @@
     <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
+    <Compile Include="ResourceCalculation\CascadingResourceExtractor.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelBeforeReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelTest.cs" />
