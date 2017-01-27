@@ -69,6 +69,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
 		}
+
+		public virtual void Handle(PersonNameChangedEvent @event)
+		{
+			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
+		}
 	}
 
 	public class AssociationInfo

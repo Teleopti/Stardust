@@ -117,6 +117,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
+		public void UpsertName(Guid personId, string firstName, string lastName)
+		{
+			AgentStateReadModel existing;
+			if (!_data.TryRemove(personId, out existing))
+			{
+				_data.TryAdd(personId, new AgentStateReadModel
+				{
+					PersonId = personId,
+					FirstName = firstName,
+					LastName = lastName
+				});
+				return;
+			}
+			existing.FirstName = firstName;
+			existing.LastName = lastName;
+			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
+		}
+
 		public IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons)
 		{
 			throw new NotImplementedException();
