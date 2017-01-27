@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -53,8 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 				var time = d.Date;
 				Database
 					.WithAssignment(d)
-					.WithLayer("Phone", time.AddHours(8), time.AddHours(12))
-					.WithLayer("Admin", time.AddHours(12), time.AddHours(17))
+					.WithAssignedActivity("Phone", time.AddHours(8), time.AddHours(12))
+					.WithAssignedActivity("Admin", time.AddHours(12), time.AddHours(17))
 					;
 			});
 			Publisher.Wait();

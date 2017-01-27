@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Infrastructure;
@@ -239,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = person,
 				StateCode = "statecode"
-			}, false);
+			});
 
 			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercode1"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
 			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
@@ -266,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person,
 				StateCode = "code",
 				ReceivedTime = "2016-09-14".Utc()
-			}, false);
+			});
 			Target.Prepare(new AgentStatePrepare
 			{
 				PersonId = person,
@@ -313,7 +310,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person,
 				BatchId = "2016-08-29 13:00".Utc(),
 				SourceId = "source"
-			}, false);
+			});
 
 			var logons = Target.FindForClosingSnapshot("2016-08-29 13:01".Utc(), "source", "loggedout");
 			Target.Find(logons, DeadLockVictim.Yes)

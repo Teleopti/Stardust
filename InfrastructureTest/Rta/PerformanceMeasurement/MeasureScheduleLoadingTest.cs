@@ -103,9 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Uow.Do(() =>
 			{
 				persons.ForEach(p =>
-				{
-					AgentState.InvalidateSchedules(p.Id.Value, DeadLockVictim.Yes);
-				});
+				{ });
 			});
 
 			var timer = new Stopwatch();

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_context = context;
 			_schedule = schedule;
-			_currentActivity = new Lazy<ScheduledActivity>(() => activityForTime(context.CurrentTime));
+			_currentActivity = new Lazy<ScheduledActivity>(currentActivity);
 			_nextActivity = new Lazy<ScheduledActivity>(nextActivity);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(_currentActivity.Value));
@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var activity = CurrentActivity() ?? activityNear(context.CurrentTime);
 				return activity?.BelongsToDate;
 			});
-			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(() => activitiesBetween(timeWindowStart(), timeWindowEnd()));
+			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(timeWindowActivities);
 			_timeWindowCheckSum = new Lazy<int>(() => _timeWindowActivities.Value.CheckSum());
 		}
 
 		public bool ActivityChanged()
 		{
-			return _context.Stored?.ActivityId != _context.Schedule.CurrentActivityId();
+			return _context.Stored?.ActivityId != CurrentActivityId();
 		}
 
 		public bool ShiftStarted()
@@ -155,21 +155,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				select l;
 		}
 
-		private ScheduledActivity activityForTime(DateTime time)
+		private IEnumerable<ScheduledActivity> timeWindowActivities()
 		{
-			return _schedule.Value.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
+			return timeWindowActivities(_schedule.Value, _context.CurrentTime);
+		}
+
+		private ScheduledActivity currentActivity()
+		{
+			return currentActivity(_schedule.Value, _context.CurrentTime);
 		}
 
 		private ScheduledActivity nextActivity()
 		{
-			var nextActivity = (from l in _schedule.Value where l.StartDateTime > _context.CurrentTime select l).FirstOrDefault();
-			if (nextActivity == null)
-				return null;
-			if (_currentActivity.Value == null)
-				return nextActivity;
-			if (nextActivity.StartDateTime == _currentActivity.Value.EndDateTime)
-				return nextActivity;
-			return null;
+			return nextActivity(_schedule.Value, _currentActivity.Value, _context.CurrentTime);
 		}
 
 		private ScheduledActivity activityNear(DateTime time)
@@ -183,37 +181,77 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				).FirstOrDefault();
 		}
 		
-		private readonly TimeSpan timeWindowFuture = TimeSpan.FromHours(3);
-		private readonly TimeSpan timeWindowPast = TimeSpan.FromHours(-1);
 
-		private DateTime timeWindowStart()
+
+
+
+
+
+
+		private static readonly TimeSpan timeWindowFuture = TimeSpan.FromHours(3);
+		private static readonly TimeSpan timeWindowPast = TimeSpan.FromHours(-1);
+
+		private static DateTime timeWindowStart(DateTime time)
 		{
-			return _context.CurrentTime.Add(timeWindowPast);
+			return time.Add(timeWindowPast);
 		}
 
-		private DateTime timeWindowEnd()
+		private static DateTime timeWindowEnd(DateTime time)
 		{
-			return _context.CurrentTime.Add(timeWindowFuture);
+			return time.Add(timeWindowFuture);
 		}
 
-		private IEnumerable<ScheduledActivity> activitiesBetween(DateTime start, DateTime end)
+		private static IEnumerable<ScheduledActivity> timeWindowActivities(IEnumerable<ScheduledActivity> schedule, DateTime time)
 		{
-			return from a in _schedule.Value
+			return activitiesBetween(schedule, timeWindowStart(time), timeWindowEnd(time));
+		}
+
+		private static IEnumerable<ScheduledActivity> activitiesBetween(IEnumerable<ScheduledActivity> schedule, DateTime start, DateTime end)
+		{
+			return from a in schedule
 				   where a.EndDateTime > start
 				   where a.StartDateTime <= end
 				   select a;
 		}
 
-		public DateTime? NextCheck()
+		private static ScheduledActivity currentActivity(IEnumerable<ScheduledActivity> schedule, DateTime time)
 		{
-			var activityEnteringTimeWindow = _schedule.Value.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd());
+			return schedule.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
+		}
+
+		private static ScheduledActivity nextActivity(IEnumerable<ScheduledActivity> schedule, ScheduledActivity currentActivity, DateTime time)
+		{
+			var nextActivity = (from l in schedule where l.StartDateTime > time select l).FirstOrDefault();
+			if (nextActivity == null)
+				return null;
+			if (currentActivity == null)
+				return nextActivity;
+			if (nextActivity.StartDateTime == currentActivity.EndDateTime)
+				return nextActivity;
+			return null;
+		}
+		
+		public static DateTime? NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck)
+		{
+			if (!lastCheck.HasValue)
+				return null;
+
+			var timeWindowCheckSum = timeWindowActivities(schedule, lastCheck.Value).CheckSum();
+			if (lastTimeWindowCheckSum != timeWindowCheckSum)
+				return null;
+
+			var current = currentActivity(schedule, lastCheck.Value);
+			var next = nextActivity(schedule, current, lastCheck.Value);
+			var activityEnteringTimeWindow = schedule.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd(lastCheck.Value));
 			var activityEntersTimeWindowAt = activityEnteringTimeWindow?.StartDateTime.Subtract(timeWindowFuture);
+
 			return new[]
 			{
-				_currentActivity.Value?.EndDateTime,
-				_nextActivity.Value?.StartDateTime,
+				current?.EndDateTime,
+				next?.StartDateTime,
 				activityEntersTimeWindowAt
 			}.Min();
 		}
+
 	}
 }

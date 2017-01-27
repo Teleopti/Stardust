@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -12,29 +13,29 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		public const string MagicString = "magic.string";
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
+		private readonly IKeyValueStorePersister _keyValues;
 
 		private string _version;
 		private IEnumerable<Mapping> _cache = Enumerable.Empty<Mapping>();
 
-		public MappingReadModelReader(ICurrentReadModelUnitOfWork unitOfWork)
+		public MappingReadModelReader(ICurrentReadModelUnitOfWork unitOfWork, IKeyValueStorePersister keyValues)
 		{
 			_unitOfWork = unitOfWork;
+			_keyValues = keyValues;
 		}
 
 		public IEnumerable<Mapping> Read()
 		{
-			var version = _unitOfWork.Current()
-				.CreateSqlQuery("SELECT [Value] FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsVersion'")
-				.UniqueResult<string>();
+			var version = _keyValues.Get("RuleMappingsVersion");
 
 			if (version == _version && _cache.Any())
 				return _cache;
 
-			_version = version;
 			_cache = _unitOfWork.Current()
 				.CreateSqlQuery("SELECT * FROM [ReadModel].[RuleMappings] WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.List<Mapping>();
+			_version = version;
 
 			return _cache;
 		}

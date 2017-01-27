@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 
 		public void Reassociate(IAggregateRoot root)

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public MutableNow Now;
 		public FakeEventPublisher Publisher;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public FakeAgentStatePersister X;
 
 		[Test]
 		public void ShouldPublishInAdherenceOnCurrentTimeWhenShiftIsRemoved()
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "loggedout"
 			});
 
-			Database.ClearSchedule(personId);
+			Database.ClearAssignments(personId);
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2016-02-23 08:05".Utc());

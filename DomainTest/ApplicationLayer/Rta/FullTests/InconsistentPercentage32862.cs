@@ -3,10 +3,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -27,6 +29,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+
+			system.UseTestDouble<AutoFillMappingReader>().For<IMappingReader>();
+			system.UseTestDouble<AutoFillCurrentScheduleReadModelReader>().For<IScheduleReader>();
+			system.UseTestDouble<AutoFillAgentStatePersister>().For<FakeAgentStatePersister, IAgentStatePersister>();
 		}
 
 		[Test]
@@ -37,13 +43,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-					.WithAgent("user", personId)
-					.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
-					.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
-					.WithRule("ready", phone, 0, Adherence.In)
-					.WithRule("ready", admin, 0, Adherence.Neutral)
-					.WithRule(null, phone, 0, Adherence.Out)
-					.WithRule("ready", null, 0, Adherence.Out)
+				.WithAgent("user", personId)
+				.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
+				.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
+				.WithRule("ready", phone, 0, Adherence.In)
+				.WithRule("ready", admin, 0, Adherence.Neutral)
+				.WithRule(null, phone, 0, Adherence.Out)
+				.WithRule("ready", null, 0, Adherence.Out)
 				;
 
 			Now.Is("2015-03-31 4:44:55");

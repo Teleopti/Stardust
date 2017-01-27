@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithSite(siteId)
 				.WithTeam(teamId)
-				.WithAgentState(new AgentStateReadModel
+				.WithAgentState_DontUse(new AgentStateReadModel
 				{
 					PersonId = personId,
 					SiteId = siteId,
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				})
-				.OnSkill(skill);
+				.OnSkill_DontUse(skill);
 
 			var viewModel = Target.ForSkills(siteId, new[] { skill }).Single();
 
@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithSite(siteId)
 				.WithTeam(teamId)
-				.WithAgentState(new AgentStateReadModel
+				.WithAgentState_DontUse(new AgentStateReadModel
 				{
 					PersonId = personId,
 					SiteId = siteId,
 					TeamId = teamId,
 				})
-				.OnSkill(skill);
+				.OnSkill_DontUse(skill);
 
 			var viewModel = Target.ForSkills(siteId, new[] { skill }).Single();
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithSite(siteId)
 				.WithTeam(teamId)
-				.WithAgentState(new AgentStateReadModel
+				.WithAgentState_DontUse(new AgentStateReadModel
 				{
 					PersonId = personId,
 					SiteId = siteId,
@@ -92,8 +92,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				})
-				.OnSkill(skill1)
-				.OnSkill(skill2)
+				.OnSkill_DontUse(skill1)
+				.OnSkill_DontUse(skill2)
 				;
 
 			var viewModel = Target.ForSkills(siteId, new[] { skill1, skill2 }).Single();

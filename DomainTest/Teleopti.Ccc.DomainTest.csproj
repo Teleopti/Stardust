@@ -178,6 +178,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsHourlyAvailabilityMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPreferenceMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsRequestMatchingPersonTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\MeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
@@ -215,7 +216,7 @@
     <Compile Include="ApplicationLayer\ReadModelInitializeHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ReplyRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Maintainer\ScheduleInvalidationTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Maintainer\AgentStateMaintainerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftStartEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonChangedTeamTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalAdherenceUpdaterTest.cs" />
@@ -224,7 +225,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExecuteBatchesInParallelTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonPersonMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelActivityTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ScheduleCachingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftAbsenceTest.cs" />

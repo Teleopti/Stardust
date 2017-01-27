@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ContextLoaderWithSpreadTransactionLockStrategy>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			else
 				builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
-			builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();
 			builder.RegisterType<DeadLockRetrier>().SingleInstance();
 			builder.RegisterType<DeadLockVictimThrower>().SingleInstance();
 
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
 			builder.RegisterType<DataSourceReader>().As<IDataSourceReader>().SingleInstance();
-			builder.RegisterType<FromPersonAssignment>().As<IScheduleReader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
 
 			_config.Cache().This<TenantLoader>(b => b
@@ -57,12 +55,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AgentStateReadModelLegacyReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelLegacyReader>().As<IAgentStateReadModelLegacyReader>().SingleInstance().ApplyAspects();
 
-
 			builder.RegisterType<KeyValueStorePersister>().As<IKeyValueStorePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
+			builder.RegisterType<CurrentScheduleReadModelPersister>()
+				.As<ICurrentScheduleReadModelPersister>()
+				.As<IScheduleReader>()
+				.SingleInstance().ApplyAspects();
 
 			builder.RegisterType<AgentViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();
@@ -92,6 +93,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 			builder.RegisterType<HardcodedSkillGroupingPageId>().SingleInstance();
 
+			builder.RegisterType<CurrentScheduleReadModelUpdater>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ActivityChangeChecker>().SingleInstance();
 			
 			if (string.IsNullOrEmpty(_config.Args().RtaAgentStateTraceMatch))

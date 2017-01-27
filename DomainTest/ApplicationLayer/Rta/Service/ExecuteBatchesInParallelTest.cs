@@ -7,6 +7,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {

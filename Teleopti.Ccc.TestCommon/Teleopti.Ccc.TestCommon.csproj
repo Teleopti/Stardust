@@ -242,8 +242,10 @@
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivatorProvider.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeCurrentScheduleReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeDataSourceReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeHistoricalAdherenceReadModelPersister.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeKeyValueStorePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInSiteReader.cs" />
@@ -336,7 +338,6 @@
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeMappingReader.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
     <Compile Include="IoC\IntegrationIoCTest.cs" />
     <Compile Include="IoC\IoCTestService.cs" />

@@ -50,14 +50,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// maintainer stuff
 		void Delete(Guid personId, DeadLockVictim deadLockVictim);
 		void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim);
-		void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim);
 
 		// rta service stuff
 		IEnumerable<ExternalLogonForCheck> FindForCheck();
 		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
 		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim);
-		void Update(AgentState model, bool updateSchedule);
+		void Update(AgentState model);
 	}
 
 	public static class AgentStatePersisterExtensions

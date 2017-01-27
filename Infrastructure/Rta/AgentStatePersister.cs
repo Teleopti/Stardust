@@ -2,15 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
-using Newtonsoft.Json;
-using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.ExternalLogon;
 
@@ -19,13 +16,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	public class AgentStatePersister : IAgentStatePersister
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly IJsonSerializer _serializer;
 		private readonly DeadLockVictimThrower _deadLockVictimThrower;
 
-		public AgentStatePersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer, DeadLockVictimThrower deadLockVictimThrower)
+		public AgentStatePersister(ICurrentUnitOfWork unitOfWork, DeadLockVictimThrower deadLockVictimThrower)
 		{
 			_unitOfWork = unitOfWork;
-			_serializer = serializer;
 			_deadLockVictimThrower = deadLockVictimThrower;
 		}
 
@@ -101,8 +96,6 @@ INSERT INTO [dbo].[AgentState]
 	AlarmStartTime,
 	TimeWindowCheckSum,
 	Adherence,
-	Schedule,
-	NextCheck,
 	DataSourceIdUserCode
 )
 VALUES
@@ -124,8 +117,6 @@ VALUES
 	:AlarmStartTime,
 	:TimeWindowCheckSum,
 	:Adherence,
-	:Schedule,
-	:NextCheck,
 	:DataSourceIdUserCode
 )")
 						.SetParameter("PersonId", model.PersonId)
@@ -145,33 +136,15 @@ VALUES
 						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
 						.SetParameter("Adherence", (int?)copyFrom?.Adherence)
-						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
-						.SetParameter("NextCheck", copyFrom?.NextCheck)
 						.SetParameter("DataSourceIdUserCode", e.NormalizedString())
 						.ExecuteUpdate();
 				});
 		}
-
+		
 		[LogInfo]
-		public virtual void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim)
+		public virtual void Update(AgentState model)
 		{
-		 	_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
-
-			_unitOfWork.Current().Session()
-				.CreateSQLQuery("UPDATE [dbo].[AgentState] SET Schedule = NULL, NextCheck = NULL WHERE PersonId = :PersonId")
-				.SetParameter("PersonId", personId)
-				.ExecuteUpdate();
-		}
-
-		[LogInfo]
-		public virtual void Update(AgentState model, bool updateSchedule)
-		{
-			var scheduleSql = "";
-
-			if (updateSchedule)
-				scheduleSql = "Schedule = :Schedule,";
-
-			var sql = $@"
+			var sql = @"
 UPDATE [dbo].[AgentState]
 SET
 	BatchId = :BatchId,
@@ -186,9 +159,7 @@ SET
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
 	TimeWindowCheckSum = :TimeWindowCheckSum,
-	Adherence = :Adherence,
-	{scheduleSql}
-	NextCheck = :NextCheck
+	Adherence = :Adherence
 WHERE
 	PersonId = :PersonId";
 			var query = _unitOfWork.Current().Session()
@@ -207,11 +178,7 @@ WHERE
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 				.SetParameter("Adherence", (int?) model.Adherence)
-				.SetParameter("NextCheck", model.NextCheck)
 				;
-
-			if (updateSchedule)
-				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
 
 			_deadLockVictimThrower.ThrowOnDeadlock(() => query.ExecuteUpdate());
 		}
@@ -230,7 +197,7 @@ WHERE
 		[LogInfo]
 		public virtual IEnumerable<ExternalLogonForCheck> FindForCheck()
 		{
-			var sql = "SELECT PersonId, DataSourceIdUserCode, NextCheck FROM [dbo].[AgentState] WITH (NOLOCK)";
+			var sql = "SELECT PersonId, DataSourceIdUserCode, ReceivedTime AS LastCheck, TimeWindowCheckSum AS LastTimeWindowCheckSum FROM [dbo].[AgentState] WITH (NOLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogonForCheck)))
 				.SetReadOnly(true)
@@ -311,11 +278,6 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 
 		private class internalAgentState : AgentStateFound
 		{
-			public new string Schedule
-			{
-				set { base.Schedule = value != null ? JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value) : null; }
-			}
-
 			public new int? Adherence
 			{
 				set { base.Adherence = (EventAdherence?) value; }

@@ -27,12 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ExternalLogonForCheck : ExternalLogon
 	{
-		public DateTime? NextCheck { get; set; }
-	}
-
-	public class ExternalLogonForSynchronize : ExternalLogon
-	{
-		public string StateCode { get; set; }
+		public DateTime? LastCheck { get; set; }
+		public int? LastTimeWindowCheckSum { get; set; }
 	}
 
 	public class AgentStateFound : AgentState
@@ -66,8 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public int? TimeWindowCheckSum { get; set; }
 
-		public IEnumerable<ScheduledActivity> Schedule { get; set; }
-		public DateTime? NextCheck { get; set; }
+		//public IEnumerable<ScheduledActivity> Schedule { get; set; }
+		//public DateTime? NextCheck { get; set; }
 
 	}
 

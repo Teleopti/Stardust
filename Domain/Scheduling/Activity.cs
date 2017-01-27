@@ -29,10 +29,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_description = new Description(name);
 		}
 
-		protected Activity()
+		public Activity()
 		{
+			_description = new Description();
 		}
-		
+
 		public override void NotifyTransactionComplete(DomainUpdateType operation)
 		{
 		    base.NotifyTransactionComplete(operation);

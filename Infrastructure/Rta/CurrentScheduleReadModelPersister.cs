@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
+using Teleopti.Interfaces;
+
+namespace Teleopti.Ccc.Infrastructure.Rta
+{
+	public class CurrentScheduleReadModelPersister : IScheduleReader, ICurrentScheduleReadModelPersister
+	{
+		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
+		private readonly IJsonSerializer _serializer;
+		private readonly IJsonDeserializer _deserializer;
+		private readonly IKeyValueStorePersister _keyValues;
+
+		private string _version;
+		private IEnumerable<ScheduledActivity> _cache = Enumerable.Empty<ScheduledActivity>();
+
+		public CurrentScheduleReadModelPersister(
+			ICurrentReadModelUnitOfWork unitOfWork, 
+			IJsonSerializer serializer, 
+			IJsonDeserializer deserializer,
+			IKeyValueStorePersister keyValues)
+		{
+			_unitOfWork = unitOfWork;
+			_serializer = serializer;
+			_deserializer = deserializer;
+			_keyValues = keyValues;
+		}
+
+		public IEnumerable<ScheduledActivity> Read()
+		{
+			var version = _keyValues.Get("CurrentScheduleReadModelVersion");
+			if (_version == version && _cache.Any())
+				return _cache;
+
+			_cache = _unitOfWork.Current()
+				.CreateSqlQuery("SELECT Schedule FROM ReadModel.CurrentSchedule")
+				.List<string>()
+				.SelectMany(x => _deserializer.DeserializeObject<IEnumerable<ScheduledActivity>>(x ?? "[]"))
+				.ToArray();
+			_version = version;
+
+			return _cache;
+		}
+
+		public void Invalidate(Guid personId)
+		{
+			var updated = _unitOfWork.Current()
+				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Valid = 0 WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", personId)
+				.ExecuteUpdate();
+
+			if (updated == 0)
+				_unitOfWork.Current()
+					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Valid) VALUES (:PersonId, 0)")
+					.SetParameter("PersonId", personId)
+					.ExecuteUpdate();
+		}
+
+		public IEnumerable<Guid> GetInvalid()
+		{
+			return _unitOfWork.Current()
+				.CreateSqlQuery("SELECT PersonId FROM ReadModel.CurrentSchedule WHERE Valid = 0")
+				.List<Guid>();
+		}
+
+		public void Persist(Guid personId, IEnumerable<ScheduledActivity> schedule)
+		{
+			if (schedule.IsEmpty())
+			{
+				_unitOfWork.Current()
+					.CreateSqlQuery("DELETE ReadModel.CurrentSchedule WHERE PersonId = :PersonId")
+					.SetParameter("PersonId", personId)
+					.ExecuteUpdate();
+				return;
+			}
+			var serializedSchedule = _serializer.SerializeObject(schedule);
+
+			var updated = _unitOfWork.Current()
+				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Schedule = :Schedule, Valid = 1 WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", personId)
+				.SetParameter("Schedule", serializedSchedule)
+				.ExecuteUpdate();
+
+			if (updated == 0)
+				_unitOfWork.Current()
+					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, Valid) VALUES (:PersonId, :Schedule, 1)")
+					.SetParameter("PersonId", personId)
+					.SetParameter("Schedule", serializedSchedule)
+					.ExecuteUpdate();
+		}
+	}
+}

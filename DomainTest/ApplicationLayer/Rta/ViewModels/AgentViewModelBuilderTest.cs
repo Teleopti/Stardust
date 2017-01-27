@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(teamId, "angel")
 				.WithAgent(personId, "John Smith", 123)
 				.WithSkill(skillId)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 			
@@ -157,11 +157,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(redId, "red")
 				.WithAgent(john, "John Smith", 123)
 				.WithSkill(skill)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithTeam(greenId, "green")
 				.WithAgent(bill, "Bill Gates", 124)
 				.WithSkill(skill)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 
@@ -191,12 +191,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(red, "red")
 				.WithAgent(john, "John Smith", 123)
 				.WithSkill(skill)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithSite(london, "london")
 				.WithTeam(students, "students")
 				.WithAgent(bill, "Bill Gates", 124)
 				.WithSkill(skill)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 
@@ -225,10 +225,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(teamId, "Angel")
 				.WithAgent(personId1, "John Smith", teamId, siteId)
 				.WithSkill(skill1)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithAgent(personId2, "Ashley Andeen", teamId, siteId)
 				.WithSkill(skill2)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithAgentNameDisplayedAs("{FirstName} {LastName}")
 				;
 
@@ -267,25 +267,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(parisTeam, "parisTeam")
 				.WithAgent(johnSmith, "John Smith", 123)
 				.WithSkill(support)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 
 				.WithSite(london, "london")
 				.WithTeam(londonTeam1, "londonTeam1")
 				.WithAgent(billGates, "Bill Gates", 124)
 				.WithSkill(support)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 
 
 				.WithSite(london, "london")
 				.WithTeam(londonTeam1, "londonTeam1")
 				.WithAgent(pierreBaldi, "Pierre Baldi", 125)
 				.WithSkill(sales)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 
 				.WithTeam(londonTeam2, "londonTeam2")
 				.WithAgent(ashleyAndeen, "Ashley Andeen", 126)
 				.WithSkill(support)
-				.InSkillGroupPage()
+				.InSkillGroupPage_DontUse()
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly Lazy<ScheduleState> _schedule;
+		private readonly Lazy<IEnumerable<ScheduledActivity>> _schedule;
 		private readonly AgentStateFound _found;
 
 		public Context(
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid teamId, 
 			Guid siteId, 
 			Func<AgentState> stored, 
-			Func<ScheduleState> schedule,
+			Func<IEnumerable<ScheduledActivity>> schedule,
 			IEnumerable<Mapping> mappings,
 			Action<Context> updateState, 
 			StateMapper stateMapper,
@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
-			_schedule = new Lazy<ScheduleState>(schedule); ;
+			_schedule = new Lazy<IEnumerable<ScheduledActivity>>(schedule); ;
 
-			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule.Value.Schedules);
+			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule.Value);
 			Schedule = new ScheduleInfo(this, schedules);
 			State = new StateRuleInfo(this, mappings);
 			Adherence = new AdherenceInfo(this, mappings);
@@ -81,11 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			// no previous state
 			if (Stored == null)
 				return true;
-
-			// new schedules loaded
-			if (_schedule.Value.NewSchedules)
-				return true;
-
+			
 			var isSameState =
 				SnapshotId.Equals(Stored.BatchId) &&
 				Schedule.CurrentActivityId().Equals(Stored.ActivityId) &&
@@ -118,7 +114,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
 		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
 
-		public bool CacheSchedules => _schedule.Value.NewSchedules;
 		public DeadLockVictim DeadLockVictim { get; set; }
 
 		public AgentState MakeAgentState()
@@ -147,10 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				AlarmStartTime = AlarmStartTime,
 
-				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
-
-				Schedule = _schedule.Value.Schedules,
-				NextCheck = Schedule.NextCheck()
+				TimeWindowCheckSum = Schedule.TimeWindowCheckSum()
 			};
 		}
 

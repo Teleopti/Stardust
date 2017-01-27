@@ -21,7 +21,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -93,21 +92,28 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Rta
 			system.AddService<FakeDataSources>();
 			system.AddService<FakeRtaDatabase>();
+
 			system.UseTestDouble<FakeDataSourceReader>().For<IDataSourceReader>();
-			system.UseTestDouble<FakeMappingReader>().For<IMappingReader>();
-			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelLegacyReader, IAgentStateReadModelPersister, IAgentStateReadModelReader>();
+			system.UseTestDouble<FakeMappingReadModelPersister>().For<IMappingReader, IMappingReadModelPersister>();
+			system.UseTestDouble<FakeCurrentScheduleReadModelPersister>().For<ICurrentScheduleReadModelPersister, IScheduleReader>();
 			system.UseTestDouble<FakeAgentStatePersister>().For<IAgentStatePersister>();
+
+			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelLegacyReader, IAgentStateReadModelPersister, IAgentStateReadModelReader>();
 			system.UseTestDouble<FakeHistoricalAdherenceReadModelPersister>().For<IHistoricalAdherenceReadModelReader, IHistoricalAdherenceReadModelPersister>();
 			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader>();
 			system.UseTestDouble<FakeNumberOfAgentsInSiteReader>().For<INumberOfAgentsInSiteReader>();
 			system.UseTestDouble<FakeNumberOfAgentsInTeamReader>().For<INumberOfAgentsInTeamReader>();
-			system.UseTestDouble<FakeMappingReadModelPersister>().For<IMappingReadModelPersister>();
 			system.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			system.UseTestDouble<FakeSiteInAlarmReader>().For<ISiteInAlarmReader>();
 			system.UseTestDouble<FakeTeamInAlarmReader>().For<ITeamInAlarmReader>();
 			//
 
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
+
+			// readmodels
+			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
+			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
+			system.UseTestDouble<FakeKeyValueStorePersister>().For<IKeyValueStorePersister>();
 
 			// licensing
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
@@ -172,9 +178,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
 			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-            // schedule readmodels
-            system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
-			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
 
 			fakePrincipal(system);
 		}

@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-	public class FakeMappingReadModelPersister : IMappingReadModelPersister
+	public class FakeMappingReadModelPersister : IMappingReadModelPersister, IMappingReader
 	{
 		private readonly IList<Mapping> _data = new List<Mapping>();
 		private bool _invalido;
 
-		public IEnumerable<Mapping> Data {get { return _data; }}
+		public IEnumerable<Mapping> Data => _data;
 
 		public void Invalidate()
 		{
@@ -32,6 +33,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public void Add(Mapping mapping)
 		{
 			_data.Add(mapping);
+		}
+
+		public IEnumerable<Mapping> Read()
+		{
+			return _data;
+		}
+
+		public IEnumerable<Mapping> ReadFor(IEnumerable<string> stateCodes, IEnumerable<Guid?> activities)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

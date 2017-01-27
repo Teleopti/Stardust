@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -430,13 +431,25 @@ namespace Teleopti.Ccc.TestCommon
 		}
 		
 		[UnitOfWork]
-		public virtual Database WithLayer(string activityName, DateTime startTime, DateTime endTime)
+		public virtual Database WithAssignedActivity(string activityName, DateTime startTime, DateTime endTime)
+		{
+			withAssignedActivity(activityName, startTime, endTime);
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual Database WithAssignedActivity(string activityName, string startTime, string endTime)
+		{
+			withAssignedActivity(activityName, startTime.Utc(), endTime.Utc());
+			return this;
+		}
+
+		private void withAssignedActivity(string activityName, DateTime startTime, DateTime endTime)
 		{
 			_activity = activityName;
 			startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
 			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 			assignment().AddActivity(activity(), new DateTimePeriod(startTime, endTime));
-			return this;
 		}
 
 		private IActivity activity()

@@ -56,20 +56,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAgent(null, name, null, null, null, null, null, null);
 		}
-
+		
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name)
 		{
 			return database.WithAgent(id, name, null, null, null, null, null, null);
 		}
 
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteid)
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid id)
 		{
-			return database.WithAgent(personId, name, null, teamId, siteid, null, null, null);
+			return database.WithAgent(id, name, null, null, null, null, null, null);
 		}
 
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteid, Guid? businessUnitId)
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteId)
 		{
-			return database.WithAgent(personId, name, null, teamId, siteid, businessUnitId, null, null);
+			return database.WithAgent(personId, name, null, teamId, siteId, null, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteId, Guid? businessUnitId)
+		{
+			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
+		{
+			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid? teamId)
@@ -134,6 +144,70 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			database.WithExternalLogon(name);
 			return database;
 		}
+	}
+
+	public static class FakeDatabaseRuleExtensions
+	{
+		public static FakeDatabase WithRule(this FakeDatabase database)
+		{
+			return database.WithRule(null, "", null, null, 0, null, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode)
+		{
+			return database.WithRule(null, stateCode, null, null, 0, null, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId)
+		{
+			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, null, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect)
+		{
+			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId)
+		{
+			return database.WithRule(ruleId, stateCode, null, activityId, 0, null, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId, string name)
+		{
+			return database.WithRule(ruleId, stateCode, null, activityId, 0, name, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, string name)
+		{
+			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, name, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid platformTypeId, Guid activityId, int staffingEffect, Adherence adherence)
+		{
+			return database.WithRule(Guid.NewGuid(), stateCode, platformTypeId, activityId, staffingEffect, null, adherence);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence)
+		{
+			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, adherence);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId)
+		{
+			return database.WithRule(ruleId, stateCode, null, activityId, 0, null, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId, string name)
+		{
+			return database.WithRule(ruleId, stateCode, null, activityId, 0, name, null);
+		}
+
+		public static FakeDatabase WithRule(this FakeDatabase database, Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
+		{
+			return database.WithRule(ruleId, stateCode, platformTypeId, activityId, staffingEffect, name, adherence, null);
+		}
+
 	}
 
 	public static class FakeDatabasePeriodExtensions
@@ -422,6 +496,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithDataSource(int datasourceId, string sourceId)
+		{
+			if (_dataSources.Datasources.Any(x => x.Key == sourceId))
+				return this;
+			_dataSources.Add(sourceId, datasourceId);
+			return this;
+		}
+
+		public FakeDatabase WithDataSource(string sourceId)
+		{
+			return WithDataSource(new Random().Next(100, 1000), sourceId);
+		}
+
 		public FakeDatabase WithBusinessUnit(Guid? id)
 		{
 			_businessUnit = new BusinessUnit(RandomName.Make());
@@ -513,7 +600,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)
 		{
-			startDate = startDate ?? "2016-01-01";
+			startDate = startDate ?? "2000-01-01";
 
 			ensureExists(_businessUnits, businessUnitId, () => WithBusinessUnit(businessUnitId));
 			ensureExists(_sites, siteId, () => this.WithSite(siteId));
@@ -524,17 +611,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ensureExists(_contractSchedules, null, () => WithContractSchedule(null));
 
 			var personContract = new PersonContract(_contract, _partTimePercentage, _contractSchedule);
-			_personPeriod = new PersonPeriod(startDate.Date(), personContract, _team);
-			_person.AddPersonPeriod(_personPeriod);
+			_person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, _team));
+			_personPeriod = _person.Period(startDate.Date()) as PersonPeriod;
 
-			return this;
-		}
-
-		public FakeDatabase WithDataSource(int datasourceId, string sourceId)
-		{
-			if (_dataSources.Datasources.Any(x => x.Key == sourceId))
-				return this;
-			_dataSources.Add(sourceId, datasourceId);
 			return this;
 		}
 
@@ -606,7 +685,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAssignments.Has(_personAssignment);
 			return this;
 		}
-		
+
 		public FakeDatabase WithAssignment(Guid? personId, string date)
 		{
 			var existingPerson = _persons.LoadAll().SingleOrDefault(x => x.Id == personId);
@@ -696,6 +775,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithActivity(Guid? id, string name, Color? color)
 		{
+			return WithActivity(id, name, null, color);
+		}
+
+		public FakeDatabase WithActivity(Guid? id, string name, string shortName, Color? color)
+		{
 			var existing = _activities.LoadAll().SingleOrDefault(x => x.Id == id);
 			if (existing != null)
 			{
@@ -703,7 +787,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				return this;
 			}
 
-			_activity = new Activity(name ?? RandomName.Make());
+			name = name ?? RandomName.Make();
+			_activity = new Activity {Description = new Description(name, shortName)};
 			_activity.SetId(id ?? Guid.NewGuid());
 			_activity.SetBusinessUnit(_businessUnit);
 			if (color.HasValue)
@@ -735,28 +820,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skill = skill;
 		}
 
-		public FakeDatabase InSkillGroupPage()
-		{
-			_groupings
-				.Has(new ReadOnlyGroupDetail
-				{
-					GroupId = _skill.Id.Value,
-					PersonId = _person.Id.Value,
-					SiteId = _site.Id.Value,
-					TeamId = _team.Id.Value,
-					FirstName = _person.Name.FirstName,
-					LastName = _person.Name.LastName,
-					EmploymentNumber = _person.EmploymentNumber
-				});
-			return this;
-		}
-
 		public FakeDatabase WithPlatform(Guid? platform)
 		{
 			_platform = platform ?? Guid.NewGuid();
 			return this;
 		}
-		
+
 		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
@@ -852,26 +921,50 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_rtaRule.AlarmColor = color.GetValueOrDefault();
 			return this;
 		}
-		
-		public FakeDatabase WithAgentState(AgentStateReadModel agentStateReadModel)
+
+		public FakeDatabase WithAlarm(TimeSpan threshold)
+		{
+			return WithAlarm(threshold, null);
+		}
+
+		public FakeDatabase ClearAssignments(Guid? personId)
+		{
+			var toRemove = _personAssignments.LoadAll().Where(x => x.Person.Id == personId).ToArray();
+			toRemove.ForEach(_personAssignments.Remove);
+			return this;
+		}
+
+
+
+
+
+		public FakeDatabase WithAgentState_DontUse(AgentStateReadModel agentStateReadModel)
 		{
 			_siteInAlarmReader.Has(agentStateReadModel);
 			_teamInAlarmReader.Has(agentStateReadModel);
 			return this;
 		}
 		
-		public FakeDatabase OnSkill(Guid skill)
+		public FakeDatabase OnSkill_DontUse(Guid skill)
 		{
 			_siteInAlarmReader.OnSkill(skill);
 			_teamInAlarmReader.OnSkill(skill);
 			return this;
 		}
 
-		public FakeDatabase ClearScheduleData(Guid? personId)
+		public FakeDatabase InSkillGroupPage_DontUse()
 		{
-			var toRemove = _personAssignments.LoadAll().Where(x => x.Person.Id == personId).ToArray();
-			toRemove.ForEach(_personAssignments.Remove);
-
+			_groupings
+				.Has(new ReadOnlyGroupDetail
+				{
+					GroupId = _skill.Id.Value,
+					PersonId = _person.Id.Value,
+					SiteId = _site.Id.Value,
+					TeamId = _team.Id.Value,
+					FirstName = _person.Name.FirstName,
+					LastName = _person.Name.LastName,
+					EmploymentNumber = _person.EmploymentNumber
+				});
 			return this;
 		}
 
@@ -901,6 +994,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
-
+		
 	}
 }

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
-			
+
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();

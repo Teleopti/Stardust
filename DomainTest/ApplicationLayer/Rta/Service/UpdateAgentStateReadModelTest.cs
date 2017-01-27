@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -124,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 			Database
-				.ClearSchedule(person)
+				.ClearAssignments(person)
 				.WithSchedule(person, phone, "Phone", "2016-05-30 14:30", "2016-05-30 16:00");
 			Now.Is("2016-05-30 14:01");
 			Target.CheckForActivityChanges(Database.TenantName());

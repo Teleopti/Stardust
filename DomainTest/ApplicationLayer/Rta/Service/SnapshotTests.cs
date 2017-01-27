@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -148,8 +149,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithDataSource("source1")
-				.WithAgent("usercode1", "source1", Guid.NewGuid())
-				.WithAgent("usercode2", "source1", personId)
+				.WithAgent("usercode1", Guid.NewGuid())
+				.WithAgent("usercode2", personId)
 				.WithRule("statecode1", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
@@ -197,9 +198,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithDataSource("source1")
-				.WithAgent("usercode1", "source1", Guid.NewGuid())
+				.WithAgent("usercode1", Guid.NewGuid())
 				.WithDataSource("source2")
-				.WithAgent("usercode2", "source2", personId)
+				.WithAgent("usercode2", personId)
 				.WithRule("statecode1", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");

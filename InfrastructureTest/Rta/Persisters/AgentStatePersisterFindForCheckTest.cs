@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			result.PersonId.Should().Be(person);
 			result.UserCode.Should().Be("user");
-			result.NextCheck.Should().Be(null);
+			result.LastCheck.Should().Be(null);
 		}
 
 		[Test]
@@ -44,13 +44,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Update(new AgentState
 			{
 				PersonId = person,
-				NextCheck = "2016-10-26 12:00".Utc()
-			}, true);
+				ReceivedTime = "2016-10-26 12:00".Utc()
+			});
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.UserCode.Should().Be("user");
-			result.NextCheck.Should().Be("2016-10-26 12:00".Utc());
+			result.LastCheck.Should().Be("2016-10-26 12:00".Utc());
 		}
 
 		[Test]
@@ -65,17 +65,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Update(new AgentState
 			{
 				PersonId = person,
-				NextCheck = null
-			}, true);
+				ReceivedTime = null
+			});
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.UserCode.Should().Be("user");
-			result.NextCheck.Should().Be(null);
+			result.LastCheck.Should().Be(null);
 		}
-
+		
 		[Test]
-		public void ShouldFindNoTimeAfterScheduleInvalidation()
+		public void ShouldFindWithTimeWindowCheckSum()
 		{
 			var person = Guid.NewGuid();
 			Persister.Prepare(new AgentStatePrepare
@@ -86,14 +86,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Update(new AgentState
 			{
 				PersonId = person,
-				NextCheck = "2016-10-26 13:00".Utc()
-			}, true);
-			Persister.InvalidateSchedules(person, DeadLockVictim.Yes);
+				ReceivedTime = "2016-10-26 12:00".Utc(),
+				TimeWindowCheckSum = 123
+			});
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.UserCode.Should().Be("user");
-			result.NextCheck.Should().Be(null);
+			result.LastTimeWindowCheckSum.Should().Be(123);
 		}
 
 

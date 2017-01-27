@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Now.Is("2015-09-21 09:00");
 			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
-			Database.ClearSchedule(personId);
+			Database.ClearAssignments(personId);
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 09:05".Utc());
@@ -235,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
 			Database
-				.ClearSchedule(personId)
+				.ClearAssignments(personId)
 				.WithSchedule(personId, phone, "2015-09-21 09:00", "2015-09-21 12:00")
 				.WithSchedule(personId, lunch, "2015-09-21 12:00", "2015-09-21 13:00")
 				;
@@ -259,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
 			Database
-				.ClearSchedule(personId)
+				.ClearAssignments(personId)
 				.WithSchedule(personId, admin, "2015-09-21 09:00", "2015-09-21 11:00")
 				;
 			Target.CheckForActivityChanges(Database.TenantName());

@@ -242,9 +242,12 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsRequestMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalCloseSnapshotWebModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\AgentStateMaintainer.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\CurrentScheduleReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ScheduleChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\IAnalyticsPersonPeriodMapNotDefined.cs" />
@@ -252,7 +255,8 @@
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelPersister.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IScheduleCacheStrategy.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ICurrentScheduleReadModelPersister.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IScheduleReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilder.cs" />
@@ -820,7 +824,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\InvalidUserCodeException.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModel.cs" />
     <Compile Include="ApplicationLayer\TestHandlers.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventCollector.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IContextLoader.cs" />

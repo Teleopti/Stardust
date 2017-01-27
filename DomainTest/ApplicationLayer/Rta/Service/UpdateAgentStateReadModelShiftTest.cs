@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Interfaces;
 
@@ -183,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(person, Color.Orange, "2016-05-30 12:00", "2016-05-30 13:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
-			Database.ClearSchedule(person)
+			Database.ClearAssignments(person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
 				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
 				.WithSchedule(person, Color.Pink, "2016-05-30 12:00", "2016-05-30 13:00");
@@ -206,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(person, Color.Orange, "2016-05-30 12:00", "2016-05-30 13:00");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.ClearSchedule(person)
+			Database.ClearAssignments(person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
 				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
 				.WithSchedule(person, Color.Pink, "2016-05-30 12:00", "2016-05-30 13:00");

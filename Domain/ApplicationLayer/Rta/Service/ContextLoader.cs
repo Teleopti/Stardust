@@ -15,13 +15,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(IScheduleCacheStrategy scheduleCacheStrategy,
+		public ContextLoaderWithSpreadTransactionLockStrategy(
 			ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper,
 			IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader,
 			ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier)
-			: base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister,
+			: base(dataSource, databaseLoader, now, stateMapper, agentStatePersister,
 				mappingReader, scheduleReader, appliedAlarm, config, deadLockRetrier)
 		{
 		}
@@ -67,7 +68,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ContextLoader : IContextLoader
 	{
 		private static readonly ILog _logger = LogManager.GetLogger("PerfLog.Rta");
-		private readonly IScheduleCacheStrategy _scheduleCacheStrategy;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly IDatabaseLoader _databaseLoader;
 		protected readonly INow _now;
@@ -80,7 +80,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly DeadLockRetrier _deadLockRetrier;
 
 		public ContextLoader(
-			IScheduleCacheStrategy scheduleCacheStrategy,
 			ICurrentDataSource dataSource,
 			IDatabaseLoader databaseLoader,
 			INow now,
@@ -92,7 +91,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IConfigReader config,
 			DeadLockRetrier deadLockRetrier)
 		{
-			_scheduleCacheStrategy = scheduleCacheStrategy;
 			_dataSource = dataSource;
 			_databaseLoader = databaseLoader;
 			_now = now;
@@ -123,42 +121,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForActivityChanges(Action<Context> action)
 		{
-			var time = _now.UtcDateTime();
-			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck())
-				.Where(x => x.NextCheck == null || x.NextCheck <= time)
-				.ToArray();
-			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons, time));
+			process(new activityChangesStrategy(_config, _agentStatePersister, _scheduleReader, action, _now.UtcDateTime()));
 		}
 
-		[AllBusinessUnitsUnitOfWork]
-		[ReadModelUnitOfWork]
-		[AnalyticsUnitOfWork]
-		protected virtual void WithUnitOfWork(Action action)
+		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
 		{
-			action.Invoke();
-		}
+			private readonly IScheduleReader _scheduleReader;
 
-		[AllBusinessUnitsUnitOfWork]
-		[ReadModelUnitOfWork]
-		[AnalyticsUnitOfWork]
-		protected virtual T WithUnitOfWork<T>(Func<T> func)
-		{
-			return func.Invoke();
-		}
+			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, IScheduleReader scheduleReader, Action<Context> action, DateTime time) : base(config, persister, action, time)
+			{
+				_scheduleReader = scheduleReader;
+				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
+				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
+				DeadLockVictim = DeadLockVictim.Yes;
+			}
 
-		protected int ValidateSourceId(IValidatable input)
-		{
-			return ValidateSourceId(_databaseLoader, input);
-		}
+			public override IEnumerable<ExternalLogon> AllItems(strategyContext context)
+			{
+				IEnumerable<ExternalLogonForCheck> externalLogons = null;
+				IEnumerable<ScheduledActivity> schedule = null;
+				context.withUnitOfWork(() =>
+				{
+					externalLogons = _persister.FindForCheck();
+					schedule = _scheduleReader.Read();
+				});
+				return externalLogons
+					.Where(x =>
+					{
+						var activities = schedule.Where(a => a.PersonId == x.PersonId).ToArray();
+						var nextCheck = ScheduleInfo.NextCheck(activities, x.LastTimeWindowCheckSum, x.LastCheck);
+						return nextCheck == null || nextCheck <= CurrentTime;
+					})
+					.ToArray();
+			}
 
-		public static int ValidateSourceId(IDatabaseLoader databaseLoader, IValidatable input)
-		{
-			if (string.IsNullOrEmpty(input.SourceId))
-				throw new InvalidSourceException("Source id is required");
-			int dataSourceId;
-			if (!databaseLoader.Datasources().TryGetValue(input.SourceId, out dataSourceId))
-				throw new InvalidSourceException($"Source id \"{input.SourceId}\" not found");
-			return dataSourceId;
+			public override IEnumerable<AgentState> LockNLoad(IEnumerable<ExternalLogon> ids, strategyContext context)
+			{
+				return _persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim);
+			}
+
+			public override InputInfo GetInputFor(AgentState state)
+			{
+				return null;
+			}
 		}
 
 		private class singleStrategy : baseStrategy<StateInputModel>
@@ -174,12 +179,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				MaxTransactionSize = 1;
 			}
 
-			public override IEnumerable<StateInputModel> AllItems()
+			public override IEnumerable<StateInputModel> AllItems(strategyContext context)
 			{
 				return new[] {_model};
 			}
 
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<StateInputModel> things, Action<Exception> addException)
+			public override IEnumerable<AgentState> LockNLoad(IEnumerable<StateInputModel> things, strategyContext context)
 			{
 				try
 				{
@@ -194,7 +199,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				}
 				catch (Exception e)
 				{
-					addException(e);
+					context.addException(e);
 				}
 
 				return Enumerable.Empty<AgentState>();
@@ -232,16 +237,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					stopwatch.Start();
 					realUpdater(context);
 					stopwatch.Stop();
-					_logger.Debug($"Update agentstate completed, agent: {context.PersonId}, update schedule: {context.CacheSchedules}, time: {stopwatch.ElapsedMilliseconds}");
+					_logger.Debug($"Update agentstate completed, agent: {context.PersonId}, time: {stopwatch.ElapsedMilliseconds}");
 				};
 			}
 
-			public override IEnumerable<BatchStateInputModel> AllItems()
+			public override IEnumerable<BatchStateInputModel> AllItems(strategyContext context)
 			{
 				return _batch.States.OrderBy(x => x.UserCode).ToArray();
 			}
 
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<BatchStateInputModel> states, Action<Exception> addException)
+			public override IEnumerable<AgentState> LockNLoad(IEnumerable<BatchStateInputModel> states, strategyContext context)
 			{
 				var dataSourceId = ValidateSourceId(_databaseLoader, _batch);
 				var userCodes = states
@@ -260,7 +265,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				userCodes
 					.Where(x => agentStates.All(s => s.UserCode != x.UserCode))
 					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {_batch.SourceId}"))
-					.ForEach(addException);
+					.ForEach(context.addException);
 
 				return agentStates;
 			}
@@ -280,34 +285,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		protected class activityChangesStrategy : baseStrategy<ExternalLogonForCheck>
-		{
-			private readonly IEnumerable<ExternalLogonForCheck> _things;
-
-			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogonForCheck> things, DateTime time) : base(config, persister, action, time)
-			{
-				_things = things;
-				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
-				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
-				DeadLockVictim = DeadLockVictim.Yes;
-			}
-
-			public override IEnumerable<ExternalLogonForCheck> AllItems()
-			{
-				return _things.OrderBy(x => x.NormalizedString()).ToArray();
-			}
-
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogonForCheck> ids, Action<Exception> addException)
-			{
-				return _persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim);
-			}
-
-			public override InputInfo GetInputFor(AgentState state)
-			{
-				return null;
-			}
-		}
-		
 		private class closingSnapshotStrategy : baseStrategy<ExternalLogon>
 		{
 			private readonly DateTime _snapshotId;
@@ -321,12 +298,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				MaxTransactionSize = _config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 			}
 
-			public override IEnumerable<ExternalLogon> AllItems()
+			public override IEnumerable<ExternalLogon> AllItems(strategyContext context)
 			{
 				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
 
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
+			public override IEnumerable<AgentState> LockNLoad(IEnumerable<ExternalLogon> ids, strategyContext context)
 			{
 				return _persister.Find(ids, DeadLockVictim);
 			}
@@ -341,7 +318,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				};
 			}
 		}
-		
+
 		protected abstract class baseStrategy<T> : IStrategy<T>
 		{
 			protected readonly IConfigReader _config;
@@ -359,7 +336,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Action = action;
 				CurrentTime = time;
 				DeadLockVictim = DeadLockVictim.No;
-				UpdateAgentState = c => _persister.Update(c.MakeAgentState(), c.CacheSchedules);
+				UpdateAgentState = c => _persister.Update(c.MakeAgentState());
 			}
 
 			public DateTime CurrentTime { get; }
@@ -367,9 +344,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public int ParallelTransactions { get; protected set; }
 			public int MaxTransactionSize { get; protected set; }
 
-			public abstract IEnumerable<T> AllItems();
+			public abstract IEnumerable<T> AllItems(strategyContext context);
 
-			public abstract IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
+			public abstract IEnumerable<AgentState> LockNLoad(IEnumerable<T> things, strategyContext context);
 
 			public abstract InputInfo GetInputFor(AgentState state);
 
@@ -382,29 +359,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public Action<Context> Action { get; }
 		}
-
-		public class scheduleData : ScheduleState
-		{
-			public Guid PersonId;
-
-			public scheduleData(IEnumerable<ScheduledActivity> schedules, bool newSchedules, Guid personId) : base(schedules, newSchedules)
-			{
-				PersonId = personId;
-			}
-		}
-
-		public class sharedData
-		{
-			public IEnumerable<Mapping> mappings;
-		}
-
-		public class transactionData
-		{
-			public IEnumerable<scheduleData> schedules;
-			public IEnumerable<AgentState> agentStates;
-			public IEnumerable<Mapping> mappings;
-		}
-
+		
 		public interface IStrategy<T>
 		{
 			DateTime CurrentTime { get; }
@@ -413,9 +368,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			int ParallelTransactions { get; }
 			int MaxTransactionSize { get; }
 
-			IEnumerable<T> AllItems();
+			IEnumerable<T> AllItems(strategyContext context);
 
-			IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
+			IEnumerable<AgentState> LockNLoad(IEnumerable<T> things, strategyContext context);
 
 			InputInfo GetInputFor(AgentState state);
 
@@ -426,21 +381,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Func<AgentState> GetStored(AgentState state);
 		}
 
+		public class strategyContext
+		{
+			public Action<Action> withUnitOfWork;
+			public Action<Exception> addException;
+		}
+
+		public class transactionData
+		{
+			public IEnumerable<AgentState> agentStates;
+			public IEnumerable<Mapping> mappings;
+			public IEnumerable<ScheduledActivity> schedules;
+		}
+
 		protected void process<T>(IStrategy<T> strategy)
 		{
 			var exceptions = new ConcurrentBag<Exception>();
 
-			var items = strategy.AllItems();
+			var strategyContext = new strategyContext
+			{
+				withUnitOfWork = WithUnitOfWork,
+				addException = exceptions.Add
+			};
+			var items = strategy.AllItems(strategyContext);
 			var itemsCount = items.Count();
 			if (itemsCount == 0)
 				return;
 
 			var transactionSize = calculateTransactionSize(strategy.MaxTransactionSize, strategy.ParallelTransactions, itemsCount);
 
-			var shared = new Lazy<sharedData>(loadSharedData);
 			var transactions = items
 				.Batch(transactionSize)
-				.Select(some => new Func<transactionData>(() => loadTransactionData(strategy, some, exceptions, shared)))
+				.Select(some => new Func<transactionData>(() => loadTransactionData(strategy, strategyContext, some)))
 				.ToArray();
 
 			ProcessTransactions(_dataSource.CurrentName(), strategy, transactions, exceptions);
@@ -462,47 +434,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return maxTransactionSize;
 		}
 
-		private sharedData loadSharedData()
+		private transactionData loadTransactionData<T>(IStrategy<T> strategy, strategyContext context, IEnumerable<T> items)
 		{
-			return new sharedData
-			{
-				mappings = _mappingReader.Read()
-			};
-		}
-
-		private transactionData loadTransactionData<T>(IStrategy<T> strategy, IEnumerable<T> items, ConcurrentBag<Exception> exceptions, Lazy<sharedData> shared)
-		{
-			var agentStates = strategy.GetStatesFor(items, exceptions.Add);
-
-			var validated = agentStates
-				.GroupBy(x => x.PersonId, (_, states) => states.First())
-				.Select(x => new
-				{
-					state = x,
-					valid = _scheduleCacheStrategy.ValidateCached(x, strategy.CurrentTime)
-				})
-				.ToArray();
-			var schedules = validated
-				.Where(x => x.valid)
-				.Select(x => new scheduleData(x.state.Schedule, false, x.state.PersonId));
-			var loadSchedulesFor = validated
-				.Where(x => !x.valid)
-				.Select(x => new PersonBusinessUnit { BusinessUnitId = x.state.BusinessUnitId, PersonId = x.state.PersonId })
-				.ToArray();
-			if (loadSchedulesFor.Any())
-			{
-				var loaded = _scheduleReader.GetCurrentSchedules(strategy.CurrentTime, loadSchedulesFor);
-				var loadedSchedules = loadSchedulesFor
-					.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x.PersonId), strategy.CurrentTime), true, x.PersonId));
-				schedules = schedules.Concat(loadedSchedules);
-			}
-			schedules = schedules.ToArray();
-
+			var agentStates = strategy.LockNLoad(items, context);
 			return new transactionData
 			{
 				agentStates = agentStates,
-				mappings = shared.Value.mappings,
-				schedules = schedules
+				mappings = _mappingReader.Read(),
+				schedules = _scheduleReader.Read()
 			};
 		}
 
@@ -533,7 +472,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual void Transaction<T>(
 			string tenant,
 			IStrategy<T> strategy,
-			Func<transactionData> transactionData)
+			Func<transactionData> transactionData
+			)
 		{
 			WithUnitOfWork(() =>
 			{
@@ -550,7 +490,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						strategy.GetStored(state),
-						() => data.schedules.Single(s => s.PersonId == state.PersonId),
+						() => data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(),
 						data.mappings,
 						strategy.UpdateAgentState,
 						_stateMapper,
@@ -559,5 +499,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 			});
 		}
+
+		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
+		[AnalyticsUnitOfWork]
+		protected virtual void WithUnitOfWork(Action action)
+		{
+			action.Invoke();
+		}
+
+		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
+		[AnalyticsUnitOfWork]
+		protected virtual T WithUnitOfWork<T>(Func<T> func)
+		{
+			return func.Invoke();
+		}
+
+		protected int ValidateSourceId(IValidatable input)
+		{
+			return ValidateSourceId(_databaseLoader, input);
+		}
+
+		public static int ValidateSourceId(IDatabaseLoader databaseLoader, IValidatable input)
+		{
+			if (string.IsNullOrEmpty(input.SourceId))
+				throw new InvalidSourceException("Source id is required");
+			int dataSourceId;
+			if (!databaseLoader.Datasources().TryGetValue(input.SourceId, out dataSourceId))
+				throw new InvalidSourceException($"Source id \"{input.SourceId}\" not found");
+			return dataSourceId;
+		}
+
 	}
 }

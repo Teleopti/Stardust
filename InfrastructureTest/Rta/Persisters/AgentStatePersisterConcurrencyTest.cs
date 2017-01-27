@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				all.ForEach(m =>
 				{
 					m.StateCode = (int.Parse(m.StateCode ?? "0") + 1).ToString();
-					_persister.Update(m, false);
+					_persister.Update(m);
 				});
 			}
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				model.ReceivedTime = model.ReceivedTime ?? "2016-03-15 00:00:00".Utc();
 				model.BatchId = model.BatchId ?? batchId;
 				model.SourceId = model.SourceId ?? sourceId;
-				_persister.Update(model, false);
+				_persister.Update(model);
 			}
 
 			[UnitOfWork]

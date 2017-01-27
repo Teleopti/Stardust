@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithAgent("user")
-				.WithTenant("key");
+				.WithTenant("tenant", "key");
 
 			Target.SaveState(new StateForTest
 			{
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithAgent("user")
-				.WithTenant(LegacyAuthenticationKey.TheKey);
+				.WithTenant("tenant", LegacyAuthenticationKey.TheKey);
 
 			Target.SaveState(new StateForTest
 			{
@@ -60,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldNotAcceptLegacyAuthenticationKeyIf2Tenants()
 		{
 			Database
-				.WithTenant(LegacyAuthenticationKey.TheKey)
-				.WithTenant("key");
+				.WithTenant("tenant1", LegacyAuthenticationKey.TheKey)
+				.WithTenant("tenant2", "key");
 
 			Assert.Throws(typeof (LegacyAuthenticationKeyException),
 				() => Target.SaveState(new StateForTest
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithAgent("user")
-				.WithTenant(LegacyAuthenticationKey.TheKey);
+				.WithTenant("tenant", LegacyAuthenticationKey.TheKey);
 
 			Target.SaveState(new StateForTest
 			{
@@ -91,8 +92,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldThrowIfMultipleTenantsAndLegacyAuthenticationKeyIsUsed()
 		{
-			Database.WithTenant(LegacyAuthenticationKey.TheKey);
-			Database.WithTenant("key");
+			Database.WithTenant("tenant1", LegacyAuthenticationKey.TheKey);
+			Database.WithTenant("tenant2", "key");
 
 			Assert.Throws(typeof (LegacyAuthenticationKeyException),
 				() => Target.SaveState(new StateForTest
