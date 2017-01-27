@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			MissingForecastProvider.MissingForecast = new MissingForecastModel[] {};
 			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
-			result.Content.Skills.Should().Be.Empty();
+			result.Content.ValidationResult.InvalidResources.Should().Be.Empty();
 		}
 
 		[Test]
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				}
 			};
 			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
-			result.Content.Skills.Should().Not.Be.Empty();
+			result.Content.ValidationResult.InvalidResources.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnDefaultPlanningPeriodIfNotCreated()
 		{
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
-			result.Content.Count().Should().Be.EqualTo(1);
+			result.Content.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28))));
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
-			result.Content.Count().Should().Be.EqualTo(3);
+			result.Content.Count.Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -160,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)
 				Target.GetAllPlanningPeriods(new DateTime(2015, 06, 01), new DateTime(2015, 06, 16));
-			result.Content.Count().Should().Be.EqualTo(2);
+			result.Content.Count.Should().Be.EqualTo(2);
 		}
 
 

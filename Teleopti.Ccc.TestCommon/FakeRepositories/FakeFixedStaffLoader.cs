@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public PeopleSelection Load(DateOnlyPeriod period)
 		{
+			_people = _people ?? new IPerson[0];
 			return new PeopleSelection(_people,_people);
 		}
 	}

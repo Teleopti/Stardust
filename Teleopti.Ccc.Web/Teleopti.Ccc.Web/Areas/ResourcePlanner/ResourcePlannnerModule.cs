@@ -6,6 +6,7 @@ using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
@@ -17,6 +18,39 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			builder.RegisterType<MissingForecastProvider>()
 				.SingleInstance()
 				.As<IMissingForecastProvider>();
+
+			builder.RegisterType<BasicSchedulingValidator>()
+				.SingleInstance()
+				.As<IBasicSchedulingValidator>();
+
+			builder.RegisterType<PersonSkillValidator>()
+				.SingleInstance()
+				.As<IPersonSkillValidator>();
+
+			builder.RegisterType<PersonPeriodValidator>()
+				.SingleInstance()
+				.As<IPersonPeriodValidator>();
+
+			builder.RegisterType<PersonSchedulePeriodValidator>()
+				.SingleInstance()
+				.As<IPersonSchedulePeriodValidator>();
+
+			builder.RegisterType<PersonShiftBagValidator>()
+				.SingleInstance()
+				.As<IPersonShiftBagValidator>();
+
+			builder.RegisterType<PersonPartTimePercentageValidator>()
+				.SingleInstance()
+				.As<IPersonPartTimePercentageValidator>();
+
+			builder.RegisterType<PersonContractValidator>()
+				.SingleInstance()
+				.As<IPersonContractValidator>();
+
+			builder.RegisterType<PersonContractScheduleValidator>()
+				.SingleInstance()
+				.As<IPersonContractScheduleValidator>();
+
 			builder.RegisterType<NextPlanningPeriodProvider>()
 				.SingleInstance()
 				.As<INextPlanningPeriodProvider>();

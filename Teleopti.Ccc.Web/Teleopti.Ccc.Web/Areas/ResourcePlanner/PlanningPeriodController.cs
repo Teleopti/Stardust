@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -18,19 +19,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class PlanningPeriodController : ApiController
 	{
 		private readonly INextPlanningPeriodProvider _nextPlanningPeriodProvider;
-		private readonly IMissingForecastProvider _missingForecastProvider;
 		private readonly IPlanningPeriodRepository _planningPeriodRespository;
 		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly INow _now;
+		private readonly IBasicSchedulingValidator _basicSchedulingValidator;
 
-		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
-			IMissingForecastProvider missingForecastProvider, IPlanningPeriodRepository planningPeriodRespository, IFixedStaffLoader fixedStaffLoader, INow now)
+		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider, IPlanningPeriodRepository planningPeriodRespository, IFixedStaffLoader fixedStaffLoader, INow now, IBasicSchedulingValidator basicSchedulingValidator)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
-			_missingForecastProvider = missingForecastProvider;
 			_planningPeriodRespository = planningPeriodRespository;
 			_fixedStaffLoader = fixedStaffLoader;
 			_now = now;
+			_basicSchedulingValidator = basicSchedulingValidator;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
 			var period = new DateOnlyPeriod (new DateOnly (startDate), new DateOnly (endDate));
-			var allPlanningPeriods = _planningPeriodRespository.LoadAll().Where (planningPeriod => (period.Intersection(planningPeriod.Range) != null));
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll().Where (planningPeriod => period.Intersection(planningPeriod.Range) != null);
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false);
 		}
 
@@ -54,13 +54,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range),planningPeriod.State);
+			var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
+			{
+				Period = planningPeriod.Range,
+				People = _fixedStaffLoader.Load(planningPeriod.Range).AllPeople.ToList()
+			});
+			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, validationResults);
 			return Ok(planningPeriodModel);
-		}
-
-		private IEnumerable<MissingForecastModel> getMissingForecast(DateOnlyPeriod planningPeriodRange)
-		{
-			return _missingForecastProvider.GetMissingForecast(planningPeriodRange);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions")]
@@ -92,7 +92,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				PeriodType = model.PeriodType,
 				StartDate = new DateOnly(model.DateFrom)
 			});
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range), planningPeriod.State);
+			var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
+			{
+				Period = planningPeriod.Range,
+				People = _fixedStaffLoader.Load(planningPeriod.Range).AllPeople.ToList()
+			});
+			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, validationResults);
 			return Ok(planningPeriodModel);
 		}
 
@@ -123,22 +128,29 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				if (createDefaultPlanningPeriod)
 				{
 					var planningPeriod = _nextPlanningPeriodProvider.Current();
+					var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
+					{
+						Period = planningPeriod.Range,
+						People = _fixedStaffLoader.Load(planningPeriod.Range).AllPeople.ToList()
+					});
 					availablePlanningPeriods.Add (createPlanningPeriodModel (planningPeriod.Range,
-						planningPeriod.Id.GetValueOrDefault(),
-						getMissingForecast (planningPeriod.Range), planningPeriod.State));
+						planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, validationResults));
 				}
 			}
 			else
 			{
 				allPlanningPeriods.ForEach(
 					pp =>
-						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(),
-							getMissingForecast(pp.Range), pp.State)));
+						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), pp.State, _basicSchedulingValidator.Validate(new ValidationParameters
+							{
+								Period = pp.Range,
+								People = _fixedStaffLoader.Load(pp.Range).AllPeople.ToList()
+							}))));
 			}
 			return Ok(availablePlanningPeriods);
 		}
 
-		private PlanningPeriodModel createPlanningPeriodModel(DateOnlyPeriod range, Guid id, IEnumerable<MissingForecastModel> skills, PlanningPeriodState state)
+		private PlanningPeriodModel createPlanningPeriodModel(DateOnlyPeriod range, Guid id, PlanningPeriodState state, ValidationResult validationResult)
 		{
 			return new PlanningPeriodModel
 			{
@@ -146,8 +158,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				EndDate = range.EndDate.Date,
 				Id = id,
 				HasNextPlanningPeriod = hasNextPlanningPeriod(range.EndDate.AddDays(1)),
-				Skills = skills,
-				State = state.ToString()
+				State = state.ToString(),
+				ValidationResult = validationResult
 			};
 		}
 

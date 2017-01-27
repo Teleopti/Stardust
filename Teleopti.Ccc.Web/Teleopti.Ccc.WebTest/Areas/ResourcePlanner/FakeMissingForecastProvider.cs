@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 		public IEnumerable<MissingForecastModel> GetMissingForecast(DateOnlyPeriod range)
 		{
-			return MissingForecast;
+			return MissingForecast ?? new MissingForecastModel[0];
 		}
 	}
 }

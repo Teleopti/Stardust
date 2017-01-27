@@ -61,6 +61,12 @@
 					}, handleScheduleOrOptimizeError);
 				};
 
+				$scope.shouldShowValidationErrors = function (planningPeriod) {
+					return planningPeriod.ValidationResult != undefined &&
+						planningPeriod.ValidationResult.InvalidResources.length > 0
+						 && planningPeriod.State === 'New';
+				}
+
 				toggleService.togglesLoaded.then(function() {
 					$scope.isEnabled = toggleService.Wfm_ChangePlanningPeriod_33043;
 				});

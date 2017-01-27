@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner;
-using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	[ForecastProviderTest]
+	[ResourcePlannerTest]
 	public class MissingForecastProviderTest
 	{
 		public IMissingForecastProvider Target;
@@ -140,18 +135,5 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			missingForecast.First().SkillName.Should().Be("A skill");
 			missingForecast.Last().SkillName.Should().Be("Direct Sales");
 		}
-	}
-
-	public class ForecastProviderTestAttribute : IoCTestAttribute
-	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddModule(new WebModule(configuration, null));
-
-			system.UseTestDouble<FakeExistingForecastRepository>().For<IExistingForecastRepository>();
-			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
-
-		}
-		
 	}
 }

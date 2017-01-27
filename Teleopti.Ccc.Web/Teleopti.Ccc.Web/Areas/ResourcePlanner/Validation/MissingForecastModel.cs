@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+﻿namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 {
 	public class MissingForecastModel
 	{

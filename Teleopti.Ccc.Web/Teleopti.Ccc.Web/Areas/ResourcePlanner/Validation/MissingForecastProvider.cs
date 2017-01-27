@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 {
 	public class MissingForecastProvider : IMissingForecastProvider
 	{
