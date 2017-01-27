@@ -300,7 +300,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 
 		[Test]
-		[Ignore("WIP")]
 		public void ShouldHandleCascadingSkills()
 		{
 			Now.Is(new DateTime(2016, 12, 1, 07, 00, 00, DateTimeKind.Utc));
