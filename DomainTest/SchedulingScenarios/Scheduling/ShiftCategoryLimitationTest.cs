@@ -138,8 +138,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.True();
 		}
 
-		[Test, Ignore("When toggle is off, tag is removed. Bug? Or should we keep that behavior?")]
-		public void ShouldKeepTagWhenReplacingShift()
+		[Test, Ignore("Fix later")]
+		public void ShouldSetCorrectTagWhenReplacingShift()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
 			var secondDate = firstDate.AddDays(1);
@@ -171,8 +171,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.True();
 		}
 
-		[Test, Ignore("When toggle is off, shift AND tag is removed. Bug? Or should we keep that behavior?")]
-		public void ShouldKeepTagWhenReplacingShiftAndRollback()
+		[Test, Ignore("Fix later")]
+		public void ShouldSetCorrectTagWhenReplacingShiftAndRollback()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
 			var secondDate = firstDate.AddDays(1);
@@ -189,7 +189,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var tag = new ScheduleTag();
 			var optimizerOriginalPreferences = createOptimizerOriginalPreferences();
 			optimizerOriginalPreferences.SchedulingOptions.TagToUseOnScheduling = tag;
-
 			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
 			agent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
 			var period = new DateOnlyPeriod(firstDate, secondDate);
@@ -207,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		private static OptimizerOriginalPreferences createOptimizerOriginalPreferences()
 		{
-			//maybe we need to run tests with different settings here?
+			//maybe we need to run all tests with different settings here?
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{
 				SchedulingOptions =
