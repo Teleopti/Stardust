@@ -139,6 +139,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		public void ShouldSetCorrectTag()
+		{
+			var firstDate = new DateOnly(2017, 1, 22);
+			var secondDate = firstDate.AddDays(1);
+			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
+			var shiftCategoryAfter = new ShiftCategory("After").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var nightRest = TimeSpan.FromHours(1);
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), nightRest, TimeSpan.FromHours(16)) };
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 1);
+			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var tag = new ScheduleTag();
+			var optimizerOriginalPreferences = createOptimizerOriginalPreferences();
+			optimizerOriginalPreferences.SchedulingOptions.TagToUseOnScheduling = tag;
+			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
+			agent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
+			var period = new DateOnlyPeriod(firstDate, secondDate);
+			var assFirstDate = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var assSecondDate = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { assFirstDate, assSecondDate }, new[] { skillDayFirstDay, skillDaySecondDay });
+
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules[agent].ScheduledDayCollection(period), new OptimizationPreferences(), null);
+
+			stateholder.Schedules[agent].ScheduledDay(firstDate).ScheduleTag()
+				.Should().Be.SameInstanceAs(tag);
+		}
+
+		[Test]
 		public void ShouldKeepTagWhenReplacingShift()
 		{
 			var firstDate = new DateOnly(2017, 1, 22);
