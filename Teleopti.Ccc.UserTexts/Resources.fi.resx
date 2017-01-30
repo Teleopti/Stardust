@@ -10046,7 +10046,7 @@ Jakso: {3}</value>
     <value>Kaavio (loc)</value>
   </data>
   <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
-    <value>Sinun työaikaasi on muutettu</value>
+    <value>Sinun vuoroasi on muutettu. </value>
   </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>SMS-asetukset</value>
@@ -10325,7 +10325,7 @@ Jakso: {3}</value>
     <value>Tuntityöntekijöiden käytettävyyden toteutuminen</value>
   </data>
   <data name="NotWorking" xml:space="preserve">
-    <value>Ei toimi.</value>
+    <value>Vuoro poistettu. </value>
   </data>
   <data name="OfferedChats" xml:space="preserve">
     <value>Tarjotut chatit</value>
@@ -12527,7 +12527,7 @@ Tuoteavain kattaa enintään {2} aktiivista agenttia.
 
 Pääversio: {5}
 
-Tuoteavaimen kattavuus"{3}". 
+Tuoteavaimen skeema"{3}". 
 Seuraavat ominaisuudet ovat aktivoitu:
 {4}</value>
   </data>
@@ -12559,7 +12559,7 @@ Tuoteavain kattaa enintään {2} istuinpaikkaa.
 
 Pääversio: {5}
 
-Tuoteavaimen kattavuus"{3}". 
+Tuoteavaimen skeema"{3}". 
 Seuraavat ominaisuudet ovat aktivoitu:
 {4}</value>
   </data>
@@ -12754,7 +12754,7 @@ Tuoteavain kattaa enintään {1} aktiivista agenttia.
 
 Pääversio: {4}
 
-Tuoteavaimen kattavuus"{2}". 
+Tuoteavaimen skeema"{2}". 
 Seuraavat ominaisuudet ovat aktivoitu:
 {3}</value>
   </data>
@@ -12765,7 +12765,7 @@ Tuoteavain kattaa enintään {1} istuinpaikkaa.
 
 Pääversio: {4}
 
-Tuoteavaimen kattavuus"{2}". 
+Tuoteavaimen skeema"{2}". 
 Seuraavat ominaisuudet ovat aktivoitu:
 {3}</value>
   </data>
@@ -13058,7 +13058,7 @@ Seuraavat ominaisuudet ovat aktivoitu:
     <value>Henkilökohtaista aktiviteettia ei voi lisätä, jos ei ole vuoroa</value>
   </data>
   <data name="HelpLabel" xml:space="preserve">
-    <value>Ohjeita</value>
+    <value>Opastus</value>
   </data>
   <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
     <value>Useita aktiviteetteja ei voi siirtää valituilta henkilöiltä</value>

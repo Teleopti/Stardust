@@ -2137,7 +2137,7 @@ Ausnahme</value>
     <comment>Preferred date or dates not selected before set the preference by clicking Gallery item.</comment>
   </data>
   <data name="ErrorMessagePreferredDatesNotValid" xml:space="preserve">
-    <value>Ungültiges Präferenzdatum. Der Plan wurde für die ausgewählten Daten bereits definiert.</value>
+    <value>Ungültiges Präferenzdatum. Der Plan wurde für die markierten Daten bereits definiert.</value>
     <comment>Error message to show when user try to set preferences for date(s) with schedule or requests.</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
@@ -7278,7 +7278,7 @@ Datum</value>
     <value>Lohn-Export Allgemeine Information</value>
   </data>
   <data name="RunExport" xml:space="preserve">
-    <value>Gewählten Export ausführen</value>
+    <value>Ausgewählten Export ausführen</value>
   </data>
   <data name="Delimiter" xml:space="preserve">
     <value>Trennzeichen</value>
@@ -12983,5 +12983,158 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="IncludeAgentsInStatesColon" xml:space="preserve">
     <value>Mitarbeiter nach Status inkludieren:</value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>RTA Monitoring aktiv</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>Die Zeitspanne kann maximal 60 Tage sein</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Der Tausch der Schichtkategorien für die markierten Mitarbeiter war erfolgreich</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>Die Anfrage anhand der Intra-Tag Besetzungsprüfung prüfen</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>Es ist nicht erlaubt die Schichtkategorien der Mitarbeiter zu bearbeiten</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>Änderungen für diese Mitarbeiter nicht vornehmen</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>Die Schicht überlappt einen freien Tag</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>Nichtüberschreibbare Aktivitäten für diese Mitarbeiter verschieben</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>Die Woche enthält zu viel Arbeitszeit</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>Nichtüberschreibbare Aktivität wurde überschrieben</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>Begrenzung der Schichtkategoriebegrenzung gebrochen - Periode</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>Begrenzung der Schichtkategoriebegrenzung gebrochen - Woche</value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>Besetzungsinformation fehlt für Skill {0}</value>
+  </data>
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>Es ist nicht möglich Änderungen an Mitarbeitern in anderen Zeitzonen vorzunehmen.</value>
+  </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>Die Aktivität kann nicht hinzugefügt werden</value>
+  </data>
+  <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
+    <value>Ihnen fehlt die Berechtigung Abwesenheiten von Mitarbeitern zu löschen</value>
+  </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>Die Abwesenheit kann nicht hinzugefügt werden</value>
+  </data>
+  <data name="NoSitesFound" xml:space="preserve">
+    <value>Keine Standorte wurden für die ausgewählten Skills gefunden</value>
+  </data>
+  <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
+    <value>Überstundenaktivitäten wurden für die ausgewählten Mitarbeiter erfolgreich eingefügt.</value>
+  </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>Ihnen fehlt die Berechtigung Überstundenaktivitäten für Mitarbeiter {0} einzufügen.</value>
+  </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>Sie müssen ein Datum in der Zukunft wählen</value>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>Der Importprozess für {0} Personen war erfolgreich</value>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>Meeting, persönliche Aktivität oder Überstundenaktivität in der Schicht</value>
+  </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>Toleranz der Vertragsarbeitszeit</value>
+  </data>
+  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
+    <value>{0} existiert schon. Sind Sie sicher, dass Sie es ersetzen möchten?</value>
+  </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>Bestätigung aktualisieren</value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>Standard entfernen</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>Als Standard verwenden</value>
+  </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>MyBusinessUnit</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>MyOwn</value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>MySite</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>Bitte zuerst eine Rolle wählen</value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>Besetzung</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>Überstunden entfernen</value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>Favoritensuche speichern</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>Ihnen fehlt die Berechtigung Überstundenaktivitäten für Mitarbeiter zu löschen</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>Bitte wählen Sie ein Datum</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>Bitte schreiben Sie eine Startzeit</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>Bitte schreiben Sie eine Endzeit</value>
+  </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value>Die Toleranz der Vertragsarbeitszeit ist überschritten worden</value>
+  </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>Einloggen</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Organisation wählen</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>Zeit ausser Einhaltung</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Alles löschen</value>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>Est ist möglich maximal {0} Mitarbeiter zu monitoren. Der "In Alarm"-Schalter ist eingeschaltet falls die Mitarbeiter nicht {1} überschreiten.</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>Favoritensuche</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>Skillprioritäten konfigurieren</value>
+  </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>Keine Skillbereiche wurden gefunden</value>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>Kein Skill wurde gefunden</value>
+  </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>Mehrere Standorte</value>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>Mehrere Teams</value>
   </data>
 </root>
