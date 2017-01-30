@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -24,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[Test]
 		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful()
@@ -233,6 +236,47 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			stateholder.Schedules[agent].ScheduledDayCollection(period).All(x => x.ScheduleTag().Equals(tag))
 				.Should().Be.True();
+		}
+
+		[Test, Ignore("42680, to be fixed")]
+		public void ShouldNotCrashOnTeamMemberNotInSelection()
+		{
+			var team = new Team { Description = new Description("_"), Site = new Site("_") };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var date = new DateOnly(2017, 1, 22);
+			var period = new DateOnlyPeriod(date, date);
+			var shiftCategory = new ShiftCategory("Before").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 2);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategory));
+			var firstTeamMember = new Person { Name = new Name("A", "A") }.WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
+			var secondTeamMember = new Person { Name = new Name("B", "B") }.WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
+			firstTeamMember.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory) { MaxNumberOf = 0 });
+			secondTeamMember.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory) { MaxNumberOf = 0 });
+			var firstTeamMemberAss = new PersonAssignment(firstTeamMember, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(6, 14));
+			var secondTeamMemberAss = new PersonAssignment(secondTeamMember, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(6, 14));
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { firstTeamMember, secondTeamMember }, new[] { firstTeamMemberAss, secondTeamMemberAss }, new[] { skillDay });
+			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
+			{
+				SchedulingOptions =
+				{
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+					UseTeam = true,
+					UseShiftCategoryLimitations = true,
+					TeamSameShiftCategory = true
+				}
+			};
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(optimizerOriginalPreferences, 
+					new NoSchedulingProgress(),
+					stateholder.Schedules.SchedulesForPeriod(period, secondTeamMember), 
+					new OptimizationPreferences(),
+					null);
+			});
 		}
 
 		private static OptimizerOriginalPreferences createOptimizerOriginalPreferences()
