@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Messaging.Client.Http
 {
-	// MMMMmmMm as in Mathias.
+	// MMMMmmMm as in Roger.
 	// No, seriously, just couldnt use HttpClient and did want to call it HttpClient2 ROFL
 	public class HttpClientM
 	{

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <param name="paging">Paging information.</param>
 		/// <returns></returns>
 		/// <remarks>
-		/// Created by: mathiass
+		/// Created by: rogerkr
 		/// Created date: 2011-10-24
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <param name="period">The period to query.</param>
 		/// <returns></returns>
 		/// <remarks>
-		/// Created by: mathiass
+		/// Created by: rogerkr
 		/// Created date: 2011-10-27
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);

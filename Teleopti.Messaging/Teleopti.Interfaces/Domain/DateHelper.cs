@@ -44,7 +44,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="month">The month.</param>
 		/// <returns></returns>
 		/// <remarks>
-		/// Created by: mathias
+		/// Created by: rogerkr
 		/// Created date: 2012-03-05
 		/// </remarks>
 		public static int GetQuarter(int month)
@@ -360,7 +360,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="culture">The culture.</param>
 		/// <returns></returns>
 		/// <remarks>
-		/// Created by: mathiass
+		/// Created by: rogerkr
 		/// Created date: 2011-06-22
 		/// </remarks>
 		public static IEnumerable<string> GetWeekdayNames(CultureInfo culture)

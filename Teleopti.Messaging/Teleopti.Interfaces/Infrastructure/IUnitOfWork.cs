@@ -91,7 +91,7 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// </summary>
 		/// <param name="rootCollectionsCollection">The root collection.</param>
 		/// <remarks>
-		/// Created by: mathiass
+		/// Created by: rogerkr
 		/// Created date: 2010-07-05
 		/// </remarks>
 		void Reassociate<T>(params IEnumerable<T>[] rootCollectionsCollection) where T : IAggregateRoot;

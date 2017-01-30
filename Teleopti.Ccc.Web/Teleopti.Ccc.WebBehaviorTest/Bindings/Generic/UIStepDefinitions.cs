@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.ClickUsingJQuery(string.Format("button.{0}:enabled", cssClass.Name));
 		}
 
-		// I click agent 'mathias stenbom'
-		// I click the agent 'mathias stenbom'
+		// I click agent 'roger kratz'
+		// I click the agent 'roger kratz'
 		// I click super agent 'james bond'
 		// *NOT* I click the radiobutton with caption 'Probably not'
 		// *NOT* I click the extended preference indication on '2012-06-20'
