@@ -279,6 +279,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
+		[Test]
+		public void ShouldReplaceShiftBlock()
+		{
+			var date = new DateOnly(2017, 1, 22);
+			var period = new DateOnlyPeriod(date, date);
+			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
+			var shiftCategoryAfter = new ShiftCategory("After").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var agent = new Person { Name = new Name("A", "A") }.WithSchedulePeriodOneDay(date).WithPersonPeriod(ruleSet, skill).InTimeZone(TimeZoneInfo.Utc);
+			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
+			var agentAss = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { agentAss}, new[] { skillDay});
+			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
+			{
+				SchedulingOptions =
+				{
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.SingleAgent),
+					UseBlock = true,
+					BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod,
+					UseShiftCategoryLimitations = true,
+					BlockSameShiftCategory = true
+				}
+			};
+
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, agent), new OptimizationPreferences(), null);
+	
+			stateholder.Schedules.SchedulesForDay(date).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter)).Should().Be.True();
+		}
+
 		private static OptimizerOriginalPreferences createOptimizerOriginalPreferences()
 		{
 			//maybe we need to run all tests with different settings here?
