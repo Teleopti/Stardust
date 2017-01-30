@@ -74,7 +74,7 @@ module.exports = function (grunt) {
 
         sass: {
             options: {
-                includePaths: ['node_modules/teleopti-styleguide/css']
+                includePaths: ['node_modules/teleopti-styleguide/styleguide/sass']
             },
             dist: {
                 files: {
@@ -124,8 +124,8 @@ module.exports = function (grunt) {
                     'node_modules/angular-gantt/assets/angular-gantt-plugins.js',
                     'node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
                     'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
-                    'node_modules/teleopti-styleguide/dist/wfmdirectives.min.js',
-                    'node_modules/teleopti-styleguide/dist/templates.js',
+                    'node_modules/teleopti-styleguide/styleguide/dist/wfmdirectives.min.js',
+                    'node_modules/teleopti-styleguide/styleguide/dist/templates.js',
                     'node_modules/filesaver.js/FileSaver.min.js',
                     'node_modules/jquery/dist/jquery.min.js',
                     'node_modules/hammerjs/hammer.min.js',
@@ -209,7 +209,7 @@ module.exports = function (grunt) {
                     'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
                     'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
                     'vendor/c3/c3.min.css',
-                    'node_modules/teleopti-styleguide/css/main.min.css'
+                    'node_modules/teleopti-styleguide/styleguide/dist/main.min.css'
                 ],
                 dest: 'dist/modules_classic.css'
             },
@@ -225,7 +225,7 @@ module.exports = function (grunt) {
                     'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
                     'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
                     'vendor/c3/c3.min.css',
-                    'node_modules/teleopti-styleguide/css/main_dark.min.css'
+                    'node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
                 ],
                 dest: 'dist/modules_dark.css'
             },
