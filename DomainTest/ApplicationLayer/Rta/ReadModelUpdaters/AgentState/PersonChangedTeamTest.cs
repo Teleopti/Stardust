@@ -2,10 +2,13 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentState
@@ -22,13 +25,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
 				TeamId = teamId,
-				ExternalLogons = new[] { new ExternalLogon() }
+				ExternalLogons = new[] {new ExternalLogon()}
 			});
 
 			Persister.Models.Single().TeamId.Should().Be(teamId);
@@ -39,14 +42,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		{
 			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
 				TeamId = Guid.NewGuid(),
 				SiteId = siteId,
-				ExternalLogons = new[] { new ExternalLogon() }
+				ExternalLogons = new[] {new ExternalLogon()}
 			});
 
 			Persister.Models.Single().SiteId.Should().Be(siteId);
@@ -57,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		{
 			var personId = Guid.NewGuid();
 			var businessUnit = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
@@ -65,17 +68,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				TeamId = Guid.NewGuid(),
 				SiteId = Guid.NewGuid(),
 				BusinessUnitId = businessUnit,
-				ExternalLogons = new[] { new ExternalLogon() }
+				ExternalLogons = new[] {new ExternalLogon()}
 			});
 
 			Persister.Models.Single().BusinessUnitId.Should().Be(businessUnit);
 		}
-		 
+
 		[Test]
 		public void ShouldUpdateWithNames()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				TeamName = "team",
 				SiteId = Guid.NewGuid(),
 				SiteName = "site",
-				ExternalLogons = new[] { new ExternalLogon() }
+				ExternalLogons = new[] {new ExternalLogon()}
 			});
 
 			Persister.Models.Single().TeamName.Should().Be("team");

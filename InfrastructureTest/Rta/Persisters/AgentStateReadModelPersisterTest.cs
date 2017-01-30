@@ -516,5 +516,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Load(personId).FirstName.Should().Be("bill");
 			Target.Load(personId).LastName.Should().Be("gates");
 		}
+
+
+		[Test]
+		public void ShouldUpdateTeamName()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Target.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				TeamName = "team students"
+			});
+
+			Target.Update(teamId,"team preferences");
+	
+			Target.Load(personId).TeamName.Should().Be("team preferences");			
+		}
 	}
 }

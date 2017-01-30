@@ -30,4 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 	}
+	public class TeamNameChangedEvent : IEvent
+	{
+		public Guid TeamId { get; set; }
+		public string Name { get; set; }
+	}
 }

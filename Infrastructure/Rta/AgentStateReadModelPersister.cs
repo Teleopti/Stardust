@@ -187,9 +187,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.UniqueResult<internalModel>();
 			if (internalModel == null) return null;
 
-			((AgentStateReadModel) internalModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(internalModel.Shift);
+			((AgentStateReadModel)internalModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(internalModel.Shift);
 			internalModel.Shift = null;
-			((AgentStateReadModel) internalModel).OutOfAdherences =
+			((AgentStateReadModel)internalModel).OutOfAdherences =
 				_deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(internalModel.OutOfAdherences);
 			internalModel.OutOfAdherences = null;
 
@@ -332,6 +332,18 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.SetParameter("PersonId", personId)
 				.SetParameter("FirstName", firstName)
 				.SetParameter("LastName", lastName)
+				.ExecuteUpdate();
+		}
+
+		public void Update(Guid teamId, string name)
+		{
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+UPDATE [ReadModel].[AgentState]
+SET TeamName = :TeamName
+WHERE TeamId = :TeamId")
+				.SetParameter("TeamName", name)
+				.SetParameter("TeamId", teamId)
 				.ExecuteUpdate();
 		}
 

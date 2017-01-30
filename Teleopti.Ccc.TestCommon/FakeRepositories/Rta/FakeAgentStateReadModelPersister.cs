@@ -135,6 +135,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
+		public void Update(Guid teamId, string name)
+		{
+			var agentsInTeam = _data
+				.Where(kvp => kvp.Value.TeamId == teamId)
+				.Select(kvp => kvp.Value)
+				.ToList();
+			foreach (var agent in agentsInTeam)
+			{
+				agent.TeamName = name;
+				_data.TryUpdate(agent.PersonId, agent, agent);
+			}
+		}
+
 		public IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons)
 		{
 			throw new NotImplementedException();

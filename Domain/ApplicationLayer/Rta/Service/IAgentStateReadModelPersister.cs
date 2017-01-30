@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void UpsertAssociation(AssociationInfo info);
 		void UpsertEmploymentNumber(Guid personId, string employmentNumber);
 		void UpsertName(Guid personId, string firstName, string lastName);
+		void Update(Guid teamId, string name);
 	}
 }

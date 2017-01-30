@@ -48,8 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			});
 
 			Persister.Models.Single().IsDeleted.Should().Be(true);
-			Persister.Models.Single().FirstName.Should().Be("bill");
-			Persister.Models.Single().LastName.Should().Be("gates");
 		}
 	}
 }
