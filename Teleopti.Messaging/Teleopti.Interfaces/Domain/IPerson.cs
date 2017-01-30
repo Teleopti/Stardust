@@ -26,9 +26,11 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        Name Name { get; set; }
+        Name Name { get; }
 
-        /// <summary>
+	    void SetName(Name value);
+
+	    /// <summary>
         /// Gets the permission related information.
         /// </summary>
         /// <value>The permission information.</value>

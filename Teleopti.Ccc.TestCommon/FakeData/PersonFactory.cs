@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// <returns></returns>
 		public static IPerson CreatePerson(Name name, TimeZoneInfo timeZoneInfo)
 		{
-			var ret = new Person { Name = name };
+			var ret = new Person().WithName(name);
 			ret.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 			return ret;
 		}

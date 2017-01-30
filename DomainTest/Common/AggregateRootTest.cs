@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Common
                 get
                 {
                     IPerson person = new Person();
-                    person.Name = new Name("Jean Pierre", " Barda");
+                    person.SetName(new Name("Jean Pierre", " Barda"));
                     return person;
                 }
             }

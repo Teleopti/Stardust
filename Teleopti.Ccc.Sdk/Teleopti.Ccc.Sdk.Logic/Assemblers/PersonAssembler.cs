@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			if (string.IsNullOrEmpty(dto.FirstName) && string.IsNullOrEmpty(dto.LastName))
 				throw new ArgumentException("Both first and last name cannot be empty");
 			else
-				person.Name = new Name(dto.FirstName, dto.LastName);
+				person.SetName(new Name(dto.FirstName, dto.LastName));
 			if (!string.IsNullOrEmpty(dto.TimeZoneId))
 				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(dto.TimeZoneId));
 			else

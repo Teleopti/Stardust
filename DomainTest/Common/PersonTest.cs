@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			string note = "�h en s� flink agent!";
 			string employmentNumber = "123";
 			DateOnly date = new DateOnly(2059, 12, 31);
-			target.Name = name;
+			target.SetName(name);
 			target.Email = email;
 			target.Note = note;
 			target.SetEmploymentNumber(employmentNumber);

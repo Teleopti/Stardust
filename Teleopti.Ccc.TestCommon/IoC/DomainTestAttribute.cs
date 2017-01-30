@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
 				if (principal == null)
 				{
-					var person = new Person {Name = new Name("Fake", "Login")};
+					var person = new Person().WithName(new Name("Fake", "Login"));
 					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 					person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 					person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());

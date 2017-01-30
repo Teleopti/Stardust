@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 		private IPerson prepareData(DateTime date, IEnumerable<IPersonSkill> personSkills = null)
 		{
-			var person = new Person {Name = new Name("John", "Smith")};
+			var person = new Person().WithName(new Name("John", "Smith"));
 			person.SetId(Guid.NewGuid());
 			PersonRepository.Add(person);
 

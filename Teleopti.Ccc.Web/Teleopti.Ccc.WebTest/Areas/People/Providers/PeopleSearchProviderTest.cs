@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				{
 					Description = new Description("TestTeam")
 				});
-			person.Name = new Name("Ashley", "Andeen");
+			person.WithName(new Name("Ashley", "Andeen"));
 			person.Email = "ashley.andeen@abc.com";
 			person.SetEmploymentNumber("1011");
 
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				{
 					Description = new Description("TestTeam")
 				});
-			person.Name = new Name("John", "Smith");
+			person.WithName(new Name("John", "Smith"));
 			person.Email = "john.smith@abc.com";
 			person.SetEmploymentNumber("1012");
 
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				{
 					var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
 					person.SetId(Guid.NewGuid());
-					person.Name = new Name(string.Format("Agent{0:000}", i), string.Format("Andeen{0:000}", i));
+					person.WithName(new Name(string.Format("Agent{0:000}", i), string.Format("Andeen{0:000}", i)));
 					person.SetEmploymentNumber(i.ToString("0000"));
 					personRepository.Add(person);
 

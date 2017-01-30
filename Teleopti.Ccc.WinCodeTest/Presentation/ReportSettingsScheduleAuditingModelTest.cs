@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
 
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         {
             for(var i = 0; i < 20; i++)
             {
-                var person = new Person{Name = new Name("01234567890123456789", "01234567890123456789")};
+                var person = new Person().WithName(new Name("01234567890123456789", "01234567890123456789"));
                 _target.AddModifier(person);
                 _target.AddAgent(person);
             }

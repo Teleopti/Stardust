@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
         [SetUp]
         public void SetUp()
         {
-            _person = new Person() {Name = new Name("Test", "test2")};
+            _person = new Person().WithName(new Name("Test", "test2"));
             _dateOnly = DateOnly.Today ;
             _dateOnlyPeriod = new DateOnlyPeriod(_dateOnly,_dateOnly );
             _dateAndPeriod = new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Local);

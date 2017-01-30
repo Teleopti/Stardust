@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var person = new Person {Name = new Name("oldFirst", "oldLast")};
+			var person = new Person().WithName(new Name("oldFirst", "oldLast"));
 			person.SetId(changePersonBasicDataCommandDto.PersonId);
 			personRepository.Stub(x => x.Get(changePersonBasicDataCommandDto.PersonId)).Return(person);
 			var target = new ChangePersonBasicDataCommandHandler(personRepository, currentUnitOfWorkFactory, null);
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var person = new Person { Name = new Name("oldFirst", "oldLast") };
+			var person = new Person().WithName(new Name("oldFirst", "oldLast"));
 			person.SetId(changePersonBasicDataCommandDto.PersonId);
 			personRepository.Stub(x => x.Get(changePersonBasicDataCommandDto.PersonId)).Return(person);
 			var target = new ChangePersonBasicDataCommandHandler(personRepository, currentUnitOfWorkFactory, null);

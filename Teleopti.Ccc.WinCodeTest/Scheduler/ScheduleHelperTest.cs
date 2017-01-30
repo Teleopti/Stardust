@@ -91,9 +91,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _dayOffTemplate = new ForTestDayOffTemplate(Guid.NewGuid().ToString());
 
-            _person1.Name = new Name("Person", "1");
-            _person2.Name = new Name("Person", "2");
-            _person3.Name = new Name("Person", "3");
+            _person1.SetName(new Name("Person", "1"));
+            _person2.SetName(new Name("Person", "2"));
+            _person3.SetName(new Name("Person", "3"));
 
             _period1 = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
             _period2 = new DateTimePeriod(2000, 1, 2, 2000, 1, 3);

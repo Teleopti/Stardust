@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -33,8 +34,8 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [Test]
         public void ShouldLoadViewComboWithTheItemAllFirstInList()
         {
-            IPerson p1 = new Person { Name = new Name("pf1", "pl1") };
-            IPerson p2 = new Person { Name = new Name("pf2", "pl2") };
+            IPerson p1 = new Person().WithName(new Name("pf1", "pl1"));
+            IPerson p2 = new Person().WithName(new Name("pf2", "pl2"));
             p1.SetId(Guid.NewGuid());
             p2.SetId(Guid.NewGuid());
             IList<IPerson> personList = new List<IPerson> { p1, p2 };
@@ -72,8 +73,8 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [Test]
         public void ShouldReturnAllInRevisionListWhenPersonInModelIsNull()
         {
-            var person1 = new Person { Name = new Name("pf1", "pl1") };
-            var person2 = new Person { Name = new Name("pf2", "pl2") };
+            var person1 = new Person().WithName(new Name("pf1", "pl1"));
+            var person2 = new Person().WithName(new Name("pf2", "pl2"));
             person1.SetId(Guid.NewGuid());
             person2.SetId(Guid.NewGuid());
             IList<IPerson> revisionList = new List<IPerson>{person1, person2};
@@ -102,9 +103,9 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [Test]
         public void ShouldReturnSelectedUserInRevisionListWhenPersonInModelIsNotNull()
         {
-            var person1 = new Person { Name = new Name("pf1", "pl1") };
+            var person1 = new Person().WithName(new Name("pf1", "pl1"));
             person1.SetId(Guid.NewGuid());
-            var person2 = new Person { Name = new Name("pf2", "pl2") };
+            var person2 = new Person().WithName(new Name("pf2", "pl2"));
             person2.SetId(Guid.NewGuid());
             IList<IPerson> revisionList = new List<IPerson> { person1, person2};
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();

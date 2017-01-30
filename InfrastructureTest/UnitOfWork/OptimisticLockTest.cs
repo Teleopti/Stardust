@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			//client 1
 			var uow1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 			var user1 = PersonFactory.CreatePerson();
-			user1.Name = new Name("new", "name");
+			user1.SetName(new Name("new", "name"));
 			new PersonRepository(new ThisUnitOfWork(uow1)).Add(user1);
 			uow1.PersistAll();
 			id = user1.Id.Value;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				//client 2
 				var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 				var user2 = new PersonRepository(new ThisUnitOfWork(uow2)).Load(id);
-				user2.Name = new Name("change", "name");
+				user2.SetName(new Name("change", "name"));
 				uow2.PersistAll();
 				uow2.Dispose();
 			});
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			
 
 			//client 1
-			user1.Name = new Name("change", "too");
+			user1.SetName(new Name("change", "too"));
 			Assert.Throws<OptimisticLockException>(() => { uow1.PersistAll(); });
 			uow1.Dispose();
 		}

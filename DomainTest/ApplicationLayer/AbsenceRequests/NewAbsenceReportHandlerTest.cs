@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			_workflowControlSet = MockRepository.GenerateMock<IWorkflowControlSet>();
 			_workflowControlSet.Stub(x => x.AllowedAbsencesForReport).Return(new List<IAbsence> {_absence});
-			_person = new Person {Name = new Name("John", "Doe")};
+			_person = new Person().WithName(new Name("John", "Doe"));
 			_person.SetId(Guid.NewGuid());
 			_person.WorkflowControlSet = _workflowControlSet;
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);

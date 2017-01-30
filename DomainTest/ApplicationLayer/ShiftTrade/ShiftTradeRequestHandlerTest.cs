@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -117,8 +118,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private void createPersonAndScenario()
 		{
-			fromPerson = new Person { Name = new Name("Janne", "Schaffer") };
-			toPerson = new Person { Name = new Name("Staffan", "Ling") };
+			fromPerson = new Person().WithName(new Name("Janne", "Schaffer"));
+			toPerson = new Person().WithName(new Name("Staffan", "Ling"));
 			var wfcl = new WorkflowControlSet("Mutex") { AutoGrantShiftTradeRequest = true };
 			fromPerson.WorkflowControlSet = wfcl;
 			toPerson.WorkflowControlSet = wfcl;

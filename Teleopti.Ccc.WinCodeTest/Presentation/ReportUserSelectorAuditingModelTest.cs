@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         {
             IPerson person = new Person();
             person.SetId(Guid.NewGuid());
-            person.Name = new Name("John", "Smith");
+            person.WithName(new Name("John", "Smith"));
 
             _target = new ReportUserSelectorAuditingModel(person);
 

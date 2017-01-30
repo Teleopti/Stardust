@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifySimpleExport()
         {
 	        setup();
-			var person1 = new Person {Name=new Name("person1", "person1")}.InTimeZone(TimeZoneInfo.Utc);
-            var person2 = new Person { Name = new Name("person2", "person2") }.InTimeZone(TimeZoneInfo.Utc);
+			var person1 = new Person().WithName(new Name("person1", "person1")).InTimeZone(TimeZoneInfo.Utc);
+            var person2 = new Person().WithName(new Name("person2", "person2")).InTimeZone(TimeZoneInfo.Utc);
             IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
                                                                                         new Scenario("dummy1"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
             IPersonAssignment assNonValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			setup();
 			var activity = new Activity("activity") { InWorkTime = true };
 				var shiftCategory = new ShiftCategory("shiftCategory");
-				var person1 = new Person { Name = new Name("person1", "person1") }.InTimeZone(TimeZoneInfo.Utc);
+				var person1 = new Person().WithName(new Name("person1", "person1")).InTimeZone(TimeZoneInfo.Utc);
 				var dateOnly = new DateOnly(new DateTime(2000, 1, 1));
 				var team = new Team();
 				var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();

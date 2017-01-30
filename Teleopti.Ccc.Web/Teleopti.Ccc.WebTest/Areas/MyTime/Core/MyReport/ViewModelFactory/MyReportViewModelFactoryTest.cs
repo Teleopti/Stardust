@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 
 			var userCulture = new FakeUserCulture();
 			userCulture.IsSwedish();
-			_detailedAdherenceMapper =   new DetailedAdherenceMapper(userCulture);
+			_detailedAdherenceMapper = new DetailedAdherenceMapper(userCulture);
 			_adherenceForDayQuery = MockRepository.GenerateMock<IDetailedAdherenceForDayQuery>();
 		}
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		public void ShouldViewPublishedDetailAdherence()
 		{
 			var date = new DateOnly(2016, 01, 01);
-			_loggedOnUser.CurrentUser().Name = new Name("Loggon", "User");
+			_loggedOnUser.CurrentUser().WithName(new Name("Loggon", "User"));
 
 			var dataModels = new List<DetailedAdherenceForDayResult>();
 			dataModels.Add(new DetailedAdherenceForDayResult());
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		[Test]
 		public void ShouldNotViewUnpublishedDetailAdherence()
 		{
-			var date = new DateOnly(2016,01,01);
-			_loggedOnUser.CurrentUser().Name = new Name("Unpublish", "loggonUser");
+			var date = new DateOnly(2016, 01, 01);
+			_loggedOnUser.CurrentUser().WithName(new Name("Unpublish", "loggonUser"));
 
 			var dataModels = new List<DetailedAdherenceForDayResult>();
 			dataModels.Add(new DetailedAdherenceForDayResult());
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		public void ShouldViewUnpublishedDetailAdherenceWhenUserCanViewUnpublishedSchedule()
 		{
 			var date = new DateOnly(2016, 01, 01);
-			_loggedOnUser.CurrentUser().Name = new Name("Unpublish", "loggonUser");
+			_loggedOnUser.CurrentUser().WithName(new Name("Unpublish", "loggonUser"));
 
 			var dataModels = new List<DetailedAdherenceForDayResult>();
 			dataModels.Add(new DetailedAdherenceForDayResult());

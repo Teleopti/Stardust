@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -215,11 +216,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldReturnPossiblePersonsToTradeShiftWhenSearchNameText()
 		{
 			var person1InMyTeam = new Person();
-			person1InMyTeam.Name = new Name("1", "person");
+			person1InMyTeam.WithName(new Name("1", "person"));
 			person1InMyTeam.SetId(Guid.NewGuid());
 
 			var person2InMyTeam = new Person();
-			person2InMyTeam.Name=new Name("2","person");
+			person2InMyTeam.WithName(new Name("2","person"));
 			person2InMyTeam.SetId(Guid.NewGuid());
 			var person2InMyTeamGuids = new PersonSelectorShiftTrade { PersonId = person2InMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			

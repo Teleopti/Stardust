@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
@@ -34,9 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
         public static IPersonRotation CreatePersonRotation(DateOnly dateTime, Name name, 
             IRotation rotation, IPerson person, int startWeek)
         {
-            // Sets the name of the person
-            person.Name = name;
-            // Returns the person rotation
+	        person.WithName(name);
             return new PersonRotation(person, rotation, dateTime, startWeek);
         }
 
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
         {
             // Instantiates the person
             IPerson person = PersonFactory.CreatePerson();
-            person.Name = name;
+            person.SetName(name);
 
             // Instantiates the availability
             AvailabilityRotation availability = new AvailabilityRotation(description.Name, dayCount);

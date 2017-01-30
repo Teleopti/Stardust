@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var timeLineHoursViewModelFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
-			var person = new Person { Name = new Name("John", "Doe") };
+			var person = new Person().WithName(new Name("John", "Doe"));
 			person.PermissionInformation.SetDefaultTimeZone(timeZone);
 			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
 			var date = DateOnly.Today;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var timeLineHoursViewModelFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
-			var person = new Person { Name = new Name("John", "Doe") };
+			var person = new Person().WithName(new Name("John", "Doe"));
 			person.PermissionInformation.SetDefaultTimeZone(timeZone);
 			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
 			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(5).AddMinutes(45),
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var timeLineHoursViewModelFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
-			var person = new Person { Name = new Name("John", "Doe") };
+			var person = new Person().WithName(new Name("John", "Doe"));
 			person.PermissionInformation.SetDefaultTimeZone(timeZone);
 			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
 			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(4).AddMinutes(45),

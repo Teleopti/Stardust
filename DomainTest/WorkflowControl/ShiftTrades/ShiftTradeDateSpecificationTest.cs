@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void Setup()
 		{
 			_target = new ShiftTradeDateSpecification();
-			_personFrom = new Person() { Name = new Name("Ashley", "Andeen") };
-			_personTo = new Person() { Name = new Name("Bengt", "Magnusson") };
+			_personFrom = new Person().WithName(new Name("Ashley", "Andeen"));
+			_personTo = new Person().WithName(new Name("Bengt", "Magnusson"));
 		}
 
 		[Test]

@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyInitializeWhenModifiedOnClient()
         {
-            var assPer = new Person {Name = new Name("roger", "moore")};
-            var changedByPer = new Person {Name = new Name("hubba", "bubba")};
+            var assPer = new Person().WithName(new Name("roger", "moore"));
+            var changedByPer = new Person().WithName(new Name("hubba", "bubba"));
 
             var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(assPer, new Scenario("sdf"), new DateTimePeriod(2000,1,1,2000,1,2));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
 	        var tz = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
-						var assPer = new Person { Name = new Name("roger", "moore") }.InTimeZone(tz);
-            var changedByPer = new Person { Name = new Name("hubba", "bubba") }.InTimeZone(tz);
+						var assPer = new Person().WithName(new Name("roger", "moore")).InTimeZone(tz);
+            var changedByPer = new Person().WithName(new Name("hubba", "bubba")).InTimeZone(tz);
 
 						var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(assPer, new Scenario("ffsdf"), new DateOnly(2000, 1, 2), new DayOffTemplate(new Description()));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyInitializeWhenDeletedInDatabase()
         {
-            var assPer = new Person { Name = new Name("roger", "moore") };
-            var changedLocallyBy = new Person { Name = new Name("hubba", "bubba") };
+            var assPer = new Person().WithName(new Name("roger", "moore"));
+            var changedLocallyBy = new Person().WithName(new Name("hubba", "bubba"));
 
             var ass = PersonAbsenceFactory.CreatePersonAbsence(assPer, new Scenario("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             ReflectionHelper.SetUpdatedBy(ass, changedLocallyBy);
@@ -147,8 +147,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyInitializeWhenNoteType()
         {
-            var per = new Person { Name = new Name("roger", "moore") };
-            var changedLocallyBy = new Person { Name = new Name("hubba", "bubba") };
+            var per = new Person().WithName(new Name("roger", "moore"));
+            var changedLocallyBy = new Person().WithName(new Name("hubba", "bubba"));
             var note = new Note(per, new DateOnly(2010, 4, 27), new Scenario("scenario"), "note");
 
             ReflectionHelper.SetUpdatedBy(note, changedLocallyBy);
@@ -173,8 +173,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ShouldInitializeWithStudentAvailabilityType()
         {
-            var per = new Person { Name = new Name("roger", "moore") };
-            var changedLocallyBy = new Person { Name = new Name("hubba", "bubba") };
+            var per = new Person().WithName(new Name("roger", "moore"));
+            var changedLocallyBy = new Person().WithName(new Name("hubba", "bubba"));
             var note = new StudentAvailabilityDay(per, new DateOnly(2010, 4, 27), new List<IStudentAvailabilityRestriction>());
 
             ReflectionHelper.SetUpdatedBy(note, changedLocallyBy);
@@ -349,8 +349,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test, SetCulture("sv-SE")]
         public void VerifyOnQueryCellInfo()
         {
-            var assPer = new Person { Name = new Name("roger", "moore") };
-            var changedByPer = new Person { Name = new Name("hubba", "bubba") };
+            var assPer = new Person().WithName(new Name("roger", "moore"));
+            var changedByPer = new Person().WithName(new Name("hubba", "bubba"));
 
             var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(assPer, new Scenario("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             public IPerson Person
             {
-                get { return new Person{Name=new Name("Arne", "weise")}; }
+                get { return new Person().WithName(new Name("Arne", "weise")); }
             }
 
             public IScenario Scenario { get; private set; }

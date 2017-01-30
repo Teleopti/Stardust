@@ -581,7 +581,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 			else setName = new Name(name, string.Empty);
 
-			_person = new Person {Name = setName};
+			_person = new Person().WithName(setName);
 			_person.SetId(id ?? Guid.NewGuid());
 			_person.SetEmploymentNumber(employeeNumber?.ToString());
 			_persons.Has(_person);

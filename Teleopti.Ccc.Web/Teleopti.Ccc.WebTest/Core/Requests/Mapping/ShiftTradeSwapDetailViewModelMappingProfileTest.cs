@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[SetUp]
 		public void Setup()
 		{
-			_fromPerson = new Person { Name = new Name("From", "Person"), };
-			_toPerson = new Person { Name = new Name("To", "Person") };
+			_fromPerson = new Person().WithName(new Name("From", "Person"));
+			_toPerson = new Person().WithName(new Name("To", "Person"));
 			_scheduleFactory = new StubFactory();
 			_timeLineFactory = MockRepository.GenerateStub<IShiftTradeTimeLineHoursViewModelFactory>();
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			_person = new Person { Name = new Name("John", "Doe") };
+			_person = new Person().WithName(new Name("John", "Doe"));
 			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
 
 			var nameFormatSettingsPersisterAndProvider = MockRepository.GenerateStub<ISettingsPersisterAndProvider<NameFormatSettings>>();

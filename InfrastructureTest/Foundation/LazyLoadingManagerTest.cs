@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         public void VerifyIsInitialized()
         {
             IPerson person = PersonFactory.CreatePerson();
-            person.Name = new Name("for", "test");
+            person.SetName(new Name("for", "test"));
             PersistAndRemoveFromUnitOfWork(person);
 
             person = Session.Load<Person>(person.Id.Value);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         public void VerifyInitializeOnEntity()
         {
             IPerson person = PersonFactory.CreatePerson();
-            person.Name = new Name("for", "test");
+            person.SetName(new Name("for", "test"));
             PersistAndRemoveFromUnitOfWork(person);
 
             person = Session.Load<Person>(person.Id.Value);

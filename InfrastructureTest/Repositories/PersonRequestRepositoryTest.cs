@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -299,7 +300,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();
 
 			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
-			personFrom.Name = new Name("mala", "mala");
+			personFrom.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
@@ -333,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();
 
 			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
-			personFrom.Name = new Name("mala", "mala");
+			personFrom.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
@@ -406,7 +407,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotUpdateBrokenRulesAfterFindAllRequestsForAgent()
 		{
 			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
-			personFrom.Name = new Name("mala", "mala");
+			personFrom.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
@@ -468,7 +469,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonRequest pendingPersonRequest = CreateAggregateWithCorrectBusinessUnit();
 
 			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-			personTo.Name = new Name("mala", "mala");
+			personTo.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personTo);
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
@@ -598,7 +599,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 
 			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-			personTo.Name = new Name("mala", "mala");
+			personTo.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personTo);
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
@@ -650,7 +651,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyShiftTradeRequestForDateTimePeriod()
 		{
 			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-			personTo.Name = new Name("mala", "mala");
+			personTo.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personTo);
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
@@ -681,15 +682,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var pendingPersonRequest = CreateAggregateWithCorrectBusinessUnit();
 
 			var personTo = PersonFactory.CreatePerson("vjiosd");
-			personTo.Name = new Name("mala", "mala");
+			personTo.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personTo);
 
 			var anotherPerson = PersonFactory.CreatePerson("Smet");
-			anotherPerson.Name = new Name("Tom", "Jones");
+			anotherPerson.SetName(new Name("Tom", "Jones"));
 			PersistAndRemoveFromUnitOfWork(anotherPerson);
 
 			var anotherPerson2 = PersonFactory.CreatePerson("Smet...");
-			anotherPerson2.Name = new Name("Kirk", "Douglas");
+			anotherPerson2.WithName(new Name("Kirk", "Douglas"));
 			PersistAndRemoveFromUnitOfWork(anotherPerson2);
 
 			var persons = new List<IPerson> {_person, anotherPerson, anotherPerson2, personTo};
@@ -773,7 +774,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyLazyLoadingOfShiftTradeDetails()
 		{
 			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-			personTo.Name = new Name("mala", "mala");
+			personTo.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personTo);
 
 			IList<IPerson> persons = new List<IPerson> {_person, personTo};

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void CanCreateDtoOfDomainObject()
 	    {
-		    var person = new Person {Name = new Name("ett namn bara", "")}.WithId();
+		    var person = new Person().WithName(new Name("ett namn bara", "")).WithId();
 		    var dateOnly = new DateOnly(2009, 2, 2);
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void CanCreateDomainObjectOfDtoNotAvailable()
 	    {
-		    var person = new Person {Name = new Name("ett namn bara", "")}.WithId();
+		    var person = new Person().WithName(new Name("ett namn bara", "")).WithId();
 		    var dateOnly = new DateOnly(2009, 2, 2);
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void CanCreateDomainObjectOfDto()
 	    {
-		    var person = new Person {Name = new Name("ett namn bara", "")}.WithId();
+		    var person = new Person().WithName(new Name("ett namn bara", "")).WithId();
 		    var dateOnly = new DateOnly(2009, 2, 2);
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();

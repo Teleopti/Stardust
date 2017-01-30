@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void Setup()
         {
             _mocks = new MockRepository();
-            _person = new Person {Name = new Name("ola", "håkansson")};
+            _person = new Person().WithName(new Name("ola", "håkansson"));
             _persons = new List<IPerson>{_person};
             _dateOnly = new DateOnly(2011, 4, 3);
             _viewBase = _mocks.StrictMock<IViewBase>();

@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -124,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private void CreatePersonAndRequest()
 		{
 			_workflowControlSet = MockRepository.GenerateMock<IWorkflowControlSet>();
-			_person = new Person { Name = new Name("John", "Doe") };
+			_person = new Person().WithName(new Name("John", "Doe"));
 			_person.WorkflowControlSet = _workflowControlSet;
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			_personAccountCollection = new PersonAccountCollection(_person);

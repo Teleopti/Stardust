@@ -65,21 +65,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var p1 = new Person
 			{
-				Name = new Name("Test1", "Testsson"),
 				Email = "test1@test.se",
-			}.WithId();
+			}.WithName(new Name("Test1", "Testsson")).WithId();
 			p1.SetEmploymentNumber("E321");
 			var p2 = new Person
 			{
-				Name = new Name("Test2", "Testsson"),
 				Email = "test2@test.se",
-			}.WithId();
+			}.WithName(new Name("Test2", "Testsson")).WithId();
 			p2.SetEmploymentNumber("E321");
 			var p3 = new Person
 			{
-				Name = new Name("Test3", "Testsson"),
 				Email = "test3@test.se",
-			}.WithId();
+			}.WithName(new Name("Test3", "Testsson")).WithId();
 			p3.SetEmploymentNumber("E321");
 
 			testPerson1Id = p1.Id.GetValueOrDefault();

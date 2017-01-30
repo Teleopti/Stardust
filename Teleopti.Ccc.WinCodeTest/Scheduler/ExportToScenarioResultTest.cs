@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Text = Rhino.Mocks.Constraints.Text;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -375,7 +376,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private static IEnumerable<IBusinessRuleResponse> threeRuleResponsesTwoWithSameMessageAndPerson()
 		{
-			IPerson sharedPerson = new Person { Name = new Name("Roger", "Moore") };
+			IPerson sharedPerson = new Person().WithName(new Name("Roger", "Moore"));
 			const string sharedMessage = "EnGång";
 			return new List<IBusinessRuleResponse>
 					   {

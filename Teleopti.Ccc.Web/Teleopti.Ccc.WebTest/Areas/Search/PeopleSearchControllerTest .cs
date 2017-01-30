@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var team = TeamFactory.CreateTeam("TestTeam", "TestSite");
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today.AddDays(-1),
 				team);
-			person.Name = new Name("Ashley", "Andeen");
+			person.WithName(new Name("Ashley", "Andeen"));
 			person.Email = "ashley.andeen@abc.com";
 			person.SetEmploymentNumber("1011");
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		{
 			var currentUser = loggonUser.CurrentUser();
 			currentUser.SetId(Guid.NewGuid());
-			currentUser.Name = new Name("firstName", "lastName");
+			currentUser.WithName(new Name("firstName", "lastName"));
 			var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 
 			var team = TeamFactory.CreateTeam("MyTeam", "MySite");

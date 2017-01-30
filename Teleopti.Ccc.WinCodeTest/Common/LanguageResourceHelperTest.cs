@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             internal TestLocalizationWithFalseMember()
             {
                 person = new Person();
-                person.Name = new Name("foo", "foo");
+                person.WithName(new Name("foo", "foo"));
             }
 
             private Person person;

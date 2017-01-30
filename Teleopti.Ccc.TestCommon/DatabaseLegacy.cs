@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			var person = new Person();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person.Name = new Name(name, name);
+			person.SetName(new Name(name, name));
 			person.AddPersonPeriod(personPeriod);
 
 			var exteralLogOn = new ExternalLogOn

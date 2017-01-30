@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			_reportsNavProvider = MockRepository.GenerateMock<IReportsNavigationProvider>();
 
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() { Name = new Name() });
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person().WithName(new Name()));
 
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();

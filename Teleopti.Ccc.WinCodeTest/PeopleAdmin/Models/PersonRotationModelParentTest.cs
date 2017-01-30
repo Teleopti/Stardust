@@ -8,6 +8,7 @@ using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -45,10 +46,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             description2 = new Description("My 2 week rotation");
 
             person1 = PersonFactory.CreatePerson();
-            person1.Name = name1;
+            person1.WithName(name1);
 
             person2 = PersonFactory.CreatePerson();
-            person2.Name = name2;
+            person2.WithName(name2);
 
             rotation1 = new Rotation(description1.Name, 7);
             rotation2 = new Rotation(description2.Name, 2 * 7);

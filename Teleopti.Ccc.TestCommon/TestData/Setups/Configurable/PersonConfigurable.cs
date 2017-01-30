@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (name.Contains(" "))
 			{
 				var splitted = name.Split(' ');
-				person.Name = new Name(splitted[0], splitted[1]);
+				person.SetName(new Name(splitted[0], splitted[1]));
 				return;
 			}
-			person.Name = new Name(name, "");
+			person.SetName(new Name(name, ""));
 		}
 	}
 }

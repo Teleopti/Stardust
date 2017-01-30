@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void ShouldRetrieveThePersonsName()
 		{
 			var person = PersonFactory.CreatePerson();
-			person.Name = new Name("a", "person");
+			person.SetName(new Name("a", "person"));
 			var target = new TeleoptiPrincipalInternalsFactory();
 
 			var name = target.NameForPerson(person);

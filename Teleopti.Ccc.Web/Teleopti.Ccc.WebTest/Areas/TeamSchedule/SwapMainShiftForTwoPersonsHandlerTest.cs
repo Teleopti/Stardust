@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			personFrom = PersonFactory.CreatePerson();
 			personFrom.SetId(personIdFrom);
-			personFrom.Name = new Name("Abc", "123");
+			personFrom.WithName(new Name("Abc", "123"));
 
 			personTo = PersonFactory.CreatePerson();
 			personTo.SetId(personIdTo);

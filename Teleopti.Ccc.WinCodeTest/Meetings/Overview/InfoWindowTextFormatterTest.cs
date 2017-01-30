@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         {
         	var meeting = MockRepository.GenerateMock<IMeeting>();
         	var meetingPerson = MockRepository.GenerateMock<IMeetingPerson>();
-			var person = new Person { Name = new Name("goran", "person") };
+			var person = new Person().WithName(new Name("goran", "person"));
         	var uow = MockRepository.GenerateMock<IUnitOfWork>();
         	var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var commonNameDescription = new CommonNameDescriptionSetting();

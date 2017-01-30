@@ -10,6 +10,18 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class PersonExtensions
 	{
+		public static IPerson WithName(this IPerson person, Name name)
+		{
+			person.SetName(name);
+			return person;
+		}
+
+		public static Person WithName(this Person person, Name name)
+		{
+			person.SetName(name);
+			return person;
+		}
+
 		public static Person InTimeZone(this Person agent, TimeZoneInfo timeZoneInfo)
 		{
 			agent.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);

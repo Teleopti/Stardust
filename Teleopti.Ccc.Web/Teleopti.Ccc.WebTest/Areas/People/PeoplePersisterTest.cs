@@ -39,16 +39,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var personInfoPersister = new PersistPersonInfoFake();
 			var personInfoMapper = new PersonInfoMapperFake();
 
-			var person1 = new Person
-			{
-				Name = new Name("Jenny", "Morgan")
-			};
+			var person1 = new Person().WithName(new Name("Jenny", "Morgan"));
 			person1.SetId(Guid.NewGuid());
 
-			var person2 = new Person
-			{
-				Name = new Name("Jan", "Morgan")
-			};
+			var person2 = new Person().WithName(new Name("Jan", "Morgan"));
 			person2.SetId(Guid.NewGuid());
 
 			var fakePersonRepository = new FakePersonRepositoryLegacy(person1, person2);

@@ -8,6 +8,7 @@ using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
@@ -48,12 +49,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _person1 = new Person();
             _person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(_person1, new DateOnly());
             // arabic
-            _person1.Name = new Name("Ola", "حالات غياب");
+            _person1.WithName(new Name("Ola", "حالات غياب")) ;
             //thai doesn't work
             //_person1.Name = new Name("Ola", "ตอบคำถามเพื่อสมาชิก");
             _person2 = new Person();
             //och kinesiska
-            _person2.Name = new Name("ola", "放弃的传真");
+            _person2.WithName(new Name("ola", "放弃的传真"));
             _person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(_person2, new DateOnly());
 			_persons = new Dictionary<IPerson, string> { { _person2, _person2.Name.ToString() }, { _person1, _person1.Name.ToString() } };
             _period = new DateOnlyPeriod(2009,2,2,2009,2,2);

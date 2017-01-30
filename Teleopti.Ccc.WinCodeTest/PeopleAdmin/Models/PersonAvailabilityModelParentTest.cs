@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -41,10 +42,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             description1 = new Description("My 1 week rotation");
 
             person1 = PersonFactory.CreatePerson();
-            person1.Name = name1;
+            person1.WithName(name1);
 
             person2 = PersonFactory.CreatePerson();
-            person2.Name = name2;
+            person2.WithName(name2);
 
             availability1 = new AvailabilityRotation(description1.Name, 7);
 

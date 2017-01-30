@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 		private IPerson prepareData(DateTime date)
 		{
-			var person = new Person {Name = new Name("John", "Smith")};
+			var person = new Person().WithName(new Name("John", "Smith"));
 			person.SetId(Guid.NewGuid());
 			PersonRepository.Add(person);
 

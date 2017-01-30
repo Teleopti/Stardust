@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldPublishMultiEvent()
 		{
-			var person = new Person { Name = new Name("Reko", "kille") };
+			var person = new Person().WithName(new Name("Reko", "kille"));
 			person.SetId(SystemUser.Id);
 			FakePersonRepository.Add(person);
 			FakeBusinessUnitRepository.Add(new Domain.Common.BusinessUnit("BU"));
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldResendTimedOutRequests()
 		{
-			var person = new Person { Name = new Name("Reko", "kille") };
+			var person = new Person().WithName(new Name("Reko", "kille"));
 			person.SetId(SystemUser.Id);
 			FakePersonRepository.Add(person);
 			FakeBusinessUnitRepository.Add(new Domain.Common.BusinessUnit("BU"));
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldRemove00000RequestsForCurrentPeriod()
 		{
-			var person = new Person { Name = new Name("Reko", "kille") };
+			var person = new Person().WithName(new Name("Reko", "kille"));
 			person.SetId(SystemUser.Id);
 			FakePersonRepository.Add(person);
 			FakeBusinessUnitRepository.Add(new Domain.Common.BusinessUnit("BU"));

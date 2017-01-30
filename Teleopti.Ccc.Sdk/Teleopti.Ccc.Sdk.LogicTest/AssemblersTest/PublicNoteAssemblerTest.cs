@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void ShouldTransformDomainObjectToDto()
 	    {
-		    var personDomain = new Person {Name = new Name("Bosse", "Bäver")}.WithId();
+		    var personDomain = new Person().WithName(new Name("Bosse", "Bäver")).WithId();
 		    var date = new DateOnly(2011, 1, 12);
 
 		    var publicNoteDomain =
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void ShouldTransformDtoObjectToDomain()
 	    {
-		    var personDomain = new Person {Name = new Name("Bosse", "Bäver")}.WithId();
+		    var personDomain = new Person().WithName(new Name("Bosse", "Bäver")).WithId();
 		    var date = new DateOnly(2011, 1, 12);
 
 		    var publicNoteDomain =

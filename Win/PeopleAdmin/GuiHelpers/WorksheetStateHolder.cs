@@ -134,12 +134,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
 				return;
 
-			IPerson newPerson = new Person
-										{
-											Name =
-												new Name("<" + UserTexts.Resources.FirstName + ">",
-															"<" + UserTexts.Resources.LastName + ">")
-										};
+			IPerson newPerson = new Person();
+			newPerson.SetName(new Name("<" + UserTexts.Resources.FirstName + ">", "<" + UserTexts.Resources.LastName + ">"));
 			newPerson.PermissionInformation.SetDefaultTimeZone(
 					 StateHolderReader.Instance.StateReader.UserTimeZone);
 			filteredPeopleHolder.FilteredPersonCollection.Insert(rowIndex, newPerson);

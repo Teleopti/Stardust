@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		[Test]
 		public void VerifyPassingPersonInConstructor()
 		{
-			_base.Name = new Name("FirstName", "LastName");
+			_base.WithName(new Name("FirstName", "LastName"));
 			Assert.AreEqual(_target.FirstName, "FirstName");
 		}
 

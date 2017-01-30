@@ -12,6 +12,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			serviceBusReportProgress = mock.StrictMock<IServiceBusPayrollExportFeedback>();
 			_resolver = mock.DynamicMock<IDomainAssemblyResolver>();
 			_tenantPeopleLoader = mock.DynamicMock<ITenantPeopleLoader>();
-			exportingPerson = new Person { Name = new Name("Ex", "Porter") };
+			exportingPerson = new Person().WithName(new Name("Ex", "Porter"));
 			target = new PayrollExportHandler(currentUnitOfWork, payrollExportRepository, payrollResultRepository,
 				payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver,
 				_tenantPeopleLoader);

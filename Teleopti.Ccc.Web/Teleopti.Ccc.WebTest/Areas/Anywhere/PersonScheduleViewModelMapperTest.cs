@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		public void ShouldMapPersonName()
 		{
 			var target = new PersonScheduleViewModelMapper();
-			var person = new Person {Name = new Name("Pierra", "B")};
+			var person = new Person().WithName(new Name("Pierra", "B"));
 
 			var result = target.Map(new PersonScheduleData { Person = person, CommonAgentNameSetting = new CommonNameDescriptionSetting() });
 

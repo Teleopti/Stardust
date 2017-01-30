@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				}
 
 				if (command.FirstName != null && command.LastName != null)
-					person.Name = new Name(command.FirstName, command.LastName);
+					person.SetName(new Name(command.FirstName, command.LastName));
 				else if (command.FirstName != null)
-					person.Name = new Name(command.FirstName, person.Name.LastName);
+					person.SetName(new Name(command.FirstName, person.Name.LastName));
 				else if (command.LastName != null)
-					person.Name = new Name(person.Name.FirstName, command.LastName);
+					person.SetName(new Name(person.Name.FirstName, command.LastName));
 
 				if (command.Email != null)
 					person.Email = command.Email;

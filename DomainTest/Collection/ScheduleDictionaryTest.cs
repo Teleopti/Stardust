@@ -1299,7 +1299,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var newId = Guid.NewGuid();
 
 			var dateOnlyPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2);
-			IMeetingPerson meetingPerson = new MeetingPerson(new Person { Name = new Name("uffe", "uffe") }, false);
+			IMeetingPerson meetingPerson = new MeetingPerson(new Person().WithName(new Name("uffe", "uffe")), false);
 
 			IMeeting meeting = new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject", "location", "description", ActivityFactory.CreateActivity("act"), target.Scenario);
 			meeting.StartDate = dateOnlyPeriod.StartDate;

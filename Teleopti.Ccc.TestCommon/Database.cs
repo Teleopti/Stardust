@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithPerson(string name)
 		{
-			var person = new Person { Name = new Name(name, name) };
+			var person = new Person().WithName(new Name(name, name));
 			_person = person.Name.ToString();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			_persons.Add(person);
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.TestCommon
 				return this;
 			}
 
-			var person = new Person { Name = new Name(name, name) };
+			var person = new Person().WithName(new Name(name, name));
 			_person = person.Name.ToString();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			person.SetEmploymentNumber(employmentNumber ?? string.Empty);

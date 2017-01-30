@@ -32,9 +32,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			IAbsence ab2 = absenceCollection[1];
 			IAbsence ab3 = absenceCollection[1];
 
-			person1.Name = new Name("Person", "1");
-			person2.Name = new Name("Person", "2");
-			person3.Name = new Name("Person", "3");
+			person1.SetName(new Name("Person", "1"));
+			person2.SetName(new Name("Person", "2"));
+			person3.SetName(new Name("Person", "3"));
 			person1.SetId(Guid.NewGuid());
 			person2.SetId(Guid.NewGuid());
 			person3.SetId(Guid.NewGuid());

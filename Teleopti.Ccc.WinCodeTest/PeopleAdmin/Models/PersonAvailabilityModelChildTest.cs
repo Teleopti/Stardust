@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
@@ -37,10 +38,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             description1 = new Description("My 1 week rotation");
 
             person1 = PersonFactory.CreatePerson();
-            person1.Name = name1;
+            person1.WithName(name1);
 
             person2 = PersonFactory.CreatePerson();
-            person2.Name = name2;
+            person2.WithName(name2);
 
             availability1 = new AvailabilityRotation(description1.Name, 7);
            

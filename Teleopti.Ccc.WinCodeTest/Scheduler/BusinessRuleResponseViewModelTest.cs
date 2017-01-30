@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _stubs = new MockRepository();
             _stubs.Record();
             _person = _stubs.Stub<IPerson>();
-            _person.Name = new Name("John", "Doe");
+            _person.WithName(new Name("John", "Doe"));
             _businessRuleResponse = _stubs.Stub<IBusinessRuleResponse>();
             Expect.Call(_businessRuleResponse.Message).Return("the message");
             Expect.Call(_businessRuleResponse.Person).Return(_person);

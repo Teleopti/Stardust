@@ -122,10 +122,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 		private IPerson createPersonFromModel(RawUser rawPerson)
 		{
-			var person = new Person
-			{
-				Name = new Name(rawPerson.Firstname ?? " ", rawPerson.Lastname ?? " ")
-			};
+			var person = new Person();
+			person.SetName(new Name(rawPerson.Firstname ?? " ", rawPerson.Lastname ?? " "));
 
 			var timeZone = _currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			person.PermissionInformation.SetDefaultTimeZone(timeZone);

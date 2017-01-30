@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override IPerson CreateAggregateWithCorrectBusinessUnit()
 		{
 			IPerson person = PersonFactory.CreatePerson("sdgf");
-			person.Name = new Name("Roger","Msdfr");
+			person.SetName(new Name("Roger","Msdfr"));
 			person.Email = "roger.kratz@teleopti.com";
 			person.WorkflowControlSet = _workflowControlSet;
 			return person;

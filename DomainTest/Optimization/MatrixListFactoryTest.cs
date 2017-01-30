@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -106,8 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			var agent2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 
-			agent1.Name = new Name("agent_1", "agent_1");
-			agent2.Name = new Name("agent_2", "agent_2");
+			agent1.WithName(new Name("agent_1", "agent_1"));
+			agent2.WithName(new Name("agent_2", "agent_2"));
 
 			agent1.Period(new DateOnly(2015, 10 , 4)).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(54), TimeSpan.Zero, TimeSpan.FromHours(36));
 			agent2.Period(new DateOnly(2015, 10, 4)).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(54), TimeSpan.Zero, TimeSpan.FromHours(36));

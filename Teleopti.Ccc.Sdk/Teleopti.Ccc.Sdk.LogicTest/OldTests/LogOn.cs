@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
             var applicationData = StateHolderProxyHelper.CreateApplicationData(null);
             var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
             
-            var per = new Person {Name = new Name("Peter", "Westlin Junior")}.WithId();
+            var per = new Person().WithName(new Name("Peter", "Westlin Junior")).WithId();
             
             StateHolderProxyHelper.ClearAndSetStateHolder(per, businessUnit, applicationData, ds, state);
         }

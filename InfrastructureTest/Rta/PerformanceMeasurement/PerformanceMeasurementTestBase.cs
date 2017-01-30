@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 
 				userCodes.ForEach(name =>
 				{
-					var person = new Person { Name = new Name(name, name) };
+					var person = new Person().WithName(new Name(name, name));
 					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 
 					var personContract = new PersonContract(

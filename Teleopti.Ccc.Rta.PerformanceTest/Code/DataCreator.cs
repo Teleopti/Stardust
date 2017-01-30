@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						var index = l.index;
 						var team = teams.Single(x => x.Description.Name == "team" + (index/ 10));
 
-						var person = new Person {Name = new Name(l.logon.UserCode, l.logon.UserCode) };
+						var person = new Person().WithName(new Name(l.logon.UserCode, l.logon.UserCode));
 						person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 						_persons.Add(person);
 

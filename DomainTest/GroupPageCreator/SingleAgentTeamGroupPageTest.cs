@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         public void Setup()
         {
             _target = new SingleAgentTeamGroupPage();
-            _baseLineData.Person1.Name = new Name("First1", "Last1");
-            _baseLineData.Person2.Name = new Name("First2", "Last2");
+            _baseLineData.Person1.SetName(new Name("First1", "Last1"));
+            _baseLineData.Person2.SetName(new Name("First2", "Last2"));
         }
 
         [Test]

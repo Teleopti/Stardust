@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldReturnPersistedNotifications()
 		{
 			var fakeJobResultRepository = new FakeJobResultRepository();
-			var person = new Person { Name = new Name("aa", "bb") };
+			var person = new Person().WithName(new Name("aa", "bb"));
 			var timeStamp = new DateTime(2015, 03, 18, 9, 18, 0, DateTimeKind.Utc);
 			
 			var jobResult1 = getJobResult(false, person, timeStamp);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldReturnPersistedNotificationsContent()
 		{
 			var fakeJobResultRepository = new FakeJobResultRepository();
-			var person = new Person { Name = new Name("aa", "bb") };
+			var person = new Person().WithName(new Name("aa", "bb"));
 			var timeStamp = DateTime.UtcNow.AddHours(1);
 			IUserTimeZone userTimeZone = new HawaiiTimeZone();
 			
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldReturnLatestFiveNotifications()
 		{
 			var fakeJobResultRepository = new FakeJobResultRepository();
-			var person = new Person { Name = new Name("aa", "bb") };
+			var person = new Person().WithName(new Name("aa", "bb"));
 			IUserTimeZone userTimeZone = new HawaiiTimeZone();
 			var timeStamp = new DateTime(2015, 03, 18, 9, 18, 0, DateTimeKind.Utc);
 			

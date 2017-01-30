@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var person = PersonFactory.CreatePersonWithId(personId);
 			((Person)person).PopAllEvents();
 
-			person.Name = new Name("bill","gates");
+			person.SetName(new Name("bill","gates"));
 		
 	
 			var @event = ((Person)person).PopAllEvents().OfType<PersonNameChangedEvent>().Single();
@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var person = PersonFactory.CreatePerson();
 			((Person)person).PopAllEvents();
-			person.Name = new Name("bill", "gates");
+			person.SetName(new Name("bill", "gates"));
 
 			((Person)person).PopAllEvents();
-			person.Name = new Name("bill", "gates");
+			person.SetName(new Name("bill", "gates"));
 
 			((Person)person).PopAllEvents().OfType<PersonNameChangedEvent>().Should().Be.Empty();
 		}

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var person = PersonFactory.CreatePerson("testuser", "123").WithId();
 			person.PermissionInformation.SetCulture(new CultureInfo(1053));
 			person.PermissionInformation.SetUICulture(new CultureInfo(1025));
-			person.Name = new Name("aaa", "bbb");
+			person.WithName(new Name("aaa", "bbb"));
 			person.Email = "email";
 			person.SetEmploymentNumber("email");
 			person.Note = "A very good agent";

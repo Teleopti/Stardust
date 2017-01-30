@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			set
 			{
 				var name = new Name(value, LastName);
-				ContainedEntity.Name = name;
+				ContainedEntity.SetName(name);
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			set
 			{
 				var name = new Name(FirstName, value);
-				ContainedEntity.Name = name;
+				ContainedEntity.SetName(name);
 			}
 		}
 

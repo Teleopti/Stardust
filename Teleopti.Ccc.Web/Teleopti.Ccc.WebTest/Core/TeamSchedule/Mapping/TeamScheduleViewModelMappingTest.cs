@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapAgentNames()
 		{
 			var personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			var person = new Person { Name = new Name("a", "person") };
+			var person = new Person().WithName(new Name("a", "person"));
 			string name = person.Name.FirstName + " " + person.Name.LastName;
 			personNameProvider.Stub(x => x.BuildNameFromSetting(person.Name)).Return(name);
 			Mapper.Reset();

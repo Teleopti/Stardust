@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
@@ -39,8 +40,8 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 
 			_replier = new Person();
 			_replier.SetId(Guid.Empty);
-			_replier.Name = new Name("Ashley","Andeen");
-			_person = new Person { Name = new Name("ashley", "andeen") };
+			_replier.WithName(new Name("Ashley","Andeen"));
+			_person = new Person().WithName(new Name("ashley", "andeen"));
 			_pushMessage = new PushMessage(new[] { "OK" })
 										 {
 											 Title = "my title",
