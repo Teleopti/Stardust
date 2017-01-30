@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -73,14 +74,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			var updated = _unitOfWork.Current()
 				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Schedule = :Schedule, Valid = 1 WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
-				.SetParameter("Schedule", serializedSchedule)
+				.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
 			if (updated == 0)
 				_unitOfWork.Current()
 					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, Valid) VALUES (:PersonId, :Schedule, 1)")
 					.SetParameter("PersonId", personId)
-					.SetParameter("Schedule", serializedSchedule)
+					.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 					.ExecuteUpdate();
 		}
 	}

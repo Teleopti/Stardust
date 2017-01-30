@@ -26,6 +26,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldPersistLargeSchedule()
+		{
+			var personId = Guid.NewGuid();
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Persist(personId, Enumerable.Range(0, 100).Select(i => new ScheduledActivity()));
+			});
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Persist(personId, Enumerable.Range(0, 100).Select(i => new ScheduledActivity()));
+			});
+		}
+
+		[Test]
 		public void ShouldReplaceOnPersist()
 		{
 			var person = Guid.NewGuid();
@@ -121,6 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.GetInvalid().Should().Be.Empty();
 		}
+
 
 	}
 }
