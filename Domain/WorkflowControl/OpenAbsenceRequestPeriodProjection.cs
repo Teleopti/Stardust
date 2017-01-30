@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -79,12 +81,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					currentTime = findNextTimeSlot(currentTime);
 			}
 
-			return workingColl.Where(w => w.GetPeriod(DateOnly.Today).Intersection(limitToPeriod).HasValue).ToList();
+			return workingColl.Where(w => w.GetPeriod(ServiceLocatorForEntity.Now.LocalDateOnly()).Intersection(limitToPeriod).HasValue).ToList();
 		}
 
 		private void AddBottomLayer(DateOnlyPeriod limitToPeriod)
 		{
-
 			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _languageCultureInfo);
 			CheckAbsenceRequestOpenPeriodResult lastCheckPeriodResult = null;
 			var denyDays = getDenyDays();
@@ -190,7 +191,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool isNextPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var dateToCheck = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate).EndDate;
-			return dateToCheck > DateOnly.Today;
+			return dateToCheck > ServiceLocatorForEntity.Now.LocalDateOnly();
 		}
 
 		private bool isPeriodOutside(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
@@ -254,7 +255,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		private DateOnly findNextTimeSlot(DateOnly currentTime)
 		{
-			DateOnly retTime = new DateOnly(DateTime.MaxValue);
+			DateOnly retTime = DateOnly.MaxValue;
 			foreach (DateOnlyPeriodWithAbsenceRequestPeriod layer in _layerCollectionOriginal)
 			{
 				DateOnly layerTime = layer.Period.StartDate;

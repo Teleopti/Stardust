@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             return _period;
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
+		
         public virtual DateOnlyPeriod Period
         {
             get {

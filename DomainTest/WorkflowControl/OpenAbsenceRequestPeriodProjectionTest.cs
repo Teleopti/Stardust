@@ -5,15 +5,17 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
-    [TestFixture]
+	[DomainTest]
     public class OpenAbsenceRequestPeriodProjectionTest
     {
         private IOpenAbsenceRequestPeriodProjection _target;
@@ -21,6 +23,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private MockRepository _mocks;
         private IOpenAbsenceRequestPeriodExtractor _openAbsenceRequestPeriodExtractor;
         private CultureInfo _cultureInfo;
+
+	    public MutableNow Now;
         
         [SetUp]
         public void Setup()
@@ -293,7 +297,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 	    [Test]
 	    public void VerifyDenyResonClosedPeriod()
 	    {
-			var today = DateOnly.Today;
+			var today = new DateOnly(2017, 1, 25);
+			Now.Is(today.Date);
+
 			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod();
 			absenceRequestOpenPeriod.Period = new DateOnlyPeriod(today.AddDays(-5), today.AddDays(-1));
 			_openAbsenceRequestPeriods.Clear();
@@ -563,6 +569,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test,SetCulture("en-US")]
 		public void ShouldSuggestRequestPeriodExceptDenyDays()
 		{
+			Now.Is(new DateTime(2017,1,1));
+
 			var openPeriodStartDate = new DateOnly(2017, 1, 1);
 			var openPeriodEndDate = new DateOnly(2017, 1, 31);
 			var absence = AbsenceFactory.CreateAbsence("holiday").WithId();
