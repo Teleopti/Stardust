@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _stubs = new MockRepository();
             _stubs.Record();
             _person = _stubs.Stub<IPerson>();
-            _person.WithName(new Name("John", "Doe"));
+			_person.Stub(x => x.Name).Return(new  Name("John", "Doe"));
             _businessRuleResponse = _stubs.Stub<IBusinessRuleResponse>();
             Expect.Call(_businessRuleResponse.Message).Return("the message");
             Expect.Call(_businessRuleResponse.Person).Return(_person);
