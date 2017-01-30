@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
+		[RemoveMeWithToggle("Remove scheduleMatrixListPros param", Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMatrixListPros,
