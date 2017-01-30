@@ -164,7 +164,6 @@
 
 		function selectOrganization(orgData, selectedRole, isSelected) {
 			var data = prepareData(orgData, selectedRole);
-
 			var selectedData = {
 				Type: orgData.Type,
 				Id: data.Id,
@@ -180,11 +179,20 @@
 				} else {
 					PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function(result) {});
 				}
-			} else if (isSelected) {
-				PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {});
-			} else if (!isSelected) {
-				PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function(result) {});
-			}
+			} else if (orgData.Type === 'Site') {
+				if (isSelected) {
+					PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {});
+				} else {
+					PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function(result){});
+					}
+				}
+				else if (orgData.Type === 'Team') {
+					if (isSelected) {
+						PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {});
+					} else {
+						PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function(result) {});
+					}
+				}
 		}
 
 		function arrayCreator(orgData) {

@@ -1,5 +1,4 @@
 'use strict';
-
 describe('permissionsDataService', function() {
 	var $httpBackend,
 		fakeBackend,
