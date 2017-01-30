@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -13,6 +14,12 @@ namespace Teleopti.Ccc.TestCommon
 		public static IPersonAssignment ShiftCategory(this IPersonAssignment assignment, IShiftCategory shiftCategory)
 		{
 			assignment.SetShiftCategory(shiftCategory);
+			return assignment;
+		}
+
+		public static IPersonAssignment IsDayOff(this IPersonAssignment assignment)
+		{
+			assignment.SetDayOff(new DayOffTemplate());
 			return assignment;
 		}
 	}
