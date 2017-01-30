@@ -21,9 +21,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 	public class AgentStateForUpsert : AgentState
 	{
-		public int DataSourceId { get; set; }
-		public string UserCode { get; set; }
-
 		public AgentStateForUpsert()
 		{
 			DataSourceId = 0;
