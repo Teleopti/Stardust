@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 			if (string.IsNullOrEmpty(notificationHeader.MobileNumber))
 			{
-				Logger.Info("Did not find a Mobile Number on " + notificationHeader.PersonName);
+				Logger.Info($"Did not find a Mobile Number on {notificationHeader.PersonName}");
 				return;
 			}
 
@@ -46,36 +46,38 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public IList<string> GetSmsMessagesToSend(INotificationMessage message, bool containUnicode)
 		{
-			IList<string> messagesToSendList = new List<string>();
-			var customerName = "";
-			if (!string.IsNullOrWhiteSpace(message.CustomerName))
-				customerName = $"[{message.CustomerName}] ";
-			var temp = $"{customerName}{message.Subject} ";
-
+			var messagesToSendList = new List<string>();
 			var maxSmsLength = 160;
 			if (containUnicode)
 				maxSmsLength = 70;
+			var customerString = "";
+			if (!string.IsNullOrWhiteSpace(message.CustomerName))
+				customerString = $" from [{message.CustomerName}]";
+			var formatString = $"{message.Subject} {{0}}{customerString}";
 
-			for (var i = 0; i < message.Messages.Count; )
+			var tmp = "";
+			foreach (var msg in message.Messages)
 			{
-				if (temp.Length + message.Messages[i].Length < maxSmsLength)
+				// If adding next message is still less than limit, add it and move on
+				if (string.Format(formatString, tmp + msg).Length < maxSmsLength)
 				{
-					temp = temp + message.Messages[i] + ",";
-					i++;
-					if (i == message.Messages.Count)
-					{
-						string replace = temp.Substring(0, temp.Length - 1);
-						messagesToSendList.Add(replace + ".");
-					}
+					tmp = string.IsNullOrWhiteSpace(tmp) ? $"{tmp}{msg}" : $"{tmp},{msg}";
+					continue;
+				}
+				// Otherwise we don't want to send empty message so add it anyways 
+				if (string.IsNullOrWhiteSpace(tmp))
+				{
+					messagesToSendList.Add(string.Format(formatString, msg));
 				}
 				else
 				{
-					var replace = temp.Substring(0, temp.Length - 1);
-					messagesToSendList.Add(replace + ".");
-					temp = message.Subject + " ";
+					// send and reset
+					messagesToSendList.Add(string.Format(formatString, tmp));
+					tmp = msg;
 				}
 			}
-
+			if (!string.IsNullOrWhiteSpace(tmp))
+				messagesToSendList.Add(string.Format(formatString, tmp));
 			return messagesToSendList;
 		}
 
@@ -89,18 +91,14 @@ namespace Teleopti.Ccc.Domain.Notification
 				var smsString = _notificationConfigReader.Data;
 
 				if (containUnicode)
-					smsMessage = smsMessage.Aggregate(@"",
-																						(current, c) =>
-																						current +
-																						string.Format("{0:x4}",
-																													Convert.ToUInt32(((int)c).ToString(CultureInfo.InvariantCulture))))
-																 .ToUpper();
+					smsMessage = smsMessage.Aggregate(@"", (current, c) => $"{current}{Convert.ToUInt32(((int) c).ToString(CultureInfo.InvariantCulture)):x4}")
+						.ToUpper();
 
 				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User,
 																		_notificationConfigReader.Password, _notificationConfigReader.Api, mobileNumber, _notificationConfigReader.From,
 																		smsMessage, containUnicode ? 1 : 0);
 
-				Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
+				Logger.Info($"Sending SMS on: {_notificationConfigReader.Url}{msgData}");
 				try
 				{
 					var data = client.MakeRequest(msgData);
@@ -115,25 +113,24 @@ namespace Teleopti.Ccc.Domain.Notification
 						{
 							if (s.Contains(_notificationConfigReader.ErrorCode))
 							{
-								Logger.Error("Error occurred sending SMS: " + s);
-								throw new SendNotificationException("Error occurred sending SMS: " + s);
+								Logger.Error($"Error occurred sending SMS: {s}");
+								throw new SendNotificationException($"Error occurred sending SMS: {s}");
 							}
 						}
 						else
 						{
 							if (!s.Contains(_notificationConfigReader.SuccessCode))
 							{
-								Logger.Error("Error occurred sending SMS: " + s);
-								throw new SendNotificationException("Error occurred sending SMS: " + s);
+								Logger.Error($"Error occurred sending SMS: {s}");
+								throw new SendNotificationException($"Error occurred sending SMS: {s}");
 							}
 						}
 					}
 				}
 				catch (Exception exception)
 				{
-					Logger.Error("Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
-					throw new SendNotificationException(
-						"Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
+					Logger.Error($"Error occurred trying receiver access: {_notificationConfigReader.Url}{msgData}", exception);
+					throw new SendNotificationException($"Error occurred trying receiver access: {_notificationConfigReader.Url}{msgData}", exception);
 				}
 			}
 		}

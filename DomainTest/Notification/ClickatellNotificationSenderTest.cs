@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			msg.Messages.Add("Monday 2012-01-01 08:00-17:00");
 			msg.Messages.Add("Tuesday 2012-01-02 08:00-16:00");
 			msg.Messages.Add("Wedneday 2012-01-03 08:00-16:00");
-			msg.Messages.Add("Thrusday 2012-01-04 08:00-16:00");
+			msg.Messages.Add("Thursday 2012-01-04 08:00-16:00");
 			msg.Messages.Add("Friday 2012-01-05 08:00-16:00");
 			msg.Messages.Add("Monday 2012-01-08 Not Working");
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			string message = _target.GetSmsMessagesToSend(msg, false).FirstOrDefault();
 			message.Should().Not.Be.Null();
-			message.Should().StartWith("[Teleopti Test]");
+			message.Should().EndWith("[Teleopti Test]");
 
 		}
 
