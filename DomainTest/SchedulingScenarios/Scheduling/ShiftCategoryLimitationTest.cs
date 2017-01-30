@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.True();
 		}
 
-		[Test, Ignore("42680, to be fixed")]
+		[Test]
 		public void ShouldNotCrashOnTeamMemberNotInSelection()
 		{
 			var team = new Team { Description = new Description("_"), Site = new Site("_") };

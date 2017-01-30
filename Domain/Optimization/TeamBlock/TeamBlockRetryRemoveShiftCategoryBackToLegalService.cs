@@ -51,8 +51,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
-			IOptimizationPreferences optimizationPreferences)
+			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMatrixListPros,
+			IOptimizationPreferences optimizationPreferences,
+			IList<IScheduleMatrixPro> allScheduleMatrixListPros)
 		{
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				var unsuccessfulDays = new HashSet<DateOnly>();
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder,
-					rollbackService, resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays);
+					rollbackService, resourceCalculateDelayer, allScheduleMatrixListPros, shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays);
 
 				unsuccessfulDays.ForEach(x => scheduleMatrixPro.UnlockPeriod(x.ToDateOnlyPeriod()));
 				_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackService);

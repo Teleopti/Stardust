@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 	public interface ITeamBlockRemoveShiftCategoryBackToLegalService
 	{
-		void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, IOptimizationPreferences optimizationPreferences);
+		void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, IOptimizationPreferences optimizationPreferences)
+		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros)
 		{
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					var dateOnly = removedScheduleDayPro.Day;
 					var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-					var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization, person, dateOnlyPeriod, allScheduleMatrixPros);
+					var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization, person, dateOnlyPeriod, scheduleMaxtrixListPros);
 					var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), isSingleAgentTeam);
 					if (teamBlockInfo == null) continue;
 
