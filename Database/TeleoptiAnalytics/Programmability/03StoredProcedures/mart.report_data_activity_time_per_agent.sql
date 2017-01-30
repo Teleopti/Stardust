@@ -94,7 +94,7 @@ SELECT * FROM SplitStringInt(@activity_set)
 /*Speed up fact_schedule*/
 INSERT INTO #fact_schedule
 SELECT shift_startdate_local_id,schedule_date_id, person_id, interval_id, scenario_id, activity_id, activity_startdate_id, scheduled_time_m, scheduled_contract_time_activity_m, scheduled_work_time_activity_m, scheduled_over_time_m, scheduled_paid_time_activity_m
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 --WHERE schedule_date_id in	(
 --							select b.date_id 
 --							from mart.bridge_time_zone b 
