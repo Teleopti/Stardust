@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		// find things to work with
 		IEnumerable<ExternalLogonForCheck> FindForCheck();
-		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
+		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, int dataSourceId, string loggedOutState);
 
 		// lock and update
 		LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);

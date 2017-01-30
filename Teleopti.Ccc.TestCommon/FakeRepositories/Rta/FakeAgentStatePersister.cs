@@ -81,11 +81,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.ToArray();
 		}
 
-		public virtual IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
+		public virtual IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, int dataSourceId, string loggedOutState)
 		{
 			lock (_lock)
 				return _data
-					.Where(s => s.SourceId == sourceId && (s.BatchId < snapshotId || s.BatchId == null) && s.StateCode != loggedOutState)
+					.Where(s => s.DataSourceId == dataSourceId && (s.BatchId < snapshotId || s.BatchId == null) && s.StateCode != loggedOutState)
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
 					.Select(x => new ExternalLogon
 					{

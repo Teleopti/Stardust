@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
-			process(new closingSnapshotStrategy(snapshotId, sourceId, action, _now.UtcDateTime(), _config, _agentStatePersister));
+			process(new closingSnapshotStrategy(snapshotId, sourceId, action, _now.UtcDateTime(), _config, _agentStatePersister, _databaseLoader));
 		}
 
 		public void ForActivityChanges(Action<Context> action)
@@ -205,7 +204,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override LockedData LockNLoad(IEnumerable<BatchStateInputModel> states, strategyContext context)
 			{
-				var dataSourceId = ValidateSourceId(_databaseLoader, _batch);
+				var dataSourceId = ValidateSourceId(_databaseLoader, _batch.SourceId);
 				var userCodes = states
 					.Select(x => new ExternalLogon
 					{
@@ -245,11 +244,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			private readonly DateTime _snapshotId;
 			private readonly string _sourceId;
+			private readonly IDatabaseLoader _databaseLoader;
 
-			public closingSnapshotStrategy(DateTime snapshotId, string sourceId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister) : base(config, persister, action, time)
+			public closingSnapshotStrategy(DateTime snapshotId, string sourceId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader) : base(config, persister, action, time)
 			{
 				_snapshotId = snapshotId;
 				_sourceId = sourceId;
+				_databaseLoader = databaseLoader;
 				ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 				MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 			}
@@ -259,7 +260,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				IEnumerable<ExternalLogon> logons = null;
 				context.withUnitOfWork(() =>
 				{
-					logons = Persister.FindForClosingSnapshot(_snapshotId, _sourceId, Rta.LogOutBySnapshot);
+					var dataSourceId = ValidateSourceId(_databaseLoader, _sourceId);
+					logons = Persister.FindForClosingSnapshot(_snapshotId, dataSourceId, Rta.LogOutBySnapshot);
 				});
 				return logons.OrderBy(x => x.NormalizedString()).ToArray();
 			}
@@ -443,18 +445,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return func.Invoke();
 		}
 
-		protected int ValidateSourceId(IValidatable input)
+		protected int ValidateSourceId(string sourceId)
 		{
-			return ValidateSourceId(_databaseLoader, input);
+			return ValidateSourceId(_databaseLoader, sourceId);
 		}
 
-		public static int ValidateSourceId(IDatabaseLoader databaseLoader, IValidatable input)
+		public static int ValidateSourceId(IDatabaseLoader databaseLoader, string sourceId)
 		{
-			if (string.IsNullOrEmpty(input.SourceId))
+			if (string.IsNullOrEmpty(sourceId))
 				throw new InvalidSourceException("Source id is required");
 			int dataSourceId;
-			if (!databaseLoader.Datasources().TryGetValue(input.SourceId, out dataSourceId))
-				throw new InvalidSourceException($"Source id \"{input.SourceId}\" not found");
+			if (!databaseLoader.Datasources().TryGetValue(sourceId, out dataSourceId))
+				throw new InvalidSourceException($"Source id \"{sourceId}\" not found");
 			return dataSourceId;
 		}
 	}

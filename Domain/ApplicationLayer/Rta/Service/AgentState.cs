@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public DateTime? BatchId { get; set; }
 		public Guid PlatformTypeId { get; set; }
-		public string SourceId { get; set; }
 
 		public Guid PersonId { get; set; }
 		public Guid BusinessUnitId { get; set; }

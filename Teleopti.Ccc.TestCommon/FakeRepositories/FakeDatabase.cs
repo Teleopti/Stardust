@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
-		
+		private int _nextDataSourceid = 100;
 
 		public FakeDatabase(
 			FakeTenants tenants,
@@ -445,8 +445,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			WithScenario(null, true);
 
 			// seems to always exist
-			_dataSources.Add("-1", -1);
-			_dataSources.Add("-1", 1);
+			WithDataSource(-1, "-1");
+			WithDataSource(1, "-1");
 		}
 
 		public Guid CurrentBusinessUnitId()
@@ -496,17 +496,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithDataSource(int datasourceId, string sourceId)
-		{
-			if (_dataSources.Datasources.Any(x => x.Key == sourceId))
-				return this;
-			_dataSources.Add(sourceId, datasourceId);
-			return this;
-		}
-
 		public FakeDatabase WithDataSource(string sourceId)
 		{
-			return WithDataSource(new Random().Next(100, 1000), sourceId);
+			var lastDataSourceId = _dataSources.Datasources.LastOrDefault().Value;
+			return WithDataSource(lastDataSourceId + 1, sourceId);
+		}
+
+		public FakeDatabase WithDataSource(int datasourceId, string sourceId)
+		{
+			_dataSources.Add(sourceId, datasourceId);
+			return this;
 		}
 
 		public FakeDatabase WithBusinessUnit(Guid? id)

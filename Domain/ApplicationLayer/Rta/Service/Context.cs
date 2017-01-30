@@ -86,12 +86,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// for logging
 		public override string ToString()
 		{
-			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, SourceId: {SourceId}, DataSourceId: {DataSourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
+			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, DataSourceId: {DataSourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
 		public string UserCode => Stored?.UserCode;
 		public int? DataSourceId => Stored?.DataSourceId;
-		public string SourceId => Input.SourceId ?? Stored?.SourceId;
 		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.BatchId;
 		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
 		public string StateCode => Input.StateCode ?? Stored?.StateCode;
@@ -113,7 +112,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BatchId = SnapshotId,
 
 				PlatformTypeId = PlatformTypeId,
-				SourceId = SourceId,
 				ReceivedTime = CurrentTime,
 
 				StateCode = StateCode,

@@ -156,10 +156,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return base.FindForCheck();
 		}
 
-		public override IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
+		public override IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, int dataSourceId, string loggedOutState)
 		{
 			syncFromAggregates();
-			return base.FindForClosingSnapshot(snapshotId, sourceId, loggedOutState);
+			return base.FindForClosingSnapshot(snapshotId, dataSourceId, loggedOutState);
 		}
 
 		public override LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)

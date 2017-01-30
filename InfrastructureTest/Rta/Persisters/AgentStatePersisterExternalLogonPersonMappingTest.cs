@@ -297,10 +297,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					new ExternalLogon
 					{
+						DataSourceId = 3,
 						UserCode = "usercode1"
 					},
 					new ExternalLogon
 					{
+						DataSourceId = 3,
 						UserCode = "usercode2"
 					}
 				}
@@ -308,11 +310,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Update(new AgentState
 			{
 				PersonId = person,
-				BatchId = "2016-08-29 13:00".Utc(),
-				SourceId = "source"
+				BatchId = "2016-08-29 13:00".Utc()
 			});
 
-			var logons = Target.FindForClosingSnapshot("2016-08-29 13:01".Utc(), "source", "loggedout");
+			var logons = Target.FindForClosingSnapshot("2016-08-29 13:01".Utc(), 3, "loggedout");
 			Target.ReadForTest(logons)
 				.Single().PersonId.Should().Be(person);
 		}

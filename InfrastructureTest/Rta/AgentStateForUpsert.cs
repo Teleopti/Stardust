@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			DataSourceId = 0;
 			UserCode = "usercode";
 			ReceivedTime = DateTime.UtcNow;
-			SourceId = "0";
 		}
 	}
 }

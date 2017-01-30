@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				SourceId = "6"
+				DataSourceId = 6
 			};
 			Persister.Upsert(state);
 
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, "loggedout");
 			Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
@@ -46,11 +46,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PlatformTypeId = Guid.NewGuid(),
 				StateStartTime = "2015-03-06 15:00".Utc(),
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				SourceId = "6"
+				DataSourceId = 6
 			};
 			Persister.Upsert(agentStateReadModel);
 
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, "loggedout");
 			var result = Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId);
 
@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = person1,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
-				SourceId = "6",
 				StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot,
 				DataSourceId = 1,
 				UserCode = "usercode1"
@@ -78,12 +77,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = person2,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
-				SourceId = "6",
 				DataSourceId = 1,
 				UserCode = "usercode2"
 			});
 
-			var result = Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), "6", Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+			var result = Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), 1, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.Single();
 			result.DataSourceId.Should().Be(1);
 			result.UserCode.Should().Be("usercode2");

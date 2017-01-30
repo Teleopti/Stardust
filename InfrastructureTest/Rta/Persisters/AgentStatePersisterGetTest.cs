@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				RuleId = Guid.NewGuid(),
 				RuleStartTime = "2014-11-11 10:33".Utc(),
 				BatchId = "2014-11-11 10:34".Utc(),
-				SourceId = "1",
+				DataSourceId = 1,
 				PlatformTypeId = Guid.NewGuid(),
 				ReceivedTime = "2014-11-11 10:36".Utc(),
 				StateCode = "statecode",
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.RuleId.Should().Be(state.RuleId);
 			result.RuleStartTime.Should().Be(state.RuleStartTime);
 			result.BatchId.Should().Be(state.BatchId);
-			result.SourceId.Should().Be(state.SourceId);
+			result.DataSourceId.Should().Be(state.DataSourceId);
 			result.PlatformTypeId.Should().Be(state.PlatformTypeId);
 			result.ReceivedTime.Should().Be(state.ReceivedTime);
 			result.StateCode.Should().Be(state.StateCode);

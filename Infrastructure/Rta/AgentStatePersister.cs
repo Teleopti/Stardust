@@ -4,7 +4,6 @@ using System.Linq;
 using Castle.Core.Internal;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
@@ -18,16 +17,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly DeadLockVictimThrower _deadLockVictimThrower;
-		private readonly IKeyValueStorePersister _keyValueStore;
 
 		public AgentStatePersister(
 			ICurrentUnitOfWork unitOfWork,
-			DeadLockVictimThrower deadLockVictimThrower,
-			IKeyValueStorePersister keyValueStore)
+			DeadLockVictimThrower deadLockVictimThrower)
 		{
 			_unitOfWork = unitOfWork;
 			_deadLockVictimThrower = deadLockVictimThrower;
-			_keyValueStore = keyValueStore;
 		}
 
 		[LogInfo]
@@ -87,7 +83,6 @@ INSERT INTO [dbo].[AgentState]
 (
 	PersonId,
 	BatchId,
-	SourceId,
 	PlatformTypeId,
 	BusinessUnitId,
 	SiteId,
@@ -102,13 +97,13 @@ INSERT INTO [dbo].[AgentState]
 	AlarmStartTime,
 	TimeWindowCheckSum,
 	Adherence,
-	DataSourceIdUserCode
+	DataSourceIdUserCode,
+	DataSourceId
 )
 VALUES
 (
 	:PersonId,
 	:BatchId,
-	:SourceId,
 	:PlatformTypeId,
 	:BusinessUnitId,
 	:SiteId,
@@ -123,11 +118,11 @@ VALUES
 	:AlarmStartTime,
 	:TimeWindowCheckSum,
 	:Adherence,
-	:DataSourceIdUserCode
+	:DataSourceIdUserCode,
+	:DataSourceId
 )")
 						.SetParameter("PersonId", model.PersonId)
 						.SetParameter("BatchId", copyFrom?.BatchId)
-						.SetParameter("SourceId", copyFrom?.SourceId)
 						.SetParameter("PlatformTypeId", copyFrom?.PlatformTypeId)
 						.SetParameter("BusinessUnitId", model.BusinessUnitId)
 						.SetParameter("SiteId", model.SiteId)
@@ -143,6 +138,7 @@ VALUES
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
 						.SetParameter("Adherence", (int?) copyFrom?.Adherence)
 						.SetParameter("DataSourceIdUserCode", e.NormalizedString())
+						.SetParameter("DataSourceId", e.DataSourceId)
 						.ExecuteUpdate();
 				});
 		}
@@ -154,7 +150,6 @@ VALUES
 UPDATE [dbo].[AgentState]
 SET
 	BatchId = :BatchId,
-	SourceId = :SourceId,
 	PlatformTypeId = :PlatformTypeId,
 	ReceivedTime = :ReceivedTime,
 	StateCode = :StateCode,
@@ -172,7 +167,6 @@ WHERE
 					.CreateSQLQuery(sql)
 					.SetParameter("PersonId", model.PersonId)
 					.SetParameter("BatchId", model.BatchId)
-					.SetParameter("SourceId", model.SourceId)
 					.SetParameter("PlatformTypeId", model.PlatformTypeId)
 					.SetParameter("ReceivedTime", model.ReceivedTime)
 					.SetParameter("StateCode", model.StateCode)
@@ -213,17 +207,17 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
+		public virtual IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, int dataSourceId, string loggedOutState)
 		{
 			return _unitOfWork.Current().Session().CreateSQLQuery(@"
 SELECT
 	PersonId,
 	DataSourceIdUserCode
 FROM [dbo].[AgentState] WITH (NOLOCK)
-WHERE SourceId = :SourceId
+WHERE DataSourceId = :DataSourceId
 AND (BatchId < :SnapshotId OR BatchId IS NULL)
 AND (StateCode <> :State OR StateCode IS NULL)")
-				.SetParameter("SourceId", sourceId)
+				.SetParameter("DataSourceId", dataSourceId)
 				.SetParameter("SnapshotId", snapshotId)
 				.SetParameter("State", loggedOutState)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogon)))

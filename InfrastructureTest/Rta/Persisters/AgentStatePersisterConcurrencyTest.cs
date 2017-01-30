@@ -59,10 +59,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			persons.ForEach(p =>
 			{
 				Service.Prepare(p);
-				Service.AddOne(p, "2016-03-15 08:00".Utc(), "9");
+				Service.AddOne(p, "2016-03-15 08:00".Utc());
 			});
 
-			runner.InParallel(() => Service.AddOneToNotInSnapshot("2016-03-15 08:05".Utc(), "9"));
+			runner.InParallel(() => Service.AddOneToNotInSnapshot("2016-03-15 08:05".Utc()));
 			persons.ForEach(p => Service.AddOne(p));
 			runner.Wait();
 
@@ -84,14 +84,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				_persister.Prepare(new AgentStatePrepare
 				{
 					PersonId = Guid.NewGuid(),
-					ExternalLogons = new[] {new ExternalLogon {UserCode = userCode } }
+					ExternalLogons = new[] {new ExternalLogon {UserCode = userCode, DataSourceId = 0} }
 				}, DeadLockVictim.Yes);
 			}
 			
 			[UnitOfWork]
-			public virtual void AddOneToNotInSnapshot(DateTime batchId, string datasourceId)
+			public virtual void AddOneToNotInSnapshot(DateTime batchId)
 			{
-				var externalLogons = _persister.FindForClosingSnapshot(batchId, datasourceId, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				var externalLogons = _persister.FindForClosingSnapshot(batchId, 0, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
 				var states = _persister.LockNLoad(externalLogons, DeadLockVictim.No).AgentStates;
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * states.Count()));
 				addOneTo(states);
@@ -116,11 +116,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			public virtual void AddOne(string userCode)
 			{
-				AddOne(userCode, null, null);
+				AddOne(userCode, null);
 			}
 
 			[UnitOfWork]
-			public virtual void AddOne(string userCode, DateTime? batchId, string sourceId)
+			public virtual void AddOne(string userCode, DateTime? batchId)
 			{
 				var model = _persister.ReadForTest(new ExternalLogon {UserCode = userCode})
 					.Single();
@@ -128,7 +128,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				model.StateCode = (int.Parse(model.StateCode ?? "0") + 1).ToString();
 				model.ReceivedTime = model.ReceivedTime ?? "2016-03-15 00:00:00".Utc();
 				model.BatchId = model.BatchId ?? batchId;
-				model.SourceId = model.SourceId ?? sourceId;
 				_persister.Update(model);
 			}
 
