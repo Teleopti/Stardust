@@ -28,16 +28,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IStateCodeAdder _stateCodeAdder;
 		private readonly IMappingReader _reader;
-		private readonly IKeyValueStorePersister _keyValues;
 		private string _version;
 		private IDictionary<ruleMappingKey, MappedRule> _ruleMappingDictionary = new Dictionary<ruleMappingKey, MappedRule>();
 		private IDictionary<stateMappingKey, MappedState> _stateMappingDictionary = new Dictionary<stateMappingKey, MappedState>();
 
-		public StateMapper(IStateCodeAdder stateCodeAdder, IMappingReader reader, IKeyValueStorePersister keyValues)
+		public StateMapper(IStateCodeAdder stateCodeAdder, IMappingReader reader)
 		{
 			_stateCodeAdder = stateCodeAdder;
 			_reader = reader;
-			_keyValues = keyValues;
 		}
 
 		public MappedRule RuleFor(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
@@ -84,11 +82,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return result;
 		}
 
-		public void RefreshMappingCache()
+		public void RefreshMappingCache(string latestVersion)
 		{
-			var version = _keyValues.Get("RuleMappingsVersion");
-
-			var refresh = version != _version || _version == null;
+			var refresh = latestVersion != _version || _version == null;
 			if (!refresh)
 				return;
 
@@ -132,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						StateGroupName = mapping.StateGroupName
 					};
 				});
-			_version = version;
+			_version = latestVersion;
 		}
 
 		private class ruleMappingKey

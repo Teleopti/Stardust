@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new ExternalLogon {DataSourceId = 3, UserCode = "usercode1"}, DeadLockVictim.Yes).Single().PersonId.Should().Be(person);
-			Target.Find(new ExternalLogon {DataSourceId = 4, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().PersonId.Should().Be(person);
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 3, UserCode = "usercode1"}).Single().PersonId.Should().Be(person);
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 4, UserCode = "usercode2"}).Single().PersonId.Should().Be(person);
 		}
 
 		[Test]
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new ExternalLogon {DataSourceId = 7, UserCode = "usercode"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(2);
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 7, UserCode = "usercode"}).Should().Have.Count.EqualTo(2);
 		}
 
 		[Test]
@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercodeA"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(0);
-			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercodeA"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(1);
-			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercodeB"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(1);
-			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercodeB"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(0);
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 1, UserCode = "usercodeA"}).Should().Have.Count.EqualTo(0);
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 2, UserCode = "usercodeA"}).Should().Have.Count.EqualTo(1);
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 1, UserCode = "usercodeB"}).Should().Have.Count.EqualTo(1);
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 2, UserCode = "usercodeB"}).Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new ExternalLogon {UserCode = "usercodeA" }, DeadLockVictim.Yes)
+			Target.ReadForTest(new ExternalLogon {UserCode = "usercodeA" })
 				.Should().Have.Count.EqualTo(0);
 		}
 
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new ExternalLogon { UserCode = "usercode2" }, DeadLockVictim.Yes)
+			Target.ReadForTest(new ExternalLogon { UserCode = "usercode2" })
 				.Single().PersonId.Should().Be(person);
 		}
 
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new ExternalLogon {UserCode = "usercode2"}, DeadLockVictim.Yes)
+			Target.ReadForTest(new ExternalLogon {UserCode = "usercode2"})
 				.Single().PersonId.Should().Be(person);
 		}
 		
@@ -238,8 +238,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				StateCode = "statecode"
 			});
 
-			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercode1"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
-			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 1, UserCode = "usercode1"}).Single().StateCode.Should().Be("statecode");
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}).Single().StateCode.Should().Be("statecode");
 		}
 
 		[Test]
@@ -277,8 +277,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("code");
-			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().ReceivedTime.Should().Be("2016-09-14".Utc());
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}).Single().StateCode.Should().Be("code");
+			Target.ReadForTest(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}).Single().ReceivedTime.Should().Be("2016-09-14".Utc());
 		}
 
 
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			});
 
 			var logons = Target.FindForClosingSnapshot("2016-08-29 13:01".Utc(), "source", "loggedout");
-			Target.Find(logons, DeadLockVictim.Yes)
+			Target.ReadForTest(logons)
 				.Single().PersonId.Should().Be(person);
 		}
 
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Find(new[]
+			Target.ReadForTest(new[]
 				{
 					new ExternalLogon
 					{
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						DataSourceId = 1,
 						UserCode = usercodeA
 					}
-				}, DeadLockVictim.Yes)
+				})
 				.Select(x => x.PersonId)
 				.OrderBy(x => x)
 				.Should().Have.SameSequenceAs(new [] { person1, person2}.OrderBy(x => x));

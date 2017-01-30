@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier) : base(dataSource, databaseLoader, now, stateMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues) : base(dataSource, databaseLoader, now, stateMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues)
 		{
 		}
 
-		protected override void ProcessTransactions<T>(string tenant, IStrategy<T> strategy, IEnumerable<Func<transactionData>> transactions, ConcurrentBag<Exception> exceptions)
+		protected override void ProcessTransactions<T>(string tenant, IStrategy<T> strategy, IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
 		{
 			var parentThreadName = Thread.CurrentThread.Name;
 
@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ProperAlarm _appliedAlarm;
 		protected readonly IConfigReader _config;
 		protected readonly DeadLockRetrier _deadLockRetrier;
+		private readonly IKeyValueStorePersister _keyValues;
 
 		public ContextLoader(
 			ICurrentDataSource dataSource,
@@ -83,7 +84,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStatePersister agentStatePersister,
 			ProperAlarm appliedAlarm,
 			IConfigReader config,
-			DeadLockRetrier deadLockRetrier)
+			DeadLockRetrier deadLockRetrier,
+			IKeyValueStorePersister keyValues
+			)
 		{
 			_dataSource = dataSource;
 			_databaseLoader = databaseLoader;
@@ -94,6 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAlarm = appliedAlarm;
 			_config = config;
 			_deadLockRetrier = deadLockRetrier;
+			_keyValues = keyValues;
 		}
 
 		public void For(StateInputModel input, Action<Context> action)
@@ -135,15 +139,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForActivityChanges(Action<Context> action)
 		{
-			process(new activityChangesStrategy(action, _now.UtcDateTime(), _config, _agentStatePersister, _scheduleCache));
+			process(new activityChangesStrategy(action, _now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache));
 		}
 
 		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
 		{
+			private readonly IKeyValueStorePersister _keyValues;
 			private readonly ScheduleCache _scheduleCache;
 
-			public activityChangesStrategy(Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, ScheduleCache scheduleCache) : base(config, persister, action, time)
+			public activityChangesStrategy(Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IKeyValueStorePersister keyValues, ScheduleCache scheduleCache) : base(config, persister, action, time)
 			{
+				_keyValues = keyValues;
 				_scheduleCache = scheduleCache;
 				ParallelTransactions = Config.ReadValue("RtaActivityChangesParallelTransactions", 7);
 				MaxTransactionSize = Config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
@@ -155,7 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				IEnumerable<ExternalLogonForCheck> externalLogons = null;
 				context.withUnitOfWork(() =>
 				{
-					_scheduleCache.Refresh();
+					_scheduleCache.Refresh(_keyValues.Get("CurrentScheduleReadModelVersion"));
 					externalLogons = Persister.FindForCheck();
 				});
 				return externalLogons
@@ -168,9 +174,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ToArray();
 			}
 
-			public override IEnumerable<AgentState> LockNLoad(IEnumerable<ExternalLogon> ids, strategyContext context)
+			public override LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, strategyContext context)
 			{
-				return Persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim);
+				return Persister.LockNLoad(externalLogons.Select(x => x.PersonId).ToArray(), DeadLockVictim);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -197,7 +203,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return _batch.States.OrderBy(x => x.UserCode).ToArray();
 			}
 
-			public override IEnumerable<AgentState> LockNLoad(IEnumerable<BatchStateInputModel> states, strategyContext context)
+			public override LockedData LockNLoad(IEnumerable<BatchStateInputModel> states, strategyContext context)
 			{
 				var dataSourceId = ValidateSourceId(_databaseLoader, _batch);
 				var userCodes = states
@@ -209,22 +215,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ToArray();
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-				var agentStates = Persister.Find(userCodes, DeadLockVictim);
+				var data = Persister.LockNLoad(userCodes, DeadLockVictim);
 				stopwatch.Stop();
 				_logger.Debug($"Load agents completed, time: {stopwatch.ElapsedMilliseconds}");
 
 				userCodes
-					.Where(x => agentStates.All(s => s.UserCode != x.UserCode))
+					.Where(x => data.AgentStates.All(s => s.UserCode != x.UserCode))
 					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {_batch.SourceId}"))
 					.ForEach(context.addException);
 
-				return agentStates;
+				return data;
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
 			{
-				var s = state as AgentStateFound;
-				var input = _batch.States.Single(x => x.UserCode == s.UserCode);
+				var input = _batch.States.Single(x => x.UserCode == state.UserCode);
 				return new InputInfo
 				{
 					PlatformTypeId = _batch.PlatformTypeId,
@@ -259,9 +264,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return logons.OrderBy(x => x.NormalizedString()).ToArray();
 			}
 
-			public override IEnumerable<AgentState> LockNLoad(IEnumerable<ExternalLogon> ids, strategyContext context)
+			public override LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, strategyContext context)
 			{
-				return Persister.Find(ids, DeadLockVictim);
+				return Persister.LockNLoad(externalLogons, DeadLockVictim);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -300,11 +305,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public Action<Context> Action { get; }
 
 			public abstract IEnumerable<T> AllItems(strategyContext context);
-			public abstract IEnumerable<AgentState> LockNLoad(IEnumerable<T> things, strategyContext context);
+			public abstract LockedData LockNLoad(IEnumerable<T> things, strategyContext context);
 			public abstract InputInfo GetInputFor(AgentState state);
 			
 		}
-		
+
 		public interface IStrategy<T>
 		{
 			DateTime CurrentTime { get; }
@@ -315,7 +320,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			IEnumerable<T> AllItems(strategyContext context);
 
-			IEnumerable<AgentState> LockNLoad(IEnumerable<T> things, strategyContext context);
+			LockedData LockNLoad(IEnumerable<T> things, strategyContext context);
 
 			InputInfo GetInputFor(AgentState state);
 
@@ -326,11 +331,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			public Action<Action> withUnitOfWork;
 			public Action<Exception> addException;
-		}
-
-		public class transactionData
-		{
-			public IEnumerable<AgentState> agentStates;
 		}
 
 		protected void process<T>(IStrategy<T> strategy)
@@ -351,7 +351,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			var transactions = items
 				.Batch(transactionSize)
-				.Select(some => new Func<transactionData>(() => loadTransactionData(strategy, strategyContext, some)))
+				.Select(some => new Func<IEnumerable<AgentState>>(() =>
+				{
+					var result = strategy.LockNLoad(some, strategyContext);
+					_stateMapper.RefreshMappingCache(result.MappingVersion);
+					_scheduleCache.Refresh(result.ScheduleVersion);
+					return result.AgentStates;
+				}))
 				.ToArray();
 
 			ProcessTransactions(_dataSource.CurrentName(), strategy, transactions, exceptions);
@@ -373,18 +379,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return maxTransactionSize;
 		}
 
-		private transactionData loadTransactionData<T>(IStrategy<T> strategy, strategyContext context, IEnumerable<T> items)
-		{
-			var agentStates = strategy.LockNLoad(items, context);
-			_stateMapper.RefreshMappingCache();
-			_scheduleCache.Refresh();
-			return new transactionData
-			{
-				agentStates = agentStates,
-			};
-		}
-
-		protected virtual void ProcessTransactions<T>(string tenant, IStrategy<T> strategy, IEnumerable<Func<transactionData>> transactions, ConcurrentBag<Exception> exceptions)
+		protected virtual void ProcessTransactions<T>(string tenant, IStrategy<T> strategy, IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
 		{
 			var parentThreadName = Thread.CurrentThread.Name;
 			Parallel.ForEach(
@@ -411,14 +406,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual void Transaction<T>(
 			string tenant,
 			IStrategy<T> strategy,
-			Func<transactionData> transactionData
+			Func<IEnumerable<AgentState>> agentStates
 			)
 		{
 			WithUnitOfWork(() =>
 			{
-				var data = transactionData.Invoke();
-
-				data.agentStates.ForEach(state =>
+				agentStates.Invoke().ForEach(state =>
 				{
 					strategy.Action.Invoke(new Context(
 						strategy.CurrentTime,

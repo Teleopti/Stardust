@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					WithUnitOfWork(() =>
 					{
-						CurrentScheduleReadModelUpdater.PersistSchedules(personIds, _now, _persons, _businessUnits, _scenarios, _schedules, _persister.Persist);
+						PersistSchedules(personIds, _now, _persons, _businessUnits, _scenarios, _schedules, _persister.Persist);
 						_keyValueStore.Update("CurrentScheduleReadModelVersion", Guid.NewGuid().ToString());
 					});
 				});

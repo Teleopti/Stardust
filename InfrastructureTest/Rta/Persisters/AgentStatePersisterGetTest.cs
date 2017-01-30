@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Upsert(state2);
 			Persister.Upsert(state3);
 
-			var result = Persister.Get(new[] {state1.PersonId, state3.PersonId}, DeadLockVictim.Yes);
+			var result = Persister.ReadForTest(new[] {state1.PersonId, state3.PersonId});
 			
 			result.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(state1.PersonId, state3.PersonId);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			};
 			writer.Upsert(state);
 
-			var result = Persister.Get(new[] { state.PersonId}, DeadLockVictim.Yes)
+			var result = Persister.ReadForTest(new[] { state.PersonId})
 				.Single();
 
 			result.PersonId.Should().Be(state.PersonId);

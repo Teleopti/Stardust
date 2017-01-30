@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			public virtual void AddOneToNotInSnapshot(DateTime batchId, string datasourceId)
 			{
 				var externalLogons = _persister.FindForClosingSnapshot(batchId, datasourceId, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
-				var states = _persister.Find(externalLogons, DeadLockVictim.No);
+				var states = _persister.LockNLoad(externalLogons, DeadLockVictim.No).AgentStates;
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * states.Count()));
 				addOneTo(states);
 			}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual void AddOneToAll()
 			{
-				var all = _persister.Find(_persister.FindForCheck(), DeadLockVictim.Yes);
+				var all = _persister.ReadForTest();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
 				addOneTo(all);
 			}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual void AddOne(string userCode, DateTime? batchId, string sourceId)
 			{
-				var model = _persister.Find(new ExternalLogon {UserCode = userCode}, DeadLockVictim.Yes)
+				var model = _persister.ReadForTest(new ExternalLogon {UserCode = userCode})
 					.Single();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100));
 				model.StateCode = (int.Parse(model.StateCode ?? "0") + 1).ToString();
@@ -135,17 +135,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual AgentState Get(string userCode)
 			{
-				return _persister.Find(new ExternalLogon {UserCode = userCode}, DeadLockVictim.Yes)
+				return _persister.ReadForTest(new ExternalLogon {UserCode = userCode})
 					.Single();
 			}
 
 			[UnitOfWork]
 			public virtual IEnumerable<AgentState> GetAll()
 			{
-				var logons = _persister.FindForCheck();
-				return _persister.Find(logons, DeadLockVictim.Yes);
+				return _persister.ReadForTest();
 			}
-
 		}
 	}
 }

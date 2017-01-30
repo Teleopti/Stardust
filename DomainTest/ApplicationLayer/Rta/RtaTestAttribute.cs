@@ -156,22 +156,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return base.FindForCheck();
 		}
 
-		public override IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
-		{
-			syncFromAggregates();
-			return base.Find(externalLogons, deadLockVictim);
-		}
-
 		public override IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
 		{
 			syncFromAggregates();
 			return base.FindForClosingSnapshot(snapshotId, sourceId, loggedOutState);
 		}
 
-		public override IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
+		public override LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
 			syncFromAggregates();
-			return base.Get(personIds, deadLockVictim);
+			return base.LockNLoad(externalLogons, deadLockVictim);
+		}
+
+		public override LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
+		{
+			syncFromAggregates();
+			return base.LockNLoad(personIds, deadLockVictim);
 		}
 	}
 }

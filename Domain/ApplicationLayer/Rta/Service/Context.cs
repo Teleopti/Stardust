@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _schedule;
-		private readonly AgentStateFound _found;
 
 		public Context(
 			DateTime utcNow,
@@ -20,9 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateMapper stateMapper,
 			ProperAlarm appliedAlarm)
 		{
-
 			Stored = stored;
-			_found = Stored as AgentStateFound;
 			// if the stored state has no time
 			// its just a prepared state
 			// and there's no real previous state
@@ -92,8 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, SourceId: {SourceId}, DataSourceId: {DataSourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
-		public string UserCode => _found?.UserCode;
-		public int? DataSourceId => _found?.DataSourceId;
+		public string UserCode => Stored?.UserCode;
+		public int? DataSourceId => Stored?.DataSourceId;
 		public string SourceId => Input.SourceId ?? Stored?.SourceId;
 		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.BatchId;
 		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();

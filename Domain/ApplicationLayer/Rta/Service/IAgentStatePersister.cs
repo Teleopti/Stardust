@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using log4net;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -47,23 +46,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public interface IAgentStatePersister
 	{
-		// maintainer stuff
+		// maintain
 		void Delete(Guid personId, DeadLockVictim deadLockVictim);
 		void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim);
 
-		// rta service stuff
+		// find things to work with
 		IEnumerable<ExternalLogonForCheck> FindForCheck();
 		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
-		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
-		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim);
+
+		// lock and update
+		LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
+		LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim);
 		void Update(AgentState model);
 	}
 
-	public static class AgentStatePersisterExtensions
+	public class LockedData
 	{
-		public static IEnumerable<AgentStateFound> Find(this IAgentStatePersister instance, ExternalLogon externalLogon, DeadLockVictim deadLockVictim)
-		{
-			return instance.Find(new[] {externalLogon}, deadLockVictim);
-		}
+		public IEnumerable<AgentState> AgentStates;
+		public string MappingVersion;
+		public string ScheduleVersion;
 	}
+
 }

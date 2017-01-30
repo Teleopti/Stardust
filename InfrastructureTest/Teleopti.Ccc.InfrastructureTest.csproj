@@ -228,6 +228,7 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
+    <Compile Include="MultiUnitOfWorkTestAttribute.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerTransientErrorTest.cs" />
     <Compile Include="Persisters\Schedules\Bug39612.cs" />
     <Compile Include="Persisters\Schedules\Bug42159.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="Rta\MappingReadModelReaderTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\PerformanceMeasurementTestBase.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelReaderTest.cs" />
+    <Compile Include="Rta\Persisters\AgentStatePersisterDataVersionsTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterConcurrencyTest.cs" />
     <Compile Include="RetryingQueueSimulator.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />

@@ -31,12 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public int? LastTimeWindowCheckSum { get; set; }
 	}
 
-	public class AgentStateFound : AgentState
-	{
-		public int DataSourceId { get; set; }
-		public string UserCode { get; set; }
-	}
-
 	public class AgentState
 	{
 		public DateTime? BatchId { get; set; }
@@ -62,8 +56,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public int? TimeWindowCheckSum { get; set; }
 
-		//public IEnumerable<ScheduledActivity> Schedule { get; set; }
-		//public DateTime? NextCheck { get; set; }
+		public int DataSourceId { get; set; }
+		public string UserCode { get; set; }
 
 	}
 

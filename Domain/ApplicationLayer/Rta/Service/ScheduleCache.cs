@@ -7,14 +7,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ScheduleCache
 	{
 		private readonly IScheduleReader _reader;
-		private readonly IKeyValueStorePersister _keyValues;
 		private string _version;
 		private IDictionary<Guid, IEnumerable<ScheduledActivity>> _dictionary = new Dictionary<Guid, IEnumerable<ScheduledActivity>>();
 
-		public ScheduleCache(IScheduleReader reader, IKeyValueStorePersister keyValues)
+		public ScheduleCache(IScheduleReader reader)
 		{
 			_reader = reader;
-			_keyValues = keyValues;
 		}
 
 		public IEnumerable<ScheduledActivity> Read(Guid personId)
@@ -24,11 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return result ?? Enumerable.Empty<ScheduledActivity>();
 		}
 
-		public void Refresh()
+		public void Refresh(string latestVersion)
 		{
-			var version = _keyValues.Get("CurrentScheduleReadModelVersion");
-
-			var refresh = version != _version || _version == null;
+			var refresh = latestVersion != _version || _version == null;
 			if (!refresh)
 				return;
 
@@ -37,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_dictionary = activities
 				.GroupBy(x => x.PersonId)
 				.ToDictionary(x => x.Key, x => x.ToArray() as IEnumerable<ScheduledActivity>);
-			_version = version;
+			_version = latestVersion;
 		}
 	}
 }

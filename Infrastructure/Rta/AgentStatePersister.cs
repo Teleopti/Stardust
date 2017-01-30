@@ -4,6 +4,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
@@ -17,11 +18,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly DeadLockVictimThrower _deadLockVictimThrower;
+		private readonly IKeyValueStorePersister _keyValueStore;
 
-		public AgentStatePersister(ICurrentUnitOfWork unitOfWork, DeadLockVictimThrower deadLockVictimThrower)
+		public AgentStatePersister(
+			ICurrentUnitOfWork unitOfWork,
+			DeadLockVictimThrower deadLockVictimThrower,
+			IKeyValueStorePersister keyValueStore)
 		{
 			_unitOfWork = unitOfWork;
 			_deadLockVictimThrower = deadLockVictimThrower;
+			_keyValueStore = keyValueStore;
 		}
 
 		[LogInfo]
@@ -43,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.CreateSQLQuery(SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", model.PersonId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.List<AgentStateFound>();
+				.List<AgentState>();
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -135,12 +141,12 @@ VALUES
 						.SetParameter("RuleStartTime", copyFrom?.RuleStartTime)
 						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
-						.SetParameter("Adherence", (int?)copyFrom?.Adherence)
+						.SetParameter("Adherence", (int?) copyFrom?.Adherence)
 						.SetParameter("DataSourceIdUserCode", e.NormalizedString())
 						.ExecuteUpdate();
 				});
 		}
-		
+
 		[LogInfo]
 		public virtual void Update(AgentState model)
 		{
@@ -163,21 +169,21 @@ SET
 WHERE
 	PersonId = :PersonId";
 			var query = _unitOfWork.Current().Session()
-				.CreateSQLQuery(sql)
-				.SetParameter("PersonId", model.PersonId)
-				.SetParameter("BatchId", model.BatchId)
-				.SetParameter("SourceId", model.SourceId)
-				.SetParameter("PlatformTypeId", model.PlatformTypeId)
-				.SetParameter("ReceivedTime", model.ReceivedTime)
-				.SetParameter("StateCode", model.StateCode)
-				.SetParameter("StateGroupId", model.StateGroupId)
-				.SetParameter("StateStartTime", model.StateStartTime)
-				.SetParameter("ActivityId", model.ActivityId)
-				.SetParameter("RuleId", model.RuleId)
-				.SetParameter("RuleStartTime", model.RuleStartTime)
-				.SetParameter("AlarmStartTime", model.AlarmStartTime)
-				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-				.SetParameter("Adherence", (int?) model.Adherence)
+					.CreateSQLQuery(sql)
+					.SetParameter("PersonId", model.PersonId)
+					.SetParameter("BatchId", model.BatchId)
+					.SetParameter("SourceId", model.SourceId)
+					.SetParameter("PlatformTypeId", model.PlatformTypeId)
+					.SetParameter("ReceivedTime", model.ReceivedTime)
+					.SetParameter("StateCode", model.StateCode)
+					.SetParameter("StateGroupId", model.StateGroupId)
+					.SetParameter("StateStartTime", model.StateStartTime)
+					.SetParameter("ActivityId", model.ActivityId)
+					.SetParameter("RuleId", model.RuleId)
+					.SetParameter("RuleStartTime", model.RuleStartTime)
+					.SetParameter("AlarmStartTime", model.AlarmStartTime)
+					.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
+					.SetParameter("Adherence", (int?) model.Adherence)
 				;
 
 			_deadLockVictimThrower.ThrowOnDeadlock(() => query.ExecuteUpdate());
@@ -226,40 +232,56 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray();
 		}
-		
+
 		[LogInfo]
-		public virtual IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
+		public virtual LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
 			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
-
 			var dataSourceIdUserCodes = externalLogons.Select(x => x.NormalizedString()).ToArray();
-			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode IN (:DataSourceIdUserCodes)";
-
-			return _deadLockVictimThrower.ThrowOnDeadlock(() =>
-					_unitOfWork.Current().Session().CreateSQLQuery(sql)
-						.SetParameterList("DataSourceIdUserCodes", dataSourceIdUserCodes)
-						.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-						.SetReadOnly(true)
-						.List<AgentStateFound>()
+			return lockNLoad(
+				SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode IN (:Parameters)", 
+				dataSourceIdUserCodes
 			);
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
+		public virtual LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
 		{
 			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
+			return lockNLoad(SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE PersonId IN (:Parameters)", personIds);
+		}
 
+		private LockedData lockNLoad<T>(string sql, IEnumerable<T> parameters)
+		{
 			return _deadLockVictimThrower.ThrowOnDeadlock(() =>
 			{
-				var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
-				return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-					.SetParameterList("PersonIds", personIds)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-					.SetReadOnly(true)
-					.List<AgentState>()
-					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.ToArray()
-					;
+				var agentStateQuery = _unitOfWork.Current().Session()
+					.CreateSQLQuery(sql)
+					.SetParameterList("Parameters", parameters)
+					.SetResultTransformer(Transformers.AliasToBean<internalAgentState>())
+					.SetReadOnly(true);
+				var keyValueQuery = _unitOfWork.Current().Session()
+					.CreateSQLQuery("SELECT * FROM [ReadModel].[KeyValueStore] WHERE [Key] IN ('RuleMappingsVersion', 'CurrentScheduleReadModelVersion')")
+					.SetResultTransformer(Transformers.AliasToBean<internalKeyValue>())
+					.SetReadOnly(true);
+
+				var results = _unitOfWork.Current().Session().CreateMultiQuery()
+					.Add(agentStateQuery)
+					.Add(keyValueQuery)
+					.List();
+
+				var agentStates = (results[0] as IEnumerable<object>).Cast<AgentState>();
+				var keyValues = (results[1] as IEnumerable<object>).Cast<internalKeyValue>();
+
+				return new LockedData
+				{
+					AgentStates =
+						agentStates
+							.GroupBy(x => x.PersonId, (guid, states) => states.First())
+							.ToArray(),
+					MappingVersion = keyValues.SingleOrDefault(x => x.Key == "RuleMappingsVersion")?.Value,
+					ScheduleVersion = keyValues.SingleOrDefault(x => x.Key == "CurrentScheduleReadModelVersion")?.Value
+				};
 			});
 		}
 
@@ -276,7 +298,13 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 			));
 		}
 
-		private class internalAgentState : AgentStateFound
+		private class internalKeyValue
+		{
+			public string Key { get; set; }
+			public string Value { get; set; }
+		}
+
+		private class internalAgentState : AgentState
 		{
 			public new int? Adherence
 			{

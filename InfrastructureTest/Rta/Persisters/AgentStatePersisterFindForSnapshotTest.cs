@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Upsert(state);
 
 			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
-			Persister.Find(logons, DeadLockVictim.Yes)
+			Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Upsert(agentStateReadModel);
 
 			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
-			var result = Persister.Find(logons, DeadLockVictim.Yes)
+			var result = Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId);
 
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);

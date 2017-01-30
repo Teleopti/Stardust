@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	public class FakeAgentStatePersister : IAgentStatePersister
 	{
 		private readonly object _lock = new object();
-		private IEnumerable<AgentStateFound> _data = Enumerable.Empty<AgentStateFound>();
+		private IEnumerable<AgentState> _data = Enumerable.Empty<AgentState>();
 
 		public AgentState ForPersonId(Guid personId)
 		{
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			lock (_lock)
 			{
-				var copyFrom = _data.FirstOrDefault(x => x.PersonId == model.PersonId) ?? new AgentStateFound();
+				var copyFrom = _data.FirstOrDefault(x => x.PersonId == model.PersonId) ?? new AgentState();
 				_data = _data.Where(x => x.PersonId != model.PersonId).ToArray();
 				model.ExternalLogons.ForEach(x =>
 				{
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.Where(x => x.PersonId == model.PersonId)
 					.Select(x =>
 					{
-						var updating = JsonConvert.DeserializeObject<AgentStateFound>(JsonConvert.SerializeObject(model));
+						var updating = JsonConvert.DeserializeObject<AgentState>(JsonConvert.SerializeObject(model));
 						updating.DataSourceId = x.DataSourceId;
 						updating.UserCode = x.UserCode;
 						return updating;
@@ -96,21 +96,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.ToArray();
 		}
 
-		public virtual IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
+		public virtual LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)
-				return _data
-					.Where(x => externalLogons.Any(y => y.UserCode == x.UserCode && y.DataSourceId == x.DataSourceId))
-					.ToArray();
+				return new LockedData
+				{
+					AgentStates = _data
+						.Where(x => externalLogons.Any(y => y.UserCode == x.UserCode && y.DataSourceId == x.DataSourceId))
+						.ToArray()
+				};
 		}
 
-		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
+		public virtual LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)
-				return _data
-					.Where(x => personIds.Contains(x.PersonId))
-					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.ToArray();
+				return new LockedData
+				{
+					AgentStates = _data
+						.Where(x => personIds.Contains(x.PersonId))
+						.GroupBy(x => x.PersonId, (guid, states) => states.First())
+						.ToArray()
+				};
 		}
 
 	}

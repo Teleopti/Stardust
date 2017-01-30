@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var state = new AgentStateForUpsert {PersonId = Guid.NewGuid(), UserCode = "user"};
 			Persister.Upsert(state);
 
-			var result = Persister.Find(new ExternalLogon {UserCode = "user"}, DeadLockVictim.Yes).SingleOrDefault();
+			var result = Persister.ReadForTest(new ExternalLogon {UserCode = "user"}).SingleOrDefault();
 
 			result.Should().Not.Be.Null();
 		}
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldGetEmptyStatesIfNotFound()
 		{
-			var result = Persister.Find(new ExternalLogon(), DeadLockVictim.Yes);
+			var result = Persister.ReadForTest(new ExternalLogon());
 
 			result.Should().Be.Empty();
 		}
