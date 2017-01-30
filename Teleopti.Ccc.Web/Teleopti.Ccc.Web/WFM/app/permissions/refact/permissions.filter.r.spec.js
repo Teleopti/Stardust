@@ -244,7 +244,7 @@ describe('permissionsFilter', function() {
 		var filter = $filter('dataFilter');
 		var filteredOrgData = filter.selected(vm.organizationSelection, vm.selectedOrgData);
 
-		expect(filteredOrgData.BusinessUnit).toEqual(filteredOrgData.BusinessUnit);
+		expect(filteredOrgData).toEqual(null);
 	});
 
 	it('should not show unselected team', function() {

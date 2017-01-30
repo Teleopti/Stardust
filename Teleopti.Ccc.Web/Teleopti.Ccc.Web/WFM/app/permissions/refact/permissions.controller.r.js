@@ -287,6 +287,7 @@
 			vm.dataFilterObj.isSelected = true;
 			vm.dataFilterObj.isUnSelected = false;
 			var data = dataFilter.selected(vm.organizationSelection, vm.selectedOrgData);
+			
 			orgDataHandler(data);
 		}
 

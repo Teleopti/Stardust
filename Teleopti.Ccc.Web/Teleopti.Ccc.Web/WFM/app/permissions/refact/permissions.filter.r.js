@@ -31,6 +31,11 @@
 		}
 
 		filter.selected = function(orgData, selectedOrgData) {
+			if (Object.keys(selectedOrgData).length === 0 && selectedOrgData.constructor === Object) {
+				var ret = $.extend(true, {}, orgData);
+				ret.BusinessUnit = {};
+				return null;
+			}
 			function reduce(nodes) {
 				return nodes.reduce(function(ret, node) {
 					if (node.ChildNodes != null) {
