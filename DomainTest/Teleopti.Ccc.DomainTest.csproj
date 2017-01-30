@@ -156,6 +156,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestQueueStrategyHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ApproveRequestsWithValidatorsEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ArrangeRequestsBySortOrderTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\CalculateOvertimeOnReadmodelTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsWithDifferentVersionTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayCascadingRequestProcessorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerTest.cs" />
