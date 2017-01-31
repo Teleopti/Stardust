@@ -6,6 +6,3 @@ IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[Auditing
 	CREATE NONCLUSTERED INDEX IX_PersonAbsence_AUD_REV
 	ON [Auditing].[PersonAbsence_AUD] ([REV])
 
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[Auditing].[PersonDayOff_AUD]') AND name = N'IX_PersonDayOff_AUD_REV')
-	CREATE NONCLUSTERED INDEX IX_PersonDayOff_AUD_REV
-	ON [Auditing].[PersonDayOff_AUD] ([REV])
