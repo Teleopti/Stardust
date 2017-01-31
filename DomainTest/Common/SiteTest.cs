@@ -1,41 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
-    /// <summary>
-    /// Class for unit tests
-    /// </summary>
     [TestFixture]
     public class SiteTest
     {
         private ISite _target;
-        
-        /// <summary>
-        /// Gets the unit with one team.
-        /// </summary>
-        /// <value>The simple unit with one team.</value>
-        protected ISite UnitWithOneTeam
-        {
-            get { return _target; }
-        }
+        protected ISite UnitWithOneTeam => _target;
 
-        /// <summary>
-        /// Runs once per test.
-        /// </summary>
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _target = SiteFactory.CreateSiteWithOneTeam();
         }
 
-        /// <summary>
-        /// Determines whether this instance can be created and properties are set.
-        /// </summary>
         [Test]
         public void CanCreateAndPropertiesAreSet()
         {
@@ -44,20 +31,40 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(null, UnitWithOneTeam.Id);
         }
 
-        /// <summary>
-        /// Teams property should be locked.
-        /// </summary>
-        [Test]
+		[Test]
+		public void ShouldPublishSiteNameChangedEvent()
+		{
+			var siteId = Guid.NewGuid();
+			var target = new Site("name");
+			target.SetId(siteId);
+
+			target.SetDescription(new Description("london"));
+			
+			var result = target.PopAllEvents().OfType<SiteNameChangedEvent>().Single();
+			result.SiteId.Should().Be(siteId);
+			result.Name.Should().Be("london");
+		}
+
+		[Test]
+		public void ShouldNotPublishSiteNameChangedEventWhenNotChanged()
+		{
+			var target = new Site("name");
+			target.SetDescription(new Description("london"));
+			target.PopAllEvents();
+
+			target.SetDescription(new Description("london"));
+
+			target.PopAllEvents().OfType<SiteNameChangedEvent>().Should().Be.Empty();
+		}
+
+		[Test]
         public void TeamsPropertyShouldBeLocked()
         {
             ICollection<ITeam> temp = UnitWithOneTeam.TeamCollection;
             Assert.Throws<NotSupportedException>(() => temp.Add(TeamFactory.CreateSimpleTeam()));
         }
 
-        /// <summary>
-        /// Verifies the name can be set and get.
-        /// </summary>
-        [Test]
+		[Test]
         public void VerifyNameCanBeSetAndGet()
         {
             const string setValue = "Set Name";
@@ -67,11 +74,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             Assert.AreEqual(setValue, resultValue);
         }
-        
-        /// <summary>
-        /// Verifies a layer can be added.
-        /// </summary>
-        [Test]
+		
+		[Test]
         public void VerifyAgentsCanBeAdded()
         {
             int countBefore = UnitWithOneTeam.TeamCollection.Count;
@@ -88,10 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.Contains(testTeam2, UnitWithOneTeam.TeamCollection);
             Assert.AreEqual(countBefore + 2, UnitWithOneTeam.TeamCollection.Count);
         }
-
-        /// <summary>
-        /// Duplicate team instances should be ignored when added to list.
-        /// </summary>
+		
         [Test]
         public void DoNotDuplicateTeamInstancesWhenAddedToList()
         {
@@ -106,10 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreSame(testTeam, UnitWithOneTeam.TeamCollection[lastPosBeforeAdded + 1]);
             Assert.AreEqual(countBefore + 1, UnitWithOneTeam.TeamCollection.Count);
         }
-
-        /// <summary>
-        /// Null teams are not allowed.
-        /// </summary>
+		
         [Test]
         public void NullTeamsAreNotAllowed()
         {

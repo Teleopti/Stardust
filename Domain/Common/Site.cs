@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
@@ -56,6 +57,12 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void SetDescription(Description value)
 	    {
+		    if (_description != value)
+			    AddEvent(() => new SiteNameChangedEvent
+			    {
+				    SiteId = Id.GetValueOrDefault(),
+				    Name = value.Name
+			    });
 		    _description = value;
 	    }
 
