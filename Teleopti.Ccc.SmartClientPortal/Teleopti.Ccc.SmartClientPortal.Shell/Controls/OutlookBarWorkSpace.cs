@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 		{
 			InitializeComponent();
 			linkLabel1.Text = Resources.PreviewTheNewIntradayTool;
+			label1.Text = Resources.AvailableForALimitedTimeOnly;
 		}
 
 		public Control NavigatorControl
@@ -29,10 +30,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		public void SetNavigatorControl(UserControl navigatorControl, string previewText, Uri previewUrl)
 		{
-			panel1.Controls.Clear();
+			panel4.Controls.Clear();
 
 			linkLabel1.Text = previewText;
 			this.tableLayoutPanel1.SuspendLayout();
+			tableLayoutPanel1.RowStyles[2].Height = 0F;
 			if (previewUrl == null)
 			{
 				_previewUrl = null;
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 			this.tableLayoutPanel1.ResumeLayout();
 
 
-			panel1.Controls.Add(navigatorControl);
+			panel4.Controls.Add(navigatorControl);
 			_navigatorControl = navigatorControl;
 			navigatorControl.Dock = DockStyle.Fill;
 			navigatorControl.Focus();

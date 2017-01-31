@@ -563,7 +563,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
 						outlookBarSmartPartInfo.Icon = Resources.Intraday_filled_space_32x32;
-						if (_toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074) && 
+						if (!_toggleManager.IsEnabled(Toggles.Wfm_Web_Intraday_Rta_As_first_Choice_42206) &&
+							_toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074) && 
 							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebIntraday))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
@@ -749,7 +750,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
 			SmartPartInvoker.ClearAllSmartParts();
-			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule);
+			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule, _toggleManager);
 
 			if (uc == null)
 				return;

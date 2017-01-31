@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Win.Main
             builder.RegisterType<NavigationPanelProvider>().SingleInstance();
             builder.RegisterType<ForecasterNavigator>();
             builder.RegisterType<IntradayNavigator>();
+            builder.RegisterType<IntradayWebNavigator>();
             builder.RegisterType<PortalSettingsProvider>().SingleInstance();
             builder.RegisterType<BudgetGroupGroupNavigatorView>();
             builder.RegisterType<BudgetGroupNavigatorModel>();

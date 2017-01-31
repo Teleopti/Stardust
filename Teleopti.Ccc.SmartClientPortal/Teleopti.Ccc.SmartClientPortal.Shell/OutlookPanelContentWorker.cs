@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Win.Budgeting;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.Win.Intraday;
@@ -15,108 +17,115 @@ using Teleopti.Ccc.WinCode.Grouping;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
-    /// <summary>
-    /// This will create content user controls for outlook panel control
-    /// </summary>
-    /// <author>Dinesh Ranasinghe</author>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses",Justification = "Don't want this to be public. Instantiated through IoC-container.")]
-    class OutlookPanelContentWorker : IDisposable
-    {
-        private bool _disposed;
-        private readonly NavigationPanelProvider _navigationPanelProvider;
+	/// <summary>
+	/// This will create content user controls for outlook panel control
+	/// </summary>
+	/// <author>Dinesh Ranasinghe</author>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Don't want this to be public. Instantiated through IoC-container.")]
+	class OutlookPanelContentWorker : IDisposable
+	{
+		private bool _disposed;
+		private readonly NavigationPanelProvider _navigationPanelProvider;
 
-        public OutlookPanelContentWorker(NavigationPanelProvider navigationPanelProvider)
-        {
-            _navigationPanelProvider = navigationPanelProvider;
-        }
+		public OutlookPanelContentWorker(NavigationPanelProvider navigationPanelProvider)
+		{
+			_navigationPanelProvider = navigationPanelProvider;
+		}
 
-        /// <summary>
-        /// This method will return usercontrol for outlook panel control
-        /// </summary>
-        /// <returns>user control</returns>
-        public UserControl GetOutlookPanelContent(string contentType)
-        {
-            UserControl uc = getParticularUserControl(contentType);
-            if (uc != null) { uc.Dock = DockStyle.Fill; }
-            return uc;
-        }
+		/// <summary>
+		/// This method will return usercontrol for outlook panel control
+		/// </summary>
+		/// <returns>user control</returns>
+		public UserControl GetOutlookPanelContent(string contentType, IToggleManager toggleManager)
+		{
+			UserControl uc = getParticularUserControl(contentType, toggleManager);
+			if (uc != null) { uc.Dock = DockStyle.Fill; }
+			return uc;
+		}
 
-        #region IDisposable Members
+		#region IDisposable Members
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-01-18
-        /// </remarks>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		/// <remarks>
+		/// Created by: Dinesh Ranasinghe
+		/// Created date: 2008-01-18
+		/// </remarks>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-01-18
-        /// </remarks>
-        public void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                }
-            }
-            _disposed = true;
-        }
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources
+		/// </summary>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		/// <remarks>
+		/// Created by: Dinesh Ranasinghe
+		/// Created date: 2008-01-18
+		/// </remarks>
+		public void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+				}
+			}
+			_disposed = true;
+		}
 
-        #endregion
+		#endregion
 
-        /// <summary>
-        /// Gets the particular user control.
-        /// </summary>
-        /// <param name="contentType">Type of the content.</param>
-        /// <returns>User Control</returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-01-18
-        /// </remarks>
-        private UserControl getParticularUserControl(string contentType)
-        {
-          
-            switch (contentType)
-            {
-                case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
-                    { return _navigationPanelProvider.CreateNavigationPanel<PeopleNavigator>(); }
-                case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
-                    { return _navigationPanelProvider.CreateNavigationPanel<ForecasterNavigator>(); }
-                case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
-                    { return _navigationPanelProvider.CreateNavigationPanel<SchedulerNavigator>(); }
-                case DefinedRaptorApplicationFunctionPaths.AccessToReports:
-                    { return _navigationPanelProvider.CreateNavigationPanel< MatrixNavigationView>(); }
-                case DefinedRaptorApplicationFunctionPaths.Shifts:
-                    { return _navigationPanelProvider.CreateNavigationPanel<ShiftsNavigationPanel>(); }
-                case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
-                    { return _navigationPanelProvider.CreateNavigationPanel<IntradayNavigator>(); }
-                case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
-                    {
-                        return _navigationPanelProvider.CreateNavigationPanel <BudgetGroupGroupNavigatorView>();
-                    }
-                case DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager:
-                    {
-                        return _navigationPanelProvider.CreateNavigationPanel < PerformanceManagerNavigator>();
-                    }
-                case DefinedRaptorApplicationFunctionPaths.PayrollIntegration:
-                    {
-                        return _navigationPanelProvider.CreateNavigationPanel<PayrollExportNavigator>();
-                    }
-            }
-            return null;
-        }
-    }
+		/// <summary>
+		/// Gets the particular user control.
+		/// </summary>
+		/// <param name="contentType">Type of the content.</param>
+		/// <param name="toggleManager"></param>
+		/// <returns>User Control</returns>
+		/// <remarks>
+		/// Created by: Dinesh Ranasinghe
+		/// Created date: 2008-01-18
+		/// </remarks>
+		private UserControl getParticularUserControl(string contentType, IToggleManager toggleManager)
+		{
+
+			switch (contentType)
+			{
+				case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
+					{ return _navigationPanelProvider.CreateNavigationPanel<PeopleNavigator>(); }
+				case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
+					{ return _navigationPanelProvider.CreateNavigationPanel<ForecasterNavigator>(); }
+				case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
+					{ return _navigationPanelProvider.CreateNavigationPanel<SchedulerNavigator>(); }
+				case DefinedRaptorApplicationFunctionPaths.AccessToReports:
+					{ return _navigationPanelProvider.CreateNavigationPanel<MatrixNavigationView>(); }
+				case DefinedRaptorApplicationFunctionPaths.Shifts:
+					{ return _navigationPanelProvider.CreateNavigationPanel<ShiftsNavigationPanel>(); }
+				case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
+					{
+						if (toggleManager.IsEnabled(Toggles.Wfm_Web_Intraday_Rta_As_first_Choice_42206))
+						{
+							return _navigationPanelProvider.CreateNavigationPanel<IntradayWebNavigator>();
+						}
+						return _navigationPanelProvider.CreateNavigationPanel<IntradayNavigator>();
+					}
+				case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
+					{
+						return _navigationPanelProvider.CreateNavigationPanel<BudgetGroupGroupNavigatorView>();
+					}
+				case DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager:
+					{
+						return _navigationPanelProvider.CreateNavigationPanel<PerformanceManagerNavigator>();
+					}
+				case DefinedRaptorApplicationFunctionPaths.PayrollIntegration:
+					{
+						return _navigationPanelProvider.CreateNavigationPanel<PayrollExportNavigator>();
+					}
+			}
+			return null;
+		}
+	}
 }

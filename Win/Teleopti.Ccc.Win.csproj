@@ -767,6 +767,12 @@
     <Compile Include="Grouping\PersonSelectorViewNew.Designer.cs">
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
+    <Compile Include="Intraday\IntradayWebNavigator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Intraday\IntradayWebNavigator.Designer.cs">
+      <DependentUpon>IntradayWebNavigator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
     <Compile Include="Main\LoginWebView.cs">
       <SubType>Form</SubType>
@@ -2911,6 +2917,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Intraday\Reforecast\SelectWorkload.resx">
       <DependentUpon>SelectWorkload.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Intraday\IntradayWebNavigator.resx">
+      <DependentUpon>IntradayWebNavigator.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\ActiveAgents.resx">
       <DependentUpon>ActiveAgents.cs</DependentUpon>

@@ -15503,4 +15503,12 @@ These options are activated:
     <value>Multiple Teams</value>
     <comment>Text displayed in RTA breadcrumb</comment>
   </data>
+  <data name="AvailableForALimitedTimeOnly" xml:space="preserve">
+    <value>Available for a limited time only!</value>
+    <comment>Available for a limited time only!</comment>
+  </data>
+  <data name="OldIntraday" xml:space="preserve">
+    <value>Old Intraday</value>
+    <comment>Old Intraday</comment>
+  </data>
 </root>

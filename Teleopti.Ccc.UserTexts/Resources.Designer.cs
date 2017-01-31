@@ -3513,6 +3513,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available for a limited time only!.
+        /// </summary>
+        public static string AvailableForALimitedTimeOnly {
+            get {
+                return ResourceManager.GetString("AvailableForALimitedTimeOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available Scorecards.
         /// </summary>
         public static string AvailableScorecards {
@@ -4071,7 +4080,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to both firstname and lastname are empty;.
+        ///   Looks up a localized string similar to both first name and last name are empty;.
         /// </summary>
         public static string BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon {
             get {
@@ -19667,6 +19676,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old Intraday.
+        /// </summary>
+        public static string OldIntraday {
+            get {
+                return ResourceManager.GetString("OldIntraday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On available agents only.
         /// </summary>
         public static string OnAvailableAgentsOnly {
@@ -25224,7 +25242,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to role {0} not exist;.
+        ///   Looks up a localized string similar to role {0} does not exist;.
         /// </summary>
         public static string RoleXNotExistErrorMsgSemicolon {
             get {
@@ -26467,7 +26485,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search an organization.
+        ///   Looks up a localized string similar to Search by organization.
         /// </summary>
         public static string SearchAnOrganization {
             get {
