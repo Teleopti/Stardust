@@ -343,7 +343,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
-		private int _nextDataSourceid = 100;
 
 		public FakeDatabase(
 			FakeTenants tenants,
