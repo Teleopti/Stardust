@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			stateholder.Schedules.SchedulesForDay(date).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter)).Should().Be.True();
 		}
 
-		[Test, Ignore("2 be fixed - #42680")]
+		[Test]
 		public void ShouldProduceOneBlankDayIfBlockAndTeamCombinationNotMakeItPossibleToSolve()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
