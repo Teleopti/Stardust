@@ -21,7 +21,7 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1">
+	<div class="panel material-depth-1" ng-if="vm.selectedSkill || vm.selectedSkillArea">
 		<div class="con-row">
 			<div class="con-flex">
 				<div class="con-row">
@@ -73,12 +73,12 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1" ng-if="vm.selectedSkill || vm.selectedSkillArea">
+	<div class="panel material-depth-1">
 		<div class="con-row demo-outline">
 			<div class="con-flex">
 				<div class="sub-header">
 					<a class="cursor-pointer" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
-					<span>{{siteName}}</span>
+					<span>{{vm.siteName}}</span>
 				</div>
 				<div class="wfm-grid">
 					<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in vm.teams | orderBy:'Name': sortByLocaleLanguage">

@@ -31,7 +31,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaSiteAndTeamOnSkillOverviewController');
+		scope = $controllerBuilder.setup('RtaOverviewController');
 		$fakeBackend.clear();
 		spyOn($state, 'go');
 		$fakeBackend.withToggle('RTA_SiteAndTeamOnSkillOverview_40817');
@@ -59,8 +59,8 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			vm.selectedSkillChange({
 				Id: "emailGuid"
 			});
-		});
-
+		}).wait(5000);
+		
 		expect(vm.sites.length).toEqual(1);
 		expect(vm.sites[0].Id).toEqual("parisGuid");
 		expect(vm.sites[0].OutOfAdherence).toEqual(5);
@@ -104,7 +104,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			vm.selectedSkillAreaChange({
 				Id: "emailAndPhoneGuid"
 			});
-		});
+		}).wait(5000);
 
 		expect(vm.sites.length).toEqual(2);
 		expect(vm.sites[0].Id).toEqual("londonGuid");
@@ -411,7 +411,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skillArea', {
+		expect($state.go).toHaveBeenCalledWith('rta.sites', {
 			skillAreaId: "emailAndPhoneGuid"
 		});
 	});
@@ -450,7 +450,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.sites', {
 			skillIds: "phoneGuid"
 		});
 	});
@@ -474,7 +474,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.sites', {
 			skillIds: "emailGuid"
 		});
 	});

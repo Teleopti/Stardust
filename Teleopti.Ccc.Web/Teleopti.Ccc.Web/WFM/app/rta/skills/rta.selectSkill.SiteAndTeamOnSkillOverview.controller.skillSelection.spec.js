@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaSelectSkillController', function() {
+describe('RtaSelectSkillController', function () {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -28,16 +28,16 @@ describe('RtaSelectSkillController', function() {
 
 	beforeEach(module('wfm.rta'));
 
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.factory('$stateParams', function() {
+	beforeEach(function () {
+		module(function ($provide) {
+			$provide.factory('$stateParams', function () {
 				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
@@ -46,13 +46,13 @@ describe('RtaSelectSkillController', function() {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaSiteAndTeamOnSkillOverviewController');
+		scope = $controllerBuilder.setup('RtaOverviewController');
 
 		$fakeBackend.clear();
 
 	}));
 
-	it('should display skill', function() {
+	it('should display skill', function () {
 		$fakeBackend.withSkill({
 			Name: "Channel Sales",
 			Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
@@ -64,7 +64,7 @@ describe('RtaSelectSkillController', function() {
 		expect(vm.skills[0].Id).toEqual("f08d75b3-fdb4-484a-ae4c-9f0800e2f753");
 	});
 
-	it('should filter on skill name', function() {
+	it('should filter on skill name', function () {
 		$fakeBackend
 			.withSkills([{
 				Name: "Channel Sales",
@@ -81,7 +81,7 @@ describe('RtaSelectSkillController', function() {
 		expect(result[0].Name).toEqual("Email");
 	});
 
-	it('should filter on lowercased skill name', function() {
+	it('should filter on lowercased skill name', function () {
 		$fakeBackend
 			.withSkills([{
 				Name: "Channel Sales",
@@ -98,17 +98,17 @@ describe('RtaSelectSkillController', function() {
 		expect(result[0].Name).toEqual("Email");
 	});
 
-	it('should display skill areas', function() {
+	it('should display skill areas', function () {
 		$fakeBackend.withSkillAreas([{
-				Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
-				Name: "my skill area 1",
-				Skills: skills
-			},
-			{
-				Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
-				Name: "my skill area 2",
-				Skills: skills
-			}
+			Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
+			Name: "my skill area 1",
+			Skills: skills
+		},
+		{
+			Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
+			Name: "my skill area 2",
+			Skills: skills
+		}
 		]);
 
 		vm = $controllerBuilder.createController().vm;
@@ -119,18 +119,18 @@ describe('RtaSelectSkillController', function() {
 		expect(vm.skillAreas[0].Skills[0].Name).toEqual("skill x");
 	});
 
-	it('should filter on skill area name', function() {
+	it('should filter on skill area name', function () {
 		$fakeBackend
 			.withSkillAreas([{
-					Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
-					Name: "my skill area 1",
-					Skills: skills
-				},
-				{
-					Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
-					Name: "my skill area 2",
-					Skills: skills
-				}
+				Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
+				Name: "my skill area 1",
+				Skills: skills
+			},
+			{
+				Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
+				Name: "my skill area 2",
+				Skills: skills
+			}
 			]);
 
 		vm = $controllerBuilder.createController().vm;
@@ -141,19 +141,19 @@ describe('RtaSelectSkillController', function() {
 		expect(result[0].Name).toEqual("my skill area 1");
 	});
 
-	it('should filter on lowercased skill area name', function() {
+	it('should filter on lowercased skill area name', function () {
 
 		$fakeBackend
 			.withSkillAreas([{
-					Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
-					Name: "my skill area 1",
-					Skills: skills
-				},
-				{
-					Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
-					Name: "my skill area 2",
-					Skills: skills
-				}
+				Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
+				Name: "my skill area 1",
+				Skills: skills
+			},
+			{
+				Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
+				Name: "my skill area 2",
+				Skills: skills
+			}
 			]);
 
 		vm = $controllerBuilder.createController().vm;
@@ -162,5 +162,4 @@ describe('RtaSelectSkillController', function() {
 		expect(result.length).toEqual(1);
 		expect(result[0].Name).toEqual("my skill area 1");
 	});
-
 });

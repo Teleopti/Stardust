@@ -2,7 +2,7 @@
 
 angular
 	.module('wfm.rta')
-	.provider('RtaState', function() {
+	.provider('RtaState', function () {
 
 		var toggles = {
 			RTA_HideAgentsByStateGroup_40469: false,
@@ -10,7 +10,7 @@ angular
 			RTA_AgentsOnOrganizationAndSkills_41586: false,
 			RTA_QuicklyChangeAgentsSelection_40610: false
 		};
-		var rtaAgentsTemplateUrl = function(elem, attr) {
+		var rtaAgentsTemplateUrl = function (elem, attr) {
 			if (toggles.RTA_QuicklyChangeAgentsSelection_40610)
 				return 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html';
 			if (toggles.RTA_AgentsOnOrganizationAndSkills_41586)
@@ -20,19 +20,23 @@ angular
 			return 'app/rta/agents/rta-agents.html';
 		}
 
-		var rtaSkillTemplateUrl = function(elem, attr) {
+		var rtaSkillTemplateUrl = function (elem, attr) {
 			if (toggles.RTA_QuicklyChangeAgentsSelection_40610)
 				return 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html';
 			return 'app/rta/skills/rta-selectSkill.html'
 		}
 
-		var sitesBySkillTemplate = function(elem, attr) {
-			return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/overview/rta-sites-SiteOnSkillsOverview.html' : 'app/rta/overview/rta-sites.html';
+		var sitesBySkillTemplate = function (elem, attr) {
+			return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/skills/rta-sites-bySkills.html' : 'app/rta/overview/rta-sites.html';
 		}
 
-		this.$get = function() {
-			return function(toggleService) {
-				toggleService.togglesLoaded.then(function() {
+		var teamsBySkillTemplate = function(elem, attr){
+			return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/skills/rta-teams-bySkills.html' :'app/rta/overview/rta-teams.html';
+		}
+
+		this.$get = function () {
+			return function (toggleService) {
+				toggleService.togglesLoaded.then(function () {
 					toggles.RTA_HideAgentsByStateGroup_40469 = toggleService.RTA_HideAgentsByStateGroup_40469;
 					toggles.RTA_SiteAndTeamOnSkillOverview_40817 = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
 					toggles.RTA_AgentsOnOrganizationAndSkills_41586 = toggleService.RTA_AgentsOnOrganizationAndSkills_41586;
@@ -41,11 +45,11 @@ angular
 			};
 		};
 
-		this.config = function($stateProvider) {
+		this.config = function ($stateProvider) {
 			$stateProvider.state('rta', {
-					url: '/rta',
-					templateUrl: 'app/rta/rta.html'
-				})
+				url: '/rta',
+				templateUrl: 'app/rta/rta.html'
+			})
 				.state('rta.select-skill', {
 					url: '/select-skill/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
 					templateUrl: rtaSkillTemplateUrl,
@@ -65,34 +69,54 @@ angular
 						}
 					}
 				})
-				.state('rta.sites-by-skill', {
-					url: '/sites-by-skill/?skillIds',
-					templateUrl: 'app/rta/skills/rta-sites-bySkills.html',
-					controller: 'RtaSiteAndTeamOnSkillOverviewController as vm'
-				})
-				.state('rta.sites-by-skillArea', {
-					url: '/sites-by-skill-area/?skillAreaId',
-					templateUrl: 'app/rta/skills/rta-sites-bySkills.html',
-					controller: 'RtaSiteAndTeamOnSkillOverviewController as vm'
-				})
-				.state('rta.teams-by-skill', {
-					url: '/teams-by-skill/?siteIds&skillIds',
-					templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
-					controller: 'RtaSiteAndTeamOnSkillOverviewController as vm'
-				})
-				.state('rta.teams-by-skillArea', {
-					url: '/teams-by-skill-area/?siteIds&skillAreaId',
-					templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
-					controller: 'RtaSiteAndTeamOnSkillOverviewController as vm'
-				})
+				// .state('rta.sites-by-skill', {
+				// 	url: '/sites-by-skill/?skillIds',
+				// 	templateUrl: 'app/rta/skills/rta-sites-bySkills.html',
+				// 	controller: 'RtaOverviewController as vm'
+				// })
+				// .state('rta.sites-by-skillArea', {
+				// 	url: '/sites-by-skill-area/?skillAreaId',
+				// 	templateUrl: 'app/rta/skills/rta-sites-bySkills.html',
+				// 	controller: 'RtaOverviewController as vm'
+				// })
+				// .state('rta.teams-by-skill', {
+				// 	url: '/teams-by-skill/?siteIds&skillIds',
+				// 	templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
+				// 	controller: 'RtaOverviewController as vm'
+				// })
+				// .state('rta.teams-by-skillArea', {
+				// 	url: '/teams-by-skill-area/?siteIds&skillAreaId',
+				// 	templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
+				// 	controller: 'RtaOverviewController as vm'
+				// })
 				.state('rta.sites', {
-					templateUrl: sitesBySkillTemplate,
+					url: '/?skillIds&skillAreaId',
+					templateUrl: 'app/rta/skills/rta-sites-bySkills.html',
 					controller: 'RtaOverviewController as vm',
+					params: {
+						skillIds: {
+							array: false
+						},
+						skillAreaId: {
+							array: false
+						}
+					}
 				})
 				.state('rta.teams', {
-					url: '/teams/:siteId',
-					templateUrl: 'app/rta/overview/rta-teams.html',
-					controller: 'RtaOverviewController as vm'
+					url: '/teams/?siteId&skillIds&skillAreaId',
+					templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
+					controller: 'RtaOverviewController as vm',
+					params: {
+						siteId: {
+							array: true
+						},
+						skillIds: {
+							array: false
+						},
+						skillAreaId: {
+							array: false
+						}
+					}
 				})
 				.state('rta.agents', {
 					url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',

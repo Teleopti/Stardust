@@ -547,6 +547,7 @@
 
 		fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
 			function (params) {
+				console.log(siteAdherences)
 				return [200, siteAdherences];
 			});
 

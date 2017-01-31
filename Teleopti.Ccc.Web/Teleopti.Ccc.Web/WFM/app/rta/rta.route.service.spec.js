@@ -45,18 +45,18 @@ describe('rtaRouteService', function() {
 	});
 
 	it('should get sites by skill overview url', function() {
-		expect(target.urlForSitesBySkills('f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/sites-by-skill/?skillIds=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
+		expect(target.urlForSitesBySkills('f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/?skillIds=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
 	});
 
 	it('should get teams by skill overview url', function() {
-		expect(target.urlForTeamsBySkills('d970a45a-90ff-4111-bfe1-9b5e015ab45c', 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/teams-by-skill/?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&skillIds=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
+		expect(target.urlForTeamsBySkills('d970a45a-90ff-4111-bfe1-9b5e015ab45c', 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/teams/?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&skillIds=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
 	});
 
 	it('should get sites by skill area overview url', function() {
-		expect(target.urlForSitesBySkillArea('f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/sites-by-skill-area/?skillAreaId=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
+		expect(target.urlForSitesBySkillArea('f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/?skillAreaId=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
 	});
 
 	it('should get teams by skill area overview url', function() {
-		expect(target.urlForTeamsBySkillArea('d970a45a-90ff-4111-bfe1-9b5e015ab45c', 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/teams-by-skill-area/?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&skillAreaId=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
+		expect(target.urlForTeamsBySkillArea('d970a45a-90ff-4111-bfe1-9b5e015ab45c', 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/teams/?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&skillAreaId=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
 	});
 });

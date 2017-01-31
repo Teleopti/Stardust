@@ -16,6 +16,8 @@
 			goToSelectSkill: goToSelectSkill,
 			goToSitesBySkill: goToSitesBySkill,
 			goToSitesBySkillArea: goToSitesBySkillArea,
+			goToTeamsBySkill:goToTeamsBySkill,
+			goToTeamsBySkillArea:goToTeamsBySkillArea,
 			urlForChangingSchedule: urlForChangingSchedule,
 			urlForHistoricalAdherence: urlForHistoricalAdherence,
 			urlForSites: urlForSites,
@@ -48,9 +50,13 @@
 			});
 		};
 
-		function goToSitesBySkill(skillId) { $state.go('rta.sites-by-skill', { skillIds: skillId }); };
+		function goToSitesBySkill(skillId) { $state.go('rta.sites', { skillIds: skillId, skillAreaId: undefined }); };
 
-		function goToSitesBySkillArea(skillAreaId) { $state.go('rta.sites-by-skillArea', { skillAreaId: skillAreaId }); };
+		function goToSitesBySkillArea(skillAreaId) { $state.go('rta.sites', { skillAreaId: skillAreaId, skillIds: undefined }); };
+
+		function goToTeamsBySkill(siteIds, skillId) { $state.go('rta.teams', { siteId: siteIds, skillIds: skillId, skillAreaId: undefined }); };
+
+		function goToTeamsBySkillArea(siteIds, skillAreaId) { $state.go('rta.teams', {  siteId: siteIds, skillIds: undefined, skillAreaId: skillAreaId }); };
 
 		function urlForChangingSchedule(personId) { return "#/teams/?personId=" + personId; };
 
@@ -64,14 +70,14 @@
 
 		function urlForSelectSkill() { return '#/rta/select-skill'; };
 
-		function urlForSitesBySkills(skillIds) { return '#/rta/sites-by-skill/?skillIds=' + skillIds; };
+		function urlForSitesBySkills(skillIds) { return '#/rta/?skillIds=' + skillIds; };
 
-		function urlForTeamsBySkills(siteIds, skillIds) { return '#/rta/teams-by-skill/?siteIds=' + siteIds + '&skillIds=' + skillIds; };
+		function urlForTeamsBySkills(siteIds, skillIds) { return '#/rta/teams/?siteIds=' + siteIds + '&skillIds=' + skillIds; };
 
-		function urlForSitesBySkillArea(skillAreaId) { return '#/rta/sites-by-skill-area/?skillAreaId=' + skillAreaId; };
+		function urlForSitesBySkillArea(skillAreaId) { return '#/rta/?skillAreaId=' + skillAreaId; };
 
 		function urlForTeamsBySkillArea(siteIds, skillAreaId) {
-			return '#/rta/teams-by-skill-area/?siteIds=' + siteIds + '&skillAreaId=' + skillAreaId;
+			return '#/rta/teams/?siteIds=' + siteIds + '&skillAreaId=' + skillAreaId;
 		};
 
 		function urlForRootInBreadcrumbs(info) {
