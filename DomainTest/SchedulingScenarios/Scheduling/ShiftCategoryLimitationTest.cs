@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
 			var agent = new Person().WithSchedulePeriodTwoDays(date).WithPersonPeriod(ruleSet, skill).InTimeZone(TimeZoneInfo.Utc);
 			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 					new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14)),
 					new PersonAssignment(agent, scenario, date.AddDays(1)).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14))
-			}, new[] { skillDay });
+			}, skillDays);
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{
 				SchedulingOptions =
@@ -346,7 +346,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, agent), new OptimizationPreferences(), null);
 
-			stateholder.Schedules.SchedulesForPeriod(period).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter)).Should().Be.True();
+			stateholder.Schedules[agent].ScheduledDayCollection(period).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter))
+				.Should().Be.True();
 		}
 
 		[Test]
