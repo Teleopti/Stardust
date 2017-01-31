@@ -52,13 +52,14 @@ namespace Teleopti.Ccc.Domain.Common
         /// Gets or sets the descrition of the site.
         /// </summary>
         /// <value>The site.</value>
-        public virtual Description Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
-        
-        /// <summary>
+        public virtual Description Description => _description;
+
+	    public virtual void SetDescription(Description value)
+	    {
+		    _description = value;
+	    }
+
+	    /// <summary>
         /// Gets the teams.
         /// Read only wrapper around the actual list.
         /// </summary>

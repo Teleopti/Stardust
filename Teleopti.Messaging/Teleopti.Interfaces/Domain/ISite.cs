@@ -20,9 +20,11 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the descrition of the site.
         /// </summary>
         /// <value>The site.</value>
-        Description Description { get; set; }
+        Description Description { get; }
 
-        /// <summary>
+	    void SetDescription(Description value);
+
+	    /// <summary>
         /// Gets the teams.
         /// Read only wrapper around the actual list.
         /// </summary>

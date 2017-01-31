@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             const string setValue = "Set Name";
 
-            UnitWithOneTeam.Description = new Description(setValue);
+            UnitWithOneTeam.SetDescription(new Description(setValue));
             string resultValue = UnitWithOneTeam.Description.Name;
 
             Assert.AreEqual(setValue, resultValue);

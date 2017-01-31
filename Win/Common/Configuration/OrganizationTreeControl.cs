@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
 
             if (node.Tag.ToString() == orgTeam) ((ITeam)node.TagObject).SetDescription(new Description(node.Text));
-            else if (node.Tag.ToString() == orgSite) ((ISite)node.TagObject).Description = new Description(node.Text);
+            else if (node.Tag.ToString() == orgSite) ((ISite)node.TagObject).SetDescription(new Description(node.Text));
         }
 
         protected override void SetCommonTexts()
