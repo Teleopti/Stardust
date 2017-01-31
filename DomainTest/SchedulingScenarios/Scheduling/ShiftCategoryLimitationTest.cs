@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			stateholder.Schedules.SchedulesForDay(date).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter)).Should().Be.True();
 		}
 
-		[Test, Ignore("test not finished")]
+		[Test, Ignore("2 be fixed - #42680")]
 		public void ShouldProduceOneBlankDayIfBlockAndTeamCombinationNotMakeItPossibleToSolve()
 		{
 			var team = new Team { Description = new Description("_"), Site = new Site("_") };
@@ -325,11 +325,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 10, 10, 1, 10, 10, 10, 10);
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategoryB));
-			var agent1 = new Person().WithName(new Name("agent1", "agent1")).WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategoryA));
+			var agent1 = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
 			agent1.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryA) { MaxNumberOf = 3, Weekly = true});
 			agent1.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryB) { MaxNumberOf = 3, Weekly = true});
-			var agent2 = new Person().WithName(new Name("agent2", "agent2")).WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
+			var agent2 = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
 			agent2.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryA) { MaxNumberOf = 3, Weekly = true });
 			agent2.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryB) { MaxNumberOf = 3, Weekly = true });
 			var asses = new []
@@ -365,15 +365,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				}
 			};
 
-			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2), new OptimizationPreferences(), null);
-
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(new DateOnlyPeriod(date.AddDays(2), date.AddDays(3)), agent1), new OptimizationPreferences(), null);
 
 			var unsolvableDate = stateholder.Schedules.SchedulesForDay(date.AddDays(3));
 			unsolvableDate.Count(x => !x.PersonAssignment(true).ShiftLayers.Any()).Should().Be.EqualTo(1);
-
-			//blir "fel" här i schedulern men inte i testet
-			//stateholder.Schedules[agent2].ScheduledDay(date.AddDays(3)).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryB);
-			//stateholder.Schedules[agent2].ScheduledDay(date.AddDays(4)).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryB);
 		}
 
 		private static OptimizerOriginalPreferences createOptimizerOriginalPreferencesTeamSingleAgent()
