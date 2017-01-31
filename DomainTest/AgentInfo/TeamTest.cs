@@ -1,5 +1,11 @@
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Kpi;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -7,63 +13,56 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 {
     [TestFixture]
     public class TeamTest
-    {
-        private ITeam _target;
-		
-        [SetUp]
-        public void Setup()
-        {
-            _target = TeamFactory.CreateSimpleTeam();
-        }
-		
+    {	
         [Test]
-        public void CanCreateAndPropertiesAreSet()
+        public void ShouldCreateWithDefaultProperties()
         {
-            Assert.IsNotNull(_target);
-            Assert.AreEqual(null, _target.Id);
-            Assert.IsNull(_target.Site);
-            Assert.IsTrue(_target.IsChoosable);
-            Assert.IsNull(_target.Scorecard);
-        }
+			var target = new Team();
 
-        [Test]
-        public void VerifyScorecardForTeamWorks()
-        {
-            MockRepository mocks = new MockRepository();
-
-            IScorecard scorecard = mocks.DynamicMock<IScorecard>();
-            _target.Scorecard = scorecard;
-
-            Assert.AreEqual(scorecard,_target.Scorecard);
+	        target.Id.Should().Be(null);
+			target.IsChoosable.Should().Be.True();
         }
 		
         [Test]
-        public void VerifyNameCanBeSetAndGet()
-        {
-            string setValue = "Set Name";
-            _target.SetDescription(new Description(setValue));
-            string resultValue = _target.Description.Name;
+        public void ShouldSetAndGetStuff()
+		{
+			var site = SiteFactory.CreateSimpleSite("Site1");
+			var scorecard = new Scorecard();
+			var target = new Team
+			{
+				Scorecard = scorecard,
+				Site = site
+			};
+			target.SetDescription(new Description("Happy Agents"));
 
-            Assert.AreEqual(setValue, resultValue);
-        }
+			target.Scorecard.Should().Be(scorecard);
+			target.Site.Should().Be(site);
+			target.Description.Name.Should().Be("Happy Agents");
+			target.SiteAndTeam.Should().Be("Site1/Happy Agents");
+		}
+		
+		[Test]
+		public void ShouldPublishTeamNameChangedEvent()
+		{
+			var target = new Team().WithId();
 
-        [Test]
-        public void VerifyCanSetSite()
-        {
-            ISite site = SiteFactory.CreateSimpleSite("Site1");
-            _target.Site = site;
-            Assert.AreSame(site, _target.Site);
+			target.SetDescription(new Description("Set Name"));
 
-        }
-        [Test]
-        public void VerifySiteAndTeam()
-        {
-            string name = "Happy Agents";
-            _target.SetDescription(new Description(name));
-            ISite site = SiteFactory.CreateSimpleSite("Site1");
-            _target.Site = site;
-            string expectedResult = string.Concat(site.Description.Name, "/", _target.Description.Name);
-            Assert.AreEqual(expectedResult, _target.SiteAndTeam);
-        }
-    }
+			var @event = target.PopAllEvents().OfType<TeamNameChangedEvent>().Single();
+			@event.TeamId.Should().Be(target.Id);
+			@event.Name.Should().Be("Set Name");
+		}
+
+		[Test]
+		public void ShouldNotPublishTeamNameChangedEventWhenNotChanged()
+		{
+			var target = new Team().WithId();
+			target.SetDescription(new Description("Team Preferences"));
+			target.PopAllEvents();
+
+			target.SetDescription(new Description("Team Preferences"));
+
+			target.PopAllEvents().OfType<TeamNameChangedEvent>().Should().Be.Empty();	
+		}
+	}
 }

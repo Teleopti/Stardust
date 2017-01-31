@@ -530,9 +530,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				TeamName = "team students"
 			});
 
-			Target.Update(teamId,"team preferences");
+			Target.UpdateTeamName(teamId,"team preferences");
 	
 			Target.Load(personId).TeamName.Should().Be("team preferences");			
+		}
+
+		[Test]
+		public void ShouldUpdateSiteName()
+		{
+			var personId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			Target.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = personId,
+				SiteId = siteId,
+				SiteName = "london"
+			});
+
+			Target.UpdateSiteName(siteId, "paris");
+	
+			Target.Load(personId).SiteName.Should().Be("paris");			
 		}
 	}
 }

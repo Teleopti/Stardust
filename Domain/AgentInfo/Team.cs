@@ -1,3 +1,5 @@
+using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -18,6 +20,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 	    public virtual void SetDescription(Description value)
 	    {
+		    if (_description != value)
+			    AddEvent(() => new TeamNameChangedEvent
+			    {
+				    TeamId = Id.GetValueOrDefault(),
+				    Name = value.Name
+			    });
 		    _description = value;
 	    }
 

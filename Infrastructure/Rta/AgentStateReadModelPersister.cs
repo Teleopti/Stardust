@@ -335,7 +335,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
-		public void Update(Guid teamId, string name)
+		public void UpdateTeamName(Guid teamId, string name)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -344,6 +344,18 @@ SET TeamName = :TeamName
 WHERE TeamId = :TeamId")
 				.SetParameter("TeamName", name)
 				.SetParameter("TeamId", teamId)
+				.ExecuteUpdate();
+		}
+
+		public void UpdateSiteName(Guid siteId, string name)
+		{
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+UPDATE [ReadModel].[AgentState]
+SET SiteName = :SiteName
+WHERE SiteId = :SiteId")
+				.SetParameter("SiteName", name)
+				.SetParameter("SiteId", siteId)
 				.ExecuteUpdate();
 		}
 

@@ -79,7 +79,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(TeamNameChangedEvent @event) 
 		{
-			_persister.Update(@event.TeamId, @event.Name);
+			_persister.UpdateTeamName(@event.TeamId, @event.Name);
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(SiteNameChangedEvent @event)
+		{
+			_persister.UpdateSiteName(@event.SiteId, @event.Name);
 		}
 	}
 

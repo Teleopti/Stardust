@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
-		public void Update(Guid teamId, string name)
+		public void UpdateTeamName(Guid teamId, string name)
 		{
 			var agentsInTeam = _data
 				.Where(kvp => kvp.Value.TeamId == teamId)
@@ -144,6 +144,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			foreach (var agent in agentsInTeam)
 			{
 				agent.TeamName = name;
+				_data.TryUpdate(agent.PersonId, agent, agent);
+			}
+		}
+
+		public void UpdateSiteName(Guid siteId, string name)
+		{
+			var agentsInSite = _data
+				.Where(kvp => kvp.Value.SiteId == siteId)
+				.Select(kvp => kvp.Value)
+				.ToList();
+			foreach (var agent in agentsInSite)
+			{
+				agent.SiteName = name;
 				_data.TryUpdate(agent.PersonId, agent, agent);
 			}
 		}
