@@ -45,19 +45,23 @@ namespace Teleopti.Ccc.Domain.Notification
 
 					try
 					{
-						Logger.Debug(string.Format("Sending E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver));
+						Logger.Debug(
+							$"Sending E-mail from sender '{notificationHeader.EmailSender}' to receiver '{notificationHeader.EmailReceiver}'.");
 						client.Send(mailMessage);
 					}
 					catch (SmtpException exception)
 					{
 						if (exception.InnerException == null)
-							Logger.Info(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
+							Logger.Info(
+								$"Failed to send E-mail from sender '{notificationHeader.EmailSender}' to receiver '{notificationHeader.EmailReceiver}'.", exception);
 						else
-							Logger.Error(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
+							Logger.Error(
+								$"Failed to send E-mail from sender '{notificationHeader.EmailSender}' to receiver '{notificationHeader.EmailReceiver}'.", exception);
 					}
 					catch (Exception exception)
 					{
-						Logger.Error(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
+						Logger.Error(
+							$"Failed to send E-mail from sender '{notificationHeader.EmailSender}' to receiver '{notificationHeader.EmailReceiver}'.", exception);
 					}
 
 				}

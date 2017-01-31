@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			    Expect.Call(_matrix.UnlockedDays).Return(new [] {_scheduleDayPro});
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 				Expect.Call(() => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
-			    Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+			    Expect.Call(_shiftProjectionCache.MainShiftProjection).Return(_mainShift.ProjectionService().CreateProjection());
 
 			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 			    Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrix.UnlockedDays).Return(new [] { _scheduleDayPro });
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 				Expect.Call(() => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
-				Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+				Expect.Call(_shiftProjectionCache.MainShiftProjection).Return(_mainShift.ProjectionService().CreateProjection());
 
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());

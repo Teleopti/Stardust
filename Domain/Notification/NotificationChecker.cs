@@ -42,10 +42,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			_settings = settings;
 		}
 
-		public string EmailSender
-		{
-			get { return _settings.EmailFrom; }
-		}
+		public string EmailSender => _settings.EmailFrom;
 
 		public string SmsMobileNumber(IPerson person)
 		{

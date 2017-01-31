@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     IScheduleRange scheduleRange = scheduleDictionary[person];
                     foreach (var part in scheduleRange.ScheduledDayCollection(datePeriod))
                     {
-                    	var schedAss = ((SchedulePartAssembler) _scheduleDayAssembler);
+                    	var schedAss = (SchedulePartAssembler) _scheduleDayAssembler;
 						schedAss.SpecialProjection = specialProjection;
                     	schedAss.TimeZone = timeZone;
                         returnList.Add(_scheduleDayAssembler.DomainEntityToDto(part));

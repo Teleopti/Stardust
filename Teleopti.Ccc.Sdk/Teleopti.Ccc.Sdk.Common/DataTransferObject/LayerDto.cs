@@ -1,8 +1,4 @@
-﻿#region Imports
-
-using System.Runtime.Serialization;
-
-#endregion
+﻿using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {

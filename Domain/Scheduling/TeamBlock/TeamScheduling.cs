@@ -59,14 +59,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())
 			{
-				var mainShiftPeriod = shiftProjectionCache.TheMainShift.ProjectionService().CreateProjection().Period().GetValueOrDefault();
+				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection.Period().GetValueOrDefault();
 				if (personAssignment.PersonalActivities().Any(personalShiftLayer => !mainShiftPeriod.Contains(personalShiftLayer.Period))) return;
 			}
 
 	        var personMeetingCollection = destinationScheduleDay.PersonMeetingCollection();
 	        if (personMeetingCollection.Any())
 			{
-				var mainShiftPeriod = shiftProjectionCache.TheMainShift.ProjectionService().CreateProjection().Period().GetValueOrDefault();
+				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection.Period().GetValueOrDefault();
 				if (personMeetingCollection.Any(personMeeting => !mainShiftPeriod.Contains(personMeeting.Period))) return;		
 			}
 			_assignScheduledLayers.Execute(schedulingOptions, destinationScheduleDay, shiftProjectionCache.TheMainShift);
