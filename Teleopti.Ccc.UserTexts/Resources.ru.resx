@@ -12488,7 +12488,7 @@ Teleopti R&amp;D</value>
     <value>Очистить кампанию</value>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Помните?</value>
+    <value>Запомнить?</value>
   </data>
   <data name="MyTeam" xml:space="preserve">
     <value>MyTeam</value>
@@ -13272,5 +13272,362 @@ Teleopti R&amp;D</value>
   </data>
   <data name="IntradayWithShrinkage" xml:space="preserve">
     <value>Мониторинг с сокращением</value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>Инфо о персонале отсутствует на навыке {0}</value>
+  </data>
+  <data name="TeamsModule" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>Требуемые операторы</value>
+  </data>
+  <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
+    <value>Ваш запрос на отсутствие отклонен автоматически. Время начала в запросе {0} должно быть на {1} минут(-ы) позже текущего времени.</value>
+  </data>
+  <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
+    <value>Индивидуальные счета следующих операторов будут затронуты.</value>
+  </data>
+  <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
+    <value>Это отсутствие превысит лимиты индивидуального счета.</value>
+  </data>
+  <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
+    <value>Получатель не имеет прав доступа на запросы обмена сменами</value>
+  </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>Соблюдение графика историческое</value>
+  </data>
+  <data name="TooManySelectedAgents" xml:space="preserve">
+    <value>Вы выбрали слишком много операторов. Выберите менее 55.</value>
+  </data>
+  <data name="UnsupportedSkill" xml:space="preserve">
+    <value>Неподдерживаемый навык</value>
+  </data>
+  <data name="UnsupportedSkillMsg" xml:space="preserve">
+    <value>Это навык не поддерживается</value>
+  </data>
+  <data name="UnsupportedSkills" xml:space="preserve">
+    <value>{0} Неподдерживаемые навыки</value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>Все запросы</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>Текущие запросы</value>
+  </data>
+  <data name="EmploymentNumber" xml:space="preserve">
+    <value>Номер сотрудника</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Организация</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="SortByStartDate" xml:space="preserve">
+    <value>Дата начала</value>
+  </data>
+  <data name="SortByUpdateDate" xml:space="preserve">
+    <value>Дата обновления</value>
+  </data>
+  <data name="SkillAreaColon" xml:space="preserve">
+    <value>Сводка навыка:</value>
+  </data>
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>Невозможно применить изменения к операторам в других часовых поясах</value>
+  </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>Активность не может быть добавлена к</value>
+  </data>
+  <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
+    <value>Нет прав доступа для удаления отсутствия.</value>
+  </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>Отсутствие не может быть добавлено к</value>
+  </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>Импорт расписания</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="MoveShift" xml:space="preserve">
+    <value>Сдвинуть смену</value>
+  </data>
+  <data name="DenyDueToTechnicalProblems" xml:space="preserve">
+    <value>Инфо о персонале не обновляется. Свяжитесь с системным администратором.</value>
+  </data>
+  <data name="Staffing" xml:space="preserve">
+    <value>Персонал</value>
+  </data>
+  <data name="NoBudgetGroupFound" xml:space="preserve">
+    <value>Бюджетная группа не найдена</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>Задать по умолчанию</value>
+  </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>Моя бизнес-единица</value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>Мой сайт</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>Сначала выберите роль</value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>Персонал</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>Удалить сверхурочное время</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>Выберите дату</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>Введите время начала</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>Введите время окончания</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>Время несоблюдения</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>Настроить приоритет навыка</value>
+  </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>Сводка навыков не найдена</value>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>Навык не найден</value>
+  </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>Удалено, так как запрос не был обработан вовремя.</value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>Полное допущение</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>Допущение после порога</value>
+  </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value>Проверка {0} человек(-а) из {1}</value>
+  </data>
+  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+    <value>Вы собираетесь перезаписать все существующее раписание на сценарии '{0}' за период {1} - {2} для выбранных групп.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Вы уверены?</value>
+  </data>
+  <data name="FromScenarioColon" xml:space="preserve">
+    <value>Из сценария:</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>Выберите меньший период.</value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>Выберите хотя бы одну группу.</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Выполнить</value>
+  </data>
+  <data name="ToScenarioColon" xml:space="preserve">
+    <value>На сценарий:</value>
+  </data>
+  <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
+    <value>Результат вашего выбора 0 человек.</value>
+  </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>Загрузка запросов...</value>
+  </data>
+  <data name="NotificationTimeToStay" xml:space="preserve">
+    <value>Продолжительность уведомления (секунды)</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingShift" xml:space="preserve">
+    <value>Перемещение смен для {0} оператора(-ов). {1} успешно и {2} не удалось.</value>
+  </data>
+  <data name="SuccessfulMessageForMovingShift" xml:space="preserve">
+    <value>Смены успешно перемещены для выбранных операторов</value>
+  </data>
+  <data name="NoSitesFound" xml:space="preserve">
+    <value>Сайты для выбранных навыков не найдены</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
+    <value>Добавление сверхурочной активности для {0} оператора(-ов). {1} успешно и {2} не удалось.</value>
+  </data>
+  <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
+    <value>Выбор набора определений множителя</value>
+  </data>
+  <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
+    <value>Сверхурочная активность успешно добавлена для выбранного(-ых) оператора(-ов).</value>
+  </data>
+  <data name="AddOvertimeActivity" xml:space="preserve">
+    <value>Добавить сверурочную активность</value>
+  </data>
+  <data name="RequestedPeriodIsTooLong" xml:space="preserve">
+    <value>Запрашиваемый период слишком длинный</value>
+  </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>Нет прав доступа для добавление сверхурочного времени для оператора {0}.</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Уровень</value>
+  </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>Необходимо выбрать дату в будущем.</value>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>Импорт выполнен для {0} человек.</value>
+  </data>
+  <data name="ImportingConfirmationWithParameters" xml:space="preserve">
+    <value>Вы собираетесь соединить расписание на сценарии '{0}' с существующим расписанием на сценарии по умолчанию за период {1} - {2} для выбранных групп.</value>
+  </data>
+  <data name="ImportScheduleDescription" xml:space="preserve">
+    <value>Импорт расписания из другого сценария на сценарий по умолчанию, со слиянием с существующим расписанием на сценарии по умочанию за выбранный период.</value>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>Выполнить импорт</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>Необходимо выбрать сценарии для импорта.</value>
+  </data>
+  <data name="WhenValidationFails" xml:space="preserve">
+    <value>Когда проверка не удалась</value>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>Правила сброса</value>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>Правила проверки</value>
+  </data>
+  <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
+    <value>Переместит рабочую смену на другой день</value>
+  </data>
+  <data name="DescriptionOfNewShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Ограничение категории смен за период</value>
+  </data>
+  <data name="DescriptionOfWeekShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Ограничение категории смен в неделю</value>
+  </data>
+  <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
+    <value>Время отдыха между сменами</value>
+  </data>
+  <data name="DescriptionOfNewMaxWeekWorkTimeRule" xml:space="preserve">
+    <value>Максимальное время работы в неделю</value>
+  </data>
+  <data name="DescriptionOfMinWeeklyRestRule" xml:space="preserve">
+    <value>Минимальное время отдыха в неделю</value>
+  </data>
+  <data name="DescriptionOfMinWeekWorkTimeRule" xml:space="preserve">
+    <value>Минимальное время работы в неделю</value>
+  </data>
+  <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
+    <value>Конфликт выходного с активностью</value>
+  </data>
+  <data name="DescriptionOfNotOverwriteLayerRule" xml:space="preserve">
+    <value>Неперезаписываемая активность в смене</value>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>Мероприятие, персональная активность или сверхурочное время в смене</value>
+  </data>
+  <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
+    <value>Индивидуальный счет</value>
+  </data>
+  <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
+    <value>Часы работы сайта</value>
+  </data>
+  <data name="DescriptionOfOpenHoursRule" xml:space="preserve">
+    <value>Часы работы навыка</value>
+  </data>
+  <data name="SearchAnOrganization" xml:space="preserve">
+    <value>Искать по организации</value>
+  </data>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>Поиск сайта или группы</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>{0} группы выбраны</value>
+  </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>Уровень сервиса</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>Использовать навыки:</value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>Операторы в предупреждении</value>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>Включая операторов в статусах:</value>
+  </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>Фильтр...</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Скрыть фильтр</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Показать фильтр</value>
+  </data>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>Обновить расчет ресурсов</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Производительность</value>
+  </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>Всего использовано</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Использовано {0}</value>
+  </data>
+  <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
+    <value>Выбор бюджетной группы...</value>
+  </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>Толерантность времени контракта</value>
+  </data>
+  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
+    <value>"{0}" уже существует. Заменить?</value>
+  </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>Обновить подтверждение</value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>Удалить по умолчанию</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>Только себя</value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>Сохранить избранный поиск</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>Нет прав доступа для удаления сверхурочного времени для оператора(-ов)</value>
+  </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value>Толерантность времени контракта превышена.</value>
+  </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>Войти с</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Выбор организации</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Очистить все</value>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>Возможно просматривать максимум {0} операторов. Переключение в "предупреждение" включено, если количество операторов не превышает {1}.</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>Избранный поиск</value>
+  </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>Несколько сайтов</value>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>Несколько групп</value>
   </data>
 </root>
