@@ -114,19 +114,6 @@ end
 set @RowCount = 1
 while @RowCount > 0
 begin
-	delete top (1000) Auditing.PersonDayOff_AUD
-	from Auditing.PersonDayOff_AUD pa
-	inner join person p on pa.Person = p.Id
-	where p.IsDeleted = 1
-
-	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
-		return
-end
-
-set @RowCount = 1
-while @RowCount > 0
-begin
 	delete top (1000) Auditing.PersonAbsence_AUD
 	from Auditing.PersonAbsence_AUD pa
 	inner join person p on pa.Person = p.Id
@@ -244,17 +231,6 @@ begin
 		return
 end
 
-set @RowCount = 1
-while @RowCount > 0
-begin
-	delete top (1000) Auditing.PersonDayOff_AUD
-	from Auditing.PersonDayOff_AUD pa
-	where pa.anchor < @KeepUntil
-
-	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
-		return
-end
 
 set @RowCount = 1
 while @RowCount > 0
@@ -278,8 +254,6 @@ begin
 						where pab.REV = r.id)
 	and not exists (	select 1 from auditing.PersonAssignment_AUD pa
 						where pa.REV = r.id)
-	and not exists (	select 1 from auditing.PersonDayOff_AUD pdo
-						where pdo.REV = r.id)
 
 	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
