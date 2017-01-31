@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var team = new Team { Description = new Description("team1") };
+			var team = new Team().WithDescription(new Description("team1"));
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var team = new Team { Description = new Description("team1") };
+			var team = new Team().WithDescription(new Description("team1"));
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var team = new Team { Description = new Description("team") };
+			var team = new Team().WithDescription(new Description("team"));
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
-			var team = new Team { Description = new Description("team") };
+			var team = new Team().WithDescription(new Description("team"));
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();

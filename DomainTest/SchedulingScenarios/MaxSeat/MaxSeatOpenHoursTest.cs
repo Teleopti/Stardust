@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldConsiderOpenHours()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = true }.WithId();
 			var skill = new Skill("_").For(activity).IsOpenBetween(8, 24);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldConsiderAgentTimeZoneWhenCheckingOpenHours()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = true }.WithId();
 			var skill = new Skill("_").For(activity).IsOpenBetween(8, 24);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldConsiderClosedHours()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = true }.WithId();
 			var skill = new Skill("_").For(activity).IsOpen(new TimePeriod(0, 7), new TimePeriod(8, 24));
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldConsiderIntersectingOpenHours()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var skill = new Skill("_").For(activity).IsOpen(new TimePeriod(0, 8), new TimePeriod(8, 24));
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldConsiderRequiresSkillWhenCheckingOpenHours()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = false }.WithId();
 			var skillActivity = new Activity("_") { RequiresSeat = true }.WithId();

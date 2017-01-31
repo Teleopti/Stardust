@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site }.WithId();
+			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site }.WithId();
+			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site }.WithId();
+			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site }.WithId();
+			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");

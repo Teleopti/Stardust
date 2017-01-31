@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldPersistAndFetchTeamFilter()
 		{
 			var site = new Site("_");
-			var team = new Team {Site = site, Description = new Description("_")};
+			var team = new Team {Site = site }.WithDescription(new Description("_"));
 			var teamFilter = new TeamFilter(team);
 			var dayOffRules = new DayOffRules();
 			dayOffRules.AddFilter(teamFilter);

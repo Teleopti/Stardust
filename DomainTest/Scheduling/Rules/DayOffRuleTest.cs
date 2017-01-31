@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
 			var site = new Site("site");
-			var team = new Team { Description = new Description("team") };
+			var team = new Team().WithDescription(new Description("team"));
 			site.AddTeam(team);
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_");

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(contract1);
 
 			var team1 = TeamFactory.CreateTeam("Team 1","Site 1");
-			var team2 = new Team {Site = team1.Site,Description = new Description("Team 2")};
+			var team2 = new Team {Site = team1.Site}.WithDescription(new Description("Team 2"));
 			PersistAndRemoveFromUnitOfWork(team1.Site);
 			PersistAndRemoveFromUnitOfWork(team1);
 			PersistAndRemoveFromUnitOfWork(team2);

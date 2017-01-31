@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var teamRepository = new FakeTeamRepository();
 			var site = new Domain.Common.Site("mysite");
-			var team = new Team {Site = site, Description = new Description("myteam")};
+			var team = new Team {Site = site }.WithDescription(new Description("myteam"));
 			teamRepository.Add(team);
 
 			var person = PersonFactory.CreatePerson();

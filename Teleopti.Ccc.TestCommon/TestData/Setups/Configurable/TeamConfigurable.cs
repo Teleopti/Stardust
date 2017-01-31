@@ -20,11 +20,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Name = RandomName.Make("team");
 			var siteRepository = new SiteRepository(currentUnitOfWork);
 			var site = siteRepository.LoadAll().Single(c => c.Description.Name == Site);
-			Team = new Team
-			{
-				Description = new Description(Name),
-				Site = site
-			};
+			Team = new Team{Site = site}
+				.WithDescription(new Description(Name));
 			var teamRepository = new TeamRepository(currentUnitOfWork);
 			teamRepository.Add(Team);
 		}

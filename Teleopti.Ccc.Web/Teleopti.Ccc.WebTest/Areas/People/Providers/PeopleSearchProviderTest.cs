@@ -53,10 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		public void ShouldSearchForPeople()
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today,
-				new Team
-				{
-					Description = new Description("TestTeam")
-				});
+				new Team().WithDescription(new Description("TestTeam")));
 			person.WithName(new Name("Ashley", "Andeen"));
 			person.Email = "ashley.andeen@abc.com";
 			person.SetEmploymentNumber("1011");
@@ -149,10 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		public void ShouldSearchPermittedPeopleWithAbsence()
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today,
-				new Team
-				{
-					Description = new Description("TestTeam")
-				});
+				new Team().WithDescription(new Description("TestTeam")));
 			person.WithName(new Name("John", "Smith"));
 			person.Email = "john.smith@abc.com";
 			person.SetEmploymentNumber("1012");

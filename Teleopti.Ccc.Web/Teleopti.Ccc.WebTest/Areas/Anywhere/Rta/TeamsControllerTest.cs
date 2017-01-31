@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public void ShouldGetTeamsForSite()
 		{
 			var teamId = Guid.NewGuid();
-			var team = new Team { Description = new Description("team1") }.WithId(teamId);
+			var team = new Team().WithId(teamId).WithDescription(new Description("team1"));
 			var site = new Site("site").WithId();
 			site.AddTeam(team);
 			TeamRepository.Has(team);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldGetNumberOfAgents()
 		{
-			var team = new Team { Description = new Description("t") }.WithId();
+			var team = new Team().WithId().WithDescription(new Description("t"));
 			var site = new Site("s").WithId();
 			site.AddTeam(team);
 			TeamRepository.Has(team);

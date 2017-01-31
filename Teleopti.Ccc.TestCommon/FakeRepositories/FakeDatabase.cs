@@ -529,7 +529,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_team = new Team {Site = _site};
 			_team.SetId(id ?? Guid.NewGuid());
 			if (name != null)
-				_team.Description = new Description(name);
+				_team.SetDescription(new Description(name));
 			_teams.Has(_team);
 			_site.AddTeam(_team);
 			return this;

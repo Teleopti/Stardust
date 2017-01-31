@@ -12,18 +12,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         private bool _isDeleted;
         private IScorecard _scorecard;
 
-        public virtual bool IsChoosable
-        {
-            get { return !IsDeleted; }
-        }
+        public virtual bool IsChoosable => !IsDeleted;
 
-        public virtual Description Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
+	    public virtual Description Description => _description;
 
-        public virtual ISite Site
+	    public virtual void SetDescription(Description value)
+	    {
+		    _description = value;
+	    }
+
+	    public virtual ISite Site
         {
             get { return _site; }
             set

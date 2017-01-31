@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void HappyPath(MaxSeatsFeatureOptions maxSeatsFeatureOptions)
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void HappyPathShouldWorkWhenAgentExistsWithoutPersonPeriod()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotRollbackEveryChangeIfLastOneBreakRule()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldSetCorrectTag()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldDoNothingWhenNotOverMaxSeatLimit()
 		{
 			var site = new Site("_") { MaxSeats = 10 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldDoNothingWhenMaxSeatDontGetBetter()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldDoNothingWhenMaxSeatGetsEqual()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldCheckEachIntervalOnShift()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldChooseShiftWherePeakIsLowest()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldChooseShiftWithLowestPeakWhenMultipleShifts()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldDoNothingWhenNoMaxSeatLimit()
 		{
 			var site = new Site("_").WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -315,8 +315,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		{
 			var siteMaxSeat = new Site("MaxSeat") { MaxSeats = 1 }.WithId();
 			var site = new Site("_").WithId();
-			var teamMaxSeat = new Team { Description = new Description("_"), Site = siteMaxSeat };
-			var team = new Team { Description = new Description("_"), Site = site };
+			var teamMaxSeat = new Team { Site = siteMaxSeat }.WithDescription(new Description("_"));
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			var bu = BusinessUnitFactory.CreateBusinessUnitAndAppend(teamMaxSeat, team);
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(bu);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var activityRequireNoSeat = new Activity("_") { RequiresSeat = false }.WithId();
 			var site = new Site("_") { MaxSeats = 0 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldDoNothingWhenNotUsingMaxSeatLimit()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -395,9 +395,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var siteOverLimit = new Site("_") { MaxSeats = 1 }.WithId();
-			var teamOverLimit = new Team { Description = new Description("_"), Site = siteOverLimit };
+			var teamOverLimit = new Team { Site = siteOverLimit }.WithDescription(new Description("_"));
 			var siteUnderLimit = new Site("_") { MaxSeats = 10 }.WithId();
-			var teamUnderLimit = new Team { Description = new Description("_"), Site = siteUnderLimit };
+			var teamUnderLimit = new Team { Site = siteUnderLimit }.WithDescription(new Description("_"));
 			var loggedOnBu = new BusinessUnit("_");
 			loggedOnBu.AddSite(siteOverLimit);
 			loggedOnBu.AddSite(siteUnderLimit);
@@ -422,9 +422,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var siteOverLimit = new Site("_") { MaxSeats = 1 }.WithId();
-			var teamOverLimit = new Team { Description = new Description("_"), Site = siteOverLimit };
+			var teamOverLimit = new Team { Site = siteOverLimit }.WithDescription(new Description("_"));
 			var siteUnderLimit = new Site("_") { MaxSeats = 10 }.WithId();
-			var teamUnderLimit = new Team { Description = new Description("_"), Site = siteUnderLimit };
+			var teamUnderLimit = new Team { Site = siteUnderLimit }.WithDescription(new Description("_"));
 			var loggedOnBu = new BusinessUnit("_");
 			loggedOnBu.AddSite(siteOverLimit);
 			loggedOnBu.AddSite(siteUnderLimit);
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public bool ShouldNotBreakMaxSeat(MaxSeatsFeatureOptions maxSeatsFeatureOptions)
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -475,7 +475,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldOnlyRemoveScheduleAffectingOverMaxSeatLimit()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -497,8 +497,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldTryToFixMaxSeatForAllBeforeRemovingShifts()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team1 = new Team { Description = new Description("_"), Site = site };
-			var team2 = new Team { Description = new Description("_"), Site = site };
+			var team1 = new Team { Site = site }.WithDescription(new Description("_"));
+			var team2 = new Team { Site = site }.WithDescription(new Description("_"));
 
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team1));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -523,7 +523,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotCrashWhenOptimizeEmptyDays()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team1 = new Team { Description = new Description("_"), Site = site };
+			var team1 = new Team { Site = site }.WithDescription(new Description("_"));
 
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team1));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -546,7 +546,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotCrashWhenShiftLayerDoesNotMatchSkillStaffPeriod()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void PeakShouldNotBe0ForNonSkillIntervals(bool ruleSet1First)
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -598,7 +598,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotOptimizeEmptyDays()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team1 = new Team { Description = new Description("_"), Site = site };
+			var team1 = new Team { Site = site }.WithDescription(new Description("_"));
 
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team1));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -623,7 +623,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotRemoveMoreThanNecessary()
 		{
 			var site = new Site("_") { MaxSeats = 2 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -645,7 +645,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotThouchLockedDays()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);

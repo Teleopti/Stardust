@@ -135,7 +135,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // Formats the name.
             var name = string.Format(CultureInfo.InvariantCulture, newNameFormat, _newTeamName, nextCount);
 
-            ITeam team = new Team { Description = new Description(name) };
+            ITeam team = new Team();
+			team.SetDescription(new Description(name));
             site.AddTeam(team);
             _teamRepository.Add(team);
 
@@ -351,7 +352,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 return;
             }
 
-            if (node.Tag.ToString() == orgTeam) ((ITeam)node.TagObject).Description = new Description(node.Text);
+            if (node.Tag.ToString() == orgTeam) ((ITeam)node.TagObject).SetDescription(new Description(node.Text));
             else if (node.Tag.ToString() == orgSite) ((ISite)node.TagObject).Description = new Description(node.Text);
         }
 

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var team = new Team { Description = new Description("team") };
+			var team = new Team().WithDescription(new Description("team"));
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();

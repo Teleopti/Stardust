@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -288,7 +289,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var partTimePercentage = new PartTimePercentage("something");
 			var contractSchedule = new ContractSchedule("something");
 			var site = new Site("test");
-			var team = new Team { Description = new Description("test"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("test"));
 
 			WithUnitOfWork.Do(() =>
 			{

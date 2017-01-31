@@ -8,6 +8,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
+	public static class DescriptionExtensions
+	{
+		public static Team WithDescription(this Team team, Description description)
+		{
+			team.SetDescription(description);
+			return team;
+		}
+	}
+
 	public static class PersonExtensions
 	{
 		public static IPerson WithName(this IPerson person, Name name)

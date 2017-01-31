@@ -46,11 +46,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 				var site = new Site(RandomName.Make());
 				Sites.Add(site);
 
-				var team = new Team
-				{
-					Description = new Description(RandomName.Make()),
-					Site = site
-				};
+				var team = new Team {Site = site}
+					.WithDescription(new Description(RandomName.Make()));
 				Teams.Add(team);
 				site.AddTeam(team);
 

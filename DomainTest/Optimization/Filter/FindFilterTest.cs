@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var searchString = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "team";
-			var team = new Team { Description = new Description(RandomName.Make() + searchString + RandomName.Make()) }.WithId(expectedGuid);
+			var team = new Team().WithId(expectedGuid).WithDescription(new Description(RandomName.Make() + searchString + RandomName.Make()));
 			TeamRepository.Add(team);
 
 			var result = Target.Search(searchString, 10).Single();
@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var name = RandomName.Make();
 			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
 			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
-			TeamRepository.Add(new Team {Description = new Description(name + RandomName.Make()) }.WithId());
-			TeamRepository.Add(new Team {Description = new Description(name + RandomName.Make()) }.WithId());
+			TeamRepository.Add(new Team().WithId().WithDescription(new Description(name + RandomName.Make())));
+			TeamRepository.Add(new Team().WithId().WithDescription(new Description(name + RandomName.Make())));
 			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 

@@ -137,7 +137,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IPerson CreatePersonWithPersonPeriodTeamSite(DateOnly personPeriodStart)
 		{
 			var site = SiteFactory.CreateSimpleSite("Site").WithId();
-			var team = new Team {Description = new Description("Team 1"),Site = site};
+			var team = new Team {Site = site}
+				.WithDescription(new Description("Team 1"));
 			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
 			return person;
 		}
@@ -251,7 +252,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			IContract ctr = new Contract("for test");
 			ctr.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			ITeam team = new Team { Description = new Description("test team") };
+			ITeam team = new Team().WithDescription(new Description("test team"));
 			IPersonPeriod per = new PersonPeriod(new DateOnly(1900, 1, 1),
 												 new PersonContract(ctr, new PartTimePercentage("f"), new ContractSchedule("f")),
 												team);

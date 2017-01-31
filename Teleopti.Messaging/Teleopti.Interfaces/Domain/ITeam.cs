@@ -13,9 +13,11 @@
         /// Created by: robink
         /// Created date: 2007-10-26
         /// </remarks>
-        Description Description { get; set; }
+        Description Description { get; }
 
-        /// <summary>
+	    void SetDescription(Description value);
+
+	    /// <summary>
         /// Gets or sets the site.
         /// </summary>
         /// <value>The site.</value>

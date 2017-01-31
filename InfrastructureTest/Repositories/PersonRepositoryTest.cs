@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			ISite site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
 			teamBu.Site = siteBu;
-			teamBu.Description = new Description("sdf");
+			teamBu.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(siteBu);
 			PersistAndRemoveFromUnitOfWork(teamBu);
 
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			ISite site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
 			teamBu.Site = siteBu;
-			teamBu.Description = new Description("sdf");
+			teamBu.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(siteBu);
 			PersistAndRemoveFromUnitOfWork(teamBu);
 
@@ -707,7 +707,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson validPerson = PersonFactory.CreatePerson("valid");
@@ -756,7 +756,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			var validPerson = PersonFactory.CreatePerson("valid");
@@ -829,7 +829,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson validPerson1 = PersonFactory.CreatePerson("valid1");
@@ -876,11 +876,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(otherSite);
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = siteWithMaxSeats;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 			ITeam otherTeam = TeamFactory.CreateSimpleTeam();
 			otherTeam.Site = otherSite;
-			otherTeam.Description = new Description("sdf");
+			otherTeam.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(otherTeam);
 
 			IPerson validPerson1 = PersonFactory.CreatePerson("valid1");
@@ -1720,7 +1720,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson per1 = PersonFactory.CreatePerson("roger","kratz");
@@ -1756,7 +1756,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			var team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson per1 = PersonFactory.CreatePerson("roger","kratz");

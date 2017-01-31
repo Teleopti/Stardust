@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
@@ -25,8 +26,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			_target = new DayLayerModelComparer();
 			var layerviewModelCollection = new LayerViewModelCollection(null, null, null, null);
-			var xTeam = new Team {Description = new Description("xTeam")};
-			var yTeam = new Team {Description = new Description("yTeam")};
+			var xTeam = new Team().WithDescription(new Description("xTeam"));
+			var yTeam = new Team().WithDescription(new Description("yTeam"));
 			x = new DayLayerModel(PersonFactory.CreatePerson("x", "x"), new DateTimePeriod(2000,01,01,2059,01,01), xTeam, layerviewModelCollection, new CommonNameDescriptionSetting());
 			y = new DayLayerModel(PersonFactory.CreatePerson("y", "y"), new DateTimePeriod(2000, 01, 01, 2059, 01, 01), yTeam, layerviewModelCollection, new CommonNameDescriptionSetting());
 		}

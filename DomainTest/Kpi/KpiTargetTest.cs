@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Kpi
             target.TargetValue = 15;
             target.MaxValue = 20;
             targetTeam = new Team();
-            targetTeam.Description = new Description("Test", "TS");
+            targetTeam.SetDescription(new Description("Test", "TS"));
         }
 
 

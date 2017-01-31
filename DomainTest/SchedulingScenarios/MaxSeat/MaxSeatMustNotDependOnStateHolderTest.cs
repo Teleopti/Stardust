@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotUseStateHolderWhenUsingHierarchy()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotUseStateHolderWhenUsingUserDefinedSkillGrouping()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);

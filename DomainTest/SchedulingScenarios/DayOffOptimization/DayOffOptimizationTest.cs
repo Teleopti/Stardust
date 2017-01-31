@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var team = new Team { Description = new Description("team"), Site = new Site("_")};
+			var team = new Team { Site = new Site("_")}.WithDescription(new Description("_"));
 			var contract = new Contract("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 
 			var scenario = ScenarioRepository.Has("some name");
-			var team = new Team { Description = new Description("team"), Site = new Site("_")};
+			var team = new Team { Site = new Site("_")}.WithDescription(new Description("_"));
 			var contract = new Contract("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));

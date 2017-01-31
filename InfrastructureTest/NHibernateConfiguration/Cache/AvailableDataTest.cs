@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ConnectionString, null), null);
 			availableData = new AvailableData {ApplicationRole = new ApplicationRole {Name = "d"}};
 			businessUnit = new BusinessUnit("d");
-			team = new Team{Description = new Description("k", "d")};
+			team = new Team().WithDescription(new Description("k", "d"));
 			site = new Site("d");
 			site.AddTeam(team);
 			businessUnit.AddSite(site);

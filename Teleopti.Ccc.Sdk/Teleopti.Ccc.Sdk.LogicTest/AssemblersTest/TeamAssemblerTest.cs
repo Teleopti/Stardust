@@ -18,11 +18,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var teamRep = new FakeTeamRepository();
 			var target = new TeamAssembler(teamRep);
 
-			var teamDomain = new Team
-			{
-				Description = new Description("Team Stockholm", "TS"),
-				Site = new Site("Europe")
-			}.WithId();
+	        var teamDomain = new Team {Site = new Site("Europe")}
+		        .WithId()
+		        .WithDescription(new Description("Team Stockholm", "TS"));
 
 			var teamDto = target.DomainEntityToDto(teamDomain);
 
@@ -37,11 +35,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var teamRep = new FakeTeamRepository();
 		    var target = new TeamAssembler(teamRep);
 
-		    var teamDomain = new Team
-		    {
-			    Description = new Description("Team Stockholm", "TS"),
-			    Site = new Site("Europe")
-		    }.WithId();
+		    var teamDomain = new Team {Site = new Site("Europe")}
+			    .WithId()
+			    .WithDescription(new Description("Team Stockholm", "TS"));
 		    teamRep.Add(teamDomain);
 
 		    var teamDto = new TeamDto {Description = teamDomain.Description.Name, Id = teamDomain.Id};

@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork (site);
 			var team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description ("sdf");
+			team.SetDescription(new Description ("sdf"));
 			PersistAndRemoveFromUnitOfWork (team);
 			return team;
 		}

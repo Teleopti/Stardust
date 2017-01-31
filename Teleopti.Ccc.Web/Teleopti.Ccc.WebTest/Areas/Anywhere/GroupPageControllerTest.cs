@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var site = SiteFactory.CreateSimpleSite("s");
 
 			var teamId = Guid.NewGuid();
-			var team = new Team {Site = site, Description = new Description("Team red")};
+			var team = new Team {Site = site}.WithDescription(new Description("Team red"));
 			team.SetId(teamId);
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team);

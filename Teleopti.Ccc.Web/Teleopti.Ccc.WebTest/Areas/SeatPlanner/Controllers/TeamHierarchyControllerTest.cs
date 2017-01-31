@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		{
 			var site = new Site("Test Site");
 			site.SetId(Guid.NewGuid());
-			var team = new Team { Description = new Description("Test Team") };
+			var team = new Team().WithDescription(new Description("Test Team"));
 			team.SetId(Guid.NewGuid());
 			site.AddTeam(team);
 

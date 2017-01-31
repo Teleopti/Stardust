@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISite site = SiteFactory.CreateSimpleSite("d");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			WithUnitOfWork.Do(() =>
 			{
 				Sites.Add(site);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISite site = SiteFactory.CreateSimpleSite("site");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("team");
+			team.SetDescription(new Description("team"));
 
 			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
 			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISite site = SiteFactory.CreateSimpleSite("site");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("team");
+			team.SetDescription(new Description("team"));
 
 			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
 			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISite site = SiteFactory.CreateSimpleSite("site");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("team");
+			team.SetDescription(new Description("team"));
 
 			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
 			IPerson per2 = PersonFactory.CreatePerson("z", "balog");

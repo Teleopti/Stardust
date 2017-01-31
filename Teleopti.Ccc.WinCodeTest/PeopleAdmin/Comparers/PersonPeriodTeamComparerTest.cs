@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         public void VerifyCompareMethodWithFirstNull()
         {
             _target.SiteTeam = null;
-            _personPeriodModel.SiteTeam.Team.Description = new Description("Test A");
+            _personPeriodModel.SiteTeam.Team.SetDescription(new Description("Test A"));
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         [Test]
         public void VerifyCompareMethodWithSecondNull()
         {
-            _target.SiteTeam.Team.Description = new Description("Test A");
+            _target.SiteTeam.Team.SetDescription(new Description("Test A"));
             _personPeriodModel.SiteTeam = null;
 
             // Calls the compares method
@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         [Test]
         public void VerifyCompareMethodAscending()
         {
-			_target.SiteTeam.Team.Description = new Description("Test A");
-			_personPeriodModel.SiteTeam.Team.Description = new Description("Test B");
+			_target.SiteTeam.Team.SetDescription(new Description("Test A"));
+			_personPeriodModel.SiteTeam.Team.SetDescription(new Description("Test B"));
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         [Test]
         public void VerifyCompareMethodDescending()
         {
-			_target.SiteTeam.Team.Description = new Description("Test B");
-			_personPeriodModel.SiteTeam.Team.Description = new Description("Test A");
+			_target.SiteTeam.Team.SetDescription(new Description("Test B"));
+			_personPeriodModel.SiteTeam.Team.SetDescription(new Description("Test A"));
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();
@@ -135,8 +135,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         [Test]
         public void VerifyCompareMethodWithSecondWithSame()
         {
-			_target.SiteTeam.Team.Description = new Description("Test A");
-			_personPeriodModel.SiteTeam.Team.Description = new Description("Test A");
+			_target.SiteTeam.Team.SetDescription(new Description("Test A"));
+			_personPeriodModel.SiteTeam.Team.SetDescription(new Description("Test A"));
 
             // Calls the compares method
             personPeriodTeamComparer = new PersonPeriodTeamComparer();

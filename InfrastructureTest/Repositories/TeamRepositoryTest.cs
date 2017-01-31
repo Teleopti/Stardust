@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldFindTeamContain()
 		{
 			var name = RandomName.Make();
-			var team = new Team { Description = new Description(RandomName.Make() + name + RandomName.Make()), Site = teamSite };
+			var team = new Team { Site = teamSite }.WithDescription(new Description(RandomName.Make() + name + RandomName.Make()));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(name, 20);
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldMissTeamContain()
 		{
-			var team = new Team { Description = new Description(RandomName.Make()), Site = teamSite };
+			var team = new Team { Site = teamSite }.WithDescription(new Description(RandomName.Make()));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(RandomName.Make(), 20);
@@ -132,9 +133,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			const int maxHits = 2;
 			var name = RandomName.Make();
-			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
-			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
-			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
+			PersistAndRemoveFromUnitOfWork(new Team { Site = teamSite }.WithDescription(new Description(name)));
+			PersistAndRemoveFromUnitOfWork(new Team { Site = teamSite }.WithDescription(new Description(name)));
+			PersistAndRemoveFromUnitOfWork(new Team { Site = teamSite }.WithDescription(new Description(name)));
 
 			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(name, maxHits);
 
@@ -159,11 +160,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var anotherSite = new Site("Rome");
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(anotherSite);
-			PersistAndRemoveFromUnitOfWork(new Team
-			{
-				Site = site,
-				Description = new Description("A")
-			});
+			PersistAndRemoveFromUnitOfWork(new Team {Site = site}
+				.WithDescription(new Description("A")));
 			var teams = new TeamRepository(UnitOfWork).FindTeamsForSite(site.Id.Value);
 
 			teams.Select(x => x.Description.Name).Single().Should().Be("A");

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 		{
 			var teams = new[] {new Team()};
 			teams[0].SetId(Guid.NewGuid());
-			teams[0].Description = new Description("team");
+			teams[0].SetDescription(new Description("team"));
 			teams[0].Site = new Site("site");
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 		{
 			var teams = new[] {new Team()};
 			teams[0].SetId(Guid.NewGuid());
-			teams[0].Description = new Description("team");
+			teams[0].SetDescription(new Description("team"));
 			teams[0].Site = new Site("site");
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 		{
 			var teams = new[] {new Team()};
 			teams[0].SetId(Guid.NewGuid());
-			teams[0].Description = new Description("team");
+			teams[0].SetDescription(new Description("team"));
 			teams[0].Site = new Site("site");
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
 			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule))

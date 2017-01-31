@@ -53,10 +53,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 
 			var team1 = new Team();
 			team1.SetId(teamId1);
-			team1.Description = new Description(teamName1);
+			team1.SetDescription(new Description(teamName1));
 			var team2 = new Team();
 			team2.SetId(teamId2);
-			team2.Description = new Description(teamName2);
+			team2.SetDescription(new Description(teamName2));
 
 			var siteIds = new List<Guid>() { siteId1, siteId2 };
 

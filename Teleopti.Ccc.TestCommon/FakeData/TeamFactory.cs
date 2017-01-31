@@ -26,9 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <returns></returns>
         public static Team CreateSimpleTeam(string name)
         {
-            Team team = new Team();
-            team.Description = new Description(name);
-            return team;
+            return new Team().WithDescription(new Description(name));
         }
 
         /// <summary>
@@ -44,8 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static  Team CreateTeam(string teamName,string siteName)
         {
             Site site = SiteFactory.CreateSimpleSite(siteName);
-            Team team = new Team();
-            team.Description = new Description(teamName);
+            Team team = new Team().WithDescription(new Description(teamName));
             site.AddTeam(team);
 
             return team;

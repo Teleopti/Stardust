@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldRestoreToLegalShiftBagShiftWithSameStartAndEndTime()
 		{
-			var team = new Team { Description = new Description("team") };
+			var team = new Team().WithDescription(new Description("team"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldKeepOvertimeWhenRestoreToLegalShiftBagShiftWithSameStartAndEndTime()
 		{
-			var team = new Team { Description = new Description("team")};
+			var team = new Team().WithDescription(new Description("team"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldFindLegalShiftWhenNotAllowPersonalActivityOverwriteActivity()
 		{
-			var team = new Team { Description = new Description("team") };
+			var team = new Team().WithDescription(new Description("team"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var secondDay = firstDay.AddDays(1);
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldFindLegalShiftWhenNotAllowedMeetingOverwriteActivity()
 		{
-			var team = new Team { Description = new Description("team") };
+			var team = new Team().WithDescription(new Description("team"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var secondDay = firstDay.AddDays(1);

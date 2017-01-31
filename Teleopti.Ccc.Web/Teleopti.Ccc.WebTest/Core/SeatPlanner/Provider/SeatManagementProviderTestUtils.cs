@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		
 		public static Team CreateTeam(String name)
 		{
-			var team = new Team() { Description = new Description(name) };
+			var team = new Team().WithDescription(new Description(name));
 			team.SetId(Guid.NewGuid());
 			return team;
 		}

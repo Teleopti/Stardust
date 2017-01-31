@@ -67,11 +67,8 @@ namespace Teleopti.Ccc.TestCommon
 			var team = _teams.LoadAll().SingleOrDefault(x => x.Description.Name == "team");
 			if (team == null)
 			{
-				team = new Team
-				{
-					Description = new Description("team"),
-					Site = site
-				};
+				team = new Team {Site = site}
+					.WithDescription(new Description("team"));
 				_teams.Add(team);
 			}
 			

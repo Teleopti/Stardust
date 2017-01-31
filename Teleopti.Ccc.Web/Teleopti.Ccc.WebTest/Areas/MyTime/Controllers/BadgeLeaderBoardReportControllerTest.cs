@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				var team = new Team();
 				team.SetId(Guid.Parse("235D8D6D-E46E-44D7-B9EA-92D7B85BE49E"));
-				team.Description = new Description("team");
+				team.SetDescription(new Description("team"));
 				team.Site = new Site("site");
 				return team;
 			}

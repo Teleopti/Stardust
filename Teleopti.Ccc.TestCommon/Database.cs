@@ -224,11 +224,9 @@ namespace Teleopti.Ccc.TestCommon
 			}
 			_team = name;
 			var s = site(_site);
-			var t = new Team
-			{
-				Description = new Description(_team),
-				Site = s
-			};
+			var t = new Team {Site = s}
+				.WithDescription(new Description(_team));
+			
 			_teams.Add(t);
 			s.AddTeam(t);
 			return t;

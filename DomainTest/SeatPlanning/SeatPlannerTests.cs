@@ -82,7 +82,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		private static Team addTeam(String name)
 		{
-			var team = new Team() { Description = new Description(name) };
+			var team = new Team();
+			team.SetDescription(new Description(name));
 			team.SetId(Guid.NewGuid());
 			return team;
 		}

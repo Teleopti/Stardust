@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    {
 		    var name = RandomName.Make();
 		    var site = new Site(name);
-		    var team = new Team {Description = new Description(RandomName.Make()), Site = site};
+		    var team = new Team { Site = site}.WithDescription(new Description(RandomName.Make()));
 		    site.AddTeam(team);
 		    PersistAndRemoveFromUnitOfWork(site);
 		    PersistAndRemoveFromUnitOfWork(team);

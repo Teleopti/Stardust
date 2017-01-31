@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				10, 10, 10, 10, 10, 10, 10);
 
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var team1 = new Team {Description = new Description("team1")};
+			var team1 = new Team().WithDescription(new Description("team1"));
 
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var normalRuleSet =
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				10, 10, 10, 10, 10, 10, 10);
 
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var team1 = new Team { Description = new Description("team1") };
+			var team1 = new Team().WithDescription(new Description("team1"));
 
 			var shiftCategory8H15M = new ShiftCategory("L").WithId();
 			var ruleSet8H15M =

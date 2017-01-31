@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldIncludeTeamFilterWhenFetching()
 		{
 			var filterName = RandomName.Make();
-			var team = new Team {Description = new Description(filterName)}.WithId();
+			var team = new Team().WithId().WithDescription(new Description(filterName));
 			var teamFilter = new TeamFilter(team);
 			var dayOffRule = new DayOffRules().WithId();
 			dayOffRule.AddFilter(teamFilter);

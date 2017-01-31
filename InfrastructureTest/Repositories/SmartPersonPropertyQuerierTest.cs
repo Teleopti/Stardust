@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = TeamFactory.CreateSimpleTeam();
 			var site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			var wcs = new WorkflowControlSet("Test");
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = TeamFactory.CreateSimpleTeam();
 			var site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			var wcs = new WorkflowControlSet("Test");
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = TeamFactory.CreateSimpleTeam();
 			var site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			var wcs1 = new WorkflowControlSet("Test1");
 			var wcs2 = new WorkflowControlSet("Test2");
 

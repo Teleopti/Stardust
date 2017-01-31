@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			var date = _now.LocalDateOnly();
 			var site = new Site("site");
 			_siteRepository.Add(site);
-			var team = new Team {Site = site, Description = new Description("team")};
+			var team = new Team {Site = site};
+			team.SetDescription(new Description("team"));
 			_teamRepository.Add(team);
 			var contract = new Contract("c");
 			_contractRepository.Add(contract);

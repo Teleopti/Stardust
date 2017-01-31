@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			contract1 = new Contract("contract1");
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			contract1 = new Contract("contract1");
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			contract1 = new Contract("contract1");
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
 			contract1 = new Contract("contract1");
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(site);
             team = TeamFactory.CreateSimpleTeam();
             team.Site = site;
-            team.Description = new Description("sdf");
+            team.SetDescription(new Description("sdf"));
             PersistAndRemoveFromUnitOfWork(team);
 
             contract1 = new Contract("contract1");
