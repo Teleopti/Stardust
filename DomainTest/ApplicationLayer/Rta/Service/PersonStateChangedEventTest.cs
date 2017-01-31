@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId);
+				.WithAgent("usercode", personId)
+				.WithStateGroup(null, "default", true);
 
 			Target.SaveState(new StateForTest
 			{
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId);
+				.WithAgent("usercode", personId)
+				.WithStateCode("statecode");
 			Now.Is("2014-10-20 10:00");
 
 			Target.SaveState(new StateForTest

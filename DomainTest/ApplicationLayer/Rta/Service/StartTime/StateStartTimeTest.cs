@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId);
+				.WithAgent("usercode", personId)
+				.WithStateCode("phone");
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new StateForTest

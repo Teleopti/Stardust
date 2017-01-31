@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			
 			var isSameState =
 				SnapshotId.Equals(Stored.BatchId) &&
-				Schedule.CurrentActivityId().Equals(Stored.ActivityId) &&
-				State.StateGroupId().Equals(Stored.StateGroupId) &&
+				!Schedule.ActivityChanged() &&
+				!State.StateChanged() &&
 				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum)
 				;
 

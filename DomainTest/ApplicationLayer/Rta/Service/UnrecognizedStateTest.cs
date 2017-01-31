@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithAgent("usercode")
-				.WithRule();
+				.WithStateGroup(null, "default", true);
 
 			Target.SaveState(new StateForTest
 			{
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithAgent("usercode")
-				.WithRule();
+				.WithStateGroup(null, "default", true);
 
 			Target.SaveState(new StateForTest
 			{
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		// this test seems a bit unclear, but saved us today
 		public void ShouldNotAddStateCodeUnlessStateReceived()
 		{
 			var personId = Guid.NewGuid();
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", personId)
-				.WithRule();
+				.WithStateGroup(null, "default", true);
 			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",

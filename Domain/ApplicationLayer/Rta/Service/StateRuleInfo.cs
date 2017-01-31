@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -8,7 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Lazy<MappedRule> _mappedRule;
 		private readonly Lazy<MappedState> _mappedState;
-		private readonly Lazy<bool> _stateChanged;
 		private readonly Context _context;
 
 		public StateRuleInfo(Context context)
@@ -16,18 +16,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_context = context;
 			_mappedState = new Lazy<MappedState>(() => context.StateMapper.StateFor(context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Input.StateDescription));
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Schedule.CurrentActivityId()));
-			_stateChanged = new Lazy<bool>(() =>
-			{
-				var mappedStateGroupId = _mappedState.Value?.StateGroupId;
-				if (mappedStateGroupId == null)
-					return _context.StateCode != _context.Stored?.StateCode;
-				return mappedStateGroupId != _context.Stored?.StateGroupId;
-			});
 		}
 		
 		public bool StateChanged()
 		{
-			return _stateChanged.Value;
+			return _mappedState.Value?.StateGroupId != _context.Stored?.StateGroupId;
 		}
 
 		public Guid? StateGroupId()

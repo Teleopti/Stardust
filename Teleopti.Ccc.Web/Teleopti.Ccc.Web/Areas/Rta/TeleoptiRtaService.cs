@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		private static string fixStateCode(string stateCode, bool isLoggedOn)
 		{
 			if (!isLoggedOn)
-				return Domain.ApplicationLayer.Rta.Service.Rta.LogOutStateCode;
+				return "LOGGED-OFF";
 			if (stateCode == null)
 				return null;
 			stateCode = stateCode.Trim();

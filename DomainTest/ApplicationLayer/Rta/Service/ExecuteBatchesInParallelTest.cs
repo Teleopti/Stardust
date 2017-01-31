@@ -25,8 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithAgent("user1", personId);
-			
+				.WithAgent("user1", personId)
+				.WithStateCode("phone");
+
 			Assert.Throws<AggregateException>(() => Target.SaveStateBatch(new BatchForTest
 			{
 				States = new[]
@@ -59,7 +60,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId2 = Guid.NewGuid();
 			Database
 				.WithAgent("user1", personId1)
-				.WithAgent("user2", personId2);
+				.WithAgent("user2", personId2)
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithRule("ready")
+				.WithRule("phone")
+				;
 			Target.SaveStateBatch(new BatchForTest
 			{
 				SnapshotId = "2016-07-11 08:00".Utc(),

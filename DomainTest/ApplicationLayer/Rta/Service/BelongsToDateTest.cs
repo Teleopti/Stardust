@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
-				;
+				.WithStateCode("phone");
 			Now.Is("2015-02-20 2:00");
 
 			Target.SaveState(new StateForTest

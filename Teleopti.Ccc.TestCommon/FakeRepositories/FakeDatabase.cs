@@ -826,8 +826,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
+			return WithStateGroup(id, name, _stateGroups.LoadAll().IsEmpty());
+		}
+
+		public FakeDatabase WithStateGroup(Guid? id, string name, bool @default)
+		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
-			_stateGroup = new RtaStateGroup(name ?? RandomName.Make());
+			_stateGroup = new RtaStateGroup(name ?? RandomName.Make(), @default, true);
 			_stateGroup.SetId(id ?? Guid.NewGuid());
 			_stateGroup.SetBusinessUnit(_businessUnit);
 			_stateGroups.Has(_stateGroup);
@@ -836,7 +841,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithStateCode(string stateCode)
 		{
-			ensureExists(_stateGroups, null, () => this.WithStateGroup(null, null));
+			ensureExists(_stateGroups, null, () => WithStateGroup(null, null));
 			ensurePlatformExists(null);
 			_stateGroup.AddState(stateCode, stateCode, _platform.Value);
 			return this;

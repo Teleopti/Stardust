@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode", Guid.Empty)
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithRule("statecode")
 				;
 
 			Now.Is("2014-10-20 10:00");
@@ -80,7 +81,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode", Guid.Empty)
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithRule("statecode")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest
@@ -151,7 +153,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDataSource("source1")
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode1", Guid.Empty)
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithRule("statecode1")
+				.WithRule("statecode2")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -178,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode1",
-						StateCode = "statecode",
+						StateCode = "statecode2",
 					}
 				}
 			});
@@ -201,7 +205,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode1", Guid.Empty)
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithRule("statecode1")
+				.WithRule("statecode2")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -228,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode1",
-						StateCode = "statecode",
+						StateCode = "statecode2",
 					}
 				}
 			});
@@ -249,8 +255,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", user2)
-				.WithRule("statecode", Guid.Empty)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty);
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithRule("statecode");
 
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest
@@ -306,7 +312,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithPlatform(platformTypeId)
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode", Guid.Empty)
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithRule("statecode")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest

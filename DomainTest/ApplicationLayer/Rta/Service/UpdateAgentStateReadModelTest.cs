@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersistReadModel()
 		{
 			Database
-				.WithAgent("usercode");
+				.WithAgent("usercode")
+				.WithStateCode("phone");
 
 			Target.SaveState(new StateForTest
 			{

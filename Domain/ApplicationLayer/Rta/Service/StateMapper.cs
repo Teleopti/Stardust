@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -67,6 +68,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var match = queryState(businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
 			return _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
+			//match = _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
+			//if (match == null)
+			//	throw new DefaultStateGroupException("No default state group configured");
+			//return match;
 		}
 
 		private MappedState queryState(Guid businessUnitId, Guid platformTypeId, string stateCode)
@@ -142,9 +147,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			protected bool Equals(ruleMappingKey other)
 			{
-				return businessUnitId.Equals(other.businessUnitId) 
-					&& platformTypeId.Equals(other.platformTypeId) 
-					&& string.Equals(stateCode, other.stateCode) 
+				return businessUnitId.Equals(other.businessUnitId)
+					&& platformTypeId.Equals(other.platformTypeId)
+					&& string.Equals(stateCode, other.stateCode)
 					&& activityId.Equals(other.activityId);
 			}
 
@@ -153,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
 				if (obj.GetType() != GetType()) return false;
-				return Equals((ruleMappingKey) obj);
+				return Equals((ruleMappingKey)obj);
 			}
 
 			public override int GetHashCode()
@@ -161,9 +166,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				unchecked
 				{
 					var hashCode = businessUnitId.GetHashCode();
-					hashCode = (hashCode*397) ^ platformTypeId.GetHashCode();
-					hashCode = (hashCode*397) ^ (stateCode?.GetHashCode() ?? 0);
-					hashCode = (hashCode*397) ^ activityId.GetHashCode();
+					hashCode = (hashCode * 397) ^ platformTypeId.GetHashCode();
+					hashCode = (hashCode * 397) ^ (stateCode?.GetHashCode() ?? 0);
+					hashCode = (hashCode * 397) ^ activityId.GetHashCode();
 					return hashCode;
 				}
 			}
@@ -181,8 +186,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			protected bool Equals(stateMappingKey other)
 			{
-				return businessUnitId.Equals(other.businessUnitId) 
-					&& platformTypeId.Equals(other.platformTypeId) 
+				return businessUnitId.Equals(other.businessUnitId)
+					&& platformTypeId.Equals(other.platformTypeId)
 					&& string.Equals(stateCode, other.stateCode);
 			}
 
@@ -191,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
 				if (obj.GetType() != GetType()) return false;
-				return Equals((stateMappingKey) obj);
+				return Equals((stateMappingKey)obj);
 			}
 
 			public override int GetHashCode()
@@ -199,8 +204,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				unchecked
 				{
 					var hashCode = businessUnitId.GetHashCode();
-					hashCode = (hashCode*397) ^ platformTypeId.GetHashCode();
-					hashCode = (hashCode*397) ^ (stateCode?.GetHashCode() ?? 0);
+					hashCode = (hashCode * 397) ^ platformTypeId.GetHashCode();
+					hashCode = (hashCode * 397) ^ (stateCode?.GetHashCode() ?? 0);
 					return hashCode;
 				}
 			}

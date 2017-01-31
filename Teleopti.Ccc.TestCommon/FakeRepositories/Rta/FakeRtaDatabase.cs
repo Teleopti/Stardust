@@ -2,16 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Interfaces.Domain;
-using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.ExternalLogon;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {

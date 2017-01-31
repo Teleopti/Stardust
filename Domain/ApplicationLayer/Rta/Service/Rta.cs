@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class Rta
 	{
-		public static string LogOutStateCode = "LOGGED-OFF";
 		public static string LogOutBySnapshot = "CCC Logged out";
 
 		private readonly RtaProcessor _processor;
