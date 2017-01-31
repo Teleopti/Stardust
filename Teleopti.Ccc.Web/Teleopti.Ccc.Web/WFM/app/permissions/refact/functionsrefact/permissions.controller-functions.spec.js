@@ -731,7 +731,7 @@ describe('component: permissionsTree', function() {
 
 		expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toEqual(undefined);
 		expect(vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c']).toEqual(undefined);
-		expect(vm.selectedOrNot).toEqual(false);
+		expect(vm.isAllFunctionSelected).toEqual(false);
 	});
 
 	it('should select all toggle when all functions are active', function() {
@@ -779,7 +779,7 @@ describe('component: permissionsTree', function() {
 
 		expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toEqual(true);
 		expect(vm.selectedFunctions['f19bb790-b000-4deb-97db-9b5e015b2e8c']).toEqual(true);
-		expect(vm.selectedOrNot).toEqual(true);
+		expect(vm.isAllFunctionSelected).toEqual(true);
 	});
 
 });

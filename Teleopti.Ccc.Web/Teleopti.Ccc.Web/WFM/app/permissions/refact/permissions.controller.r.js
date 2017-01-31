@@ -11,7 +11,7 @@
 		var vm = this;
 		vm.showCreateModal;
 		vm.roleName;
-
+		vm.isAllFunctionSelected = false;
 		fetchData();
 		vm.createRole = createRole;
 		vm.editRole = editRole;
@@ -26,7 +26,6 @@
 		vm.allFunctionsFilter = allFunctionsFilter;
 		vm.isFunctionSelected = isFunctionSelected;
 		vm.selectFunction = selectFunction;
-		vm.selectedOrNot = false;
 		vm.selectedRole = {};
 		vm.selectedFunctions = {};
 		vm.componentFunctions = [];
@@ -58,9 +57,13 @@
 			};
 			PermissionsServiceRefact.roles.save(roleData).$promise.then(function(data) {
 				vm.roles.unshift(data);
-				vm.selectedRole = data;
-				refreshRoleSelection();
-				markSelectedRole(vm.selectedRole);
+        refreshRoleSelection();
+        markSelectedRole(data);
+        PermissionsServiceRefact.manage.getRoleInformation({
+          Id: data.Id
+        }).$promise.then(function(data) {
+          	vm.selectedRole = data;
+        });
 			});
 			vm.showCreateModal = false;
 			vm.roleName = '';
@@ -105,7 +108,7 @@
 				toggleOrganizationSelecton(vm.organizationSelection.BusinessUnit, false);
 			}
 			vm.selectedRole = {};
-			vm.selectedOrNot = false;
+			vm.isAllFunctionSelected = false;
 		}
 
 		function copyRole(role) {
@@ -113,10 +116,15 @@
 				Id: role.Id
 			}).$promise.then(function(data) {
 				vm.roles.unshift(data);
-				vm.selectedRole = data;
 
 				refreshRoleSelection();
-				markSelectedRole(vm.selectedRole);
+				markSelectedRole(data);
+
+        PermissionsServiceRefact.manage.getRoleInformation({
+          Id: data.Id
+        }).$promise.then(function(data) {
+            vm.selectedRole = data;
+        });
 			});
 		}
 
@@ -149,16 +157,26 @@
 					unselectedDataFilter();
 				}
 
-				if (vm.selectedRole.AvailableFunctions) {
-					var hasAll = vm.selectedRole.AvailableFunctions.find(function(func) {
-						return func.FunctionCode === 'All';
-					});
-					if (hasAll) {
-						vm.selectedOrNot = true;
-					} else {
-						vm.selectedOrNot = false;
+				var flatFunctions = [];
+				var functionsWithoutAll = vm.applicationFunctions.slice();
+				functionsWithoutAll.splice(0, 1)
+				createFlatArrayWithoutAllFunction(functionsWithoutAll);
+
+				vm.isAllFunctionSelected = flatFunctions.every(isSelected)
+
+				function isSelected(id) {
+					return !!vm.selectedFunctions[id]
+				}
+
+				function createFlatArrayWithoutAllFunction(functions) {
+					for (var i = 0; i < functions.length; i++) {
+						flatFunctions.push(functions[i].FunctionId)
+						if (functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
+							createFlatArrayWithoutAllFunction(functions[i].ChildFunctions)
+						}
 					}
 				}
+
 			});
 		}
 
@@ -287,7 +305,7 @@
 			vm.dataFilterObj.isSelected = true;
 			vm.dataFilterObj.isUnSelected = false;
 			var data = dataFilter.selected(vm.organizationSelection, vm.selectedOrgData);
-			
+
 			orgDataHandler(data);
 		}
 
@@ -353,7 +371,7 @@
 			}
 			createFlatFunctions(vm.applicationFunctions, flatFunctions);
 
-			vm.selectedOrNot = flatFunctions.every(function(func) {
+			vm.isAllFunctionSelected = flatFunctions.every(function(func) {
 				return isFunctionSelected(func);
 			});
 			permissionsDataService.selectFunction(vm.selectedRole, functions, fn);
@@ -374,11 +392,11 @@
 		}
 
 		function toggleAllFunction() {
-			vm.selectedOrNot = !vm.selectedOrNot;
-			toggleSelection(vm.applicationFunctions, vm.selectedOrNot);
+			vm.isAllFunctionSelected = !vm.isAllFunctionSelected;
+			toggleSelection(vm.applicationFunctions, vm.isAllFunctionSelected);
 
 			if (vm.selectedRole != null) {
-				permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, vm.selectedOrNot).then(function() {
+				permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, vm.isAllFunctionSelected).then(function() {
 					selectRole(vm.selectedRole, true);
 				});
 			}
@@ -440,6 +458,7 @@
 				orgDataHandler(vm.organizationSelection);
 			});
 		}
+
 
 	}
 })();

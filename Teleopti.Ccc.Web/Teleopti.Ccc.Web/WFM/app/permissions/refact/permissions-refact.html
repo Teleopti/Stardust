@@ -142,9 +142,8 @@
 									</div>
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex line-right">
-
 										<div class="wfm-checkbox" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
-											<input type="checkbox" checked="true" ng-model="vm.selectedOrNot" />
+											<input type="checkbox" checked="true" ng-model="vm.isAllFunctionSelected" /> {{vm.isAllFunctionSelected}}
 											<label ng-click="toggleDangerModal = true" class="pointer">
 												<span class="non-pointer">
 													<span class="wfm-checkbox-toggle"></span>

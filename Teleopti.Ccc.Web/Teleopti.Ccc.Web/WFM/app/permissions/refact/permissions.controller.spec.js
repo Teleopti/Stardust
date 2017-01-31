@@ -1,6 +1,6 @@
 'use strict';
 
-describe('PermissionsController', function() {
+fdescribe('PermissionsController', function() {
 
 	var $httpBackend,
 		fakeBackend,
@@ -38,7 +38,8 @@ describe('PermissionsController', function() {
 
 		$httpBackend.whenPOST('../api/Permissions/Roles').respond(function(method, url, data, headers) {
 			return [201, {
-				DescriptionText: 'rolename'
+				DescriptionText: 'rolename',
+				Id: '123'
 			}];
 		});
 
@@ -84,7 +85,7 @@ describe('PermissionsController', function() {
 
 		allFunction = {
 			ChildFunctions: [],
-			FunctionCode: 'Raptor',
+			FunctionCode: 'All',
 			FunctionDescription: 'xxOpenRaptorApplication',
 			FunctionId: '8ecf6029-4f3c-409c-89db-46bd8d7d402d',
 			IsDisabled: false,
@@ -245,7 +246,7 @@ describe('PermissionsController', function() {
 			vm.selectRole(defaultRole);
 			$httpBackend.flush()
 
-			expect(vm.selectedOrNot).toEqual(true);
+			expect(vm.isAllFunctionSelected).toEqual(true);
 		});
 
 		it('should unselect previous selected role when creating new role', function() {
@@ -671,7 +672,7 @@ describe('PermissionsController', function() {
 				vm.onFunctionClick(vm.applicationFunctions[1].ChildFunctions[0]);
 				$httpBackend.flush();
 
-				expect(vm.selectedOrNot).toEqual(false);
+				expect(vm.isAllFunctionSelected).toEqual(false);
 		});
 
 		it('should indicate all available functions for selected role but BETTER', function() {
@@ -931,7 +932,7 @@ describe('PermissionsController', function() {
 				});
 			$httpBackend.flush();
 
-			vm.selectedOrNot = true;
+			vm.isAllFunctionSelected = true;
 			vm.toggleAllFunction();
 			$httpBackend.flush();
 
@@ -940,6 +941,61 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['52b6f3de-55e0-45b2-922e-316f8538f60c']).toEqual(undefined);
 			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(undefined);
 		});
+
+		it('should keep all function deselected when unselecting one function, switching role and going back', function() {
+			$httpBackend.whenDELETE(' ../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/' + allFunction.FunctionId).respond(function(method, url, data, headers) {
+				return 200;
+			});
+			$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/5ad43bfa-7842-4cca-ae9e-8d03ddc789e9').respond(function(method, url, data, headers) {
+				return 200;
+			});
+
+			fakeBackend
+				.withRole(defaultRole)
+				.withRole(defaultRole2)
+				.withRoleInfo({
+					Id: defaultRole.Id,
+					AvailableFunctions: [
+						{
+							Id: allFunction.FunctionId,
+							FunctionCode: allFunction.FunctionCode
+						},
+						{
+							Id: defaultApplicationFunction.FunctionId
+						},
+						{
+							Id: defaultApplicationFunction.ChildFunctions[0].FunctionId
+						},
+						{
+							Id: defaultApplicationFunction2.FunctionId
+						},
+						{
+							Id: defaultApplicationFunction2.ChildFunctions[0].FunctionId
+						}
+					]
+				})
+				.withApplicationFunction(allFunction)
+				.withApplicationFunction(defaultApplicationFunction)
+				.withApplicationFunction(defaultApplicationFunction2);
+			$httpBackend.flush();
+
+			vm.selectRole(vm.roles[0]);
+			$httpBackend.flush();
+			console.log('1', vm.isAllFunctionSelected, vm.selectedFunctions);
+			vm.selectedFunctions[defaultApplicationFunction.ChildFunctions[0].FunctionId] = undefined;
+			vm.onFunctionClick(defaultApplicationFunction.ChildFunctions[0]);
+			$httpBackend.flush();
+			console.log('2', vm.isAllFunctionSelected, vm.selectedFunctions);
+			vm.selectRole(vm.roles[1]);
+			$httpBackend.flush();
+			console.log('3', vm.isAllFunctionSelected);
+			vm.selectRole(vm.roles[0]);
+			$httpBackend.flush();
+			console.log('4', vm.isAllFunctionSelected);
+
+			expect(vm.isAllFunctionSelected).toEqual(false);
+		});
+
 	});
 
 	describe('PermissionsController - organization', function() {
