@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (personPeriod == null) return shiftList;
 			
 			var validActivities = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(personPeriod).Select(p => p.Skill.Activity).ToArray();
-			var workShiftsWithValidActivities = shiftList.AsParallel().Where(s =>
+			var workShiftsWithValidActivities = shiftList.Where(s =>
 			{
 				var projectedLayersRequiringSkill = s.MainShiftProjection.Select(l => l.Payload).OfType<IActivity>().Where(a => a.RequiresSkill);
 				return projectedLayersRequiringSkill.All(validActivities.Contains);
