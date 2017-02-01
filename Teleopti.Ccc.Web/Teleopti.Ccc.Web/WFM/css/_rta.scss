@@ -61,6 +61,10 @@
 	}
 }
 
+.rta-md-select {
+	color: $text-color-muted;
+}
+
 .rta-option-group {
 	margin: 0 16px 8px;
 
@@ -88,11 +92,13 @@
 	border: 0;
 	height: 100%;
 	width: 86%;
+	background: inherit;
 }
 
 .rta-select-header,
 .rta-option-group {
 	border-bottom: 1px solid rgba(0,0,0,.06);
+	color: $gray087;
 }
 
 .md-checkbox-enabled[selected] .md-icon,
@@ -107,8 +113,18 @@
 
 .rta-md-input-container {
 	width: 100%;
-	margin: -2px 0 0 !important;
+	margin: $half-padding*3 0 0 0 !important;
 }
+
+.rta-md-input-container {
+	padding: 0;
+
+	.md-select-placeholder {
+		border-color: $gray-300;
+		min-height: 0;
+		padding: 0;
+}
+} 
 
 // This targets all md select items
 // .md-select-menu-container {
