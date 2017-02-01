@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("to be fixed")]
+		[Ignore("Feature #42836")]
 		public void ShouldProduceOneBlankDayIfBlockAndTeamCombinationNotMakeItPossibleToSolve()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
