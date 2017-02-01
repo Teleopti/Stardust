@@ -9,7 +9,6 @@
 
     function PermissionsServiceRefact($resource) {
 
-        //ROLES
         var roles = $resource('../api/Permissions/Roles', {});
         var manage = $resource('../api/Permissions/Roles/:Id', { Id: "@Id" }, {
             deleteRole: { method: 'DELETE', params: {}, isArray: false },
@@ -19,9 +18,7 @@
         var copyRole = $resource('../api/Permissions/Roles/:Id/Copy', { Id: "@Id" }, {
             copy: { method: 'POST', params: {}, isArray: false }
         });
-        //END OF ROLES
 
-        //FUNCTIONS
         var applicationFunctions = $resource('../api/Permissions/ApplicationFunctions', {});
         var postFunctions = $resource('../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
             query: { method: 'POST', params: { Functions: [] }, isArray: true }
@@ -35,9 +32,6 @@
             delete: { method: 'DELETE', params: {}, isArray: false }
         });
 
-        //END OF FUNCTIONS
-
-        //ORGANIZATION
         var organizationSelection = $resource('../api/Permissions/OrganizationSelection', {}, {
             query: { method: 'GET', params: {}, isArray: false }
         });
@@ -53,8 +47,6 @@
         var deleteAvailableData = $resource('../api/Permissions/Roles/:Id/AvailableData/:Type/:DataId', { Id: "@Id", Type: '@Type', DataId: "@DataId" }, {
             delete: { method: 'DELETE', params: {}, isArray: false }
         });
-
-        //END OF ORGANIZATION
 
         var service = {
             roles: roles,
