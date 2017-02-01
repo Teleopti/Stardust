@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public T FindValueByKeyAndOwnerPerson<T>(string key, IPerson ownerPerson, T defaultValue) where T : class, ISettingValue
 		{
-			throw new System.NotImplementedException();
+			var ignorePersonForNow = new Func<string, T, T>(FindValueByKey);
+			return ignorePersonForNow(key, defaultValue);
 		}
 	}
 }

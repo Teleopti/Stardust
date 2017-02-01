@@ -15,9 +15,6 @@ namespace Teleopti.Ccc.Domain.SystemSetting
             _ownerPerson = ownerPerson;
         }
 
-        public virtual IPerson OwnerPerson
-        {
-            get { return _ownerPerson; }
-        }
+        public virtual IPerson OwnerPerson => _ownerPerson;
     }
 }

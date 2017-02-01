@@ -36,19 +36,4 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return Ok(currentSetting.TokenList.ToArray());
 		}
 	}
-
-	[Serializable]
-	public class UserDevices : SettingValue
-	{
-		public const string Key = "DevicesUserToken";
-
-		private readonly ICollection<string> tokens = new HashSet<string>();
-
-		public void AddToken(string token)
-		{
-			tokens.Add(token);
-		}
-
-		public IEnumerable<string> TokenList => tokens;
-	}
 }

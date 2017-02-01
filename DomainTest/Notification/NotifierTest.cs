@@ -6,12 +6,15 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
@@ -21,6 +24,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public FakeNotificationSender Sender;
 		public Notifier Target;
 		public IGlobalSettingDataRepository GlobalSettingDataRepository;
+		public IPersonalSettingDataRepository PersonalSettingDataRepository;
+		public FakeHttpServer Server;
 
 		[Test]
 		public void ShouldSendNotification()
@@ -41,6 +46,33 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			
 			Target.Notify(messages, person);
 
+			Sender.SentNotifications.First().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader));
+		}
+
+		[Test]
+		public void ShouldSendAppNotification()
+		{
+			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
+				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
+
+			var userDevices = new UserDevices();
+			userDevices.AddToken("device-id-token");
+			PersonalSettingDataRepository.PersistSettingValue(UserDevices.Key, userDevices);
+
+			var messages = new NotificationMessage();
+			var person = PersonFactory.CreatePersonWithGuid("a", "a");
+			person.Email = "aa@teleopti.com";
+			var notificationHeader = new NotificationHeader
+			{
+				EmailReceiver = person.Email,
+				EmailSender = "sender@teleopti.com",
+				MobileNumber = string.Empty,
+				PersonName = person.Name.ToString()
+			};
+
+			Target.Notify(messages, person);
+
+			Server.Requests.Count.Should().Be.EqualTo(1);
 			Sender.SentNotifications.First().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader));
 		}
 
@@ -87,6 +119,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			system.UseTestDouble<FakeNotificationSender>().For<INotificationSender>();
 			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
 			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
+			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 		}
 	}
 
