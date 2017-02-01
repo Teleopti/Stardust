@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<Notifier>().As<INotifier>();
+			builder.RegisterType<NotifyAppSubscriptions>();
 		}
 	}
 }

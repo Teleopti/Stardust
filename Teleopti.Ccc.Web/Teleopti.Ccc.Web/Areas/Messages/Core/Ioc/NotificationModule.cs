@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Core.Ioc
 			builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<Notifier>().As<INotifier>();
+			builder.RegisterType<NotifyAppSubscriptions>();
 		}
 	}
 }

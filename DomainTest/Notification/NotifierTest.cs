@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		{
 			system.UseTestDouble<Notifier>().For<INotifier>();
 			system.UseTestDouble<MultipleNotificationSenderFactory>().For<INotificationSenderFactory>();
+			system.UseTestDouble<NotifyAppSubscriptions>().For<NotifyAppSubscriptions>();
 			system.UseTestDouble<NotificationChecker>().For<INotificationChecker>();
 			system.UseTestDouble<FakeNotificationSender>().For<INotificationSender>();
 			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
