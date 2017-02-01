@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var workShiftsWithActivity =
-				shiftList.AsParallel().Where(
+				shiftList.Where(
 					s =>
 						restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, timeZone,
 							s.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>())).ToList();

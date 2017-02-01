@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		    if (shiftList.Count == 0) return shiftList;
 			var cntBefore = shiftList.Count;
 			IList<IShiftProjectionCache> workShiftsWithinPeriod =
-				shiftList.AsParallel().Select(s => new {s, OuterPeriod = s.TheMainShift.LayerCollection.OuterPeriod()})
+				shiftList.Select(s => new {s, OuterPeriod = s.TheMainShift.LayerCollection.OuterPeriod()})
 					.Where(s => s.OuterPeriod.HasValue && validPeriod.Contains(s.OuterPeriod.Value))
 					.Select(s => s.s)
 					.ToList();

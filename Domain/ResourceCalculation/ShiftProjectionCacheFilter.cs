@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (shiftList == null || mainShiftActivitiesOptimizeSpecification == null) return new List<IShiftProjectionCache>();
 
 	        IList<IShiftProjectionCache> ret =
-		        shiftList.AsParallel().Where(s => mainShiftActivitiesOptimizeSpecification.IsSatisfiedBy(s.TheMainShift)).ToList();
+		        shiftList.Where(s => mainShiftActivitiesOptimizeSpecification.IsSatisfiedBy(s.TheMainShift)).ToList();
 
 		    return ret;
         }
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return shiftList;
 
 	        IList<IShiftProjectionCache> workShiftsWithActivity =
-		        shiftList.AsParallel().Where(
+		        shiftList.Where(
 			        s => restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, agentTimeZone,
 				        s.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>())).ToList();
 
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             var cntBefore = shiftList.Count;
 	        IList<IShiftProjectionCache> workShiftsWithinPeriod =
-		        shiftList.AsParallel().Select(s => new {s, OuterPeriod = s.TheMainShift.LayerCollection.OuterPeriod()})
+		        shiftList.Select(s => new {s, OuterPeriod = s.TheMainShift.LayerCollection.OuterPeriod()})
 			        .Where(s => s.OuterPeriod.HasValue && validPeriod.Contains(s.OuterPeriod.Value))
 			        .Select(s => s.s)
 			        .ToList();
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             int cntBefore = shiftList.Count;
 	        IList<IShiftProjectionCache> workShiftsWithinPeriod =
-		        shiftList.AsParallel().Select(s => new {s, Period = s.MainShiftProjection.Period()})
+		        shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
 			        .Where(s => s.Period.HasValue && s.Period.Value.StartDateTime <= latestStart)
 			        .Select(s => s.s)
 			        .ToList();
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IList<IShiftProjectionCache> FilterOnEarliestEndTime(IList<IShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult)
         {
             int cntBefore = shiftList.Count;
-            IList<IShiftProjectionCache> workShiftsWithinPeriod = shiftList.AsParallel().Select(s => new
+            IList<IShiftProjectionCache> workShiftsWithinPeriod = shiftList.Select(s => new
 		        {
 			        s,
 			        Period = s.MainShiftProjection.Period()
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return shiftList;
             int cntBefore = shiftList.Count;
 	        IList<IShiftProjectionCache> workShiftsWithinMinMax =
-		        shiftList.AsParallel().Where(s => validMinMax.Contains(s.WorkShiftProjectionContractTime)).ToList();
+		        shiftList.Where(s => validMinMax.Contains(s.WorkShiftProjectionContractTime)).ToList();
 
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(string.Format(_currentIdentity.Current().Regional.Culture, UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, validMinMax.Minimum, validMinMax.Maximum),
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (restriction.WorkTimeLimitation.EndTime.HasValue || restriction.WorkTimeLimitation.StartTime.HasValue)
             {
 	            var workShiftsWithinMinMax =
-		            shiftList.AsParallel().Where(
+		            shiftList.Where(
 				            s =>
 						            restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(s.WorkShiftProjectionContractTime))
 			            .ToList();
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (shiftList.Count == 0)
                 return shiftList;
             int before = shiftList.Count;
-            var ret = shiftList.AsParallel().Where(shiftProjectionCache => !categories.Contains(shiftProjectionCache.TheWorkShift.ShiftCategory)).ToList();
+            var ret = shiftList.Where(shiftProjectionCache => !categories.Contains(shiftProjectionCache.TheWorkShift.ShiftCategory)).ToList();
 
 			finderResult.AddFilterResults(new WorkShiftFilterResult(string.Concat(UserTexts.Resources.FilterOn, " ") + categories.Count + UserTexts.Resources.NotAllowedShiftCategories, before, ret.Count));
             return ret;
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             int cnt = shiftList.Count;
 
 	        IList<IShiftProjectionCache> ret =
-		        shiftList.AsParallel().Select(s => new {s, Period = s.MainShiftProjection.Period()})
+		        shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
 			        .Where(s => s.Period.HasValue && s.Period.Value == startAndEndTime)
 			        .Select(s => s.s)
 			        .ToList();

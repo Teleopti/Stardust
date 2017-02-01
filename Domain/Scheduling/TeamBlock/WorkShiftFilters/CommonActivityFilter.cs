@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			if (effectiveRestriction.CommonActivity == null) return shiftList;
 
-			var retList = (from shift in shiftList.AsParallel()
+			var retList = (from shift in shiftList
 						   let visualLayerPeriodList =
 				shift.MainShiftProjection
 					.Where(c => c.Payload.Id == schedulingOptions.CommonActivity.Id)
