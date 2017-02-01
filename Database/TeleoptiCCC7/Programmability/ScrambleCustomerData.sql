@@ -1,3 +1,4 @@
+--I wonder if this one is OK to use?
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vwRandom]'))
 DROP VIEW [dbo].[vwRandom]
 GO
