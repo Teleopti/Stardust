@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -102,19 +101,21 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			{
 				connection.Open();
 
-
+				var purgeTime = dataLoaded.AddMinutes(-updateReadModelInterval*2);
 				//Purge old intervals that is out of the scope
-				using (var deleteCommand = new SqlCommand($@"
+				using (var deleteCommand = new SqlCommand(@"
 						DELETE FROM [ReadModel].[SkillCombinationResource] 
-						WHERE StartDateTime < '{dataLoaded.AddMinutes(-updateReadModelInterval * 2)}'", connection))
+						WHERE StartDateTime < @purgeTime", connection))
 				{
+					deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
 					deleteCommand.ExecuteNonQuery();
 				}
 
 				using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResourceDelta] 
-						WHERE StartDateTime < '{dataLoaded.AddMinutes(-updateReadModelInterval * 2)}'", connection))
+						WHERE StartDateTime < @purgeTime", connection))
 				{
+					deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
 					deleteCommand.ExecuteNonQuery();
 				}
 
@@ -135,18 +136,23 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					{
 						using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResource] 
-						WHERE SkillCombinationId = '{id}' 
-						AND StartDateTime = '{skillCombinationResource.StartDateTime}'", connection, transaction))
+						WHERE SkillCombinationId = @id 
+						AND StartDateTime = @startTime", connection, transaction))
 						{
+							deleteCommand.Parameters.AddWithValue("@id", id);
+							deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
 							deleteCommand.ExecuteNonQuery();
 						}
 
 						using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM ReadModel.SkillCombinationResourceDelta
-						WHERE InsertedOn < '{dataLoaded}'
-						AND SkillCombinationId = '{id}'
-						AND StartDateTime = '{skillCombinationResource.StartDateTime}'", connection, transaction))
+						WHERE InsertedOn < @dataLoaded
+						AND SkillCombinationId = @id
+						AND StartDateTime = @startTime", connection, transaction))
 						{
+							deleteCommand.Parameters.AddWithValue("@dataLoaded", dataLoaded);
+							deleteCommand.Parameters.AddWithValue("@id", id);
+							deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
 							deleteCommand.ExecuteNonQuery();
 						}
 

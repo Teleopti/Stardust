@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -65,12 +64,13 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				connection.Open();
 				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
 				{
-					var deleteCommand = new SqlCommand();
-					var deleteCommandstring = string.Format(@"DELETE from ReadModel.ScheduleForecastSkill where skillid in({0})", AddArrayParameters(deleteCommand, skills.ToArray(), "ids"));
-					deleteCommand.CommandText = deleteCommandstring;
-					deleteCommand.Connection = connection;
-					deleteCommand.Transaction = transaction;
-					deleteCommand.ExecuteNonQuery();
+					using (var deleteCommand = new SqlCommand())
+					{
+						deleteCommand.CommandText = $@"DELETE from ReadModel.ScheduleForecastSkill where skillid in({AddArrayParameters(deleteCommand, skills.ToArray(), "ids")})";
+						deleteCommand.Connection = connection;
+						deleteCommand.Transaction = transaction;
+						deleteCommand.ExecuteNonQuery();
+					}
 
 					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
 					{
@@ -78,16 +78,15 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 						sqlBulkCopy.WriteToServer(dt);
 					}
 
-					var deleteCommandForChanges = new SqlCommand();
-					deleteCommandForChanges.CommandText =
-						string.Format(
-							@"DELETE from ReadModel.ScheduleForecastSkillChange where insertedOn < @timeWhenResourceCalcDataLoaded and skillid in ({0})",
-							AddArrayParameters(deleteCommandForChanges, skills.ToArray(), "ids"));
-					deleteCommandForChanges.Connection = connection;
-					deleteCommandForChanges.Transaction = transaction;
-					deleteCommandForChanges.Parameters.AddWithValue("@timeWhenResourceCalcDataLoaded", timeWhenResourceCalcDataLoaded);
-					deleteCommandForChanges.ExecuteNonQuery();
-
+					using (var deleteCommandForChanges = new SqlCommand())
+					{
+						deleteCommandForChanges.CommandText =
+							$@"DELETE from ReadModel.ScheduleForecastSkillChange where insertedOn < @timeWhenResourceCalcDataLoaded and skillid in ({AddArrayParameters(deleteCommandForChanges, skills.ToArray(), "ids")})";
+						deleteCommandForChanges.Connection = connection;
+						deleteCommandForChanges.Transaction = transaction;
+						deleteCommandForChanges.Parameters.AddWithValue("@timeWhenResourceCalcDataLoaded", timeWhenResourceCalcDataLoaded);
+						deleteCommandForChanges.ExecuteNonQuery();
+					}
 					transaction.Commit();
 				}
 
@@ -150,10 +149,10 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var sqlCommand =
-					new SqlCommand(
-						@"delete from ReadModel.ScheduleForecastSkill where SkillId in (select id from skill where IsDeleted = 1)", connection);
-				sqlCommand.ExecuteNonQuery();
+				using (var sqlCommand = new SqlCommand(@"delete from ReadModel.ScheduleForecastSkill where SkillId in (select id from skill where IsDeleted = 1)", connection))
+				{
+					sqlCommand.ExecuteNonQuery();
+				}
 			}
 		}
 
