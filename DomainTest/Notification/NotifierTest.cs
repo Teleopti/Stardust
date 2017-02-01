@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -26,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public IGlobalSettingDataRepository GlobalSettingDataRepository;
 		public IPersonalSettingDataRepository PersonalSettingDataRepository;
 		public FakeHttpServer Server;
+		public FakeConfigReader ConfigReader;
 
 		[Test]
 		public void ShouldSendNotification()
@@ -58,7 +58,9 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var userDevices = new UserDevices();
 			userDevices.AddToken("device-id-token");
 			PersonalSettingDataRepository.PersistSettingValue(UserDevices.Key, userDevices);
-
+			
+			ConfigReader.FakeSetting("FCM","asdf");
+			
 			var messages = new NotificationMessage();
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			person.Email = "aa@teleopti.com";
