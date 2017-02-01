@@ -26,6 +26,23 @@ namespace Teleopti.Ccc.TestCommon
 			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
 		}
 
+		public static ISkillDay CreateEmailSkillDayWithIncomingDemandOncePerDay(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan defaultDemand, TimePeriod openHours)
+		{
+			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, skill.TimeZone);
+			var skillDataPeriods = Enumerable.Range(0, 24).Select(hour =>
+			{
+				var period = new DateTimePeriod(dateTime.AddHours(hour), dateTime.AddHours(hour + 1));
+
+				return
+					new SkillDataPeriod(
+						new ServiceAgreement(new ServiceLevel(new Percent(1), TimeSpan.FromHours(24).TotalSeconds), new Percent(0),
+							new Percent(1)), new SkillPersonData(), period);
+			}).ToArray();
+
+			skillDataPeriods[0].ManualAgents = defaultDemand.TotalHours;
+			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
+		}
+
 		private static ISkillDay setupSkillDay(ISkill skill, IScenario scenario, DateOnly dateOnly, IEnumerable<ISkillDataPeriod> skillDataPeriods)
 		{
 			var workloadDays = new List<IWorkloadDay>();
