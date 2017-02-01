@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _resultStateHolder(), _userTimeZone);
 					foreach (var matrix in matrixList)
 					{
-						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, matrix, _resultStateHolder(), resourceCalculateDelayer, matrixList, optimizationPreferences, allMatrixes);
-					}		
+						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(backgroundWorker, schedulingOptions, matrix, _resultStateHolder(), resourceCalculateDelayer, matrixList, optimizationPreferences, allMatrixes);
+					}
 				}
 				else
 				{

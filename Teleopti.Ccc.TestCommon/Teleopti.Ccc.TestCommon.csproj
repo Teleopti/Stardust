@@ -451,6 +451,7 @@
     <Compile Include="EntityExtensions.cs" />
     <Compile Include="FakeConfigReader.cs" />
     <Compile Include="SwedishCulture.cs" />
+    <Compile Include="TrackSchedulingProgress.cs" />
     <Compile Include="UnitOfWorkAndSession.cs" />
     <Compile Include="Web\FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />

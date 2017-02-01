@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
@@ -348,6 +349,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			stateholder.Schedules[agent].ScheduledDayCollection(period).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter))
 				.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldReportProgress()
+		{
+			var date = new DateOnly(2017, 1, 22);
+			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
+			var shiftCategoryAfter = new ShiftCategory("After").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var nightRest = TimeSpan.FromHours(11);
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), nightRest, TimeSpan.FromHours(16)) };
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, date, 1); 
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var agent = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
+			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
+			var assA = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { assA }, new[] { skillDayFirstDay });
+			var schedulingProgress = new TrackSchedulingProgress<TeleoptiProgressChangeMessage>();
+
+			Target.Execute(createOptimizerOriginalPreferencesTeamSingleAgent(), schedulingProgress, new[] { stateholder.Schedules[agent].ScheduledDay(date) }, new OptimizationPreferences(), null);
+
+			schedulingProgress.ReportedProgress.Select(x => x.Message)
+				.Should().Contain(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot);
 		}
 
 		[Test]

@@ -15511,4 +15511,7 @@ These options are activated:
     <value>Old Intraday</value>
     <comment>Old Intraday</comment>
   </data>
+  <data name="TryingToResolveShiftCategoryLimitationsDotDotDot" xml:space="preserve">
+    <value>Trying to resolve shift category limitations...</value>
+  </data>
 </root>

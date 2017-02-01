@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 	public interface ITeamBlockRemoveShiftCategoryBackToLegalService
 	{
-		void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros);
+		void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros)
+		public void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros)
 		{
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));

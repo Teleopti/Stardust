@@ -32293,6 +32293,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trying to resolve shift category limitations....
+        /// </summary>
+        public static string TryingToResolveShiftCategoryLimitationsDotDotDot {
+            get {
+                return ResourceManager.GetString("TryingToResolveShiftCategoryLimitationsDotDotDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trying to resolve unscheduled days....
         /// </summary>
         public static string TryingToResolveUnscheduledDaysDotDotDot {
