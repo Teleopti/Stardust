@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,14 +15,16 @@ namespace Teleopti.Ccc.Domain.Notification
 		private readonly INotificationChecker _notificationChecker;
 		private readonly IHttpServer _httpServer;
 		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
+		private readonly IConfigReader _configReader;
 		private static bool alreadyWarned;
 
-		public Notifier(INotificationSenderFactory notificationSenderFactory, INotificationChecker notificationChecker, IHttpServer httpServer, IPersonalSettingDataRepository personalSettingDataRepository)
+		public Notifier(INotificationSenderFactory notificationSenderFactory, INotificationChecker notificationChecker, IHttpServer httpServer, IPersonalSettingDataRepository personalSettingDataRepository, IConfigReader configReader)
 		{
 			_notificationSenderFactory = notificationSenderFactory;
 			_notificationChecker = notificationChecker;
 			_httpServer = httpServer;
 			_personalSettingDataRepository = personalSettingDataRepository;
+			_configReader = configReader;
 		}
 		
 		public void Notify(INotificationMessage messages, params IPerson[] persons)
@@ -56,6 +59,9 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		private void tryToSendToAppSubscriptions(INotificationMessage messages, IPerson[] persons)
 		{
+			var key = _configReader.AppConfig("FCM");
+			if (string.IsNullOrEmpty(key)) return;
+
 			foreach (var person in persons)
 			{
 				var setting = _personalSettingDataRepository.FindValueByKeyAndOwnerPerson(UserDevices.Key, person, new UserDevices());
@@ -63,8 +69,12 @@ namespace Teleopti.Ccc.Domain.Notification
 
 				foreach (var token in setting.TokenList)
 				{
+					if (logger.IsDebugEnabled)
+					{
+						logger.DebugFormat("Trying to send notification for Person {0} using token {1}",person.Id,token);
+					}
 					_httpServer.Post("https://fcm.googleapis.com/fcm/send", new {to=token,notification=new {title=messages.Subject, body=string.Join(" ",messages.Messages)} },
-						s => new NameValueCollection {{"Authorization", "key=AAAANvMkWNA:APA91bG1pR8ZVsp-S98uWsFUE5lnQiC8UnsQL3DgN6Vyw5HyaKuqVt86kdeurfLfQkWt_7kZTgXcTuAaxvcVUkjtE8jFo72loTy6UYrLrVbYnqCXVI4mWCYhvLQnU3Sv0sIfW1k-eZCu" } });
+						s => new NameValueCollection {{"Authorization", key } });
 				}
 			}
 		}

@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace Teleopti.Ccc.Domain.Config
 {
@@ -13,12 +12,7 @@ namespace Teleopti.Ccc.Domain.Config
 		public string ConnectionString(string name)
 		{
 			var connectionStringSetting = ConfigurationManager.ConnectionStrings[name];
-			return connectionStringSetting == null ? null : connectionStringSetting.ConnectionString;
-		}
-
-		public NameValueCollection AppSettings_DontUse
-		{
-			get { return ConfigurationManager.AppSettings; }
+			return connectionStringSetting?.ConnectionString;
 		}
 	}
 }

@@ -36,12 +36,11 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		public void ShouldFetchConfigLatencyValue()
 		{
 			const int latency = 37;
-			var namevaluecoll = new NameValueCollection {{"latency", latency.ToString()}};
-
+			
 			var configReader = MockRepository.GenerateMock<IConfigReader>();
 			target.ConfigReader = configReader;
 
-			configReader.Expect(cr => cr.AppSettings_DontUse).Return(namevaluecoll);
+			configReader.Expect(cr => cr.AppConfig("latency")).Return(latency.ToString());
 
 			target.Latency.Should().Be.EqualTo(latency);
 		}
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var configReader = MockRepository.GenerateStrictMock<IConfigReader>();
 			target.ConfigReader = configReader;
 
-			configReader.Expect(cr => cr.AppSettings_DontUse).Return(new NameValueCollection());
+			configReader.Expect(cr => cr.AppConfig("latency")).Return(37.ToString());
 
 			target.CreateCommand();
 			target.CreateCommand();

@@ -2,6 +2,7 @@
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 

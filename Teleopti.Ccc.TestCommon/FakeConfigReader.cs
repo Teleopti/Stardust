@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 
@@ -42,16 +41,6 @@ namespace Teleopti.Ccc.TestCommon
 		public string ConnectionString(string name)
 		{
 			return _connectionStrings.ContainsKey(name) ? _connectionStrings[name] : null;
-		}
-
-		public NameValueCollection AppSettings_DontUse
-		{
-			get
-			{
-				var result = new NameValueCollection();
-				_settings.ForEach(x => result.Add(x.Key, x.Value));
-				return result;
-			}
 		}
 	}
 }

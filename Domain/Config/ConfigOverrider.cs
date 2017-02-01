@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
 
 namespace Teleopti.Ccc.Domain.Config
 {
@@ -28,11 +26,6 @@ namespace Teleopti.Ccc.Domain.Config
 		public string ConnectionString(string name)
 		{
 			return _defaultConfigReader.ConnectionString(name);
-		}
-
-		public NameValueCollection AppSettings_DontUse
-		{
-			get { return ConfigurationManager.AppSettings; }
 		}
 	}
 }

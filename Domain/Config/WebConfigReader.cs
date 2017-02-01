@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
 
 namespace Teleopti.Ccc.Domain.Config
@@ -24,18 +23,10 @@ namespace Teleopti.Ccc.Domain.Config
 		public string ConnectionString(string name)
 		{
 			var connectionStringSetting = ConfigurationManager.ConnectionStrings[name];
-			return connectionStringSetting == null ? null : connectionStringSetting.ConnectionString;
+			return connectionStringSetting?.ConnectionString;
 		}
-
-		public NameValueCollection AppSettings_DontUse
-		{
-			get { return ConfigurationManager.AppSettings; }
-		}
-
-		public IDictionary<string, string> WebSettings_DontUse
-		{
-			get { return _appSettings; }
-		}
+		
+		public IDictionary<string, string> WebSettings_DontUse => _appSettings;
 	}
 	
 	public class WebSettings

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public string DefaultProvider()
 		{
-            return "urn:" + (_overrideProvider ?? _configReader.AppSettings_DontUse["DefaultIdentityProvider"]);
+            return "urn:" + (_overrideProvider ?? _configReader.AppConfig("DefaultIdentityProvider"));
 		}
 
 	    internal void SetDefaultProvider(string provider)

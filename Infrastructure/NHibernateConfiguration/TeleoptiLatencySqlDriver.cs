@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				//maybe do this thread safe but it's not the end of the world... only used in test environment.
 				if (_initialized == false)
 				{
-					_latency = Convert.ToInt32(ConfigReader.AppSettings_DontUse["latency"], CultureInfo.InvariantCulture);
+					_latency = Convert.ToInt32(ConfigReader.AppConfig("latency"), CultureInfo.InvariantCulture);
 					_initialized = true;
 				}
 				return _latency;
