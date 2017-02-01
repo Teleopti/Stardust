@@ -252,6 +252,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var selector = "[agentid='" + personId + "']";
 
 			Browser.Interactions.AssertExists(selector);
+			if (state.Name != null)
+				Browser.Interactions.AssertAnyContains(selector, state.Name);
 			if (state.State != null)
 				Browser.Interactions.AssertAnyContains(selector, state.State);
 			if (state.Alarm != null)
