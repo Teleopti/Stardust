@@ -7,10 +7,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AgentStateReadModelMaintainer :
-		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<TenantHourTickEvent>
+		IHandleEvent<TenantHourTickEvent>,
+		IHandleEvent<PersonNameChangedEvent>,
+		IHandleEvent<PersonEmploymentNumberChangedEvent>,
+		IHandleEvent<SiteNameChangedEvent>,
+		IHandleEvent<TeamNameChangedEvent>,
+		IRunOnHangfire
 	{
 		private readonly IAgentStateReadModelPersister _persister;
 		private readonly INow _now;
@@ -61,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static DateTime expirationFor(IEvent @event)
 		{
-			return ((dynamic) @event).Timestamp.AddDays(7);
+			return ((dynamic)@event).Timestamp.AddDays(7);
 		}
 
 		[UnitOfWork]
@@ -77,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[UnitOfWork]
-		public virtual void Handle(TeamNameChangedEvent @event) 
+		public virtual void Handle(TeamNameChangedEvent @event)
 		{
 			_persister.UpdateTeamName(@event.TeamId, @event.Name);
 		}
