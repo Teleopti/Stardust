@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+		private bool _reportProgress;
 
 		[Test]
 		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful()
@@ -409,6 +410,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			stateholder.Schedules.SchedulesForDay(date.AddDays(2))
 				.All(x => !x.PersonAssignment(true).ShiftLayers.Any()).Should().Be.True();
+		}
+
+		[Test, Ignore("to be fixed")]
+		public void ShouldReportProgress()
+		{
+			var firstDate = new DateOnly(2017, 1, 22);
+			var secondDate = firstDate.AddDays(1);
+			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
+			var shiftCategoryAfter = new ShiftCategory("After").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var nightRest = TimeSpan.FromHours(11);
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), nightRest, TimeSpan.FromHours(16)) };
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDayFirstDay = skill.CreateSkillDayWithDemand(scenario, firstDate, 1); //should try with this one first
+			var skillDaySecondDay = skill.CreateSkillDayWithDemand(scenario, secondDate, 10);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var agent = new Person().WithSchedulePeriodOneWeek(firstDate).WithPersonPeriod(ruleSet, contract, skill).InTimeZone(TimeZoneInfo.Utc);
+			agent.SchedulePeriod(firstDate).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 1 });
+			var period = new DateOnlyPeriod(firstDate, secondDate);
+			var assA = new PersonAssignment(agent, scenario, firstDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
+			var schedulingProgress = new SchedulingProgress();
+			schedulingProgress.FeedbackChanged += schedulingProgressFeedbackChanged;
+
+			Target.Execute(createOptimizerOriginalPreferencesTeamSingleAgent(), schedulingProgress, stateholder.Schedules[agent].ScheduledDayCollection(period), new OptimizationPreferences(), null);
+
+			schedulingProgress.FeedbackChanged -= schedulingProgressFeedbackChanged;
+
+			Assert.IsTrue(_reportProgress);
+		}
+
+		private void schedulingProgressFeedbackChanged(object sender, Domain.Forecasting.Export.FeedbackEventArgs e)
+		{
+			_reportProgress = true;
 		}
 
 		private static OptimizerOriginalPreferences createOptimizerOriginalPreferencesTeamSingleAgent()
