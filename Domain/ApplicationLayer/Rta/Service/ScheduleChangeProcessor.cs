@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Interfaces.Messages;
 
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_checker = checker;
 		}
 
+		[TestLog]
 		public void Handle(ScheduleChangedEvent @event)
 		{
 			_updater.Invalidate(@event.PersonId, @event.StartDateTime, @event.EndDateTime);
@@ -36,7 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Queues.ScheduleChangesToday : 
 				null;
 		}
-
+		
+		[TestLog]
 		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
 			_distributedLock.TryLockForTypeOf(_updater, () =>
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
+		[TestLog]
 		[Attempts(3)]
 		public virtual void Handle(TenantDayTickEvent @event)
 		{
