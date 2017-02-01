@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[TestLog]
-		public void Handle(ScheduleChangedEvent @event)
+		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			_updater.Invalidate(@event.PersonId, @event.StartDateTime, @event.EndDateTime);
 		}

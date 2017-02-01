@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.Common.TimeLogger;
+
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ActivityChangeChecker
@@ -11,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_processor = processor;
 		}
 
+		[TestLog]
 		public void CheckForActivityChanges()
 		{
 			_contextLoader.ForActivityChanges(person =>
