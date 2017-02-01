@@ -30,9 +30,7 @@ namespace Teleopti.Messaging.Client.Http
 
 		private string url(string call)
 		{
-			if (_url == null)
-				return null;
-			if (string.IsNullOrEmpty(_url.Url))
+			if (string.IsNullOrEmpty(_url?.Url))
 				return null;
 			return _url.Url.TrimEnd('/') + "/" + call;
 		}

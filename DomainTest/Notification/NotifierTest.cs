@@ -1,24 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.XPath;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Notification;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
-	[TestFixture]
-	public class NotifierTest
+	[DomainTest]
+	public class NotifierTest : ISetup
 	{
+		public FakeNotificationSender Sender;
+		public Notifier Target;
+		public IGlobalSettingDataRepository GlobalSettingDataRepository;
+
 		[Test]
 		public void ShouldSendNotification()
 		{
-			var notificationSenderFactory = MockRepository.GenerateMock<INotificationSenderFactory>();
-			var notificationSender = MockRepository.GenerateMock<INotificationSender>();
-			var notificationChecker = MockRepository.GenerateMock<INotificationChecker>();
-			notificationChecker.Stub(x => x.Lookup()).Return(new NotificationLookup(new SmsSettings{EmailFrom = "sender@teleopti.com", OptionalColumnId = Guid.Empty}));
-
+			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
+				new SmsSettings {EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email});
+			
 			var messages = new NotificationMessage();
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			person.Email = "aa@teleopti.com";
@@ -29,22 +38,17 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				MobileNumber = string.Empty,
 				PersonName = person.Name.ToString()
 			};
+			
+			Target.Notify(messages, person);
 
-			notificationSenderFactory.Stub(x => x.GetSender()).Return(notificationSender);
-
-			var target = new Notifier(notificationSenderFactory, notificationChecker);
-			target.Notify(messages, person);
-
-			notificationSender.AssertWasCalled(x => x.SendNotification(messages, notificationHeader));
+			Sender.SentNotifications.First().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader));
 		}
 
 		[Test]
 		public void ShouldSendNotificationForPersons()
 		{
-			var notificationSenderFactory = MockRepository.GenerateMock<INotificationSenderFactory>();
-			var notificationSender = MockRepository.GenerateMock<INotificationSender>();
-			var notificationChecker = MockRepository.GenerateMock<INotificationChecker>();
-			notificationChecker.Stub(x => x.Lookup()).Return(new NotificationLookup(new SmsSettings { EmailFrom = "sender@teleopti.com", OptionalColumnId = Guid.Empty }));
+			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
+				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
 
 			var messages = new NotificationMessage();
 			var person1 = PersonFactory.CreatePersonWithGuid("a", "a");
@@ -68,14 +72,64 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				MobileNumber = string.Empty,
 				PersonName = person2.Name.ToString()
 			};
+			
+			Target.Notify(messages, person1, person2);
 
-			notificationSenderFactory.Stub(x => x.GetSender()).Return(notificationSender);
+			Sender.SentNotifications.First().Should().Be.EqualTo(new Tuple<INotificationMessage,NotificationHeader>(messages, notificationHeader1));
+			Sender.SentNotifications.Last().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader2));
+		}
 
-			var target = new Notifier(notificationSenderFactory, notificationChecker);
-			target.Notify(messages, new []{person1, person2});
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<Notifier>().For<INotifier>();
+			system.UseTestDouble<MultipleNotificationSenderFactory>().For<INotificationSenderFactory>();
+			system.UseTestDouble<NotificationChecker>().For<INotificationChecker>();
+			system.UseTestDouble<FakeNotificationSender>().For<INotificationSender>();
+			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
+			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
+		}
+	}
 
-			notificationSender.AssertWasCalled(x => x.SendNotification(messages, notificationHeader1));
-			notificationSender.AssertWasCalled(x => x.SendNotification(messages, notificationHeader2));
+	public class FakeNotificationConfigReader : INotificationConfigReader
+	{
+		public bool HasLoadedConfig { get; }
+		public IXPathNavigable XmlDocument { get; }
+		public Uri Url { get; }
+		public string User { get; }
+		public string Password { get; }
+		public string From { get; }
+		public string ClassName { get; }
+		public string Assembly { get; }
+		public string Api { get; }
+		public string Data { get; }
+		public string FindSuccessOrError { get; }
+		public string ErrorCode { get; }
+		public string SuccessCode { get; }
+		public bool SkipSearch { get; }
+		public string SmtpHost { get; }
+		public int SmtpPort { get; }
+		public bool SmtpUseSsl { get; }
+		public string SmtpUser { get; }
+		public string SmtpPassword { get; }
+		public bool SmtpUseRelay { get; }
+
+		public INotificationClient CreateClient()
+		{
+			return null;
+		}
+	}
+
+	public class FakeNotificationSender : INotificationSender
+	{
+		public List<Tuple<INotificationMessage,NotificationHeader>> SentNotifications = new List<Tuple<INotificationMessage, NotificationHeader>>();
+
+		public void SendNotification(INotificationMessage message, NotificationHeader notificationHeader)
+		{
+			SentNotifications.Add(new Tuple<INotificationMessage, NotificationHeader>(message,notificationHeader));
+		}
+
+		public void SetConfigReader(INotificationConfigReader notificationConfigReader)
+		{
 		}
 	}
 }

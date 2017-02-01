@@ -5,19 +5,16 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class UserTokenController : ApiController
 	{
 		private readonly IPersonalSettingDataRepository _settingsRepository;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public UserTokenController(IPersonalSettingDataRepository settingsRepository, ILoggedOnUser loggedOnUser)
+		public UserTokenController(IPersonalSettingDataRepository settingsRepository)
 		{
 			_settingsRepository = settingsRepository;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		[Route("start/usertoken"),HttpPost, UnitOfWork]

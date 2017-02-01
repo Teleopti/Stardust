@@ -6,7 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Notification
 {
-
 	public class CustomNotificationSenderFactory : INotificationSenderFactory
 	{
 		private readonly INotificationConfigReader _notificationConfigReader;
@@ -24,11 +23,12 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				try
 				{
-					var assembly = Assembly.Load((string) _notificationConfigReader.Assembly);
+					var assembly = Assembly.Load(_notificationConfigReader.Assembly);
 					var type = assembly.GetType(_notificationConfigReader.ClassName);
 					if (type == null)
 					{
-						throw new TypeLoadException(string.Format("The type {0} can't be found in assembly {1}.", _notificationConfigReader.ClassName, _notificationConfigReader.Assembly));
+						throw new TypeLoadException(
+							$"The type {_notificationConfigReader.ClassName} can't be found in assembly {_notificationConfigReader.Assembly}.");
 					}
 					sender = (INotificationSender)Activator.CreateInstance(type);
 				}
@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				}
 			}
 
-			if (sender != null)
-				sender.SetConfigReader(_notificationConfigReader);
+			sender?.SetConfigReader(_notificationConfigReader);
 
 			return sender;
 		}

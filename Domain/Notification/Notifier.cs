@@ -15,13 +15,8 @@ namespace Teleopti.Ccc.Domain.Notification
 			_notificationSenderFactory = notificationSenderFactory;
 			_notificationChecker = notificationChecker;
 		}
-
-		public void Notify(INotificationMessage messages, IPerson person)
-		{
-			Notify(messages, new[] {person});
-		}
-
-		public void Notify(INotificationMessage messages, IPerson[] persons)
+		
+		public void Notify(INotificationMessage messages, params IPerson[] persons)
 		{
 			var sender = _notificationSenderFactory.GetSender();
 

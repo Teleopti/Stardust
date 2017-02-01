@@ -4,7 +4,6 @@ namespace Teleopti.Ccc.Domain.Notification
 {
 	public interface INotifier
 	{
-		void Notify(INotificationMessage messages, IPerson person);
-		void Notify(INotificationMessage messages, IPerson[] persons);
+		void Notify(INotificationMessage messages, params IPerson[] persons);
 	}
 }
