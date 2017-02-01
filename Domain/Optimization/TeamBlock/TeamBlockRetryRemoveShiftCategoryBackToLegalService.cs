@@ -53,14 +53,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		[RemoveMeWithToggle("Remove scheduleMatrixListPros param", Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
+		[RemoveMeWithToggle("Remove scheduleMatrixListPros param and posible move first line in method one step up", Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 		public void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMatrixListPros,
 			IOptimizationPreferences optimizationPreferences,
 			IList<IScheduleMatrixPro> allScheduleMatrixListPros)
 		{
-			backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
+			backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot)); //If this is enough, we can move this line one step up
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
 			var scheduleMatrixes = isSingleAgentTeam ? scheduleMatrixListPros : allScheduleMatrixListPros;
