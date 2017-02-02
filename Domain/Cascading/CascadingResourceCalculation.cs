@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using System;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_shovelResources = shovelResources;
 		}
 
-		public void ResourceCalculate(DateOnlyPeriod period, IResourceCalculationData resourceCalculationData)
+		public void ResourceCalculate(DateOnlyPeriod period, IResourceCalculationData resourceCalculationData, Func< IDisposable> getResourceCalculationContext = null )
 		{
 			foreach (var date in period.DayCollection())
 			{
@@ -22,8 +23,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 			if (!ResourceCalculationContext.PrimarySkillMode())
 			{
-				_shovelResources.Execute(resourceCalculationData.SkillStaffPeriodHolder, resourceCalculationData.Schedules, resourceCalculationData.Skills, period);
+				_shovelResources.Execute(resourceCalculationData.SkillStaffPeriodHolder, resourceCalculationData.Schedules, resourceCalculationData.Skills, period,getResourceCalculationContext);
 			}
 		}
+		
 	}
 }

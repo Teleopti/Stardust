@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public void Execute(IShovelResourceData shovelResourceData, IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
+		public void Execute(IShovelResourceData shovelResourceData, IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period, Func<IDisposable> getResourceCalculationContext )
 		{
 			var cascadingSkills = new CascadingSkills(allSkills); 
 			if (!cascadingSkills.Any())
@@ -39,7 +39,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				using (new ResourceCalculationContextFactory(new PersonSkillProvider(), _timeZoneGuard).Create(scheduleDictionary, allSkills, false, period))
+				var context = getResourceCalculationContext == null ? getDefaultContext(scheduleDictionary, allSkills, period) : getResourceCalculationContext();
+					
+				using (context)
 				{
 					foreach (var date in period.DayCollection())
 					{
@@ -61,5 +63,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 				}
 			}
 		}
+
+		private IDisposable getDefaultContext(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
+		{
+			var rcf = new ResourceCalculationContextFactory(new PersonSkillProvider(), _timeZoneGuard);
+			return rcf.Create(scheduleDictionary, allSkills, false, period);
+		}
+
 	}
 }
