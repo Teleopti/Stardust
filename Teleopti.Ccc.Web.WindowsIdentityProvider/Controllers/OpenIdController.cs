@@ -118,9 +118,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
-				var fetchResponse = new FetchResponse();
-				fetchResponse.Attributes.Add(new AttributeValues(ClaimTypes.IsPersistent, "true"));
-				idrequest.AddResponseExtension(fetchResponse);
+				idrequest.AddResponseExtension(createIsPersistentClaim());
 				_openIdProvider.SendResponse(idrequest);
 			}
 			else
@@ -185,6 +183,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 					new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
+				idrequest.AddResponseExtension(createIsPersistentClaim());
 				_openIdProvider.SendResponse(idrequest);
 			}
 			else
@@ -193,6 +192,13 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				idrequest.IsAuthenticated = false;
 			}
 			return new EmptyResult();
+		}
+
+		private static FetchResponse createIsPersistentClaim()
+		{
+			var fetchResponse = new FetchResponse();
+			fetchResponse.Attributes.Add(new AttributeValues(ClaimTypes.IsPersistent, "true"));
+			return fetchResponse;
 		}
 
 		public ActionResult AskUser()
