@@ -2698,7 +2698,6 @@
     <Folder Include="Areas\People\Views\PeopleData\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\PerformanceTool\Views\Dangerous\" />
-    <Folder Include="Areas\ResourcePlanner\Views\Optimization\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Staffing\Core\" />
     <Folder Include="Areas\Start\Views\Config\" />
