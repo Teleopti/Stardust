@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -56,7 +55,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.Intersect(new DateTimePeriod(now.AddDays(-2), now.AddDays(2)));
 		}
 
-		[TestLog]
 		[FullPermissions]
 		public virtual void UpdateInvalids()
 		{
@@ -73,7 +71,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[FullPermissions]
-		[TestLog]
 		public virtual  void UpdateAll()
 		{
 			IEnumerable<Guid> persons = null;
@@ -86,8 +83,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			update(persons);
 		}
 
-		[TestLog]
-		protected virtual void update(IEnumerable<Guid> personIds)
+		private void update(IEnumerable<Guid> personIds)
 		{
 			personIds
 				.Batch(50)
@@ -95,89 +91,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					WithUnitOfWork(() =>
 					{
-						PersistSchedules2(personsInBatch);
+						PersistSchedules(personsInBatch, _now, _persons, _businessUnits, _scenarios, _schedules, _persister.Persist);
 						_keyValueStore.Update("CurrentScheduleReadModelVersion", Guid.NewGuid().ToString());
 					});
 				});
 		}
-
-		[TestLog]
-		protected virtual void PersistSchedules2(IEnumerable<Guid> personIds)
-		{
-			var time = _now.UtcDateTime();
-			var from = new DateOnly(time.AddDays(-1));
-			var to = new DateOnly(time.AddDays(1));
-			var loadPeriod = new DateOnlyPeriod(@from.AddDays(-1), to.AddDays(1));
-			var persistPeriod = new DateOnlyPeriod(@from, to);
-
-			_persons.FindPeople(personIds)
-				.Select(x => new
-				{
-					businessUnitId = x.Period(new DateOnly(_now.UtcDateTime()))?.Team?.Site?.BusinessUnit?.Id,
-					person = x
-				})
-				.Where(x => x.businessUnitId.HasValue)
-				.GroupBy(x => x.businessUnitId.Value, x => x.person)
-				.ForEach(personsInBusinessUnit =>
-				{
-					PersistSchedules2Batch(personsInBusinessUnit, loadPeriod, persistPeriod);
-				});
-		}
-
-		[TestLog]
-		protected virtual void PersistSchedules2Batch(IGrouping<Guid, IPerson> personsInBusinessUnit, DateOnlyPeriod loadPeriod, DateOnlyPeriod persistPeriod)
-		{
-			var scenario = _scenarios.LoadDefaultScenario(_businessUnits.Load(personsInBusinessUnit.Key));
-			if (scenario == null)
-				return;
-
-			var scheduleDictionary = _schedules.FindSchedulesForPersonsOnlyInGivenPeriod(
-				personsInBusinessUnit,
-				new ScheduleDictionaryLoadOptions(false, false),
-				loadPeriod,
-				scenario);
-
-			personsInBusinessUnit.ForEach(x =>
-			{
-				var scheduledActivities = PersistSchedules2Batch2(loadPeriod, persistPeriod, scheduleDictionary, x);
-
-				_persister.Persist(x.Id.Value, scheduledActivities);
-			});
-		}
-
-		[TestLog]
-		protected virtual ScheduledActivity[] PersistSchedules2Batch2(DateOnlyPeriod loadPeriod, DateOnlyPeriod persistPeriod, IScheduleDictionary scheduleDictionary, IPerson x)
-		{
-			var projection =
-				from scheduleDay in scheduleDictionary[x].ScheduledDayCollection(loadPeriod)
-				from layer in scheduleDay.ProjectionService().CreateProjection()
-				select new ScheduledActivity
-				{
-					BelongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly,
-					DisplayColor = layer.DisplayColor().ToArgb(),
-					EndDateTime = layer.Period.EndDateTime,
-					Name = layer.DisplayDescription().Name,
-					PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
-					PersonId = x.Id.GetValueOrDefault(),
-					ShortName = layer.DisplayDescription().ShortName,
-					StartDateTime = layer.Period.StartDateTime
-				};
-
-			var scheduledActivities = projection.Where(a => persistPeriod.Contains(a.BelongsToDate)).ToArray();
-			return scheduledActivities;
-		}
-
-		[AllBusinessUnitsUnitOfWork]
-		[ReadModelUnitOfWork]
-		protected virtual void WithUnitOfWork(Action action)
-		{
-			action.Invoke();
-		}
-
-
-
-
-
 
 		public static void PersistSchedules(
 			IEnumerable<Guid> personIds,
@@ -237,6 +155,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					});
 
 				});
+		}
+
+		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
+		protected virtual void WithUnitOfWork(Action action)
+		{
+			action.Invoke();
 		}
 
 	}
