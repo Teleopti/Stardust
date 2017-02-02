@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public class IntegrationIoCTest
 	{
 		public static IContainer Container { get; private set; }
+		public static bool AllEventPublishingsAsSync = true;
 
 		public static void Setup()
 		{
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var builder = new ContainerBuilder();
 			var args = new IocArgs(new ConfigReader())
 			{
-				AllEventPublishingsAsSync = true,
+				AllEventPublishingsAsSync = AllEventPublishingsAsSync,
 				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));

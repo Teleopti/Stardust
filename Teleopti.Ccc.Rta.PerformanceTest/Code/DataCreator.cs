@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _testConfiguration;
 		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly Lazy<IEventPublisher> _eventPublisher;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly AnalyticsDatabase _analytics;
@@ -42,12 +43,13 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly ICurrentScenario _scenario;
 		private readonly IPersonAssignmentRepository _assignments;
 		private readonly IActivityRepository _activities;
+		private readonly HangfireUtilities _hangfire;
 
 		public DataCreator(
 			MutableNow now,
 			TestConfiguration testConfiguration,
 			ICurrentUnitOfWork unitOfWork,
-			IEventPublisher eventPublisher,
+			Lazy<IEventPublisher> eventPublisher,
 			ITenantUnitOfWork tenantUnitOfWork,
 			ICurrentTenantSession currentTenantSession,
 			AnalyticsDatabase analytics,
@@ -60,7 +62,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			IContractScheduleRepository contractSchedules,
 			ICurrentScenario scenario,
 			IPersonAssignmentRepository assignments,
-			IActivityRepository activities
+			IActivityRepository activities,
+			HangfireUtilities hangfire
 			)
 		{
 			_now = now;
@@ -80,6 +83,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_scenario = scenario;
 			_assignments = assignments;
 			_activities = activities;
+			_hangfire = hangfire;
 		}
 
 		[TestLog]
@@ -253,8 +257,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			// to create/update any data that is periodically kept up to date
 			// like the rule mappings
-			_eventPublisher.Publish(new TenantMinuteTickEvent());
-			_eventPublisher.Publish(new TenantHourTickEvent());
+			_hangfire.WaitForQueue();
+			_eventPublisher.Value.Publish(new TenantDayTickEvent());
+			_eventPublisher.Value.Publish(new TenantHourTickEvent());
+			_eventPublisher.Value.Publish(new TenantMinuteTickEvent());
+			_hangfire.WaitForQueue();
 		}
 
 		public IEnumerable<string> LoggedOffStates()
