@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private IAuthorization _authorization;
 		private INotifier _notifier;
+		private ILicenseCustomerNameProvider _licenseCustomerNameProvider;
 
 		[SetUp]
 		public void Setup()
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			_authorization = MockRepository.GenerateMock<IAuthorization>();
 			_notifier = MockRepository.GenerateMock<INotifier>();
-			target = new ApplicationController(_personRepository, _currentTeleoptiPrincipal,_authorization, _notifier);
+			_licenseCustomerNameProvider = MockRepository.GenerateMock<ILicenseCustomerNameProvider>();
+			target = new ApplicationController(_personRepository, _currentTeleoptiPrincipal,_authorization, _notifier, _licenseCustomerNameProvider);
 		}
 
 		[TearDown]
@@ -78,6 +80,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 
 			_notifier.AssertWasCalled(
 				x => x.Notify(Arg<INotificationMessage>.Matches(s => s.Subject == subject && s.Messages.First() == testBody), Arg<IPerson[]>.Is.Equal(persons)));
+		}
+
+		[Test]
+		public void ShouldSendMessageAndIncludeCustomerName()
+		{
+			string customerName = "SomeTestLicenseCustomerName";
+			var person1 = PersonFactory.CreatePersonWithGuid("a", "a");
+			var person2 = PersonFactory.CreatePersonWithGuid("b", "b");
+			var persons = new[] { person1, person2 };
+			_personRepository.Stub(x => x.FindPeople(new[] { person1.Id.Value, person2.Id.Value })).IgnoreArguments()
+				.Return(persons);
+
+			_licenseCustomerNameProvider.Stub(x => x.GetLicenseCustomerName()).Return(customerName);
+
+			const string subject = "test";
+			const string testBody = "test body";
+			target.SendMessage(new[] { person1.Id.Value, person2.Id.Value }, subject, testBody);
+
+			_notifier.AssertWasCalled(
+				x => x.Notify(Arg<INotificationMessage>.Matches(s => s.Subject == subject && s.Messages.First() == testBody && s.CustomerName == customerName), Arg<IPerson[]>.Is.Equal(persons)));
 		}
 
 		[Test]

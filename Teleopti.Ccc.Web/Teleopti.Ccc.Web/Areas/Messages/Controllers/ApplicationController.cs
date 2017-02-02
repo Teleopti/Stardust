@@ -20,13 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 	    private readonly IAuthorization _authorization;
 	    private readonly INotifier _notifier;
-
-	    public ApplicationController(IPersonRepository personRepository, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IAuthorization authorization, INotifier notifier)
+	    private readonly ILicenseCustomerNameProvider _licenseCustomerNameProvider;
+		
+	    public ApplicationController(IPersonRepository personRepository, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IAuthorization authorization, INotifier notifier, ILicenseCustomerNameProvider licenseCustomerNameProvider)
 	    {
 		    _personRepository = personRepository;
 		    _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		    _authorization = authorization;
 		    _notifier = notifier;
+		    _licenseCustomerNameProvider = licenseCustomerNameProvider;
 	    }
 
 	    [HttpGet]
@@ -65,7 +67,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			INotificationMessage msg = new NotificationMessage
 		    {
 			    Subject = subject,
-		    };
+				CustomerName = _licenseCustomerNameProvider.GetLicenseCustomerName()
+			};
 		    msg.Messages.Add(body);
 			_notifier.Notify(msg, persons);
 		    return Json("");
@@ -112,4 +115,6 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			return new ContentResult { Content = template, ContentType = "text/javascript" };
 		}
     }
+
+	
 }

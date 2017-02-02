@@ -655,6 +655,8 @@
     <Compile Include="Scheduling\WebLegacy\LoaderForResourceCalculation.cs" />
     <Compile Include="Scheduling\WebLegacy\ResourceCalculateRangeToLoadCalculator.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserIsPerson.cs" />
+    <Compile Include="Security\AuthorizationData\ILicenseCustomerNameProvider.cs" />
+    <Compile Include="Security\AuthorizationData\LicenseCustomerNameProvider.cs" />
     <Compile Include="Security\PermissionProvider.cs" />
     <Compile Include="Security\Principal\AuthorizeNone.cs" />
     <Compile Include="Security\Principal\CurrentAuthorization.cs" />

@@ -7,6 +7,7 @@ using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -170,6 +171,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
 			builder.RegisterType<IanaTimeZoneProvider>().As<IIanaTimeZoneProvider>().SingleInstance();
 			builder.RegisterType<ThemeSettingProvider>().As<ISettingsPersisterAndProvider<ThemeSetting>>().SingleInstance();
+
+			builder.RegisterType<LicenseCustomerNameProvider>().As<ILicenseCustomerNameProvider>().SingleInstance();
 		}
 
 		private static void tenantWebSpecificTypes(ContainerBuilder builder)
