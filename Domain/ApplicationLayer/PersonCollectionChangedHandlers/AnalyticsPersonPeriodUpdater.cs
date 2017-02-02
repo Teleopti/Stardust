@@ -100,9 +100,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						logger.Warn($"PersonPeriod '{personPeriod.Id.GetValueOrDefault()}' could not be found in analytics after update or insert.");
 						continue;
 					}
-
-					if ((existingPeriod == null && newOrUpdatedPersonPeriod.SkillsetId != null) ||
-						(existingPeriod != null && newOrUpdatedPersonPeriod.SkillsetId != existingPeriod.SkillsetId))
+					
+					var newPeriodSkillsetId = newOrUpdatedPersonPeriod.SkillsetId == -1 ? null : newOrUpdatedPersonPeriod.SkillsetId;
+					var existingPeriodSkillsetId = existingPeriod?.SkillsetId == -1 ? null : existingPeriod?.SkillsetId;
+					if (newPeriodSkillsetId != existingPeriodSkillsetId)
 					{
 						publishSkillChangeEvent(@event, personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
 					}
