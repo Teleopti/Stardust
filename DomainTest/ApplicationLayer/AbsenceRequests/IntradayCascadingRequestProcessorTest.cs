@@ -686,6 +686,235 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		public void ShouldTreatNonCascadingAsPrimarySkillsAdvanced()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill1 = SkillRepository.Has("skillA", activity).WithId();
+			var skill2 = SkillRepository.Has("skillB", activity).WithId();
+			var skill3 = SkillRepository.Has("skill", activity).WithId();
+			skill1.SetCascadingIndex(1);
+			skill2.SetCascadingIndex(2);
+			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			skill1.StaffingThresholds = skill2.StaffingThresholds = skill3.StaffingThresholds = threshold;
+			skill1.DefaultResolution = skill2.DefaultResolution = skill3.DefaultResolution = 60;
+
+			var agent = PersonRepository.Has(skill1,skill3);
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 6,
+																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault()}
+																				   },
+																					new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 1,
+																					   SkillCombination = new[] { skill1.Id.GetValueOrDefault(),skill3.Id.GetValueOrDefault()}
+																				   }
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 3,
+																	 SkillId = skill1.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 3,
+																	 SkillId = skill2.Id.GetValueOrDefault()
+																 },
+																  new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 3,
+																	 SkillId = skill3.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
+		}
+
+		[Test]
+		public void ShouldApproveRequestIfOnlyUnsortedSkills()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill1 = SkillRepository.Has("skillA", activity).WithId();
+			var skill2 = SkillRepository.Has("skillB", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			skill1.StaffingThresholds = skill2.StaffingThresholds = threshold;
+			skill1.DefaultResolution = skill2.DefaultResolution  = 60;
+
+			var agent = PersonRepository.Has(skill1);
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 6,
+																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+																				   },
+																					new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 1,
+																					   SkillCombination = new[] { skill1.Id.GetValueOrDefault(),}
+																				   }
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 3,
+																	 SkillId = skill1.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 3,
+																	 SkillId = skill2.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
+		}
+
+		[Test]
+		public void ShouldDenyRequestIfOnlyUnsortedSkills()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill1 = SkillRepository.Has("skillA", activity).WithId();
+			var skill2 = SkillRepository.Has("skillB", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			skill1.StaffingThresholds = skill2.StaffingThresholds = threshold;
+			skill1.DefaultResolution = skill2.DefaultResolution = 60;
+
+			var agent = PersonRepository.Has(skill1);
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 5,
+																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+																				   },
+																					new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 1,
+																					   SkillCombination = new[] { skill1.Id.GetValueOrDefault(),}
+																				   }
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 3,
+																	 SkillId = skill1.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 3,
+																	 SkillId = skill2.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+		}
+
+		[Test]
 		public void ShouldApproveRequestIfShovelAndHasUnsortedSkills()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));

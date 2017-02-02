@@ -32,16 +32,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			return withSkills.ToDictionary(k => string.Join("_", k.Resource.SkillCombination),
 										   v =>
-										   {
-											   var minCascadingIndex = v.Skills.Min(s => s.CascadingIndex ?? int.MaxValue);
-											   return new AffectedSkills
+										    new AffectedSkills
 											   {
 												   Count = double.NaN,
 												   Resource = v.Resource.Resource,
 												   SkillEffiencies = new ConcurrentDictionary<Guid, double>(),
-												   Skills = v.Skills.Where(s => !s.IsCascading() || s.CascadingIndex == minCascadingIndex)
-											   };
-										   });
+												   Skills = v.Skills.Where(s => !s.IsCascading() || s.CascadingIndex == v.Skills.Min(x => x.CascadingIndex))
+											   }
+										   );
 		}
 		
 		public int MinSkillResolution { get; }
