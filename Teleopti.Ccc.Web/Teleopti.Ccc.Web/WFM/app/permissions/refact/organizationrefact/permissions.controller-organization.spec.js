@@ -265,7 +265,8 @@ describe('component: permissionsList', function() {
 			onClick: vm.nodeClick,
 			selectedRole: vm.selectedRole,
 			select: vm.selectOrgData,
-			isSelected: vm.isOrgDataSelected
+			isSelected: vm.isOrgDataSelected,
+			originalOrg: vm.organizationSelection
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -368,7 +369,8 @@ describe('component: permissionsList', function() {
 			onClick: vm.nodeClick,
 			selectedRole: vm.selectedRole,
 			select: vm.selectOrgData,
-			isSelected: vm.isOrgDataSelected
+			isSelected: vm.isOrgDataSelected,
+			originalOrg: vm.organizationSelection
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -423,7 +425,8 @@ describe('component: permissionsList', function() {
 			onClick: vm.nodeClick,
 			selectedRole: vm.selectedRole,
 			select: vm.selectOrgData,
-			isSelected: vm.isOrgDataSelected
+			isSelected: vm.isOrgDataSelected,
+			originalOrg: vm.organizationSelection
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -822,7 +825,8 @@ describe('component: permissionsList', function() {
 			onClick: vm.nodeClick,
 			selectedRole: vm.selectedRole,
 			select: vm.selectOrgData,
-			isSelected: vm.isOrgDataSelected
+			isSelected: vm.isOrgDataSelected,
+			originalOrg: vm.organizationSelection
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -969,7 +973,8 @@ describe('component: permissionsList', function() {
 			onClick: vm.nodeClick,
 			selectedRole: vm.selectedRole,
 			select: vm.selectOrgData,
-			isSelected: vm.isOrgDataSelected
+			isSelected: vm.isOrgDataSelected,
+			originalOrg: vm.organizationSelection
 		});
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
@@ -1287,7 +1292,8 @@ describe('component: permissionsList', function() {
 			onClick: vm.nodeClick,
 			selectedRole: vm.selectedRole,
 			select: vm.selectOrgData,
-			isSelected: vm.isOrgDataSelected
+			isSelected: vm.isOrgDataSelected,
+			originalOrg: vm.organizationSelection
 		});
 
 		ctrl.selectedRole = vm.roles[0];

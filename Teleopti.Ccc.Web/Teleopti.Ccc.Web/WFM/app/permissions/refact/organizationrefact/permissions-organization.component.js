@@ -43,7 +43,8 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
 			for (var i = 0; i < node.ChildNodes.length; i++) {
 				ctrl.select(node.ChildNodes[i], selectedOrNot);
 			}
-			var noSiteSelected = ctrl.org.BusinessUnit.ChildNodes.every(function(site) {
+			
+			var noSiteSelected = ctrl.originalOrg.BusinessUnit.ChildNodes.every(function(site) {
 				return !ctrl.isSelected(site);
 			});
 			if (noSiteSelected) {
@@ -93,6 +94,7 @@ angular.module('wfm.permissions').component('permissionsList', {
 	templateUrl: 'app/permissions/refact/organizationrefact/permissions-organization-list.html',
 	controller: PermissionsListController,
 	bindings: {
+		originalOrg: '=',
 		org: '=',
 		selectedRole: '=',
 		onClick: '=',
