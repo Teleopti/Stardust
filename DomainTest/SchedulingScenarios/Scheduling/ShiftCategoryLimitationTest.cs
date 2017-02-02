@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				SchedulingOptions =
 				{
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.Hierarchy),
 					UseTeam = true,
 					UseShiftCategoryLimitations = true,
 					TeamSameShiftCategory = true
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				SchedulingOptions =
 				{
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.SingleAgent),
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.SingleAgent),
 					UseBlock = true,
 					BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod,
 					UseShiftCategoryLimitations = true,
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				SchedulingOptions =
 				{
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.SingleAgent),
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.SingleAgent),
 					UseBlock = true,
 					BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod,
 					UseShiftCategoryLimitations = true,
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				SchedulingOptions =
 				{
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.Hierarchy),
 					BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
 					UseBlock = true,
 					UseTeam = true,

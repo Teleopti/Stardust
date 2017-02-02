@@ -168,11 +168,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			RuleSetBagRepository.Has(ruleSetBag);
 			agent1.Period(date).RuleSetBag = ruleSetBag;
 			agent2.Period(date).RuleSetBag = ruleSetBag;
-			SkillDayRepository.Has(new[]
-			{
-				skill1.CreateSkillDayWithDemand(scenario, date, 10),
-				skill2.CreateSkillDayWithDemand(scenario, date, 10)
-			});
+			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, date, 10), skill2.CreateSkillDayWithDemand(scenario, date, 10));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions

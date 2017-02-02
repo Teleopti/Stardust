@@ -238,8 +238,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new IScheduleData[] {ass1, ass2, ass3, personMeeting }, skillDays);
 			stateHolder.SchedulingResultState.AllPersonAccounts = new ConcurrentDictionary<IPerson, IPersonAccountCollection>();
-			var skillDayDic = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-			skillDayDic.Add(skill, skillDays);
+			var skillDayDic = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, skillDays}};
 			stateHolder.SchedulingResultState.SkillDays = skillDayDic;
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2));
