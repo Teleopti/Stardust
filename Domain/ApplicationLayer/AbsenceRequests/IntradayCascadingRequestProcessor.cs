@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
 
-				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period);
+				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
 				if (!combinationResources.Any())
 				{
 					logger.Warn(Resources.DenyDueToTechnicalProblems + " Can not find any skillcombinations.");
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 				var allSkills = _skillRepository.LoadAll();
-				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkills(allSkills.Select(x => x.Id.GetValueOrDefault()).ToArray(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
+				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkills(allSkills.Select(x => x.Id.GetValueOrDefault()).ToArray(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime).ToList();
 				skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 				var skillIds = new HashSet<Guid>();
