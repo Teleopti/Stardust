@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SchedulingResultService : ISchedulingResultService
 	{
-		private readonly ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
+		private readonly ISkillResourceCalculationPeriodDictionary _relevantSkillStaffPeriods;
 		private readonly IEnumerable<ISkill> _allSkills;
 		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly IPersonSkillProvider _personSkillProvider;
@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IEnumerable<ISkill> allSkills,
 			IPersonSkillProvider personSkillProvider)
 		{
-			_relevantSkillStaffPeriods = stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+			_relevantSkillStaffPeriods = new SkillResourceCalculationPeriodWrapper(stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
 			_allSkills = allSkills;
 			_personSkillProvider = personSkillProvider;
 			_relevantProjections = createRelevantProjectionList(stateHolder.Schedules);
 		}
 
 
-		public SchedulingResultService(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
+		public SchedulingResultService(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 			IEnumerable<ISkill> allSkills,
 			IResourceCalculationDataContainer relevantProjections,
 			IPersonSkillProvider personSkillProvider)
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IResourceCalculationData resourceCalculationData = null,  bool emptyCache = true)
+		public ISkillResourceCalculationPeriodDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IResourceCalculationData resourceCalculationData = null,  bool emptyCache = true)
 		{
 			if (!emptyCache)
 			{
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return _relevantSkillStaffPeriods;
 			var personSkillService = new AffectedPersonSkillService(_allSkills);
 
-			var rc = new ScheduleResourceOptimizer(_relevantProjections, new SkillResourceCalculationPeriodWrapper(_relevantSkillStaffPeriods), personSkillService,
+			var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService,
 			                                       emptyCache, new ActivityDivider());
 			rc.Optimize(periodToRecalculate, resourceCalculationData);
 
@@ -120,6 +120,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items()
 		{
 			return ((SkillSkillStaffPeriodExtendedDictionary)_relevantSkillStaffPeriods).Select(w => new KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>(w.Key, w.Value));
+		}
+
+		public DateTimePeriod? Period()
+		{
+			return _relevantSkillStaffPeriods.Period();
 		}
 	}
 }

@@ -32,6 +32,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillCombinationHolder = new SkillCombinationHolder();
 			SkillDays = skillDays;
 		}
+		public ResourceCalculationData(IEnumerable<ISkill> skills,SkillStaffPeriodHolder skillStaffPeriodHolder)
+		{
+			ConsiderShortBreaks = false;
+			DoIntraIntervalCalculation = false;
+			Schedules = null;
+			Skills = skills;
+			SkillStaffPeriodHolder = skillStaffPeriodHolder;
+		}
 
 		public IScheduleDictionary Schedules { get; }
 		public bool ConsiderShortBreaks { get; }

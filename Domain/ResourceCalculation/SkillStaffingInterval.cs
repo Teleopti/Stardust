@@ -7,9 +7,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SkillStaffingInterval : IResourceCalculationPeriod, IShovelResourceDataForInterval, IValidatePeriod
 	{
+		private double _loggedOn;
 		public Guid SkillId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
+
+		public DateTimePeriod CalculationPeriod => new DateTimePeriod(StartDateTime, EndDateTime);
+		public double CalculatedLoggedOn => _loggedOn;
+
+		public void SetCalculatedUsedSeats(double usedSeats)
+		{
+		}
+
 		public double Forecast { get; set; }
 		public double StaffingLevel { get; set; }
 		public double ForecastWithShrinkage { get; set; }
@@ -45,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void SetCalculatedLoggedOn(double loggedOn)
 		{
-			
+			_loggedOn = loggedOn;
 		}
 
 		public void ResetMultiskillMinOccupancy()
@@ -74,6 +83,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			get { return Forecast; }
 			set { Forecast = value; }
+		}
+
+		public void ClearIntraIntervalDistribution()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues,
+			IPeriodDistribution periodDistribution)
+		{
 		}
 	}
 }

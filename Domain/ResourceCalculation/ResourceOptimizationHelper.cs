@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var maxSeatSkills =
 				resourceCalculationData.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 					.ToList();
-			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods =
+			ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods =
 				createSkillSkillStaffDictionaryOnSkills(
 					resourceCalculationData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
 					maxSeatSkills, timePeriod);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
 		}
 
-		private static ISkillSkillStaffPeriodExtendedDictionary createSkillSkillStaffDictionaryOnSkills(
+		private static ISkillResourceCalculationPeriodDictionary createSkillSkillStaffDictionaryOnSkills(
 			ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
 		{
 			var result = new SkillSkillStaffPeriodExtendedDictionary();
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 				result.Add(skill, skillStaffPeriodDictionaryToReturn);
 			}
-			return result;
+			return new SkillResourceCalculationPeriodWrapper(result);
 		}
 	}
 }

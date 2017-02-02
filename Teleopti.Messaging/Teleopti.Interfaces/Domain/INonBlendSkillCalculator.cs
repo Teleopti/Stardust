@@ -12,6 +12,6 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="relevantProjections">The relevant projections.</param>
         /// <param name="relevantSkillStaffPeriods">The relevant skill staff periods.</param>
         /// <param name="addToEarlierResult">if set to <c>true</c> [add to earlier result].</param>
-        void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, bool addToEarlierResult);
+        void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, bool addToEarlierResult);
 	}
 }

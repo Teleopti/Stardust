@@ -10,6 +10,7 @@ namespace Teleopti.Interfaces.Domain
 		bool TryGetValue(ISkill skill, out IResourceCalculationPeriodDictionary resourceCalculationPeriods);
 		bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate);
 		IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items();
+		DateTimePeriod? Period();
 	}
 
 	public interface IResourceCalculationPeriodDictionary

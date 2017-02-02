@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
@@ -44,6 +45,28 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			CreateInternalDictionary(skillDays);
 		}
+
+		//public SkillStaffPeriodHolder(IList<ISkill> allSkills, IList<SkillStaffingInterval> skillStaffingIntervals  )
+		//{
+		//	_internalDictionary = new SkillSkillStaffPeriodExtendedDictionary();
+		//	var skillsOnInterval = skillStaffingIntervals.Select(x => x.SkillId).Distinct();
+		//	foreach (var skillId in skillsOnInterval)
+		//	{
+		//		var skill = allSkills.First(x => x.Id.Value == skillId);
+		//		ISkillStaffPeriodDictionary skillStaffPeriods = new SkillStaffPeriodDictionary(skill);
+		//		foreach (var skillstaffInterval in skillStaffingIntervals.Where(x=>x.SkillId==skillId))
+		//		{
+		//			var newPeriod = new SkillStaffPeriod(skillstaffInterval.DateTimePeriod, new Task(), new ServiceAgreement(),
+		//				new StaffingCalculatorServiceFacade());
+		//			newPeriod.SetCalculatedLoggedOn(skillstaffInterval.FStaff);
+		//			newPeriod.ForecastedDistributedDemand
+		//			skillStaffPeriods.Add(skillstaffInterval.DateTimePeriod,newPeriod);
+					
+		//		}
+		//		if (skillStaffPeriods.Count > 0)
+		//			_internalDictionary.Add(skill, skillStaffPeriods);
+		//	}
+		//}
 
 		public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills, ISkillPriorityProvider skillPriorityProvider)
 		{

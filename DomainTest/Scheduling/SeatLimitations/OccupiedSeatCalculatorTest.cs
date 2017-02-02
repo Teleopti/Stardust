@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			using(_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, relevantSkillStaffPeriods);
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 			}
 			Assert.AreEqual(4.5, skillStaffPeriod.Payload.CalculatedUsedSeats);
 			Assert.AreEqual(4.5, skillStaffPeriod.CalculatedLoggedOn);
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			using (_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, relevantSkillStaffPeriods);
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 			}
 			Assert.AreEqual(0, skillStaffPeriod.Payload.CalculatedUsedSeats);
 		}

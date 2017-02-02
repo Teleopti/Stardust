@@ -226,16 +226,6 @@ namespace Teleopti.Interfaces.Domain
         double BookedResource65 { get; }
 
         /// <summary>
-        /// Gets the calculated logged on.
-        /// </summary>
-        /// <value>The calculated logged on.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-02-13
-        /// </remarks>
-        double CalculatedLoggedOn { get; }
-
-        /// <summary>
         /// Calculates the TRAFF calculated resources in hours.
         /// </summary>
         /// <returns></returns>
@@ -373,18 +363,6 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         IList<ISkillStaffPeriodView> Split(TimeSpan periodLength);
 
-        /// <summary>
-        /// Sets the distribution values.
-        /// </summary>
-        /// <param name="calculatedValues">The calculator.</param>
-        /// <param name="periodDistribution">The period distribution.</param>
-        void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution);
-
-        /// <summary>
-        /// Clears the intra interval distribution.
-        /// </summary>
-        void ClearIntraIntervalDistribution();
-
 	    /// <summary>
 	    /// Set the skillday the period belongs to
 	    /// </summary>
@@ -403,6 +381,6 @@ namespace Teleopti.Interfaces.Domain
 		IList<int> IntraIntervalSamples { get; set; }
 		double AbsoluteDifference { get; }
 		double CalculatedResource { get; }
-		double FStaff { get; }
+		
 	}
 }

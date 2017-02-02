@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -22,12 +23,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			IResourceCalculationPeriodDictionary resources;
 			IResourceCalculationPeriod items;
 			return _relevantSkillStaffPeriods.TryGetValue(skill, out resources) &&
-				   resources.TryGetValue(periodToCalculate, out items);
+					resources.TryGetValue(periodToCalculate, out items);
 		}
 
 		public IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items()
 		{
 			return _relevantSkillStaffPeriods;
+		}
+
+		public DateTimePeriod? Period()
+		{
+			var resourceCalculationPeriodList = new List<IResourceCalculationPeriod>();
+			foreach (var resourceCalculationPeriodDictionary in _relevantSkillStaffPeriods.Values)
+			{
+				resourceCalculationPeriodList.AddRange(resourceCalculationPeriodDictionary.OnlyValues());
+			}
+			var minPeriod = resourceCalculationPeriodList.Min(x => x.CalculationPeriod.StartDateTime);
+			var maxPeriod = resourceCalculationPeriodList.Max(x => x.CalculationPeriod.EndDateTime);
+			return new DateTimePeriod(minPeriod, maxPeriod);
 		}
 	}
 }

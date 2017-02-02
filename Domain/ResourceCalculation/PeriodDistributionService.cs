@@ -6,14 +6,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
 	    private const int _intraIntervalLengthToSplitOn = 5;
 
-	    public void CalculateDay(IResourceCalculationDataContainer resourceContainer, ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriods)
+	    public void CalculateDay(IResourceCalculationDataContainer resourceContainer, ISkillResourceCalculationPeriodDictionary skillStaffPeriods)
         {
 	        var relevantProjections = resourceContainer as IResourceCalculationDataContainerWithSingleOperation;
 			if (relevantProjections==null) return;
 
-            foreach (var skillStaffPeriodDictionary in skillStaffPeriods)
+            foreach (var skillStaffPeriodDictionary in skillStaffPeriods.Items())
             {
-                foreach (var pair in skillStaffPeriodDictionary.Value)
+                foreach (var pair in skillStaffPeriodDictionary.Value.Items())
                 {
                     var period = pair.Key;
                     var demandedTraff = pair.Value.FStaff;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                     pair.Value.ClearIntraIntervalDistribution();
 
-					periodDistribution.ProcessLayers(relevantProjections);
+					periodDistribution.ProcessLayers(relevantProjections, skillStaffPeriodDictionary.Key);
                 }
             }
         }

@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, relevantSkillStaffPeriods,false);
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods), false);
 			}
 			Assert.AreEqual(4.5, skillStaffPeriod.Payload.CalculatedLoggedOn);
 			Assert.AreEqual(4.5, skillStaffPeriod.CalculatedResource);
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, relevantSkillStaffPeriods,false);
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods), false);
 			}
 		}
 	}

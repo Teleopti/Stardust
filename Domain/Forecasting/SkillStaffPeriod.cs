@@ -448,7 +448,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    Payload.MultiskillMinOccupancy = null;
 	    }
 
-	    public TimeSpan ForecastedIncomingDemand()
+		public DateTimePeriod CalculationPeriod => Period;
+		public void SetCalculatedUsedSeats(double usedSeats)
+		{
+			Payload.CalculatedUsedSeats = usedSeats;
+		}
+
+		public TimeSpan ForecastedIncomingDemand()
         {
             return TimeSpan.FromMinutes(Payload.ForecastedIncomingDemand*Period.ElapsedTime().TotalMinutes);
         }

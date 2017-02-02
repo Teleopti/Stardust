@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             _mocks.ReplayAll();
 
-            _periodDistributionService.CalculateDay(_container, dictionary);
+            _periodDistributionService.CalculateDay(_container, new SkillResourceCalculationPeriodWrapper(dictionary));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             mocks.ReplayAll();
 
-            _periodDistributionService.CalculateDay(_container, dictionary);
+            _periodDistributionService.CalculateDay(_container, new SkillResourceCalculationPeriodWrapper(dictionary));
             double expedtedResult = Domain.Calculation.Variances.StandardDeviation(new[] { 0d, double.NaN, double.NaN });
             Assert.AreEqual(expedtedResult, skillStaffPeriod.IntraIntervalDeviation, 0.01);
         }

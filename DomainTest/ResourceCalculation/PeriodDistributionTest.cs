@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
 	        resourceContainer.Stub(x=>x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[]{period});
 
-            _target.ProcessLayers(resourceContainer);
+            _target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[0]);
             Assert.AreEqual(15,_target.PeriodDetailsSum);
 
-            _target.ProcessLayers(resourceContainer);
+            _target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[0]);
             Assert.AreEqual(15, _target.PeriodDetailsSum);
            
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
 			resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[] { new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(67)) });
 
-			_target.ProcessLayers(resourceContainer);
+			_target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
 
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[0]);
             Assert.AreEqual(2, _target.GetSplitPeriodValues()[1]);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
 			resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[] { period });
 
-			_target.ProcessLayers(resourceContainer);
+			_target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
 
             Assert.AreEqual(3, _target.GetSplitPeriodValues()[0]);
             Assert.AreEqual(2, _target.GetSplitPeriodValues()[6]);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period))
 		        .Return(new[] {new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(67))});
 
-			_target.ProcessLayers(resourceContainer);
+			_target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
 
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[0]);
             Assert.AreEqual(2, _target.GetSplitPeriodValues()[1]);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			resourceContainer2.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period))
 				.Return(new[] { new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(75)) });
 
-			_target.ProcessLayers(resourceContainer2);
+			_target.ProcessLayers(resourceContainer2, _skillStaffPeriod.SkillDay.Skill);
 
             Assert.AreEqual(0, _target.DeviationAfterNewLayers(proj));
         }
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
 			resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[] { period2 });
 
-            _target.ProcessLayers(resourceContainer);
+            _target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[0]);
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[1]);
             Assert.AreEqual(15, _target.PeriodDetailsSum);
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
 			resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[] { period1, period3 });
 
-            _target.ProcessLayers(resourceContainer);
+            _target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[0]);
             Assert.AreEqual(0, _target.GetSplitPeriodValues()[1]);
             Assert.AreEqual(5, _target.GetSplitPeriodValues()[2]);
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
 			resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[] { period1, period1,period3 });
 
-			_target.ProcessLayers(resourceContainer);
+			_target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
 			Assert.AreEqual(10, _target.GetSplitPeriodValues()[0]);
 			Assert.AreEqual(0, _target.GetSplitPeriodValues()[1]);
 			Assert.AreEqual(5, _target.GetSplitPeriodValues()[2]);
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
 			resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[] { period1,period3 });
 
-            _target.ProcessLayers(resourceContainer);
+            _target.ProcessLayers(resourceContainer, _skillStaffPeriod.SkillDay.Skill);
             DeviationStatisticData stat = new DeviationStatisticData(0.5,1);
             Assert.AreEqual(stat.RelativeDeviation, _target.CalculateSplitPeriodRelativeValues()[0], 0.001);
             

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			return _skillDayLoadHelper.LoadSchedulerSkillDays(period, skills, _scenario);
 		}
-
+			
 		[TestLog]
 		protected virtual  IScheduleDictionary Schedules( DateOnlyPeriod period)
 		{
