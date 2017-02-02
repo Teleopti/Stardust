@@ -13,7 +13,7 @@ body {
     right: 0;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, body, button, input {
 	font-family: Calibri,Segoe,Segoe UI,Arial,sans-serif!important;
 }
 
