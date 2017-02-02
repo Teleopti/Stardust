@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
@@ -10,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 	{
 		public IEnumerable<PersonValidationError> GetPeopleMissingSchedulePeriod(ICollection<IPerson> people, DateOnlyPeriod range)
 		{
+			var personIncrementor = new PeriodIncrementorFactory();
 			var list = new List<PersonValidationError>();
 			foreach (var person in people)
 			{
@@ -28,13 +28,19 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 					foreach (var schedulePeriod in schedulePeriods)
 					{
 						var start = range.StartDate;
+						var incrementor = personIncrementor.PeriodIncrementor(schedulePeriod.PeriodType,
+							person.PermissionInformation.Culture());
 						while (start < range.EndDate)
 						{
 							var period = schedulePeriod.GetSchedulePeriod(start);
 							if (period.HasValue)
+							{
 								containedPeriods.Add(period.Value);
-							
-							start = period?.EndDate.AddDays(1) ?? nextStartDate(schedulePeriod, start);
+								if (period.Value.EndDate == person.TerminalDate)
+									break;
+							}
+
+							start = (period?.EndDate ?? incrementor.Increase(start, schedulePeriod.Number)).AddDays(1);
 						}
 					}
 					if (!containedPeriods.Any(x => x.StartDate >= range.StartDate && x.EndDate <= range.EndDate))
@@ -45,23 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 				}
 			}
 			return list;
-		}
-
-		private static DateOnly nextStartDate(ISchedulePeriod schedulePeriod, DateOnly currentStartDate)
-		{
-			switch (schedulePeriod.PeriodType)
-			{
-				case SchedulePeriodType.Month:
-					return currentStartDate.AddMonths(new GregorianCalendar(), schedulePeriod.Number);
-				case SchedulePeriodType.Week:
-					return currentStartDate.AddDays(7 * schedulePeriod.Number);
-				case SchedulePeriodType.Day:
-					return currentStartDate.AddDays(schedulePeriod.Number);
-				case SchedulePeriodType.ChineseMonth:
-					return currentStartDate.AddMonths(new ChineseLunisolarCalendar(), schedulePeriod.Number);
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
 		}
 	}
 }
