@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		[RemoveMeWithToggle("Remove scheduleMatrixListPros param and posible move first line in method one step up", Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 		public void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMatrixListPros,
+			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
 			IOptimizationPreferences optimizationPreferences,
-			IList<IScheduleMatrixPro> allScheduleMatrixListPros)
+			IEnumerable<IScheduleMatrixPro> allScheduleMatrixListPros)
 		{
 			backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot)); //If this is enough, we can move this line one step up
 			var shiftNudgeDirective = new ShiftNudgeDirective();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private void executePerShiftCategoryLimitation(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros,
+			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros,
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
 			IShiftCategoryLimitation limitation, bool isSingleAgentTeam, HashSet<DateOnly> lockedDays)
 		{

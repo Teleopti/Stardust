@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 	public interface ITeamBlockRemoveShiftCategoryBackToLegalService
 	{
-		void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros);
+		void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixListPros);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IList<IScheduleMatrixPro> allScheduleMatrixListPros)
+		public void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> scheduleMaxtrixListPros, IOptimizationPreferences optimizationPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixListPros)
 		{
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
