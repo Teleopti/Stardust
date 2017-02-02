@@ -43,7 +43,7 @@ namespace Teleopti.Messaging.Client.Http
 				var headers = customHeadersFunc(content);
 				foreach (string header in headers.Keys)
 				{
-					request.Headers.Add(header,headers[header]);
+					request.Headers.TryAddWithoutValidation(header,headers[header]);
 				}
 			}
 			return _client.SendAsync(request);
