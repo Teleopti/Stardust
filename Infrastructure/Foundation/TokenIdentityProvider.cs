@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public TokenIdentity RetrieveToken()
 		{
 			var httpContext = _httpContext.Current();
-			if (httpContext == null) return null;
-			if (httpContext.User == null) return null;
+			if (httpContext?.User == null) return null;
 
 			var teleoptiIdentity = httpContext.User.Identity as ITeleoptiIdentity;
 			if (teleoptiIdentity != null)
@@ -31,19 +30,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 
 			var currentIdentity = httpContext.User.Identity as ClaimsIdentity;
-			if (currentIdentity == null)
-			{
-				return null;
-			}
 
-			var nameClaim = currentIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-			var isPersistentClaim = currentIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.IsPersistent);
+			var nameClaim = currentIdentity?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
 			if (nameClaim != null)
 			{
+				var isPersistentClaim = currentIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.IsPersistent);
 				var nameClaimValue = Uri.UnescapeDataString(nameClaim.Value);
 				var token = getTokenIdentity(nameClaimValue);
-				token.IsPersistent = isPersistentClaim != null && isPersistentClaim.Value.ToLowerInvariant() == "true";
 
+				token.IsPersistent = isPersistentClaim == null || isPersistentClaim.Value.ToLowerInvariant() == "true";
 				return token;
 			}
 			return null;

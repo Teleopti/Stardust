@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		public SessionSpecificData GrabFromCookie()
 		{
 			var cookie = getCookie();
-			if (cookie == null || string.IsNullOrEmpty(cookie.Value))
+			if (string.IsNullOrEmpty(cookie?.Value))
 			{
 				return null;
 			}

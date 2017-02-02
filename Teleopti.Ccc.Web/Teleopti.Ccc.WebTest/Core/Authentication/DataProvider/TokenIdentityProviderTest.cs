@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Security.Claims;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -21,7 +20,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				new ClaimsPrincipal(
 					new[]
 					{
-						new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/TOPTINET#kunning$$$m")})
+						new ClaimsIdentity(new[]
+						{
+							new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/TOPTINET#kunning$$$m"),
+							new Claim(ClaimTypes.AuthenticationMethod, "urn:Windows")
+						})
 					});
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo(@"TOPTINET\kunning.m");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo(@"http://fakeschema.com/TOPTINET#kunning$$$m");
@@ -50,12 +53,13 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				{
 					new ClaimsIdentity(new[]
 					{
-						new Claim(ClaimTypes.NameIdentifier,
-							"http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier)
+						new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
+						new Claim(ClaimTypes.AuthenticationMethod, "urn:Teleopti")
 					})
 				});
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier);
+			target.RetrieveToken().IsPersistent.Should().Be.False();
 		}
 
 		[Test]
@@ -81,9 +85,46 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 					{
 						new ClaimsIdentity(new[]
 						{
-							new Claim(ClaimTypes.NameIdentifier,
-								"http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
+							new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
+							new Claim(ClaimTypes.AuthenticationMethod, "urn:Teleopti"),
 							new Claim(ClaimTypes.IsPersistent, "true")
+						})
+					});
+			target.RetrieveToken().IsPersistent.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldSetIsPersistentToTrueIfOtherAuthenticationMethod()
+		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
+			httpContext.User =
+				new ClaimsPrincipal(
+					new[]
+					{
+						new ClaimsIdentity(new[]
+						{
+							new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier)
+						})
+					});
+			target.RetrieveToken().IsPersistent.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldSetIsPersistentToTrueIfOtherAuthenticationMethodWithAuthenticationMethod()
+		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
+			httpContext.User =
+				new ClaimsPrincipal(
+					new[]
+					{
+						new ClaimsIdentity(new[]
+						{
+							new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
+							new Claim(ClaimTypes.AuthenticationMethod, "urn:Others")
 						})
 					});
 			target.RetrieveToken().IsPersistent.Should().Be.True();
