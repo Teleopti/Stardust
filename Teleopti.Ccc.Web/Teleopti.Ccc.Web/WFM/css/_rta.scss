@@ -218,6 +218,19 @@
 
 .rta-right-panel-wrapper {
 	min-height:400px;
+	color: rgba(0, 0, 0, 0.87);
+	.close-right-panel {
+		:hover i {
+			color: #ffffff; //not using variable due to 
+							  //reversed background color on dark theme, same below and above;
+		}
+		i {
+			color: rgba(0, 0, 0, 0.87);
+		}
+	}
+	.open-right-panel i {
+		color: $text-color-standard;
+	}
 }
 
 .rta-options-prepend {
