@@ -119,11 +119,11 @@
 .rta-md-input-container {
 	padding: 0;
 
-	.md-select-placeholder {
+	.md-select-placeholder, .md-select-value {
 		border-color: $gray-300;
 		min-height: 0;
 		padding: 0;
-}
+	}
 } 
 
 // This targets all md select items
