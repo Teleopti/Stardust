@@ -22,7 +22,9 @@ declare @SuperRole uniqueidentifier
 declare @Start smalldatetime
 declare @TheDate smalldatetime
 declare @RowCount int
+declare @timeout int
 
+set @timeout = 240 --Why not pass from code? Current timeout from RTL is 5 mins I think.
 set @start = getdate()
 set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
 set @BatchSize = 14 --Used to control number of days to delete in one go.
@@ -94,7 +96,7 @@ begin
 	from ReadModel.PersonScheduleDay ps
 	inner join #Deleted d on d.Id = ps.PersonId
 
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -107,7 +109,7 @@ begin
 	where p.IsDeleted = 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -120,7 +122,7 @@ begin
 	where p.IsDeleted = 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -184,7 +186,7 @@ where 1=1
 and sd.SkillDayDate < @KeepUntil
 and sd.SkillDayDate < @MaxDate
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --Schedule
@@ -215,7 +217,7 @@ where 1 = 1
 and ad.TagDate < @KeepUntil
 and ad.TagDate < @MaxDate
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --Audit trails must be purged as part of schedules, at least until they get their own setting. Purge based on schedule date, not change date.
@@ -227,7 +229,7 @@ begin
 	where pa.date < @KeepUntil
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -240,7 +242,7 @@ begin
 	where pa.maximum < @KeepUntil
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -256,7 +258,7 @@ begin
 						where pa.REV = r.id)
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -283,7 +285,7 @@ from PersonPeriod pp
 inner join BudgetGroup bg on pp.BudgetGroup = bg.Id
 where bg.IsDeleted = 1
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --Messages
@@ -310,7 +312,7 @@ delete PushMessage
 from PushMessage pm
 where not exists (select 1 from PushMessageDialogue pmd where pmd.PushMessage = pm.Id)
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --Payroll
@@ -328,7 +330,7 @@ from PayrollResult pr
 where pr.UpdatedOn < @KeepUntil
 and pr.UpdatedOn < @Maxdate
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --Requests
@@ -382,7 +384,7 @@ where not exists (
 select 1 from Request r
 where r.Parent = pr.Id)
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --Autodeny requests if not handled in time.
@@ -399,7 +401,7 @@ update PersonRequest
    and pr.RequestStatus = 0 --Pending
    and pr.IsDeleted = 0
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
@@ -413,7 +415,7 @@ begin
 
 	select @TheDate = dateadd(day,1,@TheDate)
 
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -432,7 +434,7 @@ where BelongsToDate < @KeepUntil
 delete ReadModel.ScheduleProjectionReadOnly
 where BelongsToDate < @KeepUntil
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+if datediff(second,@start,getdate()) > @timeout 
 	return
 
 --delete empty schedule read model records
@@ -452,7 +454,7 @@ begin
 	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -464,7 +466,7 @@ begin
 	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -476,7 +478,7 @@ begin
 	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -488,7 +490,7 @@ begin
 	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -500,7 +502,7 @@ begin
 	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
@@ -512,7 +514,7 @@ begin
 	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
 
 	select @RowCount = @@rowcount
-	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	if datediff(second,@start,getdate()) > @timeout 
 		return
 end
 
