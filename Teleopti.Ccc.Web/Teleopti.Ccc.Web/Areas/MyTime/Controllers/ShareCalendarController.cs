@@ -24,26 +24,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			if (string.IsNullOrEmpty(id))
 			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
-				return Content("Invalid url", "text/plain");
+				return sharingError();
 			}
 			try
 			{
 				var calendarLinkId = _calendarLinkIdGenerator.Parse(id);
 				return Content(_calendarLinkGenerator.Generate(calendarLinkId), type);
 			}
-			catch (FormatException)
+			catch (ArgumentNullException)
 			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
-				return Content("Invalid url", "text/plain");
+				return sharingError();
 			}
 			catch (CryptographicException)
 			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
-				return Content("Invalid url", "text/plain");
+				return sharingError();
+			}
+			catch (FormatException)
+			{
+				return sharingError();
 			}
 			catch (PermissionException)
 			{
@@ -53,6 +51,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				return Content("Calendar sharing inactive", "text/plain");
 			}
+		}
+
+		private ActionResult sharingError()
+		{
+			Response.TrySkipIisCustomErrors = true;
+			Response.StatusCode = 400;
+			return Content("Invalid url", "text/plain");
 		}
 	}
 }

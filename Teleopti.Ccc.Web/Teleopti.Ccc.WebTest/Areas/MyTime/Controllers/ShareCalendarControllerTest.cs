@@ -67,6 +67,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldReturnErrorIfUrlInvalid3()
+		{
+			_calendarLinkIdGenerator.Stub(x => x.Parse(calendarlinkid)).Throw(new ArgumentNullException());
+			var target = new ShareCalendarController(_calendarLinkIdGenerator, null);
+			target.ControllerContext = new ControllerContext(_context, new RouteData(), target);
+
+			var result = (ContentResult)target.iCal(calendarlinkid);
+			result.Content.Should().Contain("Invalid url");
+		}
+
+		[Test]
 		public void ShouldReturnErrorIfNoCalendarLinkPermission()
 		{
 			var calendarLinkId = new CalendarLinkId();
