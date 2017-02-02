@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				});
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier);
-			target.RetrieveToken().IsPersistent.Should().Be.False();
 		}
 
 		[Test]
