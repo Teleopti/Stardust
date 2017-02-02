@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>().SingleInstance();
 			builder.RegisterType<LicenseRepositoryForLicenseVerifier>().As<ILicenseRepositoryForLicenseVerifier>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
-			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
+			builder.RegisterInstance(_iocConfiguration.Args().ConfigReader).As<IConfigReader>().SingleInstance();
 			if (_iocConfiguration.Toggle(Toggles.ResourcePlanner_LessPersonAssignmentUpdates_42159))
 			{
 				builder.RegisterType<UpdatePersonAssignmentLayersCollectionType>().As<IChangeNHibernateConfiguration>().SingleInstance();

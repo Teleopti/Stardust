@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.IocCommon
 	{
 		public string FeatureToggle { get; set; }
 		public string ToggleMode { get; set; }
-		public string TenantServer { get; set; }
-		public string ConfigServer { get; set; }
-		public string ReportServer { get; set; }
-		public string MatrixWebSiteUrl { get; set; }
-		public bool DisableWebSocketCors { get; set; }
+		public string TenantServer { get; }
+		public string ConfigServer { get; }
+		public string ReportServer { get; }
+		public string MatrixWebSiteUrl { get; }
+		public bool DisableWebSocketCors { get; }
 		public bool OptimizeScheduleChangedEvents_DontUseFromWeb { get; set; }
-		public string MessageBrokerUrl { get; set; }
+		public string MessageBrokerUrl { get; }
 
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.IocCommon
 		public bool BehaviorTestServer { get; set; }
 		public bool AllEventPublishingsAsSync { get; set; }
 		public bool WebByPassDefaultPermissionCheck_37984 { get; set; }
-		public string RtaAgentStateTraceMatch { get; set; }
+		public string RtaAgentStateTraceMatch { get; }
+		public IConfigReader ConfigReader { get; }
 
 		public IocArgs(IConfigReader configReader)
 		{
@@ -40,11 +41,11 @@ namespace Teleopti.Ccc.IocCommon
 			BehaviorTestServer = configReader.ReadValue("BehaviorTestServer", false);
 			AllEventPublishingsAsSync = configReader.ReadValue("AllEventPublishingsAsSync", false);
 			OptimizeScheduleChangedEvents_DontUseFromWeb = configReader.ReadValue("OptimizeScheduleChangedEvents_DontUseFromWeb", false);
+			ConfigReader = configReader;
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 			MessageBrokerUrl = configReader.AppConfig("MessageBroker");
 			RtaAgentStateTraceMatch = configReader.AppConfig("RtaAgentStateTraceMatch");
 		}
-
 	}
 }

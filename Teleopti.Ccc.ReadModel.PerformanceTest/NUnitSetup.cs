@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Autofac;
-using log4net;
 using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Aop;

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule(
 				new CommonModule(
 					new IocConfiguration(
-						new IocArgs(new ConfigReader())
+						new IocArgs(new ConfigOverrider(new ConfigReader(), new Dictionary<string, string> { { "FCM", "key=AAAANvMkWNA:APA91bG1pR8ZVsp-S98uWsFUE5lnQiC8UnsQL3DgN6Vyw5HyaKuqVt86kdeurfLfQkWt_7kZTgXcTuAaxvcVUkjtE8jFo72loTy6UYrLrVbYnqCXVI4mWCYhvLQnU3Sv0sIfW1k-eZCu" } }))
 						{
 							SharedContainer = sharedContainer,
 							DataSourceConfigurationSetter =
