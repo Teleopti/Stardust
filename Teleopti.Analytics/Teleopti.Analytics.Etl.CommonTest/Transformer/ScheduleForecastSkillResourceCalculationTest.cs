@@ -59,7 +59,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultService.SchedulingResult(_scheduleLoadedForPeriod)).Return(new SkillSkillStaffPeriodExtendedDictionary()).Repeat.Twice();
+				Expect.Call(_schedulingResultService.SchedulingResult(_scheduleLoadedForPeriod)).Return(new SkillResourceCalculationPeriodWrapper(new SkillSkillStaffPeriodExtendedDictionary())).Repeat.Twice();
 			}
 
 			using (_mocks.Playback())
