@@ -442,6 +442,85 @@ where NotScheduled = 1
 delete ReadModel.PersonScheduleDay
 where Start is NULL and [End] is NULL
 
+--Data from DELETED Scenarios
+--Schedules
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) PersonAssignment
+	from PersonAssignment pa
+	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) PersonAbsence
+	from PersonAbsence pa
+	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) AgentDayScheduleTag
+	from AgentDayScheduleTag pa
+	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Note
+	from Note pa
+	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) PublicNote
+	from PublicNote pa
+	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) Note
+	from Note pa
+	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
+
+--ToDo: BudgetDay, Meeting, MultiSiteDay, SkillDay
+/*
+exec Purge
+*/
+
 END
 
 GO
