@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var relevantSkillStaffPeriods =
 				createSkillSkillStaffDictionaryOnSkills(
-					resourceCalculationData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+					resourceCalculationData.SkillResourceCalculationPeriodDictionary,
 					ordinarySkills, timePeriod);
 
 			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods,
@@ -110,35 +111,37 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					.ToList();
 			ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods =
 				createSkillSkillStaffDictionaryOnSkills(
-					resourceCalculationData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+					resourceCalculationData.SkillResourceCalculationPeriodDictionary,
 					maxSeatSkills, timePeriod);
-			_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
+			_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods.Items());
 
 			var nonBlendSkills =
 				resourceCalculationData.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill)
 					.ToList();
 			relevantSkillStaffPeriods =
 				createSkillSkillStaffDictionaryOnSkills(
-					resourceCalculationData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, nonBlendSkills, timePeriod);
-			_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
+					resourceCalculationData.SkillResourceCalculationPeriodDictionary, nonBlendSkills, timePeriod);
+			_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods.Items(), false);
 		}
 
 		private static ISkillResourceCalculationPeriodDictionary createSkillSkillStaffDictionaryOnSkills(
-			ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
+			ISkillResourceCalculationPeriodDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
 		{
-			var result = new SkillSkillStaffPeriodExtendedDictionary();
+			var result = new List<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>>();
+
 			foreach (var skill in skills)
 			{
-				ISkillStaffPeriodDictionary skillStaffDictionary;
+				IResourceCalculationPeriodDictionary skillStaffDictionary;
 				if (!skillStaffPeriodDictionary.TryGetValue(skill, out skillStaffDictionary)) continue;
 
-				var skillStaffPeriodDictionaryToReturn = new SkillStaffPeriodDictionary(skill);
-				foreach (var skillStaffPeriod in skillStaffDictionary)
+				var skillStaffPeriodDictionaryToReturn = new Dictionary<DateTimePeriod, IResourceCalculationPeriod>();
+				foreach (var skillStaffPeriod in skillStaffDictionary.Items())
 				{
 					if (!skillStaffPeriod.Key.Intersect(keyPeriod)) continue;
 					skillStaffPeriodDictionaryToReturn.Add(skillStaffPeriod.Key, skillStaffPeriod.Value);
 				}
-				result.Add(skill, skillStaffPeriodDictionaryToReturn);
+
+				result.Add(new KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>(skill, new ResourceCalculationPeriodDictionary(skillStaffPeriodDictionaryToReturn)));
 			}
 			return new SkillResourceCalculationPeriodWrapper(result);
 		}

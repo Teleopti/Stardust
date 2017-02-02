@@ -31,16 +31,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return _relevantSkillStaffPeriods;
 		}
 
-		public DateTimePeriod? Period()
-		{
-			var resourceCalculationPeriodList = new List<IResourceCalculationPeriod>();
-			foreach (var resourceCalculationPeriodDictionary in _relevantSkillStaffPeriods.Values)
-			{
-				resourceCalculationPeriodList.AddRange(resourceCalculationPeriodDictionary.OnlyValues());
-			}
-			var minPeriod = resourceCalculationPeriodList.Min(x => x.CalculationPeriod.StartDateTime);
-			var maxPeriod = resourceCalculationPeriodList.Max(x => x.CalculationPeriod.EndDateTime);
-			return new DateTimePeriod(minPeriod, maxPeriod);
-		}
 	}
 }

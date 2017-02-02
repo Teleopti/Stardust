@@ -14,6 +14,7 @@ namespace Teleopti.Interfaces.Domain
 		IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		bool SkipResourceCalculation { get; }
 		SkillCombinationHolder SkillCombinationHolder {get;}
+		ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; }
 	}
 
 	public class SkillCombinationResource

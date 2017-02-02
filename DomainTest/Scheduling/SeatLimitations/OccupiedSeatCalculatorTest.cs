@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			using(_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods).Items());
 			}
 			Assert.AreEqual(4.5, skillStaffPeriod.Payload.CalculatedUsedSeats);
 			Assert.AreEqual(4.5, skillStaffPeriod.CalculatedLoggedOn);
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			using (_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods).Items());
 			}
 			Assert.AreEqual(0, skillStaffPeriod.Payload.CalculatedUsedSeats);
 		}

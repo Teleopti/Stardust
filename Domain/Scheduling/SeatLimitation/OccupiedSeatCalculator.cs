@@ -5,20 +5,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public class OccupiedSeatCalculator : IOccupiedSeatCalculator
 	{
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods)
+		public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections,
+			IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> relevantResourceCalculationPeriods)
 		{
-			foreach (KeyValuePair<ISkill, IResourceCalculationPeriodDictionary> pair in relevantSkillStaffPeriods.Items())
+			foreach (var pair in relevantResourceCalculationPeriods)
 			{
 				if (pair.Key.SkillType.ForecastSource != ForecastSource.MaxSeatSkill) continue;
 
 				IResourceCalculationPeriodDictionary skillStaffPeriodDictionary = pair.Value;
-				foreach (IResourceCalculationPeriod skillStaffPeriod in skillStaffPeriodDictionary.OnlyValues())
+				foreach (var keyValuePair in skillStaffPeriodDictionary.Items())
 				{
-					double result = relevantProjections.ActivityResourcesWhereSeatRequired(pair.Key, skillStaffPeriod.CalculationPeriod);
+					double result = relevantProjections.ActivityResourcesWhereSeatRequired(pair.Key, keyValuePair.Key);
 
-					skillStaffPeriod.SetCalculatedLoggedOn(result);
-					skillStaffPeriod.SetCalculatedUsedSeats(result);
+					keyValuePair.Value.SetCalculatedLoggedOn(result);
+					keyValuePair.Value.SetCalculatedUsedSeats(result);
 				}
 			}
 		}

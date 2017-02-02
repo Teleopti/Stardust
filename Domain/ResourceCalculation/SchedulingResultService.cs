@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			if (!emptyCache)
 			{
-				DateTimePeriod? relevantPeriod = _relevantSkillStaffPeriods.Period();
+				DateTimePeriod? relevantPeriod = Period(_relevantSkillStaffPeriods.Items());
 				if (!relevantPeriod.HasValue)
 					return _relevantSkillStaffPeriods;
 
@@ -84,21 +85,55 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			return resources;
 		}
+
+		public DateTimePeriod? Period(IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> items)
+		{
+			DateTime? minTime = null, maxTime = null;
+
+			foreach (var periodCollection in items.Select(x => x.Value))
+			{
+				if (periodCollection.Items().Any())
+				{
+					var currentMinTime = periodCollection.Items().Min(p => p.Key.StartDateTime);
+					var currentMaxTime = periodCollection.Items().Max(p => p.Key.EndDateTime);
+					if (!maxTime.HasValue || currentMaxTime > maxTime.Value)
+					{
+						maxTime = currentMaxTime;
+					}
+
+					if (!minTime.HasValue || currentMinTime < minTime.Value)
+					{
+						minTime = currentMinTime;
+					}
+				}
+			}
+
+			DateTimePeriod? returnValue = (!minTime.HasValue || !maxTime.HasValue)
+														 ? (DateTimePeriod?)null
+														 : new DateTimePeriod(minTime.Value, maxTime.Value);
+			return returnValue;
+		}
 	}
 
 	public class SkillResourceCalculationPeriodWrapper : ISkillResourceCalculationPeriodDictionary
 	{
-		private readonly ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
-
+		private readonly IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> _items;
+		
 		public SkillResourceCalculationPeriodWrapper(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods)
 		{
-			_relevantSkillStaffPeriods = relevantSkillStaffPeriods;
+			_items = ((SkillSkillStaffPeriodExtendedDictionary)relevantSkillStaffPeriods).Select(w => new KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>(w.Key, w.Value));
+		}
+
+		public SkillResourceCalculationPeriodWrapper(List<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> result)
+		{
+			_items = result;
 		}
 
 		public bool TryGetValue(ISkill skill, out IResourceCalculationPeriodDictionary resourceCalculationPeriods)
 		{
-			ISkillStaffPeriodDictionary wrappedDictionary;
-			if (_relevantSkillStaffPeriods.TryGetValue(skill, out wrappedDictionary))
+			var wrappedDictionary = _items.FirstOrDefault(x => x.Key.Equals(skill)).Value;
+
+			if (wrappedDictionary != null)
 			{
 				resourceCalculationPeriods = wrappedDictionary;
 				return true;
@@ -109,22 +144,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate)
 		{
-			ISkillStaffPeriodDictionary dictionary;
-			if (_relevantSkillStaffPeriods.TryGetValue(skill, out dictionary))
-			{
-				return dictionary.SkillOpenHoursCollection.Any(openHourPeriod => openHourPeriod.Intersect(periodToCalculate));
-			}
-			return false;
+			var pair = _items.Where(x => x.Key.Equals(skill)).ToList();
+			if (!pair.Any()) return false;
+
+			if (pair.First().Value == null) return false;
+			IResourceCalculationPeriodDictionary resources = pair.First().Value;
+			
+			IResourceCalculationPeriod items;
+			
+			return resources.TryGetValue(periodToCalculate, out items);
 		}
 
 		public IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items()
 		{
-			return ((SkillSkillStaffPeriodExtendedDictionary)_relevantSkillStaffPeriods).Select(w => new KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>(w.Key, w.Value));
-		}
-
-		public DateTimePeriod? Period()
-		{
-			return _relevantSkillStaffPeriods.Period();
+			return _items;
 		}
 	}
 }

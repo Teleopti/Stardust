@@ -5,21 +5,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 {
 	public class NonBlendSkillCalculator : INonBlendSkillCalculator
 	{
-        public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, bool addToEarlierResult)
+		public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections,
+			IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> relevantResourceCalculationPeriods,
+			bool addToEarlierResult)
 		{
-			foreach (KeyValuePair<ISkill, IResourceCalculationPeriodDictionary> pair in relevantSkillStaffPeriods.Items())
+			foreach (var pair in relevantResourceCalculationPeriods)
 			{
-                var skill = pair.Key;
-                if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
+				var skill = pair.Key;
+				if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
 					continue;
 
-				IResourceCalculationPeriodDictionary skillStaffPeriodDictionary = pair.Value;
-			    
-				foreach (IResourceCalculationPeriod skillStaffPeriod in skillStaffPeriodDictionary.OnlyValues())
+				var skillStaffPeriodDictionary = pair.Value;
+
+				foreach (var skillStaffPeriod in skillStaffPeriodDictionary.OnlyValues())
 				{
-                    var result = relevantProjections.SkillResources(skill, skillStaffPeriod.CalculationPeriod).Item1;
-                    if (addToEarlierResult)
-                        result += skillStaffPeriod.CalculatedLoggedOn;
+					var result = relevantProjections.SkillResources(skill, skillStaffPeriod.CalculationPeriod).Item1;
+					if (addToEarlierResult)
+						result += skillStaffPeriod.CalculatedLoggedOn;
 
 					skillStaffPeriod.SetCalculatedLoggedOn(result);
 					skillStaffPeriod.SetCalculatedResource65(result);

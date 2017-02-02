@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillStaffPeriodHolder = schedulingResultStateHolder.SkillStaffPeriodHolder;
 			SkillDays = schedulingResultStateHolder.SkillDays;
 			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
+			SkillResourceCalculationPeriodDictionary =
+				new SkillResourceCalculationPeriodWrapper(SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
 		}
 
 		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
@@ -31,14 +33,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDays);
 			SkillCombinationHolder = new SkillCombinationHolder();
 			SkillDays = skillDays;
+			SkillResourceCalculationPeriodDictionary =
+				new SkillResourceCalculationPeriodWrapper(SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
 		}
-		public ResourceCalculationData(IEnumerable<ISkill> skills,SkillStaffPeriodHolder skillStaffPeriodHolder)
+		public ResourceCalculationData(IEnumerable<ISkill> skills, ISkillResourceCalculationPeriodDictionary skillResourceCalculationPeriodDictionary)
 		{
 			ConsiderShortBreaks = false;
 			DoIntraIntervalCalculation = false;
 			Schedules = null;
 			Skills = skills;
-			SkillStaffPeriodHolder = skillStaffPeriodHolder;
+			SkillResourceCalculationPeriodDictionary = skillResourceCalculationPeriodDictionary;
 		}
 
 		public IScheduleDictionary Schedules { get; }
@@ -49,5 +53,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
 		public SkillCombinationHolder SkillCombinationHolder { get; }
+		public ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; }
+		
 	}
 }
