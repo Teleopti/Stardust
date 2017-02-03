@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ResourceCalculationDataConatainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool primarySkillMode, bool useAllSkills)
 		{
 			_skillCombinationResources = skillCombinationResources;
-			//_skills.Where(s => s.Activity != null && s.Activity.Equals(activity)).ToLookup(s => s.Id.GetValueOrDefault())
 			_allSkills = allSkills.ToLookup(s => s.Id.GetValueOrDefault());
 			PrimarySkillMode = primarySkillMode;
 			MinSkillResolution = allSkills.Any() ? allSkills.Min(s => s.DefaultResolution) : 15;
