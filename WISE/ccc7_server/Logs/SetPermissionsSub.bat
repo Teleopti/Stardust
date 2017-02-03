@@ -13,7 +13,6 @@ SET IIS8=8
 SET IIS7=7
 SET IIS7PoolUser40=IIS APPPOOL\Teleopti WFM
 SET IIS7PoolUser40Web=IIS APPPOOL\Teleopti Web
-SET IIS7PoolUser40Broker=IIS APPPOOL\Teleopti Broker
 SET IIS7PoolUser40RTA=IIS APPPOOL\Teleopti RTA
 SET IIS7PoolUser40SDK=IIS APPPOOL\Teleopti SDK
 SET TargetFolder=%~5
@@ -31,7 +30,6 @@ SET /A localError=%errorlevel%
 IF %IISVersion% EQU %IIS8% (
 Call:SetPermissions "%IIS7PoolUser40%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40Web%" %localError% localError
-Call:SetPermissions "%IIS7PoolUser40Broker%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40RTA%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40SDK%" %localError% localError
 )
@@ -39,7 +37,6 @@ Call:SetPermissions "%IIS7PoolUser40SDK%" %localError% localError
 IF %IISVersion% EQU %IIS7% (
 Call:SetPermissions "%IIS7PoolUser40%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40Web%" %localError% localError
-Call:SetPermissions "%IIS7PoolUser40Broker%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40RTA%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40SDK%" %localError% localError
 )
