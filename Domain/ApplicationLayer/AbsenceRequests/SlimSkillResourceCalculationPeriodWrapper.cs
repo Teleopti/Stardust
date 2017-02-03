@@ -31,5 +31,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return _relevantSkillStaffPeriods;
 		}
 
+		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
+		{
+			var wrappedDictionary = _relevantSkillStaffPeriods.FirstOrDefault(x => x.Key.Equals(skill)).Value;
+			if (wrappedDictionary != null)
+			{
+				IResourceCalculationPeriod skillStaffPeriod;
+				if (wrappedDictionary.TryGetValue(period, out skillStaffPeriod))
+				{
+					dataForInterval = (IShovelResourceDataForInterval)skillStaffPeriod;
+					return true;
+				}
+			}
+			dataForInterval = null;
+			return false;
+		}
 	}
 }

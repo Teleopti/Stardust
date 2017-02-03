@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 	}
 
-	public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder, IShovelResourceData
+	public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder
 	{
 		private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
 		private readonly object Locker = new object();
@@ -490,20 +490,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _internalDictionary.GuessResourceCalculationHasBeenMade();
 		}
 
-		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
-		{
-			ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
-			if (SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriodDictionary))
-			{
-				ISkillStaffPeriod skillStaffPeriod;
-				if (skillStaffPeriodDictionary.TryGetValue(period, out skillStaffPeriod))
-				{
-					dataForInterval = (IShovelResourceDataForInterval)skillStaffPeriod;
-					return true;
-				}
-			}
-			dataForInterval = null;
-			return false;
-		}
+		
 	}
 }

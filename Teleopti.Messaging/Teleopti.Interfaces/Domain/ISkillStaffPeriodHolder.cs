@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     ///  Created by: Ola
     ///  Created date: 2008-11-17    
     /// /// </remarks>
-    public interface ISkillStaffPeriodHolder: IShovelResourceData
+    public interface ISkillStaffPeriodHolder
     {
 	    IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(
 		    DateTimePeriod onPeriod, IList<ISkill> onSkills, ISkillPriorityProvider skillPriorityProvider);

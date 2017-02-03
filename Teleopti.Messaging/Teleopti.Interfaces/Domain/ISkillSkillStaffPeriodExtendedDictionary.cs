@@ -5,7 +5,7 @@ using System.Security;
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface ISkillResourceCalculationPeriodDictionary
+	public interface ISkillResourceCalculationPeriodDictionary : IShovelResourceData
 	{
 		bool TryGetValue(ISkill skill, out IResourceCalculationPeriodDictionary resourceCalculationPeriods);
 		bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate);

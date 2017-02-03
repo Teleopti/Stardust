@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Cascading;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
@@ -61,7 +62,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 			_schedulingResultService.SchedulingResult(_period);
 			var dateOnlyPeriodInUtc = _period.ToDateOnlyPeriod(TimeZoneInfo.Utc); //don't know if correct - copied from StageScheduleForecastSkillJobStep when getting skills
-			_shovelResources.Execute((IShovelResourceData)_skillStaffPeriodHolder, _scheduleDictionary, _skillsWithSkillDays, dateOnlyPeriodInUtc,null);
+			_shovelResources.Execute(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary), _scheduleDictionary, _skillsWithSkillDays, dateOnlyPeriodInUtc,null);
 
 			collectResourceData(_skillDaysDictionary, useShrinkage, insertDateTime);
 		}

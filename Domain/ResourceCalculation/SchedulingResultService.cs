@@ -159,5 +159,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			return _items;
 		}
+
+		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
+		{
+			var wrappedDictionary = _items.FirstOrDefault(x => x.Key.Equals(skill)).Value;
+			if (wrappedDictionary != null)
+			{
+				IResourceCalculationPeriod skillStaffPeriod;
+				if (wrappedDictionary.TryGetValue(period, out skillStaffPeriod))
+				{
+					dataForInterval = (IShovelResourceDataForInterval) skillStaffPeriod;
+					return true;
+				}
+			}
+			dataForInterval = null;
+			return false;
+		}
 	}
 }
