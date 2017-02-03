@@ -50,6 +50,7 @@ RTA_FasterAgentsView_42039 = false
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
+
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
 WfmTeamSchedule_SaveFavoriteSearches_42073 = true
@@ -207,6 +208,7 @@ ReadModel_ToHangfire_39147 = true
 NewPasswordHash_40460 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC
+Wfm_Timebank_GUI_42861 = RC
 AbsenceRequest_WithOrWithoutShrinkage_41060 = true
 LastHandlers_ToHangfire_41203 = true
 ETL_EventbasedTimeZone_40870 = RC
