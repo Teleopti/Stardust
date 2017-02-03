@@ -29,35 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 			foreach (var shift in shifts)
 			{
-				var thisShiftsPeak = 0d;
-
-				foreach (var maxSeatSkillDay in maxSeatSkillDays)
-				{
-					foreach (var skillStaffPeriod in maxSeatSkillDay.SkillStaffPeriodCollection)
-					{
-						foreach (var layer in shift.MainShiftProjection)
-						{
-							if (!layer.Period.Intersect(skillStaffPeriod.Period))
-								continue;
-
-							var activity = (IActivity)layer.Payload;
-							var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
-
-							if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer, person.PermissionInformation.DefaultTimeZone()))
-							{
-								thisShiftsPeak = double.MaxValue;
-								break;
-							}
-
-							var occupiedSeatsThisInterval = _usedSeats.Fetch(skillStaffPeriod);
-							if (thisShiftRequiresOneSeatExtra)
-							{
-								occupiedSeatsThisInterval++;
-							}
-							thisShiftsPeak = Math.Max(thisShiftsPeak, occupiedSeatsThisInterval);
-						}
-					}
-				}
+				var thisShiftsPeak = thisShiftsValue(person, maxSeatSkillDays, shift, hasNonMaxSeatSkills, skillDays, bestShiftValue);
 
 				if (thisShiftsPeak < bestShiftValue)
 				{
@@ -67,6 +39,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 
 			return ret;
+		}
+
+		private double thisShiftsValue(IPerson person, IEnumerable<ISkillDay> maxSeatSkillDays, IShiftProjectionCache shift,
+			bool hasNonMaxSeatSkills, IEnumerable<ISkillDay> skillDays, double bestShiftValue)
+		{
+			var thisShiftsPeak = 0d;
+
+			foreach (var maxSeatSkillDay in maxSeatSkillDays)
+			{
+				foreach (var skillStaffPeriod in maxSeatSkillDay.SkillStaffPeriodCollection)
+				{
+					foreach (var layer in shift.MainShiftProjection)
+					{
+						if (!layer.Period.Intersect(skillStaffPeriod.Period))
+							continue;
+
+						var activity = (IActivity) layer.Payload;
+						var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
+
+						if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer, person.PermissionInformation.DefaultTimeZone()))
+						{
+							return double.MaxValue;
+						}
+
+						var occupiedSeatsThisInterval = _usedSeats.Fetch(skillStaffPeriod);
+						if (thisShiftRequiresOneSeatExtra)
+						{
+							occupiedSeatsThisInterval++;
+						}
+						thisShiftsPeak = Math.Max(thisShiftsPeak, occupiedSeatsThisInterval);
+						if (thisShiftsPeak >= bestShiftValue) //jump out early
+						{
+							return double.MaxValue;
+						}
+					}
+				}
+			}
+			return thisShiftsPeak;
 		}
 	}
 }
