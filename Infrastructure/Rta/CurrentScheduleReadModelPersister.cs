@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
@@ -15,18 +14,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
-		private readonly IKeyValueStorePersister _keyValues;
 
 		public CurrentScheduleReadModelPersister(
 			ICurrentReadModelUnitOfWork unitOfWork, 
 			IJsonSerializer serializer, 
-			IJsonDeserializer deserializer,
-			IKeyValueStorePersister keyValues)
+			IJsonDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
 			_deserializer = deserializer;
-			_keyValues = keyValues;
 		}
 
 		public IEnumerable<ScheduledActivity> Read()

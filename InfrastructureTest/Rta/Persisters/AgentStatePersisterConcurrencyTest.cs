@@ -29,19 +29,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldNotUpdateInParalell()
 		{
 			var runner = new ConcurrencyRunner();
-			runner.InSync(() => Service.Prepare("usercode"));
+			var person = Guid.NewGuid();
+			runner.InSync(() => Service.Prepare(person));
 
-			runner.InParallel(() => Service.AddOne("usercode")).Times(20);
+			runner.InParallel(() => Service.AddOne(person)).Times(20);
 			runner.Wait();
 
-			Service.Get("usercode").StateCode.Should().Be("20");
+			Service.Get(person).StateCode.Should().Be("20");
 		}
 
 		[Test]
 		public void ShouldNotUpdateInParalellWithAll()
 		{
 			var runner = new ConcurrencyRunner();
-			var persons = Enumerable.Range(0, 20).Select(i => $"user{i}").ToArray();
+			var persons = Enumerable.Range(0, 20).Select(i => Guid.NewGuid()).ToArray();
 			persons.ForEach(p => Service.Prepare(p));
 
 			runner.InParallel(() => Service.AddOneToAll());
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldNotUpdateInParalellWithNotInSnapshot()
 		{
 			var runner = new ConcurrencyRunner();
-			var persons = Enumerable.Range(0, 20).Select(i => $"user{i}").ToArray();
+			var persons = Enumerable.Range(0, 20).Select(i => Guid.NewGuid()).ToArray();
 			persons.ForEach(p =>
 			{
 				Service.Prepare(p);
@@ -79,20 +80,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			}
 
 			[UnitOfWork]
-			public virtual void Prepare(string userCode)
+			public virtual void Prepare(Guid personId)
 			{
 				_persister.Prepare(new AgentStatePrepare
 				{
-					PersonId = Guid.NewGuid(),
-					ExternalLogons = new[] {new ExternalLogon {UserCode = userCode, DataSourceId = 0} }
+					PersonId = personId
 				}, DeadLockVictim.Yes);
 			}
 			
 			[UnitOfWork]
-			public virtual void AddOneToNotInSnapshot(DateTime batchId)
+			public virtual void AddOneToNotInSnapshot(DateTime snapshotId)
 			{
-				var externalLogons = _persister.FindForClosingSnapshot(batchId, 0, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
-				var states = _persister.LockNLoad(externalLogons, DeadLockVictim.No).AgentStates;
+				var personIds = _persister.FindForClosingSnapshot(snapshotId, 0, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				if (personIds.IsEmpty())
+					return;
+				var states = _persister.LockNLoad(personIds, DeadLockVictim.No).AgentStates;
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * states.Count()));
 				addOneTo(states);
 			}
@@ -114,28 +116,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				});
 			}
 
-			public virtual void AddOne(string userCode)
+			public virtual void AddOne(Guid personId)
 			{
-				AddOne(userCode, null);
+				AddOne(personId, null);
 			}
 
 			[UnitOfWork]
-			public virtual void AddOne(string userCode, DateTime? batchId)
+			public virtual void AddOne(Guid personId, DateTime? snapshotId)
 			{
-				var model = _persister.ReadForTest(new ExternalLogon {UserCode = userCode})
-					.Single();
+				var model = _persister.ReadForTest(personId).Single();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100));
 				model.StateCode = (int.Parse(model.StateCode ?? "0") + 1).ToString();
 				model.ReceivedTime = model.ReceivedTime ?? "2016-03-15 00:00:00".Utc();
-				model.BatchId = model.BatchId ?? batchId;
+				model.SnapshotId = model.SnapshotId ?? snapshotId;
+				model.SnapshotDataSourceId = 0;
 				_persister.Update(model);
 			}
 
 			[UnitOfWork]
-			public virtual AgentState Get(string userCode)
+			public virtual AgentState Get(Guid personId)
 			{
-				return _persister.ReadForTest(new ExternalLogon {UserCode = userCode})
-					.Single();
+				return _persister.ReadForTest(personId).Single();
 			}
 
 			[UnitOfWork]

@@ -22,13 +22,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Prepare(new AgentStatePrepare
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { UserCode = "user" } }
 			}, DeadLockVictim.Yes);
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.PersonId.Should().Be(person);
-			result.UserCode.Should().Be("user");
 			result.LastCheck.Should().Be(null);
 		}
 
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Prepare(new AgentStatePrepare
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { UserCode = "user"} }
 			}, DeadLockVictim.Yes);
 			Persister.Update(new AgentState
 			{
@@ -49,7 +46,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
-			result.UserCode.Should().Be("user");
 			result.LastCheck.Should().Be("2016-10-26 12:00".Utc());
 		}
 
@@ -60,7 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Prepare(new AgentStatePrepare
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { UserCode = "user" } }
 			}, DeadLockVictim.Yes);
 			Persister.Update(new AgentState
 			{
@@ -70,7 +65,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
-			result.UserCode.Should().Be("user");
 			result.LastCheck.Should().Be(null);
 		}
 		
@@ -81,7 +75,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Persister.Prepare(new AgentStatePrepare
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { UserCode = "user" } }
 			}, DeadLockVictim.Yes);
 			Persister.Update(new AgentState
 			{
@@ -92,7 +85,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
-			result.UserCode.Should().Be("user");
 			result.LastTimeWindowCheckSum.Should().Be(123);
 		}
 

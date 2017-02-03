@@ -18,19 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public IKeyValueStorePersister KeyValueStore;
 		public WithUnitOfWork App;
 		public WithReadModelUnitOfWork ReadModels;
-
-		[Test]
-		public void ShouldReturnMappingVersionLoadingByExternalLogon()
-		{
-			var state = new AgentStateForUpsert {UserCode = "usercode"};
-
-			App.Do(() => Target.Upsert(state));
-			ReadModels.Do(() => KeyValueStore.Update("RuleMappingsVersion", "the version"));
-
-			var result = App.Get(() => Target.LockNLoad(new [] { new ExternalLogon { UserCode = "usercode" } }, DeadLockVictim.Yes));
-			result.MappingVersion.Should().Be("the version");
-		}
-
+		
 		[Test]
 		public void ShouldReturnMappingVersionLoadingByPersonId()
 		{
@@ -42,19 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var result = App.Get(() => Target.LockNLoad(new[] { state.PersonId }, DeadLockVictim.Yes));
 			result.MappingVersion.Should().Be("the version");
 		}
-
-		[Test]
-		public void ShouldReturnScheduleVersionLoadingByExternalLogon()
-		{
-			var state = new AgentStateForUpsert { UserCode = "usercode" };
-
-			App.Do(() => Target.Upsert(state));
-			ReadModels.Do(() => KeyValueStore.Update("CurrentScheduleReadModelVersion", "the version"));
-
-			var result = App.Get(() => Target.LockNLoad(new[] { new ExternalLogon { UserCode = "usercode" } }, DeadLockVictim.Yes));
-			result.ScheduleVersion.Should().Be("the version");
-		}
-
+		
 		[Test]
 		public void ShouldReturnScheduleVersionLoadingByPersonId()
 		{

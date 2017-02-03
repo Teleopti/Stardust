@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = model.PersonId,
 				TeamId = model.TeamId,
 				SiteId = model.SiteId,
-				BusinessUnitId = model.BusinessUnitId,
-				ExternalLogons = new[] {new ExternalLogon {DataSourceId = model.DataSourceId, UserCode = model.UserCode} }
+				BusinessUnitId = model.BusinessUnitId
 			}, DeadLockVictim.Yes);
 			instance.Update(model);
 		}
@@ -23,8 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	{
 		public AgentStateForUpsert()
 		{
-			DataSourceId = 0;
-			UserCode = "usercode";
+			PersonId = Guid.NewGuid();
+			SnapshotDataSourceId = 0;
 			ReceivedTime = DateTime.UtcNow;
 		}
 	}

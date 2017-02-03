@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		{
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
 
+			system.UseTestDouble<AutoFillKeyValueStore>().For<IKeyValueStorePersister>();
+			system.UseTestDouble<AutoFillExternalLogonReader>().For<IExternalLogonReader>();
 			system.UseTestDouble<AutoFillMappingReader>().For<IMappingReader>();
 			system.UseTestDouble<AutoFillCurrentScheduleReadModelReader>().For<IScheduleReader>();
 			system.UseTestDouble<AutoFillAgentStatePersister>().For<FakeAgentStatePersister, IAgentStatePersister>();

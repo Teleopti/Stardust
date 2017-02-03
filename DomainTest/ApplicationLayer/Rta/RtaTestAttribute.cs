@@ -21,9 +21,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			base.Setup(system, configuration);
 
 			system.UseTestDouble<AutoFillKeyValueStore>().For<IKeyValueStorePersister>();
+			system.UseTestDouble<AutoFillExternalLogonReader>().For<IExternalLogonReader>();
 			system.UseTestDouble<AutoFillMappingReader>().For<IMappingReader>();
 			system.UseTestDouble<AutoFillCurrentScheduleReadModelReader>().For<IScheduleReader>();
 			system.UseTestDouble<AutoFillAgentStatePersister>().For<FakeAgentStatePersister, IAgentStatePersister>();
+		}
+	}
+
+	public class AutoFillExternalLogonReader : FakeExternalLogonReadModelPersister
+	{
+		private readonly IPersonRepository _persons;
+		private readonly INow _now;
+
+		public AutoFillExternalLogonReader(
+			IPersonRepository persons,
+			INow now)
+		{
+			_persons = persons;
+			_now = now;
+		}
+
+		public override IEnumerable<ExternalLogonReadModel> Read()
+		{
+			return _persons.LoadAll()
+				.SelectMany(x =>
+				{
+					var period = x.Period(new DateOnly(_now.UtcDateTime()));
+					if (period == null)
+						return Enumerable.Empty<ExternalLogonReadModel>();
+
+					return period
+						.ExternalLogOnCollection
+						.Select(l => new ExternalLogonReadModel
+						{
+							PersonId = x.Id.Value,
+							DataSourceId = l.DataSourceId,
+							UserCode = l.AcdLogOnOriginalId
+						});
+				}).ToArray();
 		}
 	}
 
@@ -139,33 +174,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						PersonId = x.Id.Value,
 						BusinessUnitId = period.Team?.Site?.BusinessUnit?.Id ?? Guid.Empty,
 						SiteId = period.Team?.Site?.Id,
-						TeamId = period.Team?.Id,
-						ExternalLogons = period.ExternalLogOnCollection
-							.Select(l => new ExternalLogon
-							{
-								DataSourceId = l.DataSourceId,
-								UserCode = l.AcdLogOnOriginalId
-							})
+						TeamId = period.Team?.Id
 					}, DeadLockVictim.Yes);
 				});
 		}
 
-		public override IEnumerable<ExternalLogonForCheck> FindForCheck()
+		public override IEnumerable<PersonForCheck> FindForCheck()
 		{
 			syncFromAggregates();
 			return base.FindForCheck();
 		}
 
-		public override IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, int dataSourceId, string loggedOutState)
+		public override IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, string loggedOutState)
 		{
 			syncFromAggregates();
-			return base.FindForClosingSnapshot(snapshotId, dataSourceId, loggedOutState);
-		}
-
-		public override LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
-		{
-			syncFromAggregates();
-			return base.LockNLoad(externalLogons, deadLockVictim);
+			return base.FindForClosingSnapshot(snapshotId, snapshotDataSourceId, loggedOutState);
 		}
 
 		public override LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)

@@ -43,12 +43,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
 			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
+			Publisher.AddHandler(typeof(CurrentScheduleReadModelUpdater));
+			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
 			Analytics.WithDataSource(7, new BatchForTest().SourceId);
 			Database
 				.WithAgent("usercode1")
 				.WithAgent("usercode2")
 				.WithAgent("usercode3")
-				.WithStateGroup("default", true);
+				.WithStateGroup("default", true)
+				.PublishRecurringEvents();
 			Context.Logout();
 
 			Target.SaveStateBatch(new BatchForTest

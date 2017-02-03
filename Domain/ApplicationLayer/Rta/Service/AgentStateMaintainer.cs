@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
+﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 
@@ -42,12 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PersonId = @event.PersonId,
 				BusinessUnitId = @event.BusinessUnitId.GetValueOrDefault(),
 				SiteId = @event.SiteId,
-				TeamId = @event.TeamId,
-				ExternalLogons = @event.ExternalLogons.Select(x => new ExternalLogon
-				{
-					DataSourceId = x.DataSourceId,
-					UserCode = x.UserCode,
-				}).ToArray()
+				TeamId = @event.TeamId
 			}, DeadLockVictim.Yes);
 		}
 

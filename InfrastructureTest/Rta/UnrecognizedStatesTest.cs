@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
 			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
+			Publisher.AddHandler(typeof(CurrentScheduleReadModelUpdater));
+			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
 			Now.Is("2015-05-13 08:00");
 			TheService.DoesWhileLoggedIn(uow =>
 			{
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonCreatorr.CreatePersonWithExternalLogOn(Now, "usercode");
 				uow.PersistAll();
 			});
+			Database.PublishRecurringEvents();
 			Context.Logout();
 
 			Target.SaveState(new StateInputModel
@@ -81,6 +84,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
 			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
+			Publisher.AddHandler(typeof(CurrentScheduleReadModelUpdater));
+			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
 			Now.Is("2016-07-11 08:00");
 			TheService.DoesWhileLoggedIn(uow =>
 			{
@@ -89,6 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				20.Times(i => PersonCreatorr.CreatePersonWithExternalLogOn(Now, i.ToString()));
 				uow.PersistAll();
 			});
+			Database.PublishRecurringEvents();
 			Context.Logout();
 
 			Target.SaveStateBatch(new BatchInputModel

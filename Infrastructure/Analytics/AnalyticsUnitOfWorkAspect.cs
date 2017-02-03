@@ -23,15 +23,19 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
-			var unitOfWork = _unitOfWork.Current();
+			// the uow may be null...
+			// .. if the state is disposing
+			// .. or something went wrong on before/start
+			// .. we think. we have seen exceptions. ;)
+			var uow = _unitOfWork.Current();
 			try
 			{
 				if (exception != null) return;
-				unitOfWork.PersistAll();
+				uow?.PersistAll();
 			}
 			finally
 			{
-				unitOfWork.Dispose();
+				uow?.Dispose();
 			}
 		}
 	}

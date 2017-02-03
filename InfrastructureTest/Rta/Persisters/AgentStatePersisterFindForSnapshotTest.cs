@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				DataSourceId = 6
+				SnapshotDataSourceId = 6
 			};
 			Persister.Upsert(state);
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PlatformTypeId = Guid.NewGuid(),
 				StateStartTime = "2015-03-06 15:00".Utc(),
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				DataSourceId = 6
+				SnapshotDataSourceId = 6
 			};
 			Persister.Upsert(agentStateReadModel);
 
@@ -70,21 +70,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person1,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
 				StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot,
-				DataSourceId = 1,
-				UserCode = "usercode1"
+				SnapshotDataSourceId = 1
 			});
 			Persister.Upsert(new AgentStateForUpsert
 			{
 				PersonId = person2,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
-				DataSourceId = 1,
-				UserCode = "usercode2"
+				SnapshotDataSourceId = 1
 			});
 
-			var result = Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), 1, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.Single();
-			result.DataSourceId.Should().Be(1);
-			result.UserCode.Should().Be("usercode2");
+			Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), 1, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.Single()
+				.Should().Be(person2);
 		}
 
 	}

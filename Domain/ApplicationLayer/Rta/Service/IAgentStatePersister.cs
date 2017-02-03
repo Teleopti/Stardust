@@ -51,11 +51,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim);
 
 		// find things to work with
-		IEnumerable<ExternalLogonForCheck> FindForCheck();
-		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, int dataSourceId, string loggedOutState);
+		IEnumerable<PersonForCheck> FindForCheck();
+		IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, string loggedOutState);
 
 		// lock and update
-		LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
 		LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim);
 		void Update(AgentState model);
 	}

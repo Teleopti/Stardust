@@ -23,18 +23,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			lock (_lock)
 			{
 				var copyFrom = _data.FirstOrDefault(x => x.PersonId == model.PersonId) ?? new AgentState();
-				_data = _data.Where(x => x.PersonId != model.PersonId).ToArray();
-				model.ExternalLogons.ForEach(x =>
-				{
-					var adding = copyFrom.CopyBySerialization();
-					adding.PersonId = model.PersonId;
-					adding.BusinessUnitId = model.BusinessUnitId;
-					adding.SiteId = model.SiteId;
-					adding.TeamId = model.TeamId;
-					adding.DataSourceId = x.DataSourceId;
-					adding.UserCode = x.UserCode;
-					_data = _data.Append(adding).ToArray();
-				});
+				var adding = copyFrom.CopyBySerialization();
+				adding.PersonId = model.PersonId;
+				adding.BusinessUnitId = model.BusinessUnitId;
+				adding.SiteId = model.SiteId;
+				adding.TeamId = model.TeamId;
+				_data = _data
+					.Where(x => x.PersonId != model.PersonId)
+					.Append(adding)
+					.ToArray();
 			}
 		}
 
@@ -50,13 +47,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			{
 				var updated = _data
 					.Where(x => x.PersonId == model.PersonId)
-					.Select(x =>
-					{
-						var updating = JsonConvert.DeserializeObject<AgentState>(JsonConvert.SerializeObject(model));
-						updating.DataSourceId = x.DataSourceId;
-						updating.UserCode = x.UserCode;
-						return updating;
-					});
+					.Select(x => JsonConvert.DeserializeObject<AgentState>(JsonConvert.SerializeObject(model)))
+					.ToArray();
 
 				_data = _data
 					.Where(x => x.PersonId != model.PersonId)
@@ -65,46 +57,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			}
 		}
 
-		public virtual IEnumerable<ExternalLogonForCheck> FindForCheck()
+		public virtual IEnumerable<PersonForCheck> FindForCheck()
 		{
 			lock (_lock)
 				return _data
-					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.Select(x => new ExternalLogonForCheck
+					.Select(x => new PersonForCheck
 					{
 						PersonId = x.PersonId,
-						DataSourceId = x.DataSourceId,
-						UserCode = x.UserCode,
 						LastCheck = x.ReceivedTime,
 						LastTimeWindowCheckSum = x.TimeWindowCheckSum
 					})
 					.ToArray();
 		}
 
-		public virtual IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, int dataSourceId, string loggedOutState)
+		public virtual IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, string loggedOutState)
 		{
 			lock (_lock)
 				return _data
-					.Where(s => s.DataSourceId == dataSourceId && (s.BatchId < snapshotId || s.BatchId == null) && s.StateCode != loggedOutState)
-					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.Select(x => new ExternalLogon
-					{
-						DataSourceId = x.DataSourceId,
-						UserCode = x.UserCode,
-						PersonId = x.PersonId
-					})
+					.Where(s => s.SnapshotDataSourceId == snapshotDataSourceId && (s.SnapshotId < snapshotId || s.SnapshotId == null) && s.StateCode != loggedOutState)
+					.Select(x => x.PersonId)
 					.ToArray();
-		}
-
-		public virtual LockedData LockNLoad(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
-		{
-			lock (_lock)
-				return new LockedData
-				{
-					AgentStates = _data
-						.Where(x => externalLogons.Any(y => y.UserCode == x.UserCode && y.DataSourceId == x.DataSourceId))
-						.ToArray()
-				};
 		}
 
 		public virtual LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
@@ -114,7 +86,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					AgentStates = _data
 						.Where(x => personIds.Contains(x.PersonId))
-						.GroupBy(x => x.PersonId, (guid, states) => states.First())
 						.ToArray()
 				};
 		}

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
+			builder.RegisterType<ExternalLogonMapper>().SingleInstance();
 			builder.RegisterType<ScheduleCache>().SingleInstance();
 			builder.RegisterType<EventualStateCodeAdder>()
 				.As<IStateCodeAdder>()
@@ -64,6 +65,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentScheduleReadModelPersister>()
 				.As<ICurrentScheduleReadModelPersister>()
 				.As<IScheduleReader>()
+				.SingleInstance().ApplyAspects();
+			builder.RegisterType<ExternalLogonReadModelPersister>()
+				.As<IExternalLogonReadModelPersister>()
+				.As<IExternalLogonReader>()
 				.SingleInstance().ApplyAspects();
 
 			builder.RegisterType<AgentViewModelBuilder>().SingleInstance();

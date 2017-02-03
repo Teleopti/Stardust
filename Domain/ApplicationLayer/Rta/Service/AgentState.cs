@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -10,30 +9,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid BusinessUnitId { get; set; }
 		public Guid? TeamId { get; set; }
 		public Guid? SiteId { get; set; }
-		public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
 	}
 
-	public class ExternalLogon
+	public class PersonForCheck
 	{
-		public int DataSourceId { get; set; }
-		public string UserCode { get; set; }
 		public Guid PersonId { get; set; }
-
-		public string NormalizedString()
-		{
-			return $"{DataSourceId}__{UserCode}";
-		}
-	}
-
-	public class ExternalLogonForCheck : ExternalLogon
-	{
 		public DateTime? LastCheck { get; set; }
 		public int? LastTimeWindowCheckSum { get; set; }
 	}
 
 	public class AgentState
 	{
-		public DateTime? BatchId { get; set; }
+		public DateTime? SnapshotId { get; set; }
+		public int? SnapshotDataSourceId { get; set; }
 		public Guid PlatformTypeId { get; set; }
 
 		public Guid PersonId { get; set; }
@@ -54,10 +42,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime? AlarmStartTime { get; set; }
 
 		public int? TimeWindowCheckSum { get; set; }
-
-		public int DataSourceId { get; set; }
-		public string UserCode { get; set; }
-
 	}
 
 	public static class AgentStateExtensions

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return true;
 			
 			var isSameState =
-				SnapshotId.Equals(Stored.BatchId) &&
+				SnapshotId.Equals(Stored.SnapshotId) &&
 				!Schedule.ActivityChanged() &&
 				!State.StateChanged() &&
 				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum)
@@ -86,12 +86,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// for logging
 		public override string ToString()
 		{
-			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, DataSourceId: {DataSourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
+			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, SourceId: {SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
-		public string UserCode => Stored?.UserCode;
-		public int? DataSourceId => Stored?.DataSourceId;
-		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.BatchId;
+		public string SourceId => Input.SourceId;
+		public string UserCode => Input?.UserCode;
+		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.SnapshotId;
+		public int? SnapshotDataSourceId => Input.SnapshotDataSourceId ??  Stored?.SnapshotDataSourceId;
 		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
 		public string StateCode => Input.StateCode ?? Stored?.StateCode;
 		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored?.StateStartTime;
@@ -109,7 +110,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BusinessUnitId = BusinessUnitId,
 				SiteId = SiteId,
 				TeamId = TeamId,
-				BatchId = SnapshotId,
+				SnapshotId = SnapshotId,
+				SnapshotDataSourceId = SnapshotDataSourceId,
 
 				PlatformTypeId = PlatformTypeId,
 				ReceivedTime = CurrentTime,

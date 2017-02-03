@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
 			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
+			Publisher.AddHandler(typeof(CurrentScheduleReadModelUpdater));
+			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
 			var logOutBySnapshot = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot;
 			Database
 				.WithDataSource("sourceId")

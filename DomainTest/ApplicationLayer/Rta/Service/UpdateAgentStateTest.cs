@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StoredState.StateCode.Should().Be("phone");
 		}
 
-
 		[Test]
 		public void ShouldPersistWhenNotifiedOfPossibleScheduleChange()
 		{

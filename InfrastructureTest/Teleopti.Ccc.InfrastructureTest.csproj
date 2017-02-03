@@ -304,13 +304,13 @@
     <Compile Include="Rta\Persisters\AgentStatePersisterConcurrencyTest.cs" />
     <Compile Include="RetryingQueueSimulator.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />
-    <Compile Include="Rta\Persisters\AgentStatePersisterExternalLogonPersonMappingTest.cs" />
+    <Compile Include="Rta\Persisters\AgentStatePersisterExtensions.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterFindForSnapshotTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterFindForCheckTest.cs" />
-    <Compile Include="Rta\Persisters\AgentStatePersisterFindTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForOrganizationAndSkill.cs" />
     <Compile Include="Rta\Persisters\CurrentScheduleReadModelPersisterTest.cs" />
+    <Compile Include="Rta\Persisters\ExternalLogonReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\HistoricalAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelUpdaterTest.cs" />

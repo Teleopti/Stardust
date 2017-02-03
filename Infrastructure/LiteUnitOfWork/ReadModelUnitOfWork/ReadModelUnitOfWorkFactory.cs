@@ -40,16 +40,20 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 
 		public void EndUnitOfWork(Exception exception)
 		{
+			// the uow may be null...
+			// .. if the state is disposing
+			// .. or something went wrong on before/start
+			// .. we think. we have seen exceptions. ;)
 			var uow = _state.Get();
 			_state.Set(null);
 			try
 			{
 				if (exception == null)
-					uow.Commit();
+					uow?.Commit();
 			}
 			finally
 			{
-				uow.Dispose();
+				uow?.Dispose();
 			}
 		}
 

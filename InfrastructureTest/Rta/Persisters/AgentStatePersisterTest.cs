@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,33 +6,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
-using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.ExternalLogon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
-	public static class AgentStatePersisterExtensions
-	{
-		public static IEnumerable<AgentState> ReadForTest(this IAgentStatePersister instance)
-		{
-			return instance.LockNLoad(instance.FindForCheck(), DeadLockVictim.Yes).AgentStates;
-		}
-
-		public static IEnumerable<AgentState> ReadForTest(this IAgentStatePersister instance, IEnumerable<Guid> personIds)
-		{
-			return instance.LockNLoad(personIds, DeadLockVictim.Yes).AgentStates;
-		}
-
-		public static IEnumerable<AgentState> ReadForTest(this IAgentStatePersister instance, IEnumerable<ExternalLogon> externalLogons)
-		{
-			return instance.LockNLoad(externalLogons, DeadLockVictim.Yes).AgentStates;
-		}
-
-		public static IEnumerable<AgentState> ReadForTest(this IAgentStatePersister instance, ExternalLogon externalLogon)
-		{
-			return instance.LockNLoad(new[] { externalLogon }, DeadLockVictim.Yes).AgentStates;
-		}
-	}
-
 	[TestFixture]
 	[UnitOfWorkTest]
 	public class AgentStatePersisterTest
@@ -49,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon {UserCode = "usercode"}).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.Should().Not.Be.Null();
 		}
 
@@ -61,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -73,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.TeamId.Should().Be(teamId);
 		}
 
@@ -85,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.SiteId.Should().Be(siteId);
 		}
 
@@ -102,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				SiteId = null,
 				PlatformTypeId = Guid.NewGuid(),
 				ReceivedTime = "2015-01-02 10:00".Utc(),
-				BatchId = null,
+				SnapshotId = null,
 
 				StateCode = null,
 				StateGroupId = null,
@@ -113,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				AlarmStartTime = null,
 			});
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(personId).Single()
 				.Should().Not.Be.Null();
 		}
 
@@ -124,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
@@ -135,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.TimeWindowCheckSum.Should().Be(375);
 		}
 
@@ -148,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.TimeWindowCheckSum.Should().Be(475);
 		}
 
@@ -159,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.Adherence.Should().Be(EventAdherence.Neutral);
 		}
 
@@ -174,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Update(state);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" }).Single()
+			Target.ReadForTest(state.PersonId).Single()
 				.Adherence.Should().Be(EventAdherence.In);
 		}
 
@@ -182,12 +157,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldDelete()
 		{
 			var personId = Guid.NewGuid();
-			var model = new AgentStateForUpsert { PersonId = personId };
-			Target.Upsert(model);
+			var state = new AgentStateForUpsert { PersonId = personId };
+			Target.Upsert(state);
 
 			Target.Delete(personId, DeadLockVictim.Yes);
 
-			Target.ReadForTest(new ExternalLogon { UserCode = "usercode" })
+			Target.ReadForTest(state.PersonId)
 				.Should().Be.Empty();
 		}
 		
