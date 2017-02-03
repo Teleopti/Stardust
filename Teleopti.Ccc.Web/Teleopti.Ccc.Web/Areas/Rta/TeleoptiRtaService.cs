@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						StateDescription = stateDescription,
 						PlatformTypeId = platformTypeId,
 						SourceId = sourceId,
-						SnapshotId = fixSnapshotId(batchId)
+						SnapshotId = fixSnapshotId(batchId, isSnapshot)
 					});
 				}
 			});
@@ -85,7 +85,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					.ToArray();
 
 				var mayCloseSnapshot = externalUserStateBatch.Last();
-				var closeSnapshot = isClosingSnapshot(mayCloseSnapshot.UserCode, mayCloseSnapshot.IsSnapshot);
+				var isSnapshot = mayCloseSnapshot.IsSnapshot;
+				var closeSnapshot = isClosingSnapshot(mayCloseSnapshot.UserCode, isSnapshot);
 				if (closeSnapshot)
 					states = states.Take(externalUserStateBatch.Count - 1);
 
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					AuthenticationKey = authenticationKey,
 					PlatformTypeId = platformTypeId,
 					SourceId = sourceId,
-					SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId),
+					SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId, isSnapshot),
 					States = states
 				});
 
@@ -136,9 +137,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return stateCode;
 		}
 
-		private static DateTime? fixSnapshotId(DateTime batchId)
+		private static DateTime? fixSnapshotId(DateTime snapshotId, bool isSnapshot)
 		{
-			return batchId == DateTime.MinValue ? (DateTime?)null : batchId;
+			if (!isSnapshot)
+				return null;
+			if (snapshotId == DateTime.MinValue)
+				return null;
+			return snapshotId;
 		}
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string tenant)
