@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
-	public class AgentsInAlarmForSiteViewModelBuilderTest:ISetup
+	public class AgentsInAlarmForSiteViewModelBuilderTest : ISetup
 	{
 		public AgentsInAlarmForSiteViewModelBuilder Target;
 		public FakeSiteInAlarmReader Database;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-06-21 08:30");
 			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var skill = Guid.NewGuid();			
+			var skill = Guid.NewGuid();
 			Sites.Has(siteId);
 			Database
 				.Has(new AgentStateReadModel
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				})
 				.OnSkill(skill);
 
-			var viewModel = Target.ForSkills(new[] {skill}).Single();
+			var viewModel = Target.ForSkills(new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(siteId);
 			viewModel.OutOfAdherence.Should().Be(1);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				})
 				.OnSkill(skill);
 
-			var result = Target.ForSkills(new[] {skill});
+			var result = Target.ForSkills(new[] { skill });
 
 			result.Single(x => x.Id == siteId1).OutOfAdherence.Should().Be(1);
 			result.Single(x => x.Id == siteId2).OutOfAdherence.Should().Be(2);
@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			viewModel.Id.Should().Be(site);
 			viewModel.OutOfAdherence.Should().Be(0);
 		}
-
 
 		[Test]
 		public void ShouldNotCountSameAgentTwiceForSkillArea()
@@ -145,11 +144,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			viewModel.OutOfAdherence.Should().Be(1);
 		}
 
-
 		[Test]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesName()
 		{
-		
 			var site1 = new Site("B").WithId();
 			var site2 = new Site("C").WithId();
 			var site3 = new Site("A").WithId();
@@ -161,22 +158,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var result = Target.ForSkills(new[] { skill });
 			result.Select(x => x.Id)
-				.Should().Have.SameSequenceAs(new[] 
-				{
-					site3.Id.GetValueOrDefault(),
+				.Should().Have.SameSequenceAs(new[]
+			{
+				site3.Id.GetValueOrDefault(),
 					site1.Id.GetValueOrDefault(),
 					site2.Id.GetValueOrDefault()
-				});
-		
+			});
 		}
 
 		[Test]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesNameAccordingToSwedishName()
 		{
-	
-			var site1 = new Site("Å").WithId(); 
-			var site2 = new Site("Ä").WithId(); 
-			var site3 = new Site("A").WithId(); 
+			var site1 = new Site("Ã…").WithId();
+			var site2 = new Site("Ã„").WithId();
+			var site3 = new Site("A").WithId();
 			var skill = Guid.NewGuid();
 
 			Sites.Has(site2);
@@ -188,13 +183,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var result = Target.ForSkills(new[] { skill });
 			result.Select(x => x.Id)
 				.Should().Have.SameSequenceAs(new[]
-				{
-					site3.Id.GetValueOrDefault(),
+			{
+				site3.Id.GetValueOrDefault(),
 					site1.Id.GetValueOrDefault(),
 					site2.Id.GetValueOrDefault()
-				});
-
+			});
 		}
 	}
-
 }
