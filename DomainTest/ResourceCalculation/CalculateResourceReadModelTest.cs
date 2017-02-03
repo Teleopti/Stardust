@@ -45,11 +45,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45))));
 
 			skillStaffPeriodExt.Add(skill,skillStaffPeriodDic);
-			var fakeholder = new FakeSkillStaffPeriodHolder();
-			fakeholder.SetDictionary(skillStaffPeriodExt);
+			var dic = new SkillResourceCalculationPeriodWrapper(skillStaffPeriodExt);
 			var  fakeResourceCalculationData = new FakeResourceCalculationData();
 			fakeResourceCalculationData.SetSkills(new List<ISkill> {skill});
-			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
+			fakeResourceCalculationData.SetISkillResourceCalculationPeriodDictionary(dic);
 			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
 			Target.Update(new DateTimePeriod(dateTime,dateTime.AddDays(1)));
 
@@ -68,11 +67,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime, dateTime.AddMinutes(15)), getSkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(15))));
 
 			skillStaffPeriodExt.Add(skill, skillStaffPeriodDic);
-			var fakeholder = new FakeSkillStaffPeriodHolder();
-			fakeholder.SetDictionary(skillStaffPeriodExt);
+			var dic = new SkillResourceCalculationPeriodWrapper(skillStaffPeriodExt);
 			var fakeResourceCalculationData = new FakeResourceCalculationData();
 			fakeResourceCalculationData.SetSkills(new List<ISkill> { skill });
-			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
+			fakeResourceCalculationData.SetISkillResourceCalculationPeriodDictionary(dic);
 			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
 			Target.Update(new DateTimePeriod(dateTime, dateTime.AddDays(1)));
 			ScheduleForecastSkillReadModelRepository.PurgeWasCalled.Should().Be.True();
@@ -102,11 +100,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45))));
 
 			skillStaffPeriodExt.Add(skill, skillStaffPeriodDic);
-			var fakeholder = new FakeSkillStaffPeriodHolder();
-			fakeholder.SetDictionary(skillStaffPeriodExt);
+			var dic = new SkillResourceCalculationPeriodWrapper(skillStaffPeriodExt);
 			var fakeResourceCalculationData = new FakeResourceCalculationData();
 			fakeResourceCalculationData.SetSkills(new List<ISkill> { skill });
-			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
+			fakeResourceCalculationData.SetISkillResourceCalculationPeriodDictionary(dic);
 			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
 
 			Target.Update(new DateTimePeriod(dateTime, dateTime.AddDays(1)));

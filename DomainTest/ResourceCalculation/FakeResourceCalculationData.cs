@@ -10,18 +10,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Skills = skills;
 		}
 
-		public void SetSkillStaffPeriodHolder(ISkillStaffPeriodHolder skillStaffPeriodHolder)
+		public void SetISkillResourceCalculationPeriodDictionary(ISkillResourceCalculationPeriodDictionary skillResourceCalculationPeriodDictionary)
 		{
-			SkillStaffPeriodHolder = skillStaffPeriodHolder;
+			SkillResourceCalculationPeriodDictionary = skillResourceCalculationPeriodDictionary;
 		}
 		public IScheduleDictionary Schedules { get; }
 		public bool ConsiderShortBreaks { get; }
 		public bool DoIntraIntervalCalculation { get; }
 		public IEnumerable<ISkill> Skills { get; private set; }
-		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; private set; }
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
 		public SkillCombinationHolder SkillCombinationHolder { get; }
-		public ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; }
+		public ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; private set; }
 	}
 }
