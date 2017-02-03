@@ -299,20 +299,20 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				);
 		}
 
-		public IEnumerable<Domain.ApplicationLayer.Rta.Service.ExternalLogon> Logons()
+		public IEnumerable<ExternalLogon> Logons()
 		{
 			return Enumerable.Range(0, _testConfiguration.NumberOfAgentsInSystem)
-				.Select(roger => new Domain.ApplicationLayer.Rta.Service.ExternalLogon
+				.Select(roger => new ExternalLogon
 				{
 					DataSourceId = _testConfiguration.DataSourceId,
 					UserCode = $"roger{roger}"
 				});
 		}
 
-		public IEnumerable<Domain.ApplicationLayer.Rta.Service.ExternalLogon> LogonsWorking()
+		public IEnumerable<ExternalLogon> LogonsWorking()
 		{
 			return Enumerable.Range(0, _testConfiguration.NumberOfAgentsWorking)
-				.Select(roger => new Domain.ApplicationLayer.Rta.Service.ExternalLogon
+				.Select(roger => new ExternalLogon
 				{
 					DataSourceId = _testConfiguration.DataSourceId,
 					UserCode = $"roger{roger}"
