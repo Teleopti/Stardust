@@ -10,13 +10,21 @@
       },
     });
 
-  TimebankAdminController.inject = [];
-  function TimebankAdminController() {
+  TimebankAdminController.inject = ['timebankAdminService'];
+  function TimebankAdminController(timebankAdminService) {
     var ctrl = this;
-    
+    ctrl.people = [];
+    ctrl.contracts = [];
 
+    ctrl.getContracts = function () {
+      ctrl.contracts = timebankAdminService.getContracts();
+    }
+    ctrl.getPeople = function () {
+      ctrl.people = timebankAdminService.getPeople();
+    }
 
-    ctrl.onInit = function() { };
+    ctrl.getPeople();
+    ctrl.getContracts();
     ctrl.onChanges = function(changesObj) { };
     ctrl.onDestory = function() { };
   }

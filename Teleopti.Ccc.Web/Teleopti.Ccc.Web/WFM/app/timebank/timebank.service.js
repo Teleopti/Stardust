@@ -19,12 +19,25 @@
       }
     ];
 
+    var contracts = [
+      {
+        Name: 'part-time',
+        Id: '2229aff1-a625-4266-b1d7-72f400872efb'
+      }
+    ]
+
     function getPeople() {
       return people;
-    };
+    }
+
+    function getContracts() {
+      return contracts;
+    }
+
 
     var service = {
-      getPeople: getPeople
+      getPeople: getPeople,
+      getContracts: getContracts
     };
 
     return service;

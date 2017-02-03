@@ -3,8 +3,6 @@ describe('timebankAdminService', function() {
 	var $httpBackend,
 		timebankAdminService;
 
-  var people = [];
-
 	beforeEach(function() {
 		module('wfm.timebank');
 	});
@@ -20,6 +18,12 @@ describe('timebankAdminService', function() {
 
     expect(result.length).toEqual(1);
 	});
+
+	it('should get contracts', function() {
+		var result = timebankAdminService.getContracts();
+
+		expect(result.length).toEqual(1);
+	})
 
 
 });

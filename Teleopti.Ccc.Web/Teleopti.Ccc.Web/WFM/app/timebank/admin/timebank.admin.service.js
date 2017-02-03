@@ -9,10 +9,15 @@
   function timebankAdminService(timebankService) {
     
     this.getPeople = getPeople;
+    this.getContracts = getContracts;
 
-    function getPeople(){
+    function getPeople() {
       return timebankService.getPeople();
-    };
+    }
+
+    function getContracts() {
+      return timebankService.getContracts();
+    }
 
   }
 
