@@ -71,9 +71,6 @@ SET /A LocalError=%~2
 ECHO Setting permissions using cacls ...
 ECHO Y|CACLS "%TargetFolder%" /E /G "%SvcLogin%":F
 SET /A LocalError=%LocalError%+%errorlevel%
-if not "%DRIVELETTER%"=="%mySystemDrive%" ECHO CACLS "%DRIVELETTER%" /E /G "%SvcLogin%":R
-if not "%DRIVELETTER%"=="%mySystemDrive%" ECHO Y|CACLS "%DRIVELETTER%" /E /G "%SvcLogin%":R
-SET /A LocalError=%LocalError%+%errorlevel%
 (
 ENDLOCAL
 set "%~3=%localError%"
@@ -90,9 +87,6 @@ SET /A LocalError=%~2
 ECHO Setting permissions using icacls ...
 ECHO icacls "%TargetFolder%" /grant "%SvcLogin%":(OI)(CI)R
 icacls "%TargetFolder%" /grant "%SvcLogin%":(OI)(CI)R
-SET /A LocalError=%LocalError%+%errorlevel%
-if not "%DRIVELETTER%"=="%mySystemDrive%" ECHO icacls "%DRIVELETTER%" /grant "%SvcLogin%":R
-if not "%DRIVELETTER%"=="%mySystemDrive%" icacls "%DRIVELETTER%" /grant "%SvcLogin%":R
 SET /A LocalError=%LocalError%+%errorlevel%
 (
 ENDLOCAL
