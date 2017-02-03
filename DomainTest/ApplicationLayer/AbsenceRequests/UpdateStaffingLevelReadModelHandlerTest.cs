@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			throw new NotImplementedException();
 		}
 
-		public IList<SkillStaffingInterval> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary,
+		public IList<SkillStaffingInterval> CreateReadModel(ISkillResourceCalculationPeriodDictionary skillSkillStaffPeriodExtendedDictionary,
 			DateTimePeriod period)
 		{
 			throw new NotImplementedException();

@@ -13,11 +13,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;
 			Schedules = schedulingResultStateHolder.Schedules;
 			Skills = schedulingResultStateHolder.Skills;
-			SkillStaffPeriodHolder = schedulingResultStateHolder.SkillStaffPeriodHolder;
 			SkillDays = schedulingResultStateHolder.SkillDays;
 			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
 			SkillResourceCalculationPeriodDictionary =
-				new SkillResourceCalculationPeriodWrapper(SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
+				new SkillResourceCalculationPeriodWrapper(schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
 		}
 
 		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
@@ -30,11 +29,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;
 			Schedules = scheduleDictionary;
 			Skills = skills;
-			SkillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDays);
 			SkillCombinationHolder = new SkillCombinationHolder();
 			SkillDays = skillDays;
 			SkillResourceCalculationPeriodDictionary =
-				new SkillResourceCalculationPeriodWrapper(SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
+				new SkillResourceCalculationPeriodWrapper(new SkillStaffPeriodHolder(skillDays).SkillSkillStaffPeriodDictionary);
 		}
 		public ResourceCalculationData(IEnumerable<ISkill> skills, ISkillResourceCalculationPeriodDictionary skillResourceCalculationPeriodDictionary)
 		{
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool ConsiderShortBreaks { get; }
 		public bool DoIntraIntervalCalculation { get; }
 		public IEnumerable<ISkill> Skills { get; }
-		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; }
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
 		public SkillCombinationHolder SkillCombinationHolder { get; }
