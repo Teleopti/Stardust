@@ -54,12 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
-			var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
-			{
-				Period = planningPeriod.Range,
-				People = _fixedStaffLoader.Load(planningPeriod.Range).AllPeople.ToList()
-			});
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, validationResults);
+			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, new ValidationResult());
 			return Ok(planningPeriodModel);
 		}
 

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			result.Content.ValidationResult.InvalidResources.Should().Be.Empty();
 		}
 
-		[Test]
+		[Test, Ignore("Look over this test - part of 42784")]
 		public void ShouldReturnMissingForecastWhenIncompleteForecasting()
 		{
 			MissingForecastProvider.MissingForecast = new[]
