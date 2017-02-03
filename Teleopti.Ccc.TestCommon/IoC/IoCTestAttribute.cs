@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
+			system.UseTestDouble(config).For<IConfigReader>();
 			// we really shouldnt inject this, but if we do, maybe its better its correct...
 			system.UseTestDouble(toggles).For<IToggleManager>();
 		}
