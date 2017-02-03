@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, primarySkillMode, period));
 		}
 
-		public IDisposable Create(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool primarySkillMode, DateOnlyPeriod period)
+		public IDisposable Create(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool primarySkillMode, DateOnlyPeriod period, bool useAllSkills)
 		{
-			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(skillCombinationResources, allSkills, primarySkillMode)));
+			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(skillCombinationResources, allSkills, primarySkillMode, useAllSkills)));
 		}
 
 		private Lazy<IResourceCalculationDataContainerWithSingleOperation> createResources(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, bool primarySkillMode, DateOnlyPeriod? period)
@@ -53,20 +53,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class ResourceCalculationDataConatainerFromSkillCombinations : IResourceCalculationDataContainerWithSingleOperation
 	{
-		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
+		private readonly ConcurrentDictionary<Tuple<string, DateTimePeriod>, PeriodResource> _dictionary = new ConcurrentDictionary<Tuple<string, DateTimePeriod>, PeriodResource>();
 		private readonly List<SkillCombinationResource> _skillCombinationResources;
 		private readonly IEnumerable<ISkill> _allSkills;
 
-		public ResourceCalculationDataConatainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool primarySkillMode)
+		public ResourceCalculationDataConatainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool primarySkillMode, bool useAllSkills)
 		{
 			_skillCombinationResources = skillCombinationResources;
 			_allSkills = allSkills;
 			PrimarySkillMode = primarySkillMode;
-			MinSkillResolution = allSkills.Any() ?
-					allSkills.Min(s => s.DefaultResolution)
-					: 15;
+			MinSkillResolution = allSkills.Any() ? allSkills.Min(s => s.DefaultResolution): 15;
 			createDictionary(skillCombinationResources);
+			UseAllSkills = useAllSkills;
 		}
+
+		public bool UseAllSkills { get;}
 
 		private void createDictionary(List<SkillCombinationResource> skillCombinationResources)
 		{
@@ -77,11 +78,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					_allSkills.Where(x => (skillCombinationResource.SkillCombination.Contains(x.Id.Value))).ToArray();
 				var skillCombination = new SkillCombination(allSkillsInCombination,new DateOnlyPeriod(new DateOnly(skillCombinationResource.StartDateTime),
 						new DateOnly(skillCombinationResource.EndDateTime)), new SkillEffiencyResource[] {}, allSkillsInCombination);
-
+				
 				var fractionPeriod = new DateTimePeriod(skillCombinationResource.StartDateTime, skillCombinationResource.EndDateTime);
 				var resource = new PeriodResource();
 				resource.AppendResource(new ActivitySkillsCombination(actId.Value, skillCombination),skillCombination, 0, skillCombinationResource.Resource,fractionPeriod);
-				_dictionary.TryAdd(fractionPeriod, resource);
+				_dictionary.TryAdd(new Tuple<string, DateTimePeriod>(skillCombination.Key,fractionPeriod ), resource);
 			}
 		}
 
@@ -95,44 +96,115 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
-				PeriodResource interval;
-				if (_dictionary.TryGetValue(dateTimePeriod, out interval))
-				{
-					foreach (var pair in interval.GetSkillKeyResources(activityKey))
-					{
-						var skills = new List<ISkill>();
-						_skillCombinationResources.ForEach(skillcomb =>
-						{
-							foreach (var skillId in skillcomb.SkillCombination)
-							{
-								if(!skills.Any(x=>x.Id == skillId && x.Activity==activity))
-									skills.Add(_allSkills.First(x=>x.Id==skillId));
-							}
-						});
-						if (skills.Any())
-						{
-							AffectedSkills value;
-							double previousResource = 0;
-							double previousCount = 0;
-							var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource / divider);
-							if (result.TryGetValue(pair.SkillKey, out value))
-							{
-								previousResource = value.Resource;
-								previousCount = value.Count;
-								//addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
-							}
-							value = new AffectedSkills
-							{
-								Skills = skills,
-								Resource = previousResource + pair.Resource.Resource / divider,
-								Count = previousCount + pair.Resource.Count / divider,
-								SkillEffiencies = accumulatedEffiencies
-							};
+				_skillCombinationResources.ForEach(sc =>
+												   {
+													   if (!(new DateTimePeriod(sc.StartDateTime, sc.EndDateTime) == periodToCalculate)) return;
+													   var skill = _allSkills.Where(x => x.Id == sc.SkillCombination.FirstOrDefault() && x.Activity.Id == activity.Id);
+													   if (!skill.Any())
+														   return;
+													   else
+													   {
+														   PeriodResource interval;
+														   var allSkillsInCombination = _allSkills.Where(x => sc.SkillCombination.Contains(x.Id.Value)).ToArray();
+														   var skillCombination = new SkillCombination(allSkillsInCombination, dateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), new SkillEffiencyResource[] { }, allSkillsInCombination);
+														   if (_dictionary.TryGetValue(new Tuple<string, DateTimePeriod>(skillCombination.Key, periodToCalculate), out interval))
+														   {
+															   foreach (var pair in interval.GetSkillKeyResources(activityKey))
+															   {
+																   var skills = new List<ISkill>();
+																   _skillCombinationResources.ForEach(skillcomb =>
+																   {
+																	   foreach (var skillId in skillcomb.SkillCombination)
+																	   {
+																		   if (_allSkills.First(x => x.Id == skillId).Activity == activity && skills.All(x => x.Id != skillId))
+																			   skills.Add(_allSkills.First(x => x.Id == skillId));
+																	   }
+																   });
+																   if (skills.Any())
+																   {
+																	   AffectedSkills value;
+																	   double previousResource = 0;
+																	   double previousCount = 0;
+																	   var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource / divider);
+																	   if (result.TryGetValue(pair.SkillKey, out value))
+																	   {
+																		   previousResource = value.Resource;
+																		   previousCount = value.Count;
+																		   //addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
+																	   }
+																	   if (UseAllSkills)
+																		   value = new AffectedSkills
+																		   {
+																			   Skills = skills,
+																			   Resource = previousResource + pair.Resource.Resource / divider,
+																			   Count = previousCount + pair.Resource.Count / divider,
+																			   SkillEffiencies = accumulatedEffiencies
+																		   };
+																	   else
+																		   value = new AffectedSkills
+																		   {
+																			   Skills = skills.Where(s => !s.IsCascading() || s.CascadingIndex == skills.Min(x => x.CascadingIndex)),
+																			   Resource = previousResource + pair.Resource.Resource / divider,
+																			   Count = previousCount + pair.Resource.Count / divider,
+																			   SkillEffiencies = accumulatedEffiencies
+																		   };
 
-							result[pair.SkillKey] = value;
-						}
-					}
-				}
+																	   result[pair.SkillKey] = value;
+																   }
+															   }
+														   }
+													   }
+
+
+												   });
+
+				//PeriodResource interval;
+				//if (_dictionary.TryGetValue(new Tuple<string, DateTimePeriod>(), out interval))
+				//{
+				//	foreach (var pair in interval.GetSkillKeyResources(activityKey))
+				//	{
+				//		var skills = new List<ISkill>();
+				//		_skillCombinationResources.ForEach(skillcomb =>
+				//		{
+				//			foreach (var skillId in skillcomb.SkillCombination)
+				//			{
+				//				if(_allSkills.First(x => x.Id == skillId).Activity == activity && skills.All(x => x.Id != skillId))
+				//					skills.Add(_allSkills.First(x => x.Id == skillId));
+				//			}
+				//		});
+				//		if (skills.Any())
+				//		{
+				//			AffectedSkills value;
+				//			double previousResource = 0;
+				//			double previousCount = 0;
+				//			var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource / divider);
+				//			if (result.TryGetValue(pair.SkillKey, out value))
+				//			{
+				//				previousResource = value.Resource;
+				//				previousCount = value.Count;
+				//				//addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
+				//			}
+				//			if (UseAllSkills)
+				//				value = new AffectedSkills
+				//				{
+				//					Skills = skills,
+				//					Resource = previousResource + pair.Resource.Resource/divider,
+				//					Count = previousCount + pair.Resource.Count/divider,
+				//					SkillEffiencies = accumulatedEffiencies
+				//				};
+				//			else
+				//				value = new AffectedSkills
+				//				{
+				//					Skills = skills.Where(s => !s.IsCascading() || s.CascadingIndex == skills.Min(x => x.CascadingIndex)),
+				//					Resource = previousResource + pair.Resource.Resource/divider,
+				//					Count = previousCount + pair.Resource.Count/divider,
+				//					SkillEffiencies = accumulatedEffiencies
+				//				};
+
+				//			result[pair.SkillKey] = value;
+				//		}
+				//	}
+				//}
 			}
 			return result;
 		}
