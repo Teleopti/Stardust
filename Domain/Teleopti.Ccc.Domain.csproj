@@ -713,6 +713,7 @@
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeWithoutStateHolder.cs" />
     <Compile Include="Staffing\AddOverTimeHandler.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSystemSettings.cs" />
