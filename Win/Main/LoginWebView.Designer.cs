@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			Syncfusion.Windows.Forms.CaptionLabel captionLabel1 = new Syncfusion.Windows.Forms.CaptionLabel();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginWebView));
 			this.labelVersion = new System.Windows.Forms.Label();
 			this.webControl = new EO.WebBrowser.WinForm.WebControl();
@@ -67,11 +68,18 @@
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.BorderColor = System.Drawing.Color.LightBlue;
 			this.BorderThickness = 11;
+			this.CaptionAlign = System.Windows.Forms.HorizontalAlignment.Left;
 			this.CaptionBarColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(214)))), ((int)(((byte)(255)))));
 			this.CaptionBarHeight = 18;
 			this.CaptionButtonColor = System.Drawing.Color.White;
 			this.CaptionButtonHoverColor = System.Drawing.Color.DeepSkyBlue;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
+			captionLabel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(214)))), ((int)(((byte)(255)))));
+			captionLabel1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			captionLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(214)))), ((int)(((byte)(255)))));
+			captionLabel1.Location = new System.Drawing.Point(4, 4);
+			captionLabel1.Name = "CaptionLabel1";
+			this.CaptionLabels.Add(captionLabel1);
 			this.ClientSize = new System.Drawing.Size(788, 410);
 			this.Controls.Add(this.webControl);
 			this.Controls.Add(this.labelVersion);
@@ -87,6 +95,7 @@
 			this.ShowIcon = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "WFM Login";
 			this.TransparencyKey = System.Drawing.Color.LightBlue;
 			this.ResumeLayout(false);
 
