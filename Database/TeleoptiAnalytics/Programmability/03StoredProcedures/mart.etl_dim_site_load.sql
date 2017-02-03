@@ -24,12 +24,14 @@ INSERT INTO mart.dim_site
 	(
 	site_id,
 	site_name, 
+	site_code,
 	business_unit_id,
 	datasource_id
 	)
 SELECT 
 	site_id		= -1,
 	site_name		= 'Not Defined',
+	site_code = '00000000-0000-0000-0000-000000000001',
 	business_unit_id		= -1,
 	datasource_id			= -1
 WHERE
@@ -40,12 +42,14 @@ INSERT INTO mart.dim_site
 	(
 	site_id,
 	site_name, 
+	site_code,
 	business_unit_id,
 	datasource_id
 	)
 SELECT 
 	site_id		= -2,
 	site_name		= 'All',
+	site_code = '00000000-0000-0000-0000-000000000000',
 	business_unit_id	= -1,
 	datasource_id			= -1
 WHERE
