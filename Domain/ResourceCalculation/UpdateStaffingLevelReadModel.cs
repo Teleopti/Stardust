@@ -106,20 +106,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				var skill = keyValuePair.Key;
 				var dic = keyValuePair.Value;
-				foreach (var periodPair in dic.Items())
-				{
-					if (!period.Contains(periodPair.Key.StartDateTime))
-						continue;
-					ret.Add(new SkillStaffingInterval
+				ret.AddRange(from periodPair in dic.Items()
+					where period.Contains(periodPair.Key.StartDateTime)
+					let skillStaffPeriod = (ISkillStaffPeriod) periodPair.Value
+					select new SkillStaffingInterval
 					{
 						SkillId = skill.Id.GetValueOrDefault(),
 						StartDateTime = periodPair.Key.StartDateTime,
 						EndDateTime = periodPair.Key.EndDateTime,
 						Forecast = periodPair.Value.FStaff,
-						StaffingLevel = ((ISkillStaffPeriod)periodPair.Value).CalculatedResource,
-						ForecastWithShrinkage = ((ISkillStaffPeriod)periodPair.Value).ForecastedDistributedDemandWithShrinkage
+						StaffingLevel = skillStaffPeriod.CalculatedResource,
+						ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage
 					});
-				}
 				_feedback.SendProgress($"Updated {skill}.");
 			}
 			return ret;
