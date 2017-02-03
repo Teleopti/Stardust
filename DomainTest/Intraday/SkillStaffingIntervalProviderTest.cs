@@ -295,6 +295,78 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime.AddMinutes(skillResolution) && x.Id == skillB.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(2);
 		}
 
+		[Test]
+		public void ShouldHandleDifferentSkillResolutions()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 07, 00, 00, DateTimeKind.Utc));
+
+			var activityA = ActivityRepository.Has("activityA");
+			var activityB = ActivityRepository.Has("activityB");
+			var skillA = SkillRepository.Has("skillA", activityA).WithId();
+			var skillB = SkillRepository.Has("skillB", activityB).WithId();
+			skillA.DefaultResolution = 30;
+			skillB.DefaultResolution = 60;
+
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.StartDateTime.AddMinutes(30),
+																					   Resource = 2,
+																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault()}
+																				   },
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime.AddMinutes(30),
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 2,
+																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault()}
+																				   },
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 4,
+																					   SkillCombination = new[] {skillB.Id.GetValueOrDefault()}
+																				   }
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.StartDateTime.AddMinutes(30),
+																	 Forecast = 5,
+																	 SkillId = skillA.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime.AddMinutes(30),
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skillA.Id.GetValueOrDefault()
+																 },
+																  new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skillB.Id.GetValueOrDefault()
+																 }
+															 }, Now.UtcDateTime());
+
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1));
+
+			staffingIntervals.Count.Should().Be.EqualTo(3);
+			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime && x.Id == skillA.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(2);
+			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime && x.Id == skillB.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(4);
+			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime.AddMinutes(30) && x.Id == skillA.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(2);
+		}
+
 
 		[Test]
 		public void ShouldHandleCascadingSkills()

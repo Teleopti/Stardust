@@ -27,6 +27,11 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return EndDateTime.Subtract(StartDateTime);
 		}
+
+		public DateTimePeriod Period()
+		{
+			return new DateTimePeriod(StartDateTime, EndDateTime);
+		}
 	}
 
 	public class SkillCombinationHolder
