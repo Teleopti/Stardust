@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Assignment, agentData.Assignment, agent2Data.Assignment });
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agent2Data.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+			Target.Optimize(new NoSchedulingProgress(),  dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agent2Data.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 
 			schedules.SchedulesForDay(dateOnly)
 				.Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agent}, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+				Target.Optimize(new NoSchedulingProgress(),  dateOnly.ToDateOnlyPeriod(), new[] {agent}, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 			});
 		}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+				Target.Optimize(new NoSchedulingProgress(),  dateOnly.ToDateOnlyPeriod(), new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 			});
 		}
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+				Target.Optimize(new NoSchedulingProgress(),  dateOnly.ToDateOnlyPeriod(), new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 			});
 		}
 	}

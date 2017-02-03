@@ -15514,4 +15514,8 @@ These options are activated:
   <data name="TryingToResolveShiftCategoryLimitationsDotDotDot" xml:space="preserve">
     <value>Trying to resolve shift category limitations...</value>
   </data>
+  <data name="OptimizingMaxSeats" xml:space="preserve">
+    <value>Optimizing max seats</value>
+    <comment>Status text scheduler when optimizing max seats</comment>
+  </data>
 </root>

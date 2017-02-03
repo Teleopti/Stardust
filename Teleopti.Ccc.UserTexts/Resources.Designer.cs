@@ -20180,6 +20180,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optimizing max seats.
+        /// </summary>
+        public static string OptimizingMaxSeats {
+            get {
+                return ResourceManager.GetString("OptimizingMaxSeats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimizing shift lengths.
         /// </summary>
         public static string OptimizingShiftLengths {

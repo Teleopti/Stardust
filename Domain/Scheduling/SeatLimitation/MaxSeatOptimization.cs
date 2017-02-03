@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
@@ -17,13 +20,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface IMaxSeatOptimization
 	{
-		void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback);
+		void Optimize(ISchedulingProgress backgroundWorker, DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatOptimizationDoNothing : IMaxSeatOptimization
 	{
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback)
+		public void Optimize(ISchedulingProgress backgroundWorker, DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback)
 		{
 		}
 	}
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public void Optimize(DateOnlyPeriod period, 
+		public void Optimize(ISchedulingProgress backgroundWorker, DateOnlyPeriod period, 
 			IEnumerable<IPerson> agentsToOptimize, 
 			IScheduleDictionary schedules, 
 			IEnumerable<ISkillDay> allSkillDays, 
@@ -98,11 +101,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), false))
 #pragma warning restore 618
 			{
+				var checkedInfos = 1;
+				var numInfos = teamBlockInfos.Count();
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
+					backgroundWorker.ReportProgress(0, new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingMaxSeats + " " + checkedInfos + "/" + numInfos));
 					if (maxPeaksBefore.HasPeaks())
 					{
 						var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates);
@@ -126,6 +132,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							rollbackService.RollbackMinimumChecks();
 						}
 					}
+
+					checkedInfos++;
 				}
 
 				if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
@@ -135,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
-
+					
 					foreach (var date in period.DayCollection())
 					{
 						foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
