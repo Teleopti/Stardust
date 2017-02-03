@@ -129,7 +129,7 @@ Wfm_Requests_Check_Max_Seats_39937 = true
 Wfm_Requests_Check_Max_Seats_NoReadModel_39937 = false  # do not use read model - much slower, perhaps more accurate.
 Wfm_Requests_Check_Expired_Requests_40274 = true
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
-Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770 = RC
+Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770 = true
 Wfm_Requests_ApprovingModifyRequests_41930 = true
 wfm_Requests_ReadModelOldData_42046 = true
 Wfm_Requests_ShowBudgetAllowanceDetail_41945 = true
@@ -169,7 +169,7 @@ ResourcePlanner_MaxSeatsNew_40939 = RC #prototype, not to be released for now
 ResourcePlanner_SplitBigIslands_42049 = true
 ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318 = true
 ResourcePlanner_LessPersonAssignmentUpdates_42159 = true
-ResourcePlanner_ShiftCategoryLimitations_42680 = RC
+ResourcePlanner_ShiftCategoryLimitations_42680 = true
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
@@ -227,4 +227,4 @@ AbsenceRequests_Intraday_UseCascading_41969 = true
 AbsenceRequests_ValidateAllAgentSkills_42392 = true
 WfmStaffing_AllowActions_42524 = RC
 Staffing_ReadModel_UseSkillCombination_42663 = false
-Wfm_Web_Intraday_Rta_As_first_Choice_42206 = RC
+Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
