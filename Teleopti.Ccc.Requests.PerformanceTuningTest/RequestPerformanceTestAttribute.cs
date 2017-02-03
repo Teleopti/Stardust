@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -17,6 +18,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	public class RequestPerformanceTestAttribute : IoCTestAttribute
 	{
+		protected override FakeConfigReader Config()
+		{
+			var config = base.Config();
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			return config;
+		}
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);

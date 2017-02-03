@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		private IEnumerable<Guid> _personIds;
 		private List<IPersonRequest> _personRequests;
-		private FakeConfigReader _configReader;
 		public FakeEventPublisherWithOverwritingHandlers EventPublisher;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 
@@ -53,12 +52,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			system.UseTestDouble<DefaultScenarioFromRepository>().For<ICurrentScenario>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
-
-			_configReader = new FakeConfigReader();
+			
 			var conString = ConfigurationManager.ConnectionStrings["Tenancy"].ToString();
 			system.UseTestDouble<FakeEventPublisherWithOverwritingHandlers>().For<IEventPublisher>();
-			_configReader.FakeConnectionString("Tenancy",conString );
-			system.UseTestDouble(_configReader).For<IConfigReader>();
+			((FakeConfigReader)configuration.Args().ConfigReader).FakeConnectionString("Tenancy",conString );
 		}
 
 

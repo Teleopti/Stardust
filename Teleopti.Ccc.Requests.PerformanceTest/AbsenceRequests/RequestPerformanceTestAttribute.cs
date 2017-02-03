@@ -15,6 +15,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
 	public class RequestPerformanceTestAttribute : IoCTestAttribute
 	{
+		protected override FakeConfigReader Config()
+		{
+			var config = base.Config();
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			return config;
+		}
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
