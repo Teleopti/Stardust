@@ -92,7 +92,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			}),
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
-				self.CanApproveAndDeny(true);
+				self.CanApproveAndDeny(false);
 				self.UpdatedMessage("");
 			}
 		});
