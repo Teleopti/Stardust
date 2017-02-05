@@ -31,6 +31,12 @@ namespace Teleopti.Ccc.Win.Main
 			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
 			if (bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace))
 				EO.Base.Runtime.EnableLargeAddressSpace = enableLargeAddressSpace;
+			webView1.LoadCompleted += webView1LoadCompleted;
+		}
+
+		private void webView1LoadCompleted(object sender, LoadCompletedEventArgs e)
+		{
+			pictureBox1.Visible = false;
 		}
 
 		private void logInfo(string message)
@@ -155,6 +161,11 @@ namespace Teleopti.Ccc.Win.Main
 		}
 
 		public string ServerUrl { get; set; }
+
+		private void loginWebViewLoad(object sender, EventArgs e)
+		{
+			Show();
+		}
 	}
 
 
