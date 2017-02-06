@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.DistributedLock;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -13,11 +14,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IExternalLogonReadModelPersister _persister;
 		private readonly IKeyValueStorePersister _keyValueStore;
+		private readonly IDistributedLockAcquirer _distributedLock;
 
-		public ExternalLogonReadModelUpdater(IExternalLogonReadModelPersister persister, IKeyValueStorePersister keyValueStore)
+		public ExternalLogonReadModelUpdater(
+			IExternalLogonReadModelPersister persister, 
+			IKeyValueStorePersister keyValueStore,
+			IDistributedLockAcquirer distributedLock)
 		{
 			_persister = persister;
 			_keyValueStore = keyValueStore;
+			_distributedLock = distributedLock;
 		}
 
 		[ReadModelUnitOfWork]
@@ -38,8 +44,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[ReadModelUnitOfWork]
 		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
-			_persister.Refresh();
-			_keyValueStore.Update("ExternalLogonReadModelVersion", Guid.NewGuid().ToString());
+			_distributedLock.TryLockForTypeOf(this, () =>
+			{
+				_persister.Refresh();
+				_keyValueStore.Update("ExternalLogonReadModelVersion", Guid.NewGuid().ToString());
+			});
 		}
 	}
 }
