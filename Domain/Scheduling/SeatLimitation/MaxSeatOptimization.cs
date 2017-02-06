@@ -98,9 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var teamBlockInfos = _scheduledTeamBlockInfoFactory.Create(period, agentsToOptimize, schedules, allAgents, schedulingOptions);
 			var allSkillDaysExceptMaxSeat = allSkillDays.Except(x => x.Skill is MaxSeatSkill).ToArray();
 
-#pragma warning disable 618
-			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), false))
-#pragma warning restore 618
+			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), false, period.Extend(1)))
 			{
 				var checkedInfos = 1;
 				var numInfos = teamBlockInfos.Count();
