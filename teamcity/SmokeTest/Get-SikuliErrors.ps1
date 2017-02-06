@@ -7,7 +7,7 @@ $secstr = New-Object -TypeName System.Security.SecureString
 $password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
 $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr
 
-$command = {Get-EventLog -LogName Application -After (Get-Date).AddHours("-1") |
+$command = {Get-EventLog -LogName Application -After (Get-Date).AddMinutes("-35") |
 Where-Object {$_.EntryType -like 'Error' -and $_.Source -like 'Teleopti*' -and $_.Message -notlike "*product activation*"}}
 
 $Eventlog = Invoke-Command -ComputerName $servername -ScriptBlock $command -Credential $cred | ft -Property EntryType, Source, Message -autosize
