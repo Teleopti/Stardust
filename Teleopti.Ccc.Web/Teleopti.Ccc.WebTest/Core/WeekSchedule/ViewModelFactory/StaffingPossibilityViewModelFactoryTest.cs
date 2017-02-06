@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		public void ShouldReturnFullIntradaySiteOpenHourPeriod()
 		{
 			setLoggedOnUser(createPerson());
-			var possibilityViewModel = StaffingPossibilityViewModelFactory.CreateAbsencePossibilityViewModel();
+			var possibilityViewModel = StaffingPossibilityViewModelFactory.CreateIntradayAbsencePossibilityViewModel();
 			possibilityViewModel.SiteOpenHourPeriod.Should()
 				.Be(new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(24).Subtract(TimeSpan.FromSeconds(1))));
 		}
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		public void ShouldReturnSpecificIntradaySiteOpenHourPeriod()
 		{
 			setLoggedOnUser(createPersonWithSiteOpenHours(8, 17));
-			var possibilityViewModel = StaffingPossibilityViewModelFactory.CreateAbsencePossibilityViewModel();
+			var possibilityViewModel = StaffingPossibilityViewModelFactory.CreateIntradayAbsencePossibilityViewModel();
 			possibilityViewModel.SiteOpenHourPeriod.Should()
 				.Be(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)));
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		public void ShouldReturnEmptyIntradaySiteOpenHourPeriod()
 		{
 			setLoggedOnUser(createPersonWithSiteOpenHours(8, 17, true));
-			var possibilityViewModel = StaffingPossibilityViewModelFactory.CreateAbsencePossibilityViewModel();
+			var possibilityViewModel = StaffingPossibilityViewModelFactory.CreateIntradayAbsencePossibilityViewModel();
 			possibilityViewModel.SiteOpenHourPeriod.Should()
 				.Be(new TimePeriod());
 		}

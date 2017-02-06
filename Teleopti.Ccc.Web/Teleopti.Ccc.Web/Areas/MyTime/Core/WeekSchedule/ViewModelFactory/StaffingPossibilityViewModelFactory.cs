@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public StaffingPossibilityViewModel CreateAbsencePossibilityViewModel()
+		public StaffingPossibilityViewModel CreateIntradayAbsencePossibilityViewModel()
 		{
 			return new StaffingPossibilityViewModel
 			{
@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					{
 						StartTime = DateTime.Now.AddMinutes(60),
 						EndTime = DateTime.Now.AddMinutes(90),
-						Possibility = 2
+						Possibility = 0
 					}
 				}
 			};
 		}
 
-		public StaffingPossibilityViewModel CreateOvertimePossibilityViewModel()
+		public StaffingPossibilityViewModel CreateIntradayOvertimePossibilityViewModel()
 		{
 			return new StaffingPossibilityViewModel
 			{
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					{
 						StartTime = DateTime.Now.AddMinutes(60),
 						EndTime = DateTime.Now.AddMinutes(90),
-						Possibility = 2
+						Possibility = 0
 					}
 				}
 			};

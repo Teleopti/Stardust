@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork, Route("api/ScheduleStaffingPossibility/Absence"), HttpGet]
-		public virtual StaffingPossibilityViewModel GetAbsencePossibility()
+		public virtual StaffingPossibilityViewModel GetAbsencePossibilityForIntraday()
 		{
-			return _staffingPossibilityViewModelFactory.CreateAbsencePossibilityViewModel();
+			return _staffingPossibilityViewModelFactory.CreateIntradayAbsencePossibilityViewModel();
 		}
 
 		[UnitOfWork, Route("api/ScheduleStaffingPossibility/Overtime"), HttpGet]
-		public virtual StaffingPossibilityViewModel GetOvertimePossibility()
+		public virtual StaffingPossibilityViewModel GetOvertimePossibilityForIntraday()
 		{
-			return _staffingPossibilityViewModelFactory.CreateOvertimePossibilityViewModel();
+			return _staffingPossibilityViewModelFactory.CreateIntradayOvertimePossibilityViewModel();
 		}
 	}
 }

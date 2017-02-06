@@ -4,8 +4,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public interface IStaffingPossibilityViewModelFactory
 	{
-		StaffingPossibilityViewModel CreateAbsencePossibilityViewModel();
+		StaffingPossibilityViewModel CreateIntradayAbsencePossibilityViewModel();
 
-		StaffingPossibilityViewModel CreateOvertimePossibilityViewModel();
+		StaffingPossibilityViewModel CreateIntradayOvertimePossibilityViewModel();
 	}
 }
