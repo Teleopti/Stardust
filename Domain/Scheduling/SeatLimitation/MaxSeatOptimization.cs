@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var businessRules = NewBusinessRuleCollection.Minimum();
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlockInfos = _scheduledTeamBlockInfoFactory.Create(period, agentsToOptimize, schedules, allAgents, schedulingOptions);
+			var allSkillDaysExceptMaxSeat = allSkillDays.Except(x => x.Skill is MaxSeatSkill).ToArray();
 
 #pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), false))
@@ -108,8 +109,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
-					var allSkillDaysPlusSkillDaysForTeamBlockInfoNoDuplicates = new HashSet<ISkillDay>(allSkillDays, new SkillDaySameDateAndSkillComparer());
-					skillDaysForTeamBlockInfo.ForEach(x => allSkillDaysPlusSkillDaysForTeamBlockInfoNoDuplicates.Add(x));
 					backgroundWorker.ReportProgress(0, new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingMaxSeats + " " + checkedInfos + "/" + numInfos));
 					if (maxPeaksBefore.HasPeaks())
 					{
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
 							datePoint, schedulingOptions, rollbackService,
-							new DoNothingResourceCalculateDelayer(), allSkillDaysPlusSkillDaysForTeamBlockInfoNoDuplicates, schedules,
+							new DoNothingResourceCalculateDelayer(), allSkillDaysExceptMaxSeat.Union(skillDaysForTeamBlockInfo), schedules,
 							new ShiftNudgeDirective(), businessRules, _groupPersonSkillAggregator);
 						var maxPeaksAfter = _maxSeatPeak.Fetch(scheduleCallback.ModifiedDates, skillDaysForTeamBlockInfo);
 

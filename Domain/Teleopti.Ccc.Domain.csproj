@@ -639,7 +639,6 @@
     <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillData.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillDataFactory.cs" />
     <Compile Include="Scheduling\SeatLimitation\ScheduleChangeCallbackForMaxSeatOptimization.cs" />
-    <Compile Include="Scheduling\SeatLimitation\SkillDaySameDateAndSkillComparer.cs" />
     <Compile Include="Scheduling\SeatLimitation\SkillsFromMaxSeatSite.cs" />
     <Compile Include="Scheduling\SeatLimitation\TurnOffOldMaxSeatStuffWhenToggleIsOn.cs" />
     <Compile Include="Scheduling\SeatLimitation\UsedSeatsFromResourceCalculationContext.cs" />
