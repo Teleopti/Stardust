@@ -225,8 +225,13 @@ Add filegroups and files
 	PRINT	'   - Set [sa] as database owner. Working...'
 	IF (IS_SRVROLEMEMBER('sysadmin') = 1)
 	BEGIN
-		EXEC [$(DBNAME)].dbo.sp_changedbowner @loginame = N'sa', @map = false
-		PRINT	'   - Set [sa] as database owner. Finshed'
+		IF EXISTS (select * from sys.syslogins where name=N'sa')
+		BEGIN
+			EXEC [$(DBNAME)].dbo.sp_changedbowner @loginame = N'sa', @map = false
+			PRINT	'   - Set [sa] as database owner. Finshed'
+		END
+		ELSE
+			PRINT 	'   - The Login [sa] does not exist on this server. Finshed'
 	END
 	ELSE
 	BEGIN
