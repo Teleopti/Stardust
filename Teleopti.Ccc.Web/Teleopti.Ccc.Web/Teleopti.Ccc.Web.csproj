@@ -1417,6 +1417,10 @@
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
     <Content Include="WFM\app\global\current-user\settings.service.js" />
     <Content Include="WFM\app\global\current-user\_modules.js" />
+    <Content Include="WFM\app\global\data-protection\data-protection.controller.js" />
+    <Content Include="WFM\app\global\data-protection\data-protection.html" />
+    <Content Include="WFM\app\global\data-protection\data-protection.routes.js" />
+    <Content Include="WFM\app\global\data-protection\_modules.js" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.js" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.spec.js" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.service.js" />
