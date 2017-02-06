@@ -36,6 +36,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				return new List<SkillStaffingIntervalLightModel>();
 			}
 
+			var skillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources);
+
+			var splittedIntervals = _splitSkillStaffInterval.Split(skillStaffingIntervals.ToList(), resolution);
+			return splittedIntervals
+				.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.Id))
+				.ToList();
+
+		}
+
+		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources)
+		{
 			var skills = _skillRepository.LoadAllSkills().ToList();
 
 			var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkills(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), period.StartDateTime, period.EndDateTime).ToList();
@@ -55,31 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, dateOnlyPeriod, true));
 			}
 
-			//var skillStaffingIntervalsLight = new List<SkillStaffingIntervalLightModel>();
-
-			//foreach (var skillStaffingInterval in skillStaffingIntervals)
-			//{
-			//	if (skillIdList.Contains(skillStaffingInterval.SkillId))
-			//	{
-			//		skillStaffingIntervalsLight.Add(new SkillStaffingIntervalLightModel()
-			//		{
-			//			Id = skillStaffingInterval.SkillId,
-			//			StartDateTime = skillStaffingInterval.StartDateTime,
-			//			EndDateTime = skillStaffingInterval.EndDateTime,
-			//			StaffingLevel = skillStaffingInterval.StaffingLevel
-			//		});
-			//	}
-
-			//}
-
-			//return skillStaffingIntervalsLight;
-
-
-			var splittedIntervals = _splitSkillStaffInterval.Split(skillStaffingIntervals.ToList(), resolution);
-			return splittedIntervals
-				.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.Id))
-				.ToList();
-
+			return skillStaffingIntervals;
 		}
 
 		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, DateOnlyPeriod dateOnlyPeriod, bool useAllSkills)
@@ -109,10 +96,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime)
 				.ToList();
 		}
+
+		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	public interface ISkillStaffingIntervalProvider
 	{
 		IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution);
+		List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources);
 	}
 }
