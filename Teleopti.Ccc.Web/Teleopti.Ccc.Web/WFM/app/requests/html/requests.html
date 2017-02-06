@@ -5,7 +5,7 @@
 	</div>
 </div>
 
-<div class="wfm-requests" ng-if="requests.isRequestsEnabled && requests.permissionsReady">
+<div class="wfm-requests" ng-if="requests.isRequestsEnabled && requests.permissionsReady" ng-click="requests.toggleSearchFocus && requests.resetFocusSearch();">
 	<div class="operation-container material-depth-1">
 		<div class="left-part">
 			
@@ -20,11 +20,12 @@
 								 preselected-team-ids="requests.selectedTeamIds"
 								 class="organization-picker-container"></organization-picker>
 
-
-			<wfm-multiple-search-input class="request-filter inline-block" focus-input="requests.toggleSearchFocus" ng-click="$event.stopPropagation()" ng-keydown="requests.keyDownOnSearchInputFocus($event)" search-options="requests.agentSearchOptions"></wfm-multiple-search-input>
-			<span class="pointer" ng-class="{'focusing-search':requests.toggleSearchFocus, 'not-focusing-search':!requests.toggleSearchFocus}" ng-click="requests.keyDownOnSearchTermChanged()">
-				<i class="mdi mdi-magnify"></i>
-				<md-tooltip>{{'Search' | translate}}</md-tooltip>
+			<span ng-keydown="requests.focusSearch($event)" focus-input="requests.toggleSearchFocus">
+				<wfm-multiple-search-input class="request-filter inline-block" ng-click="$event.stopPropagation()" ng-keydown="requests.keyDownOnSearchInputFocus($event)" search-options="requests.agentSearchOptions"></wfm-multiple-search-input>
+				<span class="pointer" ng-class="{'focusing-search':requests.toggleSearchFocus, 'not-focusing-search':!requests.toggleSearchFocus}" ng-click="requests.keyDownOnSearchTermChanged()">
+					<i class="mdi mdi-magnify"></i>
+					<md-tooltip>{{'Search' | translate}}</md-tooltip>
+				</span>
 			</span>
 
 			<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="requests.period"

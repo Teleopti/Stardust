@@ -8,6 +8,7 @@
 	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.permissionsReady = false;
+		vm.toggleSearchFocus = false;
 
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
@@ -47,13 +48,21 @@
 			vm.toggleSearchFocus = false;
 		};
 
+		vm.resetFocusSearch = function(){
+			vm.toggleSearchFocus = false;
+		};
+			
+		vm.focusSearch = function($event){
+			vm.toggleSearchFocus = true;
+			if($event && $event.which == 13) vm.toggleSearchFocus = false;
+		};
+
 		vm.getSearch = function () {
 			return {
 				TeamIds: internalSelectedTeamIds,
 				SearchTerm: vm.agentSearchOptions.keyword
 			};
 		};
-		vm.toggleSearchFocus = false;
 
 		vm.keyDownOnSearchInputFocus = function ($event) {
 			vm.toggleSearchFocus = true;
