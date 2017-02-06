@@ -7,6 +7,14 @@
 	padding-bottom: 0;
 	margin-bottom: 0;
 
+	md-sidenav {
+		background-color: $white !important;		
+		md-content {
+			color: inherit !important;
+		}
+	}
+
+
 	input {
 		background-color: transparent;
 	}
@@ -853,9 +861,8 @@ teamschedule-command-container {
 .add-activity i.mdi-alert-octagon {
 	vertical-align: middle;
 }
-.settings-panel .sidenav-header {
-	background: $blue-500;
-	color: $white;
+.settings-panel .sidenav-header {	
+	color: $text-color-standard;
 	font-weight: 600;
 }
 .command-check {
@@ -966,3 +973,4 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 		font-size: 12px !important;
 	}
 }
+
