@@ -5,10 +5,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public class OccupiedSeatCalculator : IOccupiedSeatCalculator
 	{
-		public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections,
-			IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> relevantResourceCalculationPeriods)
+		public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods)
 		{
-			foreach (var pair in relevantResourceCalculationPeriods)
+			foreach (KeyValuePair<ISkill, IResourceCalculationPeriodDictionary> pair in relevantSkillStaffPeriods.Items())
 			{
 				if (pair.Key.SkillType.ForecastSource != ForecastSource.MaxSeatSkill) continue;
 

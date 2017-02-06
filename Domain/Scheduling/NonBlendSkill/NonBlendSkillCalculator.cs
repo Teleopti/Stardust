@@ -5,11 +5,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 {
 	public class NonBlendSkillCalculator : INonBlendSkillCalculator
 	{
-		public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections,
-			IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> relevantResourceCalculationPeriods,
-			bool addToEarlierResult)
+		public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, bool addToEarlierResult)
 		{
-			foreach (var pair in relevantResourceCalculationPeriods)
+			foreach (KeyValuePair<ISkill, IResourceCalculationPeriodDictionary> pair in relevantSkillStaffPeriods.Items())
 			{
 				var skill = pair.Key;
 				if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)

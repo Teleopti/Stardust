@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods).Items(), false);
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods), false);
 			}
 			Assert.AreEqual(4.5, skillStaffPeriod.Payload.CalculatedLoggedOn);
 			Assert.AreEqual(4.5, skillStaffPeriod.CalculatedResource);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Playback())
 			{
-				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods).Items(), false);
+				_target.Calculate(day, relevantProjections, new SkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods), false);
 			}
 		}
 	}

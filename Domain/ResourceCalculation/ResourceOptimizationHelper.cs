@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				createSkillSkillStaffDictionaryOnSkills(
 					resourceCalculationData.SkillResourceCalculationPeriodDictionary,
 					maxSeatSkills, timePeriod);
-			_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods.Items());
+			_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
 
 			var nonBlendSkills =
 				resourceCalculationData.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill)
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			relevantSkillStaffPeriods =
 				createSkillSkillStaffDictionaryOnSkills(
 					resourceCalculationData.SkillResourceCalculationPeriodDictionary, nonBlendSkills, timePeriod);
-			_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods.Items(), false);
+			_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
 		}
 
 		private static ISkillResourceCalculationPeriodDictionary createSkillSkillStaffDictionaryOnSkills(
