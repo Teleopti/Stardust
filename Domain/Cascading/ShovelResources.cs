@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			if (!cascadingSkills.Any())
 				return;
 
-			var defaultResolution = TimeSpan.FromMinutes(cascadingSkills.First().DefaultResolution); //strange but cascading skills must have same resolution.
+			var defaultResolution = TimeSpan.FromMinutes(cascadingSkills.First().DefaultResolution); //not correct - PBI/bug/task around this soon pops up on our board
 			var activities = cascadingSkills.AffectedActivities().ToArray();
 
 			using (ResourceCalculationCurrent.PreserveContext())
