@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -202,8 +203,8 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 						x =>
 							new SkillCombinationResourceWithCombinationId
 							{
-								StartDateTime = x.Key.StartDateTime,
-								EndDateTime = x.Key.EndDateTime,
+								StartDateTime = x.Key.StartDateTime.Utc(),
+								EndDateTime = x.Key.EndDateTime.Utc(),
 								Resource = x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
 								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s)
