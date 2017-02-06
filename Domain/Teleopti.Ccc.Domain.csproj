@@ -655,6 +655,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactoryFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IsAnySkillOpen.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelectorForMaxSeat.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelectorTrackWhatSkillDays.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\OpenHoursFilter.cs" />
     <Compile Include="Scheduling\WebLegacy\LoaderForResourceCalculation.cs" />
     <Compile Include="Scheduling\WebLegacy\ResourceCalculateRangeToLoadCalculator.cs" />
