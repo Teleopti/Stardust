@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public WorkShiftSelectorTrackWhatSkillDays WorkShiftSelector;
 
-		[Test, Ignore("To be fixed #42594")]
+		[Test]
 		public void ShouldNotUseSameMaxSeatSkillDayEvenIfInitMaxSeatForStateHolderIsUsed()
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());

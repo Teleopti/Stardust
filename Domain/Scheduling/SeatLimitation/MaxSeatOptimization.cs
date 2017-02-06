@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
@@ -107,6 +108,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
+					var allSkillDaysPlusSkillDaysForTeamBlockInfoNoDuplicates = new HashSet<ISkillDay>(allSkillDays, new SkillDaySameDateAndSkillComparer());
+					skillDaysForTeamBlockInfo.ForEach(x => allSkillDaysPlusSkillDaysForTeamBlockInfoNoDuplicates.Add(x));
 					backgroundWorker.ReportProgress(0, new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingMaxSeats + " " + checkedInfos + "/" + numInfos));
 					if (maxPeaksBefore.HasPeaks())
 					{
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
 							datePoint, schedulingOptions, rollbackService,
-							new DoNothingResourceCalculateDelayer(), skillDaysForTeamBlockInfo.Union(allSkillDays), schedules,
+							new DoNothingResourceCalculateDelayer(), allSkillDaysPlusSkillDaysForTeamBlockInfoNoDuplicates, schedules,
 							new ShiftNudgeDirective(), businessRules, _groupPersonSkillAggregator);
 						var maxPeaksAfter = _maxSeatPeak.Fetch(scheduleCallback.ModifiedDates, skillDaysForTeamBlockInfo);
 
