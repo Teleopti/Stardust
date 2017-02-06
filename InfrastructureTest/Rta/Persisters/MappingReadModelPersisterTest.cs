@@ -5,8 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
@@ -43,7 +41,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 					DisplayColor = Color.Green.ToArgb(),
 					IsAlarm = false,
 					ThresholdTime = 100,
-					AlarmColor = Color.Red.ToArgb()
+					AlarmColor = Color.Red.ToArgb(),
+					IsLoggedOut = true
 				}
 			});
 
@@ -61,6 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.IsAlarm.Should().Be(false);
 			model.ThresholdTime.Should().Be(100);
 			model.AlarmColor.Should().Be(Color.Red.ToArgb());
+			model.IsLoggedOut.Should().Be(true);
 		}
 
 		[Test]
@@ -82,10 +82,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var model = Reader.Read().Single();
 			model.BusinessUnitId.Should().Be(Guid.Empty);
 			model.StateCode.Should().Be.Null();
-			model.PlatformTypeId.Should().Be(Guid.Empty);
-			model.StateGroupId.Should().Be(Guid.Empty);
+			model.PlatformTypeId.Should().Be(null);
+			model.StateGroupId.Should().Be(null);
 			model.ActivityId.Should().Be(null);
-			model.RuleId.Should().Be(Guid.Empty);
+			model.RuleId.Should().Be(null);
 			model.RuleName.Should().Be(null);
 			model.Adherence.Should().Be(null);
 			model.StaffingEffect.Should().Be(null);
@@ -93,6 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.IsAlarm.Should().Be(false);
 			model.ThresholdTime.Should().Be(0);
 			model.AlarmColor.Should().Be(0);
+			model.IsLoggedOut.Should().Be(true);
 		}
 
 		[Test]

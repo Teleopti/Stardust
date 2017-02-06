@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				SnapshotDataSourceId = 1,
 				PlatformTypeId = Guid.NewGuid(),
 				ReceivedTime = "2014-11-11 10:36".Utc(),
-				StateCode = "statecode",
 				StateGroupId = Guid.NewGuid(),
 				StateStartTime = "2014-11-11 10:37".Utc(),
 			};
@@ -68,7 +67,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.SnapshotDataSourceId.Should().Be(state.SnapshotDataSourceId);
 			result.PlatformTypeId.Should().Be(state.PlatformTypeId);
 			result.ReceivedTime.Should().Be(state.ReceivedTime);
-			result.StateCode.Should().Be(state.StateCode);
 			result.StateGroupId.Should().Be(state.StateGroupId);
 			result.StateStartTime.Should().Be(state.StateStartTime);
 		}

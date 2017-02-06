@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -24,18 +25,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		public TheService Service { get; set; }
+		public MutableNow Now { get; set; }
 
 		[Test]
 		public void ShouldNotUpdateInParalell()
 		{
 			var runner = new ConcurrencyRunner();
 			var person = Guid.NewGuid();
+			Now.Is("2016-03-15 00:00:00");
 			runner.InSync(() => Service.Prepare(person));
 
-			runner.InParallel(() => Service.AddOne(person)).Times(20);
+			runner.InParallel(() => Service.AddOneSecond(person)).Times(20);
 			runner.Wait();
 
-			Service.Get(person).StateCode.Should().Be("20");
+			Service.Get(person).ReceivedTime.Should().Be("2016-03-15 00:00:20".Utc());
 		}
 
 		[Test]
@@ -43,13 +46,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var runner = new ConcurrencyRunner();
 			var persons = Enumerable.Range(0, 20).Select(i => Guid.NewGuid()).ToArray();
+			Now.Is("2016-03-15 00:00:00");
 			persons.ForEach(p => Service.Prepare(p));
 
-			runner.InParallel(() => Service.AddOneToAll());
-			persons.ForEach(p => Service.AddOne(p));
+			runner.InParallel(() => Service.AddOneSecondToAll());
+			persons.ForEach(p => Service.AddOneSecond(p));
 			runner.Wait();
 
-			Service.GetAll().Select(m => m.StateCode).Should().Have.SameValuesAs("2");
+			Service.GetAll().Select(m => m.ReceivedTime).Should().Have.SameValuesAs("2016-03-15 00:00:02".Utc());
 		}
 
 		[Test]
@@ -57,17 +61,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var runner = new ConcurrencyRunner();
 			var persons = Enumerable.Range(0, 20).Select(i => Guid.NewGuid()).ToArray();
+			var state = Guid.NewGuid();
+			Now.Is("2016-03-15 00:00:00");
 			persons.ForEach(p =>
 			{
 				Service.Prepare(p);
-				Service.AddOne(p, "2016-03-15 08:00".Utc());
+				Service.AddOneSecond(p, state, "2016-03-15 08:00".Utc());
 			});
 
 			runner.InParallel(() => Service.AddOneToNotInSnapshot("2016-03-15 08:05".Utc()));
-			persons.ForEach(p => Service.AddOne(p));
+			persons.ForEach(p => Service.AddOneSecond(p));
 			runner.Wait();
 
-			Service.GetAll().Select(m => m.StateCode).Should().Have.SameValuesAs("3");
+			Service.GetAll().Select(m => m.ReceivedTime).Should().Have.SameValuesAs("2016-03-15 00:00:03".Utc());
 		}
 
 		public class TheService
@@ -84,14 +90,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				_persister.Prepare(new AgentStatePrepare
 				{
-					PersonId = personId
+					PersonId = personId,
 				}, DeadLockVictim.Yes);
 			}
 			
 			[UnitOfWork]
 			public virtual void AddOneToNotInSnapshot(DateTime snapshotId)
 			{
-				var personIds = _persister.FindForClosingSnapshot(snapshotId, 0, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				var personIds = _persister.FindForClosingSnapshot(snapshotId, 0, new Guid[] {});
 				if (personIds.IsEmpty())
 					return;
 				var states = _persister.LockNLoad(personIds, DeadLockVictim.No).AgentStates;
@@ -100,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			}
 
 			[UnitOfWork]
-			public virtual void AddOneToAll()
+			public virtual void AddOneSecondToAll()
 			{
 				var all = _persister.ReadForTest();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
@@ -109,25 +115,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			private void addOneTo(IEnumerable<AgentState> all)
 			{
-				all.ForEach(m =>
+				all.ForEach(model =>
 				{
-					m.StateCode = (int.Parse(m.StateCode ?? "0") + 1).ToString();
-					_persister.Update(m);
+					model.ReceivedTime = (model.ReceivedTime ?? "2016-03-15 00:00:00".Utc()).AddSeconds(1);
+					_persister.Update(model);
 				});
 			}
 
-			public virtual void AddOne(Guid personId)
+			public virtual void AddOneSecond(Guid personId)
 			{
-				AddOne(personId, null);
+				AddOneSecond(personId, null, null);
 			}
 
 			[UnitOfWork]
-			public virtual void AddOne(Guid personId, DateTime? snapshotId)
+			public virtual void AddOneSecond(Guid personId, Guid? stateGroupId, DateTime? snapshotId)
 			{
 				var model = _persister.ReadForTest(personId).Single();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100));
-				model.StateCode = (int.Parse(model.StateCode ?? "0") + 1).ToString();
-				model.ReceivedTime = model.ReceivedTime ?? "2016-03-15 00:00:00".Utc();
+				model.ReceivedTime = (model.ReceivedTime ?? "2016-03-15 00:00:00".Utc()).AddSeconds(1);
+				model.StateGroupId = model.StateGroupId ?? stateGroupId;
 				model.SnapshotId = model.SnapshotId ?? snapshotId;
 				model.SnapshotDataSourceId = 0;
 				_persister.Update(model);

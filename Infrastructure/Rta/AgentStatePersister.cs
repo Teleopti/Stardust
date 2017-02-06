@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -78,7 +80,6 @@ SET
 	SnapshotDataSourceId = :SnapshotDataSourceId,
 	PlatformTypeId = :PlatformTypeId,
 	ReceivedTime = :ReceivedTime,
-	StateCode = :StateCode,
 	StateGroupId = :StateGroupId,
 	StateStartTime = :StateStartTime,
 	ActivityId = :ActivityId, 
@@ -96,7 +97,6 @@ WHERE
 					.SetParameter("SnapshotDataSourceId", model.SnapshotDataSourceId)
 					.SetParameter("PlatformTypeId", model.PlatformTypeId)
 					.SetParameter("ReceivedTime", model.ReceivedTime)
-					.SetParameter("StateCode", model.StateCode)
 					.SetParameter("StateGroupId", model.StateGroupId)
 					.SetParameter("StateStartTime", model.StateStartTime)
 					.SetParameter("ActivityId", model.ActivityId)
@@ -138,18 +138,19 @@ FROM
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, string loggedOutState)
+		public virtual IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, IEnumerable<Guid> loggedOutStateGroupIds)
 		{
-			return _unitOfWork.Current().Session().CreateSQLQuery(@"
-SELECT
-	PersonId
+			var stateGroups = loggedOutStateGroupIds.IsEmpty() ? "IS NOT NULL" : "NOT IN (:StateGroupIds)";
+
+			return _unitOfWork.Current().Session().CreateSQLQuery($@"
+SELECT PersonId
 FROM [dbo].[AgentState] WITH (NOLOCK)
 WHERE SnapshotDataSourceId = :SnapshotDataSourceId
 AND (SnapshotId < :SnapshotId OR SnapshotId IS NULL)
-AND (StateCode <> :State OR StateCode IS NULL)")
+AND StateGroupId {stateGroups}")
 				.SetParameter("SnapshotDataSourceId", snapshotDataSourceId)
 				.SetParameter("SnapshotId", snapshotId)
-				.SetParameter("State", loggedOutState)
+				.SetParameterListIf(loggedOutStateGroupIds.Any(), "StateGroupIds", loggedOutStateGroupIds)
 				.SetReadOnly(true)
 				.List<Guid>();
 		}

@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				try
 				{
 					append(_context.UserCode);
-					append(_context.StateCode);
+					append(_context.Input.StateCode);
 					append(_context.Schedule.CurrentActivityName());
 				}
 				catch (Exception)

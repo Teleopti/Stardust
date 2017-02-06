@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					Id = g.Id.Value,
 					BusinessUnitId = g.BusinessUnit.Id.Value,
 					g.Name,
+					IsLoggedOut = g.IsLogOutState,
 					States = g.StateCollection.AsEnumerable()
 				})
 				.Concat(
@@ -121,6 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 						Id = Guid.Empty,
 						BusinessUnitId = b.Id.Value,
 						Name = null as string,
+						IsLoggedOut = true,
 						States = Enumerable.Empty<IRtaState>()
 					});
 
@@ -149,6 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					c.StateCode,
 					StateGroupId = g.Id,
 					StateGroupName = g.Name,
+					IsLoggedOut = g.IsLoggedOut,
 					PlatformTypeId = c.PlatformTypeId,
 					BusinessUnitId = g.BusinessUnitId
 				};
@@ -210,6 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					StateCode = s.StateCode,
 					StateGroupId = s.StateGroupId,
 					StateGroupName = s.StateGroupName,
+					IsLoggedOut = s.IsLoggedOut,
 					RuleId = ruleId,
 					RuleName = ruleName,
 					StaffingEffect = staffingEffect,

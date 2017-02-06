@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_context = context;
 			_adherenceChanges = new Lazy<IEnumerable<AdherenceChange>>(buildAdherenceChanges);
-			_adherenceForStoredStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Stored?.StateCode, _context.Stored.PlatformTypeId(), _context.Schedule.CurrentActivity()));
-			_adherenceForNewStateAndPreviousActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Input.StateCode, _context.Input.ParsedPlatformTypeId(), _context.Schedule.PreviousActivity()));
+			_adherenceForStoredStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Stored?.StateGroupId, _context.Schedule.CurrentActivity()));
 			_adherenceForNewStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.State.Adherence(), _context.State.StaffingEffect()));
+			_adherenceForNewStateAndPreviousActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.State.StateGroupId(), _context.Schedule.PreviousActivity()));
 		}
 		
 		public EventAdherence AdherenceForNewStateAndCurrentActivity()
@@ -38,20 +38,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _adherenceForStoredStateAndCurrentActivity.Value;
 		}
 		
-		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduledActivity activity)
+		private EventAdherence adherenceFor(Guid? stateGroupId, ScheduledActivity activity)
 		{
 			var activityId = (Guid?)null;
 			if (activity != null)
 				activityId = activity.PayloadId;
-			return adherenceFor(stateCode, platformTypeId, activityId);
+			return adherenceFor(activityId, stateGroupId);
 		}
 
-		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
+		private EventAdherence adherenceFor(Guid? activityId, Guid? stateGroupId)
 		{
-			var rule = _context.StateMapper.RuleFor(_context.BusinessUnitId, platformTypeId, stateCode, activityId);
-			if (rule == null)
-				return adherenceFor(null, null);
-			return adherenceFor(rule.Adherence, rule.StaffingEffect);
+			var rule = _context.StateMapper.RuleFor(_context.BusinessUnitId, stateGroupId, activityId);
+			return adherenceFor(rule?.Adherence, rule?.StaffingEffect);
 		}
 
 		private static EventAdherence adherenceFor(Adherence? adherence, double? staffingEffect)

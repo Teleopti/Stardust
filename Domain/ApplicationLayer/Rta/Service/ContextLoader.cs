@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
-			process(new closingSnapshotStrategy(snapshotId, sourceId, action, _now.UtcDateTime(), _config, _agentStatePersister, _databaseLoader));
+			process(new closingSnapshotStrategy(snapshotId, sourceId, action, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _databaseLoader));
 		}
 
 		public void ForActivityChanges(Action<Context> action)
@@ -242,13 +242,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			private readonly DateTime _snapshotId;
 			private readonly string _sourceId;
+			private readonly StateMapper _stateMapper;
 			private readonly IDatabaseLoader _databaseLoader;
 			private int _dataSourceId;
 
-			public closingSnapshotStrategy(DateTime snapshotId, string sourceId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader) : base(config, persister, action, time)
+			public closingSnapshotStrategy(DateTime snapshotId, string sourceId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, StateMapper stateMapper, IDatabaseLoader databaseLoader) : base(config, persister, action, time)
 			{
 				_snapshotId = snapshotId;
 				_sourceId = sourceId;
+				_stateMapper = stateMapper;
 				_databaseLoader = databaseLoader;
 				ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 				MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
@@ -260,7 +262,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				context.withUnitOfWork(() =>
 				{
 					_dataSourceId = ValidateSourceId(_databaseLoader, _sourceId);
-					personIds = Persister.FindForClosingSnapshot(_snapshotId, _dataSourceId, Rta.LogOutBySnapshot);
+					personIds = Persister.FindForClosingSnapshot(_snapshotId, _dataSourceId, _stateMapper.LoggedOutStateGroupIds());
 				});
 				return personIds;
 			}

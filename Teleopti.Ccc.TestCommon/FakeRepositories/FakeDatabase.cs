@@ -831,8 +831,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithStateGroup(Guid? id, string name, bool @default)
 		{
+			return WithStateGroup(id, name, @default, false);
+		}
+
+		public FakeDatabase WithStateGroup(Guid? id, string name, bool @default, bool isLoggedOut)
+		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 			_stateGroup = new RtaStateGroup(name ?? RandomName.Make(), @default, true);
+			_stateGroup.IsLogOutState = isLoggedOut;
 			_stateGroup.SetId(id ?? Guid.NewGuid());
 			_stateGroup.SetBusinessUnit(_businessUnit);
 			_stateGroups.Has(_stateGroup);

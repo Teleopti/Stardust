@@ -259,9 +259,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", user2)
-				.WithRule("statecode", Guid.Empty)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty);
-
+				.WithStateGroup(null, "state", true, false)
+				.WithStateCode("statecode")
+				.WithStateGroup(null, "loggedout", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest
 			{

@@ -25,11 +25,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				SnapshotDataSourceId = 6
+				SnapshotDataSourceId = 6,
+				StateGroupId = Guid.NewGuid()
 			};
 			Persister.Upsert(state);
 
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, "loggedout");
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, new [] { Guid.NewGuid() });
 			Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
@@ -38,26 +39,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldReadValuesWhenClosingSnapshot()
 		{
 			var personId = Guid.NewGuid();
-			var agentStateReadModel = new AgentStateForUpsert
+			var state = new AgentStateForUpsert
 			{
 				BusinessUnitId = Guid.NewGuid(),
 				PersonId = personId,
-				StateCode = "phone",
 				PlatformTypeId = Guid.NewGuid(),
 				StateStartTime = "2015-03-06 15:00".Utc(),
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				SnapshotDataSourceId = 6
+				SnapshotDataSourceId = 6,
+				StateGroupId = Guid.NewGuid()
 			};
-			Persister.Upsert(agentStateReadModel);
+			Persister.Upsert(state);
 
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, "loggedout");
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, new Guid[] {});
 			var result = Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId);
 
-			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
-			result.StateCode.Should().Be(agentStateReadModel.StateCode);
-			result.PlatformTypeId.Should().Be(agentStateReadModel.PlatformTypeId);
-			result.StateStartTime.Should().Be(agentStateReadModel.StateStartTime);
+			result.BusinessUnitId.Should().Be(state.BusinessUnitId);
+			result.StateGroupId.Should().Be(state.StateGroupId);
+			result.PlatformTypeId.Should().Be(state.PlatformTypeId);
+			result.StateStartTime.Should().Be(state.StateStartTime);
 		}
 
 		[Test]
@@ -65,21 +66,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
+			var state = Guid.NewGuid();
+			var loggedout = Guid.NewGuid();
 			Persister.Upsert(new AgentStateForUpsert
 			{
 				PersonId = person1,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
-				StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot,
-				SnapshotDataSourceId = 1
+				SnapshotDataSourceId = 1,
+				StateGroupId = loggedout
 			});
 			Persister.Upsert(new AgentStateForUpsert
 			{
 				PersonId = person2,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
-				SnapshotDataSourceId = 1
+				SnapshotDataSourceId = 1,
+				StateGroupId = state
 			});
 
-			Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), 1, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+			Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), 1, new[] { loggedout })
 				.Single()
 				.Should().Be(person2);
 		}

@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.ToArray();
 		}
 
-		public virtual IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, string loggedOutState)
+		public virtual IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, IEnumerable<Guid> loggedOutStateGroupIds)
 		{
 			lock (_lock)
 				return _data
-					.Where(s => s.SnapshotDataSourceId == snapshotDataSourceId && (s.SnapshotId < snapshotId || s.SnapshotId == null) && s.StateCode != loggedOutState)
+					.Where(s => s.SnapshotDataSourceId == snapshotDataSourceId && (s.SnapshotId < snapshotId || s.SnapshotId == null) && !loggedOutStateGroupIds.Contains(s.StateGroupId.Value))
 					.Select(x => x.PersonId)
 					.ToArray();
 		}

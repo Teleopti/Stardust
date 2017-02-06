@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 :DisplayColor{i},
 :IsAlarm{i},
 :ThresholdTime{i},
-:AlarmColor{i}
+:AlarmColor{i},
+:IsLoggedOut{i}
 )").Aggregate((current, next) => current + ", " + next);
 				
 				var query = _unitOfWork.Current()
@@ -88,7 +89,8 @@ USING
 	DisplayColor,
 	IsAlarm,
 	ThresholdTime,
-	AlarmColor
+	AlarmColor,
+	IsLoggedOut
 ) ON
 	T.BusinessUnitId = S.BusinessUnitId
 	AND T.StateCode = S.StateCode
@@ -111,6 +113,7 @@ INSERT
 	IsAlarm,
 	ThresholdTime,
 	AlarmColor,
+	IsLoggedOut,
 	Updated
 )
 VALUES (
@@ -128,6 +131,7 @@ VALUES (
 	S.IsAlarm,
 	S.ThresholdTime,
 	S.AlarmColor,
+	S.IsLoggedOut,
 	1
 )
 WHEN MATCHED THEN
@@ -142,6 +146,7 @@ UPDATE SET
 	IsAlarm = S.IsAlarm,
 	ThresholdTime = S.ThresholdTime,
 	AlarmColor = S.AlarmColor,
+	IsLoggedOut = S.IsLoggedOut,
 	Updated = 1
 ;");
 
@@ -164,7 +169,8 @@ UPDATE SET
 							.SetParameter("DisplayColor" + i, mapping.DisplayColor)
 							.SetParameter("IsAlarm" + i, mapping.IsAlarm)
 							.SetParameter("ThresholdTime" + i, mapping.ThresholdTime)
-							.SetParameter("AlarmColor" + i, mapping.AlarmColor);
+							.SetParameter("AlarmColor" + i, mapping.AlarmColor)
+							.SetParameter("IsLoggedOut" + i, mapping.IsLoggedOut);
 					});
 
 				query.ExecuteUpdate();

@@ -62,26 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Database.StateCodes.Select(x => x.StateCode).Should().Have.SameValuesAs("someStateCode");
 		}
-
-		[Test]
-		public void ShouldAddStateCodeAsNameWhenCheckingForActivityChange()
-		{
-			var personId = Guid.NewGuid();
-			Database
-				.WithAgent("usercode", personId)
-				.WithStateGroup(null, "default", true);
-			Target.SaveState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			});
-			StateGroups.LoadAll().Single(x => x.DefaultStateGroup).ClearStates();
-
-			Target.CheckForActivityChanges(Database.TenantName(), personId);
-
-			Database.StateCodes.Select(x => x.Name).Should().Contain("statecode");
-		}
-
+		
 		[Test]
 		public void ShouldUpdateReadModelWithDefaultState()
 		{

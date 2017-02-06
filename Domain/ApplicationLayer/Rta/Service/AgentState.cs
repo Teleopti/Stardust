@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid? TeamId { get; set; }
 		public Guid? SiteId { get; set; }
 		public DateTime? ReceivedTime { get; set; }
-		public string StateCode { get; set; }
 		public Guid? StateGroupId { get; set; }
 		public DateTime? StateStartTime { get; set; }
 

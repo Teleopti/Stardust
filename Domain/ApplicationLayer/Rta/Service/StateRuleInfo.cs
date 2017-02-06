@@ -14,8 +14,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StateRuleInfo(Context context)
 		{
 			_context = context;
-			_mappedState = new Lazy<MappedState>(() => context.StateMapper.StateFor(context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Input.StateDescription));
-			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Schedule.CurrentActivityId()));
+			_mappedState = new Lazy<MappedState>(() => context.Input.StateCode == null ? 
+				context.StateMapper.StateFor(context.Stored?.StateGroupId) : 
+				context.StateMapper.StateFor(context.BusinessUnitId, context.PlatformTypeId, context.Input.StateCode, context.Input.StateDescription));
+			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
 		}
 		
 		public bool StateChanged()

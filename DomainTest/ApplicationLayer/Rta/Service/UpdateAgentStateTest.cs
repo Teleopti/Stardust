@@ -48,21 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPersistStateCode()
-		{
-			Database
-				.WithAgent("usercode");
-
-			Target.SaveState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-
-			Database.StoredState.StateCode.Should().Be("phone");
-		}
-
-		[Test]
 		public void ShouldPersistWhenNotifiedOfPossibleScheduleChange()
 		{
 			var personId = Guid.NewGuid();

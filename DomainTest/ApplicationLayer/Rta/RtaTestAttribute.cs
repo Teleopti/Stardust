@@ -185,10 +185,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return base.FindForCheck();
 		}
 
-		public override IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, string loggedOutState)
+		public override IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, IEnumerable<Guid> loggedOutStateGroupIds)
 		{
 			syncFromAggregates();
-			return base.FindForClosingSnapshot(snapshotId, snapshotDataSourceId, loggedOutState);
+			return base.FindForClosingSnapshot(snapshotId, snapshotDataSourceId, loggedOutStateGroupIds);
 		}
 
 		public override LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)

@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				ReceivedTime = "2015-01-02 10:00".Utc(),
 				SnapshotId = null,
 
-				StateCode = null,
 				StateGroupId = null,
 				StateStartTime = null,
 

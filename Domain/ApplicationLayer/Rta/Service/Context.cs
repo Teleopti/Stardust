@@ -86,15 +86,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// for logging
 		public override string ToString()
 		{
-			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, SourceId: {SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
+			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {Input.StateCode}, SourceId: {SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
 		public string SourceId => Input.SourceId;
-		public string UserCode => Input?.UserCode;
+		public string UserCode => Input.UserCode;
 		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.SnapshotId;
 		public int? SnapshotDataSourceId => Input.SnapshotDataSourceId ??  Stored?.SnapshotDataSourceId;
 		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
-		public string StateCode => Input.StateCode ?? Stored?.StateCode;
 		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored?.StateStartTime;
 		public DateTime? RuleStartTime => State.RuleChanged() ? CurrentTime : Stored?.RuleStartTime;
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
@@ -116,7 +115,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PlatformTypeId = PlatformTypeId,
 				ReceivedTime = CurrentTime,
 
-				StateCode = StateCode,
 				StateGroupId = State.StateGroupId(),
 				StateStartTime = StateStartTime,
 

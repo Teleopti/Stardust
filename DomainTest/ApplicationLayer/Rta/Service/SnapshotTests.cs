@@ -21,11 +21,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldLogOutPersonsNotInSnapshot()
 		{
 			var personId = Guid.NewGuid();
+			var loggedout = Guid.NewGuid();
 			Database
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithRule("statecode")
+				.WithStateGroup(loggedout, "loggedout", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(null, "state")
+				.WithStateCode("statecode")
 				;
 
 			Now.Is("2014-10-20 10:00");
@@ -69,20 +72,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Database.StoredStateFor(personId)
-				.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				.StateGroupId.Should().Be(loggedout);
 		}
 
 		[Test]
 		public void ShouldOnlyLogOutPersonsNotInSnapshotFromSameSource()
 		{
-			var personId = Guid.NewGuid();
+			var user2 = Guid.NewGuid();
+			var state = Guid.NewGuid();
 			Database
 				.WithDataSource("source1")
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithDataSource("source2")
-				.WithAgent("usercode2", personId)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithRule("statecode")
+				.WithAgent("usercode2", user2)
+				.WithStateGroup(Guid.NewGuid(), "loggedout", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(state, "state")
+				.WithStateCode("statecode")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest
@@ -141,21 +147,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2014-10-20 10:05".Utc()
 			});
 
-			Database.StoredStateFor(personId)
-				.StateCode.Should().Be("statecode");
+			Database.StoredStateFor(user2)
+				.StateGroupId.Should().Be(state);
 		}
 
 		[Test]
 		public void ShouldLogOutPersonNotInSnapshotWhenPreviousWasRecievedAsSingleStates()
 		{
 			var personId = Guid.NewGuid();
+			var loggedout = Guid.NewGuid();
 			Database
 				.WithDataSource("source1")
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithRule("statecode1")
-				.WithRule("statecode2")
+				.WithStateGroup(loggedout, "loggedout", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(null, "state1")
+				.WithStateCode("statecode1")
+				.WithStateGroup(null, "state2")
+				.WithStateCode("statecode2")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -193,21 +203,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Database.StoredStateFor(personId)
-				.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				.StateGroupId.Should().Be(loggedout);
 		}
 
 		[Test]
 		public void ShouldOnlyLogOutPersonsInSnapshotFromSameSourceWhenPreviousWasRecievedAsSingleStates()
 		{
 			var personId = Guid.NewGuid();
+			var state1 = Guid.NewGuid();
 			Database
 				.WithDataSource("source1")
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithRule("statecode1")
-				.WithRule("statecode2")
+				.WithStateGroup(Guid.NewGuid(), "loggedout", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(state1, "state1")
+				.WithStateCode("statecode1")
+				.WithStateGroup(null, "state2")
+				.WithStateCode("statecode2")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -245,19 +259,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Database.StoredStateFor(personId)
-				.StateCode.Should().Be("statecode1");
+				.StateGroupId.Should().Be(state1);
 		}
 
 		[Test]
 		public void ShouldNotLogOutAlreadyLoggedOutAgents()
 		{
 			var user2 = Guid.NewGuid();
+			var loggedout = Guid.NewGuid();
 			Database
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", user2)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithRule("statecode");
-
+				.WithStateGroup(loggedout, "loggedout", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(null, "state")
+				.WithStateCode("statecode")
+				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest
 			{
@@ -308,12 +325,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var platformTypeId = Guid.NewGuid();
+			var loggedout = Guid.NewGuid();
 			Database
 				.WithPlatform(platformTypeId)
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithRule("statecode")
+				.WithStateGroup(loggedout, "loggedout", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(null, "state")
+				.WithStateCode("statecode")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest

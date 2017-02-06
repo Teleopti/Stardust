@@ -162,6 +162,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		}
 
 		[Test]
+		public void ShouldContainLoggedOutStateGroup()
+		{
+			var loggedout = Guid.NewGuid();
+			Database
+				.WithStateGroup(loggedout, "loggedout", false, true)
+				.WithStateCode("loggedout");
+
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Persister.Data.First(x => x.StateGroupId == loggedout).IsLoggedOut.Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldContainPlatform()
 		{
 			var platform = Guid.NewGuid();

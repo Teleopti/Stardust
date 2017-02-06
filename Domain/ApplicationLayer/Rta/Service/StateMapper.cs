@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -30,8 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IStateCodeAdder _stateCodeAdder;
 		private readonly IMappingReader _reader;
 		private string _version;
-		private IDictionary<ruleMappingKey, MappedRule> _ruleMappingDictionary = new Dictionary<ruleMappingKey, MappedRule>();
-		private IDictionary<stateMappingKey, MappedState> _stateMappingDictionary = new Dictionary<stateMappingKey, MappedState>();
+		private IDictionary<ruleMappingKey, MappedRule> _ruleMappings = new Dictionary<ruleMappingKey, MappedRule>();
+		private IDictionary<stateCodeMappingKey, MappedState> _stateCodeMappings = new Dictionary<stateCodeMappingKey, MappedState>();
+		private IDictionary<Guid, MappedState> _stateMappings = new Dictionary<Guid, MappedState>();
+		private IEnumerable<Guid> _loggedOutStateGroupIds;
 
 		public StateMapper(IStateCodeAdder stateCodeAdder, IMappingReader reader)
 		{
@@ -39,52 +40,60 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_reader = reader;
 		}
 
-		public MappedRule RuleFor(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
-		{
-			var match = queryRule(businessUnitId, platformTypeId, stateCode, activityId);
-			if (activityId != null && match == null)
-				match = queryRule(businessUnitId, platformTypeId, stateCode, null);
-			return match;
-		}
-
-		private MappedRule queryRule(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
-		{
-			var key = new ruleMappingKey
-			{
-				businessUnitId = businessUnitId,
-				platformTypeId = platformTypeId,
-				stateCode = stateCode,
-				activityId = activityId
-			};
-			MappedRule result;
-			_ruleMappingDictionary.TryGetValue(key, out result);
-			return result;
-		}
-
 		public MappedState StateFor(Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
 			if (stateCode == null)
 				return null;
-			var match = queryState(businessUnitId, platformTypeId, stateCode);
-			if (match != null) return match;
-			return _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
-			//match = _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
-			//if (match == null)
-			//	throw new DefaultStateGroupException("No default state group configured");
-			//return match;
-		}
-
-		private MappedState queryState(Guid businessUnitId, Guid platformTypeId, string stateCode)
-		{
-			var key = new stateMappingKey
+			MappedState match;
+			_stateCodeMappings.TryGetValue(new stateCodeMappingKey
 			{
 				businessUnitId = businessUnitId,
 				platformTypeId = platformTypeId,
 				stateCode = stateCode
+			}, out match);
+			if (match != null) return match;
+			return _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
+		}
+		
+		public MappedState StateFor(Guid? stateGroupId)
+		{
+			if (stateGroupId == null)
+				return null;
+			MappedState match;
+			_stateMappings.TryGetValue(stateGroupId.Value, out match);
+			if (match != null) return match;
+			// state group has been removed, but the agent is still in that state...
+			return new MappedState
+			{
+				StateGroupId = stateGroupId.Value,
+				StateGroupName = null
 			};
-			MappedState result;
-			_stateMappingDictionary.TryGetValue(key, out result);
-			return result;
+		}
+		
+		public MappedRule RuleFor(Guid businessUnitId, Guid? stateGroupId, Guid? activityId)
+		{
+			stateGroupId = stateGroupId ?? Guid.Empty;
+			var match = queryRule(businessUnitId, stateGroupId, activityId);
+			if (activityId != null && match == null)
+				match = queryRule(businessUnitId, stateGroupId, null);
+			return match;
+		}
+
+		private MappedRule queryRule(Guid businessUnitId, Guid? stateGroupId, Guid? activityId)
+		{
+			MappedRule match;
+			_ruleMappings.TryGetValue(new ruleMappingKey
+			{
+				businessUnitId = businessUnitId,
+				stateGroupId = stateGroupId,
+				activityId = activityId
+			}, out match);
+			return match;
+		}
+
+		public IEnumerable<Guid> LoggedOutStateGroupIds()
+		{
+			return _loggedOutStateGroupIds;
 		}
 
 		public void RefreshMappingCache(string latestVersion)
@@ -94,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return;
 
 			var mappings = _reader.Read();
-			_ruleMappingDictionary = mappings
+			_ruleMappings = mappings
 				.Where(m =>
 				{
 					var illegal = m.StateCode == null && m.StateGroupId != Guid.Empty;
@@ -103,12 +112,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.ToDictionary(x => new ruleMappingKey
 				{
 					businessUnitId = x.BusinessUnitId,
-					platformTypeId = x.PlatformTypeId,
-					stateCode = x.StateCode,
+					stateGroupId = x.StateGroupId,
 					activityId = x.ActivityId
-				}, m => new MappedRule
+				}, m => m.RuleId.HasValue ? new MappedRule
 				{
-					RuleId = m.RuleId,
+					RuleId = m.RuleId.Value,
 					RuleName = m.RuleName,
 					Adherence = m.Adherence,
 					StaffingEffect = m.StaffingEffect,
@@ -116,9 +124,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					IsAlarm = m.IsAlarm,
 					ThresholdTime = m.ThresholdTime,
 					AlarmColor = m.AlarmColor
-				});
-			_stateMappingDictionary = mappings
-				.GroupBy(x => new stateMappingKey
+				} : null);
+			_stateCodeMappings = mappings
+				.GroupBy(x => new stateCodeMappingKey
 				{
 					businessUnitId = x.BusinessUnitId,
 					platformTypeId = x.PlatformTypeId,
@@ -129,18 +137,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var mapping = m.First();
 					return new MappedState
 					{
-						StateGroupId = mapping.StateGroupId,
+						StateGroupId = mapping.StateGroupId.Value,
 						StateGroupName = mapping.StateGroupName
 					};
 				});
+			_stateMappings = mappings
+				.Where(x => x.StateGroupId.HasValue)
+				.GroupBy(x => x.StateGroupId.Value)
+				.ToDictionary(x => x.Key, m =>
+				{
+					var mapping = m.First();
+					return new MappedState
+					{
+						StateGroupId = m.Key,
+						StateGroupName = mapping.StateGroupName
+					};
+				});
+			_loggedOutStateGroupIds = mappings
+				.Where(x => x.IsLoggedOut && x.StateGroupId.HasValue)
+				.Select(x => x.StateGroupId.Value)
+				.Distinct()
+				.ToArray();
 			_version = latestVersion;
 		}
 
 		private class ruleMappingKey
 		{
 			public Guid businessUnitId;
-			public Guid platformTypeId;
-			public string stateCode;
+			public Guid? stateGroupId;
 			public Guid? activityId;
 
 			#region
@@ -148,8 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			protected bool Equals(ruleMappingKey other)
 			{
 				return businessUnitId.Equals(other.businessUnitId)
-					&& platformTypeId.Equals(other.platformTypeId)
-					&& string.Equals(stateCode, other.stateCode)
+					&& stateGroupId.Equals(other.stateGroupId)
 					&& activityId.Equals(other.activityId);
 			}
 
@@ -166,8 +189,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				unchecked
 				{
 					var hashCode = businessUnitId.GetHashCode();
-					hashCode = (hashCode * 397) ^ platformTypeId.GetHashCode();
-					hashCode = (hashCode * 397) ^ (stateCode?.GetHashCode() ?? 0);
+					hashCode = (hashCode * 397) ^ stateGroupId.GetHashCode();
 					hashCode = (hashCode * 397) ^ activityId.GetHashCode();
 					return hashCode;
 				}
@@ -176,15 +198,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			#endregion
 		}
 
-		private class stateMappingKey
+		private class stateCodeMappingKey
 		{
 			public Guid businessUnitId;
-			public Guid platformTypeId;
+			public Guid? platformTypeId;
 			public string stateCode;
 
 			#region 
 
-			protected bool Equals(stateMappingKey other)
+			protected bool Equals(stateCodeMappingKey other)
 			{
 				return businessUnitId.Equals(other.businessUnitId)
 					&& platformTypeId.Equals(other.platformTypeId)
@@ -196,7 +218,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
 				if (obj.GetType() != GetType()) return false;
-				return Equals((stateMappingKey)obj);
+				return Equals((stateCodeMappingKey)obj);
 			}
 
 			public override int GetHashCode()
