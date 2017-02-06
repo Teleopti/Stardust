@@ -161,6 +161,7 @@
 		ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318,
 		ResourcePlanner_LessPersonAssignmentUpdates_42159,
 		ResourcePlanner_ShiftCategoryLimitations_42680,
+		ResourcePlanner_IntradayNoDailyValueCheck_42767,
 
 		Wfm_DisplayOnlineHelp_39402,
 

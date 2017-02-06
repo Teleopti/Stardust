@@ -25,11 +25,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[TestFixture(true)]
-	[TestFixture(false)]
+	[TestFixture(true, true)]
+	[TestFixture(true, false)]
+	[TestFixture(false, true)]
+	[TestFixture(false, false)]
 	public class IntradayOptimizationTest : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerSplitBigIslands42049;
+		private readonly bool _resourcePlannerIntradayNoDailyValueCheck42767;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -41,9 +44,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public Func<IGridlockManager> LockManager;
 
-		public IntradayOptimizationTest(bool resourcePlannerSplitBigIslands42049)
+		public IntradayOptimizationTest(bool resourcePlannerSplitBigIslands42049, bool resourcePlannerIntradayNoDailyValueCheck42767)
 		{
 			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
+			_resourcePlannerIntradayNoDailyValueCheck42767 = resourcePlannerIntradayNoDailyValueCheck42767;
 		}
 
 		[Test]
@@ -347,13 +351,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.GetSingle(dateOnly, agent1).ShiftCategory.Should().Be.EqualTo(shiftCategory);
+			if(_resourcePlannerIntradayNoDailyValueCheck42767)
+				PersonAssignmentRepository.GetSingle(dateOnly, agent1).ShiftCategory.Should().Be.EqualTo(shiftCategory);
+			else
+				PersonAssignmentRepository.GetSingle(dateOnly, agent1).ShiftCategory.Should().Not.Be.EqualTo(shiftCategory);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_resourcePlannerSplitBigIslands42049)
 				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
+			if (_resourcePlannerIntradayNoDailyValueCheck42767)
+				toggleManager.Enable(Toggles.ResourcePlanner_IntradayNoDailyValueCheck_42767);
 		}
 	}
 }
