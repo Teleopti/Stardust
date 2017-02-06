@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			foreach (var combinationResource in _combinationResources.Where(x => x.StartDateTime == skillCombinationResource.StartDateTime && x.SkillCombination.NonSequenceEquals(skillCombinationResource.SkillCombination)))
 			{
-				combinationResource.Resource = skillCombinationResource.Resource;
+				combinationResource.Resource += skillCombinationResource.Resource;
 			}
 		}
 
