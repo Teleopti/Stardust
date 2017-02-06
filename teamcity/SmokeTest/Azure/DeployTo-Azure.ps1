@@ -11,7 +11,7 @@ $VersionedName = $VersionedName.Name.ToString()
 $AzurePackagePath = "$PSScriptRoot\AzureRelease"
 
 #Fixed Variables
-$subscription = 'Teleopti CCC Azure(Converted to EA)'			                #this the name from your .publishsettings file
+$subscription = 'Teleopti CCC Azure'			                #this the name from your .publishsettings file
 $subscriptionID = "9020de4a-13f8-465b-a3ae-995caf390fb8"                        #this is the subscription id of the cloud service
 $service	  = "$CloudServiceName"			                                    #this is the name of the cloud service
 $package	  = "$AzurePackagePath\$VersionedName"			                	#Azure package file
@@ -20,10 +20,10 @@ $slot		   = 'production'		                                            #productio
 $publishSettingsFile  = "$PSScriptRoot\AzureDemo.publishsettings"	        	#publishsettings file
 
 Write-Host '***************************************************************'
-Write-Host "CloudServiceName	=	$CloudServiceName"
-Write-Host "AzurePackagePath	=	$AzurePackagePath"
-Write-Host "VersionedName		=	$VersionedName"
-Write-Host "PathToHere			=	$PSScriptRoot"
+Write-Host "CloudServiceName =	$CloudServiceName"
+Write-Host "AzurePackagePath =	$AzurePackagePath"
+Write-Host "VersionedName	 =	$VersionedName"
+Write-Host "PathToHere		 =	$PSScriptRoot"
 Write-Host '***************************************************************'
 
 
