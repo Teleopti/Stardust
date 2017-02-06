@@ -6,6 +6,11 @@
 .wfm-requests {
     position: relative;
 
+    //Temp fix:remove this when styleguide updated wfm-multiple-search-input
+    wfm-multiple-search-input i.mdi-magnify {
+        display: none;
+    }
+
     .wfm-checkbox-toggle {
         position: relative;
     }
@@ -169,14 +174,9 @@
                 margin: 0;
             }
 
-			
-		//Temp fix:remove this when styleguide updated wfm-multiple-search-input
-		wfm-multiple-search-input i.mdi-magnify {
-			display: none;
-		}
-		.focusing-search {
-			color: $blue-500;
-		}
+    		.focusing-search {
+    			color: $blue-500;
+    		}
 
             .request-date-range-picker {
                 margin-right: 1em;
