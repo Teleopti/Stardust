@@ -46,6 +46,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public double?[] DataSeries(IList<SkillStaffingIntervalLightModel> scheduledStaffing, DateTime[] timeSeries)
 		{
+			if (!scheduledStaffing.Any())
+				return new double?[] {};
+
 			var staffingIntervals = scheduledStaffing
 				.GroupBy(x => x.StartDateTime)
 				.Select(s => new StaffingStartInterval

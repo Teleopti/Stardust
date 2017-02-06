@@ -994,6 +994,25 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(scheduledStaffingList.First().StaffingLevel);
 		}
 
+		[Test]
+		public void ShouldReturnEmptySeriesForScheduleStaffing()
+		{
+			TimeZone.IsSweden();
+			var scenario = fakeScenarioAndIntervalLength();
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false);
+			SkillRepository.Has(skill);
+
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
+			SkillDayRepository.Has(skillDay);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.StaffingHasData.Should().Be.EqualTo(true);
+			vm.DataSeries.ScheduledStaffing.IsEmpty().Should().Be.EqualTo(true);
+		}
+
+
 		private Scenario fakeScenarioAndIntervalLength()
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
