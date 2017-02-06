@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public class WorkShiftSelectorForMaxSeat : IWorkShiftSelector
 	{
+		private const double shiftNotToUse = double.MaxValue;
 		private readonly IUsedSeats _usedSeats;
 		private readonly IsAnySkillOpen _isAnySkillOpen;
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			return ret;
 		}
 
-		private double thisShiftsValue(IPerson person, IEnumerable<ISkillDay> maxSeatSkillDays, IShiftProjectionCache shift,
+		private double thisShiftsValue(IPerson person, IEnumerable<ISkillDay> maxSeatSkillDays, IShiftProjectionCache shift, 
 			bool hasNonMaxSeatSkills, IEnumerable<ISkillDay> skillDays, double bestShiftValue)
 		{
 			var thisShiftsPeak = 0d;
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					{
 						if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer, person.PermissionInformation.DefaultTimeZone()))
 						{
-							return double.MaxValue;
+							return shiftNotToUse;
 						}
 
 						var addExtraDueToRequiresSeat = ((IActivity)layer.Payload).RequiresSeat ? 1 : 0;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 						thisShiftsPeak = Math.Max(thisShiftsPeak, occupiedSeatsThisInterval);
 						if (thisShiftsPeak >= bestShiftValue)
 						{
-							return double.MaxValue;
+							return shiftNotToUse;
 						}
 					}
 				}
