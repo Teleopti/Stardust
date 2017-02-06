@@ -199,14 +199,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static SkillCombinationResource distributeResourceSmartly(IEnumerable<SkillCombinationResource> combinationResources,
 			SkillCombination skillCombination, ResourceLayer layer)
 		{
+			
 			var skillCombinationResourceByAgentAndLayer =
 				combinationResources.Single(
 					x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
 						 && (layer.Period.StartDateTime >= x.StartDateTime && layer.Period.EndDateTime <= x.EndDateTime) );
 
+			
 			var part = layer.Period.ElapsedTime().TotalMinutes / skillCombinationResourceByAgentAndLayer.GetTimeSpan().TotalMinutes;
 			skillCombinationResourceByAgentAndLayer.Resource -= 1*part;
-			return skillCombinationResourceByAgentAndLayer;
+			var skillCombinationChange = new SkillCombinationResource
+			{
+				StartDateTime = skillCombinationResourceByAgentAndLayer.StartDateTime,
+				EndDateTime = skillCombinationResourceByAgentAndLayer.EndDateTime,
+				SkillCombination = skillCombinationResourceByAgentAndLayer.SkillCombination,
+				Resource = -1 * part
+			};
+			return skillCombinationChange;
 		}
 
 		private static bool nonSkillActivityForWholeInterval(IActivity activity, ResourceLayer layer)
