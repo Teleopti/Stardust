@@ -48,8 +48,7 @@ var wfm = angular.module('wfm', [
 	'wfm.culturalDatepicker',
 	'wfm.utilities',
 	'wfm.rtaTool',
-	'wfm.staffing',
-	'wfm.timebank'
+	'wfm.staffing'
 ]);
 
 wfm.config([
