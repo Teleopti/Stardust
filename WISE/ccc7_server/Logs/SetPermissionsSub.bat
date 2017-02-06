@@ -11,6 +11,7 @@ SET /A WinXP=501
 SET /A Win2003=502
 SET TargetFolder=%~5
 SET PermissionLevel=%~6
+SET User=%~7
 
 ::create the TargetFolder if missing
 IF NOT EXIST "%TargetFolder%" (
@@ -19,9 +20,7 @@ MKDIR "%TargetFolder%"
 SET /A localError=%errorlevel%
 )
 
-Call:SetPermissions "IIS_IUSRS" %localError% localError
-Call:SetPermissions "IUSR" %localError% localError
-
+Call:SetPermissions "%User%" %localError% localError
 
 ::ETL Win Service Log permissions
 IF NOT "%WinETLLogin%"=="" Call:SetPermissions "%WinETLLogin%" %localError% localError

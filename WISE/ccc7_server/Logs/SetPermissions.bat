@@ -34,8 +34,10 @@ SET BatchPath=%TargetFolder%
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" >> "%BatchLogFile%"
-CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" "IIS_IUSRS" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" "IIS_IUSRS" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" "IUSR" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" "IUSR" >> "%BatchLogFile%"
 ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
@@ -66,8 +68,10 @@ ping 127.0.0.1 -n 2 >NUL
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" >> "%BatchLogFile%"
-CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
 ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
@@ -85,12 +89,26 @@ ping 127.0.0.1 -n 2 >NUL
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" >> "%BatchLogFile%"
-CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" >> "%BatchLogFile%"
-ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" >> "%BatchLogFile%"
-CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" >> "%BatchLogFile%"
-ECHO The errorcode from SetPermissionsSubForIISRoot is: %localError% >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
+
+::Set folder permissions for ETL Tool
+ECHO ============== >> "%BatchLogFile%"
+date /t >> "%BatchLogFile%"
+time /t >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC\ETL\Tools" "(OI)(CI)(RX)" "Users" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC\ETL\Tools" "(OI)(CI)(RX)" "Users" >> "%BatchLogFile%"
+ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
+ECHO ============== >> "%BatchLogFile%"
+
 
 IF %errorlevel% NEQ 0 (
 ECHO The errorcode from Log file permission is: %errorlevel%
