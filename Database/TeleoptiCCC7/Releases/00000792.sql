@@ -6,7 +6,7 @@
 SET NOCOUNT ON
 
 ALTER TABLE dbo.FavoriteSearch ADD
-	WfmArea int NOT NULL	
+	WfmArea int NOT NULL DEFAULT (1)	
 GO
 		
 DROP INDEX [IX_FavoriteSearch_Creator_Name] ON [dbo].[FavoriteSearch]
