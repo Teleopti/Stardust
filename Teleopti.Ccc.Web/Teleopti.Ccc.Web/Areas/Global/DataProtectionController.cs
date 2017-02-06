@@ -1,3 +1,4 @@
+using System;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,14 +18,24 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		[UnitOfWork, Route("api/Global/DataProtection/Yes"), HttpPost]
 		public virtual IHttpActionResult Yes()
 		{
-			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, new DataProtectionResponse { Response = DataProtectionEnum.Yes });
+			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, 
+				new DataProtectionResponse
+				{
+					Response = DataProtectionEnum.Yes,
+					ResponseDate = DateTime.UtcNow
+				});
 			return Ok();
 		}
 
 		[UnitOfWork, Route("api/Global/DataProtection/No"), HttpPost]
 		public virtual IHttpActionResult No()
 		{
-			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, new DataProtectionResponse { Response = DataProtectionEnum.No });
+			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, 
+				new DataProtectionResponse
+				{
+					Response = DataProtectionEnum.No,
+					ResponseDate = DateTime.UtcNow
+				});
 			return Ok();
 		}
 	}

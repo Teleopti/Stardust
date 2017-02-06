@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -15,10 +16,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var personalSettingDataRepository = new FakePersonalSettingDataRepository();
 			var target = new DataProtectionController(personalSettingDataRepository);
+			DateTime utcTimeStamp = DateTime.UtcNow;
 			IHttpActionResult result = target.Yes();
 			
 			var response = personalSettingDataRepository.FindValueByKey(DataProtectionResponse.Key, new DataProtectionResponse());
 			response.Response.Should().Be.EqualTo(DataProtectionEnum.Yes);
+			response.ResponseDate.Should().Be.GreaterThanOrEqualTo(utcTimeStamp);
 			result.Should().Be.OfType<OkResult>();
 		}
 
@@ -27,10 +30,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var personalSettingDataRepository = new FakePersonalSettingDataRepository();
 			var target = new DataProtectionController(personalSettingDataRepository);
+			DateTime utcTimeStamp = DateTime.UtcNow;
 			IHttpActionResult result = target.No();
 
 			var response = personalSettingDataRepository.FindValueByKey(DataProtectionResponse.Key, new DataProtectionResponse());
 			response.Response.Should().Be.EqualTo(DataProtectionEnum.No);
+			response.ResponseDate.Should().Be.GreaterThanOrEqualTo(utcTimeStamp);
 			result.Should().Be.OfType<OkResult>();
 		}
 	}
