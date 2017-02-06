@@ -32,6 +32,10 @@
                     });
             };
 
+            fakeGet('../ToggleHandler/AllToggles',
+                function () {
+                    return [200, {}];
+                });
             fakeGet('../api/ResourcePlanner/AdminSkillRoutingActivity',
                 function () {
                     return [200, activites];
@@ -40,6 +44,9 @@
                 function () {
                     return [200, skills];
                 });
+            $httpBackend.whenPOST("../api/ResourcePlanner/AdminSkillRoutingPriorityPost").respond(function(){
+              return 200;
+            })
 
             this.clear = function () {
                 activites = [];

@@ -3,7 +3,7 @@
 		<div class="view-title">
 			<h1><i class="mdi mdi-account"></i>Skill Priorities</h1>
 			<p>Define chains of prioritized skills per activity</p>
-			<div class="wfm-chip-wrap" ng-if="vm.ismodified">
+			<div class="wfm-chip-wrap" ng-if="vm.isModified">
 				<span class="wfm-chip">
 			<span class="chip-handle chip-warning">
 			<i class="mdi mdi-alert"></i>
@@ -24,7 +24,7 @@
 			<div class="panel material-depth-1">
 				<div class="con-row">
 					<div class="con-flex">
-						<md-autocomplete ng-disabled="vm.ismodified" id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity" md-select-on-match="true" md-search-text="searchActivityText" md-selected-item-change="vm.selectActivity(vm.selectedActivity)"
+						<md-autocomplete ng-disabled="vm.isModified" id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity" md-select-on-match="true" md-search-text="searchActivityText" md-selected-item-change="vm.selectActivity(vm.selectedActivity)"
 										md-items="activity in vm.queryActivities(searchActivityText)" md-item-text="activity.ActivityName" md-min-length="0" placeholder="Select Activity">
 							<md-item-template>
 								<span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>

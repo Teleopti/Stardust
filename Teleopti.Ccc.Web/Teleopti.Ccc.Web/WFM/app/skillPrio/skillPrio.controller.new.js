@@ -10,8 +10,11 @@
 	function skillPrioController($filter, toggleService, $location, NoticeService, $translate, $q, skillPrioServiceNew) {
 		var vm = this;
 
-		vm.ismodified = false;
+		vm.isModified = false;
 		vm.selectedActivity = null;
+		vm.activites = [];
+		vm.skills = [];
+		vm.cascadeList = [];
 		vm.toggledOptimization = checkToggles;
 		vm.selectActivity = selectActivity;
 		vm.queryActivities = queryActivities;
@@ -55,14 +58,14 @@
 		vm.optionDrop = {
 			moveItem: function(parent_id, source_id, dest_parent_id) {
 				if (parent_id == dest_parent_id) {
-					if (vm.ismodified === true) {
-						vm.ismodified = true;
+					if (vm.isModified === true) {
+						vm.isModified = true;
 					} else {
-						vm.ismodified = false;
+						vm.isModified = false;
 					}
 					return;
 				} else {
-					vm.ismodified = true;
+					vm.isModified = true;
 					var item = vm.cascadeList[parent_id].Skills.splice(source_id, 1);
 					var moved = vm.cascadeList[dest_parent_id].Skills.push(item[0]);
 					if (moved) {
@@ -187,14 +190,12 @@
 
 		function moveBackToUnsort(skills, skill, parent_id) {
 			if (skill) {
-				vm.ismodified = true;
+				vm.isModified = true;
 				var index = findIndexInData(skills, 'SkillName', skill.SkillName);
 				skills.splice(index, 1);
 				vm.cascadeList[0].Skills.push(skill);
-				var moved = vm.cascadeList[0].Skills.sort(sortByName);
-				if (moved) {
-					deleteEmptyRow(parent_id);
-				}
+				vm.cascadeList[0].Skills.sort(sortByName);
+				deleteEmptyRow(parent_id);
 			}
 		}
 
@@ -202,7 +203,7 @@
 			var allData = setPriorityForSkill();
 			var query = skillPrioServiceNew.saveSkills.save(allData);
 			query.$promise.then(function() {
-				vm.ismodified = false;
+				vm.isModified = false;
 				NoticeService.success('All changes are saved', 5000, true);
 			});
 		}
