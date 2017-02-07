@@ -412,7 +412,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("42343")]
 		public void ShouldMoveResourcesEvenWhenSkillsHaveDifferentIntervalLengths()
 		{
 			var scenario = new Scenario("_");

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -19,9 +20,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 			return _cascadingSkills.Where(x => x.Activity.Equals(activity));
 		}
 
-		public IEnumerable<IActivity> AffectedActivities()
+		public IEnumerable<ActivityAndIntervalLength> AffectedActivities()
 		{
-			return _cascadingSkills.Select(x => x.Activity).Distinct();
+			return _cascadingSkills.Select(x => x.Activity).Distinct().Select(activity => 
+				new ActivityAndIntervalLength(activity, TimeSpan.FromMinutes(_cascadingSkills.First(x => x.Activity.Equals(activity)).DefaultResolution)));
 		}
 
 		public IEnumerator<ISkill> GetEnumerator()

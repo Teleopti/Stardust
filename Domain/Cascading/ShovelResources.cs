@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			if (!cascadingSkills.Any())
 				return;
 
-			var defaultResolution = TimeSpan.FromMinutes(cascadingSkills.First().DefaultResolution); //not correct - PBI/bug/task around this soon pops up on our board
-			var activities = cascadingSkills.AffectedActivities().ToArray();
+			var activitiesAndIntervalLengths = cascadingSkills.AffectedActivities().ToArray();
 
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
@@ -45,11 +44,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 				{
 					foreach (var date in period.DayCollection())
 					{
-						foreach (var activity in activities)
+						foreach (var activityAndIntervalLength in activitiesAndIntervalLengths)
 						{
-							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(defaultResolution))
+							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(activityAndIntervalLength.IntervalLength))
 							{
-								var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, ResourceCalculationContext.Fetch(), activity, interval);
+								var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, ResourceCalculationContext.Fetch(), activityAndIntervalLength.Activity, interval);
 								var allSkillGroups = orderedSkillGroups.AllSkillGroups();
 								foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 								{
