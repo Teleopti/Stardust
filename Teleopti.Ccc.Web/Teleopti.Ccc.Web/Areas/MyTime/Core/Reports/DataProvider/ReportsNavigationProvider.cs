@@ -36,16 +36,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Title = Resources.MyReport,
 					IsWebReport = true
 				});
-			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
-			{
-				reportsList.Add(new ReportNavigationItem
-				{
-					Action = "Index",
-					Controller = "BadgeLeaderBoardReport",
-					Title = Resources.BadgeLeaderBoardReport,
-					IsWebReport = true
-				});
-			}
 			var otherReports = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription);
 			if (otherReports.Any()&& reportsList.Any())
 				reportsList.Add(new ReportNavigationItem
@@ -59,6 +49,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Url = _reportUrl.Build(applicationFunction.ForeignId),
 					Title = applicationFunction.LocalizedFunctionDescription,
 					Id = new Guid(applicationFunction.ForeignId)
+				});
+			}
+			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
+			{
+				reportsList.Add(new ReportNavigationItem
+				{
+					Action = "Index",
+					Controller = "BadgeLeaderBoardReport",
+					Title = Resources.BadgeLeaderBoardReport,
+					Url = "/WFM/#/reports/leaderboard",
+					IsWebReport = true
 				});
 			}
 			return reportsList;
