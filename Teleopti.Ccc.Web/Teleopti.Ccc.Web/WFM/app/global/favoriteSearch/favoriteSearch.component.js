@@ -22,7 +22,14 @@
 		ctrl.isTest = false;
 		var favoriteSearchNameList = [];
 
-		ctrl.openPanel = function(ev) {
+		ctrl.openPanel = function (ev) {
+			var currentSearch = ctrl.getSearch();
+
+			if (ctrl.currentFavorite && !isSameSearch(currentSearch, ctrl.currentFavorite)) {
+				ctrl.currentFavorite = false;
+				ctrl.currentName = '';
+			}
+
 			var position = $mdPanel.newPanelPosition()
 				.relativeTo('.fav-search-open-btn')
 				.addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW);
@@ -49,6 +56,16 @@
 			};
 			$mdPanel.open(config);
 		};
+
+		function isSameSearch(s1, s2) {
+			if (!s1 || !s2) return false;
+			if (s1.SearchTerm !== s2.SearchTerm || s1.TeamIds.length !== s2.TeamIds.length) return false;
+
+			for (var i = 0; i < s1.TeamIds.length; i++) {
+				if (s1.TeamIds[i] !== s2.TeamIds[i]) return false;
+			}
+			return true;
+		}
 
 		ctrl.$onInit = function () {
 			FavoriteSearchDataService.getPermission()
