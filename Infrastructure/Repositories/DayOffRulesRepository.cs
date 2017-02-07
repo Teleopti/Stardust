@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories

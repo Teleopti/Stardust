@@ -680,10 +680,13 @@
     <Compile Include="Areas\Requests\Core\ViewModelFactory\ShiftTradeRequestViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestAllowanceViewModel.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
+    <Compile Include="Areas\ResourcePlanner\AgentGroupController.cs" />
     <Compile Include="Areas\ResourcePlanner\IslandController.cs" />
     <Compile Include="Areas\ResourcePlanner\ManageScheduleController.cs" />
     <Compile Include="Areas\ResourcePlanner\ManageSchedulesModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ManageSchedulesResponse.cs" />
+    <Compile Include="Areas\ResourcePlanner\Models\AgentGroupModel.cs" />
+    <Compile Include="Areas\ResourcePlanner\Models\CreateAgentGroupModel.cs" />
     <Compile Include="Areas\ResourcePlanner\OrganizationSelectionController.cs" />
     <Compile Include="Areas\ResourcePlanner\Validation\BasicSchedulingValidator.cs" />
     <Compile Include="Areas\ResourcePlanner\Validation\IBasicSchedulingValidator.cs" />

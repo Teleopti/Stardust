@@ -180,6 +180,7 @@
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeLicenseActivator.cs" />
     <Compile Include="FakeLicenseActivatorProvider.cs" />
+    <Compile Include="FakeRepositories\FakeAgentGroupRepository.cs" />
     <Compile Include="FakeRepositories\FakeCryptoKeyInfoRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentBadgeTransactionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAggregateRootInitializer.cs" />

@@ -7,4 +7,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		void Persist(DayOffRulesModel model);
 		void Delete(Guid id);
 	}
+
+
 }

@@ -548,6 +548,8 @@
     <Compile Include="Notification\UserDevices.cs" />
     <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />
     <Compile Include="Optimization\IIntradayOptimizeOneday.cs" />
+    <Compile Include="Optimization\AgentGroup.cs" />
+    <Compile Include="Optimization\IAgentGroupRepository.cs" />
     <Compile Include="Optimization\IIntradayOptimizerCreator.cs" />
     <Compile Include="Optimization\IntradayOptimizeOnedayFor42767.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreatorFor42767.cs" />
@@ -3143,6 +3145,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Optimization\AgentGroup.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Intraday\SkillInIntraday.hbm.xml" />
     <EmbeddedResource Include="Intraday\SkillArea.hbm.xml" />
     <EmbeddedResource Include="Optimization\Filters\TeamFilter.hbm.xml" />
