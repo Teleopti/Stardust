@@ -35,7 +35,6 @@ describe('favoriteSearch component tests', function () {
 		element = $compile(element)(scope);
 		scope.$digest();
 
-
 		var ctrl = element.isolateScope().$ctrl;
 
 		expect(ctrl.favoriteSearchList.length).toEqual(2);
@@ -148,7 +147,32 @@ describe('favoriteSearch component tests', function () {
 
 		expect(ctrl.currentName).toEqual('');
 		expect(ctrl.enableSave()).toEqual(false);
-		expect(ctrl.currentFavorite).toEqual(undefined);
+		expect(ctrl.currentFavorite).toEqual(false);
+	});
+
+	it('should clear input when current favorite is cleared', function () {
+		var scope = rootScope.$new();
+		scope.getSearch = function () { return { TeamIds: ['team1', 'team2'], SearchTerm: "" } };
+		scope.applyFavorite = function () { };
+		scope.selectedFavorite = {
+			Name: 'test',
+			TeamIds: [],
+			SearchTerm: 'ash'
+		}
+
+		var element = angular.element('<favorite-search current-favorite="selectedFavorite"  get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
+		element = $compile(element)(scope);
+
+		scope.$digest();
+		var ctrl = element.isolateScope().$ctrl;
+
+		expect(ctrl.currentName).toEqual('test');
+
+		scope.selectedFavorite = undefined;
+		scope.$digest();
+
+		expect(ctrl.currentName).toEqual('');
+		
 	});
 
 	function FakeFavoriteSearchDataService() {

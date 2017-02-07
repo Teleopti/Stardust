@@ -157,6 +157,7 @@
 			if (vm.searchOptions.searchKeywordChanged) {
 				personSelectionSvc.clearPersonInfo();
 			}
+			vm.selectedFavorite = false;
 			vm.resetSchedulePage();
 			vm.resetFocusSearch();
 		};
@@ -325,8 +326,8 @@
 			keyword: $stateParams.keyword || '',
 			searchKeywordChanged: false
 		};
-		vm.selectedFavorite = $stateParams.selectedFavorite || null;
-
+		vm.selectedFavorite = $stateParams.do? $stateParams.selectedFavorite: null;
+	
 		vm.validateWarningEnabled = false;
 
 		vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
@@ -342,6 +343,7 @@
 		vm.onSelectedTeamsChanged = function (teams) {
 			vm.selectedTeamIds = teams;
 			vm.focusSearch();
+			vm.selectedFavorite = false;
 		};
 
 		vm.applyFavorite = function (currentFavorite) {

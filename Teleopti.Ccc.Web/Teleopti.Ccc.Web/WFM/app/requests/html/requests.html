@@ -12,6 +12,7 @@
 			<favorite-search ng-if="requests.saveFavoriteSearchesEnabled"
 							 apply-favorite="requests.applyFavorite(currentFavorite)"
 							 get-search="requests.getSearch()"
+							 current-favorite="requests.selectedFavorite"
 							 on-init-async="requests.onFavoriteSearchInitDefer"></favorite-search>
 
 			<organization-picker ng-if="requests.businessHierarchyToggleEnabled"

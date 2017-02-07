@@ -7,7 +7,7 @@
 			templateUrl: 'app/global/favoriteSearch/favoriteSearch.tpl.html',
 			controller: favoriteSearchCtrl,
 			bindings: {
-				currentFavorite: '<?',
+				currentFavorite: '<?', //  if set to false, the default favorite is disabled
 				onInitAsync: '<?',
 				applyFavorite: '&?',
 				getSearch: '&'
@@ -22,16 +22,17 @@
 		ctrl.isTest = false;
 		var favoriteSearchNameList = [];
 
-		ctrl.openPanel = function (ev) {
+		ctrl.openPanel = function(ev) {
 			var position = $mdPanel.newPanelPosition()
 				.relativeTo('.fav-search-open-btn')
 				.addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW);
 			var config = {
 				attachTo: angular.element(document.body),
-				controller: ['mdPanelRef', function (mdPanelRef) {
-					if (mdPanelRef) ctrl.mdPanelRef = mdPanelRef;
-					return ctrl;
-				}
+				controller: [
+					'mdPanelRef', function(mdPanelRef) {
+						if (mdPanelRef) ctrl.mdPanelRef = mdPanelRef;
+						return ctrl;
+					}
 				],
 				controllerAs: '$ctrl',
 				templateUrl: 'app/global/favoriteSearch/favoriteSearchPanel.tpl.html',
@@ -41,7 +42,10 @@
 				clickOutsideToClose: true,
 				escapeToClose: true,
 				focusOnOpen: false,
-				zIndex: 150
+				zIndex: 150,
+				onRemoving: function() {
+					ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';
+				}
 			};
 			$mdPanel.open(config);
 		};
@@ -64,8 +68,8 @@
 				});
 		};
 
-		ctrl.$onChanges = function(changObj){
-			if(!changObj || !changObj.currentFavorite || !changObj.currentFavorite.currentValue) return;
+		ctrl.$onChanges = function (changObj) {			
+			if (!changObj || !changObj.currentFavorite ) return;
 			updateCurrentFavorite(changObj.currentFavorite.currentValue);
 		};
 
@@ -169,11 +173,9 @@
 					favoriteSearchNameList.splice(index, 1);
 
 					if (ctrl.currentFavorite.Name === name) {
-						ctrl.currentFavorite = undefined;
-						ctrl.currentName = "";
-					}
-					
-						
+						ctrl.currentName = '';
+						ctrl.currentFavorite = false;
+					}											
 				});
 		};
 
@@ -185,7 +187,8 @@
 			ctrl.applyFavorite({
 				currentFavorite: {
 					TeamIds: angular.copy(ctrl.currentFavorite.TeamIds),
-					SearchTerm: angular.copy(ctrl.currentFavorite.SearchTerm)
+					SearchTerm: angular.copy(ctrl.currentFavorite.SearchTerm),
+					Name: ctrl.currentName
 				}
 			});
 		};
@@ -202,16 +205,16 @@
 				return f.IsDefault;
 			});
 
-			if(!ctrl.currentFavorite){
+			if(!ctrl.currentFavorite && ctrl.currentFavorite !== false){
 				updateCurrentFavorite(defaults[0]);
 			}
 		}
 
-		function updateCurrentFavorite(curFavorite){
-			ctrl.currentFavorite = angular.copy(curFavorite);
-			ctrl.currentName = curFavorite ? curFavorite.Name : '';
+		function updateCurrentFavorite(curFavorite) {
+			ctrl.currentFavorite = curFavorite;
+			ctrl.currentName = curFavorite ? curFavorite.Name : '';			
 		}
-
+		
 		function reorderListAccordingToIsDefault(item1, item2){
 			if(item1.IsDefault)
 				return -1;

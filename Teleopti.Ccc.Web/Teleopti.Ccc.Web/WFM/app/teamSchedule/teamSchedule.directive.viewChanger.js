@@ -36,10 +36,10 @@
 			var params = {};
 			params.do = true;
 
-			if (vc.keyword) params.keyword = vc.keyword;
-			if (vc.selectedDate) params.selectedDate = vc.selectedDate;
-			if (vc.selectedTeamIds) params.selectedTeamIds = vc.selectedTeamIds;
-			if (vc.selectedFavorite) params.selectedFavorite = vc.selectedFavorite;
+			if (angular.isDefined(vc.keyword)) params.keyword = vc.keyword;
+			if (angular.isDefined(vc.selectedDate)) params.selectedDate = vc.selectedDate;
+			if (angular.isDefined(vc.selectedTeamIds)) params.selectedTeamIds = vc.selectedTeamIds;
+			if (angular.isDefined(vc.selectedFavorite)) params.selectedFavorite = vc.selectedFavorite;
 
 			$state.go(viewState, params);
 		};

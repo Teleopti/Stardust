@@ -21,13 +21,14 @@
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
-		vm.selectedFavorite = $stateParams.selectedFavorite || null;
+		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
 	
 		vm.onKeyWordInSearchInputChanged = function() {
 			vm.resetSchedulePage();
+			vm.selectedFavorite = false;
 			vm.resetFocusSearch();
 		};
 
@@ -81,9 +82,10 @@
 		};
 
 		vm.onSelectedTeamsChanged = function(teams) {
-			vm.selectedTeamIds = teams;
+			vm.selectedTeamIds = teams;			
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 			vm.focusSearch();
+			vm.selectedFavorite = false;
 		};
 
 		vm.toggles = teamsToggles.all();

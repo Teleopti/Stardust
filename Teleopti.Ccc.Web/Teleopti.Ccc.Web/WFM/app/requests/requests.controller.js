@@ -36,9 +36,12 @@
 			}
 		}];
 
+		vm.selectedFavorite = null;
+
 		vm.changeSelectedTeams = function (teams) {
 			internalSelectedTeamIds = teams;
 			vm.keyDownOnSearchInputFocus();
+			vm.selectedFavorite = false;
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
@@ -68,11 +71,12 @@
 			vm.toggleSearchFocus = true;
 			if ($event && $event.which == 13) {
 				vm.keyDownOnSearchTermChanged();
-			}
+			}			
 		};
 		vm.keyDownOnSearchTermChanged = function() {
 			vm.toggleSearchFocus = false;
 			setSearchFilter();
+			vm.selectedFavorite = false;
 		}
 
 		vm.onFavoriteSearchInitDefer = $q.defer();
