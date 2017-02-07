@@ -118,41 +118,66 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SkillResourceCalculationPeriodWrapper : ISkillResourceCalculationPeriodDictionary
 	{
 		private readonly IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> _items;
-		
+		private readonly Dictionary<ISkill, IResourceCalculationPeriodDictionary> _wrappedDictionary = new	Dictionary<ISkill, IResourceCalculationPeriodDictionary>();
 		public SkillResourceCalculationPeriodWrapper(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods)
 		{
 			_items = ((SkillSkillStaffPeriodExtendedDictionary)relevantSkillStaffPeriods).Select(w => new KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>(w.Key, w.Value));
+			foreach (var relevantSkillStaffPeriod in relevantSkillStaffPeriods)
+			{
+				_wrappedDictionary.Add(relevantSkillStaffPeriod.Key, relevantSkillStaffPeriod.Value);
+			}
 		}
 
 		public SkillResourceCalculationPeriodWrapper(List<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> result)
 		{
 			_items = result;
+			foreach (var relevantSkillStaffPeriod in result)
+			{
+				_wrappedDictionary.Add(relevantSkillStaffPeriod.Key, relevantSkillStaffPeriod.Value);
+			}
 		}
 
 		public bool TryGetValue(ISkill skill, out IResourceCalculationPeriodDictionary resourceCalculationPeriods)
 		{
-			var wrappedDictionary = _items.FirstOrDefault(x => x.Key.Equals(skill)).Value;
-
-			if (wrappedDictionary != null)
+			IResourceCalculationPeriodDictionary thisDic;
+			if (_wrappedDictionary.TryGetValue(skill, out thisDic))
 			{
-				resourceCalculationPeriods = wrappedDictionary;
+				resourceCalculationPeriods = thisDic;
 				return true;
 			}
 			resourceCalculationPeriods = null;
 			return false;
+
+			//var wrappedDictionary = _items.FirstOrDefault(x => x.Key.Equals(skill)).Value;
+
+			//if (wrappedDictionary != null)
+			//{
+			//	resourceCalculationPeriods = wrappedDictionary;
+			//	return true;
+			//}
+			//resourceCalculationPeriods = null;
+			//return false;
 		}
 
 		public bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate)
 		{
-			var pair = _items.Where(x => x.Key.Equals(skill)).ToList();
-			if (!pair.Any()) return false;
+			IResourceCalculationPeriodDictionary thisDic;
+			if (!_wrappedDictionary.TryGetValue(skill, out thisDic))
+				return false;
 
-			if (pair.First().Value == null) return false;
-			IResourceCalculationPeriodDictionary resources = pair.First().Value;
-			
 			IResourceCalculationPeriod items;
+
+			return thisDic.TryGetValue(periodToCalculate, out items);
+
+			//var pair = _items.Where(x => x.Key.Equals(skill)).ToList();
+			//if (!pair.Any()) return false;
+
+			//if (pair.First().Value == null) return false;
+			//IResourceCalculationPeriodDictionary resources = pair.First().Value;
 			
-			return resources.TryGetValue(periodToCalculate, out items);
+			//IResourceCalculationPeriod items;
+			
+			//return resources.TryGetValue(periodToCalculate, out items);
 		}
 
 		public IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items()
@@ -162,18 +187,32 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
 		{
-			var wrappedDictionary = _items.FirstOrDefault(x => x.Key.Equals(skill)).Value;
-			if (wrappedDictionary != null)
+			IResourceCalculationPeriodDictionary thisDic;
+			if (_wrappedDictionary.TryGetValue(skill, out thisDic))
 			{
 				IResourceCalculationPeriod skillStaffPeriod;
-				if (wrappedDictionary.TryGetValue(period, out skillStaffPeriod))
+				if (thisDic.TryGetValue(period, out skillStaffPeriod))
 				{
-					dataForInterval = (IShovelResourceDataForInterval) skillStaffPeriod;
+					dataForInterval = (IShovelResourceDataForInterval)skillStaffPeriod;
 					return true;
 				}
 			}
+
 			dataForInterval = null;
 			return false;
+
+			//var wrappedDictionary = _items.FirstOrDefault(x => x.Key.Equals(skill)).Value;
+			//if (wrappedDictionary != null)
+			//{
+			//	IResourceCalculationPeriod skillStaffPeriod;
+			//	if (wrappedDictionary.TryGetValue(period, out skillStaffPeriod))
+			//	{
+			//		dataForInterval = (IShovelResourceDataForInterval) skillStaffPeriod;
+			//		return true;
+			//	}
+			//}
+			//dataForInterval = null;
+			//return false;
 		}
 	}
 }
