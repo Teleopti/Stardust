@@ -252,6 +252,8 @@
 					vm.absencePeriod = newValue;
 				}
 
+				vm.resetFocusSearch();
+
 				//fix for bug 42633, need removed when styleguide ready for this
 				if ($('#Request-period').hasClass('request-date-range-picker')
 					&& $('#Request-period').hasClass('ng-dirty')

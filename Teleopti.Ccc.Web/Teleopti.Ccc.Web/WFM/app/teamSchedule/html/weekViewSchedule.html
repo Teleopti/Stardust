@@ -20,6 +20,7 @@
 			<organization-picker ng-if="vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled"
 								 date="vm.scheduleDate"
 								 class="organization-picker-container"
+								 on-open="vm.resetFocusSearch()"
 								 on-init-async="vm.onSelectedTeamsInitDefer"
 								 on-pick="vm.onSelectedTeamsChanged(teams)"
 								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>

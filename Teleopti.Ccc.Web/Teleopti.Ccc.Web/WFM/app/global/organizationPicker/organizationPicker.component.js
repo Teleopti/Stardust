@@ -8,6 +8,7 @@
 			bindings: {			
 				date: '<',
 				preselectedTeamIds: '<?',
+				onOpen: '&',
 				onPick: '&',
 				onInitAsync: '<?'
 			}
@@ -180,6 +181,7 @@
 		};
 
 		ctrl.onPickerOpen = function () {
+			ctrl.onOpen();
 			initialSelectedTeamIds = angular.copy(ctrl.selectedTeamIds);
 		};
 

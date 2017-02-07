@@ -29,7 +29,6 @@
 		vm.onKeyWordInSearchInputChanged = function() {
 			vm.resetSchedulePage();
 			vm.selectedFavorite = false;
-			vm.resetFocusSearch();
 		};
 
 		vm.selectorChanged = function () {
@@ -79,6 +78,7 @@
 			}).catch(function() {
 				vm.isLoading = false;
 			});
+			vm.resetFocusSearch();
 		};
 
 		vm.onSelectedTeamsChanged = function(teams) {

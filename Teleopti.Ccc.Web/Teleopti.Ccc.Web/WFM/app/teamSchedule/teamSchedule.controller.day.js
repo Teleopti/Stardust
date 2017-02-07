@@ -159,7 +159,6 @@
 			}
 			vm.selectedFavorite = false;
 			vm.resetSchedulePage();
-			vm.resetFocusSearch();
 		};
 
 		vm.resetFocusSearch = function(){
@@ -248,6 +247,7 @@
 					vm.isLoading = false;
 				});
 			}
+			vm.resetFocusSearch();
 		};
 
 		vm.toggleShowAbsenceOnly = function () {

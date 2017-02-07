@@ -11,7 +11,15 @@
 								angular.element($(element[0]).find('input')).focus();
 								$interval.cancel(focusInputInterval);
 							}, 100);
-							scope[attrs.focusInput] = false;
+							//scope[attrs.focusInput] = true;
+						},0);
+					}else{
+						$timeout(function() {
+							var blurInputInterval = $interval(function() {
+								angular.element($(element[0]).find('input')).blur();
+								$interval.cancel(blurInputInterval);
+							}, 100);
+							//scope[attrs.focusInput] = false;
 						},0);
 					}
 				});
