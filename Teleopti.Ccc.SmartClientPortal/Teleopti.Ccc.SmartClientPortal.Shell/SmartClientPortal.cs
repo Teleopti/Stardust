@@ -23,9 +23,11 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemCheck;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -94,12 +96,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPress += Form_KeyPress;
 
 			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
+			webViewDataProtection.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
+			webViewDataProtection.RegisterJSExtensionFunction("dataProtectionResponse", webViewDataProtection_Response);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
 			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
 			var enableLargeAddressSpace = false;
 			if(bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace))
 				EO.Base.Runtime.EnableLargeAddressSpace = enableLargeAddressSpace;
 		}
+
+		private void webViewDataProtection_Response(object sender, JSExtInvokeArgs jsExtInvokeArgs)
+		{
+			throw new NotImplementedException();
+		}
+
 		private void logInfo(string message)
 		{
 			_customLogger.Info("SmartClientPortal: EoBrowser: " + message);
@@ -891,7 +901,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void goToPublicPage(bool  gotoStart)
+		private void goToPublicPage(bool gotoStart)
 		{
 			webControl1.Visible = true;
 			// no internet
@@ -899,31 +909,66 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if (gotoStart || webView1.Url == "")
 			{
-				try
+				var dataProtectionResponse = dataProtectionSetting();
+				if (dataProtectionResponse == DataProtectionEnum.Yes)
 				{
-					Task.Run(() =>
-					{
-						var token = SingleSignOnHelper.SingleSignOn();
-						webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
-						canAccessInternet = true;
-					});
+					//landing page and logon
+					gotoCustomerWebAndLogOn();
 				}
-				catch (ArgumentException exception)
+				else if (dataProtectionResponse == DataProtectionEnum.No)
 				{
-					_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
-					const string html = "<!doctype html><html ><head></head><body>{0}</body></html>";
-					webView1.LoadHtml(string.Format(html, exception.Message));
+					//landing page - no logon
+					webView1.Url = "http://www.teleopti.com/elogin.aspx?";
 					canAccessInternet = true;
 				}
-				catch (Exception exception)
+				else
 				{
-					_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
-					canAccessInternet = false;
-					goToLocalPage();
+					// Goto web page question data protection
+					wfmWebControl.Visible = false;
+					webControl1.Visible = false;
+					webControlDataProtection.Enabled = true;
+					webControlDataProtection.Visible = true;
+					webControlDataProtection.WebView.Url = string.Format("{0}WFM/index_desktop_client.html#/fdpa", webServer);
 				}
 			}
 		}
-		
+
+		private async void gotoCustomerWebAndLogOn()
+		{
+			try
+			{
+				await Task.Run(() =>
+				{
+					var token = SingleSignOnHelper.SingleSignOn();
+					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
+					canAccessInternet = true;
+				});
+			}
+			catch (ArgumentException exception)
+			{
+				_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
+				const string html = "<!doctype html><html ><head></head><body>{0}</body></html>";
+				webView1.LoadHtml(string.Format(html, exception.Message));
+				canAccessInternet = true;
+			}
+			catch (Exception exception)
+			{
+				_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
+				canAccessInternet = false;
+				goToLocalPage();
+			}
+		}
+
+		private DataProtectionEnum dataProtectionSetting()
+		{
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+				var dataProtectionResponse = settingDataRepository.FindValueByKey(DataProtectionResponse.Key, new DataProtectionResponse());
+				return dataProtectionResponse.Response;
+			}
+		}
+
 		private void openOptionsDialog()
 		{
 			try
