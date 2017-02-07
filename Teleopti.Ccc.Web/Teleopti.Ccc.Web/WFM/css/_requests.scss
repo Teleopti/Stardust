@@ -167,8 +167,11 @@
             flex: 1 1 80%;
             display: flex;
             flex-wrap: wrap;
-            align-items: baseline;
             justify-content: flex-start;
+
+            & > .people-search-container, & > .wfm-switch {
+                margin: 10px 10px 10px 0;
+            }
 
             wfm-multiple-search-input {
                 margin: 0;
@@ -180,11 +183,6 @@
 
             .request-date-range-picker {
                 margin-right: 1em;
-            }
-
-            .wfm-switch {
-                padding: 0;
-                margin: 0;
             }
         }
 
