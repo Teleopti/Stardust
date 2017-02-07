@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IOptimizationCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
-		public IResourceCalculation ResourceOptimization;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public WorkShiftSelectorTrackWhatSkillDays WorkShiftSelector;
 
@@ -67,7 +66,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true },
 				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
 			};
-			ResourceOptimization.ResourceCalculate(dateOnly, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 			InitMaxSeatForStateHolder.Execute(15); //causes maxskills from other sites to be included in stateholder
 
 			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, false, null, null);
@@ -106,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
 			};
 			InitMaxSeatForStateHolder.Execute(15); //causes maxskills to be included in stateholder
-			ResourceOptimization.ResourceCalculate(dateOnly, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
 			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, false, null, null);
 

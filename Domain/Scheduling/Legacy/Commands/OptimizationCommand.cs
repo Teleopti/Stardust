@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
+		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPagePerDateHolder groupPagePerDateHolder,
 			WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
 			IRequiredScheduleHelper requiredScheduleHelper,
-			ScheduleOptimizerHelper scheduleOptimizerHelper)
+			ScheduleOptimizerHelper scheduleOptimizerHelper,
+			DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
 			_requiredScheduleHelper = requiredScheduleHelper;
 			_scheduleOptimizerHelper = scheduleOptimizerHelper;
+			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
@@ -81,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
+			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
 
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 

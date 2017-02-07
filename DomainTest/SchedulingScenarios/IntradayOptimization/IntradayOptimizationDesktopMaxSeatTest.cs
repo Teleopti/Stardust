@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
-		public IResourceCalculation ResourceOptimization;
 
 		public IntradayOptimizationDesktopMaxSeatTest(bool resourcePlannerMaxSeatsNew40939, bool resourcePlannerSplitBigIslands42049)
 		{
@@ -106,7 +105,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			}
 
 			InitMaxSeatForStateHolder.Execute(15);
-			ResourceOptimization.ResourceCalculate(dateOnly, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, false, null, null);
 
 			var wasGivenNewShift = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9);
