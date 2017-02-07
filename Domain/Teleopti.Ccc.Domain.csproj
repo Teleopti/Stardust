@@ -184,6 +184,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IApproveRequestsWithValidatorsEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IIntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\INewAbsenceRequestHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayCascadingRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayCascadingRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />

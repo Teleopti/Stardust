@@ -75,8 +75,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType
 				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProvider25635ToggleOff>(builder,
 						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
-			registerType<IIntradayRequestProcessor, IntradayCascadingRequestProcessor,
-				IntradayRequestProcessor>(builder, Toggles.AbsenceRequests_Intraday_UseCascading_41969);
+
+			
+			registerType
+				<IIntradayRequestProcessor, IntradayCascadingRequestProcessor, IntradayCascadingRequestProcessorOld>(builder,
+						Toggles.Staffing_ReadModel_UseSkillCombination_42663);
+
 
 			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();
 			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
