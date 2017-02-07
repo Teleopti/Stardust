@@ -4,8 +4,10 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -17,31 +19,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class IntradayCascadingRequestProcessor : IIntradayRequestProcessor
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayCascadingRequestProcessor));
+		private readonly IActivityRepository _activityRepository;
+		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
+		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
+		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
+		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
-		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 
 		public IntradayCascadingRequestProcessor(ICommandDispatcher commandDispatcher,
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
-												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
-												 ISkillRepository skillRepository, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
-												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ISkillStaffingIntervalProvider skillStaffingIntervalProvider)
+												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
+												 ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills,
+			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
+			SkillGroupPerActivityProvider skillGroupPerActivityProvider, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_personSkillProvider = personSkillProvider;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
+			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_skillRepository = skillRepository;
+			_activityRepository = activityRepository;
+			_addResourcesToSubSkills = addResourcesToSubSkills;
+			_reducePrimarySkillResources = reducePrimarySkillResources;
+			_primarySkillOverstaff = primarySkillOverstaff;
 			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
+			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
-			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
@@ -67,12 +80,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, _currentScenario.Current())[personRequest.Person];
-
 				//night shift?
 				var dateOnlyPeriod = personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 				var allSkills = _skillRepository.LoadAll();
+				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkills(allSkills.Select(x => x.Id.GetValueOrDefault()).ToArray(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime).ToList();
+				skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 				var skillIds = new HashSet<Guid>();
 				foreach (var skillCombinationResource in combinationResources)
@@ -84,6 +98,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.Value)).Min(x => x.DefaultResolution);
 
+				var relevantSkillStaffPeriods =
+					skillStaffingIntervals.GroupBy(s => allSkills.First(a => a.Id.GetValueOrDefault() == s.SkillId))
+						.ToDictionary(k => k.Key,
+							v =>
+								(IResourceCalculationPeriodDictionary)
+								new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
+									s => (IResourceCalculationPeriod) s)));
+				var resourcesForCalculation = new ResourcesExtractorCalculation(combinationResources, allSkills, skillInterval);
+				var resourcesForShovel = new ResourcesExtractorShovel(combinationResources, allSkills, skillInterval);
+
 				var skillCombinationResourcesForAgent = new List<SkillCombinationResource>();
 				foreach (var day in scheduleDays)
 				{
@@ -91,14 +115,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					var layers = projection.ToResourceLayers(skillInterval);
 
-					skillCombinationResourcesForAgent.AddRange(
-						from layer in layers let skillCombination = _personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
-							.ForActivity(layer.PayloadId)
-						where skillCombination.Skills.Any()
-						select distributeResourceSmartly(combinationResources, skillCombination, layer));
+					foreach (var layer in layers)
+					{
+						var activity = _activityRepository.Get(layer.PayloadId);
+						if (nonSkillActivityForWholeInterval(activity, layer))
+						{
+							zeroDemandForIntervalsCoveredByNonSkillActivity(skillStaffingIntervals.ToList(), layer);
+							continue;
+						}
+						var skillCombination =
+							_personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
+								.ForActivity(layer.PayloadId);
+						if (!skillCombination.Skills.Any()) continue;
+						
+						var skillCombinationResourceByAgentAndLayer = distributeResourceSmartly(combinationResources, skillCombination, layer);
+						skillCombinationResourcesForAgent.Add(skillCombinationResourceByAgentAndLayer);
+						
+						var scheduleResourceOptimizer = new ScheduleResourceOptimizer(resourcesForCalculation, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods),new AffectedPersonSkillService(allSkills), false, new ActivityDivider());
+						scheduleResourceOptimizer.Optimize(layer.Period);
+						
+						//Shovling
+						var skillStaffIntervalHolder = new SkillStaffIntervalHolder(relevantSkillStaffPeriods.Select(s =>
+						{
+							IResourceCalculationPeriod period;
+							s.Value.TryGetValue(layer.Period, out period);
+							return new {s.Key, period};
+						}).ToDictionary(k => k.Key, v => v.period));
+						var cascadingSkills = new CascadingSkills(allSkills);
+						if (!cascadingSkills.Any()) continue;
+
+						var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills,
+							resourcesForShovel, activity, layer.Period);
+						var allSkillGroups = orderedSkillGroups.AllSkillGroups();
+						foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
+						{
+							var state = _primarySkillOverstaff.AvailableSum(skillStaffIntervalHolder, allSkillGroups, skillGroupsWithSameIndex, layer.Period);
+							_addResourcesToSubSkills.Execute(state, skillStaffIntervalHolder, skillGroupsWithSameIndex, layer.Period);
+							_reducePrimarySkillResources.Execute(state, skillStaffIntervalHolder, layer.Period);
+						}
+					}
 				}
 
-				var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList());
 				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
 				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 
@@ -159,6 +216,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				Resource = -1 * part
 			};
 			return skillCombinationChange;
+		}
+
+		private static bool nonSkillActivityForWholeInterval(IActivity activity, ResourceLayer layer)
+		{
+			return !activity.RequiresSkill && !layer.FractionPeriod.HasValue;
+		}
+
+		private static void zeroDemandForIntervalsCoveredByNonSkillActivity(List<SkillStaffingInterval> skillStaffingIntervals, ResourceLayer layer)
+		{
+			var relevantStaffingIntervals = skillStaffingIntervals.Where(s => s.StartDateTime == layer.Period.StartDateTime);
+			foreach (var relevantStaffingInterval in relevantStaffingIntervals)
+			{
+				relevantStaffingInterval.ForecastWithShrinkage = 0;
+				relevantStaffingInterval.FStaff = 0;
+			}
 		}
 
 		private bool sendDenyCommand(Guid personRequestId, string denyReason)

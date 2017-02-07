@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
 	public class IntradayCascadingRequestProcessorTest : ISetup
 	{
 		public IntradayCascadingRequestProcessor Target;

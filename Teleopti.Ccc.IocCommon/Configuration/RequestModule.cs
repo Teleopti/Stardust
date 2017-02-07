@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -19,12 +18,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	public class RequestModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
-		private readonly IToggleManager _toggleManager;
 
-		public RequestModule(IIocConfiguration configuration, IToggleManager toggleManager)
+		public RequestModule(IIocConfiguration configuration)
 		{
 			_configuration = configuration;
-			_toggleManager = toggleManager;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -78,15 +75,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType
 				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProvider25635ToggleOff>(builder,
 						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
-
-			if (_toggleManager.IsEnabled(Toggles.Staffing_ReadModel_UseSkillCombination_42663))
-				builder.RegisterType<IntradayCascadingRequestProcessor>()
-				.As<IIntradayRequestProcessor>();
-			else if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_Intraday_UseCascading_41969))
-				builder.RegisterType<IntradayCascadingRequestProcessorOld>().As<IIntradayRequestProcessor>();
-			else
-				builder.RegisterType<IntradayRequestProcessor>().As<IIntradayRequestProcessor>();
-			
+			registerType<IIntradayRequestProcessor, IntradayCascadingRequestProcessor,
+				IntradayRequestProcessor>(builder, Toggles.AbsenceRequests_Intraday_UseCascading_41969);
 
 			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();
 			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
