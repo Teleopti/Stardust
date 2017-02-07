@@ -19,7 +19,10 @@
 				poor: '@Resources.Poor',
 				good: '@Resources.Good',
 				possibilityForAbsence: '@Resources.PossibilityToGetAbsenceColon',
-				possibilityForOvertime: '@Resources.PossibilityToGetOvertimeColon'
+				possibilityForOvertime: '@Resources.PossibilityToGetOvertimeColon',
+				hideStaffingPossibility: '@Resources.HideStaffingPossibility',
+				showAbsencePossibility: '@Resources.ShowAbsencePossibility',
+				showOvertimePossibility: '@Resources.ShowOvertimePossibility'
 			},
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
@@ -67,15 +70,27 @@
             <li class="col-xs-12 col-sm-4 pull-right" data-bind="visible: staffingPossibilityEnabled">
                 <div class="input-group pull-right" style="width: 200px; margin-left: 50px;">
                     <div class="btn-group" role="group" aria-describedby="basic-addon1">
-                        <a class="btn btn-default dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': possibilityType > 0, 'glyphicon-eye-close': possibilityType === 0}"></i>
-                            <span>@Resources.HideStaffingPossibility</span>
+                        <a class="btn btn-default dropdown-toggle" id="dropdown-possibility-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': possibilityType() > 0, 'glyphicon-eye-close': possibilityType() === 0}"></i>
+                            <span data-bind="text: possibilityLabel()"></span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="javascript: void(0);">@Resources.HideStaffingPossibility</a></li>
-                            <li><a href="javascript: void(0);">@Resources.ShowAbsencePossibility</a></li>
-                            <li><a href="javascript: void(0);">@Resources.ShowOvertimePossibility</a></li>
+                            <li>
+                                <a href="#" data-bind="click: function (data, event) { switchPossibilityType(0); }">
+                                    @Resources.HideStaffingPossibility
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bind="click: function (data, event) { switchPossibilityType(1); }">
+                                    @Resources.ShowAbsencePossibility
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bind="click: function (data, event) { switchPossibilityType(2); }">
+                                    @Resources.ShowOvertimePossibility
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

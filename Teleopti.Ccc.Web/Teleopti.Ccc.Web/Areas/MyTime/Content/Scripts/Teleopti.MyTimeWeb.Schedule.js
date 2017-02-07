@@ -51,8 +51,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				// by default, selectedDate is empty
 				var selectedDateMoment = moment(selectedDate);
 				var isCurrentWeek = !selectedDateMoment.isValid() || selectedDateMoment.isSame(moment(), "week");
-				if (vm.staffingPossibilityEnabled && isCurrentWeek && vm.possibilityType > 0) {
-					var possibilityUrl = vm.possibilityType === 1
+				if (vm.staffingPossibilityEnabled && isCurrentWeek && vm.possibilityType() > 0) {
+					var possibilityUrl = vm.possibilityType() === 1
 						? "../api/IntradayStaffingPossibility/Absence"
 						: "../api/IntradayStaffingPossibility/Overtime";
 
@@ -166,7 +166,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.initialRequestDay = ko.observable();
 		self.selectedDateSubscription = null;
-		self.possibilityType = 0; // Show which possibility, 0: None; 1: Absence possibility; 2: Overtime possibility;
 
 		self.showAddRequestToolbar = ko.computed(function () {
 			return (self.requestViewModel() || '') !== '';
@@ -193,6 +192,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.nextWeek = function () {
 			self.selectedDate(self.nextWeekDate());
 		};
+
+		var validPossibilitiesTypes = [
+			userTexts.hideStaffingPossibility,
+			userTexts.showAbsencePossibility,
+			userTexts.showOvertimePossibility
+		];
+
+		self.possibilityType = ko.observable(0);
+		self.possibilityLabel = function () { return validPossibilitiesTypes[self.possibilityType()] };
+
+		self.switchPossibilityType = function (possibilityType) {
+			self.possibilityType(possibilityType);
+			_fetchData();
+		}
 
 		self.previousWeek = function () {
 			self.selectedDate(self.previousWeekDate());
@@ -596,9 +609,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var totalHeight = shiftEndPosition - shiftStartPosition;
 
 			var tooltipsTitle = "";
-			if (parent.possibilityType === 1) {
+			if (parent.possibilityType() === 1) {
 				tooltipsTitle = parent.userTexts.possibilityForAbsence;
-			} else if (parent.possibilityType === 2) {
+			} else if (parent.possibilityType() === 2) {
 				tooltipsTitle = parent.userTexts.possibilityForOvertime;
 			}
 
@@ -731,7 +744,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (layer.IsOvertimeAvailability) {
 				width = 20;
 			} else if (parent.possibility && parent.possibility.length > 0) {
-				width = 116;
+				width = 115;
 			} else {
 				width = 127;
 			}
@@ -909,6 +922,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
 				vm.staffingPossibilityEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingPossibility_41608');
+
 				callback();
 				$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 				ko.applyBindings(vm, $('#page')[0]);
