@@ -410,5 +410,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		[Ignore("42343")]
+		public void ShouldMoveResourcesEvenWhenSkillsHaveDifferentIntervalLengths()
+		{
+			var scenario = new Scenario("_");
+			var activity1 = new Activity("_");
+			var activity2 = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("_").For(activity1).InTimeZone(TimeZoneInfo.Utc).CascadingIndex(1).IsOpenBetween(8, 9);
+			skillA.DefaultResolution = 15;
+			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB = new Skill("_").For(activity2).InTimeZone(TimeZoneInfo.Utc).CascadingIndex(1).IsOpenBetween(8, 9);
+			skillB.DefaultResolution = 30;
+			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var skillC = new Skill("_").For(activity2).InTimeZone(TimeZoneInfo.Utc).CascadingIndex(2).IsOpenBetween(8, 9);
+			skillC.DefaultResolution = 30;
+			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA);
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity1, new TimePeriod(5, 10));
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB, skillC);
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity2, new TimePeriod(5, 10));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass1, ass2 }, new[] { skillADay, skillBDay, skillCDay }, false, false));
+
+			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillBDay.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+		}
 	}
 }
