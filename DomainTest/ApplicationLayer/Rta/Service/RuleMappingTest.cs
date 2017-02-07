@@ -97,5 +97,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			EventPublisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldHandleMultipleStateCodesInStateGroup()
+		{
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode")
+				.WithStateGroup(phone, "phone")
+				.WithStateCode("Phone")
+				.WithStateCode("Ready")
+				;
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.SaveState(new StateForTest
+				{
+					StateCode = "Ready",
+					UserCode = "usercode"
+				});
+			});
+		}
 	}
 }

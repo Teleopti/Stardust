@@ -109,22 +109,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var illegal = m.StateCode == null && m.StateGroupId != Guid.Empty;
 					return !illegal;
 				})
-				.ToDictionary(x => new ruleMappingKey
+				.GroupBy(x => new ruleMappingKey
 				{
 					businessUnitId = x.BusinessUnitId,
 					stateGroupId = x.StateGroupId,
 					activityId = x.ActivityId
-				}, m => m.RuleId.HasValue ? new MappedRule
+				})
+				.ToDictionary(x => x.Key, m =>
 				{
-					RuleId = m.RuleId.Value,
-					RuleName = m.RuleName,
-					Adherence = m.Adherence,
-					StaffingEffect = m.StaffingEffect,
-					DisplayColor = m.DisplayColor,
-					IsAlarm = m.IsAlarm,
-					ThresholdTime = m.ThresholdTime,
-					AlarmColor = m.AlarmColor
-				} : null);
+					var mapping = m.First();
+					if (!mapping.RuleId.HasValue)
+						return null;
+					return new MappedRule
+					{
+						RuleId = mapping.RuleId.Value,
+						RuleName = mapping.RuleName,
+						Adherence = mapping.Adherence,
+						StaffingEffect = mapping.StaffingEffect,
+						DisplayColor = mapping.DisplayColor,
+						IsAlarm = mapping.IsAlarm,
+						ThresholdTime = mapping.ThresholdTime,
+						AlarmColor = mapping.AlarmColor
+					};
+				});
 			_stateCodeMappings = mappings
 				.GroupBy(x => new stateCodeMappingKey
 				{
