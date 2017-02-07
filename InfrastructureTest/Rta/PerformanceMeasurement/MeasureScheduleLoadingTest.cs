@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Publisher.AddHandler<AgentStateMaintainer>();
 			Publisher.AddHandler<ProjectionChangedEventPublisher>();
 			Publisher.AddHandler<ScheduleProjectionReadOnlyUpdater>();
+			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
+			Publisher.AddHandler<CurrentScheduleReadModelUpdater>();
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithDefaultScenario("default")

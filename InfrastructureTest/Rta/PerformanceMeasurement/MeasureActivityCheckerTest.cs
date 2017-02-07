@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Publisher.AddHandler<MappingReadModelUpdater>();
 			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
 			Publisher.AddHandler<AgentStateMaintainer>();
+			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithDefaultScenario("default")
