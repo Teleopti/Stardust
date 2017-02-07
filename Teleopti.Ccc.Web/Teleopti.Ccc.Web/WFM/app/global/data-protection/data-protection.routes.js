@@ -9,7 +9,7 @@
 		$stateProvider.state('dataProtection', {
 			url: '/fdpa',
 			templateUrl: 'app/global/data-protection/data-protection.html',
-			controller: 'DataProtectionController as vm'
+			controller: 'DataProtectionCtrl as vm'
 		})
 	}
 })();

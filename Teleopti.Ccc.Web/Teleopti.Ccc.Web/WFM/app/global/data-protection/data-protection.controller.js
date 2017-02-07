@@ -3,12 +3,21 @@
 
 	angular
 	  .module('wfm.dataProtection')
-	  .controller('DataProtectionController', DataProtectionController);
+	  .controller('DataProtectionCtrl', DataProtectionCtrl);
 
-	DataProtectionController.inject = [];
-	function DataProtectionController() {
+	DataProtectionCtrl.inject = ['DataProtectionService'];
+	function DataProtectionCtrl(DataProtectionService) {
 		var vm = this;
 
+		vm.sendYesResponse = sendYesResponse;
+		vm.sendNoResponse = sendNoResponse;
 
+		function sendYesResponse() {
+			DataProtectionService.iAgree.query();
+		}
+
+		function sendNoResponse() {
+			DataProtectionService.iDontAgree.query();
+		}
 	}
 })();
