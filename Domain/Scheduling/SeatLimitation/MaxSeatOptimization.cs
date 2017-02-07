@@ -138,6 +138,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 					return;
 
+				backgroundWorker.ReportProgress(0, new ResourceOptimizerProgressEventArgs(0, 0, Resources.DoNotBreakMaxSeatDotDotDot));
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);

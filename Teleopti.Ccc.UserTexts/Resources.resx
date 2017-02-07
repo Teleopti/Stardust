@@ -15542,4 +15542,7 @@ These options are activated:
     <value>Possibility to get overtime:</value>
     <comment>Title for tooltips in MyTime Web</comment>
   </data>
+  <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
+    <value>Do not break max seat...</value>
+  </data>
 </root>

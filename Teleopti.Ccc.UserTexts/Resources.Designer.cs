@@ -9131,6 +9131,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do not break max seat....
+        /// </summary>
+        public static string DoNotBreakMaxSeatDotDotDot {
+            get {
+                return ResourceManager.GetString("DoNotBreakMaxSeatDotDotDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do Not Break Max Seats.
         /// </summary>
         public static string DoNotBreakMaxSeats {
