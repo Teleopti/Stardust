@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('RtaSiteAndTeamOnSkillOverviewController', function() {
+describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -38,44 +38,6 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewController', function() {
 		spyOn($state, 'go');
 		$fakeBackend.withToggle('RTA_SiteAndTeamOnSkillOverview_40817');
 	}));
-
-	// fit('should get agents out of adherence in teams for selected skill', function() {
-	// 	stateParams.siteIds = "parisGuid";
-	// 	$fakeBackend
-	// 		.withTeam({
-	// 			Id: "parisTeamGreenGuid",
-	// 			SiteId: "parisGuid"
-	// 		})
-	// 		.withTeam({
-	// 			Id: "parisTeamRedGuid",
-	// 			SiteId: "parisGuid"
-	// 		})
-	// 		.withTeamAdherenceForSkill({
-	// 			SiteId: "parisGuid",
-	// 			Id: "parisTeamGreenGuid",
-	// 			OutOfAdherence: 5,
-	// 			SkillId: "phoneGuid"
-	// 		})
-	// 		.withTeamAdherenceForSkill({
-	// 			SiteId: "parisGuid",
-	// 			Id: "parisTeamRedGuid",
-	// 			OutOfAdherence: 7,
-	// 			SkillId: "emailGuid"
-	// 		});
-
-	// 	var c = $controllerBuilder.createController();
-	// 	vm = c.vm;
-	// 	c.apply(function() {
-	// 		vm.selectedSkillChange({
-	// 			Id: "emailGuid"
-	// 		});
-	// 	})
-	// 	.wait(5000);
-
-	// 	expect(vm.teams.length).toEqual(1);
-	// 	expect(vm.teams[0].Id).toEqual("parisTeamRedGuid");
-	// 	expect(vm.teams[0].OutOfAdherence).toEqual(7);
-	// });
 
 	it('should display agents out of adherence in teams for selected skill area', function() {
 		stateParams.siteIds = "parisGuid";
@@ -447,7 +409,7 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewController', function() {
 		expect(vm.selectedSkillArea.Name).toEqual('Email and phone');
 	});
 
-	it('should update url when changing from skill to skill area', function() {
+	it('should update url when on teams and changing from skill to skill area', function() {
 		stateParams.skillIds = "phoneGuid";
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
@@ -474,14 +436,13 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			})
 			.wait(5000);
 
-		expect($state.go).toHaveBeenCalledWith('rta.teams', {
-			siteIds: "parisGuid",
-			skillIds: undefined,
-			skillAreaId: "emailAndPhoneGuid"
+		expect($state.go).toHaveBeenCalledWith('rta.sites', {
+			skillAreaId: "emailAndPhoneGuid",
+			skillIds: undefined
 		});
 	});
 
-	fit('should update url when changing from skill area to skill', function() {
+	it('should update url when on teams and changing from skill area to skill', function() {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend

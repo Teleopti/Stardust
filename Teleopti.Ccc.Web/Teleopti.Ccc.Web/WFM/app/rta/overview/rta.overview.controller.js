@@ -46,27 +46,38 @@
 	) {
 
 		var vm = this;
+		var siteId = $stateParams.siteIds || [];
+		var stateForTeamsBySkill = 'rta.teams({siteIds: site.Id, skillIds: vm.selectedSkill.Id})';
+		var stateForTeamsBySkillArea = 'rta.teams({siteIds: site.Id, skillAreaId: vm.selectedSkillArea.Id})';
+		var stateForTeams = 'rta.teams({siteIds: site.Id})';
+		var stateForAgentsByTeamsAndSkill = 'rta.agents({teamIds: team.Id, skillIds: vm.selectedSkill.Id})';
+		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.selectedSkillArea.Id})';
+		/***scoped variables */
 		vm.selectedItemIds = [];
-		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.displaySkillOrSkillAreaFilter = false;
-		var teamsBySkillsStateName = "rta.teams-by-skill";
-
 		vm.skills = [];
 		vm.skillAreas = [];
 		vm.skillsLoaded = false;
 		vm.skillAreasLoaded = false;
 		vm.skillId = $stateParams.skillIds || null;
 		vm.skillAreaId = $stateParams.skillAreaId || null;
-		var siteId = $stateParams.siteIds || [];
 		vm.siteIds = angular.isArray(siteId) ? siteId[0] || null : siteId;
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
+		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
-
-		var stateForTeamsBySkill = 'rta.teams({siteId: site.Id, skillIds: vm.selectedSkill.Id})';
-		var stateForTeamsBySkillArea = 'rta.teams({siteId: site.Id, skillAreaId: vm.selectedSkillArea.Id})';
-		var stateForTeams = 'rta.teams({siteId: site.Id})';
-		var stateForAgentsByTeamsAndSkill = 'rta.agents({teamIds: team.Id, skillIds: vm.selectedSkill.Id})';
-		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.selectedSkillArea.Id})';
+		vm.goBackToRootWithUrl = rtaRouteService.urlForSites(vm.skillId, vm.skillAreaId);
+		/***scoped functions */
+		vm.querySearch = querySearch;
+		vm.selectedSkillChange = selectedSkillChange;
+		vm.selectedSkillAreaChange = selectedSkillAreaChange;
+		vm.urlForSelectSkill = urlForSelectSkill;
+		vm.getStateForTeams = getStateForTeams;
+		vm.getStateForAgents = getStateForAgents;
+		vm.goBackWithUrl = goBackWithUrl;
+		vm.goToDashboard = goToDashboard;
+		vm.goToSelectSkill = goToSelectSkill;
+		vm.toggleSelection = toggleSelection;
+		vm.openSelectedItems = openSelectedItems;
 
 		rtaService.getSkills()
 			.then(function (skills) {
@@ -91,7 +102,7 @@
 				getSitesOrTeams();
 			});
 
-		vm.querySearch = function (query, myArray) {
+		function querySearch(query, myArray) {
 			var results = query ? myArray.filter(createFilterFor(query)) : myArray;
 			return results;
 		};
@@ -104,95 +115,64 @@
 			};
 		};
 
-		vm.selectedSkillChange = function (skill) {
+		function selectedSkillChange(skill) {
 			if (!skill) return;
 			if (skill.Id == vm.skillId) return;
 			vm.skillId = skill.Id;
 			vm.selectedSkill = skill;
-			console.log('changing skill');
-			//vm.skillAreaId = undefined;
 			vm.selectedSkillArea = undefined;
-			if ($state.current.name !== "rta.teams" && angular.isDefined($stateParams.siteId) )
-				rtaRouteService.goToTeamsBySkill(vm.siteIds, skill.Id);
+			if ($state.current.name !== "rta.teams" && angular.isDefined($stateParams.siteId))
+				rtaRouteService.goToTeams(vm.siteIds, skill.Id, vm.selectedSkillArea);
 			else
-				rtaRouteService.goToSitesBySkill(skill.Id);
+				rtaRouteService.goToSites(skill.Id, vm.selectedSkillArea);
 		};
 
-		vm.selectedSkillAreaChange = function (skillArea) {
+		function selectedSkillAreaChange(skillArea) {
 			if (!skillArea) return;
 			if (skillArea.Id == vm.skillAreaId) return;
 			vm.skillAreaId = skillArea.Id;
 			vm.selectedSkillArea = skillArea;
-			console.log('changing skill area');
-			//vm.skillId = undefined;
 			vm.selectedSkill = undefined;
 			if ($state.current.name !== "rta.teams" && $stateParams.siteId)
-				rtaRouteService.goToTeamsBySkillArea(vm.siteIds, skillArea.Id);
+				rtaRouteService.goToTeams(vm.siteIds, vm.selectedSkill, skillArea.Id);
 			else
-				rtaRouteService.goToSitesBySkillArea(skillArea.Id);
+				rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
 		};
 
-		vm.urlForSelectSkill = function () { return rtaRouteService.urlForSelectSkill(); };
+		function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };
 
-		vm.goBackToRootWithUrl = vm.skillId !== null ?
-			rtaRouteService.urlForSitesBySkills(vm.skillId) :
-			rtaRouteService.urlForSitesBySkillArea(vm.skillAreaId);
-
-		vm.getStateForTeams = function () {
-			if(vm.skillId !== null || vm.skillAreaId !== null)
-				return vm.skillId !== null ? stateForTeamsBySkill : stateForTeamsBySkillArea;
-			else
-				return stateForTeams;
+		function getStateForTeams() {
+			if (vm.skillId !== null || vm.skillAreaId !== null) return vm.skillId !== null ? stateForTeamsBySkill : stateForTeamsBySkillArea;
+			else return stateForTeams;
 		};
 
-		vm.getStateForAgents = function () {
-			return (vm.skillId !== null || []) ? stateForAgentsByTeamsAndSkill : stateForAgentsByTeamsAndSkillArea;
-		}
-
-		$scope.$watch(function () {
-			return vm.selectedSkill;
-		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-				vm.goToDashboard();
-			}
-		});
-
-		$scope.$watch(function () {
-			return vm.selectedSkillArea;
-		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-				vm.goToDashboard();
-			}
-		});
+		function getStateForAgents() { return (vm.skillAreaId !== null) ? stateForAgentsByTeamsAndSkillArea : stateForAgentsByTeamsAndSkill; };
 
 		function changed(newValue, oldValue) {
 			return newValue !== oldValue && angular.isDefined(oldValue) && oldValue != null && newValue == null;
 		}
 
-		vm.goBackWithUrl = function () { return rtaRouteService.urlForSites(); };
-		vm.goToDashboard = function () { rtaRouteService.goToSites(); }
-		vm.goToSelectSkill = function () { rtaRouteService.goToSelectSkill(); };
+		function goBackWithUrl() { return rtaRouteService.urlForSites(); };
+		function goToDashboard() { rtaRouteService.goToSites(); }
+		function goToSelectSkill() { rtaRouteService.goToSelectSkill(); };
 
 
-		vm.toggleSelection = function (itemId) {
+		function toggleSelection(itemId) {
 			var index = vm.selectedItemIds.indexOf(itemId);
-			if (index > -1) {
-				vm.selectedItemIds.splice(index, 1);
-			} else {
-				vm.selectedItemIds.push(itemId);
-			}
+			if (index > -1) vm.selectedItemIds.splice(index, 1);
+			else vm.selectedItemIds.push(itemId);
 		}
 
-		vm.openSelectedItems = function () {
+		function openSelectedItems() {
 			if (vm.selectedItemIds.length === 0) return;
 			goToAgents(vm.selectedItemIds);
 		};
 
 		var polling = $interval(function () {
 			if (vm.skillId !== null || vm.skillAreaId !== null) {
-				if(vm.skillAreaId !== null)
+				if (vm.skillAreaId !== null)
 					vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
-				if (vm.siteIds !== null && angular.isDefined(vm.teams)) {				
+				if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
 					getAdherenceForTeamsBySkills(vm.siteIds, vm.skillId)
 						.then(function (teamAdherences) {
 							updateAdherence(vm.teams, teamAdherences);
@@ -227,17 +207,12 @@
 			var skillOrSkillAreaValue = vm.selectedSkill != null ? vm.skillIds : vm.skillAreaId;
 			var sitesOrTeamsKey = vm.sites ? 'siteIds' : 'teamIds';
 			var sitesOrTeamsValue = selectedItemIds;
-			if(vm.skillIds || vm.skillAreaId){
+			if (vm.skillIds || vm.skillAreaId) {
 				stateParamsObject[skillOrSkillAreaKey] = skillOrSkillAreaValue;
 			}
 			stateParamsObject[sitesOrTeamsKey] = sitesOrTeamsValue;
 			rtaRouteService.goToAgents(stateParamsObject);
 		};
-
-		// function goToAgents(selectedItemIds) {
-		// 	vm.siteId ? rtaRouteService.goToAgents({ teamIds: selectedItemIds }) : rtaRouteService.goToAgents({ siteIds: selectedItemIds });
-		// };
-
 
 		function getTeamsBySkillsInfo() {
 			return getTeamsForSkillOrSkillArea()
@@ -341,6 +316,22 @@
 					rtaRouteService.goToSites();
 			}
 		);
+
+		$scope.$watch(function () {
+			return vm.selectedSkill;
+		}, function (newValue, oldValue) {
+			if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
+				vm.goToDashboard();
+			}
+		});
+
+		$scope.$watch(function () {
+			return vm.selectedSkillArea;
+		}, function (newValue, oldValue) {
+			if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
+				vm.goToDashboard();
+			}
+		});
 
 		$scope.$on('$destroy', function () { $interval.cancel(polling); });
 

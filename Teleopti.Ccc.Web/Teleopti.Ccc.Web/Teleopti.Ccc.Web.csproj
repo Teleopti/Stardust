@@ -1516,7 +1516,6 @@
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.spec.js" />
-    <Content Include="WFM\app\rta\overview\rta-sites-SiteOnSkillsOverview.html" />
     <Content Include="WFM\app\rta\overview\rta-sites.html" />
     <Content Include="WFM\app\rta\overview\rta-teams.html" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.js" />
@@ -1538,10 +1537,7 @@
     <Content Include="WFM\app\rta\rta.sorting.localelanguage.service.js" />
     <Content Include="WFM\app\rta\rta.state.provider.js" />
     <Content Include="WFM\app\rta\skills\rta-selectSkill.html" />
-    <Content Include="WFM\app\rta\skills\rta-sites-bySkills.html" />
-    <Content Include="WFM\app\rta\skills\rta-teams-bySkills.html" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.teams.spec.js" />
