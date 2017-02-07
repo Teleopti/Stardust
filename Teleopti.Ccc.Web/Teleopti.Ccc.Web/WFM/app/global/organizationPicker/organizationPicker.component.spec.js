@@ -68,6 +68,7 @@ describe('organizationPicker component tests', function () {
 
 		var bindings = {
 			date: new Date('2015-09-01'),
+			onOpen: function(){	},
 			onPick: angular.noop
 		}
 
@@ -85,6 +86,7 @@ describe('organizationPicker component tests', function () {
 		
 		var bindings = {
 			date: new Date('2015-09-01'),
+			onOpen: function(){	},
 			onPick: angular.noop
 		}
 
@@ -105,6 +107,7 @@ describe('organizationPicker component tests', function () {
 		var selectedTeams=[];		
 		var bindings = {
 			date: new Date('2015-09-01'),
+			onOpen: function(){	},
 			onPick: function (input) {
 				selectedTeams = input.teams;
 			}
@@ -123,6 +126,7 @@ describe('organizationPicker component tests', function () {
 		var selectedTeams=[];		
 		var bindings = {
 			date: new Date('2015-09-01'),
+			onOpen: function(){	},
 			onPick: function (input) {
 				selectedTeams = input.teams;
 			}
