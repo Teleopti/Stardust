@@ -16,7 +16,7 @@
 		'wfm.multiplesearchinput',
 		'wfm.favoriteSearch',
 		'wfm.organizationPicker',
-		'wfm.inputFocus'
+		'wfm.focusInput'
 	]).run(moduleRun);
 
 	moduleRun.$inject = ['$rootScope', 'organizationPickerSvc', 'FavoriteSearchDataService'];

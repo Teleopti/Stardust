@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('wfm.inputFocus', []).directive('focusInput', function ($timeout, $interval) {
+	angular.module('wfm.focusInput', []).directive('focusInput', function ($timeout, $interval) {
 		return {
 			link: function(scope, element, attrs) {
 				scope.$watch(attrs.focusInput, function(value) {
