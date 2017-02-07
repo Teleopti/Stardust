@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				where g.StateCollection.Any()
 				select new
 				{
-					Id = g.Id.Value,
+					g.Id,
 					BusinessUnitId = g.BusinessUnit.Id.Value,
 					g.Name,
 					IsLoggedOut = g.IsLogOutState,
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					from b in businessUnits
 					select new
 					{
-						Id = Guid.Empty,
+						Id = null as Guid?,
 						BusinessUnitId = b.Id.Value,
 						Name = null as string,
 						IsLoggedOut = true,
@@ -135,14 +135,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					select new
 					{
 						c.StateCode,
-						c.PlatformTypeId
+						PlatformTypeId = c.PlatformTypeId as Guid?
 					}
 				let codes = legalStateCodes.IsEmpty()
 					? legalStateCodes.Append(
 						new
 						{
 							StateCode = null as string,
-							PlatformTypeId = Guid.Empty
+							PlatformTypeId = null as Guid?
 						})
 					: legalStateCodes
 				from c in codes
@@ -165,14 +165,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					select new
 					{
 						c.StateCode,
-						c.PlatformTypeId
+						PlatformTypeId = c.PlatformTypeId as Guid?
 					}
 				let codes = m.StateGroup == null
 					? legalStateCodes.Append(
 						new
 						{
 							StateCode = null as string,
-							PlatformTypeId = Guid.Empty
+							PlatformTypeId = null as Guid?
 						})
 					: legalStateCodes
 				from c in codes
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					select m
 					).SingleOrDefault()
 				let businessUnitId = mapping?.BusinessUnitId ?? s.BusinessUnitId
-				let ruleId = mapping?.Rule?.Id ?? Guid.Empty
+				let ruleId = mapping?.Rule?.Id
 				let ruleName = mapping?.Rule?.Description.Name
 				let staffingEffect = mapping?.Rule?.StaffingEffect
 				let adherence = mapping?.Rule?.Adherence

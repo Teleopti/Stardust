@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		
 		public MappedRule RuleFor(Guid businessUnitId, Guid? stateGroupId, Guid? activityId)
 		{
-			stateGroupId = stateGroupId ?? Guid.Empty;
 			var match = queryRule(businessUnitId, stateGroupId, activityId);
 			if (activityId != null && match == null)
 				match = queryRule(businessUnitId, stateGroupId, null);
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_ruleMappings = mappings
 				.Where(m =>
 				{
-					var illegal = m.StateCode == null && m.StateGroupId != Guid.Empty;
+					var illegal = m.StateCode == null && m.StateGroupId.HasValue;
 					return !illegal;
 				})
 				.GroupBy(x => new ruleMappingKey
@@ -133,6 +132,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					};
 				});
 			_stateCodeMappings = mappings
+				.Where(x => x.StateGroupId.HasValue)
 				.GroupBy(x => new stateCodeMappingKey
 				{
 					businessUnitId = x.BusinessUnitId,
