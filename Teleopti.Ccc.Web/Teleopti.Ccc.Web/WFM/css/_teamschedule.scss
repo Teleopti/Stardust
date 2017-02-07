@@ -257,6 +257,14 @@
 		.advanced-input-dropdown {
 			top: 14px;
 			left: -5px;
+
+			
+		}
+
+		@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
+			.advanced-input-dropdown > .con-row{
+				display: block;
+			}
 		}
 		.advanced-input {
 			width: 150px;
