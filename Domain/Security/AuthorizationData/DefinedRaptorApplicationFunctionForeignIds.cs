@@ -118,6 +118,7 @@
 		public const string ViewBadgeLeaderboard = "0102";
 		public const string AbsenceReport = "0103";
 		public const string MyTimeCancelRequest = "0132";
+		public const string ViewPossibility = "0143";
 
 		// Web
 		public const string Anywhere = "0080";
