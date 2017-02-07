@@ -61,11 +61,10 @@
 												<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
 											}*@
 
-										@*if (!reportNavSection.IsWebReport)
+										@if (!reportNavSection.IsWebReport)
 										{
 											<a href="@reportNavSection.Url">@reportNavSection.Title</a>
-										}*@
-										<a href="@reportNavSection.Url">@reportNavSection.Title</a>
+										}
 									</li>
 								}
 							</ul>
