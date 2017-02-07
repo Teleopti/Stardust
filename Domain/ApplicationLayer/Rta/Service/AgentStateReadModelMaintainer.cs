@@ -25,19 +25,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_now = now;
 		}
 
-		[UnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Handle(TenantHourTickEvent @event)
 		{
 			_persister.DeleteOldRows(_now.UtcDateTime());
 		}
 
-		[UnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			_persister.SetDeleted(@event.PersonId, expirationFor(@event));
 		}
 
-		[UnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (!@event.TeamId.HasValue)
@@ -68,25 +68,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return ((dynamic)@event).Timestamp.AddDays(7);
 		}
 
-		[UnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
 		{
 			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
 		}
 
-		[UnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
 			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
 		}
 
-		[UnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Handle(TeamNameChangedEvent @event)
 		{
 			_persister.UpdateTeamName(@event.TeamId, @event.Name);
 		}
 
-		[UnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Handle(SiteNameChangedEvent @event)
 		{
 			_persister.UpdateSiteName(@event.SiteId, @event.Name);
