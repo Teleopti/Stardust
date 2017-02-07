@@ -84,14 +84,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.Value)).Min(x => x.DefaultResolution);
 
-				var skillCombinationResourcesForAgent = new List<SkillCombinationResource>();
+				var deltaResourcesForAgent = new List<SkillCombinationResource>();
 				foreach (var day in scheduleDays)
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
 
 					var layers = projection.ToResourceLayers(skillInterval);
 
-					skillCombinationResourcesForAgent.AddRange(
+					deltaResourcesForAgent.AddRange(
 						from layer in layers let skillCombination = _personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
 							.ForActivity(layer.PayloadId)
 						where skillCombination.Skills.Any()
@@ -111,9 +111,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var result = sendApproveCommand(personRequest.Id.GetValueOrDefault());
 						if (result)
 						{
-							foreach (var combinationResource in skillCombinationResourcesForAgent)
+							foreach (var delta in deltaResourcesForAgent)
 							{
-								_skillCombinationResourceRepository.PersistChange(combinationResource);
+								_skillCombinationResourceRepository.PersistChange(delta);
 							}
 						}
 						else
