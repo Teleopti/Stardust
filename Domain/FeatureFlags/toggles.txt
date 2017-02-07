@@ -155,7 +155,7 @@ MyTimeWeb_PreferenceForMobile_40265 = true
 MyTimeWeb_StudentAvailabilityForMobile_42498 = true
 MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = true
 MyTimeWeb_ShowContractTime_41462 = true
-MyTimeWeb_ViewAbsencePossibilityOnIntradayLevel_41608 = DEV
+MyTimeWeb_ViewIntradayStaffingPossibility_41608 = DEV
 
 Scheduler_AgentSkillAnalyzer_12345 = DEV
 Scheduler_IntradayOptimization_36617 = true
