@@ -18,24 +18,20 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		[UnitOfWork, Route("api/Global/DataProtection/Yes"), HttpPost]
 		public virtual IHttpActionResult Yes()
 		{
-			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, 
-				new DataProtectionResponse
-				{
-					Response = DataProtectionEnum.Yes,
-					ResponseDate = DateTime.UtcNow
-				});
+			var setting = _personalSettingDataRepository.FindValueByKey(DataProtectionResponse.Key, new DataProtectionResponse());
+			setting.Response = DataProtectionEnum.Yes;
+			setting.ResponseDate = DateTime.UtcNow;
+			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, setting);
 			return Ok();
 		}
 
 		[UnitOfWork, Route("api/Global/DataProtection/No"), HttpPost]
 		public virtual IHttpActionResult No()
 		{
-			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, 
-				new DataProtectionResponse
-				{
-					Response = DataProtectionEnum.No,
-					ResponseDate = DateTime.UtcNow
-				});
+			var setting = _personalSettingDataRepository.FindValueByKey(DataProtectionResponse.Key, new DataProtectionResponse());
+			setting.Response = DataProtectionEnum.No;
+			setting.ResponseDate = DateTime.UtcNow;
+			_personalSettingDataRepository.PersistSettingValue(DataProtectionResponse.Key, setting);
 			return Ok();
 		}
 	}
