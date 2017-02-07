@@ -16,47 +16,59 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public StaffingPossibilityViewModel CreateIntradayAbsencePossibilityViewModel()
 		{
+			//* TODO: This is just for creating demo data, should be replaced with API invoking
+			const int intervalLengthInMinutes = 15;
+			var today = DateTime.Now.Date;
+			var tomorrow = today.AddDays(1);
+
+			var random = new Random();
+			var periodStart = today;
+			var possibilities = new List<PeriodStaffingPossibilityViewModel>();
+			while (periodStart < tomorrow)
+			{
+				possibilities.Add(new PeriodStaffingPossibilityViewModel
+				{
+					StartTime = periodStart,
+					EndTime = periodStart.AddMinutes(intervalLengthInMinutes),
+					Possibility = (int)Math.Round(random.NextDouble())
+				});
+				periodStart = periodStart.AddMinutes(intervalLengthInMinutes);
+			}
+			//*/
+
 			return new StaffingPossibilityViewModel
 			{
 				SiteOpenHourPeriod = getIntradaySiteOpenHourPeriod(),
-				Possibilities = new List<PeriodStaffingPossibilityViewModel>
-				{
-					new PeriodStaffingPossibilityViewModel
-					{
-						StartTime = DateTime.Now.AddMinutes(30),
-						EndTime = DateTime.Now.AddMinutes(60),
-						Possibility = 1
-					},
-					new PeriodStaffingPossibilityViewModel
-					{
-						StartTime = DateTime.Now.AddMinutes(60),
-						EndTime = DateTime.Now.AddMinutes(90),
-						Possibility = 0
-					}
-				}
+				Possibilities = possibilities
 			};
 		}
 
 		public StaffingPossibilityViewModel CreateIntradayOvertimePossibilityViewModel()
 		{
+			//* TODO: This is just for creating demo data, should be replaced with API invoking
+			const int intervalLengthInMinutes = 15;
+			var today = DateTime.Now.Date;
+			var tomorrow = today.AddDays(1);
+
+			var random = new Random();
+			var periodStart = today;
+			var possibilities = new List<PeriodStaffingPossibilityViewModel>();
+			while (periodStart < tomorrow)
+			{
+				possibilities.Add(new PeriodStaffingPossibilityViewModel
+				{
+					StartTime = periodStart,
+					EndTime = periodStart.AddMinutes(intervalLengthInMinutes),
+					Possibility = (int)Math.Round(random.NextDouble())
+				});
+				periodStart = periodStart.AddMinutes(intervalLengthInMinutes);
+			}
+			//*/
+
 			return new StaffingPossibilityViewModel
 			{
 				SiteOpenHourPeriod = getIntradaySiteOpenHourPeriod(),
-				Possibilities = new List<PeriodStaffingPossibilityViewModel>
-				{
-					new PeriodStaffingPossibilityViewModel
-					{
-						StartTime = DateTime.Now.AddMinutes(30),
-						EndTime = DateTime.Now.AddMinutes(60),
-						Possibility = 1
-					},
-					new PeriodStaffingPossibilityViewModel
-					{
-						StartTime = DateTime.Now.AddMinutes(60),
-						EndTime = DateTime.Now.AddMinutes(90),
-						Possibility = 0
-					}
-				}
+				Possibilities = possibilities
 			};
 		}
 
