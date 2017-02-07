@@ -316,6 +316,7 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopShiftTabTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelBeforeReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelTest.cs" />
