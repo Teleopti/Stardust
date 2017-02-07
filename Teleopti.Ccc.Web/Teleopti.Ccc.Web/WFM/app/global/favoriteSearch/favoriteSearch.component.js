@@ -14,9 +14,9 @@
 			}
 		});
 
-	favoriteSearchCtrl.$inject = ['$translate', '$mdPanel', '$wfmConfirmModal', 'FavoriteSearchDataService'];
+	favoriteSearchCtrl.$inject = ['$scope', '$translate', '$mdPanel', '$wfmConfirmModal', 'FavoriteSearchDataService'];
 
-	function favoriteSearchCtrl($translate, $mdPanel, $wfmModal, FavoriteSearchDataService) {
+	function favoriteSearchCtrl($scope, $translate, $mdPanel, $wfmModal, FavoriteSearchDataService) {
 		var ctrl = this;
 		ctrl.favoriteSearchList = [];
 		ctrl.isTest = false;
@@ -41,7 +41,10 @@
 				clickOutsideToClose: true,
 				escapeToClose: true,
 				focusOnOpen: false,
-				zIndex: 150
+				zIndex: 150,
+				onRemoving: function () {
+					ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';				
+				}
 			};
 			$mdPanel.open(config);
 		};
@@ -63,6 +66,17 @@
 					});
 				});
 		};
+
+		$scope.$watch(function() {
+				return ctrl.getSearch();
+			},
+			function (nv, ov) {
+				if (nv !== ov) {
+					ctrl.currentName = '';
+					ctrl.currentFavorite = null;
+				}				
+			},
+			true);
 
 		ctrl.$onChanges = function(changObj){
 			if(!changObj || !changObj.currentFavorite || !changObj.currentFavorite.currentValue) return;
