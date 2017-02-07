@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 	public class SkillCombinationResourceRepository : ISkillCombinationResourceRepository
 	{
 		private readonly INow _now;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 
-		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork, 
 			ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader)
 		{
 			_now = now;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			}
 
 
-			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
+			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		private Dictionary<string, Guid> loadSkillCombination()
 		{
-			var result = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
+			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery("select Id, SkillId from [ReadModel].[SkillCombination]")
 				.SetResultTransformer(Transformers.AliasToBean<internalSkillCombination>())
 				.List<internalSkillCombination>();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var skillCombinations = loadSkillCombination();
 
-			var connectionString = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session().Connection.ConnectionString;
+			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-			var result = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
+			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(
 					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource - ISNULL(COUNT(d.SkillCombinationId), 0) as Resource, c.SkillId from 
 [ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId 
@@ -219,7 +219,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 			Guid id;
 			if (skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id))
 			{
-				_currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
+				_currentUnitOfWork.Current().Session()
 					.CreateSQLQuery("INSERT INTO [ReadModel].[SkillCombinationResourceDelta] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn) VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, CURRENT_TIMESTAMP)")
 					.SetParameter("SkillCombinationId", id)
 					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
@@ -231,7 +231,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 		public DateTime GetLastCalculatedTime()
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-			var latest =_currentUnitOfWorkFactory.Current().CurrentUnitOfWork().Session()
+			var latest =_currentUnitOfWork.Current().Session()
 							.CreateSQLQuery("SELECT top(1) InsertedOn from [ReadModel].SkillCombinationResource Where BusinessUnit = :bu order by InsertedOn desc ")
 							.SetParameter("bu", bu)
 							.UniqueResult<DateTime>();
@@ -275,8 +275,8 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 		}
 
-		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader) 
-			: base(now, currentUnitOfWorkFactory, currentBusinessUnit, requestStrategySettingsReader)
+		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader) 
+			: base(now, currentUnitOfWork, currentBusinessUnit, requestStrategySettingsReader)
 		{
 		}
 	}
