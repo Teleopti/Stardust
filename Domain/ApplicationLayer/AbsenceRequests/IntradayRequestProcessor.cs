@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
@@ -15,141 +17,153 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class IntradayRequestProcessor : IIntradayRequestProcessor
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
-
 		private readonly ICommandDispatcher _commandDispatcher;
-		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
-		private readonly ResourceAllocator _resourceAllocator;
-		private readonly IIntradayRequestWithinOpenHourValidator _intradayRequestWithinOpenHourValidator;
-		private readonly IScheduleForecastSkillReadModelValidator _scheduleForecastSkillReadModelValidator;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly ICurrentScenario _currentScenario;
+		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
+		private readonly ISkillRepository _skillRepository;
+		private readonly ISkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
+		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
+		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 
-		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator, 
-			IIntradayRequestWithinOpenHourValidator intradayRequestWithinOpenHourValidator, IScheduleForecastSkillReadModelValidator scheduleForecastSkillReadModelValidator, ICurrentBusinessUnit currentBusinessUnit)
+		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher,
+												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
+												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
+												 ISkillRepository skillRepository, ISkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
+												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ISkillStaffingIntervalProvider skillStaffingIntervalProvider)
 		{
 			_commandDispatcher = commandDispatcher;
-			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
-			_resourceAllocator = resourceAllocator;
-			_intradayRequestWithinOpenHourValidator = intradayRequestWithinOpenHourValidator;
-			_scheduleForecastSkillReadModelValidator = scheduleForecastSkillReadModelValidator;
-			_currentBusinessUnit = currentBusinessUnit;
+			_skillCombinationResourceRepository = skillCombinationResourceRepository;
+			_personSkillProvider = personSkillProvider;
+			_scheduleStorage = scheduleStorage;
+			_currentScenario = currentScenario;
+			_skillRepository = skillRepository;
+			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
+			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
+			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
-			if (!_scheduleForecastSkillReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
+			try
 			{
-				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems + " Old processor.");
-				return;
-			}
-			var personPeriod = personRequest.Person.Period(new DateOnly(startTime));
-			var cascadingPersonSkills = personPeriod.CascadingSkills();
-			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
-			var periods =
-				personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(personRequest.Request as IAbsenceRequest);
-			var useShrinkage = periods.GetSelectedValidatorList().Any(x => x is StaffingThresholdWithShrinkageValidator);
-			var primaryAndUnSortedSkills =
-				personPeriod
-					.PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue);
-			if (!areAllSkillsClosed(primaryAndUnSortedSkills, personRequest.Request.Period))
-			{
-				foreach (var skill in primaryAndUnSortedSkills)
+				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
-					var skillOpenHourStatus = _intradayRequestWithinOpenHourValidator.Validate(skill.Skill,personRequest.Request.Period);
-					if (skillOpenHourStatus == OpenHourStatus.MissingOpenHour || skillOpenHourStatus == OpenHourStatus.OutsideOpenHour) continue;
+					logger.Warn(Resources.DenyDueToTechnicalProblems + "Read model is not up to date");
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
+					return;
+				}
 
-					var skillStaffingIntervals =
-						_scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Skill.Id.GetValueOrDefault(),
-							personRequest.Request.Period);
-					if (!skillStaffingIntervals.Any())
-					{
-						sendDenyCommand(personRequest.Id.GetValueOrDefault(),
-							string.Format(Resources.StaffingInformationMissing, skill.Skill.Name));
-						return;
-					}
-					if (hasZeroForecast(skillStaffingIntervals.ToList(),useShrinkage)) continue;
+				//what if the agent changes personPeriod in the middle of the request period?
+				//what if the request is 8:00-8:05, only a third of a resource should be removed
 
-					var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals,
-						personRequest.Person.PermissionInformation.DefaultTimeZone(), useShrinkage);
-					if (underStaffingDetails.UnderstaffingTimes.Any())
+				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
+				if (!combinationResources.Any())
+				{
+					logger.Warn(Resources.DenyDueToTechnicalProblems + " Can not find any skillcombinations.");
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
+					return;
+				}
+
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, _currentScenario.Current())[personRequest.Person];
+
+				//night shift?
+				var dateOnlyPeriod = personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
+
+				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
+				var allSkills = _skillRepository.LoadAll();
+
+				var skillIds = new HashSet<Guid>();
+				foreach (var skillCombinationResource in combinationResources)
+				{
+					foreach (var skillId in skillCombinationResource.SkillCombination)
 					{
-						var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
-						sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
-						return;
+						skillIds.Add(skillId);
 					}
 				}
-				if (sendApproveCommand(personRequest.Id.GetValueOrDefault()))
-					updateResources(personRequest, startTime);
+				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.Value)).Min(x => x.DefaultResolution);
+
+				var skillCombinationResourcesForAgent = new List<SkillCombinationResource>();
+				foreach (var day in scheduleDays)
+				{
+					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
+
+					var layers = projection.ToResourceLayers(skillInterval);
+
+					skillCombinationResourcesForAgent.AddRange(
+						from layer in layers let skillCombination = _personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
+							.ForActivity(layer.PayloadId)
+						where skillCombination.Skills.Any()
+						select distributeResourceSmartly(combinationResources, skillCombination, layer));
+				}
+
+				var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList());
+				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+
+				var staffingThresholdValidator = validators.OfType<StaffingThresholdValidator>().FirstOrDefault();
+				if (staffingThresholdValidator != null)
+				{
+					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);
+					if (validatedRequest.IsValid)
+					{
+						var result = sendApproveCommand(personRequest.Id.GetValueOrDefault());
+						if (result)
+						{
+							foreach (var combinationResource in skillCombinationResourcesForAgent)
+							{
+								_skillCombinationResourceRepository.PersistChange(combinationResource);
+							}
+						}
+						else
+						{
+							sendDenyCommand(personRequest.Id.GetValueOrDefault(), validatedRequest.ValidationErrors);
+						}
+					}
+					else
+					{
+						sendDenyCommand(personRequest.Id.GetValueOrDefault(), validatedRequest.ValidationErrors);
+					}
+				}
+				else
+				{
+					logger.Error(Resources.DenyDueToTechnicalProblems + " Can not find any staffingThresholdValidator.");
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
+				}
 			}
-			else
+			catch (Exception exp)
 			{
-				//absence on a day which has no opening hours or on an period where all skills are closed
-				//approve and no need to update resource
-				sendApproveCommand(personRequest.Id.GetValueOrDefault());
+				logger.Error(Resources.DenyDueToTechnicalProblems + exp);
+				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 			}
-
 		}
 
-		private bool hasZeroForecast(List<SkillStaffingInterval> staffingIntervals, bool useShrinkage)
+		private static SkillCombinationResource distributeResourceSmartly(IEnumerable<SkillCombinationResource> combinationResources,
+			SkillCombination skillCombination, ResourceLayer layer)
 		{
-			return staffingIntervals.Count(x => x.GetForecast(useShrinkage) > 0) == 0;
-		}
+			
+			var skillCombinationResourceByAgentAndLayer =
+				combinationResources.Single(
+					x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
+						 && (layer.Period.StartDateTime >= x.StartDateTime && layer.Period.EndDateTime <= x.EndDateTime) );
 
-
-		private bool areAllSkillsClosed(IEnumerable<IPersonSkill> primaryAndUnSortedSkills, DateTimePeriod requestPeriod)
-		{
-			foreach (var personSkill in primaryAndUnSortedSkills)
+			
+			var part = layer.Period.ElapsedTime().TotalMinutes / skillCombinationResourceByAgentAndLayer.GetTimeSpan().TotalMinutes;
+			skillCombinationResourceByAgentAndLayer.Resource -= 1*part;
+			var skillCombinationChange = new SkillCombinationResource
 			{
-				if (_intradayRequestWithinOpenHourValidator.Validate(personSkill.Skill, requestPeriod) == OpenHourStatus.WithinOpenHour)
-					return false;
-			}
-			return true;
-		}
-
-		private void updateResources(IPersonRequest personRequest, DateTime startDate)
-		{
-			var staffingIntervalChanges = _resourceAllocator.AllocateResource(personRequest, startDate);
-			foreach (var staffingIntervalChange in staffingIntervalChanges)
-			{
-				_scheduleForecastSkillReadModelRepository.PersistChange(staffingIntervalChange);
-			}
-		}
-
-		private UnderstaffingDetails getUnderStaffedPeriods(IEnumerable<SkillStaffingInterval> skillStaffingIntervals, TimeZoneInfo defaultTimeZone, bool useShrinkage)
-		{
-			var result = new UnderstaffingDetails();
-			foreach (var interval in skillStaffingIntervals.Where(x => x.StaffingLevel < x.GetForecast(useShrinkage) + 1))
-			{
-				var startDateTime = TimeZoneHelper.ConvertFromUtc(interval.StartDateTime, defaultTimeZone);
-				var endDateTime = TimeZoneHelper.ConvertFromUtc(interval.EndDateTime, defaultTimeZone);
-				var startTimeSpan = startDateTime.TimeOfDay;
-				var endTimeSpan = endDateTime.Subtract(startDateTime.Date);
-					
-				result.AddUnderstaffingTime(new TimePeriod(startTimeSpan, endTimeSpan));
-			}
-			return result;
-		}
-
-		public string GetUnderStaffingHourString(UnderstaffingDetails underStaffingDetails, IPersonRequest personRequest)
-		{
-			var culture = personRequest.Person.PermissionInformation.Culture();
-			var uiCulture = personRequest.Person.PermissionInformation.UICulture();
-			var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-			var dateTime = personRequest.Request.Period.StartDateTimeLocal(timeZone);
-
-			var errorMessageBuilder = new StringBuilder();
-			var understaffingHoursValidationError = string.Format(uiCulture,
-				Resources.ResourceManager.GetString("InsufficientStaffingHours", uiCulture),
-				dateTime.ToString("d", culture));
-			var insufficientHours = string.Join(", ",
-				underStaffingDetails.UnderstaffingTimes.Select(t => t.ToShortTimeString(culture)).Take(4)); //4 = max items, NEEDS TO BE MAX 4 WHEN DENYREASON IS NVARCHAR(300)
-			errorMessageBuilder.AppendLine(string.Format("{0}{1}{2}", understaffingHoursValidationError, insufficientHours,
-				Environment.NewLine));
-			return errorMessageBuilder.ToString();
+				StartDateTime = skillCombinationResourceByAgentAndLayer.StartDateTime,
+				EndDateTime = skillCombinationResourceByAgentAndLayer.EndDateTime,
+				SkillCombination = skillCombinationResourceByAgentAndLayer.SkillCombination,
+				Resource = -1 * part
+			};
+			return skillCombinationChange;
 		}
 
 		private bool sendDenyCommand(Guid personRequestId, string denyReason)
 		{
-			var command = new DenyRequestCommand()
+			var command = new DenyRequestCommand
 			{
 				PersonRequestId = personRequestId,
 				DenyReason = denyReason
@@ -166,7 +180,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private bool sendApproveCommand(Guid personRequestId)
 		{
-			var command = new ApproveRequestCommand()
+			var command = new ApproveRequestCommand
 			{
 				PersonRequestId = personRequestId,
 				IsAutoGrant = true
@@ -180,6 +194,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			return !command.ErrorMessages.Any();
 		}
-
 	}
 }

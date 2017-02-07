@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	public class IntradayCascadingRequestProcessorOldTest : ISetup
+	public class IntradayRequestProcessorOldTest : ISetup
 	{
-		public IntradayCascadingRequestProcessorOld Target;
+		public IntradayRequestProcessorOld Target;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble<IntradayCascadingRequestProcessorOld>().For<IIntradayRequestProcessor>();
+			system.UseTestDouble<IntradayRequestProcessorOld>().For<IIntradayRequestProcessor>();
 			system.UseTestDouble<ScheduleForecastSkillReadModelValidator>().For<IScheduleForecastSkillReadModelValidator>();
 		}
 
