@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using NodaTime;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -123,7 +124,11 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private personAssociationInfo currentAssociationInfo(INow now)
 		{
-			var period = Period(now.LocalDateOnly());
+			var nowInAgentTimeZone =
+				LocalDateTime.FromDateTime(now.UtcDateTime())
+					.InZoneLeniently(DateTimeZoneProviders.Bcl[PermissionInformation.DefaultTimeZone().Id])
+					.ToDateTimeUnspecified();
+			var period = Period(new DateOnly(nowInAgentTimeZone));
 			var info = new personAssociationInfo();
 			if (period?.Team != null)
 			{

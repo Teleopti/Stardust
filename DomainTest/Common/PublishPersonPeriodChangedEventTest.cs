@@ -6,9 +6,11 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
@@ -17,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	public class PublishPersonPeriodChangedEventTest
 	{
 		public MutableNow Now;
-
+		
 		[Test]
 		public void ShouldPublishWhenPersonPeriodIsAdded()
 		{
@@ -144,6 +146,27 @@ namespace Teleopti.Ccc.DomainTest.Common
 			@event.CurrentSiteName.Should().Be("siteName");
 			@event.CurrentTeamId.Should().Be(teamId);
 			@event.CurrentTeamName.Should().Be("teamName");
+		}
+
+
+		[Test]
+		public void ShouldPublishWithTheCurrentPersonPeriodForAgentTimeZone()
+		{
+			Now.Is("2017-02-07 23:00");
+			var person = PersonFactory.CreatePerson(TimeZoneInfoFactory.IstanbulTimeZoneInfo());
+			var currentTeamId = Guid.NewGuid();
+			var futureTeamId = Guid.NewGuid();
+			var currentPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date(), TeamFactory.CreateTeamWithId(currentTeamId));
+			var futurePeriod = PersonPeriodFactory.CreatePersonPeriod("2017-02-08".Date(), TeamFactory.CreateTeamWithId(futureTeamId));
+			person.AddPersonPeriod(currentPeriod);
+			((Person) person).PopAllEvents();
+
+			person.AddPersonPeriod(futurePeriod);
+
+			((Person)person).PopAllEvents()
+				.OfType<PersonPeriodChangedEvent>()
+				.Single()
+				.CurrentTeamId.Should().Be(currentTeamId);
 		}
 	}
 }

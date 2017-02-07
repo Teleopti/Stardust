@@ -82,6 +82,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ret.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 			return ret;
 		}
+		
+		public static IPerson CreatePerson(TimeZoneInfo timeZoneInfo)
+		{
+			return CreatePerson(new Name("arne", "arne"), timeZoneInfo);
+		}
 
 		public static IPerson CreatePerson(WorkflowControlSet wfcs)
 		{
