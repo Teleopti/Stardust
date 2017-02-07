@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaSiteAndTeamOnSkillOverviewController', function() {
+fdescribe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -40,7 +40,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	}));
 
 	// fit('should get agents out of adherence in teams for selected skill', function() {
-	// 	stateParams.siteId = "parisGuid";
+	// 	stateParams.siteIds = "parisGuid";
 	// 	$fakeBackend
 	// 		.withTeam({
 	// 			Id: "parisTeamGreenGuid",
@@ -78,7 +78,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	// });
 
 	it('should display agents out of adherence in teams for selected skill area', function() {
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -134,7 +134,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	//should include other site to test filtering it out?
 	it('should display agents out of adherence in team for preselected skill', function() {
 		stateParams.skillIds = "emailGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -166,7 +166,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 
 	it('should display agents out of adherence in teams for preselected skill area', function() {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -213,7 +213,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	});
 
 	it('should update adherence for team and selected skill', function() {
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -249,7 +249,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 	
 
 	it('should update adherence for team and selected skill area', function() {
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -305,7 +305,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 
 	it('should update adherence for team and preselected skill', function() {
 		stateParams.skillIds = "phoneGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -337,7 +337,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 
 	it('should update adherence for site and preselected skill area', function() {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -394,7 +394,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 
 	it('should have preselected skill in field for teams', function() {
 		stateParams.skillIds = "phoneGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -419,7 +419,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 
 	it('should have preselected skill area in field for teams', function() {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		stateParams.siteId = ["parisGuid"];
+		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
 			.withTeam({
 				Id: "parisTeamGreenGuid",
@@ -449,7 +449,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 
 	it('should update url when changing from skill to skill area', function() {
 		stateParams.skillIds = "phoneGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withSkill({
 				Id: "phoneGuid",
@@ -475,15 +475,15 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			.wait(5000);
 
 		expect($state.go).toHaveBeenCalledWith('rta.teams', {
-			siteId: "parisGuid",
+			siteIds: "parisGuid",
 			skillIds: undefined,
 			skillAreaId: "emailAndPhoneGuid"
 		});
 	});
 
-	it('should update url when changing from skill area to skill', function() {
+	fit('should update url when changing from skill area to skill', function() {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withSkill({
 				Id: "phoneGuid",
@@ -508,8 +508,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 			})
 			.wait(5000);
 			
-		expect($state.go).toHaveBeenCalledWith('rta.teams', {
-			siteId: "parisGuid",
+		expect($state.go).toHaveBeenCalledWith('rta.sites', {
 			skillIds: "phoneGuid",
 			skillAreaId: undefined
 		});
@@ -517,7 +516,7 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 
 	it('should set site name in breadcrumb', function() {
 		stateParams.skillIds = "phoneGuid";
-		stateParams.siteId = "parisGuid";
+		stateParams.siteIds = "parisGuid";
 		$fakeBackend
 			.withSite({
 				Id: "parisGuid",

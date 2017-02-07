@@ -115,7 +115,6 @@
 			vm.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 			rtaService.getOrganization()
 				.then(function (organization) {
-					console.log('organization', organization);
 					vm.sites = organization;
 					if (vm.showOrgSelection)
 						keepSelectionForOrganization();
@@ -723,7 +722,6 @@
 		}
 
 		function updateBreadCrumb(data) {
-			console.log('data', data);
 			var breadCrumbInfo = rtaBreadCrumbService.getBreadCrumb({
 				organization: vm.sites,
 				skillAreaId: skillAreaId,

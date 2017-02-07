@@ -412,7 +412,8 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.sites', {
-			skillAreaId: "emailAndPhoneGuid"
+			skillAreaId: "emailAndPhoneGuid",
+			skillIds: undefined
 		});
 	});
 
@@ -451,7 +452,8 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.sites', {
-			skillIds: "phoneGuid"
+			skillIds: "phoneGuid",
+			skillAreaId: undefined
 		});
 	});
 
@@ -475,7 +477,8 @@ describe('RtaSiteAndTeamOnSkillOverviewController', function() {
 		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.sites', {
-			skillIds: "emailGuid"
+			skillIds: "emailGuid",
+			skillAreaId: undefined
 		});
 	});
 

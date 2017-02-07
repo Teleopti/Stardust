@@ -57,7 +57,7 @@
 		vm.skillAreasLoaded = false;
 		vm.skillId = $stateParams.skillIds || null;
 		vm.skillAreaId = $stateParams.skillAreaId || null;
-		var siteId = $stateParams.siteId || [];
+		var siteId = $stateParams.siteIds || [];
 		vm.siteIds = angular.isArray(siteId) ? siteId[0] || null : siteId;
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;

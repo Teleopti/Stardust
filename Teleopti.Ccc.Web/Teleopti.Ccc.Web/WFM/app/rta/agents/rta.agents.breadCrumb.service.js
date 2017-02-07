@@ -16,7 +16,6 @@
 		return service;
 
 		function getBreadCrumb(info) {
-			console.log(info);
 			var result = {};
 			result.goBackToRootWithUrl = rtaRouteService.urlForRootInBreadcrumbs(info);
 			if (info.siteIds.length > 1 && info.teamIds.length === 0) {

@@ -103,11 +103,11 @@ angular
 					}
 				})
 				.state('rta.teams', {
-					url: '/teams/?siteId&skillIds&skillAreaId',
+					url: '/teams/?siteIds&skillIds&skillAreaId',
 					templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
 					controller: 'RtaOverviewController as vm',
 					params: {
-						siteId: {
+						siteIds: {
 							array: true
 						},
 						skillIds: {

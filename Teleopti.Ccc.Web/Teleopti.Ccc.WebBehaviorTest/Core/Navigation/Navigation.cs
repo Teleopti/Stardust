@@ -473,28 +473,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoRealTimeAdherenceForTeamsOnSite(Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams/" + siteId);
+			GoToPage("wfm/#/rta/teams/?siteId=" + siteId);
 		}
 		
 		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams-by-skill/?siteIds=" + siteId + "&skillIds=" + skillId);
+			GoToPage("wfm/#/rta/teams/?siteId=" + siteId + "&skillIds=" + skillId);
 		}
 
 		public static void GotoRealTimeAdherenceForSkillForSites(Guid skillId)
 		{
 
-			GoToPage("wfm/#/rta/sites-by-skill/?skillIds=" + skillId);
+			GoToPage("wfm/#/rta/?skillIds=" + skillId);
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaForSites(Guid skillAreaId)
 		{
-			GoToPage("wfm/#/rta/sites-by-skill-area/?skillAreaId=" + skillAreaId);
+			GoToPage("wfm/#/rta/?skillAreaId=" + skillAreaId);
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(Guid skillAreaId, Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams-by-skill-area/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId);
+			GoToPage("wfm/#/rta/teams/?siteId=" + siteId + "&skillAreaId=" + skillAreaId);
 		}
 
 		public static void GotoRealTimeAdherenceAgentsOnTeam(Guid businessUnitId, Guid siteId, Guid teamId)
