@@ -88,6 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						}).ToArray();
 				}))
 				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => s))
+				.ForMember(d=>d.ViewPossibilityPermission, c=>c.MapFrom(s=>s.ViewPossibilityPermission))
 				.ForMember(d => d.DatePickerFormat, o => o.ResolveUsing(s => _culture().GetCulture().DateTimeFormat.ShortDatePattern))
 				;
 

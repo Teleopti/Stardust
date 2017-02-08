@@ -521,6 +521,19 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapViewPossibilityPermission()
+		{
+			var domainData = new WeekScheduleDomainData()
+			{
+				Date = DateOnly.Today,
+				ViewPossibilityPermission = true
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+			result.ViewPossibilityPermission.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapAbsenceRequestPermission()
 		{
 			var domainData = new WeekScheduleDomainData

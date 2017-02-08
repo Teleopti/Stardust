@@ -147,6 +147,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.shiftExchangePermission = ko.observable();
 		self.personAccountPermission = ko.observable();
+		self.viewPossibilityPermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
@@ -380,6 +381,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
+			self.viewPossibilityPermission(data.ViewPossibilityPermission);
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);

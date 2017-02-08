@@ -621,6 +621,31 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldMapViewPossibilityPermission()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewPossibility)).Return(true);
+
+			var result = target.Get(firstDayOfWeek);
+
+			result.ViewPossibilityPermission.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapRequestPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
