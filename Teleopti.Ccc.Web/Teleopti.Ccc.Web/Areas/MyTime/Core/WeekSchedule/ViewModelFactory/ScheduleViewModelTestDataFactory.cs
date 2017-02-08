@@ -100,12 +100,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return new PeriodViewModel {Summary = "00:15", TimeSpan = "10:30 - 10:45", Title = "Lunch", StyleClassName = "meeting_id"};
 		}
 
-		public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly)
+		public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblity staffingPossiblity)
 		{
 			return createWeekDayModels(dateOnly, 7);
 		}
 
-        public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
+		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
         {
             return new MonthScheduleViewModel();
         }
