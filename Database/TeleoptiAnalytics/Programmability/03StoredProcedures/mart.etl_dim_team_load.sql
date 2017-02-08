@@ -39,6 +39,10 @@ SELECT
 WHERE
 	NOT EXISTS (SELECT d.team_id FROM mart.dim_team d WHERE d.team_id=-1)
 
+UPDATE [mart].[dim_team]
+SET team_code = '00000000-0000-0000-0000-000000000000'
+WHERE team_id = -1 AND team_code is null
+
 -- insert all, used in reports 
 /*INSERT INTO mart.dim_team
 	(
