@@ -1652,7 +1652,7 @@
     <Content Include="WFM\app\requests\html\requests-commands-pane.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-open-hours.html" />
     <Content Include="WFM\app\requests\html\requests-reply-message.html" />
-    <Content Include="WFM\app\requests\ngEnter.js" />
+    <Content Include="WFM\app\global\ngEnter\ngEnter.js" />
     <Content Include="WFM\app\requests\request-command-parameters.service.js" />
     <Content Include="WFM\app\requests\request-grid-state.service.js" />
     <Content Include="WFM\app\requests\requests-absence-text-grid-configuration.service.js" />
