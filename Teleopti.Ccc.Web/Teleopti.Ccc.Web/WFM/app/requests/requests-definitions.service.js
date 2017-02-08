@@ -81,18 +81,18 @@
 				strlist.pop();
 			for (var i in strlist) {
 				if (strlist.hasOwnProperty(i)) {
-					if (strlist[i].includes("FirstName")) this.fillTermItem('FirstName', strlist[i], formated);
-					else if (strlist[i].includes("LastName")) this.fillTermItem('LastName', strlist[i], formated);
-					else if (strlist[i].includes("EmploymentNumber")) this.fillTermItem('EmploymentNumber', strlist[i], formated);
-					else if (strlist[i].includes("Organization")) this.fillTermItem('Organization', strlist[i], formated);
-					else if (strlist[i].includes("Role")) this.fillTermItem('Role', strlist[i], formated);
-					else if (strlist[i].includes("Contract")) this.fillTermItem('Contract', strlist[i], formated);
-					else if (strlist[i].includes("ContractSchedule")) this.fillTermItem('ContractSchedule', strlist[i], formated);
-					else if (strlist[i].includes("ShiftBags")) this.fillTermItem('ShiftBag', strlist[i], formated);
-					else if (strlist[i].includes("PartTimePercentage")) this.fillTermItem('PartTimePercentage', strlist[i], formated);
-					else if (strlist[i].includes("Skill")) this.fillTermItem('Skill', strlist[i], formated);
-					else if (strlist[i].includes("BudgetGroup")) this.fillTermItem('BudgetGroup', strlist[i], formated);
-					else if (strlist[i].includes("Note")) this.fillTermItem('Note', strlist[i], formated);
+					if (strlist[i].indexOf("FirstName") > -1) this.fillTermItem('FirstName', strlist[i], formated);
+					else if (strlist[i].indexOf("LastName") > -1) this.fillTermItem('LastName', strlist[i], formated);
+					else if (strlist[i].indexOf("EmploymentNumber") > -1) this.fillTermItem('EmploymentNumber', strlist[i], formated);
+					else if (strlist[i].indexOf("Organization") > -1) this.fillTermItem('Organization', strlist[i], formated);
+					else if (strlist[i].indexOf("Role") > -1) this.fillTermItem('Role', strlist[i], formated);
+					else if (strlist[i].indexOf("Contract") > -1) this.fillTermItem('Contract', strlist[i], formated);
+					else if (strlist[i].indexOf("ContractSchedule") > -1) this.fillTermItem('ContractSchedule', strlist[i], formated);
+					else if (strlist[i].indexOf("ShiftBags") > -1) this.fillTermItem('ShiftBag', strlist[i], formated);
+					else if (strlist[i].indexOf("PartTimePercentage") > -1) this.fillTermItem('PartTimePercentage', strlist[i], formated);
+					else if (strlist[i].indexOf("Skill") > -1) this.fillTermItem('Skill', strlist[i], formated);
+					else if (strlist[i].indexOf("BudgetGroup") > -1) this.fillTermItem('BudgetGroup', strlist[i], formated);
+					else if (strlist[i].indexOf("Note") > -1) this.fillTermItem('Note', strlist[i], formated);
 					else this.fillTermItem('All', strlist[i], formated);
 				}
 			}

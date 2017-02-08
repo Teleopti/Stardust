@@ -112,6 +112,7 @@
 				if (defaultSearch) {
 					vm.selectedTeamIds = defaultSearch.TeamIds;
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
+					vm.agentSearchTerm = vm.agentSearchOptions.keyword;
 				}
 			});
 
