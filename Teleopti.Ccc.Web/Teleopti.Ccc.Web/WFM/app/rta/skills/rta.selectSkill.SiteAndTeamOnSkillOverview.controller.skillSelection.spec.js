@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaSelectSkillController', function () {
+describe('RtaOverviewController', function () {
 	var $interval,
 		$httpBackend,
 		$state,
