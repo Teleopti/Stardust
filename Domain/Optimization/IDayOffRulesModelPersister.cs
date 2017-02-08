@@ -8,5 +8,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		void Delete(Guid id);
 	}
 
+	public interface IAgentGroupModelPersister
+	{
+		void Persist(AgentGroupModel agentGroupModel);
+	}
+
 
 }

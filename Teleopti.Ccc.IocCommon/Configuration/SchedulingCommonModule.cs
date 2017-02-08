@@ -397,6 +397,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
 			builder.RegisterType<FilterMapper>().SingleInstance();
 			builder.RegisterType<DayOffRulesModelPersister>().As<IDayOffRulesModelPersister>().SingleInstance();
+			builder.RegisterType<AgentGroupModelPersister>().As<IAgentGroupModelPersister>().SingleInstance();
 			builder.RegisterType<DayOffOptimizationPreferenceProviderUsingFiltersFactory>().AsSelf().SingleInstance();
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();

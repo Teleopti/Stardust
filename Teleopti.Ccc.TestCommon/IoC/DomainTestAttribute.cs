@@ -151,6 +151,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeDayOffRulesRepository>().For<IDayOffRulesRepository>();
+			system.UseTestDouble<FakeAgentGroupRepository>().For<IAgentGroupRepository>();
 			system.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
 			system.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
 			system.UseTestDouble<FakeRtaMapRepository>().For<IRtaMapRepository>();

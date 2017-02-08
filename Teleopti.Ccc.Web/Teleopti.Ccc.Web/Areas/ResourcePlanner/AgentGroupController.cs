@@ -3,28 +3,25 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner.Models;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class AgentGroupController : ApiController
 	{
 		private readonly IAgentGroupRepository _agentGroupRepository;
+		private readonly IAgentGroupModelPersister _agentGroupModelPersister;
 
-		public AgentGroupController(IAgentGroupRepository agentGroupRepository)
+		public AgentGroupController(IAgentGroupRepository agentGroupRepository,IAgentGroupModelPersister agentGroupModelPersister)
 		{
 			_agentGroupRepository = agentGroupRepository;
+			_agentGroupModelPersister = agentGroupModelPersister;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/ResourcePlanner/AgentGroup")]
-		public virtual object Create(CreateAgentGroupModel model)
+		public virtual object Create(AgentGroupModel model)
 		{
-			var agentGroup = new AgentGroup
-			{
-				Name = model.Name
-			};
-			_agentGroupRepository.Add(agentGroup);
-			return new {agentGroup.Id };
+			_agentGroupModelPersister.Persist(model);
+			return new { model.Id };
 		}
 
 		[UnitOfWork, HttpGet, Route("api/ResourcePlanner/AgentGroup")]

@@ -271,6 +271,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
     <Compile Include="Areas\People\PeopleSmartWorkflowControlSetControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\AgentGroupControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\Validation\PersonContractValidatorTest.cs" />
     <Compile Include="Areas\ResourcePlanner\Validation\PersonContractScheduleValidatorTest.cs" />
     <Compile Include="Areas\ResourcePlanner\Validation\PersonPartTimePercentageValidatorTest.cs" />
