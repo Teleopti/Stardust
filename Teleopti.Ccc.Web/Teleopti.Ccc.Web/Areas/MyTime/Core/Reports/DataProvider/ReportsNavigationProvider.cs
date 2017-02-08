@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Action = "Index",
 					Controller = "BadgeLeaderBoardReport",
 					Title = Resources.BadgeLeaderBoardReport,
+					Url = "/WFM/#/reports/leaderboard",
 					IsWebReport = true
 				});
 			}
