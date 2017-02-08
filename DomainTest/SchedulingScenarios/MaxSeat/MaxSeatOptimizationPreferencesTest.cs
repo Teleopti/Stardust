@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[Test]
-		[Ignore("Fix with #42593")]
 		public void ShouldRespectKeepShiftCategoriesTeamHierarchyOneAgent()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
