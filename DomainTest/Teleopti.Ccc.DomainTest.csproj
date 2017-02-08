@@ -316,7 +316,6 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopShiftTabTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelBeforeReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelTest.cs" />
@@ -340,6 +339,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOpenHoursTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationBlockTest.cs" />
+    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatRestrictionsTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatSurroundingDaysTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\TestData\DefaultMaxSeatOptimizationPreferences.cs" />
