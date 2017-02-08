@@ -1,4 +1,4 @@
-using Teleopti.Ccc.Domain.Collection;
+﻿using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -8,9 +8,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizeOneday : IIntradayOptimizeOneday
+	public class IntradayOptimizeOnedayFor42767 : IIntradayOptimizeOneday
 	{
-		private readonly IScheduleResultDailyValueCalculator _dailyValueCalculator;
 		private readonly IScheduleService _scheduleService;
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
@@ -25,9 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
 
-		public IntradayOptimizeOneday(IScheduleResultDailyValueCalculator dailyValueCalculator,
-			IScheduleService scheduleService,
+		public IntradayOptimizeOnedayFor42767(IScheduleService scheduleService,
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculation resourceOptimizationHelper,
@@ -40,9 +39,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleMatrixPro matrix,
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			IScheduleDayEquator scheduleDayEquator)
 		{
-			_dailyValueCalculator = dailyValueCalculator;
 			_scheduleService = scheduleService;
 			_optimizerPreferences = optimizerPreferences;
 			_rollbackService = rollbackService;
@@ -57,6 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_userTimeZone = userTimeZone;
+			_scheduleDayEquator = scheduleDayEquator;
 		}
 
 		public bool Execute(DateOnly dateOnly)
@@ -66,56 +66,35 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (daysOverMax())
 				return false;
 
-			double? oldPeriodValue = calculatePeriodValue(dateOnly);
-
 			var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrix);
 
-			if (!oldPeriodValue.HasValue)
-				return false;
-
-			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
 			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateOnly].GetEditorShift();
-			if (originalShift == null) return false;
-
+			if (originalShift == null)
+				return false;
 
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, dateOnly);
 			var undoResCalcChanges = new UndoRedoContainer();
-			foreach (var skillDay in _schedulingResultStateHolder.SkillDaysOnDateOnly(new[] { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1)}))
+			foreach (var skillDay in _schedulingResultStateHolder.SkillDaysOnDateOnly(new[] { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1) }))
 			{
 				skillDay.SkillStaffPeriodCollection.ForEach(x => undoResCalcChanges.SaveState(x.Payload));
 			}
 
 			_rollbackService.ClearModificationCollection();
 
-			IScheduleDayPro scheduleDayPro = _matrix.GetScheduleDayByKey(dateOnly);
-			IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
+			var scheduleDayPro = _matrix.GetScheduleDayByKey(dateOnly);
+			var scheduleDay = scheduleDayPro.DaySchedulePart();
+			//var currentShift = scheduleDay.GetEditorShift();
 
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
 
-			//delete schedule
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 
 			if (!tryScheduleDay(dateOnly, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime))
 			{
 				undoResCalcChanges.UndoAll();
-				return true;
-			}
-
-			// Step: Check that there are no white spots
-
-			double newValidatedPeriodValue = double.MaxValue;
-			double? newPeriodValue = calculatePeriodValue(dateOnly);
-			if (newPeriodValue.HasValue)
-				newValidatedPeriodValue = newPeriodValue.Value;
-
-			var isPeriodBetter = newValidatedPeriodValue < oldPeriodValue;
-			if (!isPeriodBetter)
-			{
-				_rollbackService.Rollback();
-				undoResCalcChanges.UndoAll();
-				lockDay(dateOnly);
 				return true;
 			}
 
@@ -131,11 +110,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			lockDay(dateOnly);
 
 			return true;
-		}
-
-		private double? calculatePeriodValue(DateOnly scheduleDay)
-		{
-			return _dailyValueCalculator.DayValue(scheduleDay);
 		}
 
 		private void lockDay(DateOnly day)
@@ -157,9 +131,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return false;
 			}
 
+			//var newShift = scheduleDay.DaySchedulePart().ReFetch().GetEditorShift();
+			//if (_scheduleDayEquator.MainShiftEquals(currentShift, newShift))
+			//{
+			//	_rollbackService.Rollback();
+			//	lockDay(day);
+			//	return false;
+			//}
+
 			if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
 			{
+				//should return false and lock?
 				_rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+				lockDay(day);
+				return false;
 			}
 
 			return true;

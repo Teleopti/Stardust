@@ -544,7 +544,9 @@
     <Compile Include="Notification\NotifyAppSubscriptions.cs" />
     <Compile Include="Notification\UserDevices.cs" />
     <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />
+    <Compile Include="Optimization\IIntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\IIntradayOptimizerCreator.cs" />
+    <Compile Include="Optimization\IntradayOptimizeOnedayFor42767.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreatorFor42767.cs" />
     <Compile Include="Optimization\TeamBlock\RemoveScheduleDayProsBasedOnShiftCategoryLimitation.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRetryRemoveShiftCategoryBackToLegalService.cs" />

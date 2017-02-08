@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
 		private readonly IIntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleMatrixPro _matrix;
-		private readonly IntradayOptimizeOneday _optimizeOneday;
+		private readonly IIntradayOptimizeOneday _optimizeOneday;
 
 		public IntradayOptimizer2(
 						IScheduleResultDataExtractor personalSkillsDataExtractor,
 						IIntradayDecisionMaker decisionMaker,
 						IScheduleMatrixPro matrix,
-						IntradayOptimizeOneday optimizeOneday)
+						IIntradayOptimizeOneday optimizeOneday)
 		{
 			_personalSkillsDataExtractor = personalSkillsDataExtractor;
 			_decisionMaker = decisionMaker;

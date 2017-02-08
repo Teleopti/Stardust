@@ -189,8 +189,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value);
 			
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> { skill }, scenario);
-			skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource
-				.Should().Be.EqualTo(1);
+			if (!_resourcePlannerIntradayNoDailyValueCheck42767)
+				skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1); //shift is rolled back due to worse intraday STD
+			else
+				skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(0); //shift is not rolled back
 		}
 
 
@@ -219,8 +221,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(dateOnly.AddDays(-1).ToDateOnlyPeriod(), new List<ISkill> { skill }, scenario);
-			skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
-				.Should().Be.True();
+			if (!_resourcePlannerIntradayNoDailyValueCheck42767)
+				skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
+				.Should().Be.True(); //shift is rolled back due to worse intraday STD
+			else
+				skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
+				.Should().Be.False(); //shift is not rolled back
 		}
 
 		[Test]
@@ -301,8 +307,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
 		}
 
-		[Test, Ignore("PBI 42767")]
-		public void ShouldNotRollBackEvenIfStandardDevGetsHigher()
+		[Test]
+		public void ShouldNotRollBackEvenIfStandardDevGetsHigherToggle42767()
 		{
 			//PBI 42767
 			var phoneActivity = ActivityFactory.CreateActivity("phone");

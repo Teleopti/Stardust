@@ -87,22 +87,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
 
-				IScheduleResultDailyValueCalculator dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
-																														   optimizerPreferences.Advanced,
-																														   _skillStaffPeriodToSkillIntervalDataMapper,
-																														   _skillIntervalDataDivider,
-																														   _skillIntervalDataAggregator,
-																																																									 _personalSkillsProvider,
-																																																									 _schedulerStateHolder().SchedulingResultState,
-																																																									 _userTimeZone);
-				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
-																														   optimizerPreferences.Advanced,
-																														   _skillStaffPeriodToSkillIntervalDataMapper,
-																														   _skillIntervalDataDivider,
-																														   _skillIntervalDataAggregator,
-																																																									 _personalSkillsProvider,
-																																																									 _schedulerStateHolder().SchedulingResultState,
-																																																									 _userTimeZone);
+				IScheduleResultDataExtractor personalSkillsDataExtractor =
+					new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
+						optimizerPreferences.Advanced,
+						_skillStaffPeriodToSkillIntervalDataMapper,
+						_skillIntervalDataDivider,
+						_skillIntervalDataAggregator,
+						_personalSkillsProvider,
+						_schedulerStateHolder().SchedulingResultState,
+						_userTimeZone);
 
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = workShiftContainerList[index];
 
@@ -118,11 +111,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
 				var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker, scheduleMatrix,
-					new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
+					new IntradayOptimizeOnedayFor42767(_scheduleService, optimizerPreferences, rollbackService,
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService,
-						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone));
+						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone, _scheduleDayEquator));
 
 				result.Add(optimizer);
 			}
