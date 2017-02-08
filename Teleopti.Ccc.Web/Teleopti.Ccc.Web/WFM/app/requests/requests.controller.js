@@ -40,7 +40,7 @@
 
 		vm.changeSelectedTeams = function (teams) {
 			internalSelectedTeamIds = teams;
-			vm.keyDownOnSearchInputFocus();
+			vm.focusSearch();
 			vm.selectedFavorite = false;
 		};
 
@@ -67,12 +67,6 @@
 			};
 		};
 
-		vm.keyDownOnSearchInputFocus = function ($event) {
-			vm.toggleSearchFocus = true;
-			if ($event && $event.which == 13) {
-				vm.keyDownOnSearchTermChanged();
-			}			
-		};
 		vm.keyDownOnSearchTermChanged = function() {
 			vm.toggleSearchFocus = false;
 			setSearchFilter();
@@ -111,6 +105,8 @@
 			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
 				if (defaultSearch) {
 					vm.selectedTeamIds = defaultSearch.TeamIds;
+					internalSelectedTeamIds = defaultSearch.TeamIds;
+					
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 					vm.agentSearchTerm = vm.agentSearchOptions.keyword;
 				}
