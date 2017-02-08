@@ -229,3 +229,4 @@ AbsenceRequests_ValidateAllAgentSkills_42392 = true
 WfmStaffing_AllowActions_42524 = RC
 Staffing_ReadModel_UseSkillCombination_42663 = RC
 Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
+Wfm_ResourcePlanner_AgentGroup_42871 = Dev
