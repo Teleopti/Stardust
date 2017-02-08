@@ -98,7 +98,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex);
-				log.Error("Exception occurred invoking TenantHearbeatEventPublisher", ex);
+				log.Error($"Exception occurred invoking {nameof(TenantTickEventPublisher)}", ex);
 			}
 		}
 
