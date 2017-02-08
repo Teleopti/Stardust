@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => s))
 				.ForMember(d=>d.ViewPossibilityPermission, c=>c.MapFrom(s=>s.ViewPossibilityPermission))
 				.ForMember(d => d.DatePickerFormat, o => o.ResolveUsing(s => _culture().GetCulture().DateTimeFormat.ShortDatePattern))
+				.ForMember(d => d.Possibilities, o=>o.Ignore())
 				;
 
 			CreateMap<WeekScheduleDomainData, RequestPermission>()

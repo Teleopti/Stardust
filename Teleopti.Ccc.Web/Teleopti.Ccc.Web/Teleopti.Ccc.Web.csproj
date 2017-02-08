@@ -496,7 +496,6 @@
     <Compile Include="Areas\MultiTenancy\Model\IdLogonModel.cs" />
     <Compile Include="Areas\MultiTenancy\Controllers\TenantAdminInfoController.cs" />
     <Compile Include="Areas\MultiTenancy\MultiTenancyAreaRegistration.cs" />
-    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityController.cs" />
     <Compile Include="Areas\MyTime\Controllers\StaffingAvailabilityController.cs" />
     <Compile Include="Areas\MyTime\Controllers\WidgetController.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IStaffingPossibilityViewModelFactory.cs" />

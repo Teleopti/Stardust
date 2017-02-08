@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			var weekScheduleDomainDataProvider = MockRepository.GenerateMock<IWeekScheduleDomainDataProvider>();
 			var monthScheduleDomainDataProvider = MockRepository.GenerateMock<IMonthScheduleDomainDataProvider>();
 			var target = new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider,
-				null);
+				null, null);
 			var domainData = new WeekScheduleDomainData();
 			var viewModel = new WeekScheduleViewModel();
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			var weekScheduleDomainDataProvider = MockRepository.GenerateMock<IWeekScheduleDomainDataProvider>();
 			var monthScheduleDomainDataProvider = MockRepository.GenerateMock<IMonthScheduleDomainDataProvider>();
 			var target = new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider,
-				null);
+				null, null);
 			var domainData = new MonthScheduleDomainData();
 			var viewModel = new MonthScheduleViewModel();
 
@@ -114,9 +114,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			var mapper = createMapper(user);
 			var weekScheduleDomainDataProvider = MockRepository.GenerateMock<IWeekScheduleDomainDataProvider>();
 			var monthScheduleDomainDataProvider = MockRepository.GenerateMock<IMonthScheduleDomainDataProvider>();
+			var staffingPossibilityViewModelFactory = MockRepository.GenerateMock<IStaffingPossibilityViewModelFactory>();
 			weekScheduleDomainDataProvider.Stub(x => x.Get(DateOnly.Today)).Return(weekScheduleDomainData);
 			return new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider,
-				user);
+				user, staffingPossibilityViewModelFactory);
 		}
 
 		private static ILoggedOnUser createUserWithSiteOpenHours(int startHour, int endHour)

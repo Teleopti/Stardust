@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public double BaseUtcOffsetInMinutes { get; set; }
 		public string CurrentWeekEndDate { get; set; }
 		public string CurrentWeekStartDate { get; set; }
+		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
 	}
 
     public class RequestPermission
