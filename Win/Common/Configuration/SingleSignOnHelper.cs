@@ -6,9 +6,6 @@ using System.Security.Cryptography;
 using System.Text;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.UserTexts;
@@ -19,25 +16,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     public class SingleSignOnHelper
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public static string SingleSignOn()
+        public static string SingleSignOn(IPerson loggedOnPerson)
         {
             var token = Guid.NewGuid();
             using (var customerWebProxy = new CustomerWebProxy())
             {
                 var ticket = new Hashtable();
-                IPerson currentPerson;
-                using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
-                }
-                var email = currentPerson.Email.Trim();
-                if (string.IsNullOrEmpty(email))
-                    throw new ArgumentException(
-								Resources.PleaseConfigureYourEmailAddress);
+                var email = loggedOnPerson.Email.Trim();
                 ticket.Add("email", email);
-                ticket.Add("firstname", currentPerson.Name.FirstName);
-                ticket.Add("lastname", currentPerson.Name.LastName);
-                ticket.Add("language", currentPerson.PermissionInformation.UICulture().Name);
+                ticket.Add("firstname", loggedOnPerson.Name.FirstName);
+                ticket.Add("lastname", loggedOnPerson.Name.LastName);
+                ticket.Add("language", loggedOnPerson.PermissionInformation.UICulture().Name);
                 ticket.Add("company", getCustomerName());
                 ticket.Add("guid", token);
                 var iv = "qwertyui";

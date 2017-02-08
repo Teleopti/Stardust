@@ -28,6 +28,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -77,6 +78,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private const string _permissionModule = "/permissions";
 		private WebUrlHolder _webUrlHolder;
 		private List<string> validUrls;
+		private bool showDataProtectionWebPage;
+		IPerson _loggedOnPerson;
 
 		protected SmartClientShellForm()
 		{
@@ -97,7 +100,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
 			webViewDataProtection.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
-			webViewDataProtection.RegisterJSExtensionFunction("dataProtectionResponse", webViewDataProtection_Response);
+			webViewDataProtection.RegisterJSExtensionFunction("yesResponseCallback", yesResponse);
+			webViewDataProtection.RegisterJSExtensionFunction("noOrNotNowResponseCallback", noResponse);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
 			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
 			var enableLargeAddressSpace = false;
@@ -105,9 +109,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				EO.Base.Runtime.EnableLargeAddressSpace = enableLargeAddressSpace;
 		}
 
-		private void webViewDataProtection_Response(object sender, JSExtInvokeArgs jsExtInvokeArgs)
+		private void yesResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)
 		{
-			throw new NotImplementedException();
+			showDataProtectionWebPage = false;
+			webControlDataProtection.Visible = false;
+			webControl1.Visible = true;
+			gotoCustomerWebAndLogOn();
+		}
+
+		private void noResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)
+		{
+			showDataProtectionWebPage = false;
+			webControlDataProtection.Visible = false;
+			webControl1.Visible = true;
+			gotoCustomerWeb();
 		}
 
 		private void logInfo(string message)
@@ -778,15 +793,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if (uc is ForecasterNavigator || uc is PayrollExportNavigator)
 			{
-				if (webControl1 != null)
-					webControl1.Visible = false;
-				if (wfmWebControl != null)
-					wfmWebControl.Visible = false;
-                return;
+				webControl1.Visible = false;
+				wfmWebControl.Visible = false;
+				webControlDataProtection.Visible = false;
+				return;
 			}
 
-			if (webControl1 != null)
+			if (showDataProtectionWebPage)
+			{
+				wfmWebControl.Visible = false;
+				webControl1.Visible = false;
+				webControlDataProtection.Visible = true;
+			}
+			else
+			{
+				wfmWebControl.Visible = false;
+				webControlDataProtection.Visible = false;
 				webControl1.Visible = true;
+			}
+				
 
 			if (uc is SchedulerNavigator || uc is PeopleNavigator)
 				((INavigationPanel)uc).SetMainOwner(this);
@@ -818,6 +843,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var menuItem = new EO.WebBrowser.MenuItem(UserTexts.Resources.StartPage,homeCommand);
 			
 			e.Menu.Items.Add(menuItem);
+		}
+
+		private void webViewDataProtection_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
+		{
+			e.Menu.Items.Clear();
 		}
 
 		private void toolStripButtonCustomerWeb_Click(object sender, EventArgs e)
@@ -903,33 +933,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void goToPublicPage(bool gotoStart)
 		{
+			wfmWebControl.Visible = false;
+			webControlDataProtection.Visible = false;
 			webControl1.Visible = true;
 			// no internet
 			if (webView1.Title == "Static") return;
-
-			if (gotoStart || webView1.Url == "")
+			if (!gotoStart && webView1.Url != "") return;
+			if (string.IsNullOrWhiteSpace(LoggedOnPerson.Email))
 			{
-				var dataProtectionResponse = dataProtectionSetting();
-				if (dataProtectionResponse == DataProtectionEnum.Yes)
-				{
-					//landing page and logon
+				pleaseRegisterAnEmailAddress(UserTexts.Resources.PleaseConfigureYourEmailAddress);
+				return;
+			}
+
+			var dataProtectionResponse = dataProtectionSetting();
+			switch (dataProtectionResponse)
+			{
+				case DataProtectionEnum.Yes:
 					gotoCustomerWebAndLogOn();
-				}
-				else if (dataProtectionResponse == DataProtectionEnum.No)
-				{
-					//landing page - no logon
-					webView1.Url = "http://www.teleopti.com/elogin.aspx?";
-					canAccessInternet = true;
-				}
-				else
-				{
-					// Goto web page question data protection
+					break;
+				case DataProtectionEnum.No:
+					gotoCustomerWeb();
+					break;
+				default:
+					showDataProtectionWebPage = true;
 					wfmWebControl.Visible = false;
 					webControl1.Visible = false;
 					webControlDataProtection.Enabled = true;
 					webControlDataProtection.Visible = true;
 					webControlDataProtection.WebView.Url = string.Format("{0}WFM/index_desktop_client.html#/fdpa", webServer);
-				}
+					break;
 			}
 		}
 
@@ -939,7 +971,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				await Task.Run(() =>
 				{
-					var token = SingleSignOnHelper.SingleSignOn();
+					var token = SingleSignOnHelper.SingleSignOn(LoggedOnPerson);
 					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
 					canAccessInternet = true;
 				});
@@ -947,9 +979,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			catch (ArgumentException exception)
 			{
 				_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
-				const string html = "<!doctype html><html ><head></head><body>{0}</body></html>";
-				webView1.LoadHtml(string.Format(html, exception.Message));
-				canAccessInternet = true;
+				pleaseRegisterAnEmailAddress(exception.Message);
 			}
 			catch (Exception exception)
 			{
@@ -959,13 +989,44 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
+		private void pleaseRegisterAnEmailAddress(string message)
+		{
+			const string html = "<!doctype html><html ><head></head><body>{0}</body></html>";
+			webView1.LoadHtml(string.Format(html, message));
+			canAccessInternet = true;
+		}
+
+		private async void gotoCustomerWeb()
+		{
+			await Task.Run(() =>
+			{
+				webView1.Url = "http://www.teleopti.com/elogin.aspx?";
+				canAccessInternet = true;
+			});
+			
+		}
+
 		private DataProtectionEnum dataProtectionSetting()
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+				ISettingDataRepository settingDataRepository = new PersonalSettingDataRepository(uow);
 				var dataProtectionResponse = settingDataRepository.FindValueByKey(DataProtectionResponse.Key, new DataProtectionResponse());
 				return dataProtectionResponse.Response;
+			}
+		}
+
+		private IPerson LoggedOnPerson
+		{
+			get
+			{
+				if (_loggedOnPerson != null) return _loggedOnPerson;
+
+				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					_loggedOnPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
+				}
+				return _loggedOnPerson;
 			}
 		}
 
@@ -986,7 +1047,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void toggleWebControls(bool hidePermissions)
 		{
 			wfmWebControl.Visible = !hidePermissions;
-			webControl1.Visible = hidePermissions;
+			if (!hidePermissions)
+			{
+				webControl1.Visible = false;
+				webControlDataProtection.Visible = false;
+			}
+			else
+			{
+				if (showDataProtectionWebPage)
+				{
+					webControlDataProtection.Visible = true;
+					webControl1.Visible = false;
+				}
+
+				else
+				{
+					webControlDataProtection.Visible = false;
+					webControl1.Visible = true;
+				}
+			}		
 		}
 
 		private void wfmWebView_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
@@ -1007,6 +1086,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void handlingCertificateErrorsWebView1(object sender, CertificateErrorEventArgs e)
 		{
 			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+			_logger.Error("The following url is missing a certificate. " + e.Url);
+		}
+
+		private void handlingCertificateErrorswebViewDataProtection(object sender, CertificateErrorEventArgs e)
+		{
+			webViewDataProtection.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
 			_logger.Error("The following url is missing a certificate. " + e.Url);
 		}
 

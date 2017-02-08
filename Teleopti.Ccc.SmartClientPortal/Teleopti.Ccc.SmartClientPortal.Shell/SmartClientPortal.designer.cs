@@ -267,6 +267,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.wfmWebView.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWfmWebView);
 			this.wfmWebView.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
 			// 
+			// webViewDataProtection
+			// 
+			this.webViewDataProtection.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(webViewDataProtection_BeforeContextMenu);
+			this.webViewDataProtection.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
+			this.webViewDataProtection.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorswebViewDataProtection);
+			// 
 			// webControlDataProtection
 			// 
 			this.webControlDataProtection.BackColor = System.Drawing.Color.White;
@@ -588,7 +594,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.PerformLayout();
 
 		}
-
+		
 		#endregion
 
 		private System.Windows.Forms.StatusStrip _mainStatusStrip;
