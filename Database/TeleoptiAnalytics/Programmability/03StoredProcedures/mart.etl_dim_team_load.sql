@@ -25,12 +25,14 @@ SET IDENTITY_INSERT mart.dim_team ON
 INSERT INTO mart.dim_team
 	(
 	team_id,
+	team_code,
 	team_name, 
 	scorecard_id,
 	datasource_id
 	)
 SELECT 
 	team_id			= -1,
+	team_code       = '00000000-0000-0000-0000-000000000000',
 	team_name		= 'Not Defined',
 	scorecard_id	= -1,
 	datasource_id	= -1

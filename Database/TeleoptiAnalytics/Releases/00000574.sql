@@ -1,4 +1,13 @@
 
+-- Remove ALL team, it was no longer being added in 2009 but some customers have it
+delete from [mart].[dim_team]
+where team_id = -2
+
+-- Set Not Defined to have empty guid to allow unique constraint later
+update [mart].[dim_team]
+set team_code = '00000000-0000-0000-0000-000000000000'
+where team_id = -1
+
 -- Find duplicate rows to be removed
 SELECT dt.team_code, team_id AS old_id, new_id 
 INTO #duplicates

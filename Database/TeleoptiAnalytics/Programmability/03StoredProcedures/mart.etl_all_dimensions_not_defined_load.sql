@@ -427,13 +427,15 @@ SET IDENTITY_INSERT mart.dim_site ON
 INSERT INTO mart.dim_site
 	(
 	site_id,
+	site_code,
 	site_name, 
 	business_unit_id,
 	datasource_id
 	)
 SELECT 
-	site_id		= -1,
-	site_name		= 'Not Defined',
+	site_id		            = -1,
+	site_code               = '00000000-0000-0000-0000-000000000001',
+	site_name		        = 'Not Defined',
 	business_unit_id		= -1,
 	datasource_id			= -1
 WHERE
@@ -443,14 +445,16 @@ WHERE
 INSERT INTO mart.dim_site
 	(
 	site_id,
+	site_code,
 	site_name, 
 	business_unit_id,
 	datasource_id
 	)
 SELECT 
-	site_id		= -2,
-	site_name		= 'All',
-	business_unit_id	= -1,
+	site_id		            = -2,
+	site_code               = '00000000-0000-0000-0000-000000000000',
+	site_name		        = 'All',
+	business_unit_id	    = -1,
 	datasource_id			= -1
 WHERE
 	NOT EXISTS (SELECT d.site_id FROM mart.dim_site d WHERE d.site_id=-2)
@@ -485,12 +489,14 @@ SET IDENTITY_INSERT mart.dim_team ON
 INSERT INTO mart.dim_team
 	(
 	team_id,
+	team_code,
 	team_name, 
 	scorecard_id,
 	datasource_id
 	)
 SELECT 
 	team_id			= -1,
+	team_code       = '00000000-0000-0000-0000-000000000000',
 	team_name		= 'Not Defined',
 	scorecard_id	= -1,
 	datasource_id	= -1
