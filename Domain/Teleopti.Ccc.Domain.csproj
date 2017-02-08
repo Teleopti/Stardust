@@ -549,10 +549,13 @@
     <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />
     <Compile Include="Optimization\IIntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\AgentGroup.cs" />
+    <Compile Include="Optimization\AgentGroupMapper.cs" />
     <Compile Include="Optimization\AgentGroupModel.cs" />
     <Compile Include="Optimization\AgentGroupModelPersister.cs" />
+    <Compile Include="Optimization\FetchAgentGroupModel.cs" />
     <Compile Include="Optimization\IAgentGroupRepository.cs" />
     <Compile Include="Optimization\IIntradayOptimizerCreator.cs" />
+    <Compile Include="Optimization\IFetchAgentGroupModel.cs" />
     <Compile Include="Optimization\IntradayOptimizeOnedayFor42767.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreatorFor42767.cs" />
     <Compile Include="Optimization\TeamBlock\RemoveScheduleDayProsBasedOnShiftCategoryLimitation.cs" />

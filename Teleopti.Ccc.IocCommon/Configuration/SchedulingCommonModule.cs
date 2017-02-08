@@ -394,7 +394,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
 			builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
+			builder.RegisterType<FetchAgentGroupModel>().As<IFetchAgentGroupModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
+			builder.RegisterType<AgentGroupMapper>().SingleInstance();
 			builder.RegisterType<FilterMapper>().SingleInstance();
 			builder.RegisterType<DayOffRulesModelPersister>().As<IDayOffRulesModelPersister>().SingleInstance();
 			builder.RegisterType<AgentGroupModelPersister>().As<IAgentGroupModelPersister>().SingleInstance();

@@ -8,42 +8,32 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class AgentGroupController : ApiController
 	{
-		private readonly IAgentGroupRepository _agentGroupRepository;
 		private readonly IAgentGroupModelPersister _agentGroupModelPersister;
+		private readonly IFetchAgentGroupModel _fetchAgentGroupModel;
 
-		public AgentGroupController(IAgentGroupRepository agentGroupRepository,IAgentGroupModelPersister agentGroupModelPersister)
+		public AgentGroupController(IAgentGroupModelPersister agentGroupModelPersister, IFetchAgentGroupModel fetchAgentGroupModel)
 		{
-			_agentGroupRepository = agentGroupRepository;
 			_agentGroupModelPersister = agentGroupModelPersister;
+			_fetchAgentGroupModel = fetchAgentGroupModel;
 		}
 
-		[UnitOfWork, HttpPost, Route("api/ResourcePlanner/AgentGroup")]
-		public virtual object Create(AgentGroupModel model)
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/agentgroup")]
+		public virtual IHttpActionResult Create(AgentGroupModel model)
 		{
 			_agentGroupModelPersister.Persist(model);
-			return new { model.Id };
+			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/ResourcePlanner/AgentGroup")]
-		public virtual AgentGroupModel[] List()
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/agentgroup")]
+		public virtual IHttpActionResult List()
 		{
-			var result = _agentGroupRepository.LoadAll();
-			return result.Select(x => new AgentGroupModel
-			{
-				Id = x.Id.Value,
-				Name = x.Name
-			}).ToArray();
+			return Ok(_fetchAgentGroupModel.FetchAll());
 		}
 
-		[UnitOfWork, HttpGet, Route("api/ResourcePlanner/AgentGroup/{id}")]
-		public virtual AgentGroupModel Get(Guid id)
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/agentgroup/{id}")]
+		public virtual IHttpActionResult Get(Guid id)
 		{
-			var result = _agentGroupRepository.Get(id);
-			return new AgentGroupModel
-			{
-				Id = result.Id.Value,
-				Name = result.Name
-			};
+			return Ok(_fetchAgentGroupModel.Fetch(id));
 		}
 	}
 
