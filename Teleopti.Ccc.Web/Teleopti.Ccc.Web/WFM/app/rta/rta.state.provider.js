@@ -5,7 +5,6 @@ angular
 	.provider('RtaState', function () {
 
 		var toggles = {
-			RTA_HideAgentsByStateGroup_40469: false,
 			RTA_AgentsOnOrganizationAndSkills_41586: false,
 			RTA_QuicklyChangeAgentsSelection_40610: false
 		};
@@ -14,8 +13,6 @@ angular
 				return 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html';
 			if (toggles.RTA_AgentsOnOrganizationAndSkills_41586)
 				return 'app/rta/agents/rta-agents-AgentsOnOrganizationAndSkills_41586.html';
-			if (toggles.RTA_HideAgentsByStateGroup_40469)
-				return 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html';
 			return 'app/rta/agents/rta-agents.html';
 		}
 
@@ -28,7 +25,6 @@ angular
 		this.$get = function () {
 			return function (toggleService) {
 				toggleService.togglesLoaded.then(function () {
-					toggles.RTA_HideAgentsByStateGroup_40469 = toggleService.RTA_HideAgentsByStateGroup_40469;
 					toggles.RTA_AgentsOnOrganizationAndSkills_41586 = toggleService.RTA_AgentsOnOrganizationAndSkills_41586;
 					toggles.RTA_QuicklyChangeAgentsSelection_40610 = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 				});
