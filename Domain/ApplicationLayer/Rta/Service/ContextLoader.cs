@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -219,7 +220,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					})
 					.GroupBy(x => x.id, x => x.state)
 					.ToDictionary(x => x.Key, x => x.First());
-				return _matches.Keys;
+				return _matches.Keys
+					.OrderBy(x => new SqlGuid(x))
+					.ToArray();
 			}
 			
 			public override InputInfo GetInputFor(AgentState state)

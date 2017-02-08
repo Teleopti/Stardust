@@ -295,7 +295,7 @@
     <Compile Include="Rta\PerformanceMeasurement\MeasureActivityCheckerTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureBatchTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureScheduleLoadingTest.cs" />
-    <Compile Include="Rta\ConcurrencyTest.cs" />
+    <Compile Include="Rta\DeadlockTest.cs" />
     <Compile Include="Rta\DataSourceReaderTest.cs" />
     <Compile Include="Rta\MappingReadModelReaderTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\PerformanceMeasurementTestBase.cs" />
