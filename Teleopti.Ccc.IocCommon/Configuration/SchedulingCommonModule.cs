@@ -136,6 +136,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
 
+			builder.RegisterType<OptimizerActivitiesPreferencesFactory>().SingleInstance();
+
 			builder.RegisterType<SchedulerStateHolder>()
 				.As<ISchedulerStateHolder>()
 				.As<IClearReferredShiftTradeRequests>()

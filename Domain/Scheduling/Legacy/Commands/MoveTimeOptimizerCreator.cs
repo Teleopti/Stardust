@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
 				var schedulingOptionsCreator = new SchedulingOptionsCreator();
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 
 				IMoveTimeOptimizer optimizer =
 					new MoveTimeOptimizer(

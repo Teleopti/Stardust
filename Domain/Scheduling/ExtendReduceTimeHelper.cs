@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				ISchedulingOptions schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
 
 				IExtendReduceTimeOptimizer optimizer = new ExtendReduceTimeOptimizer(

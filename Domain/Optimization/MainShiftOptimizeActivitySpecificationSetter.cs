@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -11,13 +9,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class MainShiftOptimizeActivitySpecificationSetter : IMainShiftOptimizeActivitySpecificationSetter
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		private readonly OptimizerActivitiesPreferencesFactory _optimizerActivitiesPreferencesFactory;
+
+		public MainShiftOptimizeActivitySpecificationSetter(OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory)
+		{
+			_optimizerActivitiesPreferencesFactory = optimizerActivitiesPreferencesFactory;
+		}
+
 		public void SetMainShiftOptimizeActivitySpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate)
 		{
 			if (schedulingOptions == null)
 				return;
 
-			var optimizerActivitiesPreferences = createOptimizerActivitiesPreferences(optimizationPreferences);
+			var optimizerActivitiesPreferences = _optimizerActivitiesPreferencesFactory.Create(optimizationPreferences);
 
 			if (optimizerActivitiesPreferences == null)
 				return;
@@ -25,39 +29,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.MainShiftOptimizeActivitySpecification =
 				new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate,
 															 StateHolderReader.Instance.StateReader.UserTimeZone);
-
-		}
-
-		private static OptimizerActivitiesPreferences createOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
-		{
-			if (optimizationPreferences == null)
-				return null;
-
-			var shiftPreferences = optimizationPreferences.Shifts;
-
-			if (!shiftPreferences.KeepActivityLength && !shiftPreferences.AlterBetween && !shiftPreferences.KeepEndTimes &&
-				!shiftPreferences.KeepShiftCategories && !shiftPreferences.KeepStartTimes &&
-				shiftPreferences.SelectedActivities.Count == 0)
-				return null;
-
-			var optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
-			optimizerActivitiesPreferences.KeepShiftCategory = optimizationPreferences.Shifts.KeepShiftCategories;
-			optimizerActivitiesPreferences.KeepStartTime = optimizationPreferences.Shifts.KeepStartTimes;
-			optimizerActivitiesPreferences.KeepEndTime = optimizationPreferences.Shifts.KeepEndTimes;
-			optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
-
-			if (optimizationPreferences.Shifts.AlterBetween)
-				optimizerActivitiesPreferences.AllowAlterBetween = optimizationPreferences.Shifts.SelectedTimePeriod;
-
-			optimizerActivitiesPreferences.SetDoNotMoveActivities(optimizationPreferences.Shifts.SelectedActivities);
-			optimizerActivitiesPreferences.DoNotAlterLengthOfActivity = null;
-			if (shiftPreferences.KeepActivityLength)
-			{
-				optimizerActivitiesPreferences.DoNotAlterLengthOfActivity = shiftPreferences.ActivityToKeepLengthOn;
-			}
-
-			return optimizerActivitiesPreferences;
-
 		}
 	}
 }

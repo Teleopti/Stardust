@@ -543,6 +543,7 @@
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Notification\NotifyAppSubscriptions.cs" />
     <Compile Include="Notification\UserDevices.cs" />
+    <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />
     <Compile Include="Optimization\TeamBlock\RemoveScheduleDayProsBasedOnShiftCategoryLimitation.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRetryRemoveShiftCategoryBackToLegalService.cs" />
     <Compile Include="Repositories\IScheduleStorageRepositoryWrapper.cs" />

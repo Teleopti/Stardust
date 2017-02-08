@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 
 				var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker,  scheduleMatrix,
 					new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,

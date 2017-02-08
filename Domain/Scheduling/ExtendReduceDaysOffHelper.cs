@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizationOverLimitDecider);
 
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 
 				IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
 					personalSkillsPeriodValueCalculator,

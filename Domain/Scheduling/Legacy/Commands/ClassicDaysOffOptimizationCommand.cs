@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_deleteAndResourceCalculateService,
 					scheduleService, _workShiftFinderResultHolder,
 					resourceCalculateDelayer);
-			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(scheduleResultStateHolder, _userTimeZone);
 			var deviationStatisticData = new DeviationStatisticData();
 			var dayOffOptimizerPreMoveResultPredictor =

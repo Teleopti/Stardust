@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[SetUp]
 		public void Setup()
 		{
-			_target = new MainShiftOptimizeActivitySpecificationSetter();
+			_target = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 			_schedulingOptionsCreator = new SchedulingOptionsCreator();
 			_optimizationPreferences = new OptimizationPreferences();
 			_mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
