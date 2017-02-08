@@ -9,6 +9,8 @@ using Hangfire.Storage;
 using Hangfire.Storage.Monitoring;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
@@ -18,15 +20,18 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		private readonly Lazy<JobStorage> _storage;
 		private readonly Lazy<IBackgroundJobClient> _backgroundJobs;
 		private readonly Lazy<RecurringJobManager> _recurringJobs;
+		private readonly WithAnalyticsUnitOfWork _withUnitOfWork;
 
 		public HangfireUtilities(
 			Lazy<JobStorage> storage,
 			Lazy<IBackgroundJobClient> backgroundJobs,
-			Lazy<RecurringJobManager> recurringJobs)
+			Lazy<RecurringJobManager> recurringJobs,
+			WithAnalyticsUnitOfWork withUnitOfWork)
 		{
 			_storage = storage;
 			_backgroundJobs = backgroundJobs;
 			_recurringJobs = recurringJobs;
+			_withUnitOfWork = withUnitOfWork;
 		}
 
 		private IMonitoringApi monitoring => _storage.Value.GetMonitoringApi();
@@ -178,6 +183,16 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			monitoring
 				.ScheduledJobs(0, 100)
 				.ForEach(j => backgroundJobs.Requeue(j.Key));
+		}
+
+		public void DeleteQueues()
+		{
+			_withUnitOfWork.Do(uow =>
+			{
+				uow.Current().Session()
+					.CreateSQLQuery("DELETE FROM HangFire.Job")
+					.ExecuteUpdate();
+			});
 		}
 	}
 }

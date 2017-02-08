@@ -262,6 +262,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_eventPublisher.Value.Publish(new TenantHourTickEvent());
 			_eventPublisher.Value.Publish(new TenantMinuteTickEvent());
 			_hangfire.WaitForQueue();
+			_hangfire.DeleteQueues();
 		}
 
 		public IEnumerable<string> LoggedOffStates()
