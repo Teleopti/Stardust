@@ -19,10 +19,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var twoDayIntervalsForAllDays = new Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>>();
 
 		    var lastDate = dayIntervalData.Keys.Max();
+	        var count = dayIntervalData.Count;
             foreach(var dateOnly in dayIntervalData.Keys )
             {
 				//skip last date
-				if(dateOnly == lastDate)
+				if(dateOnly == lastDate && count > 1)
 					continue;
 
                 var dic = new Dictionary<DateTime, ISkillIntervalData>();
