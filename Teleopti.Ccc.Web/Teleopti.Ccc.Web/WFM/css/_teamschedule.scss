@@ -257,8 +257,6 @@
 		.advanced-input-dropdown {
 			top: 14px;
 			left: -5px;
-
-			
 		}
 
 		@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
@@ -268,6 +266,7 @@
 		}
 		.advanced-input {
 			width: 150px;
+			vertical-align: top;
 		}
 		wfm-multiple-search-input .expand-advanced-input {
 			width: 150px !important;
