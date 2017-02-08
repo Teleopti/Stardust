@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class IntradayMonitorStaffingController : ApiController
 	{
 		private readonly ISkillAreaRepository _skillAreaRepository;
-		private readonly StaffingViewModelCreator _staffingViewModelCreator;
+		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
 
-		public IntradayMonitorStaffingController(ISkillAreaRepository skillAreaRepository, StaffingViewModelCreator staffingViewModelCreator)
+		public IntradayMonitorStaffingController(ISkillAreaRepository skillAreaRepository, IStaffingViewModelCreator staffingViewModelCreator)
 		{
 			_skillAreaRepository = skillAreaRepository;
 			_staffingViewModelCreator = staffingViewModelCreator;

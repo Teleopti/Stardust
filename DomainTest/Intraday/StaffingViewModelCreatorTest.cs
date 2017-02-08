@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	[DomainTest]
 	public class StaffingViewModelCreatorTest : ISetup
 	{
-		public StaffingViewModelCreator Target;
+		public IStaffingViewModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;

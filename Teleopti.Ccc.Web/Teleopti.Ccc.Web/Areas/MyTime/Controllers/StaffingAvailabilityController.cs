@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		 */
 		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly StaffingViewModelCreator _staffingViewModelCreator;
+		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
 	    private readonly ISkillRepository _skillRepository;
 
-	    public StaffingAvailabilityController(INow now, ILoggedOnUser loggedOnUser, StaffingViewModelCreator staffingViewModelCreator, 
+	    public StaffingAvailabilityController(INow now, ILoggedOnUser loggedOnUser, IStaffingViewModelCreator staffingViewModelCreator, 
 			ISkillRepository skillRepository)
 	    {
 		    _now = now;

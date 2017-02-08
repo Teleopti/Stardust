@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class StaffingViewModelCreator
+	public class StaffingViewModelCreator : IStaffingViewModelCreator
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
@@ -102,9 +102,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private DateTime? getLastestStatsTime(IList<SkillIntervalStatistics> actualCallsPerSkillInterval)
+		private static DateTime? getLastestStatsTime(IList<SkillIntervalStatistics> actualCallsPerSkillInterval)
 		{
 			return actualCallsPerSkillInterval.Any() ? (DateTime?)actualCallsPerSkillInterval.Max(d => d.StartTime) : null;
 		}
+	}
+
+	public interface IStaffingViewModelCreator
+	{
+		IntradayStaffingViewModel Load(Guid[] skillIdList);
 	}
 }
