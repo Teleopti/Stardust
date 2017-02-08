@@ -29,8 +29,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var baseUtcOffsetInMinutes;
 	var currentPage = 'Teleopti.MyTimeWeb.Schedule';
 
-	function _bindData(data, possibility) {
-		vm.Initialize(data, possibility);
+	function _bindData(data) {
+		vm.Initialize(data);
 		daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 		_initTimeIndicator();
@@ -45,33 +45,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			dataType: "json",
 			type: "GET",
 			data: {
-				date: selectedDate
+				date: selectedDate,
+				staffingPossiblity: vm.possibilityType
 			},
 			success: function (data) {
-				// by default, selectedDate is empty
-				var selectedDateMoment = moment(selectedDate);
-				var isCurrentWeek = !selectedDateMoment.isValid() || selectedDateMoment.isSame(moment(), "week");
-				if (vm.staffingPossibilityEnabled && isCurrentWeek && vm.possibilityType() > 0) {
-					var possibilityUrl = vm.possibilityType() === 1
-						? "../api/IntradayStaffingPossibility/Absence"
-						: "../api/IntradayStaffingPossibility/Overtime";
-
-					ajax.Ajax({
-						url: possibilityUrl,
-						dataType: "json",
-						type: "GET",
-						success: function (possibilities) {
-							_bindData(data, possibilities);
-							if (dataHandler != undefined) {
-								dataHandler(data);
-							}
-						}
-					});
-				} else {
-					_bindData(data);
-					if (dataHandler != undefined) {
-						dataHandler(data);
-					}
+				_bindData(data);
+				if (dataHandler != undefined) {
+					dataHandler(data);
 				}
 			}
 		});
@@ -372,7 +352,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	};
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
-		Initialize: function (data, possibility) {
+		Initialize: function (data) {
 			var self = this;
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
 			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
@@ -405,7 +385,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.timeLines(timelines);
 			var days = ko.utils.arrayMap(data.Days, function (item) {
 				var isToday = moment(item.FixedDate).isSame(moment(), "day");
-				return new DayViewModel(item, isToday ? possibility : undefined, self);
+				return new DayViewModel(item, isToday ? data.Possibilities : undefined, self);
 			});
 			self.days(days);
 			var minDateArr = data.PeriodSelection.SelectedDateRange.MinDate.split('-');
@@ -651,8 +631,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				tooltipsTitle = parent.userTexts.possibilityForOvertime;
 			}
 
-			for (var j = 0; j < rawPossibility.Possibilities.length; j++) {
-				var intervalPossibility = rawPossibility.Possibilities[j];
+			for (var j = 0; j < rawPossibility.length; j++) {
+				var intervalPossibility = rawPossibility[j];
 				var intervalStartTime = moment(intervalPossibility.StartTime).format("HH:mm");
 				var intervalEndTime = moment(intervalPossibility.EndTime).format("HH:mm");
 
