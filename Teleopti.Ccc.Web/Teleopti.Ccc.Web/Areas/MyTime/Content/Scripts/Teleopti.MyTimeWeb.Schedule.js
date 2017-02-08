@@ -577,12 +577,44 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		};
 
+		var getContinousPeriods = function (periods) {
+			if (!periods || periods.length === 0) return [];
+
+			var continousPeriods = [];
+			var previousEndTime = "";
+			var continousPeriodStart = "";
+			for (var l = 0; l < periods.length; l++) {
+				var periodTimeSpan = day.Periods[l].TimeSpan;
+				var periodStartTime = !periodTimeSpan || periodTimeSpan.indexOf("+1") > 0 ? "00:00" : periodTimeSpan.substring(0, 5);
+				var periodEndTime = !periodTimeSpan ? "00:00" : periodTimeSpan.substring(8, 13);
+
+				if (l === 0) {
+					continousPeriodStart = periodStartTime;
+				}
+
+				if (l === periods.length - 1 || (previousEndTime !== "" && periodStartTime !== previousEndTime)) {
+					continousPeriods.push({
+						"startTime": continousPeriodStart,
+						"endTime": l === periods.length - 1 ? periodEndTime : previousEndTime
+					});
+					continousPeriodStart = periodStartTime;
+				}
+
+				previousEndTime = periodEndTime;
+			}
+
+			return continousPeriods;
+		};
+
 		var createPossibilityModel = function (rawPossibility) {
 			if (rawPossibility == undefined || rawPossibility.length === 0) return [];
+			// TODO: If today is full day absence or dayoff, Then hide absence possibility
 
-			var timeSpan = day.Summary.TimeSpan;
-			var shiftStartTime = timeSpan === null ? "00:00" : timeSpan.substring(0, 5);
-			var shiftEndTime = timeSpan === null ? "00:00" : timeSpan.substring(8, 13);
+			var summaryTimeSpan = day.Summary.TimeSpan;
+			var shiftStartTime = summaryTimeSpan === null || (day.Periods.length > 0 && day.Periods[0].TimeSpan.indexOf("+1") > 0)
+				? "00:00"
+				: summaryTimeSpan.substring(0, 5);
+			var shiftEndTime = summaryTimeSpan === null ? "00:00" : summaryTimeSpan.substring(8, 13);
 
 			var shiftStartPosition = 1;
 			var shiftEndPosition = 0;
@@ -610,9 +642,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			var totalHeight = shiftEndPosition - shiftStartPosition;
 
+			var continousPeriods = [];
 			var tooltipsTitle = "";
 			if (parent.possibilityType() === 1) {
 				tooltipsTitle = parent.userTexts.possibilityForAbsence;
+				continousPeriods = getContinousPeriods(day.Periods);
 			} else if (parent.possibilityType() === 2) {
 				tooltipsTitle = parent.userTexts.possibilityForOvertime;
 			}
@@ -625,15 +659,31 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				var visible = intervalStartTime >= shiftStartTime && intervalEndTime <= shiftEndTime;
 				if (!visible) continue;
 
+				var inScheduleTimeRange = false;
+				if (parent.possibilityType() === 1) {
+					// Show absence possibility within schedule time range only
+					for (var m = 0; m < continousPeriods.length; m++) {
+						var continousPeriod = continousPeriods[m];
+						if (continousPeriod.startTime <= intervalStartTime && intervalEndTime <= continousPeriod.endTime) {
+							inScheduleTimeRange = true;
+							break;
+						}
+					}
+				} else {
+					inScheduleTimeRange = true;
+				}
+
 				var index = intervalPossibility.Possibility;
-				var tooltips = "<div style='text-align: center'>" +
+				var tooltips = inScheduleTimeRange
+					? "<div style='text-align: center'>" +
 					"  <div>" + tooltipsTitle + "</div>" +
 					"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + possibilityLabels[index] + "</div>" +
 					"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalStartTime + " - " + intervalEndTime + "</div>" +
-					"</div>";
+					"</div>"
+					: "";
 
 				possibilities.push({
-					cssClass: "possibility-" + possibilityNames[index],
+					cssClass: "possibility-" + (inScheduleTimeRange ? possibilityNames[index] : "none"),
 					tooltips: tooltips
 				});
 			}
