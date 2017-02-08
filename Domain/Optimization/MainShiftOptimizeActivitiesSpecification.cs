@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
 
@@ -7,13 +8,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class MainShiftOptimizeActivitiesSpecification : Specification<IEditableShift>
 	{
-        private readonly IOptimizerActivitiesPreferences _optimizerActivitiesPreferences;
+        private readonly OptimizerActivitiesPreferences _optimizerActivitiesPreferences;
 		private readonly IEditableShift _originalMainShift;
 		private readonly DateOnly _viewerDate;
         private readonly TimeZoneInfo _viewerTimeZone;
         private readonly Lazy<IVisualLayerCollection> _visualLayerColl;
 
-		public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, IEditableShift originalMainShift, DateOnly viewerDate, TimeZoneInfo viewerTimeZone)
+		public MainShiftOptimizeActivitiesSpecification(OptimizerActivitiesPreferences optimizerActivitiesPreferences, IEditableShift originalMainShift, DateOnly viewerDate, TimeZoneInfo viewerTimeZone)
         {
             _optimizerActivitiesPreferences = optimizerActivitiesPreferences;
 			_originalMainShift = originalMainShift;

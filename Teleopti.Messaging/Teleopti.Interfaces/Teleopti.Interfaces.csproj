@@ -331,7 +331,6 @@
     <Compile Include="Domain\INewSkillStaffPeriodValues.cs" />
     <Compile Include="Domain\INonBlendSkillCalculator.cs" />
     <Compile Include="Domain\IOccupiedSeatCalculator.cs" />
-    <Compile Include="Domain\IOptimizerActivitiesPreferences.cs" />
     <Compile Include="Domain\IPasswordPolicy.cs" />
     <Compile Include="Domain\IPasswordStrengthRule.cs" />
     <Compile Include="Domain\IPayrollResultDetail.cs" />

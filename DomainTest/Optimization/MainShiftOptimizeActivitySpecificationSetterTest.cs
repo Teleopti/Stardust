@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			_target.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizationPreferences, _mainShift, DateOnly.MinValue);
 
-			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
+			var optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
 			optimizerActivitiesPreferences.KeepShiftCategory = _optimizationPreferences.Shifts.KeepShiftCategories;
 			optimizerActivitiesPreferences.KeepStartTime = _optimizationPreferences.Shifts.KeepStartTimes;
 			optimizerActivitiesPreferences.KeepEndTime = _optimizationPreferences.Shifts.KeepEndTimes;

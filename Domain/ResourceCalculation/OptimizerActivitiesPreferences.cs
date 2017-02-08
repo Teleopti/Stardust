@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class OptimizerActivitiesPreferences : IOptimizerActivitiesPreferences
+    public class OptimizerActivitiesPreferences
     {
         private bool _keepShiftCategory;
         private bool _keepStartTime;

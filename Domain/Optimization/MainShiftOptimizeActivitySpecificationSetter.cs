@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (schedulingOptions == null)
 				return;
 
-			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = createOptimizerActivitiesPreferences(optimizationPreferences);
+			var optimizerActivitiesPreferences = createOptimizerActivitiesPreferences(optimizationPreferences);
 
 			if (optimizerActivitiesPreferences == null)
 				return;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 
-		private static IOptimizerActivitiesPreferences createOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
+		private static OptimizerActivitiesPreferences createOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
 		{
 			if (optimizationPreferences == null)
 				return null;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				shiftPreferences.SelectedActivities.Count == 0)
 				return null;
 
-			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
+			var optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
 			optimizerActivitiesPreferences.KeepShiftCategory = optimizationPreferences.Shifts.KeepShiftCategories;
 			optimizerActivitiesPreferences.KeepStartTime = optimizationPreferences.Shifts.KeepStartTimes;
 			optimizerActivitiesPreferences.KeepEndTime = optimizationPreferences.Shifts.KeepEndTimes;

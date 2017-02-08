@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class OptimizerActivitiesPreferencesTest
     {
-        private IOptimizerActivitiesPreferences _target;
+        private OptimizerActivitiesPreferences _target;
         private IList<IActivity> _activities;
         private IActivity _activity;
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyClone()
         {
-            IOptimizerActivitiesPreferences clone = _target.Clone() as IOptimizerActivitiesPreferences;
+            var clone = _target.Clone() as OptimizerActivitiesPreferences;
             Assert.IsNotNull(clone);
             Assert.AreNotSame(_target, clone);
         }
