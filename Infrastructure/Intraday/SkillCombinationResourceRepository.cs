@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(
-					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource - ISNULL(COUNT(d.SkillCombinationId), 0) as Resource, c.SkillId from 
+					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource + ISNULL(SUM(d.DeltaResource), 0) as Resource, c.SkillId from 
 [ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId 
 LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId = r.SkillCombinationId AND d.StartDateTime = r.StartDateTime AND d.EndDateTime = r.EndDateTime
  WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime AND r.BusinessUnit = :bu GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId")
@@ -220,28 +220,32 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 			if (skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id))
 			{
 				_currentUnitOfWork.Current().Session()
-					.CreateSQLQuery("INSERT INTO [ReadModel].[SkillCombinationResourceDelta] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn) VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, CURRENT_TIMESTAMP)")
+					.CreateSQLQuery("INSERT INTO [ReadModel].[SkillCombinationResourceDelta] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn, DeltaResource) VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :TimeStamp, :DeltaResource)")
 					.SetParameter("SkillCombinationId", id)
 					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
 					.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
+					.SetParameter("TimeStamp", _now.UtcDateTime())
+					.SetParameter("DeltaResource", skillCombinationResource.Resource)
 					.ExecuteUpdate();
 
-				//var numberResources = _currentUnitOfWork.Current().Session().CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
-				//	.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
-				//	.SetParameter("id", id)
-				//	.UniqueResult<int>();
+				_currentUnitOfWork.Current().PersistAll();
 
-				//if (numberResources == 0)
-				//	PersistSkillCombinationResource(_now.UtcDateTime(), new List<SkillCombinationResource>
-				//									{
-				//										new SkillCombinationResource
-				//										{
-				//											StartDateTime = skillCombinationResource.StartDateTime,
-				//											EndDateTime = skillCombinationResource.EndDateTime,
-				//											Resource = 0,
-				//											SkillCombination = skillCombinationResource.SkillCombination
-				//										}
-				//									});
+				var numberResources = _currentUnitOfWork.Current().Session().CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
+					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
+					.SetParameter("id", id)
+					.UniqueResult<int>();
+
+				if (numberResources == 0)
+					PersistSkillCombinationResource(GetLastCalculatedTime(), new List<SkillCombinationResource>
+													{
+														new SkillCombinationResource
+														{
+															StartDateTime = skillCombinationResource.StartDateTime,
+															EndDateTime = skillCombinationResource.EndDateTime,
+															Resource = 0,
+															SkillCombination = skillCombinationResource.SkillCombination
+														}
+													});
 
 			}
 		}
