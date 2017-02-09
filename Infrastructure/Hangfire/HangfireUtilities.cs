@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
@@ -185,13 +186,18 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				.ForEach(j => backgroundJobs.Requeue(j.Key));
 		}
 
+		// delete in batches so it doesn't time out
 		public void DeleteQueues()
 		{
+			Func<ICurrentAnalyticsUnitOfWork, int> delete = uow => uow.Current().Session()
+				.CreateSQLQuery("DELETE TOP (1000) FROM HangFire.Job")
+				.ExecuteUpdate();
+
 			_withUnitOfWork.Do(uow =>
 			{
-				uow.Current().Session()
-					.CreateSQLQuery("DELETE FROM HangFire.Job")
-					.ExecuteUpdate();
+				var deleted = 1;
+				while (deleted != 0)
+					deleted = delete.Invoke(uow);
 			});
 		}
 	}

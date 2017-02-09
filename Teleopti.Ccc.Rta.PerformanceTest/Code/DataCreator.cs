@@ -258,8 +258,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			// to create/update any data that is periodically kept up to date
 			// like the rule mappings
 			_hangfire.WaitForQueue();
-			// delete the queue in batches, so delete job doesn't time out
-			_hangfire.DeleteQueues();
 
 			_eventPublisher.Value.Publish(new TenantDayTickEvent());
 			_eventPublisher.Value.Publish(new TenantHourTickEvent());
