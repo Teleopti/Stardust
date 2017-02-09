@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
 		}
 
-		[Test, Ignore("42593")]
+		[Test, Ignore("42593 to be fixed")]
 		public void ShouldRespectKeepShiftTeamWhenFirstAgentIsLocked()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
