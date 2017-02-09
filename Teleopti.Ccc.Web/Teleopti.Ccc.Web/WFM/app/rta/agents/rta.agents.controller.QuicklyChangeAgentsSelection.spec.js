@@ -196,7 +196,7 @@ describe('RtaAgentsController', function() {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: []
 		}, {
@@ -227,7 +227,7 @@ describe('RtaAgentsController', function() {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid', 'ParisGuid'],
 			teamIds: []
 		}, {
@@ -253,7 +253,7 @@ describe('RtaAgentsController', function() {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
 			teamIds: ['LondonTeam1']
 		}, {
@@ -287,7 +287,7 @@ describe('RtaAgentsController', function() {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
 			teamIds: ['LondonTeam1', 'ParisTeam1']
 		}, {
@@ -322,7 +322,7 @@ describe('RtaAgentsController', function() {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: ['ParisTeam1']
 		}, {
@@ -357,7 +357,7 @@ describe('RtaAgentsController', function() {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
 			teamIds: ['ParisTeam1']
 		}, {
@@ -391,7 +391,7 @@ describe('RtaAgentsController', function() {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['ParisGuid'],
 			teamIds: []
 		}, {
@@ -464,7 +464,7 @@ describe('RtaAgentsController', function() {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
 			teamIds: []
 		}, {
@@ -562,7 +562,7 @@ describe('RtaAgentsController', function() {
 			.apply(function() {
 				vm.goToAgents();
 			});
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid', 'ParisGuid'],
 			teamIds: []
 		}, {
@@ -676,7 +676,7 @@ describe('RtaAgentsController', function() {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: ['ParisTeam2']
 		}, {
@@ -771,7 +771,7 @@ describe('RtaAgentsController', function() {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['ParisGuid'],
 			teamIds: []
 		}, {
@@ -801,7 +801,7 @@ describe('RtaAgentsController', function() {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
 			teamIds: ['ParisTeam1']
 		}, {
@@ -838,7 +838,7 @@ describe('RtaAgentsController', function() {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
 			teamIds: []
 		}, {
@@ -880,7 +880,7 @@ describe('RtaAgentsController', function() {
 			});
 		});;
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			skillIds: 'phoneSkillGuid',
 			skillAreaId: undefined,
 			siteIds: [],
@@ -904,7 +904,7 @@ describe('RtaAgentsController', function() {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			skillAreaId: 'phoneAndEmailGuid',
 			skillIds: [],
 			siteIds: [],
@@ -959,7 +959,7 @@ describe('RtaAgentsController', function() {
 				Id: "phoneAndEmailGuid"
 			});
 
-			expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+			expect($state.go).toHaveBeenCalledWith('rta.agents', {
 				skillAreaId: 'phoneAndEmailGuid',
 				skillIds: [],
 				siteIds: [],

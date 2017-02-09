@@ -40,7 +40,7 @@
 		function goToAgents(ids) { $state.go('rta.agents', ids); };
 
 		function goToSelectSkill() {
-			$state.go('rta.select-skill', {
+			$state.go('rta.agents', {
 				skillIds: [],
 				skillAreaId: [],
 				siteIds: [],

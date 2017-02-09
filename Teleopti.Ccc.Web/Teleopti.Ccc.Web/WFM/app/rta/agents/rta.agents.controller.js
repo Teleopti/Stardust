@@ -91,8 +91,6 @@
 		vm.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0 || skillIds === [];
 		vm.skill = false;
 		vm.skillArea = false;
-		vm.skillName = "";
-		vm.skillAreaName = "";
 		vm.openedMaxNumberOfAgents = false;
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
@@ -111,15 +109,12 @@
 		inAlarmGrid.data = 'vm.filteredData';
 
 		/*******REQUESTS*****/
-		toggleService.togglesLoaded.then(function () {
-			vm.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
-			rtaService.getOrganization()
-				.then(function (organization) {
-					vm.sites = organization;
-					if (vm.showOrgSelection)
-						keepSelectionForOrganization();
-				});
-		});
+		rtaService.getOrganization()
+			.then(function (organization) {
+				vm.sites = organization;
+				if (vm.sites.length > 0)
+					keepSelectionForOrganization();
+			});
 
 		function keepSelectionForOrganization() {
 			selectSiteAndTeamsUnder();
@@ -176,7 +171,6 @@
 				});
 
 			vm.pollingLock = false;
-			removeMeWithToggle('RTA_QuicklyChangeAgentsSelection_40610');
 			if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 				toggleService.togglesLoaded.then(function () {
 					if (toggleService.RTA_FasterAgentsView_42039) {
@@ -193,16 +187,6 @@
 
 			}
 		})();
-
-		function removeMeWithToggle() {
-			if (skillIds.length === 1) {
-				rtaService.getSkillName(skillIds[0])
-					.then(function (skill) {
-						vm.skillName = skill.Name || '?';
-						vm.skill = true;
-					});
-			}
-		}
 
 		function agentsByParams(fn) {
 			return fn({
@@ -263,11 +247,11 @@
 		}
 
 		function stateGoToAgents(selection) {
-			var stateName = vm.showOrgSelection ? 'rta.select-skill' : 'rta.agents';
-			var options = vm.showOrgSelection ? {
+			var stateName = 'rta.agents';
+			var options = {
 				reload: true,
 				notify: true
-			} : {};
+			};
 			$state.go(stateName, selection, options);
 		}
 
@@ -544,8 +528,6 @@
 
 		function getSkillIdsFromSkillArea(skillArea) {
 			if (skillArea.Skills != null) {
-				//remove vm.skillAreaNAme when Quickly toggle is released
-				vm.skillAreaName = skillArea.Name || '?';
 				vm.skillArea = true;
 				skillIds = skillArea.Skills.map(function (skill) { return skill.Id; });
 			}

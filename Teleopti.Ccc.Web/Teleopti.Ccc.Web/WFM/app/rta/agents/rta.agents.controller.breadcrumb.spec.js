@@ -81,37 +81,6 @@ describe('RtaAgentsController', function () {
 		expect(vm.siteName).toEqual("London");
 	});
 
-	it('should display skill name', function () {
-		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
-		$fakeBackend
-			.withSkill({
-				Name: "Phone",
-				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
-			});
-
-		vm = $controllerBuilder.createController().vm;
-
-		expect(vm.skillName).toEqual("Phone");
-	});
-
-	it('should show name for skill area', function () {
-		stateParams.skillAreaId = "bb8d75b3-fdb4-484a-ae4c-9f0800e2f753";
-
-		$fakeBackend
-			.withSkillAreas([{
-				Id: "bb8d75b3-fdb4-484a-ae4c-9f0800e2f753",
-				Name: "my skill area 2",
-				Skills: [{
-					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
-					Name: "skill x"
-				}]
-			}]);
-
-		vm = $controllerBuilder.createController().vm;
-
-		expect(vm.skillAreaName).toEqual("my skill area 2");
-	});
-
 	it('should set to multiple teams when selecting teams', function () {
 		stateParams.teamIds = ["e5f968d7-6f6d-407c-81d5-9b5e015ab495", "d7a9c243-8cd8-406e-9889-9b5e015ab495"];
 		$fakeBackend.withOrganization({
@@ -203,7 +172,6 @@ describe('RtaAgentsController', function () {
 
 		vm = $controllerBuilder.createController().vm;
 		expect(vm.showBreadcrumb).toEqual(false);
-		expect(vm.skillName).toEqual("skill b");
 	});
 
 	it('should have site link when selected one team', function () {

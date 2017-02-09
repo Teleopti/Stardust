@@ -1535,11 +1535,7 @@
     <Content Include="WFM\app\rta\rta.service.js" />
     <Content Include="WFM\app\rta\rta.sorting.localelanguage.service.js" />
     <Content Include="WFM\app\rta\rta.state.provider.js" />
-    <Content Include="WFM\app\rta\skills\rta-selectSkill.html" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.skillSelection.spec.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.teams.spec.js" />
+    <Content Include="WFM\app\rta\overview\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\_modules.js" />
     <Content Include="WFM\app\seatManagement\html\seatplaninitmanualperiod.html" />
     <Content Include="WFM\app\seatManagement\seatplaninitmanualperiod.directive.js" />

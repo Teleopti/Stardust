@@ -1,4 +1,4 @@
-<div class="view-header with-fab with-desc">
+<div class="view-header with-fab with-desc" ng-cloak>
 	<div class="view-title">
 		<div class="pull-left">
 			<h1><i class="mdi mdi-alarm"></i> {{'Agents'|translate}}</h1>
@@ -6,11 +6,7 @@
 		<div class="rta-top-buttons-wrapper pull-left">
 			<span>
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'Dashboard'|translate}}</button>
-				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToSelectItem()">{{'Details'|translate}}</button>
-				<span class="wfm-chip">
-					<span ng-if="vm.skill" class="chip-text rta-default-cursor"><span ng-if="vm.openedMaxNumberOfAgents"></span> {{'SkillColon'|translate}} <b>{{vm.skillName}}</b></span>
-			<span ng-if="vm.skillArea" class="chip-text rta-default-cursor"><span ng-if="vm.openedMaxNumberOfAgents"></span> {{'SkillAreaColon'|translate}} <b>{{vm.skillAreaName}}</b></span>
-			</span>
+				<button class="wfm-btn wfm-btn-primary rta-default-cursor" ng-click="vm.goToSelectItem()">{{'Details'|translate}}</button>
 			</span>
 		</div>
 	</div>
@@ -26,10 +22,84 @@
 		<span ng-if="vm.pausedAt" class="h4">{{'PausedAt'|translate}} {{vm.pausedAt}}</span>
 	</div>
 </div>
+
+	<div class="panel material-depth-1">
+		<div class="con-row">
+			<div class="con-flex">
+				<div class="con-row">
+					<span class="con-flex">
+						<md-autocomplete id="skill-id"
+										 ng-disabled="!vm.skillsLoaded"
+										 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
+										 class="autocomplete-skill"
+										 md-input-id="skill-input"
+										 md-selected-item="vm.selectedSkill"
+										 md-search-text="searchSkillText"
+										 md-selected-item-change="vm.selectedSkillChange(skill)"
+										 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
+										 md-item-text="skill.Name"
+										 md-min-length="0"
+										 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+							<md-item-template>
+								<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+					</md-item-template>
+					<md-not-found>
+						{{'RepViewerNoMoreMatches'|translate}}
+					</md-not-found>
+					</md-autocomplete>
+					</span>
+					<span class="con-flex">
+						<md-autocomplete id="skill-area-id"
+										ng-disabled="!vm.skillAreasLoaded"
+										ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
+										class="autocomplete-skillarea"
+										md-input-id="skill-area-input"
+										md-selected-item="vm.selectedSkillArea"
+										md-search-text="searchSkillAreaText"
+										md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
+										md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
+										md-item-text="skillArea.Name"
+										md-min-length="0"
+										placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
+							<md-item-template>
+								<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
+					</md-item-template>
+					<md-not-found>
+						{{'RepViewerNoMoreMatches'|translate}}
+					</md-not-found>
+					</md-autocomplete>
+					</span>
+					<span class="con-flex rta-multiple-selection-panel">
+						<md-input-container class="rta-md-input-container" id="organization" md-no-float>
+							<label class="for-searchTerm"></label>
+							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" multiple md-on-close="vm.goToAgents()">
+								<div class="rta-select-header">
+									<md-select-header>
+										<i class="mdi mdi-magnify"></i>
+										<span ng-if="vm.searchTerm.length > 0" ng-click="vm.clearSearchTerm()" class="pull-right grow-out rta-clear-search cursor-pointer">
+											<i class="mdi mdi-close"></i>
+										</span>
+					<input ng-model="vm.searchTerm" type="search" placeholder="{{'SearchASiteOrTeam' | translate}}" ng-keydown="vm.onSearchOrganization($event)" class="picker-searchbox md-text rta-options-search-input">
+					</md-select-header>
+				</div>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="vm.teamsSelected.length === 0" ng-click="vm.clearOrgSelection()">{{'ClearAll' | translate}}</button>
+				<md-optgroup ng-repeat="site in vm.sites | filter:vm.searchTerm | orderBy:'Name':sortByLocaleLanguage" class="rta-option-group">
+					<span ng-click="vm.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
+					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
+					<md-option ng-show="site.isExpanded" ng-selected="vm.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams | orderBy:'Name':sortByLocaleLanguage">{{team.Name}}</md-option>
+				</md-optgroup>
+				</md-select>
+				</md-input-container>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="panel material-depth-1">
 	<div class="con-row">
 		<div class="con-flex">
-			<div class="sub-header" ng-show="vm.showBreadcrumb">
+			<div class="sub-header" ng-class="{'invisible' : !vm.showBreadcrumb}">
 				<div>
 					<a class="cursor-pointer" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
 					<a class="cursor-pointer" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>
@@ -42,11 +112,14 @@
 	</div>
 	<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agents.length >= vm.maxNumberOfAgents}">
 		<div class="con-flex">
-			<label class="input-prepend" for="filter-agents">
-				<i class="mdi mdi-filter-outline"></i>
-				<input id="filter-agents" ng-change="vm.filterData()" ng-model="vm.filterText" placeholder="{{'Search'|translate}}..." type="text">
-			</label>
+		<label for="filter-agents" class="input-icon">
+			<i class="mdi mdi-filter-outline">
+				<input type="text" id="filter-agents" ng-change="vm.filterData()" ng-model="vm.filterText" placeholder="{{'Search'|translate}}...">
+					<md-tooltip>{{'Search'|translate}}</md-tooltip>
+			</i>
+		</label>
 		</div>
+		<div class="hide-on-ie con-flex split-3-1"></div>
 		<div class="con-flex">
 			<div class="wfm-switch panel-switch line-right">
 				<input id="switch1" ng-model="vm.agentsInAlarm" type="checkbox" ng-disabled="vm.pause" />
@@ -64,7 +137,7 @@
 			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
 		</div>
 	</div>
-	<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause" panel-options="vm.rightPanelOptions" class="rta-right-panel-wrapper">
+	<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause"  class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 		<div ng-repeat="state in vm.states">
 			<div class="wfm-checkbox">
