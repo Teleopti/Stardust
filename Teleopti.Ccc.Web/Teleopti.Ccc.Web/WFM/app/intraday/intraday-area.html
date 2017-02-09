@@ -135,6 +135,13 @@
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-selected="activeTab">
 						<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
+							<md-content ng-cloak class="md-padding" ng-if="viewObj.waitingForData">
+								<div class="con-row">
+									<div class="con-flex">
+										<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+									</div>
+								</div>
+							</md-content>
 							<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex">
@@ -183,6 +190,13 @@
 							</md-content>
 						</md-tab>
 						<md-tab label="{{'Performance'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
+							<md-content ng-cloak class="md-padding" ng-if="viewObj.waitingForData">
+								<div class="con-row">
+									<div class="con-flex">
+										<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+									</div>
+								</div>
+							</md-content>
 							<md-content class="md-padding" ng-show="viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex">
@@ -233,7 +247,14 @@
 							</md-content>
 						</md-tab>
 						<md-tab label="{{'Staffing'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content class="md-padding" ng-show="viewObj.hasMonitorData">
+							<md-content ng-cloak class="md-padding" ng-if="viewObj.waitingForData">
+								<div class="con-row">
+									<div class="con-flex">
+										<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+									</div>
+								</div>
+							</md-content>
+							<md-content class="md-padding" ng-show="viewObj.hasMonitorData && !viewObj.waitingForData">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="staffingChart"></div>

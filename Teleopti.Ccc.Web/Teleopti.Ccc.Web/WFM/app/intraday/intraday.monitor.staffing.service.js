@@ -12,6 +12,7 @@
 					updatedSeries: []
 				},
 				hasMonitorData: false,
+				waitingForData: false,
 				timeSeries: [],
 				actualStaffingSeries: [],
 				currentInterval: [],
@@ -79,11 +80,13 @@
 			};
 
 			service.pollSkillData = function (selectedItem, toggles) {
+				staffingData.waitingForData = true;
 				intradayService.getSkillStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
+						staffingData.waitingForData = false;
 						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing);
 					},
 					function (error) {
@@ -92,11 +95,13 @@
 			};
 
 			service.pollSkillAreaData = function (selectedItem, toggles) {
+				staffingData.waitingForData = true;
 				intradayService.getSkillAreaStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
+						staffingData.waitingForData = false;
 						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing);
 					},
 					function (error) {

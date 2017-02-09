@@ -24,6 +24,7 @@
 				},
 				summary: {},
 				hasMonitorData: false,
+				waitingForData: false,
 				timeSeries : [],
 				currentInterval: []
 			};
@@ -106,11 +107,13 @@
 			};
 
 			service.pollSkillData = function (selectedItem) {
+				trafficData.waitingForData = true;
 				intradayService.getSkillMonitorStatistics.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
+						trafficData.waitingForData = false;
 						service.setTrafficData(result);
 					},
 					function (error) {
@@ -119,11 +122,13 @@
 				};
 
 				service.pollSkillAreaData = function (selectedItem) {
+					trafficData.waitingForData = true;
 					intradayService.getSkillAreaMonitorStatistics.query(
 						{
 							id: selectedItem.Id
 						})
 						.$promise.then(function (result) {
+							trafficData.waitingForData = false;
 							service.setTrafficData(result);
 						},
 						function (error) {
