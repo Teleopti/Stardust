@@ -590,6 +590,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (rawPossibility == undefined || rawPossibility.length === 0) return [];
 			// TODO: If today is full day absence or dayoff, Then hide absence possibility
 
+			var possibilityType = parent.possibilityType();
+			if (possibilityType === 1 && day.IsFullDayAbsence) {
+				return [];
+			}
+
 			var summaryTimeSpan = day.Summary.TimeSpan;
 			var shiftStartTime = summaryTimeSpan === null || (day.Periods.length > 0 && day.Periods[0].TimeSpan.indexOf("+1") > 0)
 				? "00:00"
@@ -624,10 +629,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			var continousPeriods = [];
 			var tooltipsTitle = "";
-			if (parent.possibilityType() === 1) {
+			if (possibilityType === 1) {
 				tooltipsTitle = parent.userTexts.possibilityForAbsence;
 				continousPeriods = getContinousPeriods(day.Periods);
-			} else if (parent.possibilityType() === 2) {
+			} else if (possibilityType === 2) {
 				tooltipsTitle = parent.userTexts.possibilityForOvertime;
 			}
 
@@ -640,7 +645,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				if (!visible) continue;
 
 				var inScheduleTimeRange = false;
-				if (parent.possibilityType() === 1) {
+				if (possibilityType === 1) {
 					// Show absence possibility within schedule time range only
 					for (var m = 0; m < continousPeriods.length; m++) {
 						var continousPeriod = continousPeriods[m];
