@@ -625,6 +625,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<UsedSeatsFromResourceCalculationContext>().As<IUsedSeats>().SingleInstance();
 
 				builder.RegisterType<MaxSeatOptimization>().As<IMaxSeatOptimization>().AsSelf().InstancePerLifetimeScope();
+				builder.RegisterType<OptimizationLimitsFactory>().SingleInstance();
 				builder.RegisterType<TurnOffOldMaxSeatStuffWhenToggleIsOn>()
 					.As<IMaxSeatSkillAggregator>()
 					.As<ITeamBlockMaxSeatChecker>()

@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly OptimizerActivitiesPreferencesFactory _optimizerActivitiesPreferencesFactory;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly OptimizationLimitsFactory _optimizationLimitsFactory;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -67,7 +68,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			ScheduledTeamBlockInfoFactory scheduledTeamBlockInfoFactory,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			OptimizationLimitsFactory optimizationLimitsFactory)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -85,6 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_optimizerActivitiesPreferencesFactory = optimizerActivitiesPreferencesFactory;
 			_userTimeZone = userTimeZone;
+			_optimizationLimitsFactory = optimizationLimitsFactory;
 		}
 
 		public void Optimize(ISchedulingProgress backgroundWorker, DateOnlyPeriod period, 
@@ -136,21 +139,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							}
 							schedulingOptions.MainShiftOptimizeActivitySpecification = specification; 
 						}
-
-						IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider;
-						if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
-						{
-							optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDeciderAcceptEverything();
-						}
-						else
-						{
-							var scheduleDayEquator = new ScheduleDayEquator(new EditableShiftMapper());
-							var matrix = teamBlockInfo.MatrixesForGroupAndBlock().First();
-							var originalStateContainer = new ScheduleMatrixOriginalStateContainer(matrix, scheduleDayEquator);
-							optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDecider(new RestrictionChecker(), optimizationPreferences, originalStateContainer, new DaysOffPreferences());
-						}
-						var optimizationLimits = new OptimizationLimits(optimizationOverLimitByRestrictionDecider);
 						////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						var optimizationLimits = _optimizationLimitsFactory.Create(optimizationPreferences, teamBlockInfo);
 
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
