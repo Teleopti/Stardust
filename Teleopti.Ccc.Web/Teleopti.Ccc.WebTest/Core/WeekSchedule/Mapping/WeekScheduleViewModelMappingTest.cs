@@ -577,6 +577,20 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapSiteOpenHourIntradayTimePeriod()
+		{
+			var timePeriod = new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0));
+			var domainData = new WeekScheduleDomainData()
+			{
+				Date = DateOnly.Today,
+				SiteOpenHourIntradayPeriod = timePeriod
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+			result.SiteOpenHourIntradayPeriod.Equals(timePeriod).Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapDateFormatForUser()
 		{
 			IPerson person = new Person();

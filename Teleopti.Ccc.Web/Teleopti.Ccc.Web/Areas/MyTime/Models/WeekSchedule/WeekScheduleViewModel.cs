@@ -5,6 +5,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 {
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string CurrentWeekEndDate { get; set; }
 		public string CurrentWeekStartDate { get; set; }
 		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
+		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
 	}
 
 	public class RequestPermission

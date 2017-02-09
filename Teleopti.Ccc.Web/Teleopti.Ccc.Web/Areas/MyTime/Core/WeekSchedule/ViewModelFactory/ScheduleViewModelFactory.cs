@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblity staffingPossiblity)
 		{
 			var domainData = _weekScheduleDomainDataProvider.Get(dateOnly);
+			domainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
 			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblity, domainData);
 			var weekScheduleViewModel = _mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 			setPossibilities(staffingPossiblity, weekScheduleViewModel);
