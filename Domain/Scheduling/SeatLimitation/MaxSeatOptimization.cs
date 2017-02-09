@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -133,10 +134,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 									specification = specification.And(new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, editableShift, unLockedDate, userTimeZone));
 								}
 							}
-							schedulingOptions.MainShiftOptimizeActivitySpecification = specification; //TODO: Claes? will this overwrite prop for other steps in the wrong way? Maybe better to pass this as param?
+							schedulingOptions.MainShiftOptimizeActivitySpecification = specification; 
 						}
-						////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+						var scheduleDayEquator = new ScheduleDayEquator(new EditableShiftMapper());
+						var matrix = teamBlockInfo.MatrixesForGroupAndBlock().First();
+						var originalStateContainer = new ScheduleMatrixOriginalStateContainer(matrix, scheduleDayEquator);
+						var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(new RestrictionChecker(), optimizationPreferences, originalStateContainer, new DaysOffPreferences());
+						var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
+						////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
@@ -149,7 +155,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						if (scheduleWasSuccess &&
 								_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) &&
 								_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) &&
-								maxPeaksAfter.IsBetterThan(maxPeaksBefore, scheduleCallback.ModifiedDates))
+								maxPeaksAfter.IsBetterThan(maxPeaksBefore, scheduleCallback.ModifiedDates) && 
+								!optimizationLimits.MoveMaxDaysOverLimit())
 						{
 							maxSeatCallback?.DatesOptimized(scheduleCallback.ModifiedDates);
 						}

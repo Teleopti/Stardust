@@ -141,7 +141,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 		[Test]
-		[Ignore("42593")]
 		public void ShouldRespectKeepShiftSingleAgent()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
