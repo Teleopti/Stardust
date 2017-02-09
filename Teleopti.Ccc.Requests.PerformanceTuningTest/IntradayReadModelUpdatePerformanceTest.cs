@@ -1,6 +1,5 @@
 using System;
 using System.Data.SqlClient;
-using System.IO;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[TestFixture]
 	[RequestPerformanceTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
-	public class IntradayReadModelUpdatePerformanceTest : PerformanceTestWithOneTimeSetup
+	public class IntradayReadModelUpdatePerformanceTest
 	{
 		public UpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
@@ -26,8 +25,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public AsSystem AsSystem;
 		public IConfigReader ConfigReader;
 
-
-		public override void OneTimeSetUp()
+		public void setup()
 		{
 			Now.Is("2016-03-26 07:00");
 			var now = Now.UtcDateTime();
@@ -52,8 +50,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		[Test]
-		public void UpdateReadModel() 
+		public void UpdateReadModel()
 		{
+			setup();
 			Now.Is("2016-03-26 07:00");
 			var now = Now.UtcDateTime();
 

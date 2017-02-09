@@ -291,7 +291,6 @@
     <Compile Include="Rta\AgentStateReadModelReader\ForSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\InAlarmExcludePhoneStateTest.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelReaderTest.cs" />
-    <Compile Include="Rta\InfrastructureTestWithOneTimeSetup.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureClosingSnapshotTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureActivityCheckerTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureBatchTest.cs" />
@@ -299,7 +298,7 @@
     <Compile Include="Rta\DeadlockTest.cs" />
     <Compile Include="Rta\DataSourceReaderTest.cs" />
     <Compile Include="Rta\MappingReadModelReaderTest.cs" />
-    <Compile Include="Rta\PerformanceMeasurement\PerformanceMeasurementTestBase.cs" />
+    <Compile Include="Rta\PerformanceMeasurement\PerformanceMeasurementTestAttribute.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelReaderTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterDataVersionsTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterConcurrencyTest.cs" />

@@ -1,33 +1,53 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
-	public class PerformanceMeasurementTestBase : InfrastructureTestWithOneTimeSetup
+	public class PerformanceMeasurementTestAttribute : InfrastructureTestAttribute
 	{
+		public ConfigurableSyncEventPublisher Publisher;
 		public AnalyticsDatabase Analytics;
 		public WithUnitOfWork Uow;
-
 		public IPersonRepository Persons;
-		public IActivityRepository Activities;
-		public IPersonAssignmentRepository PersonAssignments;
-		public IScenarioRepository Scenarios;
-		public IAgentStatePersister AgentState;
 		public IContractRepository Contracts;
 		public IPartTimePercentageRepository PartTimePercentages;
 		public IContractScheduleRepository ContractSchedules;
 		public IExternalLogOnRepository ExternalLogOns;
 		public ITeamRepository Teams;
 		public ISiteRepository Sites;
+
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			base.Setup(system, configuration);
+
+			system.AddService(this);
+		}
+
+		protected override void BeforeTest()
+		{
+			base.BeforeTest();
+
+			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
+			Publisher.AddHandler<AgentStateMaintainer>();
+			Publisher.AddHandler<MappingReadModelUpdater>();
+			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
+			//Publisher.AddHandler<ProjectionChangedEventPublisher>();
+			//Publisher.AddHandler<ScheduleProjectionReadOnlyUpdater>();
+			Publisher.AddHandler<ScheduleChangeProcessor>();
+		}
 
 		public void MakeUsersFaster(IEnumerable<string> userCodes)
 		{
@@ -46,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 				var site = new Site(RandomName.Make());
 				Sites.Add(site);
 
-				var team = new Team {Site = site}
+				var team = new Team { Site = site }
 					.WithDescription(new Description(RandomName.Make()));
 				Teams.Add(team);
 				site.AddTeam(team);
@@ -78,5 +98,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 				});
 			});
 		}
+
 	}
 }

@@ -5,14 +5,13 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -22,10 +21,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
 	[TestFixture]
-	[InfrastructureTest]
 	[Explicit]
 	[Category("LongRunning")]
-	public class MeasureScheduleLoadingTest : PerformanceMeasurementTestBase, ISetup
+	[PerformanceMeasurementTest]
+	public class MeasureScheduleLoadingTest : ISetup
 	{
 		public Database Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
@@ -33,22 +32,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		public ConfigurableSyncEventPublisher Publisher;
 		public AgentStateMaintainer Maintainer;
 		public MutableNow Now;
+		public AnalyticsDatabase Analytics;
+		public WithUnitOfWork Uow;
+		public PerformanceMeasurementTestAttribute Attribute;
+		public IPersonRepository Persons;
+		public IScenarioRepository Scenarios;
+		public IActivityRepository Activities;
+		public IPersonAssignmentRepository PersonAssignments;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
 		}
-		
-		public override void OneTimeSetUp()
+
+		private void createData()
 		{
 			Now.Is("2016-09-20 00:00");
-			Publisher.AddHandler<MappingReadModelUpdater>();
-			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
-			Publisher.AddHandler<AgentStateMaintainer>();
-			Publisher.AddHandler<ProjectionChangedEventPublisher>();
-			Publisher.AddHandler<ScheduleProjectionReadOnlyUpdater>();
-			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
-			Publisher.AddHandler<CurrentScheduleReadModelUpdater>();
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithDefaultScenario("default")
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			stateCodes.ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
 			var dates = new DateOnly(Now.UtcDateTime()).DateRange(100);
 
-			MakeUsersFaster(userCodes);
+			Attribute.MakeUsersFaster(userCodes);
 
 			var persons = Uow.Get(uow => Persons.LoadAll());
 
@@ -89,43 +88,52 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			// trigger tick to populate mappings
 			Publisher.Publish(new TenantMinuteTickEvent());
 		}
-		
+
 		private static IEnumerable<string> userCodes => Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
 		private static IEnumerable<string> stateCodes => Enumerable.Range(0, 2).Select(x => $"code{x}").ToArray();
 
 		[Test]
 		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
-		public void Measure(
-			[Values(50, 500, 1000)] int batchSize,
-			[Values(1, 2, 3, 4, 5)] int variation
-		)
+		public void Measure()
 		{
-			var persons = Uow.Get(uow => Persons.LoadAll());
+			createData();
 
-			Uow.Do(() =>
+			(
+				from batchSize in new[] { 50, 500, 1000 }
+				from variation in new[] { "A", "B", "C" }
+				select new { batchSize, variation }
+			)
+			.Select(x =>
 			{
-				persons.ForEach(p =>
-				{ });
-			});
+				var batches = userCodes
+					.Batch(x.batchSize)
+					.Select(u => new BatchForTest
+					{
+						States = u
+							.Select(y => new BatchStateForTest
+							{
+								UserCode = y,
+								StateCode = $"code{x.variation}"
+							})
+							.ToArray()
+					}).ToArray();
 
-			var timer = new Stopwatch();
-			timer.Start();
+				var stopwatch = new Stopwatch();
+				stopwatch.Start();
 
-			userCodes
-				.Batch(batchSize)
-				.Select(u => new BatchForTest
+				batches.ForEach(Rta.SaveStateBatch);
+
+				stopwatch.Stop();
+
+				return new
 				{
-					States = u
-						.Select(y => new BatchStateForTest
-						{
-							UserCode = y,
-							StateCode = $"code{variation}"
-						})
-						.ToArray()
-				}).ForEach(Rta.SaveStateBatch);
-
-			timer.Stop();
-			Console.WriteLine($"Time {timer.Elapsed}");
+					x.batchSize,
+					x.variation,
+					stopwatch.Elapsed
+				};
+			})
+			.OrderBy(x => x.Elapsed)
+			.ForEach(x => Console.WriteLine($@"{x.batchSize} {x.variation}: {x.Elapsed}"));
 		}
 	}
 }

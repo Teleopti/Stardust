@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[TestFixture]
 	[RequestPerformanceTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
-	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
+	public class IntradayAbsenceRequestPerformanceTest
 	{
 		public UpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 		private IList<IPersonRequest> requests;
 
-		public override void OneTimeSetUp()
+		public void setup()
 		{
 			Now.Is("2016-03-16 07:00");
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
@@ -90,8 +90,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		[Test]
-		public void Run200Requests() 
+		public void Run200Requests()
 		{
+			setup();
 			Now.Is("2016-03-16 07:00");
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))

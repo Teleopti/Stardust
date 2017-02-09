@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			return _service.Config();
 		}
-
+		
 		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
 		{
 		}
@@ -107,7 +107,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			(_fixture as ISetupConfiguration)?.SetupConfiguration(args);
 			var configuration = new IocConfiguration(args, toggles);
 
-			SetupSystem(system, configuration, config, toggles);
+			system.AddModule(new CommonModule(configuration));
+
+			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
+			system.UseTestDouble<FakeTime>().For<ITime>();
+			system.UseTestDouble(config).For<IConfigReader>();
+			// we really shouldnt inject this, but if we do, maybe its better its correct...
+			system.UseTestDouble(toggles).For<IToggleManager>();
 
 			// Test helpers
 			system.AddService(this);
@@ -116,18 +122,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			Setup(system, configuration);
 			(_fixture as ISetup)?.Setup(system, configuration);
 		}
-
-		public static void SetupSystem(ISystem system, IocConfiguration configuration, FakeConfigReader config, FakeToggleManager toggles)
-		{
-			system.AddModule(new CommonModule(configuration));
-
-			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
-			system.UseTestDouble<FakeTime>().For<ITime>();
-			system.UseTestDouble(config).For<IConfigReader>();
-			// we really shouldnt inject this, but if we do, maybe its better its correct...
-			system.UseTestDouble(toggles).For<IToggleManager>();
-		}
-
+		
 		private void disposeContainer()
 		{
 			_container?.Dispose();
