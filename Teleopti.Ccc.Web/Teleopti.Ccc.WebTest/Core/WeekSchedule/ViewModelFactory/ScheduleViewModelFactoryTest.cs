@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var weekScheduleDomainDataProvider = MockRepository.GenerateMock<IWeekScheduleDomainDataProvider>();
 			var monthScheduleDomainDataProvider = MockRepository.GenerateMock<IMonthScheduleDomainDataProvider>();
-			var target = new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider,
-				null, null);
+			var target = new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider, new FakeLoggedOnUser(),null);
 			var domainData = new WeekScheduleDomainData();
 			var viewModel = new WeekScheduleViewModel();
 
