@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public IntradayOptimizerCreatorNoPeriodValueCheck(
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 			_schedulerStateHolder = schedulerStateHolder;
-			_scheduleDayEquator = scheduleDayEquator;
 			_userTimeZone = userTimeZone;
 		}
 
@@ -58,11 +56,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
 		{
 			return new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker, scheduleMatrix,
-					new IntradayOptimizeOnedayFor42767(_scheduleService, optimizerPreferences, rollbackService,
+					new IntradayOptimizeOnedayNoPeriodValueCheck(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService,
-						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone, _scheduleDayEquator));
+						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone));
 		}
 	}
 }

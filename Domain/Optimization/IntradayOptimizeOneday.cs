@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (daysOverMax())
 				return false;
 
-			double? oldPeriodValue = calculatePeriodValue(dateOnly);
+			double? oldPeriodValue = CalculatePeriodValue(dateOnly);
 
 			var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrix);
 
@@ -106,11 +106,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			// Step: Check that there are no white spots
 
 			double newValidatedPeriodValue = double.MaxValue;
-			double? newPeriodValue = calculatePeriodValue(dateOnly);
+			double? newPeriodValue = CalculatePeriodValue(dateOnly);
 			if (newPeriodValue.HasValue)
 				newValidatedPeriodValue = newPeriodValue.Value;
 
-			var isPeriodBetter = newValidatedPeriodValue < oldPeriodValue;
+			var isPeriodBetter = IsPeriodBetter(newValidatedPeriodValue, oldPeriodValue);
 			if (!isPeriodBetter)
 			{
 				_rollbackService.Rollback();
@@ -133,7 +133,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-		private double? calculatePeriodValue(DateOnly scheduleDay)
+		protected virtual bool IsPeriodBetter(double newValidatedPeriodValue, double? oldPeriodValue)
+		{
+			return newValidatedPeriodValue < oldPeriodValue;
+		}
+
+		protected virtual double? CalculatePeriodValue(DateOnly scheduleDay)
 		{
 			return _dailyValueCalculator.DayValue(scheduleDay);
 		}
