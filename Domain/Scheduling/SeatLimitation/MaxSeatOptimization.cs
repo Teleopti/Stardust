@@ -174,7 +174,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				}
 			}
 		}
-
-
 	}
 }

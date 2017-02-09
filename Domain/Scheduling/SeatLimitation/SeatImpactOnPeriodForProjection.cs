@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface ISeatImpactOnPeriodForProjection
 	{
 		double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList);
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		bool CheckPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class SeatImpactOnPeriodForProjection : ISeatImpactOnPeriodForProjection
 	{
         public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList)
@@ -33,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return result;
 		}
 
-        public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IVisualLayerCollection shift)
+
+		public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IVisualLayerCollection shift)
 		{
 			return calculateShift(skillStaffPeriod, shift);
 		}
