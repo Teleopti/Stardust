@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			return _events.PopAllEvents();
 		}
 
-		public bool HasEvents()
+		public virtual bool HasEvents()
 		{
 			return _events.HasEvents();
 		}
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			return _events.PopAllEvents();
 		}
 
-		public bool HasEvents()
+		public virtual bool HasEvents()
 		{
 			return _events.HasEvents();
 		}
