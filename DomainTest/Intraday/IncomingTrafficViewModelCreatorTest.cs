@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var expectedForecastedCallsSum = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
 			var expectedForecastedHandleTimeSum = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
 			var expectedActualCallsSum = _firstInterval.CalculatedCalls + _secondInterval.CalculatedCalls;
+			var expectedActualAnsweredCallsSum = _firstInterval.AnsweredCalls + _secondInterval.AnsweredCalls;
 			var expectedActualHandleTimeSum = _firstInterval.HandleTime + _secondInterval.HandleTime;
 
 			viewModel.Summary.ForecastedCalls.Should().Be.EqualTo(expectedForecastedCallsSum);
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(expectedForecastedHandleTimeSum / expectedForecastedCallsSum);
 			viewModel.Summary.CalculatedCalls.Should().Be.EqualTo(expectedActualCallsSum);
 			viewModel.Summary.HandleTime.Should().Be.EqualTo(expectedActualHandleTimeSum);
-			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(expectedActualHandleTimeSum / expectedActualCallsSum);
+			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(expectedActualHandleTimeSum / expectedActualAnsweredCallsSum);
 		}
 
 		[Test, SetCulture("sv-SE")]
@@ -273,39 +274,17 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			double allForecastedCalls = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
-			double allOfferedCalls = _firstInterval.CalculatedCalls.Value + _secondInterval.CalculatedCalls.Value;
+			double allAnsweredCalls = _firstInterval.AnsweredCalls.Value + _secondInterval.AnsweredCalls.Value;
 			double allForecastedHandleTime = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
 			double allHandleTime = _firstInterval.HandleTime.Value + _secondInterval.HandleTime.Value;
 			double forecastedAverageHandleTime = allForecastedHandleTime / allForecastedCalls;
-			double actualAverageHandleTime = allHandleTime / allOfferedCalls;
+			double actualAverageHandleTime = allHandleTime / allAnsweredCalls;
 
 			var expectedDiff = (actualAverageHandleTime - forecastedAverageHandleTime) * 100 / forecastedAverageHandleTime;
 
 			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(expectedDiff);
 		}
 		
-		[Test]
-		public void ShouldSetForecastedAverageHandleTimeToZeroWhenForecastedCallsAreZero()
-		{
-			_firstInterval.ForecastedCalls = 0;
-			_secondInterval.ForecastedCalls = 0;
-
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
-
-			viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldSetAverageHandleTimeToZeroWhenOfferedCallsAreZero()
-		{
-			_firstInterval.CalculatedCalls = 0;
-			_secondInterval.CalculatedCalls = 0;
-
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
-
-			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(0);
-		}
-
 		[Test]
 		public void ShouldSetAverageSpeedOfAnswer()
 		{
@@ -381,6 +360,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
+			viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(0);
+			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(0);
 			viewModel.Summary.ServiceLevel.Should().Be.EqualTo(-99);
 			viewModel.Summary.AbandonRate.Should().Be.EqualTo(-99);
 			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(-99);

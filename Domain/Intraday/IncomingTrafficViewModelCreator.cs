@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 			summary.ForecastedAverageHandleTime = Math.Abs(summary.ForecastedCalls) < 0.0001
 					? 0
 					: summary.ForecastedHandleTime / summary.ForecastedCalls;
-			summary.AverageHandleTime = Math.Abs(summary.CalculatedCalls) < 0.0001
+			summary.AverageHandleTime = Math.Abs(summary.AnsweredCalls) < 0.0001
 								? 0
-								: summary.HandleTime / summary.CalculatedCalls;
+								: summary.HandleTime / summary.AnsweredCalls;
 
 			summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
 				 ? -99
