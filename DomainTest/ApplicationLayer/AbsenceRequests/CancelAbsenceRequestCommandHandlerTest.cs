@@ -14,6 +14,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeUserCulture UserCulture;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakeEventPublisherWithOverwritingHandlers EventPublisher;
+		public FakeGlobalSettingDataRepository GlobalSetting;
 		public INow Now;
 
 		private IPerson person;
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
 			system.UseTestDouble(userCulture).For<IUserCulture>();
-
+			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();			
 			system.AddService<CancelAbsenceRequestCommandHandler>();
 		}
 		
@@ -86,6 +89,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRepository.Add(person);
 			UserCulture.IsSwedish();
 			ScheduleDifferenceSaver.SetScheduleStorage(ScheduleStorage);
+
+			GlobalSetting.PersistSettingValue("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
+			GlobalSetting.PersistSettingValue("FullDayAbsenceRequestEndTime",new TimeSpanSetting(new TimeSpan(23,59,0)));
 		}
 		
 		[Test]
@@ -160,6 +166,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d",UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}
+
+		[Test]
+		public void ShouldBeAbleToCancelRequestWhenScheduleIsUnpublished()
+		{
+			commonSetup();
+
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 03, 01, 23, 59, 0,DateTimeKind.Utc));
+
+			var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest,person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
+			createShiftsForPeriod(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
+			createPersonAbsence(absence,new DateTimePeriod(2016,03,01,08,2016,03,01,13),person);
+
+			person.WorkflowControlSet = new WorkflowControlSet();
+			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2016, 01, 01);
+
+			var cancelRequestCommand = new CancelAbsenceRequestCommand()
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault()
+			};
+
+			Target.Handle(cancelRequestCommand);
+
+			Assert.AreEqual(0,cancelRequestCommand.ErrorMessages.Count);
+			
+		}
+
 
 
 		[Test]

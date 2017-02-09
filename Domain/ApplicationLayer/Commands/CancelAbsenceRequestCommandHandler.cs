@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				new DateOnlyPeriod(date, date),
 				_currentScenario.Current());
 
-			return dictionary[person].ScheduledDay(date);
+			return dictionary[person].ScheduledDay(date, true);
 		}
 
 		private IScheduleRange getScheduleRange(IPerson person, DateTime startDate, DateTime endDate)
