@@ -25,14 +25,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[TestFixture(true, true)]
-	[TestFixture(true, false)]
-	[TestFixture(false, true)]
-	[TestFixture(false, false)]
+	[TestFixture(true)]
+	[TestFixture(false)]
 	public class IntradayOptimizationTest : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerSplitBigIslands42049;
-		private readonly bool _resourcePlannerIntradayNoDailyValueCheck42767;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -44,10 +41,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public Func<IGridlockManager> LockManager;
 
-		public IntradayOptimizationTest(bool resourcePlannerSplitBigIslands42049, bool resourcePlannerIntradayNoDailyValueCheck42767)
+		public IntradayOptimizationTest(bool resourcePlannerSplitBigIslands42049)
 		{
 			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
-			_resourcePlannerIntradayNoDailyValueCheck42767 = resourcePlannerIntradayNoDailyValueCheck42767;
 		}
 
 		[Test]
@@ -189,10 +185,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value);
 			
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> { skill }, scenario);
-			if (!_resourcePlannerIntradayNoDailyValueCheck42767)
-				skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1); //shift is rolled back due to worse intraday STD
-			else
-				skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(0); //shift is not rolled back
+			skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1);
 		}
 
 
@@ -221,12 +215,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(dateOnly.AddDays(-1).ToDateOnlyPeriod(), new List<ISkill> { skill }, scenario);
-			if (!_resourcePlannerIntradayNoDailyValueCheck42767)
-				skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
-				.Should().Be.True(); //shift is rolled back due to worse intraday STD
-			else
-				skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
-				.Should().Be.False(); //shift is not rolled back
+			skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
+				.Should().Be.True();
 		}
 
 		[Test]
@@ -311,8 +301,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			if (_resourcePlannerSplitBigIslands42049)
 				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
-			if (_resourcePlannerIntradayNoDailyValueCheck42767)
-				toggleManager.Enable(Toggles.ResourcePlanner_IntradayNoDailyValueCheck_42767);
 		}
 	}
 }
