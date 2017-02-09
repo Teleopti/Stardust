@@ -162,7 +162,8 @@
 			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {
 				vm.scheduleVm = {
 					Schedules: ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
-					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize)
+					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize),
+					TimeLine: ScheduleMgmt.groupScheduleVm.TimeLine
 				};
 
 			} else {
