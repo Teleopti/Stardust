@@ -1,5 +1,6 @@
-﻿(function() {
-	var resourceplanner = angular.module('wfm.resourceplanner',
+(function() {
+	angular
+	.module('wfm.resourceplanner',
 		[
 			'restResourcePlannerService',
 			'restPlanningPeriodService',
@@ -10,16 +11,16 @@
 			'scheduleManipulationService',
 			'wfm.signalR',
 			'wfm.utilities'
-		]);
+		])
+		.run(runResourcePlanner);
 
-	resourceplanner.run([
-		'$rootScope', '$state', '$location', function ($rootScope, $state, $location) {
+runResourcePlanner.$inject = ['$rootScope', '$state', '$location'];
 
-			$rootScope.$on('$stateChangeSuccess',
-				function (event, toState) {
-					if ($location.url() === $state.current.url && toState.name === 'resourceplanner') $state.go('resourceplanner.overview');
-				});
-
-		}
-	]);
+function runResourcePlanner($rootScope, $state, $location) {
+	var result = $rootScope.$on('$stateChangeSuccess',
+		function (event, toState) {
+			if ($location.url() === $state.current.url && toState.name === 'resourceplanner') $state.go('resourceplanner.overview');
+		});
+	return result;
+}
 })();
