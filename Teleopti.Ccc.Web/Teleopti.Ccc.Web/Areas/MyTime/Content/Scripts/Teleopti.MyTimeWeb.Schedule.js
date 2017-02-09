@@ -147,6 +147,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.initialRequestDay = ko.observable();
 		self.selectedDateSubscription = null;
+		self.intradayOpenPeriod = undefined;
 
 		self.showAddRequestToolbar = ko.computed(function () {
 			return (self.requestViewModel() || '') !== '';
@@ -379,6 +380,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				styleToSet[value.Name] = 'rgb({0})'.format(value.RgbColor);
 			});
 			self.styles(styleToSet);
+
+			self.intradayOpenPeriod = {
+				"startTime": data.SiteOpenHourIntradayPeriod.StartTime,
+				"endTime": data.SiteOpenHourIntradayPeriod.EndTime
+			};
+
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 				return new TimelineViewModel(item, data.TimeLineCulture);
 			});
@@ -588,10 +595,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		var createPossibilityModel = function (rawPossibility) {
 			if (rawPossibility == undefined || rawPossibility.length === 0) return [];
-			// TODO: If today is full day absence or dayoff, Then hide absence possibility
 
+			// If today is full day absence or dayoff, Then hide absence possibility
 			var possibilityType = parent.possibilityType();
-			if (possibilityType === 1 && day.IsFullDayAbsence) {
+			if (possibilityType === 1 && (day.IsFullDayAbsence || day.IsDayOff)) {
 				return [];
 			}
 
@@ -599,23 +606,46 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var shiftEndTime = "24:00";
 			var shiftStartPosition = 1;
 			var shiftEndPosition = 0;
-			for (var i = 0; i < day.Periods.length; i++) {
-				var period = day.Periods[i];
-				var timeSpan = period.TimeSpan;
 
-				if (i === 0 && timeSpan.indexOf("+1") === -1) {
-					shiftStartTime = timeSpan.substring(0, 5);
+			if (day.IsDayOff) {
+				var timelines = parent.timeLines();
+				if (parent.intradayOpenPeriod != null) {
+					shiftStartTime = parent.intradayOpenPeriod.startTime.substring(0, 5);
+					shiftEndTime = parent.intradayOpenPeriod.endTime.substring(0, 5);
+				} else {
+					shiftStartTime = timelines[0].timeText;
+					shiftEndTime = timelines[timelines.length - 1].timeText;
 				}
 
-				if (i === day.Periods.length - 1) {
-					shiftEndTime = timeSpan.substring(8, 13);
-				}
+				// Calculate shiftStartPosition and shiftEndPosition since this could not get from raw data
+				var timelineStartMinutes = timelines[0].minutes;
+				var timelineEndMinutes = timelines[timelines.length - 1].minutes;
 
-				if (shiftStartPosition > period.StartPositionPercentage) {
-					shiftStartPosition = period.StartPositionPercentage;
-				}
-				if (shiftEndPosition < period.EndPositionPercentage) {
-					shiftEndPosition = period.EndPositionPercentage;
+				var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
+				var shiftStartMinutes = parseInt(shiftStartTime.substring(0, 2)) * 60 + parseInt(shiftStartTime.substring(3, 5));
+				var shiftEndMinutes = parseInt(shiftEndTime.substring(0, 2)) * 60 + parseInt(shiftEndTime.substring(3, 5));
+
+				shiftStartPosition = (shiftStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
+				shiftEndPosition = (shiftEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
+			} else {
+				for (var i = 0; i < day.Periods.length; i++) {
+					var period = day.Periods[i];
+					var timeSpan = period.TimeSpan;
+
+					if (i === 0 && timeSpan.indexOf("+1") === -1) {
+						shiftStartTime = timeSpan.substring(0, 5);
+					}
+
+					if (i === day.Periods.length - 1) {
+						shiftEndTime = timeSpan.substring(8, 13);
+					}
+
+					if (shiftStartPosition > period.StartPositionPercentage) {
+						shiftStartPosition = period.StartPositionPercentage;
+					}
+					if (shiftEndPosition < period.EndPositionPercentage) {
+						shiftEndPosition = period.EndPositionPercentage;
+					}
 				}
 			}
 
