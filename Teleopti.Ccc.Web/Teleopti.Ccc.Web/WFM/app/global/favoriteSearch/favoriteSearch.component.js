@@ -151,7 +151,7 @@
 						ctrl.currentFavorite.SearchTerm = updatedCurrent.SearchTerm;
 						ctrl.currentFavorite.TeamIds = updatedCurrent.TeamIds;
 					}
-					ctrl.favoriteSearchList[index] = angular.copy(currentFavorite);
+					ctrl.favoriteSearchList[index] = angular.copy(updatedCurrent);
 					ctrl.searchItemSaved = true;
 				});
 		}
@@ -199,7 +199,7 @@
 					if (ctrl.currentFavorite.Name === name) {
 						ctrl.currentName = '';
 						ctrl.currentFavorite = false;
-					}											
+					}
 				});
 		};
 
