@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var optPreferences = new OptimizationPreferences
 			{
 				Extra = { UseTeams = false, UseTeamBlockOption = false, TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent) },
-				Shifts = { KeepShiftCategories = true },
+				Shifts = { KeepStartTimes = true  },
 				Advanced = { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats }
 			};
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var optPreferences = new OptimizationPreferences
 			{
 				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) },
-				Shifts = { KeepShiftCategories = true },
+				Shifts = { KeepEndTimes = true },
 				Advanced = { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats }
 			};
 
