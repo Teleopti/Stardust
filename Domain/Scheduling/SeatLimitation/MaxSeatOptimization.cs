@@ -9,11 +9,9 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -49,9 +47,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
 		private readonly ScheduledTeamBlockInfoFactory _scheduledTeamBlockInfoFactory;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-		private readonly OptimizerActivitiesPreferencesFactory _optimizerActivitiesPreferencesFactory;
-		private readonly IUserTimeZone _userTimeZone;
 		private readonly OptimizationLimitsFactory _optimizationLimitsFactory;
+		private readonly SetMainShiftOptimizeActivitySpecificationForTeamBlock _setMainShiftOptimizeActivitySpecificationForTeamBlock;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -67,9 +64,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			ScheduleChangesAffectedDates scheduleChangesAffectedDates,
 			ScheduledTeamBlockInfoFactory scheduledTeamBlockInfoFactory,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
-			OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory,
-			IUserTimeZone userTimeZone,
-			OptimizationLimitsFactory optimizationLimitsFactory)
+			OptimizationLimitsFactory optimizationLimitsFactory,
+			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -85,9 +81,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
 			_scheduledTeamBlockInfoFactory = scheduledTeamBlockInfoFactory;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
-			_optimizerActivitiesPreferencesFactory = optimizerActivitiesPreferencesFactory;
-			_userTimeZone = userTimeZone;
 			_optimizationLimitsFactory = optimizationLimitsFactory;
+			_setMainShiftOptimizeActivitySpecificationForTeamBlock = setMainShiftOptimizeActivitySpecificationForTeamBlock;
 		}
 
 		public void Optimize(ISchedulingProgress backgroundWorker, DateOnlyPeriod period, 
@@ -122,27 +117,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					if (maxPeaksBefore.HasPeaks())
 					{
 						var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates);
-
-						//temp fix for MaxSeatOptimizationPreferencesTest here - move this elsewhere when we getting further ////////
-						var userTimeZone = _userTimeZone.TimeZone();
-						var optimizerActivitiesPreferences = _optimizerActivitiesPreferencesFactory.Create(optimizationPreferences);
-						if (optimizerActivitiesPreferences != null) //TODO: get rid of this null check
-						{
-							ISpecification<IEditableShift> specification = new All<IEditableShift>();
-							foreach (var unLockedDate in teamBlockInfo.BlockInfo.UnLockedDates())
-							{
-								foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
-								{
-									var editableShift = scheduleMatrixPro.GetScheduleDayByKey(unLockedDate).DaySchedulePart().GetEditorShift();
-									specification = specification.And(new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, editableShift, unLockedDate, userTimeZone));
-								}
-							}
-							schedulingOptions.MainShiftOptimizeActivitySpecification = specification; 
-						}
-						////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+						_setMainShiftOptimizeActivitySpecificationForTeamBlock.Execute(optimizationPreferences, teamBlockInfo, schedulingOptions);
 						var optimizationLimits = _optimizationLimitsFactory.Create(optimizationPreferences, teamBlockInfo);
-
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
@@ -198,5 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				}
 			}
 		}
+
+
 	}
 }
