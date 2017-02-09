@@ -367,10 +367,12 @@
 		button {
 			margin: 0;
 		}
-		//remember to put this into styleguide
-		.wfm-btn.wfm-btn-sm {
-			padding: 5px;
-			font-size: .8em;
+		& > span{
+			color: $blue-500;
+		}
+		.disable-save{
+			color: $gray026;
+			cursor: not-allowed;
 		}
 	}
 	// override default heights of md-list-item

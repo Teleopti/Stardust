@@ -1,10 +1,11 @@
 ﻿<div class="fav-search-panel material-depth-2">
 	<div class="fav-search-header">
-		<input type="text" class="name" placeholder="{{'Name'|translate}}" ng-enter="$ctrl.save()" ng-model="$ctrl.currentName" ng-maxlength="50" ng-required="true"/>
+		<input type="text" class="name" placeholder="{{'Name'|translate}}" ng-keydown="$ctrl.searchItemSaved" ng-enter="$ctrl.save()" ng-model="$ctrl.currentName" ng-maxlength="50" ng-required="true"/>
 
-		<button class="save-btn wfm-btn wfm-btn-sm" ng-click="$ctrl.save()" ng-class="{'wfm-btn-invis-primary':$ctrl.enableSave(), 'wfm-btn-invis-disabled':!$ctrl.enableSave()}" ng-disabled="!$ctrl.enableSave()" ng-cloak translate>
-			Save
-		</button>
+		<span class="cursor-pointer" ng-click="$ctrl.enableSave() && $ctrl.save()" ng-disabled="!$ctrl.enableSave()" ng-class="{'disable-save':!$ctrl.enableSave()}">
+			<i class="mdi mdi-content-save"></i>
+			<md-tooltip ng-if="$ctrl.enableSave()">{{'Save' | translate}}</md-tooltip>
+		</span>
 	</div>
 	<div ng-if="$ctrl.favoriteSearchList.length > 0">
 		<md-divider></md-divider>
