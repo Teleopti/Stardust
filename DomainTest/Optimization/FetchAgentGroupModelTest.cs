@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.TestCommon;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeAgentGroupRepository AgentGroupRepository;
 
 		[Test]
-		public void ShouldIncludePersistedDayOffRuleWhenLoadingAll()
+		public void ShouldIncludePersistedAgentGroupWhenLoadingAll()
 		{
 			var presentInDb = new AgentGroup
 			{
@@ -90,9 +91,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			filter.Name.Should().Be.EqualTo(filterName);
 		}
 
+		[Test]
+		public void ShouldIncludeSkillFilterWhenFetching()
+		{
+			var filterName = RandomName.Make();
+			var skill = new Skill(filterName).WithId();
+			var skillFilter = new SkillFilter(skill);
+			var agentGroup = new AgentGroup().WithId();
+			agentGroup.AddFilter(skillFilter);
+			AgentGroupRepository.Add(agentGroup);
+
+			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
+
+			var filter = loaded.Filters.Single();
+			filter.FilterType.Should().Be.EqualTo(FilterModel.SkillFilterType);
+			filter.Id.Should().Be.EqualTo(skill.Id.Value);
+			filter.Name.Should().Be.EqualTo(filterName);
+		}
+
 
 		[Test]
-		public void ShouldFetchDayOffRule()
+		public void ShouldFetchAgentGroup()
 		{
 			var curr = new AgentGroup().WithId();
 			AgentGroupRepository.Add(curr);

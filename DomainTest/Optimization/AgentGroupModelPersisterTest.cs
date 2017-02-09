@@ -5,9 +5,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeContractRepository ContractRepository;
+		public FakeSkillRepository SkillRepository;
 		public IAgentGroupModelPersister Target;
 
 		[Test]
@@ -89,6 +92,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
+		public void ShouldInsertSkillFilter()
+		{
+			var skill = new Skill("_").WithId();
+			SkillRepository.Add(skill);
+			var model = new AgentGroupModel();
+			model.Filters.Add(
+				new FilterModel
+				{
+					Id = skill.Id.Value,
+					FilterType = FilterModel.SkillFilterType
+				}
+			);
+
+			Target.Persist(model);
+
+			var inDb = AgentGroupRepository.LoadAll().Single();
+			var skillFilter = (SkillFilter)inDb.Filters.Single();
+			skillFilter.Skill.Should().Be.EqualTo(skill);
+		}
+
+		[Test]
 		public void ShouldNotAddExistingTeamFilter()
 		{
 			var team = new Team().WithId();
@@ -129,6 +153,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var model = new AgentGroupModel();
 			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
 			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
+
+			Target.Persist(model);
+
+			var inDb = AgentGroupRepository.LoadAll().Single();
+			inDb.Filters.Count().Should().Be.EqualTo(1);
+		}
+
+
+		[Test]
+		public void ShouldNotAddExistingSkillFilter()
+		{
+			var skill = new Skill("_").WithId();
+			SkillRepository.Add(skill);
+
+			var model = new AgentGroupModel();
+			model.Filters.Add(new FilterModel { Id = skill.Id.Value, FilterType = "skill" });
+			model.Filters.Add(new FilterModel { Id = skill.Id.Value, FilterType = "skill" });
 
 			Target.Persist(model);
 

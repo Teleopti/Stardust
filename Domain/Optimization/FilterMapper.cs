@@ -9,14 +9,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IContractRepository _contractRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly ISiteRepository _siteRepository;
+		private readonly ISkillRepository _skillRepository;
 
 		public FilterMapper(IContractRepository contractRepository, 
 										ITeamRepository teamRepository, 
-										ISiteRepository siteRepository)
+										ISiteRepository siteRepository, 
+										ISkillRepository skillRepository)
 		{
 			_contractRepository = contractRepository;
 			_teamRepository = teamRepository;
 			_siteRepository = siteRepository;
+			_skillRepository = skillRepository;
 		}
 
 
@@ -55,6 +58,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 				};
 			}
 
+			var skillFilter = filter as SkillFilter;
+			if (skillFilter != null)
+			{
+				return new FilterModel
+				{
+					FilterType = FilterModel.SkillFilterType,
+					Id = skillFilter.Skill.Id.Value,
+					Name = skillFilter.Skill.Name
+				};
+			}
+
 			throw new NotSupportedException("Unknown filter type" + filter);
 		}
 
@@ -68,8 +82,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return new SiteFilter(_siteRepository.Get(filterModel.Id));
 				case FilterModel.TeamFilterType:
 					return new TeamFilter(_teamRepository.Get(filterModel.Id));
+				case FilterModel.SkillFilterType:
+					return new SkillFilter(_skillRepository.Get(filterModel.Id));
 				default:
-					throw new NotSupportedException(string.Format("Unknown filter type {0}", filterModel.FilterType));
+					throw new NotSupportedException($"Unknown filter type {filterModel.FilterType}");
 			}
 		}
 	}

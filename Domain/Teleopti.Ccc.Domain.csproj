@@ -546,6 +546,7 @@
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Notification\NotifyAppSubscriptions.cs" />
     <Compile Include="Notification\UserDevices.cs" />
+    <Compile Include="Optimization\Filters\SkillFilter.cs" />
     <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />
     <Compile Include="Optimization\IIntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\AgentGroup.cs" />
@@ -3151,6 +3152,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\AgentGroup.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
