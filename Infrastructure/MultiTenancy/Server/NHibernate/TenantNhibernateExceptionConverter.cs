@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 					}
 					if (sqle.Message.Contains("UQ_PersonInfo_Identity"))
 					{
-						return new DuplicateIdentityException();
+						return new DuplicateIdentityException(Guid.Empty);
 					}
 				}
 			}

@@ -45,9 +45,10 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 				ret.ApplicationLogonNameIsValid = false;
 				ret.ExistingPerson = e.ExistingPerson;
 			}
-			catch (DuplicateIdentityException)
+			catch (DuplicateIdentityException e)
 			{
 				ret.IdentityIsValid = false;
+				ret.ExistingPerson = e.ExistingPerson;
 			}
 			return Ok(ret);
 		}

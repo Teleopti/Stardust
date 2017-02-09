@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void ShouldHandleDuplicateIdentityException()
 		{
 			var personInfoModel = new PersonInfoModel { ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
-			TenantUnitOfWork.WillThrowAtCommit(new DuplicateIdentityException());
+			TenantUnitOfWork.WillThrowAtCommit(new DuplicateIdentityException(Guid.Empty));
 
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 

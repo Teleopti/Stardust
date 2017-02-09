@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			{
 				ret.Success = false;
 				ret.FailReason += string.Format(UserTexts.Resources.IdentityLogonExists, tenantAuthenticationData.Identity);
+				ret.ExistingPerson = tmpResult.ExistingPerson;
 			}
 
 			return ret;

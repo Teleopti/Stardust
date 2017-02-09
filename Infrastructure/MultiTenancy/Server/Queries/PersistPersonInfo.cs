@@ -32,11 +32,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			if (!string.IsNullOrEmpty(personInfo.Identity))
 			{
 				//if already exists
-				if (session.GetNamedQuery("identityUQCheck")
+				var existing = session.GetNamedQuery("identityUQCheck")
 					.SetGuid("id", personInfo.Id)
 					.SetString("identity", personInfo.Identity)
-					.UniqueResult<PersonInfo>() != null)
-					throw new DuplicateIdentityException();
+					.UniqueResult<PersonInfo>();
+				if(existing != null)
+					throw new DuplicateIdentityException(existing.Id);
 			}
 
 			//throw 
