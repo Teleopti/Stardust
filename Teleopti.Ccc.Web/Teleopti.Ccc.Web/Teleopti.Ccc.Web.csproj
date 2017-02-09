@@ -1487,7 +1487,6 @@
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
     <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate-AllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate.html" />
-    <Content Include="WFM\app\rta\agents\rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-shiftcelltemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents.html" />
     <Content Include="WFM\app\rta\agents\rta.agents.breadCrumb.service.js" />
