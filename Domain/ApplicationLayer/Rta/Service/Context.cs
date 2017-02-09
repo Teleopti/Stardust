@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _schedule;
+		private readonly InputInfo _input;
 
 		public Context(
 			DateTime utcNow,
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ProperAlarm appliedAlarm)
 		{
 			Stored = stored;
-			Input = input ?? new InputInfo();
+			_input = input;
 			CurrentTime = utcNow;
 			DeadLockVictim = deadLockVictim;
 			PersonId = stored.PersonId;
@@ -46,9 +47,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid TeamId { get; }
 		public Guid SiteId { get; }
 
-		public StateMapper StateMapper { get; set; }
+		public StateMapper StateMapper { get; }
 
-		public InputInfo Input { get; set; }
 		public AgentState Stored { get; }
 
 		public StateRuleInfo State { get; }
@@ -58,6 +58,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool FirstTimeProcessingAgent()
 		{
 			return Stored.ReceivedTime == null;
+		}
+
+		public bool HasInput()
+		{
+			return _input != null;
 		}
 
 		public bool ShouldProcessState()
@@ -83,14 +88,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// for logging
 		public override string ToString()
 		{
-			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {Input.StateCode}, SourceId: {SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
+			return $"Time: {CurrentTime}, UserCode: {_input?.UserCode}, StateCode: {_input?.StateCode}, SourceId: {_input?.SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
-		public string SourceId => Input.SourceId;
-		public string UserCode => Input.UserCode;
-		public DateTime? SnapshotId => Input.SnapshotId ?? Stored.SnapshotId;
-		public int? SnapshotDataSourceId => Input.SnapshotDataSourceId ??  Stored.SnapshotDataSourceId;
-		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
+		public string InputStateCode() => _input?.StateCode;
+		public string InputStateDescription() => _input?.StateDescription;
+
+		public DateTime? SnapshotId => _input?.SnapshotId ?? Stored.SnapshotId;
+		public int? SnapshotDataSourceId => _input?.SnapshotDataSourceId ??  Stored.SnapshotDataSourceId;
+		public Guid PlatformTypeId => string.IsNullOrEmpty(_input?.PlatformTypeId) ? Stored.PlatformTypeId() : (_input?.ParsedPlatformTypeId() ?? Guid.Empty);
 		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored.StateStartTime;
 		public DateTime? RuleStartTime => State.RuleChanged() ? CurrentTime : Stored.RuleStartTime;
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);

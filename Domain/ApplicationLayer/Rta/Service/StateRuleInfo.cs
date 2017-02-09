@@ -12,9 +12,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StateRuleInfo(Context context)
 		{
 			_context = context;
-			_mappedState = new Lazy<MappedState>(() => context.Input.StateCode == null ? 
-				context.StateMapper.StateFor(context.Stored.StateGroupId) : 
-				context.StateMapper.StateFor(context.BusinessUnitId, context.PlatformTypeId, context.Input.StateCode, context.Input.StateDescription));
+			_mappedState = new Lazy<MappedState>(() =>
+					context.HasInput() ?
+						context.StateMapper.StateFor(context.BusinessUnitId, context.PlatformTypeId, context.InputStateCode(), context.InputStateDescription()) :
+						context.StateMapper.StateFor(context.Stored.StateGroupId)
+			);
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
 		}
 		

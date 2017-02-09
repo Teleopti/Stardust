@@ -245,7 +245,6 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalCloseSnapshotWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateMaintainer.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CurrentScheduleReadModelUpdater.cs" />

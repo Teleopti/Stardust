@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	{
 	}
 
-	[Setting("RtaAgentStateTraceMatch", ".*")]
 	public class RtaTestLoggedOnAttribute : DomainTestAttribute
 	{
 		public FakeEventPublisher_ExperimentalEventPublishing Publisher;

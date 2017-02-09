@@ -102,10 +102,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentScheduleReadModelUpdater>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ActivityChangeChecker>().AsSelf().As<IActivityChangeCheckerFromScheduleChangeProcessor>().SingleInstance();
 			
-			if (string.IsNullOrEmpty(_config.Args().RtaAgentStateTraceMatch))
-				builder.RegisterType<DisabledTracer>().As<IAgentStateTracer>().SingleInstance();
-			else
-				builder.RegisterType<AgentStateTracer>().As<IAgentStateTracer>().SingleInstance();
 		}
 
 	}
