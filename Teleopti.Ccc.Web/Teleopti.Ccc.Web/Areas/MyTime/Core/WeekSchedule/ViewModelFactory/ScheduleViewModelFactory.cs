@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
@@ -11,13 +10,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public class ScheduleViewModelFactory : IScheduleViewModelFactory
 	{
-	    private readonly IMappingEngine _mapper;
+		private readonly IMappingEngine _mapper;
 		private readonly IWeekScheduleDomainDataProvider _weekScheduleDomainDataProvider;
 		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IStaffingPossibilityViewModelFactory _staffingPossibilityViewModelFactory;
 
-		public ScheduleViewModelFactory(IMappingEngine mapper, IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider, IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider, ILoggedOnUser loggedOnUser, IStaffingPossibilityViewModelFactory staffingPossibilityViewModelFactory)
+		public ScheduleViewModelFactory(IMappingEngine mapper, IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
+			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider, ILoggedOnUser loggedOnUser,
+			IStaffingPossibilityViewModelFactory staffingPossibilityViewModelFactory)
 		{
 			_mapper = mapper;
 			_weekScheduleDomainDataProvider = weekScheduleDomainDataProvider;
@@ -27,15 +28,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		}
 
 		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
-	    {
+		{
 			var domainData = _monthScheduleDomainDataProvider.Get(dateOnly);
 			return _mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(domainData);
-        }
+		}
 
-	    public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblity staffingPossiblity)
-	    {
+		public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblity staffingPossiblity)
+		{
 			var domainData = _weekScheduleDomainDataProvider.Get(dateOnly);
-		    adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblity, domainData);
+			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblity, domainData);
 			var weekScheduleViewModel = _mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 			setPossibilities(staffingPossiblity, weekScheduleViewModel);
 			return weekScheduleViewModel;
@@ -62,7 +63,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			{
 				maxTime = siteOpenHourPeriod.Value.EndTime;
 			}
-			weekScheduleDomainData.MinMaxTime = new TimePeriod(minTime, maxTime);
+
+			if (minTime == scheduleMinMaxTime.StartTime && maxTime == scheduleMinMaxTime.EndTime)
+				return;
+
+			var newTimelinePeriod = new TimePeriod(minTime, maxTime);
+			weekScheduleDomainData.MinMaxTime = newTimelinePeriod;
+
+			if (weekScheduleDomainData.Days == null) return;
+
+			foreach (var day in weekScheduleDomainData.Days)
+			{
+				day.MinMaxTime = newTimelinePeriod;
+			}
 		}
 
 		private void setPossibilities(StaffingPossiblity staffingPossiblity, WeekScheduleViewModel weekScheduleViewModel)
@@ -88,4 +101,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return siteOpenHour.TimePeriod;
 		}
 	}
-}	
+}
