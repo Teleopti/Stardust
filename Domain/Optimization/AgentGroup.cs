@@ -16,12 +16,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual IEnumerable<IFilter> Filters => _filters;
 		public virtual string Name { get; set; }
 
-		public void ClearFilters()
+		public virtual void ClearFilters()
 		{
 			_filters.Clear();
 		}
 
-		public void AddFilter(IFilter filter)
+		public virtual void AddFilter(IFilter filter)
 		{
 			_filters.Add(filter);
 		}
