@@ -1527,8 +1527,10 @@
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.spec.js" />
+    <Content Include="WFM\app\rta\overview\filter-template.html" />
     <Content Include="WFM\app\rta\overview\rta-sites.html" />
     <Content Include="WFM\app\rta\overview\rta-teams.html" />
+    <Content Include="WFM\app\rta\overview\rta.filter.controller.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.teams.spec.js" />
