@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IDistributedLockAcquirer _distributedLock;
 		private readonly CurrentScheduleReadModelUpdater _updater;
-		private readonly ActivityChangeChecker _checker;
+		private readonly IActivityChangeCheckerFromScheduleChangeProcessor _checker;
 
 		public ScheduleChangeProcessor(
 			IDistributedLockAcquirer distributedLock, 
-			CurrentScheduleReadModelUpdater updater, 
-			ActivityChangeChecker checker)
+			CurrentScheduleReadModelUpdater updater,
+			IActivityChangeCheckerFromScheduleChangeProcessor checker)
 		{
 			_distributedLock = distributedLock;
 			_updater = updater;

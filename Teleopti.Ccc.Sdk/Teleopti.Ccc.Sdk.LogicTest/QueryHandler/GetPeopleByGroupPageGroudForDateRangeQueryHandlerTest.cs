@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			var groupPageGroupId = Guid.NewGuid();
 			var personWithId = PersonFactory.CreatePersonWithId();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(personWithId);
 			var groupingReadOnlyRepository = new FakeGroupingReadOnlyRepository(new ReadOnlyGroupDetail { PersonId = personWithId.Id.GetValueOrDefault() });
 			var assembler = new PersonAssembler(personRepository,

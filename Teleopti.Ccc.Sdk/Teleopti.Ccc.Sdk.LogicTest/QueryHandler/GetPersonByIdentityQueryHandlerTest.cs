@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldGetPeopleByIdentity()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 
 			var fakeTenantLogonDataManager = new FakeTenantLogonDataManager();
 			var assembler = new PersonAssembler(personRepository,

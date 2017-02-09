@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var target = new ShiftTradeSwapDetailAssembler();
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-	        var personRepository = new FakePersonRepository();
+	        var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person1);
 			personRepository.Add(person2);
 	        var personAssembler = new PersonAssembler(personRepository,
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var target = new ShiftTradeSwapDetailAssembler();
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person1);
 			personRepository.Add(person2);
 			var personAssembler = new PersonAssembler(personRepository,

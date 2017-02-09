@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldGetAllPersonPeriodsWithinGivenRange()
 		{
-			var personRepository = new FakePersonRepository
+			var personRepository = new FakePersonRepositoryLegacy
 			{
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 1, 1),
 					TeamFactory.CreateTeam("Team 1", "Paris"))
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldOnlyGetPersonPeriodsWithinGivenRange()
 		{
-			var personRepository = new FakePersonRepository
+			var personRepository = new FakePersonRepositoryLegacy
 			{
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 2, 1),
 					TeamFactory.CreateTeam("Team 1", "Paris"))
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldNotGetPersonPeriodsForEveryoneIfNotPermitted()
 		{
-			var personRepository = new FakePersonRepository
+			var personRepository = new FakePersonRepositoryLegacy
 			{
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 1, 1),
 					TeamFactory.CreateTeam("Team 1", "Paris"))

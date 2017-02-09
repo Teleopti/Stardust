@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[SetUp]
 		public void Setup()
 		{
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 			_personRequestRepository = new FakePersonRequestRepository();
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
 			_swapAndModifyService = new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack());

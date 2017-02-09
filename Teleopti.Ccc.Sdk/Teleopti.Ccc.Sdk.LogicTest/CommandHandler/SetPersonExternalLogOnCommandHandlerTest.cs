@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			_externalLogOnRepository = new FakeExternalLogOnRepository();
 			_unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy();
 			_target = new SetPersonExternalLogOnCommandHandler(_personRepository, _unitOfWorkFactory, _externalLogOnRepository);
 		}
 

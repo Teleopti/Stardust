@@ -70,5 +70,10 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 		{
 			return _events.PopAllEvents();
 		}
+
+		public bool HasEvents()
+		{
+			return _events.HasEvents();
+		}
 	}
 }

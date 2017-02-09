@@ -175,7 +175,6 @@ UPDATE SET
 
 				query.ExecuteUpdate();
 			});
-
 			
 			_unitOfWork.Current()
 				.CreateSqlQuery("DELETE FROM [ReadModel].[RuleMappings] WHERE Updated = 0")

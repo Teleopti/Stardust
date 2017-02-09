@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			person = PersonFactory.CreatePerson().WithId();
 
-			personRepository = new FakePersonRepository {person};
+			personRepository = new FakePersonRepositoryLegacy { person};
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
 
 			optionalColumn = new OptionalColumn("Shoe size");

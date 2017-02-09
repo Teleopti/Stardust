@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver,personAbsenceAccountRepository,
 				new DoNothingScheduleDayChangeCallBack());
 
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 
-			_personAbsenceRepository = new FakePersonAbsenceRepository();
+			_personAbsenceRepository = new FakePersonAbsenceRepositoryLegacy();
 			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService,_businessRulesForAccountUpdate);
 
 

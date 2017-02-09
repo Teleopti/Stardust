@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    {
 			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
 			var scheduleStorage = new FakeScheduleStorage();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleTagRepository = new FakeScheduleTagRepository();
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
 			var scheduleStorage = new FakeScheduleStorage();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleTagRepository = new FakeScheduleTagRepository();
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    {
 			var newScenario = ScenarioFactory.CreateScenarioWithId("High", false);
 			var scheduleStorage = new FakeScheduleStorage();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(newScenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleTagRepository = new FakeScheduleTagRepository();
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
 			var scheduleStorage = new FakeScheduleStorage();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleTagRepository = new FakeScheduleTagRepository();

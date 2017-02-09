@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 1, 1),
 				TeamFactory.CreateTeam("Team 1", "Paris")).WithId();
-			var personRepository = new FakePersonRepository { person };
+			var personRepository = new FakePersonRepositoryLegacy { person };
 			var target = new GetPersonPeriodsByPersonIdQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(),
 				new PersonPeriodAssembler(new ExternalLogOnAssembler()));
 			var query = new GetPersonPeriodsByPersonIdQueryDto
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 1, 1),
 				TeamFactory.CreateTeam("Team 1", "Paris")).WithId();
-			var personRepository = new FakePersonRepository { person };
+			var personRepository = new FakePersonRepositoryLegacy { person };
 			var target = new GetPersonPeriodsByPersonIdQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(),
 				new PersonPeriodAssembler(new ExternalLogOnAssembler()));
 			var query = new GetPersonPeriodsByPersonIdQueryDto
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			Enumerable.Range(0, 51).ForEach(i => query.PersonIdCollection.Add(Guid.NewGuid()));
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var target = new GetPersonPeriodsByPersonIdQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(),
 				new PersonPeriodAssembler(new ExternalLogOnAssembler()));
 			Assert.Throws<FaultException>(() => target.Handle(query));

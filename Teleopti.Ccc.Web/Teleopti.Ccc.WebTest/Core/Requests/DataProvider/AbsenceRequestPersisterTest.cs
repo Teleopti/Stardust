@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_workflowControlSet = new WorkflowControlSet().WithId();
 			_person.WorkflowControlSet = _workflowControlSet;
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(_person);
 
 			system.UseTestDouble(personRepository).For<IPersonRepository>();

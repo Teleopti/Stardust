@@ -6,11 +6,21 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
+	public class FakePersonAbsenceRepositoryLegacy : FakePersonAbsenceRepository
+	{
+		public FakePersonAbsenceRepositoryLegacy() : base(new FakeStorage())
+		{
+		}
+	}
+
 	public class FakePersonAbsenceRepository : IPersonAbsenceRepository
 	{
+		private readonly FakeStorage _storage;
 
-		private List<IPersonAbsence> _personAbsences = new List<IPersonAbsence>();
-
+		public FakePersonAbsenceRepository(FakeStorage storage)
+		{
+			_storage = storage;
+		}
 
 		public void Has(IPersonAbsence personAbsence)
 		{
@@ -19,22 +29,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAbsence entity)
 		{
-			_personAbsences.Add (entity);
+			_storage.Add(entity);
 		}
 
 		public void Remove(IPersonAbsence entity)
 		{
-			_personAbsences.Remove(entity);
+			_storage.Remove(entity);
 		}
 
 		public IPersonAbsence Get(Guid id)
 		{
-			return _personAbsences.SingleOrDefault(personAbsence => personAbsence.Id == id);
+			return _storage.Get<IPersonAbsence>(id);
 		}
 
 		public IList<IPersonAbsence> LoadAll()
 		{
-			return _personAbsences;
+			return _storage.LoadAll<IPersonAbsence>().ToList();
 		}
 
 		public IPersonAbsence Load(Guid id)
@@ -59,17 +69,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAbsence LoadAggregate(Guid id)
 		{
-			return _personAbsences.Single(pa => pa.Id == id);
+			return _storage.LoadAll<IPersonAbsence>().Single(pa => pa.Id == id);
 		}
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period)
 		{
-			return _personAbsences;
+			return _storage.LoadAll<IPersonAbsence>().ToList();
 		}
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period, IScenario scenario)
 		{
-			return _personAbsences
+			return _storage.LoadAll<IPersonAbsence>()
 					.Where(personAbsence => personAbsence.BelongsToScenario(scenario) && 
 							personAbsence.Period.Intersect(period) &&
 							persons.Contains(personAbsence.Person)).ToArray(); 
@@ -77,13 +87,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario)
 		{
-			return _personAbsences.Where(x => x.BelongsToScenario(scenario) && x.Period.Intersect(period)).ToArray();
+			return _storage.LoadAll<IPersonAbsence>().Where(x => x.BelongsToScenario(scenario) && x.Period.Intersect(period)).ToArray();
 		}
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds, IScenario scenario)
 		{
 			var idList = personAbsenceIds.ToList();
-			return _personAbsences.Where(x => idList.Contains(x.Id.GetValueOrDefault())).ToArray();
+			return _storage.LoadAll<IPersonAbsence>().Where(x => idList.Contains(x.Id.GetValueOrDefault())).ToArray();
 		}
 
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
@@ -94,7 +104,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public ICollection<IPersonAbsence> FindExact(IPerson person, DateTimePeriod period, IAbsence absence, IScenario scenario)
 		{
-			return _personAbsences.Where(personAbsence => personAbsence.Person == person && personAbsence.Period == period && personAbsence.Layer.Payload == absence && personAbsence.Scenario == scenario
+			return _storage.LoadAll<IPersonAbsence>()
+				.Where(personAbsence => personAbsence.Person == person && personAbsence.Period == period && personAbsence.Layer.Payload == absence && personAbsence.Scenario == scenario
 			).ToList();
 		}
 	}

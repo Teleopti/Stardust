@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scheduleProjectionReadOnlyPersister = new FakeScheduleProjectionReadOnlyPersister();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 		}
 
 		[Test]

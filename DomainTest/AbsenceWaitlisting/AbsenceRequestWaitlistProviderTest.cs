@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		[SetUp]
 		public void SetUp()
 		{
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 			_personRequestRepository = new FakePersonRequestRepository();
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
 			_workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01),

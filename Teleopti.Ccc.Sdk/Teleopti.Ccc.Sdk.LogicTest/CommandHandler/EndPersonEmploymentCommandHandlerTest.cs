@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Date = new DateOnlyDto(2015, 10, 1)
 			};
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Date = new DateOnlyDto(2015, 10, 1)
 			};
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
@@ -74,13 +74,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var personAssignmentRepository = new FakePersonAssignmentRepository(personAssignment);
+			var personAssignmentRepository = new FakePersonAssignmentRepositoryLegacy(personAssignment);
 			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
-					new FakePersonAbsenceRepository()), new PersonAccountUpdaterDummy());
+					new FakePersonAbsenceRepositoryLegacy()), new PersonAccountUpdaterDummy());
 
 			target.Handle(endPersonEmploymentCommandDto);
 
@@ -102,13 +102,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var personAssignmentRepository = new FakePersonAssignmentRepository(personAssignment);
+			var personAssignmentRepository = new FakePersonAssignmentRepositoryLegacy(personAssignment);
 			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
-					new FakePersonAbsenceRepository()), new PersonAccountUpdaterDummy());
+					new FakePersonAbsenceRepositoryLegacy()), new PersonAccountUpdaterDummy());
 
 			target.Handle(endPersonEmploymentCommandDto);
 

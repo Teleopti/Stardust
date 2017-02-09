@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					ModuleId = initiatorId,
 					DataSource = _dataSource.CurrentName(),
-					BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+					BusinessUnitId = _businessUnit.Current() == null ? null : Subscription.IdToString(_businessUnit.Current().Id.Value),
 					StartDate = Subscription.DateToString(startDateTime),
 					EndDate = Subscription.DateToString(endDateTime),
 					DomainReferenceId = scenario.Key.Id.Value.ToString(),

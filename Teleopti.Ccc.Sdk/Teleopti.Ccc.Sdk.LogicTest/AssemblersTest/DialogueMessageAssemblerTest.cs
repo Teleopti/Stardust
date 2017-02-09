@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void VerifyDoToDto()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Has(person);
 
 			var personAssembler = new PersonAssembler(personRepository,

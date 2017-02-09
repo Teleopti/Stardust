@@ -31,7 +31,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
-			system.UseTestDouble(new MutableNow("2016-03-01 10:00")).For<INow>();
+			var mutableNow = new MutableNow();
+			mutableNow.Is("2016-03-01 10:00");
+			system.UseTestDouble(mutableNow).For<INow>();
 			_now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
 		}
 

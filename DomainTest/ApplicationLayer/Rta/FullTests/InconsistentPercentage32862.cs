@@ -1,42 +1,31 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 {
-	[DomainTest]
+	[RtaTestLoggedOn]
 	[TestFixture]
-	public class InconsistentPercentage32862 : ISetup
+	public class InconsistentPercentage32862 //: ISetup
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeAdherencePercentageReadModelPersister Percentage;
 		public IAdherencePercentageViewModelBuilder PercentageView;
-		public ConfigurableSyncEventPublisher Publisher;
+		public FakeEventPublisher_ExperimentalEventPublishing Publisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
-
-			system.UseTestDouble<AutoFillKeyValueStore>().For<IKeyValueStorePersister>();
-			system.UseTestDouble<AutoFillExternalLogonReader>().For<IExternalLogonReader>();
-			system.UseTestDouble<AutoFillMappingReader>().For<IMappingReader>();
-			system.UseTestDouble<AutoFillCurrentScheduleReadModelReader>().For<IScheduleReader>();
-			system.UseTestDouble<AutoFillAgentStatePersister>().For<FakeAgentStatePersister, IAgentStatePersister>();
-		}
-
+		//public void Setup(ISystem system, IIocConfiguration configuration)
+		//{
+		//	system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+		//}
+		
 		[Test]
 		public void TestReadModels()
 		{

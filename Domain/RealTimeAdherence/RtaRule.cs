@@ -92,7 +92,19 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 			}
 		}
 
-		public virtual bool IsAlarm { get { return _isAlarm; } set { _isAlarm = value; }}
+		public virtual bool IsAlarm
+		{
+			get
+			{
+				return _isAlarm;
+			}
+			set
+			{
+				_isAlarm = value;
+				AddEvent(new RtaRuleChangedEvent());
+			}
+		}
+
 		public virtual Color AlarmColor { get { return _alarmColor; } set { _alarmColor = value; } }
 
 		public virtual int ThresholdTime

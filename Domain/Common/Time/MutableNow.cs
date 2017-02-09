@@ -16,11 +16,6 @@ namespace Teleopti.Ccc.Domain.Common.Time
 			Is(utc);
 		}
 
-		public MutableNow(string utc)
-		{
-			this.Is(utc);
-		}
-
 		public DateTime UtcDateTime()
 		{
 			return _mutatedUtc ?? DateTime.UtcNow;
@@ -31,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Common.Time
 			_mutatedUtc = null;
 		}
 
-		public void Is(DateTime? utc)
+		public virtual void Is(DateTime? utc)
 		{
 			_mutatedUtc = utc;
 		}

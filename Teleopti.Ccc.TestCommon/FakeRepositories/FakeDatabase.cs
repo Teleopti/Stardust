@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -314,6 +315,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeGroupingReadOnlyRepository _groupings;
 		protected readonly FakeRtaStateGroupRepository _stateGroups;
 		protected readonly FakeRtaMapRepository _mappings;
+		private readonly FakeRtaRuleRepository _rules;
 		private readonly FakeExternalLogOnRepository _externalLogOns;
 		private readonly FakeDataSources _dataSources;
 		private readonly FakeSiteInAlarmReader _siteInAlarmReader;
@@ -338,7 +340,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private Skill _skill;
 		private Guid? _platform;
 		private RtaStateGroup _stateGroup;
-		private RtaRule _rtaRule;
+		private RtaRule _rule;
 		private Meeting _meeting;
 
 		public static string DefaultTenantName = "default";
@@ -368,6 +370,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeGroupingReadOnlyRepository groupings,
 			FakeRtaStateGroupRepository stateGroups,
 			FakeRtaMapRepository mappings,
+			FakeRtaRuleRepository rules,
 			FakeExternalLogOnRepository externalLogOns,
 			FakeDataSources dataSources,
 			FakeSiteInAlarmReader siteInAlarmReader,
@@ -402,6 +405,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_siteInAlarmReader = siteInAlarmReader;
 			_teamInAlarmReader = teamInAlarmReader;
 			_mappings = mappings;
+			_rules = rules;
 			_meetings = meetings;
 
 			createDefaultData();
@@ -562,7 +566,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone, CultureInfo culture, CultureInfo uiCulture, int? employeeNumber)
+		[UnitOfWork]
+		public virtual FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone, CultureInfo culture, CultureInfo uiCulture, int? employeeNumber)
 		{
 			var existing = _persons.LoadAll().FirstOrDefault(x => x.Id.GetValueOrDefault() == id.GetValueOrDefault());
 			if (existing != null)
@@ -596,7 +601,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)
+		[UnitOfWork]
+		public virtual FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)
 		{
 			startDate = startDate ?? "2000-01-01";
 
@@ -615,7 +621,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithExternalLogon(string name)
+		[UnitOfWork]
+		public virtual FakeDatabase WithExternalLogon(string name)
 		{
 			var exteralLogOn = new ExternalLogOn
 			{
@@ -675,15 +682,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithAssignment(string date)
-		{
-			ensureExists(_scenarios, null, () => WithScenario(null, true));
-			_personAssignment = new PersonAssignment(_person, _scenario, date.Date());
-			_personAssignment.SetId(Guid.NewGuid());
-			_personAssignments.Has(_personAssignment);
-			return this;
-		}
-
 		public FakeDatabase WithAssignment(Guid? personId, string date)
 		{
 			var existingPerson = _persons.LoadAll().SingleOrDefault(x => x.Id == personId);
@@ -697,6 +695,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			else
 				WithAssignment(date);
 
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual FakeDatabase WithAssignment(string date)
+		{
+			ensureExists(_scenarios, null, () => WithScenario(null, true));
+			_personAssignment = new PersonAssignment(_person, _scenario, date.Date());
+			_personAssignment.SetId(Guid.NewGuid());
+			_personAssignments.Has(_personAssignment);
 			return this;
 		}
 
@@ -729,7 +737,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithPersonAbsence(date, date.Utc().AddHours(24).ToShortTimeString());
 		}
 
-		public FakeDatabase WithPersonAbsence(string start, string end)
+		[UnitOfWork]
+		public virtual FakeDatabase WithPersonAbsence(string start, string end)
 		{
 			ensureExists(_absences, null, () => this.WithAbsence(null, null, null));
 			var period = new DateTimePeriod(start.Utc(), end.Utc());
@@ -739,7 +748,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithMeeting(string subject, string start, string end)
+		[UnitOfWork]
+		public virtual FakeDatabase WithMeeting(string subject, string start, string end)
 		{
 			ensureExists(_scenarios, null, () => WithScenario(null, true));
 			_meeting = new Meeting(
@@ -776,7 +786,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithActivity(id, name, null, color);
 		}
 
-		public FakeDatabase WithActivity(Guid? id, string name, string shortName, Color? color)
+		[UnitOfWork]
+		public virtual FakeDatabase WithActivity(Guid? id, string name, string shortName, Color? color)
 		{
 			var existing = _activities.LoadAll().SingleOrDefault(x => x.Id == id);
 			if (existing != null)
@@ -796,7 +807,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithAssignedActivity(string startTime, string endTime)
+		[UnitOfWork]
+		public virtual FakeDatabase WithAssignedActivity(string startTime, string endTime)
 		{
 			ensureExists(_activities, null, () => this.WithActivity(null));
 			_personAssignment.AddActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
@@ -834,7 +846,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithStateGroup(id, name, @default, false);
 		}
 
-		public FakeDatabase WithStateGroup(Guid? id, string name, bool @default, bool isLoggedOut)
+		[UnitOfWork]
+		public virtual FakeDatabase WithStateGroup(Guid? id, string name, bool @default, bool isLoggedOut)
 		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 			_stateGroup = new RtaStateGroup(name ?? RandomName.Make(), @default, true);
@@ -845,7 +858,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithStateCode(string stateCode)
+		[UnitOfWork]
+		public virtual FakeDatabase WithStateCode(string stateCode)
 		{
 			ensureExists(_stateGroups, null, () => WithStateGroup(null, null));
 			ensurePlatformExists(null);
@@ -853,22 +867,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color? displayColor)
+		[UnitOfWork]
+		public virtual FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color? displayColor)
 		{
 			ensurePlatformExists(platformTypeId);
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 
-			_rtaRule = null;
+			_rule = null;
 			if (ruleId != null)
 			{
-				_rtaRule = new RtaRule();
+				_rule = new RtaRule();
 				if (name != null)
-					_rtaRule.Description = new Description(name);
-				_rtaRule.SetId(ruleId);
-				_rtaRule.SetBusinessUnit(_businessUnit);
-				_rtaRule.StaffingEffect = staffingEffect;
-				_rtaRule.Adherence = adherence;
-				_rtaRule.DisplayColor = displayColor.GetValueOrDefault();
+					_rule.Description = new Description(name);
+				_rule.SetId(ruleId);
+				_rule.SetBusinessUnit(_businessUnit);
+				_rule.StaffingEffect = staffingEffect;
+				_rule.Adherence = adherence;
+				_rule.DisplayColor = displayColor.GetValueOrDefault();
+				_rules.Add(_rule);
 			}
 
 			IRtaStateGroup stateGroup = null;
@@ -900,7 +916,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				activity = _activity;
 			}
 
-			var mapping = new RtaMap(stateGroup, activity) { RtaRule = _rtaRule };
+			var mapping = new RtaMap(stateGroup, activity) { RtaRule = _rule };
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
 			_mappings.Add(mapping);
@@ -915,7 +931,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			stateGroup.SetBusinessUnit(_businessUnit);
 			_stateGroups.Add(stateGroup);
 
-			var mapping = new RtaMap(stateGroup, null) { RtaRule = _rtaRule };
+			var mapping = new RtaMap(stateGroup, null) { RtaRule = _rule };
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
 			_mappings.Add(mapping);
@@ -923,11 +939,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithAlarm(TimeSpan threshold, Color? color)
+		[UnitOfWork]
+		public virtual FakeDatabase WithAlarm(TimeSpan threshold, Color? color)
 		{
-			_rtaRule.IsAlarm = true;
-			_rtaRule.ThresholdTime = (int) threshold.TotalSeconds;
-			_rtaRule.AlarmColor = color.GetValueOrDefault();
+			_rule.IsAlarm = true;
+			_rule.ThresholdTime = (int) threshold.TotalSeconds;
+			_rule.AlarmColor = color.GetValueOrDefault();
 			return this;
 		}
 
@@ -936,7 +953,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithAlarm(threshold, null);
 		}
 
-		public FakeDatabase ClearAssignments(Guid? personId)
+		[UnitOfWork]
+		public virtual FakeDatabase ClearAssignments(Guid? personId)
 		{
 			var toRemove = _personAssignments.LoadAll().Where(x => x.Person.Id == personId).ToArray();
 			toRemove.ForEach(_personAssignments.Remove);

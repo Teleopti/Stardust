@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public void Setup()
 		{
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 			_scheduleStorage = new FakeScheduleStorage();
 
 			_requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    
 		    var repository = new FakePublicNoteRepository();
 
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			repository.Add(publicNoteDomain);
 			var publicNoteDto = new PublicNoteDto {Id = publicNoteDomain.Id};
 			
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);

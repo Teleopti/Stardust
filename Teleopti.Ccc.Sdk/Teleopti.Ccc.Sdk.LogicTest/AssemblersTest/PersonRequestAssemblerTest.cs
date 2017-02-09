@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
-	        var personRepository = new FakePersonRepository();
+	        var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 	        var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
-	        var personRepository = new FakePersonRepository();
+	        var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 	        var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
-	        var personRepository = new FakePersonRepository();
+	        var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 	        var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new ShiftTradeRequestAssembler(cultureProvider,
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 			var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new ShiftTradeRequestAssembler(cultureProvider,
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 			var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
-			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy(),
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
-			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy(),
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
 	        var shiftCategoryRepository = new FakeShiftCategoryRepository();
 	        var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-	        var personAssembler = new PersonAssembler(new FakePersonRepository(),
+	        var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy(),
@@ -447,7 +447,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy(),
@@ -498,7 +498,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy(),
@@ -549,7 +549,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy(),
@@ -598,7 +598,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
 					batchStatusChecker);
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
-			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy(),

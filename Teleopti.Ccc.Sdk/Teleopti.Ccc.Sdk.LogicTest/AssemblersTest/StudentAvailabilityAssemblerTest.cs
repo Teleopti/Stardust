@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    personRepository.Add(person);
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    personRepository.Add(person);
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    personRepository.Add(person);
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),

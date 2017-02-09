@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			system.UseTestDouble<TeamsProvider>().For<ITeamsProvider>();
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			personRepository = new FakePersonRepository();
+			personRepository = new FakePersonRepositoryLegacy();
 		}
 		[Test]
 		public void ShouldReturnPermittedTeamsHierachyWhenUserHasMyTeamSchedulesPermission()

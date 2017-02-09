@@ -14,11 +14,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>
 	{
-		private readonly IList<IPerson> _persons = new List<IPerson>();
-		
+		private readonly FakeStorage _storage;
+
+		public FakePersonRepository(FakeStorage storage)
+		{
+			_storage = storage;
+		}
+
 		public void Has(IPerson person)
 		{
-			_persons.Add(person);
+			_storage.Add(person);
 		}
 
 		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, IRuleSetBag ruleSetBag, params ISkill[] skills)
@@ -38,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				agent.AddSkill(skill, ppDate);
 			}
-			_persons.Add(agent);
+			_storage.Add(agent);
 			return agent;
 		}
 
@@ -46,7 +51,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, new RuleSetBag(ruleSet), skills);
 		}
-
 
 		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
@@ -71,33 +75,33 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPerson Has(IPerson person, ITeam team, DateOnly startDate)
 		{
 			person.AddPersonPeriod(new PersonPeriod(startDate, new PersonContract(new Contract("."), new PartTimePercentage("."), new ContractSchedule(".")), team));
-			_persons.Add(person);
+			_storage.Add(person);
 			return person;
 		}
 
 		public void Add(IPerson person)
 		{
-			_persons.Add(person);
+			_storage.Add(person);
 		}
 
 		public void Remove(IPerson person)
 		{
-			_persons.Remove(person);
+			_storage.Remove(person);
 		}
 
 		public IPerson Get(Guid id)
 		{
-			return _persons.SingleOrDefault(x => x.Id.Equals(id));
+			return _storage.Get<IPerson>(id);
 		}
 
 		public IList<IPerson> LoadAll()
 		{
-			return _persons;
+			return _storage.LoadAll<IPerson>().ToList();
 		}
 
 		public IPerson Load(Guid id)
 		{
-			return _persons.SingleOrDefault(x => x.Id.Equals(id));
+			return _storage.LoadAll<IPerson>().SingleOrDefault(x => x.Id.Equals(id));
 		}
 
 		public long CountAllEntities()
@@ -109,13 +113,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> LoadAllPeopleWithHierarchyDataSortByName(DateOnly earliestTerminalDate)
 		{
-			return _persons;
+			return _storage.LoadAll<IPerson>().ToList();
 		}
 
 		public ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period)
 		{
-			var people = from per in _persons
-				let periods = per.PersonPeriods(period)
+			var people = from per in _storage.LoadAll<IPerson>()
+						 let periods = per.PersonPeriods(period)
 				where periods.Any(personPeriod => personPeriod.Team == team)
 				select per;
 
@@ -124,7 +128,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleBelongTeams(ITeam[] teams, DateOnlyPeriod period)
 		{
-			var people = from per in _persons
+			var people = from per in _storage.LoadAll<IPerson>()
 						 let periods = per.PersonPeriods(period)
 						 where periods.Any(personPeriod => teams.Contains(personPeriod.Team))
 						 select per;
@@ -135,8 +139,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
 
-			var people = from per in _persons
-				let periods = per.PersonPeriods(period)
+			var people = from per in _storage.LoadAll<IPerson>()
+						 let periods = per.PersonPeriods(period)
 				where periods.Any(personPeriod => personPeriod.Team == team)
 				select per;
 
@@ -146,22 +150,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindAllSortByName()
 		{
-			return _persons.OrderBy(p => p.Name.ToString()).ToArray();
+			return _storage.LoadAll<IPerson>().OrderBy(p => p.Name.ToString()).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)
 		{
-			return _persons.Where(p => p.PersonPeriods(period).Count > 0).ToList();
+			return _storage.LoadAll<IPerson>().Where(p => p.PersonPeriods(period).Count > 0).ToList();
 		}
 
 		public ICollection<IPerson> FindPeopleByEmploymentNumber(string employmentNumber)
 		{
-			return _persons.Where(p => p.EmploymentNumber == employmentNumber).ToArray();
+			return _storage.LoadAll<IPerson>().Where(p => p.EmploymentNumber == employmentNumber).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeopleByEmploymentNumbers(IEnumerable<string> employmentNumbers)
 		{
-			return _persons.Where(p => employmentNumbers.Contains(p.EmploymentNumber)).ToArray();
+			return _storage.LoadAll<IPerson>().Where(p => employmentNumbers.Contains(p.EmploymentNumber)).ToArray();
 		}
 
 		public int NumberOfActiveAgents()
@@ -171,7 +175,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
 		{
-			foreach (var agent in _persons)
+			foreach (var agent in _storage.LoadAll<IPerson>())
 			{
 				foreach (var personPeriod in agent.PersonPeriods(period.ToDateOnlyPeriod(agent.PermissionInformation.DefaultTimeZone())))
 				{
@@ -185,7 +189,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
 		{
-			foreach (var agent in _persons)
+			foreach (var agent in _storage.LoadAll<IPerson>())
 			{
 				foreach (var personPeriod in agent.PersonPeriods(period.ToDateOnlyPeriod(agent.PermissionInformation.DefaultTimeZone())))
 				{
@@ -200,12 +204,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period)
 		{
-			return _persons.Where(p => p.PersonPeriods(period).Count > 0).ToArray();
+			return _storage.LoadAll<IPerson>().Where(p => p.PersonPeriods(period).Count > 0).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId)
 		{
-			return _persons.Where(x => peopleId.Any(id => id == x.Id.GetValueOrDefault())).ToArray();
+			return _storage.LoadAll<IPerson>().Where(x => peopleId.Any(id => id == x.Id.GetValueOrDefault())).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeople(IEnumerable<IPerson> people)
@@ -215,17 +219,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleSimplify(IEnumerable<Guid> people)
 		{
-			return _persons.Where(x => people.Any(id => id == x.Id.GetValueOrDefault())).ToArray();
+			return _storage.LoadAll<IPerson>().Where(x => people.Any(id => id == x.Id.GetValueOrDefault())).ToArray();
 		}
 
 		public IEnumerator<IPerson> GetEnumerator()
 		{
-			return _persons.GetEnumerator();
+			return _storage.LoadAll<IPerson>().GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return _persons.GetEnumerator();
+			return _storage.LoadAll<IPerson>().GetEnumerator();
 		}
 
 		public ICollection<IPerson> FindAllWithRolesSortByName()
@@ -235,7 +239,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleByEmail(string email)
 		{
-			return _persons.Where(p => p.Email == email).ToArray();
+			return _storage.LoadAll<IPerson>().Where(p => p.Email == email).ToArray();
 		}
 
 		public IPerson LoadPersonAndPermissions(Guid id)
@@ -245,13 +249,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period)
 		{
-			return _persons.Where(p => p.PersonPeriods(period).Count > 0).ToArray();
+			return _storage.LoadAll<IPerson>().Where(p => p.PersonPeriods(period).Count > 0).ToArray();
 		}
 
 		public IList<IPerson> FindUsers(DateOnly date)
 		{
-			return
-			_persons.Where(
+			return _storage.LoadAll<IPerson>().Where(
 				p => !p.IsAgent(date) && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= date).ToArray();
 		}
 	}

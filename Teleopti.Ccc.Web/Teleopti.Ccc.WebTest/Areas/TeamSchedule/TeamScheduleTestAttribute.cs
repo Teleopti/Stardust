@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.AddModule(new WebModule(configuration, null));
 			system.AddModule(new TeamScheduleAreaModule());
 
+			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeSchedulePersonProvider>().For<ISchedulePersonProvider>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeUserCulture>().For<IUserCulture>();

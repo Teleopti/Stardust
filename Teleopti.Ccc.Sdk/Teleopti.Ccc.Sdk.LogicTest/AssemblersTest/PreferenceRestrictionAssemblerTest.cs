@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void ShouldMapDtoToDomainEntity()
 	    {
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void ShouldMapDomainEntityToDto()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);

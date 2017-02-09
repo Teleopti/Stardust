@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,16 +9,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeRtaMapRepository : IRtaMapRepository
 	{
-		private readonly IList<IRtaMap> _data = new List<IRtaMap>();
+		private readonly FakeStorage _storage;
 
+		public FakeRtaMapRepository(FakeStorage storage)
+		{
+			_storage = storage;
+		}
 		public void Add(IRtaMap entity)
 		{
-			_data.Add(entity);
+			_storage.Add(entity);
 		}
 
 		public void Remove(IRtaMap entity)
 		{
-			throw new NotImplementedException();
+			_storage.Remove(entity);
 		}
 
 		public IRtaMap Get(Guid id)
@@ -27,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IList<IRtaMap> LoadAll()
 		{
-			return _data;
+			return _storage.LoadAll<IRtaMap>().ToList();
 		}
 
 		public IRtaMap Load(Guid id)
@@ -47,12 +52,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IList<IRtaMap> LoadAllCompleteGraph()
 		{
-			return _data;
+			return _storage.LoadAll<IRtaMap>().ToList();
 		}
-
-		public void Clear()
-		{
-			_data.Clear();
-		}
+		
 	}
 }

@@ -4,8 +4,7 @@ namespace Teleopti.Ccc.Domain.Aop
 {
 	public sealed class UnitOfWorkAttribute : AspectAttribute
 	{
-		public UnitOfWorkAttribute()
-			: base(typeof(IUnitOfWorkAspect))
+		public UnitOfWorkAttribute() : base(typeof(IUnitOfWorkAspect))
 		{
 		}
 	}

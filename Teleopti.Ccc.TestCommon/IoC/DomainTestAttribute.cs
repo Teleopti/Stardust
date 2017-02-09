@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Repositories
 			system.AddService<FakeDatabase>();
+			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
@@ -155,6 +156,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
 			system.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
 			system.UseTestDouble<FakeRtaMapRepository>().For<IRtaMapRepository>();
+			system.UseTestDouble<FakeRtaRuleRepository>().For<IRtaRuleRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();

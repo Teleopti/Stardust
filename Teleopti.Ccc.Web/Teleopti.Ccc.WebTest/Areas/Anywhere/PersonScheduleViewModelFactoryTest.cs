@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		
 		private static IPersonRepository FakePersonRepository(IPerson person)
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 			return personRepository;
 		}
@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var ianaTimeZoneProvider = new IanaTimeZoneProvider();
 			var userTimeZone = new FakeUserTimeZone(TimeZoneInfoFactory.BrazilTimeZoneInfo());
 			var fakePersonRepository = FakePersonRepository(person);
-			var target = new PersonScheduleViewModelFactory(fakePersonRepository, new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepository(), fakePersonRepository), 
+			var target = new PersonScheduleViewModelFactory(fakePersonRepository, new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepositoryLegacy(), fakePersonRepository), 
 				new FakeAbsenceRepository(), new FakeActivityRepository(), personScheduleViewModelMapper, 
-				new FakePersonAbsenceRepository(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, 
+				new FakePersonAbsenceRepositoryLegacy(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, 
 				ianaTimeZoneProvider, userTimeZone, _currentScenario);
 			
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
@@ -341,11 +341,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldNotRetrievePersonAbsencesInNonDefaultScenario()
 		{
-			var personRepository = new FakePersonRepository();
-			var personAbsenceRepository = new FakePersonAbsenceRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
+			var personAbsenceRepository = new FakePersonAbsenceRepositoryLegacy();
 			var personScheduleViewModelMapper = new PersonScheduleViewModelMapper();
 			var personScheduleDayReadModelRepository =
-				new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepository(), personRepository);
+				new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepositoryLegacy(), personRepository);
 			var absenceRepository = new FakeAbsenceRepository();
 			var activityRepository = new FakeActivityRepository();
 			var permissionProvider = new FakePermissionProvider();

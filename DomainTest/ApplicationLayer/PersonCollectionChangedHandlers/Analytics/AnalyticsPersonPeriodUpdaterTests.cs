@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
 			var skills = new List<AnalyticsSkill> {fakeSkill3};
 			_analyticsSkillRepository.SetSkills(skills);
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_analyticsTeamRepository = new FakeAnalyticsTeamRepository();
 			_eventPublisher = new FakeEventPublisher();

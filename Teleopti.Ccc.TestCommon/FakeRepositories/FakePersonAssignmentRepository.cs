@@ -8,22 +8,28 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
+	public class FakePersonAssignmentRepositoryLegacy : FakePersonAssignmentRepository
+	{
+		public FakePersonAssignmentRepositoryLegacy() : base(new FakeStorage())
+		{
+		}
+
+		public FakePersonAssignmentRepositoryLegacy(IPersonAssignment assignment) : base(new FakeStorage())
+		{
+			Add(assignment);
+		}
+	}
+
 	// feel free to continue implementing as see fit
 	// im all for keeping it stupid (in the same manner as an .IgnoreArguments()) until smartness is required
 	public class FakePersonAssignmentRepository : IPersonAssignmentRepository
 	{
-		private readonly IList<IPersonAssignment> _personAssignments = new List<IPersonAssignment>();
+		private readonly FakeStorage _storage;
 
-		public FakePersonAssignmentRepository()
+		public FakePersonAssignmentRepository(FakeStorage storage)
 		{
-			
+			_storage = storage;
 		}
-
-		public FakePersonAssignmentRepository(IPersonAssignment personAssignment)
-		{
-			_personAssignments.Add(personAssignment);
-		}
-
 
 
 
@@ -59,22 +65,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAssignment entity)
 		{
-			_personAssignments.Add(entity);
+			_storage.Add(entity);
 		}
 
 		public void Remove(IPersonAssignment entity)
 		{
-			_personAssignments.Remove(entity);
+			_storage.Remove(entity);
 		}
 
 		public IPersonAssignment Get(Guid id)
 		{
-			return _personAssignments.FirstOrDefault(x => x.Id == id);
+			return _storage.Get<IPersonAssignment>(id);
 		}
 
 		public IList<IPersonAssignment> LoadAll()
 		{
-			return _personAssignments;
+			return _storage.LoadAll<IPersonAssignment>().ToList();
 		}
 
 		public IPersonAssignment Load(Guid id)
@@ -86,7 +92,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAssignment LoadAggregate(Guid id)
 		{
-			return _personAssignments.First(x => x.Id == id);
+			return _storage.LoadAll<IPersonAssignment>().First(x => x.Id == id);
 		}
 
 		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
@@ -96,12 +102,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
-			return _personAssignments.Where(ass => persons.Any(x => ass.Person.Equals(x)) && ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario)).ToList();
+			return _storage.LoadAll<IPersonAssignment>().Where(ass => persons.Any(x => ass.Person.Equals(x)) && ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario)).ToList();
 		}
 
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
 		{
-			return new Collection<IPersonAssignment>(_personAssignments);
+			return new Collection<IPersonAssignment>(_storage.LoadAll<IPersonAssignment>().ToList());
 		}
 
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
@@ -116,17 +122,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public IPersonAssignment GetSingle(DateOnly dateOnly)
 		{
-			return _personAssignments.Single(pa => pa.Date == dateOnly);
+			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly);
 		}
 
 		public IPersonAssignment GetSingle(DateOnly dateOnly, IPerson agent)
 		{
-			return _personAssignments.Single(pa => pa.Date == dateOnly && pa.Person.Equals(agent));
-		}
-
-		public void Clear()
-		{
-			_personAssignments.Clear();
+			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly && pa.Person.Equals(agent));
 		}
 
 	}

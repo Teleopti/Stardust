@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,11 +9,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeRtaRuleRepository : IRtaRuleRepository
 	{
-		private readonly IList<IRtaRule> _data = new List<IRtaRule>();
+		private readonly FakeStorage _storage;
 
+		public FakeRtaRuleRepository(FakeStorage storage)
+		{
+			_storage = storage;
+		}
 		public void Add(IRtaRule entity)
 		{
-			_data.Add(entity);
+			_storage.Add(entity);
 		}
 
 		public void Remove(IRtaRule entity)
@@ -27,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IList<IRtaRule> LoadAll()
 		{
-			return _data;
+			return _storage.LoadAll<IRtaRule>().ToList();
 		}
 
 		public IRtaRule Load(Guid id)

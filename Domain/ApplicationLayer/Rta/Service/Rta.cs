@@ -9,18 +9,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private readonly RtaProcessor _processor;
 		private readonly TenantLoader _tenantLoader;
-		private readonly ActivityChangeChecker _activityChangeChecker;
+		private readonly ActivityChangeChecker _checker;
 		private readonly IContextLoader _contextLoader;
 
 		public Rta(
 			RtaProcessor processor,
 			TenantLoader tenantLoader,
-			ActivityChangeChecker activityChangeChecker,
+			ActivityChangeChecker checker,
 			IContextLoader contextLoader)
 		{
 			_processor = processor;
 			_tenantLoader = tenantLoader;
-			_activityChangeChecker = activityChangeChecker;
+			_checker = checker;
 			_contextLoader = contextLoader;
 		}
 		
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[TenantScope]
 		public virtual void CheckForActivityChanges(string tenant)
 		{
-			_activityChangeChecker.CheckForActivityChanges();
+			_checker.CheckForActivityChanges();
 		}
 	}
 }

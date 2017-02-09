@@ -109,7 +109,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			system.AddModule(new CommonModule(configuration));
 
-			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
+			var now = new MutableNow();
+			now.Is("2014-12-18 13:31");
+			system.UseTestDouble(now).For<INow>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
 			system.UseTestDouble(config).For<IConfigReader>();
 			// we really shouldnt inject this, but if we do, maybe its better its correct...

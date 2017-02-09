@@ -86,7 +86,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         protected internal virtual void AddStateInternal(IRtaState state)
         {
             _stateCollection.Add(state);
-            state.SetParent(this);
+			AddEvent(new RtaStateGroupChangedEvent());
+			state.SetParent(this);
         }
 
         public virtual IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state)

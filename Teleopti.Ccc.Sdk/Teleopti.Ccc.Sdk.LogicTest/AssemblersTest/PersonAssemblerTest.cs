@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void VerifyDomainEntityToDto()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void ShouldMapDomainEntityWithoutWorkflowControlSetToDto()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void VerifyCanTransformToDomainObject()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void VerifyCanTransformToDomainObjectFromNewPersonDto()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void VerifyCannotAddPersonWithoutName()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void VerifyCannotUpdatePersonWithoutName()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void VerifyCannotAddPersonWithoutTimeZone()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void ShouldUseDummyAccountUpdaterWhenNewPerson()
 		{
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var workflowControlSetAssembler =
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),

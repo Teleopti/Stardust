@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 
@@ -9,8 +10,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAgentStatePersister : IAgentStatePersister
 	{
+		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly object _lock = new object();
 		private IEnumerable<AgentState> _data = Enumerable.Empty<AgentState>();
+
+		public FakeAgentStatePersister(IKeyValueStorePersister keyValueStore)
+		{
+			_keyValueStore = keyValueStore;
+		}
 
 		public AgentState ForPersonId(Guid personId)
 		{
@@ -86,7 +93,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					AgentStates = _data
 						.Where(x => personIds.Contains(x.PersonId))
-						.ToArray()
+						.ToArray(),
+					MappingVersion = _keyValueStore.Get("RuleMappingsVersion"),
+					ScheduleVersion = _keyValueStore.Get("CurrentScheduleReadModelVersion")
 				};
 		}
 

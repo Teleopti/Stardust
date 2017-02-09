@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_analyticsDateRepository = new FakeAnalyticsDateRepository(
 				new DateTime(2001, 01, 01),
 				new DateTime(2002, 12, 31));
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
 			_analyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository(

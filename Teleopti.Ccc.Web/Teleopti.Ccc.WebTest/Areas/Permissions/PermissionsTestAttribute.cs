@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			system.AddModule(new WebModule(configuration, null));
 
+			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
 			system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();

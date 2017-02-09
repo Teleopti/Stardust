@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			system.AddModule(new WebModule(configuration, null));
 
+			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
 			system.UseTestDouble(new FakeScheduleDataReadScheduleStorage()).For<IScheduleStorage>();

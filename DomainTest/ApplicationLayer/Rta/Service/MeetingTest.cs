@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMeeting("meeting", "2016-12-15 13:00", "2016-12-15 15:00")
 				;
 
+			Publisher.Clear();
 			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",

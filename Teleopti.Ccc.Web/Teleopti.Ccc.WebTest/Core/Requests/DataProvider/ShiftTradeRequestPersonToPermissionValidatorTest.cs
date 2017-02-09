@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			principalFactory = MockRepository.GenerateMock<IPrincipalFactory>();
 			principalFactory.Stub(x => x.MakePrincipal(personTo, dataSource, null, null)).Return(principal);
 
-			personRepository = new FakePersonRepository();
+			personRepository = new FakePersonRepositoryLegacy();
 			roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
 
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));

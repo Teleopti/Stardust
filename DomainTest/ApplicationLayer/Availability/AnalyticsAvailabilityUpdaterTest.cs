@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			_analyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 			_analyticsDateRepository = new FakeAnalyticsDateRepository(DateTime.Today-TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 			_scheduleStorage = new FakeScheduleStorage();
 			_analyticsHourlyAvailabilityRepository = new FakeAnalyticsHourlyAvailabilityRepository();
 			_scenarioRepository = new FakeScenarioRepository();

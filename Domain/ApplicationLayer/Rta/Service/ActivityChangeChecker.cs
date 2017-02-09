@@ -1,6 +1,18 @@
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ActivityChangeChecker
+	public interface IActivityChangeCheckerFromScheduleChangeProcessor
+	{
+		void CheckForActivityChanges();
+	}
+
+	public class DontCheckForActivityChangesFromScheduleChangeProcessor : IActivityChangeCheckerFromScheduleChangeProcessor
+	{
+		public void CheckForActivityChanges()
+		{
+		}
+	}
+
+	public class ActivityChangeChecker : IActivityChangeCheckerFromScheduleChangeProcessor
 	{
 		private readonly IContextLoader _contextLoader;
 		private readonly RtaProcessor _processor;

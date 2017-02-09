@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			system.AddModule(new WebModule(configuration, null));
 			system.AddModule(new PeopleAreaModule());
 
+			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
 			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();

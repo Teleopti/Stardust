@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var absenceRepository = new FakeAbsenceRepository();
 			var scheduleStorage = new FakeScheduleStorage();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var businessRulesForPersonalAccountUpdate =
 				new BusinessRulesForPersonalAccountUpdate(new FakePersonAbsenceAccountRepository(),
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var absenceRepository = new FakeAbsenceRepository();
 			var scheduleStorage = new FakeScheduleStorage();
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			scenarioRepository.Add(otherScenario);
 

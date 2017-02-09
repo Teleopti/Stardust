@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeKeyValueStorePersister : IKeyValueStorePersister
 	{
-		private Hashtable _data = new Hashtable();
+		private readonly Hashtable _data = new Hashtable();
 
 		public void Update(string key, string value)
 		{

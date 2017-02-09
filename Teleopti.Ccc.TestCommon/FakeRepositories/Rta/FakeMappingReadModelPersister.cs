@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -8,33 +9,41 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeMappingReadModelPersister : IMappingReadModelPersister, IMappingReader
 	{
+		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IList<Mapping> _data = new List<Mapping>();
-		private bool _invalido;
 
 		public IEnumerable<Mapping> Data => _data;
 
+		public FakeMappingReadModelPersister(IKeyValueStorePersister keyValueStore)
+		{
+			_keyValueStore = keyValueStore;
+		}
+
 		public void Invalidate()
 		{
-			_invalido = true;
+			if (Invalid())
+				return;
+			setInvalido(true);
+		}
+
+		private void setInvalido(bool value)
+		{
+			_keyValueStore.Update("RuleMappingsInvalido", value);
 		}
 
 		public bool Invalid()
 		{
-			return _invalido || _data.IsEmpty();
+			return _keyValueStore.Get("RuleMappingsInvalido", true);
 		}
 
 		public void Persist(IEnumerable<Mapping> mappings)
 		{
+			setInvalido(false);
 			_data.Clear();
 			mappings.ForEach(_data.Add);
-			_invalido = false;
+			_keyValueStore.Update("RuleMappingsVersion", Guid.NewGuid().ToString());
 		}
-
-		public void Add(Mapping mapping)
-		{
-			_data.Add(mapping);
-		}
-
+		
 		public IEnumerable<Mapping> Read()
 		{
 			return _data;

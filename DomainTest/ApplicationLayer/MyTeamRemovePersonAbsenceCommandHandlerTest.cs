@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAbsence.SetId(Guid.Empty);
 			_scheduleStorage.Add(personAbsence);
 
-			var personAbsenceRepository = new FakePersonAbsenceRepository();
+			var personAbsenceRepository = new FakePersonAbsenceRepositoryLegacy();
 			personAbsenceRepository.Add(personAbsence);
 
 			var target = new MyTeamRemovePersonAbsenceCommandHandler(personAbsenceRepository, _scheduleStorage,
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), scenario, MockRepository.GenerateMock<IAbsenceLayer>());
 			personAbsence.SetId(Guid.Empty);
 
-			var personAbsenceRepository = new FakePersonAbsenceRepository();
+			var personAbsenceRepository = new FakePersonAbsenceRepositoryLegacy();
 			personAbsenceRepository.Add(personAbsence);
 
 			var target = new MyTeamRemovePersonAbsenceCommandHandler(personAbsenceRepository, _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeEventPublisher : IEventPublisher
 	{
-		public IEnumerable<IEvent> PublishedEvents { get { return queuedEvents.ToArray(); }}
+		public IEnumerable<IEvent> PublishedEvents => queuedEvents.ToArray();
 		private ConcurrentQueue<IEvent> queuedEvents = new ConcurrentQueue<IEvent>();
 
 		public void Clear()
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon
 			queuedEvents = new ConcurrentQueue<IEvent>();
 		}
 
-		public void Publish(params IEvent[] events)
+		public virtual void Publish(params IEvent[] events)
 		{
 			events.ForEach(queuedEvents.Enqueue);
 		}

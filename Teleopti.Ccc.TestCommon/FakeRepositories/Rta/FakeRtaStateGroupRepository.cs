@@ -1,15 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
+	public class FakeRtaStateGroupRepositoryLegacy : FakeRtaStateGroupRepository
+	{
+		public FakeRtaStateGroupRepositoryLegacy() : base(new FakeStorage())
+		{
+		}
+	}
+
 	public class FakeRtaStateGroupRepository : IRtaStateGroupRepository
 	{
-		private readonly List<IRtaStateGroup> _data = new List<IRtaStateGroup>();
+		private readonly FakeStorage _storage;
 
+		public FakeRtaStateGroupRepository(FakeStorage storage)
+		{
+			_storage = storage;
+		}
 		public void Has(IRtaStateGroup stateGroup)
 		{
 			Add(stateGroup);
@@ -17,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void Add(IRtaStateGroup entity)
 		{
-			_data.Add(entity);
+			_storage.Add(entity);
 		}
 
 		public void Remove(IRtaStateGroup entity)
@@ -32,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IList<IRtaStateGroup> LoadAll()
 		{
-			return _data;
+			return _storage.LoadAll<IRtaStateGroup>().ToList();
 		}
 
 		public IRtaStateGroup Load(Guid id)
@@ -52,18 +64,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IList<IRtaStateGroup> LoadAllCompleteGraph()
 		{
-			return _data;
+			return _storage.LoadAll<IRtaStateGroup>().ToList();
 		}
 
 		public IEnumerable<IRtaStateGroup> LoadAllExclusive()
 		{
-			return _data;
+			return _storage.LoadAll<IRtaStateGroup>();
 		}
-
-		public void Clear()
-		{
-			_data.Clear();
-		}
-
+		
 	}
 }

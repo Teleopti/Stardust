@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public void Setup()
 		{
 			_preferenceDayRepository = new FakePreferenceDayRepository();
-			_personRepository = new FakePersonRepository();
+			_personRepository = new FakePersonRepositoryLegacy2();
 			_eventPublisher = new FakeEventPublisher();
 
 			_target = new PreferenceFulfillmentChangedHandler(_preferenceDayRepository, _personRepository, _eventPublisher);

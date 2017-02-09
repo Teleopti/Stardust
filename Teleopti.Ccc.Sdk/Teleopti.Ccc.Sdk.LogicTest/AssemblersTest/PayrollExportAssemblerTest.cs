@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    public void VerifyDoToDto()
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
 		    
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var payrollExport = createDo(person);
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
 		    
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void VerifyDtoToDoWithNoId()
 	    {
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
 
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 
 		    var personAssembler = new PersonAssembler(personRepository,

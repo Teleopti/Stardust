@@ -64,18 +64,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShouldProcessState()
 		{
-			// no previous state
 			if (Stored == null)
 				return true;
-			
-			var isSameState =
-				SnapshotId.Equals(Stored.SnapshotId) &&
-				!Schedule.ActivityChanged() &&
-				!State.StateChanged() &&
-				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum)
-				;
-
-			return !isSameState;
+			if (State.StateChanged())
+				return true;
+			if (Schedule.ActivityChanged())
+				return true;
+			if (Schedule.TimeWindowCheckSum() != Stored.TimeWindowCheckSum)
+				return true;
+			if (SnapshotId != Stored.SnapshotId)
+				return true;
+			return false;
 		}
 
 		public void UpdateAgentState()

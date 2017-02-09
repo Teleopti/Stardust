@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -231,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var optimizedAgentsInAnyOfLoops = new HashSet<IPerson>();
 			for (var retries = 0; retries < retriesBeforeGivingUp; retries++)
 			{
-				PersonAssignmentRepository.Clear();
+				PersonAssignmentRepository.LoadAll().ForEach(x => PersonAssignmentRepository.Remove(x));
 				TrackOptimizeDaysForAgents.Clear();
 				for (var i = 0; i < numberOfAgents; i++)
 				{

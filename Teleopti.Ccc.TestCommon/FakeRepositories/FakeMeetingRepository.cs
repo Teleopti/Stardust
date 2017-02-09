@@ -10,31 +10,36 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeMeetingRepository : IMeetingRepository
 	{
-		private readonly IList<IMeeting> meetings = new List<IMeeting>();
+		private readonly FakeStorage _storage;
+
+		public FakeMeetingRepository(FakeStorage storage)
+		{
+			_storage = storage;
+		}
 
 		public void Add(IMeeting root)
 		{
-			meetings.Add(root);
+			_storage.Add(root);
 		}
 
 		public void Remove(IMeeting root)
 		{
-			meetings.Remove(root);
+			_storage.Remove(root);
 		}
 
 		public IMeeting Get(Guid id)
 		{
-			return meetings.FirstOrDefault(x => x.Id == id);
+			return _storage.Get<IMeeting>(id);
 		}
 
 		public IList<IMeeting> LoadAll()
 		{
-			return meetings;
+			return _storage.LoadAll<IMeeting>().ToList();
 		}
 
 		public IMeeting Load(Guid id)
 		{
-			return meetings.First(x => x.Id == id);
+			return _storage.LoadAll<IMeeting>().First(x => x.Id == id);
 		}
 
 		public long CountAllEntities()
@@ -66,8 +71,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer = true)
 		{
-			return (from m in meetings
-				where m.Scenario == scenario
+			return (from m in _storage.LoadAll<IMeeting>()
+					where m.Scenario == scenario
 				let matchPersons = includeForOrganizer ?
 					m.MeetingPersons.Select(mp => mp.Person).Append(m.Organizer) :
 					m.MeetingPersons.Select(mp => mp.Person)

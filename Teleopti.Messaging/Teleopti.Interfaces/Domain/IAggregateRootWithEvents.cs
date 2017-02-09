@@ -9,5 +9,6 @@ namespace Teleopti.Interfaces.Domain
 		void NotifyTransactionComplete(DomainUpdateType operation);
 		void NotifyDelete();
 		IEnumerable<IEvent> PopAllEvents();
+		bool HasEvents();
 	}
 }

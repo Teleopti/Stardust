@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		public void Setup()
 		{
 			searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
-			personRepository = new FakePersonRepository();
+			personRepository = new FakePersonRepositoryLegacy();
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
-			personAbsenceRepository = new FakePersonAbsenceRepository();
+			personAbsenceRepository = new FakePersonAbsenceRepositoryLegacy();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			loggedOnUser = new FakeLoggedOnUser();
 			currentScenario = new FakeCurrentScenario();
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		[Test]
 		public void ShouldSearchPermittedPeopleReturnMoreThan2Pages()
 		{
-			personRepository = new FakePersonRepository();
+			personRepository = new FakePersonRepositoryLegacy();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
 				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit, currentScenario);
 

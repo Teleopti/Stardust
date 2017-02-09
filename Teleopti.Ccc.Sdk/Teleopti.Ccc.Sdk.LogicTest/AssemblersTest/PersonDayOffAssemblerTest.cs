@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var person = PersonFactory.CreatePerson().WithId();
 		    person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
 		    var scenario = ScenarioFactory.CreateScenarioAggregate();
-		    var personAssembler = new PersonAssembler(new FakePersonRepository(),
+		    var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var person = PersonFactory.CreatePerson().WithId();
 			person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),

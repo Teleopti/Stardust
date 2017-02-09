@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
 
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 		    var scenarioRepository = new FakeCurrentScenario();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(person);
 
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void VerifyDoToDtoWithNullValue()
         {
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		{
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var personRepository = new FakePersonRepository();
+			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
 
-		    var personRepository = new FakePersonRepository();
+		    var personRepository = new FakePersonRepositoryLegacy();
 		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 		    var scenarioRepository = new FakeCurrentScenario();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());

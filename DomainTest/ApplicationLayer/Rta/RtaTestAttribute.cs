@@ -1,200 +1,181 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	[LoggedOff]
-	public class RtaTestAttribute : DomainTestAttribute
+	public class RtaTestAttribute : RtaTestLoggedOnAttribute
 	{
+	}
+
+	[Setting("RtaAgentStateTraceMatch", ".*")]
+	public class RtaTestLoggedOnAttribute : DomainTestAttribute
+	{
+		public FakeEventPublisher_ExperimentalEventPublishing Publisher;
+		public MutableNow_ExperimentalEventPublishing Now;
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
 
-			system.UseTestDouble<AutoFillKeyValueStore>().For<IKeyValueStorePersister>();
-			system.UseTestDouble<AutoFillExternalLogonReader>().For<IExternalLogonReader>();
-			system.UseTestDouble<AutoFillMappingReader>().For<IMappingReader>();
-			system.UseTestDouble<AutoFillCurrentScheduleReadModelReader>().For<IScheduleReader>();
-			system.UseTestDouble<AutoFillAgentStatePersister>().For<FakeAgentStatePersister, IAgentStatePersister>();
+			system.UseTestDouble<FakeEventPublisher_ExperimentalEventPublishing>().For<FakeEventPublisher, IEventPublisher>();
+			system.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
+			system.UseTestDouble<FakeUnitOfWorkAspect_ExperimentalEventPublishing>().For<IUnitOfWorkAspect>();
+
+			// disable activity change checker triggered by minute tick which is triggered by Now.Is(...)
+			system.UseTestDouble<DontCheckForActivityChangesFromScheduleChangeProcessor>().For<IActivityChangeCheckerFromScheduleChangeProcessor>();
+		}
+
+		protected override void BeforeTest()
+		{
+			base.BeforeTest();
+
+			Now.Is("2001-12-18 13:31");
+
+			Publisher.AddHandler<Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleChangedEventPublisher>();
+			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
+
+			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
+			Publisher.AddHandler<MappingReadModelUpdater>();
+			Publisher.AddHandler<ScheduleChangeProcessor>();
+			Publisher.AddHandler<AgentStateMaintainer>();
 		}
 	}
 
-	public class AutoFillExternalLogonReader : FakeExternalLogonReadModelPersister
+	public class FakeUnitOfWorkAspect_ExperimentalEventPublishing : IUnitOfWorkAspect
 	{
-		private readonly IPersonRepository _persons;
+		private readonly IEventPopulatingPublisher _publisher;
+		private readonly FakeStorage _storage;
+		private readonly IEnumerable<ITransactionHook> _hooks;
 		private readonly INow _now;
 
-		public AutoFillExternalLogonReader(
-			IPersonRepository persons,
-			INow now)
+		public FakeUnitOfWorkAspect_ExperimentalEventPublishing(
+			IEventPopulatingPublisher publisher,
+			FakeStorage storage,
+			IEnumerable<ITransactionHook> hooks,
+			INow now
+			)
 		{
-			_persons = persons;
+			_publisher = publisher;
+			_storage = storage;
+			_hooks = hooks;
 			_now = now;
 		}
 
-		public override IEnumerable<ExternalLogonReadModel> Read()
+		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			return _persons.LoadAll()
-				.SelectMany(x =>
+		}
+
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+		{
+			var changes = _storage.Commit();
+			if (changes.IsEmpty())
+				return;
+
+			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} OnAfterInvocation {changes.Count()}");
+			//changes.ForEach(x => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {x.Root.GetType()} {x.Status}"));
+
+			// required for rta tests, really, PA is missing events...
+			new ScheduleChangedEventPublisher(_publisher, _now).AfterCompletion(changes);
+			_hooks.ForEach(x => x.AfterCompletion(changes));
+			_publisher.Publish(new TenantMinuteTickEvent());
+		}
+	}
+
+	public class MutableNow_ExperimentalEventPublishing : MutableNow
+	{
+		private readonly IEventPublisher _publisher;
+
+		public MutableNow_ExperimentalEventPublishing(IEventPublisher publisher)
+		{
+			_publisher = publisher;
+		}
+
+		public override void Is(DateTime? utc)
+		{
+			var dayTick = Math.Abs(utc.GetValueOrDefault().Subtract(UtcDateTime()).TotalDays) >= 1;
+			var hourTick = Math.Abs(utc.GetValueOrDefault().Subtract(UtcDateTime()).TotalHours) >= 1;
+
+			base.Is(utc);
+
+			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {utc}");
+
+			if (dayTick)
+				_publisher.Publish(new TenantDayTickEvent());
+			if (hourTick)
+				_publisher.Publish(new TenantHourTickEvent());
+			_publisher.Publish(new TenantMinuteTickEvent());
+		}
+	}
+
+	public class FakeEventPublisher_ExperimentalEventPublishing : FakeEventPublisher
+	{
+		private readonly ResolveEventHandlers _resolver;
+		private readonly CommonEventProcessor _processor;
+		private readonly List<Type> _handlerTypes = new List<Type>();
+
+		public FakeEventPublisher_ExperimentalEventPublishing(ResolveEventHandlers resolver, CommonEventProcessor processor)
+		{
+			_resolver = resolver;
+			_processor = processor;
+		}
+
+		public void AddHandler<T>()
+		{
+			_handlerTypes.Add(typeof(T));
+		}
+
+		public void AddHandler(Type type)
+		{
+			_handlerTypes.Add(type);
+		}
+
+		public override void Publish(params IEvent[] events)
+		{
+			base.Publish(events);
+
+			if (PublishedEvents.Count() > 100)
+				throw new Exception("Looks like a circular/recursive event chain?");
+
+			foreach (var @event in events)
+			{
+				foreach (var handlerType in _handlerTypes)
 				{
-					var period = x.Period(new DateOnly(_now.UtcDateTime()));
-					if (period == null)
-						return Enumerable.Empty<ExternalLogonReadModel>();
+					var method = _resolver.HandleMethodFor(handlerType, @event);
+					if (method == null)
+						continue;
 
-					return period
-						.ExternalLogOnCollection
-						.Select(l => new ExternalLogonReadModel
-						{
-							PersonId = x.Id.Value,
-							DataSourceId = l.DataSourceId,
-							UserCode = l.AcdLogOnOriginalId
-						});
-				}).ToArray();
-		}
-	}
+					//events.ForEach(e => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {e} to {handlerType}"));
 
-	// if this one always is empty caches will always be refreshed
-	public class AutoFillKeyValueStore : IKeyValueStorePersister
-	{
-		public void Update(string key, string value)
-		{
-		}
-
-		public string Get(string key)
-		{
-			return null;
-		}
-
-		public void Delete(string key)
-		{
-		}
-	}
-
-	public class AutoFillMappingReader : IMappingReader
-	{
-		private readonly IBusinessUnitRepository _businessUnits;
-		private readonly IActivityRepository _activities;
-		private readonly IRtaMapRepository _mapRepository;
-		private readonly IRtaStateGroupRepository _stateGroups;
-
-		public AutoFillMappingReader(
-			IBusinessUnitRepository businessUnits,
-			IActivityRepository activities,
-			IRtaMapRepository mapRepository,
-			IRtaStateGroupRepository stateGroups
-		)
-		{
-			_businessUnits = businessUnits;
-			_activities = activities;
-			_mapRepository = mapRepository;
-			_stateGroups = stateGroups;
-		}
-
-		public IEnumerable<Mapping> Read()
-		{
-			return MappingReadModelUpdater.MakeMappings(_businessUnits, _activities, _stateGroups, _mapRepository)
-				.ToArray();
-		}
-	}
-
-	public class AutoFillCurrentScheduleReadModelReader : IScheduleReader
-	{
-		private readonly INow _now;
-		private readonly IPersonRepository _persons;
-		private readonly IBusinessUnitRepository _businessUnits;
-		private readonly IScenarioRepository _scenarios;
-		private readonly IScheduleStorage _scheduleStorage;
-
-		public AutoFillCurrentScheduleReadModelReader(
-			INow now,
-			IPersonRepository persons,
-			IBusinessUnitRepository businessUnits,
-			IScenarioRepository scenarios,
-			IScheduleStorage scheduleStorage)
-		{
-			_now = now;
-			_persons = persons;
-			_businessUnits = businessUnits;
-			_scenarios = scenarios;
-			_scheduleStorage = scheduleStorage;
-		}
-
-		public IEnumerable<ScheduledActivity> Read()
-		{
-			var result = new List<ScheduledActivity>();
-			CurrentScheduleReadModelUpdater.PersistSchedules(
-				_persons.LoadAll().Select(x => x.Id.Value),
-				_now,
-				_persons,
-				_businessUnits,
-				_scenarios,
-				_scheduleStorage,
-				(a, b) => result.AddRange(b));
-			return result;
-		}
-		
-	}
-
-	public class AutoFillAgentStatePersister : FakeAgentStatePersister
-	{
-		private readonly IPersonRepository _persons;
-		private readonly INow _now;
-
-		public AutoFillAgentStatePersister(
-			IPersonRepository persons,
-			INow now)
-		{
-			_persons = persons;
-			_now = now;
-		}
-
-		private void syncFromAggregates()
-		{
-			_persons.LoadAll()
-				.ForEach(x =>
-				{
-					var period = x.Period(new DateOnly(_now.UtcDateTime()));
-					if (period == null)
+					onAnotherThread(() =>
 					{
-						Delete(x.Id.Value, DeadLockVictim.Yes);
-						return;
-					}
-
-					Prepare(new AgentStatePrepare
-					{
-						PersonId = x.Id.Value,
-						BusinessUnitId = period.Team?.Site?.BusinessUnit?.Id ?? Guid.Empty,
-						SiteId = period.Team?.Site?.Id,
-						TeamId = period.Team?.Id
-					}, DeadLockVictim.Yes);
-				});
+						_processor.Process(@event, handlerType);
+					});
+				}
+			}
 		}
 
-		public override IEnumerable<PersonForCheck> FindForCheck()
+		private static void onAnotherThread(Action action)
 		{
-			syncFromAggregates();
-			return base.FindForCheck();
-		}
-
-		public override IEnumerable<Guid> FindForClosingSnapshot(DateTime snapshotId, int snapshotDataSourceId, IEnumerable<Guid> loggedOutStateGroupIds)
-		{
-			syncFromAggregates();
-			return base.FindForClosingSnapshot(snapshotId, snapshotDataSourceId, loggedOutStateGroupIds);
-		}
-
-		public override LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
-		{
-			syncFromAggregates();
-			return base.LockNLoad(personIds, deadLockVictim);
+			var thread = new Thread(action.Invoke);
+			thread.Start();
+			thread.Join();
 		}
 	}
 }

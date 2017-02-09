@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -80,6 +81,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeGroupingReadOnlyRepository groupings, 
 			FakeRtaStateGroupRepository stateGroups, 
 			FakeRtaMapRepository mappings, 
+			FakeRtaRuleRepository rules,
 			FakeExternalLogOnRepository externalLogOns, 
 			FakeDataSources dataSources,
 			FakeAgentStatePersister agentStates,
@@ -110,7 +112,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				skills, 
 				groupings, 
 				stateGroups, 
-				mappings, 
+				mappings,
+				rules,
 				externalLogOns, 
 				dataSources,
 				siteInAlarmReader, 
@@ -148,13 +151,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase ClearRuleMap()
 		{
-			_mappings.Clear();
+			_mappings.LoadAll().ForEach(x => _mappings.Remove(x));
 			return this;
 		}
 
 		public FakeRtaDatabase ClearStates()
 		{
-			_stateGroups.Clear();
+			_stateGroups.LoadAll().ForEach(x => _stateGroups.Remove(x));
 			return this;
 		}
 

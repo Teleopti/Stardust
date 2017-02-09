@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			return _events.PopAllEvents();
 		}
 
+		public bool HasEvents()
+		{
+			return _events.HasEvents();
+		}
+
 		public virtual IBusinessUnit BusinessUnit
 		{
 			get { return _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current()); }
@@ -142,6 +147,10 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			return _events.PopAllEvents();
 		}
 
+		public bool HasEvents()
+		{
+			return _events.HasEvents();
+		}
 
 
 
@@ -210,6 +219,10 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			return allEvents;
 		}
 
+		public bool HasEvents()
+		{
+			return _events.Any();
+		}
 	}
 
 }
