@@ -47,7 +47,7 @@
 						placeholder: $translate.instant('FilterThreeDots')
 					},
 					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">' +
-						'<input xng-enter=\"enter()\" type=\"text\"  ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
+						'<input ng-enter=\"enter()\" type=\"text\"  ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 				},
 				{
 					displayName: 'Message',
