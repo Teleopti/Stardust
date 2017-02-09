@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginWebView));
-			Syncfusion.Windows.Forms.CaptionLabel captionLabel1 = new Syncfusion.Windows.Forms.CaptionLabel();
+			Syncfusion.Windows.Forms.CaptionImage captionImage1 = new Syncfusion.Windows.Forms.CaptionImage();
 			this.labelVersion = new System.Windows.Forms.Label();
 			this.webControl = new EO.WebBrowser.WinForm.WebControl();
 			this.webView1 = new EO.WebBrowser.WebView();
@@ -67,7 +67,7 @@
 			this.pictureBox1.BackColor = System.Drawing.Color.White;
 			this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
 			this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.pictureBox1.Location = new System.Drawing.Point(270, 58);
+			this.pictureBox1.Location = new System.Drawing.Point(274, 58);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(227, 75);
 			this.pictureBox1.TabIndex = 5;
@@ -87,18 +87,17 @@
 			this.CaptionButtonColor = System.Drawing.Color.White;
 			this.CaptionButtonHoverColor = System.Drawing.Color.DeepSkyBlue;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
-			captionLabel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(214)))), ((int)(((byte)(255)))));
-			captionLabel1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			captionLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(214)))), ((int)(((byte)(255)))));
-			captionLabel1.Location = new System.Drawing.Point(4, 4);
-			captionLabel1.Name = "CaptionLabel1";
-			this.CaptionLabels.Add(captionLabel1);
+			captionImage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(214)))), ((int)(((byte)(255)))));
+			captionImage1.Location = new System.Drawing.Point(5, 5);
+			captionImage1.Name = "CaptionImage1";
+			captionImage1.Size = new System.Drawing.Size(200, 24);
+			this.CaptionImages.Add(captionImage1);
 			this.ClientSize = new System.Drawing.Size(788, 410);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.webControl);
 			this.Controls.Add(this.labelVersion);
 			this.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(214)))), ((int)(((byte)(255)))));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
