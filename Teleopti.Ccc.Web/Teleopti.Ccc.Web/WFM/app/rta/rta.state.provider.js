@@ -8,8 +8,8 @@ angular
 			RTA_QuicklyChangeAgentsSelection_40610: false
 		};
 		var rtaAgentsTemplateUrl = function (elem, attr) {
-			if (toggles.RTA_AgentsOnOrganizationAndSkills_41586)
-				return 'app/rta/agents/rta-agents-AgentsOnOrganizationAndSkills_41586.html';
+			if (toggles.RTA_QuicklyChangeAgentsSelection_40610)
+				return 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html';
 			return 'app/rta/agents/rta-agents.html';
 		}
 
