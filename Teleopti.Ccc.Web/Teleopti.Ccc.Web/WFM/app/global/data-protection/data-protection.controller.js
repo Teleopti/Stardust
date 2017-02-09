@@ -12,6 +12,10 @@
 		vm.sendYesResponse = sendYesResponse;
 		vm.sendNoResponse = sendNoResponse;
 		vm.notNowResponse = notNowResponse;
+		vm.dataProtectionQuestionText = '...';
+		DataProtectionService.dataProtectionQuestionText.query().$promise.then(function (result) {
+			vm.dataProtectionQuestionText = result.text;
+		});
 
 		function sendYesResponse() {
 			DataProtectionService.iAgree.query();

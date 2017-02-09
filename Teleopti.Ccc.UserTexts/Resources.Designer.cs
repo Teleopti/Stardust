@@ -3142,6 +3142,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ask Me Later.
+        /// </summary>
+        public static string AskMeLater {
+            get {
+                return ResourceManager.GetString("AskMeLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open ASM.
         /// </summary>
         public static string ASM {
@@ -7542,6 +7551,21 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DataHasBeenDeleted {
             get {
                 return ResourceManager.GetString("DataHasBeenDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please participate on the Teleopti Customer Web. You will get access to tips and tricks, blog posts, tutorials and other useful information. For this purpose, Teleopti would like to collect the following data from you to enable your access to the Teleopti Customer Web.&lt;br&gt;&lt;br&gt;
+        ///E-mail: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+        ///First name: &lt;b&gt;{1}&lt;/b&gt;&lt;br&gt;
+        ///Last name: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
+        ///Language: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
+        ///Company: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+        ///This data will ensure that you are automatically signed on to the Teleopti Customer Web and get acc [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string DataProtectionQuestion {
+            get {
+                return ResourceManager.GetString("DataProtectionQuestion", resourceCulture);
             }
         }
         
@@ -19352,6 +19376,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Thanks.
+        /// </summary>
+        public static string NoThanks {
+            get {
+                return ResourceManager.GetString("NoThanks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notifications.
         /// </summary>
         public static string Notifications {
@@ -30992,6 +31025,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TeleoptiCCCColonModuleColonFromToDateScenarioColon {
             get {
                 return ResourceManager.GetString("TeleoptiCCCColonModuleColonFromToDateScenarioColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teleopti Customer Web.
+        /// </summary>
+        public static string TeleoptiCustomerWeb {
+            get {
+                return ResourceManager.GetString("TeleoptiCustomerWeb", resourceCulture);
             }
         }
         

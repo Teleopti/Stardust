@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private WebUrlHolder _webUrlHolder;
 		private List<string> validUrls;
 		private bool showDataProtectionWebPage;
-		IPerson _loggedOnPerson;
 
 		protected SmartClientShellForm()
 		{
@@ -944,6 +943,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				pleaseRegisterAnEmailAddress(UserTexts.Resources.PleaseConfigureYourEmailAddress);
 				return;
 			}
+			if (!_toggleManager.IsEnabled(Toggles.Landing_Page_Data_Protection_Question_35721))
+			{
+				gotoCustomerWebAndLogOn();
+				return;
+			}
 
 			var dataProtectionResponse = dataProtectionSetting();
 			switch (dataProtectionResponse)
@@ -991,7 +995,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void pleaseRegisterAnEmailAddress(string message)
 		{
-			const string html = "<!doctype html><html ><head></head><body>{0}</body></html>";
+			const string html = "<!doctype html><html><head></head><body style='font-family:Sans-Serif'>{0}</body></html>";
 			webView1.LoadHtml(string.Format(html, message));
 			canAccessInternet = true;
 		}
@@ -1020,13 +1024,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			get
 			{
-				if (_loggedOnPerson != null) return _loggedOnPerson;
-
 				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					_loggedOnPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
+					return TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
 				}
-				return _loggedOnPerson;
 			}
 		}
 
@@ -1070,9 +1071,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void wfmWebView_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
 		{
-			//do we need this?
-			//var menuItem = new EO.WebBrowser.MenuItem(UserTexts.Resources.StartPage, homeCommand);
-
 			e.Menu.Items.Clear();
 		}
 

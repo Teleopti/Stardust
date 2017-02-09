@@ -15,9 +15,22 @@
 			query: { method: 'POST', params: {}, isArray: false }
 		});
 
+		var dataProtectionQuestionText = $resource('../api/Global/DataProtection/QuestionText', {},
+		{
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: false,
+				transformResponse: function(data) {
+					return { text: angular.fromJson(data) }
+				}
+			}
+		});
+
 		var service = {
 			iAgree: iAgree,
-			iDontAgree: iDontAgree
+			iDontAgree: iDontAgree,
+			dataProtectionQuestionText: dataProtectionQuestionText
 		};
 
 		return service;

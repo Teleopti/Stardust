@@ -15545,4 +15545,27 @@ These options are activated:
   <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
     <value>Do not break max seat...</value>
   </data>
+  <data name="AskMeLater" xml:space="preserve">
+    <value>Ask Me Later</value>
+    <comment>Ask Me Later button</comment>
+  </data>
+  <data name="DataProtectionQuestion" xml:space="preserve">
+    <value>Please participate on the Teleopti Customer Web. You will get access to tips and tricks, blog posts, tutorials and other useful information. For this purpose, Teleopti would like to collect the following data from you to enable your access to the Teleopti Customer Web.&lt;br&gt;&lt;br&gt;
+E-mail: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+First name: &lt;b&gt;{1}&lt;/b&gt;&lt;br&gt;
+Last name: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
+Language: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
+Company: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+This data will ensure that you are automatically signed on to the Teleopti Customer Web and get access to appropriate material.&lt;br&gt;&lt;br&gt;
+Do you want to participate?</value>
+    <comment>Asking for users agreement to collect user information to log on automatically to Teleopti Customer Web</comment>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>No Thanks</value>
+    <comment>No Thanks button</comment>
+  </data>
+  <data name="TeleoptiCustomerWeb" xml:space="preserve">
+    <value>Teleopti Customer Web</value>
+    <comment>Teleopti Customer Web</comment>
+  </data>
 </root>

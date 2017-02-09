@@ -3,17 +3,15 @@
 	<div class="con-flex split-1-2">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
-				<h1>Access customer web</h1>
+				<h1>{{'TeleoptiCustomerWeb' | translate}}</h1>
 			</div>
 			<div class="con-row">
-				<div class="con-flex">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae erat sagittis, maximus lorem vel, pulvinar orci. Morbi eget aliquam dolor. Praesent sed diam in nisi iaculis faucibus. Integer eget elit posuere, imperdiet ex ut, volutpat dolor. Etiam diam ex, interdum non nunc et, mollis vehicula urna. Integer sed dolor sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur facilisis lobortis elit, non varius tellus elementum vitae. Duis mollis, est quis bibendum fermentum, nisl turpis auctor lorem, nec lobortis mauris justo ut elit.
-				</div>
+				<div class="con-flex" ng-bind-html="vm.dataProtectionQuestionText"><pre></pre></div>
 			</div>
 			<div class="con-footer">
-				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.sendNoResponse()">Never</button>
-				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.notNowResponse()">Not now</button>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.sendYesResponse()">Agree</button>
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.sendYesResponse()">{{'Yes' | translate}}</button>
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.notNowResponse()">{{'AskMeLater' | translate}}</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.sendNoResponse()">{{'NoThanks' | translate}}</button>
 			</div>
 		</div>
 	</div>

@@ -8,6 +8,10 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeLicenseActivator : ILicenseActivator
 	{
+		public FakeLicenseActivator(string customerName) : this()
+		{
+			CustomerName = customerName;
+		}
 		public FakeLicenseActivator()
 		{
 			EnabledLicenseOptionPaths = new List<string>();
