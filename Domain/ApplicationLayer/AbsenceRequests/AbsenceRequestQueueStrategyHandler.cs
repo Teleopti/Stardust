@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				_businessUnitScope.OnThisThreadUse(businessUnit);
 				
-				using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					var now = _now.UtcDateTime();
 					var nearFutureThresholdTime = now.AddMinutes(-absenceReqNearFutureTime);
@@ -85,13 +85,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					//include yesterday to deal with timezones
 					var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(windowSize)));
-					reqWithVersion = getRequestWithVersion(_queuedAbsenceRequestRepository.LoadAll().Select(x=>x.PersonRequest).ToList());
 					listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureThresholdTime, farFutureThresholdTime,
 						pastThresholdTime, initialPeriod, windowSize);
 
-				}
-				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-				{
 					if (!listOfAbsenceRequests.Any()) return;
 
 					listOfAbsenceRequests = _filterRequestsWithDifferentVersion.Filter(reqWithVersion, listOfAbsenceRequests);
@@ -117,12 +113,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				
 			});
 			_businessUnitScope.OnThisThreadUse(initialBu);
-		}
-
-		private IDictionary<Guid, int> getRequestWithVersion(IEnumerable<Guid> reqIds)
-		{
-			var personRequests = _personRequestRepository.Find(reqIds);
-			return personRequests.ToDictionary(x => x.Id.GetValueOrDefault(), x => ((PersonRequest)x).Version.GetValueOrDefault());
 		}
 	}
 }

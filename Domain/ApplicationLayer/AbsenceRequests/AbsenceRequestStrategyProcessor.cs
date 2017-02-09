@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			var maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 60);
 			var allRequestsRaw = _queuedAbsenceRequestRepo.LoadAll();
-			//var requestVersions = getRequestVersions(allRequestsRaw);
 			var longRequests = new List<IQueuedAbsenceRequest>(); 
 			longRequests.AddRange(allRequestsRaw.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays >= maxDaysForAbsenceRequest));
 			if (longRequests.Any())
