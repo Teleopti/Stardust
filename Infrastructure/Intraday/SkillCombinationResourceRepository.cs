@@ -225,6 +225,24 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
 					.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
 					.ExecuteUpdate();
+
+				//var numberResources = _currentUnitOfWork.Current().Session().CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
+				//	.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
+				//	.SetParameter("id", id)
+				//	.UniqueResult<int>();
+
+				//if (numberResources == 0)
+				//	PersistSkillCombinationResource(_now.UtcDateTime(), new List<SkillCombinationResource>
+				//									{
+				//										new SkillCombinationResource
+				//										{
+				//											StartDateTime = skillCombinationResource.StartDateTime,
+				//											EndDateTime = skillCombinationResource.EndDateTime,
+				//											Resource = 0,
+				//											SkillCombination = skillCombinationResource.SkillCombination
+				//										}
+				//									});
+
 			}
 		}
 

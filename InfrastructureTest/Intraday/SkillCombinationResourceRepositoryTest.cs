@@ -113,6 +113,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
 		}
 
+
+		[Test]
+		[Ignore("WIP")]
+		public void ShouldAddEmptySkillCombinationResourceIfThereIsNoWhenAddingDelta()
+		{
+			var skill = Guid.NewGuid();
+			Now.Is("2016-12-19 08:00");
+			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
+
+			Target.PersistChange(new SkillCombinationResource
+			{
+				SkillCombination = new[] { skill },
+				StartDateTime = start,
+				EndDateTime = end,
+				Resource = 1
+			});
+
+			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
+			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
+		}
+
 		[Test]
 		public void ShouldMergeDeltatWithResourceWithMultipleSkills()
 		{
