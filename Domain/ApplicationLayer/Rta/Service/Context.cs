@@ -20,13 +20,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ProperAlarm appliedAlarm)
 		{
 			Stored = stored;
-			// if the stored state has no time
-			// its just a prepared state
-			// and there's no real previous state
-			// throws if Stored is null, which is by design
-			if (Stored.ReceivedTime == null)
-				Stored = null;
-
 			Input = input ?? new InputInfo();
 			CurrentTime = utcNow;
 			DeadLockVictim = deadLockVictim;
@@ -56,15 +49,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StateMapper StateMapper { get; set; }
 
 		public InputInfo Input { get; set; }
-		public AgentState Stored { get; set; }
+		public AgentState Stored { get; }
 
 		public StateRuleInfo State { get; }
 		public ScheduleInfo Schedule { get; }
 		public AdherenceInfo Adherence { get; }
 
+		public bool FirstTimeProcessingAgent()
+		{
+			return Stored.ReceivedTime == null;
+		}
+
 		public bool ShouldProcessState()
 		{
-			if (Stored == null)
+			if (FirstTimeProcessingAgent())
 				return true;
 			if (State.StateChanged())
 				return true;
@@ -90,11 +88,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public string SourceId => Input.SourceId;
 		public string UserCode => Input.UserCode;
-		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.SnapshotId;
-		public int? SnapshotDataSourceId => Input.SnapshotDataSourceId ??  Stored?.SnapshotDataSourceId;
+		public DateTime? SnapshotId => Input.SnapshotId ?? Stored.SnapshotId;
+		public int? SnapshotDataSourceId => Input.SnapshotDataSourceId ??  Stored.SnapshotDataSourceId;
 		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
-		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored?.StateStartTime;
-		public DateTime? RuleStartTime => State.RuleChanged() ? CurrentTime : Stored?.RuleStartTime;
+		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored.StateStartTime;
+		public DateTime? RuleStartTime => State.RuleChanged() ? CurrentTime : Stored.RuleStartTime;
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
 		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
 

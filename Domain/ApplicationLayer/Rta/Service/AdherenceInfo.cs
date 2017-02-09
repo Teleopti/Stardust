@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_context = context;
 			_adherenceChanges = new Lazy<IEnumerable<AdherenceChange>>(buildAdherenceChanges);
-			_adherenceForStoredStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Stored?.StateGroupId, _context.Schedule.CurrentActivity()));
+			_adherenceForStoredStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Stored.StateGroupId, _context.Schedule.CurrentActivity()));
 			_adherenceForNewStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.State.Adherence(), _context.State.StaffingEffect()));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.State.StateGroupId(), _context.Schedule.PreviousActivity()));
 		}
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private IEnumerable<AdherenceChange> buildAdherenceChanges()
 		{
-			var adherence = _context.Stored?.Adherence;
+			var adherence = _context.Stored.Adherence;
 
 			var adherenceChanges = new List<AdherenceChange>();
 			if (_context.Schedule.ActivityChanged())
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				}
 			}
 
-			if (_context.State.StateChanged() || _context.Stored == null)
+			if (_context.State.StateChanged() || _context.FirstTimeProcessingAgent())
 			{
 				if (adherence != AdherenceForNewStateAndCurrentActivity())
 				{

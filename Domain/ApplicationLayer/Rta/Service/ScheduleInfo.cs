@@ -42,18 +42,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ActivityChanged()
 		{
-			return _context.Stored?.ActivityId != CurrentActivityId();
+			return _context.Stored.ActivityId != CurrentActivityId();
 		}
 
 		public bool ShiftStarted()
 		{
-			return _context.Stored?.ActivityId == null &&
+			return _context.Stored.ActivityId == null &&
 				   CurrentActivity() != null;
 		}
 
 		public bool ShiftEnded()
 		{
-			return _context.Stored?.ActivityId != null &&
+			return _context.Stored.ActivityId != null &&
 				   CurrentActivity() == null &&
 				   PreviousActivity() != null;
 		}
