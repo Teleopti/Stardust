@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -27,16 +28,18 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public IScheduleStaffingPossibilityCalculator Target;
 
 		private readonly DateTime _today = new DateTime(2017, 2, 7, 13, 31, 0, DateTimeKind.Utc);
-		
+		private int _callStaffingViewModelCreatorTimes = 1;
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			var staffingViewModelCreator = MockRepository.GenerateMock<IStaffingViewModelCreator>();
+			system.UseTestDouble(staffingViewModelCreator).For<IStaffingViewModelCreator>();
+
 			system.UseTestDouble(new MutableNow(_today)).For<INow>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-
-			var staffingViewModelCreator = MockRepository.GenerateMock<IStaffingViewModelCreator>();
-			system.UseTestDouble(staffingViewModelCreator).For<IStaffingViewModelCreator>();
+			system.UseTestDouble<CacheableStaffingViewModelCreator>().For<ICacheableStaffingViewModelCreator>();
 		}
 
 		[Test]
@@ -59,6 +62,42 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
 			Assert.AreEqual(2, possibilities.Count);
+		}
+
+		[Test]
+		public void ShouldGetIntradayAbsenceIntervalPossibilitiesFromCache()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var activity = createActivity();
+			createAssignment(person, activity);
+			setPersonSkill(person, activity, new double?[] { 10d, 10d }, new double?[] { 8d, 8d });
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			Assert.AreEqual(2, possibilities.Count);
+			StaffingViewModelCreator.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void ShouldGetIntradayAbsenceIntervalPossibilitiesWhenCacheIsNoAvailable()
+		{
+			_callStaffingViewModelCreatorTimes = 2;
+			var person = PersonFactory.CreatePersonWithId();
+			var activity = createActivity();
+			createAssignment(person, activity);
+			var personSkill = setPersonSkill(person, activity, new double?[] { 10d, 10d }, new double?[] { 8d, 8d });
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			Target.CalcuateIntradayAbsenceIntervalPossibilities();
+
+			var cacheKey = $"{LoggedOnUser.CurrentUser().Id.GetValueOrDefault()}_{personSkill.Skill.Id}";
+			MemoryCache.Default.Remove(cacheKey);
+
+			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
+
+			Assert.AreEqual(2, possibilities.Count);
+			StaffingViewModelCreator.VerifyAllExpectations();
 		}
 
 		[Test]
@@ -138,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 				scheduledStaffing);
 		}
 
-		private void setPersonSkill(IPerson person, IActivity activity, double?[] forecastedStaffing,
+		private IPersonSkill setPersonSkill(IPerson person, IActivity activity, double?[] forecastedStaffing,
 			double?[] scheduledStaffing)
 		{
 			var personSkill = createPersonSkill(activity);
@@ -147,6 +186,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			personSkill.Skill.StaffingThresholds = createStaffingThresholds();
 			setupIntradayStaffingViewModelForSkill(personSkill.Skill.Id.GetValueOrDefault(), forecastedStaffing,
 				scheduledStaffing);
+			return personSkill;
 		}
 
 		private StaffingThresholds createStaffingThresholds()
@@ -182,7 +222,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			return activity;
 		}
 
-		private void setupIntradayStaffingViewModelForSkill(Guid skillId, double?[] forecastedStaffing, double?[] scheduledStaffing)
+		private void setupIntradayStaffingViewModelForSkill(Guid skillId, double?[] forecastedStaffing,
+			double?[] scheduledStaffing)
 		{
 			var startDate = _today.AddHours(8);
 			var interval1 = startDate.AddMinutes(15);
@@ -197,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 					ScheduledStaffing = scheduledStaffing,
 					Time = new[] {interval1, interval2}
 				}
-			});
+			}).Repeat.Times(_callStaffingViewModelCreatorTimes);
 		}
 
 		private void createAssignment(IPerson person, params IActivity[] activities)

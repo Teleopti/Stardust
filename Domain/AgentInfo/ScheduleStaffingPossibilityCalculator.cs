@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
+		private readonly ICacheableStaffingViewModelCreator _staffingViewModelCreator;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _scenarioRepository;
 
 		public ScheduleStaffingPossibilityCalculator(INow now, ILoggedOnUser loggedOnUser,
-			IStaffingViewModelCreator staffingViewModelCreator, IScheduleStorage scheduleStorage, ICurrentScenario scenarioRepository)
+			ICacheableStaffingViewModelCreator staffingViewModelCreator, IScheduleStorage scheduleStorage, ICurrentScenario scenarioRepository)
 		{
 			_now = now;
 			_loggedOnUser = loggedOnUser;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var personSkills = getPersonSkills().ToList();
 
 			return from skill in personSkills.Select(x => x.Skill)
-					let intradayStaffingModel = _staffingViewModelCreator.Load(new[] { skill.Id.GetValueOrDefault() })
+					let intradayStaffingModel = _staffingViewModelCreator.Load(skill.Id.GetValueOrDefault())
 					select new skillStaffingData
 					{
 						Skill = skill,
