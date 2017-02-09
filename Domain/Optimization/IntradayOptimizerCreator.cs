@@ -117,17 +117,28 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 
-				var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker,  scheduleMatrix,
-					new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
-						_resourceOptimizationHelper,
-						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
-						mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService, 
-						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone));
+				var optimizer = CreateIntradayOptimizer(optimizerPreferences, personalSkillsDataExtractor, scheduleMatrix, dailyValueCalculator, rollbackService, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator, mainShiftOptimizeActivitySpecificationSetter);
 
 				result.Add(optimizer);
 			}
 
 			return result;
+		}
+
+		protected virtual IntradayOptimizer2 CreateIntradayOptimizer(IOptimizationPreferences optimizerPreferences,
+			IScheduleResultDataExtractor personalSkillsDataExtractor, IScheduleMatrixPro scheduleMatrix,
+			IScheduleResultDailyValueCalculator dailyValueCalculator, SchedulePartModifyAndRollbackService rollbackService,
+			OptimizationLimits optimizationLimits, IScheduleMatrixOriginalStateContainer workShiftStateContainer,
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
+		{
+			var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker, scheduleMatrix,
+				new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
+					_resourceOptimizationHelper,
+					_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
+					mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService,
+					scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone));
+			return optimizer;
 		}
 	}
 }
