@@ -49,6 +49,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Publisher.AddHandler<ScheduleChangeProcessor>();
 		}
 
+		protected override void AfterTest()
+		{
+			base.AfterTest();
+
+			SetupFixtureForAssembly.RestoreCcc7Database();
+			SetupFixtureForAssembly.RestoreAnalyticsDatabase();
+		}
+
 		public void MakeUsersFaster(IEnumerable<string> userCodes)
 		{
 

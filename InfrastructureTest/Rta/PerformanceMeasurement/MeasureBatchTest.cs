@@ -46,10 +46,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 
 		private void createData()
 		{
-			Publisher.AddHandler<MappingReadModelUpdater>();
-			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
-			Publisher.AddHandler<AgentStateMaintainer>();
-			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
 			Analytics.WithDataSource(9, "sourceId");
 			Database.WithDefaultScenario("default");
 			stateCodes.ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
