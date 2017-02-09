@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
-		public Func<IGridlockManager> LockManager;
 
 		[Test]
 		public void ShouldRespectKeepShiftCategoriesTeamHierarchyOneAgent()
@@ -162,8 +161,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
 		}
 
-		[Test, Ignore("42593 to be fixed")]
-		public void ShouldRespectKeepShiftTeamWhenFirstAgentIsLocked()
+		[TestCase(TeamBlockType.Team)]
+		[TestCase(TeamBlockType.Block)]
+		public void ShouldSkipKeepShiftPercentCheckIfTeamOrBlock(TeamBlockType teamBlockType)
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
@@ -172,23 +172,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var newShiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 0, 0, 60), new TimePeriodWithSegment(8, 0, 8, 0, 60), newShiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_") { RequiresSeat = false }.WithId(), new TimePeriodWithSegment(8, 0, 16, 0, 60), new TimePeriodWithSegment(8, 0, 16, 0, 60), newShiftCategory));
 			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Assignment, agentData2.Assignment });
-			LockManager().AddLock(agentData1.Agent, dateOnly, LockType.Normal);
+			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
+			optPreferences.Shifts = new ShiftPreferences {KeepShifts = true, KeepShiftsValue = 1};
 
-			var optPreferences = new OptimizationPreferences
-			{
-				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) },
-				Shifts = { KeepShifts = true, KeepShiftsValue = 1},
-				Advanced = { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats }
-			};
-
-			Target.Optimize(new NoSchedulingProgress(), dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
-
-			schedules[agentData1.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
-			schedules[agentData2.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
+			Target.Optimize(new NoSchedulingProgress(), dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+			
+			schedules[agentData1.Agent].ScheduledDay(dateOnly).PersonAssignment().ShiftCategory
+				.Should().Be.EqualTo(newShiftCategory);
 		}
 	}
 }

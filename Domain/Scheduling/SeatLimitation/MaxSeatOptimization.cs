@@ -137,11 +137,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							schedulingOptions.MainShiftOptimizeActivitySpecification = specification; 
 						}
 
-						var scheduleDayEquator = new ScheduleDayEquator(new EditableShiftMapper());
-						var matrix = teamBlockInfo.MatrixesForGroupAndBlock().First();
-						var originalStateContainer = new ScheduleMatrixOriginalStateContainer(matrix, scheduleDayEquator);
-						var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(new RestrictionChecker(), optimizationPreferences, originalStateContainer, new DaysOffPreferences());
-						var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
+						IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider;
+						if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
+						{
+							optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDeciderAcceptEverything();
+						}
+						else
+						{
+							var scheduleDayEquator = new ScheduleDayEquator(new EditableShiftMapper());
+							var matrix = teamBlockInfo.MatrixesForGroupAndBlock().First();
+							var originalStateContainer = new ScheduleMatrixOriginalStateContainer(matrix, scheduleDayEquator);
+							optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDecider(new RestrictionChecker(), optimizationPreferences, originalStateContainer, new DaysOffPreferences());
+						}
+						var optimizationLimits = new OptimizationLimits(optimizationOverLimitByRestrictionDecider);
 						////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
