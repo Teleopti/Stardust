@@ -595,16 +595,22 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return [];
 			}
 
-			var summaryTimeSpan = day.Summary.TimeSpan;
-			var shiftStartTime = summaryTimeSpan === null || (day.Periods.length > 0 && day.Periods[0].TimeSpan.indexOf("+1") > 0)
-				? "00:00"
-				: summaryTimeSpan.substring(0, 5);
-			var shiftEndTime = summaryTimeSpan === null ? "00:00" : summaryTimeSpan.substring(8, 13);
-
+			var shiftStartTime = "00:00";
+			var shiftEndTime = "24:00";
 			var shiftStartPosition = 1;
 			var shiftEndPosition = 0;
 			for (var i = 0; i < day.Periods.length; i++) {
 				var period = day.Periods[i];
+				var timeSpan = period.TimeSpan;
+
+				if (i === 0 && timeSpan.indexOf("+1") === -1) {
+					shiftStartTime = timeSpan.substring(0, 5);
+				}
+
+				if (i === day.Periods.length - 1) {
+					shiftEndTime = timeSpan.substring(8, 13);
+				}
+
 				if (shiftStartPosition > period.StartPositionPercentage) {
 					shiftStartPosition = period.StartPositionPercentage;
 				}
@@ -638,10 +644,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			for (var j = 0; j < rawPossibility.length; j++) {
 				var intervalPossibility = rawPossibility[j];
-				var intervalStartTime = moment(intervalPossibility.StartTime).format("HH:mm");
-				var intervalEndTime = moment(intervalPossibility.EndTime).format("HH:mm");
+				var startMoment = moment(intervalPossibility.StartTime);
+				var endMoment = moment(intervalPossibility.EndTime);
 
-				var visible = intervalStartTime >= shiftStartTime && intervalEndTime <= shiftEndTime;
+				var intervalStartTime = startMoment.format("HH:mm");
+				var intervalEndTime = endMoment.isSame(startMoment, "day") ? endMoment.format("HH:mm") : "23:59";
+
+				var visible = shiftStartTime <= intervalStartTime && intervalEndTime <= shiftEndTime;
 				if (!visible) continue;
 
 				var inScheduleTimeRange = false;

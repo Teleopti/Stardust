@@ -27,15 +27,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
 	}
 
-    public class RequestPermission
+	public class RequestPermission
 	{
 		public bool TextRequestPermission { get; set; }
 		public bool AbsenceRequestPermission { get; set; }
 		public bool ShiftTradeRequestPermission { get; set; }
 		public bool OvertimeAvailabilityPermission { get; set; }
 		public bool AbsenceReportPermission { get; set; }
-	    public bool ShiftExchangePermission { get; set; }
-	    public bool ShiftTradeBulletinBoardPermission { get; set; }
+		public bool ShiftExchangePermission { get; set; }
+		public bool ShiftTradeBulletinBoardPermission { get; set; }
 		public bool PersonAccountPermission { get; set; }
 	}
 
@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public OvertimeAvailabilityViewModel OvertimeAvailabililty { get; set; }
 		public bool HasOvertime { get; set; }
 		public bool IsFullDayAbsence { get; set; }
+		public bool IsDayOff { get; set; }
 		public PeriodViewModel Summary { get; set; }
 		public IEnumerable<PeriodViewModel> Periods { get; set; }
 		public int DayOfWeekNumber { get; set; }
@@ -147,7 +148,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string Date { get; set; }
 		public string DayDescription { get; set; }
 		public string DayNumber { get; set; }
-
 	}
 
 	public class DaylightSavingsTimeAdjustmentViewModel
@@ -155,14 +155,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public double AdjustmentOffsetInMinutes { get; set; }
-		
+
 		public DaylightSavingsTimeAdjustmentViewModel(DaylightTime daylightTime)
 		{
 			StartDateTime = daylightTime.Start;
 			EndDateTime = daylightTime.End;
 			AdjustmentOffsetInMinutes = daylightTime.Delta.TotalMinutes;
 		}
-
-		
 	}
 }
