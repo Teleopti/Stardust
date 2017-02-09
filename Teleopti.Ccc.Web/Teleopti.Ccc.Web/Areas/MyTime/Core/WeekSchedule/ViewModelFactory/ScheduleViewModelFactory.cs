@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				return;
 
 			var scheduleMinMaxTime = weekScheduleDomainData.MinMaxTime;
-			var siteOpenHourPeriod = getIntradaySiteOpenHourPeriod();
+			var siteOpenHourPeriod = weekScheduleDomainData.SiteOpenHourIntradayPeriod;
 			if (!siteOpenHourPeriod.HasValue)
 				return;
 
