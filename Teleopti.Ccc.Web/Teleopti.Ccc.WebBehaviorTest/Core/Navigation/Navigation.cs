@@ -546,7 +546,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			var sites = string.Join("&siteIds=", siteIds);
 			var teams = string.Join("&teamIds=", teamIds);
-			GoToPage("wfm/#/rta/select-skill/?siteIds=" + sites + "&teamIds=" + teams + "&skillIds=" + skillId);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&teamIds=" + teams + "&skillIds=" + skillId);
 		}
 
 		public static void GoToAgentDetails(Guid personId)
