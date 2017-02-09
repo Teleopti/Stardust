@@ -206,16 +206,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			SkillDayRepository.Has(new List<ISkillDay>
 			{
 				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(-1), 1), //här hamnar ursprungsassignment
-				skill.CreateSkillDayWithDemand(scenario, dateOnly, 1),
+				skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 0, new Tuple<TimePeriod, double>(new TimePeriod(0, 10), 1 )),
 				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 1)
 			});
-			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(0, 0, 9, 0)); //ska börja tidigt! för att få rött
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(0, 0, 10, 0)); //ska börja tidigt! för att få rött
 
 			Target.Execute(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(dateOnly.AddDays(-1).ToDateOnlyPeriod(), new List<ISkill> { skill }, scenario);
 			skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
-				.Should().Be.True();
+				.Should().Be.False();
 		}
 
 		[Test]
