@@ -132,6 +132,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapScheduleDetailsMapper.cs" />
+    <Compile Include="AgentInfo\ScheduleStaffingPossibilityCalculator.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
     <Compile Include="Analytics\AnalyticsBridgeQueueWorkload.cs" />

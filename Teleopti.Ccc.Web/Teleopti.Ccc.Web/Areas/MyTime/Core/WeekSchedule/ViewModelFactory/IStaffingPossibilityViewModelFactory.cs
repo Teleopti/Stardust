@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public interface IStaffingPossibilityViewModelFactory
 	{
-		List<PeriodStaffingPossibilityViewModel> CreateIntradayPeriodStaffingPossibilityViewModels(StaffingPossiblity staffingPossiblity);
+		IEnumerable<PeriodStaffingPossibilityViewModel> CreateIntradayPeriodStaffingPossibilityViewModels(StaffingPossiblity staffingPossiblity);
 	}
 }

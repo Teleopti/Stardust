@@ -64,13 +64,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson agent, IScenario scenario, IActivity activity, DateTimePeriod period, IShiftCategory category)
 		{
+			return CreateAssignmentWithMainShift(agent, scenario, period, category, activity);
+		}
+
+		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson agent, IScenario scenario, DateTimePeriod period, IShiftCategory category, params IActivity[] activities)
+		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
 			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, period);
+			foreach (var activity in activities)
+			{
+				ass.AddActivity(activity, period);
+			}
 			ass.SetShiftCategory(category);
 			return ass;
 		}
-		
+
 		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson agent, IActivity activity, DateTimePeriod period)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
