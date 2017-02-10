@@ -112,16 +112,12 @@
 	background-color: #F9F9F9;
 }
 
-.possibility-poor {
-	background-color: red;
-}
-
 .possibility-good {
-	background-color: yellow;
+	background-color: green;
 }
 
 .possibility-fair {
-	background-color: green;
+	background-color: yellow;
 }
 
 .weekview-timeline {
