@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
 		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
 
-		public DeadLockVictim DeadLockVictim { get; set; }
+		public DeadLockVictim DeadLockVictim { get; }
 
 		public AgentState MakeAgentState()
 		{
