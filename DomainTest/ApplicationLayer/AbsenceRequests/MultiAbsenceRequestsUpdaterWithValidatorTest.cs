@@ -62,6 +62,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.GetMessage(new NoFormatting()).Should().Be(null);
 		}
 
+		[Test]
+		public void ShouldLoadResourcesAndOnlyValidateStaffingThresholdValidator()
+		{
+			var skill = SkillFactory.CreateSkillWithId("skill1");
+			SkillRepository.Add(skill);
+			var personRequest = updateAbsenceRequestWithStaffingThresholdValidator(-0.5d);
+			personRequest.IsPending.Should().Be.True();
+			personRequest.GetMessage(new NoFormatting()).Trim().Should().Be("Critical Understaffing on : 12/1/2016 at 12:00 AM - 12:00 AM");
+			Assert.IsTrue(SchedulingResultStateHolder.SkillDays.Count > 0);
+		}
+
 		private PersonRequest updateAbsenceRequestWithStaffingThresholdValidator(double relativeDifference)
 		{
 			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
