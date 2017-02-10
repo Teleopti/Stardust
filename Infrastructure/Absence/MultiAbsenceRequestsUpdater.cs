@@ -145,7 +145,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					{
 						var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
 						aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
-						if (_absenceRequestValidators.ContainsKey(personRequest.Id.GetValueOrDefault()))
+						if (_absenceRequestValidators != null &&
+							_absenceRequestValidators.ContainsKey(personRequest.Id.GetValueOrDefault()))
 						{
 							aggregatedValidatorList.UnionWith(_absenceRequestValidators[personRequest.Id.GetValueOrDefault()]);
 						}
