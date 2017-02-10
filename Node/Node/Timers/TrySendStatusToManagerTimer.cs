@@ -44,10 +44,7 @@ namespace Stardust.Node.Timers
 
 		public void InvokeTriggerTrySendStatusSucceded()
 		{
-			if (TrySendStatusSucceded != null)
-			{
-				TrySendStatusSucceded(this, EventArgs.Empty);
-			}
+			TrySendStatusSucceded?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected virtual async Task<HttpResponseMessage> TrySendStatus(JobQueueItemEntity jobQueueItemEntity,
