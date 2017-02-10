@@ -33,8 +33,7 @@
 			this.labelVersion = new System.Windows.Forms.Label();
 			this.webControl = new EO.WebBrowser.WinForm.WebControl();
 			this.webView1 = new EO.WebBrowser.WebView();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.SuspendLayout();
 			// 
 			// labelVersion
@@ -62,16 +61,18 @@
 			this.webControl.Text = "webControl2";
 			this.webControl.WebView = this.webView1;
 			// 
-			// pictureBox1
+			// panel1
 			// 
-			this.pictureBox1.BackColor = System.Drawing.Color.White;
-			this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-			this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.pictureBox1.Location = new System.Drawing.Point(274, 58);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(227, 75);
-			this.pictureBox1.TabIndex = 5;
-			this.pictureBox1.TabStop = false;
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.BackColor = System.Drawing.Color.Gainsboro;
+			this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+			this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.panel1.Location = new System.Drawing.Point(0, 0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(788, 390);
+			this.panel1.TabIndex = 5;
 			// 
 			// LoginWebView
 			// 
@@ -93,7 +94,7 @@
 			captionImage1.Size = new System.Drawing.Size(200, 24);
 			this.CaptionImages.Add(captionImage1);
 			this.ClientSize = new System.Drawing.Size(788, 410);
-			this.Controls.Add(this.pictureBox1);
+			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.webControl);
 			this.Controls.Add(this.labelVersion);
 			this.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -111,7 +112,6 @@
 			this.Text = "WFM Login";
 			this.TransparencyKey = System.Drawing.Color.LightBlue;
 			this.Load += new System.EventHandler(this.loginWebViewLoad);
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -121,6 +121,6 @@
 		private System.Windows.Forms.Label labelVersion;
 		private EO.WebBrowser.WinForm.WebControl webControl;
 		private EO.WebBrowser.WebView webView1;
-		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.Panel panel1;
 	}
 }

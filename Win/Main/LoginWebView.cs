@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void webView1LoadCompleted(object sender, LoadCompletedEventArgs e)
 		{
-			pictureBox1.Visible = false;
+			panel1.Visible = false;
 		}
 
 		private void logInfo(string message)
