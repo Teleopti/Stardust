@@ -28,6 +28,7 @@
 		var skillIds = $stateParams.skillIds || [];
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		var enableWatchOnTeam = false;
+		var agentsStates = "rta.agents";
 		// select skill dependency
 		vm.skills = [];
 		vm.skillAreas = [];
@@ -36,13 +37,8 @@
 		vm.teamsSelected = [];
 		vm.selectFieldText = $translate.instant('SelectOrganization');
 		vm.searchTerm = "";
+		vm.showOrganizationPicker = $state.current.name === agentsStates;
 		/*******REQUESTS*****/
-		rtaService.getOrganization()
-			.then(function (organization) {
-				vm.sites = organization;
-				if (vm.sites.length > 0)
-					keepSelectionForOrganization();
-			});
 
 		function keepSelectionForOrganization() {
 			selectSiteAndTeamsUnder();
@@ -96,6 +92,13 @@
 					vm.skillAreas = skillAreas.SkillAreas;
 					if (skillAreaId != null)
 						vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
+				});
+			if ($state.current.name === agentsStates);
+			rtaService.getOrganization()
+				.then(function (organization) {
+					vm.sites = organization;
+					if (vm.sites.length > 0)
+						keepSelectionForOrganization();
 				});
 		})();
 

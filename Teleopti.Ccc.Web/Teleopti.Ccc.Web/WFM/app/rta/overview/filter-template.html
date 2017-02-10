@@ -44,7 +44,7 @@
 					</md-autocomplete>
 					</span>
 					<span class="con-flex rta-multiple-selection-panel">
-						<md-input-container class="rta-md-input-container" id="organization" md-no-float>
+						<md-input-container class="rta-md-input-container" id="organization" md-no-float ng-if="vm.showOrganizationPicker">
 							<label class="for-searchTerm"></label>
 							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" multiple md-on-close="vm.goToAgents()">
 								<div class="rta-select-header">
