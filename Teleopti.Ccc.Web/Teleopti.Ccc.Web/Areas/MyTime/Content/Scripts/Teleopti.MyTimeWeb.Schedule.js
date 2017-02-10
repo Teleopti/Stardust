@@ -147,7 +147,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.initialRequestDay = ko.observable();
 		self.selectedDateSubscription = null;
-		self.intradayOpenPeriod = undefined;
+		self.intradayOpenPeriod = null;
 
 		self.showAddRequestToolbar = ko.computed(function () {
 			return (self.requestViewModel() || '') !== '';
@@ -381,10 +381,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 			self.styles(styleToSet);
 
-			self.intradayOpenPeriod = {
-				"startTime": data.SiteOpenHourIntradayPeriod.StartTime,
-				"endTime": data.SiteOpenHourIntradayPeriod.EndTime
-			};
+			self.intradayOpenPeriod = data.SiteOpenHourIntradayPeriod != null
+				? {
+					"startTime": data.SiteOpenHourIntradayPeriod.StartTime,
+					"endTime": data.SiteOpenHourIntradayPeriod.EndTime
+				}
+				: null;
 
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 				return new TimelineViewModel(item, data.TimeLineCulture);
