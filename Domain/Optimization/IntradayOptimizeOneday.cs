@@ -164,7 +164,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
 			{
-				_rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+				_rollbackService.Rollback();
+				lockDay(day);
+				return false;
 			}
 
 			return true;
