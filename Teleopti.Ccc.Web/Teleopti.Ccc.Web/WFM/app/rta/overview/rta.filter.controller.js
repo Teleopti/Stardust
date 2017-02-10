@@ -12,6 +12,7 @@
 			'$stateParams',
 			'$translate',
 			'rtaService',
+			'rtaRouteService'
 		];
 
 	function RtaFilterController(
@@ -19,7 +20,8 @@
 		$state,
 		$stateParams,
 		$translate,
-		rtaService
+		rtaService,
+		rtaRouteService
 	) {
 
 		var vm = this;
@@ -28,7 +30,7 @@
 		var skillIds = $stateParams.skillIds || [];
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		var enableWatchOnTeam = false;
-		var agentsStates = "rta.agents";
+		var agentsState = "rta.agents";
 		// select skill dependency
 		vm.skills = [];
 		vm.skillAreas = [];
@@ -37,7 +39,7 @@
 		vm.teamsSelected = [];
 		vm.selectFieldText = $translate.instant('SelectOrganization');
 		vm.searchTerm = "";
-		vm.showOrganizationPicker = $state.current.name === agentsStates;
+		vm.showOrganizationPicker = $state.current.name === agentsState;
 		/*******REQUESTS*****/
 
 		function keepSelectionForOrganization() {
@@ -83,8 +85,13 @@
 				.then(function (skills) {
 					vm.skillsLoaded = true;
 					vm.skills = skills;
-					if (skillIds.length > 0 && skillAreaId == null)
-						vm.selectedSkill = skills.find(function (s) { return s.Id === skillIds[0] });
+					if (skillIds.length > 0 && skillAreaId == null) {
+					vm.selectedSkill = skills.find(function (s) {
+						if (angular.isArray(skillIds))
+							return s.Id === skillIds[0];
+						return s.Id === skillIds;
+					});
+					}
 				});
 			rtaService.getSkillAreas()
 				.then(function (skillAreas) {
@@ -93,13 +100,13 @@
 					if (skillAreaId != null)
 						vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
 				});
-			if ($state.current.name === agentsStates);
-			rtaService.getOrganization()
-				.then(function (organization) {
-					vm.sites = organization;
-					if (vm.sites.length > 0)
-						keepSelectionForOrganization();
-				});
+			if ($state.current.name === agentsState)
+				rtaService.getOrganization()
+					.then(function (organization) {
+						vm.sites = organization;
+						if (vm.sites.length > 0)
+							keepSelectionForOrganization();
+					});
 		})();
 
 		/*********AUTOCOMPLETE*****/
@@ -110,23 +117,51 @@
 		};
 
 		vm.selectedSkillChange = function (skill) {
-			if (!skill || (skill.Id != skillIds[0] || $stateParams.skillAreaId))
+			if ((!skill || (skill.Id != skillIds[0] || $stateParams.skillAreaId)) && $state.current.name === agentsState) {
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
 					skillAreaId: skill ? undefined : skillAreaId,
 					siteIds: siteIds,
 					teamIds: teamIds
 				});
+			}
+			else if(!skill) {rtaRouteService.goToSites();}
+			else {
+				if (skill.Id == skillIds) return;
+				skillIds = skill.Id;
+				vm.selectedSkill = skill;
+				vm.selectedSkillArea = undefined;
+				if ($state.current.name !== "rta.teams" && angular.isDefined($stateParams.siteId))
+					rtaRouteService.goToTeams(vm.siteIds, skill.Id, vm.selectedSkillArea);
+				else {
+					rtaRouteService.goToSites(skill.Id, vm.selectedSkillArea);
+				}
+			}
 		}
 
 		vm.selectedSkillAreaChange = function (skillArea) {
-			if (!skillArea || !(skillArea.Id == $stateParams.skillAreaId))
-				stateGoToAgents({
-					skillIds: skillArea ? [] : $stateParams.skillIds,
-					skillAreaId: skillArea ? skillArea.Id : undefined,
-					siteIds: siteIds,
-					teamIds: teamIds
-				});
+			if ($state.current.name === agentsState) {
+				if (!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) {
+					stateGoToAgents({
+						skillIds: skillArea ? [] : $stateParams.skillIds,
+						skillAreaId: skillArea ? skillArea.Id : undefined,
+						siteIds: siteIds,
+						teamIds: teamIds
+					});
+				}
+			}
+			else if(!skillArea) {rtaRouteService.goToSites();}
+			else {
+				if (skillArea.Id === $stateParams.skillAreaId) return;
+				vm.skillAreaId = skillArea.Id;
+				vm.selectedSkillArea = skillArea;
+				vm.selectedSkill = undefined;
+				if ($state.current.name !== "rta.teams" && $stateParams.siteId)
+					rtaRouteService.goToTeams(vm.siteIds, vm.selectedSkill, skillArea.Id);
+				else {
+					rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
+				}
+			}
 		}
 
 		/***********MULTI-SELECT************/

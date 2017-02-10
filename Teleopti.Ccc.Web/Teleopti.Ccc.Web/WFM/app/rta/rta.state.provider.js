@@ -8,7 +8,7 @@ angular
 
 		this.$get = function () {
 			return function (toggleService) {
-				toggleService.togglesLoaded.then(function () {});
+				toggleService.togglesLoaded.then(function () { });
 			};
 		};
 

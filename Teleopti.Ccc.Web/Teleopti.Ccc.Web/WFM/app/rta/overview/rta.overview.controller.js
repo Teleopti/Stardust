@@ -47,11 +47,11 @@
 
 		var vm = this;
 		var siteId = $stateParams.siteIds || [];
-		var stateForTeamsBySkill = 'rta.teams({siteIds: site.Id, skillIds: vm.selectedSkill.Id})';
-		var stateForTeamsBySkillArea = 'rta.teams({siteIds: site.Id, skillAreaId: vm.selectedSkillArea.Id})';
+		var stateForTeamsBySkill = 'rta.teams({siteIds: site.Id, skillIds: vm.skillId})';
+		var stateForTeamsBySkillArea = 'rta.teams({siteIds: site.Id, skillAreaId: vm.skillAreaId})';
 		var stateForTeams = 'rta.teams({siteIds: site.Id})';
-		var stateForAgentsByTeamsAndSkill = 'rta.agents({teamIds: team.Id, skillIds: vm.selectedSkill.Id})';
-		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.selectedSkillArea.Id})';
+		var stateForAgentsByTeamsAndSkill = 'rta.agents({teamIds: team.Id, skillIds: vm.skillId})';
+		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.skillAreaId})';
 		/***scoped variables */
 		vm.selectedItemIds = [];
 		vm.displaySkillOrSkillAreaFilter = false;
@@ -67,9 +67,6 @@
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
 		vm.goBackToRootWithUrl = rtaRouteService.urlForSites(vm.skillId, vm.skillAreaId);
 		/***scoped functions */
-		vm.querySearch = querySearch;
-		vm.selectedSkillChange = selectedSkillChange;
-		vm.selectedSkillAreaChange = selectedSkillAreaChange;
 		vm.urlForSelectSkill = urlForSelectSkill;
 		vm.getStateForTeams = getStateForTeams;
 		vm.getStateForAgents = getStateForAgents;
@@ -79,70 +76,17 @@
 		vm.toggleSelection = toggleSelection;
 		vm.openSelectedItems = openSelectedItems;
 
-		rtaService.getSkills()
-			.then(function (skills) {
-				vm.skillsLoaded = true;
-				vm.skills = skills;
-				if (vm.skillId !== null) {
-					vm.selectedSkill = skills.find(function (skill) { return skill.Id === vm.skillId });
-				}
-				var defer = $q.defer();
-				defer.resolve();
-				return defer.promise;
-			})
-			.then(function () {
-				return rtaService.getSkillAreas();
-			})
+		rtaService.getSkillAreas()
 			.then(function (skillAreas) {
-				vm.skillAreasLoaded = true;
 				vm.skillAreas = skillAreas.SkillAreas;
-				if (vm.skillAreaId !== null) {
-					vm.selectedSkillArea = skillAreas.SkillAreas.find(function (skillArea) { return skillArea.Id === vm.skillAreaId; });
-				}
 				getSitesOrTeams();
 			});
-
-		function querySearch(query, myArray) {
-			var results = query ? myArray.filter(createFilterFor(query)) : myArray;
-			return results;
-		};
-
-		function createFilterFor(query) {
-			var lowercaseQuery = angular.lowercase(query);
-			return function filterFn(item) {
-				var lowercaseName = angular.lowercase(item.Name);
-				return (lowercaseName.indexOf(lowercaseQuery) === 0);
-			};
-		};
-
-		function selectedSkillChange(skill) {
-			if (!skill) return;
-			if (skill.Id == vm.skillId) return;
-			vm.skillId = skill.Id;
-			vm.selectedSkill = skill;
-			vm.selectedSkillArea = undefined;
-			if ($state.current.name !== "rta.teams" && angular.isDefined($stateParams.siteId))
-				rtaRouteService.goToTeams(vm.siteIds, skill.Id, vm.selectedSkillArea);
-			else
-				rtaRouteService.goToSites(skill.Id, vm.selectedSkillArea);
-		};
-
-		function selectedSkillAreaChange(skillArea) {
-			if (!skillArea) return;
-			if (skillArea.Id == vm.skillAreaId) return;
-			vm.skillAreaId = skillArea.Id;
-			vm.selectedSkillArea = skillArea;
-			vm.selectedSkill = undefined;
-			if ($state.current.name !== "rta.teams" && $stateParams.siteId)
-				rtaRouteService.goToTeams(vm.siteIds, vm.selectedSkill, skillArea.Id);
-			else
-				rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
-		};
 
 		function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };
 
 		function getStateForTeams() {
-			if (vm.skillId !== null || vm.skillAreaId !== null) return vm.skillId !== null ? stateForTeamsBySkill : stateForTeamsBySkillArea;
+			if (vm.skillId !== null || vm.skillAreaId !== null) 
+				return vm.skillAreaId !== null ? stateForTeamsBySkillArea : stateForTeamsBySkill;
 			else return stateForTeams;
 		};
 
