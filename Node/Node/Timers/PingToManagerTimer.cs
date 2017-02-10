@@ -6,7 +6,6 @@ using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers

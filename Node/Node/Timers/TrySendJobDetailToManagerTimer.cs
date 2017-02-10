@@ -23,10 +23,7 @@ namespace Stardust.Node.Timers
 
 		private void InvokeSendJobProgressModelWithSuccessEventHandler(JobDetailEntity jobDetail)
 		{
-			if (SendJobDetailWithSuccessEventHandler != null)
-			{
-				SendJobDetailWithSuccessEventHandler(this, jobDetail);
-			}
+			SendJobDetailWithSuccessEventHandler?.Invoke(this, jobDetail);
 		}
 
 		public TrySendJobDetailToManagerTimer(NodeConfiguration nodeConfiguration,
@@ -50,16 +47,14 @@ namespace Stardust.Node.Timers
 
 		public void ClearAllJobProgresses(Guid jobId)
 		{
-			if (_jobDetails != null)
-			{
-				var progressesToRemove =
-					_jobDetails.Where(pair => pair.Value.JobId == jobId);
+			if (_jobDetails == null) return;
+			var progressesToRemove =
+				_jobDetails.Where(pair => pair.Value.JobId == jobId);
 
-				foreach (var progress in progressesToRemove)
-				{
-					JobDetailEntity model;
-					_jobDetails.TryRemove(progress.Key, out model);
-				}
+			foreach (var progress in progressesToRemove)
+			{
+				JobDetailEntity model;
+				_jobDetails.TryRemove(progress.Key, out model);
 			}
 		}
 		
@@ -78,51 +73,45 @@ namespace Stardust.Node.Timers
 
 		protected virtual void TrySendJobProgress()
 		{
-			if (_jobDetails != null && _jobDetails.Count > 0)
+			if (_jobDetails == null || _jobDetails.Count <= 0) return;
+			foreach (var sendJobProgressModel in _jobDetails)
 			{
-				foreach (var sendJobProgressModel in _jobDetails)
+				try
 				{
-					try
-					{
-						var model = sendJobProgressModel;
+					var model = sendJobProgressModel;
 
-						var task = Task.Factory.StartNew(async () =>
-						{
-							JobDetailEntity jobDetail = new JobDetailEntity
-							{
-								JobId = model.Value.JobId,
-								Detail = model.Value.Detail,
-								Created = model.Value.Created
-							};
+					var task = Task.Factory.StartNew(async () =>
+					                                 {
+						                                 var jobDetail = new JobDetailEntity
+						                                 {
+							                                 JobId = model.Value.JobId,
+							                                 Detail = model.Value.Detail,
+							                                 Created = model.Value.Created
+						                                 };
 
-							var httpResponseMessage =
-								await _httpSender.PostAsync(_uriBuilder.Uri,
-														   jobDetail);
+						                                 var httpResponseMessage =
+							                                 await _httpSender.PostAsync(_uriBuilder.Uri,
+							                                                             jobDetail);
 
-							if (httpResponseMessage.IsSuccessStatusCode)
-							{
-								JobDetailEntity removedValue;
+						                                 if (httpResponseMessage.IsSuccessStatusCode)
+						                                 {
+							                                 JobDetailEntity removedValue;
 
-								var removed =
-									_jobDetails.TryRemove(model.Key, out removedValue);
+							                                 var removed =
+								                                 _jobDetails.TryRemove(model.Key, out removedValue);
 
-								if (removed)
-								{
-									InvokeSendJobProgressModelWithSuccessEventHandler(removedValue);
-								}
-							}
-						});
+							                                 if (removed)
+							                                 {
+								                                 InvokeSendJobProgressModelWithSuccessEventHandler(removedValue);
+							                                 }
+						                                 }
+					                                 });
 
-						task.Wait();
-					}
-					catch (Exception)
-					{
-						var msg =
-							string.Format("Send job progresses to manager failed for job ( jobId ) : ( {0} )",
-							              sendJobProgressModel.Value.JobId);
-
-						Logger.ErrorWithLineNumber(msg);
-					}
+					task.Wait();
+				}
+				catch (Exception)
+				{
+					Logger.ErrorWithLineNumber($"Send job progresses to manager failed for job ( jobId ) : ( {sendJobProgressModel.Value.JobId} )");
 				}
 			}
 		}

@@ -6,7 +6,6 @@ using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -65,10 +64,7 @@ namespace Stardust.Node.Timers
 
 		private void TrySendNodeStartUpNotificationSuccededInvoke()
 		{
-			if (TrySendNodeStartUpNotificationSucceded != null)
-			{
-				TrySendNodeStartUpNotificationSucceded(this, EventArgs.Empty);
-			}
+			TrySendNodeStartUpNotificationSucceded?.Invoke(this, EventArgs.Empty);
 		}
 
 		private async void OnTimedEvent(object sender,

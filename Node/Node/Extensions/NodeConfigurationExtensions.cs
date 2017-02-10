@@ -11,7 +11,7 @@ namespace Stardust.Node.Extensions
 			var nodeName = "Missing Node Name";
 			var machine = "Missing Machine Name";
 
-			if (nodeConfiguration != null && !string.IsNullOrEmpty(nodeConfiguration.NodeName))
+			if (!string.IsNullOrEmpty(nodeConfiguration?.NodeName))
 			{
 				nodeName = nodeConfiguration.NodeName;
 			}

@@ -8,7 +8,6 @@ using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -121,11 +120,7 @@ namespace Stardust.Node.Timers
 					Start();
 
 					var msg =
-						string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} ). Reason : {3}",
-						              _whoAmI,
-						              JobQueueItemEntity.JobId,
-						              JobQueueItemEntity.Name,
-						              httpResponseMessage.ReasonPhrase);
+						$"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase}";
 
 					Logger.InfoWithLineNumber(msg);
 				}
@@ -136,10 +131,7 @@ namespace Stardust.Node.Timers
 				Start();
 
 				var msg =
-					string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} )",
-					              _whoAmI,
-					              JobQueueItemEntity.JobId,
-					              JobQueueItemEntity.Name);
+					$"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )";
 
 				Logger.ErrorWithLineNumber(msg, exp);
 			}

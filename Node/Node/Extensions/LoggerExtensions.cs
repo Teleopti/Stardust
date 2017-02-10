@@ -33,11 +33,7 @@ namespace Stardust.Node.Extensions
 			{
 				ValidateArgument(logger);
 
-				logger.Error(string.Format("{0}_{1}({2}): {3}",
-				                           Path.GetFileName(file),
-				                           member,
-				                           line,
-				                           info),
+				logger.Error($"{Path.GetFileName(file)}_{member}({line}): {info}",
 				             exception);
 			}
 		}
@@ -53,11 +49,7 @@ namespace Stardust.Node.Extensions
 			{
 				ValidateArgument(logger);
 
-				logger.Fatal(string.Format("{0}_{1}({2}): {3}",
-				                           Path.GetFileName(file),
-				                           member,
-				                           line,
-				                           info),
+				logger.Fatal($"{Path.GetFileName(file)}_{member}({line}): {info}",
 				             exception);
 			}
 		}
@@ -72,11 +64,7 @@ namespace Stardust.Node.Extensions
 			{
 				ValidateArgument(logger);
 
-				logger.Warn(string.Format("{0}_{1}({2}): {3}",
-				                          Path.GetFileName(file),
-				                          member,
-				                          line,
-				                          info));
+				logger.Warn($"{Path.GetFileName(file)}_{member}({line}): {info}");
 			}
 		}
 
@@ -90,11 +78,7 @@ namespace Stardust.Node.Extensions
 			{
 				ValidateArgument(logger);
 
-				logger.Debug(string.Format("{0}_{1}({2}): {3}",
-				                           Path.GetFileName(file),
-				                           member,
-				                           line,
-				                           info));
+				logger.Debug($"{Path.GetFileName(file)}_{member}({line}): {info}");
 			}
 		}
 
@@ -108,11 +92,7 @@ namespace Stardust.Node.Extensions
 			{
 				ValidateArgument(logger);
 
-				logger.Info(string.Format("{0}_{1}({2}): {3}",
-				                          Path.GetFileName(file),
-				                          member,
-				                          line,
-				                          info));
+				logger.Info($"{Path.GetFileName(file)}_{member}({line}): {info}");
 			}
 		}
 	}

@@ -35,27 +35,25 @@ namespace Stardust.Node
 			{
 				return ResponseMessage(isValidRequest);
 			}
-			if (!_workerWrapper.IsWorking)
-			{
-				Task.Factory.StartNew(() =>
+			if (_workerWrapper.IsWorking) return Conflict();
+			Task.Factory.StartNew(() =>
+			                      {
+				                      try
 				                      {
-					                      try
-					                      {
-						                      var stopwatch = new Stopwatch();
-						                      stopwatch.Start();
+					                      var stopwatch = new Stopwatch();
+					                      stopwatch.Start();
 
-						                      while (stopwatch.Elapsed.Seconds <= 60 && !_workerWrapper.IsWorking)
-						                      {
-							                      Thread.Sleep(TimeSpan.FromMilliseconds(200));
-						                      }
-					                      }
-					                      catch (Exception)
+					                      while (stopwatch.Elapsed.Seconds <= 60 && !_workerWrapper.IsWorking)
 					                      {
+						                      Thread.Sleep(TimeSpan.FromMilliseconds(200));
 					                      }
-				                      });
-				return Ok();
-			}
-			return Conflict();
+				                      }
+				                      catch
+				                      {
+					                      // ignored
+				                      }
+			                      });
+			return Ok();
 		}
 
 		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]
@@ -82,10 +80,7 @@ namespace Stardust.Node
 
 			Task.Factory.StartNew(() =>
 			{				
-				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
-				                                    _workerWrapper.WhoamI,
-													currentMessage.JobId,
-													currentMessage.Name);
+				var startJobMessage = $"{_workerWrapper.WhoamI} : Starting job ( jobId, jobName ) : ( {currentMessage.JobId}, {currentMessage.Name} )";
 
 				Logger.InfoWithLineNumber(startJobMessage);
 

@@ -43,9 +43,9 @@ namespace Stardust.Node
 
 		private string GetIPAddress()
 		{
-			string localIp = "?";
-			IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-			foreach (IPAddress ip in host.AddressList)
+			var localIp = "?";
+			var host = Dns.GetHostEntry(Dns.GetHostName());
+			foreach (var ip in host.AddressList)
 			{
 				if (ip.AddressFamily == AddressFamily.InterNetwork)
 				{
