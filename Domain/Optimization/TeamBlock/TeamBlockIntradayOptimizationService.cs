@@ -198,7 +198,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 				
-
 				var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
 					optimizationPreferences.Advanced);
 				var isWorse = newTargetValue >= previousTargetValue;
