@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -28,16 +29,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IStateCodeAdder _stateCodeAdder;
 		private readonly IMappingReader _reader;
-		private string _version;
-		private IDictionary<ruleMappingKey, MappedRule> _ruleMappings = new Dictionary<ruleMappingKey, MappedRule>();
-		private IDictionary<stateCodeMappingKey, MappedState> _stateCodeMappings = new Dictionary<stateCodeMappingKey, MappedState>();
-		private IDictionary<Guid, MappedState> _stateMappings = new Dictionary<Guid, MappedState>();
-		private IEnumerable<Guid> _loggedOutStateGroupIds;
 
-		public StateMapper(IStateCodeAdder stateCodeAdder, IMappingReader reader)
+		private readonly PerTenant<string> _version;
+		private readonly PerTenant<IDictionary<ruleMappingKey, MappedRule>> _ruleMappings;
+		private readonly PerTenant<IDictionary<stateCodeMappingKey, MappedState>> _stateCodeMappings;
+		private readonly PerTenant<IDictionary<Guid, MappedState>> _stateMappings;
+		private readonly PerTenant<IEnumerable<Guid>> _loggedOutStateGroupIds;
+
+		public StateMapper(IStateCodeAdder stateCodeAdder, IMappingReader reader, ICurrentDataSource dataSource)
 		{
 			_stateCodeAdder = stateCodeAdder;
 			_reader = reader;
+
+			_version = new PerTenant<string>(dataSource);
+			_ruleMappings = new PerTenant<IDictionary<ruleMappingKey, MappedRule>>(dataSource);
+			_stateCodeMappings = new PerTenant<IDictionary<stateCodeMappingKey, MappedState>>(dataSource);
+			_stateMappings = new PerTenant<IDictionary<Guid, MappedState>>(dataSource);
+			_loggedOutStateGroupIds = new PerTenant<IEnumerable<Guid>>(dataSource);
 		}
 
 		public MappedState StateFor(Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
@@ -45,12 +53,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (stateCode == null)
 				return null;
 			MappedState match;
-			_stateCodeMappings.TryGetValue(new stateCodeMappingKey
-			{
-				businessUnitId = businessUnitId,
-				platformTypeId = platformTypeId,
-				stateCode = stateCode
-			}, out match);
+
+			_stateCodeMappings.Value
+				.TryGetValue(new stateCodeMappingKey
+				{
+					businessUnitId = businessUnitId,
+					platformTypeId = platformTypeId,
+					stateCode = stateCode
+				}, out match);
 			if (match != null) return match;
 			return _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
 		}
@@ -60,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (stateGroupId == null)
 				return null;
 			MappedState match;
-			_stateMappings.TryGetValue(stateGroupId.Value, out match);
+			_stateMappings.Value.TryGetValue(stateGroupId.Value, out match);
 			if (match != null) return match;
 			// state group has been removed, but the agent is still in that state...
 			return new MappedState
@@ -81,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private MappedRule queryRule(Guid businessUnitId, Guid? stateGroupId, Guid? activityId)
 		{
 			MappedRule match;
-			_ruleMappings.TryGetValue(new ruleMappingKey
+			_ruleMappings.Value.TryGetValue(new ruleMappingKey
 			{
 				businessUnitId = businessUnitId,
 				stateGroupId = stateGroupId,
@@ -92,80 +102,88 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<Guid> LoggedOutStateGroupIds()
 		{
-			return _loggedOutStateGroupIds;
+			return _loggedOutStateGroupIds.Value;
 		}
 
 		public void RefreshMappingCache(string latestVersion)
 		{
-			var refresh = latestVersion != _version || _version == null;
+			var refresh = latestVersion != _version.Value || _version.Value == null;
 			if (!refresh)
 				return;
 
 			var mappings = _reader.Read();
-			_ruleMappings = mappings
-				.Where(m =>
-				{
-					var illegal = m.StateCode == null && m.StateGroupId.HasValue;
-					return !illegal;
-				})
-				.GroupBy(x => new ruleMappingKey
-				{
-					businessUnitId = x.BusinessUnitId,
-					stateGroupId = x.StateGroupId,
-					activityId = x.ActivityId
-				})
-				.ToDictionary(x => x.Key, m =>
-				{
-					var mapping = m.First();
-					if (!mapping.RuleId.HasValue)
-						return null;
-					return new MappedRule
+			_ruleMappings.Set(
+				mappings
+					.Where(m =>
 					{
-						RuleId = mapping.RuleId.Value,
-						RuleName = mapping.RuleName,
-						Adherence = mapping.Adherence,
-						StaffingEffect = mapping.StaffingEffect,
-						DisplayColor = mapping.DisplayColor,
-						IsAlarm = mapping.IsAlarm,
-						ThresholdTime = mapping.ThresholdTime,
-						AlarmColor = mapping.AlarmColor
-					};
-				});
-			_stateCodeMappings = mappings
-				.Where(x => x.StateGroupId.HasValue)
-				.GroupBy(x => new stateCodeMappingKey
-				{
-					businessUnitId = x.BusinessUnitId,
-					platformTypeId = x.PlatformTypeId,
-					stateCode = x.StateCode
-				})
-				.ToDictionary(x => x.Key, m =>
-				{
-					var mapping = m.First();
-					return new MappedState
+						var illegal = m.StateCode == null && m.StateGroupId.HasValue;
+						return !illegal;
+					})
+					.GroupBy(x => new ruleMappingKey
 					{
-						StateGroupId = mapping.StateGroupId.Value,
-						StateGroupName = mapping.StateGroupName
-					};
-				});
-			_stateMappings = mappings
-				.Where(x => x.StateGroupId.HasValue)
-				.GroupBy(x => x.StateGroupId.Value)
-				.ToDictionary(x => x.Key, m =>
-				{
-					var mapping = m.First();
-					return new MappedState
+						businessUnitId = x.BusinessUnitId,
+						stateGroupId = x.StateGroupId,
+						activityId = x.ActivityId
+					})
+					.ToDictionary(x => x.Key, m =>
 					{
-						StateGroupId = m.Key,
-						StateGroupName = mapping.StateGroupName
-					};
-				});
-			_loggedOutStateGroupIds = mappings
-				.Where(x => x.IsLoggedOut && x.StateGroupId.HasValue)
-				.Select(x => x.StateGroupId.Value)
-				.Distinct()
-				.ToArray();
-			_version = latestVersion;
+						var mapping = m.First();
+						if (!mapping.RuleId.HasValue)
+							return null;
+						return new MappedRule
+						{
+							RuleId = mapping.RuleId.Value,
+							RuleName = mapping.RuleName,
+							Adherence = mapping.Adherence,
+							StaffingEffect = mapping.StaffingEffect,
+							DisplayColor = mapping.DisplayColor,
+							IsAlarm = mapping.IsAlarm,
+							ThresholdTime = mapping.ThresholdTime,
+							AlarmColor = mapping.AlarmColor
+						};
+					})
+			);
+			_stateCodeMappings.Set(
+				mappings
+					.Where(x => x.StateGroupId.HasValue)
+					.GroupBy(x => new stateCodeMappingKey
+					{
+						businessUnitId = x.BusinessUnitId,
+						platformTypeId = x.PlatformTypeId,
+						stateCode = x.StateCode
+					})
+					.ToDictionary(x => x.Key, m =>
+					{
+						var mapping = m.First();
+						return new MappedState
+						{
+							StateGroupId = mapping.StateGroupId.Value,
+							StateGroupName = mapping.StateGroupName
+						};
+					})
+			);
+			_stateMappings.Set(
+				mappings
+					.Where(x => x.StateGroupId.HasValue)
+					.GroupBy(x => x.StateGroupId.Value)
+					.ToDictionary(x => x.Key, m =>
+					{
+						var mapping = m.First();
+						return new MappedState
+						{
+							StateGroupId = m.Key,
+							StateGroupName = mapping.StateGroupName
+						};
+					})
+			);
+			_loggedOutStateGroupIds.Set(
+				mappings
+					.Where(x => x.IsLoggedOut && x.StateGroupId.HasValue)
+					.Select(x => x.StateGroupId.Value)
+					.Distinct()
+					.ToArray()
+			);
+			_version.Set(latestVersion);
 		}
 
 		private class ruleMappingKey
@@ -242,4 +260,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			#endregion
 		}
 	}
+
 }

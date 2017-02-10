@@ -195,17 +195,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
 			{
-				// because DomainTest project has a LegacyDomainTest attribute that creates a principal and sets it to that static thing... 
-				var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-				if (principal == null)
-				{
-					var person = new Person().WithName(new Name("Fake", "Login"));
-					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-					person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
-					person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
-					var loggedOnBu = new BusinessUnit("loggedOnBu").WithId();
-					principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, loggedOnBu, null, null), person);
-				}
+				var person = new Person().WithName(new Name("Fake", "Login"));
+				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
+				person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
+				var loggedOnBu = new BusinessUnit("loggedOnBu").WithId();
+				var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", new FakeDataSource("Fake DataSource"), loggedOnBu, null, null), person);
 				context.SetCurrentPrincipal(principal);
 			}
 

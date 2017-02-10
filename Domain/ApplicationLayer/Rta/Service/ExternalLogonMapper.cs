@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -8,18 +9,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IExternalLogonReader _externalLogonReader;
 		private readonly IKeyValueStorePersister _keyValueStore;
-		private string _version;
-		private ILookup<key, Guid> _cache;
+		private readonly PerTenant<string> _version;
+		private readonly PerTenant<ILookup<key, Guid>> _cache;
 
-		public ExternalLogonMapper(IExternalLogonReader externalLogonReader, IKeyValueStorePersister keyValueStore)
+		public ExternalLogonMapper(IExternalLogonReader externalLogonReader, IKeyValueStorePersister keyValueStore, ICurrentDataSource dataSource)
 		{
 			_externalLogonReader = externalLogonReader;
 			_keyValueStore = keyValueStore;
+			_version = new PerTenant<string>(dataSource);
+			_cache = new PerTenant<ILookup<key, Guid>>(dataSource);
 		}
 
 		public IEnumerable<Guid> PersonIdsFor(int dataSourceId, string userCode)
 		{
-			return _cache[new key
+			return _cache.Value[new key
 			{
 				dataSourceId = dataSourceId,
 				userCode = userCode
@@ -29,18 +32,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public void Refresh()
 		{
 			var latestVersion = _keyValueStore.Get("ExternalLogonReadModelVersion");
-			var refresh = latestVersion != _version || _version == null;
+			var refresh = latestVersion != _version.Value || _version.Value == null;
 			if (!refresh)
 				return;
 
-			_cache = _externalLogonReader
-				.Read()
-				.ToLookup(x => new key
-				{
-					dataSourceId = x.DataSourceId.Value,
-					userCode = x.UserCode
-				}, x => x.PersonId);
-			_version = latestVersion;
+			_cache.Set(
+				_externalLogonReader
+					.Read()
+					.ToLookup(x => new key
+					{
+						dataSourceId = x.DataSourceId.Value,
+						userCode = x.UserCode
+					}, x => x.PersonId)
+			);
+			_version.Set(latestVersion);
 		}
 
 		private class key

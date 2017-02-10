@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater) : base(dataSource, databaseLoader, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, agentStateReadModelUpdater)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, agentStateReadModelUpdater)
 		{
 		}
 
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ContextLoader : IContextLoader
 	{
 		private readonly ICurrentDataSource _dataSource;
-		private readonly IDatabaseLoader _databaseLoader;
+		private readonly DataSourceMapper _dataSourceMapper;
 		protected readonly INow _now;
 		private readonly StateMapper _stateMapper;
 		private readonly ExternalLogonMapper _externalLogonMapper;
@@ -74,10 +73,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RtaProcessor _processor;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 
-		public ContextLoader(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater)
+		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater)
 		{
 			_dataSource = dataSource;
-			_databaseLoader = databaseLoader;
+			_dataSourceMapper = dataSourceMapper;
 			_now = now;
 			_stateMapper = stateMapper;
 			_externalLogonMapper = externalLogonMapper;
@@ -113,19 +112,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_now.UtcDateTime(),
 				_config,
 				_agentStatePersister,
-				_databaseLoader,
+				_dataSourceMapper,
 				_externalLogonMapper
 			));
 		}
 
 		public void ForBatch(BatchInputModel batch)
 		{
-			Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _databaseLoader, _externalLogonMapper));
+			Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _dataSourceMapper, _externalLogonMapper));
 		}
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId)
 		{
-			Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _databaseLoader));
+			Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _dataSourceMapper));
 		}
 
 		public void ForActivityChanges()
@@ -249,20 +248,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return func.Invoke();
 		}
 
-		protected int ValidateSourceId(string sourceId)
-		{
-			return ValidateSourceId(_databaseLoader, sourceId);
-		}
-
-		public static int ValidateSourceId(IDatabaseLoader databaseLoader, string sourceId)
-		{
-			if (string.IsNullOrEmpty(sourceId))
-				throw new InvalidSourceException("Source id is required");
-			int dataSourceId;
-			if (!databaseLoader.Datasources().TryGetValue(sourceId, out dataSourceId))
-				throw new InvalidSourceException($"Source id \"{sourceId}\" not found");
-			return dataSourceId;
-		}
 	}
 
 }

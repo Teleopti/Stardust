@@ -252,6 +252,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IExternalLogonReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IContextLoadingStrategy.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\PerTenant.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
@@ -859,11 +860,10 @@
     <Compile Include="ApplicationLayer\Rta\Service\EventCollector.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IContextLoader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IDatabaseLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKey.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BehaviorTestTenants.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\DatabaseLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\DataSourceMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateRuleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\TenantLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModel.cs" />

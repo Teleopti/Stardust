@@ -51,15 +51,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class BatchStrategy : ContextLoadingStrategy
 	{
-		private readonly IDatabaseLoader _databaseLoader;
+		private readonly DataSourceMapper _dataSourceMapper;
 		private readonly ExternalLogonMapper _externalLogonMapper;
 		private readonly BatchInputModel _batch;
 		private int _dataSourceId;
 		private IDictionary<Guid, BatchStateInputModel> _matches;
 
-		public BatchStrategy(BatchInputModel batch, DateTime time, IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader, ExternalLogonMapper externalLogonMapper) : base(config, persister, time)
+		public BatchStrategy(BatchInputModel batch, DateTime time, IConfigReader config, IAgentStatePersister persister, DataSourceMapper dataSourceMapper, ExternalLogonMapper externalLogonMapper) : base(config, persister, time)
 		{
-			_databaseLoader = databaseLoader;
+			_dataSourceMapper = dataSourceMapper;
 			_externalLogonMapper = externalLogonMapper;
 			_batch = batch;
 			ParallelTransactions = Config.ReadValue("RtaBatchParallelTransactions", 7);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			context.WithUnitOfWork(() =>
 			{
-				_dataSourceId = ContextLoader.ValidateSourceId(_databaseLoader, _batch.SourceId);
+				_dataSourceId = _dataSourceMapper.ValidateSourceId(_batch.SourceId);
 				_externalLogonMapper.Refresh();
 			});
 			_matches = _batch.States
@@ -114,15 +114,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly DateTime _snapshotId;
 		private readonly string _sourceId;
 		private readonly StateMapper _stateMapper;
-		private readonly IDatabaseLoader _databaseLoader;
+		private readonly DataSourceMapper _dataSourceMapper;
 		private int _dataSourceId;
 
-		public ClosingSnapshotStrategy(DateTime snapshotId, string sourceId, DateTime time, IConfigReader config, IAgentStatePersister persister, StateMapper stateMapper, IDatabaseLoader databaseLoader) : base(config, persister, time)
+		public ClosingSnapshotStrategy(DateTime snapshotId, string sourceId, DateTime time, IConfigReader config, IAgentStatePersister persister, StateMapper stateMapper, DataSourceMapper dataSourceMapper) : base(config, persister, time)
 		{
 			_snapshotId = snapshotId;
 			_sourceId = sourceId;
 			_stateMapper = stateMapper;
-			_databaseLoader = databaseLoader;
+			_dataSourceMapper = dataSourceMapper;
 			ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 			MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 		}
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IEnumerable<Guid> personIds = null;
 			context.WithUnitOfWork(() =>
 			{
-				_dataSourceId = ContextLoader.ValidateSourceId(_databaseLoader, _sourceId);
+				_dataSourceId = _dataSourceMapper.ValidateSourceId(_sourceId);
 				personIds = Persister.FindForClosingSnapshot(_snapshotId, _dataSourceId, _stateMapper.LoggedOutStateGroupIds());
 			});
 			return personIds;

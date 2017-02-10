@@ -37,11 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DeadLockRetrier>().SingleInstance();
 			builder.RegisterType<DeadLockVictimThrower>().SingleInstance();
 
-			_config.Cache().This<IDatabaseLoader>((c, b) => b
-				.CacheMethod(x => x.Datasources())
-				.CacheKey(c.Resolve<CachePerDataSource>())
-				);
-			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
+			builder.RegisterType<DataSourceMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<DataSourceReader>().As<IDataSourceReader>().SingleInstance();
 			builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
 
