@@ -27,8 +27,7 @@ namespace Stardust.Node.Timers
 		}
 
 		public TrySendJobDetailToManagerTimer(NodeConfiguration nodeConfiguration,
-		                                        IHttpSender httpSender,
-		                                        double interval = 2000) : base(interval)
+		                                        IHttpSender httpSender)
 		{
 			_httpSender = httpSender;
 			_cancellationTokenSource = new CancellationTokenSource();
@@ -36,6 +35,7 @@ namespace Stardust.Node.Timers
 			_uriBuilder = new UriBuilder(nodeConfiguration.ManagerLocation);
 			_uriBuilder.Path += ManagerRouteConstants.JobProgress;
 
+			Interval = nodeConfiguration.SendDetailsToManagerMilliSeconds;
 			Elapsed += OnTimedEvent;
 		}
 		

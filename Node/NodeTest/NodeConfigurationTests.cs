@@ -19,7 +19,8 @@ namespace NodeTest
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				14100,
 				"TestNode",
-				60);
+				60,
+				2000);
 
 
 			UriToTest = NodeConfiguration.ManagerLocation;

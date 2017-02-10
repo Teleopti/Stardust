@@ -25,7 +25,8 @@ namespace NodeTest.Timers
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				14100,
 				"TestNode",
-				60);
+				60,
+				2000);
 			_httpSenderFake = new FakeHttpSender();
 		}
 
@@ -34,8 +35,7 @@ namespace NodeTest.Timers
 		{
 			var timer =
 				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
-				                                     _httpSenderFake,
-				                                     1000);
+				                                     _httpSenderFake);
 
 			Assert.IsNotNull(timer);
 
@@ -47,8 +47,7 @@ namespace NodeTest.Timers
 		{
 			var timer =
 				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
-				                                     _httpSenderFake,
-				                                     1000);
+				                                     _httpSenderFake);
 
 			Assert.IsNotNull(timer, "Should be able to instantiate timer.");
 
@@ -68,8 +67,7 @@ namespace NodeTest.Timers
 		{
 			var timer =
 				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
-				                                     _httpSenderFake,
-				                                     1000);
+				                                     _httpSenderFake);
 
 			Assert.IsNotNull(timer);
 
@@ -94,8 +92,7 @@ namespace NodeTest.Timers
 
 			var timer =
 				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
-				                                     _httpSenderFake,
-				                                     1000);
+				                                     _httpSenderFake);
 
 
 			var numberOfProgressesReceived = 0;

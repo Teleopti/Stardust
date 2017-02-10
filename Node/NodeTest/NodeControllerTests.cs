@@ -43,8 +43,7 @@ namespace NodeTest
 
 			_trySendJobDetailToManagerTimerFake =
 				new TrySendJobDetailToManagerTimerFake(_nodeConfigurationFake,
-				                                         new FakeHttpSender(),
-				                                         1000);
+				                                         new FakeHttpSender());
 
 			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
 			                                             _trySendJobDetailToManagerTimerFake,
@@ -67,7 +66,8 @@ namespace NodeTest
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				14100,
 				"TestNode",
-				60);
+				60,
+				2000);
 		}
 
 		private NodeConfiguration _nodeConfigurationFake;

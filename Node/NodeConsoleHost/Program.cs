@@ -78,7 +78,8 @@ namespace NodeConsoleHost
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				int.Parse(ConfigurationManager.AppSettings["Port"]),
 				ConfigurationManager.AppSettings["NodeName"],
-				int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"])
+				int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]),
+				int.Parse(ConfigurationManager.AppSettings["SendJobDetailToManagerMilliSeconds"])
 				);
 
 			WhoAmI = "[NODE CONSOLE HOST ( " + nodeConfig.NodeName + ", " + nodeConfig.BaseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
