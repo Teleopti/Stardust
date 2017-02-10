@@ -2,18 +2,55 @@ using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class AgentStateReadModelMaintainer :
-		IHandleEvent<PersonDeletedEvent>,
-		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<TenantHourTickEvent>,
+	[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
+	public class AgentStateReadModelNamesMaintainer :
 		IHandleEvent<PersonNameChangedEvent>,
 		IHandleEvent<PersonEmploymentNumberChangedEvent>,
 		IHandleEvent<SiteNameChangedEvent>,
 		IHandleEvent<TeamNameChangedEvent>,
+		IRunOnHangfire
+	{
+		private readonly IAgentStateReadModelPersister _persister;
+
+		public AgentStateReadModelNamesMaintainer(IAgentStateReadModelPersister persister)
+		{
+			_persister = persister;
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
+		{
+			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonNameChangedEvent @event)
+		{
+			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(TeamNameChangedEvent @event)
+		{
+			_persister.UpdateTeamName(@event.TeamId, @event.Name);
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(SiteNameChangedEvent @event)
+		{
+			_persister.UpdateSiteName(@event.SiteId, @event.Name);
+		}
+	}
+
+	public class AgentStateReadModelMaintainer :
+		IHandleEvent<PersonDeletedEvent>,
+		IHandleEvent<PersonAssociationChangedEvent>,
+		IHandleEvent<TenantHourTickEvent>,
 		IRunOnHangfire
 	{
 		private readonly IAgentStateReadModelPersister _persister;
@@ -66,30 +103,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private static DateTime expirationFor(IEvent @event)
 		{
 			return ((dynamic)@event).Timestamp.AddDays(7);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
-		{
-			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonNameChangedEvent @event)
-		{
-			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(TeamNameChangedEvent @event)
-		{
-			_persister.UpdateTeamName(@event.TeamId, @event.Name);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(SiteNameChangedEvent @event)
-		{
-			_persister.UpdateSiteName(@event.SiteId, @event.Name);
 		}
 	}
 
