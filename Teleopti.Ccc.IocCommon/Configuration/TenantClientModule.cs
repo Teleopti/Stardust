@@ -86,6 +86,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				throw new NotImplementedException();
 			}
+
+			public IEnumerable<LogonInfoModel> GetLogonInfoForIdentities(IEnumerable<string> identities)
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }

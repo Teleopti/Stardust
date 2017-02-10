@@ -28,5 +28,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			return storage.FirstOrDefault(s => s.Identity == identity);
 		}
+
+		public IEnumerable<LogonInfoModel> GetLogonInfoForIdentities(IEnumerable<string> identities)
+		{
+			var ids = identities.ToList();
+			return storage.Where(s => ids.Contains(s.Identity)).ToList();
+		}
 	}
 }

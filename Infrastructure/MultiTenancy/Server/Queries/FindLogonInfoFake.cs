@@ -27,5 +27,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		{
 			data[logonInfo.PersonId] = logonInfo;
 		}
+
+		public IEnumerable<LogonInfo> GetForIdentities(IEnumerable<string> logonNames)
+		{
+			var names = logonNames.ToList();
+			return data.Values.Where(x => names.Contains(x.LogonName));
+		}
 	}
 }

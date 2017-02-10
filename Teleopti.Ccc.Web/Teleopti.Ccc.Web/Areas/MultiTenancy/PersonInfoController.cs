@@ -89,5 +89,12 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		{
 			return Ok(_findLogonInfo.GetForIdentity(identity));
 		}
+
+		[HttpPost, Route("PersonInfo/LogonInfosFromIdentities")]
+		[TenantUnitOfWork]
+		public virtual IHttpActionResult LogonInfosFromIdentities([FromBody]IEnumerable<string> identities)
+		{
+			return Ok(_findLogonInfo.GetForIdentities(identities));
+		}
 	}
 }

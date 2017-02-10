@@ -40,5 +40,10 @@ where pi.Id in (:ids)";
 		{
 			throw new NotImplementedException();
 		}
+
+		public IEnumerable<LogonInfo> GetForIdentities(IEnumerable<string> logonNames)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

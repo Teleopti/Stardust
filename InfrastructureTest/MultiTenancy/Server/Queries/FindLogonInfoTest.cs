@@ -100,6 +100,25 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		}
 
 		[Test]
+		public void ShouldGetLogonInfosByIdentities()
+		{
+			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
+			info.SetIdentity(RandomName.Make());
+			_tenantUnitOfWorkManager.CurrentSession().Save(info);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
+
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
+
+			var result = target.GetForIdentities(new []{ info.Identity }).ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.First().LogonName.Should().Be.EqualTo(info.ApplicationLogonInfo.LogonName);
+			result.First().Identity.Should().Be.EqualTo(info.Identity);
+			result.First().PersonId.Should().Be.EqualTo(info.Id);
+		}
+
+		[Test]
 		public void ShouldNotGetPersonInfoFromWrongTenantByLogonName()
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
