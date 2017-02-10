@@ -27,9 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 					{
 						var editableShift = scheduleMatrixPro.GetScheduleDayByKey(unLockedDate).DaySchedulePart().GetEditorShift();
-						specification =
-							specification.And(new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, editableShift,
-								unLockedDate, userTimeZone));
+						specification = specification.And(new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, editableShift, unLockedDate, userTimeZone));
 					}
 				}
 				schedulingOptions.MainShiftOptimizeActivitySpecification = specification;

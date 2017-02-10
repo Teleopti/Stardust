@@ -15,6 +15,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
@@ -24,6 +25,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+
+		[Test]
+		public void ShouldAllowModifyingBlockWithMultipleDays()
+		{
+			var site = new Site("_") { MaxSeats = 0 }.WithId();
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var period = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1));
+			var scenario = new Scenario("_");
+			var newShiftCategory = new ShiftCategory("_").WithId();
+			var oldShiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_") { RequiresSeat = false }.WithId(), new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), newShiftCategory));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodTwoDays(dateOnly).WithPersonPeriod(ruleSet, team);
+			var asses = period.DayCollection().Select(date => new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(oldShiftCategory));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, asses);
+			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+			optPreferences.Shifts.ActivityToKeepLengthOn = new Activity("_");
+			optPreferences.Shifts.KeepActivityLength = true;
+
+			Target.Optimize(new NoSchedulingProgress(), period, new[] {agent}, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+
+			schedules[agent].ScheduledDayCollection(period).All(x => x.PersonAssignment().ShiftCategory.Equals(newShiftCategory))
+				.Should().Be.True();
+		}
 
 		[Test]
 		public void ShouldRespectKeepShiftCategoriesTeamHierarchyOneAgent()

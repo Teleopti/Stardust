@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -22,10 +21,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				KeepShiftCategory = optimizationPreferences.Shifts.KeepShiftCategories,
 				KeepStartTime = optimizationPreferences.Shifts.KeepStartTimes,
-				KeepEndTime = optimizationPreferences.Shifts.KeepEndTimes,
-				AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36))
+				KeepEndTime = optimizationPreferences.Shifts.KeepEndTimes
 			};
-
 			if (optimizationPreferences.Shifts.AlterBetween)
 			{
 				optimizerActivitiesPreferences.AllowAlterBetween = optimizationPreferences.Shifts.SelectedTimePeriod;
