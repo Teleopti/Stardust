@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 
-		private void setProperties(AgentGroup agentGroup, AgentGroupModel agentGroupModel)
+		private void setProperties(IAgentGroup agentGroup, AgentGroupModel agentGroupModel)
 		{
 			agentGroup.Name = agentGroupModel.Name;
 

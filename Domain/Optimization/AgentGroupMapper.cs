@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filterMapper = filterMapper;
 		}
 
-		public AgentGroupModel ToModel(AgentGroup agentGroup)
+		public AgentGroupModel ToModel(IAgentGroup agentGroup)
 		{
 			var filterModels = agentGroup.Filters.Select(filter => _filterMapper.ToModel(filter)).ToList();
 

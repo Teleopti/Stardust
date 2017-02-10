@@ -670,7 +670,9 @@
     <Compile Include="Domain\IReplyOptionTarget.cs" />
     <Compile Include="Domain\ILogWriter.cs" />
     <Compile Include="Domain\WorkTimeSource.cs" />
+    <Compile Include="IAgentGroup.cs" />
     <Compile Include="IDayOffOptimizationDecisionMakerFactory.cs" />
+    <Compile Include="IFilter.cs" />
     <Compile Include="IJsonDeserializer.cs" />
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="IMapiMailMessage.cs" />

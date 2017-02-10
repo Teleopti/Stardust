@@ -111,9 +111,11 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
+    <Compile Include="AgentInfo\AgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
+    <Compile Include="AgentInfo\IAgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PeopleSelection.cs" />
     <Compile Include="AgentInfo\PersonsThatChangedPersonSkillsDuringPeriodFinder.cs" />
@@ -1231,7 +1233,6 @@
     <Compile Include="Optimization\Filters\ContractFilter.cs" />
     <Compile Include="Optimization\Filters\FindFilter.cs" />
     <Compile Include="Optimization\Filters\FindFilterResult.cs" />
-    <Compile Include="Optimization\Filters\IFilter.cs" />
     <Compile Include="Optimization\Filters\SiteFilter.cs" />
     <Compile Include="Optimization\Filters\TeamFilter.cs" />
     <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />

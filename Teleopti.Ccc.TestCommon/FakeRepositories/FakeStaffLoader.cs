@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeFixedStaffLoader : IFixedStaffLoader
+	public class FakeStaffLoader : IFixedStaffLoader, IAgentGroupStaffLoader
 	{
 		private IPerson[] _people;
 

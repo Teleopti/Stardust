@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -27,7 +29,43 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public MutableNow Now;
 		public FakeMissingForecastProvider MissingForecastProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeFixedStaffLoader FixedStaffLoader;
+		public FakeStaffLoader StaffLoader;
+		public FakeAgentGroupRepository AgentGroupRepository;
+
+		[Test]
+		public void ShouldReturnDefaultPlanningPeriodForAgentGroupIfNotCreated()
+		{
+			var agentGroupId = Guid.NewGuid();
+			var agentGroup = new FakeAgentGroup
+			{
+				Name = "test group"
+			};
+			agentGroup.SetId(agentGroupId);
+			AgentGroupRepository.Add(agentGroup);
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(agentGroupId);
+			result.Content.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldReturnAvailablePlanningPeriodsForAgentGroup()
+		{
+			var agentGroupId = Guid.NewGuid();
+			var agentGroup = new FakeAgentGroup
+			{
+				Name = "test group"
+			};
+			agentGroup.SetId(agentGroupId);
+			AgentGroupRepository.Add(agentGroup);
+
+			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)), agentGroup));
+			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)), agentGroup));
+			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), agentGroup));
+
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(agentGroupId);
+			result.Content.Count.Should().Be.EqualTo(3);
+		}
 
 		[Test]
 		public void ShouldReturnDefaultPlanningPeriodIfNoPeriodExists()
@@ -116,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2010, 1, 1));
-			FixedStaffLoader.SetPeople(person);
+			StaffLoader.SetPeople(person);
 
 			var result = (OkResult)Target.Publish(Guid.NewGuid());
 			result.Should().Not.Be.Null();
@@ -254,7 +292,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.AddService<PlanningPeriodController>();
 			system.AddModule(new ResourcePlannerModule());
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
-			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
+			system.UseTestDouble<FakeStaffLoader>().For<IFixedStaffLoader>();
 		}
 	}
 }

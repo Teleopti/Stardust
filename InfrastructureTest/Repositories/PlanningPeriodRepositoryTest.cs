@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -37,6 +38,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override Repository<IPlanningPeriod> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PlanningPeriodRepository(currentUnitOfWork);
+		}
+
+		[Test]
+		public void ShouldGetPlanningPeriodsForAgentGroup()
+		{
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
+			var agentGroup = new AgentGroup
+			{
+				Name = "test agent group"
+			};
+			PersistAndRemoveFromUnitOfWork(agentGroup);
+			PersistAndRemoveFromUnitOfWork(new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), agentGroup));
+
+			var planningPeriods = repository.LoadForAgentGroup(agentGroup);
+
+			planningPeriods.SingleOrDefault().AgentGroup.Name.Should().Be.EqualTo(agentGroup.Name);
 		}
 
 		[Test]

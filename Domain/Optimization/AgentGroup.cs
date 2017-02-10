@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Optimization.Filters;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class AgentGroup : NonversionedAggregateRootWithBusinessUnit
+	public class AgentGroup : NonversionedAggregateRootWithBusinessUnit, IAgentGroup
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 
@@ -26,4 +26,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filters.Add(filter);
 		}
 	}
+
 }

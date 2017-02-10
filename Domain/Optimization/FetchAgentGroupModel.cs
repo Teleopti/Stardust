@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var all = _agentGroupRepository.LoadAll();
 
-			var result = all.Select(dayOffRules => _agentGroupMapper.ToModel(dayOffRules)).ToList();
+			var result = all.Select(agentGroup => _agentGroupMapper.ToModel(agentGroup)).ToList();
 
 			return result;
 		}

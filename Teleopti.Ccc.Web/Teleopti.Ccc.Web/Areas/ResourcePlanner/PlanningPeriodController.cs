@@ -5,6 +5,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
@@ -23,14 +24,25 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly INow _now;
 		private readonly IBasicSchedulingValidator _basicSchedulingValidator;
+		private readonly IAgentGroupRepository _agentGroupRepository;
 
-		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider, IPlanningPeriodRepository planningPeriodRespository, IFixedStaffLoader fixedStaffLoader, INow now, IBasicSchedulingValidator basicSchedulingValidator)
+		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider, IPlanningPeriodRepository planningPeriodRespository, IFixedStaffLoader fixedStaffLoader, INow now, IBasicSchedulingValidator basicSchedulingValidator, IAgentGroupRepository agentGroupRepository)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRespository = planningPeriodRespository;
 			_fixedStaffLoader = fixedStaffLoader;
 			_now = now;
 			_basicSchedulingValidator = basicSchedulingValidator;
+			_agentGroupRepository = agentGroupRepository;
+		}
+
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodforagentgroup/{agentGroupId}")]
+		public virtual IHttpActionResult GetAllPlanningPeriods(Guid agentGroupId)
+		{
+			var availablePlanningPeriods = new List<PlanningPeriodModel>();
+			var agentGroup = _agentGroupRepository.Load(agentGroupId);
+			var allPlanningPeriods = _planningPeriodRespository.LoadForAgentGroup(agentGroup);
+			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]

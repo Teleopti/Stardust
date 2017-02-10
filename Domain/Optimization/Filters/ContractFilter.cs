@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.Filters

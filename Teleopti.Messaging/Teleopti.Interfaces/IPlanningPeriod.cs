@@ -8,6 +8,7 @@ namespace Teleopti.Interfaces
 		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation);
 		IPlanningPeriod NextPlanningPeriod();
 		PlanningPeriodState State { get; }
+		IAgentGroup AgentGroup { get; }
 		void Scheduled();
 		void Publish(params IPerson[] people);
 	}

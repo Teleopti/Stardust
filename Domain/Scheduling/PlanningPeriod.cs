@@ -1,6 +1,8 @@
+using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -15,19 +17,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private SchedulePeriodType _periodType;
 		private  int _number;
 		private PlanningPeriodState _state;
+		private readonly AgentGroup _agentGroup;
 
 		protected PlanningPeriod()
 		{
 			_state = PlanningPeriodState.New;
 		}
-		
-		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions) : this()
+
+		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, AgentGroup agentGroup) : this()
 		{
 			var suggestedPlanningPeriod = planningPeriodSuggestions.Default();
 
 			_periodType = suggestedPlanningPeriod.PeriodType;
 			_number = suggestedPlanningPeriod.Number;
 			_range = suggestedPlanningPeriod.Range;
+			_agentGroup = agentGroup;
+		}
+
+
+		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions) : this(planningPeriodSuggestions, null)
+		{
 		}
 
 		public virtual DateOnlyPeriod Range
@@ -38,6 +47,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual PlanningPeriodState State
 		{
 			get { return _state; }
+		}
+
+		public virtual IAgentGroup AgentGroup
+		{
+			get { return _agentGroup; }
 		}
 
 		public virtual void Scheduled()

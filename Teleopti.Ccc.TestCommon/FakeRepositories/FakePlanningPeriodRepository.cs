@@ -85,6 +85,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningPeriodSuggestions;
 		}
 
+		public IEnumerable<IPlanningPeriod> LoadForAgentGroup(IAgentGroup agentGroup)
+		{
+			return _planningPeriods.Where(x => x.AgentGroup.Id == agentGroup.Id).ToList();
+		}
+
 		public void CustomData(PlanningPeriod planinnPeriod, PlanningPeriodSuggestions planningPeriodSuggestions)
 		{
 			if (planinnPeriod != null)
