@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				return intradyStaffingViewModelCache;
 
 			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId});
-			var cachePolicy = new CacheItemPolicy {SlidingExpiration = new TimeSpan(0, 30, 0)};
+			var cachePolicy = new CacheItemPolicy {SlidingExpiration = new TimeSpan(0, 10, 0)};
 			MemoryCache.Default.Set(cacheKey, intradyStaffingViewModel, cachePolicy);
 			return intradyStaffingViewModel;
 		}
