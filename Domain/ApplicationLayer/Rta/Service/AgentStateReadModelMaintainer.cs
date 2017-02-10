@@ -62,19 +62,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_now = now;
 		}
 
-		[ReadModelUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(TenantHourTickEvent @event)
 		{
 			_persister.DeleteOldRows(_now.UtcDateTime());
 		}
 
-		[ReadModelUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			_persister.SetDeleted(@event.PersonId, expirationFor(@event));
 		}
 
-		[ReadModelUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (!@event.TeamId.HasValue)
