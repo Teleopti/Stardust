@@ -36,21 +36,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public IDictionary<DateTime, int> CalcuateIntradayAbsenceIntervalPossibilities()
 		{
 			var skillStaffingDatas = getSkillStaffingData();
-
-			var periodPossibilities = calcuateIntervalPossibilities(skillStaffingDatas,
-				isIntervalUnderstaffed => isIntervalUnderstaffed ? fairPossibility : goodPossibility);
-
-			return periodPossibilities;
+			var useShrinkageValidator = isShrinkageValidatorExists();
+			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
+				skill => useShrinkageValidator
+					? new IntervalShrinkageHasUnderstaffing(skill) as Specification<IValidatePeriod>
+					: new IntervalHasUnderstaffing(skill);
+			return calcuateIntervalPossibilities(skillStaffingDatas, getStaffingSpecification);
 		}
 
 		public IDictionary<DateTime, int> CalcuateIntradayOvertimeIntervalPossibilities()
 		{
 			var skillStaffingDatas = getSkillStaffingData();
-
-			var periodPossibilities = calcuateIntervalPossibilities(skillStaffingDatas,
-				isIntervalUnderstaffed => isIntervalUnderstaffed ? goodPossibility : fairPossibility);
-
-			return periodPossibilities;
+			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
+				skill => new IntervalHasOverstaffing(skill);
+			return calcuateIntervalPossibilities(skillStaffingDatas, getStaffingSpecification);
 		}
 
 		private IEnumerable<skillStaffingData> getSkillStaffingData()
@@ -102,16 +101,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return dictionary.SchedulesForDay(date).First();
 		}
 
-		private Dictionary<DateTime, int> calcuateIntervalPossibilities(IEnumerable<skillStaffingData> skillStaffingDatas,
-			Func<bool, int> getPossiblityByStaffingStatus)
+		private static Dictionary<DateTime, int> calcuateIntervalPossibilities(IEnumerable<skillStaffingData> skillStaffingDatas,
+		Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification)
 		{
 			var intervalPossibilities = new Dictionary<DateTime, int>();
-			var useShrinkageValidator = isShrinkageValidatorExists();
 			foreach (var skillStaffingData in skillStaffingDatas)
 			{
-				var intervalHasUnderStaffing = useShrinkageValidator
-					? (Specification<IValidatePeriod>) new IntervalShrinkageHasUnderstaffing(skillStaffingData.Skill)
-					: new IntervalHasUnderstaffing(skillStaffingData.Skill);
+				var staffingSpecification = getStaffingSpecification(skillStaffingData.Skill);
 
 				for (var i = 0; i < skillStaffingData.Time?.Length; i++)
 				{
@@ -126,8 +122,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 					if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time[i]))
 						continue;
 
-					var isIntervalUnderstaffed = intervalHasUnderStaffing.IsSatisfiedBy(staffingInterval);
-					var possibility = getPossiblityByStaffingStatus(isIntervalUnderstaffed);
+					var isSatisfied = staffingSpecification.IsSatisfiedBy(staffingInterval);
+					var possibility = isSatisfied ? fairPossibility : goodPossibility;
 					var key = skillStaffingData.Time[i];
 					if (intervalPossibilities.ContainsKey(key))
 					{
