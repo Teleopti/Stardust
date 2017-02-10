@@ -8,29 +8,36 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FullPermission : IAuthorization, ICurrentAuthorization
 	{
+		private List<string> _blackList = new List<string>();
+
+		public void AddToBlackList(string functionPath)
+		{
+			_blackList.Add(functionPath);
+		}
+
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
 		{
-			return true;
+			return !_blackList.Contains(functionPath);			
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
 		{
-			return true;
+			return !_blackList.Contains(functionPath);
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
 		{
-			return true;
+			return !_blackList.Contains(functionPath);
 		}
 
 		public bool IsPermitted(string functionPath)
 		{
-			return true;
+			return !_blackList.Contains(functionPath);
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
-			return true;
+			return !_blackList.Contains(functionPath);
 		}
 
 		public virtual IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)

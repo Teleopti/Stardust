@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			personAbsence.RemovePersonAbsence(commandInfo);
 			
-			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate) as ExtractedSchedule;
+			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate, true) as ExtractedSchedule;
 			if (scheduleDay != null)
 			{
 				var scheduleDaysForChecking = new List<IScheduleDay> {scheduleDay};

@@ -14,6 +14,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.DomainTest.Common;
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeEventPublisherWithOverwritingHandlers EventPublisher;
 		public FakeGlobalSettingDataRepository GlobalSetting;
 		public INow Now;
-
+	
 		private IPerson person;
 		private IAbsence absence;
 
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
 			system.UseTestDouble(userCulture).For<IUserCulture>();
 			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();			
-			system.AddService<CancelAbsenceRequestCommandHandler>();
+			system.AddService<CancelAbsenceRequestCommandHandler>();			
 		}
 		
 		private void commonSetup()
@@ -171,6 +173,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldBeAbleToCancelRequestWhenScheduleIsUnpublished()
 		{
 			commonSetup();
+			
+			var permissions = PrincipalAuthorization.Current() as FullPermission;
+			permissions.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2016, 03, 01, 23, 59, 0,DateTimeKind.Utc));
@@ -182,6 +187,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			person.WorkflowControlSet = new WorkflowControlSet();
 			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2016, 01, 01);
+			person.WorkflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2016, 8, 1, 2016, 9, 1);
+			person.WorkflowControlSet.PreferencePeriod = new DateOnlyPeriod(2016,9,1,2016,10,1);
 
 			var cancelRequestCommand = new CancelAbsenceRequestCommand()
 			{
@@ -191,7 +198,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Handle(cancelRequestCommand);
 
 			Assert.AreEqual(0,cancelRequestCommand.ErrorMessages.Count);
-			
+
+			var schedules = ScheduleStorage.LoadAll();
+			schedules.Single().Period.Should().Be.EqualTo(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
 		}
 
 
