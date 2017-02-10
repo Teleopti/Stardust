@@ -115,6 +115,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					var layers = projection.ToResourceLayers(skillInterval);
 
+					if (!layers.Any())
+					{
+						logger.Info($"Absence request {personRequest.Id.GetValueOrDefault()}  is approved as the agent is not scheduled.");
+						sendApproveCommand(personRequest.Id.GetValueOrDefault());
+						return;
+					}
+
 					foreach (var layer in layers)
 					{
 						var activity = _activityRepository.Get(layer.PayloadId);

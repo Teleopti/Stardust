@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, _currentScenario.Current())[personRequest.Person];
 
-				//night shift?
 				var dateOnlyPeriod = personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
@@ -90,6 +89,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
 
 					var layers = projection.ToResourceLayers(skillInterval);
+					if (!layers.Any())
+					{
+						logger.Info($"Absence request {personRequest.Id.GetValueOrDefault()} is approved as the agent is not scheduled.");
+						sendApproveCommand(personRequest.Id.GetValueOrDefault());
+						return;
+					}
 
 					deltaResourcesForAgent.AddRange(
 						from layer in layers let skillCombination = _personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)

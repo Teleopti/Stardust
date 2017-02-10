@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -1444,6 +1446,70 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9)).ToList();
 			skillCombinationResources.Count().Should().Be.EqualTo(2);
 			skillCombAsserts(skillCombinationResources[0], new DateTimePeriod(emailPerod.StartDateTime,emailPerod.StartDateTime.AddMinutes(60)), new[] {emailSkill.Id.GetValueOrDefault()}, 9.5);
+		}
+
+		[Test]
+		public void ShouldApproveRequestIfTheAgentIsNotScheduled()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var phoneActivity = ActivityRepository.Has("phone");
+			var phoneSkill = SkillRepository.Has("skillA", phoneActivity).WithId();
+			phoneSkill.DefaultResolution = 30;
+			var workload = WorkloadFactory.CreateWorkload(phoneSkill);
+			WorkloadDay workloadDay1 = new WorkloadDay();
+			workloadDay1.Create(new DateOnly(2008, 7, 1), workload, new List<TimePeriod>() { new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(10, 0, 0)) });
+
+			phoneSkill.AddWorkload(workload);
+			var agent = PersonRepository.Has(phoneSkill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
+			var mainShiftPersonAssing = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, phoneActivity, period, new ShiftCategory("category"));
+			PersonAssignmentRepository.Has(mainShiftPersonAssing);
+
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(30)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(60)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(60), period.StartDateTime.AddMinutes(90)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10)
+
+			});
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.StartDateTime.AddMinutes(30),
+																	 Forecast = 4,
+																	 SkillId = phoneSkill.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	StartDateTime = period.StartDateTime.AddMinutes(30),
+																	EndDateTime = period.StartDateTime.AddMinutes(60),
+																	 Forecast = 4,
+																	 SkillId = phoneSkill.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	StartDateTime = period.StartDateTime.AddMinutes(60),
+																	EndDateTime = period.StartDateTime.AddMinutes(90),
+																	 Forecast = 4,
+																	 SkillId = phoneSkill.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 1, 11))).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
 		private void skillCombAsserts(SkillCombinationResource skillCombinationResource, DateTimePeriod period, Guid[] skillCombinationResources, double resource)
