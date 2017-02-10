@@ -93,7 +93,7 @@
 				ctrl.processingCommand = true;
 
 				activitySvc.moveShift(requestData)
-					.then(function(response) {						
+					.then(function(response) {
 						if (ctrl.containerCtrl.getActionCb(ctrl.label)) {
 							ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, validAgentIds);
 						}
@@ -130,7 +130,7 @@
 
 		function updateInvalidAgents() {
 			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
-			validator.validateMoveToTimeForShift(moment(getMoveToStartTimeStr()), currentTimezone);
+			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
 			ctrl.invalidAgents = validator.getInvalidPeople();
 		}
 	}

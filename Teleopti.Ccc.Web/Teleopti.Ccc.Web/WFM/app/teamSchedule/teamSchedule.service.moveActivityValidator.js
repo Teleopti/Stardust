@@ -1,16 +1,16 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'ScheduleManagement', 'belongsToDateDecider', validator]);
+	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'belongsToDateDecider', validator]);
 
-	function validator($filter, PersonSelectionSvc, ScheduleMgmt, belongsToDateDecider) {
+	function validator($filter, PersonSelectionSvc, belongsToDateDecider) {
 		var MAX_SCHEDULE_LENGTH_IN_MINUTES = 36 * 60; // 36 hours
 		var invalidPeople = [];
 		this.validateMoveToTime = validateMoveToTimeForScheduleInDifferentTimezone;
 		this.validateMoveToTimeForShift = validateShiftsToMove;
 		this.validateInputForOvertime = validateInputForOvertime;
 
-		function validateInputForOvertime(timeRange, selectedDefinitionSetId, currentTimezone) {
+		function validateInputForOvertime(ScheduleMgmt, timeRange, selectedDefinitionSetId, currentTimezone) {
 			var invalidPeople = [];
 			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
 
@@ -65,10 +65,11 @@
 				});
 				return selectedProjections.length > 0;
 			})[0];
-			return selectedShift.Date;
+			if(selectedShift) return selectedShift.Date;
+			else return personSchedule.Date;
 		}
 
-		function validateShiftsToMove(newStartMoment, currentTimezone) {
+		function validateShiftsToMove(ScheduleMgmt, newStartMoment, currentTimezone) {
 			invalidPeople = [];
 			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
 			for (var i = 0; i < selectedPersonIds.length; i++) {
@@ -125,7 +126,7 @@
 			return invalidPeople.length === 0;
 		}
 
-		function validateMoveToTimeForScheduleInDifferentTimezone(newStartMoment, currentTimezone) {
+		function validateMoveToTimeForScheduleInDifferentTimezone(ScheduleMgmt, newStartMoment, currentTimezone) {
 			invalidPeople = [];
 			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
 			for (var i = 0; i < selectedPersonIds.length; i++) {
@@ -158,13 +159,15 @@
 			return invalidPeople.length === 0;
 		}
 
-		function hasOvertimeSelected(personSchedule){
+		function hasOvertimeSelected(personSchedule) {
 			var result = [];
-			personSchedule.Shifts.forEach(function(s){
-				result = result.concat(s.Projections.filter(function(p){
-					return p.Selected && p.IsOvertime;
-				}));
-			});
+			if (personSchedule.Shifts && personSchedule.Shifts.length > 0) {
+				personSchedule.Shifts.forEach(function(s) {
+					result = result.concat(s.Projections.filter(function(p) {
+						return p.Selected && p.IsOvertime;
+					}));
+				});
+			}
 			return result.length > 0;
 		}
 

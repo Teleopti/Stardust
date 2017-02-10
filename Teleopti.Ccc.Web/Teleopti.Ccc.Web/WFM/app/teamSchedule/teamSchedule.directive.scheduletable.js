@@ -111,7 +111,7 @@
 			if (!personSchedule.Shifts) return false;
 
 			var result = false;
-			personSchedule.Shifts.forEach(function (shift) {				
+			personSchedule.Shifts.forEach(function (shift) {
 				if (moment(shift.ProjectionTimeRange.End) > personSchedule.ViewRange.endMoment)
 					result = true;
 			});
@@ -158,17 +158,7 @@
 
 		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
-
-			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {
-				vm.scheduleVm = {
-					Schedules: ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
-					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize),
-					TimeLine: ScheduleMgmt.groupScheduleVm.TimeLine
-				};
-
-			} else {
-				vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
-			}
+			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 
 			vm.toggles = teamsToggles.all();
 			vm.permissions = teamsPermissions.all();
@@ -178,11 +168,6 @@
 		vm.init();
 
 		$scope.$watchCollection(function () {
-			if (vm.paginationOptions && ScheduleMgmt.groupScheduleVm && ScheduleMgmt.groupScheduleVm.Schedules && ScheduleMgmt.groupScheduleVm.Schedules.length > vm.paginationOptions.pageSize) {				
-				return ScheduleMgmt.groupScheduleVm.Schedules.slice((vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
-					vm.paginationOptions.pageNumber * vm.paginationOptions.pageSize);
-			}
-
 			return angular.isDefined(ScheduleMgmt.groupScheduleVm) ? ScheduleMgmt.groupScheduleVm.Schedules : [];
 		}, function (newVal) {
 			if (newVal)

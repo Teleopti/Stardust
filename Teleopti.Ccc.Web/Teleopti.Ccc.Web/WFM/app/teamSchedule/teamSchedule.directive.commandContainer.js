@@ -12,7 +12,9 @@
 				date: '=',
 				timezone: '=',
 				actionCallback: '&?',
-				onReady: '&'
+				onReady: '&',
+				isSelectAll: '=?',
+				getLoadAllParams: '&?'
 			},
 			controllerAs: 'vm',
 			bindToController: true,
@@ -38,24 +40,30 @@
 
 		vm.ready = false;
 
-		vm.initCmd = function (cmd) {
-			var checked = personSelectionSvc.getCheckedPersonIds();
-
-			var unavailable = checked;
-
-			if (unavailable.length === 0) {
-				vm.setReady(true);
-			} else {
-				teamScheduleSvc.getSchedules(vm.date, unavailable).then(function (data) {
-					vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date));
+		vm.initCmd = function(cmd) {
+			if (vm.isSelectAll) {
+				teamScheduleSvc.searchSchedules(vm.getLoadAllParams()).then(function(result) {
+					vm.scheduleManagementSvc.resetSchedules(result.data.Schedules, moment(vm.date), vm.timezone);
+					personSelectionSvc.selectAllPerson(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
+					personSelectionSvc.updatePersonInfo(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
 					vm.setReady(true);
 				});
+			} else {
+				var checkedPersonIdList = personSelectionSvc.getCheckedPersonIds();
+				if (checkedPersonIdList.length === 0) {
+					vm.setReady(true);
+				} else {
+					teamScheduleSvc.getSchedules(vm.date, checkedPersonIdList).then(function(data) {
+						vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date));
+						vm.setReady(true);
+					});
+				}
 			}
 
 			vm.setActiveCmd(cmd);
 		};
 
-		vm.setReady = function (value) {
+		vm.setReady = function(value) {
 			vm.ready = value;
 		};
 

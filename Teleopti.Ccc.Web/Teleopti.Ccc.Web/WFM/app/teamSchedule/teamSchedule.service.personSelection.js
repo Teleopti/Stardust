@@ -187,6 +187,9 @@
 					delete svc.personInfo[personSchedule.PersonId];
 				}
 			});
+			if(Object.keys(svc.personInfo).length > 0){
+				svc.personInfo = {};
+			}
 		};
 
 		svc.getCheckedPersonIds = function () {

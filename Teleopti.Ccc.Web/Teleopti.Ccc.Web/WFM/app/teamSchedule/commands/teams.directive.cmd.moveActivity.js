@@ -23,6 +23,7 @@
 				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 				scope.vm.getActionCb = containerCtrl.getActionCb;
 				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+				scope.vm.scheduleMgtSvc = containerCtrl.scheduleManagementSvc;
 
 				scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
 				scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
@@ -89,7 +90,7 @@
 
 		vm.updateInvalidAgents = function () {
 			var currentTimezone = vm.getCurrentTimezone();
-			validator.validateMoveToTime(moment(vm.getMoveToStartTimeStr()), currentTimezone);
+			validator.validateMoveToTime(vm.scheduleMgtSvc, moment(vm.getMoveToStartTimeStr()), currentTimezone);
 			vm.invalidAgents = validator.getInvalidPeople();
 
 		};

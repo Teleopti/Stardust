@@ -62,7 +62,7 @@
 				vm.onCommandContainerReady = function () {
 					$scope.$applyAsync(function () {
 						if (needToOpenSidePanel)
-							openSidePanel();						
+							openSidePanel();
 					});
 					return true;
 				};
@@ -88,7 +88,7 @@
 			$mdSidenav(settingsContainerId).toggle();
 		};
 
-		vm.commonCommandCallback = function (trackId, personIds) {			
+		vm.commonCommandCallback = function (trackId, personIds) {
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
@@ -191,6 +191,13 @@
 			return params;
 		}
 
+		vm.getLoadAllSchedulesParams = function() {
+			return getParamsForLoadingSchedules({
+				currentPageIndex: 1,
+				pageSize: vm.total
+			});
+		};
+
 		function afterSchedulesLoaded(result) {
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
 			vm.scheduleCount = scheduleMgmtSvc.groupScheduleVm.Schedules.length;
@@ -227,7 +234,12 @@
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
+
+					if(vm.hasSelectedAllPeopleInEveryPage){
+						personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+					}
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+
 					vm.isLoading = false;
 					vm.checkValidationWarningForCurrentPage();
 					populateAvailableTimezones(result);
@@ -239,7 +251,12 @@
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
+
+					if(vm.hasSelectedAllPeopleInEveryPage){
+						personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+					}
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+
 					personSelectionSvc.preSelectPeople(preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
 
 					vm.checkValidationWarningForCurrentPage();
@@ -280,28 +297,19 @@
 		};
 
 		vm.selectAllForAllPages = function () {
-			var params = getParamsForLoadingSchedules({ currentPageIndex: 1, pageSize: vm.total });
-			teamScheduleSvc.searchSchedules(params).then(function (result) {
-
-				scheduleMgmtSvc.resetSchedules(result.data.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
-				personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-				vm.hasSelectedAllPeopleInEveryPage = true;
-			});
+			personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			vm.hasSelectedAllPeopleInEveryPage = true;
 		};
 
 		vm.unselectAllForAllPages = function () {
-			var params = getParamsForLoadingSchedules({ currentPageIndex: 1, pageSize: vm.total });
-			teamScheduleSvc.searchSchedules(params).then(function (result) {
-				scheduleMgmtSvc.resetSchedules(result.data.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
-				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-				vm.hasSelectedAllPeopleInEveryPage = false;
-			});
+			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			vm.hasSelectedAllPeopleInEveryPage = false;
 		};
 
 		vm.selectAllVisible = function () {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
-			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
+			return (vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total) && !vm.hasSelectedAllPeopleInEveryPage;
 		};
 
 		vm.hasSelectedAllPeople = function () {
@@ -312,11 +320,10 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
 
-
 		vm.onPersonScheduleChanged = function(personIds) {
 			vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
-		}
+		};
 
 		vm.toggles = teamsToggles.all();
 

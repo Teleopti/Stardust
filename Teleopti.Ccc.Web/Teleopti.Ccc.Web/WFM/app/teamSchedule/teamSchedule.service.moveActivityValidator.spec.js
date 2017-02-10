@@ -4,6 +4,30 @@
 	describe('teamschedule move activity validator tests: ', function() {
 		var target, personSelection, scheduleMgmt, fakeTeamsToggles, fakeTeamsPermissions;
 		var defaultUserTimeZone = 'Asia/Hong_Kong';  //UTC+8
+		
+		var scheduleDate = "2016-05-12";
+		var definitionSetId = 'selected_definition_set_id';
+		var schedule = {
+			"PersonId": "221B-Baker-SomeoneElse",
+			"Name": "SomeoneElse",
+			"Date": scheduleDate,
+			"Timezone": {
+				IanaId: "Asia/Hong_Kong"
+			},
+			"Projection": [
+				{
+					"ShiftLayerIds": ["layer1"],
+					"Color": "#80FF80",
+					"Description": "Email",
+					"Start": scheduleDate + " 07:00",
+					"Minutes": 480,
+					"End": scheduleDate + " 15:00",
+				}
+			],
+			"IsFullDayAbsence": false,
+			"DayOff": null
+		};
+
 		beforeEach(function () {
 			module("wfm.teamSchedule");
 		});
@@ -61,30 +85,6 @@
 			scheduleMgmt = ScheduleManagement;
 			target = ActivityValidator;
 		}));
-		
-		var scheduleDate = "2016-05-12";
-		var schedule = {
-			"PersonId": "221B-Baker-SomeoneElse",
-			"Name": "SomeoneElse",
-			"Date": scheduleDate,
-			"Timezone": {
-				IanaId: "Asia/Hong_Kong"
-			},
-			"Projection": [
-				{
-					"ShiftLayerIds": ["layer1"],
-					"Color": "#80FF80",
-					"Description": "Email",
-					"Start": scheduleDate + " 07:00",
-					"Minutes": 480,
-					"End": scheduleDate + " 15:00",
-				}
-			],
-			"IsFullDayAbsence": false,
-			"DayOff": null
-		};
-		var definitionSetId = 'selected_definition_set_id';
-
 
 		it('should return invalide people when overtime activity input time is greater than 36h', function() {
 			var localSchedule = JSON.parse(JSON.stringify(schedule));
@@ -101,7 +101,7 @@
 				endTime: moment("2016-05-08 2:00")
 			};
 
-			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
+			var result = target.validateInputForOvertime(scheduleMgmt, timeRange, definitionSetId, defaultUserTimeZone);
 
 			expect(result.length).toEqual(1);
 			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
@@ -123,7 +123,7 @@
 				endTime: moment("2016-05-12 09:00")    //ensure this end time will make overtime overlapping with agent's belongsToDate shift
 			};
 
-			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
+			var result = target.validateInputForOvertime(scheduleMgmt, timeRange, definitionSetId, defaultUserTimeZone);
 
 			expect(result.length).toEqual(1);
 			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
@@ -147,7 +147,7 @@
 				endTime: moment("2016-05-12 16:00")    //ensure this end time will make overtime overlapping with agent's belongsToDate shift
 			};
 
-			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
+			var result = target.validateInputForOvertime(scheduleMgmt, timeRange, definitionSetId, defaultUserTimeZone);
 
 			expect(result.length).toEqual(1);
 			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
@@ -171,7 +171,7 @@
 				endTime: moment("2016-05-12 16:10")     //ensure this end time will make overtime overlapping with agent's belongsToDate shift
 			};
 
-			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
+			var result = target.validateInputForOvertime(scheduleMgmt, timeRange, definitionSetId, defaultUserTimeZone);
 
 			expect(result.length).toEqual(0);
 		});
@@ -185,7 +185,7 @@
 			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
 			var newStartMoment = moment("2016-05-13 2:00");
 
-			var result = target.validateMoveToTime(newStartMoment, defaultUserTimeZone);
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, defaultUserTimeZone);
 
 			expect(result).toEqual(false);
 			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
@@ -226,7 +226,7 @@
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1]);
 			var newStartMoment = moment("2016-05-13 13:00");
 
-			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(false);
 			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
@@ -275,7 +275,7 @@
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
 			var newStartMoment = moment(scheduleDate + " 00:00");
 
-			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(true);
 		});
@@ -309,7 +309,7 @@
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
 			var newStartMoment = moment(scheduleDate + " 01:00");
 
-			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(false);
 		});
@@ -343,7 +343,7 @@
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
 			var newStartMoment = moment(scheduleDate + " 01:00");
 
-			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(false);
 		});
@@ -377,7 +377,7 @@
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
 			var newStartMoment = moment(nextDay + " 02:00");
 
-			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(true);
 		});
@@ -418,7 +418,7 @@
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1]);
 			var newStartMoment = moment("2016-05-13 13:00");
 
-			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(false);
 			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
@@ -453,7 +453,7 @@
 			personSelection.updatePersonSelection(personSchedule);
 			var newStartMoment = moment(scheduleDate + " 02:00");
 
-			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+			target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(target.getInvalidPeople().length).toEqual(0);
 		});
@@ -487,7 +487,7 @@
 			personSelection.updatePersonSelection(personSchedule);
 			var newStartMoment = moment(nextDay + " 02:00");
 
-			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+			target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
@@ -542,7 +542,7 @@
 			personSelection.updatePersonSelection(personSchedule);
 			var newStartMoment = moment(scheduleDate + " 23:00");
 
-			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+			target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
@@ -597,7 +597,7 @@
 			personSelection.updatePersonSelection(personSchedule);
 			var newStartMoment = moment(scheduleDate + " 23:00");
 
-			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+			target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
@@ -652,7 +652,7 @@
 			personSelection.updatePersonSelection(personSchedule);
 			var newStartMoment = moment(scheduleDate + " 5:00");
 
-			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+			target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
@@ -685,7 +685,7 @@
 			personSelection.updatePersonSelection(personSchedule);
 			var newStartMoment = moment(scheduleDate + " 10:00");
 
-			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+			target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
@@ -710,7 +710,7 @@
 			personSelection.updatePersonSelection(personSchedule);
 			var newStartMoment = moment(scheduleDate + " 10:00");
 
-			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+			target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
@@ -747,7 +747,7 @@
 				endTime: moment(scheduleDate + " 10:00")
 			}
 
-			var invalidPeople = target.validateInputForOvertime(timeRange, null, "Asia/Hong_Kong");
+			var invalidPeople = target.validateInputForOvertime(scheduleMgmt, timeRange, null, "Asia/Hong_Kong");
 
 			expect(invalidPeople.length).toEqual(0);
 		});
@@ -784,7 +784,7 @@
 				endTime: moment(scheduleDate + " 10:00")
 			}
 
-			var invalidPeople = target.validateInputForOvertime(timeRange, null, "Asia/Hong_Kong");
+			var invalidPeople = target.validateInputForOvertime(scheduleMgmt, timeRange, null, "Asia/Hong_Kong");
 
 			expect(invalidPeople.length).toEqual(1);
 		});
@@ -822,7 +822,7 @@
 				endTime: moment(scheduleDate + " 10:00")
 			}
 
-			var invalidPeople = target.validateInputForOvertime(timeRange, 'anything', "Asia/Hong_Kong");
+			var invalidPeople = target.validateInputForOvertime(scheduleMgmt, timeRange, 'anything', "Asia/Hong_Kong");
 
 			expect(invalidPeople.length).toEqual(1);
 		});

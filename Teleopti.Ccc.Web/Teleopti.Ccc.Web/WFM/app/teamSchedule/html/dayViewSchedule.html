@@ -89,7 +89,9 @@
 		<teamschedule-command-container date="vm.scheduleDate"
 										timezone="vm.currentTimezone"
 										action-callback="vm.commonCommandCallback(trackId, personIds)"
-										on-ready="vm.onCommandContainerReady()">
+										on-ready="vm.onCommandContainerReady()"
+										get-load-all-params="vm.getLoadAllSchedulesParams()"
+										is-select-all ="vm.hasSelectedAllPeopleInEveryPage">
 		</teamschedule-command-container>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">

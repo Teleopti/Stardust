@@ -102,6 +102,12 @@ describe("teamschedule person selection tests", function() {
 		expect(target.personInfo).toEqual({});
 	}));
 
+	it("Should clear all person info extra cached by switching pages", inject(function () {
+		target.updatePersonInfo([schedule1, schedule2]);
+		target.unselectAllPerson([schedule1]);
+		expect(target.personInfo).toEqual({});
+	}));
+
 	it("can select/deselect one person", inject(function () {
 		schedule1.IsSelected = true;
 		target.updatePersonSelection(schedule1);

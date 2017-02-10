@@ -62,7 +62,7 @@
 				endTime: moment(ctrl.toTime)
 			};
 			var timezone = ctrl.containerCtrl.getCurrentTimezone();
-			ctrl.invalidAgents = activityValidator.validateInputForOvertime(timeRange, ctrl.selectedDefinitionSetId, timezone);
+			ctrl.invalidAgents = activityValidator.validateInputForOvertime(ctrl.containerCtrl.scheduleManagementSvc, timeRange, ctrl.selectedDefinitionSetId, timezone);
 		};
 
 		ctrl.addOvertime = function() {

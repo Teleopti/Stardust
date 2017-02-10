@@ -373,20 +373,20 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(selectedPersonInfoList.length).toEqual(2);
 	}));
 
-	it("When scheduleManagementService contains more records than page size, display according to pagination options  -- only occurs when select all agents on every page is on", function() {
+	it("scheduleManagementService should contains same records with table", function() {
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
 			createSchedule('2222', '2015-01-01', null, [{ startHour: 8, endHour: 16 }])
 		];
 
 		scheduleManagement.groupScheduleVm = { Schedules: schedules }
-		controller.paginationOptions = { pageSize: 1, pageNumber: 2 };
 		controller.init();
 		
 		scope.$apply();
 
-		expect(controller.scheduleVm.Schedules.length).toEqual(1);
-		expect(controller.scheduleVm.Schedules[0].PersonId).toEqual('2222');
+		expect(controller.scheduleVm.Schedules.length).toEqual(2);
+		expect(controller.scheduleVm.Schedules[0].PersonId).toEqual('1111');
+		expect(controller.scheduleVm.Schedules[1].PersonId).toEqual('2222');
 	});
 
 	it("can initialize current page selection status correctly when all people in current page are selected", inject(function () {
