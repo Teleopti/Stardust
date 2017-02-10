@@ -28,7 +28,7 @@ namespace Stardust.Node.Timers
 
 		public TrySendJobDetailToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                        IHttpSender httpSender,
-		                                        double interval = 500) : base(interval)
+		                                        double interval = 2000) : base(interval)
 		{
 			_httpSender = httpSender;
 			_cancellationTokenSource = new CancellationTokenSource();
