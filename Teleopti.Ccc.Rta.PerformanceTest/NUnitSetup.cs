@@ -60,6 +60,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			}, this);
 
+			HangfireClientStarter.Start();
+
 			if (!haveDatabases)
 			{
 				StateHolderProxyHelper.SetupFakeState(
@@ -79,8 +81,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 				StateHolderProxyHelper.Logout();
 			}
-
-			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))

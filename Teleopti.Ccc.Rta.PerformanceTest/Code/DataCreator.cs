@@ -253,8 +253,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			// to create/update any data that is periodically kept up to date
 			// like the rule mappings
-			_eventPublisher.Publish(new TenantMinuteTickEvent());
-			_eventPublisher.Publish(new TenantHourTickEvent());
+			_eventPublisher.Publish(new TenantDayTickEvent(), new TenantHourTickEvent(), new TenantMinuteTickEvent());
 		}
 
 		public IEnumerable<string> LoggedOffStates()
