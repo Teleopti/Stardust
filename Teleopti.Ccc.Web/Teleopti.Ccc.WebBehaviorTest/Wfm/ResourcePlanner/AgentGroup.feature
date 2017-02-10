@@ -7,6 +7,7 @@ Feature: AgentGroup
 		so that John can plan for Invoice in London,
 		so that Fixed agents in London have exactly 2 DOs off per week.
 
+@ignore
 @OnlyRunIfEnabled('Wfm_ResourcePlanner_AgentGroup_42871')
 Scenario: Create agent group
 	Given there is a site named 'Site 1'
