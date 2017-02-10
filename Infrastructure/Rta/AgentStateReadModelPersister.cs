@@ -263,44 +263,19 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
+		public void UpdateEmploymentNumber(Guid personId, string employmentNumber)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
-MERGE INTO [ReadModel].[AgentState] AS T
-	USING (
-		VALUES
-		(
-			:PersonId,
-			:EmploymentNumber
-			
-		)
-	) AS S (
-			PersonId,
-			EmploymentNumber
-		)
-	ON 
-		T.PersonId = S.PersonId
-	WHEN NOT MATCHED THEN
-		INSERT
-		(
-			PersonId,
-			EmploymentNumber
-			
-		) VALUES (
-			S.PersonId,
-			S.EmploymentNumber
-		)
-	WHEN MATCHED THEN
-		UPDATE SET
-			EmploymentNumber = S.EmploymentNumber
-;")
+UPDATE [ReadModel].[AgentState]
+SET EmploymentNumber = :EmploymentNumber
+WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.SetParameter("EmploymentNumber", employmentNumber)
 				.ExecuteUpdate();
 		}
 
-		public void UpsertName(Guid personId, string firstName, string lastName)
+		public void UpdateName(Guid personId, string firstName, string lastName)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"

@@ -475,8 +475,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldPersistEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
+			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId });
 
-			Target.UpsertEmploymentNumber(personId, "123");
+			Target.UpdateEmploymentNumber(personId, "123");
 
 			Target.Load(personId)
 				.EmploymentNumber.Should().Be("123");
@@ -486,9 +487,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.UpsertEmploymentNumber(personId, "123");
+			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId });
+			Target.UpdateEmploymentNumber(personId, "123");
 
-			Target.UpsertEmploymentNumber(personId, "abc");
+			Target.UpdateEmploymentNumber(personId, "abc");
 
 			Target.Load(personId)
 				.EmploymentNumber.Should().Be("abc");
@@ -498,8 +500,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldPersistFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
+			Target.PersistWithAssociation(new AgentStateReadModelForTest() {PersonId = personId});
 
-			Target.UpsertName(personId,"bill","gates");
+			Target.UpdateName(personId,"bill","gates");
 
 			Target.Load(personId).FirstName.Should().Be("bill");
 			Target.Load(personId).LastName.Should().Be("gates");
@@ -509,9 +512,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldUpdateFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
+			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId });
 
-			Target.UpsertName(personId, "bill", "clinton");
-			Target.UpsertName(personId, "bill", "gates");
+			Target.UpdateName(personId, "bill", "clinton");
+			Target.UpdateName(personId, "bill", "gates");
 
 			Target.Load(personId).FirstName.Should().Be("bill");
 			Target.Load(personId).LastName.Should().Be("gates");

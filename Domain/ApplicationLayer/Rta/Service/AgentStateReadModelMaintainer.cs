@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
 		{
-			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
+			_persister.UpdateEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
 		}
 
 		[UnitOfWork]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
-			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
+			_persister.UpdateName(@event.PersonId, @event.FirstName, @event.LastName);
 		}
 
 		[UnitOfWork]

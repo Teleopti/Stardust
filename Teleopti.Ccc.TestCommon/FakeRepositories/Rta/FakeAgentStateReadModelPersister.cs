@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(info.PersonId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
+		public void UpdateEmploymentNumber(Guid personId, string employmentNumber)
 		{
 			AgentStateReadModel existing;
 			if (!_data.TryRemove(personId, out existing))
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
-		public void UpsertName(Guid personId, string firstName, string lastName)
+		public void UpdateName(Guid personId, string firstName, string lastName)
 		{
 			AgentStateReadModel existing;
 			if (!_data.TryRemove(personId, out existing))
