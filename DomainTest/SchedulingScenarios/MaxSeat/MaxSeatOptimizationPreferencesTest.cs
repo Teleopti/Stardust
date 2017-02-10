@@ -122,8 +122,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentScheduledForAnHourDatas = MaxSeatDataFactory.CreateAgentWithAssignments(period, new Team { Site = site }, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
 			var agentDatas = MaxSeatDataFactory.CreateAgentWithAssignments(period, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0)).ToArray();
 			var agent = agentDatas.First().Agent;
-			var agentScheduledForAnHourAsses = agentScheduledForAnHourDatas.Select(maxSeatData => maxSeatData.Assignment).Cast<IScheduleData>();
-			var agentAsses = agentDatas.Select(maxSeatData => maxSeatData.Assignment).Cast<IScheduleData>();
+			var agentScheduledForAnHourAsses = agentScheduledForAnHourDatas.Select(maxSeatData => maxSeatData.Assignment);
+			var agentAsses = agentDatas.Select(maxSeatData => maxSeatData.Assignment);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, agentAsses.Union(agentScheduledForAnHourAsses));
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Shifts.KeepShiftCategories = true;
@@ -161,9 +161,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
 		}
 
-		[Test]
-		[Ignore("42593")]
-		public void ShouldRespectKeepShifts50PercentSingleAgent()
+		[TestCase(0, ExpectedResult = 2)]
+		[TestCase(0.5, ExpectedResult = 1)]
+		[TestCase(1, ExpectedResult = 0)]
+		public int ShouldRespectKeepShiftsPercentSettingSingleAgent(double percent)
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
@@ -177,21 +178,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentScheduledForAnHourDatas = MaxSeatDataFactory.CreateAgentWithAssignments(period, new Team { Site = site }, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
 			var agentDatas = MaxSeatDataFactory.CreateAgentWithAssignments(period, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0)).ToArray();
 			var agent = agentDatas.First().Agent;
-			var agentScheduledForAnHourAsses = agentScheduledForAnHourDatas.Select(maxSeatData => maxSeatData.Assignment).Cast<IScheduleData>();
-			var agentAsses = agentDatas.Select(maxSeatData => maxSeatData.Assignment).Cast<IScheduleData>();
+			var agentScheduledForAnHourAsses = agentScheduledForAnHourDatas.Select(maxSeatData => maxSeatData.Assignment);
+			var agentAsses = agentDatas.Select(maxSeatData => maxSeatData.Assignment);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, agentAsses.Union(agentScheduledForAnHourAsses));
 
 			var optPreferences = new OptimizationPreferences
 			{
 				Extra = { UseTeams = false, UseTeamBlockOption = false, TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent) },
-				Shifts = { KeepShifts = true, KeepShiftsValue = 0.5d },
+				Shifts = { KeepShifts = true, KeepShiftsValue = percent },
 				Advanced = { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats }
 			};
 
 			Target.Optimize(new NoSchedulingProgress(), period, new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 
-			schedules[agent].ScheduledDay(date).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(new TimeSpan(9, 0, 0));
-			schedules[agent].ScheduledDay(date.AddDays(1)).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
+			return schedules[agent].ScheduledDayCollection(period).Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay.Hours == 9);
 		}
 
 		[TestCase(TeamBlockType.Team)]

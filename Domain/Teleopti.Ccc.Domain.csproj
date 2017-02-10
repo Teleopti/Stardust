@@ -547,7 +547,8 @@
     <Compile Include="Notification\NotifyAppSubscriptions.cs" />
     <Compile Include="Notification\UserDevices.cs" />
     <Compile Include="Optimization\Filters\SkillFilter.cs" />
-    <Compile Include="Optimization\OptimizationLimitsFactory.cs" />
+    <Compile Include="Optimization\OptimizationLimitsForAgent.cs" />
+    <Compile Include="Optimization\OptimizationLimitsForAgentFactory.cs" />
     <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />
     <Compile Include="Optimization\IIntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\AgentGroup.cs" />

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
 		private readonly ScheduledTeamBlockInfoFactory _scheduledTeamBlockInfoFactory;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-		private readonly OptimizationLimitsFactory _optimizationLimitsFactory;
+		private readonly OptimizationLimitsForAgentFactory _optimizationLimitsForAgentFactory;
 		private readonly SetMainShiftOptimizeActivitySpecificationForTeamBlock _setMainShiftOptimizeActivitySpecificationForTeamBlock;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			ScheduleChangesAffectedDates scheduleChangesAffectedDates,
 			ScheduledTeamBlockInfoFactory scheduledTeamBlockInfoFactory,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
-			OptimizationLimitsFactory optimizationLimitsFactory,
+			OptimizationLimitsForAgentFactory optimizationLimitsForAgentFactory,
 			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
 			_scheduledTeamBlockInfoFactory = scheduledTeamBlockInfoFactory;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
-			_optimizationLimitsFactory = optimizationLimitsFactory;
+			_optimizationLimitsForAgentFactory = optimizationLimitsForAgentFactory;
 			_setMainShiftOptimizeActivitySpecificationForTeamBlock = setMainShiftOptimizeActivitySpecificationForTeamBlock;
 		}
 
@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlockInfos = _scheduledTeamBlockInfoFactory.Create(period, agentsToOptimize, schedules, allAgents, schedulingOptions);
 			var allSkillDaysExceptMaxSeat = allSkillDays.Except(x => x.Skill is MaxSeatSkill).ToArray();
+			var optimizationLimits = _optimizationLimitsForAgentFactory.Create(optimizationPreferences, teamBlockInfos);
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), false, period.Extend(1)))
 			{
@@ -118,7 +119,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					{
 						var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates);
 						_setMainShiftOptimizeActivitySpecificationForTeamBlock.Execute(optimizationPreferences, teamBlockInfo, schedulingOptions);
-						var optimizationLimits = _optimizationLimitsFactory.Create(optimizationPreferences, teamBlockInfo);
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 								_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) &&
 								_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) &&
 								maxPeaksAfter.IsBetterThan(maxPeaksBefore, scheduleCallback.ModifiedDates) && 
-								!optimizationLimits.MoveMaxDaysOverLimit())
+								!optimizationLimits.ForAgent(teamBlockInfo.TeamInfo.GroupMembers.First()).MoveMaxDaysOverLimit())
 						{
 							maxSeatCallback?.DatesOptimized(scheduleCallback.ModifiedDates);
 						}
