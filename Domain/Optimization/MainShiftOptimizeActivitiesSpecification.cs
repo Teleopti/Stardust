@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool isIdenticalPeriodBefore(IVisualLayerCollection other)
         {
-			var allowPeriod = allowAlterBetweenDateTimePeriod();
-			var start = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone).AddDays(-1).Add(allowPeriod.EndDateTime.TimeOfDay);
-			var periodBefore = new DateTimePeriod(start, allowAlterBetweenDateTimePeriod().StartDateTime);
+            DateTimePeriod periodBefore = new DateTimePeriod(new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                                                             allowAlterBetweenDateTimePeriod().
+                                                                 StartDateTime);
                         
             IVisualLayerCollection shiftLayersOutsideBefore =
                 other.FilterLayers(periodBefore);
@@ -111,9 +111,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool isIdenticalPeriodAfter(IVisualLayerCollection other)
         {
-	        var allowPeriod = allowAlterBetweenDateTimePeriod();
-	        var end = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone).AddDays(1).Add(allowPeriod.StartDateTime.TimeOfDay);
-					var periodAfter = new DateTimePeriod(allowPeriod.EndDateTime, end);
+            DateTimePeriod periodAfter =
+                new DateTimePeriod(allowAlterBetweenDateTimePeriod().EndDateTime,
+                                   new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
             IVisualLayerCollection shiftLayersOutsideAfter =
                 other.FilterLayers(periodAfter);

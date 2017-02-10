@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.True();
 		}
 
-		[Test]
+		[Test, Ignore("#42593")]
 		public void ShouldRespectAlterBetweenBlockTwoDays()
 		{
 			var site = new Site("_") { MaxSeats = 0 }.WithId();
