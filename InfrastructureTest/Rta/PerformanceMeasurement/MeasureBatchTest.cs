@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -66,10 +65,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			createData();
 
 			(
-				from parallelTransactions in new[] { 5, 7, 9 }
-				from transactionSize in new[] { 80, 100, 150 }
-				from batchSize in new[] { 50, 500, 1000}
-				from variation in new[] { "A", "B", "C" }
+				from parallelTransactions in Attribute.ParallelTransactions()
+				from transactionSize in Attribute.TransactionSize()
+				from batchSize in Attribute.BatchSize()
+				from variation in Attribute.Variation()
 				select new { parallelTransactions, transactionSize, batchSize, variation }
 			)
 			.Select(x =>
@@ -77,8 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 				Config.FakeSetting("RtaBatchParallelTransactions", x.parallelTransactions.ToString());
 				Config.FakeSetting("RtaBatchMaxTransactionSize", x.transactionSize.ToString());
 
-				var states = 5000;
-				var batches = Enumerable.Range(0, states)
+				var batches = Enumerable.Range(0, 5000)
 					.Batch(x.batchSize)
 					.Select(s => new BatchForTest
 					{
@@ -92,11 +90,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 							})
 							.ToArray()
 					}).ToArray();
+
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-
 				batches.ForEach(Rta.SaveStateBatch);
-
 				stopwatch.Stop();
 
 				return new

@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			createData();
 
 			(
-				from parallelTransactions in new[] {6, 7, 8}
-				from transactionSize in new[] {90, 100, 110}
-				from variation in new[] {"A", "B", "C"}
+				from parallelTransactions in Attribute.ParallelTransactions()
+				from transactionSize in Attribute.TransactionSize()
+				from variation in Attribute.Variation()
 				select new {parallelTransactions, transactionSize, variation}
 			)
 			.Select(x =>

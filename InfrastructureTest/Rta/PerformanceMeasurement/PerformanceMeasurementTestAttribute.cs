@@ -57,6 +57,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			SetupFixtureForAssembly.RestoreAnalyticsDatabase();
 		}
 
+		public IEnumerable<int> ParallelTransactions() => new[] {5, 7, 9};
+		public IEnumerable<int> TransactionSize() => new[] {50, 80, 100, 120, 150};
+		public IEnumerable<int> BatchSize() => new[] {50, 500, 1000};
+		public IEnumerable<string> Variation() => new[] {"A", "B", "C"};
+
 		public void MakeUsersFaster(IEnumerable<string> userCodes)
 		{
 

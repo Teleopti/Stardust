@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -82,9 +81,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			createData();
 
 			(
-				from parallelTransactions in new[] { 4,6,8 }
-				from transactionSize in new[] {200,500,1500 }
-				from variation in new[] { "A", "B", "C" }
+				from parallelTransactions in Attribute.ParallelTransactions()
+				from transactionSize in Attribute.TransactionSize()
+				from variation in Attribute.Variation()
 				select new { parallelTransactions, transactionSize, variation }
 			)
 			.Select(x =>

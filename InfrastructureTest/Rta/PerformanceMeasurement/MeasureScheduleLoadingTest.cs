@@ -99,12 +99,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			createData();
 
 			(
-				from batchSize in new[] { 50, 500, 1000 }
-				from variation in new[] { "A", "B", "C" }
-				select new { batchSize, variation }
+				from parallelTransactions in Attribute.ParallelTransactions()
+				from transactionSize in Attribute.TransactionSize()
+				from batchSize in Attribute.BatchSize()
+				from variation in Attribute.Variation()
+				select new { parallelTransactions, transactionSize, batchSize, variation }
 			)
 			.Select(x =>
 			{
+				Config.FakeSetting("RtaBatchParallelTransactions", x.parallelTransactions.ToString());
+				Config.FakeSetting("RtaBatchMaxTransactionSize", x.transactionSize.ToString());
+
 				var batches = userCodes
 					.Batch(x.batchSize)
 					.Select(u => new BatchForTest
@@ -120,9 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-
 				batches.ForEach(Rta.SaveStateBatch);
-
 				stopwatch.Stop();
 
 				return new
