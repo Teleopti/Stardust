@@ -1062,7 +1062,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(personRequest.BusinessUnit.Id.GetValueOrDefault(), now.AddHours(-3));
 			Target.Process(personRequest, period.StartDateTime);
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
-			denyCommand.DenyReason.Should().Contain("Please contact system administrator");
+			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", agent.PermissionInformation.Culture()));
 		}
 
 		[Test]
@@ -1091,7 +1091,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(personRequest.BusinessUnit.Id.GetValueOrDefault(), now.AddHours(-1));
 			Target.Process(personRequest, period.StartDateTime);
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
-			denyCommand.DenyReason.Should().Contain("Please contact system administrator");
+			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", agent.PermissionInformation.Culture()));
 		}
 
 		[Test]

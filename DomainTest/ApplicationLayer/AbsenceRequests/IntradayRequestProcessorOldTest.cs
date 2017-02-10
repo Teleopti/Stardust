@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -1061,7 +1060,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(personRequest.BusinessUnit.Id.GetValueOrDefault(), now.AddHours(-3));
 			Target.Process(personRequest, period.StartDateTime);
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
-			denyCommand.DenyReason.Should().Contain("Please contact system administrator");
+			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", agent.PermissionInformation.Culture()));	
 		}
 
 		[Test]
@@ -1090,7 +1089,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(personRequest.BusinessUnit.Id.GetValueOrDefault(), now.AddHours(-1));
 			Target.Process(personRequest, period.StartDateTime);
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
-			denyCommand.DenyReason.Should().Contain("Please contact system administrator");
+			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", agent.PermissionInformation.Culture()));
 		}
 
 		[Test]
