@@ -14,12 +14,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class AgentStateReadModelPersister : IAgentStateReadModelPersister
 	{
-		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
 		private readonly DeadLockVictimThrower _deadLockVictimThrower;
 
-		public AgentStateReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IJsonSerializer serializer, IJsonDeserializer deserializer, DeadLockVictimThrower deadLockVictimThrower)
+		public AgentStateReadModelPersister(
+			ICurrentUnitOfWork unitOfWork,
+			IJsonSerializer serializer,
+			IJsonDeserializer deserializer,
+			DeadLockVictimThrower deadLockVictimThrower)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
@@ -33,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
 
 			var query = _unitOfWork.Current()
-				.CreateSqlQuery(@"
+				.Session().CreateSQLQuery(@"
 					UPDATE [ReadModel].[AgentState]
 					SET
 						ReceivedTime = :ReceivedTime,
@@ -80,7 +84,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			if (updated == 0)
 			{
 				_unitOfWork.Current()
-					.CreateSqlQuery(@"
+					.Session().CreateSQLQuery(@"
 						INSERT INTO [ReadModel].[AgentState]
 						(
 							PersonId,
@@ -158,7 +162,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public virtual void SetDeleted(Guid personId, DateTime expiresAt)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery(
+				.Session().CreateSQLQuery(
 					@"UPDATE [ReadModel].[AgentState] SET IsDeleted=1, ExpiresAt = :ExpiresAt WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.SetParameter("ExpiresAt", expiresAt)
@@ -169,7 +173,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public void DeleteOldRows(DateTime now)
 		{
 			while (_unitOfWork.Current()
-				.CreateSqlQuery(
+				.Session().CreateSQLQuery(
 					@"DELETE TOP (100) FROM [ReadModel].[AgentState] WHERE ExpiresAt <= :now")
 				.SetParameter("now", now)
 				.ExecuteUpdate() > 0)
@@ -181,16 +185,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public AgentStateReadModel Load(Guid personId)
 		{
 			var internalModel = _unitOfWork.Current()
-				.CreateSqlQuery(@"SELECT TOP 1 * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
+				.Session().CreateSQLQuery(@"SELECT TOP 1 * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.UniqueResult<internalModel>();
 			if (internalModel == null) return null;
 
-			((AgentStateReadModel)internalModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(internalModel.Shift);
+			((AgentStateReadModel) internalModel).Shift =
+				_deserializer.DeserializeObject<AgentStateActivityReadModel[]>(internalModel.Shift);
 			internalModel.Shift = null;
-			((AgentStateReadModel)internalModel).OutOfAdherences =
+			((AgentStateReadModel) internalModel).OutOfAdherences =
 				_deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(internalModel.OutOfAdherences);
 			internalModel.OutOfAdherences = null;
 
@@ -200,7 +205,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public void UpsertAssociation(AssociationInfo info)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery(@"
+				.Session().CreateSQLQuery(@"
 MERGE INTO [ReadModel].[AgentState] AS T
 	USING (
 		VALUES
@@ -261,7 +266,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
 		{
 			_unitOfWork.Current()
-	.CreateSqlQuery(@"
+				.Session().CreateSQLQuery(@"
 MERGE INTO [ReadModel].[AgentState] AS T
 	USING (
 		VALUES
@@ -290,15 +295,15 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		UPDATE SET
 			EmploymentNumber = S.EmploymentNumber
 ;")
-	.SetParameter("PersonId", personId)
-	.SetParameter("EmploymentNumber", employmentNumber)
-	.ExecuteUpdate();
+				.SetParameter("PersonId", personId)
+				.SetParameter("EmploymentNumber", employmentNumber)
+				.ExecuteUpdate();
 		}
 
 		public void UpsertName(Guid personId, string firstName, string lastName)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery(@"
+				.Session().CreateSQLQuery(@"
 UPDATE [ReadModel].[AgentState]
 SET FirstName = :FirstName,
 LastName = :LastName
@@ -312,7 +317,7 @@ WHERE PersonId = :PersonId")
 		public void UpdateTeamName(Guid teamId, string name)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery(@"
+				.Session().CreateSQLQuery(@"
 UPDATE [ReadModel].[AgentState]
 SET TeamName = :TeamName
 WHERE TeamId = :TeamId")
@@ -324,7 +329,7 @@ WHERE TeamId = :TeamId")
 		public void UpdateSiteName(Guid siteId, string name)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery(@"
+				.Session().CreateSQLQuery(@"
 UPDATE [ReadModel].[AgentState]
 SET SiteName = :SiteName
 WHERE SiteId = :SiteId")

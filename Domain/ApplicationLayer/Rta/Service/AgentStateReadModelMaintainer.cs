@@ -22,25 +22,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_persister = persister;
 		}
 
-		[ReadModelUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
 		{
 			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
 		}
 
-		[ReadModelUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
 			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
 		}
 
-		[ReadModelUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(TeamNameChangedEvent @event)
 		{
 			_persister.UpdateTeamName(@event.TeamId, @event.Name);
 		}
 
-		[ReadModelUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(SiteNameChangedEvent @event)
 		{
 			_persister.UpdateSiteName(@event.SiteId, @event.Name);
