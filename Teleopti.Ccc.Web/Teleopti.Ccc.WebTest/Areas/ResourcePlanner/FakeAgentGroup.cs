@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	public class FakeAgentGroup:IAgentGroup
+	public class FakeAgentGroup : IAgentGroup
 	{
 		private readonly Guid _id;
 		public IEnumerable<IFilter> Filters { get; }
