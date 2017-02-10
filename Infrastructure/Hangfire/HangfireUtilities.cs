@@ -9,52 +9,44 @@ using Hangfire.Storage;
 using Hangfire.Storage.Monitoring;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	public class HangfireUtilities : ICleanHangfire
 	{
-		private readonly Lazy<JobStorage> _storage;
-		private readonly Lazy<IBackgroundJobClient> _backgroundJobs;
-		private readonly Lazy<RecurringJobManager> _recurringJobs;
-		private readonly WithAnalyticsUnitOfWork _withUnitOfWork;
+		private readonly JobStorage _storage;
+		private readonly IBackgroundJobClient _backgroundJobs;
+		private readonly RecurringJobManager _recurringJobs;
+		private readonly IMonitoringApi _monitoring;
 
 		public HangfireUtilities(
-			Lazy<JobStorage> storage,
-			Lazy<IBackgroundJobClient> backgroundJobs,
-			Lazy<RecurringJobManager> recurringJobs,
-			WithAnalyticsUnitOfWork withUnitOfWork)
+			JobStorage storage,
+			IBackgroundJobClient backgroundJobs,
+			RecurringJobManager recurringJobs)
 		{
 			_storage = storage;
 			_backgroundJobs = backgroundJobs;
 			_recurringJobs = recurringJobs;
-			_withUnitOfWork = withUnitOfWork;
+			_monitoring = _storage.GetMonitoringApi();
 		}
-
-		private IMonitoringApi monitoring => _storage.Value.GetMonitoringApi();
-		private IBackgroundJobClient backgroundJobs => _backgroundJobs.Value;
-		private RecurringJobManager recurringJobs => _recurringJobs.Value;
 
 		public void TriggerReccuringJobs()
 		{
-			var jobs = _storage.Value.GetConnection().GetRecurringJobs();
+			var jobs = _storage.GetConnection().GetRecurringJobs();
 			jobs.ForEach(j =>
 			{
-				recurringJobs.Trigger(j.Id);
+				_recurringJobs.Trigger(j.Id);
 			});
 		}
 
 		public void CleanQueue()
 		{
 			foreach (var queueName in Queues.OrderOfPriority())
-				deleteJobs(() => monitoring.EnqueuedJobs(queueName, 0, 10).Select(x => x.Key), WorkerIteration);
-			deleteJobs(() => monitoring.ScheduledJobs(0, 10).Select(x => x.Key), null);
-			deleteJobs(() => monitoring.FailedJobs(0, 10).Select(x => x.Key), null);
-			deleteJobs(() => monitoring.SucceededJobs(0, 10).Select(x => x.Key), null);
+				deleteJobs(() => _monitoring.EnqueuedJobs(queueName, 0, 10).Select(x => x.Key), WorkerIteration);
+			deleteJobs(() => _monitoring.ScheduledJobs(0, 10).Select(x => x.Key), null);
+			deleteJobs(() => _monitoring.FailedJobs(0, 10).Select(x => x.Key), null);
+			deleteJobs(() => _monitoring.SucceededJobs(0, 10).Select(x => x.Key), null);
 		}
 
 		private void deleteJobs(Func<IEnumerable<string>> ids, Action afterDelete)
@@ -64,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			{
 				jobs.ForEach(j =>
 				{
-					backgroundJobs.Delete(j);
+					_backgroundJobs.Delete(j);
 					afterDelete?.Invoke();
 				});
 				jobs = ids.Invoke();
@@ -75,13 +67,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		{
 			// will hang if nothing to work with
 			var count = Queues.OrderOfPriority()
-				.Select(x => monitoring.EnqueuedCount(x))
+				.Select(x => _monitoring.EnqueuedCount(x))
 				.Sum();
 			if (count > 0)
 				new Worker(Queues.OrderOfPriority().ToArray()).Execute(
 					new BackgroundProcessContext(
 						"fake server",
-						_storage.Value,
+						_storage,
 						new Dictionary<string, object>(),
 						new CancellationToken()
 					));
@@ -91,33 +83,33 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		{
 			foreach (var queueName in Queues.OrderOfPriority())
 			{
-				monitoring
+				_monitoring
 				.EnqueuedJobs(queueName, 0, 1000)
-				.ForEach(j => backgroundJobs.Delete(j.Key));
+				.ForEach(j => _backgroundJobs.Delete(j.Key));
 			}
 
-			monitoring
+			_monitoring
 				.ScheduledJobs(0, 1000)
-				.ForEach(j => backgroundJobs.Delete(j.Key));
+				.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
 
 		public long NumberOfJobsInQueue(string name)
 		{
-			return monitoring.EnqueuedCount(name);
+			return _monitoring.EnqueuedCount(name);
 		}
 
 		public long NumberOfFailedJobs()
 		{
-			return monitoring.FailedCount();
+			return _monitoring.FailedCount();
 		}
 
 		public long NumberOfScheduledJobs()
 		{
-			return monitoring.ScheduledCount();
+			return _monitoring.ScheduledCount();
 		}
 		public long NumberOfProcessingJobs()
 		{
-			return monitoring.ProcessingCount();
+			return _monitoring.ProcessingCount();
 		}
 
 		public void CleanFailedJobsBefore(DateTime time)
@@ -128,7 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var expiredFailed = new Dictionary<string, FailedJobDto>();
 			while (true)
 			{
-				var failedJobs = monitoring.FailedJobs(iteration*batch, batch);
+				var failedJobs = _monitoring.FailedJobs(iteration*batch, batch);
 				 failedJobs
 					.Where(x => x.Value.FailedAt.HasValue && x.Value.FailedAt < time)
 					.ForEach(x => expiredFailed[x.Key] = x.Value);
@@ -139,7 +131,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				iteration++;
 			}
 
-			expiredFailed.ForEach(j => backgroundJobs.Delete(j.Key));
+			expiredFailed.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
 
 		[TestLog]
@@ -151,11 +143,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				long fetchedCount = 0;
 				foreach (var queueName in Queues.OrderOfPriority())
 				{
-					enqueuedCount += monitoring.EnqueuedCount(queueName);
-					fetchedCount += monitoring.FetchedCount(queueName);
+					enqueuedCount += _monitoring.EnqueuedCount(queueName);
+					fetchedCount += _monitoring.FetchedCount(queueName);
 				}
-				var scheduledCount = monitoring.ScheduledCount();
-				var processingCount = monitoring.ProcessingCount();
+				var scheduledCount = _monitoring.ScheduledCount();
+				var processingCount = _monitoring.ProcessingCount();
 
 				// all is well
 				if (enqueuedCount + fetchedCount + scheduledCount + processingCount == 0)
@@ -168,37 +160,22 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				Thread.Sleep(20);
 			}
 
-			if (monitoring.FailedCount() <= 0) return;
+			if (_monitoring.FailedCount() <= 0) return;
 
 			// booom!
 			var exceptions = (
-				from j in monitoring.FailedJobs(0, 10)
+				from j in _monitoring.FailedJobs(0, 10)
 				select new Exception($"Hangfire job failure: {j.Value.ExceptionDetails}")
 			).ToArray();
-			deleteJobs(() => monitoring.FailedJobs(0, 1000).Select(x => x.Key), null);
+			deleteJobs(() => _monitoring.FailedJobs(0, 1000).Select(x => x.Key), null);
 			throw new AggregateException("Hangfire job has failed!", exceptions);
 		}
 
 		public void RequeueScheduledJobs()
 		{
-			monitoring
+			_monitoring
 				.ScheduledJobs(0, 100)
-				.ForEach(j => backgroundJobs.Requeue(j.Key));
-		}
-
-		// delete in batches so it doesn't time out
-		public void DeleteQueues()
-		{
-			Func<ICurrentAnalyticsUnitOfWork, int> delete = uow => uow.Current().Session()
-				.CreateSQLQuery("DELETE TOP (1000) FROM HangFire.Job")
-				.ExecuteUpdate();
-
-			_withUnitOfWork.Do(uow =>
-			{
-				var deleted = 1;
-				while (deleted != 0)
-					deleted = delete.Invoke(uow);
-			});
+				.ForEach(j => _backgroundJobs.Requeue(j.Key));
 		}
 	}
 }

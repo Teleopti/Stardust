@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			if (!haveDatabases)
 				DataSourceHelper.CreateDatabases();
 
-			IntegrationIoCTest.AllEventPublishingsAsSync = false;
 			IntegrationIoCTest.Setup(builder =>
 			{
 				builder.RegisterType<TestConfiguration>().SingleInstance();
@@ -60,8 +59,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			}, this);
-
-			HangfireClientStarter.Start();
 
 			if (!haveDatabases)
 			{
@@ -82,6 +79,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 				StateHolderProxyHelper.Logout();
 			}
+
+			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
