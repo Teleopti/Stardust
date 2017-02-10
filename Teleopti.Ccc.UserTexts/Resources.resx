@@ -15568,4 +15568,8 @@ Do you want to participate?</value>
     <value>Teleopti Customer Web</value>
     <comment>Teleopti Customer Web</comment>
   </data>
+  <data name="DenyReasonTechnicalIssues" xml:space="preserve">
+    <value>Your request has been denied due to technical issues. Please try again later. </value>
+    <comment>Replace DenyDueToTechnicalProblems, be more general</comment>
+  </data>
 </root>

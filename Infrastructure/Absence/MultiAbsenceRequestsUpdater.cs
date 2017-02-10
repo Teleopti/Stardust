@@ -231,65 +231,81 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			var stopwatch = new Stopwatch();
 			foreach (var personRequest in requests)
 			{
-				requestLogger.Debug($"Start processing absence request for {personRequest.Person.Name} for period {personRequest.Request.Period}");
-				var absenceRequest = personRequest.Request as IAbsenceRequest;
-				if(absenceRequest == null) continue;
-
-				var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-				var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
-
-				var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(_scheduleDayChangeCallback);
-
-				var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
-
-
-				IPersonAccountCollection allAccounts;
-				if (!_schedulingResultStateHolder.AllPersonAccounts.TryGetValue(absenceRequest.Person, out allAccounts))
-					allAccounts = new PersonAccountCollection(absenceRequest.Person);
-
-				var affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
-				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(NewBusinessRuleCollection.Minimum(), currentScenario, _schedulingResultStateHolder);
-
-				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				var validatorList = getValidatorList(personRequest.Id.Value, mergedPeriod);
-				var processAbsenceRequest = getAbsenceRequestProcess(personRequest.Id.Value, mergedPeriod);
-
-				if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
+				
+					requestLogger.Debug($"Start processing absence request for {personRequest.Person.Name} for period {personRequest.Request.Period}");
+					var absenceRequest = personRequest.Request as IAbsenceRequest;
+					if (absenceRequest == null) continue;
+				try
 				{
-					setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
-					processAbsenceRequest = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, processAbsenceRequest);
+					var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+					var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
+
+					var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(_scheduleDayChangeCallback);
+
+					var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
+
+
+					IPersonAccountCollection allAccounts;
+					if (!_schedulingResultStateHolder.AllPersonAccounts.TryGetValue(absenceRequest.Person, out allAccounts))
+						allAccounts = new PersonAccountCollection(absenceRequest.Person);
+
+					var affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
+					var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(NewBusinessRuleCollection.Minimum(), currentScenario, _schedulingResultStateHolder);
+
+					var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
+					var validatorList = getValidatorList(personRequest.Id.Value, mergedPeriod);
+					var processAbsenceRequest = getAbsenceRequestProcess(personRequest.Id.Value, mergedPeriod);
 
 					if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
 					{
-						simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
-					}
-				}
+						setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
+						processAbsenceRequest = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, processAbsenceRequest);
 
-				var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
-					undoRedoContainer,
-					requestApprovalServiceScheduler,
-					_authorization,
-					()
-						=>
+						if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
 						{
-							if (affectedPersonAbsenceAccount != null)
-								trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
-						});
-				
-				var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
+							simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
+						}
+					}
+
+					var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
+						undoRedoContainer,
+						requestApprovalServiceScheduler,
+						_authorization,
+						()
+							=>
+							{
+								if (affectedPersonAbsenceAccount != null)
+									trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
+							});
+
+					var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 						_schedulingResultStateHolder,
 						getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod),
 						_resourceOptimizationHelper,
 						_budgetGroupAllowanceSpecification,
 						_budgetGroupHeadCountSpecification);
 
-				stopwatch.Restart();
-				processAbsenceRequest.Process(absenceRequest,
-											  requiredForProcessingAbsenceRequest,
-											  requiredForHandlingAbsenceRequest,
-											  validatorList);
-				stopwatch.Stop();
-				_feedback.SendProgress($"processAbsenceRequest.process(..) took {stopwatch.Elapsed}");
+					stopwatch.Restart();
+					processAbsenceRequest.Process(absenceRequest,
+												  requiredForProcessingAbsenceRequest,
+												  requiredForHandlingAbsenceRequest,
+												  validatorList);
+					stopwatch.Stop();
+				}
+				catch (Exception exp)
+				{
+					_feedback.SendProgress($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp.Message + exp.StackTrace);
+					logger.Error($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp.Message + exp.StackTrace);
+					var command = new DenyRequestCommand
+					{
+						PersonRequestId = personRequest.Id.GetValueOrDefault(),
+						DenyReason = UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", absenceRequest.Person.PermissionInformation.Culture()),
+						DenyOption = PersonRequestDenyOption.None
+					};
+
+					_commandDispatcher.Execute(command);
+				}
+
 			}
 		}
 

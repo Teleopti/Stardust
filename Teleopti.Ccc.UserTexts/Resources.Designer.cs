@@ -8696,6 +8696,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your request has been denied due to technical issues. Please try again later. .
+        /// </summary>
+        public static string DenyReasonTechnicalIssues {
+            get {
+                return ResourceManager.GetString("DenyReasonTechnicalIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {
