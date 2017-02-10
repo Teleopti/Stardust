@@ -15,20 +15,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ActivityChangeChecker : IActivityChangeCheckerFromScheduleChangeProcessor
 	{
 		private readonly IContextLoader _contextLoader;
-		private readonly RtaProcessor _processor;
 
-		public ActivityChangeChecker(IContextLoader contextLoader, RtaProcessor processor)
+		public ActivityChangeChecker(IContextLoader contextLoader)
 		{
 			_contextLoader = contextLoader;
-			_processor = processor;
 		}
 
 		public void CheckForActivityChanges()
 		{
-			_contextLoader.ForActivityChanges(person =>
-			{
-				_processor.Process(person);
-			});
+			_contextLoader.ForActivityChanges();
 		}
 	}
 }

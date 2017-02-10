@@ -1,5 +1,8 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -11,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
-		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 
 		public RtaProcessor(
 			ShiftEventPublisher shiftEventPublisher,
@@ -19,8 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateEventPublisher stateEventPublisher,
 			AdherenceEventPublisher adherenceEventPublisher,
 			IEventPublisherScope eventPublisherScope,
-			ICurrentEventPublisher eventPublisher,
-			IAgentStateReadModelUpdater agentStateReadModelUpdater)
+			ICurrentEventPublisher eventPublisher)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
@@ -28,14 +29,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_adherenceEventPublisher = adherenceEventPublisher;
 			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
-			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 		}
 
 		[LogInfo]
-		public virtual void Process(Context context)
+		public virtual IEnumerable<IEvent> Process(Context context)
 		{
 			if (!context.ShouldProcessState())
-				return;
+				return Enumerable.Empty<IEvent>();
 
 			var eventCollector = new EventCollector(_eventPublisher);
 
@@ -51,9 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
 			}
 
-			var events = eventCollector.Publish();
-
-			_agentStateReadModelUpdater.Update(context, events, context.DeadLockVictim);
+			return eventCollector.Publish();
 		}
 	}
 

@@ -31,10 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			validateAuthenticationKey(batch);
 			validatePlatformId(batch);
 
-			_contextLoader.ForBatch(batch, person =>
-			{
-				_processor.Process(person);
-			});
+			_contextLoader.ForBatch(batch);
 		}
 
 		[LogInfo]
@@ -44,20 +41,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			validateAuthenticationKey(input);
 			validatePlatformId(input);
 
-			_contextLoader.For(input, person =>
-			{
-				_processor.Process(person);
-			});
+			_contextLoader.For(input);
 		}
 		
 		[LogInfo]
 		[TenantScope]
 		public virtual void CloseSnapshot(CloseSnapshotInputModel input)
 		{
-			_contextLoader.ForClosingSnapshot(input.SnapshotId, input.SourceId, context =>
-			{
-				_processor.Process(context);
-			});
+			_contextLoader.ForClosingSnapshot(input.SnapshotId, input.SourceId);
 		}
 
 		private void validateAuthenticationKey(IValidatable input)

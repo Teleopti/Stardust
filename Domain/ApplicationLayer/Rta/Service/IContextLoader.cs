@@ -4,9 +4,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IContextLoader
 	{
-		void For(StateInputModel input, Action<Context> action);
-		void ForBatch(BatchInputModel batch, Action<Context> action);
-		void ForActivityChanges(Action<Context> action);
-		void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action);
+		void For(StateInputModel input);
+		void ForBatch(BatchInputModel batch);
+		void ForActivityChanges();
+		void ForClosingSnapshot(DateTime snapshotId, string sourceId);
 	}
 }

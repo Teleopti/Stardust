@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues) : base(dataSource, databaseLoader, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater) : base(dataSource, databaseLoader, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, agentStateReadModelUpdater)
 		{
 		}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			Task.WaitAll(tasks);
 		}
-		
+
 	}
 	
 
@@ -71,20 +71,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly IConfigReader _config;
 		protected readonly DeadLockRetrier _deadLockRetrier;
 		private readonly IKeyValueStorePersister _keyValues;
+		private readonly RtaProcessor _processor;
+		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 
-		public ContextLoader(
-			ICurrentDataSource dataSource,
-			IDatabaseLoader databaseLoader,
-			INow now,
-			StateMapper stateMapper,
-			ExternalLogonMapper externalLogonMapper,
-			ScheduleCache scheduleCache,
-			IAgentStatePersister agentStatePersister,
-			ProperAlarm appliedAlarm,
-			IConfigReader config,
-			DeadLockRetrier deadLockRetrier,
-			IKeyValueStorePersister keyValues
-			)
+		public ContextLoader(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater)
 		{
 			_dataSource = dataSource;
 			_databaseLoader = databaseLoader;
@@ -97,9 +87,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_config = config;
 			_deadLockRetrier = deadLockRetrier;
 			_keyValues = keyValues;
+			_processor = processor;
+			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 		}
 
-		public void For(StateInputModel input, Action<Context> action)
+		public void For(StateInputModel input)
 		{
 			process(new batchStrategy(
 				new BatchInputModel
@@ -118,7 +110,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						}
 					}
 				},
-				action,
 				_now.UtcDateTime(),
 				_config,
 				_agentStatePersister,
@@ -127,19 +118,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			));
 		}
 
-		public void ForBatch(BatchInputModel batch, Action<Context> action)
+		public void ForBatch(BatchInputModel batch)
 		{
-			process(new batchStrategy(batch, action, _now.UtcDateTime(), _config, _agentStatePersister, _databaseLoader, _externalLogonMapper));
+			process(new batchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _databaseLoader, _externalLogonMapper));
 		}
 
-		public void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
+		public void ForClosingSnapshot(DateTime snapshotId, string sourceId)
 		{
-			process(new closingSnapshotStrategy(snapshotId, sourceId, action, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _databaseLoader));
+			process(new closingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _databaseLoader));
 		}
 
-		public void ForActivityChanges(Action<Context> action)
+		public void ForActivityChanges()
 		{
-			process(new activityChangesStrategy(action, _now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache));
+			process(new activityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache));
 		}
 
 		protected class activityChangesStrategy : baseStrategy
@@ -147,7 +138,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			private readonly IKeyValueStorePersister _keyValues;
 			private readonly ScheduleCache _scheduleCache;
 
-			public activityChangesStrategy(Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IKeyValueStorePersister keyValues, ScheduleCache scheduleCache) : base(config, persister, action, time)
+			public activityChangesStrategy(DateTime time, IConfigReader config, IAgentStatePersister persister, IKeyValueStorePersister keyValues, ScheduleCache scheduleCache) : base(config, persister, time)
 			{
 				_keyValues = keyValues;
 				_scheduleCache = scheduleCache;
@@ -189,7 +180,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			private int _dataSourceId;
 			private IDictionary<Guid, BatchStateInputModel> _matches;
 
-			public batchStrategy(BatchInputModel batch, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader, ExternalLogonMapper externalLogonMapper) : base(config, persister, action, time)
+			public batchStrategy(BatchInputModel batch, DateTime time, IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader, ExternalLogonMapper externalLogonMapper) : base(config, persister, time)
 			{
 				_databaseLoader = databaseLoader;
 				_externalLogonMapper = externalLogonMapper;
@@ -249,7 +240,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			private readonly IDatabaseLoader _databaseLoader;
 			private int _dataSourceId;
 
-			public closingSnapshotStrategy(DateTime snapshotId, string sourceId, Action<Context> action, DateTime time, IConfigReader config, IAgentStatePersister persister, StateMapper stateMapper, IDatabaseLoader databaseLoader) : base(config, persister, action, time)
+			public closingSnapshotStrategy(DateTime snapshotId, string sourceId, DateTime time, IConfigReader config, IAgentStatePersister persister, StateMapper stateMapper, IDatabaseLoader databaseLoader) : base(config, persister, time)
 			{
 				_snapshotId = snapshotId;
 				_sourceId = sourceId;
@@ -287,13 +278,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			protected baseStrategy(
 				IConfigReader config,
 				IAgentStatePersister persister,
-				Action<Context> action,
 				DateTime time
 			)
 			{
 				Config = config;
 				Persister = persister;
-				Action = action;
 				CurrentTime = time;
 				DeadLockVictim = DeadLockVictim.No;
 			}
@@ -304,7 +293,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public DeadLockVictim DeadLockVictim { get; protected set; }
 			public int ParallelTransactions { get; protected set; }
 			public int MaxTransactionSize { get; protected set; }
-			public Action<Context> Action { get; }
 
 			public abstract IEnumerable<Guid> PersonIds(strategyContext context);
 			public abstract InputInfo GetInputFor(AgentState state);
@@ -316,7 +304,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			DeadLockVictim DeadLockVictim { get; }
 			int ParallelTransactions { get; }
 			int MaxTransactionSize { get; }
-			Action<Context> Action { get; }
 
 			IEnumerable<Guid> PersonIds(strategyContext context);
 			InputInfo GetInputFor(AgentState state);
@@ -408,7 +395,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				agentStates.Invoke().ForEach(state =>
 				{
-					strategy.Action.Invoke(new Context(
+					var context = new Context(
 						strategy.CurrentTime,
 						strategy.DeadLockVictim,
 						strategy.GetInputFor(state),
@@ -417,7 +404,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,
 						_appliedAlarm
-					));
+					);
+
+					var events = _processor.Process(context);
+
+					if (context.ShouldProcessState())
+						_agentStateReadModelUpdater.Update(context, events, context.DeadLockVictim);
+
 				});
 			});
 		}
