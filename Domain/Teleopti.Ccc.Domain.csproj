@@ -251,6 +251,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IExternalLogonReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IContextLoadingStrategy.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
