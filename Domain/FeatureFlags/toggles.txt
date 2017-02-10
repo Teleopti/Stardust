@@ -47,6 +47,8 @@ RTA_SeeAllOutOfAdherencesToday_39146 = true
 RTA_QuicklyChangeAgentsSelection_40610 = true
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_FasterAgentsView_42039 = false
+RTA_MonitorAgentsInPermittedOrganizaionlOnly_40660 = false
+
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
