@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				InPaidTime = true,
 				RequiresSkill = true
 			};
-			var skill = SkillFactory.CreateSkill("Direct Sales").WithId();
+			var skill = SkillFactory.CreateSkill("Direct Sales").WithId().InTimeZone(TimeZoneInfo.Utc);
 			skill.Activity = activity;
 
 			var workShiftRuleSet =
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			
 			var bag = new RuleSetBag(workShiftRuleSet);
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new[] {skill}).WithId();
-
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			person.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 			var personPeriod = person.Period(date);
 			personPeriod.RuleSetBag = bag;
