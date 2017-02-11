@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -33,14 +32,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IResourceOptimizationHelperExtended ResourceCalculator;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[Test, Ignore("PBI 42767")]
+		[Test]
 		public void ShouldNotRollBackIfSingleAgentSingleDayAndPeriodValueIsNotBetter()
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var date = new DateOnly(2014, 4, 01);
+			var date = new DateOnly(2014, 4, 1);
 			var scenario = new Scenario("Default").WithId();
 			var shiftCategory = new ShiftCategory("DY").WithId();
-			var shiftCategoryAM = new ShiftCategory("AM").WithId();
+			var shiftCategoryAm = new ShiftCategory("AM").WithId();
 			var activity = new Activity("Phone")
 			{
 				InContractTime = true,
@@ -53,10 +52,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			var workShiftRuleSet =
 				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 7, 0, 15),
-					new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryAM));
+					new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryAm));
 			
 			var bag = new RuleSetBag(workShiftRuleSet);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new[] {skill}).WithId(); // PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson().WithId(),
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new[] {skill}).WithId();
 
 			person.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 			var personPeriod = person.Period(date);
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			dictionary.SetUndoRedoContainer(new UndoRedoContainer());
 
 			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				new DateTimePeriod(2014, 3, 31, 8, 2014, 3, 31, 16), shiftCategory));
+				new DateTimePeriod(2014, 4, 1, 8, 2014, 4, 1, 16), shiftCategory));
 
 			StateHolder.SetRequestedScenario(scenario);
 			StateHolder.SchedulingResultState.Schedules = dictionary;
@@ -87,37 +86,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			OptimizationPreferences.General = new GeneralPreferences
 			{
-				OptimizationStepShiftsWithinDay = true,
-				ScheduleTag = NullScheduleTag.Instance
+				ScheduleTag = NullScheduleTag.Instance,
+				OptimizationStepShiftsWithinDay = true
 			};
+
 			OptimizationPreferences.Advanced = new AdvancedPreferences
 			{
-				UseMinimumStaffing = true,
-				UseMaximumStaffing = true,
-				UseAverageShiftLengths = true,
 				UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats
 			};
-			OptimizationPreferences.Extra = new ExtraPreferences()
+			OptimizationPreferences.Extra = new ExtraPreferences
 			{
 				UseTeamBlockOption = true,
 				UseBlockSameShiftCategory = true
 			};
 
+			var optimizerOriginalPrefs = new OptimizerOriginalPreferences(new SchedulingOptions
+			{
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay,
+				GroupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(UserTexts.Resources.NoTeam),
+				UseTeam = true,
+
+			});
+
 			Target.Execute(
-				new OptimizerOriginalPreferences(new SchedulingOptions
-				{
-					TagToUseOnScheduling = NullScheduleTag.Instance,
-					BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay,
-					GroupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(UserTexts.Resources.NoTeam),
-					UseTeam = true
-					
-				}),
+				optimizerOriginalPrefs,
 				new NoSchedulingProgress(), StateHolder,
 				new[] {dictionary[person].ScheduledDay(date)},
 				OptimizationPreferences, false, new DaysOffPreferences(),
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
-			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAM);
+			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAm);
 		}
 
 		private static SkillDay createSkillDay(ISkill skill, DateOnly date, Scenario scenario)

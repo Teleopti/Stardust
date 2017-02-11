@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
@@ -147,8 +148,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				string teamName = teamBlockInfo.TeamInfo.Name.DisplayString(20);
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-				var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock
-					.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
+				var previousTargetValue = 1d;
+				if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount() > 1)
+					previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
+
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.StartDate;
 				var datePoint = firstSelectedDay;
@@ -197,9 +200,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 					continue;
 				}
-				
-				var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
-					optimizationPreferences.Advanced);
+
+				var newTargetValue = -1d;
+				if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount() > 1)
+					newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
+
+				if (teamBlockInfo.TeamInfo.GroupMembers.Count() == 1 && teamBlockInfo.BlockInfo.BlockPeriod.DayCount() == 1)
+					teamBlockToRemove.Add(teamBlockInfo);
+
 				var isWorse = newTargetValue >= previousTargetValue;
 				string commonProgress = Resources.OptimizingIntraday + Resources.Colon + "(" + totalTeamBlockInfos + ")(" +
 				                        runningTeamBlockCounter + ") " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " +
