@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						filteredCombinations);
 				}
 			}
-			_feedback.SendProgress("Starting purge ForeCastSkill Read Model");
+			_feedback.SendProgress("Starting purge ForecastSkill Read Model");
 			_scheduleForecastSkillReadModelRepository.Purge();
 		}
 
@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						model.StaffingLevelWithShrinkage = ((ISkillStaffPeriod)periodPair.Value).CalculatedResource;
 				}
 			}
-
 		}
 
 		[TestLog]
