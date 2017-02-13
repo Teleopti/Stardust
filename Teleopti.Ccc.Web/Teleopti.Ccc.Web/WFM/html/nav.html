@@ -38,7 +38,7 @@
 	<div class="con-flex"></div>
 
 	<div class="nav-tools">
-		<a ng-click="searchbarSetFocus()">
+		<a ng-click="searchbarSetFocus()" ng-if="searchIsEnabled">
 			<div class="panel-menu">
 				<div class="context-menu card-context" ng-class="{'active-context material-depth-2':searchmode}">
 					<i class="mdi mdi-magnify"></i>
