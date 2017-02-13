@@ -23,70 +23,61 @@ CREATE PROCEDURE [ReadModel].[UpdateFindPersonData]
 
 -- =============================================
 AS
--- exec [ReadModel].[UpdateFindPersonData] '3d5dd51a-8713-42e9-9f33-9b5e015ab71b'
+-- exec [ReadModel].[UpdateFindPersonData] 'AAB08A5E-0C0B-4981-B859-A34501025265,0AA78021-7A7B-4AEA-B6A9-A13A00C4F94A,BB76366B-0A8F-42CB-ADDF-A11C00F0F283,3B9ACF9A-6D3F-4C48-B0E7-A13A00C4CB7A,3A545D7E-A93B-4145-8CF9-A54800E0BBB8,59F19897-60D5-4530-BDC0-A14E00911F3E,FDE198E0-7BAE-4737-9EF1-A3570097D6FF,959FBF3F-10FF-439C-AE2D-A22D0088C36E'
 --SET NOCOUNT ON
 CREATE TABLE #ids(id uniqueidentifier)
 INSERT INTO #ids SELECT * FROM SplitStringString(@ids)
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team
+SET SearchValue = Name
 FROM [ReadModel].[FindPerson] fp
 INNER JOIN PartTimePercentage WITH(NOLOCK) ON PartTimePercentage.Id = SearchValueId
 INNER JOIN #ids on #ids.id = SearchValueId
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent AND pp.PartTimePercentage = SearchValueId 
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team
+SET SearchValue = Name
 FROM [ReadModel].[FindPerson] fp
 INNER JOIN RuleSetBag WITH(NOLOCK) ON RuleSetBag.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent AND pp.RuleSetBag = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team
+SET SearchValue = Name
 FROM [ReadModel].[FindPerson] fp 
 INNER JOIN [Contract] WITH(NOLOCK) ON [Contract].Id = SearchValueId
 INNER JOIN #ids on #ids.id = SearchValueId
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent AND pp.[Contract] = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team
+SET SearchValue = Name
 FROM [ReadModel].[FindPerson] fp
 INNER JOIN ContractSchedule WITH(NOLOCK) ON ContractSchedule.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent AND pp.[ContractSchedule] = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team
+SET SearchValue = Name
 FROM [ReadModel].[FindPerson] fp
 INNER JOIN BudgetGroup WITH(NOLOCK) ON BudgetGroup.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent AND pp.[BudgetGroup] = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team
+SET SearchValue = Name
 FROM [ReadModel].[FindPerson] fp
 INNER JOIN Skill WITH(NOLOCK) ON Skill.Id = fp.SearchValueId
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent and fp.StartDateTime = pp.StartDate
 INNER JOIN #ids on #ids.id = Skill.Id
-INNER JOIN PersonSkill ps WITH(NOLOCK) ON pp.Id = ps.Parent AND ps.Skill = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  s.Name + ' ' + t.Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team  
+SET SearchValue =  s.Name + ' ' + t.Name
 FROM [ReadModel].[FindPerson] 
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON pp.Id = SearchValueId
-INNER JOIN Team t WITH(NOLOCK) ON pp.Team = t.Id
-INNER JOIN #ids ids ON t.Id = ids.id
+INNER JOIN Team t WITH(NOLOCK) ON SearchValueId = t.Id
 INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
+INNER JOIN #ids ids ON t.Id = ids.id
 WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  s.Name + ' ' + t.Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate, PersonPeriodTeamId = pp.Team
+SET SearchValue =  s.Name + ' ' + t.Name
 FROM [ReadModel].[FindPerson] 
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON pp.Id = SearchValueId
-INNER JOIN Team t WITH(NOLOCK) ON pp.Team = t.Id
-INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
+INNER JOIN Site s WITH(NOLOCK) ON s.Id = SearchValueId
+INNER JOIN Team t WITH(NOLOCK) ON s.Id = t.Site
 INNER JOIN #ids ids ON s.Id = ids.id
 WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
