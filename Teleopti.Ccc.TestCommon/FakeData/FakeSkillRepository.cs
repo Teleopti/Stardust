@@ -128,5 +128,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return _skills.Where(s => skillIdList.Contains(s.Id.Value)).ToList();
 		}
+
+		public IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits)
+		{
+			return _skills.Where(x => x.Name.Contains(searchString)).Take(maxHits);
+		}
 	}
 }

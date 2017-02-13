@@ -4,8 +4,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		public FakeContractRepository ContractRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeSiteRepository SiteRepository;
+		public FakeSkillRepository SkillRepository;
 
 		[Test]
 		public void ShouldGiveEmptyResult()
@@ -99,6 +102,104 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 
 			Target.Search(name, maxHits).Count()
+				.Should().Be.EqualTo(maxHits);
+		}
+
+
+		[Test]
+		public void ShouldGiveEmptyResultForAgentGroup()
+		{
+			Target.SearchForAgentGroup(RandomName.Make(), 10)
+				.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldFindContractForAgentGroup()
+		{
+			var searchString = RandomName.Make();
+			var expectedGuid = Guid.NewGuid();
+			const string expectedType = "contract";
+			var contract = new Contract(RandomName.Make() + searchString + RandomName.Make()).WithId(expectedGuid);
+			ContractRepository.Add(contract);
+
+			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+
+			result.Name.Should().Contain(searchString);
+			result.Id.Should().Be.EqualTo(expectedGuid);
+			result.FilterType.Should().Be.EqualTo(expectedType);
+		}
+
+		[Test]
+		public void ShouldFindTeamForAgentGroup()
+		{
+			var searchString = RandomName.Make();
+			var expectedGuid = Guid.NewGuid();
+			const string expectedType = "team";
+			var team = new Team().WithId(expectedGuid).WithDescription(new Description(RandomName.Make() + searchString + RandomName.Make()));
+			TeamRepository.Add(team);
+
+			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+
+			result.Name.Should().Contain(searchString);
+			result.Id.Should().Be.EqualTo(expectedGuid);
+			result.FilterType.Should().Be.EqualTo(expectedType);
+		}
+
+		[Test]
+		public void ShouldFindSiteForAgentGroup()
+		{
+			var searchString = RandomName.Make();
+			var expectedGuid = Guid.NewGuid();
+			const string expectedType = "site";
+			var site = new Site(RandomName.Make() + searchString + RandomName.Make()).WithId(expectedGuid);
+			SiteRepository.Add(site);
+
+			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+
+			result.Name.Should().Contain(searchString);
+			result.Id.Should().Be.EqualTo(expectedGuid);
+			result.FilterType.Should().Be.EqualTo(expectedType);
+		}
+
+		[Test]
+		public void ShouldFindSkillForAgentGroup()
+		{
+			var searchString = RandomName.Make();
+			var expectedGuid = Guid.NewGuid();
+			const string expectedType = "skill";
+			var skill = new Skill(RandomName.Make()+ searchString + RandomName.Make()).WithId(expectedGuid);
+			SkillRepository.Add(skill);
+
+			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+
+			result.Name.Should().Contain(searchString);
+			result.Id.Should().Be.EqualTo(expectedGuid);
+			result.FilterType.Should().Be.EqualTo(expectedType);
+		}
+
+		[Test]
+		public void EmptySearchStringShouldGiveNoResultForAgentGroup()
+		{
+			var site = new Site(RandomName.Make()).WithId();
+			SiteRepository.Add(site);
+
+			Target.SearchForAgentGroup(string.Empty, 10)
+				.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldOnlyFetchMaxHitsForAgentGroup()
+		{
+			const int maxHits = 3;
+			var name = RandomName.Make();
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			TeamRepository.Add(new Team().WithId().WithDescription(new Description(name + RandomName.Make())));
+			TeamRepository.Add(new Team().WithId().WithDescription(new Description(name + RandomName.Make())));
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
+
+			Target.SearchForAgentGroup(name, maxHits).Count()
 				.Should().Be.EqualTo(maxHits);
 		}
 	}

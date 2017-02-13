@@ -18,5 +18,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			return Ok(_findFilter.Search(searchString, maxHits));
 		}
-  }
+
+		[HttpGet, Route("api/filtersagentgroup"), UnitOfWork]
+		public virtual IHttpActionResult FindFiltersForAgentGroup(string searchString, int maxHits)
+		{
+			return Ok(_findFilter.SearchForAgentGroup(searchString, maxHits));
+		}
+	}
 }

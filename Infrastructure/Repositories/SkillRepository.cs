@@ -311,7 +311,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
-	    public int MinimumResolution()
+		public IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits)
+		{
+			if (maxHits < 1)
+				return Enumerable.Empty<ISkill>();
+
+			return Session.CreateCriteria<Skill>()
+				.Add(Restrictions.Like("Name", searchString, MatchMode.Anywhere))
+				.SetMaxResults(maxHits)
+				.List<ISkill>();
+		}
+
+		public int MinimumResolution()
 	    {
 		    return Session.CreateCriteria<Skill>()
 				.SetProjection(Projections.Min("DefaultResolution"))

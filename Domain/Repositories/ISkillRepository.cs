@@ -41,6 +41,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	    int MinimumResolution();
 	    IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource();
 	    ICollection<ISkill> LoadSkills(IEnumerable<Guid> skillIdList);
-
+		IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits);
     }
 }
