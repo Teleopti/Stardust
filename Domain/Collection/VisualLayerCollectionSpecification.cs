@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.Domain.Collection
             }
         }
 
-        public static ISpecification<IVisualLayerCollection> OneSpecificLayer(IPayload payload)
-        {
-            return new OneSpecificLayerSpecification(payload);
-        }
-
         public static ISpecification<IVisualLayerCollection> IdenticalLayers(IVisualLayerCollection collectionToCompare)
         {
             return new IdenticalLayersSpecification(collectionToCompare);

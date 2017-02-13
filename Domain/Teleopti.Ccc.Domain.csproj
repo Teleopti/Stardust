@@ -1948,7 +1948,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collection\OneAbsenceLayerSpecification.cs" />
-    <Compile Include="Collection\OneSpecificLayerSpecification.cs" />
     <Compile Include="Collection\PersonCollection.cs" />
     <Compile Include="Collection\ScheduleDictionary.cs" />
     <Compile Include="Collection\SkillSkillStaffPeriodExtendedDictionary.cs" />

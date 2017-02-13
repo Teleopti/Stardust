@@ -1040,7 +1040,6 @@
     <Compile Include="Collection\DifferenceEntityCollectionServiceTest.cs" />
     <Compile Include="Collection\DifferenceCollectionItemTest.cs" />
     <Compile Include="Collection\OneAbsenceLayerSpecificationTest.cs" />
-    <Compile Include="Collection\OneSpecificLayerSpecificationTest.cs" />
     <Compile Include="Collection\PersonCollectionTest.cs" />
     <Compile Include="Collection\SkillStaffPeriodDictionaryTest.cs" />
     <Compile Include="Collection\TypedBindingCollectionTest.cs" />
