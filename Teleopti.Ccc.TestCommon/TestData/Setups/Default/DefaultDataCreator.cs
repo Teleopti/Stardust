@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
@@ -11,11 +14,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IEventPublisherScope _eventPublisher;
 
-		public DefaultDataCreator(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentUnitOfWork unitOfWork)
+		public DefaultDataCreator(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentUnitOfWork unitOfWork, IEventPublisherScope eventPublisher)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_unitOfWork = unitOfWork;
+			_eventPublisher = eventPublisher;
 		}
 
 		private static readonly IEnumerable<IHashableDataSetup> setups = new IHashableDataSetup[]
@@ -44,10 +49,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 			var dataFactory = new DataFactory(_unitOfWork);
 			setups.ForEach(s =>
 			{
-				using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-				{
-					dataFactory.Apply(s);
-				}
+				if (s is DefaultPersonThatCreatesData)
+					using (_eventPublisher.OnThisThreadPublishTo(new NoEventPublisher()))
+					using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+						dataFactory.Apply(s);
+				else
+					using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+						dataFactory.Apply(s);
 			});
 		}
 
@@ -59,6 +67,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 				new DefaultScenario().Apply(new ThisUnitOfWork(uow));
 				uow.PersistAll();
 			}
+		}
+	}
+
+	public class NoEventPublisher : IEventPublisher
+	{
+		public void Publish(params IEvent[] events)
+		{
 		}
 	}
 }
