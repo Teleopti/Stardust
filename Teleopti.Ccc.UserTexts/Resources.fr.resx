@@ -8224,9 +8224,6 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Vous devez avoir {0} jours libres.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Vous devez avoir entre {0} et {1} jours libres.</value>
   </data>

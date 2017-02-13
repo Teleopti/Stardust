@@ -104,7 +104,9 @@
     <EmbeddedResource Include="Resources.fa.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.fi.resx" />
+    <EmbeddedResource Include="Resources.fi.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.fr-CA.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -117,7 +119,9 @@
     <EmbeddedResource Include="Resources.ja.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.nl.resx" />
+    <EmbeddedResource Include="Resources.nl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.no.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -139,7 +143,9 @@
     <EmbeddedResource Include="Resources.zh-CN.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.it.resx" />
+    <EmbeddedResource Include="Resources.it.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.ar.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -151,7 +157,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.zh-HK.resx" />
+    <EmbeddedResource Include="Resources.zh-HK.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

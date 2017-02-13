@@ -9778,9 +9778,6 @@ Teleopti R&amp;D</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>У вас должно быть {0} выходных дней.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>У вас должно быть от {0} до {1} выходных дней.</value>
   </data>

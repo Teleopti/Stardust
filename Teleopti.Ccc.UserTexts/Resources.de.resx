@@ -9752,9 +9752,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Sie sollten {0} freie Tage haben.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Sie sollten zwischen {0} und {1} freien Tagen haben.</value>
   </data>

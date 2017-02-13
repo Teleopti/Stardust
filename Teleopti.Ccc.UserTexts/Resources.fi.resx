@@ -9949,9 +9949,6 @@ Jakso: {3}</value>
   <data name="AvailabilityFulfillment" xml:space="preserve">
     <value>Käytettävyyden toteutuminen</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
-  </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
     <value>Todellinen ACW aika</value>
   </data>

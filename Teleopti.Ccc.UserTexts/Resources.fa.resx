@@ -6780,9 +6780,6 @@
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>شما باید بین {0} و {1} روز تعطیل داشته باشید</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>هر جا</value>
-  </data>
   <data name="HandledWithinColon" xml:space="preserve">
     <value>رسیدگی  شد در مدت </value>
   </data>

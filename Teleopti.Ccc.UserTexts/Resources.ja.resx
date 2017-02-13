@@ -8491,9 +8491,6 @@ Teleopti研究開発グループ</value>
   <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
     <value>このサブスキルのインターバル長は、親スキルのインターバル長（{0} 分）と同じにする必要があります。</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>随所</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>{0} ～ {1} の休暇を取る必要があります。</value>
   </data>

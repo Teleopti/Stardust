@@ -8019,9 +8019,6 @@ Długoterminowy</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Powinieneś mieć {0} dni wolnych.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Gdziekolwiek</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Powinieneś mieć od {0} do {1} dni wolnych.</value>
   </data>

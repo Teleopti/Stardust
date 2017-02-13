@@ -6092,9 +6092,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Dovresti avere {0} riposi.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Ovunque</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Dovresti avere da {0} a {1} riposi.</value>
   </data>

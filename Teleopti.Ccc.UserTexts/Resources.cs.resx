@@ -9958,9 +9958,6 @@ zkrácených úvazků</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Měl /-a byste mít {0} dnů volna.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Kdekoliv</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Měl /-a byste mít mezi {0} a {1} dnů volna.</value>
   </data>

@@ -9500,9 +9500,6 @@ Teleopti R&amp;D</value>
   <data name="RunningBackgroundJob" xml:space="preserve">
     <value>正在運行幕後工作</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Web</value>
-  </data>
   <data name="RowsPerPageTen" xml:space="preserve">
     <value>十</value>
   </data>

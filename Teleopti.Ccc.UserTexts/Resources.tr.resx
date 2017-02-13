@@ -7974,9 +7974,6 @@
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Saate göre uygunluk tercihlerinin yerine getirilme oranı</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>HerYerde</value>
-  </data>
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>Devamsızlık türü bulunamadı.</value>
   </data>

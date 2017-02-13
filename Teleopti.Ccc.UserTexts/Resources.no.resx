@@ -8184,9 +8184,6 @@ ukedag</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Du skal ha {0} fridager.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Hvor som helst</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Du skal ha mellom {0} og {1} fridager.</value>
   </data>

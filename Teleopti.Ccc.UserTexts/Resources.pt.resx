@@ -8090,9 +8090,6 @@ Teleopti P&amp;D
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Você deverá ter {0} dias de folga.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Você deverá ter entre {0} e {1} dias de folga.</value>
   </data>

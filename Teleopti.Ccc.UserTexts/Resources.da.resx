@@ -10251,9 +10251,6 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Du ska have {0} fridage.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Web</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Du skal have mellem {0} og {1} fridage.</value>
   </data>

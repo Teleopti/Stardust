@@ -9242,9 +9242,6 @@
   <data name="FullDay" xml:space="preserve">
     <value>يووم كامل </value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>اى مكان </value>
-  </data>
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>نوع الغياب الغير موجود</value>
   </data>

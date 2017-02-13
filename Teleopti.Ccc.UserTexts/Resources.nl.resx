@@ -8524,9 +8524,6 @@ Periode</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>U moet {0} vrije dagen hebben.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>Overal</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>U moet tussen {0} en {1} vrije dagen hebben.</value>
   </data>

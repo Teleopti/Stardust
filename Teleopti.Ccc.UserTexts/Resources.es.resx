@@ -8086,9 +8086,6 @@ La longitud actual de la asignación es {1} hrs.</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Debe tener {0} días libres.</value>
   </data>
-  <data name="Anywhere" xml:space="preserve">
-    <value>En cualquier dispositivo</value>
-  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Debe tener entre {0} y {1} días libres.</value>
   </data>
