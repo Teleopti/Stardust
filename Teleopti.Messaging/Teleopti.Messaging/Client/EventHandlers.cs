@@ -27,10 +27,8 @@ namespace Teleopti.Messaging.Client
 
 		public void Remove(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			var toRemove = (from s in _subscriptions
-				where s.Callback == eventMessageHandler
-				select s).ToList();
-			toRemove.ForEach(s => _subscriptions.Remove(s));
+			var toRemove = _subscriptions.Where(s => s.Callback == eventMessageHandler).ToArray();
+			Array.ForEach(toRemove, s => _subscriptions.Remove(s));
 		}
 
 		public IEnumerable<SubscriptionInfo> All()

@@ -21,10 +21,11 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var target = new OriginHandlerPipelineModule();
 			var function = target.BuildAuthorizeConnect((d, r) => true);
 
-			var request = new FakeHubRequest();
-			request.Url = new Uri("http://burk1/TeleoptiWFM/Web/signalr?connect");
-			var headers = new SimpleSignalrNameValueCollection(new NameValueCollection());
-			headers.Add("Origin","http://attacker-website/TeleoptiWFM");
+			var request = new FakeHubRequest {Url = new Uri("http://burk1/TeleoptiWFM/Web/signalr?connect")};
+			var headers = new SimpleSignalrNameValueCollection(new NameValueCollection())
+			{
+				{"Origin", "http://attacker-website/TeleoptiWFM"}
+			};
 			request.Headers = headers;
 			function(new HubDescriptor(), request).Should().Be.False();
 		}
@@ -35,8 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var target = new OriginHandlerPipelineModule();
 			var function = target.BuildAuthorizeConnect((d, r) => true);
 
-			var request = new FakeHubRequest();
-			request.Url = new Uri("http://burk1/TeleoptiWFM/Web/signalr?connect");
+			var request = new FakeHubRequest {Url = new Uri("http://burk1/TeleoptiWFM/Web/signalr?connect")};
 			var headers = new SimpleSignalrNameValueCollection(new NameValueCollection());
 			request.Headers = headers;
 			function(new HubDescriptor(), request).Should().Be.True();
@@ -78,10 +78,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			return _underlyingCollection.Get(key);
 		}
 
-		public string this[string key]
-		{
-			get { return _underlyingCollection[key]; }
-		}
+		public string this[string key] => _underlyingCollection[key];
 
 		public void Add(string key, string value)
 		{
