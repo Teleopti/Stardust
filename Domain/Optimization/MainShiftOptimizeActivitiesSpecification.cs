@@ -94,8 +94,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool isIdenticalPeriodBefore(IVisualLayerCollection other)
         {
 			var allowPeriod = allowAlterBetweenDateTimePeriod();
-			var start = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone).AddDays(-1).Add(allowPeriod.EndDateTime.TimeOfDay);
-			var periodBefore = new DateTimePeriod(start, allowAlterBetweenDateTimePeriod().StartDateTime);
+	        var baseDate = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone);
+			var start = baseDate.AddDays(-1).Add(allowPeriod.EndDateTime.Subtract(baseDate));
+			var periodBefore = new DateTimePeriod(start, allowPeriod.StartDateTime);
                         
             IVisualLayerCollection shiftLayersOutsideBefore =
                 other.FilterLayers(periodBefore);

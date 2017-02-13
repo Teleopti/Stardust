@@ -79,6 +79,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldRespectAlterBetweenBlockTwoDaysEndAt24()
+		{
+			var site = new Site("_") { MaxSeats = 0 }.WithId();
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
+			var activityRequiresSeat = new Activity("_") { RequiresSeat = true }.WithId();
+			var activityRequiresNoSeat = new Activity("_") { RequiresSeat = false }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var period = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1));
+			var scenario = new Scenario("_");
+			var newShiftCategory = new ShiftCategory("_").WithId();
+			var oldShiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityRequiresNoSeat, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), newShiftCategory));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodTwoDays(dateOnly).WithPersonPeriod(ruleSet, team);
+			var asses = period.DayCollection().Select(date => new PersonAssignment(agent, scenario, date).WithLayer(activityRequiresSeat, new TimePeriod(8, 16)).ShiftCategory(oldShiftCategory));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, asses);
+			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+			optPreferences.Shifts.SelectedTimePeriod = new TimePeriod(0, 24);
+			optPreferences.Shifts.AlterBetween = true;
+
+			Target.Optimize(new NoSchedulingProgress(), period, new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+
+			schedules[agent].ScheduledDayCollection(period).All(x => x.PersonAssignment().ShiftCategory.Equals(newShiftCategory))
+				.Should().Be.True();
+		}
 
 		[Test]
 		public void ShouldRespectKeepShiftCategoriesTeamHierarchyOneAgent()
