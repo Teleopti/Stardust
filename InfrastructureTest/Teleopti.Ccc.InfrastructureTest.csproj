@@ -187,6 +187,7 @@
     <Compile Include="Foundation\DatabaseVersionTest.cs" />
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
     <Compile Include="Intraday\JobStartTimeTest.cs" />
+    <Compile Include="Intraday\PersonProviderForOvertimeTest.cs" />
     <Compile Include="Intraday\ResourceCalculationReadModelPersisterTest.cs" />
     <Compile Include="Intraday\SkillCombinationResourceRepositoryTest.cs" />
     <Compile Include="Logon\ImpersonateSystemTest.cs" />
