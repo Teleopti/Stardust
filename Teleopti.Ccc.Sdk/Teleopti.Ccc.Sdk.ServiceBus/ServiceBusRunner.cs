@@ -227,7 +227,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				Assembly.Load(_configReader.ReadValue("handlerAssembly", "Teleopti.Ccc.Domain")),
 				port,
 				nodeName,
-				_configReader.ReadValue("pingToManagerSeconds", 30)
+				_configReader.ReadValue("pingToManagerSeconds", 30),
+				_configReader.ReadValue("sendDetailsToManagerMilliSeconds", 2000)
 				);
 
 			var iocArgs = new IocArgs(new ConfigReader());
