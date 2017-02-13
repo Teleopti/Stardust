@@ -180,7 +180,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			);
 		}
 
-		protected void ProcessTransaction(
+		[TenantScope]
+		[LogInfo]
+		protected virtual void ProcessTransaction(
 			string tenant, 
 			IContextLoadingStrategy strategy, 
 			Func<IEnumerable<AgentState>> transaction, 
@@ -211,8 +213,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		[TenantScope]
-		[LogInfo]
 		protected virtual IEnumerable<AgentStateReadModelUpdaterEventPackage> Transaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
