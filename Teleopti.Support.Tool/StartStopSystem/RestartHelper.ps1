@@ -161,9 +161,9 @@ function TeleoptiWindowsServices-Start {
 	StartWindowsService -ServiceName $ServiceBus
 	StartWindowsService -ServiceName $EtlService
 
-    #if (ServiceExist($ServiceBus)) {
-    #    & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
-    #}
+    if (ServiceExist($ServiceBus)) {
+        & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
+    }
 }
 
 function AppPools-Start {
