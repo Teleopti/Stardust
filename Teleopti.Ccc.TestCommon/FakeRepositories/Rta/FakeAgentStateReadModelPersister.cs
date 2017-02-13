@@ -39,10 +39,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(model.PersonId, model.CopyBySerialization(), (g, m) => model);
 		}
 
-		public void SetDeleted(Guid personId, DateTime expiresAt)
+		public void UpsertDeleted(Guid personId, DateTime expiresAt)
 		{
 			AgentStateReadModel updated;
-			if (!_data.TryGetValue(personId, out updated)) return;
+			if (!_data.TryGetValue(personId, out updated))
+			{
+				_data.TryAdd(personId, new AgentStateReadModel
+				{
+					PersonId = personId,
+					IsDeleted = true
+				});
+				return;
+			}
 			var copy = updated.CopyBySerialization();
 			updated.IsDeleted = true;
 			updated.ExpiresAt = expiresAt;
@@ -101,7 +109,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(info.PersonId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
-		public void UpdateEmploymentNumber(Guid personId, string employmentNumber)
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
 		{
 			AgentStateReadModel existing;
 			if (!_data.TryRemove(personId, out existing))
@@ -109,7 +117,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				_data.TryAdd(personId, new AgentStateReadModel
 				{
 					PersonId = personId,
-					EmploymentNumber = employmentNumber
+					EmploymentNumber = employmentNumber,
+					IsDeleted = true
 				});
 				return;
 			}
@@ -117,7 +126,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
-		public void UpdateName(Guid personId, string firstName, string lastName)
+		public void UpsertName(Guid personId, string firstName, string lastName)
 		{
 			AgentStateReadModel existing;
 			if (!_data.TryRemove(personId, out existing))
@@ -126,7 +135,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					PersonId = personId,
 					FirstName = firstName,
-					LastName = lastName
+					LastName = lastName,
+					IsDeleted = true
 				});
 				return;
 			}

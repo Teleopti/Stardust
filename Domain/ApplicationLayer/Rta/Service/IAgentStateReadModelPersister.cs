@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		AgentStateReadModel Load(Guid personId);
 		void Persist(AgentStateReadModel model);
-		void SetDeleted(Guid personId, DateTime expiresAt);
+		void UpsertDeleted(Guid personId, DateTime expiresAt);
 		void DeleteOldRows(DateTime now);
 		void UpsertAssociation(AssociationInfo info);
-		void UpdateEmploymentNumber(Guid personId, string employmentNumber);
-		void UpdateName(Guid personId, string firstName, string lastName);
+		void UpsertEmploymentNumber(Guid personId, string employmentNumber);
+		void UpsertName(Guid personId, string firstName, string lastName);
 		void UpdateTeamName(Guid teamId, string name);
 		void UpdateSiteName(Guid siteId, string name);
 	}

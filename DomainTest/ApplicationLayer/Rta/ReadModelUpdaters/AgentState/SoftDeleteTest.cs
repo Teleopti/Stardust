@@ -30,6 +30,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 
 			Persister.Models.Single().IsDeleted.Should().Be(true);
 		}
+
+		[Test]
+		public void ShouldInsertDeleted()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new PersonDeletedEvent { PersonId = personId });
+
+			Persister.Models.Single().IsDeleted.Should().Be(true);
+		}
 		
 		[Test]
 		public void ShouldSetDeletedIfPersonIsTerminated()
@@ -47,7 +57,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		}
 
 		[Test]
+		public void ShouldInsertDeletedIfPersonIsTerminated()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = null
+			});
+
+			Persister.Models.Single().IsDeleted.Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldSetDeletedIfPersonIsNotConnectedToExternalLogon()
+		{
+			var personId = Guid.NewGuid();
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				ExternalLogons = null
+			});
+
+			Persister.Models.Single().IsDeleted.Should().Be(true);
+		}
+		
+		[Test]
+		public void ShouldInsertDeletedIfPersonIsNotConnectedToExternalLogon()
 		{
 			var personId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel { PersonId = personId });
@@ -119,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		public void ShouldUnDeleteReadModel()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel {PersonId = personId});
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
@@ -132,26 +172,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				PersonId = personId,
 				TeamId = Guid.NewGuid(),
 				Timestamp = "2016-10-04 08:10".Utc(),
-				ExternalLogons = new[] { new ExternalLogon() }
+				ExternalLogons = new[] {new ExternalLogon()}
 			});
 
 			Persister.Load(personId).IsDeleted.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldInsertReadModel()
-		{
-			var personId = Guid.NewGuid();			
-
-			Target.Handle(new PersonAssociationChangedEvent
-			{
-				PersonId = personId,
-				TeamId = Guid.NewGuid(),
-				Timestamp = "2016-10-04 08:10".Utc(),
-				ExternalLogons = new[] { new ExternalLogon() }
-			});
-
-			Persister.Load(personId).Should().Not.Be.Null();
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 	[Toggle(Toggles.RTA_FasterAgentsView_42039)]
 	public class TeamNameChangedTest
 	{
-		public AgentStateReadModelNamesMaintainer Target;
+		public AgentStateReadModelMaintainer Target;
 		public FakeAgentStateReadModelPersister Persister;
 
 		[Test]

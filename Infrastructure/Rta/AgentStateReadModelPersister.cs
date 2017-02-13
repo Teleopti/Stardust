@@ -152,15 +152,42 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		public virtual void SetDeleted(Guid personId, DateTime expiresAt)
+		public virtual void UpsertDeleted(Guid personId, DateTime expiresAt)
 		{
 			_unitOfWork.Current()
-				.Session().CreateSQLQuery(
-					@"UPDATE [ReadModel].[AgentState] SET IsDeleted=1, ExpiresAt = :ExpiresAt WHERE PersonId = :PersonId")
+				.Session().CreateSQLQuery(@"
+MERGE INTO [ReadModel].[AgentState] AS T
+	USING (
+		VALUES
+		(
+			:PersonId,
+			:ExpiresAt
+		)
+	) AS S (
+			PersonId,
+			ExpiresAt
+		)
+	ON 
+		T.PersonId = S.PersonId
+	WHEN NOT MATCHED THEN
+		INSERT
+		(
+			PersonId,
+			ExpiresAt,
+			IsDeleted
+		) VALUES (
+			S.PersonId,
+			S.ExpiresAt,
+			1
+		)
+	WHEN MATCHED THEN
+		UPDATE SET
+			ExpiresAt = S.ExpiresAt,
+			IsDeleted = 1
+		;")
 				.SetParameter("PersonId", personId)
 				.SetParameter("ExpiresAt", expiresAt)
-				.ExecuteUpdate()
-				;
+				.ExecuteUpdate();
 		}
 
 		public void DeleteOldRows(DateTime now)
@@ -256,29 +283,86 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
-		public void UpdateEmploymentNumber(Guid personId, string employmentNumber)
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
-UPDATE [ReadModel].[AgentState]
-SET EmploymentNumber = :EmploymentNumber
-WHERE PersonId = :PersonId")
+MERGE INTO [ReadModel].[AgentState] AS T
+	USING (
+		VALUES
+		(
+			:PersonId,
+			:EmploymentNumber
+		)
+	) AS S (
+			PersonId,
+			EmploymentNumber
+		)
+	ON 
+		T.PersonId = S.PersonId
+	WHEN NOT MATCHED THEN
+		INSERT
+		(
+			PersonId,
+			EmploymentNumber,
+			IsDeleted
+		) VALUES (
+			S.PersonId,
+			S.EmploymentNumber,
+			1
+		)
+	WHEN MATCHED THEN
+		UPDATE SET
+			EmploymentNumber = S.EmploymentNumber
+			
+		;")
 				.SetParameter("PersonId", personId)
 				.SetParameter("EmploymentNumber", employmentNumber)
 				.ExecuteUpdate();
+
 		}
 
-		public void UpdateName(Guid personId, string firstName, string lastName)
+		public void UpsertName(Guid personId, string firstName, string lastName)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
-UPDATE [ReadModel].[AgentState]
-SET FirstName = :FirstName,
-LastName = :LastName
-WHERE PersonId = :PersonId")
+MERGE INTO [ReadModel].[AgentState] AS T
+	USING (
+		VALUES
+		(
+			:PersonId,
+			:FirstName,
+			:LastName
+		)
+	) AS S (
+			PersonId,
+			FirstName,
+			LastName
+		)
+	ON 
+		T.PersonId = S.PersonId
+	WHEN NOT MATCHED THEN
+		INSERT
+		(
+			PersonId,
+			FirstName,
+			LastName,
+			IsDeleted
+		) VALUES (
+			S.PersonId,
+			S.FirstName,
+			S.LastName,
+			1
+		)
+	WHEN MATCHED THEN
+		UPDATE SET
+			FirstName = S.FirstName,
+			LastName = S.LastName
+			
+		;")
+				.SetParameter("PersonId", personId)
 				.SetParameter("FirstName", firstName)
 				.SetParameter("LastName", lastName)
-				.SetParameter("PersonId", personId)
 				.ExecuteUpdate();
 		}
 

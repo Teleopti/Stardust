@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					AlarmStartTime = "2016-10-17 08:00".Utc()
 				});
 			});
-			WithUnitOfWork.Do(() => StatePersister.SetDeleted(ashleyId, "2016-10-17 08:30".Utc()));
+			WithUnitOfWork.Do(() => StatePersister.UpsertDeleted(ashleyId, "2016-10-17 08:30".Utc()));
 
 			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneSkillId }))
 				.Single().Count.Should().Be(1);

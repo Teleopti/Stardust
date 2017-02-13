@@ -303,20 +303,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			
 			Target.Load(personId).OutOfAdherences.Should().Have.Count.EqualTo(59);
 		}
-
-		[Test]
-		public void ShouldSetDeleted()
-		{
-			var personId = Guid.NewGuid();
-			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.PersistWithAssociation(model);
-
-			Target.SetDeleted(personId, "2016-10-04 08:00".Utc());
-
-			var result = Target.Load(personId);
-			result.IsDeleted.Should().Be(true);
-			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
-		}
 		
 		[Test]
 		public void ShouldUpdatePersonAssociation()
@@ -372,11 +358,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldUpdateDeleted()
+		{
+			var personId = Guid.NewGuid();
+			var model = new AgentStateReadModelForTest { PersonId = personId };
+			Target.PersistWithAssociation(model);
+
+			Target.UpsertDeleted(personId, "2016-10-04 08:00".Utc());
+
+			var result = Target.Load(personId);
+			result.IsDeleted.Should().Be(true);
+			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
+		}
+
+		[Test]
+		public void ShouldInsertDeleted()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.UpsertDeleted(personId, "2016-10-04 08:00".Utc());
+
+			var result = Target.Load(personId);
+			result.IsDeleted.Should().Be(true);
+			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
+		}
+
+		[Test]
 		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
 		{
 			var personId = Guid.NewGuid();
 			Target.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = personId});
-			Target.SetDeleted(personId, "2016-10-05 08:00".Utc());
+			Target.UpsertDeleted(personId, "2016-10-05 08:00".Utc());
 
 			Target.UpsertAssociation(new AssociationInfo()
 			{
@@ -429,7 +441,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
 			Target.PersistWithAssociation(model);
-			Target.SetDeleted(personId, "2016-10-04 08:30".Utc());
+			Target.UpsertDeleted(personId, "2016-10-04 08:30".Utc());
 			
 			Target.DeleteOldRows("2016-10-04 08:30".Utc());
 
@@ -442,7 +454,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
 			Target.PersistWithAssociation(model);
-			Target.SetDeleted(personId, "2016-10-04 08:30".Utc());
+			Target.UpsertDeleted(personId, "2016-10-04 08:30".Utc());
 
 			Target.DeleteOldRows("2016-10-04 09:00".Utc());
 
@@ -459,7 +471,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					var model = new AgentStateReadModelForTest { PersonId = personId };
 					Target.PersistWithAssociation(model);
-					Target.SetDeleted(personId, "2016-10-04 08:29".Utc());
+					Target.UpsertDeleted(personId, "2016-10-04 08:29".Utc());
 					return personId;
 				})
 				.ToArray();
@@ -471,54 +483,62 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				Target.Load(personId).Should().Be.Null());
 		}
 
-		[Test]
-		public void ShouldPersistEmploymentNumber()
-		{
-			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId });
-
-			Target.UpdateEmploymentNumber(personId, "123");
-
-			Target.Load(personId)
-				.EmploymentNumber.Should().Be("123");
-		}
 
 		[Test]
 		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId });
-			Target.UpdateEmploymentNumber(personId, "123");
+			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false});
+			
+			Target.UpsertEmploymentNumber(personId, "abc");
 
-			Target.UpdateEmploymentNumber(personId, "abc");
-
-			Target.Load(personId)
-				.EmploymentNumber.Should().Be("abc");
+			Target.Load(personId).EmploymentNumber.Should().Be("abc");
+			Target.Load(personId).IsDeleted.Should().Be(false);
 		}
 
 		[Test]
-		public void ShouldPersistFirstAndLastName()
+		public void ShouldInsertEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest() {PersonId = personId});
 
-			Target.UpdateName(personId,"bill","gates");
+			Target.UpsertEmploymentNumber(personId, "123");
 
-			Target.Load(personId).FirstName.Should().Be("bill");
-			Target.Load(personId).LastName.Should().Be("gates");
+			var model = Target.Load(personId);
+			model.EmploymentNumber.Should().Be("123");
+			model.IsDeleted.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldInsertFirstAndLastName()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.UpsertName(personId,"bill","gates");
+
+			var model = Target.Load(personId);
+			model.FirstName.Should().Be("bill");
+			model.LastName.Should().Be("gates");
+			model.IsDeleted.Should().Be(true);
 		}
 
 		[Test]
 		public void ShouldUpdateFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId });
+			Target.PersistWithAssociation(new AgentStateReadModelForTest()
+			{
+				PersonId = personId,
+				FirstName = "ashley",
+				LastName = "andeen",
+				IsDeleted = false
+			});
+			
+			Target.UpsertName(personId, "bill", "gates");
 
-			Target.UpdateName(personId, "bill", "clinton");
-			Target.UpdateName(personId, "bill", "gates");
-
-			Target.Load(personId).FirstName.Should().Be("bill");
-			Target.Load(personId).LastName.Should().Be("gates");
+			var model = Target.Load(personId);
+			model.FirstName.Should().Be("bill");
+			model.LastName.Should().Be("gates");
+			model.IsDeleted.Should().Be(false);
 		}
 
 

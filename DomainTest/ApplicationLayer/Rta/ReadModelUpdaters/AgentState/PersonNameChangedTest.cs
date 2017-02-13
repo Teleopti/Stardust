@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 	[Toggle(Toggles.RTA_FasterAgentsView_42039)]
 	public class PersonNameChangedTest
 	{
-		public AgentStateReadModelNamesMaintainer Target;
+		public AgentStateReadModelMaintainer Target;
 		public FakeAgentStateReadModelPersister Persister;
 
 		[Test]
 		public void ShouldSaveFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel {PersonId = personId});
+			Persister.Has(new AgentStateReadModel {PersonId = personId, IsDeleted = false});
 			
 			Target.Handle(new PersonNameChangedEvent
 			{
@@ -31,9 +31,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				LastName = "gates"
 			});
 
-			Persister.Models.Single().PersonId.Should().Be(personId);
-			Persister.Models.Single().FirstName.Should().Be("bill");
-			Persister.Models.Single().LastName.Should().Be("gates");
+			var model = Persister.Models.Single();
+			model.PersonId.Should().Be(personId);
+			model.FirstName.Should().Be("bill");
+			model.LastName.Should().Be("gates");
+			model.IsDeleted.Should().Be(false);
 		}
 
 		[Test]
@@ -50,6 +52,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			});
 
 			Persister.Models.Single().IsDeleted.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldInsertNameAndSetToDeleted()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new PersonNameChangedEvent
+			{
+				PersonId = personId,
+				FirstName = "bill",
+				LastName = "gates"
+			});
+
+			var model = Persister.Models.Single();
+			model.IsDeleted.Should().Be(true);
+			model.FirstName.Should().Be("bill");
+			model.LastName.Should().Be("gates");
 		}
 	}
 }

@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -15,10 +16,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 {
 	[TestFixture]
 	[DomainTest]
-	public class PersonChangedTeamTest
+	public class PersonAssociationChangedTest
 	{
 		public AgentStateReadModelMaintainer Target;
 		public FakeAgentStateReadModelPersister Persister;
+		
+		[Test]
+		public void ShouldInsertReadModel()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				Timestamp = "2016-10-04 08:10".Utc(),
+				ExternalLogons = new[] { new ExternalLogon() }
+			});
+
+			Persister.Load(personId).Should().Not.Be.Null();
+		}
 
 		[Test]
 		public void ShouldMovePersonToNewTeam()

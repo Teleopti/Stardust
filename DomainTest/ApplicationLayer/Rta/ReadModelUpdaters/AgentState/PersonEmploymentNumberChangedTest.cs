@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 	[Toggle(Toggles.RTA_FasterAgentsView_42039)]
 	public class PersonEmploymentNumberChangedTest
 	{
-		public AgentStateReadModelNamesMaintainer Target;
+		public AgentStateReadModelMaintainer Target;
 		public FakeAgentStateReadModelPersister Persister;
 
 		[Test]
-		public void ShouldSaveEmploymentNumber()
+		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
@@ -35,10 +35,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		}
 
 		[Test]
-		public void ShouldNotSetAgentToActive()
+		public void ShouldInsertEmploymentNumberAndSetToDeleted()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel { PersonId = personId, IsDeleted = true});
 			
 			Target.Handle(new PersonEmploymentNumberChangedEvent
 			{

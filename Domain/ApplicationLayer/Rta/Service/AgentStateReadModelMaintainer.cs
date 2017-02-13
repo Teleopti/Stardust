@@ -31,39 +31,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!@event.TeamId.HasValue)
 			{
-				_persister.SetDeleted(@event.PersonId, expirationFor(@event));
+				_persister.UpsertDeleted(@event.PersonId, expirationFor(@event));
 				return;
 			}
 			if (@event.ExternalLogons.IsNullOrEmpty())
 			{
-				_persister.SetDeleted(@event.PersonId, expirationFor(@event));
+				_persister.UpsertDeleted(@event.PersonId, expirationFor(@event));
 				return;
 			}
-			var model = _persister.Load(@event.PersonId);
-			if (model == null || expirationFor(@event) >= model.ExpiresAt.GetValueOrDefault())
-				_persister.UpsertAssociation(new AssociationInfo()
-				{
-					PersonId = @event.PersonId,
-					BusinessUnitId = @event.BusinessUnitId,
-					SiteId = @event.SiteId,
-					SiteName = @event.SiteName,
-					TeamId = @event.TeamId.Value,
-					TeamName = @event.TeamName
-				});
+			_persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = @event.PersonId,
+				BusinessUnitId = @event.BusinessUnitId,
+				SiteId = @event.SiteId,
+				SiteName = @event.SiteName,
+				TeamId = @event.TeamId.Value,
+				TeamName = @event.TeamName
+			});
 		}
 
 		[UnitOfWork]
 		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
-			_persister.UpdateName(@event.PersonId, @event.FirstName, @event.LastName);
+			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
 		}
 
 		[UnitOfWork]
 		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
 		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
 		{
-			_persister.UpdateEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
+			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
 		}
 
 		[UnitOfWork]
@@ -83,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			_persister.SetDeleted(@event.PersonId, expirationFor(@event));
+			_persister.UpsertDeleted(@event.PersonId, expirationFor(@event));
 		}
 		
 		[UnitOfWork]

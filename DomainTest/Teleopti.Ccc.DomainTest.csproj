@@ -228,7 +228,7 @@
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Maintainer\AgentStateMaintainerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftStartEndTimeTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonChangedTeamTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonAssociationChangedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalAdherenceUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Mappings\MappingsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\DontUpdateAgentStateReadModel.cs" />
