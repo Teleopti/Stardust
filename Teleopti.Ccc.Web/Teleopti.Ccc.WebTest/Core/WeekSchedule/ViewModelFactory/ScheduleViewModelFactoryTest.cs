@@ -89,6 +89,22 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			assertTimeLine(result, "09:00", "10:00");
 		}
 
+		[Test]
+		public void ShouldNotGetPossibilitiesWhenNotShowingIntradaySchedule()
+		{
+			var user = new FakeLoggedOnUser();
+			user.SetFakeLoggedOnUser(createPerson());
+			var requestDate = DateOnly.Today.AddDays(10);
+			var weekScheduleDomainData = new WeekScheduleDomainData
+			{
+				MinMaxTime = new TimePeriod(9, 10),
+				Date = requestDate
+			};
+			var target = setupTarget(weekScheduleDomainData, user, requestDate);
+			var result = target.CreateWeekViewModel(requestDate, StaffingPossiblity.Absence);
+			Assert.AreEqual(0, result.Possibilities.Count());
+		}
+
 		private WeekScheduleViewModel createWeekViewModel(ILoggedOnUser loggedOnUser, TimePeriod scheduleMinMaxTime, StaffingPossiblity staffingPossiblity)
 		{
 			var weekScheduleDomainData = new WeekScheduleDomainData
@@ -108,13 +124,13 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			Assert.AreEqual(expectLastTimeLine, lastTimeLine.TimeLineDisplay);
 		}
 
-		private static ScheduleViewModelFactory setupTarget(WeekScheduleDomainData weekScheduleDomainData, ILoggedOnUser user)
+		private static ScheduleViewModelFactory setupTarget(WeekScheduleDomainData weekScheduleDomainData, ILoggedOnUser user, DateOnly? requestDate = null)
 		{
 			var mapper = createMapper(user);
 			var weekScheduleDomainDataProvider = MockRepository.GenerateMock<IWeekScheduleDomainDataProvider>();
 			var monthScheduleDomainDataProvider = MockRepository.GenerateMock<IMonthScheduleDomainDataProvider>();
 			var staffingPossibilityViewModelFactory = MockRepository.GenerateMock<IStaffingPossibilityViewModelFactory>();
-			weekScheduleDomainDataProvider.Stub(x => x.Get(DateOnly.Today)).Return(weekScheduleDomainData);
+			weekScheduleDomainDataProvider.Stub(x => x.Get(requestDate ?? DateOnly.Today)).Return(weekScheduleDomainData);
 			return new ScheduleViewModelFactory(mapper, weekScheduleDomainDataProvider, monthScheduleDomainDataProvider,
 				user, staffingPossibilityViewModelFactory);
 		}

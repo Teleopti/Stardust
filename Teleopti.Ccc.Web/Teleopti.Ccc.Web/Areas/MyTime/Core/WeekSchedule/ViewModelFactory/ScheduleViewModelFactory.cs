@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		private void setPossibilities(StaffingPossiblity staffingPossiblity, WeekScheduleViewModel weekScheduleViewModel)
 		{
-			if (staffingPossiblity != StaffingPossiblity.None)
+			if (staffingPossiblity != StaffingPossiblity.None && containsIntradaySchedule(weekScheduleViewModel))
 			{
 				weekScheduleViewModel.Possibilities =
 					_staffingPossibilityViewModelFactory.CreateIntradayPeriodStaffingPossibilityViewModels(staffingPossiblity);
@@ -90,6 +90,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			{
 				weekScheduleViewModel.Possibilities = new PeriodStaffingPossibilityViewModel[] { };
 			}
+		}
+
+		private static bool containsIntradaySchedule(WeekScheduleViewModel weekScheduleViewModel)
+		{
+			return new DateOnlyPeriod(new DateOnly(weekScheduleViewModel.PeriodSelection.StartDate),
+				new DateOnly(weekScheduleViewModel.PeriodSelection.EndDate)).Contains(DateOnly.Today);
 		}
 
 		private TimePeriod? getIntradaySiteOpenHourPeriod()
