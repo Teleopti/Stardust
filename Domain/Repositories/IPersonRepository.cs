@@ -94,6 +94,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period);
 
 		IList<IPerson> FindUsers(DateOnly date);
-		IList<IPerson> FindPeopleInAgentGroup(DateOnly date, IAgentGroup agentGroup);
+		IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period);
 	}
 }

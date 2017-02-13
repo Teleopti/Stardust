@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				p => !p.IsAgent(date) && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= date).ToArray();
 		}
 
-		public IList<IPerson> FindPeopleInAgentGroup(DateOnly date, IAgentGroup agentGroup)
+		public IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
 		{
 			throw new NotImplementedException();
 		}

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Core
 			{
 				return _fixedStaffLoader.Load(period);
 			}
-			var result = _personRepository.FindPeopleInAgentGroup(DateOnly.Today, agentGroup);
+			var result = _personRepository.FindPeopleInAgentGroup(agentGroup, period);
 			return new PeopleSelection(result, result);
 		}
 	}

@@ -12,6 +12,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Easier that way, because db is involved in those tests
 	[TestFixture]
 	[Category("BucketB")]
-	public class PersonRepositoryTest:RepositoryTest<IPerson>
+	public class PersonRepositoryTest : RepositoryTest<IPerson>
 	{
 		private PersonRepository target;
 		private IAbsence absence;
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override IPerson CreateAggregateWithCorrectBusinessUnit()
 		{
 			IPerson person = PersonFactory.CreatePerson("sdgf");
-			person.SetName(new Name("Roger","Msdfr"));
+			person.SetName(new Name("Roger", "Msdfr"));
 			person.Email = "roger.kratz@teleopti.com";
 			person.WorkflowControlSet = _workflowControlSet;
 			return person;
@@ -68,18 +70,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void VerifyAggregateGraphProperties(IPerson loadedAggregateFromDatabase)
 		{
 			IPerson person = CreateAggregateWithCorrectBusinessUnit();
-			Assert.AreEqual(person.Name,loadedAggregateFromDatabase.Name);
-			Assert.AreEqual(person.Email,loadedAggregateFromDatabase.Email);
-			Assert.AreEqual(0,loadedAggregateFromDatabase.PermissionInformation.ApplicationRoleCollection.Count);
-			Assert.AreEqual(0,loadedAggregateFromDatabase.PersonPeriodCollection.Count());
+			Assert.AreEqual(person.Name, loadedAggregateFromDatabase.Name);
+			Assert.AreEqual(person.Email, loadedAggregateFromDatabase.Email);
+			Assert.AreEqual(0, loadedAggregateFromDatabase.PermissionInformation.ApplicationRoleCollection.Count);
+			Assert.AreEqual(0, loadedAggregateFromDatabase.PersonPeriodCollection.Count());
 
-			Assert.AreEqual(person.WorkflowControlSet,loadedAggregateFromDatabase.WorkflowControlSet);
+			Assert.AreEqual(person.WorkflowControlSet, loadedAggregateFromDatabase.WorkflowControlSet);
 		}
 
 		/// <summary>
 		/// Determines whether this instance can be created.
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance","CA1822:MarkMembersAsStatic"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void CanCreate()
 		{
 			new PersonRepository(new FromFactory(() => UnitOfWorkFactory.Current)).Should().Not.Be.Null();
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldIncludeSuperAdminThatIsAgentInAnotherBu()
 		{
-			var builtInRole = new ApplicationRole { BuiltIn = true,Name = "dummy role simulating super user" };
+			var builtInRole = new ApplicationRole { BuiltIn = true, Name = "dummy role simulating super user" };
 			var site = SiteFactory.CreateSimpleSite("for test");
 			var team = TeamFactory.CreateSimpleTeam("for test");
 			site.AddTeam(team);
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var cc = new ContractSchedule("sdf");
 			var csw = new ContractScheduleWeek();
 			cc.AddContractScheduleWeek(csw);
-			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1801,1,1),new PersonContract(c,pt,cc),team));
+			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1801, 1, 1), new PersonContract(c, pt, cc), team));
 
 			p.PermissionInformation.AddApplicationRole(builtInRole);
 
@@ -114,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(c);
 			PersistAndRemoveFromUnitOfWork(p);
 
-			using(FakeLogon.ToBusinessUnit(fakeBu))
+			using (FakeLogon.ToBusinessUnit(fakeBu))
 			{
 				target.FindAllSortByName().Should().Not.Contain(p);
 			}
@@ -132,19 +134,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var pt = new PartTimePercentage("sdf");
 			var cc = new ContractSchedule("sdf");
 			var csw = new ContractScheduleWeek();
-			csw.Add(DayOfWeek.Monday,true);
-			csw.Add(DayOfWeek.Tuesday,true);
-			csw.Add(DayOfWeek.Wednesday,true);
-			csw.Add(DayOfWeek.Thursday,true);
+			csw.Add(DayOfWeek.Monday, true);
+			csw.Add(DayOfWeek.Tuesday, true);
+			csw.Add(DayOfWeek.Wednesday, true);
+			csw.Add(DayOfWeek.Thursday, true);
 			var csw2 = new ContractScheduleWeek();
-			csw2.Add(DayOfWeek.Monday,true);
-			csw2.Add(DayOfWeek.Tuesday,true);
-			csw2.Add(DayOfWeek.Wednesday,true);
-			csw2.Add(DayOfWeek.Thursday,true);
+			csw2.Add(DayOfWeek.Monday, true);
+			csw2.Add(DayOfWeek.Tuesday, true);
+			csw2.Add(DayOfWeek.Wednesday, true);
+			csw2.Add(DayOfWeek.Thursday, true);
 			cc.AddContractScheduleWeek(csw);
 			cc.AddContractScheduleWeek(csw2);
-			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1801,1,1),new PersonContract(c,pt,cc),team));
-			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1802,1,1),new PersonContract(c,pt,cc),team));
+			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1801, 1, 1), new PersonContract(c, pt, cc), team));
+			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1802, 1, 1), new PersonContract(c, pt, cc), team));
 
 			PersistAndRemoveFromUnitOfWork(cc);
 			PersistAndRemoveFromUnitOfWork(pt);
@@ -153,30 +155,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(c);
 			PersistAndRemoveFromUnitOfWork(p);
 
-			var snubbar = target.FindPeopleInOrganization(new DateOnlyPeriod(1800,1,1,2100,1,1),true);
+			var snubbar = target.FindPeopleInOrganization(new DateOnlyPeriod(1800, 1, 1, 2100, 1, 1), true);
 
-			Assert.AreEqual(2,snubbar.First().PersonPeriodCollection.First().PersonContract.ContractSchedule.ContractScheduleWeeks.Count());
+			Assert.AreEqual(2, snubbar.First().PersonPeriodCollection.First().PersonContract.ContractSchedule.ContractScheduleWeeks.Count());
 		}
 
 		[Test]
 		public void VerifyWriteProtectionInfo()
 		{
-			IPerson person = PersonFactory.CreatePerson("for","test");
-			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000,1,1);
+			IPerson person = PersonFactory.CreatePerson("for", "test");
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000, 1, 1);
 			PersistAndRemoveFromUnitOfWork(person);
 
 			IPerson loaded = Session.Get<Person>(person.Id);
-			Assert.AreEqual(person,loaded);
-			Assert.AreEqual(new DateOnly(2000,1,1),loaded.PersonWriteProtection.PersonWriteProtectedDate);
-			Assert.AreEqual(((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person,loaded.PersonWriteProtection.UpdatedBy);
+			Assert.AreEqual(person, loaded);
+			Assert.AreEqual(new DateOnly(2000, 1, 1), loaded.PersonWriteProtection.PersonWriteProtectedDate);
+			Assert.AreEqual(((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, loaded.PersonWriteProtection.UpdatedBy);
 			Assert.IsNotNull(loaded.PersonWriteProtection.UpdatedOn);
-			Assert.AreSame(loaded,loaded.PersonWriteProtection.BelongsTo);
+			Assert.AreSame(loaded, loaded.PersonWriteProtection.BelongsTo);
 			var version = ((IVersioned)loaded).Version;
-			loaded.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2010,1,1);
+			loaded.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2010, 1, 1);
 			PersistAndRemoveFromUnitOfWork(loaded);
 			loaded = Session.Get<Person>(person.Id);
-			Assert.That(loaded.PersonWriteProtection.PersonWriteProtectedDate,Is.EqualTo(new DateOnly(2010,1,1)));
-			Assert.That(version,Is.EqualTo(((IVersioned)loaded).Version));
+			Assert.That(loaded.PersonWriteProtection.PersonWriteProtectedDate, Is.EqualTo(new DateOnly(2010, 1, 1)));
+			Assert.That(version, Is.EqualTo(((IVersioned)loaded).Version));
 
 		}
 
@@ -184,11 +186,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyWriteProtectionInfoWhenAllColumnsIsNull()
 		{
-			IPerson person = PersonFactory.CreatePerson("for","test");
+			IPerson person = PersonFactory.CreatePerson("for", "test");
 			PersistAndRemoveFromUnitOfWork(person);
 
 			IPerson loaded = Session.Get<Person>(person.Id);
-			Assert.AreEqual(person,loaded);
+			Assert.AreEqual(person, loaded);
 			Assert.IsNotNull(loaded.PersonWriteProtection);
 			Assert.IsNull(loaded.PersonWriteProtection.PersonWriteProtectedDate);
 		}
@@ -215,7 +217,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource,LoggedOnPerson,buTemp);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
@@ -224,10 +226,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(siteBu);
 			PersistAndRemoveFromUnitOfWork(teamBu);
 
-			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900,1,1),new PersonContract(ctr,percentage,ctrSched),teamBu));
-			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1999,1,1),new PersonContract(ctr,percentage,ctrSched),team));
+			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), teamBu));
+			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1999, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0,new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false).Count());
+			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count());
 		}
 
 		[Test]
@@ -252,7 +254,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource,LoggedOnPerson,buTemp);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
@@ -261,9 +263,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(siteBu);
 			PersistAndRemoveFromUnitOfWork(teamBu);
 
-			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900,1,1),new PersonContract(ctr,percentage,ctrSched),team));
+			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0,new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800,1,1)).Count());
+			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)).Count());
 		}
 
 		/// <summary>
@@ -281,7 +283,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson personToTest = PersonFactory.CreatePerson("dummyAgent1");
 
 			// CreateProjection Team belong to a  site 
-			ITeam team = TeamFactory.CreateTeam("Dummy Site","Dummy Team");
+			ITeam team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
 			PersistAndRemoveFromUnitOfWork(team.Site);
 			PersistAndRemoveFromUnitOfWork(team);
 
@@ -305,15 +307,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			// create Person Contract for testing person
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract();
 
-			IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(2000,1,1),
+			IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 												personContract,
 												team);
 			personToTest.AddPersonPeriod(personPeriod);
-			personToTest.AddSkill(new PersonSkill(skill,new Percent(0.44)),personPeriod);
-			personToTest.AddSkill(new PersonSkill(skill2,new Percent(0.54)),personPeriod);
+			personToTest.AddSkill(new PersonSkill(skill, new Percent(0.44)), personPeriod);
+			personToTest.AddSkill(new PersonSkill(skill2, new Percent(0.54)), personPeriod);
 			personPeriod.RuleSetBag = rsBag;
 
-			personPeriod.BudgetGroup = new BudgetGroup { Name = "BG",TimeZone = personToTest.PermissionInformation.DefaultTimeZone() };
+			personPeriod.BudgetGroup = new BudgetGroup { Name = "BG", TimeZone = personToTest.PermissionInformation.DefaultTimeZone() };
 
 			PersistAndRemoveFromUnitOfWork(personContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
@@ -329,10 +331,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson personLoaded = new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Load(personToTest.Id.Value);
 			var personPeriodLoaded = personLoaded.PersonPeriodCollection.Single();
 			//asserts
-			Assert.AreEqual(personPeriod.StartDate,personPeriodLoaded.StartDate);
-			Assert.AreEqual(2,personPeriodLoaded.PersonSkillCollection.Count());
-			Assert.AreEqual("for test",personPeriodLoaded.RuleSetBag.Description.Name);
-			Assert.AreEqual(personPeriod.BudgetGroup,personPeriodLoaded.BudgetGroup);
+			Assert.AreEqual(personPeriod.StartDate, personPeriodLoaded.StartDate);
+			Assert.AreEqual(2, personPeriodLoaded.PersonSkillCollection.Count());
+			Assert.AreEqual("for test", personPeriodLoaded.RuleSetBag.Description.Name);
+			Assert.AreEqual(personPeriod.BudgetGroup, personPeriodLoaded.BudgetGroup);
 		}
 
 		[Test]
@@ -346,27 +348,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skill.SkillType);
 			PersistAndRemoveFromUnitOfWork(skill);
 
-			var team = TeamFactory.CreateTeam("Dummy Site","Dummy Team");
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
 			PersistAndRemoveFromUnitOfWork(team.Site);
 			PersistAndRemoveFromUnitOfWork(team);
 
 			var personContract = PersonContractFactory.CreatePersonContract();
-			var personPeriod = new PersonPeriod(new DateOnly(2000,1,1),personContract,team);
-			personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(0.44)));
-			Assert.Throws<ArgumentException>(() => personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(0.54))));
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
+			Assert.Throws<ArgumentException>(() => personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54))));
 		}
 
 
 		[Test]
-		public void ShouldLoadPermissionDataOnLoadOne([Values(true,false)] bool isDeleted)
+		public void ShouldLoadPermissionDataOnLoadOne([Values(true, false)] bool isDeleted)
 		{
 			var userOk = PersonFactory.CreatePerson(RandomName.Make());
 			userOk.PermissionInformation.AddApplicationRole(createAndPersistApplicationRole());
-			if(isDeleted)
+			if (isDeleted)
 				((IDeleteTag)userOk).SetDeleted();
 
 			// CreateProjection Team belong to a  site 
-			ITeam team = TeamFactory.CreateTeam("Dummy Site","Dummy Team");
+			ITeam team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
 			PersistAndRemoveFromUnitOfWork(team.Site);
 			PersistAndRemoveFromUnitOfWork(team);
 
@@ -389,15 +391,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			// create Person Contract for testing person
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract();
 
-			IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(2000,1,1),
+			IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 												personContract,
 												team);
 			userOk.AddPersonPeriod(personPeriod);
-			userOk.AddSkill(new PersonSkill(skill,new Percent(0.44)),personPeriod);
-			userOk.AddSkill(new PersonSkill(skill2,new Percent(0.54)),personPeriod);
+			userOk.AddSkill(new PersonSkill(skill, new Percent(0.44)), personPeriod);
+			userOk.AddSkill(new PersonSkill(skill2, new Percent(0.54)), personPeriod);
 			personPeriod.RuleSetBag = rsBag;
 
-			personPeriod.BudgetGroup = new BudgetGroup() { Name = "BG",TimeZone = userOk.PermissionInformation.DefaultTimeZone() };
+			personPeriod.BudgetGroup = new BudgetGroup() { Name = "BG", TimeZone = userOk.PermissionInformation.DefaultTimeZone() };
 
 			PersistAndRemoveFromUnitOfWork(personContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
@@ -409,7 +411,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IPerson userRetOk = target.LoadPersonAndPermissions(userOk.Id.GetValueOrDefault());
 			Session.Close();
-			Assert.AreEqual(userOk,userRetOk);
+			Assert.AreEqual(userOk, userRetOk);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection));
@@ -420,10 +422,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team.BusinessUnitExplicit));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team.Site.TeamCollection));
 
-			Assert.AreEqual(1,userRetOk.PermissionInformation.ApplicationRoleCollection.Count);
-			Assert.AreEqual(2,userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection.Count);
-			Assert.AreEqual(1,userRetOk.PersonPeriodCollection[0].Team.Site.TeamCollection.Count);
-			Assert.AreEqual(1,userRetOk.PersonPeriodCollection.Count);
+			Assert.AreEqual(1, userRetOk.PermissionInformation.ApplicationRoleCollection.Count);
+			Assert.AreEqual(2, userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection.Count);
+			Assert.AreEqual(1, userRetOk.PersonPeriodCollection[0].Team.Site.TeamCollection.Count);
+			Assert.AreEqual(1, userRetOk.PersonPeriodCollection.Count);
 		}
 
 
@@ -436,19 +438,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team = TeamFactory.CreateSimpleTeam("for test");
 			site.AddTeam(team);
 
-			IPerson per1 = PersonFactory.CreatePerson("roger","kratz");
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
 			IPersonPeriod personPeriod1 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
 			per1.AddPersonPeriod(personPeriod1);
 			IPersonPeriod personPeriod2 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001,1,1),team);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), team);
 			per1.AddPersonPeriod(personPeriod2);
 
-			IPerson per2 = PersonFactory.CreatePerson("tamas","balog");
+			IPerson per2 = PersonFactory.CreatePerson("tamas", "balog");
 
 			IExternalLogOn login1 = ExternalLogOnFactory.CreateExternalLogOn();
-			per1.AddExternalLogOn(login1,personPeriod1);
-			per1.AddExternalLogOn(login1,personPeriod2);
+			per1.AddExternalLogOn(login1, personPeriod1);
+			per1.AddExternalLogOn(login1, personPeriod2);
 
 			//Persist
 			PersistAndRemoveFromUnitOfWork(site);
@@ -470,19 +472,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per2);
 
 			//load
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800,1,1)));
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
 			//verify
 			testList.Remove(LoggedOnPerson);
-			Assert.AreEqual(2,testList.Count);
-			Assert.AreEqual(testList[0],per2);
-			Assert.AreEqual(testList[1],per1);
+			Assert.AreEqual(2, testList.Count);
+			Assert.AreEqual(testList[0], per2);
+			Assert.AreEqual(testList[1], per1);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection.First().Team));
-			Assert.AreEqual(0,testList[0].PersonPeriodCollection.Count);
-			Assert.AreEqual(2,testList[1].PersonPeriodCollection.Count);
+			Assert.AreEqual(0, testList[0].PersonPeriodCollection.Count);
+			Assert.AreEqual(2, testList[1].PersonPeriodCollection.Count);
 			IList<IPersonPeriod> wrappedPersonPeriod = new List<IPersonPeriod>(testList[1].PersonPeriodCollection);
-			Assert.AreEqual(1,wrappedPersonPeriod[0].ExternalLogOnCollection.Count());
-			Assert.AreEqual(1,wrappedPersonPeriod[1].ExternalLogOnCollection.Count());
+			Assert.AreEqual(1, wrappedPersonPeriod[0].ExternalLogOnCollection.Count());
+			Assert.AreEqual(1, wrappedPersonPeriod[1].ExternalLogOnCollection.Count());
 		}
 
 		[Test]
@@ -501,13 +503,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(func1);
 			IApplicationFunction func2 = new ApplicationFunction("APP2");
 			PersistAndRemoveFromUnitOfWork(func2);
-			IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1","ROLEDESC1");
+			IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1", "ROLEDESC1");
 			role1.AddApplicationFunction(func1);
 			role1.AddApplicationFunction(func2);
 			PersistAndRemoveFromUnitOfWork(role1);
-			IPerson per = PersonFactory.CreatePerson("Test","Testorson");
+			IPerson per = PersonFactory.CreatePerson("Test", "Testorson");
 			IPersonPeriod personPeriod =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
 			per.AddPersonPeriod(personPeriod);
 			per.PermissionInformation.AddApplicationRole(role1);
 
@@ -517,13 +519,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per);
 			//load
 			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800,1,1)));
+			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
 			//verify
 			personList.Remove(LoggedOnPerson);
-			Assert.AreEqual(1,personList.Count);
+			Assert.AreEqual(1, personList.Count);
 			IPerson retPerson = personList[0];
 
-			verifyPermissionInfoIsLazy(false,retPerson);
+			verifyPermissionInfoIsLazy(false, retPerson);
 		}
 
 		[Test]
@@ -540,14 +542,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IApplicationFunction func1 = new ApplicationFunction("APP1");
 			PersistAndRemoveFromUnitOfWork(func1);
-			IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1","ROLEDESC1");
+			IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1", "ROLEDESC1");
 			role1.AddApplicationFunction(func1);
 			PersistAndRemoveFromUnitOfWork(role1);
 
-			IPerson per = PersonFactory.CreatePerson("Test","Testorson");
-			per.TerminatePerson(DateOnly.Today.AddDays(-1),_personAccountUpdater);
+			IPerson per = PersonFactory.CreatePerson("Test", "Testorson");
+			per.TerminatePerson(DateOnly.Today.AddDays(-1), _personAccountUpdater);
 			IPersonPeriod personPeriod =
-				 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team);
+				 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
 			per.AddPersonPeriod(personPeriod);
 
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.ContractSchedule);
@@ -560,7 +562,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(DateOnly.Today));
 			//verify
 			personList.Remove(LoggedOnPerson);
-			Assert.AreEqual(0,personList.Count);
+			Assert.AreEqual(0, personList.Count);
 		}
 
 		/// <summary>
@@ -577,7 +579,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsNotNull(justForTest1.InternalSession);
 		}
 
-		private class disabledFakeState:IState
+		private class disabledFakeState : IState
 		{
 			public TimeZoneInfo UserTimeZone { get { throw new NotSupportedException(); } }
 			public IApplicationData ApplicationScopeData { get { throw new NotSupportedException(); } }
@@ -592,9 +594,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			SetupPersonsInOrganizationWithContract();
 
 			Session.Evict(BusinessUnitFactory.BusinessUnitUsedInTest);
-			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false);
+			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false);
 
-			Assert.AreEqual(2,res.Count);
+			Assert.AreEqual(2, res.Count);
 
 			IPerson person = res.FirstOrDefault(p => p.Name.FirstName == "hejhej");
 			IPerson person2 = res.FirstOrDefault(p => p.Name.FirstName == "hejhej2");
@@ -614,10 +616,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.PersonSchedulePeriodCollection));
-			Assert.AreEqual(2,person.PersonSchedulePeriodCollection.Count);
-			Assert.AreEqual(0,person2.PersonSchedulePeriodCollection.Count);
-			Assert.AreEqual(3,person.PersonPeriodCollection.Count());
-			Assert.AreEqual(1,person2.PersonPeriodCollection.Count());
+			Assert.AreEqual(2, person.PersonSchedulePeriodCollection.Count);
+			Assert.AreEqual(0, person2.PersonSchedulePeriodCollection.Count);
+			Assert.AreEqual(3, person.PersonPeriodCollection.Count());
+			Assert.AreEqual(1, person2.PersonPeriodCollection.Count());
 
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person2.PersonPeriodCollection.First().PersonSkillCollection.First().Skill.SkillType));
 		}
@@ -650,7 +652,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person2);
 			PersistAndRemoveFromUnitOfWork(person3);
 
-			var result = target.FindPeopleBelongTeams(new[] {team1, team2},
+			var result = target.FindPeopleBelongTeams(new[] { team1, team2 },
 				new DateOnlyPeriod(new DateOnly(2016, 12, 12), new DateOnly(2016, 12, 12)));
 
 			result.Count.Should().Be.EqualTo(2);
@@ -662,7 +664,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyFindPersonInOrganizationWithWorkflowControlSet()
 		{
 			SetupPersonsInOrganizationWithContract();
-			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false);
+			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false);
 			IPerson person = res.FirstOrDefault(p => p.Name.FirstName == "hejhej");
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.WorkflowControlSet));
 		}
@@ -671,7 +673,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadPeopleTeamSiteSchedulePeriodWorkflowControlSet()
 		{
 			SetupPersonsInOrganizationWithContract();
-			var res = target.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(new DateOnlyPeriod(2000,1,1,2001,1,1));
+			var res = target.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1));
 
 			var person = res.FirstOrDefault(p => p.Name.FirstName == "hejhej");
 			var personPeriod = person.PersonPeriodCollection.First();
@@ -695,11 +697,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
-			ISkill skillWithValidDays = SkillFactory.CreateSkill("skillWithValidDays",skType,10);
+			ISkill skillWithValidDays = SkillFactory.CreateSkill("skillWithValidDays", skType, 10);
 			skillWithValidDays.Activity = act;
 			skillWithValidDays.TimeZone = (TimeZoneInfo.Local);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays);
-			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays,new DateOnly(2000,1,6),scenOk);
+			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays, new DateOnly(2000, 1, 6), scenOk);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays.WorkloadCollection);
 			PersistAndRemoveFromUnitOfWork(skillDayValid);
 
@@ -711,12 +713,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson validPerson = PersonFactory.CreatePerson("valid");
-			validPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2000,2,3),createPersonContract(),team));
-			validPerson.AddSkill(new PersonSkill(skillWithValidDays,new Percent(1)),validPerson.PersonPeriodCollection.First());
+			validPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team));
+			validPerson.AddSkill(new PersonSkill(skillWithValidDays, new Percent(1)), validPerson.PersonPeriodCollection.First());
 			PersistAndRemoveFromUnitOfWork(validPerson);
 
-			Assert.AreEqual(1,target.PeopleSkillMatrix(scenOk,new DateTimePeriod(2000,1,1,2001,1,1)).Count());
-			Assert.AreEqual(0,target.PeopleSkillMatrix(scenNo,new DateTimePeriod(2000,1,1,2001,1,1)).Count());
+			Assert.AreEqual(1, target.PeopleSkillMatrix(scenOk, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)).Count());
+			Assert.AreEqual(0, target.PeopleSkillMatrix(scenNo, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)).Count());
 		}
 
 		[Test]
@@ -728,10 +730,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
-			ISkill skillWithValidDays = new Skill("skillWithValidDays","sdf",Color.Red,10,skType) { Activity = act,TimeZone = TimeZoneInfo.Local };
-			ISkill skillWithNonValidDays = new Skill("skillWithNonValidDays","sdf",Color.Red,10,skType) { Activity = act,TimeZone = TimeZoneInfo.Local };
-			ISkill skillWithNoDays = new Skill("skillWithNonValidDays","sdf",Color.Red,10,skType) { Activity = act,TimeZone = TimeZoneInfo.Local };
-			ISkill deletedSkill = new Skill("deletedSkill","sdf",Color.Red,10,skType) { Activity = act,TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithValidDays = new Skill("skillWithValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithNonValidDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithNoDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill deletedSkill = new Skill("deletedSkill", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
 			((IDeleteTag)deletedSkill).SetDeleted();
 
 			PersistAndRemoveFromUnitOfWork(skillWithNoDays);
@@ -739,9 +741,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skillWithNonValidDays);
 			PersistAndRemoveFromUnitOfWork(deletedSkill);
 
-			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays,new DateOnly(2000,1,6),scen);
-			ISkillDay skillDayNonValid = SkillDayFactory.CreateSkillDay(skillWithNonValidDays,new DateOnly(2002,1,6),scen);
-			ISkillDay skillDayNonValid2 = SkillDayFactory.CreateSkillDay(deletedSkill,new DateOnly(2000,1,6),scen);
+			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays, new DateOnly(2000, 1, 6), scen);
+			ISkillDay skillDayNonValid = SkillDayFactory.CreateSkillDay(skillWithNonValidDays, new DateOnly(2002, 1, 6), scen);
+			ISkillDay skillDayNonValid2 = SkillDayFactory.CreateSkillDay(deletedSkill, new DateOnly(2000, 1, 6), scen);
 
 			PersistAndRemoveFromUnitOfWork(scen);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays.WorkloadCollection);
@@ -760,39 +762,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 
 			var validPerson = PersonFactory.CreatePerson("valid");
-			var validPersonPeriod = new PersonPeriod(new DateOnly(2000,2,3),createPersonContract(),team);
+			var validPersonPeriod = new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team);
 			validPerson.AddPersonPeriod(validPersonPeriod);
-			validPerson.AddSkill(new PersonSkill(skillWithValidDays,new Percent(1)),validPersonPeriod);
-			validPerson.AddSkill(new PersonSkill(skillWithNonValidDays,new Percent(1)),validPersonPeriod);
+			validPerson.AddSkill(new PersonSkill(skillWithValidDays, new Percent(1)), validPersonPeriod);
+			validPerson.AddSkill(new PersonSkill(skillWithNonValidDays, new Percent(1)), validPersonPeriod);
 
 			var nonValidPerson1 = PersonFactory.CreatePerson("no1");
-			var nonValidPersonPeriod1 = new PersonPeriod(new DateOnly(2000,2,3),createPersonContract(),team);
+			var nonValidPersonPeriod1 = new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team);
 			nonValidPerson1.AddPersonPeriod(nonValidPersonPeriod1);
-			nonValidPerson1.AddSkill(new PersonSkill(deletedSkill,new Percent(2)),nonValidPersonPeriod1);
+			nonValidPerson1.AddSkill(new PersonSkill(deletedSkill, new Percent(2)), nonValidPersonPeriod1);
 
 			var nonValidPerson2 = PersonFactory.CreatePerson("no2");
-			var nonValidPersonPeriod2 = new PersonPeriod(new DateOnly(2006,2,3),createPersonContract(),team);
+			var nonValidPersonPeriod2 = new PersonPeriod(new DateOnly(2006, 2, 3), createPersonContract(), team);
 			nonValidPerson2.AddPersonPeriod(nonValidPersonPeriod2);
-			nonValidPerson2.AddSkill(new PersonSkill(skillWithValidDays,new Percent(2)),nonValidPersonPeriod2);
+			nonValidPerson2.AddSkill(new PersonSkill(skillWithValidDays, new Percent(2)), nonValidPersonPeriod2);
 
 			var nonValidPerson3 = PersonFactory.CreatePerson("no3");
-			var nonValidPersonPeriod3 = new PersonPeriod(new DateOnly(2000,2,3),createPersonContract(),team);
+			var nonValidPersonPeriod3 = new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team);
 			nonValidPerson3.AddPersonPeriod(nonValidPersonPeriod3);
-			nonValidPerson3.AddSkill(new PersonSkill(skillWithNonValidDays,new Percent(2)),nonValidPersonPeriod3);
+			nonValidPerson3.AddSkill(new PersonSkill(skillWithNonValidDays, new Percent(2)), nonValidPersonPeriod3);
 
 			PersistAndRemoveFromUnitOfWork(validPerson);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson1);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson2);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson3);
 
-			var res = target.PeopleSkillMatrix(scen,new DateTimePeriod(2000,1,1,2001,1,1));
+			var res = target.PeopleSkillMatrix(scen, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 
 			//1 pers med ett skill
-			Assert.AreEqual(1,res.Count());
-			foreach(var pair in res)
+			Assert.AreEqual(1, res.Count());
+			foreach (var pair in res)
 			{
-				Assert.AreEqual(pair.Item1,validPerson.Id.Value);
-				Assert.AreEqual(pair.Item2,skillWithValidDays.Id.Value);
+				Assert.AreEqual(pair.Item1, validPerson.Id.Value);
+				Assert.AreEqual(pair.Item2, skillWithValidDays.Id.Value);
 			}
 		}
 
@@ -805,16 +807,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
-			ISkill skillWithValidDays1 = new Skill("skillWithValidDays1","sdf",Color.Red,10,skType) { Activity = act,TimeZone = TimeZoneInfo.Local };
-			ISkill skillWithValidDays2 = new Skill("skillWithValidDays2","sdf",Color.Red,10,skType) { Activity = act,TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithValidDays1 = new Skill("skillWithValidDays1", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithValidDays2 = new Skill("skillWithValidDays2", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
 
 
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays1);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays2);
 
-			ISkillDay skillDayValid1 = SkillDayFactory.CreateSkillDay(skillWithValidDays1,new DateOnly(2000,1,6),scen);
-			ISkillDay skillDayValid2 = SkillDayFactory.CreateSkillDay(skillWithValidDays2,new DateOnly(2000,1,2),scen);
-			ISkillDay skillDayValid3 = SkillDayFactory.CreateSkillDay(skillWithValidDays2,new DateOnly(2000,1,6),scen);
+			ISkillDay skillDayValid1 = SkillDayFactory.CreateSkillDay(skillWithValidDays1, new DateOnly(2000, 1, 6), scen);
+			ISkillDay skillDayValid2 = SkillDayFactory.CreateSkillDay(skillWithValidDays2, new DateOnly(2000, 1, 2), scen);
+			ISkillDay skillDayValid3 = SkillDayFactory.CreateSkillDay(skillWithValidDays2, new DateOnly(2000, 1, 6), scen);
 
 
 			PersistAndRemoveFromUnitOfWork(scen);
@@ -833,35 +835,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson validPerson1 = PersonFactory.CreatePerson("valid1");
-			IPersonPeriod period = new PersonPeriod(new DateOnly(2000,1,1),createPersonContract(),team);
+			IPersonPeriod period = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team);
 			validPerson1.AddPersonPeriod(period);
-			validPerson1.AddSkill(new PersonSkill(skillWithValidDays2,new Percent(1)),period);
-			period = new PersonPeriod(new DateOnly(2000,1,4),createPersonContract(),team);
+			validPerson1.AddSkill(new PersonSkill(skillWithValidDays2, new Percent(1)), period);
+			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
 			validPerson1.AddPersonPeriod(period);
-			validPerson1.AddSkill(new PersonSkill(skillWithValidDays1,new Percent(1)),period);
+			validPerson1.AddSkill(new PersonSkill(skillWithValidDays1, new Percent(1)), period);
 
 			IPerson validPerson2 = PersonFactory.CreatePerson("valid2");
-			period = new PersonPeriod(new DateOnly(2000,1,4),createPersonContract(),team);
+			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
 			validPerson2.AddPersonPeriod(period);
-			validPerson2.AddSkill(new PersonSkill(skillWithValidDays1,new Percent(1)),period);
+			validPerson2.AddSkill(new PersonSkill(skillWithValidDays1, new Percent(1)), period);
 
 			IPerson nonValidPerson1 = PersonFactory.CreatePerson("no1");
-			period = new PersonPeriod(new DateOnly(2000,1,4),createPersonContract(),team);
+			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
 			nonValidPerson1.AddPersonPeriod(period);
-			nonValidPerson1.AddSkill(new PersonSkill(skillWithValidDays2,new Percent(1)),period);
+			nonValidPerson1.AddSkill(new PersonSkill(skillWithValidDays2, new Percent(1)), period);
 
 			PersistAndRemoveFromUnitOfWork(validPerson1);
 			PersistAndRemoveFromUnitOfWork(validPerson2);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson1);
 
-			var res = target.PeopleSkillMatrix(scen,new DateTimePeriod(2000,1,5,2001,1,7)).ToList();
+			var res = target.PeopleSkillMatrix(scen, new DateTimePeriod(2000, 1, 5, 2001, 1, 7)).ToList();
 
-			Assert.AreEqual(3,res.Count);
-			var pair = new Tuple<Guid,Guid>(validPerson1.Id.Value,skillWithValidDays1.Id.Value);
+			Assert.AreEqual(3, res.Count);
+			var pair = new Tuple<Guid, Guid>(validPerson1.Id.Value, skillWithValidDays1.Id.Value);
 			Assert.IsTrue(res.Contains(pair));
-			pair = new Tuple<Guid,Guid>(validPerson2.Id.Value,skillWithValidDays1.Id.Value);
+			pair = new Tuple<Guid, Guid>(validPerson2.Id.Value, skillWithValidDays1.Id.Value);
 			Assert.IsTrue(res.Contains(pair));
-			pair = new Tuple<Guid,Guid>(nonValidPerson1.Id.Value,skillWithValidDays2.Id.Value);
+			pair = new Tuple<Guid, Guid>(nonValidPerson1.Id.Value, skillWithValidDays2.Id.Value);
 			Assert.IsTrue(res.Contains(pair));
 
 		}
@@ -884,26 +886,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(otherTeam);
 
 			IPerson validPerson1 = PersonFactory.CreatePerson("valid1");
-			IPersonPeriod period = new PersonPeriod(new DateOnly(2000,1,1),createPersonContract(),team);
+			IPersonPeriod period = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team);
 			validPerson1.AddPersonPeriod(period);
-			period = new PersonPeriod(new DateOnly(2000,1,4),createPersonContract(),team);
+			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
 			validPerson1.AddPersonPeriod(period);
 
 			IPerson validPerson2 = PersonFactory.CreatePerson("valid2");
-			period = new PersonPeriod(new DateOnly(2000,1,4),createPersonContract(),team);
+			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
 			validPerson2.AddPersonPeriod(period);
 
 			IPerson nonValidPerson1 = PersonFactory.CreatePerson("no1");
-			period = new PersonPeriod(new DateOnly(2000,1,4),createPersonContract(),otherTeam);
+			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), otherTeam);
 			nonValidPerson1.AddPersonPeriod(period);
 
 			PersistAndRemoveFromUnitOfWork(validPerson1);
 			PersistAndRemoveFromUnitOfWork(validPerson2);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson1);
 
-			IList<Guid> res = target.PeopleSiteMatrix(new DateTimePeriod(2000,1,5,2001,1,7)).ToList();
+			IList<Guid> res = target.PeopleSiteMatrix(new DateTimePeriod(2000, 1, 5, 2001, 1, 7)).ToList();
 
-			Assert.AreEqual(2,res.Count);
+			Assert.AreEqual(2, res.Count);
 			Assert.IsTrue(res.Contains(validPerson1.Id.Value));
 			Assert.IsTrue(res.Contains(validPerson2.Id.Value));
 			Assert.IsFalse(res.Contains(nonValidPerson1.Id.Value));
@@ -918,37 +920,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson okPerson2 = PersonFactory.CreatePerson("hejhej2");
 			IPerson noPerson1 = PersonFactory.CreatePerson("bajbaj");
 			IPerson noPerson2 = PersonFactory.CreatePerson("bajbaj");
-			IPerson noPerson3 = PersonFactory.CreatePerson("dra på ","trissor");
+			IPerson noPerson3 = PersonFactory.CreatePerson("dra på ", "trissor");
 			ITeam team = TeamFactory.CreateSimpleTeam("hola");
 			ISite site = SiteFactory.CreateSimpleSite();
 			site.AddTeam(team);
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
-			ISkill skill = new Skill("for test","sdf",Color.Blue,3,skType);
-			ISkill skill2 = new Skill("for test2","sdf",Color.Blue,3,skType);
+			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
+			ISkill skill2 = new Skill("for test2", "sdf", Color.Blue, 3, skType);
 			skill.Activity = act;
 			skill2.Activity = act;
 			skill.TimeZone = (TimeZoneInfo.Local);
 			skill2.TimeZone = (TimeZoneInfo.Local);
 
-			PersonPeriod okPeriod = new PersonPeriod(new DateOnly(2000,1,1),createPersonContract(),team);
-			okPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1)));
-			okPeriod.AddPersonSkill(new PersonSkill(skill2,new Percent(1)));
-			PersonPeriod okPeriod2 = new PersonPeriod(new DateOnly(2000,1,1),createPersonContract(),team);
-			okPeriod2.AddPersonSkill(new PersonSkill(skill,new Percent(1)));
-			okPeriod2.AddPersonSkill(new PersonSkill(skill2,new Percent(1)));
-			PersonPeriod noPeriod2 = new PersonPeriod(new DateOnly(2002,1,1),createPersonContract(),team);
-			noPeriod2.AddPersonSkill(new PersonSkill(skill,new Percent(1)));
+			PersonPeriod okPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team);
+			okPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			okPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(1)));
+			PersonPeriod okPeriod2 = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team);
+			okPeriod2.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			okPeriod2.AddPersonSkill(new PersonSkill(skill2, new Percent(1)));
+			PersonPeriod noPeriod2 = new PersonPeriod(new DateOnly(2002, 1, 1), createPersonContract(), team);
+			noPeriod2.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 
-			SchedulePeriod schedulePeriod1 = new SchedulePeriod(okPeriod.StartDate,SchedulePeriodType.Month,1);
-			SchedulePeriod schedulePeriod2 = new SchedulePeriod(new DateOnly(okPeriod.StartDate.Date.AddYears(1)),SchedulePeriodType.Month,1);
+			SchedulePeriod schedulePeriod1 = new SchedulePeriod(okPeriod.StartDate, SchedulePeriodType.Month, 1);
+			SchedulePeriod schedulePeriod2 = new SchedulePeriod(new DateOnly(okPeriod.StartDate.Date.AddYears(1)), SchedulePeriodType.Month, 1);
 			var sCategory = new ShiftCategory("for test");
 			schedulePeriod1.AddShiftCategoryLimitation(new ShiftCategoryLimitation(sCategory));
 			schedulePeriod2.AddShiftCategoryLimitation(new ShiftCategoryLimitation(sCategory));
 
-			okPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(1900,1,1),createPersonContract(),team));
+			okPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), createPersonContract(), team));
 			okPerson.AddPersonPeriod(okPeriod);
-			okPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2001,1,1),createPersonContract(),team));
+			okPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2001, 1, 1), createPersonContract(), team));
 			okPerson.AddSchedulePeriod(schedulePeriod1);
 			okPerson.AddSchedulePeriod(schedulePeriod2);
 			okPerson2.AddPersonPeriod(okPeriod2);
@@ -980,12 +982,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IPerson per = PersonFactory.CreatePerson("Test","Testorson");
+			IPerson per = PersonFactory.CreatePerson("Test", "Testorson");
 			IPersonPeriod personPeriod =
-				 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team);
+				 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
 			per.AddPersonPeriod(personPeriod);
 			DateOnly secondPersonPeriodStartDate = personPeriod.StartDate.AddDays(40);
-			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(secondPersonPeriodStartDate,personPeriod.PersonContract,team));
+			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(secondPersonPeriodStartDate, personPeriod.PersonContract, team));
 
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.ContractSchedule);
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.PartTimePercentage);
@@ -993,8 +995,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per);
 
 			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(2000,2,1)));
-			((PersonPeriod)personList[0].Period(new DateOnly(2000,1,10))).internalEndDate.Should()
+			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(2000, 2, 1)));
+			((PersonPeriod)personList[0].Period(new DateOnly(2000, 1, 10))).internalEndDate.Should()
 				.Be.EqualTo(secondPersonPeriodStartDate.AddDays(-1));
 		}
 
@@ -1013,26 +1015,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createPersonWithRuleSets(team);
 			createPersonWithRuleSets(team2);
 
-			IPerson loadedPerson = new List<IPerson>(target.FindPeopleInOrganizationLight(new DateOnlyPeriod(2000,1,1,2001,1,1)))[0];
+			IPerson loadedPerson = new List<IPerson>(target.FindPeopleInOrganizationLight(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1)))[0];
 			Assert.IsFalse(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag));
 			Session.Clear();
-			loadedPerson = new List<IPerson>(target.FindPeopleInOrganizationLight(new DateOnlyPeriod(2000,1,1,2001,1,1)))[0];
-			Assert.AreEqual(2,loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
+			loadedPerson = new List<IPerson>(target.FindPeopleInOrganizationLight(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1)))[0];
+			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability","CA1506:AvoidExcessiveClassCoupling"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldFindPeople()
 		{
 			var person = CreateAggregateWithCorrectBusinessUnit();
 
-			IApplicationRole role = ApplicationRoleFactory.CreateRole("test","role");
+			IApplicationRole role = ApplicationRoleFactory.CreateRole("test", "role");
 			ITeam team = TeamFactory.CreateSimpleTeam("sdf");
 			ISite site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
 			IContract ctr = new Contract("sdf");
 			IPartTimePercentage pTime = new PartTimePercentage("sdf");
 			IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
-			DateOnly date = new DateOnly(2000,1,2);
+			DateOnly date = new DateOnly(2000, 1, 2);
 
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(team);
@@ -1040,8 +1042,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(pTime);
 			PersistAndRemoveFromUnitOfWork(cSc);
 
-			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date,PersonContractFactory.CreatePersonContract(ctr,pTime,cSc),team));
-			foreach(IPersonPeriod personPeriod in person.PersonPeriodCollection)
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
+			foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
 			{
 				PersistAndRemoveFromUnitOfWork(personPeriod.Team.Site);
 				PersistAndRemoveFromUnitOfWork(personPeriod.Team);
@@ -1058,7 +1060,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonSchedulePeriodCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PermissionInformation.ApplicationRoleCollection));
 
-			var fieldInfo = loadedPerson.PermissionInformation.GetType().GetField("personInApplicationRole",BindingFlags.Instance | BindingFlags.NonPublic);
+			var fieldInfo = loadedPerson.PermissionInformation.GetType().GetField("personInApplicationRole", BindingFlags.Instance | BindingFlags.NonPublic);
 			var list = fieldInfo.GetValue(loadedPerson.PermissionInformation);
 
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(list));
@@ -1080,15 +1082,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createPersonWithRuleSets(team);
 			createPersonWithRuleSets(team2);
 
-			IPerson loadedPerson = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false))[0];
+			IPerson loadedPerson = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false))[0];
 			Assert.IsFalse(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag));
 			Session.Clear();
-			loadedPerson = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),true))[0];
+			loadedPerson = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), true))[0];
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].ExtenderCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].LimiterCollection));
-			Assert.AreEqual(2,loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
+			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
 		}
 
 		[Test]
@@ -1107,20 +1109,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(pTime);
 			PersistAndRemoveFromUnitOfWork(cSc);
 
-			IPerson per = PersonFactory.CreatePerson("sdf","sdf");
-			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,2),PersonContractFactory.CreatePersonContract(ctr,pTime,cSc),team));
-			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),PersonContractFactory.CreatePersonContract(ctr,pTime,cSc),team));
-			foreach(IPersonPeriod personPeriod in per.PersonPeriodCollection)
+			IPerson per = PersonFactory.CreatePerson("sdf", "sdf");
+			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 2), PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
+			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), PersonContractFactory.CreatePersonContract(ctr, pTime, cSc), team));
+			foreach (IPersonPeriod personPeriod in per.PersonPeriodCollection)
 			{
 				PersistAndRemoveFromUnitOfWork(personPeriod.Team.Site);
 				PersistAndRemoveFromUnitOfWork(personPeriod.Team);
 			}
-			Assert.AreEqual(new DateOnly(2000,1,1),per.PersonPeriodCollection.First().StartDate);
+			Assert.AreEqual(new DateOnly(2000, 1, 1), per.PersonPeriodCollection.First().StartDate);
 			PersistAndRemoveFromUnitOfWork(per);
 			per = Session.Get<Person>(per.Id);
-			Assert.AreEqual(new DateOnly(2000,1,1),per.PersonPeriodCollection.First().StartDate);
-			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999,1,1)));
-			Assert.AreEqual(new DateOnly(1999,1,1),per.PersonPeriodCollection.First().StartDate);
+			Assert.AreEqual(new DateOnly(2000, 1, 1), per.PersonPeriodCollection.First().StartDate);
+			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1)));
+			Assert.AreEqual(new DateOnly(1999, 1, 1), per.PersonPeriodCollection.First().StartDate);
 
 		}
 
@@ -1131,10 +1133,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IRuleSetBag bag = createBag();
 			IPerson okPerson = PersonFactory.CreatePerson("with rule sets");
 			IPersonPeriod periodWithRuleSet =
-				new PersonPeriod(new DateOnly(1900,1,1),createPersonContract(),team);
+				new PersonPeriod(new DateOnly(1900, 1, 1), createPersonContract(), team);
 			periodWithRuleSet.RuleSetBag = bag;
 			IPersonPeriod periodWithRuleSet2 =
-				new PersonPeriod(new DateOnly(1900,1,2),createPersonContract(),team);
+				new PersonPeriod(new DateOnly(1900, 1, 2), createPersonContract(), team);
 			periodWithRuleSet2.RuleSetBag = bag;
 			okPerson.AddPersonPeriod(periodWithRuleSet);
 			okPerson.AddPersonPeriod(periodWithRuleSet2);
@@ -1152,27 +1154,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			bag.Description = new Description("dummy");
 			WorkShiftRuleSet ruleSet =
 				new WorkShiftRuleSet(
-					new WorkShiftTemplateGenerator(dummyActivity,new TimePeriodWithSegment(1,1,1,1,1),
-													new TimePeriodWithSegment(1,1,1,1,1),shiftCat));
+					new WorkShiftTemplateGenerator(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
+													new TimePeriodWithSegment(1, 1, 1, 1, 1), shiftCat));
 			ruleSet.Description = new Description("dummy");
 			ruleSet.AddExtender(
-				new ActivityAbsoluteStartExtender(dummyActivity,new TimePeriodWithSegment(1,1,1,1,1),
-												  new TimePeriodWithSegment(1,1,1,11,1)));
+				new ActivityAbsoluteStartExtender(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
+												  new TimePeriodWithSegment(1, 1, 1, 11, 1)));
 			ruleSet.AddExtender(
-				new ActivityAbsoluteStartExtender(dummyActivity,new TimePeriodWithSegment(1,1,1,1,1),
-												  new TimePeriodWithSegment(1,1,1,11,1)));
-			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(10,10,11,11),new TimeSpan()));
+				new ActivityAbsoluteStartExtender(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
+												  new TimePeriodWithSegment(1, 1, 1, 11, 1)));
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(10, 10, 11, 11), new TimeSpan()));
 			WorkShiftRuleSet ruleSet2 =
 				new WorkShiftRuleSet(
-					new WorkShiftTemplateGenerator(dummyActivity,new TimePeriodWithSegment(1,1,1,1,1),
-										new TimePeriodWithSegment(1,1,1,1,1),shiftCat));
+					new WorkShiftTemplateGenerator(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
+										new TimePeriodWithSegment(1, 1, 1, 1, 1), shiftCat));
 			ruleSet2.AddExtender(
-				new ActivityAbsoluteStartExtender(dummyActivity,new TimePeriodWithSegment(1,1,1,1,1),
-												  new TimePeriodWithSegment(1,1,1,11,1)));
+				new ActivityAbsoluteStartExtender(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
+												  new TimePeriodWithSegment(1, 1, 1, 11, 1)));
 			ruleSet2.AddExtender(
-				new ActivityAbsoluteStartExtender(dummyActivity,new TimePeriodWithSegment(1,1,1,1,1),
-												  new TimePeriodWithSegment(1,1,1,11,1)));
-			ruleSet2.AddLimiter(new ContractTimeLimiter(new TimePeriod(10,10,11,11),new TimeSpan()));
+				new ActivityAbsoluteStartExtender(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
+												  new TimePeriodWithSegment(1, 1, 1, 11, 1)));
+			ruleSet2.AddLimiter(new ContractTimeLimiter(new TimePeriod(10, 10, 11, 11), new TimeSpan()));
 			ruleSet2.Description = new Description("dummy");
 			PersistAndRemoveFromUnitOfWork(ruleSet);
 			PersistAndRemoveFromUnitOfWork(ruleSet2);
@@ -1198,24 +1200,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			IContract contract = new Contract("Full time");
 
-			IPerson per1 = PersonFactory.CreatePerson("sumeda","Herath");
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),new PersonContract(contract,partTimePercentage,contractSchedule),team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
 			per1.AddPersonPeriod(personPeriod1);
 			IPersonPeriod personPeriod2 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001,1,1),new PersonContract(contract,partTimePercentage,contractSchedule),team2);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team2);
 			per1.AddPersonPeriod(personPeriod2);
-			per1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2000,1,1)));
+			per1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2000, 1, 1)));
 			//Person2
-			IPerson per2 = PersonFactory.CreatePerson("Dinesh","Ranasinghe");
+			IPerson per2 = PersonFactory.CreatePerson("Dinesh", "Ranasinghe");
 			IPersonPeriod personPeriod3 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),new PersonContract(contract,partTimePercentage,contractSchedule),team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
 			per2.AddPersonPeriod(personPeriod3);
 
 			//Person3
-			IPerson per3 = PersonFactory.CreatePerson("Madhuranga","Pinnagoda");
+			IPerson per3 = PersonFactory.CreatePerson("Madhuranga", "Pinnagoda");
 			IPersonPeriod personPeriod4 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),new PersonContract(contract,partTimePercentage,contractSchedule),team2);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team2);
 			per3.AddPersonPeriod(personPeriod4);
 
 			PersistAndRemoveFromUnitOfWork(site1);
@@ -1233,21 +1235,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per3);
 
 			//load
-			var testeriod = new DateOnlyPeriod(1999,12,31,2059,01,01);
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeam(team1,testeriod));
+			var testeriod = new DateOnlyPeriod(1999, 12, 31, 2059, 01, 01);
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeam(team1, testeriod));
 
 			//verify
 			testList.Remove(LoggedOnPerson);
-			Assert.AreEqual(2,testList.Count);
-			Assert.AreEqual(testList[0],per1);
-			Assert.AreEqual(testList[1],per2);
+			Assert.AreEqual(2, testList.Count);
+			Assert.AreEqual(testList[0], per1);
+			Assert.AreEqual(testList[1], per2);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection.First().Team));
-			Assert.AreEqual(2,testList[0].PersonPeriodCollection.Count());
-			Assert.AreEqual(1,testList[1].PersonPeriodCollection.Count());
+			Assert.AreEqual(2, testList[0].PersonPeriodCollection.Count());
+			Assert.AreEqual(1, testList[1].PersonPeriodCollection.Count());
 
-			testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1,testeriod));
-			Assert.AreEqual(2,testList.Count);
+			testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
+			Assert.AreEqual(2, testList.Count);
 		}
 
 		[Test]
@@ -1261,11 +1263,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			IContract contract = new Contract("Full time");
 
-			IPerson per1 = PersonFactory.CreatePerson("sumeda","Herath");
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),new PersonContract(contract,partTimePercentage,contractSchedule),team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
 			per1.AddPersonPeriod(personPeriod1);
-			per1.TerminatePerson(new DateOnly(2002,1,1),_personAccountUpdater);
+			per1.TerminatePerson(new DateOnly(2002, 1, 1), _personAccountUpdater);
 
 			PersistAndRemoveFromUnitOfWork(site1);
 			PersistAndRemoveFromUnitOfWork(team1);
@@ -1276,8 +1278,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(per1);
 
-			var testeriod = new DateOnlyPeriod(2002,12,31,2059,01,01);
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeam(team1,testeriod));
+			var testeriod = new DateOnlyPeriod(2002, 12, 31, 2059, 01, 01);
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeam(team1, testeriod));
 			testList.Should().Be.Empty();
 		}
 
@@ -1295,24 +1297,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			site2.AddTeam(team2);
 
 			// Person1
-			IPerson per1 = PersonFactory.CreatePerson("sumeda","Herath");
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team1);
 			per1.AddPersonPeriod(personPeriod1);
 			IPersonPeriod personPeriod2 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001,1,1),team2);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), team2);
 			per1.AddPersonPeriod(personPeriod2);
-			per1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2000,1,1)));
+			per1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2000, 1, 1)));
 			//Person2
-			IPerson per2 = PersonFactory.CreatePerson("Dinesh","Ranasinghe");
+			IPerson per2 = PersonFactory.CreatePerson("Dinesh", "Ranasinghe");
 			IPersonPeriod personPeriod3 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team1);
 			per2.AddPersonPeriod(personPeriod3);
 
 			//Person3
-			IPerson per3 = PersonFactory.CreatePerson("Madhuranga","Pinnagoda");
+			IPerson per3 = PersonFactory.CreatePerson("Madhuranga", "Pinnagoda");
 			IPersonPeriod personPeriod4 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team2);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team2);
 			per3.AddPersonPeriod(personPeriod4);
 
 			#endregion
@@ -1347,9 +1349,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			#endregion
 
-			var testeriod = new DateOnlyPeriod(1999,12,31,2059,01,01);
-			var testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1,testeriod));
-			Assert.AreEqual(2,testList.Count);
+			var testeriod = new DateOnlyPeriod(1999, 12, 31, 2059, 01, 01);
+			var testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
+			Assert.AreEqual(2, testList.Count);
 		}
 
 		[Test]
@@ -1372,7 +1374,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyNumberOfActiveAgentsNotIncreasedWhenEmptyAssignmentsExists()
 		{
 			SetupPersonsInOrganizationWithContract();
-			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false)); //returns 2
+			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			scenario.DefaultScenario = true;
@@ -1382,11 +1384,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
-																					  scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
+																					  scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
 			ass.Clear();
 			PersistAndRemoveFromUnitOfWork(ass);
 
-			Assert.AreEqual(0,target.NumberOfActiveAgents());
+			Assert.AreEqual(0, target.NumberOfActiveAgents());
 		}
 
 		[Test]
@@ -1399,7 +1401,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyNumberOfActiveAgentsIfBusinessUnitIsDeleted()
 		{
 			SetupPersonsInOrganizationWithContract();
-			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false)); //returns 2
+			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 
 			//add pers ass
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -1410,26 +1412,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
-																	scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
+																	scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			((BusinessUnit)buTemp).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource,LoggedOnPerson,buTemp);
-			Assert.AreEqual(1,target.NumberOfActiveAgents());
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
 
-			addPersonAssignmentInAnotherBu(act,shiftCategory);
+			addPersonAssignmentInAnotherBu(act, shiftCategory);
 
-			Assert.AreEqual(1,target.NumberOfActiveAgents());
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
 		}
 
 		[Test]
 		public void ShouldNotCountDeletedAsActiveAgents()
 		{
 			SetupPersonsInOrganizationWithContract();
-			var resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false)); //returns 2
+			var resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			scenario.DefaultScenario = true;
 			var act = new Activity("df");
@@ -1437,29 +1439,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftCategory);
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
-			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0], scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			var buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource,LoggedOnPerson,buTemp);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
-			addPersonAssignmentInAnotherBu(act,shiftCategory);
-			Assert.AreEqual(2,target.NumberOfActiveAgents());
+			addPersonAssignmentInAnotherBu(act, shiftCategory);
+			Assert.AreEqual(2, target.NumberOfActiveAgents());
 
 			var person = ass.Person;
 			((Person)person).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(person);
 
-			Assert.AreEqual(1,target.NumberOfActiveAgents());
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability","CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void verifyNumberOfActiveAgents()
 		{
 			SetupPersonsInOrganizationWithContract();
-			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2001,1,1),false)); //returns 2
+			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 
 			//add pers ass
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -1470,22 +1472,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
-																	scenario, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
+																	scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(ass);
 
-			Assert.AreEqual(1,target.NumberOfActiveAgents());
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
 
 			//change logged on BU
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource,LoggedOnPerson,buTemp);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
-			addPersonAssignmentInAnotherBu(act,shiftCategory);
-			Assert.AreEqual(2,target.NumberOfActiveAgents());
+			addPersonAssignmentInAnotherBu(act, shiftCategory);
+			Assert.AreEqual(2, target.NumberOfActiveAgents());
 		}
 
-		private void addPersonAssignmentInAnotherBu(IActivity act,IShiftCategory shiftCategory)
+		private void addPersonAssignmentInAnotherBu(IActivity act, IShiftCategory shiftCategory)
 		{
 			//add pers ass in another BU
 			IContract ctr = new Contract("cf");
@@ -1495,18 +1497,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			ITeam team = TeamFactory.CreateSimpleTeam("dd");
 			team.Site = site;
-			IPerson p = PersonFactory.CreatePerson("ff","ff");
-			p.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900,1,1),
-				new PersonContract(ctr,part,ctrSched),team));
+			IPerson p = PersonFactory.CreatePerson("ff", "ff");
+			p.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900, 1, 1),
+				new PersonContract(ctr, part, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(ctrSched);
 			PersistAndRemoveFromUnitOfWork(part);
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 			PersistAndRemoveFromUnitOfWork(p);
-			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf",true);
+			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf", true);
 			PersistAndRemoveFromUnitOfWork(scenarioNew);
 			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(p,
-				scenarioNew, act, new DateTimePeriod(2000,1,1,2000,1,2), shiftCategory);
+				scenarioNew, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
 			PersistAndRemoveFromUnitOfWork(assNew);
 		}
 
@@ -1514,7 +1516,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyNumberOfActiveAgentsWhenNone()
 		{
 			IPersonRepository pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			Assert.AreEqual(0,pr.NumberOfActiveAgents());
+			Assert.AreEqual(0, pr.NumberOfActiveAgents());
 		}
 
 		[Test]
@@ -1522,9 +1524,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IPerson person1 = PersonFactory.CreatePerson("sunil");
 			PersistAndRemoveFromUnitOfWork(person1);
-			IPerson person2 = PersonFactory.CreatePerson("kamal","pwd1");
+			IPerson person2 = PersonFactory.CreatePerson("kamal", "pwd1");
 			PersistAndRemoveFromUnitOfWork(person2);
-			IPerson person3 = PersonFactory.CreatePerson("Fname","lname");
+			IPerson person3 = PersonFactory.CreatePerson("Fname", "lname");
 			PersistAndRemoveFromUnitOfWork(person3);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
@@ -1538,49 +1540,49 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindPersonByEmploymentNumber()
 		{
-			IPerson person = PersonFactory.CreatePerson("Fname","lname");
+			IPerson person = PersonFactory.CreatePerson("Fname", "lname");
 			var employmentNumber = "987392";
 			person.SetEmploymentNumber(employmentNumber);
 			PersistAndRemoveFromUnitOfWork(person);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			IList<IPerson> personList = pr.FindPeopleByEmploymentNumber(employmentNumber).ToList();
-			Assert.AreEqual(employmentNumber,personList[0].EmploymentNumber);
+			Assert.AreEqual(employmentNumber, personList[0].EmploymentNumber);
 		}
 
 		[Test]
 		public void ShouldFindPersonsByEmploymentNumbers()
 		{
-			IPerson person1 = PersonFactory.CreatePerson("Fname","lname");
+			IPerson person1 = PersonFactory.CreatePerson("Fname", "lname");
 			var employmentNumber1 = "987392";
 			person1.SetEmploymentNumber(employmentNumber1);
 			PersistAndRemoveFromUnitOfWork(person1);
 
-			IPerson person2 = PersonFactory.CreatePerson("Fname","lname");
+			IPerson person2 = PersonFactory.CreatePerson("Fname", "lname");
 			var employmentNumber2 = "987393";
 			person2.SetEmploymentNumber(employmentNumber2);
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			IList<IPerson> personList = pr.FindPeopleByEmploymentNumbers(new[] { employmentNumber1,employmentNumber2 }).ToList();
-			Assert.AreEqual(employmentNumber1,personList[0].EmploymentNumber);
-			Assert.AreEqual(employmentNumber2,personList[1].EmploymentNumber);
+			IList<IPerson> personList = pr.FindPeopleByEmploymentNumbers(new[] { employmentNumber1, employmentNumber2 }).ToList();
+			Assert.AreEqual(employmentNumber1, personList[0].EmploymentNumber);
+			Assert.AreEqual(employmentNumber2, personList[1].EmploymentNumber);
 		}
 
 		[Test]
 		public void ShouldFindPeopleByEmail()
 		{
-			var person1 = PersonFactory.CreatePerson("Fname","lname");
+			var person1 = PersonFactory.CreatePerson("Fname", "lname");
 			person1.Email = "test@teleopti.com";
 			PersistAndRemoveFromUnitOfWork(person1);
 
-			var person2 = PersonFactory.CreatePerson("Fname2","lname2");
+			var person2 = PersonFactory.CreatePerson("Fname2", "lname2");
 			person2.Email = "test@teleopti.com";
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			var foundPeople = pr.FindPeopleByEmail(person1.Email);
-			Assert.AreEqual(2,foundPeople.Count);
+			Assert.AreEqual(2, foundPeople.Count);
 		}
 
 		[Test]
@@ -1594,9 +1596,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			IContract contract = new Contract("Full time");
 
-			IPerson per1 = PersonFactory.CreatePerson("sumeda","Herath");
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),new PersonContract(contract,partTimePercentage,contractSchedule),team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
 			per1.AddPersonPeriod(personPeriod1);
 
 			PersistAndRemoveFromUnitOfWork(site1);
@@ -1608,12 +1610,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(per1);
 
-			var person2 = PersonFactory.CreatePerson("Fname2","lname2");
+			var person2 = PersonFactory.CreatePerson("Fname2", "lname2");
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			var foundPeople = pr.FindUsers(DateOnly.Today);
-			Assert.AreEqual(1,foundPeople.Count);
+			Assert.AreEqual(1, foundPeople.Count);
 		}
 
 		[Test]
@@ -1627,9 +1629,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			IContract contract = new Contract("Full time");
 
-			IPerson per1 = PersonFactory.CreatePerson("sumeda","Herath");
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010,1,2),new PersonContract(contract,partTimePercentage,contractSchedule),team1);
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 2), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
 			per1.AddPersonPeriod(personPeriod1);
 
 			PersistAndRemoveFromUnitOfWork(site1);
@@ -1642,20 +1644,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			var foundPeople = pr.FindUsers(new DateOnly(2010,1,1));
-			Assert.AreEqual(1,foundPeople.Count);
+			var foundPeople = pr.FindUsers(new DateOnly(2010, 1, 1));
+			Assert.AreEqual(1, foundPeople.Count);
 		}
 
 		[Test]
 		public void ShouldExcludeTerminatedUsers()
 		{
-			var person2 = PersonFactory.CreatePerson("Fname2","lname2");
-			person2.TerminatePerson(new DateOnly(2010,1,1),new PersonAccountUpdaterDummy());
+			var person2 = PersonFactory.CreatePerson("Fname2", "lname2");
+			person2.TerminatePerson(new DateOnly(2010, 1, 1), new PersonAccountUpdaterDummy());
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			var foundPeople = pr.FindUsers(new DateOnly(2010,1,2));
-			Assert.AreEqual(0,foundPeople.Count);
+			var foundPeople = pr.FindUsers(new DateOnly(2010, 1, 2));
+			Assert.AreEqual(0, foundPeople.Count);
 		}
 
 		[Test]
@@ -1671,12 +1673,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IExternalLogOn logOn2 = ExternalLogOnFactory.CreateExternalLogOn();
 
 			IPerson person = PersonFactory.CreatePerson("sunil");
-			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,1),team);
-			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001,3,31),team);
+			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
+			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 3, 31), team);
 			person.AddPersonPeriod(personPeriod1);
 			person.AddPersonPeriod(personPeriod2);
-			person.AddExternalLogOn(logOn1,personPeriod1);
-			person.AddExternalLogOn(logOn2,personPeriod2);
+			person.AddExternalLogOn(logOn1, personPeriod1);
+			person.AddExternalLogOn(logOn2, personPeriod2);
 			//IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc), team);
 			//person.AddPersonPeriod(personPeriod2);
 
@@ -1693,17 +1695,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(logOn2);
 			PersistAndRemoveFromUnitOfWork(person);
 
-			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000,1,1,2000,1,2),false);
-			Assert.AreEqual(1,res.Count);
+			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2), false);
+			Assert.AreEqual(1, res.Count);
 			IPerson per = res.First();
-			Assert.AreEqual(2,per.PersonPeriodCollection.Count);
-			Assert.AreEqual(2,per.PersonPeriodCollection.Sum(x => x.ExternalLogOnCollection.Count()));
+			Assert.AreEqual(2, per.PersonPeriodCollection.Count);
+			Assert.AreEqual(2, per.PersonPeriodCollection.Sum(x => x.ExternalLogOnCollection.Count()));
 		}
 
 		[Test]
 		public void ShouldSaveAndLoadFirstDayOfWeek()
 		{
-			IPerson person = PersonFactory.CreatePerson("Fname","lname");
+			IPerson person = PersonFactory.CreatePerson("Fname", "lname");
 			Assert.That(person.FirstDayOfWeek.Equals(DayOfWeek.Monday));
 			person.FirstDayOfWeek = DayOfWeek.Saturday;
 			PersistAndRemoveFromUnitOfWork(person);
@@ -1723,12 +1725,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IPerson per1 = PersonFactory.CreatePerson("roger","kratz");
-			IPerson per2 = PersonFactory.CreatePerson("z","balog");
-			IPerson per3 = PersonFactory.CreatePerson("a","balog");
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000,1,1),createPersonContract(),team));
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2001,1,1),createPersonContract(),team));
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2002,1,1),createPersonContract(),team));
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
+			IPerson per3 = PersonFactory.CreatePerson("a", "balog");
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2001, 1, 1), createPersonContract(), team));
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2002, 1, 1), createPersonContract(), team));
 
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(per2);
@@ -1739,10 +1741,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
 			//verify
 			testList.Remove(LoggedOnPerson);
-			Assert.AreEqual(3,testList.Count);
-			Assert.AreEqual(testList[0],per3);
-			Assert.AreEqual(testList[1],per2);
-			Assert.AreEqual(testList[2],per1);
+			Assert.AreEqual(3, testList.Count);
+			Assert.AreEqual(testList[0], per3);
+			Assert.AreEqual(testList[1], per2);
+			Assert.AreEqual(testList[2], per1);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
 		}
 
@@ -1759,8 +1761,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IPerson per1 = PersonFactory.CreatePerson("roger","kratz");
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000,1,1),createPersonContract(businessUnit),team));
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(businessUnit), team));
 
 			PersistAndRemoveFromUnitOfWork(per1);
 
@@ -1768,7 +1770,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IList<IPerson> testList = new List<IPerson>(
 					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
 			//verify
-			Assert.AreEqual(0,testList.Count);
+			Assert.AreEqual(0, testList.Count);
 		}
 
 		[Test]
@@ -1776,17 +1778,232 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var column = new OptionalColumn("COL1") { TableName = "Person" };
 			PersistAndRemoveFromUnitOfWork(column);
-			IPerson per1 = PersonFactory.CreatePerson("roger","kratz");
-			per1.AddOptionalColumnValue(new OptionalColumnValue("A VALUE"),column);
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per1.AddOptionalColumnValue(new OptionalColumnValue("A VALUE"), column);
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			IList<IPerson> testList = new List<IPerson>(
 					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
-			Assert.AreEqual(testList[0],per1);
-			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
+			Assert.AreEqual(testList[0], per1);
+			Assert.That(testList[0].OptionalColumnValueCollection.Count, Is.EqualTo(1));
 		}
 
-		private static void verifyPermissionInfoIsLazy(bool expected,IPerson userRetOk)
+		[Test, TestCaseSource(nameof(agentGroupFilterTestCases))]
+		public void ShouldBeAbleToGetPeopleBasedOnAgentGroupFilter(AgentGroupTestCase testCase)
+		{
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(businessUnit);
+			var siteA = SiteFactory.CreateSimpleSite("Site A");
+			siteA.SetBusinessUnit(businessUnit);
+			PersistAndRemoveFromUnitOfWork(siteA);
+
+			var siteB = SiteFactory.CreateSimpleSite("Site B");
+			siteB.SetBusinessUnit(businessUnit);
+			PersistAndRemoveFromUnitOfWork(siteB);
+
+			var teamA = TeamFactory.CreateSimpleTeam();
+			teamA.Site = siteA;
+			teamA.SetDescription(new Description("Team A"));
+			PersistAndRemoveFromUnitOfWork(teamA);
+
+			var teamB = TeamFactory.CreateSimpleTeam();
+			teamB.Site = siteB;
+			teamB.SetDescription(new Description("Team B"));
+			PersistAndRemoveFromUnitOfWork(teamB);
+
+			var contractA = new Contract("Contract A");
+			var contractB = new Contract("Contract B");
+			var partTimePercentage = new PartTimePercentage("PartTimePercentage A");
+			var contractSchedule = new ContractSchedule("Contract Schedule A");
+			PersistAndRemoveFromUnitOfWork(contractA);
+			PersistAndRemoveFromUnitOfWork(contractB);
+			PersistAndRemoveFromUnitOfWork(partTimePercentage);
+			PersistAndRemoveFromUnitOfWork(contractSchedule);
+			var personContractA = new PersonContract(contractA, partTimePercentage, contractSchedule);
+			var personContractB = new PersonContract(contractB, partTimePercentage, contractSchedule);
+
+			var activity = new Activity("Phone Activity") {RequiresSkill = true};
+			PersistAndRemoveFromUnitOfWork(activity);
+			var skillTypePhone = new SkillTypePhone(new Description("Phone"), ForecastSource.InboundTelephony);
+			PersistAndRemoveFromUnitOfWork(skillTypePhone);
+			var skillA = SkillFactory.CreateSkill("Skill A", skillTypePhone, 10);
+			skillA.Activity = activity;
+			var skillB = SkillFactory.CreateSkill("Skill B", skillTypePhone, 10);
+			skillB.Activity = activity;
+			PersistAndRemoveFromUnitOfWork(skillA);
+			PersistAndRemoveFromUnitOfWork(skillB);
+
+			var per1 = PersonFactory.CreatePerson("1", "1");
+			var pp1 = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(businessUnit), teamA)
+			{
+				PersonContract = personContractA
+			};
+			pp1.AddPersonSkill(new PersonSkill(skillA, new Percent(100)));
+			per1.AddPersonPeriod(pp1);
+			PersistAndRemoveFromUnitOfWork(per1);
+
+			var per2 = PersonFactory.CreatePerson("2", "2");
+			var pp2 = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(businessUnit), teamB)
+			{
+				PersonContract = personContractA
+			};
+			pp2.AddPersonSkill(new PersonSkill(skillB, new Percent(100)));
+			per2.AddPersonPeriod(pp2);
+			PersistAndRemoveFromUnitOfWork(per2);
+
+			var per3 = PersonFactory.CreatePerson("3", "3");
+			var pp3 = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(businessUnit), teamA)
+			{
+				PersonContract = personContractB
+			};
+			pp3.AddPersonSkill(new PersonSkill(skillA, new Percent(50)));
+			pp3.AddPersonSkill(new PersonSkill(skillB, new Percent(50)));
+			per3.AddPersonPeriod(pp3);
+			PersistAndRemoveFromUnitOfWork(per3);
+
+			var per4 = PersonFactory.CreatePerson("4", "4");
+			per4.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(businessUnit), teamB)
+			{
+				PersonContract = personContractB
+			});
+			PersistAndRemoveFromUnitOfWork(per4);
+
+			var testData = new AgentGroupFilterTestData
+			{
+				Person1 = per1,
+				Person2 = per2,
+				Person3 = per3,
+				Person4 = per4,
+				SiteA = siteA,
+				SiteB = siteB,
+				TeamA = teamA,
+				TeamB = teamB,
+				ContractA = contractA,
+				ContractB = contractB,
+				SkillA = skillA,
+				SkillB = skillB
+			};
+			var agentGroup = testCase.CreateAgentGroup(new AgentGroup { Name = "Group" }, testData);
+			PersistAndRemoveFromUnitOfWork(agentGroup);
+
+			//load
+			var testList = new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInAgentGroup(agentGroup, new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6));
+
+			//verify
+			var expectedPeople = testCase.ExpectedPeople(testData);
+			Assert.AreEqual(expectedPeople.Count, testList.Count);
+			foreach (var person in expectedPeople)
+			{
+				testList.Should().Contain(person);
+			}
+		}
+
+		public class AgentGroupTestCase
+		{
+			private readonly string _name;
+
+			public AgentGroupTestCase(string name)
+			{
+				_name = name;
+			}
+			public Func<AgentGroup, AgentGroupFilterTestData, AgentGroup> CreateAgentGroup { get; set; }
+			public Func<AgentGroupFilterTestData, IList<IPerson>> ExpectedPeople { get; set; }
+
+			public override string ToString()
+			{
+				return _name;
+			}
+		}
+
+		public class AgentGroupFilterTestData
+		{
+			public ITeam TeamA { get; set; }
+			public ITeam TeamB { get; set; }
+			public ISite SiteA { get; set; }
+			public ISite SiteB { get; set; }
+			public IPerson Person1 { get; set; }
+			public IPerson Person2 { get; set; }
+			public IPerson Person3 { get; set; }
+			public IPerson Person4 { get; set; }
+			public IContract ContractA { get; set; }
+			public IContract ContractB { get; set; }
+			public ISkill SkillA { get; set; }
+			public ISkill SkillB { get; set; }
+		}
+
+		private static readonly AgentGroupTestCase[] agentGroupFilterTestCases =
+		{
+			new AgentGroupTestCase("Team and Site filters should return people from both team and site")
+			{
+				CreateAgentGroup = (group, data) =>
+				{
+					group.AddFilter(new TeamFilter(data.TeamB));
+					group.AddFilter(new SiteFilter(data.SiteA));
+					return group;
+				},
+				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2, data.Person3, data.Person4}
+			},
+			new AgentGroupTestCase("Team filter should return people from team.")
+			{
+				CreateAgentGroup = (group, data) =>
+				{
+					group.AddFilter(new TeamFilter(data.TeamB));
+					return group;
+				},
+				ExpectedPeople = data => new List<IPerson> {data.Person2, data.Person4}
+			},
+			new AgentGroupTestCase("Site filter should return people from site.")
+			{
+				CreateAgentGroup = (group, data) =>
+				{
+					group.AddFilter(new SiteFilter(data.SiteA));
+					return group;
+				},
+				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person3}
+			},
+			new AgentGroupTestCase("Contract filter should return people with contract.")
+			{
+				CreateAgentGroup = (group, data) =>
+				{
+					group.AddFilter(new ContractFilter(data.ContractA));
+					return group;
+				},
+				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2}
+			},
+			new AgentGroupTestCase("Team and Contract filters should return people from team with contract.")
+			{
+				CreateAgentGroup = (group, data) =>
+				{
+					group.AddFilter(new ContractFilter(data.ContractA));
+					group.AddFilter(new TeamFilter(data.TeamB));
+					return group;
+				},
+				ExpectedPeople = data => new List<IPerson> {data.Person2}
+			},
+			new AgentGroupTestCase("Skill filters should return people from skills.")
+			{
+				CreateAgentGroup = (group, data) =>
+				{
+					group.AddFilter(new SkillFilter(data.SkillA));
+					group.AddFilter(new SkillFilter(data.SkillB));
+					return group;
+				},
+				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2, data.Person3}
+			},
+			new AgentGroupTestCase("Skill, Team and Contract filters should return people with all three.")
+			{
+				CreateAgentGroup = (group, data) =>
+				{
+					group.AddFilter(new SkillFilter(data.SkillA));
+					group.AddFilter(new TeamFilter(data.TeamA));
+					group.AddFilter(new ContractFilter(data.ContractA));
+					return group;
+				},
+				ExpectedPeople = data => new List<IPerson> {data.Person1}
+			}
+		};
+
+		private static void verifyPermissionInfoIsLazy(bool expected, IPerson userRetOk)
 		{
 			Assert.AreEqual(expected,
 				(LazyLoadingManager.IsInitialized(
@@ -1799,7 +2016,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
 		{
 			var pContract = PersonContractFactory.CreatePersonContract();
-			if(otherBusinessUnit != null)
+			if (otherBusinessUnit != null)
 			{
 				pContract.Contract.SetBusinessUnit(otherBusinessUnit);
 				pContract.ContractSchedule.SetBusinessUnit(otherBusinessUnit);
@@ -1831,7 +2048,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return role;
 		}
 
-		private class justForTest:PersonRepository
+		private class justForTest : PersonRepository
 		{
 			public justForTest(IUnitOfWork unitOfWork)
 				: base(new ThisUnitOfWork(unitOfWork))

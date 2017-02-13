@@ -11,6 +11,8 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -614,6 +616,30 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("Team", team));
 		}
 
+		private static DetachedCriteria findActivePeriod(IContract contract, DateOnlyPeriod dateOnlyPeriod)
+		{
+			return DetachedCriteria.For(typeof(PersonPeriod))
+				.SetProjection(Projections.Id())
+				.SetFetchMode("PersonContract", FetchMode.Join)
+				.SetFetchMode("PersonContract.Contract", FetchMode.Join)
+				.Add(Restrictions.Le("StartDate", dateOnlyPeriod.EndDate))
+				.Add(Restrictions.Ge("internalEndDate", dateOnlyPeriod.StartDate))
+				.Add(Restrictions.EqProperty("Parent", "per.Id"))
+				.Add(Restrictions.Eq("PersonContract.Contract", contract));
+		}
+
+		private static DetachedCriteria findBySkill(ISkill skill, DateOnlyPeriod dateOnlyPeriod)
+		{
+			return DetachedCriteria.For(typeof(PersonPeriod), "pp")
+				.SetProjection(Projections.Id())
+				.Add(Restrictions.Le("StartDate", dateOnlyPeriod.EndDate))
+				.Add(Restrictions.Ge("internalEndDate", dateOnlyPeriod.StartDate))
+				.Add(Restrictions.EqProperty("Parent", "per.Id"))
+				.CreateCriteria("PersonSkillCollection", "ps", JoinType.InnerJoin)
+				.Add(Restrictions.EqProperty("Parent", "pp.Id"))
+				.Add(Restrictions.Eq("ps.Skill", skill));
+		}
+
 		private static DetachedCriteria findActivePeriod(DateOnly date)
 		{
 			return DetachedCriteria.For(typeof(PersonPeriod))
@@ -647,9 +673,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						 .List<IPerson>();
 		}
 
-		public IList<IPerson> FindPeopleInAgentGroup(DateOnly date, IAgentGroup agentGroup)
+		public IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			
+			var criteria = Session.CreateCriteria(typeof(Person), "per")
+				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+				.Add(Restrictions.Or(
+					Restrictions.IsNull("TerminalDate"),
+					Restrictions.Ge("TerminalDate", period.StartDate)
+				));
+			var filterCriteria = Restrictions.Conjunction();
+			foreach (var group in agentGroup.Filters.GroupBy(x => x.FilterType))
+			{
+				var groupStuff = Restrictions.Disjunction();
+				foreach (var filter in group)
+				{
+					if (filter.GetType() == typeof(TeamFilter))
+					{
+						groupStuff.Add(Subqueries.Exists(findActivePeriod(((TeamFilter)filter).Team, period)));
+					}
+					else if (filter.GetType() == typeof(SiteFilter))
+					{
+						groupStuff.Add(Subqueries.Exists(findActivePeriod(((SiteFilter)filter).Site.TeamCollection.ToArray(), period)));
+					}
+					else if (filter.GetType() == typeof(ContractFilter))
+					{
+						groupStuff.Add(Subqueries.Exists(findActivePeriod(((ContractFilter)filter).Contract, period)));
+					}
+					else if (filter.GetType() == typeof(SkillFilter))
+					{
+						groupStuff.Add(Subqueries.Exists(findBySkill(((SkillFilter)filter).Skill, period)));
+					}
+
+				}
+				filterCriteria.Add(groupStuff);
+			}
+			criteria.Add(filterCriteria);
+			ICollection<IPerson> retList = criteria
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.List<IPerson>();
+
+			return retList.ToList();
 		}
 	}
 }
