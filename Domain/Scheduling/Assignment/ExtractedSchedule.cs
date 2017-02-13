@@ -73,7 +73,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IEditableShift GetEditorShift()
 		{
-			return new EditableShiftMapper().CreateEditorShift(PersonAssignment(true));
+			var personAssignment = PersonAssignment();
+			if (personAssignment == null)
+				return null;
+
+			return new EditableShiftMapper().CreateEditorShift(personAssignment);
 		}
 
 		public bool IsScheduled()
