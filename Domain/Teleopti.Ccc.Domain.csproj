@@ -111,7 +111,6 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
-    <Compile Include="AgentInfo\AgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_now = now;
 		}
 		
-		public IPlanningPeriod Current()
+		public IPlanningPeriod Current(IAgentGroup agentGroup)
 		{
 			var foundPlanningPeriods = _planningPeriodRepository.LoadAll();
 			var result =
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (planningPeriodNotFound(result))
 			{
 				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
-				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion);
+				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion, agentGroup);
 				_planningPeriodRepository.Add(planningPeriod);
 				return planningPeriod;
 			}
 			return result;
 		}
 
-		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
+		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, IAgentGroup agentGroup)
 		{
 			var foundPlanningPeriods = _planningPeriodRepository.LoadAll();
 			var current =
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				//refactor
 				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
-				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion);
+				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion, agentGroup);
 				planningPeriod.ChangeRange(schedulePeriodForRangeCalculation);
 				_planningPeriodRepository.Add(planningPeriod);
 				return planningPeriod;

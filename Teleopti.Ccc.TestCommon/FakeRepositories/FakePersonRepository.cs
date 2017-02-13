@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -256,6 +257,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _storage.LoadAll<IPerson>().Where(
 				p => !p.IsAgent(date) && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= date).ToArray();
+		}
+
+		public IList<IPerson> FindPeopleInAgentGroup(DateOnly date, IAgentGroup agentGroup)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

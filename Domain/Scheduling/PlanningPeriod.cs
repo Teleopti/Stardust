@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private SchedulePeriodType _periodType;
 		private  int _number;
 		private PlanningPeriodState _state;
-		private readonly AgentGroup _agentGroup;
+		private readonly IAgentGroup _agentGroup;
 
 		protected PlanningPeriod()
 		{
 			_state = PlanningPeriodState.New;
 		}
 
-		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, AgentGroup agentGroup) : this()
+		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, IAgentGroup agentGroup) : this()
 		{
 			var suggestedPlanningPeriod = planningPeriodSuggestions.Default();
 

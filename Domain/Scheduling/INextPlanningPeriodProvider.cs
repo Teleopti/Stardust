@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface INextPlanningPeriodProvider
 	{
-		IPlanningPeriod Current();
-		IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation);
+		IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, IAgentGroup agentGroup);
+		IPlanningPeriod Current(IAgentGroup agentGroup);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -93,5 +94,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period);
 
 		IList<IPerson> FindUsers(DateOnly date);
+		IList<IPerson> FindPeopleInAgentGroup(DateOnly date, IAgentGroup agentGroup);
 	}
 }

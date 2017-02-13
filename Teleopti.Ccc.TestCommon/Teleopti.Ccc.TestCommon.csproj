@@ -212,6 +212,7 @@
     <Compile Include="FakeRepositories\FakeBudgetGroupRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalLogOnRepository.cs" />
     <Compile Include="FakeRepositories\FakeFavoriteSearchRepository.cs" />
+    <Compile Include="FakeRepositories\FakeFixedStaffLoader.cs" />
     <Compile Include="FakeRepositories\FakeGroupPageRepository.cs" />
     <Compile Include="FakeRepositories\FakeJobResultRepository.cs" />
     <Compile Include="FakeRepositories\FakeKpiRepository.cs" />
@@ -301,7 +302,7 @@
     <Compile Include="FakeRepositories\FakeContractRepository.cs" />
     <Compile Include="FakeRepositories\FakeContractScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakeExistingForecastRepository.cs" />
-    <Compile Include="FakeRepositories\FakeStaffLoader.cs" />
+    <Compile Include="FakeRepositories\FakeAgentGroupStaffLoader.cs" />
     <Compile Include="FakeRepositories\FakeGlobalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeGroupingReadOnlyRepository.cs" />
     <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />

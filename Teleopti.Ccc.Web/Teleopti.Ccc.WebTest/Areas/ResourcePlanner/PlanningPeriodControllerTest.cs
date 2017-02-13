@@ -16,7 +16,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -29,14 +28,14 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public MutableNow Now;
 		public FakeMissingForecastProvider MissingForecastProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeStaffLoader StaffLoader;
+		public FakeAgentGroupStaffLoader AgentGroupStaffLoader;
 		public FakeAgentGroupRepository AgentGroupRepository;
 
 		[Test]
 		public void ShouldReturnDefaultPlanningPeriodForAgentGroupIfNotCreated()
 		{
 			var agentGroupId = Guid.NewGuid();
-			var agentGroup = new FakeAgentGroup
+			var agentGroup = new AgentGroup
 			{
 				Name = "test group"
 			};
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnAvailablePlanningPeriodsForAgentGroup()
 		{
 			var agentGroupId = Guid.NewGuid();
-			var agentGroup = new FakeAgentGroup
+			var agentGroup = new AgentGroup
 			{
 				Name = "test group"
 			};
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2010, 1, 1));
-			StaffLoader.SetPeople(person);
+			AgentGroupStaffLoader.SetPeople(person);
 
 			var result = (OkResult)Target.Publish(Guid.NewGuid());
 			result.Should().Not.Be.Null();
@@ -292,7 +291,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.AddService<PlanningPeriodController>();
 			system.AddModule(new ResourcePlannerModule());
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
-			system.UseTestDouble<FakeStaffLoader>().For<IFixedStaffLoader>();
+			system.UseTestDouble<FakeAgentGroupStaffLoader>().For<IAgentGroupStaffLoader>();
+			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 		}
 	}
 }

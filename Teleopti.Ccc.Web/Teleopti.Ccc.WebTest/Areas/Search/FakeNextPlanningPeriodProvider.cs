@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		{
 			_planningPeriod = planningPeriod;
 		}
-		public IPlanningPeriod Current()
+		public IPlanningPeriod Current(IAgentGroup agentGroup)
 		{
 			return new FakePlanningPeriod(Guid.NewGuid(),new DateOnlyPeriod(2015,06,10,2015,07,10));
 		}
 
-		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
+		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, IAgentGroup agentGroup)
 		{
 			throw new NotImplementedException();
 		}

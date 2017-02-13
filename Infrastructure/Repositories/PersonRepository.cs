@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -644,6 +645,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Subqueries.NotExists(findActivePeriod(date)))
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 						 .List<IPerson>();
+		}
+
+		public IList<IPerson> FindPeopleInAgentGroup(DateOnly date, IAgentGroup agentGroup)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

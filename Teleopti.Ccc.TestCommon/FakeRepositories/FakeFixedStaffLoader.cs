@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeStaffLoader : IFixedStaffLoader, IAgentGroupStaffLoader
+	public class FakeFixedStaffLoader : IFixedStaffLoader
 	{
 		private IPerson[] _people;
 
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public PeopleSelection Load(DateOnlyPeriod period)
 		{
 			_people = _people ?? new IPerson[0];
-			return new PeopleSelection(_people,_people);
+			return new PeopleSelection(_people, _people);
 		}
 	}
 }

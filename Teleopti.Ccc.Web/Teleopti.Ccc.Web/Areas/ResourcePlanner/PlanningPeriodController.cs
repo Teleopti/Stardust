@@ -21,16 +21,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly INextPlanningPeriodProvider _nextPlanningPeriodProvider;
 		private readonly IPlanningPeriodRepository _planningPeriodRespository;
-		private readonly IFixedStaffLoader _fixedStaffLoader;
+		private readonly IAgentGroupStaffLoader _agentGroupStaffLoader;
 		private readonly INow _now;
 		private readonly IBasicSchedulingValidator _basicSchedulingValidator;
 		private readonly IAgentGroupRepository _agentGroupRepository;
 
-		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider, IPlanningPeriodRepository planningPeriodRespository, IFixedStaffLoader fixedStaffLoader, INow now, IBasicSchedulingValidator basicSchedulingValidator, IAgentGroupRepository agentGroupRepository)
+		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider, IPlanningPeriodRepository planningPeriodRespository, IAgentGroupStaffLoader agentGroupStaffLoader, INow now, IBasicSchedulingValidator basicSchedulingValidator, IAgentGroupRepository agentGroupRepository)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRespository = planningPeriodRespository;
-			_fixedStaffLoader = fixedStaffLoader;
+			_agentGroupStaffLoader = agentGroupStaffLoader;
 			_now = now;
 			_basicSchedulingValidator = basicSchedulingValidator;
 			_agentGroupRepository = agentGroupRepository;
@@ -42,8 +42,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
 			var agentGroup = _agentGroupRepository.Load(agentGroupId);
 			var allPlanningPeriods = _planningPeriodRespository.LoadForAgentGroup(agentGroup);
-			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true);
+			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true, agentGroup);
 		}
+
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
 		public virtual IHttpActionResult GetAllPlanningPeriods()
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
 			{
 				Period = planningPeriod.Range,
-				People = _fixedStaffLoader.Load(planningPeriod.Range).AllPeople.ToList()
+				People = _agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).AllPeople.ToList()
 			});
 			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, validationResults);
 			return Ok(planningPeriodModel);
@@ -126,21 +127,22 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 
 		private IHttpActionResult buildPlanningPeriodViewModels(
-					IEnumerable<IPlanningPeriod> allPlanningPeriods, 
-					List<PlanningPeriodModel> availablePlanningPeriods, 
-					bool createDefaultPlanningPeriod)
+			IEnumerable<IPlanningPeriod> allPlanningPeriods, 
+			List<PlanningPeriodModel> availablePlanningPeriods,
+			bool createDefaultPlanningPeriod, 
+			IAgentGroup agentGroup)
 		{
 			if (!allPlanningPeriods.Any())
 			{
 				if (createDefaultPlanningPeriod)
 				{
-					var planningPeriod = _nextPlanningPeriodProvider.Current();
+					var planningPeriod = _nextPlanningPeriodProvider.Current(agentGroup);
 					var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
 					{
 						Period = planningPeriod.Range,
-						People = _fixedStaffLoader.Load(planningPeriod.Range).AllPeople.ToList()
+						People = _agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).AllPeople.ToList()
 					});
-					availablePlanningPeriods.Add (createPlanningPeriodModel (planningPeriod.Range,
+					availablePlanningPeriods.Add(createPlanningPeriodModel(planningPeriod.Range,
 						planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, validationResults));
 				}
 			}
@@ -149,12 +151,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				allPlanningPeriods.ForEach(
 					pp =>
 						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), pp.State, _basicSchedulingValidator.Validate(new ValidationParameters
-							{
-								Period = pp.Range,
-								People = _fixedStaffLoader.Load(pp.Range).AllPeople.ToList()
-							}))));
+						{
+							Period = pp.Range,
+							People = _agentGroupStaffLoader.Load(pp.Range, pp.AgentGroup).AllPeople.ToList()
+						}))));
 			}
 			return Ok(availablePlanningPeriods);
+		}
+
+		private IHttpActionResult buildPlanningPeriodViewModels(
+			IEnumerable<IPlanningPeriod> allPlanningPeriods, 
+			List<PlanningPeriodModel> availablePlanningPeriods, 
+			bool createDefaultPlanningPeriod)
+		{
+			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, createDefaultPlanningPeriod, null);
 		}
 
 		private PlanningPeriodModel createPlanningPeriodModel(DateOnlyPeriod range, Guid id, PlanningPeriodState state, ValidationResult validationResult)
@@ -180,7 +190,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult Publish(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
-			planningPeriod.Publish(_fixedStaffLoader.Load(planningPeriod.Range).FixedStaffPeople.ToArray());
+			planningPeriod.Publish(_agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).FixedStaffPeople.ToArray());
 			return Ok();
 		}
 	}

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			var searchResultModel = new List<SearchResultModel>();
 			if (UserTexts.Resources.NextPlanningPeriod.IndexOf(keyword, StringComparison.CurrentCultureIgnoreCase) > -1)
 			{
-				var currentPplanningPeriodRange = _planningPeriodProvider.Current().Range;
+				var currentPplanningPeriodRange = _planningPeriodProvider.Current(null).Range;
 				searchResultModel.AddRange(new[]
 				{
 					new SearchResultModel
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 							currentPplanningPeriodRange.EndDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture),
 						Url = "resourceplanner.planningperiod",
 						SearchGroup = "Planning Period",
-						Id = _planningPeriodProvider.Current().Id
+						Id = _planningPeriodProvider.Current(null).Id
 					}
 				});
 			}
