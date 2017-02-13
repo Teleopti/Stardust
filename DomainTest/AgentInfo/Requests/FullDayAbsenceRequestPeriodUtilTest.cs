@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -178,6 +179,50 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             TestShiftTimeIsAppliedToFullDayAbsence(settingStart, settingEnd, activityPeriod);
 
         }
+
+
+	    [Test]
+	    public void EmptyPersonAssignmentShouldWorkTheSameAsEmptyDay()
+	    {
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			//create "full day" absence (0:00->23:59)
+			var absencePeriodStartTime = new DateTime(2011,3,4,0,0,0,DateTimeKind.Utc);
+			var absencePeriodEndTime = new DateTime(2011,3,4,23,59,0,DateTimeKind.Utc);
+			var period = new DateTimePeriod(absencePeriodStartTime,absencePeriodEndTime);
+
+			var personAssignment = new PersonAssignment(person,scenario,new DateOnly(2011, 3, 4));		
+			var day = mocks.DynamicMock<IScheduleDay>();
+
+			var fullDayAbsenceRequestStartTime = new TimeSpan(0,0,0);
+			var fullDayAbsenceRequestEndTime = new TimeSpan(23,59,0);
+
+
+			using(mocks.Record())
+			{
+				Expect.Call(day.PersonAssignment()).Return(personAssignment);
+				Expect.Call(day.IsScheduled()).Return(true);
+
+				
+				Expect.Call(globalSettingDataRepository.FindValueByKey("FullDayAbsenceRequestStartTime",
+					new TimeSpanSetting(fullDayAbsenceRequestStartTime)))
+					.IgnoreArguments()
+					.Return(new TimeSpanSetting(fullDayAbsenceRequestStartTime));
+
+				Expect.Call(globalSettingDataRepository.FindValueByKey("FullDayAbsenceRequestEndTime",
+					new TimeSpanSetting(fullDayAbsenceRequestEndTime)))
+					.IgnoreArguments()
+					.Return(new TimeSpanSetting(fullDayAbsenceRequestEndTime));
+			}
+			using(mocks.Playback())
+			{
+				period = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(period,person,day,day,
+					globalSettingDataRepository);
+
+				period.StartDateTime.Should().Be.EqualTo(new DateTime(2011,3,4).Add(fullDayAbsenceRequestStartTime));
+				period.EndDateTime.Should().Be.EqualTo(new DateTime(2011, 3, 4).Add(fullDayAbsenceRequestEndTime));
+			}
+		}
 
         private void TestShiftTimeIsAppliedToFullDayAbsence(TimeSpan fullDaySettingstartTimeSpan, TimeSpan fullDaySettingEndTimeSpan,DateTimePeriod activityDateTimePeriod)
         {

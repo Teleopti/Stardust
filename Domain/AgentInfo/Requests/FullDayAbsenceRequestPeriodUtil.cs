@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				var endDate = absencePeriodUserTime.EndDateTime.Date.Add(settingEndTime);
 
 				var personAssignment = dayScheduleForAbsenceReqStart.PersonAssignment();
-				if (dayScheduleForAbsenceReqStart.IsScheduled() && personAssignment != null && !dayScheduleForAbsenceReqStart.HasDayOff())
+				if (dayScheduleForAbsenceReqStart.IsScheduled() && personAssignment != null && !dayScheduleForAbsenceReqStart.HasDayOff() && personAssignment.ShiftLayers.Any())
 				{
 					var dayScheduleStartTimeForAbsenceReqStart =
 						personAssignment
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				}
 
 				var assignment = dayScheduleForAbsenceReqEnd.PersonAssignment();
-				if (dayScheduleForAbsenceReqEnd.IsScheduled() && assignment != null && !dayScheduleForAbsenceReqEnd.HasDayOff())
+				if (dayScheduleForAbsenceReqEnd.IsScheduled() && assignment != null && !dayScheduleForAbsenceReqEnd.HasDayOff() && assignment.ShiftLayers.Any())
 				{
 					var dayScheduleEndTimeForAbsenceReqEnd = assignment
 						.Period.EndDateTimeLocal(personTimeZone);
