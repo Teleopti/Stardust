@@ -30,11 +30,24 @@
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		var enableWatchOnTeam = false;
 		var agentsState = "rta.agents";
-		// select skill dependency
+		// scoped variables
 		fc.teamsSelected = [];
 		fc.selectFieldText = $translate.instant('SelectOrganization');
 		fc.searchTerm = "";
 		fc.showOrganizationPicker = $state.current.name === agentsState;
+		//scoped functions
+		fc.querySearch = querySearch;
+		fc.selectedSkillChange = selectedSkillChange;
+		fc.selectedSkillAreaChange = selectedSkillAreaChange;
+		fc.expandSite = expandSite;
+		fc.goToAgents = goToAgents;
+		fc.selectedSites = selectedSites;
+		fc.teamChecked = teamChecked;
+		fc.updateSite = updateSite;
+		fc.clearOrgSelection = clearOrgSelection;
+		fc.clearSearchTerm =  clearSearchTerm;
+		fc.onSearchOrganization = onSearchOrganization;
+		fc.forTest_selectSite = forTest_selectSite;
 
 		/*******REQUESTS*****/
 		(function initialize() {
@@ -86,13 +99,13 @@
 		}
 
 		/*********AUTOCOMPLETE*****/
-		fc.querySearch = function (query, myArray) {
+		function querySearch(query, myArray) {
 			if (!query)
 				return myArray;
 			return myArray.filter(function (query) { return function filterFn(item) { return (item.Name.toUpperCase().indexOf(query.toUpperCase()) === 0); }; });
 		};
 
-		fc.selectedSkillChange = function (skill) {
+		function selectedSkillChange(skill) {
 			if ((!skill || (skill.Id != skillIds[0] || $stateParams.skillAreaId)) && $state.current.name === agentsState) {
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
@@ -115,7 +128,7 @@
 			}
 		}
 
-		fc.selectedSkillAreaChange = function (skillArea) {
+		function selectedSkillAreaChange(skillArea) {
 			if ($state.current.name === agentsState) {
 				if (!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) {
 					stateGoToAgents({
@@ -141,9 +154,9 @@
 		}
 
 		/***********MULTI-SELECT************/
-		fc.expandSite = function (site) { site.isExpanded = !site.isExpanded; };
+		function expandSite(site) { site.isExpanded = !site.isExpanded; };
 
-		fc.goToAgents = function () {
+		function goToAgents() {
 			var selection = {};
 			var selectedSiteIds = fc.selectedSites();
 			var selectedTeamIds = fc.teamsSelected;
@@ -161,7 +174,7 @@
 			$state.go(stateName, selection, options);
 		}
 
-		fc.selectedSites = function () {
+		function selectedSites() {
 			return fc.sites
 				.filter(function (site) {
 					var selectedTeams = site.Teams.filter(function (team) {
@@ -188,7 +201,7 @@
 			});
 		}
 
-		fc.teamChecked = function (site, team) {
+		function teamChecked(site, team) {
 			if (site.isChecked)
 				return true;
 			var selectedTeamsChecked = site.Teams.filter(function (t) { return t.isChecked; });
@@ -199,21 +212,7 @@
 			return team.isChecked;
 		}
 
-		fc.forTest_selectSite = function (site) {
-			site.isChecked = !site.isChecked;
-			var selectedSite = fc.sites.find(function (s) { return s.Id === site.Id; });
-			selectedSite.Teams.forEach(function (team) {
-				team.isChecked = selectedSite.isChecked;
-				if (selectedSite.isChecked) {
-					fc.teamsSelected.push(team.Id);
-				} else {
-					var index = fc.teamsSelected.indexOf(team.Id);
-					fc.teamsSelected.splice(index, 1);
-				}
-			});
-		}
-
-		fc.updateSite = function (oldTeamsSelected) {
+		function updateSite(oldTeamsSelected) {
 			fc.sites.forEach(function (site) {
 				var anyChangeForThatSite = false;
 				site.Teams.forEach(function (team) {
@@ -228,14 +227,28 @@
 			});
 		};
 
-		fc.clearOrgSelection = function () {
+		function clearOrgSelection() {
 			fc.sites.forEach(function (site) { site.isChecked = false; });
 			fc.teamsSelected = [];
 			updateSelectFieldText();
 		};
 
-		fc.clearSearchTerm = function () { fc.searchTerm = ''; }
-		fc.onSearchOrganization = function ($event) { $event.stopPropagation(); };
+		function clearSearchTerm() { fc.searchTerm = ''; }
+		function onSearchOrganization($event) { $event.stopPropagation(); };
+
+		function forTest_selectSite(site) {
+			site.isChecked = !site.isChecked;
+			var selectedSite = fc.sites.find(function (s) { return s.Id === site.Id; });
+			selectedSite.Teams.forEach(function (team) {
+				team.isChecked = selectedSite.isChecked;
+				if (selectedSite.isChecked) {
+					fc.teamsSelected.push(team.Id);
+				} else {
+					var index = fc.teamsSelected.indexOf(team.Id);
+					fc.teamsSelected.splice(index, 1);
+				}
+			});
+		}
 
 		$scope.$watch(
 			function () { return fc.teamsSelected; },

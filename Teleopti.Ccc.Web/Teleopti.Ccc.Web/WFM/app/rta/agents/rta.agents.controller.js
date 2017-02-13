@@ -69,7 +69,7 @@
 		var enableWatchOnTeam = false;
 		var updateStatesDelegate = updateStates;
 		var agentsInfo = [];
-
+		
 		vm.adherence = {};
 		vm.adherencePercent = null;
 		vm.filterText = "";
@@ -93,13 +93,30 @@
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 		vm.pollingLock = true;
-		// select skill dependency
 		vm.skills = [];
 		vm.skillAreas = [];
 		vm.skillsLoaded = false;
 		vm.skillAreasLoaded = false;
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
-		vm.querySearch = querySearch;
+		vm.getTableHeight = getTableHeight;
+		vm.getAdherenceForAgent = getAdherenceForAgent;
+		vm.selectAgent = selectAgent;
+		vm.isSelected = isSelected;
+		vm.showAdherenceUpdates = showAdherenceUpdates;
+		vm.changeScheduleUrl = changeScheduleUrl;
+		vm.historicalAdherenceUrl = historicalAdherenceUrl;
+		vm.goToOverview = function () { rtaRouteService.goToSites(); }
+		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
+		/**************RIGHT PANEL**************/
+		vm.rightPanelOptions = {
+			panelState: false,
+			panelTitle: " ",
+			sidePanelTitle: " ",
+			showCloseButton: true,
+			showBackdrop: true,
+			showResizer: true,
+			showPopupButton: true
+		};
 		allGrid.data = 'vm.filteredData';
 		inAlarmGrid.data = 'vm.filteredData';
 
@@ -164,7 +181,7 @@
 				return (lowercaseName.indexOf(lowercaseQuery) === 0);
 			};
 		/************AGENTS GRID************/
-		vm.getTableHeight = function () {
+		function getTableHeight() {
 			var rowHeight = 30;
 			var headerHeight = 30;
 			var agentMenuHeight = 45;
@@ -173,7 +190,7 @@
 			};
 		};
 
-		vm.getAdherenceForAgent = function (personId) {
+		function getAdherenceForAgent(personId) {
 			if (!vm.isSelected(personId)) {
 				rtaService
 					.forToday({ personId: personId })
@@ -185,29 +202,11 @@
 			}
 		};
 
-		vm.selectAgent = function (personId) { selectedPersonId = vm.isSelected(personId) ? '' : personId; };
-		vm.isSelected = function (personId) { return selectedPersonId === personId; };
-		vm.showAdherenceUpdates = function () { return vm.adherencePercent !== null; };
-		vm.changeScheduleUrl = function (personId) { return rtaRouteService.urlForChangingSchedule(personId); };
-		vm.historicalAdherenceUrl = function (personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
-
-		/****************GO TOS**************/
-		vm.goToOverview = function () { rtaRouteService.goToSites(); }
-		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
-		
-		/**************RIGHT PANEL**************/
-
-		vm.rightPanelOptions = {
-			panelState: false,
-			panelTitle: " ",
-			sidePanelTitle: " ",
-			showCloseButton: true,
-			showBackdrop: true,
-			showResizer: true,
-			showPopupButton: true
-		};
-
-		///////////////////////////////////////////////////////////////////
+		function selectAgent(personId) { selectedPersonId = vm.isSelected(personId) ? '' : personId; };
+		function isSelected(personId) { return selectedPersonId === personId; };
+		function showAdherenceUpdates() { return vm.adherencePercent !== null; };
+		function changeScheduleUrl(personId) { return rtaRouteService.urlForChangingSchedule(personId); };
+		function historicalAdherenceUrl(personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
 
 		/*****************WATCHES*****************/
 		$scope.$watch(
@@ -242,14 +241,6 @@
 					}
 				}
 			});
-
-		// $scope.$watch(
-		// 	function () { return vm.teamsSelected; },
-		// 	function (newValue, oldValue) {
-		// 		if (angular.toJson(newValue) !== angular.toJson(oldValue) && enableWatchOnTeam) {
-		// 			vm.updateSite(oldValue);
-		// 		}
-		// 	});
 
 		$scope.$watch(
 			function () { return vm.filterText; },
