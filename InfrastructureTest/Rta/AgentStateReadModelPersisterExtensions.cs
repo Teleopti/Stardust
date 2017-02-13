@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				TeamId = model.TeamId.GetValueOrDefault(),
 				TeamName = model.TeamName
 			});
-			instance.Persist(model, DeadLockVictim.Yes);
+			instance.Persist(model);
 		}
 	}
 }

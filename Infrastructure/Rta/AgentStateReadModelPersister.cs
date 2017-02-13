@@ -15,25 +15,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
-		private readonly DeadLockVictimThrower _deadLockVictimThrower;
 
 		public AgentStateReadModelPersister(
 			ICurrentUnitOfWork unitOfWork,
 			IJsonSerializer serializer,
-			IJsonDeserializer deserializer,
-			DeadLockVictimThrower deadLockVictimThrower)
+			IJsonDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
 			_deserializer = deserializer;
-			_deadLockVictimThrower = deadLockVictimThrower;
 		}
 
 		[LogInfo]
-		public virtual void Persist(AgentStateReadModel model, DeadLockVictim deadLockVictim)
+		public virtual void Persist(AgentStateReadModel model)
 		{
-			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
-
 			var query = _unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
 					UPDATE [ReadModel].[AgentState]
@@ -77,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences), NHibernateUtil.StringClob)
 				.SetParameter("StateGroupId", model.StateGroupId);
 
-			var updated = _deadLockVictimThrower.ThrowOnDeadlock(query.ExecuteUpdate);
+			var updated = query.ExecuteUpdate();
 
 			if (updated == 0)
 			{

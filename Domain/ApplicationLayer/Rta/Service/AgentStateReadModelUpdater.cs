@@ -7,9 +7,38 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	// composite event never ment to be used in a queue
+	public class AgentStateChangedEvent : IEvent
+	{
+		public Guid PersonId { get; set; }
+		public DateTime CurrentTime { get; set; }
+
+		public string CurrentActivityName { get; set; }
+		public string NextActivityName { get; set; }
+		public DateTime? NextActivityStartTime { get; set; }
+
+		public string RuleName { get; set; }
+		public DateTime? RuleStartTime { get; set; }
+		public int? RuleDisplayColor { get; set; }
+		public double? StaffingEffect { get; set; }
+
+		public bool IsAlarm { get; set; }
+		public DateTime? AlarmStartTime { get; set; }
+		public int? AlarmColor { get; set; }
+
+		public IEnumerable<ScheduledActivity> ActivitiesInTimeWindow { get; set; }
+
+	}
+
 	public interface IAgentStateReadModelUpdater
 	{
-		void Update(Context context, IEnumerable<IEvent> events, DeadLockVictim deadLockVictim);
+		void Handle(AgentStateReadModelUpdaterEventPackage @event);
+	}
+
+	public class AgentStateReadModelUpdaterEventPackage : IEvent
+	{
+		public Guid PersonId { get; set; }
+		public IEnumerable<IEvent> Events { get; set; }
 	}
 
 	public class AgentStateReadModelUpdater : IAgentStateReadModelUpdater
@@ -23,44 +52,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_now = now;
 		}
 
-		public void Update(Context context, IEnumerable<IEvent> events, DeadLockVictim deadLockVictim)
+		public void Handle(AgentStateReadModelUpdaterEventPackage @event)
 		{
-			var model = _persister.Load(context.PersonId) ?? new AgentStateReadModel();
+			var model = _persister.Load(@event.PersonId) ?? new AgentStateReadModel();
 			if (model.IsDeleted) return;
-
-			model.ReceivedTime = context.CurrentTime;
-			model.PersonId = context.PersonId;
-
-			model.Activity = context.Schedule.CurrentActivityName();
-			model.NextActivity = context.Schedule.NextActivityName();
-			model.NextActivityStartTime = context.Schedule.NextActivityStartTime();
-
-			model.RuleName = context.State.RuleName();
-			model.RuleStartTime = context.RuleStartTime;
-			model.RuleColor = context.State.RuleDisplayColor();
-			model.StaffingEffect = context.State.StaffingEffect();
-
-			model.IsRuleAlarm = context.IsAlarm;
-			model.AlarmStartTime = context.AlarmStartTime;
-			model.AlarmColor = context.State.AlarmColor();
-			model.Shift = context.Schedule.ActivitiesInTimeWindow()
-				.Select(a => new AgentStateActivityReadModel
-				{
-					Color = a.DisplayColor,
-					StartTime = a.StartDateTime,
-					EndTime = a.EndDateTime,
-					Name = a.Name
-				}).ToArray();
-
-			applyEvents(model, events);
-
-			_persister.Persist(model, deadLockVictim);
+			applyEvents(model, @event.Events);
+			_persister.Persist(model);
 		}
 		
 		private void applyEvents(AgentStateReadModel model, IEnumerable<IEvent> events)
 		{
 			foreach (var @event in events)
 			{
+				if (@event is AgentStateChangedEvent)
+					handle(model, @event as AgentStateChangedEvent);
 				if (@event is PersonOutOfAdherenceEvent)
 					handle(model, @event as PersonOutOfAdherenceEvent);
 				else if (@event is PersonInAdherenceEvent)
@@ -78,6 +83,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					;
 		}
 		
+		private static void handle(AgentStateReadModel model, AgentStateChangedEvent @event)
+		{
+			model.ReceivedTime = @event.CurrentTime;
+			model.PersonId = @event.PersonId;
+
+			model.Activity = @event.CurrentActivityName;
+			model.NextActivity = @event.NextActivityName;
+			model.NextActivityStartTime = @event.NextActivityStartTime;
+
+			model.RuleName = @event.RuleName;
+			model.RuleStartTime = @event.RuleStartTime;
+			model.RuleColor = @event.RuleDisplayColor;
+			model.StaffingEffect = @event.StaffingEffect;
+
+			model.IsRuleAlarm = @event.IsAlarm;
+			model.AlarmStartTime = @event.AlarmStartTime;
+			model.AlarmColor = @event.AlarmColor;
+			model.Shift = @event.ActivitiesInTimeWindow
+				.Select(a => new AgentStateActivityReadModel
+				{
+					Color = a.DisplayColor,
+					StartTime = a.StartDateTime,
+					EndTime = a.EndDateTime,
+					Name = a.Name
+				})
+				.ToArray();
+		}
+
 		private static void handle(AgentStateReadModel model, PersonStateChangedEvent @event)
 		{
 			model.StateCode = @event.StateCode;
@@ -113,4 +146,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					}).ToArray();
 		}
 	}
+
 }

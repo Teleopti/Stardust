@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IAgentStateReadModelPersister
 	{
 		AgentStateReadModel Load(Guid personId);
-		void Persist(AgentStateReadModel model, DeadLockVictim deadLockVictim);
+		void Persist(AgentStateReadModel model);
 		void SetDeleted(Guid personId, DateTime expiresAt);
 		void DeleteOldRows(DateTime now);
 		void UpsertAssociation(AssociationInfo info);

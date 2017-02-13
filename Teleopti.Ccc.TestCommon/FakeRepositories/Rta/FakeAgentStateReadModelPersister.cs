@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> Models => _data.Values.ToArray();
 
-		public void Persist(AgentStateReadModel model, DeadLockVictim deadLockVictim)
+		public void Persist(AgentStateReadModel model)
 		{
 			AgentStateReadModel removed;
 			_data.TryRemove(model.PersonId, out removed);

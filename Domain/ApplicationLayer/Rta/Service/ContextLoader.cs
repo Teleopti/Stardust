@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 	}
-	
+
 
 
 
@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static int calculateTransactionSize(int maxTransactionSize, int parallelTransactions, int thingsCount)
 		{
-			if (thingsCount <= maxTransactionSize* parallelTransactions)
-				maxTransactionSize = (int) Math.Ceiling(thingsCount/(double)parallelTransactions);
+			if (thingsCount <= maxTransactionSize*parallelTransactions)
+				maxTransactionSize = (int) Math.Ceiling(thingsCount/(double) parallelTransactions);
 			return maxTransactionSize;
 		}
 
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			Parallel.ForEach(
 				transactions,
-				new ParallelOptions { MaxDegreeOfParallelism = strategy.ParallelTransactions },
+				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
 				data =>
 				{
 					ProcessTransaction(tenant, strategy, data, exceptions);
@@ -180,23 +180,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			);
 		}
 
-		protected void ProcessTransaction(string tenant, IContextLoadingStrategy strategy, Func<IEnumerable<AgentState>> transaction, ConcurrentBag<Exception> exceptions)
+		protected void ProcessTransaction(
+			string tenant, 
+			IContextLoadingStrategy strategy, 
+			Func<IEnumerable<AgentState>> transaction, 
+			ConcurrentBag<Exception> exceptions)
 		{
 			try
 			{
 				if (Thread.CurrentThread.Name == null)
 					Thread.CurrentThread.Name = $"{strategy.ParentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
 
-				IEnumerable<ProcessResult> result = null;
-				_deadLockRetrier.RetryOnDeadlock(() => { result = Transaction(tenant, strategy, transaction); });
+				IEnumerable<AgentStateReadModelUpdaterEventPackage> packages = null;
+				_deadLockRetrier.RetryOnDeadlock(() => { packages = Transaction(tenant, strategy, transaction); });
 
-				if (result.Any())
+				if (packages.Any())
 				{
 					WithUnitOfWork(() =>
 					{
-						result.ForEach(x =>
+						packages.ForEach(x =>
 						{
-							_agentStateReadModelUpdater.Update(x.Context, x.Events, x.Context.DeadLockVictim);
+							_agentStateReadModelUpdater.Handle(x);
 						});
 					});
 				}
@@ -209,7 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[TenantScope]
 		[LogInfo]
-		protected virtual IEnumerable<ProcessResult> Transaction(
+		protected virtual IEnumerable<AgentStateReadModelUpdaterEventPackage> Transaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
 			Func<IEnumerable<AgentState>> agentStates
@@ -233,22 +237,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						);
 					})
 					.Where(x => x.ShouldProcessState())
-					.Select(x =>
+					.Select(x => new AgentStateReadModelUpdaterEventPackage
 					{
-						var events = _processor.Process(x);
-						return new ProcessResult {Context = x, Events = events};
+						PersonId = x.PersonId,
+						Events = _processor.Process(x)
 					})
 					.ToArray();
 			});
 
 		}
-
-		protected class ProcessResult
-		{
-			public Context Context { get; set; }
-			public IEnumerable<IEvent> Events { get; set; }
-		}
-
+		
 		[ReadModelUnitOfWork]
 		protected virtual void WithReadModelUnitOfWork(Action action)
 		{

@@ -45,6 +45,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				context.Adherence.AdherenceChanges()
 					.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
+
+				eventCollector.Publish(new AgentStateChangedEvent
+				{
+					PersonId = context.PersonId,
+					CurrentTime = context.CurrentTime,
+
+					CurrentActivityName = context.Schedule.CurrentActivityName(),
+					NextActivityName = context.Schedule.NextActivityName(),
+					NextActivityStartTime = context.Schedule.NextActivityStartTime(),
+
+					RuleName = context.State.RuleName(),
+					RuleStartTime = context.RuleStartTime,
+					RuleDisplayColor = context.State.RuleDisplayColor(),
+					StaffingEffect = context.State.StaffingEffect(),
+
+					IsAlarm = context.IsAlarm,
+					AlarmStartTime = context.AlarmStartTime,
+					AlarmColor = context.State.AlarmColor(),
+
+					ActivitiesInTimeWindow = context.Schedule.ActivitiesInTimeWindow(),
+				});
+
 			}
 
 			return eventCollector.Publish();
