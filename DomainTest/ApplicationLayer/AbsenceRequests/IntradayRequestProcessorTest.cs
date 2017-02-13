@@ -1037,7 +1037,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillCombinationResourceRepository.LoadSkillCombinationResources(period).Second().Resource.Should().Be.EqualTo(9);
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void DenyIfReadModelDataIsTooOld()
 		{
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
@@ -1065,7 +1065,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", agent.PermissionInformation.Culture()));
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void DenyIfReadModelDataIsNotTooOldButNoSkillCombinationsInReadModel()
 		{
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
