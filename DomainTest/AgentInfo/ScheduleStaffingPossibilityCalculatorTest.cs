@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -88,6 +89,46 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
 			Assert.AreEqual(2, possibilities.Count);
 			StaffingViewModelCreator.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesOnlyForSkillsInSchedule()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var activity1 = createActivity();
+			var personSkill1 = createPersonSkill(activity1);
+			setPersonSkill(personSkill1, new double?[] { 10d, 10d }, new double?[] { 12d, 11d });
+
+			var activity2 = createActivity();
+			var personSkill2 = createPersonSkill(activity2);
+			setPersonSkill(personSkill2, new double?[] { 10d, 10d }, new double?[] { 11d, 12d });
+
+			var personPeriod = createPersonPeriod(personSkill1, personSkill2);
+			person.AddPersonPeriod(personPeriod);
+
+			createAssignment(person, activity2);
+
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var possibilities = Target.CalcuateIntradayOvertimeIntervalPossibilities();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(1, possibilities.Values.ElementAt(0));
+			Assert.AreEqual(0, possibilities.Values.ElementAt(1));
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesWhenUsingShrinkageValidator()
+		{
+			setupTestDataForOneSkill();
+			var person = LoggedOnUser.CurrentUser();
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new PendingAbsenceRequest(),
+				false);
+			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator =
+				new StaffingThresholdWithShrinkageValidator();
+			person.WorkflowControlSet = workflowControlSet;
+			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			Assert.AreEqual(2, possibilities.Count);
 		}
 
 		[Test]
