@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -34,9 +33,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[LogInfo]
 		public virtual IEnumerable<IEvent> Process(Context context)
 		{
-			if (!context.ShouldProcessState())
-				return Enumerable.Empty<IEvent>();
-
 			var eventCollector = new EventCollector(_eventPublisher);
 
 			context.UpdateAgentState();

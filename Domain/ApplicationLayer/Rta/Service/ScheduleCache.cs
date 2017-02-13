@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -25,13 +26,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return result ?? Enumerable.Empty<ScheduledActivity>();
 		}
 
+		[ReadModelUnitOfWork]
+		protected virtual IEnumerable<ScheduledActivity> Read()
+		{
+			return _reader.Read();
+		}
+
 		public void Refresh(string latestVersion)
 		{
 			var refresh = latestVersion != _version.Value || _version.Value == null;
 			if (!refresh)
 				return;
 
-			var activities = _reader.Read();
+			var activities = Read();
 
 			_dictionary.Set(
 				activities

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}];
 		}
 
-		public void Refresh()
+		[ReadModelUnitOfWork]
+		public virtual void Refresh()
 		{
 			var latestVersion = _keyValueStore.Get("ExternalLogonReadModelVersion");
 			var refresh = latestVersion != _version.Value || _version.Value == null;

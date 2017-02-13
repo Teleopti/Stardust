@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public int ValidateSourceId(string sourceId)
 		{
 			if (_cache.Value == null)
-				_cache.Set(_dataSourceReader.Datasources());
+				_cache.Set(ReadDataSources());
 
 			if (string.IsNullOrEmpty(sourceId))
 				throw new InvalidSourceException("Source id is required");
@@ -25,6 +26,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (!_cache.Value.TryGetValue(sourceId, out dataSourceId))
 				throw new InvalidSourceException($"Source id \"{sourceId}\" not found");
 			return dataSourceId;
+		}
+
+		[AnalyticsUnitOfWork]
+		protected virtual ConcurrentDictionary<string, int> ReadDataSources()
+		{
+			return _dataSourceReader.Datasources();
 		}
 	}
 }

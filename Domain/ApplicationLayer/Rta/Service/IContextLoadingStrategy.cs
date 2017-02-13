@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IContextLoadingStrategy
 	{
+		string ParentThreadName { get; }
 		DateTime CurrentTime { get; }
 		DeadLockVictim DeadLockVictim { get; }
 		int ParallelTransactions { get; }
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StrategyContext
 	{
 		public Action<Action> WithUnitOfWork;
+		public Action<Action> WithReadModelUnitOfWork;
 		public Action<Exception> AddException;
 	}
 
@@ -32,12 +35,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			DateTime time
 		)
 		{
+			ParentThreadName = Thread.CurrentThread.Name;
 			Config = config;
 			Persister = persister;
 			CurrentTime = time;
 			DeadLockVictim = DeadLockVictim.No;
 		}
 
+		public string ParentThreadName { get; }
 		public DateTime CurrentTime { get; }
 		protected IConfigReader Config { get; }
 		protected IAgentStatePersister Persister { get; }
@@ -51,28 +56,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class BatchStrategy : ContextLoadingStrategy
 	{
-		private readonly DataSourceMapper _dataSourceMapper;
 		private readonly ExternalLogonMapper _externalLogonMapper;
 		private readonly BatchInputModel _batch;
-		private int _dataSourceId;
+		private readonly int _dataSourceId;
 		private IDictionary<Guid, BatchStateInputModel> _matches;
 
 		public BatchStrategy(BatchInputModel batch, DateTime time, IConfigReader config, IAgentStatePersister persister, DataSourceMapper dataSourceMapper, ExternalLogonMapper externalLogonMapper) : base(config, persister, time)
 		{
-			_dataSourceMapper = dataSourceMapper;
 			_externalLogonMapper = externalLogonMapper;
 			_batch = batch;
+			_dataSourceId = dataSourceMapper.ValidateSourceId(_batch.SourceId);
 			ParallelTransactions = Config.ReadValue("RtaBatchParallelTransactions", 7);
 			MaxTransactionSize = Config.ReadValue("RtaBatchMaxTransactionSize", 100);
 		}
 
 		public override IEnumerable<Guid> PersonIds(StrategyContext context)
 		{
-			context.WithUnitOfWork(() =>
-			{
-				_dataSourceId = _dataSourceMapper.ValidateSourceId(_batch.SourceId);
-				_externalLogonMapper.Refresh();
-			});
+			_externalLogonMapper.Refresh();
 			_matches = _batch.States
 				.SelectMany(state =>
 				{
@@ -112,17 +112,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ClosingSnapshotStrategy : ContextLoadingStrategy
 	{
 		private readonly DateTime _snapshotId;
-		private readonly string _sourceId;
 		private readonly StateMapper _stateMapper;
-		private readonly DataSourceMapper _dataSourceMapper;
-		private int _dataSourceId;
+		private readonly int _dataSourceId;
 
 		public ClosingSnapshotStrategy(DateTime snapshotId, string sourceId, DateTime time, IConfigReader config, IAgentStatePersister persister, StateMapper stateMapper, DataSourceMapper dataSourceMapper) : base(config, persister, time)
 		{
 			_snapshotId = snapshotId;
-			_sourceId = sourceId;
 			_stateMapper = stateMapper;
-			_dataSourceMapper = dataSourceMapper;
+			_dataSourceId = dataSourceMapper.ValidateSourceId(sourceId);
 			ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 			MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 		}
@@ -132,7 +129,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IEnumerable<Guid> personIds = null;
 			context.WithUnitOfWork(() =>
 			{
-				_dataSourceId = _dataSourceMapper.ValidateSourceId(_sourceId);
 				personIds = Persister.FindForClosingSnapshot(_snapshotId, _dataSourceId, _stateMapper.LoggedOutStateGroupIds());
 			});
 			return personIds;
@@ -167,9 +163,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public override IEnumerable<Guid> PersonIds(StrategyContext context)
 		{
 			IEnumerable<PersonForCheck> persons = null;
-			context.WithUnitOfWork(() =>
+			context.WithReadModelUnitOfWork(() =>
 			{
 				_scheduleCache.Refresh(_keyValues.Get("CurrentScheduleReadModelVersion"));
+			});
+			context.WithUnitOfWork(() =>
+			{
 				persons = Persister.FindForCheck();
 			});
 			return persons

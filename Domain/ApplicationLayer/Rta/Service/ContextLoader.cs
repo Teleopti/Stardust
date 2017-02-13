@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		protected override void ProcessTransactions(string tenant, IContextLoadingStrategy strategy, IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
 		{
-			var parentThreadName = Thread.CurrentThread.Name;
-
 			var taskTransactionCount = Math.Max(2, transactions.Count()/strategy.ParallelTransactions);
 
 			var tasks = transactions
@@ -31,18 +29,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					return Task.Factory.StartNew(() =>
 					{
-						if (Thread.CurrentThread.Name == null)
-							Thread.CurrentThread.Name = $"{parentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
-						transactionBatch.ForEach(transactionData =>
+						transactionBatch.ForEach(transaction =>
 						{
-							try
-							{
-								_deadLockRetrier.RetryOnDeadlock(() => Transaction(tenant, strategy, transactionData));
-							}
-							catch (Exception e)
-							{
-								exceptions.Add(e);
-							}
+							ProcessTransaction(tenant, strategy, transaction, exceptions);
 						});
 					});
 				})
@@ -139,6 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var strategyContext = new StrategyContext
 			{
 				WithUnitOfWork = WithUnitOfWork,
+				WithReadModelUnitOfWork = WithReadModelUnitOfWork,
 				AddException = exceptions.Add
 			};
 			var items = strategy.PersonIds(strategyContext);
@@ -152,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.Select(some => new Func<IEnumerable<AgentState>>(() =>
 					{
 						var result = _agentStatePersister.LockNLoad(some, strategy.DeadLockVictim);
-						_stateMapper.RefreshMappingCache(result.MappingVersion);
+						_stateMapper.Refresh(result.MappingVersion);
 						_scheduleCache.Refresh(result.ScheduleVersion);
 						return result.AgentStates;
 					}))
@@ -180,74 +170,102 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		protected virtual void ProcessTransactions(string tenant, IContextLoadingStrategy strategy, IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
 		{
-			var parentThreadName = Thread.CurrentThread.Name;
 			Parallel.ForEach(
 				transactions,
 				new ParallelOptions { MaxDegreeOfParallelism = strategy.ParallelTransactions },
 				data =>
 				{
-					try
-					{
-						if (Thread.CurrentThread.Name == null)
-							Thread.CurrentThread.Name = $"{parentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
-						_deadLockRetrier.RetryOnDeadlock(() => Transaction(tenant, strategy, data));
-					}
-					catch (Exception e)
-					{
-						exceptions.Add(e);
-					}
+					ProcessTransaction(tenant, strategy, data, exceptions);
 				}
 			);
 		}
 
+		protected void ProcessTransaction(string tenant, IContextLoadingStrategy strategy, Func<IEnumerable<AgentState>> transaction, ConcurrentBag<Exception> exceptions)
+		{
+			try
+			{
+				if (Thread.CurrentThread.Name == null)
+					Thread.CurrentThread.Name = $"{strategy.ParentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
+
+				IEnumerable<ProcessResult> result = null;
+				_deadLockRetrier.RetryOnDeadlock(() => { result = Transaction(tenant, strategy, transaction); });
+
+				if (result.Any())
+				{
+					WithUnitOfWork(() =>
+					{
+						result.ForEach(x =>
+						{
+							_agentStateReadModelUpdater.Update(x.Context, x.Events, x.Context.DeadLockVictim);
+						});
+					});
+				}
+			}
+			catch (Exception e)
+			{
+				exceptions.Add(e);
+			}
+		}
+
 		[TenantScope]
 		[LogInfo]
-		protected virtual void Transaction(
+		protected virtual IEnumerable<ProcessResult> Transaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
 			Func<IEnumerable<AgentState>> agentStates
 			)
 		{
-			WithUnitOfWork(() =>
+			return WithUnitOfWork(() =>
 			{
-				agentStates.Invoke().ForEach(state =>
-				{
-					var context = new Context(
-						strategy.CurrentTime,
-						strategy.DeadLockVictim,
-						strategy.GetInputFor(state),
-						state,
-						() => _scheduleCache.Read(state.PersonId),
-						c => _agentStatePersister.Update(c.MakeAgentState()),
-						_stateMapper,
-						_appliedAlarm
-					);
-
-					var events = _processor.Process(context);
-
-					if (context.ShouldProcessState())
-						_agentStateReadModelUpdater.Update(context, events, context.DeadLockVictim);
-
-				});
+				return agentStates
+					.Invoke()
+					.Select(state =>
+					{
+						return new Context(
+							strategy.CurrentTime,
+							strategy.DeadLockVictim,
+							strategy.GetInputFor(state),
+							state,
+							() => _scheduleCache.Read(state.PersonId),
+							c => _agentStatePersister.Update(c.MakeAgentState()), //remove
+							_stateMapper,
+							_appliedAlarm
+						);
+					})
+					.Where(x => x.ShouldProcessState())
+					.Select(x =>
+					{
+						var events = _processor.Process(x);
+						return new ProcessResult {Context = x, Events = events};
+					})
+					.ToArray();
 			});
+
+		}
+
+		protected class ProcessResult
+		{
+			public Context Context { get; set; }
+			public IEnumerable<IEvent> Events { get; set; }
+		}
+
+		[ReadModelUnitOfWork]
+		protected virtual void WithReadModelUnitOfWork(Action action)
+		{
+			action.Invoke();
 		}
 
 		[AllBusinessUnitsUnitOfWork]
-		[ReadModelUnitOfWork]
-		[AnalyticsUnitOfWork]
 		protected virtual void WithUnitOfWork(Action action)
 		{
 			action.Invoke();
 		}
 
 		[AllBusinessUnitsUnitOfWork]
-		[ReadModelUnitOfWork]
-		[AnalyticsUnitOfWork]
-		protected virtual T WithUnitOfWork<T>(Func<T> func)
+		protected virtual T WithUnitOfWork<T>(Func<T> action)
 		{
-			return func.Invoke();
+			return action.Invoke();
 		}
-
 	}
 
 }

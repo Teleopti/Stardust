@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -105,13 +106,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _loggedOutStateGroupIds.Value;
 		}
 
-		public void RefreshMappingCache(string latestVersion)
+		[ReadModelUnitOfWork]
+		protected virtual IEnumerable<Mapping> Read()
+		{
+			return _reader.Read();
+		}
+
+		public void Refresh(string latestVersion)
 		{
 			var refresh = latestVersion != _version.Value || _version.Value == null;
 			if (!refresh)
 				return;
 
-			var mappings = _reader.Read();
+			var mappings = Read();
 			_ruleMappings.Set(
 				mappings
 					.Where(m =>

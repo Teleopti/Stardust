@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
