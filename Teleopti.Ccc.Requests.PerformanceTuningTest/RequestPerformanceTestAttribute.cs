@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -28,15 +27,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-
-			SetupSystem(system, configuration);
-		}
-
-		public static void SetupSystem(ISystem system, IIocConfiguration configuration)
-		{
 			system.AddModule(new CommonModule(configuration));
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<UpdateStaffingLevelReadModel>().For<UpdateStaffingLevelReadModel>();
 			system.UseTestDouble<MutableNow>().For<INow>();
