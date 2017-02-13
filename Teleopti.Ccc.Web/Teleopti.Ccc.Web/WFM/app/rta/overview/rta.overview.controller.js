@@ -75,12 +75,32 @@
 		vm.goToSelectSkill = goToSelectSkill;
 		vm.toggleSelection = toggleSelection;
 		vm.openSelectedItems = openSelectedItems;
+		vm.justTesting = "testing";
 
-		rtaService.getSkillAreas()
+		(function initialize() {
+		rtaService.getSkills()
+			.then(function (skills) {
+				vm.skillsLoaded = true;
+				vm.skills = skills;
+				if (vm.skillId !== null) {
+					vm.selectedSkill = skills.find(function (skill) { return skill.Id === vm.skillId });
+				}
+				var defer = $q.defer();
+				defer.resolve();
+				return defer.promise;
+			})
+			.then(function () {
+				return rtaService.getSkillAreas();
+			})
 			.then(function (skillAreas) {
+				vm.skillAreasLoaded = true;
 				vm.skillAreas = skillAreas.SkillAreas;
+				if (vm.skillAreaId !== null) {
+					vm.selectedSkillArea = skillAreas.SkillAreas.find(function (skillArea) { return skillArea.Id === vm.skillAreaId; });
+				}
 				getSitesOrTeams();
 			});
+		})();
 
 		function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };
 
@@ -118,14 +138,10 @@
 					vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
 				if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
 					getAdherenceForTeamsBySkills(vm.siteIds, vm.skillId)
-						.then(function (teamAdherences) {
-							updateAdherence(vm.teams, teamAdherences);
-						});
+						.then(function (teamAdherences) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); });
 				} else if (angular.isDefined(vm.sites)) {
 					getAdherenceForSitesBySkills(vm.skillId)
-						.then(function (siteAdherences) {
-							updateAdherence(vm.sites, siteAdherences);
-						});
+						.then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
 				};
 			}
 			else if (vm.siteIds) {
@@ -166,9 +182,7 @@
 						return team.Id;
 					});
 					return getAdherenceForTeamsBySkills(vm.siteIds, vm.skillIds)
-						.then(function (teamAdherences) {
-							updateAdherence(vm.teams, teamAdherences);
-						});
+						.then(function (teamAdherences) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); });
 				})
 		}
 
@@ -177,9 +191,7 @@
 				.then(function (sites) {
 					vm.sites = sites;
 					return getAdherenceForSitesBySkills(vm.skillIds);
-				}).then(function (siteAdherences) {
-					updateAdherence(vm.sites, siteAdherences);
-				});
+				}).then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
 		}
 
 		function getTeamsInfo() {
@@ -249,10 +261,6 @@
 			})
 		};
 
-		function updateAdherence(item, adh) {
-			rtaAdherenceService.updateAdherence(item, adh);
-		};
-
 		$scope.$watch(
 			function () { return $sessionStorage.buid; },
 			function (newValue, oldValue) {
@@ -264,17 +272,15 @@
 		$scope.$watch(function () {
 			return vm.selectedSkill;
 		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue)) {
+			if (changed(newValue, oldValue)) 
 				vm.goToDashboard();
-			}
 		});
 
 		$scope.$watch(function () {
 			return vm.selectedSkillArea;
 		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue)) {
+			if (changed(newValue, oldValue)) 
 				vm.goToDashboard();
-			}
 		});
 
 		$scope.$on('$destroy', function () { $interval.cancel(polling); });

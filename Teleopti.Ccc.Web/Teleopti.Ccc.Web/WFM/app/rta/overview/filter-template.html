@@ -3,17 +3,17 @@
 				<div class="con-row">
 					<span class="con-flex">
 						<md-autocomplete id="skill-id"
-										 ng-disabled="!vm.skillsLoaded"
-										 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
+										 ng-disabled="!$parent.vm.skillsLoaded"
+										 ng-attr-skillsLoaded="{{$parent.vm.skillsLoaded}}"
 										 class="autocomplete-skill"
 										 md-input-id="skill-input"
-										 md-selected-item="vm.selectedSkill"
+										 md-selected-item="$parent.vm.selectedSkill"
 										 md-search-text="searchSkillText"
-										 md-selected-item-change="vm.selectedSkillChange(skill)"
-										 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
+										 md-selected-item-change="fc.selectedSkillChange(skill)"
+										 md-items="skill in fc.querySearch(searchSkillText, $parent.vm.skills)"
 										 md-item-text="skill.Name"
 										 md-min-length="0"
-										 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+										 placeholder="{{$parent.vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 					</md-item-template>
@@ -24,17 +24,17 @@
 					</span>
 					<span class="con-flex">
 						<md-autocomplete id="skill-area-id"
-										ng-disabled="!vm.skillAreasLoaded"
-										ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
+										ng-disabled="!$parent.vm.skillAreasLoaded"
+										ng-attr-skillAreasLoaded="{{$parent.vm.skillAreasLoaded}}"
 										class="autocomplete-skillarea"
 										md-input-id="skill-area-input"
-										md-selected-item="vm.selectedSkillArea"
+										md-selected-item="$parent.vm.selectedSkillArea"
 										md-search-text="searchSkillAreaText"
-										md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
-										md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
+										md-selected-item-change="fc.selectedSkillAreaChange(skillArea)"
+										md-items="skillArea in fc.querySearch(searchSkillAreaText, $parent.vm.skillAreas)"
 										md-item-text="skillArea.Name"
 										md-min-length="0"
-										placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
+										placeholder="{{$parent.vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 					</md-item-template>
@@ -44,23 +44,23 @@
 					</md-autocomplete>
 					</span>
 					<span class="con-flex rta-multiple-selection-panel">
-						<md-input-container class="rta-md-input-container" id="organization" md-no-float ng-if="vm.showOrganizationPicker">
+						<md-input-container class="rta-md-input-container" id="organization" md-no-float ng-if="fc.showOrganizationPicker">
 							<label class="for-searchTerm"></label>
-							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" multiple md-on-close="vm.goToAgents()">
+							<md-select ng-model="fc.teamsSelected" class="rta-md-select" md-selected-text="fc.selectFieldText" multiple md-on-close="fc.goToAgents()">
 								<div class="rta-select-header">
 									<md-select-header>
 										<i class="mdi mdi-magnify"></i>
-										<span ng-if="vm.searchTerm.length > 0" ng-click="vm.clearSearchTerm()" class="pull-right grow-out rta-clear-search cursor-pointer">
+										<span ng-if="fc.searchTerm.length > 0" ng-click="fc.clearSearchTerm()" class="pull-right grow-out rta-clear-search cursor-pointer">
 											<i class="mdi mdi-close"></i>
 										</span>
-					<input ng-model="vm.searchTerm" type="search" placeholder="{{'SearchASiteOrTeam' | translate}}" ng-keydown="vm.onSearchOrganization($event)" class="picker-searchbox md-text rta-options-search-input">
+					<input ng-model="fc.searchTerm" type="search" placeholder="{{'SearchASiteOrTeam' | translate}}" ng-keydown="fc.onSearchOrganization($event)" class="picker-searchbox md-text rta-options-search-input">
 					</md-select-header>
 				</div>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="vm.teamsSelected.length === 0" ng-click="vm.clearOrgSelection()">{{'ClearAll' | translate}}</button>
-				<md-optgroup ng-repeat="site in vm.sites | filter:vm.searchTerm | orderBy:'Name':sortByLocaleLanguage" class="rta-option-group">
-					<span ng-click="vm.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-class="fc.teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="fc.teamsSelected.length === 0" ng-click="fc.clearOrgSelection()">{{'ClearAll' | translate}}</button>
+				<md-optgroup ng-repeat="site in fc.sites | filter:fc.searchTerm | orderBy:'Name':sortByLocaleLanguage" class="rta-option-group">
+					<span ng-click="fc.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
 					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
-					<md-option ng-show="site.isExpanded" ng-selected="vm.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams | orderBy:'Name':sortByLocaleLanguage">{{team.Name}}</md-option>
+					<md-option ng-show="site.isExpanded" ng-selected="fc.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams | orderBy:'Name':sortByLocaleLanguage">{{team.Name}}</md-option>
 				</md-optgroup>
 				</md-select>
 				</md-input-container>
