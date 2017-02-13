@@ -45,6 +45,7 @@ namespace Manager.Integration.Test.WPF.Commands
 					{
 						Name = "Job Name " + i,
 						Serialized = testJobParamsToJson,
+						Type = "NodeTest.JobHandlers.TestJobParams",
 						CreatedBy = "test"
 					};
 
