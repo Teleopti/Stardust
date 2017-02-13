@@ -123,61 +123,73 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
 		{
 			if (!personRequestsIds.Any()) return;
-			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
-			IList<IPersonRequest> personRequests;
-			var stopwatch = new Stopwatch();
-
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			try
 			{
-				stopwatch.Restart();
-				preloadData();
-				personRequests = _personRequestRepository.Find(personRequestsIds);
-				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
-				var currentScenario = _scenarioRepository.Current();
-				stopwatch.Stop();
-				_feedback.SendProgress($"Done preloading data! It took {stopwatch.Elapsed}");
+				var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
+				IList<IPersonRequest> personRequests;
+				var stopwatch = new Stopwatch();
 
-
-				foreach (var personRequest in personRequests)
+				using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					var person = personRequest.Person;
-					if (person.WorkflowControlSet != null)
+					stopwatch.Restart();
+					preloadData();
+					personRequests = _personRequestRepository.Find(personRequestsIds);
+					_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
+					var currentScenario = _scenarioRepository.Current();
+					stopwatch.Stop();
+					_feedback.SendProgress($"Done preloading data! It took {stopwatch.Elapsed}");
+
+
+					foreach (var personRequest in personRequests)
 					{
-						var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
-						aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
-						if (_absenceRequestValidators != null &&
-							_absenceRequestValidators.ContainsKey(personRequest.Id.GetValueOrDefault()))
+						var person = personRequest.Person;
+						if (person.WorkflowControlSet != null)
 						{
-							aggregatedValidatorList.UnionWith(_absenceRequestValidators[personRequest.Id.GetValueOrDefault()]);
+							var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
+							aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
+							if (_absenceRequestValidators != null &&
+								_absenceRequestValidators.ContainsKey(personRequest.Id.GetValueOrDefault()))
+							{
+								aggregatedValidatorList.UnionWith(_absenceRequestValidators[personRequest.Id.GetValueOrDefault()]);
+							}
 						}
 					}
-				}
 
-				stopwatch.Restart();
-				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
-				stopwatch.Stop();
-				_feedback.SendProgress($"Done loading data for resource calculation! It took {stopwatch.Elapsed}");
-
-				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
-				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
-
-				stopwatch.Restart();
-
-				var primaryMode = !_toggleManager.IsEnabled(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
-#pragma warning disable 618
-				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, primaryMode))
-#pragma warning restore 618
-				{
+					stopwatch.Restart();
+					loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 					stopwatch.Stop();
-					_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
-					processOrderList(seniority, currentScenario);
-					processOrderList(firstComeFirstServe, currentScenario);
+					_feedback.SendProgress($"Done loading data for resource calculation! It took {stopwatch.Elapsed}");
+
+					var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
+					var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
+
+					stopwatch.Restart();
+
+					var primaryMode = !_toggleManager.IsEnabled(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
+#pragma warning disable 618
+					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, primaryMode))
+#pragma warning restore 618
+					{
+						stopwatch.Stop();
+						_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
+						processOrderList(seniority, currentScenario);
+						processOrderList(firstComeFirstServe, currentScenario);
+					}
+				}
+				foreach (var personRequest in personRequests)
+				{
+					sendCommandWithRetries(personRequest);
 				}
 			}
-
-			foreach (var personRequest in personRequests)
+			catch (Exception exp)
 			{
-				sendCommandWithRetries(personRequest);
+				_feedback.SendProgress("The bulk for absence requests failed! " + exp.Message + exp.StackTrace);
+				logger.Error("The bulk for absence requests failed! " + exp.Message + exp.StackTrace);
+				var personRequests = _personRequestRepository.Find(personRequestsIds);
+				foreach (var personRequest in personRequests)
+				{
+					denyDueToTechnicalIssues(personRequest);
+				}
 			}
 		}
 
@@ -296,17 +308,22 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				{
 					_feedback.SendProgress($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp.Message + exp.StackTrace);
 					logger.Error($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp.Message + exp.StackTrace);
-					var command = new DenyRequestCommand
-					{
-						PersonRequestId = personRequest.Id.GetValueOrDefault(),
-						DenyReason = UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", absenceRequest.Person.PermissionInformation.Culture()),
-						DenyOption = PersonRequestDenyOption.None
-					};
-
-					_commandDispatcher.Execute(command);
+					denyDueToTechnicalIssues(personRequest);
 				}
 
 			}
+		}
+
+		private void denyDueToTechnicalIssues(IPersonRequest personRequest)
+		{
+			var command = new DenyRequestCommand
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				DenyReason = UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", personRequest.Person.PermissionInformation.Culture()),
+				DenyOption = PersonRequestDenyOption.None
+			};
+
+			_commandDispatcher.Execute(command);
 		}
 
 		private IProcessAbsenceRequest getAbsenceRequestProcess(Guid personRequestId, IAbsenceRequestOpenPeriod mergedPeriod)
