@@ -17,13 +17,14 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
+	var vm;
+
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668; // Same value as height of class 'weekview-day-schedule'
 	var timeLineOffset = 110;
 	var pixelToDisplayAll = 38;
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	var vm;
 	var completelyLoaded;
 	var daylightSavingAdjustment;
 	var baseUtcOffsetInMinutes;
@@ -167,7 +168,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				self.selectedDateSubscription.dispose();
 			self.selectedDate(date);
 			self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+				var possibilityPart = self.staffingPossibilityEnabled ? "/Possibility/" + self.possibilityType() : "";
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD"))
+					+ possibilityPart);
 			});
 		};
 
@@ -181,7 +184,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			userTexts.showOvertimePossibility
 		];
 
-		self.possibilityType = ko.observable(0);
+		self.possibilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().possibility);
 		self.possibilityLabel = function () { return validPossibilitiesTypes[self.possibilityType()] };
 
 		self.switchPossibilityType = function (possibilityType) {
@@ -198,7 +201,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.week = function (date) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+			var possibilityPart = self.staffingPossibilityEnabled ? "/Possibility/" + self.possibilityType() : "";
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"))
+				+ possibilityPart);
 		};
 
 		self.month = function () {

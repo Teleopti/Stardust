@@ -6,7 +6,6 @@
 /// <reference path="~/Content/hasher/hasher.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 
-
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 
@@ -15,7 +14,6 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-
 Teleopti.MyTimeWeb.Portal = (function ($) {
 	var _settings = {};
 	var _partialViewInitCallback = {};
@@ -23,14 +21,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	var currentViewId = null;
 	var currentFixedDate = null;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	
+
 	function _layout() {
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateHorizontalScroll();
 	}
 
 	function _registerPartialCallback(viewId, callBack, disposeCallback) {
-	    _partialViewInitCallback[viewId.toUpperCase()] = callBack;
-	    _partialViewDisposeCallback[viewId.toUpperCase()] = disposeCallback;
+		_partialViewInitCallback[viewId.toUpperCase()] = callBack;
+		_partialViewDisposeCallback[viewId.toUpperCase()] = disposeCallback;
 	}
 
 	//disable navigation controls on ajax-begin
@@ -40,28 +38,27 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _attachAjaxEvents() {
-	    $('#loading').hide();  // hide it initially
+		$('#loading').hide();  // hide it initially
 
-	    $(document).ajaxStart(function() {
-	        var bodyInner = $('#body-inner');
-	        $('#loading')
+		$(document).ajaxStart(function () {
+			var bodyInner = $('#body-inner');
+			$('#loading')
 	            .css({
-	                'width': $(bodyInner).width(),
-	                'height': $(bodyInner).height() + 10
+	            	'width': $(bodyInner).width(),
+	            	'height': $(bodyInner).height() + 10
 	            })
 	            .show();
-	        $('img', $('#loading')[0])
+			$('img', $('#loading')[0])
 	            .css({
-	                'top': 50 + $(window).scrollTop()
+	            	'top': 50 + $(window).scrollTop()
 	            });
-	    });
-	    $(document).ajaxStop(function() {
-	        $('#loading').hide();
-	    });
+		});
+		$(document).ajaxStop(function () {
+			$('#loading').hide();
+		});
 	}
 
-    function _initNavigation() {
-
+	function _initNavigation() {
 		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
 				e.preventDefault();
@@ -93,110 +90,111 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 			return false;
 		});
-		$('#signout').click(function() {
+		$('#signout').click(function () {
 			if (asmWindow != undefined && !asmWindow.closed) {
 				asmWindow.close();
 			}
 		});
-
 	}
 
 	function _setupRoutes() {
 		var viewRegex = '[a-z]+';
 		var actionRegex = '[a-z]+';
 		var dateRegex = '\\d{8}';
+		var intOptionRegex = "\\d{1}";
 		var yearsRegex = '\\d{4}';
 		var monthRegex = '\\d{2}';
 		var dayRegex = '\\d{2}';
-		
 
-		crossroads.addRoute(new RegExp('^(MyReport)/(' + actionRegex + ')/(' + yearsRegex + ')/(' + monthRegex + ')/(' + dayRegex+ ')$', 'i'),
+		crossroads.addRoute(new RegExp('^(MyReport)/(' + actionRegex + ')/(' + yearsRegex + ')/(' + monthRegex + ')/(' + dayRegex + ')$', 'i'),
 	        function (view, action, year, month, day) {
-		        var viewAction = view + '/' + action;
-		        var hashInfo = _parseHash('#' + viewAction);
-		        if (viewAction == currentViewId) {
-		        	var parsedDate = new Date(year, month - 1, day);
-			        var actionUpperCase = action.toUpperCase();
-			        if (actionUpperCase === "INDEX") {
-		        		Teleopti.MyTimeWeb.MyReport.ForDay(moment(parsedDate));
-		        	}
-			        if (actionUpperCase === "ADHERENCE") {
-			        	Teleopti.MyTimeWeb.MyAdherence.ForDay(moment(parsedDate));
-			        }
-			        if (actionUpperCase === "QUEUEMETRICS") {
-			        	Teleopti.MyTimeWeb.MyQueueMetrics.ForDay(moment(parsedDate));
-					}
-			        return;
-		        }
-		        _invokeDisposeCallback(currentViewId);
+	        	var viewAction = view + '/' + action;
+	        	var hashInfo = _parseHash('#' + viewAction);
+	        	if (viewAction == currentViewId) {
+	        		var parsedDate = new Date(year, month - 1, day);
+	        		var actionUpperCase = action.toUpperCase();
+	        		if (actionUpperCase === "INDEX") {
+	        			Teleopti.MyTimeWeb.MyReport.ForDay(moment(parsedDate));
+	        		}
+	        		if (actionUpperCase === "ADHERENCE") {
+	        			Teleopti.MyTimeWeb.MyAdherence.ForDay(moment(parsedDate));
+	        		}
+	        		if (actionUpperCase === "QUEUEMETRICS") {
+	        			Teleopti.MyTimeWeb.MyQueueMetrics.ForDay(moment(parsedDate));
+	        		}
+	        		return;
+	        	}
+	        	_invokeDisposeCallback(currentViewId);
 	        	_adjustTabs(hashInfo);
 	        	_loadContent(hashInfo);
 	        });
-
 
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
 
-		        var parsedDate;
-		        if (/^(\d){8}$/.test(date)) {
-			        var y = date.substr(0, 4),
+	        	var parsedDate;
+	        	if (/^(\d){8}$/.test(date)) {
+	        		var y = date.substr(0, 4),
 			            m = date.substr(4, 2) - 1,
 			            d = date.substr(6, 2);
-			        parsedDate = new Date(y, m, d);
-			       
-		        }
-		        _invokeDisposeCallback(currentViewId);
-		        _adjustTabs(hashInfo);
-		        _loadContent(hashInfo,
+	        		parsedDate = new Date(y, m, d);
+	        	}
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo,
 					   function () {
 					   	Teleopti.MyTimeWeb.Request.ShiftTradeRequest(parsedDate);
 					   });
-	        	
 	        });
 
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTradeBulletinBoard)/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
 
-		        var parsedDate;
-		        if (/^(\d){8}$/.test(date)) {
-			        var y = date.substr(0, 4),
+	        	var parsedDate;
+	        	if (/^(\d){8}$/.test(date)) {
+	        		var y = date.substr(0, 4),
 			            m = date.substr(4, 2) - 1,
 			            d = date.substr(6, 2);
-			        parsedDate = new Date(y, m, d);
-			       
-		        }
-		        _invokeDisposeCallback(currentViewId);
-		        _adjustTabs(hashInfo);
-		        _loadContent(hashInfo,
+	        		parsedDate = new Date(y, m, d);
+	        	}
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo,
 					   function () {
 					   	Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardRequest(parsedDate);
 					   });
-	        	
 	        });
 
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(PostShiftForTrade)/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
 
-		        var parsedDate;
-		        if (/^(\d){8}$/.test(date)) {
-			        var y = date.substr(0, 4),
+	        	var parsedDate;
+	        	if (/^(\d){8}$/.test(date)) {
+	        		var y = date.substr(0, 4),
 			            m = date.substr(4, 2) - 1,
 			            d = date.substr(6, 2);
-			        parsedDate = new Date(y, m, d);
-			       
-		        }
-		        _invokeDisposeCallback(currentViewId);
-		        _adjustTabs(hashInfo);
-		        _loadContent(hashInfo,
+	        		parsedDate = new Date(y, m, d);
+	        	}
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo,
 					   function () {
 					   	Teleopti.MyTimeWeb.Request.PostShiftForTradeRequest(parsedDate);
 					   });
-	        	
 	        });
-		
+
+		crossroads.addRoute(new RegExp("^(" + viewRegex + ")/(" + actionRegex + ")/(" + yearsRegex + ")/(" + monthRegex
+			+ ")/(" + dayRegex + ")/Possibility/(" + intOptionRegex + ")$", "i"),
+			function (view, action, year, month, day, possibility) {
+				var hashInfo = _parseHash("#" + view + "/" + action);
+				_invokeDisposeCallback(currentViewId);
+				_adjustTabs(hashInfo);
+				_loadContent(hashInfo);
+			});
+
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
@@ -204,6 +202,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	        	_adjustTabs(hashInfo);
 	        	_loadContent(hashInfo);
 	        });
+
 		crossroads.addRoute(new RegExp('^(.*)$', 'i'),
 	        function (hash) {
 	        	var hashInfo = _parseHash('#' + hash);
@@ -224,7 +223,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _navigateTo(action, date, id) {
-
 		var hash = action;
 		if (date) {
 			if (Teleopti.MyTimeWeb.Common.IsFixedDate(date)) {
@@ -244,34 +242,34 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _isMobile() {
 		var ua = navigator.userAgent;
-		if ( ua.match(/Android/i) ||ua.match(/webOS/i) ||ua.match(/iPhone/i) ||ua.match(/iPod/i) ) {
+		if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
 			return true;
 		}
 		return false;
 	}
 
 	function _parseHash(hash) {
-		if (_endsWith(hash, 'Tab')) {
-			if (hash.indexOf('#Schedule') == 0) {
-				if (_isMobile()) {
-					hash = hash.substring(0, hash.length - 'Tab'.length) + '/MobileWeek';
-				}
-				else hash = hash.substring(0, hash.length - 'Tab'.length) + '/Week';
-			} else {
+		var isWeekSchedule = hash.indexOf("#Schedule") >= 0 && !_isMobile();
 
-				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Index';
-			}
+		if (_endsWith(hash, "Tab")) {
+			var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile() ? "/MobileWeek" : "/Week") : "/Index";
+			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
-		if (hash.length > 0) { hash = hash.substring(1); }
+
+		if (hash.length > 0) {
+			hash = hash.substring(1);
+		}
 
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
 		parts.length = 8;
+
+		var possibility = (isWeekSchedule && parts[5] === "Possibility") ? parts[6] : 0;
 
 		var controller = parts[0];
 		var action = parts[1];
 		var actionHash = controller + "/" + action;
 
-		var dateHash = '';
+		var dateHash = "";
 		var dateMatch = hash.match(/\d{4}\/\d{2}\/\d{2}/);
 		if (dateMatch)
 			dateHash = dateMatch[0];
@@ -282,7 +280,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			controller: controller,
 			action: action,
 			actionHash: actionHash,
-			dateHash: dateHash
+			dateHash: dateHash,
+			possibility: possibility
 		};
 	}
 
@@ -293,7 +292,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		// hide off canvas menu when it has been clicked
 		var offCanvasMenu = $(".navbar-offcanvas");
-		if ( offCanvasMenu.hasClass('in')){
+		if (offCanvasMenu.hasClass('in')) {
 			offCanvasMenu.offcanvas('hide');
 		}
 	}
@@ -320,16 +319,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _invokeDisposeCallback(viewId) {
-	    if (viewId != null)
-	        viewId = viewId.toUpperCase();
-	    var partialDispose = _partialViewDisposeCallback[viewId];
+		if (viewId != null)
+			viewId = viewId.toUpperCase();
+		var partialDispose = _partialViewDisposeCallback[viewId];
 		if ($.isFunction(partialDispose))
 			partialDispose();
 	}
 
 	function _invokeInitCallback(viewId, secondAction) {
-	    if (viewId != null)
-	        viewId = viewId.toUpperCase();
+		if (viewId != null)
+			viewId = viewId.toUpperCase();
 		var partialInit = _partialViewInitCallback[viewId];
 		if ($.isFunction(partialInit))
 			partialInit(_readyForInteraction, _completelyLoaded);
@@ -346,7 +345,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _completelyLoaded() {
 		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
 	}
-	
+
 	return {
 		Init: function (settings) {
 			Teleopti.MyTimeWeb.AjaxSettings = settings;
@@ -378,7 +377,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 })(jQuery);
 
 Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
-
 	return {
 		ActivateHorizontalScroll: function () {
 			$(window).scroll(function () {
@@ -387,8 +385,3 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 		}
 	};
 })(jQuery);
-
-
-
-
- 
