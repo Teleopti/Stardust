@@ -163,10 +163,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public override IEnumerable<Guid> PersonIds(StrategyContext context)
 		{
 			IEnumerable<PersonForCheck> persons = null;
+			string version = null;
 			context.WithReadModelUnitOfWork(() =>
 			{
-				_scheduleCache.Refresh(_keyValues.Get("CurrentScheduleReadModelVersion"));
+				version = _keyValues.Get("CurrentScheduleReadModelVersion");
 			});
+			_scheduleCache.Refresh(version);
 			context.WithUnitOfWork(() =>
 			{
 				persons = Persister.FindForCheck();
