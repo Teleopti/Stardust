@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		private bool isPeriodOutside(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
-			DateOnlyPeriod period = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate);
+			var period = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate);
 			var isPeriodInsideOrEqual = (period.StartDate <= requestPeriod.StartDate && period.EndDate >= requestPeriod.EndDate);
 			return !isPeriodInsideOrEqual;
 		}
@@ -212,6 +212,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				if (isAbsenceRequestOpenPeriodAutoDeny(absenceRequestOpenPeriod))
 				{
 					denyReason = UserTexts.Resources.RequestDenyReasonAutodeny;
+				}
+				else if (!absenceRequestOpenPeriod.OpenForRequestsPeriod.Contains(period))
+				{
+					denyReason = UserTexts.Resources.RequestDenyReasonClosedPeriod;
 				}
 				else
 				{
