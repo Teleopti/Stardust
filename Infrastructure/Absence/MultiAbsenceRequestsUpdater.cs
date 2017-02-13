@@ -184,11 +184,16 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			catch (Exception exp)
 			{
 				_feedback.SendProgress("The bulk for absence requests failed! " + exp.Message + exp.StackTrace);
-				logger.Error("The bulk for absence requests failed! " + exp.Message + exp.StackTrace);
-				var personRequests = _personRequestRepository.Find(personRequestsIds);
-				foreach (var personRequest in personRequests)
+				logger.Error("The bulk for absence requests failed! ", exp);
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					denyDueToTechnicalIssues(personRequest);
+					var personRequests = _personRequestRepository.Find(personRequestsIds);
+					_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
+					foreach (var personRequest in personRequests)
+					{
+						denyDueToTechnicalIssues(personRequest);
+					}
+					uow.PersistAll();
 				}
 			}
 		}
@@ -307,10 +312,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				catch (Exception exp)
 				{
 					_feedback.SendProgress($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp.Message + exp.StackTrace);
-					logger.Error($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp.Message + exp.StackTrace);
-					denyDueToTechnicalIssues(personRequest);
+					logger.Error($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}", exp);
+					throw;
 				}
-
 			}
 		}
 
