@@ -4159,7 +4159,7 @@ Periods</comment>
     <comment>Scheduled hours</comment>
   </data>
   <data name="ScheduledStaff" xml:space="preserve">
-    <value>已排定的座席代表数量</value>
+    <value>已排定的座席代表数</value>
     <comment>Scheduled staff</comment>
   </data>
   <data name="ScheduledTime" xml:space="preserve">
@@ -5331,7 +5331,7 @@ Periods</comment>
     <comment>Weeks:</comment>
   </data>
   <data name="WeekView" xml:space="preserve">
-    <value>星期视图</value>
+    <value>周视图</value>
     <comment>Week View</comment>
   </data>
   <data name="Welcome" xml:space="preserve">
@@ -6356,7 +6356,7 @@ Periods</comment>
     <value>到岗的相对差异</value>
   </data>
   <data name="ScheduledAgentsIncoming" xml:space="preserve">
-    <value>已排定的到岗座席代表数量</value>
+    <value>已排定的到岗座席代表数</value>
   </data>
   <data name="ScheduledHoursIncoming" xml:space="preserve">
     <value>已排定的到岗小时数</value>
@@ -8336,7 +8336,7 @@ Teleopti R&amp;D</value>
     <value>差异 (%)</value>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
-    <value>预测的员工数</value>
+    <value>预测的座席代表数</value>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
     <value>FTE 小时/天</value>
@@ -9500,6 +9500,9 @@ Teleopti R&amp;D</value>
   <data name="RunningBackgroundJob" xml:space="preserve">
     <value>正在运行后台任务</value>
   </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Web</value>
+  </data>
   <data name="RowsPerPageTen" xml:space="preserve">
     <value>十</value>
   </data>
@@ -9621,7 +9624,7 @@ Teleopti R&amp;D</value>
     <value>预测客户数：</value>
   </data>
   <data name="ForecastedEmployees" xml:space="preserve">
-    <value>预测员工数</value>
+    <value>预测的员工数</value>
   </data>
   <data name="OfferedCustomers" xml:space="preserve">
     <value>客户</value>
@@ -9882,7 +9885,7 @@ Teleopti R&amp;D</value>
     <value>仅排定必须有的偏好</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
-    <value>已排定的和实际的座席代表数量</value>
+    <value>已排定的和实际的座席代表数</value>
   </data>
   <data name="ScheduledEmployeesIncoming" xml:space="preserve">
     <value>已排定的到岗员工数</value>
@@ -12240,7 +12243,7 @@ Teleopti R&amp;D</value>
     <value>平均处理时间</value>
   </data>
   <data name="IntradayIntroText" xml:space="preserve">
-    <value>再次您可以监控当日数值，通过选择一个技能或区域开始</value>
+    <value>在此您可以监控当日数值，通过选择一个技能或技能区域开始</value>
   </data>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>流入量</value>
@@ -13311,5 +13314,128 @@ Teleopti R&amp;D</value>
   </data>
   <data name="UsedBy" xml:space="preserve">
     <value>{0} 已使用</value>
+  </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>由于请求未被及时处理而清除的。</value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>完整配额</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>阈值后的配额</value>
+  </data>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>查询站点或小组</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>已选择{0}个小组</value>
+  </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>服务水平</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>使用技能：</value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>处于告警状态的座席代表</value>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>显示在以下状态中的座席代表：</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>效能</value>
+  </data>
+  <data name="Staffing" xml:space="preserve">
+    <value>人力</value>
+  </data>
+  <data name="NoBudgetGroupFound" xml:space="preserve">
+    <value>未找到预算组</value>
+  </data>
+  <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
+    <value>选择一个预算组...</value>
+  </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>合同时间容差</value>
+  </data>
+  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
+    <value>"{0}" 已存在。请确认是否覆盖?</value>
+  </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>更新确认</value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>移除默认</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>设为默认</value>
+  </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>我的业务单元</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>我自己</value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>我的站点</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>请先选择一个角色</value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>人力</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>移除加班</value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>保存喜爱的搜索</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>没有权限为座席代表移除加班活动</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>请选择一个日期</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>请输入开始时间</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>请输入结束时间</value>
+  </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value>已超出班表合同时间容差范围</value>
+  </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>签入以</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>选择组织</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>未遵循时间</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>清除所有</value>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>只能最多查看 {0} 个座席代表。"报警" 开关仅在座席代表数不超过 {1} 时有效。</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>喜爱的搜索</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>配置技能优先级</value>
+  </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>未找到技能区域</value>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>未找到技能</value>
+  </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>多个站点</value>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>多个小组</value>
   </data>
 </root>

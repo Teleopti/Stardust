@@ -1030,7 +1030,7 @@
     <value>下一页</value>
   </data>
   <data name="RepViewerNoMoreMatches" xml:space="preserve">
-    <value>无法找到更多匹配</value>
+    <value>无法找到更多匹配相。</value>
   </data>
   <data name="RepViewerOf" xml:space="preserve">
     <value>的</value>

@@ -9752,6 +9752,9 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Sie sollten {0} freie Tage haben.</value>
   </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Sie sollten zwischen {0} und {1} freien Tagen haben.</value>
   </data>
@@ -11197,7 +11200,7 @@ Details:
     <value>Geben Sie einen gültigen Namen und Pfad ein.</value>
   </data>
   <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Glückwunsch, Sie haben den Product Activation Key erfolgreich hinzugefügt!
+    <value>Sie haben den Product Activation Key erfolgreich hinzugefügt!
 Sie sind nun ein lizensierter Nutzer unserer ausgezeichneten Workforce Management Lösung. Teleopti WFM wird nun beendet.
 
 Wichtig: Um alle Services und Web-Anwendungen voll funktionsfähig und einsatzbereit zu haben sowie alle neu lizensierten Optionen zu erhalten, bitten Sie ihre IT um die Ausführung der Datei "Restart Teleopti WFM" im Teleopti Ordner auf dem Server. </value>
@@ -12694,7 +12697,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Fehlende Kolumne: {0}</value>
   </data>
   <data name="GroupSelectedItems" xml:space="preserve">
-    <value>Markierte Objekte gruppieren</value>
+    <value>Markierte Skillbereiche gruppieren</value>
   </data>
   <data name="RequiredStaff" xml:space="preserve">
     <value>Benötigte Anzahl an Mitarbeitern</value>
@@ -13133,5 +13136,161 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="MultipleTeams" xml:space="preserve">
     <value>Mehrere Teams</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Die Aktivitäten für die ausgewählten Mitarbeiter wurden erfolgreich gelöscht</value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>Maximale Anzahl Zeilen erreicht</value>
+  </data>
+  <data name="RuleWithRatioConvertor" xml:space="preserve">
+    <value>Quoten-Umwandlung benutzen</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Multi-Tag Abwesenheit löschen</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>Die Abwesenheit konnte von dem geschützten Plan nicht gelöscht werden.</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>Kein Login-Konto</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>Der Benutzername enthält zu viele Zeichen</value>
+  </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>Es wurde ein doppelter Benutzername gefunden.</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>Legal State berechnen</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>Kein Beutzer-ID</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie diese Kampagne löschen möchten?</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>Die Sitzplatzbuchung {0} für {1} wurde gelöscht</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>Hintergrundbild löschen</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>Aktivität(en) für {0} Mitarbeiter werden gelöscht. {1} erfolgreich, {2} fehlgeschlagen</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>Regel-mapping verwalten</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>Unten ausrichten</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>Die Warteliste für die Periode {0} ist bearbeitet worden.</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>Die Warteliste wird im Hintergrund bearbeitet</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>Kann nicht mehrere Aktivitäten für die ausgewählten Mitarbeiter verschieben</value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>Alle Anfragen auf der Warteliste werden für die ausgewählte Periode bearbeitet</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>Neue Regelung für freie Tage</value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>Zusammenfassung bis zum aktuellsten Intervall</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>Rechts ausrichten</value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>Die Aktivitäten wurden für die ausgewählten Mitarbeiter erfolgreich verschoben</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>Aktivitäten für {0} Mitarbeiter werden verschoben. {1} erfolgreich und {2} fehlgeschlagen.</value>
+  </data>
+  <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie die Letzte Planänderung für die ausgewählten Mitarbeiter rückgängig machen möchten?</value>
+  </data>
+  <data name="FailedMessageForUndoSchedule" xml:space="preserve">
+    <value>Die letzte Planänderung der ausgewählten Mitarbeiter konnte nicht durchgeführt werden</value>
+  </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>Das zuletzt aktuelle Intervall</value>
+  </data>
+  <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
+    <value>Die letzte Planänderung der ausgewählten Mitarbeiter war erfolgreich</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Sitzplatzbuchungs-Liste</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Das rechte Bedienfeld zeigen</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Bedienfeld verstecken</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Max. Sitzplatz-Validierung</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Hier doppelklicken um den Text zu ändern</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>Links ausrichten</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie {0} Abwesenheiten von {1} Mitarbeitern löschen möchten?</value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Sie können ohne hinterliegende Schicht keine persönliche Aktivität hinzufügen</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Spielen</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>Aktivitäten werden für {0} Mitarbeiter hinzugefügt. {1} erfolgreich und {2} fehlgeschlagen</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Alle Mitarbeiter auf allen Seiten markieren</value>
+  </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>Standorteigenschaften verwalten</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>Oben ausrichten</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>Nach vorne bringen</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>Nach hinten bringen</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>Sitzplatzbuchungen einsehen</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Einzel-Mitarbeiter Teams</value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>Abwesenheiten konnten nicht hinzugefügt werden</value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>Schichten von ( ) benutzen</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>Ein Fehler ist aufgetreten:{0}</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>Nicht verplante Tage</value>
   </data>
 </root>
