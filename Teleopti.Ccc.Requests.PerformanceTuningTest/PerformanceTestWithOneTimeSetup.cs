@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			SetupSystem(system, configuration, config, toggles);
 
 			var container = builder.Build();
-
 			service.InjectFrom(container);
 
 			OneTimeSetUp();
