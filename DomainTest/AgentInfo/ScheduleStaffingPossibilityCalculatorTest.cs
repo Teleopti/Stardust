@@ -132,6 +132,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
+		public void ShouldGetPossibilitiesWhenSomeStaffingDataIsNotAvailable()
+		{
+			setupTestDataForOneSkill(new double?[] { 10d }, new double?[] { 11d, 11d });
+			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			Assert.AreEqual(1, possibilities.Count);
+		}
+
+		[Test]
 		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffing()
 		{
 			setupTestDataForOneSkill();
