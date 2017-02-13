@@ -107,6 +107,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 		[Test]
+		[Ignore("#42593")]
+		public void ShouldHandleAlterBetweenWhenPersonAssignmentMissingInSchedulePeriod()
+		{
+			var site = new Site("_") { MaxSeats = 0 }.WithId();
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
+			var activityRequiresSeat = new Activity("_") { RequiresSeat = true }.WithId();
+			var activityRequiresNoSeat = new Activity("_") { RequiresSeat = false }.WithId();
+			var date = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var newShiftCategory = new ShiftCategory("_").WithId();
+			var oldShiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityRequiresNoSeat, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), newShiftCategory));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodTwoDays(date).WithPersonPeriod(ruleSet, team);
+			var ass =  new PersonAssignment(agent, scenario, date).WithLayer(activityRequiresSeat, new TimePeriod(8, 16)).ShiftCategory(oldShiftCategory);
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod(), new [] {ass});
+			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+			optPreferences.Shifts.SelectedTimePeriod = new TimePeriod(0, 24);
+			optPreferences.Shifts.AlterBetween = true;
+
+			Target.Optimize(new NoSchedulingProgress(), date.ToDateOnlyPeriod(), new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+
+			//TODO: Claes! Jag vet inte riktigt vad som ska hända/asserta här när man har oschemalagda dagar i sin schemaperiod? (just nu smuller det....)
+			schedules[agent].ScheduledDay(date).PersonAssignment().ShiftCategory.Equals(newShiftCategory)
+					.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldRespectKeepShiftCategoriesTeamHierarchyOneAgent()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
