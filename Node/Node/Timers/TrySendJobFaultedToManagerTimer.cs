@@ -6,6 +6,7 @@ using log4net;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Timers
 {
@@ -15,12 +16,12 @@ namespace Stardust.Node.Timers
 		private readonly IHttpSender _httpSender;
 
 		public TrySendJobFaultedToManagerTimer(NodeConfiguration nodeConfiguration,
-		                                       TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
+											   JobDetailSender jobDetailSender,
 		                                       IHttpSender httpSender,
 		                                       double interval = 500) : base(nodeConfiguration,
 		                                                                     nodeConfiguration
 			                                                                     .GetManagerJobHasFailedTemplatedUri(),
-		                                                                     sendJobDetailToManagerTimer,
+																			 jobDetailSender,
 		                                                                     httpSender,
 		                                                                     interval)
 		{

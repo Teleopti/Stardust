@@ -1,0 +1,77 @@
+﻿using System;
+using System.Configuration;
+using System.Reflection;
+using NodeTest.Fakes;
+using NUnit.Framework;
+using SharpTestsEx;
+using Stardust.Node;
+using Stardust.Node.Workers;
+
+namespace NodeTest
+{
+	[TestFixture]
+	public class JobDetailSenderTest
+	{
+		private NodeConfiguration _nodeConfiguration;
+		private FakeHttpSender _httpSenderFake;
+		public JobDetailSender Target;
+
+		[TestFixtureSetUp]
+		public void TestFixtureSetup()
+		{
+			_nodeConfiguration = new NodeConfiguration(
+				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+				14100,
+				"TestNode",
+				60,
+				100);
+			_httpSenderFake = new FakeHttpSender();
+		}
+
+		[Test]
+		public void ShouldBeAbleToAddDetail()
+		{
+			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
+			Target.AddDetail(Guid.NewGuid(), "Progress message");
+			Assert.IsTrue(Target.DetailsCount() == 1);
+		}
+
+		[Test]
+		public void ShouldHaveTwoJobProgressesWhenTwoWithSameGuidAreAdded()
+		{
+			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
+
+			var jobid = Guid.NewGuid();
+
+			Target.AddDetail(jobid, "Progress message 1.");
+			Target.AddDetail(jobid, "Progress message 2.");
+			Assert.IsTrue(Target.DetailsCount() == 2);
+		}
+
+		[Test]
+		public void ShouldRemoveDetailWhenSent()
+		{
+			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
+			Target.AddDetail(Guid.NewGuid(), "Progress message.");
+			Target.Send();
+			Target.DetailsCount().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldSendAllDetailsInTheSameRequest()
+		{
+			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
+
+			var jobid = Guid.NewGuid();
+			Target.AddDetail(jobid, "Progress message 1.");
+			Target.AddDetail(jobid, "Progress message 2.");
+
+			Target.Send();
+			_httpSenderFake.SentJson.Should().Contain("Progress message 1.");
+			_httpSenderFake.SentJson.Should().Contain("Progress message 2.");
+		}
+
+
+	}
+}

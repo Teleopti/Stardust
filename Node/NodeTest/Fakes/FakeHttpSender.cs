@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Stardust.Node.Interfaces;
 
 namespace NodeTest.Fakes
@@ -27,7 +28,7 @@ namespace NodeTest.Fakes
 		public async Task<HttpResponseMessage> PostAsync(Uri url, object data)
 #pragma warning restore 1998
 		{
-			SentJson = data.ToString();
+			SentJson = JsonConvert.SerializeObject(data);
 			CalledUrl = url.ToString();
 
 			return new HttpResponseMessage(HttpStatusCode.OK);

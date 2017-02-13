@@ -569,8 +569,9 @@ namespace Stardust.Manager
 							}
 						}
 
-						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
+						if (!response.IsSuccessStatusCode) return;
 
+						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 						//what should happen if this response is not 200? 
 						_httpSender.PutAsync(urijob, null);
 					}

@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>default</LangVersion>
+    <LangVersion>6</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -151,6 +151,7 @@
     <Compile Include="Workers\HttpSender.cs" />
     <Compile Include="Workers\InvokeHandler.cs" />
     <Compile Include="Entities\JobDetailEntity.cs" />
+    <Compile Include="Workers\JobDetailSender.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

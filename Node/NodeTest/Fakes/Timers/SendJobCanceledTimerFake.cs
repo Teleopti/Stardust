@@ -17,10 +17,10 @@ namespace NodeTest.Fakes.Timers
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
 		public SendJobCanceledTimerFake(NodeConfiguration nodeConfiguration,
-										TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
+										JobDetailSender jobDetailSender,
 										IHttpSender httpSender,
 										double interval = 1000) : base(nodeConfiguration,
-																	   sendJobDetailToManagerTimer,
+																	   jobDetailSender,
 																	   httpSender,
 																	   interval)
 		{

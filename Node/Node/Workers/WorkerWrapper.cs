@@ -37,6 +37,7 @@ namespace Stardust.Node.Workers
 		private readonly TrySendStatusToManagerTimer _trySendJobFaultedStatusToManagerTimer;
 		private JobQueueItemEntity _currentMessageToProcess;
 		private TrySendStatusToManagerTimer _trySendStatusToManagerTimer;
+		private readonly JobDetailSender _jobDetailSender;
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
 		                     NodeConfiguration nodeConfiguration,
@@ -45,7 +46,7 @@ namespace Stardust.Node.Workers
 		                     TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
 		                     TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
 		                     TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
-		                     TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer)
+		                     TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer, JobDetailSender jobDetailSender)
 		{
 			_handler = invokeHandler;
 			_nodeConfiguration = nodeConfiguration;
@@ -60,6 +61,7 @@ namespace Stardust.Node.Workers
 			_trySendJobCanceledStatusToManagerTimer = trySendJobCanceledStatusToManagerTimer;
 			_trySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
 			_trySendJobDetailToManagerTimer = trySendJobDetailToManagerTimer;
+			_jobDetailSender = jobDetailSender;
 
 			IsWorking = false;
 
@@ -309,23 +311,13 @@ namespace Stardust.Node.Workers
 			// Dispose timer.
 			SetNodeStatusTimer(null, null);
 
-			// Clear all job progresses for jobid.
-			if (_currentMessageToProcess != null)
-			{
-				_trySendJobDetailToManagerTimer.ClearAllJobProgresses(_currentMessageToProcess.JobId);
-			}
-
 			// Reset jobToDo, so it can start processing new work.
 			ResetCurrentMessage();
 		}
 
 		private void SendJobProgressToManager(string message)
 		{
-			if (_currentMessageToProcess != null)
-			{
-				_trySendJobDetailToManagerTimer.SendProgress(_currentMessageToProcess.JobId,
-				                                             message);
-			}
+			_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
 		}
 	}
 }

@@ -38,14 +38,13 @@ namespace Manager.Integration.Test.WPF.Commands
 
 				for (var i = 0; i < NumberOfJobs; i++)
 				{
-					var fastJobParams = new TestJobParams("Fast job Data " + i, TimeSpan.FromSeconds(1));
-					var fastJobParamsToJson = JsonConvert.SerializeObject(fastJobParams);
+					var testJobParams = new TestJobParams("Test job Data " + i, TimeSpan.FromSeconds(10));
+					var testJobParamsToJson = JsonConvert.SerializeObject(testJobParams);
 
 					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
-						Serialized = fastJobParamsToJson,
-						Type = "NodeTest.JobHandlers.FastJobParams",
+						Serialized = testJobParamsToJson,
 						CreatedBy = "test"
 					};
 

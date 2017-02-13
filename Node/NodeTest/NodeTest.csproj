@@ -83,15 +83,12 @@
     <Compile Include="Fakes\Timers\SendJobDoneTimerFake.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Fakes\Timers\TrySendJobDetailToManagerTimerFake.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="JobDetailSenderTest.cs" />
     <Compile Include="JobHandlersTests.cs" />
     <Compile Include="NodeConfigurationTests.cs" />
     <Compile Include="NodeControllerTests.cs" />
     <Compile Include="NodeModuleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Timers\TrySendJobProgressToManagerTimerTests.cs" />
     <Compile Include="WorkerWrapperTests.cs" />
   </ItemGroup>
   <ItemGroup>

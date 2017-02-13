@@ -17,10 +17,10 @@ namespace NodeTest.Fakes.Timers
 
 		public SendJobDoneWithEventTriggerTimerFake(NodeConfiguration nodeConfiguration,
 		                                            Uri callbackTemplateUri,
-		                                            TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
+		                                            JobDetailSender jobDetailSender,
 		                                            IHttpSender httpSender) : base(nodeConfiguration,
 		                                                                           callbackTemplateUri,
-		                                                                           sendJobDetailToManagerTimer,
+		                                                                           jobDetailSender,
 		                                                                           httpSender)
 		{
 		}

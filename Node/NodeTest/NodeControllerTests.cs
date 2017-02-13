@@ -14,6 +14,7 @@ using NUnit.Framework;
 using Stardust.Node;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Timers;
 using Stardust.Node.Workers;
 
 namespace NodeTest
@@ -41,20 +42,22 @@ namespace NodeTest
 			                                                                    new FakeHttpSender());
 			_pingToManagerFake = new PingToManagerFake();
 
-			_trySendJobDetailToManagerTimerFake =
-				new TrySendJobDetailToManagerTimerFake(_nodeConfigurationFake,
-				                                         new FakeHttpSender());
+			_jobDetailSender = new JobDetailSender(_nodeConfigurationFake, new FakeHttpSender());
+
+			_trySendJobDetailToManagerTimer =
+				new TrySendJobDetailToManagerTimer(_nodeConfigurationFake,
+														 _jobDetailSender);
 
 			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
-			                                             _trySendJobDetailToManagerTimerFake,
+														 _jobDetailSender,
 			                                             new FakeHttpSender());
 
 			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
-			                                                     _trySendJobDetailToManagerTimerFake,
+																 _jobDetailSender,
 			                                                     new FakeHttpSender());
 
 			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
-			                                                   _trySendJobDetailToManagerTimerFake,
+															   _jobDetailSender,
 			                                                   new FakeHttpSender());
 		}
 
@@ -79,7 +82,8 @@ namespace NodeTest
 		private SendJobDoneTimerFake _sendJobDoneTimer;
 		private SendJobCanceledTimerFake _sendJobCanceledTimer;
 		private SendJobFaultedTimerFake _sendJobFaultedTimer;
-		private TrySendJobDetailToManagerTimerFake _trySendJobDetailToManagerTimerFake;
+		private TrySendJobDetailToManagerTimer _trySendJobDetailToManagerTimer;
+		private JobDetailSender _jobDetailSender;
 
 		[Test]
 		public void CancelJobShouldReturnNotFoundWhenNodeIsIdle()
@@ -91,7 +95,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -115,7 +120,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -143,7 +149,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -152,9 +159,6 @@ namespace NodeTest
 
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 			_nodeController.StartJob(_jobQueueItemEntity.JobId);
-
-			//is this to make sure the job has started before cancelling?
-			_trySendJobDetailToManagerTimerFake.WaitHandle.Wait(500);
 
 			var actionResult = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
 
@@ -173,7 +177,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -198,7 +203,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -225,7 +231,8 @@ namespace NodeTest
 											   _sendJobDoneTimer,
 											   _sendJobCanceledTimer,
 											   _sendJobFaultedTimer,
-											   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -264,7 +271,8 @@ namespace NodeTest
 											   _sendJobDoneTimer,
 											   _sendJobCanceledTimer,
 											   _sendJobFaultedTimer,
-											   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -290,7 +298,8 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -318,7 +327,8 @@ namespace NodeTest
 											   _sendJobDoneTimer,
 											   _sendJobCanceledTimer,
 											   _sendJobFaultedTimer,
-											   _trySendJobDetailToManagerTimerFake);
+											   _trySendJobDetailToManagerTimer,
+											   _jobDetailSender);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{

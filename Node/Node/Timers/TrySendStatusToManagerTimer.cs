@@ -8,6 +8,7 @@ using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -19,12 +20,12 @@ namespace Stardust.Node.Timers
 
 		public TrySendStatusToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
-		                                   TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
+		                                   JobDetailSender jobDetailSender,
 		                                   IHttpSender httpSender, double interval = 500) : base(interval)
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
 			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
-			_sendJobDetailToManagerTimer = sendJobDetailToManagerTimer;
+			_jobDetailSender = jobDetailSender;
 			_httpSender = httpSender;
 			CallbackTemplateUri = callbackTemplateUri;
 
@@ -34,7 +35,7 @@ namespace Stardust.Node.Timers
 
 		private readonly CancellationTokenSource _cancellationTokenSource;
 		private readonly string _whoAmI;
-		private readonly TrySendJobDetailToManagerTimer _sendJobDetailToManagerTimer;
+		private readonly JobDetailSender _jobDetailSender;
 		private readonly IHttpSender _httpSender;
 
 		public JobQueueItemEntity JobQueueItemEntity { get; set; }
@@ -88,7 +89,7 @@ namespace Stardust.Node.Timers
 			}
 
 			// All job progresses must have been sent to manager. 
-			if (!_sendJobDetailToManagerTimer.HasAllProgressesBeenSent(JobQueueItemEntity.JobId))
+			if (_jobDetailSender.DetailsCount() != 0)
 			{
 				return;
 			}
@@ -104,36 +105,24 @@ namespace Stardust.Node.Timers
 
 				if (httpResponseMessage.IsSuccessStatusCode)
 				{
-					var msg = string.Format("{0} : Sent job status to manager ({3}) for job ( jobId, jobName ) : ( {1}, {2} )",
-					                        _whoAmI,
-					                        JobQueueItemEntity.JobId,
-					                        JobQueueItemEntity.Name,
-					                        httpResponseMessage.RequestMessage.RequestUri);
-
-					Logger.DebugWithLineNumber(msg);
-
-
+					Logger.DebugWithLineNumber($"{_whoAmI} : Sent job status to manager ({httpResponseMessage.RequestMessage.RequestUri}) " +
+							  $"for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )");
+					
 					InvokeTriggerTrySendStatusSucceded();
 				}
 				else
 				{
 					Start();
-
-					var msg =
-						$"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase}";
-
-					Logger.InfoWithLineNumber(msg);
+					Logger.InfoWithLineNumber($"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : " +
+						$"( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase}");
 				}
 			}
 
 			catch (Exception exp)
 			{
 				Start();
-
-				var msg =
-					$"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )";
-
-				Logger.ErrorWithLineNumber(msg, exp);
+				Logger.ErrorWithLineNumber($"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) :" +
+					$" ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )", exp);
 			}
 		}
 	}

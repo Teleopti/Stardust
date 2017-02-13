@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -190,15 +191,18 @@ namespace Stardust.Manager
 
 
 		[HttpPost, Route(ManagerRouteConstants.JobDetail)]
-		public IHttpActionResult AddJobDetail([FromBody] JobDetail jobDetail)
+		public IHttpActionResult AddJobDetail([FromBody] IList<JobDetail> jobDetails)
 		{
-			var isValidRequest = _validator.ValidateObject(jobDetail);
-			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
-			
-			Task.Factory.StartNew(() =>
+			foreach (var detail in jobDetails)
 			{
-				_jobManager.CreateJobDetail(jobDetail);
-			});
+				var isValidRequest = _validator.ValidateObject(detail);
+				if (!isValidRequest.Success) continue;
+				
+				Task.Factory.StartNew(() =>
+				                      {
+					                      _jobManager.CreateJobDetail(detail);
+				                      });
+			}
 
 			return Ok();
 		}

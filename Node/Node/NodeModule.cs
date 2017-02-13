@@ -31,7 +31,8 @@ namespace Stardust.Node
 			builder.RegisterType<PingToManagerTimer>().As<System.Timers.Timer>().SingleInstance();
 			builder.RegisterType<TrySendJobFaultedToManagerTimer>().SingleInstance();
 			builder.RegisterType<TrySendJobCanceledToManagerTimer>().SingleInstance();
-			
+			builder.RegisterType<JobDetailSender>().SingleInstance();
+
 		}
 	}
 }
