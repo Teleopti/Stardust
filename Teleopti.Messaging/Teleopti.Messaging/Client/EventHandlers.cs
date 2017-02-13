@@ -36,13 +36,22 @@ namespace Teleopti.Messaging.Client
 		public IEnumerable<SubscriptionInfo> All()
 		{
 			return _subscriptions.ToArray();
-		} 
+		}
 
 		public void CallHandlers(Message message)
 		{
+			Type interfaceType;
+			try
+			{
+				interfaceType = Type.GetType(message.DomainQualifiedType, false, true);
+			}
+			catch (System.IO.FileLoadException)
+			{
+				interfaceType = null;
+			}
 			var eventMessage = new EventMessage
 			{
-				InterfaceType = Type.GetType(message.DomainQualifiedType, false, true),
+				InterfaceType = interfaceType,
 				DomainObjectType = message.DomainType,
 				DomainObjectId = message.DomainIdAsGuid(),
 				ModuleId = message.ModuleIdAsGuid(),
@@ -53,12 +62,14 @@ namespace Teleopti.Messaging.Client
 			};
 
 			var matchingHandlers = from s in _subscriptions
-				from r in message.Routes()
+				let upperBoundaryAsDateTime = s.Subscription.UpperBoundaryAsDateTime()
+				let lowerBoundaryAsDateTime = s.Subscription.LowerBoundaryAsDateTime()
 				let route = s.Subscription.Route()
+				from r in message.Routes()
 				where
-					route == r &&
-					s.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
-					s.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate
+				route == r &&
+				lowerBoundaryAsDateTime <= eventMessage.EventEndDate &&
+				upperBoundaryAsDateTime >= eventMessage.EventStartDate
 				select s;
 
 			foreach (var subscription in matchingHandlers)
@@ -71,9 +82,6 @@ namespace Teleopti.Messaging.Client
 				}
 				subscription.Callback(this, e);
 			}
-
-
 		}
-
 	}
 }
