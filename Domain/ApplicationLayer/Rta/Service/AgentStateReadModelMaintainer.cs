@@ -7,50 +7,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
-	public class AgentStateReadModelNamesMaintainer :
-		IHandleEvent<PersonNameChangedEvent>,
-		IHandleEvent<PersonEmploymentNumberChangedEvent>,
-		IHandleEvent<SiteNameChangedEvent>,
-		IHandleEvent<TeamNameChangedEvent>,
-		IRunOnHangfire
-	{
-		private readonly IAgentStateReadModelPersister _persister;
-
-		public AgentStateReadModelNamesMaintainer(IAgentStateReadModelPersister persister)
-		{
-			_persister = persister;
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
-		{
-			_persister.UpdateEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonNameChangedEvent @event)
-		{
-			_persister.UpdateName(@event.PersonId, @event.FirstName, @event.LastName);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(TeamNameChangedEvent @event)
-		{
-			_persister.UpdateTeamName(@event.TeamId, @event.Name);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(SiteNameChangedEvent @event)
-		{
-			_persister.UpdateSiteName(@event.SiteId, @event.Name);
-		}
-	}
-
 	public class AgentStateReadModelMaintainer :
 		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
 		IHandleEvent<TenantHourTickEvent>,
+		IHandleEvent<PersonNameChangedEvent>,
+		IHandleEvent<PersonEmploymentNumberChangedEvent>,
+		IHandleEvent<SiteNameChangedEvent>,
+		IHandleEvent<TeamNameChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IAgentStateReadModelPersister _persister;
@@ -61,19 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_persister = persister;
 			_now = now;
 		}
-
-		[UnitOfWork]
-		public virtual void Handle(TenantHourTickEvent @event)
-		{
-			_persister.DeleteOldRows(_now.UtcDateTime());
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonDeletedEvent @event)
-		{
-			_persister.SetDeleted(@event.PersonId, expirationFor(@event));
-		}
-
+		
 		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
@@ -98,6 +50,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					TeamId = @event.TeamId.Value,
 					TeamName = @event.TeamName
 				});
+		}
+
+		[UnitOfWork]
+		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
+		public virtual void Handle(PersonNameChangedEvent @event)
+		{
+			_persister.UpdateName(@event.PersonId, @event.FirstName, @event.LastName);
+		}
+
+		[UnitOfWork]
+		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
+		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
+		{
+			_persister.UpdateEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
+		}
+
+		[UnitOfWork]
+		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
+		public virtual void Handle(TeamNameChangedEvent @event)
+		{
+			_persister.UpdateTeamName(@event.TeamId, @event.Name);
+		}
+
+		[UnitOfWork]
+		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
+		public virtual void Handle(SiteNameChangedEvent @event)
+		{
+			_persister.UpdateSiteName(@event.SiteId, @event.Name);
+		}
+		
+		[UnitOfWork]
+		public virtual void Handle(PersonDeletedEvent @event)
+		{
+			_persister.SetDeleted(@event.PersonId, expirationFor(@event));
+		}
+		
+		[UnitOfWork]
+		public virtual void Handle(TenantHourTickEvent @event)
+		{
+			_persister.DeleteOldRows(_now.UtcDateTime());
 		}
 
 		private static DateTime expirationFor(IEvent @event)
