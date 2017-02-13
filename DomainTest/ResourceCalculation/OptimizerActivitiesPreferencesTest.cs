@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
             Assert.IsFalse(_target.UtcPeriodFromDateAndTimePeriod(dateOnly, timeZoneInfo).HasValue);
 
-            TimePeriod timePeriod = new TimePeriod(new TimeSpan(12, 30, 0), new TimeSpan(1, 6, 0, 0));
-            DateTimePeriod expectedPeriod = new DateTimePeriod(new DateTime(2010, 1, 1, 12, 30, 0, DateTimeKind.Utc),
-                                                               new DateTime(2010, 1, 2, 6, 0, 0, DateTimeKind.Utc));
+            TimePeriod timePeriod = new TimePeriod(new TimeSpan(0, 30, 0), new TimeSpan(6, 0, 0));
+            DateTimePeriod expectedPeriod = new DateTimePeriod(new DateTime(2010, 1, 1, 0, 30, 0, DateTimeKind.Utc),
+                                                               new DateTime(2010, 1, 1, 6, 0, 0, DateTimeKind.Utc));
             _target.AllowAlterBetween = timePeriod;
             Assert.AreEqual(expectedPeriod, _target.UtcPeriodFromDateAndTimePeriod(dateOnly, timeZoneInfo));
         }

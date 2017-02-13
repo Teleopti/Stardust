@@ -59,7 +59,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return null;
 
             DateTime dt = TimeZoneHelper.ConvertToUtc(dateOnly.Date, timeZoneInfo);
-            DateTimePeriod period = new DateTimePeriod(dt.Add(AllowAlterBetween.Value.StartTime), dt.Add(AllowAlterBetween.Value.EndTime));
+	        var period = new DateTimePeriod(
+		        dt.AddTicks(Math.Max(AllowAlterBetween.Value.StartTime.Ticks, 0)),
+		        dt.AddTicks(Math.Min(AllowAlterBetween.Value.EndTime.Ticks, TimeSpan.FromDays(1).Ticks)));
             
             return period;
         }
