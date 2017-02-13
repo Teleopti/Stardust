@@ -8184,6 +8184,9 @@ ukedag</value>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Du skal ha {0} fridager.</value>
   </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Hvor som helst</value>
+  </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Du skal ha mellom {0} og {1} fridager.</value>
   </data>
@@ -8456,5 +8459,233 @@ ukedag</value>
   </data>
   <data name="WorkflowControlSetHeader" xml:space="preserve">
     <value>Arbeidsflyt</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Suksess</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Du benytter flere agenter ({0}) enn din lisens tillater  ({1}). Du har {2} dager igjen til å redusere antall agenter eller motta en aktiveringskode som dekker denne mengden agenter</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Timebasert tilgjengelighet</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Timebasert tilgjengelighet oppfyllelse</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>Prognosen kjører</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>Dette er din eksisterende prognose. For å kunne modifisere samtale, velg noen dager i diagrammet</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Fjern diagram valget</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Sender</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sendt</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Samme aktivitet</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Feil brukernavn eller passord</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Finn</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Finn neste</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Første side</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Siste side</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Neste</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Neste side</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Side oppsett</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Forrige side</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Skriv</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Oppfrisk</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Tekst ikke funnet</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Hele siden</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Del kalender</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Del min kalender</value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Send igjen</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>Betalt tid</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Gjennomsnitt</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>Per dato</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Per Agent</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>her</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stopp</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>Min rapport</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Aktive agenter</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Verdi</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>I går</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Naviger</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Neste aktivitet</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Flytt aktivitet</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>Forespørsel</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Alle Team</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Terskel:</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Terskel for bronsje:</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Terskel for sølv:</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Teskel for gull:</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Terskel: (TT:mm:ss):</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>terskel for bronsje (TT:mm.ss):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Terskel for sølv (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Terskel for gull (TT:mm:ss):</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Terskel (%)</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Terskel for bronsje (%)</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Terskel for sølv (%)</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Terskel for gull (%)</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Legg til aktivitet for</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Feilet!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Flytt aktivitet for</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Fjern fravær for</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Venligst prøv igjen!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Suksess!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Gratulerer!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Fil</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Logg ut</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Logg in</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>Du er ikke innlogget</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Start side</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Legg til Time tilgjengelighet</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Planlegg overtid</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Alternativer for planlegging av overtid</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Bare for tilgjengelige agenter</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Juster skift til å matche skift bagen</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publiser</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Publiser vakter for:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Publiser vakter til:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Publiser vakter</value>
   </data>
 </root>
