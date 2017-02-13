@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
@@ -80,8 +81,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			var intradaySchedule = getIntradaySchedule();
 			var personAssignment = intradaySchedule.PersonAssignment();
-			if (personAssignment == null)
-				return new IPersonSkill[] {};
+			if (personAssignment == null || personAssignment.ShiftLayers.IsEmpty())
+				return personSkills;
 
 			var scheduledActivities = personAssignment.MainActivities().Select(m => m.Payload).Where(p => p.RequiresSkill);
 			return personSkills.Where(p => scheduledActivities.Contains(p.Skill.Activity));

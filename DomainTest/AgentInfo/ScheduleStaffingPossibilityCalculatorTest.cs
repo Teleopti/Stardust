@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -197,6 +198,19 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.Values.ElementAt(0));
 			Assert.AreEqual(0, possibilities.Values.ElementAt(1));
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesForOvertimeWithDayOff()
+		{
+			setupTestDataForOneSkill();
+			ScheduleStorage.Clear();
+			var person = LoggedOnUser.CurrentUser();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, CurrentScenario.Current(),
+				new DateOnly(_today), new DayOffTemplate());
+			ScheduleStorage.Set(new List<IScheduleData> {assignment});
+			var possibilities = Target.CalcuateIntradayOvertimeIntervalPossibilities();
+			Assert.AreEqual(2, possibilities.Count);
 		}
 
 		private void setupTestDataForOneSkill(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null)
