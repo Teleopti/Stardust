@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -42,11 +43,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			Target.Handle(new PersonEmploymentNumberChangedEvent
 			{
 				PersonId = personId,
-				EmploymentNumber = "123"
+				EmploymentNumber = "123",
+				Timestamp = "2017-02-14 08:00".Utc()
 			});
 
-			Persister.Models.Single().IsDeleted.Should().Be(true);
 			Persister.Models.Single().EmploymentNumber.Should().Be("123");
+			Persister.Models.Single().IsDeleted.Should().Be(true);
+			Persister.Models.Single().ExpiresAt.Should().Be("2017-02-21 08:00".Utc());
 		}
 	}
 }

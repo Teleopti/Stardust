@@ -283,7 +283,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber, DateTime? expiresAt)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
@@ -292,11 +292,13 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		VALUES
 		(
 			:PersonId,
-			:EmploymentNumber
+			:EmploymentNumber,
+			:ExpiresAt
 		)
 	) AS S (
 			PersonId,
-			EmploymentNumber
+			EmploymentNumber,
+			ExpiresAt
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -305,11 +307,13 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		(
 			PersonId,
 			EmploymentNumber,
-			IsDeleted
+			IsDeleted,
+			ExpiresAt
 		) VALUES (
 			S.PersonId,
 			S.EmploymentNumber,
-			1
+			1,
+			S.ExpiresAt
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -318,11 +322,12 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		;")
 				.SetParameter("PersonId", personId)
 				.SetParameter("EmploymentNumber", employmentNumber)
+				.SetParameter("ExpiresAt", expiresAt)
 				.ExecuteUpdate();
 
 		}
 
-		public void UpsertName(Guid personId, string firstName, string lastName)
+		public void UpsertName(Guid personId, string firstName, string lastName, DateTime? expiresAt)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
@@ -332,12 +337,14 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		(
 			:PersonId,
 			:FirstName,
-			:LastName
+			:LastName,
+			:ExpiresAt
 		)
 	) AS S (
 			PersonId,
 			FirstName,
-			LastName
+			LastName,
+			ExpiresAt
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -347,12 +354,14 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			PersonId,
 			FirstName,
 			LastName,
-			IsDeleted
+			IsDeleted,
+			ExpiresAt
 		) VALUES (
 			S.PersonId,
 			S.FirstName,
 			S.LastName,
-			1
+			1,
+			S.ExpiresAt
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -363,6 +372,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.SetParameter("PersonId", personId)
 				.SetParameter("FirstName", firstName)
 				.SetParameter("LastName", lastName)
+				.SetParameter("ExpiresAt", expiresAt)
 				.ExecuteUpdate();
 		}
 

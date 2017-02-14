@@ -490,10 +490,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false});
 			
-			Target.UpsertEmploymentNumber(personId, "abc");
+			Target.UpsertEmploymentNumber(personId, "abc", "2017-02-14 08:00".Utc());
 
 			Target.Load(personId).EmploymentNumber.Should().Be("abc");
 			Target.Load(personId).IsDeleted.Should().Be(false);
+			Target.Load(personId).ExpiresAt.Should().Be(null);
 		}
 
 		[Test]
@@ -501,11 +502,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertEmploymentNumber(personId, "123");
+			Target.UpsertEmploymentNumber(personId, "123", "2017-02-14 08:00".Utc());
 
 			var model = Target.Load(personId);
 			model.EmploymentNumber.Should().Be("123");
 			model.IsDeleted.Should().Be(true);
+			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
 		}
 
 		[Test]
@@ -513,12 +515,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertName(personId,"bill","gates");
+			Target.UpsertName(personId,"bill","gates", "2017-02-14 08:00".Utc());
 
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
 			model.IsDeleted.Should().Be(true);
+			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
 		}
 
 		[Test]
@@ -533,12 +536,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				IsDeleted = false
 			});
 			
-			Target.UpsertName(personId, "bill", "gates");
+			Target.UpsertName(personId, "bill", "gates", "2017-02-14 0:00".Utc());
 
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
 			model.IsDeleted.Should().Be(false);
+			model.ExpiresAt.Should().Be(null);
 		}
 
 

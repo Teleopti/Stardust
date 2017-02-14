@@ -18,17 +18,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	
 	}
 
-	public class PersonEmploymentNumberChangedEvent : IEvent
+	public class PersonEmploymentNumberChangedEvent : IEvent, ITimestamped
 	{
 		public Guid PersonId { get; set; }
 		public string EmploymentNumber { get; set; }
+		public DateTime Timestamp { get; set; }
 	}
 
-	public class PersonNameChangedEvent : IEvent
+	public class PersonNameChangedEvent : IEvent, ITimestamped
 	{
 		public Guid PersonId { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
+		public DateTime Timestamp { get; set; }
 	}
 	public class TeamNameChangedEvent : IEvent
 	{

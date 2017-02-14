@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(info.PersonId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber, DateTime? expiresAt)
 		{
 			AgentStateReadModel existing;
 			if (!_data.TryRemove(personId, out existing))
@@ -118,6 +118,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					PersonId = personId,
 					EmploymentNumber = employmentNumber,
+					ExpiresAt = expiresAt,
 					IsDeleted = true
 				});
 				return;
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
 		}
 
-		public void UpsertName(Guid personId, string firstName, string lastName)
+		public void UpsertName(Guid personId, string firstName, string lastName, DateTime? expiresAt)
 		{
 			AgentStateReadModel existing;
 			if (!_data.TryRemove(personId, out existing))
@@ -136,6 +137,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					PersonId = personId,
 					FirstName = firstName,
 					LastName = lastName,
+					ExpiresAt = expiresAt,
 					IsDeleted = true
 				});
 				return;

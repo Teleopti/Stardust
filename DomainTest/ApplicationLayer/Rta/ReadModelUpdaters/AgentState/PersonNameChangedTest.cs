@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -63,13 +64,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			{
 				PersonId = personId,
 				FirstName = "bill",
-				LastName = "gates"
+				LastName = "gates",
+				Timestamp = "2017-02-14 08:00".Utc()
 			});
 
 			var model = Persister.Models.Single();
 			model.IsDeleted.Should().Be(true);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
+			model.ExpiresAt.Should().Be("2017-02-21 08:00".Utc());
 		}
 	}
 }
