@@ -11,7 +11,6 @@
 	function Controller($state, $timeout, $q, agentGroupService, NoticeService, $translate) {
 		var vm = this;
 
-		//vm.createAgentGroup = createAgentGroup;
 		vm.inputFilterData = inputFilterData;
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -26,7 +25,7 @@
 
 		function inputFilterData() {
 			var searchString = vm.searchString;
-			console.log("hello");
+
 			if (!searchString) {
 				return vm.results;
 			}
