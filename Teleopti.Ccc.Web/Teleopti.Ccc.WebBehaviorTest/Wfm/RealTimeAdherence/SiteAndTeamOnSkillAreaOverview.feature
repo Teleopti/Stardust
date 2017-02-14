@@ -60,7 +60,6 @@ Background:
 	| Phone state | Ready    |
 	| Is alarm    | false    |
 
-@OnlyRunIfEnabled('RTA_SiteAndTeamOnSkillOverview_40817')
 Scenario: See how many agents with a specific skill area that are in alarm for each site
 	Given the time is '2016-10-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
@@ -75,7 +74,6 @@ Scenario: See how many agents with a specific skill area that are in alarm for e
 	Then I should see site 'Paris' with 0 of 1 agents in alarm
 	And I should see site 'London' with 0 of 1 agents in alarm
 
-@OnlyRunIfEnabled('RTA_SiteAndTeamOnSkillOverview_40817')
 Scenario: See how many agents with a specific skill area that are in alarm for each team
 	Given the time is '2016-10-03 08:01'
 	And 'Ashley Andeen' sets her phone state to 'Ready'

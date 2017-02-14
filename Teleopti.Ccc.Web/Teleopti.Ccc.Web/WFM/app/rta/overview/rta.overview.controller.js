@@ -320,7 +320,7 @@
 		$scope.$watch(function () {
 			return vm.selectedSkill;
 		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
+			if (changed(newValue, oldValue)) {
 				vm.goToDashboard();
 			}
 		});
@@ -328,7 +328,7 @@
 		$scope.$watch(function () {
 			return vm.selectedSkillArea;
 		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
+			if (changed(newValue, oldValue)) {
 				vm.goToDashboard();
 			}
 		});
