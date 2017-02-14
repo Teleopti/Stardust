@@ -87,8 +87,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		[TestCase("Singapore Standard Time")]
 		public void ShouldRespectAlterBetweenBlockTwoDaysEndAt24(string timeZone)
 		{
-			if(timeZone== "Singapore Standard Time")
-				Assert.Ignore("To be fixed");
 			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(timeZone));
 			var site = new Site("_") { MaxSeats = 0 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
@@ -99,9 +97,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var scenario = new Scenario("_");
 			var newShiftCategory = new ShiftCategory("_").WithId();
 			var oldShiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityRequiresNoSeat, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), newShiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityRequiresNoSeat, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(16, 0, 17, 0, 15), newShiftCategory));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodTwoDays(dateOnly).WithPersonPeriod(ruleSet, team);
-			var asses = period.DayCollection().Select(date => new PersonAssignment(agent, scenario, date).WithLayer(activityRequiresSeat, new TimePeriod(8, 16)).ShiftCategory(oldShiftCategory));
+			var asses = period.DayCollection().Select(date => new PersonAssignment(agent, scenario, date).WithLayer(activityRequiresSeat, new TimePeriod(7, 15)).ShiftCategory(oldShiftCategory));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, asses);
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
