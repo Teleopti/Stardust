@@ -60,7 +60,6 @@ Background:
 	| Phone state | Pause        |
 	| Is alarm    | true         |
 
-@OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
 Scenario: See agents with a specific skill that are in alarm for a selected sites
 	Given the time is '2016-11-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
@@ -72,7 +71,6 @@ Scenario: See agents with a specific skill that are in alarm for a selected site
 	And I should see agent status for 'Ashley Andeen'
 	And I should not see agent 'John King'
 
-@OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
 Scenario: See agents with a specific skill that are in alarm for selected teams
 	Given the time is '2016-11-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
@@ -84,7 +82,6 @@ Scenario: See agents with a specific skill that are in alarm for selected teams
 	And I should see agent status for 'Ashley Andeen'
 	And I should not see agent 'John King'
 
-@OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
 Scenario: See agents with a specific Skill Area that are in alarm for selected sites
 	Given the time is '2016-11-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
@@ -96,7 +93,6 @@ Scenario: See agents with a specific Skill Area that are in alarm for selected s
 	And I should see agent status for 'Ashley Andeen'
 	And I should see agent status for 'John King'
 
-@OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
 Scenario: See agents with a specific Skill Area that are in alarm for selected teams
 	Given the time is '2016-11-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'

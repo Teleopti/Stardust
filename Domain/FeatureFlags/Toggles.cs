@@ -20,7 +20,6 @@
 		Settings_AlertViaEmailFromSMSLink_30444,
 		
 		RTA_SiteAndTeamOnSkillOverview_40817,
-		RTA_AgentsOnOrganizationAndSkills_41586,
 		RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_QuicklyChangeAgentsSelection_40610,
 		RTA_SpreadTransactionLocksStrategy_41823,
