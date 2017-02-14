@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 		private ISkillIntervalDataDivider _intervalDataDivider;
 		private ITeamBlockInfo _teamBlockInfo;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private ITeamInfo _teamInfo;
 		private IPerson _person1;
 		private IBlockInfo _blockInfo;
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			_intervalDataDivider = _mock.StrictMock<ISkillIntervalDataDivider>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
-			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 
 			_skillInterval1 = new SkillIntervalData(new DateTimePeriod(new DateTime(2014, 05, 28, 16, 0, 0, DateTimeKind.Utc), new DateTime(2014, 05, 28, 16, 30, 0, DateTimeKind.Utc)), 0, 0, 0, null, null);
 			_skillInterval2 = new SkillIntervalData(new DateTimePeriod(new DateTime(2014, 05, 28, 16, 30, 0, DateTimeKind.Utc), new DateTime(2014, 05, 28, 17, 0, 0, DateTimeKind.Utc)), 0, 0, 0, null, null);

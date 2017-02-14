@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		protected bool ClearRefferedRequestsWasCalled { get; private set; }
 
 		private IRequestPersister target;
-		private IPersonRequest requestToRemove;
 
 		[Test]
 		public void TheTest()
@@ -51,8 +50,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			{
 				Then(rep.Find(request.Id.Value));
 			}
-
-			requestToRemove = request;
 		}
 
 		private void setState()

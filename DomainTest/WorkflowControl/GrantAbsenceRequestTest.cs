@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private IAbsenceRequest _absenceRequest;
         private ApprovalServiceForTest _requestApprovalService;
         private IPersonRequestCheckAuthorization _authorization;
-        private IValidatedRequest _validatedRequest;
 
         [SetUp]
         public void Setup()
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _requestApprovalService = new ApprovalServiceForTest();
             _validators = new List<IAbsenceRequestValidator>{_validator};
             _authorization = new PersonRequestAuthorizationCheckerForTest();
-            _validatedRequest = new ValidatedRequest {IsValid = true, ValidationErrors = ""};
             _target = new GrantAbsenceRequest();
         }
 

@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IList<IWorkShiftCalculationResultHolder> _allValues;
 		private DateOnly _dateOnly;
 		private SchedulingOptions _options;
-		private IShiftCategory _shiftCategory;
 		private IVisualLayerCollection _visualLayerCollection;
 
 
@@ -48,9 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak
 
 			};
-			_shiftCategory = new ShiftCategory("test");
 			_visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
-
 		}
 
 		[Test]

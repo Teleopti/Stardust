@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         private IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
 	    private IScheduleDay _scheduleDay;
 	    private MinMax<TimeSpan> _overtimeSpecifiedPeriod;
-		private ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
 		
 		[SetUp]
         public void Setup()
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _skill1, _skill2 });
 	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _overtimeSkillIntervalDataAggregator = _mocks.StrictMock<IOvertimeSkillIntervalDataAggregator>();
-			_skillIntervalDataOpenHour = _mocks.StrictMock<ISkillIntervalDataOpenHour>();
             _calculateBestOvertime = _mocks.StrictMock<ICalculateBestOvertime>();
             _overtimePeriodValueMapper = new OvertimePeriodValueMapper();
 			_overtimeSpecifiedPeriod = new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));

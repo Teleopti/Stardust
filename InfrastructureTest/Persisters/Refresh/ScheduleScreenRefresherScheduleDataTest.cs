@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         private IEventMessage _refreshedDerivedFromScheduleDataMessage;
         private Guid _refreshedDerivedFromScheduleDataEntityId;
         private IPersonAssignment _refreshedDerivedFromScheduleDataEntity;
-	    private IMessageQueueRemoval _messageQueueRemover;
 
 	    [SetUp]
         public void Setup()
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
             _scheduleStorage = _mocks.DynamicMock<IScheduleStorage>();
             _messageQueueUpdater = _mocks.DynamicMock<IReassociateDataForSchedules>();
-			_messageQueueRemover = _mocks.DynamicMock<IMessageQueueRemoval>();
 			_scheduleDataUpdater = _mocks.DynamicMock<IUpdateScheduleDataFromMessages>();
 
             _conflictingScheduleDataEntityId = Guid.NewGuid();

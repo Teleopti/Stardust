@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
 		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
 		private FakeScheduleDataReadScheduleStorage _scheduleRepository;
-		private FakeScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private LoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private IPersonRepository _personRepository;
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder();
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
-			_scheduleProjectionReadOnlyPersister = new FakeScheduleProjectionReadOnlyPersister();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);
 			_personRepository = new FakePersonRepositoryLegacy2();

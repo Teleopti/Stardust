@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         private IExtractDayOffFromGivenWeek _extractDayOffFromGivenWeek;
         private IScheduleDayWorkShiftTimeExtractor _scheduleDayWorkShiftTimeExtractor;
         private IVerifyWeeklyRestAroundDayOffSpecification _verifyWeeklyRestAroundDayOffSpecification;
-	    private IScheduleMatrixPro _scheduleMatrixPro;
 
         [SetUp]
         public void Setup()
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             _extractDayOffFromGivenWeek = _mock.StrictMock<IExtractDayOffFromGivenWeek>();
             _scheduleDayWorkShiftTimeExtractor = _mock.StrictMock<IScheduleDayWorkShiftTimeExtractor>();
             _verifyWeeklyRestAroundDayOffSpecification = _mock.StrictMock<IVerifyWeeklyRestAroundDayOffSpecification>();
-			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 
             _target = new DayOffToTimeSpanExtractor(_extractDayOffFromGivenWeek,_scheduleDayWorkShiftTimeExtractor,
 				_verifyWeeklyRestAroundDayOffSpecification);

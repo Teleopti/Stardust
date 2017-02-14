@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRuleProvider _businessRuleProvider;
-		private readonly INewBusinessRuleCollection _businessRuleCollection;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private readonly IShiftTradeMaxSeatValidator _shiftTradeMaxSeatValidator;
 		private IShiftTradeMaxSeatValidator _activeShiftTradeMaxSeatValidator;
 
-		public ShiftTradeTestHelper(ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IBusinessRuleProvider businessRuleProvider, INewBusinessRuleCollection businessRuleCollection, ICurrentScenario currentScenario, IScheduleProjectionReadOnlyActivityProvider scheduleProjectionReadOnlyActivityProvider)
+		public ShiftTradeTestHelper(ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IBusinessRuleProvider businessRuleProvider, ICurrentScenario currentScenario, IScheduleProjectionReadOnlyActivityProvider scheduleProjectionReadOnlyActivityProvider)
 		{
 			_personRequestRepository = new FakePersonRequestRepository();
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -54,7 +53,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
 			_businessRuleProvider = businessRuleProvider;
-			_businessRuleCollection = businessRuleCollection;
 			_currentScenario = currentScenario;
 
 			_scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make());

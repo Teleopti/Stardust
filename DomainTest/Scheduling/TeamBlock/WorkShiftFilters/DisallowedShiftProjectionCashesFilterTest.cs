@@ -14,17 +14,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private DisallowedShiftProjectionCashesFilter _target;
 		private MockRepository _mock;
 		private IShiftProjectionCache _shiftProjectionCache1;
-		private IShiftProjectionCache _shiftProjectionCache2;
-		private IShiftProjectionCache _notAllowedShiftProjectionCache;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_target = new DisallowedShiftProjectionCashesFilter();	
+			_target = new DisallowedShiftProjectionCashesFilter();
 			_mock = new MockRepository();
 			_shiftProjectionCache1 = _mock.StrictMock<IShiftProjectionCache>();
-			_shiftProjectionCache2 = _mock.StrictMock<IShiftProjectionCache>();
-			_notAllowedShiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
 		}
 
 		[Test]

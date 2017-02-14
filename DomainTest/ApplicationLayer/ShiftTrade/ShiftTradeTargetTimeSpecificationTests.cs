@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IPersonRepository _personRepository;
 		private IScheduleStorage _scheduleStorage;
 		private IBusinessRuleProvider _businessRuleProvider;
-		private INewBusinessRuleCollection _businessRuleCollection;
 		private ShiftTradeTestHelper _shiftTradeTestHelper;
 		private IGlobalSettingDataRepository _globalSettingDataRepository;
 
@@ -42,9 +41,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRepository = new FakePersonRepositoryLegacy2();
 			_scheduleStorage = new FakeScheduleStorage();
 			_businessRuleProvider = new FakeBusinessRuleProvider();
-			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
-				_businessRuleProvider, _businessRuleCollection, _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
+				_businessRuleProvider,  _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
 			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 		}
 
