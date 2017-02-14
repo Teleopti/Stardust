@@ -567,7 +567,6 @@
     <Compile Include="DayOffPlanning\FreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendSolverTest.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendValidatorTest.cs" />
-    <Compile Include="DayOffPlanning\GeneticDayOffBackToLegalStateSolverTest.cs" />
     <Compile Include="DayOffPlanning\IntradayDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendValidatorTest.cs" />
@@ -1658,7 +1657,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="DayOffPlanning\FreeWeekendValidatorTestCases.xls" />
     <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
     <Content Include="..\LicenseFiles\Teleopti_RD.xml">
       <Link>Teleopti_RD.xml</Link>

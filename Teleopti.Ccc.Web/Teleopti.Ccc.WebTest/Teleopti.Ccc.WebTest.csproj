@@ -435,7 +435,6 @@
     <Compile Include="Core\SeatPlanner\Provider\SeatMapProviderTest.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatOccupancyProviderTest.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatPlanProviderTest.cs" />
-    <Compile Include="Core\Startup\AuthenticationProviderTaskTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
