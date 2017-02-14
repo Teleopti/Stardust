@@ -281,16 +281,12 @@
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
     <Compile Include="Rta\AgentStateForUpsert.cs" />
     <Compile Include="Rta\AgentStateReadModelPersisterExtensions.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForExcludingStateGroups.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForCombinations.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForOrganization.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForOrganizationAndSkill.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForSkill.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\WithNames.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroups.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroupsForTeamAndSkill.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\ForCombinations.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\ForOrganization.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\ForOrganizationAndSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForSkill.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\InAlarmExcludePhoneStateTest.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\WithNames.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelReaderTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureClosingSnapshotTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureActivityCheckerTest.cs" />
@@ -309,7 +305,6 @@
     <Compile Include="Rta\Persisters\AgentStatePersisterFindForSnapshotTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterFindForCheckTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\ForOrganizationAndSkill.cs" />
     <Compile Include="Rta\Persisters\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\ExternalLogonReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\HistoricalAdherenceReadModelPersisterTest.cs" />
@@ -368,7 +363,6 @@
     <Compile Include="Rta\Persisters\AgentStatePersisterGetTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader\ForOrganization.cs" />
     <Compile Include="Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />

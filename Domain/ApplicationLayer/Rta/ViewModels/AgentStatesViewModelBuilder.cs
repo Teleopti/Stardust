@@ -102,8 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			return build(_reader.ReadInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, excludedPhoneStates));
 		}
-
-
+		
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
 		{
 			return build(_legacyReader.ReadForSites(siteIds));
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			return build(_legacyReader.ReadForTeams(teamIds));
 		}
-		
+
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)
 		{
 			return new AgentStatesViewModel

@@ -34,11 +34,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			}
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
-		public virtual IHttpActionResult GetStatesForTeams([FromUri] Query query)
+		#region PerformanceTool
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
+		public virtual IHttpActionResult GetStates(Guid teamId)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(query.Ids));
+			return Ok(_agentStatesBuilder.ForTeams(new[] { teamId }).States);
 		}
+		#endregion
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
 		public virtual IHttpActionResult GetStatesForSites([FromUri] Query query)
@@ -46,12 +48,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.ForSites(query.Ids));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
-		public virtual IHttpActionResult GetStates(Guid teamId)
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
+		public virtual IHttpActionResult GetStatesForTeams([FromUri] Query query)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(new[] {teamId}).States);
+			return Ok(_agentStatesBuilder.ForTeams(query.Ids));
 		}
-
+		
 		[UnitOfWork, HttpGet, Route("api/Agents/ForTeams")]
 		public virtual IHttpActionResult ForTeams([FromUri] Guid[] teamIds)
 		{

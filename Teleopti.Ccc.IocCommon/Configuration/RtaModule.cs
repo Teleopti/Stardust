@@ -45,17 +45,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				);
 			builder.CacheByClassProxy<TenantLoader>().ApplyAspects().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_QuicklyChangeAgentsSelection_40610))
-				builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
-			else
-				builder.RegisterType<AgentStateReadModelLegacyReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
+			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
+			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
+			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelLegacyReader>().As<IAgentStateReadModelLegacyReader>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<KeyValueStorePersister>().As<IKeyValueStorePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
-			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();
-			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
 			builder.RegisterType<CurrentScheduleReadModelPersister>()
 				.As<ICurrentScheduleReadModelPersister>()
 				.As<IScheduleReader>()

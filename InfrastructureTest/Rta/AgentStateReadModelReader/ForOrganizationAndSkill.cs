@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		public IAgentStateReadModelPersister StatePersister;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
-		public IAgentStateReadModelLegacyReader Target;
+		public IAgentStateReadModelReader Target;
 
 		[Test]
 		public void ShouldLoadForSiteAndSkill()
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSitesAndSkills(new[] {siteId}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, null, new[] {currentSkillId}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSitesAndSkills(new[] {siteId}, new[] {phone, email}))
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, null, new[] {phone, email}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForTeamsAndSkills(new[] {teamId}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, new[] {teamId}, new[] {currentSkillId}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForTeamsAndSkills(new[] {teamId}, new[] {phone, email}))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, new[] {teamId}, new[] {phone, email}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var currentSkillId = Database.SkillIdFor("phone");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] {expected, wrongSite, wrongSkill, notInAlarm});
+				Groupings.UpdateGroupingReadModel(new[] { expected, wrongSite, wrongSkill, notInAlarm });
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmForSitesAndSkills(new[] {site}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(new[] { site }, null, new[] { currentSkillId }))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					var current = Database.PersonIdFor(i.ToString());
 					WithUnitOfWork.Do(() =>
 					{
-						Groupings.UpdateGroupingReadModel(new[] {current});
+						Groupings.UpdateGroupingReadModel(new[] { current });
 						StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 						{
 							PersonId = current,
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			var skillId = Database.SkillIdFor("phone");
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmForSitesAndSkills(new[] {site}, new[] {skillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(new[] { site }, null, new[] { skillId }))
 				.Select(x => x.PersonId).Distinct()
 				.Should().Have.Count.EqualTo(50);
 		}
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var currentSkillId = Database.SkillIdFor("phone");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] {expected, wrongTeam, wrongSkill, notInAlarm});
+				Groupings.UpdateGroupingReadModel(new[] { expected, wrongTeam, wrongSkill, notInAlarm });
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {team}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, new[] { team }, new[] { currentSkillId }))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					var current = Database.PersonIdFor(i.ToString());
 					WithUnitOfWork.Do(() =>
 					{
-						Groupings.UpdateGroupingReadModel(new[] {current});
+						Groupings.UpdateGroupingReadModel(new[] { current });
 						StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 						{
 							PersonId = current,
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			var skillId = Database.SkillIdFor("phone");
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {teamId}, new[] {skillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, new[] { teamId }, new[] { skillId }))
 				.Select(x => x.PersonId).Distinct()
 				.Should().Have.Count.EqualTo(50);
 		}
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var email = Database.SkillIdFor("email");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] {expected});
+				Groupings.UpdateGroupingReadModel(new[] { expected });
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
@@ -371,10 +371,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {teamId}, new[] {phone, email}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, new[] { teamId }, new[] { phone, email }))
 				.Single().PersonId.Should().Be(expected);
 		}
-		
+
 		[Test]
 		public void ShouldLoadInAlarmForMultipleTeamAndSkill()
 		{
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {teamA, teamB}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, new[] { teamA, teamB }, new[] { currentSkillId }))
 				.Should().Have.Count.EqualTo(2);
 		}
 	}

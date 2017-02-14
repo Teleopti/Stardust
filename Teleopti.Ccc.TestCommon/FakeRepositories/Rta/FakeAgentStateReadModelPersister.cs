@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
 			return this;
 		}
-		
+
 		public FakeAgentStateReadModelPersister WithPersonSkill(Guid person, Guid skill)
 		{
 			_personSkills.Add(new personSkill(person, skill));
@@ -56,25 +56,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.TryRemove(model.PersonId, out removed);
 			_data.AddOrUpdate(model.PersonId, model.CopyBySerialization(), (g, m) => model);
 		}
-
-		public void UpsertDeleted(Guid personId, DateTime expiresAt)
-		{
-			AgentStateReadModel updated;
-			if (!_data.TryGetValue(personId, out updated))
-			{
-				_data.TryAdd(personId, new AgentStateReadModel
-				{
-					PersonId = personId,
-					IsDeleted = true
-				});
-				return;
-			}
-			var copy = updated.CopyBySerialization();
-			updated.IsDeleted = true;
-			updated.ExpiresAt = expiresAt;
-			_data.TryUpdate(personId, updated.CopyBySerialization(), copy);
-		}
-
+		
 		public void DeleteOldRows(DateTime now)
 		{
 			var toRemove =
@@ -89,13 +71,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				_data.TryRemove(personId, out model);
 			}
 		}
-
-		public void Delete(Guid personId)
-		{
-			AgentStateReadModel model;
-			_data.TryRemove(personId, out model);
-		}
-
+		
 		public AgentStateReadModel Load(Guid personId)
 		{
 			return _data.ContainsKey(personId) ? _data[personId].CopyBySerialization() : null;
@@ -164,6 +140,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			existing.LastName = lastName;
 			_data.AddOrUpdate(personId, existing.CopyBySerialization(), (g, m) => existing);
 		}
+		
+		public void UpsertDeleted(Guid personId, DateTime expiresAt)
+		{
+			AgentStateReadModel updated;
+			if (!_data.TryGetValue(personId, out updated))
+			{
+				_data.TryAdd(personId, new AgentStateReadModel
+				{
+					PersonId = personId,
+					IsDeleted = true
+				});
+				return;
+			}
+			var copy = updated.CopyBySerialization();
+			updated.IsDeleted = true;
+			updated.ExpiresAt = expiresAt;
+			_data.TryUpdate(personId, updated.CopyBySerialization(), copy);
+		}
 
 		public void UpdateTeamName(Guid teamId, string name)
 		{
@@ -201,80 +195,35 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadForTeam(Guid teamId)
-		{
-			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
+			IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
-				return forSitesTeamsAndSkills(siteIds, teamIds, skillIds);
+				return withSkill(ReadForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct(), skillIds);
 			if (siteIds != null && teamIds != null)
-				 return forSitesAndTeams(siteIds, teamIds);
+				return ReadForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct();
 			if (siteIds != null && skillIds != null)
-				return ReadForSitesAndSkills(siteIds, skillIds);
-			if (siteIds != null )
+				return withSkill(ReadForSites(siteIds), skillIds);
+			if (siteIds != null)
 				return ReadForSites(siteIds);
 			if (teamIds != null && skillIds != null)
-				return ReadForTeamsAndSkills(teamIds, skillIds);
+				return withSkill(ReadForTeams(teamIds), skillIds);
 			if (teamIds != null)
 				return ReadForTeams(teamIds);
-			return ReadForSkills(skillIds);
+			return forSkill(skillIds);
 		}
 
-		private IEnumerable<AgentStateReadModel> forSitesTeamsAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			return withSkill(forSitesAndTeams(siteIds, teamIds), skillIds);
-		}
-
-		private IEnumerable<AgentStateReadModel> forSitesAndTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
-		{
-			return forSites(siteIds).Concat(forTeams(teamIds)).Distinct();
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
-		{
-			return withSkill(forSites(siteIds), skillIds);
-		}
-		
 		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
 		{
-			return forSites(siteIds);
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			return forTeamsAndSkills(teamIds, skillIds);
-		}
-
-		private IEnumerable<AgentStateReadModel> forTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			return withSkill(forTeams(teamIds), skillIds);
+			return from model in _data.Values
+				from siteId in siteIds
+				where siteId == model.SiteId
+				select model;
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
 		{
-			return forTeams(teamIds);
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadForSkills(IEnumerable<Guid> skillIds)
-		{
-			return forSkill(skillIds);
-		}
-
-		private IEnumerable<AgentStateReadModel> forSites(IEnumerable<Guid> siteIds)
-		{
 			return from model in _data.Values
-				   from siteId in siteIds
-				   where siteId == model.SiteId
-				   select model;
-		}
-
-		private IEnumerable<AgentStateReadModel> forTeams(IEnumerable<Guid> teamIds)
-		{
-			return
-				from model in _data.Values
 				from team in teamIds
 				where team == model.TeamId
 				select model;
@@ -282,12 +231,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		private IEnumerable<AgentStateReadModel> forSkill(IEnumerable<Guid> skillIds)
 		{
-			return
-				from model in
-					withSkill(
-						_data.Values,
-						skillIds)
-				select model;
+			return from model in withSkill(_data.Values, skillIds) select model;
 		}
 
 		private IEnumerable<AgentStateReadModel> withSkill(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid> skillIds)
@@ -301,58 +245,35 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					personSkill.SkillId == skill
 				select model;
 		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+
+		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
+			IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
 				return inAlarm(ReadFor(siteIds, teamIds, skillIds));
 			if (siteIds != null && teamIds != null)
 				return inAlarm(ReadFor(siteIds, teamIds, null));
 			if (siteIds != null && skillIds != null)
-				return ReadInAlarmForSitesAndSkills(siteIds, skillIds);
+				return inAlarm(ReadFor(siteIds, null, skillIds));
 			if (siteIds != null)
-				return ReadInAlarmForSites(siteIds);
+				return inAlarm(ReadFor(siteIds, null, null));
 			if (teamIds != null && skillIds != null)
-				return ReadInAlarmForTeamsAndSkills(teamIds, skillIds);
+				return inAlarm(ReadFor(null, teamIds, skillIds));
 			if (teamIds != null)
-				return ReadInAlarmForTeams(teamIds);
-			return ReadInAlarmForSkills(skillIds);
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
-		{
-			return inAlarm(ReadFor(siteIds, null, skillIds));
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForSites(IEnumerable<Guid> siteIds)
-		{
-			return inAlarm(ReadFor(siteIds, null, null));
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			return inAlarm(ReadFor(null, teamIds, skillIds));
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeams(IEnumerable<Guid> teamIds)
-		{
-			return inAlarm(ReadFor(null, teamIds, null));
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForSkills(IEnumerable<Guid> skillIds)
-		{
+				return inAlarm(ReadFor(null, teamIds, null));
 			return inAlarm(ReadFor(null, null, skillIds));
 		}
 
 		private IEnumerable<AgentStateReadModel> inAlarm(IEnumerable<AgentStateReadModel> models)
 		{
 			return from model in models
-				   where model.AlarmStartTime <= _now.UtcDateTime()
-				   orderby model.AlarmStartTime
-				   select model;
+				where model.AlarmStartTime <= _now.UtcDateTime()
+				orderby model.AlarmStartTime
+				select model;
 		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
+
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds,
+			IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
 				return excludingStateGroups(ReadInAlarmFor(siteIds, teamIds, skillIds), excludedStates);
@@ -361,49 +282,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			if (siteIds != null && skillIds != null)
 				return excludingStateGroups(ReadInAlarmFor(siteIds, null, skillIds), excludedStates);
 			if (siteIds != null)
-				return excludingStateGroups(ReadInAlarmFor(siteIds, null , null), excludedStates);
+				return excludingStateGroups(ReadInAlarmFor(siteIds, null, null), excludedStates);
 			if (teamIds != null && skillIds != null)
 				return excludingStateGroups(ReadInAlarmFor(null, teamIds, skillIds), excludedStates);
 			if (teamIds != null)
 				return excludingStateGroups(ReadInAlarmFor(null, teamIds, null), excludedStates);
 			return excludingStateGroups(ReadInAlarmFor(null, null, skillIds), excludedStates);
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSitesAndSkill(
-			IEnumerable<Guid> siteIds,
-			IEnumerable<Guid> skillIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return excludingStateGroups(ReadInAlarmForSitesAndSkills(siteIds, skillIds), excludedStateGroupIds);
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSites(
-			IEnumerable<Guid> siteIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return excludingStateGroups(ReadInAlarmForSites(siteIds), excludedStateGroupIds);
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(
-			IEnumerable<Guid> teamIds,
-			IEnumerable<Guid> skillIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return excludingStateGroups(ReadInAlarmForTeamsAndSkills(teamIds, skillIds), excludedStateGroupIds);
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeams(
-			IEnumerable<Guid> teamIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return excludingStateGroups(ReadInAlarmForTeams(teamIds), excludedStateGroupIds);
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSkills(
-			IEnumerable<Guid> skillIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return excludingStateGroups(ReadInAlarmForSkills(skillIds), excludedStateGroupIds);
 		}
 
 		private static IEnumerable<AgentStateReadModel> excludingStateGroups(
@@ -416,6 +300,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				where excludedStateGroup != model.StateGroupId
 				select model;
 		}
-
 	}
 }

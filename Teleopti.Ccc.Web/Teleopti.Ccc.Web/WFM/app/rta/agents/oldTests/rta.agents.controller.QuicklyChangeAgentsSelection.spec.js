@@ -36,7 +36,6 @@ describe('RtaAgentsController', function() {
 		$fakeBackend.clear();
 		spyOn($state, 'go');
 
-		$fakeBackend.withToggle('RTA_QuicklyChangeAgentsSelection_40610');
 	}));
 
 	it('should get organization', function() {

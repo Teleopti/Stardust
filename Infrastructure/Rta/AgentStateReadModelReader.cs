@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		private IEnumerable<AgentStateReadModel> load(AgentStateReadModelQueryBuilder queryBuilder)
 		{
-
 			var builder = queryBuilder.Build();
 			var sqlQuery = _unitOfWork.Current().Session()
 				.CreateSQLQuery(builder.Query);

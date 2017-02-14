@@ -6,18 +6,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolidated
+namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 {
 	[DatabaseTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_QuicklyChangeAgentsSelection_40610)]
 	public class WithNames
 	{
 		public IGroupingReadOnlyRepository Groupings;

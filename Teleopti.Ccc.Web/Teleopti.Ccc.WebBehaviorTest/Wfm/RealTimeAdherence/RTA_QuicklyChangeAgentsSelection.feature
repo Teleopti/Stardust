@@ -58,7 +58,6 @@ Background:
          | Phone state | Ready    |
          | Is alarm    | false    |
 
-@OnlyRunIfEnabled('RTA_QuicklyChangeAgentsSelection_40610')
 Scenario: Quickly change agent selection for skill, site and team
          Given the time is '2016-06-14 08:00:00'
          And 'Pierre Baldi' sets his phone state to 'LoggedOut'

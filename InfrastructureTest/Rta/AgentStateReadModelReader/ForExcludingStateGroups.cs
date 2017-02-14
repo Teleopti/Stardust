@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -14,322 +13,521 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 {
 	[DatabaseTest]
 	[TestFixture]
-	public class ForExcludingStateGroupsForSiteAndSkill
+	public class ForExcludingStateGroupsTest
 	{
 		public IGroupingReadOnlyRepository Groupings;
 		public Database Database;
 		public IAgentStateReadModelPersister StatePersister;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
-		public IAgentStateReadModelLegacyReader Target;
+		public IAgentStateReadModelReader Target;
 
 		[Test]
-		public void ShouldLoadForSitesAndSkill()
+		public void ShouldLoadForSite()
 		{
-			Now.Is("2016-11-07 08:10");
-			Database
-				.WithSite()
-				.WithAgent("expected")
-				.WithSkill("phone")
-				;
-
-			var siteId = Database.CurrentSiteId();
-			var expected = Database.PersonIdFor("expected");
-			var skillId = Database.SkillIdFor("phone");
+			Now.Is("2016-11-28 08:10");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
 			var loggedOut = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] {expected});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
-					PersonId = expected,
+					PersonId = personId1,
 					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = true,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = loggedOut
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] {siteId}, null, null, new Guid?[] {loggedOut}))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(personId1);
+		}
+
+		[Test]
+		public void ShouldLoadForTeam()
+		{
+			Now.Is("2016-11-28 08:10");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = loggedOut
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(null, new[] { teamId }, null, new Guid?[] { loggedOut }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(personId1);
+		}
+
+		[Test]
+		public void ShouldLoadForSiteAndTeam()
+		{
+			Now.Is("2016-11-28 08:10");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = Guid.NewGuid()
 				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = true,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = loggedOut
 				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
-					PersonId = Guid.NewGuid(),
-					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = false,
+					PersonId = personId2,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = Guid.NewGuid()
 				});
-			});
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(new[] { siteId }, new[] { skillId }, new Guid?[] { loggedOut }))
-				.Single().PersonId.Should().Be(expected);
-		}
-
-		[Test]
-		public void ShouldLoadTop50InAlarmForSiteAndSkill()
-		{
-			Now.Is("2016-11-07 08:10");
-			Database
-				.WithSite();
-			var site = Database.CurrentSiteId();
-			Enumerable.Range(1, 51)
-				.ForEach(i =>
-				{
-					Database
-						.WithAgent(i.ToString())
-						.WithSkill("phone")
-						;
-					var current = Database.PersonIdFor(i.ToString());
-					WithUnitOfWork.Do(() =>
-					{
-						Groupings.UpdateGroupingReadModel(new[] { current });
-						StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
-						{
-							PersonId = current,
-							SiteId = site,
-							AlarmStartTime = "2016-11-07 08:00".Utc(),
-							IsRuleAlarm = true,
-							StateGroupId = Guid.NewGuid()
-						});
-					});
-				});
-			var skillId = Database.SkillIdFor("phone");
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(new[] { site }, new[] { skillId }, new Guid?[] {null}))
-				.Select(x => x.PersonId).Distinct()
-				.Should().Have.Count.EqualTo(50);
-		}
-
-		[Test]
-		public void ShouldNotLoadDuplicateRowsForSitesAndSkill()
-		{
-			Now.Is("2016-11-07 08:10");
-			Database
-				.WithAgent("expected")
-				.WithSkill("phone")
-				.WithSkill("email")
-				;
-			var expected = Database.PersonIdFor("expected");
-			var siteId = Database.CurrentSiteId();
-			var phone = Database.SkillIdFor("phone");
-			var email = Database.SkillIdFor("email");
-			var loggedOut = Guid.NewGuid();
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { expected });
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
-					PersonId = expected,
-					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					StateGroupId = Guid.NewGuid()
+					PersonId = Guid.NewGuid(),
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = loggedOut
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(new[] { siteId }, new[] { phone, email }, new Guid?[] { loggedOut }))
-				.Single().PersonId.Should().Be(expected);
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new []{siteId}, new[] { teamId }, null, new Guid?[] { loggedOut }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(personId1, personId2);
 		}
 
 		[Test]
-		public void ShouldLoadInAlarmForSiteAndSkill()
+		public void ShouldLoadForSiteTeamAndSkill()
 		{
-			Now.Is("2016-11-07 08:10");
+			Now.Is("2016-11-28 08:10");
 			Database
+				.WithAgent("wrongTeam")
+				.WithSkill("phone")
+				.WithTeam()
 				.WithAgent("wrongSite")
 				.WithSkill("phone")
 				.WithSite()
+				.WithAgent("excludedState")
+				.WithSkill("phone")
+				.WithAgent("expectedForSite")
+				.WithSkill("phone")
+				.WithAgent("expectedForTeam")
+				.WithSkill("phone")
 				.WithAgent("wrongSkill")
 				.WithSkill("email")
-				.WithAgent("notInAlarm")
-				.WithSkill("phone")
-				.WithAgent("expected")
-				.WithSkill("phone")
+				.UpdateGroupings()
 				;
-			var wrongSite = Database.PersonIdFor("wrongSite");
+			var expectedForSite = Database.PersonIdFor("expectedForSite");
+			var expectedForTeam = Database.PersonIdFor("expectedForTeam");
+			var excludedState = Database.PersonIdFor("excludedState");
 			var wrongSkill = Database.PersonIdFor("wrongSkill");
-			var notInAlarm = Database.PersonIdFor("notInAlarm");
-			var expected = Database.PersonIdFor("expected");
-			var site = Database.CurrentSiteId();
-			var currentSkillId = Database.SkillIdFor("phone");
+			var wrongSite = Database.PersonIdFor("wrongSite");
+			var wrongTeam = Database.PersonIdFor("wrongTeam");
+			var siteId = Database.CurrentSiteId();
+			var teamId = Database.CurrentSiteId();
+			var phoneId = Database.SkillIdFor("phone");
+			var loggedOut = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { expected, wrongSite, wrongSkill, notInAlarm });
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
-					PersonId = expected,
-					SiteId = site,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = true,
+					PersonId = expectedForSite,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = Guid.NewGuid()
 				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
-					PersonId = wrongSite,
-					SiteId = Guid.NewGuid(),
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = true,
+					PersonId = expectedForTeam,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = excludedState,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = loggedOut
 				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
-					SiteId = site,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = Guid.NewGuid()
-				});
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = notInAlarm,
-					SiteId = site,
-					StateGroupId = Guid.NewGuid()
-				});
-			});
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(new[] { site }, new[] { currentSkillId }, new Guid?[] {null}))
-				.Single().PersonId.Should().Be(expected);
-		}
-
-		[Test]
-		public void ShouldNotLoadForPreviousSkill()
-		{
-			Now.Is("2016-11-08 08:10");
-			Database
-				.WithSite()
-				.WithPerson("agent1")
-				.WithPersonPeriod("2016-11-01".Date())
-				.WithSkill("email")
-				.WithPersonPeriod("2016-11-07".Date())
-				.WithSkill("phone")
-				.WithPersonPeriod("2016-11-10".Date())
-				.WithSkill("email")
-				;
-			var site = Database.CurrentSiteId();
-			var personId = Database.CurrentPersonId();
-			var email = Database.SkillIdFor("email");
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { personId });
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId,
-					SiteId = site,
-					AlarmStartTime = "2016-11-08 08:00".Utc(),
-					StateGroupId = Guid.NewGuid()
-				});
-			});
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(new[] {site}, new[] { email }, new Guid?[] {null}))
-				.Should().Be.Empty();
-		}
-
-		[Test]
-		public void ShouldLoadForSitesAndSkillWhenExcludingNull()
-		{
-			Now.Is("2016-11-07 08:10");
-			Database
-				.WithSite()
-				.WithAgent("expected")
-				.WithSkill("phone")
-				.WithAgent("wrongSite")
-				.WithSkill("phone")
-				.WithAgent("wrongState")
-				.WithSkill("phone")
-				.WithAgent("nullState")
-				.WithSkill("phone")
-				;
-
-			var siteId = Database.CurrentSiteId();
-			var expected = Database.PersonIdFor("expected");
-			var wrongSite = Database.PersonIdFor("wrongSite");
-			var wrongState = Database.PersonIdFor("wrongState");
-			var nullState = Database.PersonIdFor("nullState");
-			var skillId = Database.SkillIdFor("phone");
-			var loggedOut = Guid.NewGuid();
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { expected, wrongState, nullState, wrongSite });
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = expected,
 					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = true,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = Guid.NewGuid()
-				});
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = wrongState,
-					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = loggedOut
-				});
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = nullState,
-					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = false,
-					StateGroupId = null
 				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid(),
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					IsRuleAlarm = false,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongTeam,
+					TeamId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = Guid.NewGuid()
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(new[] { siteId }, new[] { skillId }, new Guid?[] { loggedOut, null }))
-				.Single().PersonId.Should().Be(expected);
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, new[] { teamId }, new[] { phoneId }, new Guid?[] {loggedOut}))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
 		}
 
 		[Test]
-		public void ShouldLoadForSitesAndSkillWhenIncludingNull()
+		public void ShouldLoadForSkill()
 		{
-			Now.Is("2016-11-07 08:10");
+			Now.Is("2016-11-28 08:10");
 			Database
-				.WithSite()
-				.WithAgent("expected")
+				.WithPerson("expected")
+				.WithPersonPeriod("2016-01-01".Date())
+				.WithSkill("email")
+				.WithPersonPeriod("2016-06-01".Date())
 				.WithSkill("phone")
+				.WithPersonPeriod("2017-01-01".Date())
+				.WithSkill("email")
 				.WithAgent("wrongState")
 				.WithSkill("phone")
+				.UpdateGroupings()
 				;
-
-			var siteId = Database.CurrentSiteId();
-			var wrongState = Database.PersonIdFor("wrongState");
 			var expected = Database.PersonIdFor("expected");
-			var skillId = Database.SkillIdFor("phone");
+			var wrongState = Database.PersonIdFor("wrongState");
+			var phoneId = Database.SkillIdFor("phone");
 			var loggedOut = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { wrongState, expected });
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = wrongState,
-					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
-					StateGroupId = loggedOut
-				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongState,
+					TeamId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = loggedOut
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(null, null, new[] { phoneId }, new Guid?[] { loggedOut }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(expected);
+		}
+
+		[Test]
+		public void ShouldLoadNullStateGroups()
+		{
+			Now.Is("2016-11-28 08:10");
+			var personId1 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
 					SiteId = siteId,
-					AlarmStartTime = "2016-11-07 08:00".Utc(),
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = null
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = loggedOut
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, null, null, new Guid?[] { loggedOut }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(personId1);
+		}
+
+		[Test]
+		public void ShouldExcludeNullStateGroup()
+		{
+			Now.Is("2016-11-28 08:10");
+			var personId1 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
+					StateGroupId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc(),
 					StateGroupId = null
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(new[] { siteId }, new[] { skillId }, new Guid?[] { loggedOut }))
-				.Single().PersonId.Should().Be(expected);
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, null, null, new Guid?[] { null }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(personId1);
 		}
+
+		[Test]
+		public void ShouldExcludeNullAndRegularStateGroup()
+		{
+			Now.Is("2016-11-28 08:10");
+			var personId1 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-28 08:00".Utc(),
+					StateGroupId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-28 08:00".Utc(),
+					StateGroupId = null
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-28 08:00".Utc(),
+					StateGroupId = loggedOut
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, null, null, new Guid?[] { null, loggedOut }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(personId1);
+		}
+
+
+
+		/*
+		[Test]
+		public void ShouldLoadForSiteTeamAndSkill()
+		{
+			Now.Is("2016-11-07 08:00");
+			Database
+				.WithAgent("wrongTeam")
+				.WithSkill("phone")
+				.WithTeam()
+				.WithAgent("wrongSite")
+				.WithSkill("phone")
+				.WithSite()
+				.WithAgent("expectedForSite")
+				.WithSkill("phone")
+				.WithAgent("expectedForTeam")
+				.WithSkill("phone")
+				.WithAgent("wrongSkill")
+				.WithSkill("email")
+				.UpdateGroupings()
+				;
+			var expectedForSite = Database.PersonIdFor("expectedForSite");
+			var expectedForTeam = Database.PersonIdFor("expectedForTeam");
+			var wrongSkill = Database.PersonIdFor("wrongSkill");
+			var wrongSite = Database.PersonIdFor("wrongSite");
+			var wrongTeam = Database.PersonIdFor("wrongTeam");
+			var siteId = Database.CurrentSiteId();
+			var teamId = Database.CurrentSiteId();
+			var phoneId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForSite,
+					SiteId = siteId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForTeam,
+					TeamId = teamId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSkill,
+					SiteId = siteId,
+					TeamId = teamId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSite,
+					SiteId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongTeam,
+					TeamId = Guid.NewGuid()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, new []{teamId}, new[] {phoneId}))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
+		}
+
+
+		[Test]
+		public void ShouldInAlarmLoadForSiteAndTeam()
+		{
+			Now.Is("2016-11-24 08:10");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					TeamId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] { siteId }, new[] { teamId }, null))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(personId1, personId2);
+		}
+
+
+		[Test]
+		public void ShouldLoadInAlarmForSiteTeamAndSkill()
+		{
+			Now.Is("2016-11-28 08:10");
+			Database
+				.WithAgent("wrongSite")
+				.WithSkill("phone")
+				.WithSite()
+				.WithAgent("wrongTeam")
+				.WithSkill("phone")
+				.WithTeam()
+				.WithAgent("notInAlarm")
+				.WithSkill("phone")
+				.WithAgent("expectedForSite")
+				.WithSkill("phone")
+				.WithAgent("expectedForTeam")
+				.WithSkill("phone")
+				.WithAgent("wrongSkill")
+				.WithSkill("email")
+				.UpdateGroupings()
+				;
+			var expectedForSite = Database.PersonIdFor("expectedForSite");
+			var expectedForTeam = Database.PersonIdFor("expectedForTeam");
+			var notInAlarm = Database.PersonIdFor("notInAlarm");
+			var wrongSkill = Database.PersonIdFor("wrongSkill");
+			var wrongSite = Database.PersonIdFor("wrongSite");
+			var wrongTeam = Database.PersonIdFor("wrongTeam");
+			var siteId = Database.CurrentSiteId();
+			var teamId = Database.CurrentSiteId();
+			var phoneId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForSite,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForTeam,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = notInAlarm,
+					SiteId = siteId,
+					TeamId = teamId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSkill,
+					SiteId = siteId,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSite,
+					SiteId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongTeam,
+					TeamId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(new[] { siteId }, new[] { teamId }, new[] { phoneId }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
+		}
+		*/
 	}
 }
