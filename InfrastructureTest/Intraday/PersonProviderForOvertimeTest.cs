@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using NHibernate.Transform;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -11,9 +10,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Intraday;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		public ISkillRepository SkillRepository;
 		public IPersonScheduleDayReadModelPersister PersonScheduleDayReadModelPersister;
 		public IBusinessUnitRepository BusinessUnitRepository;
-		public IPersonProviderForOvertime Target;
+		public IPersonForOvertimeProvider Target;
 		public ISkillTypeRepository SkillTypeRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IActivityRepository ActivityRepository;
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<PersonProviderForOvertime>().For<IPersonProviderForOvertime>();
+			system.UseTestDouble<PersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
 		}
 
 		[Test]
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
 				new[] { model }, false);
 
-			var persons = Target.GetPerson(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
+			var persons = Target.Persons(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
 			persons.Count.Should().Be.EqualTo(1);
 			persons.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			persons.First().End.Should().Be.EqualTo(date.Date.AddHours(18));
@@ -114,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
 				new[] { model }, false);
 
-			var persons = Target.GetPerson(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(17), date.Date.AddHours(20));
+			var persons = Target.Persons(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(17), date.Date.AddHours(20));
 
 			persons.Count.Should().Be.EqualTo(0);
 		}
@@ -148,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
 				new[] { model }, false);
 
-			var persons = Target.GetPerson(new List<Guid>() { skillMissing.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
+			var persons = Target.Persons(new List<Guid>() { skillMissing.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
 
 			persons.Count.Should().Be.EqualTo(0);
 		}
@@ -182,7 +180,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
 				new[] { model }, false);
 
-			var persons = Target.GetPerson(new List<Guid>() { skill2.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
+			var persons = Target.Persons(new List<Guid>() { skill2.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
 
 			persons.Count.Should().Be.EqualTo(1);
 		}
@@ -215,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
 				new[] { model }, false);
 
-			var persons = Target.GetPerson(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
+			var persons = Target.Persons(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20));
 
 			persons.Count.Should().Be.EqualTo(0);
 		}
