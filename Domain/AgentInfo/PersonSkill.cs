@@ -63,5 +63,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             var retobj = (PersonSkill)MemberwiseClone();
             return retobj;
         }
-    }
+
+		public override bool Equals(IEntity other)
+		{
+			var otherPersonSkill = other as IPersonSkill;
+			if (otherPersonSkill == null)
+				return false;
+
+			return (this.Skill == otherPersonSkill.Skill);
+		}
+
+		public override int GetHashCode()
+		{
+			return _skill.GetHashCode();
+		}
+	}
 }

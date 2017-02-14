@@ -177,7 +177,6 @@
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Authentication\NonceInfoRepositoryTest.cs" />
-    <Compile Include="Bugs\Bug42845.cs" />
     <Compile Include="Bugs\Bug42607.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DatabaseTestAttribute.cs" />

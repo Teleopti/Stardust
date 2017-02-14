@@ -109,21 +109,24 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(period3.Period.EndDate,  person2.TerminalDate);
 		}
 
-		/// <summary>
-		/// Determines whether this instance [can add _person skill].
-		/// </summary>
-		/// <remarks>
-		/// Created by: sumeda herath
-		/// Created date: 2008-01-10
-		/// </remarks>
 		[Test]
 		public void CanAddPersonSkill()
 		{
-			ISkill skill = SkillFactory.CreateSkill("test skill");
-			IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill("test", 1);
 			_target.AddPersonSkill(personSkill);
 
 			Assert.IsTrue(_target.PersonSkillCollection.Contains(personSkill));
+			Assert.AreEqual(1, _target.PersonSkillCollection.Count());
+		}
+
+		[Test]
+		public void CannotAddPersonSkillsWithSameSkill()
+		{
+			ISkill skill = SkillFactory.CreateSkill("test skill");
+			IPersonSkill personSkill1 = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			IPersonSkill personSkill2 = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			_target.AddPersonSkill(personSkill1);
+			Assert.Throws<ArgumentException>(() => _target.AddPersonSkill(personSkill2));
 		}
 
 		[Test]
@@ -299,8 +302,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			IPersonSkill skill = PersonSkillFactory.CreatePersonSkill("Test", 1);
 			
 			_target.AddPersonSkill(skill);
-
-			Assert.AreEqual(1, _target.PersonSkillCollection.Count());
+			_target.ResetPersonSkill();
+			Assert.AreEqual(0, _target.PersonSkillCollection.Count());
 		}
 
 		/// <summary>
