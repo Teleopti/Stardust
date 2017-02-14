@@ -5,5 +5,3 @@
 ---------------- 
 ALTER TABLE [dbo].[PersonSkill] DROP CONSTRAINT [UQ_PersonSkill_Parent_Skill]
 GO
-
-

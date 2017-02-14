@@ -1,0 +1,2 @@
+ALTER TABLE ReadModel.CurrentSchedule ADD CONSTRAINT PK_PersonId PRIMARY KEY CLUSTERED (PersonId)
+GO
