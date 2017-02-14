@@ -181,7 +181,7 @@
 									<div class="con-flex"></div>
 								</div>
 							</md-content>
-							<md-content ng-cloak class="md-padding" ng-if="!viewObj.hasMonitorData">
+							<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex no-data-available">
 										{{'NoDataAvailable'|translate}}
@@ -238,7 +238,7 @@
 									<div class="con-flex"></div>
 								</div>
 							</md-content>
-							<md-content ng-cloak class="md-padding" ng-if="!viewObj.hasMonitorData">
+							<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex no-data-available">
 										{{'NoDataAvailable'|translate}}
@@ -261,7 +261,7 @@
 									</div>
 								</div>
 							</md-content>
-							<md-content ng-cloak class="md-padding" ng-if="!viewObj.hasMonitorData">
+							<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex no-data-available">
 										{{'NoDataAvailable'|translate}}
