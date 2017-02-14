@@ -1,23 +1,24 @@
+using System;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class ScheduleController : ApiController
 	{
 		private readonly FullScheduling _fullScheduling;
-		private readonly IAgentGroupRepository _agentGroupRepository;
 		private readonly IAgentGroupStaffLoader _agentGroupStaffLoader;
+		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
-		public ScheduleController(FullScheduling fullScheduling, IAgentGroupRepository agentGroupRepository, IAgentGroupStaffLoader agentGroupStaffLoader)
+		public ScheduleController(FullScheduling fullScheduling, IAgentGroupStaffLoader agentGroupStaffLoader, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_fullScheduling = fullScheduling;
-			_agentGroupRepository = agentGroupRepository;
 			_agentGroupStaffLoader = agentGroupStaffLoader;
+			_planningPeriodRepository = planningPeriodRepository;
 		}
 
 		//remove me when we move scheduling/optimization out of http request
@@ -33,12 +34,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(_fullScheduling.DoScheduling(period));
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/Schedule/AgentGroup")]
-		public virtual IHttpActionResult AgentGroup([FromBody] AgentGroupStaffSchedulingInput input)
+		[HttpPost, Route("api/ResourcePlanner/Schedule/{id}")]
+		public virtual IHttpActionResult ScheduleForPlanningPeriod(Guid id)
 		{
-			var agentGroup = _agentGroupRepository.Load(input.AgentGroupId);
-			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
-			var people = _agentGroupStaffLoader.Load(period, agentGroup);
+			var planningPeriod = _planningPeriodRepository.Load(id);
+			var period = planningPeriod.Range;
+			var people = _agentGroupStaffLoader.Load(period, planningPeriod.AgentGroup);
 			return Ok(_fullScheduling.DoScheduling(period, people.AllPeople.Select(x => x.Id.Value)));
 		}
 	}
