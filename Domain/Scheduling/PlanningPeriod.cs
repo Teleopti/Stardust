@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_state = PlanningPeriodState.Published;
 		}
 
-		public IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup)
+		public virtual IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup)
 		{
 			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
 			var range = _calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation
