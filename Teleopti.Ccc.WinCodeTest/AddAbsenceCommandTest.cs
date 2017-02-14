@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.WinCodeTest
 		private IList<IScheduleDay> _selectedSchedules;
 		private IScenario _scenario;
 		private IAbsence _selectedItem;
-		private DateTimePeriod _period;
 		private IGridlockManager _gridlockManager;
 		private IAddLayerViewModel<IAbsence> _dialog;
 		private IPerson _person;
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.WinCodeTest
 			_viewBase = MockRepository.GenerateMock<IScheduleViewBase>();
 			_scenario = MockRepository.GenerateMock<IScenario>();
 			_dialog = MockRepository.GenerateMock<IAddLayerViewModel<IAbsence>>();
-			_period = new DateTimePeriod(2012, 7, 16, 2012, 7, 16);
 			_dateOnlyPeriod = new DateOnlyPeriod(2012, 7, 16, 2012, 7, 16);
 			_schedulePart = MockRepository.GenerateMock<IScheduleDay>();
 			_scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();

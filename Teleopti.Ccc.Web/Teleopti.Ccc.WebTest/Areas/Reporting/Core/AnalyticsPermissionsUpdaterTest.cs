@@ -5,14 +5,9 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 {
@@ -24,8 +19,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private IAnalyticsPermissionExecutionRepository _analyticsPermissionExecutionRepository;
 		private IPermissionsConverter _permissionsConverter;
-		private IDistributedLockAcquirer _distributedLockAcquirer;
-		private ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 		private MutableNow _now;
 		private Guid businessUnitId;
 		private Guid personId;
@@ -38,8 +31,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository {UseList = true};
 			_analyticsPermissionExecutionRepository = new FakeAnalyticsPermissionExecutionRepository(_now);
 			_permissionsConverter = MockRepository.GenerateMock<IPermissionsConverter>();
-			_distributedLockAcquirer = new FakeDistributedLockAcquirer();
-			_currentAnalyticsUnitOfWork = new ThisAnalyticsUnitOfWork(new FakeUnitOfWork());
 
 			businessUnitId = Guid.NewGuid();
 			personId = Guid.NewGuid();
