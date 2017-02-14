@@ -29,6 +29,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
 			return this;
 		}
+		
+		public FakeAgentStateReadModelPersister WithPersonSkill(Guid person, Guid skill)
+		{
+			_personSkills.Add(new personSkill(person, skill));
+			return this;
+		}
+
+		private class personSkill
+		{
+			public Guid PersonId { get; }
+			public Guid SkillId { get; }
+
+			public personSkill(Guid personId, Guid skillId)
+			{
+				PersonId = personId;
+				SkillId = skillId;
+			}
+		}
 
 		public IEnumerable<AgentStateReadModel> Models => _data.Values.ToArray();
 
@@ -191,9 +209,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
-				return readForSitesTeamsAndSkills(siteIds, teamIds, skillIds);
+				return forSitesTeamsAndSkills(siteIds, teamIds, skillIds);
 			if (siteIds != null && teamIds != null)
-				 return readForSitesAndTeams(siteIds, teamIds);
+				 return forSitesAndTeams(siteIds, teamIds);
 			if (siteIds != null && skillIds != null)
 				return ReadForSitesAndSkills(siteIds, skillIds);
 			if (siteIds != null )
@@ -205,12 +223,91 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return ReadForSkills(skillIds);
 		}
 
+		private IEnumerable<AgentStateReadModel> forSitesTeamsAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return withSkill(forSitesAndTeams(siteIds, teamIds), skillIds);
+		}
+
+		private IEnumerable<AgentStateReadModel> forSitesAndTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
+		{
+			return forSites(siteIds).Concat(forTeams(teamIds)).Distinct();
+		}
+
+		public IEnumerable<AgentStateReadModel> ReadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		{
+			return withSkill(forSites(siteIds), skillIds);
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
+		{
+			return forSites(siteIds);
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return forTeamsAndSkills(teamIds, skillIds);
+		}
+
+		private IEnumerable<AgentStateReadModel> forTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return withSkill(forTeams(teamIds), skillIds);
+		}
+
+		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
+		{
+			return forTeams(teamIds);
+		}
+
+		public IEnumerable<AgentStateReadModel> ReadForSkills(IEnumerable<Guid> skillIds)
+		{
+			return forSkill(skillIds);
+		}
+
+		private IEnumerable<AgentStateReadModel> forSites(IEnumerable<Guid> siteIds)
+		{
+			return from model in _data.Values
+				   from siteId in siteIds
+				   where siteId == model.SiteId
+				   select model;
+		}
+
+		private IEnumerable<AgentStateReadModel> forTeams(IEnumerable<Guid> teamIds)
+		{
+			return
+				from model in _data.Values
+				from team in teamIds
+				where team == model.TeamId
+				select model;
+		}
+
+		private IEnumerable<AgentStateReadModel> forSkill(IEnumerable<Guid> skillIds)
+		{
+			return
+				from model in
+					withSkill(
+						_data.Values,
+						skillIds)
+				select model;
+		}
+
+		private IEnumerable<AgentStateReadModel> withSkill(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid> skillIds)
+		{
+			return
+				from model in models
+				from personSkill in _personSkills
+				from skill in skillIds
+				where
+					model.PersonId == personSkill.PersonId &&
+					personSkill.SkillId == skill
+				select model;
+		}
+		
 		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
-				return readInAlarmForSitesTeamsAndSkills(siteIds, teamIds, skillIds);
+				return inAlarm(ReadFor(siteIds, teamIds, skillIds));
 			if (siteIds != null && teamIds != null)
-				return readInAlarmForSitesAndTeams(siteIds, teamIds);
+				return inAlarm(ReadFor(siteIds, teamIds, null));
 			if (siteIds != null && skillIds != null)
 				return ReadInAlarmForSitesAndSkills(siteIds, skillIds);
 			if (siteIds != null)
@@ -221,299 +318,70 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				return ReadInAlarmForTeams(teamIds);
 			return ReadInAlarmForSkills(skillIds);
 		}
-
-		private IEnumerable<AgentStateReadModel> readInAlarmForSitesAndTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
+		
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
-			return
-				from model in _data.Values
-				from site in siteIds
-				from team in teamIds
-				where (site == model.SiteId || team == model.TeamId) &&
-					  model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
+			return inAlarm(ReadFor(siteIds, null, skillIds));
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForSites(IEnumerable<Guid> siteIds)
+		{
+			return inAlarm(ReadFor(siteIds, null, null));
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return inAlarm(ReadFor(null, teamIds, skillIds));
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeams(IEnumerable<Guid> teamIds)
+		{
+			return inAlarm(ReadFor(null, teamIds, null));
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForSkills(IEnumerable<Guid> skillIds)
+		{
+			return inAlarm(ReadFor(null, null, skillIds));
 		}
 
-		private IEnumerable<AgentStateReadModel> readInAlarmForSitesTeamsAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		private IEnumerable<AgentStateReadModel> inAlarm(IEnumerable<AgentStateReadModel> models)
 		{
-			return
-				from model in _data.Values
-				from personSkill in _personSkills
-				from siteId in siteIds
-				from teamId in teamIds
-				from skillId in skillIds
-				where model.PersonId == personSkill.PersonId &&
-					  personSkill.SkillId == skillId &&
-					  (model.SiteId == siteId || model.TeamId == teamId) &&
-					  model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
+			return from model in models
+				   where model.AlarmStartTime <= _now.UtcDateTime()
+				   orderby model.AlarmStartTime
+				   select model;
 		}
-
+		
 		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
-				return readInAlarmExcludingPhoneStatesForSitesTeamsAndSkills(siteIds, teamIds, skillIds, excludedStates);
+				return excludingStateGroups(ReadInAlarmFor(siteIds, teamIds, skillIds), excludedStates);
 			if (siteIds != null && teamIds != null)
-				return readInAlarmExcludingPhoneStatesForSitesAndTeams(siteIds, teamIds, excludedStates);
+				return excludingStateGroups(ReadInAlarmFor(siteIds, teamIds, null), excludedStates);
 			if (siteIds != null && skillIds != null)
-				return ReadInAlarmExcludingPhoneStatesForSitesAndSkill(siteIds, skillIds, excludedStates);
+				return excludingStateGroups(ReadInAlarmFor(siteIds, null, skillIds), excludedStates);
 			if (siteIds != null)
-				return ReadInAlarmExcludingPhoneStatesForSites(siteIds, excludedStates);
+				return excludingStateGroups(ReadInAlarmFor(siteIds, null , null), excludedStates);
 			if (teamIds != null && skillIds != null)
-				return ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(teamIds, skillIds, excludedStates);
+				return excludingStateGroups(ReadInAlarmFor(null, teamIds, skillIds), excludedStates);
 			if (teamIds != null)
-				return ReadInAlarmExcludingPhoneStatesForTeams(teamIds, excludedStates);
-			return ReadInAlarmExcludingPhoneStatesForSkills(skillIds, excludedStates);
+				return excludingStateGroups(ReadInAlarmFor(null, teamIds, null), excludedStates);
+			return excludingStateGroups(ReadInAlarmFor(null, null, skillIds), excludedStates);
 		}
-
-		private IEnumerable<AgentStateReadModel> readInAlarmExcludingPhoneStatesForSitesTeamsAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return
-			from model in _data.Values
-			from site in siteIds
-			from team in teamIds
-			from skill in skillIds
-			from personSkill in _personSkills
-			from excludedStateGroup in excludedStateGroupIds
-			where (site == model.SiteId || team == model.TeamId)
-				&& (model.PersonId == personSkill.PersonId && personSkill.SkillId == skill)
-				  && model.AlarmStartTime <= _now.UtcDateTime()
-				  && excludedStateGroup != model.StateGroupId
-			orderby model.AlarmStartTime
-			select model;
-		}
-
-		private IEnumerable<AgentStateReadModel> readInAlarmExcludingPhoneStatesForSitesAndTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds)
-		{
-
-			return
-				from model in _data.Values
-				from site in siteIds
-				from team in teamIds
-				from excludedStateGroup in excludedStateGroupIds
-				where (site == model.SiteId || team == model.TeamId)
-					  && model.AlarmStartTime <= _now.UtcDateTime()
-					  && excludedStateGroup != model.StateGroupId
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
-		{
-			return
-				from model in _data.Values
-				from site in siteIds
-				where site == model.SiteId
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
-		{
-			return
-				from model in _data.Values
-				from team in teamIds
-				where team == model.TeamId
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadForSkills(IEnumerable<Guid> skillIds)
-		{
-			return
-				from model in _data.Values
-				from personSkill in _personSkills
-				from skill in skillIds
-				where
-					model.PersonId == personSkill.PersonId &&
-					personSkill.SkillId == skill
-				select model;
-		}
-
-		private IEnumerable<AgentStateReadModel> readForSitesAndTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
-		{
-			return
-				from model in _data.Values
-				from siteId in siteIds
-				from teamId in teamIds
-				where model.SiteId == siteId || model.TeamId == teamId
-				select model;
-
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
-		{
-			return
-				from model in _data.Values
-				from personSkill in _personSkills
-				from skillId in skillIds
-				from siteId in siteIds
-				where model.PersonId == personSkill.PersonId &&
-					  personSkill.SkillId == skillId &&
-					  model.SiteId == siteId
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			return
-				from model in _data.Values
-				from personSkill in _personSkills
-				from skillId in skillIds
-				from teamId in teamIds
-				where model.PersonId == personSkill.PersonId &&
-					  personSkill.SkillId == skillId &&
-					  model.TeamId == teamId
-				select model;
-		}
-
-
-		private IEnumerable<AgentStateReadModel> readForSitesTeamsAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			return
-			from model in _data.Values
-			from personSkill in _personSkills
-			from skillId in skillIds
-			from siteId in siteIds
-			from teamId in teamIds
-			where model.PersonId == personSkill.PersonId &&
-				  personSkill.SkillId == skillId &&
-				  (model.SiteId == siteId || model.TeamId == teamId)
-
-			select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForSites(IEnumerable<Guid> siteIds)
-		{
-			return
-				from model in _data.Values
-				from site in siteIds
-				where site == model.SiteId &&
-					  model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeams(IEnumerable<Guid> teamIds)
-		{
-			return
-				from model in _data.Values
-				from team in teamIds
-				where team == model.TeamId &&
-					  model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForSkills(IEnumerable<Guid> skillIds)
-		{
-			return
-				from model in _data.Values
-				from personSkill in _personSkills
-				from skill in skillIds
-				where model.PersonId == personSkill.PersonId &&
-					  personSkill.SkillId == skill &&
-					  model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForSitesAndSkills(IEnumerable<Guid> siteIds,
-			IEnumerable<Guid> skillIds)
-		{
-			return
-				from model in _data.Values
-				from personSkill in _personSkills
-				from siteId in siteIds
-				from skillId in skillIds
-				where model.PersonId == personSkill.PersonId &&
-					  personSkill.SkillId == skillId &&
-					  model.SiteId == siteId &&
-					  model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeamsAndSkills(IEnumerable<Guid> teamIds,
-			IEnumerable<Guid> skillIds)
-		{
-			return
-				from model in _data.Values
-				from personSkill in _personSkills
-				from teamId in teamIds
-				from skillId in skillIds
-				where model.PersonId == personSkill.PersonId &&
-					  personSkill.SkillId == skillId &&
-					  model.TeamId == teamId &&
-					  model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSites(
-			IEnumerable<Guid> siteIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return
-				from model in _data.Values
-				from site in siteIds
-				from excludedStateGroup in excludedStateGroupIds
-				where site == model.SiteId
-					  && model.AlarmStartTime <= _now.UtcDateTime()
-					  && excludedStateGroup != model.StateGroupId
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeams(
-			IEnumerable<Guid> teamIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return
-				from model in _data.Values
-				from team in teamIds
-				from excludedStateGroup in excludedStateGroupIds
-				where team == model.TeamId
-					  && model.AlarmStartTime <= _now.UtcDateTime()
-					  && excludedStateGroup != model.StateGroupId
-				orderby model.AlarmStartTime
-				select model;
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSkills(
-			IEnumerable<Guid> skillIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return
-				from model in _data.Values
-				from skill in skillIds
-				from personSkill in _personSkills
-				from excludedStateGroup in excludedStateGroupIds
-				where model.PersonId == personSkill.PersonId && personSkill.SkillId == skill
-					  && model.AlarmStartTime <= _now.UtcDateTime()
-					  && excludedStateGroup != model.StateGroupId
-				orderby model.AlarmStartTime
-				select model;
-		}
-
+		
 		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSitesAndSkill(
 			IEnumerable<Guid> siteIds,
 			IEnumerable<Guid> skillIds,
 			IEnumerable<Guid?> excludedStateGroupIds)
 		{
-			return
-				from model in _data.Values
-				from skill in skillIds
-				from personSkill in _personSkills
-				from site in siteIds
-				from excludedStateGroup in excludedStateGroupIds
-				where model.PersonId == personSkill.PersonId &&
-					  model.SiteId == site &&
-					  personSkill.SkillId == skill &&
-					  model.AlarmStartTime <= _now.UtcDateTime() &&
-					  excludedStateGroup != model.StateGroupId
-				orderby model.AlarmStartTime
-				select model;
+			return excludingStateGroups(ReadInAlarmForSitesAndSkills(siteIds, skillIds), excludedStateGroupIds);
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSites(
+			IEnumerable<Guid> siteIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			return excludingStateGroups(ReadInAlarmForSites(siteIds), excludedStateGroupIds);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(
@@ -521,39 +389,33 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			IEnumerable<Guid> skillIds,
 			IEnumerable<Guid?> excludedStateGroupIds)
 		{
+			return excludingStateGroups(ReadInAlarmForTeamsAndSkills(teamIds, skillIds), excludedStateGroupIds);
+		}
+		
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeams(
+			IEnumerable<Guid> teamIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			return excludingStateGroups(ReadInAlarmForTeams(teamIds), excludedStateGroupIds);
+		}
+
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSkills(
+			IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			return excludingStateGroups(ReadInAlarmForSkills(skillIds), excludedStateGroupIds);
+		}
+
+		private static IEnumerable<AgentStateReadModel> excludingStateGroups(
+			IEnumerable<AgentStateReadModel> models,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
 			return
-				from model in _data.Values
-				from skill in skillIds
-				from personSkill in _personSkills
-				from team in teamIds
+				from model in models
 				from excludedStateGroup in excludedStateGroupIds
-				where model.PersonId == personSkill.PersonId &&
-					  model.TeamId == team &&
-					  personSkill.SkillId == skill &&
-					  model.AlarmStartTime <= _now.UtcDateTime() &&
-					  excludedStateGroup != model.StateGroupId
-				orderby model.AlarmStartTime
+				where excludedStateGroup != model.StateGroupId
 				select model;
 		}
 
-
-
-		public FakeAgentStateReadModelPersister WithPersonSkill(Guid person, Guid skill)
-		{
-			_personSkills.Add(new personSkill(person, skill));
-			return this;
-		}
-
-		private class personSkill
-		{
-			public Guid PersonId { get; }
-			public Guid SkillId { get; }
-
-			public personSkill(Guid personId, Guid skillId)
-			{
-				PersonId = personId;
-				SkillId = skillId;
-			}
-		}
 	}
 }
