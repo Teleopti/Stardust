@@ -19,7 +19,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[TestFixture]
 	[RequestPerformanceTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
