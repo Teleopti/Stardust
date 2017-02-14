@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class AbsenceRequestIntradayFilter : IAbsenceRequestIntradayFilter 
+	public class AbsenceRequestIntradayFilter : IAbsenceRequestIntradayFilter
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestIntradayFilter));
 
@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
-		public AbsenceRequestIntradayFilter(IConfigReader configReader, 
-			IIntradayRequestProcessor intradayRequestProcessor, 
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now, 
-			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
+		public AbsenceRequestIntradayFilter(IConfigReader configReader,
+											IIntradayRequestProcessor intradayRequestProcessor,
+											IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
+											IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
 			_configReader = configReader;
 			_intradayRequestProcessor = intradayRequestProcessor;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 		}
 
-		
+
 		public void Process(IPersonRequest personRequest)
 		{
 			personRequest.Pending();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 
 			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(24));
-			
+
 			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
 			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 
@@ -76,4 +76,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 	}
+
+	public class AbsenceRequestIntradayFilterIntradayRequestDisabled : IAbsenceRequestIntradayFilter
+	{
+		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
+
+		public AbsenceRequestIntradayFilterIntradayRequestDisabled(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+		{
+			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
+		}
+
+		public void Process(IPersonRequest personRequest)
+		{
+			personRequest.Pending();
+
+			var queuedAbsenceRequest = new QueuedAbsenceRequest
+			{
+				PersonRequest = personRequest.Id.GetValueOrDefault(),
+				Created = personRequest.CreatedOn.GetValueOrDefault(),
+				StartDateTime = personRequest.Request.Period.StartDateTime,
+				EndDateTime = personRequest.Request.Period.EndDateTime
+			};
+			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+		}
+	}
+
 }
