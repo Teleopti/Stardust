@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					row.TimePart.PaidTimeActivityMinutes,
 					row.TimePart.PaidTimeAbsenceMinutes,
 					row.PersonPart.BusinessUnitId,
-					row.DatePart.DatasourceUpdateDate == DateTime.MinValue ? DateTime.UtcNow : row.DatePart.DatasourceUpdateDate,
+					getSqlDateCompatibleOrDefault(row.DatePart.DatasourceUpdateDate, DateTime.UtcNow),
 					row.TimePart.OverTimeId);
 			}
 
@@ -156,7 +157,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void DeleteFactSchedule(int dateId, int personId, int scenarioId)
 		{
-			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete @shift_startdate_local_id=:{nameof(dateId)}, @person_id=:{nameof(personId)}, @scenario_id=:{nameof(scenarioId)}")
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete 
+												@shift_startdate_local_id=:{nameof(dateId)}, 
+												@person_id=:{nameof(personId)}, 
+												@scenario_id=:{nameof(scenarioId)}")
 				.SetInt32(nameof(dateId), dateId)
 				.SetInt32(nameof(personId), personId)
 				.SetInt32(nameof(scenarioId), scenarioId)
@@ -176,7 +180,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetGuid(nameof(personId), personId)
 				.SetGuid(nameof(scenarioId), scenarioId)
 				.SetGuid(nameof(businessUnitId), businessUnitId)
-				.SetDateTime(nameof(datasourceUpdateDate), datasourceUpdateDate == DateTime.MinValue ? DateTime.UtcNow : datasourceUpdateDate)
+				.SetDateTime(nameof(datasourceUpdateDate), getSqlDateCompatibleOrDefault(datasourceUpdateDate, DateTime.UtcNow))
 				.ExecuteUpdate();
 		}
 
@@ -219,7 +223,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select person_id {nameof(AnalyticsPersonBusinessUnit.PersonId)}, business_unit_id {nameof(AnalyticsPersonBusinessUnit.BusinessUnitId)} from mart.dim_person WITH (NOLOCK) WHERE person_period_code =:{nameof(personPeriodCode)} ")
+				$@"SELECT 
+						person_id {nameof(AnalyticsPersonBusinessUnit.PersonId)}, 
+						business_unit_id {nameof(AnalyticsPersonBusinessUnit.BusinessUnitId)} 
+					FROM mart.dim_person WITH (NOLOCK) 
+					WHERE person_period_code =:{nameof(personPeriodCode)} ")
 				.SetGuid(nameof(personPeriodCode), personPeriodCode)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonBusinessUnit)))
 				.SetReadOnly(true)
@@ -230,7 +238,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select shift_length_id {nameof(AnalyticsShiftLength.Id)}, shift_length_m {nameof(AnalyticsShiftLength.ShiftLength)} from mart.dim_shift_length WITH (NOLOCK)")
+				$@"SELECT 
+						shift_length_id {nameof(AnalyticsShiftLength.Id)}, 
+						shift_length_m {nameof(AnalyticsShiftLength.ShiftLength)} 
+					FROM mart.dim_shift_length WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsShiftLength)))
 				.SetReadOnly(true)
 				.List<IAnalyticsShiftLength>();
@@ -241,6 +252,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_dim_shift_length_id_get @shift_length_m=:{nameof(shiftLength)}")
 				.SetInt32(nameof(shiftLength), shiftLength)
 				.UniqueResult<int>();
+		}
+
+		private static DateTime getSqlDateCompatibleOrDefault(DateTime input, DateTime defaultValue)
+		{
+			if (input < SqlDateTime.MinValue.Value || input > SqlDateTime.MaxValue.Value)
+				return defaultValue;
+			return input;
 		}
 	}
 
