@@ -395,6 +395,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<IntradayDecisionMaker>().As<IIntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
+			builder.RegisterType<AgentGroupStaffLoader>().As<IAgentGroupStaffLoader>().SingleInstance();
 			builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
 			builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();

@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();
 			builder.RegisterType<ClearScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
 
-			builder.RegisterType<AgentGroupStaffLoader>().As<IAgentGroupStaffLoader>().SingleInstance();
 		}
 	}
 }
