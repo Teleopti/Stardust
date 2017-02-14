@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class IntradayOptimizationReduceUnnecessaryCallsTest : ISetup
 	{
-		public IOptimizationCommand Target;
+		public OptimizationCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
