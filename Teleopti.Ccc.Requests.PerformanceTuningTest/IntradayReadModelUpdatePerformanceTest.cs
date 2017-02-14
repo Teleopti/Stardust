@@ -16,16 +16,16 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[TestFixture]
 	[RequestPerformanceTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
-	public class IntradayReadModelUpdatePerformanceTest
+	public class IntradayReadModelUpdatePerformanceTest : PerformanceTestWithOneTimeSetup
 	{
-		public UpdateStaffingLevelReadModel UpdateStaffingLevel;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public IConfigReader ConfigReader;
 
-		public void setup()
+		public override void OneTimeSetUp()
 		{
 			Now.Is("2016-03-26 07:00");
 			var now = Now.UtcDateTime();
@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		[Test]
 		public void UpdateReadModel()
 		{
-			setup();
 			Now.Is("2016-03-26 07:00");
 			var now = Now.UtcDateTime();
 
