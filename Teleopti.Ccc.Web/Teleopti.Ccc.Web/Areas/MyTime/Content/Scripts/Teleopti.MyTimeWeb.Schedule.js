@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			type: "GET",
 			data: {
 				date: selectedDate,
-				staffingPossiblity: vm.possibilityType
+				staffingPossiblity: vm.probabilityType
 			},
 			success: function (data) {
 				_bindData(data);
@@ -128,7 +128,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.shiftExchangePermission = ko.observable();
 		self.personAccountPermission = ko.observable();
-		self.viewPossibilityPermission = ko.observable();
+		self.viewProbabilityPermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
@@ -168,9 +168,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				self.selectedDateSubscription.dispose();
 			self.selectedDate(date);
 			self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-				var possibilityPart = self.staffingPossibilityEnabled ? "/Possibility/" + self.possibilityType() : "";
+				var probabilityPart = self.staffingProbabilityEnabled ? "/Probability/" + self.probabilityType() : "";
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD"))
-					+ possibilityPart);
+					+ probabilityPart);
 			});
 		};
 
@@ -178,17 +178,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.selectedDate(self.nextWeekDate());
 		};
 
-		var validPossibilitiesTypes = [
-			userTexts.hideStaffingPossibility,
-			userTexts.showAbsencePossibility,
-			userTexts.showOvertimePossibility
+		var validProbabilitiesTypes = [
+			userTexts.hideStaffingProbability,
+			userTexts.showAbsenceProbability,
+			userTexts.showOvertimeProbability
 		];
 
-		self.possibilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().possibility);
-		self.possibilityLabel = function () { return validPossibilitiesTypes[self.possibilityType()] };
+		self.probabilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().probability);
+		self.probabilityLabel = function () { return validProbabilitiesTypes[self.probabilityType()] };
 
-		self.switchPossibilityType = function (possibilityType) {
-			self.possibilityType(possibilityType);
+		self.switchProbabilityType = function (probabilityType) {
+			self.probabilityType(probabilityType);
 			_fetchData();
 		}
 
@@ -201,9 +201,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.week = function (date) {
-			var possibilityPart = self.staffingPossibilityEnabled ? "/Possibility/" + self.possibilityType() : "";
+			var probabilityPart = self.staffingProbabilityEnabled ? "/Probability/" + self.probabilityType() : "";
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"))
-				+ possibilityPart);
+				+ probabilityPart);
 		};
 
 		self.month = function () {
@@ -386,7 +386,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
-			self.viewPossibilityPermission(data.ViewPossibilityPermission);
+			self.viewProbabilityPermission(data.ViewPossibilityPermission);
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
@@ -429,7 +429,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 	});
 
-	var DayViewModel = function (day, possibility, parent) {
+	var DayViewModel = function (day, probabilities, parent) {
 		var self = this;
 
 		self.fixedDate = ko.observable(day.FixedDate);
@@ -619,12 +619,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return continousPeriods;
 		};
 
-		var createPossibilityModel = function (rawPossibility) {
-			if (rawPossibility == undefined || rawPossibility.length === 0) return [];
+		var createProbabilityModel = function (rawProbabilities) {
+			if (rawProbabilities == undefined || rawProbabilities.length === 0) return [];
 
-			// If today is full day absence or dayoff, Then hide absence possibility
-			var possibilityType = parent.possibilityType();
-			if (possibilityType === 1 && (day.IsFullDayAbsence || day.IsDayOff)) {
+			// If today is full day absence or dayoff, Then hide absence probability
+			var probabilityType = parent.probabilityType();
+			if (probabilityType === 1 && (day.IsFullDayAbsence || day.IsDayOff)) {
 				return [];
 			}
 
@@ -675,15 +675,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				}
 			}
 
-			var possibilityNames = ["fair", "good"];
-			var possibilityLabels = [parent.userTexts.fair, parent.userTexts.good];
-			var possibilities = [];
-			possibilities.push({
+			var probabilityNames = ["low", "high"];
+			var probabilityLabels = [parent.userTexts.low, parent.userTexts.high];
+			var probabilities = [];
+			probabilities.push({
 				styleJson: {
 					"top": 0,
 					"height": Math.round(scheduleHeight * shiftStartPosition) + "px"
 				},
-				cssClass: "possibility-none",
+				cssClass: "probability-none",
 				tooltips: ""
 			});
 
@@ -691,17 +691,18 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			var continousPeriods = [];
 			var tooltipsTitle = "";
-			if (possibilityType === 1) {
-				tooltipsTitle = parent.userTexts.possibilityForAbsence;
+			if (probabilityType === 1) {
+				tooltipsTitle = parent.userTexts.probabilityForAbsence;
 				continousPeriods = getContinousPeriods(day.Periods);
-			} else if (possibilityType === 2) {
-				tooltipsTitle = parent.userTexts.possibilityForOvertime;
+			} else if (probabilityType === 2) {
+				tooltipsTitle = parent.userTexts.probabilityForOvertime;
 			}
 
-			for (var j = 0; j < rawPossibility.length; j++) {
-				var intervalPossibility = rawPossibility[j];
-				var startMoment = moment(intervalPossibility.StartTime);
-				var endMoment = moment(intervalPossibility.EndTime);
+			for (var j = 0; j < rawProbabilities.length; j++) {
+				var intervalProbability = rawProbabilities[j];
+				console.log("intervalProbability:", JSON.stringify(intervalProbability));
+				var startMoment = moment(intervalProbability.StartTime);
+				var endMoment = moment(intervalProbability.EndTime);
 
 				var intervalStartTime = startMoment.format("HH:mm");
 				var intervalEndTime = endMoment.isSame(startMoment, "day") ? endMoment.format("HH:mm") : "23:59";
@@ -710,8 +711,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				if (!visible) continue;
 
 				var inScheduleTimeRange = false;
-				if (possibilityType === 1) {
-					// Show absence possibility within schedule time range only
+				if (probabilityType === 1) {
+					// Show absence probability within schedule time range only
 					for (var m = 0; m < continousPeriods.length; m++) {
 						var continousPeriod = continousPeriods[m];
 						if (continousPeriod.startTime <= intervalStartTime && intervalEndTime <= continousPeriod.endTime) {
@@ -723,34 +724,34 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					inScheduleTimeRange = true;
 				}
 
-				var index = intervalPossibility.Possibility;
+				var index = intervalProbability.Possibility;
 				var tooltips = inScheduleTimeRange
 					? "<div style='text-align: center'>" +
 					"  <div>" + tooltipsTitle + "</div>" +
-					"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + possibilityLabels[index] + "</div>" +
+					"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + probabilityLabels[index] + "</div>" +
 					"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalStartTime + " - " + intervalEndTime + "</div>" +
 					"</div>"
 					: "";
 
-				possibilities.push({
-					cssClass: "possibility-" + (inScheduleTimeRange ? possibilityNames[index] : "none"),
+				probabilities.push({
+					cssClass: "probability-" + (inScheduleTimeRange ? probabilityNames[index] : "none"),
 					tooltips: tooltips
 				});
 			}
 
-			var heightPerInterval = totalHeight / (possibilities.length - 1);
-			for (var k = 1; k < possibilities.length; k++) {
+			var heightPerInterval = totalHeight / (probabilities.length - 1);
+			for (var k = 1; k < probabilities.length; k++) {
 				var topPositionPercentage = shiftStartPosition + heightPerInterval * (k - 1);
-				possibilities[k].styleJson = {
+				probabilities[k].styleJson = {
 					"top": scheduleHeight * topPositionPercentage + "px",
 					"height": scheduleHeight * heightPerInterval + "px"
 				};
 			}
 
-			return possibilities;
+			return probabilities;
 		}
 
-		self.possibility = createPossibilityModel(possibility);
+		self.probability = createProbabilityModel(probabilities);
 
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent.userTexts, self);
@@ -843,7 +844,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var width;
 			if (layer.IsOvertimeAvailability) {
 				width = 20;
-			} else if (parent.possibility && parent.possibility.length > 0) {
+			} else if (parent.probability && parent.probability.length > 0) {
 				width = 115;
 			} else {
 				width = 127;
@@ -1021,7 +1022,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				};
 
 				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
-				vm.staffingPossibilityEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingPossibility_41608");
+				vm.staffingProbabilityEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
 
 				callback();
 				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");

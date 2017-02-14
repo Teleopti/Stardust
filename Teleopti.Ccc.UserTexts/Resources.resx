@@ -15519,27 +15519,27 @@ These options are activated:
     <comment>Status text scheduler when optimizing max seats</comment>
   </data>
   <data name="ViewPossibility" xml:space="preserve">
-    <value>View Possibility</value>
-    <comment>use in MyTime Web, permission for view possibility of absence or overtime approved on intraday</comment>
+    <value>View staffing probability</value>
+    <comment>use in MyTime Web, permission for view Probability of absence or overtime approved on intraday</comment>
   </data>
-  <data name="HideStaffingPossibility" xml:space="preserve">
-    <value>Hide staffing possibility</value>
+  <data name="HideStaffingProbability" xml:space="preserve">
+    <value>Hide staffing probability</value>
     <comment>Dropdown list item in MyTime Web</comment>
   </data>
-  <data name="ShowAbsencePossibility" xml:space="preserve">
-    <value>Show absence possibility</value>
+  <data name="ShowAbsenceProbability" xml:space="preserve">
+    <value>Show absence probability</value>
     <comment>Dropdown list item in MyTime Web</comment>
   </data>
-  <data name="ShowOvertimePossibility" xml:space="preserve">
-    <value>Show overtime possibility</value>
+  <data name="ShowOvertimeProbability" xml:space="preserve">
+    <value>Show overtime probability</value>
     <comment>Dropdown list item in MyTime Web</comment>
   </data>
-  <data name="PossibilityToGetAbsenceColon" xml:space="preserve">
-    <value>Possibility to get absence:</value>
+  <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
+    <value>Probability to get absence:</value>
     <comment>Title for tooltips in MyTime Web</comment>
   </data>
-  <data name="PossibilityToGetOvertimeColon" xml:space="preserve">
-    <value>Possibility to get overtime:</value>
+  <data name="ProbabilityToGetOvertimeColon" xml:space="preserve">
+    <value>Probability to get overtime:</value>
     <comment>Title for tooltips in MyTime Web</comment>
   </data>
   <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
