@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Intraday
 {
-	public class PersonProviderForOvertime : IPersonProviderForOvertime
+	public class PersonForOvertimeProvider : IPersonForOvertimeProvider
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public PersonProviderForOvertime(ICurrentUnitOfWork unitOfWork)
+		public PersonForOvertimeProvider(ICurrentUnitOfWork unitOfWork)
 		{
 			_currentUnitOfWork = unitOfWork;
 		}
 
-		public IList<SuggestedPersonsModel> GetPerson(List<Guid> skillIds, DateTime startDateTime, DateTime endDateTime)
+		public IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime)
 		{
 			const string sql = "exec StaffingOvertimeSuggestions @SkillIds =:skillIds, "
 							   + "@StartDateTime=:startDateTime, @EndDateTime=:endDateTime";
@@ -29,15 +30,5 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		}
 	}
 
-	public class SuggestedPersonsModel
-	{
-		public Guid PersonId { get; set; }
-		public DateTime End { get; set; }
-		public int TimeToAdd { get; set; }
-	}
-
-	public interface IPersonProviderForOvertime
-	{
-		IList<SuggestedPersonsModel> GetPerson(List<Guid> skillIds, DateTime startDateTime, DateTime endDateTime);
-	}
+	
 }

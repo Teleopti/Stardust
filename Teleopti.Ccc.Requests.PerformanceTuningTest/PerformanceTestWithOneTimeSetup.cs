@@ -4,7 +4,9 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -68,6 +70,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
+
 		}
 	}
 }

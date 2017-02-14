@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		{
 			var skills = _skillRepository.LoadAllSkills().ToList();
 
-			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), period).ToList();
+			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, period).ToList();
 			skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 			var relevantSkillStaffPeriods =
@@ -119,16 +120,54 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
 
-		public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] skillIds, DateTimePeriod period)
+		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period)
 		{
 			return
-				_scheduleForecastSkillReadModelRepository.GetBySkills(skillIds,
+				_scheduleForecastSkillReadModelRepository.GetBySkills(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(),
 					period.StartDateTime, period.EndDateTime).ToList();
+		}
+	}
+
+	public class ExtractSkillForecastIntervals : IExtractSkillForecastIntervals
+	{
+		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly ICurrentScenario _currentScenario;
+
+		public ExtractSkillForecastIntervals(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario)
+		{
+			_skillDayRepository = skillDayRepository;
+			_currentScenario = currentScenario;
+		}
+
+		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period)
+		{
+			var returnList = new List<SkillStaffingInterval>();
+			var skillDays =  _skillDayRepository.FindReadOnlyRange(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), skills, _currentScenario.Current());
+			foreach (var skillDay in skillDays)
+			{
+				returnList.AddRange(getSkillStaffingIntervals(skillDay));
+			}
+			return returnList;
+		}
+
+		private IEnumerable<SkillStaffingInterval> getSkillStaffingIntervals(ISkillDay skillDay)
+		{
+			var skillStaffPeriods = skillDay.CompleteSkillStaffPeriodCollection;
+
+			return skillStaffPeriods.Select(skillStaffPeriod => new SkillStaffingInterval
+			{
+				SkillId = skillDay.Skill.Id.GetValueOrDefault(),
+				StartDateTime = skillStaffPeriod.Period.StartDateTime,
+				EndDateTime =skillStaffPeriod.Period.EndDateTime,
+				Forecast = skillStaffPeriod.FStaff,
+				ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage,
+				StaffingLevel = 0,
+			});
 		}
 	}
 
 	public interface IExtractSkillForecastIntervals
 	{
-		IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] skillIds, DateTimePeriod period);
+		IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period);
 	}
 }

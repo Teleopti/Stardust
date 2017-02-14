@@ -738,6 +738,8 @@
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeWithoutStateHolder.cs" />
     <Compile Include="Staffing\AddOverTime.cs" />
     <Compile Include="Staffing\AddOverTimeHandler.cs" />
+    <Compile Include="Staffing\CalculateOvertimeSuggestionProvider.cs" />
+    <Compile Include="Staffing\IPersonForOvertimeProvider.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />

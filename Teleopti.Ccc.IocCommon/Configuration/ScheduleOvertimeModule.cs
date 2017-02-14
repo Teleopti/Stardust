@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Intraday;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -22,6 +23,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRelativeDifferenceCalculator>().As<IOvertimeRelativeDifferenceCalculator>();
 			builder.RegisterType<ScheduleOvertimeWithoutStateHolder>().SingleInstance();
 			builder.RegisterType<AddOverTime>().As<IAddOverTime>().SingleInstance();
+			builder.RegisterType<CalculateOvertimeSuggestionProvider>().As<CalculateOvertimeSuggestionProvider>().SingleInstance();
+			builder.RegisterType<PersonForOvertimeProvider>().As<IPersonForOvertimeProvider>().SingleInstance();
+
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318))
 			{
 				builder.RegisterType<PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider>().As<IPersonSkillsForScheduleDaysOvertimeProvider>().SingleInstance();
