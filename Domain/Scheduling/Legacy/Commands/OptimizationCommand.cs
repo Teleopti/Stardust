@@ -86,23 +86,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
 
-			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
-
-			GroupPageLight selectedGroupPage;
-
-			if (optimizationMethodBackToLegalState)
-			{
-				selectedGroupPage = optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPageForTeamBlockPer;
-			}
-			else
-			{
-				selectedGroupPage = optimizationPreferences.Extra.TeamGroupPage;
-			}
-
-			var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(schedulerStateHolder.AllPermittedPersons, schedulerStateHolder.Schedules, groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider, selectedGroupPage);
-
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-
 			if (optimizationMethodBackToLegalState)
 			{
 #pragma warning disable 618
@@ -131,23 +114,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 			else
 			{
-				var selectedPersons = _personExtractor.ExtractPersons(selectedSchedules);
+				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 					schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 				var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
-				var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
-					_scheduleDayChangeCallback,
-					tagSetter);
+				var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, tagSetter);
 
 				if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 				{
-					_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod.Value, selectedPersons,
-							optimizationPreferences,
-							rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules,
-							dayOffOptimizationPreferenceProvider);
+					_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod.Value, _personExtractor.ExtractPersons(selectedSchedules),
+							optimizationPreferences, rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules, dayOffOptimizationPreferenceProvider);
 				}
 				else
 				{
+					var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(schedulerStateHolder.AllPermittedPersons, schedulerStateHolder.Schedules, 
+						schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection(), _groupScheduleGroupPageDataProvider, optimizationPreferences.Extra.TeamGroupPage);
+
 					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 					_scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
 						dayOffOptimizationPreferenceProvider, optimizationPreferences, resourceCalculateDelayer, rollbackService);
