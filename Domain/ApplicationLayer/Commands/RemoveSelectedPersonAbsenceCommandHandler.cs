@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -43,12 +44,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);			
 			var personAssignment = scheduleDay.PersonAssignment();
 
-			var periodToMove = personAssignment != null && personAssignment.ShiftLayers.Any()? 
-				personAssignment.Period :
-				scheduleDay.Period;
+			var periodToRemove = personAssignment != null && personAssignment.ShiftLayers.Any()
+				? coverAllDay(personAssignment.Period, personAbsences.Period, person.PermissionInformation.DefaultTimeZone())
+				: scheduleDay.Period;
 
-			command.ErrorMessages = _personAbsenceRemover.RemovePartPersonAbsence(command.Date, person,personAbsences, periodToMove,scheduleRange, command.TrackedCommandInfo).ToList() ;
+			command.ErrorMessages =
+				_personAbsenceRemover.RemovePartPersonAbsence(command.Date, person, personAbsences, periodToRemove, scheduleRange,
+					command.TrackedCommandInfo).ToList();
 			_currentUnitOfWork.Current().PersistAll();
+		}
+
+		private DateTimePeriod coverAllDay(DateTimePeriod period, DateTimePeriod absencePeriod, TimeZoneInfo timezone)
+		{
+			var contains = period.Contains(absencePeriod);
+			if (!contains)
+			{
+				var startTimeLocal = period.StartDateTimeLocal(timezone);
+				var endTimeLocal = period.EndDateTimeLocal(timezone);
+
+				var laterThanZero =
+					endTimeLocal.CompareTo(new DateTime(endTimeLocal.Year, endTimeLocal.Month, endTimeLocal.Day, 0, 0, 0)) > 0;
+				if (laterThanZero)
+				{
+					endTimeLocal = endTimeLocal.AddDays(1);
+				}
+
+				var startAdjusted =
+					TimeZoneHelper.ConvertToUtc(new DateTime(startTimeLocal.Year, startTimeLocal.Month, startTimeLocal.Day, 0, 0, 0),
+						timezone);
+				var endAdjusted =
+					TimeZoneHelper.ConvertToUtc(new DateTime(endTimeLocal.Year, endTimeLocal.Month, endTimeLocal.Day, 0, 0, 0),
+						timezone);
+
+				period = new DateTimePeriod(startAdjusted, endAdjusted);
+			}
+			return period;
 		}
 	}
 }

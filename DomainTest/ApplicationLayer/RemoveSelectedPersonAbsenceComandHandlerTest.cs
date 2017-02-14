@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -234,6 +235,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var allPersonAbsences = _scheduleStorage.LoadAll().Where(s => s is PersonAbsence).ToList();
 
 			allPersonAbsences.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldRemoveByDayWithTimezoneAwarenessWhenRemovingOnMultidayAbsence()
+		{
+			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+			var periodForAbsence = new DateTimePeriod(2017, 2, 20, 0, 2017, 2, 23, 8);
+
+			var absenceLayer = new AbsenceLayer(new Absence(), periodForAbsence);
+			var personAbsence = new PersonAbsence(_person, _scenario.Current(), absenceLayer);
+			personAbsence.WithId();
+			_personAbsenceRepository.Has(personAbsence);
+
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				_person,
+				_scenario.Current(), new DateTimePeriod(2017, 2, 21, 0, 2017, 2, 21, 8));
+
+			_scheduleStorage.Add(personAbsence);
+			_scheduleStorage.Add(personAssignment);
+
+			var command = new RemoveSelectedPersonAbsenceCommand
+			{
+				PersonId = _person.Id.Value,
+				PersonAbsenceId = personAbsence.Id.Value,
+				Date = new DateOnly(2017, 2, 21),
+			};
+
+			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario, _personAbsenceRepository, _scheduleStorage,
+				_personRepository, _personAbsenceRemover, _currentUnitOfWork);
+
+			target.Handle(command);
+
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+
+
+			var allPersonAbsences = _scheduleStorage.LoadAll().Where(s => s is PersonAbsence).ToList();
+			allPersonAbsences.Count.Should().Be.EqualTo(2);
+
+			allPersonAbsences.First().Period.Should().Be.EqualTo(new DateTimePeriod(2017, 2, 20, 0, 2017, 2, 20, 15));
+			allPersonAbsences.Last().Period.Should().Be.EqualTo(new DateTimePeriod(2017, 2, 21, 15, 2017, 2, 23, 8));
 		}
 	}
 }

@@ -98,14 +98,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldRemoveByDayWhenAbsencePeriodNotContainsPeriodToRemove()
+		public void ShouldRemovePartPersonAbsenceWhenAbsencePeriodCoveredPeriodToRemove()
 		{
 			var periodForAbsence = new DateTimePeriod(
 				new DateTime(2016, 03, 1, 13, 0, 0, DateTimeKind.Utc),
 				new DateTime(2016, 03, 4, 17, 0, 0, DateTimeKind.Utc));
 
 			var periodToRemove = new DateTimePeriod(
-				new DateTime(2016, 03, 2, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2016, 03, 3, 8, 0, 0, DateTimeKind.Utc));
 
 			var allPersonAbsences = removePartPersonAbsence(periodForAbsence, periodToRemove).ToList();
@@ -113,10 +113,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.That(
 				allPersonAbsences.Any(
 					pa => pa.Period.StartDateTime == periodForAbsence.StartDateTime
-						  && pa.Period.EndDateTime == new DateTime(2016, 3, 2, 0, 0, 0)));
+						  && pa.Period.EndDateTime == periodToRemove.StartDateTime));
 			Assert.That(
 				allPersonAbsences.Any(
-					pa => pa.Period.StartDateTime == new DateTime(2016, 3, 4, 0, 0, 0)
+					pa => pa.Period.StartDateTime == periodToRemove.EndDateTime
 						  && pa.Period.EndDateTime == periodForAbsence.EndDateTime));
 		}
 

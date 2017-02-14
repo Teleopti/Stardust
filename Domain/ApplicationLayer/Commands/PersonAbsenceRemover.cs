@@ -43,25 +43,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			IPersonAbsence personAbsence, DateTimePeriod periodToRemove, IScheduleRange scheduleRange,
 			TrackedCommandInfo commandInfo = null)
 		{
-			var contains = periodToRemove.Contains(personAbsence.Period);
-			if (!contains)
-			{
-				var y0 = periodToRemove.StartDateTime.Year;
-				var m0 = periodToRemove.StartDateTime.Month;
-				var d0 = periodToRemove.StartDateTime.Day;
-				
-				var y1 = periodToRemove.EndDateTime.Year;
-				var m1 = periodToRemove.EndDateTime.Month;
-				var d1 = periodToRemove.EndDateTime.Day;
-				var laterThanZero = periodToRemove.EndDateTime.CompareTo(new DateTime(y1, m1, d1, 0, 0, 0)) > 0;
-				if (laterThanZero)
-				{
-					d1 = periodToRemove.EndDateTime.AddDays(1).Day;
-				}
-
-				var t = 0;
-				periodToRemove = new DateTimePeriod(y0, m0, d0, t, y1, m1, d1, t);
-			}
 			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsence, commandInfo,
 				scheduleRange, periodToRemove);
 			return errors ?? new List<string>();
