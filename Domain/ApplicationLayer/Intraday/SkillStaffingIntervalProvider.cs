@@ -16,16 +16,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IResourceCalculation _resourceCalculation;
-		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
+		private readonly IExtractSkillForecastIntervals _extractSkillForecastIntervals;
 
 		public SkillStaffingIntervalProvider(SplitSkillStaffInterval splitSkillStaffInterval,
-											 ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, IResourceCalculation resourceCalculation, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
+											 ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, IResourceCalculation resourceCalculation, IExtractSkillForecastIntervals extractSkillForecastIntervals)
 		{
 			_splitSkillStaffInterval = splitSkillStaffInterval;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_skillRepository = skillRepository;
 			_resourceCalculation = resourceCalculation;
-			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
+			_extractSkillForecastIntervals = extractSkillForecastIntervals;
 		}
 
 		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		{
 			var skills = _skillRepository.LoadAllSkills().ToList();
 
-			var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkills(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), period.StartDateTime, period.EndDateTime).ToList();
+			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), period).ToList();
 			skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 			var relevantSkillStaffPeriods =
@@ -107,5 +107,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	{
 		IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution);
 		List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources);
+	}
+
+
+	public class SkillForecastIntervalsFromReadModel : IExtractSkillForecastIntervals
+	{
+		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
+
+		public SkillForecastIntervalsFromReadModel(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
+		{
+			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
+		}
+
+		public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] skillIds, DateTimePeriod period)
+		{
+			return
+				_scheduleForecastSkillReadModelRepository.GetBySkills(skillIds,
+					period.StartDateTime, period.EndDateTime).ToList();
+		}
+	}
+
+	public interface IExtractSkillForecastIntervals
+	{
+		IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] skillIds, DateTimePeriod period);
 	}
 }

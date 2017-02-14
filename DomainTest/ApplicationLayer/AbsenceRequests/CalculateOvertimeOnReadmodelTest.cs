@@ -66,8 +66,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(90),period.StartDateTime.AddMinutes(120)), new[] {skill.Id.GetValueOrDefault()}, 10)
 			});
 
-
-
 			ScheduleForecastSkillReadModelRepository.Persist(new[]
 			{
 				new SkillStaffingInterval
@@ -102,12 +100,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var newStaffing =  Target.CalculateOvertimeResource(new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 11), new[] { skill.Id.GetValueOrDefault() });
 			newStaffing.Count.Should().Be.EqualTo(4);
-			//newStaffing[0].NewStaffing.Should().Be(10);
-			//newStaffing[1].NewStaffing.Should().Be(10);
 			newStaffing[0].NewStaffing.Should().Be(11);
 			newStaffing[1].NewStaffing.Should().Be(11);
-			//newStaffing[2].NewStaffing.Should().Be(1);
-			//newStaffing[3].NewStaffing.Should().Be(1);
 		}
 
 		[Test, Ignore("WIP")]

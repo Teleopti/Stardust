@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EstimatedServiceLevelProvider>().SingleInstance();
 			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();
+			builder.RegisterType<SkillForecastIntervalsFromReadModel>().As<IExtractSkillForecastIntervals>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
