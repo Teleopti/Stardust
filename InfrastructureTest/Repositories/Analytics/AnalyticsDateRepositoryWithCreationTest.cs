@@ -138,9 +138,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			_fakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MaxDate());
-			date.DateDate.Date.Should().Be.EqualTo(new DateTime(2000, 01, 05));
-			date.DateId.Should().Be.EqualTo(createdDate.DateId);
-			date.DateId.Should().Not.Be.LessThan(0);
+			date.DateDate.Date.Should().Be.EqualTo(targetDate + TimeSpan.FromDays(42));
+			date.DateId.Should().Be.EqualTo(createdDate.DateId + 42);
 
 			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}

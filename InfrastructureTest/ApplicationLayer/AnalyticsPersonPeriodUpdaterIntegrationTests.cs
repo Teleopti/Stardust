@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 					var dateList = DateRepository.GetAllPartial();
 					result1.ValidToDateId.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidToDate.Date).DateId);
 					result1.ValidToDateIdLocal.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidToDateLocal.Date).DateId);
-					result1.ValidToDateIdMaxDate.Should().Be.EqualTo(dateList.Last(d => d != AnalyticsDate.Eternity).DateId);
+					result1.ValidToDateIdMaxDate.Should().Be.EqualTo(dateList.Last(d => d != AnalyticsDate.Eternity).DateId - 42);
 					result1.ValidFromDateId.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidFromDate.Date).DateId);
 					result1.ValidFromDateIdLocal.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidFromDateLocal.Date).DateId);
 				});
