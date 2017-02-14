@@ -22,7 +22,7 @@
 								 preselected-team-ids="requests.selectedTeamIds"
 								 class="organization-picker-container"></organization-picker>
 
-			<span ng-keydown="requests.focusSearch($event)" focus-input="requests.toggleSearchFocus" class="people-search-container" ng-keydown="requests.focusSearch($event)">
+			<span ng-keydown="requests.focusSearch($event)" focus-input="requests.toggleSearchFocus" class="people-search-container">
 				<wfm-multiple-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.keyDownOnSearchTermChanged"></wfm-multiple-search-input>
 				<span class="pointer" ng-class="{'focusing-search':requests.toggleSearchFocus}" ng-click="requests.keyDownOnSearchTermChanged()">
 					<i class="mdi mdi-magnify"></i>
@@ -43,8 +43,8 @@
 					<span class="wfm-switch-label" ng-show="requests.filterEnabled === true" translate>HideFilter</span>
 				</label>
 			</div>
-
-</div>
+		</div>
+		
 		<div class="right-part">
 			<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled && requests.canApproveOrDenyRequest()"
 									before-command="requests.onBeforeCommand()"
@@ -85,14 +85,9 @@
 							</requests-overview>
 						</md-content>
 					</md-tab>
-
-
 				</md-tabs>
 				<div class="paging pull-right" ng-if="requests.isPaginationEnabled && requests.paging.totalPages>0"></div>
 			</md-content>
-
 		</div>
 	</div>
-
-
 </div>

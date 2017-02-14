@@ -71,7 +71,8 @@
 			vm.toggleSearchFocus = false;
 			setSearchFilter();
 			vm.selectedFavorite = false;
-		}
+			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:vm.selectedTeamIds,agentSearchTerm:vm.agentSearchTerm});
+		};
 
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
@@ -249,7 +250,7 @@
 					vm.absencePeriod = newValue;
 				}
 
-				vm.resetFocusSearch();
+				//vm.resetFocusSearch();
 
 				//fix for bug 42633, need removed when styleguide ready for this
 				if ($('#Request-period').hasClass('request-date-range-picker')

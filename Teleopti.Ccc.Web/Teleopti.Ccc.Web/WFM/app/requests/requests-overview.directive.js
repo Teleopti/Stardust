@@ -20,7 +20,6 @@
 		};
 
 		vm.filters = [];
-		vm.agentSearchTerm = "";
 		vm.reload = reload;
 		vm.sortingOrders = [];
 
@@ -97,7 +96,7 @@
 			vm.paging.totalRequestsCount = totalRequestsCount;
 		}
 
-		function getRequests(requestsFilter, sortingOrders, paging, done) {
+		function getRequests(requestsFilter, sortingOrders, paging) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
 				vm.requests = requests.data.Requests;
 
@@ -116,13 +115,16 @@
 				}
 
 				vm.loaded = true;
-				if (done != null) done();
 			});
 		}
 
-		function reload(callback) {
-			if (!vm.isActive || !(angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0)) {
+		function reload(params) {
+			if (!vm.isActive || (!(angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) && angular.isUndefined(params))) {
 				return;
+			}
+			if(params){
+				vm.agentSearchTerm = params.agentSearchTerm || vm.agentSearchTerm;
+				vm.selectedTeamIds = params.selectedTeamIds || vm.selectedTeamIds;
 			}
 
 			var requestsFilter = {
@@ -130,17 +132,17 @@
 				agentSearchTerm: vm.agentSearchTerm,
 				selectedTeamIds: vm.selectedTeamIds,
 				filters: vm.filters
-			}
+			};
 
 			vm.loaded = false;
+
 			if (vm.isPaginationEnabled) {
-				getRequests(requestsFilter, vm.sortingOrders, vm.paging, callback);
+				getRequests(requestsFilter, vm.sortingOrders, vm.paging);
 			} else {
 				requestsDataService.getAllRequestsPromise_old(requestsFilter, vm.sortingOrders).then(function(requests) {
 					vm.requests = requests.data;
 					vm.loaded = true;
 				});
-				if (callback != null) callback();
 			}
 		}
 	}
@@ -175,8 +177,6 @@
 				var target = {
 					startDate: vm.period ? vm.period.startDate : null,
 					endDate: vm.period ? vm.period.endDate : null,
-					agentSearchTerm: vm.agentSearchTerm ? vm.agentSearchTerm : '',
-					selectedTeamIds: vm.selectedTeamIds ? vm.selectedTeamIds : [],
 					filters: vm.filters,
 					isActive: vm.isActive,
 					sortingOrders: vm.sortingOrders
@@ -197,19 +197,15 @@
 			}, true);
 
 			function listenToReload() {
-				scope.$on('reload.requests.with.selection', function (event) {
-					reload();
+				scope.$on('reload.requests.with.selection', function (event, data) {
+					ctrl.reload(data);
 				});
 
 				scope.$on('reload.requests.without.selection', function (event) {
-					reload();
+					ctrl.reload();
 				});
 
 				ctrl.loadRequestWatchersInitialized = true;
-			}
-
-			function reload(callback) {
-				ctrl.reload(callback);
 			}
 		}
 	}
