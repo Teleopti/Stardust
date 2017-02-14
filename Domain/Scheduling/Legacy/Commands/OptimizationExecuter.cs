@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class OptimizationCommand
+	public class OptimizationExecuter
 	{
 		private readonly IGroupPageCreator _groupPageCreator;
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
 		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
-		public OptimizationCommand(IGroupPageCreator groupPageCreator,
+		public OptimizationExecuter(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceCalculation resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,

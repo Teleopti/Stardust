@@ -3549,7 +3549,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
-			var optimizationCommand = _container.Resolve<OptimizationCommand>();
+			var optimizationCommand = _container.Resolve<OptimizationExecuter>();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(argument.DaysOffPreferences);
 
 			optimizationCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerOptimization),

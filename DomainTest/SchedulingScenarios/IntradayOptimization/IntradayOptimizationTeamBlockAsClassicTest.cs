@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	public class IntradayOptimizationTeamBlockAsClassicTest : ISetup
 	{
-		public OptimizationCommand Target;
+		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderOrg;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 

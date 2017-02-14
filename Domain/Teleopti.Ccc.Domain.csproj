@@ -1683,7 +1683,7 @@
     <Compile Include="Scheduling\Legacy\Commands\IWeeklyRestSolverCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MatrixListFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MatrixUserLockLocker.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\OptimizationCommand.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\OptimizationExecuter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ResourceOptimizationHelperExtended.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertime.cs" />
