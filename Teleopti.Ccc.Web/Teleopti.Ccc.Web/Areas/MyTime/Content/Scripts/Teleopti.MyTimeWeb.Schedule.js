@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			type: "GET",
 			data: {
 				date: selectedDate,
-				staffingPossiblity: vm.probabilityType()
+				staffingPossiblity: vm.probabilityType
 			},
 			success: function (data) {
 				_bindData(data);
@@ -129,8 +129,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.shiftExchangePermission = ko.observable();
 		self.personAccountPermission = ko.observable();
 		self.viewProbabilityPermission = ko.observable();
-		self.staffingProbabilityEnabled = ko.observable();
-
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
@@ -170,7 +168,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				self.selectedDateSubscription.dispose();
 			self.selectedDate(date);
 			self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-				var probabilityPart = self.staffingProbabilityEnabled() ? "/Probability/" + self.probabilityType() : "";
+				var probabilityPart = self.staffingProbabilityEnabled ? "/Probability/" + self.probabilityType() : "";
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD"))
 					+ probabilityPart);
 			});
@@ -203,7 +201,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.week = function (date) {
-			var probabilityPart = self.staffingProbabilityEnabled() ? "/Probability/" + self.probabilityType() : "";
+			var probabilityPart = self.staffingProbabilityEnabled ? "/Probability/" + self.probabilityType() : "";
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"))
 				+ probabilityPart);
 		};
@@ -389,10 +387,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
 			self.viewProbabilityPermission(data.ViewPossibilityPermission);
-
-			self.staffingProbabilityEnabled(self.viewProbabilityPermission()
-				&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608"));
-
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
@@ -706,6 +700,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			for (var j = 0; j < rawProbabilities.length; j++) {
 				var intervalProbability = rawProbabilities[j];
+				console.log("intervalProbability:", JSON.stringify(intervalProbability));
 				var startMoment = moment(intervalProbability.StartTime);
 				var endMoment = moment(intervalProbability.EndTime);
 
@@ -1027,6 +1022,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				};
 
 				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
+				vm.staffingProbabilityEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
 
 				callback();
 				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
