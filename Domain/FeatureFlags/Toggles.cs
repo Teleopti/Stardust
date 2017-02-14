@@ -35,7 +35,7 @@
 		MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747,
 		MyTimeWeb_ShowContractTime_41462,
 		MyTimeWeb_SortRequestList_40711,
-		MyTimeWeb_ViewIntradayStaffingProbability_41608,
+		MyTimeWeb_ViewIntradayStaffingPossibility_41608,
 
 		Backlog_Module_23980,
 

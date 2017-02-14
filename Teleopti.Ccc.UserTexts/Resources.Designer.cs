@@ -12810,11 +12810,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide staffing probability.
+        ///   Looks up a localized string similar to Hide staffing possibility.
         /// </summary>
-        public static string HideStaffingProbability {
+        public static string HideStaffingPossibility {
             get {
-                return ResourceManager.GetString("HideStaffingProbability", resourceCulture);
+                return ResourceManager.GetString("HideStaffingPossibility", resourceCulture);
             }
         }
         
@@ -22485,6 +22485,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Possibility to get absence:.
+        /// </summary>
+        public static string PossibilityToGetAbsenceColon {
+            get {
+                return ResourceManager.GetString("PossibilityToGetAbsenceColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Possibility to get overtime:.
+        /// </summary>
+        public static string PossibilityToGetOvertimeColon {
+            get {
+                return ResourceManager.GetString("PossibilityToGetOvertimeColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Possible Matches.
         /// </summary>
         public static string PossibleMatches {
@@ -22735,24 +22753,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PriorityColon {
             get {
                 return ResourceManager.GetString("PriorityColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Probability to get absence:.
-        /// </summary>
-        public static string ProbabilityToGetAbsenceColon {
-            get {
-                return ResourceManager.GetString("ProbabilityToGetAbsenceColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Probability to get overtime:.
-        /// </summary>
-        public static string ProbabilityToGetOvertimeColon {
-            get {
-                return ResourceManager.GetString("ProbabilityToGetOvertimeColon", resourceCulture);
             }
         }
         
@@ -28724,11 +28724,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show absence probability.
+        ///   Looks up a localized string similar to Show absence possibility.
         /// </summary>
-        public static string ShowAbsenceProbability {
+        public static string ShowAbsencePossibility {
             get {
-                return ResourceManager.GetString("ShowAbsenceProbability", resourceCulture);
+                return ResourceManager.GetString("ShowAbsencePossibility", resourceCulture);
             }
         }
         
@@ -28940,11 +28940,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show overtime probability.
+        ///   Looks up a localized string similar to Show overtime possibility.
         /// </summary>
-        public static string ShowOvertimeProbability {
+        public static string ShowOvertimePossibility {
             get {
-                return ResourceManager.GetString("ShowOvertimeProbability", resourceCulture);
+                return ResourceManager.GetString("ShowOvertimePossibility", resourceCulture);
             }
         }
         
@@ -33838,7 +33838,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View staffing probability.
+        ///   Looks up a localized string similar to View Possibility.
         /// </summary>
         public static string ViewPossibility {
             get {

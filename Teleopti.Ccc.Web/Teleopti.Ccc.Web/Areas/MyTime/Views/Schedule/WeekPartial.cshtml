@@ -18,13 +18,11 @@
 				fair: '@Resources.Fair',
 				poor: '@Resources.Poor',
 				good: '@Resources.Good',
-				high: '@Resources.High',
-				low: '@Resources.Low',
-				probabilityForAbsence: '@Resources.ProbabilityToGetAbsenceColon',
-				probabilityForOvertime: '@Resources.ProbabilityToGetOvertimeColon',
-				hideStaffingProbability: '@Resources.HideStaffingProbability',
-				showAbsenceProbability: '@Resources.ShowAbsenceProbability',
-				showOvertimeProbability: '@Resources.ShowOvertimeProbability'
+				possibilityForAbsence: '@Resources.PossibilityToGetAbsenceColon',
+				possibilityForOvertime: '@Resources.PossibilityToGetOvertimeColon',
+				hideStaffingPossibility: '@Resources.HideStaffingPossibility',
+				showAbsencePossibility: '@Resources.ShowAbsencePossibility',
+				showOvertimePossibility: '@Resources.ShowOvertimePossibility'
 			},
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
@@ -69,28 +67,28 @@
             <li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
             <li class="col-xs-12 col-sm-4 active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
             <li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month, visible: !Teleopti.MyTimeWeb.Common.UseJalaaliCalendar">@Resources.Month</a></li>
-            <li class="col-xs-12 col-sm-4 pull-right" data-bind="visible: staffingProbabilityEnabled && viewProbabilityPermission">
+            <li class="col-xs-12 col-sm-4 pull-right" data-bind="visible: staffingPossibilityEnabled && viewPossibilityPermission">
                 <div class="input-group pull-right" style="width: 200px; margin-left: 50px;">
                     <div class="btn-group" role="group" aria-describedby="basic-addon1">
-                        <a class="btn btn-default dropdown-toggle" id="dropdown-probability-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': probabilityType() > 0, 'glyphicon-eye-close': probabilityType() === 0}"></i>
-                            <span data-bind="text: probabilityLabel()"></span>
+                        <a class="btn btn-default dropdown-toggle" id="dropdown-possibility-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': possibilityType() > 0, 'glyphicon-eye-close': possibilityType() === 0}"></i>
+                            <span data-bind="text: possibilityLabel()"></span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(0); }">
-                                    @Resources.HideStaffingProbability
+                                <a href="#" data-bind="click: function (data, event) { switchPossibilityType(0); }">
+                                    @Resources.HideStaffingPossibility
                                 </a>
                             </li>
                             <li>
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(1); }">
-                                    @Resources.ShowAbsenceProbability
+                                <a href="#" data-bind="click: function (data, event) { switchPossibilityType(1); }">
+                                    @Resources.ShowAbsencePossibility
                                 </a>
                             </li>
                             <li>
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(2); }">
-                                    @Resources.ShowOvertimeProbability
+                                <a href="#" data-bind="click: function (data, event) { switchPossibilityType(2); }">
+                                    @Resources.ShowOvertimePossibility
                                 </a>
                             </li>
                         </ul>
@@ -187,8 +185,8 @@
                         </div>
                     </div>
                     <div>
-                        <div class="weekview-day-schedule relative" data-bind="style: {width: probability.length > 0 ? '114px' : '129px'}">
-                            <div class="weekview-day-time-indicator relative" data-bind="style: {width: probability.length > 0 ? '119px' : '129px'}">
+                        <div class="weekview-day-schedule relative" data-bind="style: {width: possibility.length > 0 ? '114px' : '129px'}">
+                            <div class="weekview-day-time-indicator relative" data-bind="style: {width: possibility.length > 0 ? '119px' : '129px'}">
                             </div>
                             <!-- ko foreach: layers -->
                             <!-- ko if: isOvertimeAvailability() -->
@@ -213,8 +211,8 @@
                             <!-- /ko -->
                             <!-- /ko -->
                         </div>
-                        <div class="probability-pane">
-                            <!--ko foreach: probability-->
+                        <div class="possibility-pane">
+                            <!--ko foreach: possibility-->
                             <div data-bind="css:cssClass, tooltip: {title: tooltips, html:true}, style: styleJson"></div>
                             <!-- /ko -->
                         </div>
