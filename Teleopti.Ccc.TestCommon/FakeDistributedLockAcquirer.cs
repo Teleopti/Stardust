@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.TestCommon
 			return @lock(lockObject.GetType() + guid.ToString());
 		}
 
-		public void TryLockForGuid(object lockObject, Guid guid, Action action)
+		public void TryLockForTypeOfAnd(object lockObject, string extra, Action action)
 		{
-			tryLock(lockObject.GetType().Name + guid, action);
+			tryLock(lockObject.GetType().Name + extra, action);
 		}
 
 		private static void tryLock(string name, Action action)

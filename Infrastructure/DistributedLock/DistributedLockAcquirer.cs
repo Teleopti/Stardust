@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			tryLock(ProxyUtil.GetUnproxiedType(lockObject).Name, action);
 		}
 
-		public void TryLockForGuid(object lockObject, Guid guid, Action action)
+		public void TryLockForTypeOfAnd(object lockObject, string extra, Action action)
 		{
-			tryLock($"{ProxyUtil.GetUnproxiedType(lockObject).Name}{guid}", action);
+			tryLock($"{ProxyUtil.GetUnproxiedType(lockObject).Name}{extra}", action);
 		}
 
 

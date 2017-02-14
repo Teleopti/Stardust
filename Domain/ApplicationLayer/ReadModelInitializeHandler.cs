@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		[UnitOfWork]
 		public virtual void Handle(InitialLoadScheduleProjectionEvent @event)
 		{
-			_distributedLockAcquirer.TryLockForGuid(this, @event.LogOnBusinessUnitId, () =>
+			_distributedLockAcquirer.TryLockForTypeOfAnd(this, @event.LogOnBusinessUnitId.ToString(), () =>
 			// Use a lock for each business unit to only run this once for each BU
 			{
 				var messages = new List<ScheduleChangedEventBase>();
