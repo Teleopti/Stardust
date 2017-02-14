@@ -33,13 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			return @lock(ProxyUtil.GetUnproxiedType(lockObject).Name);
 		}
 
-		public IDisposable LockForGuid(object lockObject, Guid guid)
-		{
-			return @lock($"{ProxyUtil.GetUnproxiedType(lockObject).Name}{guid}");
-		}
-
-
-
 		public void TryLockForTypeOf(object lockObject, Action action)
 		{
 			tryLock(ProxyUtil.GetUnproxiedType(lockObject).Name, action);
@@ -49,6 +42,9 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 		{
 			tryLock($"{ProxyUtil.GetUnproxiedType(lockObject).Name}{guid}", action);
 		}
+
+
+
 
 		private void tryLock(string name, Action action)
 		{

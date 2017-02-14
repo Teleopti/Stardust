@@ -47,9 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 			target = new AnalyticsPermissionsUpdater(_analyticsPermissionRepository, 
 				_analyticsBusinessUnitRepository, 
 				_analyticsPermissionExecutionRepository, 
-				_permissionsConverter,
-				_distributedLockAcquirer,
-				_currentAnalyticsUnitOfWork);
+				_permissionsConverter);
 		}
 
 		[Test]

@@ -78,9 +78,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 							var target = new AnalyticsPermissionsUpdater(AnalyticsPermissionRepository,
 								AnalyticsBusinessUnitRepository,
 								AnalyticsPermissionExecutionRepository,
-								PermissionsConverter,
-								DistributedLockAcquirer,
-								CurrentAnalyticsUnitOfWork);
+								PermissionsConverter);
 
 							target.Handle(personId, businessUnitId);
 						});
