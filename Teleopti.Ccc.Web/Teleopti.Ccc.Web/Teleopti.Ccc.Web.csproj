@@ -708,7 +708,7 @@
     <Compile Include="Areas\ResourcePlanner\GroupPagesController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
-    <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
+    <Compile Include="Areas\ResourcePlanner\StaffSchedulingInput.cs" />
     <Compile Include="Areas\Global\IActionThrottler.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodChangeRangeModel.cs" />

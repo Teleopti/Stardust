@@ -46,8 +46,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
+			return DoScheduling(period, null);
+		}
+
+		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
+		{
 			var stateHolder = _schedulerStateHolder();
-			SetupAndSchedule(period);
+			SetupAndSchedule(period, people);
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);
 		}
@@ -79,10 +84,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual void SetupAndSchedule(DateOnlyPeriod period)
+		protected virtual void SetupAndSchedule(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(stateHolder, null, null, null, period);
+			_fillSchedulerStateHolder.Fill(stateHolder, people, null, null, period);
 
 			if (stateHolder.Schedules.Any())
 			{
@@ -138,9 +143,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						BusinessRuleCategory = BusinessRuleCategory.DayOff,
 						BusinessRuleCategoryText = "Scheduled time",
 						Message =
-							string.Format("Target of {0} scheduled time is not fulfilled",
-								DateHelper.HourMinutesString(
-									item.Value.CalculatedTargetTimeHolder(periodTocheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)),
+							$"Target of {DateHelper.HourMinutesString(item.Value.CalculatedTargetTimeHolder(periodTocheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)} scheduled time is not fulfilled",
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				}
@@ -159,6 +162,5 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			});
 		}
 
-		
 	}
 }

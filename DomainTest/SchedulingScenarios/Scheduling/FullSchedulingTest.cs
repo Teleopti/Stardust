@@ -101,5 +101,78 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			assignment.Date.Should().Be.EqualTo(new DateOnly(2015, 10, 17));
 			assignment.DayOff().Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldNotCreateTagsForPeople()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
+				);
+
+			Target.DoScheduling(period, new[] {agent.Id.Value});
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Should().Not.Be.Empty();
+			AgentDayScheduleTagRepository.LoadAll().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotScheduleDaysOffOutsideSelectedDaysForPeople()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7)); //12 to 18
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
+				);
+
+			Target.DoScheduling(new DateOnlyPeriod(new DateOnly(2015, 10, 16), new DateOnly(2015, 10, 17)), new[] { agent.Id.Value }); //friday saturday
+
+			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
+			assignments.Count.Should().Be.EqualTo(1);
+
+			var assignment = assignments.First();
+			assignment.Date.Should().Be.EqualTo(new DateOnly(2015, 10, 17));
+			assignment.DayOff().Should().Not.Be.Null();
+		}
 	}
 }

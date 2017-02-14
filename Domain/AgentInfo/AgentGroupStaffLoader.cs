@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				return _fixedStaffLoader.Load(period);
 			}
 			var result = _personRepository.FindPeopleInAgentGroup(agentGroup, period);
-			return new PeopleSelection(result, result);
+			var peopleToSchedule = result.FixedStaffPeople(period);
+			return new PeopleSelection(result, peopleToSchedule);
 		}
 	}
 }
