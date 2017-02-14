@@ -256,6 +256,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 	public class ShiftTradeRequestPerformanceTestAttribute : IoCTestAttribute
 	{
+		protected override FakeConfigReader Config()
+		{
+			var config = base.Config();
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			return config;
+		}
+
 		protected override void Setup (ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup (system, configuration);
@@ -268,7 +276,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 			system.AddService<Database>();
 			system.AddModule (new TenantServerModule (configuration));
-
 		}
 
 		protected override void Startup (IComponentContext container)
@@ -277,8 +284,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 			// normal test injection is not working...
 			((MutableNow) container.Resolve<INow>()).Is (new DateTime (2016, 04, 01, 10, 00, 00, DateTimeKind.Utc));
-
-
+			
 			container.Resolve<HangfireClientStarter>().Start();
 		}
 	}
