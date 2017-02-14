@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon
 			return _timeZone;
 		}
 
-		private void Is(TimeZoneInfo timeZone)
+		public void Is(TimeZoneInfo timeZone)
 		{
 			_timeZone = timeZone;
 		}

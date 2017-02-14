@@ -16,15 +16,17 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-	public class MaxSeatOptimizationPreferencesTest
+	public class MaxSeatOptimizationPreferencesTest : ISetup
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+		public FakeUserTimeZone UserTimeZone;
 
 		[Test]
 		public void ShouldAllowModifyingBlockWithMultipleDays()
@@ -79,9 +81,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.True();
 		}
 
-		[Test]
-		public void ShouldRespectAlterBetweenBlockTwoDaysEndAt24()
+		[TestCase("UTC")]
+		[TestCase("W. Europe Standard Time")]
+		public void ShouldRespectAlterBetweenBlockTwoDaysEndAt24(string timeZone)
 		{
+			if(timeZone!="UTC")
+				Assert.Ignore("To be fixed");
+			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(timeZone));
 			var site = new Site("_") { MaxSeats = 0 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
 			var activityRequiresSeat = new Activity("_") { RequiresSeat = true }.WithId();
@@ -323,6 +329,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			
 			schedules[agentData1.Agent].ScheduledDay(dateOnly).PersonAssignment().ShiftCategory
 				.Should().Be.EqualTo(newShiftCategory);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 	}
 }
