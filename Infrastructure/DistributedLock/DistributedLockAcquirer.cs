@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			IConnectionStrings connectionStrings, 
 			SqlMonitor monitor)
 		{
-			_timeout = TimeSpan.FromMilliseconds(config.ReadValue("DistributedLockTimeout", 20*1000));
+			_timeout = TimeSpan.FromMilliseconds(config.ReadValue("DistributedLockTimeout", 10*1000));
 			_keepAliveInterval = TimeSpan.FromMilliseconds(config.ReadValue("DistributedLockKeepAliveInterval", 60*1000));
 			_connectionStrings = connectionStrings;
 			_monitor = monitor;
