@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return _storage.LoadAll<IPerson>().ToList();
 		}
 	}
 }

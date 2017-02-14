@@ -1,9 +1,8 @@
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Core
+namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class AgentGroupStaffLoader : IAgentGroupStaffLoader
 	{

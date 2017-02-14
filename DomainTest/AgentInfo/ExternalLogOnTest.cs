@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo
 {
-    [TestFixture]
+	[TestFixture]
     public class ExternalLogOnTest
     {
         private ExternalLogOn target;
