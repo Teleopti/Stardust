@@ -54,10 +54,11 @@
 		vm.resetFocusSearch = function(){
 			vm.toggleSearchFocus = false;
 		};
-			
+
 		vm.focusSearch = function($event){
 			vm.toggleSearchFocus = true;
 			if($event && $event.which == 13) vm.toggleSearchFocus = false;
+			setSearchFilter();
 		};
 
 		vm.getSearch = function () {
@@ -250,7 +251,7 @@
 					vm.absencePeriod = newValue;
 				}
 
-				//vm.resetFocusSearch();
+				vm.resetFocusSearch();
 
 				//fix for bug 42633, need removed when styleguide ready for this
 				if ($('#Request-period').hasClass('request-date-range-picker')
