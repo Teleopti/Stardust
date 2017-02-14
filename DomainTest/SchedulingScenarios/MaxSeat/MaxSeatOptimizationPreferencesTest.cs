@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 		[Test]
-		[Ignore("#42593")]
 		public void ShouldHandleAlterBetweenWhenPersonAssignmentMissingInSchedulePeriod()
 		{
 			var site = new Site("_") { MaxSeats = 0 }.WithId();
@@ -129,7 +128,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(new NoSchedulingProgress(), date.ToDateOnlyPeriod(), new[] { agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 
-			//TODO: Claes! Jag vet inte riktigt vad som ska hända/asserta här när man har oschemalagda dagar i sin schemaperiod? (just nu smuller det....)
 			schedules[agent].ScheduledDay(date).PersonAssignment().ShiftCategory.Equals(newShiftCategory)
 					.Should().Be.True();
 		}

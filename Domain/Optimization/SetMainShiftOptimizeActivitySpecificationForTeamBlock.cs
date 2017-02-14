@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
@@ -24,8 +25,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ISpecification<IEditableShift> specification = new All<IEditableShift>();
 				foreach (var unLockedDate in teamBlockInfo.BlockInfo.UnLockedDates())
 				{
+					var unlockedMembers = teamBlockInfo.TeamInfo.UnLockedMembers(unLockedDate).ToArray();
+
 					foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 					{
+						if(!unlockedMembers.Contains(scheduleMatrixPro.Person))
+							continue;
+
 						var editableShift = scheduleMatrixPro.GetScheduleDayByKey(unLockedDate).DaySchedulePart().GetEditorShift();
 						specification = specification.And(new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, editableShift, unLockedDate, userTimeZone));
 					}
