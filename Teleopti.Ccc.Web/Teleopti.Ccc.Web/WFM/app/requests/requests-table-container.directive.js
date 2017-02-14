@@ -185,6 +185,15 @@
 			vm.filters = vm.requestFiltersMgr.Filters;
 		};
 
+		vm.subjectFilterChanged = function () {
+			vm.requestFiltersMgr.SetFilter('Subject', vm.subjectFilter);
+			vm.filters = vm.requestFiltersMgr.Filters;
+		}
+
+		vm.messageFilterChanged = function () {
+			vm.requestFiltersMgr.SetFilter('Message', vm.messageFilter);
+			vm.filters = vm.requestFiltersMgr.Filters;
+		}
 
 
 		function getGridOptions() {
