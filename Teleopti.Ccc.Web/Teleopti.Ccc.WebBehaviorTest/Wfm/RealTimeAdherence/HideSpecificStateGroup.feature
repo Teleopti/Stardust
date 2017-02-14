@@ -42,9 +42,7 @@ Background:
 	| Phone state     | LoggedOut  |
 	| Is alarm        | True       |
 	| Alarm threshold | 00:00:00   |
- 
 
-@OnlyRunIfEnabled('RTA_HideAgentsByStateGroup_40469')
 Scenario: Hide logged out agents
 	Given the time is '2016-11-22 17:00:00'			
 	And 'Ashley Andeen' sets her phone state to 'LoggedOut'		

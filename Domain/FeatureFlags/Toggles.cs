@@ -18,8 +18,7 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
-
-		RTA_HideAgentsByStateGroup_40469,
+		
 		RTA_SiteAndTeamOnSkillOverview_40817,
 		RTA_AgentsOnOrganizationAndSkills_41586,
 		RTA_SeeAllOutOfAdherencesToday_39146,

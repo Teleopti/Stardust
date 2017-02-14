@@ -40,7 +40,6 @@ Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
 MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 
-RTA_HideAgentsByStateGroup_40469 = true
 RTA_SiteAndTeamOnSkillOverview_40817 = true
 RTA_AgentsOnOrganizationAndSkills_41586 = true
 RTA_SeeAllOutOfAdherencesToday_39146 = true
