@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			throw new NotImplementedException();
 		}
 
-		public IPlanningPeriod NextPlanningPeriod()
+		public IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup)
 		{
 			throw new NotImplementedException();
 		}

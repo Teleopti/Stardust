@@ -112,14 +112,27 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod")]
 		public virtual IHttpActionResult GetNextPlanningPeriod()
 		{
+			return nextPlanningPeriod(null);
+		}
+
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod/{agentGroupId}")]
+		public virtual IHttpActionResult GetNextPlanningPeriod(Guid agentGroupId)
+		{
+			var agentGroup = _agentGroupRepository.Load(agentGroupId);
+			return nextPlanningPeriod(agentGroup);
+		}
+
+		private IHttpActionResult nextPlanningPeriod(IAgentGroup agentGroup)
+		{
 			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
-			var last = allPlanningPeriods.OrderByDescending(p => p.Range.StartDate).First().NextPlanningPeriod();
-			
+			var last = allPlanningPeriods.OrderByDescending(p => p.Range.StartDate).First().NextPlanningPeriod(agentGroup);
+
 			_planningPeriodRespository.Add(last);
 
 			var id = last.Id.GetValueOrDefault();
-			return Created(Request.RequestUri + "/" + id, new {
-				Id= id,
+			return Created(Request.RequestUri + "/" + id, new
+			{
+				Id = id,
 				EndDate = last.Range.EndDate.Date,
 				StartDate = last.Range.StartDate.Date,
 			});

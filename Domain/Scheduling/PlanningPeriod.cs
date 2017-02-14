@@ -1,8 +1,6 @@
-using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected PlanningPeriod()
 		{
 			_state = PlanningPeriodState.New;
+		}
+
+		protected PlanningPeriod(IAgentGroup agentGroup):this()
+		{
+			_agentGroup = agentGroup;
 		}
 
 		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, IAgentGroup agentGroup) : this()
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_state = PlanningPeriodState.Published;
 		}
 
-		public virtual IPlanningPeriod NextPlanningPeriod()
+		public IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup)
 		{
 			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
 			var range = _calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation
@@ -82,9 +85,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				Culture = CultureInfo.CurrentCulture,
 				Number = _number,
 				PeriodType = _periodType,
-				StartDate =  nextPlanningPeriodStartDate
+				StartDate = nextPlanningPeriodStartDate
 			});
-			return new PlanningPeriod {_range = range, _number = _number, _periodType = _periodType };
+			if (agentGroup != null)
+			{
+				return new PlanningPeriod(agentGroup) {_range = range, _number = _number, _periodType = _periodType};
+			}
+			return new PlanningPeriod { _range = range, _number = _number, _periodType = _periodType };
 		}
 	}
 }

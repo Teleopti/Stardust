@@ -4,6 +4,7 @@ using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
@@ -26,14 +27,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldReturnNextPlanningPeriod()
 		{
 			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
-			target.NextPlanningPeriod().Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30));
+			target.NextPlanningPeriod(null).Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30));
+		}
+
+		[Test, SetCulture("sv-SE")]
+		public void ShouldReturnNextPlanningPeriodForAgentGroup()
+		{
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var agentGroup = new AgentGroup
+			{
+				Name = "group1"
+			};
+			var nextPlanningPeriod = target.NextPlanningPeriod(agentGroup);
+			nextPlanningPeriod.Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30));
+			nextPlanningPeriod.AgentGroup.Name.Should().Be.EqualTo(agentGroup.Name);
 		}
 
 		[Test, SetCulture("sv-SE")]
 		public void ShouldReturnNextNextPlanningPeriod()
 		{
 			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
-			target.NextPlanningPeriod().NextPlanningPeriod().Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 07, 01, 2015, 07, 31));
+			target.NextPlanningPeriod(null).NextPlanningPeriod(null).Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 07, 01, 2015, 07, 31));
 		}
 
 		[Test, SetCulture("sv-SE")]
@@ -64,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var target = new PlanningPeriod(suggestion);
 			target.ChangeRange(new SchedulePeriodForRangeCalculation { Culture = culture, Number = 1, PeriodType = SchedulePeriodType.Week, StartDate = new DateOnly(2015, 06, 01) });
-			target.NextPlanningPeriod().Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 8, 2015, 06, 21));
+			target.NextPlanningPeriod(null).Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 8, 2015, 06, 21));
 		}
 	}
 }

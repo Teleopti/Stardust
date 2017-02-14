@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces
@@ -6,7 +7,7 @@ namespace Teleopti.Interfaces
 	{
 		DateOnlyPeriod Range { get; }
 		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation);
-		IPlanningPeriod NextPlanningPeriod();
+		IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup);
 		PlanningPeriodState State { get; }
 		IAgentGroup AgentGroup { get; }
 		void Scheduled();

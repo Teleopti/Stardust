@@ -216,6 +216,24 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
+		public void ShouldReturnNextPlanningPeriodForAgentGroup()
+		{
+			var agentGroup = new AgentGroup();
+			var agentGroupId = Guid.NewGuid();
+			agentGroup.SetId(agentGroupId);
+			AgentGroupRepository.Add(agentGroup);
+			Now.Is(new DateTime(2015, 05, 23));
+			PlanningPeriodRepository.Add(new PlanningPeriod(new PlanningPeriodSuggestions(Now, new List<AggregatedSchedulePeriod>())));
+
+			Target.Request = new HttpRequestMessage();
+			Target.GetNextPlanningPeriod(agentGroupId);
+			PlanningPeriodRepository.LoadAll()
+				.Any(p => p.Range.StartDate == new DateOnly(2015, 07, 01) && p.AgentGroup.Id.Value == agentGroupId)
+				.Should()
+				.Be.True();
+		}
+
+		[Test]
 		public void ShouldReturnIndicationIfNextPlanningPeriodExists()
 		{
 			Now.Is(new DateTime(2015, 05, 23));
