@@ -83,8 +83,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 		[TestCase("UTC")]
 		[TestCase("W. Europe Standard Time")]
+		[TestCase("Mountain Standard Time")]
+		[TestCase("Singapore Standard Time")]
 		public void ShouldRespectAlterBetweenBlockTwoDaysEndAt24(string timeZone)
 		{
+			if(timeZone== "Singapore Standard Time")
+				Assert.Ignore("To be fixed");
 			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(timeZone));
 			var site = new Site("_") { MaxSeats = 0 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
