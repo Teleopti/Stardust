@@ -104,7 +104,7 @@
 		vm.selectFieldText = $translate.instant('SelectOrganization');
 		vm.searchTerm = "";
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
-
+		vm.querySearch = querySearch;
 		allGrid.data = 'vm.filteredData';
 		inAlarmGrid.data = 'vm.filteredData';
 
@@ -207,13 +207,19 @@
 			vm.pollingLock = true;
 		}
 
-		/*********AUTOCOMPLETE*****/
-		vm.querySearch = function (query, myArray) {
-			if (!query)
-				return myArray;
-			return myArray.filter(function (query) { return function filterFn(item) { return (item.Name.toUpperCase().indexOf(query.toUpperCase()) === 0); }; });
-		};
+		function querySearch(query, myArray) {
+			var results = query ? myArray.filter(createFilterFor(query)) : myArray;
+			return results;
+		}
 
+		function createFilterFor(query) {
+			var lowercaseQuery = angular.lowercase(query);
+			return function filterFn(item) {
+				var lowercaseName = angular.lowercase(item.Name);
+				return (lowercaseName.indexOf(lowercaseQuery) === 0);
+			};
+		};
+		
 		vm.selectedSkillChange = function (skill) {
 			if (!skill || (skill.Id != skillIds[0] || $stateParams.skillAreaId))
 				stateGoToAgents({
