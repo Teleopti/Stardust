@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		[TestCase("W. Europe Standard Time")]
 		public void ShouldRespectAlterBetweenBlockTwoDaysEndAt24(string timeZone)
 		{
-			if(timeZone!="UTC")
-				Assert.Ignore("To be fixed");
 			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(timeZone));
 			var site = new Site("_") { MaxSeats = 0 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));

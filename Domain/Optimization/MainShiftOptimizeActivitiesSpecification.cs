@@ -113,7 +113,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool isIdenticalPeriodAfter(IVisualLayerCollection other)
         {
 	        var allowPeriod = allowAlterBetweenDateTimePeriod();
-	        var end = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone).AddDays(1).Add(allowPeriod.StartDateTime.TimeOfDay);
+			var baseDate = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone);
+			var end = baseDate.AddDays(1).Add(allowPeriod.StartDateTime.Subtract(baseDate));
 					var periodAfter = new DateTimePeriod(allowPeriod.EndDateTime, end);
 
             IVisualLayerCollection shiftLayersOutsideAfter =
