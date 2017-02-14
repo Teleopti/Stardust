@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculateOvertimeSuggestionProviderTest.cs" />
     <Compile Include="IntradayAbsenceRequestPerformanceTest.cs" />
     <Compile Include="IntradayReadModelUpdatePerformanceTest.cs" />
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
