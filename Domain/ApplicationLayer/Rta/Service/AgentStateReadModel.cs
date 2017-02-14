@@ -46,30 +46,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override string ToString()
 		{
-			return string.Format(
-				"PersonId: {0}, " +
-				"StateCode: {1} " +
-				"StateName: {2}, " +
-				"Activity: {3}, " +
-				"StateStartTime: {4}, " +
-				"NextActivity: {5}, " +
-				"NextActivityStartTime: {6}, " +
-				"RuleName: {7}, " +
-				"RuleStartTime: {8}, " +
-				"IsRuleAlarm: {9}, " +
-				"AlarmStartTime: {10}",
-				PersonId,
-				StateCode, 
-				StateName, 
-				Activity, 
-				StateStartTime, 
-				NextActivity, 
-				NextActivityStartTime,
-				RuleName, 
-				RuleStartTime,
-				IsRuleAlarm, 
-				AlarmStartTime
-				);
+			return $"PersonId: {PersonId}, " +
+				   $"StateCode: {StateCode} " +
+				   $"StateName: {StateName}, " +
+				   $"Activity: {Activity}, " +
+				   $"StateStartTime: {StateStartTime}, " +
+				   $"NextActivity: {NextActivity}, " +
+				   $"NextActivityStartTime: {NextActivityStartTime}, " +
+				   $"RuleName: {RuleName}, " +
+				   $"RuleStartTime: {RuleStartTime}, "
+				   + $"IsRuleAlarm: {IsRuleAlarm}, " +
+				   $"AlarmStartTime: {AlarmStartTime}";
 		}
 
 	}

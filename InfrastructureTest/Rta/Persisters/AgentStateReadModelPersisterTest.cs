@@ -29,112 +29,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldPersistBusinessUnit()
+		public void ShouldPersistWithProperties()
 		{
+			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var state = new AgentStateReadModelForTest { BusinessUnitId = businessUnitId };
-
-			Target.PersistWithAssociation(state);
-
-			Target.Load(state.PersonId)
-				.BusinessUnitId.Should().Be(businessUnitId);
-		}
-
-		[Test]
-		public void ShouldPersistTeamId()
-		{
-			var teamId = Guid.NewGuid();
-			var state = new AgentStateReadModelForTest { TeamId = teamId };
-
-			Target.PersistWithAssociation(state);
-
-			Target.Load(state.PersonId)
-				.TeamId.Should().Be(teamId);
-		}
-
-		[Test]
-		public void ShouldPersistSiteId()
-		{
 			var siteId = Guid.NewGuid();
-			var state = new AgentStateReadModelForTest { SiteId = siteId };
-
-			Target.PersistWithAssociation(state);
-
-			Target.Load(state.PersonId)
-				.SiteId.Should().Be(siteId);
-		}
-
-		[Test]
-		public void ShouldPersistModelWithNullValues()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.PersistWithAssociation(new AgentStateReadModel
+			var teamId = Guid.NewGuid();
+			var state = new AgentStateReadModelForTest
 			{
 				PersonId = personId,
-				BusinessUnitId = Guid.NewGuid(),
-				SiteId = null,
-				SiteName = null,
-				TeamId = null,
-				TeamName = null,
-				
-				ReceivedTime = "2015-01-02 10:00".Utc(),
-
-				StateCode = null,
-				StateStartTime = null,
-				StateName = null,
-
-				Activity = null,
-				NextActivity = null,
-				NextActivityStartTime = null,
-
-				RuleName = null,
-				RuleStartTime = null,
-				AlarmStartTime = null,
-				StaffingEffect = null,
-				RuleColor = null,
-			});
-
-			Target.Load(personId)
-				.Should().Not.Be.Null();
-		}
-
-
-		[Test]
-		public void ShouldPersistAlarmStartTime()
-		{
-			var state = new AgentStateReadModelForTest { AlarmStartTime = "2015-12-11 08:00".Utc() };
+				BusinessUnitId = businessUnitId,
+				SiteId = siteId,
+				TeamId = teamId,
+				IsRuleAlarm = true,
+				AlarmStartTime = "2015-12-11 08:00".Utc(),
+				AlarmColor = Color.Red.ToArgb(),
+			};
 
 			Target.PersistWithAssociation(state);
 
-			Target.Load(state.PersonId)
-				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
-		}
-
-		[Test]
-		public void ShouldPersistIsAlarm()
-		{
-			var state = new AgentStateReadModelForTest { IsRuleAlarm = true };
-
-			Target.PersistWithAssociation(state);
-
-			Target.Load(state.PersonId)
-				.IsRuleAlarm.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldPersistAlarmColor()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				PersonId = personId,
-				AlarmColor = Color.Red.ToArgb()
-			});
-
-			Target.Load(personId)
-				.AlarmColor.Should().Be(Color.Red.ToArgb());
+			var model = Target.Load(personId);
+			model.BusinessUnitId.Should().Be(businessUnitId);
+			model.TeamId.Should().Be(teamId);
+			model.SiteId.Should().Be(siteId);
+			model.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
+			model.IsRuleAlarm.Should().Be(true);
+			model.AlarmColor.Should().Be(Color.Red.ToArgb());
 		}
 
 		[Test]
@@ -221,6 +141,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldPersistModelWithNullValues()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.PersistWithAssociation(new AgentStateReadModel
+			{
+				PersonId = personId,
+				BusinessUnitId = Guid.NewGuid(),
+				SiteId = null,
+				SiteName = null,
+				TeamId = null,
+				TeamName = null,
+
+				ReceivedTime = "2015-01-02 10:00".Utc(),
+
+				StateCode = null,
+				StateStartTime = null,
+				StateName = null,
+
+				Activity = null,
+				NextActivity = null,
+				NextActivityStartTime = null,
+
+				RuleName = null,
+				RuleStartTime = null,
+				AlarmStartTime = null,
+				StaffingEffect = null,
+				RuleColor = null,
+			});
+
+			Target.Load(personId)
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldPersistOutOfAdherences()
 		{
 			var state = new AgentStateReadModelForTest
@@ -278,7 +233,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var outOfAdherences = Target.Load(personId).OutOfAdherences;
+			var outOfAdherences = Target.Load(personId).OutOfAdherences.ToArray();
 			outOfAdherences.First().StartTime.Should().Be("2016-06-16 08:00".Utc());
 			outOfAdherences.First().EndTime.Should().Be("2016-06-16 08:10".Utc());
 			outOfAdherences.Last().StartTime.Should().Be("2016-06-16 08:20".Utc());
@@ -303,7 +258,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			
 			Target.Load(personId).OutOfAdherences.Should().Have.Count.EqualTo(59);
 		}
-		
+
+		[Test]
+		public void ShouldPersistStateGroupId()
+		{
+			var personId = Guid.NewGuid();
+			var stateGroupId = Guid.NewGuid();
+
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				StateGroupId = stateGroupId
+			});
+
+			Target.Load(personId).StateGroupId.Should().Be(stateGroupId);
+		}
+
+		[Test]
+		public void ShouldUpdateStateGroupId()
+		{
+			var personId = Guid.NewGuid();
+			var stateGroupId = Guid.NewGuid();
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				StateGroupId = null
+			});
+
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				StateGroupId = stateGroupId
+			});
+
+			Target.Load(personId).StateGroupId.Should().Be(stateGroupId);
+		}
+
 		[Test]
 		public void ShouldUpdatePersonAssociation()
 		{
@@ -358,6 +348,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
+		{
+			var personId = Guid.NewGuid();
+			Target.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
+			Target.UpsertDeleted(personId, "2016-10-05 08:00".Utc());
+
+			Target.UpsertAssociation(new AssociationInfo()
+			{
+				PersonId = personId
+			});
+
+			var result = Target.Load(personId);
+			result.IsDeleted.Should().Be.False();
+			result.ExpiresAt.Should().Be(null);
+		}
+
+		[Test]
 		public void ShouldUpdateDeleted()
 		{
 			var personId = Guid.NewGuid();
@@ -383,56 +390,101 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
 		}
 
+
 		[Test]
-		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
+		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = personId});
-			Target.UpsertDeleted(personId, "2016-10-05 08:00".Utc());
+			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false });
 
-			Target.UpsertAssociation(new AssociationInfo()
-			{
-				PersonId = personId
-			});
+			Target.UpsertEmploymentNumber(personId, "abc", "2017-02-14 08:00".Utc());
 
-			var result = Target.Load(personId);
-			result.IsDeleted.Should().Be.False();
-			result.ExpiresAt.Should().Be(null);
+			Target.Load(personId).EmploymentNumber.Should().Be("abc");
+			Target.Load(personId).IsDeleted.Should().Be(false);
+			Target.Load(personId).ExpiresAt.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldPersistStateGroupId()
+		public void ShouldInsertEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			var stateGroupId = Guid.NewGuid();
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				PersonId = personId,
-				StateGroupId = stateGroupId
-			});
+			Target.UpsertEmploymentNumber(personId, "123", "2017-02-14 08:00".Utc());
 
-			Target.Load(personId).StateGroupId.Should().Be(stateGroupId);
+			var model = Target.Load(personId);
+			model.EmploymentNumber.Should().Be("123");
+			model.IsDeleted.Should().Be(true);
+			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
 		}
 
 		[Test]
-		public void ShouldUpdateStateGroupId()
+		public void ShouldInsertFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
-			var stateGroupId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+
+			Target.UpsertName(personId, "bill", "gates", "2017-02-14 08:00".Utc());
+
+			var model = Target.Load(personId);
+			model.FirstName.Should().Be("bill");
+			model.LastName.Should().Be("gates");
+			model.IsDeleted.Should().Be(true);
+			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
+		}
+
+		[Test]
+		public void ShouldUpdateFirstAndLastName()
+		{
+			var personId = Guid.NewGuid();
+			Target.PersistWithAssociation(new AgentStateReadModelForTest()
 			{
 				PersonId = personId,
-				StateGroupId = null
+				FirstName = "ashley",
+				LastName = "andeen",
+				IsDeleted = false
 			});
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.UpsertName(personId, "bill", "gates", "2017-02-14 0:00".Utc());
+
+			var model = Target.Load(personId);
+			model.FirstName.Should().Be("bill");
+			model.LastName.Should().Be("gates");
+			model.IsDeleted.Should().Be(false);
+			model.ExpiresAt.Should().Be(null);
+		}
+
+
+		[Test]
+		public void ShouldUpdateTeamName()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Target.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = personId,
-				StateGroupId = stateGroupId
+				TeamId = teamId,
+				TeamName = "team students"
 			});
 
-			Target.Load(personId).StateGroupId.Should().Be(stateGroupId);
+			Target.UpdateTeamName(teamId, "team preferences");
+
+			Target.Load(personId).TeamName.Should().Be("team preferences");
+		}
+
+		[Test]
+		public void ShouldUpdateSiteName()
+		{
+			var personId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			Target.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = personId,
+				SiteId = siteId,
+				SiteName = "london"
+			});
+
+			Target.UpdateSiteName(siteId, "paris");
+
+			Target.Load(personId).SiteName.Should().Be("paris");
 		}
 
 		[Test]
@@ -484,100 +536,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 
-		[Test]
-		public void ShouldUpdateEmploymentNumber()
-		{
-			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false});
-			
-			Target.UpsertEmploymentNumber(personId, "abc", "2017-02-14 08:00".Utc());
-
-			Target.Load(personId).EmploymentNumber.Should().Be("abc");
-			Target.Load(personId).IsDeleted.Should().Be(false);
-			Target.Load(personId).ExpiresAt.Should().Be(null);
-		}
-
-		[Test]
-		public void ShouldInsertEmploymentNumber()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.UpsertEmploymentNumber(personId, "123", "2017-02-14 08:00".Utc());
-
-			var model = Target.Load(personId);
-			model.EmploymentNumber.Should().Be("123");
-			model.IsDeleted.Should().Be(true);
-			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
-		}
-
-		[Test]
-		public void ShouldInsertFirstAndLastName()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.UpsertName(personId,"bill","gates", "2017-02-14 08:00".Utc());
-
-			var model = Target.Load(personId);
-			model.FirstName.Should().Be("bill");
-			model.LastName.Should().Be("gates");
-			model.IsDeleted.Should().Be(true);
-			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
-		}
-
-		[Test]
-		public void ShouldUpdateFirstAndLastName()
-		{
-			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest()
-			{
-				PersonId = personId,
-				FirstName = "ashley",
-				LastName = "andeen",
-				IsDeleted = false
-			});
-			
-			Target.UpsertName(personId, "bill", "gates", "2017-02-14 0:00".Utc());
-
-			var model = Target.Load(personId);
-			model.FirstName.Should().Be("bill");
-			model.LastName.Should().Be("gates");
-			model.IsDeleted.Should().Be(false);
-			model.ExpiresAt.Should().Be(null);
-		}
-
-
-		[Test]
-		public void ShouldUpdateTeamName()
-		{
-			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfo
-			{
-				PersonId = personId,
-				TeamId = teamId,
-				TeamName = "team students"
-			});
-
-			Target.UpdateTeamName(teamId,"team preferences");
-	
-			Target.Load(personId).TeamName.Should().Be("team preferences");			
-		}
-
-		[Test]
-		public void ShouldUpdateSiteName()
-		{
-			var personId = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfo
-			{
-				PersonId = personId,
-				SiteId = siteId,
-				SiteName = "london"
-			});
-
-			Target.UpdateSiteName(siteId, "paris");
-	
-			Target.Load(personId).SiteName.Should().Be("paris");			
-		}
 	}
 }
