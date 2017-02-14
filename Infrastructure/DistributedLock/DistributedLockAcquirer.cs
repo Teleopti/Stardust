@@ -57,15 +57,16 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 				connection.Open();
 				if (_monitor.TryEnter(name, TimeSpan.Zero, connection))
 				{
-					var timer = new Timer(_ => keepAlive(connection), null, _keepAliveInterval, _keepAliveInterval);
+					Timer timer = null;
 					try
 					{
+						timer = new Timer(_ => keepAlive(connection), null, _keepAliveInterval, _keepAliveInterval);
 						action();
 					}
 					finally
 					{
 						_monitor.Exit(name, TimeSpan.Zero, connection);
-						timer.Dispose();
+						timer?.Dispose();
 					}
 				}
 				connection.Close();
@@ -74,12 +75,15 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		private IDisposable @lock(string name)
 		{
-			var connection = new SqlConnection(connectionString());
-			connection.Open();
+			Timer timer = null;
+			IDisposable @lock = null;
+			SqlConnection connection = null;
 			try
 			{
-				var @lock = _monitor.Enter(name, _timeout, connection);
-				var timer = new Timer(_ => keepAlive(connection), null, _keepAliveInterval, _keepAliveInterval);
+				connection = new SqlConnection(connectionString());
+				connection.Open();
+				@lock = _monitor.Enter(name, _timeout, connection);
+				timer = new Timer(_ => keepAlive(connection), null, _keepAliveInterval, _keepAliveInterval);
 				return new GenericDisposable(() =>
 				{
 					try
@@ -96,7 +100,9 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			}
 			catch (Exception)
 			{
-				connection.Dispose();
+				connection?.Dispose();
+				@lock?.Dispose();
+				timer?.Dispose();
 				throw;
 			}
 		}
