@@ -25,6 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(_scheduleOptimization.Execute(id));
 		}
 
+		[HttpPost, Route("api/ResourcePlanner/Optimize/{id}")]
+		public virtual IHttpActionResult OptimizeForPlanningPeriod(Guid id)
+		{
+			return Ok(_scheduleOptimization.Execute(id));
+		}
+
 		[HttpPost, Route("api/ResourcePlanner/optimize/intraday/{id}")]
 		public void OptimizeIntraday(Guid id)
 		{

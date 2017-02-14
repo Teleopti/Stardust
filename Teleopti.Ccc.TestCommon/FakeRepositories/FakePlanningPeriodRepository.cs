@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks)
 		{
+			return Has(start, numberOfWeeks, null);
+		}
+
+		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks, IAgentGroup agentGroup)
+		{
 			var planningPeriod =
 				new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(start.Date.AddDays(-7*numberOfWeeks)), new[]
 				{
@@ -42,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 						Number = numberOfWeeks,
 						PeriodType = SchedulePeriodType.Week
 					}
-				}));
+				}), agentGroup);
 			planningPeriod.SetId(Guid.NewGuid());
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IPersonRepository _personRepository;
 
 		public ScheduleOptimizationTeamBlock(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -50,7 +52,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IResourceCalculation resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			IPersonRepository personRepository)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -68,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_userTimeZone = userTimeZone;
+			_personRepository = personRepository;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -90,8 +94,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
+			var agentGroup = planningPeriod.AgentGroup;
+			if (agentGroup == null)
+			{
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
+			}
+			else
+			{
+				var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, people.Select(x => x.Id.Value), null, null, period);
+			}
 
 			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToArray();
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, period); 

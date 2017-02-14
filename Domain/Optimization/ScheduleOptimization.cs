@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
+		private readonly IPersonRepository _personRepository;
 
 		public ScheduleOptimization(IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
@@ -39,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			IOptimizerHelperHelper optimizerHelperHelper, CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			OptimizationResult optimizationResult, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended)
+			OptimizationResult optimizationResult, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,
+			IPersonRepository personRepository)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -55,6 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
+			_personRepository = personRepository;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -73,7 +77,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
+			var agentGroup = planningPeriod.AgentGroup;
+			if (agentGroup == null)
+			{
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
+			}
+			else
+			{
+				var people = _personRepository.FindPeopleInAgentGroup(agentGroup, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, people.Select(x=>x.Id.Value), null, null, period);
+			}
+			
 			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToArray();
 
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, schedules);
