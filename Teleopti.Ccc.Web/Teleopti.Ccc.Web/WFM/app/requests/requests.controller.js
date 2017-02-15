@@ -25,6 +25,8 @@
 			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeams) {
 				internalSelectedTeamIds = defaultTeams ? defaultTeams : [];
 				vm.selectedTeamIds = internalSelectedTeamIds;
+				
+				$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: internalSelectedTeamIds, agentSearchTerm: vm.agentSearchTerm});
 			}))
 			.then(init);
 
