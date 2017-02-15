@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public virtual IEnumerable<IFilter> Filters => _filters;
-		public virtual string Name { get; private set; }
+		public virtual string Name { get; protected set; }
 
 		public virtual void ChangeName(string name)
 		{
