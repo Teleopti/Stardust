@@ -1398,6 +1398,8 @@
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />

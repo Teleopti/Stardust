@@ -19,7 +19,6 @@
 
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
 		
-		
 		<%
 		    var version = DateTime.UtcNow.Ticks;
         %>
@@ -43,6 +42,7 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MonthViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.WeekViewModel.js?bust=<%=version%>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Viewmodels.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.js?bust=<%=version%>"></script>
@@ -58,6 +58,7 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.WeekViewModel.Tests.js?bust=<%=version%>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Viewmodels.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.RequestViewModel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.List.Tests.js?bust=<%=version%>"></script>
@@ -70,7 +71,6 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js?bust=<%=version %>"></script>
-
 	</head>
 	<body>
 		<h1 id="qunit-header">All tests</h1>
