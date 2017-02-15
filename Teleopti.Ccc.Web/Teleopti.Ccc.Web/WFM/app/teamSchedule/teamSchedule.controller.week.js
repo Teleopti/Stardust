@@ -27,8 +27,8 @@
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
 	
 		vm.onKeyWordInSearchInputChanged = function() {
-			vm.resetSchedulePage();
 			vm.selectedFavorite = false;
+			vm.resetSchedulePage();
 		};
 
 		vm.selectorChanged = function () {
@@ -41,9 +41,23 @@
 			vm.focusToSearch = false;
 		};
 
-		vm.focusSearch = function($event){
+		vm.resetSearchStatus = function(){
+			vm.resetFocusSearch();
+			vm.deactiveSearchIcon();
+		};
+
+		vm.focusSearch = function(){
 			vm.focusToSearch = true;
-			if($event && $event.which == 13) vm.focusToSearch = false;
+		};
+
+		vm.activeSearchIcon = function($event){
+			vm.activeSearchIconColor = true;
+			if($event && $event.which == 13)
+				vm.deactiveSearchIcon();
+		};
+
+		vm.deactiveSearchIcon = function(){
+			vm.activeSearchIconColor = false;
 		};
 
 		vm.resetSchedulePage = function () {
@@ -78,13 +92,14 @@
 			}).catch(function() {
 				vm.isLoading = false;
 			});
-			vm.resetFocusSearch();
+			vm.resetSearchStatus();
 		};
 
 		vm.onSelectedTeamsChanged = function(teams) {
-			vm.selectedTeamIds = teams;			
+			vm.selectedTeamIds = teams;
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 			vm.focusSearch();
+			vm.activeSearchIcon();
 			vm.selectedFavorite = false;
 		};
 

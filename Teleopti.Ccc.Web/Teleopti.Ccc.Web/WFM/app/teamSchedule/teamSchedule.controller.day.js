@@ -167,9 +167,23 @@
 			vm.focusToSearch = false;
 		};
 
-		vm.focusSearch = function($event){
+		vm.resetSearchStatus = function(){
+			vm.resetFocusSearch();
+			vm.deactiveSearchIcon();
+		};
+
+		vm.focusSearch = function(){
 			vm.focusToSearch = true;
-			if($event && $event.which == 13) vm.focusToSearch = false;
+		};
+
+		vm.activeSearchIcon = function($event){
+			vm.activeSearchIconColor = true;
+			if($event && $event.which == 13)
+				vm.deactiveSearchIcon();
+		};
+
+		vm.deactiveSearchIcon = function(){
+			vm.activeSearchIconColor = false;
 		};
 
 		vm.resetSchedulePage = function () {
@@ -266,7 +280,7 @@
 					vm.isLoading = false;
 				});
 			}
-			vm.resetFocusSearch();
+			vm.resetSearchStatus();
 		};
 
 		vm.toggleShowAbsenceOnly = function () {
@@ -354,6 +368,7 @@
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			personSelectionSvc.clearPersonInfo();
 			vm.focusSearch();
+			vm.activeSearchIcon();
 			vm.selectedFavorite = false;
 		};
 

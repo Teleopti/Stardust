@@ -123,8 +123,8 @@
 				return;
 			}
 			if(params){
-				vm.agentSearchTerm = params.agentSearchTerm || vm.agentSearchTerm;
-				vm.selectedTeamIds = params.selectedTeamIds || vm.selectedTeamIds;
+				vm.agentSearchTerm = params.agentSearchTerm;
+				vm.selectedTeamIds = params.selectedTeamIds;
 			}
 
 			var requestsFilter = {

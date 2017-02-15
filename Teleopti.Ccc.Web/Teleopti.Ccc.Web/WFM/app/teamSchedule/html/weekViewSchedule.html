@@ -25,9 +25,9 @@
 								 on-pick="vm.onSelectedTeamsChanged(teams)"
 								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 
-			<span class="people-search-container inline-block" focus-input="vm.focusToSearch" ng-click="$event.stopPropagation()" ng-keydown="vm.focusSearch($event)">
+			<span class="people-search-container inline-block" focus-input="vm.focusToSearch" ng-keyup="vm.activeSearchIcon($event)">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
-				<span class="pointer" ng-class="{'focusing-search':vm.focusToSearch, 'not-focusing-search':!vm.focusToSearch}" ng-click="vm.onKeyWordInSearchInputChanged()">
+				<span class="pointer" ng-class="{'focusing-search':vm.activeSearchIconColor}" ng-click="vm.onKeyWordInSearchInputChanged()">
 					<i class="mdi mdi-magnify"></i>
 					<md-tooltip>{{'Search' | translate}}</md-tooltip>
 				</span>

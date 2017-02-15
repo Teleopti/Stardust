@@ -41,6 +41,7 @@
 		vm.changeSelectedTeams = function (teams) {
 			internalSelectedTeamIds = teams;
 			vm.focusSearch();
+			vm.activeSearchIcon();
 			vm.selectedFavorite = false;
 		};
 
@@ -48,17 +49,33 @@
 			internalSelectedTeamIds = currentFavorite.TeamIds;
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 			setSearchFilter();
-			vm.toggleSearchFocus = false;
+
+			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:currentFavorite.TeamIds,agentSearchTerm:currentFavorite.SearchTerm});
+			vm.resetSearchStatus();
 		};
 
 		vm.resetFocusSearch = function(){
 			vm.toggleSearchFocus = false;
 		};
 
-		vm.focusSearch = function($event){
+		vm.resetSearchStatus = function(){
+			vm.resetFocusSearch();
+			vm.deactiveSearchIcon();
+		};
+
+		vm.focusSearch = function(){
 			vm.toggleSearchFocus = true;
-			if($event && $event.which == 13) vm.toggleSearchFocus = false;
+		};
+
+		vm.activeSearchIcon = function($event){
+			vm.activeSearchIconColor = true;
+			if($event && $event.which == 13)
+				vm.deactiveSearchIcon();
 			setSearchFilter();
+		};
+
+		vm.deactiveSearchIcon = function(){
+			vm.activeSearchIconColor = false;
 		};
 
 		vm.getSearch = function () {
@@ -69,9 +86,10 @@
 		};
 
 		vm.keyDownOnSearchTermChanged = function() {
-			vm.toggleSearchFocus = false;
 			setSearchFilter();
 			vm.selectedFavorite = false;
+			vm.resetSearchStatus();
+
 			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:vm.selectedTeamIds,agentSearchTerm:vm.agentSearchTerm});
 		};
 
@@ -79,7 +97,7 @@
 
 		function setSearchFilter() {
 			vm.selectedTeamIds = internalSelectedTeamIds;
-			vm.agentSearchTerm = vm.agentSearchOptions.keyword;
+			vm.agentSearchTerm = vm.agentSearchOptions && vm.agentSearchOptions.keyword;
 		}
 
 		function init() {
@@ -251,7 +269,7 @@
 					vm.absencePeriod = newValue;
 				}
 
-				vm.resetFocusSearch();
+				vm.resetSearchStatus();
 
 				//fix for bug 42633, need removed when styleguide ready for this
 				if ($('#Request-period').hasClass('request-date-range-picker')

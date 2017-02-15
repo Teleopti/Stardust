@@ -21,6 +21,7 @@ describe('RequestsControllerTests', function () {
 					Wfm_Requests_Performance_36295: true,
 					Wfm_Requests_ApproveDeny_36297: true,
 					Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
+					Wfm_Requests_SaveFavoriteSearches_42578: true,
 					togglesLoaded: $q(function(resolve, reject) {
 						resolve();
 					})
@@ -98,5 +99,72 @@ describe('RequestsControllerTests', function () {
 		controller.selectedTabIndex = shiftTradeRequestTabIndex;
 		test.scope.$digest();
 		expect(controller.shiftTradePeriod).toEqual(periodForShiftTradeRequest);
-	});	
+	});
+
+	it('should active search status after selected teams changed', function(){
+		var target = setUpTarget().target;
+
+		target.toggleSearchFocus = false;
+		target.activeSearchIconColor = false;
+
+		target.changeSelectedTeams(['fakeTeamId']);
+
+		expect(target.toggleSearchFocus).toEqual(true);
+		expect(target.activeSearchIconColor).toEqual(true);
+	});
+
+	it('should deactive search status after applying favorite', function(){
+		var target = setUpTarget().target;
+
+		target.agentSearchOptions = {
+				keyword: "",
+				isAdvancedSearchEnabled: true,
+				searchKeywordChanged: false,
+				searchFields: [
+					'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBags',
+					'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
+				]
+			};
+		target.toggleSearchFocus = true;
+		target.activeSearchIconColor = true;
+
+		target.applyFavorite({
+			Name: 'fakeFavorite',
+			SearchTerm: 'a',
+			TeamIds: ['fakeTeam1Id']
+		});
+
+		expect(target.toggleSearchFocus).toEqual(false);
+		expect(target.activeSearchIconColor).toEqual(false);
+	});
+
+	it('should deactive search status after search term changed and enter pressed', function(){
+		var target = setUpTarget().target;
+
+		target.toggleSearchFocus = true;
+		target.activeSearchIconColor = true;
+
+		target.keyDownOnSearchTermChanged()
+
+		expect(target.toggleSearchFocus).toEqual(false);
+		expect(target.activeSearchIconColor).toEqual(false);
+	});
+
+	it('should deactive search status after period changed', function(){
+		var test = setUpTarget();
+		var target = test.target;
+
+		target.toggleSearchFocus = true;
+		target.activeSearchIconColor = true;
+
+		target.period = {
+			startDate: moment().startOf('week')._d,
+			endDate: moment().endOf('week')._d
+		};
+
+		test.scope.$digest();
+
+		expect(target.toggleSearchFocus).toEqual(false);
+		expect(target.activeSearchIconColor).toEqual(false);
+	});
 });

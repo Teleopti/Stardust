@@ -118,6 +118,58 @@ describe("teamschedule controller tests", function() {
 		expect(Object.keys(personSelection.personInfo).length).toEqual(0);
 	});
 
+	it("should active search status after selected teams changed", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.activeSearchIconColor = false;
+		controller.focusToSearch = false;
+
+		controller.onSelectedTeamsChanged(['empty Team']);
+
+		expect(controller.activeSearchIconColor).toEqual(true);
+		expect(controller.focusToSearch).toEqual(true);
+	});
+
+	it("should deactive search status after selected date changed", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.activeSearchIconColor = true;
+		controller.focusToSearch = true;
+
+		controller.onScheduleDateChanged();
+
+		expect(controller.activeSearchIconColor).toEqual(false);
+		expect(controller.focusToSearch).toEqual(false);
+	});
+
+	it("should deactive search status after search text changed", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.activeSearchIconColor = true;
+		controller.focusToSearch = true;
+
+		controller.onKeyWordInSearchInputChanged();
+
+		expect(controller.activeSearchIconColor).toEqual(false);
+		expect(controller.focusToSearch).toEqual(false);
+	});
+
+	it("should deactive search status after selected favorite changed", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.activeSearchIconColor = true;
+		controller.focusToSearch = true;
+
+		controller.applyFavorite({
+			Name: 'fakeFavorite',
+			SearchTerm: 'a',
+			TeamIds: ['fakeTeam1Id']
+		});
+
+		expect(controller.activeSearchIconColor).toEqual(false);
+		expect(controller.focusToSearch).toEqual(false);
+	});
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
 			$scope: rootScope,
