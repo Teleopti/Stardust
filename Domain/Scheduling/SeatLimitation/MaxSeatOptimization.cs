@@ -111,6 +111,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				var numInfos = teamBlockInfos.Count();
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
+					if (backgroundWorker.CancellationPending)
+						return;
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);

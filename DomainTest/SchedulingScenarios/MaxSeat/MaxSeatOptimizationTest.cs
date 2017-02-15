@@ -710,7 +710,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			progress.ReportedProgress.Select(x=> x.Message).Should().Contain(Resources.DoNotBreakMaxSeatDotDotDot);
 		}
 
-		[Test, Ignore("41746")]
+		[Test]
 		public void ShouldCancel()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
