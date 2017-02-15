@@ -3,6 +3,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -37,11 +38,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldNotMoveDayOffToDayWithPersonalActivityWhenOptimizingDayOffs()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
-			var agentGroup = new AgentGroup("group1");
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
+			var agentGroup = new AgentGroup("group1").AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Add(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
+			
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);

@@ -378,7 +378,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var scenario = ScenarioRepository.Has("some name");
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1");
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
