@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -939,11 +940,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyHashCode()
         {
-            IActivity activity = ActivityFactory.CreateActivity("lunch");
-            var activityRestriction = new ActivityRestriction(activity);
-            var startTime = TimeSpan.FromHours(8);
+            IActivity activity = ActivityFactory.CreateActivity("lunch").WithId();
+            var activityRestriction = new ActivityRestriction(activity).WithId();
+			var otherActivityRestriction = new ActivityRestriction(activity).WithId();
+			var startTime = TimeSpan.FromHours(8);
             var endTime = TimeSpan.FromHours(9);
-            var cat = ShiftCategoryFactory.CreateShiftCategory("katt");
+            var cat = ShiftCategoryFactory.CreateShiftCategory("katt").WithId();
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), cat, null, null,
                                                new List<IActivityRestriction>());
@@ -969,7 +971,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             other = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), null, null, null,
-                                               new List<IActivityRestriction>{activityRestriction});
+                                               new List<IActivityRestriction>{otherActivityRestriction});
 
             Assert.AreEqual(_target.GetHashCode(), other.GetHashCode());
 

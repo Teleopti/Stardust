@@ -431,7 +431,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 					result = (result * 398) ^ Absence.GetHashCode();
 				foreach (IActivityRestriction activityRestriction in ActivityRestrictionCollection)
 				{
-					result = (result * 398) ^ activityRestriction.GetHashCode();
+					result = (result * 398) ^ activityRestriction.Activity.GetHashCode();
+					result = (result * 398) ^ activityRestriction.StartTimeLimitation.GetHashCode();
+					result = (result * 398) ^ activityRestriction.EndTimeLimitation.GetHashCode();
+					result = (result * 398) ^ activityRestriction.WorkTimeLimitation.GetHashCode();
 				}
 				result = (result * 398) ^ NotAvailable.GetHashCode();
 				result = (result * 398) ^ IsAvailabilityDay.GetHashCode();
