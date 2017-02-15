@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces.Domain;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_maxSeatsCalculationForTeamBlock = maxSeatsCalculationForTeamBlock;
 		}
 
+		[RemoveMeWithToggle("Most part of while clause below can be removed when toggle is removed - HasMaxSeatSkill always false", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
 			IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
 			PeriodValueCalculationParameters periodValueCalculationParameters, TimeZoneInfo timeZoneInfo)

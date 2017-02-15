@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schedulingOption, ITeamInfo teamInfo, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays);
     }
 
-    public class TeamBlockMaxSeatChecker : ITeamBlockMaxSeatChecker
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+	public class TeamBlockMaxSeatChecker : ITeamBlockMaxSeatChecker
     {
         private readonly IUsedSeats _usedSeats;
 

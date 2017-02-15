@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		bool IsSatisfiedByWithoutEqualCondition(double usedSeats, int maxSeats);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class IsMaxSeatsReachedOnSkillStaffPeriodSpecification : IIsMaxSeatsReachedOnSkillStaffPeriodSpecification
 	{
 

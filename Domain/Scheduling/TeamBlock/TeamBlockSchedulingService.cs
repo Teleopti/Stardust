@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -143,7 +144,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
         }
 
-        private void verifyScheduledTeamBlock(IList<IPerson> selectedPersons,
+		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		private void verifyScheduledTeamBlock(IList<IPerson> selectedPersons,
                                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                               DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo, Func<bool> isCancelled,
 																							IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)

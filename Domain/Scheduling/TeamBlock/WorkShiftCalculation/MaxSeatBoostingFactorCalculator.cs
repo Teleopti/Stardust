@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		double GetBoostingFactor(double currentSeats, double maxSeats);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatBoostingFactorCalculator : IMaxSeatBoostingFactorCalculator
 	{
 		public double GetBoostingFactor(double currentSeats, double maxSeats)
