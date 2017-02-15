@@ -76,8 +76,8 @@ BEGIN
        Insert
         into #persons
         SELECT p.id
-        FROM Person p 
-        INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+        FROM Person(nolock) p 
+        INNER JOIN PersonPeriod(nolock) pp ON p.Id = pp.Parent
         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
         AND pp.Team in(SELECT * FROM @GroupIds)
         LEFT JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1
@@ -94,8 +94,8 @@ BEGIN
         Insert
         into #persons
         SELECT p.id
-        FROM Person p 
-        INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+        FROM Person(nolock) p 
+        INNER JOIN PersonPeriod(nolock) pp ON p.Id = pp.Parent
         AND pp.Team in(SELECT * FROM @GroupIds)
         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
         INNER JOIN #personSkill2 ps ON ps.Parent = pp.Id
