@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				return new IPersonSkill[] {};
 
 			var intradaySchedule = getIntradaySchedule();
-			var personAssignment = intradaySchedule.PersonAssignment();
+			var personAssignment = intradaySchedule?.PersonAssignment();
 			if (personAssignment == null || personAssignment.ShiftLayers.IsEmpty())
 				return personSkills;
 
@@ -94,12 +94,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var defaultScenario = _scenarioRepository.Current();
 
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-				new [] {_loggedOnUser.CurrentUser()},
+				new[] {_loggedOnUser.CurrentUser()},
 				new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(date, date),
 				defaultScenario);
 
-			return dictionary.SchedulesForDay(date).First();
+			var scheduleDays = dictionary.SchedulesForDay(date).ToList();
+			return scheduleDays.Any() ? scheduleDays.First() : null;
 		}
 
 		private static Dictionary<DateTime, int> calcuateIntervalPossibilities(IEnumerable<skillStaffingData> skillStaffingDatas,

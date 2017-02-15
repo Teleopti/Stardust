@@ -140,6 +140,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
+		public void ShouldGetPossibilitiesWithoutIntradaySchedule()
+		{
+			setupTestDataForOneSkill();
+			ScheduleStorage.Clear();
+			var possibilities = Target.CalcuateIntradayOvertimeIntervalPossibilities();
+			Assert.AreEqual(2, possibilities.Count);
+		}
+
+		[Test]
 		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffing()
 		{
 			setupTestDataForOneSkill();
