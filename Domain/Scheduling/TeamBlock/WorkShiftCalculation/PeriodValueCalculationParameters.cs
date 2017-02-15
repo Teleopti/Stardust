@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	  private readonly bool _hasMaxSeatSkill;
 	  private readonly IDictionary<DateTime, IntervalLevelMaxSeatInfo> _maxSeatInfo;
 
-	  public PeriodValueCalculationParameters(WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool hasMaxSeatSkill, IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo)
+		[RemoveMeWithToggle("remove maxseatskill stuff when toggle is removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		public PeriodValueCalculationParameters(WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool hasMaxSeatSkill, IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo)
 	  {
 		  _lengthFactor = lengthFactor;
 		  _useMinimumPersons = useMinimumPersons;

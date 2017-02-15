@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class InitMaxSeatForStateHolderOld : IInitMaxSeatForStateHolder
 	{
 		private readonly Func<ISchedulerStateHolder> _stateHolder;

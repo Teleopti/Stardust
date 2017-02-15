@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -375,6 +376,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return success;
 		}
 
+		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private bool runOneMatrixOnly(ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, IOptimizationPreferences optimizationPreferences,
 										ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
 										ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, 
@@ -478,6 +480,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
+		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private bool runOneTeam(ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, 
 														IOptimizationPreferences optimizationPreferences,
 		                        ISchedulePartModifyAndRollbackService rollbackService,

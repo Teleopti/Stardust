@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_seatLimitationWorkShiftCalculator = seatLimitationWorkShiftCalculator;
 		}
 
+		[RemoveMeWithToggle("remove maxseatskill stuff when toggle is removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues, double maxValue, IPerson person,
 			DateOnly dateOnly, IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, TimeSpan averageWorkTimePerDay,
 			ISchedulingOptions schedulingOptions)
