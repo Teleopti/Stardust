@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 using Castle.DynamicProxy;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -14,7 +13,6 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 	{
 		private readonly IConnectionStrings _connectionStrings;
 		private readonly SqlMonitor _monitor;
-		private readonly TimeSpan _timeout;
 		private readonly TimeSpan _keepAliveInterval;
 
 		public DistributedLockAcquirer(
@@ -22,15 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			IConnectionStrings connectionStrings, 
 			SqlMonitor monitor)
 		{
-			_timeout = TimeSpan.FromMilliseconds(config.ReadValue("DistributedLockTimeout", 10*1000));
 			_keepAliveInterval = TimeSpan.FromMilliseconds(config.ReadValue("DistributedLockKeepAliveInterval", 60*1000));
 			_connectionStrings = connectionStrings;
 			_monitor = monitor;
-		}
-
-		public IDisposable LockForTypeOf(object lockObject)
-		{
-			return @lock(ProxyUtil.GetUnproxiedType(lockObject).Name);
 		}
 
 		public void TryLockForTypeOf(object lockObject, Action action)
@@ -68,41 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 				connection.Close();
 			}
 		}
-
-		private IDisposable @lock(string name)
-		{
-			Timer timer = null;
-			IDisposable @lock = null;
-			SqlConnection connection = null;
-			try
-			{
-				connection = new SqlConnection(connectionString());
-				connection.Open();
-				@lock = _monitor.Enter(name, _timeout, connection);
-				timer = new Timer(_ => keepAlive(connection), null, _keepAliveInterval, _keepAliveInterval);
-				return new GenericDisposable(() =>
-				{
-					try
-					{
-						@lock.Dispose();
-						connection.Close();
-					}
-					finally
-					{
-						timer.Dispose();
-						connection.Dispose();
-					}
-				});
-			}
-			catch (Exception)
-			{
-				connection?.Dispose();
-				@lock?.Dispose();
-				timer?.Dispose();
-				throw;
-			}
-		}
-
+		
 		// Connections to SQL Azure Database that are idle for 30 minutes 
 		// or longer will be terminated. And since we are using separate
 		// connection for a distributed lock, we'd like to prevent Resource
