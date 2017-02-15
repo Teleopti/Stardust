@@ -71,6 +71,13 @@ CREATE TABLE #fact_schedule(
 	[scheduled_paid_time_absence_m] [int] NULL,
 )
 
+CREATE TABLE #person(
+	person_id int,
+	person_code uniqueidentifier,
+	person_name nvarchar(200), 
+	valid_from_date_id_local smalldatetime, 
+	valid_to_date_id_local smalldatetime
+)
 
 /* Get the agents to report on */
 INSERT INTO #rights_agents
@@ -83,7 +90,12 @@ INSERT INTO #rights_teams
 INSERT INTO #absences
 SELECT * FROM SplitStringInt(@absence_set)
 
-/*Speed up fact_schedule*/
+INSERT INTO #person
+SELECT p.person_id, p.person_code, p.person_name, valid_from_date_id_local, valid_to_date_id_local
+FROM mart.dim_person p
+INNER JOIN #rights_agents a ON p.person_id = a.right_id
+INNER JOIN #rights_teams t ON p.team_id = t.right_id
+
 INSERT INTO #fact_schedule
 SELECT
 	p.person_code,
@@ -96,15 +108,15 @@ SELECT
 	f.scheduled_work_time_absence_m,
 	f.scheduled_paid_time_absence_m
 FROM mart.fact_schedule f WITH (NOLOCK)
-INNER JOIN mart.dim_person p
+INNER JOIN #person p
 	ON f.person_id=p.person_id
 	AND f.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_date d
 	ON d.date_id = f.shift_startdate_local_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND f.scenario_id = @scenario_id
-AND p.team_id IN (select right_id from #rights_teams)
-AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
+AND f.activity_id = -1
+
 
 IF @report_id =  'C5B88862-F7BE-431B-A63F-3DD5FF8ACE54'  --4
 BEGIN
