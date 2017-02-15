@@ -66,6 +66,6 @@
     "moment-timezone": "0.4.1",
     "ng-file-upload": "5.2.0",
     "ngstorage": "0.3.9",
-    "teleopti-styleguide": "1.8.7"
+    "teleopti-styleguide": "1.8.8"
   }
 }
