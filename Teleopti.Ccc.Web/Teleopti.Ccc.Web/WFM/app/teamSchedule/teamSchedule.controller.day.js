@@ -148,6 +148,7 @@
 
 		vm.onScheduleDateChanged = function () {
 			vm.isLoading = true;
+			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			personSelectionSvc.clearPersonInfo();
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
@@ -155,6 +156,7 @@
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			if (vm.searchOptions.searchKeywordChanged) {
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				personSelectionSvc.clearPersonInfo();
 			}
 			vm.selectedFavorite = false;
@@ -349,6 +351,8 @@
 
 		vm.onSelectedTeamsChanged = function (teams) {
 			vm.selectedTeamIds = teams;
+			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			personSelectionSvc.clearPersonInfo();
 			vm.focusSearch();
 			vm.selectedFavorite = false;
 		};

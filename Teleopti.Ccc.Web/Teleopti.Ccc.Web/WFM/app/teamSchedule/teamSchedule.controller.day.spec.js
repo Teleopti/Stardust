@@ -64,6 +64,60 @@ describe("teamschedule controller tests", function() {
 
 	});
 
+	it("should clear person selection when search text changed", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.loadSchedules();
+		controller.selectAllForAllPages();
+
+		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
+		expect(personSchedule1.IsSelected).toEqual(true);
+
+		
+		controller.searchOptions.searchKeywordChanged = true;
+		controller.onKeyWordInSearchInputChanged();
+
+		expect(scheduleMgmt.groupScheduleVm.Schedules[0].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[1].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[2].IsSelected).toEqual(false);
+		expect(Object.keys(personSelection.personInfo).length).toEqual(0);
+	});
+
+	it("should clear person selection when date changed", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.loadSchedules();
+		controller.selectAllForAllPages();
+
+		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
+		expect(personSchedule1.IsSelected).toEqual(true);
+
+		controller.onScheduleDateChanged();
+
+		expect(scheduleMgmt.groupScheduleVm.Schedules[0].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[1].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[2].IsSelected).toEqual(false);
+
+		expect(Object.keys(personSelection.personInfo).length).toEqual(0);
+	});
+
+	it("should clear person selection when selected teams changed", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.loadSchedules();
+		controller.selectAllForAllPages();
+
+		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
+		expect(personSchedule1.IsSelected).toEqual(true);
+
+		controller.onSelectedTeamsChanged(['empty Team']);
+
+		expect(scheduleMgmt.groupScheduleVm.Schedules[0].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[1].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[2].IsSelected).toEqual(false);
+		expect(Object.keys(personSelection.personInfo).length).toEqual(0);
+	});
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
 			$scope: rootScope,
@@ -119,6 +173,7 @@ describe("teamschedule controller tests", function() {
 							}
 						],
 						"IsFullDayAbsence": false,
+						"IsSelected":false,
 						"DayOff": null,
 						"Timezone": {
 							"IanaId": "Europe/Berlin",
@@ -139,6 +194,7 @@ describe("teamschedule controller tests", function() {
 							}
 						],
 						"IsFullDayAbsence": false,
+						"IsSelected":false,
 						"DayOff": null,
 						"Timezone": {
 							"IanaId": "Europe/Berlin",
@@ -151,6 +207,7 @@ describe("teamschedule controller tests", function() {
 						"Date": today,
 						"Projection": [],
 						"IsFullDayAbsence": false,
+						"IsSelected":false,
 						"DayOff": null,
 						"Timezone": {
 							"IanaId": "Asia/Shanghai",
