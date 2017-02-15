@@ -36,10 +36,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		{
 			var team = TeamFactory.CreateTeamWithId(Guid.NewGuid());
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(Guid.NewGuid(), new DateOnly(2017, 1, 1), team);
-			var agentGroup = new AgentGroup
-			{
-				Name = "agent group 1",
-			};
+			var agentGroup = new AgentGroup("agent group 1");
 			agentGroup.AddFilter(new TeamFilter(team));
 			agentGroup.SetId(Guid.NewGuid());
 			PersonRepository.Add(person);

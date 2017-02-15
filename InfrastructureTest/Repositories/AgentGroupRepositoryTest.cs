@@ -11,10 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		protected override IAgentGroup CreateAggregateWithCorrectBusinessUnit()
 		{
-			return new AgentGroup
-			{
-				Name = "Test"
-			};
+			return new AgentGroup("Test");
 		}
 
 		protected override void VerifyAggregateGraphProperties(IAgentGroup loadedAggregateFromDatabase)

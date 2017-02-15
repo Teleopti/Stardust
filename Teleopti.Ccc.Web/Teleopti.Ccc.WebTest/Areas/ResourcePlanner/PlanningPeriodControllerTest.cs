@@ -35,10 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnDefaultPlanningPeriodForAgentGroupIfNotCreated()
 		{
 			var agentGroupId = Guid.NewGuid();
-			var agentGroup = new AgentGroup
-			{
-				Name = "test group"
-			};
+			var agentGroup = new AgentGroup("test group");
 			agentGroup.SetId(agentGroupId);
 			AgentGroupRepository.Add(agentGroup);
 
@@ -50,10 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnAvailablePlanningPeriodsForAgentGroup()
 		{
 			var agentGroupId = Guid.NewGuid();
-			var agentGroup = new AgentGroup
-			{
-				Name = "test group"
-			};
+			var agentGroup = new AgentGroup("test group");
 			agentGroup.SetId(agentGroupId);
 			AgentGroupRepository.Add(agentGroup);
 

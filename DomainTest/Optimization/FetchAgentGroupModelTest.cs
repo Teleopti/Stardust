@@ -24,10 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldIncludePersistedAgentGroupWhenLoadingAll()
 		{
-			var presentInDb = new AgentGroup
-			{
-				Name = RandomName.Make()
-			}.WithId();
+			var presentInDb = new AgentGroup(RandomName.Make()).WithId();
 			AgentGroupRepository.Add(presentInDb);
 
 			var loaded = Target.FetchAll().Single();
@@ -113,9 +110,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldFetchAgentGroup()
 		{
-			var curr = new AgentGroup().WithId();
+			var curr = new AgentGroup(RandomName.Make()).WithId();
 			AgentGroupRepository.Add(curr);
-			curr.Name = RandomName.Make();
 
 			var agentGroupModel = Target.Fetch(curr.Id.Value);
 			agentGroupModel.Id.Should().Be.EqualTo(curr.Id);

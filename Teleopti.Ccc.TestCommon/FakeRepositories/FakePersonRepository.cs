@@ -261,7 +261,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
 		{
-			return _storage.LoadAll<IPerson>().ToList();
+			var people = _storage.LoadAll<IPerson>().ToList();
+			var result = new List<IPerson>();
+			foreach (var person in people)
+			{
+				if(agentGroup.Filters.Any(x => x.IsValidFor(person, period.StartDate)))
+					result.Add(person);
+			}
+			return result;
 		}
 	}
 }

@@ -41,14 +41,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldUseSettingForConsecutiveDayOffs()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var agentGroup = new AgentGroup
-			{
-				Name = "group1"
-			};
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
+			var agentGroup = new AgentGroup("group 1");
+			agentGroup.AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Add(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
+			
 			var scenario = ScenarioRepository.Has("some name");
 			DayOffRulesRepository.HasDefault(x => 
 			{
@@ -89,14 +88,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldUseSettingForConsecutiveWorkDays()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mo
-			var agentGroup = new AgentGroup
-			{
-				Name = "group1"
-			};
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
+			var agentGroup = new AgentGroup("group 1");
+			agentGroup.AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Add(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			var scenario = ScenarioRepository.Has("some name");
 			DayOffRulesRepository.HasDefault(x => x.ConsecutiveWorkdays = new MinMax<int>(1, 6));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
@@ -131,14 +128,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldUseSettingForDayOffPerWeek_NotValid()
 		{
 			var firstDay = new DateOnly(2015, 10, 26); //mon
-			var agentGroup = new AgentGroup
-			{
-				Name = "group1"
-			};
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
+			var agentGroup = new AgentGroup("group 1");
+			agentGroup.AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Add(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
+			
 			var scenario = ScenarioRepository.Has("some name");
 			DayOffRulesRepository.HasDefault(x => x.DayOffsPerWeek = new MinMax<int>(3, 4));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
@@ -179,14 +175,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldUseSettingForDayOffPerWeek_Valid()
 		{
 			var firstDay = new DateOnly(2015, 10, 26); //mon
-			var agentGroup = new AgentGroup
-			{
-				Name = "group1"
-			};
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
+			var agentGroup = new AgentGroup("group 1");
+			agentGroup.AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Add(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
 			var scenario = ScenarioRepository.Has("some name");
 			DayOffRulesRepository.HasDefault(x =>
 			{
@@ -235,14 +229,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			OptimizationPreferencesProvider.SetFromTestsOnly(prefUsedInThisTest);
 
 			var firstDay = new DateOnly(2015, 10, 26); //mon
-			var agentGroup = new AgentGroup
-			{
-				Name = "group1"
-			};
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
+			var agentGroup = new AgentGroup("group 1");
+			agentGroup.AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Add(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
+			
 			var scenario = ScenarioRepository.Has("some name");
 			DayOffRulesRepository.HasDefault(x =>
 			{
@@ -290,16 +283,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldUseDifferentDayOffRulesForDifferentFiltersWhenOneIsIncorrect()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var agentGroup = new AgentGroup
-			{
-				Name = "group1"
-			};
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
+			var agentGroup = new AgentGroup("group 1");
+			agentGroup.AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Add(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			var scenario = ScenarioRepository.Has("some name");
-
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
 			var contractInFilter = new Contract("_");

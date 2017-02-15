@@ -1883,7 +1883,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SkillA = skillA,
 				SkillB = skillB
 			};
-			var agentGroup = testCase.CreateAgentGroup(new AgentGroup { Name = "Group" }, testData);
+			var agentGroup = testCase.CreateAgentGroup(new AgentGroup("Group"), testData);
 			PersistAndRemoveFromUnitOfWork(agentGroup);
 
 			//load

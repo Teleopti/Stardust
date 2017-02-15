@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -9,27 +10,44 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
+		private readonly IPersonRepository _personRepository;
 
-		public IntradayOptimizationFromWeb(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, IPlanningPeriodRepository planningPeriodRepository)
+		public IntradayOptimizationFromWeb(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, IPlanningPeriodRepository planningPeriodRepository, IPersonRepository personRepository)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_planningPeriodRepository = planningPeriodRepository;
+			_personRepository = personRepository;
 		}
 
 		public virtual void Execute(Guid planningPeriodId)
 		{
-			var period = LoadNecessaryData(planningPeriodId);
-			_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
+			var planningPeriod = LoadPlanningPeriod(planningPeriodId);
+			IntradayOptimizationCommand intradayOptimizationCommand;
+			if (planningPeriod.AgentGroup == null)
 			{
-				Period = period,
-				RunResolveWeeklyRestRule = true
-			});
+				intradayOptimizationCommand = new IntradayOptimizationCommand
+				{
+					Period = planningPeriod.Range,
+					RunResolveWeeklyRestRule = true
+				};
+			}
+			else
+			{
+				var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
+				intradayOptimizationCommand = new IntradayOptimizationCommand
+				{
+					Period = planningPeriod.Range,
+					RunResolveWeeklyRestRule = true,
+					AgentsToOptimize = people
+				};
+			}
+			_intradayOptimizationCommandHandler.Execute(intradayOptimizationCommand);
 		}
 
 		[UnitOfWork]
-		protected virtual DateOnlyPeriod LoadNecessaryData(Guid planningPeriodId)
+		protected virtual IPlanningPeriod LoadPlanningPeriod(Guid planningPeriodId)
 		{
-			return _planningPeriodRepository.Load(planningPeriodId).Range;
+			return _planningPeriodRepository.Load(planningPeriodId);
 		}
 	}
 }

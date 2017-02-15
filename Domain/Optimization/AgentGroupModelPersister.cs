@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private void setProperties(IAgentGroup agentGroup, AgentGroupModel agentGroupModel)
 		{
-			agentGroup.Name = agentGroupModel.Name;
+			agentGroup.ChangeName(agentGroupModel.Name);
 
 			agentGroup.ClearFilters();
 			foreach (var filter in agentGroupModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))

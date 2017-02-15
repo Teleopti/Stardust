@@ -6,8 +6,9 @@ namespace Teleopti.Interfaces
 	public interface IAgentGroup : IAggregateRoot
 	{
 		IEnumerable<IFilter> Filters { get; }
-		string Name { get; set; }
+		string Name { get; }
 		void ClearFilters();
 		void AddFilter(IFilter filter);
+		void ChangeName(string name);
 	}
 }

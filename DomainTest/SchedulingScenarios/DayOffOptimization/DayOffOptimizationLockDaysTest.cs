@@ -37,10 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldNotMoveDayOffToDayWithPersonalActivityWhenOptimizingDayOffs()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
-			var agentGroup = new AgentGroup
-			{
-				Name = "group1"
-			};
+			var agentGroup = new AgentGroup("group1");
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			var activity = ActivityRepository.Has("_");
