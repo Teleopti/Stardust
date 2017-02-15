@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_pullTargetValueFromSkillIntervalData = pullTargetValueFromSkillIntervalData;
 		}
 
+		[RemoveMeWithToggle("remove maxseatskill stuff when toggle is removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences)
 		{
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;

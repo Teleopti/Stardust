@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		HashSet<ISkill> GetAggregatedSkills(IList<IPerson> teamMembers, DateOnlyPeriod dateOnlyPeriod);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatSkillAggregator : IMaxSeatSkillAggregator
 	{
 		public HashSet< ISkill> GetAggregatedSkills(IList<IPerson> teamMembers,  DateOnlyPeriod dateOnlyPeriod )
