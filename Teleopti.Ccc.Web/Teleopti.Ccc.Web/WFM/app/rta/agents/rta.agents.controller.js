@@ -69,7 +69,7 @@
 		var enableWatchOnTeam = false;
 		var updateStatesDelegate = updateStates;
 		var agentsInfo = [];
-		
+
 		vm.adherence = {};
 		vm.adherencePercent = null;
 		vm.filterText = "";
@@ -95,8 +95,6 @@
 		vm.pollingLock = true;
 		vm.skills = [];
 		vm.skillAreas = [];
-		vm.skillsLoaded = false;
-		vm.skillAreasLoaded = false;
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
 		vm.getTableHeight = getTableHeight;
 		vm.getAdherenceForAgent = getAdherenceForAgent;
@@ -125,17 +123,23 @@
 		(function initialize() {
 			rtaService.getSkills()
 				.then(function (skills) {
-					vm.skillsLoaded = true;
 					vm.skills = skills;
 					if (skillIds.length > 0 && skillAreaId == null)
 						vm.selectedSkill = skills.find(function (s) { return s.Id === skillIds[0] });
+					vm.skillsForView = {
+						skills: skills,
+						skillsLoaded: true
+					};
 				});
 			rtaService.getSkillAreas()
 				.then(function (skillAreas) {
-					vm.skillAreasLoaded = true;
 					vm.skillAreas = skillAreas.SkillAreas;
 					if (skillAreaId != null)
 						vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
+					vm.skillAreasForView = {
+						skillAreas: skillAreas.SkillAreas,
+						skillAreasLoaded: true
+					};
 				});
 
 			vm.pollingLock = false;

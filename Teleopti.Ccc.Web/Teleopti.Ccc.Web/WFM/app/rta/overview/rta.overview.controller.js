@@ -57,8 +57,6 @@
 		vm.displaySkillOrSkillAreaFilter = false;
 		vm.skills = [];
 		vm.skillAreas = [];
-		vm.skillsLoaded = false;
-		vm.skillAreasLoaded = false;
 		vm.skillId = $stateParams.skillIds || null;
 		vm.skillAreaId = $stateParams.skillAreaId || null;
 		vm.siteIds = angular.isArray(siteId) ? siteId[0] || null : siteId;
@@ -76,36 +74,43 @@
 		vm.toggleSelection = toggleSelection;
 		vm.openSelectedItems = openSelectedItems;
 		vm.justTesting = "testing";
-
+		vm.skills2 = {};
 		(function initialize() {
-		rtaService.getSkills()
-			.then(function (skills) {
-				vm.skillsLoaded = true;
-				vm.skills = skills;
-				if (vm.skillId !== null) {
-					vm.selectedSkill = skills.find(function (skill) { return skill.Id === vm.skillId });
-				}
-				var defer = $q.defer();
-				defer.resolve();
-				return defer.promise;
-			})
-			.then(function () {
-				return rtaService.getSkillAreas();
-			})
-			.then(function (skillAreas) {
-				vm.skillAreasLoaded = true;
-				vm.skillAreas = skillAreas.SkillAreas;
-				if (vm.skillAreaId !== null) {
-					vm.selectedSkillArea = skillAreas.SkillAreas.find(function (skillArea) { return skillArea.Id === vm.skillAreaId; });
-				}
-				getSitesOrTeams();
-			});
+			rtaService.getSkills()
+				.then(function (skills) {
+					vm.skills = skills;
+					if (vm.skillId !== null) {
+						vm.selectedSkill = skills.find(function (skill) { return skill.Id === vm.skillId });
+					}
+					vm.skillsForView = {
+						skills: skills,
+						skillsLoaded: true
+					};
+					var defer = $q.defer();
+					defer.resolve();
+					return defer.promise;
+				})
+				.then(function () {
+					return rtaService.getSkillAreas();
+				})
+				.then(function (skillAreas) {
+					vm.skillAreasLoaded = true;
+					vm.skillAreas = skillAreas.SkillAreas;
+					if (vm.skillAreaId !== null) {
+						vm.selectedSkillArea = skillAreas.SkillAreas.find(function (skillArea) { return skillArea.Id === vm.skillAreaId; });
+					}
+					vm.skillAreasForView = {
+						skillAreas: skillAreas.SkillAreas,
+						skillAreasLoaded: true
+					};
+					getSitesOrTeams();
+				});
 		})();
 
 		function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };
 
 		function getStateForTeams() {
-			if (vm.skillId !== null || vm.skillAreaId !== null) 
+			if (vm.skillId !== null || vm.skillAreaId !== null)
 				return vm.skillAreaId !== null ? stateForTeamsBySkillArea : stateForTeamsBySkill;
 			else return stateForTeams;
 		};
@@ -272,14 +277,14 @@
 		$scope.$watch(function () {
 			return vm.selectedSkill;
 		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue)) 
+			if (changed(newValue, oldValue))
 				vm.goToDashboard();
 		});
 
 		$scope.$watch(function () {
 			return vm.selectedSkillArea;
 		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue)) 
+			if (changed(newValue, oldValue))
 				vm.goToDashboard();
 		});
 
