@@ -14,6 +14,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     public interface IRuleSetBagRepository : IRepository<IRuleSetBag>
     {
         IEnumerable<IRuleSetBag> LoadAllWithRuleSets();
-	    IRuleSetBag Find(Guid id);
+	    IRuleSetBag FindWithRuleSetsAndAccessibility(Guid id);
     }
 }

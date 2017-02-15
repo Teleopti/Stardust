@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var bag = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(bag);
 
-			var bags = new RuleSetBagRepository(UnitOfWork).Find(bag.Id.GetValueOrDefault());
+			var bags = new RuleSetBagRepository(UnitOfWork).FindWithRuleSetsAndAccessibility(bag.Id.GetValueOrDefault());
 			Assert.That(bags.RuleSetCollection.Count, Is.EqualTo(1));
 			Assert.That(LazyLoadingManager.IsInitialized(bags.RuleSetCollection[0].AccessibilityDates), Is.True);
 			Assert.That(LazyLoadingManager.IsInitialized(bags.RuleSetCollection[0].AccessibilityDaysOfWeek), Is.True);

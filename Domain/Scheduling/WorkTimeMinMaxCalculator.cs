@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return null;
 
 			var ruleSetBag = personPeriod.RuleSetBag;
-			return ruleSetBag != null ? _repository.Find(ruleSetBag.Id.GetValueOrDefault()) : null;
+			return ruleSetBag != null ? _repository.FindWithRuleSetsAndAccessibility(ruleSetBag.Id.GetValueOrDefault()) : null;
 		}
 	}
 }
