@@ -10,13 +10,14 @@ describe('IntradayAreaCtrl', function () {
 
 	var skillAreas = [];
 	var skills = [];
-	var unsupportedSkills = [];
+	var skillsWithFirstUnsupported = [];
 	var skillAreaInfo;
 	var trafficAndPerformanceData;
 	var performanceData;
 	var staffingData;
 	var emptyStaffingData;
 	var timeData;
+	var isUnsupportedSkillTest = false;
 
 	beforeEach(function() {
 		module('wfm.intraday');
@@ -45,12 +46,18 @@ describe('IntradayAreaCtrl', function () {
 				DoDisplayData: true
 			}];
 
-		unsupportedSkills = [
+		skillsWithFirstUnsupported = [
 			{
 				Id: "63b0ac3d-06b5-42d7-bb0a-d7b2fd272196",
 				Name: "Unsupported skill1",
 				DoDisplayData: false
-			}];
+			},
+			{
+				Id: "22b0ac3d-06b5-42d7-bb0a-d7b2fd272196",
+				Name: "Supported skill1",
+				DoDisplayData: true
+			}
+		];
 
 		skillAreas = [
 			{
@@ -66,8 +73,8 @@ describe('IntradayAreaCtrl', function () {
 			{
 				Id: "3f43f39b-f01b-47e7-b59f-35fc09fd5e41",
 				Name: "my unsupported skill area 1",
-				Skills: unsupportedSkills,
-				UnsupportedSkills: unsupportedSkills
+				Skills: skillsWithFirstUnsupported,
+				UnsupportedSkills: skillsWithFirstUnsupported
 			}
 		];
 
@@ -166,7 +173,11 @@ describe('IntradayAreaCtrl', function () {
 
 		$httpBackend.whenGET("../api/intraday/skills")
 		.respond(function () {
-			return [200, skills];
+			if (isUnsupportedSkillTest) {
+				return [200, skillsWithFirstUnsupported];
+			} else {
+				return [200, skills];
+			}
 		});
 
 		$httpBackend.whenDELETE("../api/intraday/skillarea/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
@@ -277,16 +288,14 @@ describe('IntradayAreaCtrl', function () {
 		createController(false);
 
 		scope.skillSelected(scope.skills[0]);
-		// $httpBackend.flush();
-
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
 	});
+
 
 	it('should monitor first skill area if there are any', function () {
 		createController(false);
 
 		scope.skillAreaSelected(scope.skillAreas[0]);
-		// $httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
 	});
@@ -470,6 +479,16 @@ describe('IntradayAreaCtrl', function () {
 
 		expect(scope.viewObj.estimatedServiceLevelObj.series.length).toEqual(1);
 		expect(scope.viewObj.summary.summaryEstimatedServiceLevel).toEqual(undefined);
+	});
+
+	it('should monitor first skill that is supported', function () {
+		skillAreaInfo.SkillAreas = [];
+		isUnsupportedSkillTest = true;
+		createController(false);
+
+		scope.selectedSkillChange(skillsWithFirstUnsupported[0]);
+
+		expect(scope.selectedItem).toEqual(scope.skills[1]);
 	});
 
 });

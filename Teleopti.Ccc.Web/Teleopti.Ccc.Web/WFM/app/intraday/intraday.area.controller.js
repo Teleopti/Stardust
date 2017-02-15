@@ -123,7 +123,6 @@
 					}
 					else{
 						UnsupportedSkillNotice();
-						clearSkillSelection();
 					}
 				}
 			};
@@ -146,6 +145,10 @@
 				}
 			};
 
+			function isSupported(skill) {
+				return skill.DoDisplayData === true;
+			}
+
 			var reloadSkillAreas = function(isNew) {
 				intradayService.getSkillAreas.query()
 				.$promise.then(function(result) {
@@ -158,7 +161,7 @@
 					.$promise.then(function(result) {
 						$scope.skills = result;
 						if ($scope.skillAreas.length === 0) {
-							$scope.selectedItem = $scope.skills[0];
+							$scope.selectedItem = $scope.selectedItem = $scope.skills.find(isSupported);;
 							if (autocompleteSkill) {
 								autocompleteSkill.selectedSkill = $scope.selectedItem;
 							}
