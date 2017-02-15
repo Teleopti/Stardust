@@ -208,8 +208,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 
 			Now.Is("2017-01-25 00:00");
 			Target.Handle(new TenantDayTickEvent());
+			Target.Handle(new TenantMinuteTickEvent());
 			Now.Is("2017-01-26 00:00");
 			Target.Handle(new TenantDayTickEvent());
+			Target.Handle(new TenantMinuteTickEvent());
 
 			Persister.Read().Select(x => x.BelongsToDate)
 				.Should().Contain("2017-01-27".Date());

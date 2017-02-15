@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public IEnumerable<ScheduledActivity> Read()
 		{
 			return _data
-				.SelectMany(x => x.Schedules)
+				.SelectMany(x => x.Schedules ?? Enumerable.Empty<ScheduledActivity>())
 				.ToArray();
 		}
 		

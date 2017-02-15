@@ -55,6 +55,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.Intersect(new DateTimePeriod(now.AddDays(-2), now.AddDays(2)));
 		}
 
+		[ReadModelUnitOfWork]
+		public virtual void InvalidateAll()
+		{
+			IEnumerable<Guid> persons = null;
+			WithUnitOfWork(() =>
+			{
+				persons = _persons.LoadAll().Select(x => x.Id.Value).ToArray();
+			});
+			persons.ForEach(x => _persister.Invalidate(x));
+		}
+		
 		[FullPermissions]
 		public virtual void UpdateInvalids()
 		{
@@ -65,19 +76,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				persons = _keyValueStore.Get("CurrentScheduleReadModelVersion") == null ?
 					_persons.LoadAll().Select(x => x.Id.Value).ToArray() :
 					_persister.GetInvalid();
-			});
-
-			update(persons);
-		}
-
-		[FullPermissions]
-		public virtual  void UpdateAll()
-		{
-			IEnumerable<Guid> persons = null;
-
-			WithUnitOfWork(() =>
-			{
-				persons = _persons.LoadAll().Select(x => x.Id.Value).ToArray();
 			});
 
 			update(persons);

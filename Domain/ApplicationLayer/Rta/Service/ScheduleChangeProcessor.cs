@@ -53,10 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[Attempts(3)]
 		public virtual void Handle(TenantDayTickEvent @event)
 		{
-			using (_distributedLock.LockForTypeOf(_updater))
-			{
-				_updater.UpdateAll();
-			}
+			_updater.InvalidateAll();
 		}
 	}
 
