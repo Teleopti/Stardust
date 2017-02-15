@@ -8,7 +8,7 @@ namespace Teleopti.Interfaces
 		IEnumerable<IFilter> Filters { get; }
 		string Name { get; }
 		void ClearFilters();
-		void AddFilter(IFilter filter);
+		IAgentGroup AddFilter(IFilter filter);
 		void ChangeName(string name);
 	}
 }

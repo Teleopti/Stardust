@@ -196,9 +196,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldClearOldFiltersWhenUpdate()
 		{
 			var contract = new Contract("_").WithId();
-			var existing = new AgentGroup().WithId();
+			var existing = new AgentGroup()
+				.WithId()
+				.AddFilter(new ContractFilter(contract));
 			var team = new Team().WithId();
-			existing.AddFilter(new ContractFilter(contract));
 
 			AgentGroupRepository.Add(existing);
 			ContractRepository.Add(contract);

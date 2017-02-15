@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -36,9 +37,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		{
 			var team = TeamFactory.CreateTeamWithId(Guid.NewGuid());
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(Guid.NewGuid(), new DateOnly(2017, 1, 1), team);
-			var agentGroup = new AgentGroup("agent group 1");
-			agentGroup.AddFilter(new TeamFilter(team));
-			agentGroup.SetId(Guid.NewGuid());
+			var agentGroup = new AgentGroup("agent group 1")
+				.WithId(Guid.NewGuid())
+				.AddFilter(new TeamFilter(team));
 			PersonRepository.Add(person);
 			var target=new AgentGroupStaffLoader(null, PersonRepository);
 			var result = target.Load(new DateOnlyPeriod(2017, 1, 1, 2017, 1, 28), agentGroup);

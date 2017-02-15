@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces;
@@ -9,9 +8,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 
-		public AgentGroup():this(String.Empty)
+		public AgentGroup():this(string.Empty)
 		{
-
 		}
 
 		public AgentGroup(string name)
@@ -27,16 +25,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Name = name;
 		}
 
-
 		public virtual void ClearFilters()
 		{
 			_filters.Clear();
 		}
 
-		public virtual void AddFilter(IFilter filter)
+		public virtual IAgentGroup AddFilter(IFilter filter)
 		{
 			_filters.Add(filter);
+			return this;
 		}
 	}
-
 }

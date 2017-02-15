@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015,10,12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1");
-			agentGroup.AddFilter(new SkillFilter(skill));
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2016, 5, 23);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1");
-			agentGroup.AddFilter(new SkillFilter(skill));
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
 			
@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2016, 5, 23);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1");
-			agentGroup.AddFilter(new SkillFilter(skill));
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, agentGroup);
 			var scenario = ScenarioRepository.Has("some name");
@@ -243,8 +243,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var weekPeriod = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1");
-			agentGroup.AddFilter(new SkillFilter(skill));
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			
@@ -295,8 +295,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1");
-			agentGroup.AddFilter(new SkillFilter(skill));
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(monday, 1, agentGroup);
 			var weekPeriod = new DateOnlyPeriod(monday, monday.AddDays(7));
@@ -336,8 +336,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var weekPeriod = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1");
-			agentGroup.AddFilter(new SkillFilter(skill));
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
 			
@@ -434,8 +434,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var agentGroup = new AgentGroup("group1");
-			agentGroup.AddFilter(new SkillFilter(skill));
+			var agentGroup = new AgentGroup("group1")
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly.AddDays(-6), 1, agentGroup);
 			var scenario = ScenarioRepository.Has("some name");

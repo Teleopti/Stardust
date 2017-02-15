@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var filterName = RandomName.Make();
 			var contract = new Contract(filterName).WithId();
-			var contractFilter = new ContractFilter(contract);
-			var agentGroup = new AgentGroup().WithId();
-			agentGroup.AddFilter(contractFilter);
+			var agentGroup = new AgentGroup()
+				.WithId()
+				.AddFilter(new ContractFilter(contract));
 			AgentGroupRepository.Add(agentGroup);
 
 			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var filterName = RandomName.Make();
 			var team = new Team().WithId().WithDescription(new Description(filterName));
-			var teamFilter = new TeamFilter(team);
-			var agentGroup = new AgentGroup().WithId();
-			agentGroup.AddFilter(teamFilter);
+			var agentGroup = new AgentGroup()
+				.WithId()
+				.AddFilter(new TeamFilter(team));
 			AgentGroupRepository.Add(agentGroup);
 
 			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
@@ -75,9 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var filterName = RandomName.Make();
 			var site = new Site(filterName).WithId();
-			var siteFilter = new SiteFilter(site);
-			var agentGroup = new AgentGroup().WithId();
-			agentGroup.AddFilter(siteFilter);
+			var agentGroup = new AgentGroup().WithId().AddFilter(new SiteFilter(site));
 			AgentGroupRepository.Add(agentGroup);
 
 			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
@@ -93,9 +91,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var filterName = RandomName.Make();
 			var skill = new Skill(filterName).WithId();
-			var skillFilter = new SkillFilter(skill);
-			var agentGroup = new AgentGroup().WithId();
-			agentGroup.AddFilter(skillFilter);
+			var agentGroup = new AgentGroup()
+				.WithId()
+				.AddFilter(new SkillFilter(skill));
 			AgentGroupRepository.Add(agentGroup);
 
 			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));

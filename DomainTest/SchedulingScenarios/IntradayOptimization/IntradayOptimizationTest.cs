@@ -303,8 +303,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void ShouldIntradayOptimizeForAgentGroup()
 		{
 			var team = new Team { Site = new Site("site") };
-			var agentGroup = new AgentGroup("Europe");
-			agentGroup.AddFilter(new TeamFilter(team));
+			var agentGroup = new AgentGroup("Europe")
+				.AddFilter(new TeamFilter(team));
 
 			AgentGroupRepository.Add(agentGroup);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");

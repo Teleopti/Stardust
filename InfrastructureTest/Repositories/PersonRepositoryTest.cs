@@ -29,6 +29,7 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(person.Name, loadedAggregateFromDatabase.Name);
 			Assert.AreEqual(person.Email, loadedAggregateFromDatabase.Email);
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PermissionInformation.ApplicationRoleCollection.Count);
-			Assert.AreEqual(0, loadedAggregateFromDatabase.PersonPeriodCollection.Count());
+			Assert.AreEqual(0, loadedAggregateFromDatabase.PersonPeriodCollection.Count);
 
 			Assert.AreEqual(person.WorkflowControlSet, loadedAggregateFromDatabase.WorkflowControlSet);
 		}
@@ -229,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), teamBu));
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1999, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count());
+			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count);
 		}
 
 		[Test]
@@ -265,7 +266,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)).Count());
+			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)).Count);
 		}
 
 		/// <summary>
@@ -618,8 +619,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.PersonSchedulePeriodCollection));
 			Assert.AreEqual(2, person.PersonSchedulePeriodCollection.Count);
 			Assert.AreEqual(0, person2.PersonSchedulePeriodCollection.Count);
-			Assert.AreEqual(3, person.PersonPeriodCollection.Count());
-			Assert.AreEqual(1, person2.PersonPeriodCollection.Count());
+			Assert.AreEqual(3, person.PersonPeriodCollection.Count);
+			Assert.AreEqual(1, person2.PersonPeriodCollection.Count);
 
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person2.PersonPeriodCollection.First().PersonSkillCollection.First().Skill.SkillType));
 		}
@@ -1152,11 +1153,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftCat);
 			IRuleSetBag bag = new RuleSetBag();
 			bag.Description = new Description("dummy");
-			WorkShiftRuleSet ruleSet =
+			var ruleSet =
 				new WorkShiftRuleSet(
 					new WorkShiftTemplateGenerator(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
-													new TimePeriodWithSegment(1, 1, 1, 1, 1), shiftCat));
-			ruleSet.Description = new Description("dummy");
+						new TimePeriodWithSegment(1, 1, 1, 1, 1), shiftCat)) {Description = new Description("dummy")};
 			ruleSet.AddExtender(
 				new ActivityAbsoluteStartExtender(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
 												  new TimePeriodWithSegment(1, 1, 1, 11, 1)));
@@ -1164,7 +1164,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new ActivityAbsoluteStartExtender(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
 												  new TimePeriodWithSegment(1, 1, 1, 11, 1)));
 			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(10, 10, 11, 11), new TimeSpan()));
-			WorkShiftRuleSet ruleSet2 =
+			var ruleSet2 =
 				new WorkShiftRuleSet(
 					new WorkShiftTemplateGenerator(dummyActivity, new TimePeriodWithSegment(1, 1, 1, 1, 1),
 										new TimePeriodWithSegment(1, 1, 1, 1, 1), shiftCat));
@@ -1245,8 +1245,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(testList[1], per2);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection.First().Team));
-			Assert.AreEqual(2, testList[0].PersonPeriodCollection.Count());
-			Assert.AreEqual(1, testList[1].PersonPeriodCollection.Count());
+			Assert.AreEqual(2, testList[0].PersonPeriodCollection.Count);
+			Assert.AreEqual(1, testList[1].PersonPeriodCollection.Count);
 
 			testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
 			Assert.AreEqual(2, testList.Count);
@@ -1906,7 +1906,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				_name = name;
 			}
-			public Func<AgentGroup, AgentGroupFilterTestData, AgentGroup> CreateAgentGroup { get; set; }
+			public Func<IAgentGroup, AgentGroupFilterTestData, IAgentGroup> CreateAgentGroup { get; set; }
 			public Func<AgentGroupFilterTestData, IList<IPerson>> ExpectedPeople { get; set; }
 
 			public override string ToString()
@@ -1935,70 +1935,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			new AgentGroupTestCase("Team and Site filters should return people from both team and site")
 			{
-				CreateAgentGroup = (group, data) =>
-				{
-					group.AddFilter(new TeamFilter(data.TeamB));
-					group.AddFilter(new SiteFilter(data.SiteA));
-					return group;
-				},
+				CreateAgentGroup = (group, data) => group
+					.AddFilter(new TeamFilter(data.TeamB))
+					.AddFilter(new SiteFilter(data.SiteA)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2, data.Person3, data.Person4}
 			},
 			new AgentGroupTestCase("Team filter should return people from team.")
 			{
-				CreateAgentGroup = (group, data) =>
-				{
-					group.AddFilter(new TeamFilter(data.TeamB));
-					return group;
-				},
+				CreateAgentGroup = (group, data) => group.AddFilter(new TeamFilter(data.TeamB)),
 				ExpectedPeople = data => new List<IPerson> {data.Person2, data.Person4}
 			},
 			new AgentGroupTestCase("Site filter should return people from site.")
 			{
-				CreateAgentGroup = (group, data) =>
-				{
-					group.AddFilter(new SiteFilter(data.SiteA));
-					return group;
-				},
+				CreateAgentGroup = (group, data) => group.AddFilter(new SiteFilter(data.SiteA)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person3}
 			},
 			new AgentGroupTestCase("Contract filter should return people with contract.")
 			{
-				CreateAgentGroup = (group, data) =>
-				{
-					group.AddFilter(new ContractFilter(data.ContractA));
-					return group;
-				},
+				CreateAgentGroup = (group, data) => group.AddFilter(new ContractFilter(data.ContractA)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2}
 			},
 			new AgentGroupTestCase("Team and Contract filters should return people from team with contract.")
 			{
-				CreateAgentGroup = (group, data) =>
-				{
-					group.AddFilter(new ContractFilter(data.ContractA));
-					group.AddFilter(new TeamFilter(data.TeamB));
-					return group;
-				},
+				CreateAgentGroup = (group, data) => group
+					.AddFilter(new ContractFilter(data.ContractA))
+					.AddFilter(new TeamFilter(data.TeamB)),
 				ExpectedPeople = data => new List<IPerson> {data.Person2}
 			},
 			new AgentGroupTestCase("Skill filters should return people from skills.")
 			{
-				CreateAgentGroup = (group, data) =>
-				{
-					group.AddFilter(new SkillFilter(data.SkillA));
-					group.AddFilter(new SkillFilter(data.SkillB));
-					return group;
-				},
+				CreateAgentGroup = (group, data) => group
+					.AddFilter(new SkillFilter(data.SkillA))
+					.AddFilter(new SkillFilter(data.SkillB)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2, data.Person3}
 			},
 			new AgentGroupTestCase("Skill, Team and Contract filters should return people with all three.")
 			{
-				CreateAgentGroup = (group, data) =>
-				{
-					group.AddFilter(new SkillFilter(data.SkillA));
-					group.AddFilter(new TeamFilter(data.TeamA));
-					group.AddFilter(new ContractFilter(data.ContractA));
-					return group;
-				},
+				CreateAgentGroup = (group, data) => group
+					.AddFilter(new SkillFilter(data.SkillA))
+					.AddFilter(new TeamFilter(data.TeamA))
+					.AddFilter(new ContractFilter(data.ContractA)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1}
 			}
 		};
@@ -2030,13 +2006,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private ApplicationRole createAndPersistApplicationRole()
 		{
-			ApplicationRole role = new ApplicationRole();
-			role.DescriptionText = "description";
-			role.Name = "name";
+			var role = new ApplicationRole
+			{
+				DescriptionText = "description",
+				Name = "name"
+			};
 			role.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
-			ApplicationFunction fkn1 = new ApplicationFunction("FUNCTION1");
-			ApplicationFunction fkn2 = new ApplicationFunction("FUNCTION2");
-			AvailableData ad = new AvailableData();
+			var fkn1 = new ApplicationFunction("FUNCTION1");
+			var fkn2 = new ApplicationFunction("FUNCTION2");
+			var ad = new AvailableData();
 			role.AddApplicationFunction(fkn1);
 			role.AddApplicationFunction(fkn2);
 			ad.ApplicationRole = role;
@@ -2055,13 +2033,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 			}
 
-			public ISession InternalSession
-			{
-				get
-				{
-					return Session;
-				}
-			}
+			public ISession InternalSession => Session;
 		}
 
 		protected override Repository<IPerson> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
