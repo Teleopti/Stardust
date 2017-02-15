@@ -256,26 +256,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return self.absenceReportPermission() && isPermittedDate;
 		});
 
-		var addOvertimeModel = {
-			model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability),
-			type: function () { return "overtime"; },
-			CancelAddingNewRequest: self.CancelAddingNewRequest
-		};
-
-		var innerRequestModel = createRequestViewModel();
-
-		var addRequestModel = {
-			model: innerRequestModel,
-			type: innerRequestModel.TypeEnum,
-			CancelAddingNewRequest: self.CancelAddingNewRequest
-		};
-
-		var addAbsenceReportModel = {
-			model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
-			type: function () { return "absenceReport"; },
-			CancelAddingNewRequest: self.CancelAddingNewRequest
-		};
-
 		self.showAddTextRequestForm = function (data) {
 			if (self.textPermission() !== true) {
 				return;
@@ -313,6 +293,26 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.CancelAddingNewRequest();
 			_fetchData();
 		}
+
+		var addOvertimeModel = {
+			model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability),
+			type: function () { return "overtime"; },
+			CancelAddingNewRequest: self.CancelAddingNewRequest
+		};
+
+		var innerRequestModel = createRequestViewModel();
+
+		var addRequestModel = {
+			model: innerRequestModel,
+			type: innerRequestModel.TypeEnum,
+			CancelAddingNewRequest: self.CancelAddingNewRequest
+		};
+
+		var addAbsenceReportModel = {
+			model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
+			type: function () { return "absenceReport"; },
+			CancelAddingNewRequest: self.CancelAddingNewRequest
+		};
 
 		self.showAddShiftExchangeOfferForm = function (data) {
 			if (!self.shiftExchangePermission()) {
