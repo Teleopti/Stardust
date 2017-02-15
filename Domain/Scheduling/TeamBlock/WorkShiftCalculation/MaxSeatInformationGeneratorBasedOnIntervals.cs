@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IEnumerable<ISkillDay> allSkillDays, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatInformationGeneratorBasedOnIntervals : IMaxSeatInformationGeneratorBasedOnIntervals
 	{
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;

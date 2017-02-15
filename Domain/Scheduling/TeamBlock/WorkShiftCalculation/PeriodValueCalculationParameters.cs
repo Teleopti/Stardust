@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
@@ -39,14 +40,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		  get { return _useMaximumPersons; }
 	  }
 
-	  public MaxSeatsFeatureOptions MaxSeatsFeatureOption
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		public MaxSeatsFeatureOptions MaxSeatsFeatureOption
 	  {
 		  get { return _maxSeatsFeatureOption; }
 	  }
 
-	  public IDictionary<DateTime, IntervalLevelMaxSeatInfo> MaxSeatInfoPerInterval { get { return _maxSeatInfo; } }
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> MaxSeatInfoPerInterval { get { return _maxSeatInfo; } }
 
-	  public bool HasMaxSeatSkill
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		public bool HasMaxSeatSkill
 	  {
 		  get { return _hasMaxSeatSkill;}
 	  }
