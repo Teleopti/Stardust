@@ -100,6 +100,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		public List<Guid> FindPersonIdsInTeams(DateOnly date, Guid[] teamIds,IDictionary<PersonFinderField,string> searchCriteria)
+		{
+			var result = new List<Guid>();
+
+			if (teamIds.Length == 0)
+			{
+				return result;
+			}
+
+			foreach (var teamIdsBatch in teamIds.Batch(100))
+			{
+				var teamIdsString = string.Join(",",teamIdsBatch.Select(x => x.ToString()));
+
+				if (searchCriteria.Any())
+				{
+					var searchString = createSearchString(searchCriteria);
+					var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
+							"exec [ReadModel].[PersonFinderWithCriteriaAndTeamsSimplified] @search_criterias=:search_criterias, @belongs_to_date=:belongs_to_date, @team_ids=:team_ids")
+						.SetString("search_criterias", searchString)
+						.SetDateOnly("belongs_to_date", date)
+						.SetString("team_ids", teamIdsString)
+						.SetReadOnly(true)
+						.List<Guid>();
+
+					result.AddRange(batchResult);
+				}
+				else
+				{
+					var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
+							"exec [dbo].[PersonInTeams] @belongs_to_date=:belongs_to_date, @team_ids=:team_ids")						
+						.SetDateOnly("belongs_to_date",date)
+						.SetString("team_ids",teamIdsString)
+						.SetReadOnly(true)
+						.List<Guid>();
+
+					result.AddRange(batchResult);
+				}
+			}
+
+			return result;
+		}
+
 		public void FindInTeams(IPersonFinderSearchCriteria personFinderSearchCriteria, Guid[] teamIds)
 		{
 			personFinderSearchCriteria.TotalRows = 0;

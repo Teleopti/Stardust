@@ -49,19 +49,21 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupScheduleViewModel CreateViewModel(Guid[] teamIds,IDictionary<PersonFinderField,string> criteriaDictionary,
 			DateOnly dateInUserTimeZone,int pageSize,int currentPageIndex,bool isOnlyAbsences)
-		{
-			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,null);
+		{			
 			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260);
-			
+
+			List<Guid> targetIds;
 			if(businessHierachyToggle)
 			{
-				_searchProvider.PopulateSearchCriteriaResult(searchCriteria,teamIds);
+				targetIds = _searchProvider.FindPersonIds(dateInUserTimeZone, teamIds, criteriaDictionary);
 			}
 			else
 			{
+				var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,null);
 				_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
+				targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct().ToList();
 			}
-			var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct();
+			
 			var matchedPersons = _personRepository.FindPeople(targetIds).ToList();			
 
 			var permittedPersons =
@@ -82,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				};
 			}
 
-			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(searchCriteria,dateInUserTimeZone,
+			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(permittedPersons,dateInUserTimeZone,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
@@ -162,21 +164,21 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			foreach(var d in weekDays)
 			{
-				var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,d,null);
+				List<Guid> targetIds;
 
 				if(businessHierachyToggle)
 				{
-					_searchProvider.PopulateSearchCriteriaResult(searchCriteria,teamIds);
+					targetIds = _searchProvider.FindPersonIds(d, teamIds, criteriaDictionary).Where(id => !personIds.Contains(id)).ToList();
 				}
 				else
 				{
+					var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,d,null);
 					_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
+					targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Where(id => !personIds.Contains(id)).ToList();
 				}
-
-				var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Where(id => !personIds.Contains(id)).ToList();
-
+			
 				if(targetIds.Count == 0) continue;
-
+				
 				var matchedPersons = _personRepository.FindPeople(targetIds);
 				var permittedPersons = _searchProvider.GetPermittedPersonList(matchedPersons,d,DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToList();
 				permittedPersons.ForEach(p => personIds.Add(p.Id.GetValueOrDefault()));

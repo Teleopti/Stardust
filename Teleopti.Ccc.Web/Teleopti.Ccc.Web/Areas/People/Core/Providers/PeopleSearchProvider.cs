@@ -46,6 +46,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			return searchPermittedPeopleSummary(personIdList, pageSize, currentPageIndex);
 		}
 
+		public List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			return _searchRepository.FindPersonIdsInTeams(date, teamIds, searchCriteria);
+		}
+
 		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
 			DateOnly dateInUserTimeZone, string function)
 		{

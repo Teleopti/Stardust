@@ -50,11 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			};
 
 			if (businessHierachyToggle)
-			{
-				var searchCriteria = _peopleSearchProvider.CreatePersonFinderSearchCriteria(input.AgentSearchTerm, 9999, 1, input.StartDate, null);
-				_peopleSearchProvider.PopulateSearchCriteriaResult(searchCriteria, input.SelectedTeamIds);
-				var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).ToList();
-
+			{				
+				var targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedTeamIds, input.AgentSearchTerm);
 				if (targetIds.Count == 0)
 					filter.Persons = new List<IPerson>();
 				else

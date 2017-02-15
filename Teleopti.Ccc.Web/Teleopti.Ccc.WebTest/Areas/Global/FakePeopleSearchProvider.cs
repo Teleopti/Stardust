@@ -168,6 +168,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			});
 		}
 
+		public List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			var people = new List<IPerson>();			
+			if(_enableDateFilter)
+			{
+				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date].ToList();
+			}
+			else
+			{
+				people = _permittedPeople.ToList();
+			}
+			people = people.Where(p => p.PersonPeriodCollection.Any(pp => teamIds.ToList().Contains(pp.Team.Id.Value))).ToList();
+			return people.Select(p => p.Id.Value).ToList();
+		}
+
 		private PersonFinderDisplayRow toPersonFinderDisplayRow(IPerson p, DateOnly date, int rowNumber)
 		{
 			var team = p.MyTeam(date);
