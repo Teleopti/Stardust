@@ -15,6 +15,7 @@
         vm.selectedAreaChange = selectedAreaChange;
         vm.querySearchSkills = querySearchSkills;
         vm.querySearchAreas = querySearchAreas;
+        vm.suggestOvertime = suggestOvertime;
         vm.addOvertime = addOvertime;
         vm.draggable = false;
         vm.toggleDraggable = toggleDraggable;
@@ -43,10 +44,10 @@
                 var query = getSkillAreaStaffing(areaId);
             }
             query.$promise.then(function (result) {
-                console.log(result);
                 staffingData.time = [];
                 staffingData.scheduledStaffing = [];
                 staffingData.forcastedStaffing = [];
+                staffingData.suggestedStaffing = [];
                 if (staffingPrecheck(result.DataSeries)) {
                     staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
                     staffingData.forcastedStaffing = result.DataSeries.ForecastedStaffing;
@@ -106,7 +107,7 @@
 
         function getSkillAreaStaffing(areaId) {
             if (!areaId) return;
-            return staffingService.getSkillAreaStaffing.get({id: areaId});
+            return staffingService.getSkillAreaStaffing.get({ id: areaId });
         }
 
         function getSkillStaffing(skillId) {
@@ -144,6 +145,7 @@
                 return (lowercaseName.indexOf(lowercaseQuery) === 0);
             };
         };
+
         function addOvertime() {
             var skillIds;
             if (currentSkills.Skills) {
@@ -155,7 +157,28 @@
                 skillIds = [currentSkills.Id];
             }
             staffingService.addOvertime.save({ Skills: skillIds });
-        }
+
+
+        };
+
+        function suggestOvertime() {
+            var skillIds;
+            if (currentSkills.Skills) {
+                skillIds = currentSkills.Skills.map(function (skill) {
+                    return skill.Id
+                });
+                // staffingService.addOvertime.save({ Skills: [skillIds] });
+            } else {
+                skillIds = [currentSkills.Id];
+            }
+            var query = staffingService.getSuggestion.save({ Skills: skillIds })
+            query.$promise.then(function (response) {
+                console.log(staffingData);
+                staffingData.suggestedStaffing = response.DataSeries.ScheduledStaffing;
+                staffingData.suggestedStaffing.unshift("Suggested Staffing");
+                generateChartForView();
+            })
+        };
 
         function toggleDraggable() {
             vm.draggable = !vm.draggable
@@ -182,7 +205,8 @@
                     columns: [
                         staffingData.time,
                         staffingData.forcastedStaffing,
-                        staffingData.scheduledStaffing
+                        staffingData.scheduledStaffing,
+                        staffingData.suggestedStaffing
                     ],
                 },
                 axis: {

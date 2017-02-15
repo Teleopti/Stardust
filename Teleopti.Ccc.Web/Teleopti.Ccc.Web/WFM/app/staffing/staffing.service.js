@@ -12,6 +12,8 @@
         var skills = $resource("../api/intraday/skills");
         var areas = $resource("../api/intraday/skillarea");
         var overtime = $resource('../api/staffing/overtime');
+        var suggestion = $resource('../api/staffing/overtime/suggestion');
+
         var resCalc = $resource('../TriggerResourceCalculate');
         ////////////////
 
@@ -21,6 +23,7 @@
             getSkills: skills,
             getSkillAreas: areas,
             addOvertime: overtime,
+            getSuggestion: suggestion,
             triggerResourceCalculate: resCalc
         };
 
