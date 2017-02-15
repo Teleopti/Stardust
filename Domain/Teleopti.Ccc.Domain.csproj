@@ -549,6 +549,7 @@
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Notification\NotifyAppSubscriptions.cs" />
     <Compile Include="Notification\UserDevices.cs" />
+    <Compile Include="Optimization\AgentGroupAllAgents.cs" />
     <Compile Include="Optimization\Filters\SkillFilter.cs" />
     <Compile Include="Optimization\OptimizationLimitsForAgent.cs" />
     <Compile Include="Optimization\OptimizationLimitsForAgentFactory.cs" />

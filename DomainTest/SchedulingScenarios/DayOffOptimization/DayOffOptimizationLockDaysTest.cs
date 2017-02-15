@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupRepository AgentGroupRepository;
 
 		public DayOffOptimizationLockDaysTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{
@@ -40,9 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var agentGroup = new AgentGroup("group1").AddFilter(new SkillFilter(skill));
-			AgentGroupRepository.Add(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, new AgentGroupAllAgents());
 			
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
