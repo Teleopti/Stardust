@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[RequestPerformanceTest]
+	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	[Ignore("WIP")]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup

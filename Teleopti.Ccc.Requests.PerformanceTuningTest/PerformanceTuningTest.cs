@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[RequestPerformanceTest]
+	[RequestPerformanceTuningTest]
 	public class PerformanceTuningTest
     {
         public AsSystem AsSystem;

@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[RequestPerformanceTest]
+	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
 	public class CalculateOvertimeSuggestionProviderTest : PerformanceTestWithOneTimeSetup

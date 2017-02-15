@@ -15,7 +15,7 @@ using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	public class RequestPerformanceTestAttribute : IoCTestAttribute
+	public class RequestPerformanceTuningTestAttribute : IoCTestAttribute
 	{
 		protected override FakeConfigReader Config()
 		{
