@@ -596,6 +596,23 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		};
 
+		var parseTimeSpan = function (timespan) {
+			var splitterIndex = timespan.indexOf(" - ");
+			var periodEndPosition = splitterIndex + 3;
+			var periodStart = timespan.substring(0, splitterIndex);
+			var periodEnd = timespan.substring(periodEndPosition, timespan.length);
+
+			var baseDate = "2017-01-01 ";
+			var startTimeInMinutes = periodEnd.indexOf("+1") === -1
+				? (moment(baseDate + periodStart).diff(moment(baseDate)) / (60 * 1000))
+				: 0;
+			var endTimeInMinutes = moment(baseDate + periodEnd).diff(moment(baseDate)) / (60 * 1000);
+			return {
+				startMinutes: startTimeInMinutes,
+				endMinutes: endTimeInMinutes
+			};
+		}
+
 		var getContinousPeriods = function (periods) {
 			if (!periods || periods.length === 0) return [];
 
@@ -603,9 +620,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var previousEndTime = "";
 			var continousPeriodStart = "";
 			for (var l = 0; l < periods.length; l++) {
-				var periodTimeSpan = day.Periods[l].TimeSpan;
-				var periodStartTime = !periodTimeSpan || periodTimeSpan.indexOf("+1") > 0 ? "00:00" : periodTimeSpan.substring(0, 5);
-				var periodEndTime = !periodTimeSpan ? "00:00" : periodTimeSpan.substring(8, 13);
+				var periodTimeSpan = parseTimeSpan(day.Periods[l].TimeSpan);
+				var periodStartTime = periodTimeSpan.startMinutes;
+				var periodEndTime = periodTimeSpan.endMinutes;
 
 				if (l === 0) {
 					continousPeriodStart = periodStartTime;
@@ -634,19 +651,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return [];
 			}
 
-			var shiftStartTime = "00:00";
-			var shiftEndTime = "24:00";
+			var shiftStartMinutes = 0;
+			var shiftEndMinutes = 1440; // = 24 * 60, Total minutes of a day
 			var shiftStartPosition = 1;
 			var shiftEndPosition = 0;
 
 			if (day.IsDayOff) {
 				var timelines = parent.timeLines();
 				if (parent.intradayOpenPeriod != null) {
-					shiftStartTime = parent.intradayOpenPeriod.startTime.substring(0, 5);
-					shiftEndTime = parent.intradayOpenPeriod.endTime.substring(0, 5);
+					var openPeriodTimeSpan = parseTimeSpan(parent.intradayOpenPeriod);
+					shiftStartMinutes = openPeriodTimeSpan.startMinutes;
+					shiftEndMinutes = openPeriodTimeSpan.endMinutes;
 				} else {
-					shiftStartTime = timelines[0].timeText;
-					shiftEndTime = timelines[timelines.length - 1].timeText;
+					shiftStartMinutes = timelines[0].minutes;
+					shiftEndMinutes = timelines[timelines.length - 1].minutes;
 				}
 
 				// Calculate shiftStartPosition and shiftEndPosition since this could not get from raw data
@@ -654,22 +672,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				var timelineEndMinutes = timelines[timelines.length - 1].minutes;
 
 				var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
-				var shiftStartMinutes = parseInt(shiftStartTime.substring(0, 2)) * 60 + parseInt(shiftStartTime.substring(3, 5));
-				var shiftEndMinutes = parseInt(shiftEndTime.substring(0, 2)) * 60 + parseInt(shiftEndTime.substring(3, 5));
-
 				shiftStartPosition = (shiftStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
 				shiftEndPosition = (shiftEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
 			} else {
 				for (var i = 0; i < day.Periods.length; i++) {
 					var period = day.Periods[i];
-					var timeSpan = period.TimeSpan;
 
-					if (i === 0 && timeSpan.indexOf("+1") === -1) {
-						shiftStartTime = timeSpan.substring(0, 5);
+					var periodTimeSpan = parseTimeSpan(period.TimeSpan);
+
+					if (i === 0) {
+						shiftStartMinutes = periodTimeSpan.startMinutes;
 					}
 
 					if (i === day.Periods.length - 1) {
-						shiftEndTime = timeSpan.substring(8, 13);
+						shiftEndMinutes = periodTimeSpan.endMinutes;
 					}
 
 					if (shiftStartPosition > period.StartPositionPercentage) {
@@ -706,13 +722,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			for (var j = 0; j < rawProbabilities.length; j++) {
 				var intervalProbability = rawProbabilities[j];
+				var startOfToday = moment(intervalProbability.StartTime).startOf("day");
 				var startMoment = moment(intervalProbability.StartTime);
 				var endMoment = moment(intervalProbability.EndTime);
 
-				var intervalStartTime = startMoment.format("HH:mm");
-				var intervalEndTime = endMoment.isSame(startMoment, "day") ? endMoment.format("HH:mm") : "23:59";
+				var intervalStartMinutes = startMoment.diff(startOfToday) / (60 * 1000);
+				var intervalEndMinutes = endMoment.isSame(startMoment, "day")
+					? endMoment.diff(startOfToday) / (60 * 1000)
+					: 1439; // 23:59
 
-				var visible = shiftStartTime <= intervalStartTime && intervalEndTime <= shiftEndTime;
+				var visible = shiftStartMinutes <= intervalStartMinutes && intervalEndMinutes <= shiftEndMinutes;
 				if (!visible) continue;
 
 				var inScheduleTimeRange = false;
@@ -720,7 +739,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					// Show absence probability within schedule time range only
 					for (var m = 0; m < continousPeriods.length; m++) {
 						var continousPeriod = continousPeriods[m];
-						if (continousPeriod.startTime <= intervalStartTime && intervalEndTime <= continousPeriod.endTime) {
+						if (continousPeriod.startTime <= intervalStartMinutes && intervalEndMinutes <= continousPeriod.endTime) {
 							inScheduleTimeRange = true;
 							break;
 						}
@@ -730,11 +749,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				}
 
 				var index = intervalProbability.Possibility;
+				var timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat;
 				var tooltips = inScheduleTimeRange
 					? "<div style='text-align: center'>" +
 					"  <div>" + tooltipsTitle + "</div>" +
 					"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + probabilityLabels[index] + "</div>" +
-					"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalStartTime + " - " + intervalEndTime + "</div>" +
+					"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + startMoment.format(timeFormat) + " - " + endMoment.format(timeFormat) + "</div>" +
 					"</div>"
 					: "";
 
