@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +16,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
-	public class CalculateOvertimeSuggestionProviderTest : PerformanceTestWithOneTimeSetup
+	[Ignore("WIP")]
+	public class CalculateOvertimeSuggestionProviderPerfTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
@@ -44,7 +39,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			//requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
 			{
-				//UpdateStaffingLevel.Update(period);
+				UpdateStaffingLevel.Update(period);
 			});
 		}
 

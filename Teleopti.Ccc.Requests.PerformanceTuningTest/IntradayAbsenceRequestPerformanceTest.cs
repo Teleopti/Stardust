@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
-	[Ignore("WIP")]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
