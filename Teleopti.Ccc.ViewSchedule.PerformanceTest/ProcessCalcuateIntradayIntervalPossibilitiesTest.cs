@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario CurrentScenario;
 
-		[Theory]
+		[Test]
 		public void ShouldProcessMultipleCalculationAbsencePossibilities1000()
 		{
 			setup();
@@ -75,14 +75,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var personIds = new List<string>();
 			var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "PersonIds.txt";
 			var content = File.ReadAllText(path);
-			using (var stringReader = new StringReader(content))
-			{
-				string personId;
-				while ((personId = stringReader.ReadLine()) != null)
-				{
-					personIds.Add(personId);
-				}
-			}
+			personIds.AddRange(content.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries));
 			return personIds.ToArray();
 		}
 

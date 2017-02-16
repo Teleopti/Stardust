@@ -19,3 +19,5 @@
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTuningTest\bin\Debug\Teleopti.Ccc.Requests.PerformanceTuningTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTuningTest\bin\Release\Teleopti.Ccc.Requests.PerformanceTuningTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\App.config,BuildArtifacts\ServiceBusHost.config
+..\..\..\Teleopti.Ccc.ViewSchedule.PerformanceTest\bin\Debug\Teleopti.Ccc.ViewSchedule.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.ViewSchedule.PerformanceTest\bin\Release\Teleopti.Ccc.ViewSchedule.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config

@@ -20,3 +20,4 @@ c:\nhib\NotificationConfig.xml.notinuse,..\..\..\BuildArtifacts\NotificationConf
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTest\app.config,..\..\..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTuningTest\app.config,..\..\..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.StartPage\Web.config,..\..\..\BuildArtifacts\Web.StartPage.Web.config
+..\..\..\Teleopti.Ccc.ViewSchedule.PerformanceTest\app.config,..\..\..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
