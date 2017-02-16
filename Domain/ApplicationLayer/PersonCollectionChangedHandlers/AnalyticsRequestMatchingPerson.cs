@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	[EnabledBy(Toggles.ETL_SpeedUpNightlyRequest_38914)]
-	public class AnalyticsRequestMatchingPerson : IHandleEvent<AnalyticsPersonCollectionChangedEvent>, IRunOnHangfire
+	public class AnalyticsRequestMatchingPerson : IHandleEvent<AnalyticsPersonPeriodRangeChangedEvent>, IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsRequestMatchingPerson));
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		[ImpersonateSystem]
 		[UnitOfWork, AnalyticsUnitOfWork]
 		[Attempts(10)]
-		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
+		public virtual void Handle(AnalyticsPersonPeriodRangeChangedEvent @event)
 		{
-			logger.Debug($"Handle AnalyticsPersonCollectionChangedEvent for {@event.SerializedPeople}");
+			logger.Debug($"Handle {nameof(AnalyticsPersonPeriodRangeChangedEvent)} for {@event.SerializedPeople}");
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);

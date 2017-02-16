@@ -12,6 +12,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 	}
 
+	public class AnalyticsPersonPeriodRangeChangedEvent : PersonCollectionChangedEventBase
+	{
+	}
+
 	public abstract class PersonCollectionChangedEventBase : EventWithInfrastructureContext
 	{
 		private string _serializedPeople;

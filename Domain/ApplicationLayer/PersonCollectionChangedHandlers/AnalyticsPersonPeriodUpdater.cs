@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection);
 
 			var changedPeople = new List<Guid>();
+			var peopleWithUnlinkedPersonPeriod = new HashSet<Guid>();
 			foreach (var personCodeGuid in @event.PersonIdCollection)
 			{
 				// Check if person does exists => if not it is deleted and handled by other handle-method
@@ -82,6 +83,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						updatedAnalyticsPersonPeriod.WindowsUsername = existingPeriod.WindowsUsername;
 						updatedAnalyticsPersonPeriod.WindowsDomain = existingPeriod.WindowsDomain;
 
+						if (existingPeriod.ValidFromDateIdLocal != updatedAnalyticsPersonPeriod.ValidFromDateIdLocal ||
+							existingPeriod.ValidToDateIdLocal != updatedAnalyticsPersonPeriod.ValidToDateIdLocal)
+						{
+							peopleWithUnlinkedPersonPeriod.Add(personCodeGuid);
+						}
+
 						_analyticsPersonPeriodRepository.UpdatePersonPeriod(updatedAnalyticsPersonPeriod);
 					}
 					else
@@ -91,6 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						// Insert
 						var newAnalyticsPersonPeriod = _personPeriodTransformer.Transform(person, personPeriod, out analyticsSkills);
 						_analyticsPersonPeriodRepository.AddPersonPeriod(newAnalyticsPersonPeriod);
+						peopleWithUnlinkedPersonPeriod.Add(personCodeGuid);
 					}
 
 					var newOrUpdatedPersonPeriod = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid).
@@ -143,6 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					if (!person.PersonPeriodCollection.Any(a => a.Id.Equals(analyticsPersonPeriod.PersonPeriodCode)))
 					{
 						_analyticsPersonPeriodRepository.DeletePersonPeriod(analyticsPersonPeriod);
+						peopleWithUnlinkedPersonPeriod.Add(personCodeGuid);
 
 						// Delete bridge acd login for that person period
 						foreach (var bridgeAcdLoginPerson in _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(analyticsPersonPeriod.PersonId))
@@ -165,6 +174,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				};
 				analyticsPersonCollectionChangedEvent.SetPersonIdCollection(changedPeople);
 				_eventPublisher.Publish(analyticsPersonCollectionChangedEvent);
+			});
+
+			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
+			{
+				if (peopleWithUnlinkedPersonPeriod.Any()) return;
+				var analyticsPersonPeriodRangeChangedEvent = new AnalyticsPersonPeriodRangeChangedEvent
+				{
+					InitiatorId = @event.InitiatorId,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
+					Timestamp = @event.Timestamp
+				};
+				analyticsPersonPeriodRangeChangedEvent.SetPersonIdCollection(peopleWithUnlinkedPersonPeriod);
+				_eventPublisher.Publish(analyticsPersonPeriodRangeChangedEvent);
 			});
 
 		}
