@@ -49,13 +49,16 @@ describe('RequestsControllerTests', function () {
 	}
 
 	function fakeRequestCommandParamsHolder() {
-		var requestIds;
+		var requestIds = [];
 		this.setSelectedRequestsIds = function (ids) {
 			requestIds = ids;
-		}
+		};
 		this.getSelectedRequestsIds = function () {
 			return requestIds;
-		}
+		};
+		this.resetSelectedRequestIds =function(){
+			requestIds = [];
+		};
 	}
 
 	it('should display approve deny command', function () {
@@ -144,7 +147,7 @@ describe('RequestsControllerTests', function () {
 		target.toggleSearchFocus = true;
 		target.activeSearchIconColor = true;
 
-		target.keyDownOnSearchTermChanged()
+		target.keyDownOnSearchTermChanged();
 
 		expect(target.toggleSearchFocus).toEqual(false);
 		expect(target.activeSearchIconColor).toEqual(false);
@@ -166,5 +169,65 @@ describe('RequestsControllerTests', function () {
 
 		expect(target.toggleSearchFocus).toEqual(false);
 		expect(target.activeSearchIconColor).toEqual(false);
+	});
+
+	it('should clear the selection after selected period changed', function(){
+		var test = setUpTarget();
+		var target = test.target;
+
+		requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
+
+		target.period = {
+			startDate: moment().startOf('week')._d,
+			endDate: moment().endOf('week')._d
+		};
+
+		test.scope.$digest();
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
+	});
+
+	it('should clear the selection after search term changed and enter press', function(){
+		var target = setUpTarget().target;
+
+		requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
+
+		target.keyDownOnSearchTermChanged();
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
+	});
+
+	it('should clear the selection after selected teams changed', function(){
+		var target = setUpTarget().target;
+
+		requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
+
+		target.changeSelectedTeams(['fakeTeamId']);
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
+	});
+
+	it('should clear the selection after applying favorite', function(){
+		var target = setUpTarget().target;
+
+		requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
+
+		target.agentSearchOptions = {
+				keyword: "",
+				isAdvancedSearchEnabled: true,
+				searchKeywordChanged: false,
+				searchFields: [
+					'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBags',
+					'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
+				]
+			};
+
+		target.applyFavorite({
+			Name: 'fakeFavorite',
+			SearchTerm: 'a',
+			TeamIds: ['fakeTeam1Id']
+		});
+		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
 	});
 });

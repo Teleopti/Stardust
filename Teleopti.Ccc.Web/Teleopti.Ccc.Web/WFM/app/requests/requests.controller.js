@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "CurrentUserInfo"];
 
-	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
+	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.permissionsReady = false;
 		vm.toggleSearchFocus = false;
@@ -25,7 +25,6 @@
 			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeams) {
 				internalSelectedTeamIds = defaultTeams ? defaultTeams : [];
 				vm.selectedTeamIds = internalSelectedTeamIds;
-				
 				$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: internalSelectedTeamIds, agentSearchTerm: vm.agentSearchTerm});
 			}))
 			.then(init);
@@ -45,12 +44,15 @@
 			vm.focusSearch();
 			vm.activeSearchIcon();
 			vm.selectedFavorite = false;
+			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
 			internalSelectedTeamIds = currentFavorite.TeamIds;
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 			setSearchFilter();
+
+			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 
 			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:currentFavorite.TeamIds,agentSearchTerm:currentFavorite.SearchTerm});
 			vm.resetSearchStatus();
@@ -92,6 +94,8 @@
 			vm.selectedFavorite = false;
 			vm.resetSearchStatus();
 
+			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+
 			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:vm.selectedTeamIds,agentSearchTerm:vm.agentSearchTerm});
 		};
 
@@ -131,6 +135,7 @@
 					
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 					vm.agentSearchTerm = vm.agentSearchOptions.keyword;
+					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:internalSelectedTeamIds,agentSearchTerm:vm.agentSearchTerm});
 				}
 			});
 
@@ -271,6 +276,7 @@
 					vm.absencePeriod = newValue;
 				}
 
+				requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 				vm.resetSearchStatus();
 
 				//fix for bug 42633, need removed when styleguide ready for this
