@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	        _jobStartTimeRepository = jobStartTimeRepository;
         }
 
-        public void Handle(TenantMinuteTickEvent @event)
+		public void Handle(TenantMinuteTickEvent @event)
         {
             var now = _now.UtcDateTime();
             var configuredNow = _configReader.AppConfig("FakeIntradayUtcStartDateTime");

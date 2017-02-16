@@ -106,37 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			FailingHandler.Attempts.Should().Be(1);
 		}
-
-		[Test]
-		public void ShouldNotRetryHourlyRecurringJobs()
-		{
-			Recurring.PublishHourly(new RecurringEvent());
-
-			Hangfire.TriggerReccuringJobs();
-			20.Times(() =>
-			{
-				Hangfire.WorkerIteration();
-				Hangfire.RequeueScheduledJobs();
-			});
-
-			FailingHandler.Attempts.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldNotRetryDailyRecurringJobs()
-		{
-			Recurring.PublishDaily(new RecurringEvent());
-
-			Hangfire.TriggerReccuringJobs();
-			20.Times(() =>
-			{
-				Hangfire.WorkerIteration();
-				Hangfire.RequeueScheduledJobs();
-			});
-
-			FailingHandler.Attempts.Should().Be(1);
-		}
-
+		
 		public class RetryEvent : IEvent
 		{
 		}

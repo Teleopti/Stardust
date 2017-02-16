@@ -29,37 +29,49 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			events.SelectMany(jobsFor).ForEach(_client.Enqueue);
+			events.SelectMany(jobsFor).ForEach(x => _client.Enqueue(x.Job));
 		}
 
 		public void PublishDaily(IEvent @event)
 		{
-			jobsFor(@event).ForEach(j =>
+			jobsFor(@event).ForEach(x =>
 			{
-				j.Attempts = 1;
-				_client.AddOrUpdateDaily(j);
+				_client.AddOrUpdateDaily(x.Job);
 			});
 		}
 
 		public void PublishHourly(IEvent @event)
 		{
-			jobsFor(@event).ForEach(j =>
+			jobsFor(@event).ForEach(x =>
 			{
-				j.Attempts = 1;
-				_client.AddOrUpdateHourly(j);
+				_client.AddOrUpdateHourly(x.Job);
 			});
 		}
 
 		public void PublishMinutely(IEvent @event)
 		{
-			jobsFor(@event).ForEach(j =>
+			jobsFor(@event).ForEach(x =>
 			{
-				j.Attempts = 1;
-				_client.AddOrUpdateMinutely(j);
+
+				if (x.AttemptsAttribute != null)
+					throw new Exception("Retrying minutely recurring job is a bad idea");
+				x.Job.Attempts = 1;
+
+				if (x.AllowFailuresAttribute == null)
+					x.Job.AllowFailures = 10;
+
+				_client.AddOrUpdateMinutely(x.Job);
 			});
 		}
 
-		private IEnumerable<HangfireEventJob> jobsFor(IEvent @event)
+		private class JobInfo
+		{
+			public HangfireEventJob Job;
+			public AttemptsAttribute AttemptsAttribute;
+			public AllowFailuresAttribute AllowFailuresAttribute;
+		}
+
+		private IEnumerable<JobInfo> jobsFor(IEvent @event)
 		{
 			var tenant = _dataSource.CurrentName();
 			var eventType = @event.GetType();
@@ -68,19 +80,26 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			return handlerTypes.Select(handlerType =>
 			{
 				var method = _resolver.HandleMethodFor(handlerType, @event);
-				return new HangfireEventJob
+				var attemptsAttribute = method
+					.GetCustomAttributes(typeof(AttemptsAttribute), true).Cast<AttemptsAttribute>()
+					.SingleOrDefault();
+				var allowedFailuresAttribute = method
+					.GetCustomAttributes(typeof(AllowFailuresAttribute), true).Cast<AllowFailuresAttribute>()
+					.SingleOrDefault();
+				return new JobInfo
 				{
-					DisplayName = $"{handlerType.Name} got {eventType.Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
-					Tenant = tenant,
-					Event = @event,
-					HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
-					QueueName = _resolver.QueueTo(handlerType, @event),
-					Attempts = method
-								   .GetCustomAttributes(typeof(AttemptsAttribute), true).Cast<AttemptsAttribute>()
-								   .SingleOrDefault()?.Attempts ?? 3,
-					AllowFailures = method
-										.GetCustomAttributes(typeof(AllowFailuresAttribute), true).Cast<AllowFailuresAttribute>()
-										.SingleOrDefault()?.Failures ?? 0
+					Job = new HangfireEventJob
+					{
+						DisplayName = $"{handlerType.Name} got {eventType.Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
+						Tenant = tenant,
+						Event = @event,
+						HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
+						QueueName = _resolver.QueueTo(handlerType, @event),
+						Attempts = attemptsAttribute?.Attempts ?? 3,
+						AllowFailures = allowedFailuresAttribute?.Failures ?? 0
+					},
+					AttemptsAttribute = attemptsAttribute,
+					AllowFailuresAttribute = allowedFailuresAttribute
 				};
 			});
 		}

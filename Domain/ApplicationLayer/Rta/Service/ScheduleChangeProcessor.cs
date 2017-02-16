@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		[Attempts(3)]
+		[Attempts(10)]
 		public virtual void Handle(TenantDayTickEvent @event)
 		{
 			_updater.InvalidateAll();
