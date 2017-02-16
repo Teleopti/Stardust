@@ -37,12 +37,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				return new List<SkillStaffingIntervalLightModel>();
 			}
 
-			var skillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources);
-
-			var splittedIntervals = _splitSkillStaffInterval.Split(skillStaffingIntervals.ToList(), resolution);
-			return splittedIntervals
-				.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.Id))
-				.ToList();
+			var allSkillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources);
+			var relevantSkillStaffingIntervals = allSkillStaffingIntervals.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.SkillId)).ToList();
+			var splittedIntervals = _splitSkillStaffInterval.Split(relevantSkillStaffingIntervals, resolution);
+			return splittedIntervals;
 
 		}
 

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
+		private readonly CalculateOvertimeSuggestionProvider _calculateOvertimeSuggestionProvider;
 
 		public AddOverTime(TimeSeriesProvider timeSeriesProvider,
 						   ScheduledStaffingProvider scheduledStaffingProvider,
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 						   ISkillRepository skillRepository, 
 						   ForecastedStaffingProvider forecastedStaffingProvider, 
 						   ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository, 
-						   INow now, IUserTimeZone timeZone)
+						   INow now, IUserTimeZone timeZone, CalculateOvertimeSuggestionProvider calculateOvertimeSuggestionProvider)
 		{
 			_timeSeriesProvider = timeSeriesProvider;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_scenarioRepository = scenarioRepository;
 			_now = now;
 			_timeZone = timeZone;
+			_calculateOvertimeSuggestionProvider = calculateOvertimeSuggestionProvider;
 		}
 
 		public IntradayStaffingViewModel GetSuggestion(IEnumerable<Guid> skillIds)
@@ -46,26 +48,37 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
+			var usersTomorrow = new DateOnly(usersNow.AddHours(24));
+			var userstomorrowUtc = TimeZoneHelper.ConvertToUtc(usersTomorrow.Date, _timeZone.TimeZone());
 			var skills = _skillRepository.LoadSkills(skillIds);
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
-			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills.ToList(), minutesPerInterval);
-			var fakeOverTimescheduledStaffingPerSkill = scheduledStaffingPerSkill.Select(interval => new SkillStaffingIntervalLightModel
-																						 {
-																							 StartDateTime = interval.StartDateTime,
-																							 EndDateTime = interval.EndDateTime,
-																							 Id = interval.Id,
-																							 StaffingLevel = interval.StaffingLevel + 1
-																						 }).ToList();
+			var staffingIntervals = _calculateOvertimeSuggestionProvider.GetOvertimeSuggestions(skillIds.ToList(), _now.UtcDateTime(), userstomorrowUtc);
+			var overTimescheduledStaffingPerSkill = staffingIntervals.Select(x => new SkillStaffingIntervalLightModel()
+				{
+					Id = x.SkillId,
+					StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _timeZone.TimeZone()),
+					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _timeZone.TimeZone()),
+					StaffingLevel = x.StaffingLevel
+				}).ToList();
+			//var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills.ToList(), minutesPerInterval);
+			//var fakeOverTimescheduledStaffingPerSkill = scheduledStaffingPerSkill.Select(interval => new SkillStaffingIntervalLightModel
+			//																			 {
+			//																				 StartDateTime = interval.StartDateTime,
+			//																				 EndDateTime = interval.EndDateTime,
+			//																				 Id = interval.Id,
+			//																				 StaffingLevel = interval.StaffingLevel + 1
+			//																			 }).ToList();
+
 			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday.AddDays(-1), usersToday.AddDays(1)), skills, scenario);
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills.ToList(), skillDays, minutesPerInterval);
-			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
+			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, overTimescheduledStaffingPerSkill, minutesPerInterval);
 
 			return new IntradayStaffingViewModel
 			{
 				DataSeries = new StaffingDataSeries
 				{
 					Time = timeSeries,
-					ScheduledStaffing = _scheduledStaffingProvider.DataSeries(fakeOverTimescheduledStaffingPerSkill, timeSeries)
+					ScheduledStaffing = _scheduledStaffingProvider.DataSeries(overTimescheduledStaffingPerSkill, timeSeries)
 				},
 				StaffingHasData = timeSeries.Any()
 			};

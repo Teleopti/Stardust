@@ -52,15 +52,31 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var act = skill.Activity;
 				foreach (var person in persons)
 				{
-					if (!intervals.Any(x => x.SkillId == skill.Id.GetValueOrDefault() && x.AbsoluteDifference < 0)) continue;
+					var personModel = personsModels.First(x => x.PersonId == person.Id.GetValueOrDefault());
+
+					var skillIntervals = intervals.Where(x => x.SkillId == skill.Id.GetValueOrDefault() && x.EndDateTime > personModel.End && x.StartDateTime < endDateTime).OrderBy(x => x.StartDateTime);
+					if (!skillIntervals.Any()) continue;
+					//var shiftPeriod = new DateTimePeriod(skillIntervals.First().StartDateTime, skillIntervals.First().StartDateTime);
+					var shiftStart = skillIntervals.First().StartDateTime;
+					var shiftEnd = new DateTime(skillIntervals.First().EndDateTime.Ticks);
+					var ts = skillIntervals.First().GetTimeSpan();
+					foreach (var skillStaffingInterval in skillIntervals)
+					{
+						if (skillStaffingInterval.AbsoluteDifference >= 0) break;
+						shiftEnd.Add(ts);
+					}
+					if (shiftEnd == shiftStart) break;
+
+					var overTimePeriod = new DateTimePeriod(shiftStart.Utc(), shiftEnd.Utc());
 
 					var personSkills = person.Period(new DateOnly(startDateTime)).PersonSkillCollection.Select(x => x.Skill);
 					if (!personSkills.Select(x => x.Id).Contains(skill.Id.GetValueOrDefault())) continue;
 
 					var skillsForActivity = personSkills.Where(x => x.Activity == act).Select(y => y.Id.GetValueOrDefault());
+					
+					var relevantResources = resources.Where(x => x.SkillCombination.NonSequenceEquals(skillsForActivity) && x.EndDateTime > shiftStart && x.StartDateTime < shiftEnd);
+
 					//assume whole resource
-					var relevantResources = resources.Where(x => x.SkillCombination.NonSequenceEquals(skillsForActivity) && x.EndDateTime > startDateTime && x.StartDateTime < endDateTime);
-			
 					relevantResources.ForEach(x => x.Resource += 1);
 					intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources);
 
@@ -80,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			
 			// loop in some way and add overtime, then check if the demand is fulfilled
 
-			return intervals;
+			return intervals.Where(x => skillIds.Contains(x.SkillId)).ToList();
 		}
 	}
 	public class SkillIntervalsForOvertime
