@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		
 		public IPlanningPeriod Current(IAgentGroup agentGroup)
 		{
-			var foundPlanningPeriods = _planningPeriodRepository.LoadAll();
+			var foundPlanningPeriods = agentGroup != null ? _planningPeriodRepository.LoadForAgentGroup(agentGroup) : _planningPeriodRepository.LoadAll();
 			var result =
 				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.LocalDateOnly())
 					.OrderBy(y => y.Range.StartDate)
