@@ -190,6 +190,8 @@
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
+		QRCodeForMobileApps_42695,
+
 		AbsenceRequests_SpeedupIntradayRequests_40754,
 		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
