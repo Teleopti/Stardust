@@ -36,7 +36,7 @@
 
         function startNextPlanningPeriod() {
           var id = agentGroupId;
-          var getNextPlanningPeriod = planningPeriodService.getNextPlanningPeriod.update({agentGroupId:id});
+          var getNextPlanningPeriod = planningPeriodService.getNextPlanningPeriod.save({agentGroupId:id});
           return getNextPlanningPeriod.$promise.then(function(data){
             vm.planningPeriods.push(data);
             goAgentGroup(agentGroupId);

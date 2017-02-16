@@ -11,15 +11,11 @@
 	function factory($resource) {
 
 		var planningPeriodByAgentGroupId = $resource('../api/resourceplanner/planningperiodforagentgroup/:agentGroupId', {
-			agentGroupId: "@id"
+			agentGroupId: "@agentGroupId"
 		});
 
-		var nextplanningperiod = $resource('../api/resourceplanner/nextplanningperiod/:agentGroupId', {agentGroupId: "@id"}, {
-			update: {
-				method: 'POST',
-				params: {},
-				isArray: false
-			}
+		var nextplanningperiod = $resource('../api/resourceplanner/nextplanningperiod/:agentGroupId', {
+			agentGroupId: "@agentGroupId"
 		});
 
 		var service = {
