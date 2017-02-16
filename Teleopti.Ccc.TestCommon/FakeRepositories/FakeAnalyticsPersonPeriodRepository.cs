@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod)
 		{
-			throw new NotImplementedException();
+			fakePersonPeriods.RemoveAll(x => x.PersonCode == analyticsPersonPeriod.PersonCode);
 		}
 
 		public IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForPerson(int personId)

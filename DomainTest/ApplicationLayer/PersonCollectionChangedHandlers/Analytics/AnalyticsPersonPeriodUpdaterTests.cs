@@ -216,6 +216,109 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
+		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenAddedPersonPeriod()
+		{
+			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod()
+			{
+				PersonId = 1,
+				PersonCode = testPerson1Id
+			});
+
+			_target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenPersonPeriodEndChanged()
+		{
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var personPeriodId = Guid.NewGuid();
+			var startDate = new DateTime(2017, 12, 31);
+			person.AddPersonPeriod(newTestPersonPeriod(startDate, personPeriodId));
+			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonId = 1,
+				PersonCode = testPerson1Id,
+				ValidFromDateIdLocal = _analyticsDateRepository.Date(startDate).DateId,
+				ValidToDateIdLocal = _analyticsDateRepository.Date(startDate).DateId+1,
+				PersonPeriodCode = personPeriodId
+			});
+
+			_target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenPersonPeriodStartChanged()
+		{
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var personPeriodId = Guid.NewGuid();
+			var startDate = new DateTime(2017, 12, 31);
+			person.AddPersonPeriod(newTestPersonPeriod(startDate, personPeriodId));
+			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonId = 1,
+				PersonCode = testPerson1Id,
+				ValidFromDateIdLocal = _analyticsDateRepository.Date(startDate).DateId -1,
+				ValidToDateIdLocal = _analyticsDateRepository.Date(startDate).DateId,
+				PersonPeriodCode = personPeriodId
+			});
+
+			_target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenDeletedPersonPeriod()
+		{
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2017, 12, 31)));
+
+			_target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotPublishAnalyticsPersonPeriodRangeChangedEventWhenPersonPeriodAlreadyDeleted()
+		{
+			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonId = 1,
+				PersonCode = testPerson1Id,
+				PersonPeriodCode = Guid.NewGuid(),
+				ToBeDeleted = true
+			});
+
+			_target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void NewPersonPeriodOnDayAfterEndAnalyticsDate_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
 		{
 			// Given when adding person period
