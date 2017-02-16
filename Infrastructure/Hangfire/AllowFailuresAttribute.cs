@@ -18,26 +18,33 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var jobInfo = args.OfType<HangfireEventJob>().SingleOrDefault();
 			var allowFailures = jobInfo?.AllowFailures ?? 0;
 
-			var failedState = context.CandidateState as FailedState;
 			if (allowFailures == 0)
-				return;
-			if (failedState == null)
 				return;
 
 			var recurringId = jobInfo.RecurringId();
 			var key = "allow-failures:" + recurringId;
-			var failures = getHashValue<int>(context, key, "Failures");
 
-			failures = failures + 1;
-			if (failures <= allowFailures)
+			if (context.CandidateState is SucceededState)
 			{
-				context.CandidateState = newSucceededState();
-				Logger.WarnException(
-					$"Failed to process the job '{context.BackgroundJob.Id}', '{recurringId}': an exception occurred. Fail {failures} of {allowFailures} was supressed. Next attempt will be performed on next occurrence.",
-					failedState.Exception);
+				setHashValue(context, key, "Failures", 0);
+				return;
 			}
 
-			setHashValue(context, key, "Failures", failures);
+			if (context.CandidateState is FailedState)
+			{
+				var failedState = context.CandidateState as FailedState;
+				var failures = getHashValue<int>(context, key, "Failures");
+				failures = failures + 1;
+				if (failures <= allowFailures)
+				{
+					context.CandidateState = newSucceededState();
+					Logger.WarnException(
+						$"Failed to process the job '{context.BackgroundJob.Id}', '{recurringId}': an exception occurred. Fail {failures} of {allowFailures} was supressed. Next attempt will be performed on next occurrence.",
+						failedState.Exception);
+				}
+
+				setHashValue(context, key, "Failures", failures);
+			}
 		}
 
 		private static void setHashValue<T>(ElectStateContext context, string key, string field, T value)

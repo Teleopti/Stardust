@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IRecurringEventPublisher Recurring;
 		public HangfireClientStarter Starter;
 		public FailingHandlerImpl FailingHandler;
-		public FailingHandlerImpl2 FailingHandler2;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldFailOnLastAttempt()
+		public void ShouldFailAfterLastAllowedFailure()
 		{
 			Recurring.PublishMinutely(new RecurringEvent());
 
@@ -75,6 +74,47 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Hangfire.NumberOfSucceededJobs().Should().Be(4);
 		}
 
+
+		[Test]
+		public void ShouldAllowFailuresAfterSuccess()
+		{
+			Recurring.PublishMinutely(new RecurringEvent());
+			FailingHandler.Success = false;
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+			FailingHandler.Success = true;
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+
+			FailingHandler.Success = false;
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+
+			Hangfire.NumberOfFailedJobs().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldContinueFailingAfterLastAllowedFailure()
+		{
+			Recurring.PublishMinutely(new RecurringEvent());
+
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+			Hangfire.TriggerReccuringJobs();
+			Hangfire.WorkerIteration();
+
+			Hangfire.NumberOfFailedJobs().Should().Be(2);
+			Hangfire.NumberOfSucceededJobs().Should().Be(2);
+		}
+
 		public class RecurringEvent : IEvent
 		{
 		}
@@ -83,11 +123,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IHandleEvent<RecurringEvent>,
 			IRunOnHangfire
 		{
+			public bool Success = false;
 
 			[AllowFailures(2)]
 			public void Handle(RecurringEvent @event)
 			{
-				throw new Exception("fail!");
+				if (!Success)
+					throw new Exception("fail!");
 			}
 
 		}
