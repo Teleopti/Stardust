@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				}
 
 				// Check deleted person periods
-				foreach (var analyticsPersonPeriod in personPeriodsInAnalytics)
+				foreach (var analyticsPersonPeriod in personPeriodsInAnalytics.Where(period => !period.ToBeDeleted))
 				{
 					if (!person.PersonPeriodCollection.Any(a => a.Id.Equals(analyticsPersonPeriod.PersonPeriodCode)))
 					{
