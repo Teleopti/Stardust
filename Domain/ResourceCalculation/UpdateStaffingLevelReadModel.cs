@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					var filteredCombinations =
 						resCalcData.SkillCombinationHolder.SkillCombinationResources.Where(
 							x =>
-								x.StartDateTime > timeWhenResourceCalcDataLoaded.AddHours(-1) &&
+								x.StartDateTime > timeWhenResourceCalcDataLoaded.AddHours(-25) &&
 								x.StartDateTime < timeWhenResourceCalcDataLoaded.AddHours(25));
 					_skillCombinationResourceRepository.PersistSkillCombinationResource(timeWhenResourceCalcDataLoaded,
 						filteredCombinations);
