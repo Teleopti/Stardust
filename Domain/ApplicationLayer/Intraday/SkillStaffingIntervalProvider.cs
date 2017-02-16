@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
 		private IEnumerable<SkillStaffingInterval> getSkillStaffingIntervals(ISkillDay skillDay)
 		{
-			var skillStaffPeriods = skillDay.CompleteSkillStaffPeriodCollection;
+			var skillStaffPeriods = skillDay.SkillStaffPeriodCollection;
 			
 			return skillStaffPeriods.Select(skillStaffPeriod => new SkillStaffingInterval
 			{
