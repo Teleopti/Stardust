@@ -7,15 +7,11 @@
 
 	factory.$inject = ['$resource'];
 
-	/* @ngInject */
 	function factory($resource) {
 
 		var agentGroup = $resource('../api/ResourcePlanner/AgentGroup');
-		var agentGroupById = $resource('../api/ResourcePlanner/AgentGroup/:id', {
-			id: "@id"
-		});
-		var filterResult = $resource('../api/filtersagentgroup', {searchString: '@searchString',
-		maxHits: 100});
+		var agentGroupById = $resource('../api/ResourcePlanner/AgentGroup/:id', {id: "@id"});
+		var filterResult = $resource('../api/filtersagentgroup', {searchString: '@searchString', maxHits: 100});
 
 		var service = {
 			getAgentGroups: agentGroup,

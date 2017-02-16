@@ -7,7 +7,6 @@
 
 	factory.$inject = ['$resource'];
 
-	/* @ngInject */
 	function factory($resource) {
 
 		var planningPeriodByAgentGroupId = $resource('../api/resourceplanner/planningperiodforagentgroup/:agentGroupId', {
@@ -22,7 +21,6 @@
 			getPlanningPeriodByAgentGroupId: planningPeriodByAgentGroupId,
 			getNextPlanningPeriod: nextplanningperiod
 		};
-
 
 		return service;
 	}

@@ -12,11 +12,39 @@
 			</button>
 	</div>
 </div>
-<div class="con-row">
-	<div class="con-flex">
-		<div planing-periods></div>
+<div class="panel material-depth-1">
+	<div class="wfm-slide-tabs tabbed-panel">
+		<md-content class="md-padding">
+			<md-tabs md-dynamic-height md-border-bottom>
+				<md-tab label="Planning Periods">
+					<md-content class="md-padding">
+						<div class="con-flex">
+							<div planing-periods></div>
+						</div>
+					</md-content>
+				</md-tab>
+				<md-tab label="Dayoff Rules">
+					<md-content class="md-padding">
+						<div class="con-flex">
+							<div dayoff-rules></div>
+						</div>
+					</md-content>
+				</md-tab>
+				<md-tab label="Info">
+					<md-content class="md-padding">
+						<div class="con-flex">
+							<h2> Agent Group: {{vm.agentGroup.Name}} </h2>
+							<div class="wfm-chip-wrap" ng-repeat="each in vm.agentGroup.Filters">
+								<span class="wfm-chip">
+						    <span class="chip-handle">{{each.FilterType}}</span>
+								<span class="chip-text" style="margin-right:20px;">{{each.Name}}</span>
+								</span>
+							</div>
+						</div>
+					</md-content>
+				</md-tab>
+			</md-tabs>
+		</md-content>
 	</div>
-  <!-- <div class="con-flex">
-		<div dayoff-rules></div>
-	</div> -->
 </div>
+<!-- {{vm.agentGroup}} -->

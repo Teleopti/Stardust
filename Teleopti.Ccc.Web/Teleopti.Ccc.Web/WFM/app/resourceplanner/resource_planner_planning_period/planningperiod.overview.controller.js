@@ -5,33 +5,25 @@
         .module('wfm.resourceplanner')
         .controller('planningPeriodOverviewController', Controller);
 
-    Controller.$inject = ['$stateParams','$state','agentGroupService','planningPeriodService'];
+    Controller.$inject = ['$stateParams','$state','planningPeriodService'];
 
-    /* @ngInject */
-    function Controller( $stateParams, $state, agentGroupService, planningPeriodService) {
+    function Controller( $stateParams, $state, planningPeriodService) {
         var vm = this;
         var agentGroupId = $stateParams.groupId;
-        vm.agentGroup = {};
         vm.planningPeriods = [];
         vm.startNextPlanningPeriod = startNextPlanningPeriod;
 
-        getAgentGroupbyId(agentGroupId);
         getPlanningPeriod(agentGroupId);
 
-        function getAgentGroupbyId(id){
-          var getAgentGroup = agentGroupService.getAgentGroupbyId.get({id:id});
-    			return getAgentGroup.$promise.then(function(data) {
-    				vm.agentGroup = data;
-    				return vm.agentGroup;
-    			});
-        }
-
         function getPlanningPeriod(id){
-          var getPlanningPeriod = planningPeriodService.getPlanningPeriodByAgentGroupId.query({agentGroupId:id});
-          return getPlanningPeriod.$promise.then(function(data){
-            vm.planningPeriods = data;
-            return vm.planningPeriods;
-          });
+          if (id) {
+            var getPlanningPeriod = planningPeriodService.getPlanningPeriodByAgentGroupId.query({agentGroupId:id});
+            return getPlanningPeriod.$promise.then(function(data){
+              vm.planningPeriods = data;
+
+              return vm.planningPeriods;
+            });
+          }
         }
 
         function startNextPlanningPeriod() {

@@ -5,14 +5,22 @@
         .module('wfm.resourceplanner')
         .controller('dayoffRuleOverviewController', Controller);
 
-    Controller.$inject = [];
+    Controller.$inject = ['dayOffRuleService'];
 
-    /* @ngInject */
-    function Controller() {
+    function Controller(dayOffRuleService) {
         var vm = this;
 
-        vm.hello="i am shit";
-    }
+        vm.dayoffRules = [];
 
-    
+        getDayOffRules();
+
+        function getDayOffRules(){
+          var getDayOffRules = dayOffRuleService.getDayOffRules.query();
+    			return getDayOffRules.$promise.then(function(data) {
+    				vm.dayoffRules = data;
+
+    				return vm.dayoffRules;
+    			});
+        }
+    }
 })();
