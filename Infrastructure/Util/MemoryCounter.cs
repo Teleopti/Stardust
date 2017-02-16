@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 	{
 		private static MemoryCounter defaultInstance;
 		private static readonly object defaultInstanceLocker = new object();
-		private long _maxMem = 0;
+		private long _maxMem;
 
 		public static MemoryCounter DefaultInstance()
 		{
@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.Infrastructure.Util
 			}
 		}
 
-		public double MaximumMemoryConsumption
-		{
-			get { return (double) _maxMem/1024/1024; } 
-		}
+		public double MaximumMemoryConsumption => (double) _maxMem/1024/1024;
 
 		public double CurrentMemoryConsumption()
 		{
+			GC.Collect();
 			var mem = GC.GetTotalMemory(true);
 			if (mem > _maxMem)
+			{
 				_maxMem = mem;
+			}
 			return (double) mem/1024/1024;
 		}
 
