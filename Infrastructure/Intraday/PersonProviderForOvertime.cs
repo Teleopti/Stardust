@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
@@ -30,5 +31,20 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		}
 	}
 
-	
+
+
+	public class FakePersonForOvertimeProvider : IPersonForOvertimeProvider
+	{
+		private IList<SuggestedPersonsModel> _models;
+		public IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime)
+		{
+			return _models;
+		}
+
+		public void Fill(IList<SuggestedPersonsModel> models)
+		{
+			_models = models;
+		}
+	}
+
 }

@@ -1542,6 +1542,7 @@
     <Compile Include="Staffing\AddOverTimeHandlerTest.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeWithoutStateHolderTest.cs" />
     <Compile Include="Staffing\AddOverTimeTest.cs" />
+    <Compile Include="Staffing\CalculateOvertimeSuggestionProviderTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="OneTimeSetUp.cs" />
