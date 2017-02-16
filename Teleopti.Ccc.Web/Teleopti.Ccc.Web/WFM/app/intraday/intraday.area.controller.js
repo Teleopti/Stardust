@@ -122,6 +122,7 @@
 						}
 					}
 					else{
+						clearSkillSelection();
 						UnsupportedSkillNotice();
 					}
 				}
