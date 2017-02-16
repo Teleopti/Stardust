@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -212,9 +213,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnNextPlanningPeriodForAgentGroup()
 		{
-			var agentGroup = new AgentGroup();
 			var agentGroupId = Guid.NewGuid();
-			agentGroup.SetId(agentGroupId);
+			var agentGroup = new AgentGroup().WithId(agentGroupId);
 			AgentGroupRepository.Add(agentGroup);
 			Now.Is(new DateTime(2015, 05, 23));
 			PlanningPeriodRepository.Add(new PlanningPeriod(new PlanningPeriodSuggestions(Now, new List<AggregatedSchedulePeriod>())));
