@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
-				if (peopleWithUnlinkedPersonPeriod.Any()) return;
+				if (!peopleWithUnlinkedPersonPeriod.Any()) return;
 				var analyticsPersonPeriodRangeChangedEvent = new AnalyticsPersonPeriodRangeChangedEvent
 				{
 					InitiatorId = @event.InitiatorId,
