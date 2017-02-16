@@ -15,18 +15,16 @@
 <div class="con-row">
 	<div class="con-flex">
 		<div class="wfm-grid">
-			<div class="grid-card-mini" ng-repeat="p in vm.planningPeriods" ng-init="show=[]">
-				<div class="cards">
+			<div class="grid-card" ng-repeat="p in vm.planningPeriods" ng-init="show=[]">
+				<div class="list-content">
 					<div class="inner-card">
 						<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context card-dot mdi mdi-calendar-check"></i>
 						<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context card-dot-undone mdi mdi-calendar-remove"></i>
 						<span>{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}</span>
-						<button class="wfm-btn wfm-btn-default" ng-click="show[$index]=!show[$index]">Validation{{$index}}</button>
-						<!-- ng-click="selectedPlanningPeriod(p)" -->
+						<!-- <button class="wfm-btn wfm-btn-default" ng-click="show[$index]=!show[$index]">Validation{{$index}}</button> -->
 					</div>
 					<div class="open-card" ng-show="show[$index]">
-						<!-- ng-class="{'card__collapsed':show[$index], 'card__expanded':!show[$index]}" -->
-						<ol>Validated Error{{$index}}
+						<ol>Validated Error
 							<li ng-repeat="msg in p.ValidationResult.InvalidResources">
 								{{msg.ResourceName}}: {{msg.ValidationErrors[0]}}
 							</li>

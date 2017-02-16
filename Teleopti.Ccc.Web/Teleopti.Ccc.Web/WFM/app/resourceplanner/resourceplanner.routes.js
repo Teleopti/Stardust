@@ -59,12 +59,20 @@
 			controller: 'agentGroupFormController as vm'
 		})
 		.state('resourceplanner.oneagentroup', {
-			url: '/agentgroup/:groupId/planningperiod',
-			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
-			controller: 'planningPeriodOverviewController as vm',
+			url: '/agentgroup/:groupId/detail',
+			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.detail.html',
+			controller: 'agentGroupsDetailController as vm',
 			params: {
 				groupId: ''
 			}
 		});
+		// .state('resourceplanner.oneagentroup', {
+		// 	url: '/agentgroup/:groupId/planningperiod',
+		// 	templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
+		// 	controller: 'planningPeriodOverviewController as vm',
+		// 	params: {
+		// 		groupId: ''
+		// 	}
+		// });
 	}
 })();
