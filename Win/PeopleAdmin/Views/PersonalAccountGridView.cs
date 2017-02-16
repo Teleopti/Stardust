@@ -5,7 +5,9 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Drawing;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
@@ -90,6 +92,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			{
 				_gridColumns[e.ColIndex].SaveCellInfo(e, new ReadOnlyCollection<IPersonAccountModel>(
 																			FilteredPeopleHolder.PersonAccountModelCollection));
+				if (e.Handled && e.Style.CellValue is DateTime)
+				{
+
+					var updater = new FilteredPeopleAccountUpdater(FilteredPeopleHolder, UnitOfWorkFactory.Current);
+					updater.Update(FilteredPeopleHolder.PersonAccountModelCollection[e.RowIndex - 1].Parent.Person);
+				}
 			}
 		}
 
