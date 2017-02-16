@@ -55,7 +55,6 @@
 		/***scoped variables */
 		vm.selectedItemIds = [];
 		vm.displaySkillOrSkillAreaFilter = false;
-		vm.skills = [];
 		vm.skillAreas = [];
 		vm.skillId = $stateParams.skillIds || null;
 		vm.skillAreaId = $stateParams.skillAreaId || null;
@@ -73,38 +72,11 @@
 		vm.goToSelectSkill = goToSelectSkill;
 		vm.toggleSelection = toggleSelection;
 		vm.openSelectedItems = openSelectedItems;
-		vm.justTesting = "testing";
-		vm.skills2 = {};
 		(function initialize() {
-			rtaService.getSkills()
-				.then(function (skills) {
-					vm.skills = skills;
-					if (vm.skillId !== null) {
-						vm.selectedSkill = skills.find(function (skill) { return skill.Id === vm.skillId });
-					}
-					vm.skillsForView = {
-						skills: skills,
-						skillsLoaded: true
-					};
-					var defer = $q.defer();
-					defer.resolve();
-					return defer.promise;
-				})
-				.then(function () {
-					return rtaService.getSkillAreas();
-				})
-				.then(function (skillAreas) {
-					vm.skillAreasLoaded = true;
-					vm.skillAreas = skillAreas.SkillAreas;
-					if (vm.skillAreaId !== null) {
-						vm.selectedSkillArea = skillAreas.SkillAreas.find(function (skillArea) { return skillArea.Id === vm.skillAreaId; });
-					}
-					vm.skillAreasForView = {
-						skillAreas: skillAreas.SkillAreas,
-						skillAreasLoaded: true
-					};
-					getSitesOrTeams();
-				});
+			rtaService.getSkillAreas().then(function(skillAreas){
+				vm.skillAreas = skillAreas.SkillAreas;
+				getSitesOrTeams();
+			});			
 		})();
 
 		function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };

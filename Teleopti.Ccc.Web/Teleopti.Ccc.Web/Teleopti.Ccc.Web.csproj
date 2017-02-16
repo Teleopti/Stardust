@@ -1532,6 +1532,7 @@
     <Content Include="WFM\app\rta\overview\rta-teams.html" />
     <Content Include="WFM\app\rta\overview\rta.filter.controller.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.js" />
+    <Content Include="WFM\app\rta\overview\rta.filter.controller.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.teams.spec.js" />
     <Content Include="WFM\app\rta\rta.adherence.service.js" />

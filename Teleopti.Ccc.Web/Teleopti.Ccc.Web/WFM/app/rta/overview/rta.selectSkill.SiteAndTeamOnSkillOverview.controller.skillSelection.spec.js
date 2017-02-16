@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaOverviewController', function () {
+describe('RtaFilterController', function () {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -46,7 +46,7 @@ describe('RtaOverviewController', function () {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaOverviewController');
+		scope = $controllerBuilder.setup('RtaFilterController');
 
 		$fakeBackend.clear();
 
@@ -75,6 +75,7 @@ describe('RtaOverviewController', function () {
 			}]);
 
 		vm = $controllerBuilder.createController().vm;
+
 		var result = vm.querySearch("Email", vm.skills);
 
 		expect(result.length).toEqual(1);

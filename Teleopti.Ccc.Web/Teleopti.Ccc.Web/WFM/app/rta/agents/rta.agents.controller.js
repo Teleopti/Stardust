@@ -69,7 +69,6 @@
 		var enableWatchOnTeam = false;
 		var updateStatesDelegate = updateStates;
 		var agentsInfo = [];
-
 		vm.adherence = {};
 		vm.adherencePercent = null;
 		vm.filterText = "";
@@ -93,8 +92,6 @@
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 		vm.pollingLock = true;
-		vm.skills = [];
-		vm.skillAreas = [];
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
 		vm.getTableHeight = getTableHeight;
 		vm.getAdherenceForAgent = getAdherenceForAgent;
@@ -105,43 +102,13 @@
 		vm.historicalAdherenceUrl = historicalAdherenceUrl;
 		vm.goToOverview = function () { rtaRouteService.goToSites(); }
 		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
-		/**************RIGHT PANEL**************/
-		vm.rightPanelOptions = {
-			panelState: false,
-			panelTitle: " ",
-			sidePanelTitle: " ",
-			showCloseButton: true,
-			showBackdrop: true,
-			showResizer: true,
-			showPopupButton: true
-		};
+
 		allGrid.data = 'vm.filteredData';
 		inAlarmGrid.data = 'vm.filteredData';
 
 		/*******REQUESTS*****/
 
 		(function initialize() {
-			rtaService.getSkills()
-				.then(function (skills) {
-					vm.skills = skills;
-					if (skillIds.length > 0 && skillAreaId == null)
-						vm.selectedSkill = skills.find(function (s) { return s.Id === skillIds[0] });
-					vm.skillsForView = {
-						skills: skills,
-						skillsLoaded: true
-					};
-				});
-			rtaService.getSkillAreas()
-				.then(function (skillAreas) {
-					vm.skillAreas = skillAreas.SkillAreas;
-					if (skillAreaId != null)
-						vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
-					vm.skillAreasForView = {
-						skillAreas: skillAreas.SkillAreas,
-						skillAreasLoaded: true
-					};
-				});
-
 			vm.pollingLock = false;
 			if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 				toggleService.togglesLoaded.then(function () {
@@ -175,15 +142,9 @@
 			$scope.$watchCollection(
 				function () { return vm.agents; },
 				filterData);
-			updateBreadCrumb(data);
 			vm.pollingLock = true;
 		}
 
-			var lowercaseQuery = angular.lowercase(query);
-			return function filterFn(item) {
-				var lowercaseName = angular.lowercase(item.Name);
-				return (lowercaseName.indexOf(lowercaseQuery) === 0);
-			};
 		/************AGENTS GRID************/
 		function getTableHeight() {
 			var rowHeight = 30;
@@ -284,7 +245,6 @@
 			$scope.$watchCollection(
 				function () { return vm.agents; },
 				filterData);
-			updateBreadCrumb(data.States);
 			vm.pollingLock = true;
 			return data;
 		}
@@ -528,22 +488,6 @@
 				}
 			}
 		}
-
-		function updateBreadCrumb(data) {
-			var breadCrumbInfo = rtaBreadCrumbService.getBreadCrumb({
-				organization: vm.sites,
-				skillAreaId: skillAreaId,
-				skillIds: skillIds,
-				siteIds: siteIds,
-				teamIds: teamIds,
-				agentsInfo: data
-			});
-			vm.goBackToRootWithUrl = breadCrumbInfo.goBackToRootWithUrl;
-			vm.siteName = breadCrumbInfo.siteName;
-			vm.teamName = breadCrumbInfo.teamName;
-			vm.goBackToTeamsWithUrl = breadCrumbInfo.goBackToTeamsWithUrl;
-			vm.showPath = breadCrumbInfo.showPath;
-		};
 
 		function updateUrlWithExcludedStateIds(excludedStates) {
 			$state.go($state.current.name,

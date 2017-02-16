@@ -23,19 +23,12 @@
 	</div>
 </div>
 
-<div class="panel material-depth-1" ng-include="'app/rta/overview/filter-template.html'" ng-controller="RtaFilterController as fc"></div>
+<div class="panel material-depth-1" ng-include="'app/rta/overview/filter-template.html'" ng-controller="RtaFilterController as vm"></div>
 
 <div class="panel material-depth-1">
 	<div class="con-row">
 		<div class="con-flex">
-			<div class="sub-header" ng-class="{'invisible' : !vm.showBreadcrumb}">
-				<div>
-					<a class="cursor-pointer" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
-					<a class="cursor-pointer" ng-if="vm.showPath" href="{{vm.goBackToTeamsWithUrl}}">{{vm.siteName}}</a>
-					<span ng-if="!vm.showPath">{{vm.siteName}}</span>
-					<span ng-if="vm.showPath">/</span>
-					<span>{{vm.teamName}}</span>
-				</div>
+			<div class="sub-header">
 			</div>
 		</div>
 	</div>

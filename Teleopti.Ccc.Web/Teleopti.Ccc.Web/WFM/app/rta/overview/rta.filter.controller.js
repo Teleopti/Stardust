@@ -11,6 +11,7 @@
 			'$state',
 			'$stateParams',
 			'$translate',
+			'$timeout',
 			'rtaService',
 			'rtaRouteService'
 		];
@@ -20,50 +21,71 @@
 		$state,
 		$stateParams,
 		$translate,
+		$timeout,
 		rtaService,
 		rtaRouteService
 	) {
-		var fc = this;
+		var vm = this;
 		var siteIds = $stateParams.siteIds || [];
 		var teamIds = $stateParams.teamIds || [];
-		var skillIds = $stateParams.skillIds || [];
+		var skillIds = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		var enableWatchOnTeam = false;
 		var agentsState = "rta.agents";
 		// scoped variables
-		fc.teamsSelected = [];
-		fc.selectFieldText = $translate.instant('SelectOrganization');
-		fc.searchTerm = "";
-		fc.showOrganizationPicker = $state.current.name === agentsState;
+		vm.teamsSelected = [];
+		vm.selectFieldText = $translate.instant('SelectOrganization');
+		vm.searchTerm = "";
+		vm.showOrganizationPicker = $state.current.name === agentsState;
 		//scoped functions
-		fc.querySearch = querySearch;
-		fc.selectedSkillChange = selectedSkillChange;
-		fc.selectedSkillAreaChange = selectedSkillAreaChange;
-		fc.expandSite = expandSite;
-		fc.goToAgents = goToAgents;
-		fc.selectedSites = selectedSites;
-		fc.teamChecked = teamChecked;
-		fc.updateSite = updateSite;
-		fc.clearOrgSelection = clearOrgSelection;
-		fc.clearSearchTerm =  clearSearchTerm;
-		fc.onSearchOrganization = onSearchOrganization;
-		fc.forTest_selectSite = forTest_selectSite;
-
-		/*******REQUESTS*****/
+		vm.querySearch = querySearch;
+		vm.selectedSkillChange = selectedSkillChange;
+		vm.selectedSkillAreaChange = selectedSkillAreaChange;
+		vm.expandSite = expandSite;
+		vm.goToAgents = goToAgents;
+		vm.selectedSites = selectedSites;
+		vm.teamChecked = teamChecked;
+		vm.updateSite = updateSite;
+		vm.clearOrgSelection = clearOrgSelection;
+		vm.clearSearchTerm = clearSearchTerm;
+		vm.onSearchOrganization = onSearchOrganization;
+		vm.forTest_selectSite = forTest_selectSite;
+		vm.skillsLoaded = false;
+		vm.skillAreasLoaded = false;
+		vm.showOrganization = $state.current.name === agentsState;
 		(function initialize() {
-			if ($state.current.name === agentsState)
+			if (vm.showOrganization)
 				rtaService.getOrganization()
 					.then(function (organization) {
-						fc.sites = organization;
-						if (fc.sites.length > 0)
+						vm.sites = organization;
+						if (vm.sites.length > 0)
 							keepSelectionForOrganization();
 					});
+
+			rtaService.getSkills()
+				.then(function (skills) {
+					vm.skillsLoaded = true;
+					vm.skills = skills;
+					if (skillIds != null && skillAreaId == null) {
+						vm.selectedSkill = skills.find(function (s) {
+							return s.Id === skillIds;
+						});
+					}
+				});
+			rtaService.getSkillAreas()
+				.then(function (skillAreas) {
+					vm.skillAreasLoaded = true;
+					vm.skillAreas = skillAreas.SkillAreas;
+					if (skillAreaId != null && skillIds == null)
+						vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
+				});
 		})();
+
 
 		function keepSelectionForOrganization() {
 			selectSiteAndTeamsUnder();
 			if (teamIds.length > 0)
-				fc.teamsSelected = teamIds;
+				vm.teamsSelected = teamIds;
 			enableWatchOnTeam = true;
 			updateSelectFieldText();
 		}
@@ -72,7 +94,7 @@
 			if (siteIds.length === 0)
 				return;
 			siteIds.forEach(function (sid) {
-				var theSite = fc.sites.find(function (site) {
+				var theSite = vm.sites.find(function (site) {
 					return site.Id == sid;
 				});
 				theSite.isChecked = true;
@@ -84,29 +106,35 @@
 
 		function updateSelectFieldText() {
 			var howManyTeamsSelected = countTeamsSelected();
-			fc.selectFieldText = howManyTeamsSelected === 0 ? fc.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected);
+			vm.selectFieldText = howManyTeamsSelected === 0 ? vm.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected);
 		}
-
 		function countTeamsSelected() {
 			var checkedTeamsCount = 0;
-			fc.sites.forEach(function (site) {
+			vm.sites.forEach(function (site) {
 				if (siteIds.indexOf(site.Id) > -1) {
 					checkedTeamsCount = checkedTeamsCount + site.Teams.length;
 				}
 			});
-			checkedTeamsCount = checkedTeamsCount + fc.teamsSelected.length;
+			checkedTeamsCount = checkedTeamsCount + vm.teamsSelected.length;
 			return checkedTeamsCount;
 		}
 
 		/*********AUTOCOMPLETE*****/
 		function querySearch(query, myArray) {
-			if (!query)
-				return myArray;
-			return myArray.filter(function (query) { return function filterFn(item) { return (item.Name.toUpperCase().indexOf(query.toUpperCase()) === 0); }; });
+			var results = query ? myArray.filter(createFilterFor(query)) : myArray;
+			return results;
+		};
+
+		function createFilterFor(query) {
+			var lowercaseQuery = angular.lowercase(query);
+			return function filterFn(item) {
+				var lowercaseName = angular.lowercase(item.Name);
+				return (lowercaseName.indexOf(lowercaseQuery) === 0);
+			};
 		};
 
 		function selectedSkillChange(skill) {
-			if ((!skill || (skill.Id != skillIds[0] || $stateParams.skillAreaId)) && $state.current.name === agentsState) {
+			if ((!skill || (skill.Id != skillIds || $stateParams.skillAreaId)) && vm.showOrganizationPicker) {
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
 					skillAreaId: skill ? undefined : skillAreaId,
@@ -118,37 +146,36 @@
 			else {
 				if (skill.Id == skillIds) return;
 				skillIds = skill.Id;
-				fc.selectedSkill = skill;
-				fc.selectedSkillArea = undefined;
+				vm.selectedSkill = skill;
+				vm.selectedSkillArea = undefined;
 				if ($state.current.name !== "rta.teams" && angular.isDefined($stateParams.siteId))
-					rtaRouteService.goToTeams(fc.siteIds, skill.Id, fc.selectedSkillArea);
+					rtaRouteService.goToTeams(vm.siteIds, skill.Id, vm.selectedSkillArea);
 				else {
-					rtaRouteService.goToSites(skill.Id, fc.selectedSkillArea);
+					rtaRouteService.goToSites(skill.Id, vm.selectedSkillArea);
 				}
 			}
 		}
 
 		function selectedSkillAreaChange(skillArea) {
-			if ($state.current.name === agentsState) {
-				if (!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) {
-					stateGoToAgents({
-						skillIds: skillArea ? [] : $stateParams.skillIds,
-						skillAreaId: skillArea ? skillArea.Id : undefined,
-						siteIds: siteIds,
-						teamIds: teamIds
-					});
-				}
+			if ((!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) && vm.showOrganizationPicker) {
+				stateGoToAgents({
+					skillIds: skillArea ? [] : $stateParams.skillIds,
+					skillAreaId: skillArea ? skillArea.Id : undefined,
+					siteIds: siteIds,
+					teamIds: teamIds
+				});
 			}
+
 			else if (!skillArea) { rtaRouteService.goToSites(); }
 			else {
 				if (skillArea.Id === $stateParams.skillAreaId) return;
-				fc.skillAreaId = skillArea.Id;
-				fc.selectedSkillArea = skillArea;
-				fc.selectedSkill = undefined;
+				vm.skillAreaId = skillArea.Id;
+				vm.selectedSkillArea = skillArea;
+				vm.selectedSkill = undefined;
 				if ($state.current.name !== "rta.teams" && $stateParams.siteId)
-					rtaRouteService.goToTeams(fc.siteIds, fc.selectedSkill, skillArea.Id);
+					rtaRouteService.goToTeams(vm.siteIds, vm.selectedSkill, skillArea.Id);
 				else {
-					rtaRouteService.goToSites(fc.selectedSkill, skillArea.Id);
+					rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
 				}
 			}
 		}
@@ -158,8 +185,8 @@
 
 		function goToAgents() {
 			var selection = {};
-			var selectedSiteIds = fc.selectedSites();
-			var selectedTeamIds = fc.teamsSelected;
+			var selectedSiteIds = vm.selectedSites();
+			var selectedTeamIds = vm.teamsSelected;
 			selection['siteIds'] = selectedSiteIds;
 			selection['teamIds'] = selectedTeamIds;
 			stateGoToAgents(selection);
@@ -175,7 +202,7 @@
 		}
 
 		function selectedSites() {
-			return fc.sites
+			return vm.sites
 				.filter(function (site) {
 					var selectedTeams = site.Teams.filter(function (team) {
 						return team.isChecked == true;
@@ -194,9 +221,9 @@
 
 		function unselectTeamsInSite(site) {
 			site.Teams.forEach(function (team) {
-				var index = fc.teamsSelected.indexOf(team.Id);
+				var index = vm.teamsSelected.indexOf(team.Id);
 				if (index > -1) {
-					fc.teamsSelected.splice(index, 1);
+					vm.teamsSelected.splice(index, 1);
 				}
 			});
 		}
@@ -213,10 +240,10 @@
 		}
 
 		function updateSite(oldTeamsSelected) {
-			fc.sites.forEach(function (site) {
+			vm.sites.forEach(function (site) {
 				var anyChangeForThatSite = false;
 				site.Teams.forEach(function (team) {
-					team.isChecked = fc.teamsSelected.indexOf(team.Id) > -1;
+					team.isChecked = vm.teamsSelected.indexOf(team.Id) > -1;
 					var teamChanged = (team.isChecked === oldTeamsSelected.indexOf(team.Id) < 0);
 					if (oldTeamsSelected.length > 0 && teamChanged)
 						anyChangeForThatSite = true;
@@ -228,33 +255,33 @@
 		};
 
 		function clearOrgSelection() {
-			fc.sites.forEach(function (site) { site.isChecked = false; });
-			fc.teamsSelected = [];
+			vm.sites.forEach(function (site) { site.isChecked = false; });
+			vm.teamsSelected = [];
 			updateSelectFieldText();
 		};
 
-		function clearSearchTerm() { fc.searchTerm = ''; }
+		function clearSearchTerm() { vm.searchTerm = ''; }
 		function onSearchOrganization($event) { $event.stopPropagation(); };
 
 		function forTest_selectSite(site) {
 			site.isChecked = !site.isChecked;
-			var selectedSite = fc.sites.find(function (s) { return s.Id === site.Id; });
+			var selectedSite = vm.sites.find(function (s) { return s.Id === site.Id; });
 			selectedSite.Teams.forEach(function (team) {
 				team.isChecked = selectedSite.isChecked;
 				if (selectedSite.isChecked) {
-					fc.teamsSelected.push(team.Id);
+					vm.teamsSelected.push(team.Id);
 				} else {
-					var index = fc.teamsSelected.indexOf(team.Id);
-					fc.teamsSelected.splice(index, 1);
+					var index = vm.teamsSelected.indexOf(team.Id);
+					vm.teamsSelected.splice(index, 1);
 				}
 			});
 		}
 
 		$scope.$watch(
-			function () { return fc.teamsSelected; },
+			function () { return vm.teamsSelected; },
 			function (newValue, oldValue) {
 				if (angular.toJson(newValue) !== angular.toJson(oldValue) && enableWatchOnTeam) {
-					fc.updateSite(oldValue);
+					vm.updateSite(oldValue);
 				}
 			});
 	};

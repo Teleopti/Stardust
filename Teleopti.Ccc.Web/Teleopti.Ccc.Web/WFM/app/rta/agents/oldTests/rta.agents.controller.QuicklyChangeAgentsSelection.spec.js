@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsController', function() {
+describe('RtaFilterController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -31,13 +31,13 @@ describe('RtaAgentsController', function() {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaAgentsController');
+		scope = $controllerBuilder.setup('RtaFilterController');
+		$state.current.name = "rta.agents";
 
 		$fakeBackend.clear();
 		spyOn($state, 'go');
 
 	}));
-
 	it('should get organization', function() {
 		$fakeBackend.withOrganization({
 				Id: 'LondonGuid',
@@ -912,28 +912,6 @@ describe('RtaAgentsController', function() {
 			reload: true,
 			notify: true
 		});
-	});
-
-	it('should keep skill in selection', function() {
-		stateParams.skillIds = ["phoneSkillGuid"];
-		$fakeBackend.withSkill({
-			Id: "phoneSkillGuid"
-		})
-
-		vm = $controllerBuilder.createController().vm;
-
-		expect(vm.selectedSkill.Id).toBe("phoneSkillGuid");
-	});
-
-	it('should keep skillArea in selection', function() {
-		stateParams.skillAreaId = "phoneAndEmailGuid";
-		$fakeBackend.withSkillAreas([{
-			Id: "phoneAndEmailGuid"
-		}])
-
-		vm = $controllerBuilder.createController().vm;
-
-		expect(vm.selectedSkillArea.Id).toBe("phoneAndEmailGuid");
 	});
 
 	it('should go to agents by skillArea and clear skill from stateParams', function() {
