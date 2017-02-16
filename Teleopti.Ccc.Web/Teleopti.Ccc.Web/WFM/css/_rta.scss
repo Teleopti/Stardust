@@ -92,7 +92,7 @@
 	border: 0;
 	height: 100%;
 	width: 86%;
-	background: inherit;
+	background: transparent; //inherit does not work in IE
 }
 
 .rta-select-header,
