@@ -51,17 +51,17 @@
 			}
 		}).state('resourceplanner.agentgroups', {   //from here is new
 			url: '/agentgroup',
-			templateUrl: 'app/resourceplanner/resource_planner_v2/agentgroups.html',
+			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroups.html',
 			controller: 'agentGroupsController as vm'
 		}).state('resourceplanner.createagentgroup', {
 			url: '/createagentgroup',
-			templateUrl: 'app/resourceplanner/resource_planner_v2/agentgroup.createform.html',
+			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.createform.html',
 			controller: 'agentGroupFormController as vm'
 		})
 		.state('resourceplanner.oneagentroup', {
-			url: '/agentgroup/:groupId',
-			templateUrl: 'app/resourceplanner/resource_planner_v2/agentgroup.one.html',
-			controller: 'agentGroupOneController as vm',
+			url: '/agentgroup/:groupId/planningperiod',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
+			controller: 'planningPeriodOverviewController as vm',
 			params: {
 				groupId: ''
 			}
