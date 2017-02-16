@@ -54,16 +54,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return new DateTimePeriod(startTime, endTime)
 				.Intersect(new DateTimePeriod(now.AddDays(-2), now.AddDays(2)));
 		}
-
-		[ReadModelUnitOfWork]
-		public virtual void InvalidateAll()
+		
+		public void InvalidateAll()
 		{
-			IEnumerable<Guid> persons = null;
 			WithUnitOfWork(() =>
 			{
-				persons = _persons.LoadAll().Select(x => x.Id.Value).ToArray();
+				_persons
+					.LoadAll()
+					.Select(x => x.Id.Value)
+					.ForEach(x => _persister.Invalidate(x));
 			});
-			persons.ForEach(x => _persister.Invalidate(x));
 		}
 		
 		[FullPermissions]
