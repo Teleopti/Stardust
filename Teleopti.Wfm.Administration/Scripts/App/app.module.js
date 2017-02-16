@@ -62,11 +62,11 @@
 					templateUrl: 'StardustDashboard/nodedetails.html',
 					//controller: 'nodeDetailsController'
 				})
-				.when('/StardustDashboard/jobs_', {
+				.when('/StardustDashboard/jobs', {
 					templateUrl: 'StardustDashboard/jobs.html',
 					//controller: 'jobController'
 				})
-				.when('/StardustDashboard/jobs_/:jobId', {
+				.when('/StardustDashboard/jobs/:jobId', {
 					templateUrl: 'StardustDashboard/jobdetails.html',
 					//controller: 'jobDetailsController'
 				})

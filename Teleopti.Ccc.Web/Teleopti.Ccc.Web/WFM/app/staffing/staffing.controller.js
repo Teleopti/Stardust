@@ -157,8 +157,6 @@
                 skillIds = [currentSkills.Id];
             }
             staffingService.addOvertime.save({ Skills: skillIds });
-
-
         };
 
         function suggestOvertime() {
@@ -183,12 +181,12 @@
         function toggleDraggable() {
             vm.draggable = !vm.draggable
             generateChartForView();
-        }
+        };
+
         function triggerResourceCalc() {
             staffingService.triggerResourceCalculate.get();
             NoticeService.success('ResourceCalculation Triggered', 5000, true);
-
-        }
+        };
 
         function generateChartForView() {
             c3.generate({
