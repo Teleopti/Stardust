@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPlanningPeriod Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _planningPeriods.FirstOrDefault();
 		}
 
 		public IList<IPlanningPeriod> LoadAll()
