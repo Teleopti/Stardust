@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var attempts = jobInfo?.Attempts ?? int.Parse(string.Format(_format, args));
 
 			Attempts = attempts - 1;
-
+			
 			base.OnStateElection(context);
 		}
 	}

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,6 +20,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	public class RealHangfireAttribute : Attribute
+	{
+	}
+
 	[Toggle(Domain.FeatureFlags.Toggles.No_UnitOfWork_Nesting_42175)]
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
@@ -60,7 +66,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
 
 			// Hangfire bus maybe? ;)
-			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())
+				system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
 			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
 
 			// message broker

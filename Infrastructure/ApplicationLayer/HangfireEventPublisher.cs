@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Util;
@@ -64,17 +65,23 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var eventType = @event.GetType();
 			var handlerTypes = _resolver.HandlerTypesFor<IRunOnHangfire>(@event);
 
-			return handlerTypes.Select(handlerType => new HangfireEventJob
+			return handlerTypes.Select(handlerType =>
 			{
-				DisplayName = $"{handlerType.Name} got {eventType.Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
-				Tenant = tenant,
-				Event = @event,
-				HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
-				QueueName = _resolver.QueueTo(handlerType, @event),
-				Attempts = _resolver
-							   .HandleMethodFor(handlerType, @event)
-							   .GetCustomAttributes(typeof(AttemptsAttribute), true)
-							   .Cast<AttemptsAttribute>().SingleOrDefault()?.Attempts ?? 3
+				var method = _resolver.HandleMethodFor(handlerType, @event);
+				return new HangfireEventJob
+				{
+					DisplayName = $"{handlerType.Name} got {eventType.Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
+					Tenant = tenant,
+					Event = @event,
+					HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
+					QueueName = _resolver.QueueTo(handlerType, @event),
+					Attempts = method
+								   .GetCustomAttributes(typeof(AttemptsAttribute), true).Cast<AttemptsAttribute>()
+								   .SingleOrDefault()?.Attempts ?? 3,
+					AllowFailures = method
+										.GetCustomAttributes(typeof(AllowFailuresAttribute), true).Cast<AllowFailuresAttribute>()
+										.SingleOrDefault()?.Failures ?? 0
+				};
 			});
 		}
 

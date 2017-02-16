@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 			if (!string.IsNullOrEmpty(queueName))
 				enqueuedState.Queue = queueName;
+
 		}
 	}
 }

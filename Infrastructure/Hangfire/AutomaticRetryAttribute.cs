@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			get { lock (_lockObject) { return _logEvents; } }
 			set { lock (_lockObject) { _logEvents = value; } }
 		}
-
+		
 		/// <inheritdoc />
 		public virtual void OnStateElection(ElectStateContext context)
 		{
@@ -255,4 +255,5 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				Math.Pow(retryCount - 1, 4) + 15 + random.Next(30) * retryCount);
 		}
 	}
+	
 }

@@ -16,10 +16,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	[HangfireTest]
 	public class HangfireRetryEventPublishingTest : ISetup
 	{
-		public Lazy<HangfireUtilities> Hangfire;
+		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
 		public IRecurringEventPublisher Recurring;
-		public HangfireClientStarter Starter;
 		public FailingHandlerImpl FailingHandler;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -32,10 +31,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new RetryEvent());
 
-			Hangfire.Value.WorkerIteration();
+			Hangfire.WorkerIteration();
 
-			Hangfire.Value.NumberOfScheduledJobs().Should().Be(1);
-			Hangfire.Value.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
+			Hangfire.NumberOfScheduledJobs().Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
 		}
 
 		[Test]
@@ -43,11 +42,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new RetryEvent());
 
-			Hangfire.Value.WorkerIteration();
-			Hangfire.Value.RequeueScheduledJobs();
-			Hangfire.Value.WorkerIteration();
+			Hangfire.WorkerIteration();
+			Hangfire.RequeueScheduledJobs();
+			Hangfire.WorkerIteration();
 
-			Hangfire.Value.NumberOfScheduledJobs().Should().Be(1);
+			Hangfire.NumberOfScheduledJobs().Should().Be(1);
 		}
 
 		[Test]
@@ -55,14 +54,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new RetryEvent());
 
-			Hangfire.Value.WorkerIteration();
-			Hangfire.Value.RequeueScheduledJobs();
-			Hangfire.Value.WorkerIteration();
-			Hangfire.Value.RequeueScheduledJobs();
-			Hangfire.Value.WorkerIteration();
+			Hangfire.WorkerIteration();
+			Hangfire.RequeueScheduledJobs();
+			Hangfire.WorkerIteration();
+			Hangfire.RequeueScheduledJobs();
+			Hangfire.WorkerIteration();
 
-			Hangfire.Value.NumberOfFailedJobs().Should().Be(1);
-			Hangfire.Value.NumberOfScheduledJobs().Should().Be(0);
+			Hangfire.NumberOfFailedJobs().Should().Be(1);
+			Hangfire.NumberOfScheduledJobs().Should().Be(0);
 		}
 
 		[Test]
@@ -70,24 +69,24 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new RetryEvent());
 
-			Hangfire.Value.WorkerIteration();
-			Hangfire.Value.RequeueScheduledJobs();
+			Hangfire.WorkerIteration();
+			Hangfire.RequeueScheduledJobs();
 			FailingHandler.Succeeds = true;
-			Hangfire.Value.WorkerIteration();
+			Hangfire.WorkerIteration();
 
-			Hangfire.Value.NumberOfFailedJobs().Should().Be(0);
-			Hangfire.Value.NumberOfScheduledJobs().Should().Be(0);
+			Hangfire.NumberOfFailedJobs().Should().Be(0);
+			Hangfire.NumberOfScheduledJobs().Should().Be(0);
 		}
 
 		[Test]
-		public void ShouldRetry3TimeByDefault()
+		public void ShouldRetry3TimesByDefault()
 		{
 			Publisher.Publish(new DefaultRetryEvent());
 
 			10.Times(() =>
 			{
-				Hangfire.Value.WorkerIteration();
-				Hangfire.Value.RequeueScheduledJobs();
+				Hangfire.WorkerIteration();
+				Hangfire.RequeueScheduledJobs();
 			});
 
 			FailingHandler.Attempts.Should().Be(3);
@@ -98,11 +97,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Recurring.PublishMinutely(new RecurringEvent());
 
-			Hangfire.Value.TriggerReccuringJobs();
+			Hangfire.TriggerReccuringJobs();
 			20.Times(() =>
 			{
-				Hangfire.Value.WorkerIteration();
-				Hangfire.Value.RequeueScheduledJobs();
+				Hangfire.WorkerIteration();
+				Hangfire.RequeueScheduledJobs();
 			});
 
 			FailingHandler.Attempts.Should().Be(1);
@@ -113,11 +112,26 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Recurring.PublishHourly(new RecurringEvent());
 
-			Hangfire.Value.TriggerReccuringJobs();
+			Hangfire.TriggerReccuringJobs();
 			20.Times(() =>
 			{
-				Hangfire.Value.WorkerIteration();
-				Hangfire.Value.RequeueScheduledJobs();
+				Hangfire.WorkerIteration();
+				Hangfire.RequeueScheduledJobs();
+			});
+
+			FailingHandler.Attempts.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotRetryDailyRecurringJobs()
+		{
+			Recurring.PublishDaily(new RecurringEvent());
+
+			Hangfire.TriggerReccuringJobs();
+			20.Times(() =>
+			{
+				Hangfire.WorkerIteration();
+				Hangfire.RequeueScheduledJobs();
 			});
 
 			FailingHandler.Attempts.Should().Be(1);

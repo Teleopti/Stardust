@@ -204,6 +204,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ISkillCombinationResourceReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SlimSkillResourceCalculationPeriodWrapper.cs" />
+    <Compile Include="ApplicationLayer\AllowFailuresAttribute.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ScheduleManagementHandlerBase.cs" />

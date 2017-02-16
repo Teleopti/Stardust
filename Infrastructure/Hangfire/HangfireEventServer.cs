@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		[DisplayName("{0}")]
 		[QueueFromArgument]
-		[AttemptsFromArgument]
+		[AllowFailuresFromArgument(Order = 1)]
+		[AttemptsFromArgument(Order = 2)]
 		public void Process(string displayName, HangfireEventJob job)
 		{
 			_processor.Process(job.DisplayName, job.Tenant, job.Event, job.HandlerTypeName);

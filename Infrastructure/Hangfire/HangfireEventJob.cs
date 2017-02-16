@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public string Tenant;
 		public string QueueName;
 		public int Attempts;
+		public int AllowFailures;
 		public IEvent Event;
 		public string HandlerTypeName;
 		

@@ -109,9 +109,15 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		{
 			return monitoring.ScheduledCount();
 		}
+
 		public long NumberOfProcessingJobs()
 		{
 			return monitoring.ProcessingCount();
+		}
+
+		public long NumberOfSucceededJobs()
+		{
+			return monitoring.SucceededListCount();
 		}
 
 		public void CleanFailedJobsBefore(DateTime time)
