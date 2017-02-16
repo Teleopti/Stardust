@@ -1,0 +1,1113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Kļūda</value>
+  </data>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>Tehniskā informācija</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Aizpildīts</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Aizpildījums (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Must Haves</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Neaizpildīts</value>
+  </data>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>Sakļaut</value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>Izvērst</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>Ievadīta nederīga vērtība:</value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>Nekas nav ievadīts:</value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>Nokritušie Zvani</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>Nokritušo Zvanu Īpatsvars</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>Operators</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>Atbildētie Zvani</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>Atbildēti Ārpus Servisa Līmeņa</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>Atbildēti Servisa Līmenī</value>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>Datums</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>Datums:</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>Datums No:</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>Datums Līdz:</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>Pavisam Kopā</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>Intervāls</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>Intervāls:</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>Ieplānotais Laiks</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>Servisa Līmenis (%)</value>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>Grupa</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>Prasmes</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>Nodaļa</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>Darba Slodze</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>Parādīt Atskaiti</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>Intervāls No:</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>Intervāls Līdz:</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>Perioda Tips:</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>Prombūtnes (%)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>Atbilstība (%)</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>Atbildētie Zvani Attiecībā pret Ieplānotajām Zvanu Stundām</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>Vidējais Zvanu Pēcapstrādes Laiks (s)</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>Vidējais Atbildēšanas Laiks (s)</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>Vidējais Sarunas laiks (s)</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>Gatavība (%)</value>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>Faktiskais</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>Kpi</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>Iepriekšējais Periods</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>Mērķis</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>Nodaļas Faktiskais</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>Tendence</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>Autorizēties</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>Autorizācija ir nesekmīga. Lūdzu mēģiniet atkārtoti.</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>Lietotājvārds:</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>Jaunā parole:</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>Nav ievadīta parole</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>Parole:</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>Atcerēties mani</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>Autorizācija</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>Nav ievadīts lietotājvārds</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>Parādīt Atskaiti</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>Scenārijs</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>Nokritušo Zvanu, izņemot Īsos Zvanus, Īpatsvars (%)</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>Nokritušo Zvanu Īpatsvars (%)</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>Atbildēto Zvanu Īpatsvars (%)</value>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>Vidējais savienojuma ātrums (s)</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>Vidējais Laiks līdz Zvana Nokrišanai (s)</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>Periods</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>Rindas Ilgākais Nokritušā Zvana Laiks (s)</value>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>Rindas Ilgākais Zvana Atbildes Laiks (s)</value>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>Periods</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>Abandonment and Speed of Answer</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>Sekundes</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>Laiks līdz </value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>Kopā:</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>Procents</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>Faktiskais Zvana Pēcapstrādes Laiks</value>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>Faktiskais Vidējais Sarunu Ilgums</value>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>Zvana Pēcapstrāde</value>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>Vidējais Sarunas Ilgums</value>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>Aprēķinātie Zvani</value>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>Zvani</value>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>Prognozētais Zvana Pēcapstrādes laiks</value>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>Prognozētais Vidējais Sarunas Ilgums</value>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>Prognozētie Zvani</value>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>Skaits</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>Prognoze attiecībā pret faktisko Darba Slodzi</value>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>Operatori Gatavībā</value>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>Ieplānotie Operatori</value>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>Relatīvā atšķirība (%)</value>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>Prognozētais Laiks (hh:mm)</value>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>Padotie Zvani</value>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>Padotie Zvani / Operatori Gatavībā</value>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>Padotie Zvani / Ieplānotie Operatori Gatavībā</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>Prognoze attiecībā pret Ieplānotajām Stundām</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>Servisa Līmenis un Aģenti Gatavībā</value>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>Ieplānotais Gatavības Laiks</value>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>Ieplānotie Aģenti attiecībā pret Aģentiem Gatavībā</value>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>Gludums (%)</value>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>Darba diena / Prasmes</value>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>Aģenta Kategorija:</value>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>Aģenta Kategorijas Tips:</value>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>Operatori:</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>Operatora Rādītāji</value>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>Atbilstība (%)</value>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>Operators / Datums</value>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>Atbildētie zvani / Ieplānotais Gatavības Laiks</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>Prombūtne</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>Aktivitāte</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>Atbilstība</value>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>Noslogojums (%)</value>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>Gatavība (%)</value>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>Gatavības Laiks</value>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>Atbilstības Aprēķins:</value>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>Padotie Zvani / Operators</value>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>Servisa Līmenis</value>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>Servisa Līmeņa Aprēķins:</value>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>Kārtot pēc:</value>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Gatavības laiks / Ieplānotais Gatavības Laiks (%)</value>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>Ieplānotie Operatori Gatavībā</value>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>Novirze (m)</value>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>Nākamais</value>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>Iepriekšējais</value>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Atbilstība / Intervāls (%)</value>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>Novirze / Intervāls (m)</value>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>Rinda:</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>Rindas Statistika</value>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>Servisa Līmenī Nokritušie Zvani</value>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>Nokritušie Īsie Zvani</value>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>Zvana Atbildēšanas Laiks</value>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>Atbildes Ātrums</value>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>Sarunas Laiks</value>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>Pāradresētie zvani</value>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>Rinda</value>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>Laika zona:</value>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>Aizkavētākais neatbildētais zvans rindā</value>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>Aizkavētākais atbildētais zvans rindā</value>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>Laiks līdz Zvana Nokrišanai (s)</value>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>Palīdzība</value>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>Acd Autorizācija</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>Operatoru Rindas Statistika</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>Operatoru Statistika</value>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>Admin Laiks</value>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>Tiešie Ienākošie Zvani</value>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>Tiešo ienākošo Zvanu Sarunas Laiks</value>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>Tiešie Izejošie Zvani</value>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>Tiešo Izejošo Zvanu Sarunas Laiks</value>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>Dīkstāves Laiks</value>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>Autorizācijas Laiks</value>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>Nav Gatavībā Laiks</value>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>Datums / Intervāls</value>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>Nav Atļaujas</value>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>Zvanu Ienākošā Pārplūde</value>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>Zvanu Izejošā Pārplūde</value>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>Prognozētais Laiks ieskaitot Samazinājumu (hh:mm)</value>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>Ieplānotais Laiks (hh:mm)</value>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>Standarta Novirze</value>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>Nedēļa:</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>Ieplānotais Laiks pēc Operatoriem</value>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>Ieplānotais Prombūtnes Laiks (hh:mm)</value>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>Ieplānotās Virsstundas (hh:mm)</value>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>Prombūtne:</value>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>Aktivitāte:</value>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>Prognozētās Stundas (hh:mm)</value>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>Ieplānotās Stundas (hh:mm)</value>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>Prognozētās Stundas (samazinājums) (hh:mm)</value>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>Relatīvā Atšķirība iesk. Samazinājumu (%)</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>Maiņu Kategorijas pēc Dienām</value>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>Maiņu Kategorijas:</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>Maiņu Kategorijas un Pilnas Dienas Prombūtnes pēc Operatoriem</value>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>Brīvdiena:</value>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>Atlases</value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>Ieplānotais Laiks pēc Aktivitātes</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>Nodaļas Rādītāji</value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>Nodaļa / Datums</value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>Atbildētie Zvani / Stundas Gatavībā</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>Kontrakta Prombūtnes Laiks (hh:mm)</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>Kontrakta Laiks (hh:mm)</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>Apmaksājamais Laiks (hh:mm)</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>Darba Laiks (hh:mm)</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>Akceptētās Vēlmes</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>Akceptētās Vēlmes (%)</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>Noraidītās Vēlmes</value>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>Izteiktās Vēlmes</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>Vēlmju Kategorijas</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>Vēlmes pa Dienām</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>Vēlmes pa Operatoriem</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>Ieplānotie Operatori pēc Intervāla un Nodaļas</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>UZLABOT</value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>Noslodzes Laiks / Apmaksājamais Laiks (%)</value>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>Piektdiena</value>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>Pirmdiena</value>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>Sestdiena</value>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>Svētdiena</value>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>Ceturtdiena</value>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>Otrdiena</value>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>Trešdiena</value>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>Aprīlis</value>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>Augusts</value>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>Decembris</value>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>Februāris</value>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>Janvāris</value>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>Jūlijs</value>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>Jūnijs</value>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>Marts</value>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>Maijs</value>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>Novembris</value>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>Oktobris</value>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>Septembris</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>Operatora Rezultāti</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>Apmaksājamais Laiks (hh:mm)</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>Darba Laiks (hh:mm)</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>Prombūtnes Laiks pēc Operatora</value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>Pilna Diena</value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>Nepilna Diena</value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>Lietotāja autentifikācija neizdevās</value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>When using Windows authentication at the web application it is not valid to use Application authentication at the client side.</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>Please use application login instead.</value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>Iespējamais risinājums</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>Make sure the permissions are synchronized properly with the ETL service.</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>Either close the client and log back on using Windows authentication or a system administrator can change web authentication to Forms.</value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>Visi</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>Atbildētie Zvani uz Servisa Līmeņa Sliekšņa / Atbildētie Zvani</value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>Atbildētie un Nokritušie Zvani uz Servisa Līmeņa Sliekšņa / Padotie Zvani</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>Atbildētie Zvani uz Servisa Līmeņa Sliekšņa / Padotie Zvani</value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>Diena</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>Brīvdiena</value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>Paplašinātās Vēlmes</value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>Vārds</value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>Piektdiena</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>Pusstunda</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>Stunda</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>Uzvārds</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>Pirmdiena</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>Mēnesis</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>Nav Noteikts</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>Gatavības Laiks attiecībā pret Kontrakta Ieplānoto Laiku</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>Gatavības Laiks attiecībā pret Ieplānoto Gatavības Laiku</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>Gatavības Laiks attiecībā pret Ieplānoto Laiku (ieskaitot laiku pirms un pēc maiņas sākuma)</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>Maiņu Kategorijas</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>Maiņas Sākuma Laiks</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>Svētdiena</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>Ceturtdiena</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>Otrdiena</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>Trešdiena</value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>Nedēļa</value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>Darba diena</value>
+  </data>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>Operators:</value>
+  </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>Rezultāti nav pieejami</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>Prombūtnes Laiks pēc Prombūtnēm</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Struktūrvienības</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>Līgumi</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>Līguma Grafiks</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Piezīme</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>Nepilna Laika procentuālā attiecība</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>Maiņu grozs</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>Grupas Lapa:</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>Grupa:</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Prasmes</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>Ieplānotās Virsstundas pēc Operatoriem</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>Virsstundas:</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>Virsstundu tips:</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>Vidējais Zvanu Pēcapstrādes Laiks</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>Vidējais Zvana Laiks</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>Vidējais Sarunas Laiks</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>Operatoru Rindas Rādītāji</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>Aktivitātes Laiks pēc Operatoriem</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>Virsstundas (hh:mm)</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>Maiņas Beigu Laiks</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>Maiņu Kategorija un Pilna Laika Prombūtne</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Prombūtne</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Samaiņa</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Teksts</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Pieprasījumi pēc Operatoriem</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>Apstiprināts</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>Noraidīts</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>Izskatīšanā</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>Pieprasījuma Tips</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Statuss:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Statuss</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>Pieprasītās dienas</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>Pieprasījumi</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Iesnieguma Datums</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Pieprasījumu Periods</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Novirzīt Tagad</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Sesija beigusies</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Your session has expired due to an extended period of inactivity. You will soon be redirected to the log on page again.</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Atbilstība pēc Operatoriem</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Atbilstība pēc Dienas</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Ieplānotie Operatori pēc Aktivitātēm</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Kopā</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Izrakstīties</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Datums (maiņas sākums):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Datums No (maiņas sākums):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Datums Līdz (maiņas sākums):</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Pašreizējā lapa</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Eksportēt</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Atrast</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Atrast Nākamo</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Atrast Tekstu Atskaitē</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Pirmā Lapa</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Lapa nav atrasta</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Pēdējā Lapa</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Nākamais</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Nākamā Lapa</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Vairāk sakritības nav atrastas</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>no</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Lapas Uzstādījumi</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Lapas Platums</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Iepriekšējā Lapa</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Izdrukas Izkārtojums</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Izdruka</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Atsvaidzināt</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Apturēt Veidošanu</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Teksts nav atrasts</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Kopā Lapas</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Visa lapa</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Pietuvināt</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Savienojuma laiks ar datubāzi ir beidzies, mēģiniet ierobežot meklēšanas kritērijus.</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>Sestdiena</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Pieejamība pēc Operatoriem</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Pieejamās Dienas</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Pieejamais Laiks</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Ieplānotās Dienas</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Izlietošana</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Tikai aktīvās prasmes</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Operatora Prasmes</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Tikai aktīvās prasmes:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Laiks Stāvoklī pēc Operatoriem</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Stāvokļu Grupas:</value>
+  </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>Ietverta informācija:</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>Atcelts</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>Gaidīšanas Rindā</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Vairākas aktivitātes/prombūtnes </value>
+  </data>
+</root>
