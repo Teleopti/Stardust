@@ -187,8 +187,8 @@
                         </div>
                     </div>
                     <div>
-                        <div class="weekview-day-schedule relative" data-bind="style: {width: probability.length > 0 ? '114px' : '129px'}">
-                            <div class="weekview-day-time-indicator relative" data-bind="style: {width: probability.length > 0 ? '119px' : '129px'}">
+                        <div class="weekview-day-schedule relative" data-bind="style: {width: probabilities.length > 0 ? '114px' : '129px'}">
+                            <div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities.length > 0 ? '119px' : '129px'}">
                             </div>
                             <!-- ko foreach: layers -->
                             <!-- ko if: isOvertimeAvailability() -->
@@ -214,7 +214,7 @@
                             <!-- /ko -->
                         </div>
                         <div class="probability-pane">
-                            <!--ko foreach: probability-->
+                            <!--ko foreach: probabilities-->
                             <div data-bind="css:cssClass, tooltip: {title: tooltips, html:true}, style: styleJson"></div>
                             <!-- /ko -->
                         </div>

@@ -263,7 +263,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
 		parts.length = 8;
 
-		var probability = (isWeekSchedule && parts[5] === "Probability") ? parts[6] : 0;
+		var probability = (isWeekSchedule && parts[5] === "Probability") ? parseInt(parts[6]) : 0;
 
 		var controller = parts[0];
 		var action = parts[1];

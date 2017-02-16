@@ -1,4 +1,5 @@
-﻿var scheduleHeight = 668; // Same value as height of class "weekview-day-schedule"
+﻿// Same value as height of class "weekview-day-schedule"
+var scheduleHeight = 668;
 var pixelToDisplayAll = 38;
 var pixelToDisplayTitle = 16;
 
@@ -220,10 +221,10 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 		return continousPeriods;
 	};
 
-	var createProbabilityModel = function (rawProbabilities) {
+	var createProbabilityModels = function (rawProbabilities) {
 		if (rawProbabilities == undefined || rawProbabilities.length === 0) return [];
 
-		// If today is full day absence or dayoff, Then hide absence probability
+		// If today is full day absence or dayoff, Then hide absence probabilities
 		var probabilityType = parent.probabilityType();
 		if (probabilityType === 0 || (probabilityType === 1 && (day.IsFullDayAbsence || day.IsDayOff))) {
 			return [];
@@ -278,13 +279,15 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 		var probabilityNames = ["low", "high"];
 		var probabilityLabels = [parent.userTexts.low, parent.userTexts.high];
 		var probabilities = [];
+
+		// Add an "invisible" probability on top to make all probabilities displayed from correct position
 		probabilities.push({
+			cssClass: "probability-none",
+			tooltips: "",
 			styleJson: {
 				"top": 0,
 				"height": Math.round(scheduleHeight * shiftStartPosition) + "px"
-			},
-			cssClass: "probability-none",
-			tooltips: ""
+			}
 		});
 
 		var totalHeight = shiftEndPosition - shiftStartPosition;
@@ -328,11 +331,12 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 
 			var index = intervalProbability.Possibility;
 			var timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat;
+			var intervalTimeSpan = startMoment.format(timeFormat) + " - " + endMoment.format(timeFormat);
 			var tooltips = inScheduleTimeRange
 				? "<div style='text-align: center'>" +
 				"  <div>" + tooltipsTitle + "</div>" +
 				"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + probabilityLabels[index] + "</div>" +
-				"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + startMoment.format(timeFormat) + " - " + endMoment.format(timeFormat) + "</div>" +
+				"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalTimeSpan + "</div>" +
 				"</div>"
 				: "";
 
@@ -354,7 +358,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 		return probabilities;
 	}
 
-	self.probability = createProbabilityModel(probabilities);
+	self.probabilities = createProbabilityModels(probabilities);
 
 	self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, parent.userTexts, self);
@@ -447,7 +451,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, userTexts, parent)
 		var width;
 		if (layer.IsOvertimeAvailability) {
 			width = 20;
-		} else if (parent.probability && parent.probability.length > 0) {
+		} else if (parent.probabilities && parent.probabilities.length > 0) {
 			width = 115;
 		} else {
 			width = 127;
