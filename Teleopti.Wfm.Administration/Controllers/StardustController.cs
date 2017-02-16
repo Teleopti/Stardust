@@ -22,6 +22,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustRepository.GetAllJobs(from, to));
 		}
 
+		[HttpGet, Route("Stardust/FailedJobs/{from}/{to}")]
+		public IHttpActionResult FailedJobHistoryList(int from, int to)
+		{
+			return Ok(_stardustRepository.GetAllFailedJobs(from, to));
+		}
+
 		[HttpGet, Route("Stardust/RunningJobs")]
 		public IHttpActionResult RunningJobsList()
 		{

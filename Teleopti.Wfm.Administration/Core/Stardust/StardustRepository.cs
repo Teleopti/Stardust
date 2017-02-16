@@ -305,6 +305,33 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 			}
 		}
 
+		public object GetAllFailedJobs(int from, int to)
+		{
+			var jobs = new List<Job>();
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' FROM Stardust.Job WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
+				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
+						{
+							while (sqlDataReader.Read())
+							{
+								var job = createJobFromSqlDataReader(sqlDataReader);
+								setTotalDuration(job);
+								jobs.Add(job);
+							}
+						}
+					}
+				}
+			}
+			return jobs;
+		}
+
 		private T getDBNullSafeValue<T>(object value) where T : class
 		{
 			return value == DBNull.Value ? null : (T)value;
@@ -353,6 +380,8 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 			};
 			return jobDetail;
 		}
+
+	
 	}
 
 	public static class SqlDataReaderExtensions

@@ -7,7 +7,7 @@ using Teleopti.Wfm.Administration.Core.Stardust;
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
 	[TestFixture]
-	class StardustControllerTest
+	public class StardustControllerTest
 	{
 		public StardustController Target;
 		public StardustRepository StardustRepository;
@@ -82,6 +82,12 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void WorkerNodesWithIdShouldNotCrash()
 		{
 			Target.WorkerNodes(Guid.NewGuid());
+		}
+
+		[Test]
+		public void GetFailedJobsShouldNotCrash()
+		{
+			Target.FailedJobHistoryList(1, 10);
 		}
 	}
 }
