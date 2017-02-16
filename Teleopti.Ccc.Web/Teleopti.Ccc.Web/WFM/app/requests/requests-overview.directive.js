@@ -21,6 +21,7 @@
 
 		vm.filters = [];
 		vm.reload = reload;
+		vm.isLoading = false;
 		vm.sortingOrders = [];
 
 		vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
@@ -48,7 +49,6 @@
 			if (toggleService.Wfm_Requests_Default_Status_Filter_39472) {
 				vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
 			}
-			vm.loaded = false;
 
 			if (vm.isActive) {
 				reload();
@@ -98,6 +98,7 @@
 
 		function getRequests(requestsFilter, sortingOrders, paging) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
+
 				vm.requests = requests.data.Requests;
 
 				if (vm.requests && vm.requests.length > 0) {
@@ -114,7 +115,7 @@
 						vm.onTotalRequestsCountChanges(vm.totalRequestsCount);
 				}
 
-				vm.loaded = true;
+				vm.isLoading = false;
 			});
 		}
 
@@ -134,17 +135,22 @@
 				filters: vm.filters
 			};
 
-			vm.loaded = false;
+			vm.isLoading = true;
 
 			if (vm.isPaginationEnabled) {
 				getRequests(requestsFilter, vm.sortingOrders, vm.paging);
 			} else {
 				requestsDataService.getAllRequestsPromise_old(requestsFilter, vm.sortingOrders).then(function(requests) {
 					vm.requests = requests.data;
-					vm.loaded = true;
+					vm.isLoading = false;
 				});
 			}
 		}
+	}
+
+	function validateDateParameters(startDate, endDate) {
+		if (endDate === null || startDate === null) return false;
+		return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
 	}
 
 	function requestsOverviewDirective() {
@@ -165,11 +171,6 @@
 			link: postlink
 		};
 
-		function validateDateParameters(startDate, endDate) {
-			if (endDate === null || startDate === null) return false;
-			return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
-		}
-
 		function postlink(scope, elem, attrs, ctrl) {
 			var vm = scope.requestsOverview;
 
@@ -182,9 +183,8 @@
 					sortingOrders: vm.sortingOrders
 				};
 				return target;
-			}, function (newValue) {
+			}, function (newValue, oldValue) {
 				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
-					vm.loaded = true;
 					return;
 				}
 
@@ -193,7 +193,6 @@
 				if (!ctrl.loadRequestWatchersInitialized) {
 					listenToReload();
 				}
-
 			}, true);
 
 			function listenToReload() {

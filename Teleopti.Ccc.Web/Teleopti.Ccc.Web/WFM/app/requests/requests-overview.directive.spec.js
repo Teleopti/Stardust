@@ -161,6 +161,27 @@
 			expect(requestsDataService.getLastRequestParameters()[0].agentSearchTerm).toEqual("search term");
 		});
 
+		it("should set isLoading to false after reload requests action finished", function () {
+			requestsDataService.setRequests([]);
+			targetScope.period = {};
+			targetScope.agentSearchTerm = "";
+
+			targetElement = $compile('<requests-overview period="period" agent-search-term="agentSearchTerm"></requests-overview>')(targetScope);
+
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isLoading = true;
+			scope.requestsOverview.isActive = true;
+			scope.requestsOverview.selectedTeamIds = ["team"];
+
+			targetScope.agentSearchTerm = "search term";
+			
+			expect(scope.requestsOverview.isLoading).toBeTruthy();
+
+			targetScope.$digest();
+			expect(scope.requestsOverview.isLoading).toBeFalsy();
+		});
+
 		it('should show selected requests information when requests get selected and nothing vice verse', function () {
 			var requestIds = [{ id: 1 }, { id: 2 }];
 			requestsDataService.setRequests([]);
