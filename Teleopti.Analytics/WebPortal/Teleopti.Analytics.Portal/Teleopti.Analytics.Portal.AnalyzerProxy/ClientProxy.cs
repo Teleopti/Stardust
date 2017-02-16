@@ -196,7 +196,9 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
                                   ToolbarButton.UpdateBookmark,
                                   ToolbarButton.DataSource,
                                   ToolbarButton.ObjectPanel,
-                                  ToolbarButton.SchemaTree
+                                  ToolbarButton.SchemaTree,
+											 ToolbarButton.Save,
+											 ToolbarButton.SaveAs
                               };
 
 
@@ -207,7 +209,7 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 				// A report designer should be able to see datasource and schema panels and buttons
 				schemaVisible = true;
 
-				var buttonsCopy = new ToolbarButton[buttons.Length - 2];
+				var buttonsCopy = new ToolbarButton[buttons.Length - 4];
 				Array.Copy(buttons, buttonsCopy, buttonsCopy.Length);
 				buttons = buttonsCopy;
 			}
