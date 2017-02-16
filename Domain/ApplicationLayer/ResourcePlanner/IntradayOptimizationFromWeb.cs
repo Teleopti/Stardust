@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		[UnitOfWork]
 		protected virtual IPlanningPeriod LoadPlanningPeriod(Guid planningPeriodId)
 		{
-			return _planningPeriodRepository.Load(planningPeriodId);
+			return _planningPeriodRepository.Get(planningPeriodId);
 		}
 	}
 }
