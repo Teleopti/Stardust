@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public MutableNow Now;
 
-		[Test] //temporary test
+		[Test] 
+		[Ignore("WIP")]//temporary test
 		public void ShouldAddOneResourceToAllIntervals()
 		{
 			Now.Is("2017-02-08 07:00");
