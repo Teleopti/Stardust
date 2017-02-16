@@ -190,6 +190,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			skill.DefaultResolution = 60;
 			var agent1 = PersonRepository.Has(skill);
 			var agent2 = PersonRepository.Has(skill);
+			var agent3 = PersonRepository.Has(skill);
+			var agent4 = PersonRepository.Has(skill);
 			PersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel>
 										   {
 											   new SuggestedPersonsModel
@@ -198,9 +200,21 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 												   End = now.AddHours(1),
 												   TimeToAdd = 180
 											   },
-												new SuggestedPersonsModel
+											   new SuggestedPersonsModel
 											   {
 												   PersonId = agent2.Id.GetValueOrDefault(),
+												   End = now.AddHours(1),
+												   TimeToAdd = 180
+											   },
+											   new SuggestedPersonsModel
+											   {
+												   PersonId = agent3.Id.GetValueOrDefault(),
+												   End = now.AddHours(1),
+												   TimeToAdd = 180
+											   },
+												new SuggestedPersonsModel
+											   {
+												   PersonId = agent4.Id.GetValueOrDefault(),
 												   End = now.AddHours(3),
 												   TimeToAdd = 180
 											   }

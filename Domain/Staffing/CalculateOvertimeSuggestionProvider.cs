@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 			//börja med skill som har öppet längst på längsta workload
 			foreach (var skill in skills)
 			{
-				//if (!intervals.Any(x => x.SkillId == skill.Id.GetValueOrDefault() && x.AbsoluteDifference < 0)) continue;
 				var act = skill.Activity;
 				foreach (var person in persons)
 				{
@@ -56,18 +55,16 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 					var skillIntervals = intervals.Where(x => x.SkillId == skill.Id.GetValueOrDefault() && x.EndDateTime > personModel.End && x.StartDateTime < endDateTime).OrderBy(x => x.StartDateTime);
 					if (!skillIntervals.Any()) continue;
-					//var shiftPeriod = new DateTimePeriod(skillIntervals.First().StartDateTime, skillIntervals.First().StartDateTime);
+
 					var shiftStart = skillIntervals.First().StartDateTime;
-					var shiftEnd = new DateTime(skillIntervals.First().EndDateTime.Ticks);
+					var shiftEnd = new DateTime(skillIntervals.First().StartDateTime.Ticks);
 					var ts = skillIntervals.First().GetTimeSpan();
 					foreach (var skillStaffingInterval in skillIntervals)
 					{
 						if (skillStaffingInterval.AbsoluteDifference >= 0) break;
-						shiftEnd.Add(ts);
+						shiftEnd = shiftEnd.Add(ts);
 					}
-					if (shiftEnd == shiftStart) break;
-
-					var overTimePeriod = new DateTimePeriod(shiftStart.Utc(), shiftEnd.Utc());
+					if (shiftEnd == shiftStart) continue;
 
 					var personSkills = person.Period(new DateOnly(startDateTime)).PersonSkillCollection.Select(x => x.Skill);
 					if (!personSkills.Select(x => x.Id).Contains(skill.Id.GetValueOrDefault())) continue;

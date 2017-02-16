@@ -60,14 +60,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _timeZone.TimeZone()),
 					StaffingLevel = x.StaffingLevel
 				}).ToList();
-			//var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills.ToList(), minutesPerInterval);
-			//var fakeOverTimescheduledStaffingPerSkill = scheduledStaffingPerSkill.Select(interval => new SkillStaffingIntervalLightModel
-			//																			 {
-			//																				 StartDateTime = interval.StartDateTime,
-			//																				 EndDateTime = interval.EndDateTime,
-			//																				 Id = interval.Id,
-			//																				 StaffingLevel = interval.StaffingLevel + 1
-			//																			 }).ToList();
 
 			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday.AddDays(-1), usersToday.AddDays(1)), skills, scenario);
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills.ToList(), skillDays, minutesPerInterval);
