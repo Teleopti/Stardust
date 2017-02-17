@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -85,6 +86,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			schedules[notSelectedAgent].ScheduledDay(date).PersonAssignment(true).ShiftLayers
 				.Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldIncludeSelectedAgentsScheduleOnceOnly()
+		{
+			var date = DateOnly.Today;
+			var scenario = new Scenario("_");
+			var selectedAgent = new Person().WithSchedulePeriodOneDay(date).InTimeZone(TimeZoneInfo.Utc).WithId();
+			PersonAssignmentRepository.Has(selectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), date, new TimePeriod(8, 17));
+
+			var schedules = Target.FindSchedulesForPersons(
+					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent }),
+					scenario,
+					new PersonProvider(new[] { selectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new ScheduleDictionaryLoadOptions(false, false),
+					new[] { selectedAgent });
+
+			schedules[selectedAgent].ScheduledDay(date).PersistableScheduleDataCollection().Count()
+				.Should().Be.EqualTo(1);
 		}
 	}
 }
