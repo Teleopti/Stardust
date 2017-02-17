@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -64,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
 
-			var result = Target.GetSuggestion(new[] {skill.Id.GetValueOrDefault()});
-			result.DataSeries.ScheduledStaffing.FirstOrDefault().Should().Be.EqualTo(11);
+			//var result = Target.GetSuggestion(new OverTimeSuggestionModel{SkillIds = new [] {skill.Id.GetValueOrDefault()}, TimeSerie = );
+			//result.SuggestedStaffingWithOverTime.FirstOrDefault().Should().Be.EqualTo(11);
 		}
 	}
 }

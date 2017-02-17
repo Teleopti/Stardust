@@ -20,13 +20,19 @@
         vm.draggable = false;
         vm.toggleDraggable = toggleDraggable;
         vm.triggerResourceCalc = triggerResourceCalc;
+	    vm.timeSerie = [];
         var allSkills = [];
         var allSkillAreas = [];
         getSkills();
         getSkillAreas();
         var currentSkills;
-        var getSkillStaffing = getSkillStaffing;
-        var getSkillsForArea = getSkillAreaStaffing
+
+	    function getSkillStaffing(skillId) {
+		    if (!skillId) return;
+		    return staffingService.getSkillStaffing.get({ id: skillId });
+	    }
+
+	    var getSkillsForArea = getSkillAreaStaffing();
         var staffingData = {};
         vm.devTogglesEnabled = false;
         checkToggles();
@@ -43,25 +49,28 @@
             } else if (areaId) {
                 var query = getSkillAreaStaffing(areaId);
             }
-            query.$promise.then(function (result) {
-                staffingData.time = [];
-                staffingData.scheduledStaffing = [];
-                staffingData.forcastedStaffing = [];
-                staffingData.suggestedStaffing = [];
-                if (staffingPrecheck(result.DataSeries)) {
-                    staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
-                    staffingData.forcastedStaffing = result.DataSeries.ForecastedStaffing;
-                    staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
-                    staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
-                    angular.forEach(result.DataSeries.Time, function (value, key) {
-                        staffingData.time.push($filter('date')(value, 'shortTime'));
-                    }, staffingData.time);
-                    staffingData.time.unshift('x');
-                    generateChartForView();
-                } else {
-                    vm.staffingDataAvailable = false;
-                }
-            })
+	        query.$promise.then(function(result) {
+		        staffingData.time = [];
+		        staffingData.scheduledStaffing = [];
+		        staffingData.forcastedStaffing = [];
+		        staffingData.suggestedStaffing = [];
+		        if (staffingPrecheck(result.DataSeries)) {
+			        staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
+			        staffingData.forcastedStaffing = result.DataSeries.ForecastedStaffing;
+			        staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
+			        staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
+			        vm.timeSerie = result.DataSeries.Time;
+			        angular.forEach(result.DataSeries.Time,
+				        function(value, key) {
+					        staffingData.time.push($filter('date')(value, 'shortTime'));
+				        },
+				        staffingData.time);
+			        staffingData.time.unshift('x');
+			        generateChartForView();
+		        } else {
+			        vm.staffingDataAvailable = false;
+		        }
+	        });
         }
 
 
@@ -110,20 +119,15 @@
             return staffingService.getSkillAreaStaffing.get({ id: areaId });
         }
 
-        function getSkillStaffing(skillId) {
-            if (!skillId) return;
-            return staffingService.getSkillStaffing.get({ id: skillId })
-        }
-
-        function selectedSkillChange(skill) {
+	    function selectedSkillChange(skill) {
             if (skill == null) return;
-            generateChart(skill.Id, null)
-            selectSkillOrArea(skill, null)
+	        generateChart(skill.Id, null);
+	        selectSkillOrArea(skill, null);
         }
         function selectedAreaChange(area) {
             if (area == null) return;
-            generateChart(null, area.Id)
-            selectSkillOrArea(null, area)
+	        generateChart(null, area.Id);
+	        selectSkillOrArea(null, area);
         }
 
         function querySearchSkills(query) {
@@ -150,7 +154,7 @@
             var skillIds;
             if (currentSkills.Skills) {
                 skillIds = currentSkills.Skills.map(function (skill) {
-                    return skill.Id
+	                return skill.Id;
                 });
                 // staffingService.addOvertime.save({ Skills: [skillIds] });
             } else {
@@ -159,24 +163,24 @@
             staffingService.addOvertime.save({ Skills: skillIds });
         };
 
-        function suggestOvertime() {
-            var skillIds;
-            if (currentSkills.Skills) {
-                skillIds = currentSkills.Skills.map(function (skill) {
-                    return skill.Id
-                });
-                // staffingService.addOvertime.save({ Skills: [skillIds] });
-            } else {
-                skillIds = [currentSkills.Id];
-            }
-            var query = staffingService.getSuggestion.save({ Skills: skillIds })
-            query.$promise.then(function (response) {
-                console.log(staffingData);
-                staffingData.suggestedStaffing = response.DataSeries.ScheduledStaffing;
-                staffingData.suggestedStaffing.unshift("Suggested Staffing");
-                generateChartForView();
-            })
-        };
+	    function suggestOvertime() {
+		    var skillIds;
+		    if (currentSkills.Skills) {
+			    skillIds = currentSkills.Skills.map(function(skill) {
+				    return skill.Id;
+			    });
+			    // staffingService.addOvertime.save({ Skills: [skillIds] });
+		    } else {
+			    skillIds = [currentSkills.Id];
+		    }
+		    var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie });
+		    query.$promise.then(function(response) {
+			    console.log(staffingData);
+			    staffingData.suggestedStaffing = response.SuggestedStaffingWithOverTime;
+			    staffingData.suggestedStaffing.unshift("Suggested Staffing");
+			    generateChartForView();
+		    });
+	    };
 
         function toggleDraggable() {
             vm.draggable = !vm.draggable

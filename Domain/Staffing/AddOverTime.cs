@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public AddOverTime(TimeSeriesProvider timeSeriesProvider,
 						   ScheduledStaffingProvider scheduledStaffingProvider,
 						   IIntervalLengthFetcher intervalLengthFetcher,
-						   ISkillRepository skillRepository, 
-						   ForecastedStaffingProvider forecastedStaffingProvider, 
-						   ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository, 
+						   ISkillRepository skillRepository,
+						   ForecastedStaffingProvider forecastedStaffingProvider,
+						   ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository,
 						   INow now, IUserTimeZone timeZone, CalculateOvertimeSuggestionProvider calculateOvertimeSuggestionProvider)
 		{
 			_timeSeriesProvider = timeSeriesProvider;
@@ -43,42 +43,41 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_calculateOvertimeSuggestionProvider = calculateOvertimeSuggestionProvider;
 		}
 
-		public IntradayStaffingViewModel GetSuggestion(IEnumerable<Guid> skillIds)
+		public OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel)
 		{
-			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var usersToday = new DateOnly(usersNow);
 			var usersTomorrow = new DateOnly(usersNow.AddHours(24));
 			var userstomorrowUtc = TimeZoneHelper.ConvertToUtc(usersTomorrow.Date, _timeZone.TimeZone());
-			var skills = _skillRepository.LoadSkills(skillIds);
-			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
-			var staffingIntervals = _calculateOvertimeSuggestionProvider.GetOvertimeSuggestions(skillIds.ToList(), _now.UtcDateTime(), userstomorrowUtc);
-			var overTimescheduledStaffingPerSkill = staffingIntervals.Select(x => new SkillStaffingIntervalLightModel()
-				{
-					Id = x.SkillId,
-					StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _timeZone.TimeZone()),
-					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _timeZone.TimeZone()),
-					StaffingLevel = x.StaffingLevel
-				}).ToList();
-
-			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday.AddDays(-1), usersToday.AddDays(1)), skills, scenario);
-			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills.ToList(), skillDays, minutesPerInterval);
-			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, overTimescheduledStaffingPerSkill, minutesPerInterval);
-
-			return new IntradayStaffingViewModel
+			var staffingIntervals = _calculateOvertimeSuggestionProvider.GetOvertimeSuggestions(overTimeSuggestionModel.SkillIds, _now.UtcDateTime(), userstomorrowUtc);
+			var overTimescheduledStaffingPerSkill = staffingIntervals.Select(x => new SkillStaffingIntervalLightModel
+																			 {
+																				 Id = x.SkillId,
+																				 StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _timeZone.TimeZone()),
+																				 EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _timeZone.TimeZone()),
+																				 StaffingLevel = x.StaffingLevel
+																			 }).ToList();
+			return new OverTimeSuggestionResultModel
 			{
-				DataSeries = new StaffingDataSeries
-				{
-					Time = timeSeries,
-					ScheduledStaffing = _scheduledStaffingProvider.DataSeries(overTimescheduledStaffingPerSkill, timeSeries)
-				},
-				StaffingHasData = timeSeries.Any()
+				SuggestedStaffingWithOverTime = _scheduledStaffingProvider.DataSeries(overTimescheduledStaffingPerSkill, overTimeSuggestionModel.TimeSerie)
 			};
 		}
 	}
 
 	public interface IAddOverTime
 	{
-		IntradayStaffingViewModel GetSuggestion(IEnumerable<Guid> skillIds);
+		OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel skillIds);
 	}
+
+	public class OverTimeSuggestionResultModel
+	{
+		public double?[] SuggestedStaffingWithOverTime { get; set; }
+	}
+
+	public class OverTimeSuggestionModel
+	{
+		public IList<Guid> SkillIds { get; set; }
+		public DateTime[] TimeSerie { get; set; }
+	}
+
+
 }
