@@ -172,8 +172,11 @@
 					}
 					else
 					{
-						@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-						@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+						<span>@String.Format("{0} : ",Resources.PreferencePeriod)</span><span data-bind="text: PreferencePeriod"></span>
+						<span>&nbsp;|&nbsp;</span>
+						<span>@String.Format("{0} : ",Resources.IsOpen)</span><span data-bind="text: PreferenceOpenPeriod"></span>
+						@*@String.Format("{0} : {1} | ",Resources.PreferencePeriod,Model.PreferencePeriod.Period)
+						@String.Format("{0} : {1}",Resources.IsOpen,Model.PreferencePeriod.OpenPeriod)*@
 					}
 				</div>
 			</div>
@@ -184,7 +187,10 @@
 		 class="clearfix"
 		 data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'
 		 data-mytime-maxmusthave="@Model.MaxMustHave"
-		 data-mytime-currentmusthave="@Model.CurrentMustHave">
+		 data-mytime-currentmusthave="@Model.CurrentMustHave"
+		 data-period-start-date='@Model.PeriodSelection.StartDate.ToString("yyyy-MM-dd")'
+		 data-period-end-date='@Model.PeriodSelection.EndDate.ToString("yyyy-MM-dd")'>
+		
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
@@ -228,11 +234,11 @@
 					@foreach (DayViewModel day in week.Days)
 					{
 						var date = Html.Schedule().FormatDate(day.Date);
-						<li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
+						<li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-period-start-date="@Model.Weeks.First().Days.First().Date.Date.ToString("yyyy-MM-dd")"  data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
 							<div class="relative">
 								<div class="day-header">
-									<span class="day-header-left badge day-header-text @(day.Header.DayDescription == "" ? "hide" : "floatleft")">@day.Header.DayDescription</span>
-									<span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
+									<span class="day-header-left badge day-header-text floatleft" data-bind="text: MonthString"></span>
+									<span class="floatright day-header-right badge day-header-text" data-bind="text: DayString"></span>
 								</div>
 								<div class="day-content">
 									<figure class="cover-me" data-bind="visible: IsLoading"><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." /></figure>

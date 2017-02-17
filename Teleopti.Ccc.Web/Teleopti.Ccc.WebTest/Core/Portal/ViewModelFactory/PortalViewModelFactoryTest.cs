@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private static ILoggedOnUser _loggedOnUser;
 		private static IUserCulture _userCulture;
 		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -47,6 +50,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("Agent Name");
+
+			_toggleManager = new FakeToggleManager();
 		}
 
 		[Test]
@@ -63,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
 				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal);
+				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var result = target.CreatePortalViewModel();
 
@@ -95,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
 				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal);
+				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
 			licenseActivator.Stub(x => x.CustomerName).Return("Customer Name");
@@ -116,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
 				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal);
+				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var result = target.CreatePortalViewModel();
 
@@ -135,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				_personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
+				loggedOnUser, _userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
@@ -154,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				_personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
+				loggedOnUser, _userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
@@ -230,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
 				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal);
+				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
 		}
 	}
 }

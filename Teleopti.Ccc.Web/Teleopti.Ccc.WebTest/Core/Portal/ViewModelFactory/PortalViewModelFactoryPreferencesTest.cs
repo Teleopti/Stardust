@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private ILoggedOnUser _loggedOnUser;
 		private IUserCulture _userCulture;
 		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -47,6 +49,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
+
+			_toggleManager = new FakeToggleManager();
 		}
 
 		[Test]
@@ -57,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal);
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var result = target.CreatePortalViewModel();
 
@@ -72,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal);
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var result = target.CreatePortalViewModel();
 
@@ -87,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal);
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var result = target.CreatePortalViewModel();
 
@@ -104,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal);
+				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var result = target.CreatePortalViewModel();
 
@@ -121,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal);
+				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
 			var result = target.CreatePortalViewModel();
 

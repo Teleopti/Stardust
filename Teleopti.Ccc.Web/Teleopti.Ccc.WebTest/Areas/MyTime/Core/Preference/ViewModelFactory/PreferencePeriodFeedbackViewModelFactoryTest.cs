@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback {PossibleResultDaysOff = 8});
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
+
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider,new FakeLoggedOnUser());
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback {TargetDaysOff = new MinMax<int>(3, 4)});
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider,new FakeLoggedOnUser());
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback {TargetDaysOff = new MinMax<int>(3, 4)});
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider,new FakeLoggedOnUser());
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
 				.Return(new PeriodFeedback { TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5)) });
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider,new FakeLoggedOnUser());
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
 				.Return(new PeriodFeedback { TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5)) });
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider,new FakeLoggedOnUser());
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 

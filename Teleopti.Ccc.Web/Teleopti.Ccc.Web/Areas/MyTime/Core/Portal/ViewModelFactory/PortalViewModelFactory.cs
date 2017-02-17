@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ICurrentTenantUser _currentTenantUser;
 		private readonly IUserCulture _userCulture;
 		private readonly ICurrentTeleoptiPrincipal _currentIdentity;
+		private readonly IToggleManager _toggleManager;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
 			IUserCulture userCulture,
-			ICurrentTeleoptiPrincipal currentIdentity)
+			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -53,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_currentTenantUser = currentTenantUser;
 			_userCulture = userCulture;
 			_currentIdentity = currentIdentity;
+			_toggleManager = toggleManager;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -123,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
 			if (
-				!useJalaaliCalendar &&
+				(!useJalaaliCalendar || _toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferenceForJalaliCalendar_42965 )) &&
 				(_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
 				 _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
 			{

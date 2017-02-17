@@ -16,7 +16,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 	var dayDate = moment(day.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 
 	if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
-		self.headerTitle = ko.observable(dayDate.format("jdddd"));
+		self.headerTitle = ko.observable(dayDate.format("dddd"));
 		self.dayOfWeek = ko.observable(dayDate.weekday());
 		dayNumberDisplay = dayDate.jDate();
 

@@ -22,7 +22,7 @@
 	.rtl .weekdays li, 
 	.rtl .calendarview-week li
 	{
-		float: right;
+		/*float: right;*/
 	}
 }
 

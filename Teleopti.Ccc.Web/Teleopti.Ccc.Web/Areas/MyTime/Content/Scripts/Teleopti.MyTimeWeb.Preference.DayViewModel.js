@@ -22,6 +22,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 
 	self.Date = "";
 
+	self.DayString = ko.observable();
+	self.MonthString = ko.observable();
+
 	self.HasPreference = true;
 	self.IsLoading = ko.observable(false);
 	self.Preference = ko.observable();
@@ -135,6 +138,15 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
+		var periodStartDate = item.attr('data-period-start-date');
+
+		self.DayString(Teleopti.MyTimeWeb.Common.FormatDayOnly(self.Date));
+
+		if (self.DayString() === '01' || periodStartDate === self.Date) {
+			self.MonthString(Teleopti.MyTimeWeb.Common.FormatMonthOnly(self.Date));
+		}
+
+	
 		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 	};

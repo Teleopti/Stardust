@@ -1,3 +1,5 @@
+using Teleopti.Interfaces.Domain;
+
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 {
 	public class PreferencePeriodFeedbackViewModel
@@ -5,6 +7,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public int PossibleResultDaysOff { get; set; }
 		public TargetDaysOffViewModel TargetDaysOff { get; set; }
 		public TargetContractTimeViewModel TargetContractTime { get; set; }
+		public string PreferencePeriodStart { get; set; }
+		public string PreferenceOpenPeriodStart { get; set; }
+		public string PreferencePeriodEnd { get; set; }
+		public string PreferenceOpenPeriodEnd { get; set; }
 	}
 
 	public class TargetContractTimeViewModel

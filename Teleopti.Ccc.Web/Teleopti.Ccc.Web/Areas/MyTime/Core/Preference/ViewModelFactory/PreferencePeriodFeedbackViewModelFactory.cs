@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
@@ -7,16 +8,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 	public class PreferencePeriodFeedbackViewModelFactory : IPreferencePeriodFeedbackViewModelFactory
 	{
 		private readonly IPreferencePeriodFeedbackProvider _preferencePeriodFeedbackProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public PreferencePeriodFeedbackViewModelFactory(IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider)
+		public PreferencePeriodFeedbackViewModelFactory(IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider, ILoggedOnUser loggedOnUser)
 		{
 			_preferencePeriodFeedbackProvider = preferencePeriodFeedbackProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public PreferencePeriodFeedbackViewModel CreatePeriodFeedbackViewModel(DateOnly date)
 		{
 			var feedback = _preferencePeriodFeedbackProvider.PeriodFeedback(date);
-			return new PreferencePeriodFeedbackViewModel
+			
+			var result = new PreferencePeriodFeedbackViewModel
 				{
 					PossibleResultDaysOff = feedback.PossibleResultDaysOff,
 					TargetDaysOff = new TargetDaysOffViewModel
@@ -29,7 +33,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 							LowerMinutes = feedback.TargetTime.Minimum.TotalMinutes,
 							UpperMinutes = feedback.TargetTime.Maximum.TotalMinutes
 						},
-				};
+					
+			};
+			var wfc = _loggedOnUser.CurrentUser().WorkflowControlSet;
+			if (wfc != null)
+			{
+				result.PreferencePeriodStart = wfc.PreferencePeriod.StartDate.Date.ToFixedDateFormat();
+				result.PreferencePeriodEnd = wfc.PreferencePeriod.EndDate.Date.ToFixedDateFormat();
+				result.PreferenceOpenPeriodStart = wfc.PreferenceInputPeriod.StartDate.Date.ToFixedDateFormat();
+				result.PreferenceOpenPeriodEnd = wfc.PreferenceInputPeriod.EndDate.Date.ToFixedDateFormat();
+			}
+			return result;
 		}
 	}
 }
