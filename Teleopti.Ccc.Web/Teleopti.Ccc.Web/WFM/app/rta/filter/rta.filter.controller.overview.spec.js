@@ -48,20 +48,7 @@ describe('RtaFilterController', function () {
 		expect(vm.selectedSkill.Id).toEqual("emailGuid");
 		expect($state.go).toHaveBeenCalledWith('rta.sites', { skillIds: "emailGuid", skillAreaId: undefined });
 	});
-
-	it('should go to sites by selected skill', function () {
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.selectedSkillChange({
-				Id: "emailGuid"
-			});
-		});
-
-		expect(vm.selectedSkill.Id).toEqual("emailGuid");
-		expect($state.go).toHaveBeenCalledWith('rta.sites', { skillIds: "emailGuid", skillAreaId: undefined });
-	});
-
+	
 	it('should go to sites by selected skill area', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;

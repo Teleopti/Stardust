@@ -1494,7 +1494,7 @@
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.monitorBySkills.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.multipleOrganizationSelection.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.pauseButton.spec.js" />
-    <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.QuicklyChangeAgentsSelection.spec.js" />
+    <Content Include="WFM\app\rta\agents\oldTests\rta.filter.controller.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.recentOutOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
@@ -1514,7 +1514,7 @@
     <Content Include="WFM\app\rta\agents\rta.agents.controller.monitorBySkills.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.multipleOrganizationSelection.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.pauseButton.spec.js" />
-    <Content Include="WFM\app\rta\agents\rta.agents.controller.QuicklyChangeAgentsSelection.spec.js" />
+    <Content Include="WFM\app\rta\filter\rta.filter.controller.agents.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.recentOutOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
@@ -1527,12 +1527,12 @@
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.spec.js" />
-    <Content Include="WFM\app\rta\overview\filter-template.html" />
+    <Content Include="WFM\app\rta\filter\filter-template.html" />
     <Content Include="WFM\app\rta\overview\rta-sites.html" />
     <Content Include="WFM\app\rta\overview\rta-teams.html" />
-    <Content Include="WFM\app\rta\overview\rta.filter.controller.js" />
+    <Content Include="WFM\app\rta\filter\rta.filter.controller.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.js" />
-    <Content Include="WFM\app\rta\overview\rta.filter.controller.spec.js" />
+    <Content Include="WFM\app\rta\filter\rta.filter.controller.overview.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.teams.spec.js" />
     <Content Include="WFM\app\rta\rta.adherence.service.js" />
@@ -1550,7 +1550,7 @@
     <Content Include="WFM\app\rta\rta.service.js" />
     <Content Include="WFM\app\rta\rta.sorting.localelanguage.service.js" />
     <Content Include="WFM\app\rta\rta.state.provider.js" />
-    <Content Include="WFM\app\rta\overview\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.skillSelection.spec.js" />
+    <Content Include="WFM\app\rta\filter\rta.filter.controller.overview.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\_modules.js" />
     <Content Include="WFM\app\seatManagement\html\seatplaninitmanualperiod.html" />
     <Content Include="WFM\app\seatManagement\seatplaninitmanualperiod.directive.js" />
