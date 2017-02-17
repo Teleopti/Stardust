@@ -15,21 +15,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle("Merge this with ScheduleStorage when toggle is removed and remove this class", Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
 	public class ScheduleStorage42639 : ScheduleStorage
 	{
-		public ScheduleStorage42639(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper) : 
-			base(currentUnitOfWork, repositoryFactory, dataPermissionChecker, scheduleStorageRepositoryWrapper)
+		public ScheduleStorage42639(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper) 
+			:base(currentUnitOfWork, repositoryFactory, dataPermissionChecker, scheduleStorageRepositoryWrapper)
 		{
 		}
 
-		protected override void LoadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft, IEnumerable<IPerson> selectedPersons)
+		protected override void LoadScheduleForAll(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod dateOnlyPeriod)
 		{
 		}
 
-		protected override void LoadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> personsInOrganization, bool loadDaysAfterLeft, IEnumerable<IPerson> selectedPersons)
+		protected override void LoadSchedulesByPersons(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IList<IPerson> personsInOrganization)
 		{
 		}
 	}
 
-    public class ScheduleStorage : IScheduleStorage
+	public class ScheduleStorage : IScheduleStorage
     {
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
@@ -245,41 +245,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    var loadedPeriod = period.LoadedPeriod();
 		    var longDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(loadedPeriod.StartDateTime.AddDays(-1)),
 			    new DateOnly(loadedPeriod.EndDateTime.AddDays(1)));
-		    var longPeriod = new DateTimePeriod(loadedPeriod.StartDateTime.AddDays(-1), loadedPeriod.EndDateTime.AddDays(1));
 		    var uow = _currentUnitOfWork.Current();
 		    using (TurnoffPermissionScope.For(scheduleDictionary))
 		    {
 			    if (personsProvider.DoLoadByPerson)
 			    {
-				    LoadScheduleByPersons(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, personsInOrganization, scheduleDictionaryLoadOptions.LoadDaysAfterLeft, visiblePersons);
-
-				    if (scheduleDictionaryLoadOptions.LoadNotes)
-				    {
-					    addNotes(scheduleDictionary,
-						    _repositoryFactory.CreateNoteRepository(uow).Find(longDateOnlyPeriod, personsInOrganization, scenario));
-					    addPublicNotes(scheduleDictionary,
-						    _repositoryFactory.CreatePublicNoteRepository(uow)
-							    .Find(longDateOnlyPeriod, personsInOrganization, scenario));
-				    }
-
-					if (scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
-						addAgentDayScheduleTags(scheduleDictionary,
-					    _repositoryFactory.CreateAgentDayScheduleTagRepository(uow)
-						    .Find(longDateOnlyPeriod, personsInOrganization, scenario));
+				    LoadSchedulesByPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, longDateOnlyPeriod, personsInOrganization);
 			    }
 			    else
 			    {
-				    LoadScheduleForAll(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, scheduleDictionaryLoadOptions.LoadDaysAfterLeft, visiblePersons);
-
-				    if (scheduleDictionaryLoadOptions.LoadNotes)
-				    {
-					    addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(uow).Find(longPeriod, scenario));
-					    addPublicNotes(scheduleDictionary,
-						    _repositoryFactory.CreatePublicNoteRepository(uow).Find(longPeriod, scenario));
-				    }
-					 if(scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
-						addAgentDayScheduleTags(scheduleDictionary,
-							_repositoryFactory.CreateAgentDayScheduleTagRepository(uow).Find(longPeriod, scenario));
+				    LoadScheduleForAll(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, longDateOnlyPeriod);
 			    }
 
 			    if (scheduleDictionaryLoadOptions.LoadRestrictions)
@@ -306,24 +281,59 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    return scheduleDictionary;
 	    }
 
-	    protected virtual void LoadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft, IEnumerable<IPerson> selectedPersons)
+	    protected virtual void LoadSchedulesByPersons(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IList<IPerson> personsInOrganization)
 	    {
-		    var uow = _currentUnitOfWork.Current();
-		    addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario), loadDaysAfterLeft);
-		    var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(uow);
-		    addPersonAssignments(scheduleDictionary, personAssignmentRepository.Find(dateOnlyPeriod, scenario));
-		    addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario), false, new List<IPerson>());
+		    DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, longDateOnlyPeriod, personsInOrganization);
 	    }
 
-	    protected virtual void LoadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> personsInOrganization, bool loadDaysAfterLeft, IEnumerable<IPerson> selectedPersons)
-        {
-	        var uow = _currentUnitOfWork.Current();
-			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(personsInOrganization, longPeriod, scenario), loadDaysAfterLeft);
-			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(uow).Find(personsInOrganization, longDateOnlyPeriod, scenario), loadDaysAfterLeft);
-			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(personsInOrganization, longDateOnlyPeriod, scenario), true, personsInOrganization, loadDaysAfterLeft);
-        }
+	    protected void DoLoadSchedulesPerPersons(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IList<IPerson> personsToLoad)
+	    {
+		    var uow = _currentUnitOfWork.Current();
+			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(personsToLoad, longDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc), scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario), true, personsToLoad, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+			if (scheduleDictionaryLoadOptions.LoadNotes)
+		    {
+			    addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(uow).Find(longDateOnlyPeriod, personsToLoad, scenario));
+			    addPublicNotes(scheduleDictionary, _repositoryFactory.CreatePublicNoteRepository(uow).Find(longDateOnlyPeriod, personsToLoad, scenario));
+		    }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ScheduleDictionary")]
+		    if (scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
+		    {
+			    addAgentDayScheduleTags(scheduleDictionary, _repositoryFactory.CreateAgentDayScheduleTagRepository(uow).Find(longDateOnlyPeriod, personsToLoad, scenario));
+		    }
+	    }
+
+	    protected virtual void LoadScheduleForAll(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod dateOnlyPeriod)
+	    {
+		    DoLoadScheduleForAll(scenario, scheduleDictionary, dateOnlyPeriod, scheduleDictionaryLoadOptions);
+	    }
+
+	    protected void DoLoadScheduleForAll(IScenario scenario, IScheduleDictionary scheduleDictionary, DateOnlyPeriod dateOnlyPeriod, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions)
+	    {
+		    var longPeriod = dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc);
+		    var uow = _currentUnitOfWork.Current();
+		    addPersonAbsences(scheduleDictionary,
+			    _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario),
+			    scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+		    var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(uow);
+		    addPersonAssignments(scheduleDictionary, personAssignmentRepository.Find(dateOnlyPeriod, scenario));
+		    addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario),
+			    false, new List<IPerson>());
+
+		    if (scheduleDictionaryLoadOptions.LoadNotes)
+		    {
+			    addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(uow).Find(longPeriod, scenario));
+			    addPublicNotes(scheduleDictionary, _repositoryFactory.CreatePublicNoteRepository(uow).Find(longPeriod, scenario));
+		    }
+		    if (scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
+		    {
+			    addAgentDayScheduleTags(scheduleDictionary,
+				    _repositoryFactory.CreateAgentDayScheduleTagRepository(uow).Find(longPeriod, scenario));
+		    }
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ScheduleDictionary")]
         private static void removeSchedulesOfPersonsNotInOrganization(IScheduleDictionary scheduleDictionary, IList<IPerson> personsInOrganization)
         {
 			foreach (var person in personsInOrganization)
