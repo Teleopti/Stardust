@@ -12,6 +12,7 @@
         var agentGroupId = $stateParams.groupId;
         vm.planningPeriods = [];
         vm.startNextPlanningPeriod = startNextPlanningPeriod;
+        vm.showPlanningPeriod = showPlanningPeriod;
 
         getPlanningPeriod(agentGroupId);
 
@@ -40,6 +41,12 @@
           if (groupId) {
             $state.go('resourceplanner.oneagentroup', { groupId: groupId });
           }
+        }
+
+        function showPlanningPeriod(planningPeriodId) {
+        	if (planningPeriodId) {
+        		$state.go('resourceplanner.planningperiod', { id: planningPeriodId });
+	        }
         }
     }
 })();
