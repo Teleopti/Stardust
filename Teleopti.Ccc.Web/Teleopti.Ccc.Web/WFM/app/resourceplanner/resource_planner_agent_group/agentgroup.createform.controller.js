@@ -77,7 +77,7 @@
 		};
 
 		function isValidName() {
-			return vm.name.length > 0;
+			return vm.name.length > 0 && vm.name.length <= 100;
 		};
 
 		function isValid() {
