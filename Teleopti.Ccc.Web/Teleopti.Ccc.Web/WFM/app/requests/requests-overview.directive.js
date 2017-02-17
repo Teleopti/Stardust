@@ -120,7 +120,7 @@
 		}
 
 		function reload(params) {
-			if (!vm.isActive || (!(angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) && angular.isUndefined(params))) {
+			if (!vm.isActive) {
 				return;
 			}
 			if(params){
@@ -187,7 +187,7 @@
 				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
 					return;
 				}
-
+				
 				scope.$broadcast('reload.requests.without.selection');
 
 				if (!ctrl.loadRequestWatchersInitialized) {
@@ -197,6 +197,10 @@
 
 			function listenToReload() {
 				scope.$on('reload.requests.with.selection', function (event, data) {
+					if((!angular.isArray(vm.selectedTeamIds) || vm.selectedTeamIds.length == 0) && angular.isUndefined(data)){
+						return;
+					}
+
 					ctrl.reload(data);
 				});
 

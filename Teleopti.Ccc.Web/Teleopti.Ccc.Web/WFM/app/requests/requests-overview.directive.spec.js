@@ -21,6 +21,7 @@
 						Wfm_Requests_ApproveDeny_36297: true,
 						Wfm_Requests_Filtering_37748: true,
 						Wfm_Requests_Default_Status_Filter_39472: true,
+						Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -69,19 +70,22 @@
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
 		});
 
-		it("should not populate requests data from requests data service when no team selected", function () {
+		it("should not populate requests data from requests data service when no team selected and organization picker is on", function () {
 			var request = {
 				Id: 1,
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
 			};
 
 			requestsDataService.setRequests([request]);
-			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetScope.agentSearchTerm = '';
+			targetScope.selectedTeamIds = [];
+			targetElement = $compile('<requests-overview agent-search-term="agentSearchTerm" selected-team-ids="selectedTeamIds"></requests-overview>')(targetScope);
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
-			scope.requestsOverview.init();
-			targetScope.$digest();
+			
+			targetScope.$broadcast('reload.requests.with.selection');
+
 			expect(scope.requestsOverview.requests.length).toEqual(0);
 		});
 
@@ -92,7 +96,7 @@
 			};
 
 			requestsDataService.setRequests([request]);
-			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetElement = $compile('<requests-overview ></requests-overview>')(targetScope);
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = false;
