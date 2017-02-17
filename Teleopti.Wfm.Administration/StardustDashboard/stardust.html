@@ -41,12 +41,21 @@
 
 			</div>
 		</div>
-	</div>
-	<div class="row">
-		<h3>Stardust Summary</h3>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-4 panel panel-default ">
+			<div class="panel-heading">Show Failed jobs</div>
+			<div class="panel-body text-container">
+				See jobs that have failed
+			</div>
+			<div class="panel-footer">
+				<a href="#StardustDashboard/failedJobs">
+					<button class="btn btn-primary">
+						<span class="text-white">Monitor fails &raquo;</span>
+					</button>
+				</a>
+			</div>
+		</div>
+		<div class="col-md-8 panel panel-default ">
+			<h3>Stardust Summary</h3>
 			<h4>Nodes</h4>
 			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.NodeError}}</div>
 			<div>
@@ -67,50 +76,40 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12">
 			<h4>Currently Running Jobs</h4>
 			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.JobError}}</div>
 			<div>
 				<table>
 					<thead>
-						<tr>
-							<th>Type</th>
-							<th>Started (UTC)</th>
-							<th>Sent to</th>
-						</tr>
+					<tr>
+						<th>Type</th>
+						<th>Started (UTC)</th>
+						<th>Sent to</th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="job in vm.RunningJobs">
-							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
-							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{job.SentToWorkerNodeUri}}</td>
-						</tr>
+					<tr ng-repeat="job in vm.RunningJobs">
+						<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
+						<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{job.SentToWorkerNodeUri}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12">
 			<h4>Queue - Top 5</h4>
 			<div>
 				<table>
 					<thead>
-					<tr>
-						<th>Type</th>
-						<th>Created (UTC)</th>
-					</tr>
+						<tr>
+							<th>Type</th>
+							<th>Created (UTC)</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr ng-repeat="job in vm.QueuedJobs">
-						<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
-						<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-					</tr>
+						<tr ng-repeat="job in vm.QueuedJobs">
+							<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
+							<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
