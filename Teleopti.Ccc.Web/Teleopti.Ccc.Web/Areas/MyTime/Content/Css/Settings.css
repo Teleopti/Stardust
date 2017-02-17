@@ -36,3 +36,40 @@
 .setting-padding {
     padding-top: 20px;
 }
+
+.settings-input-border{
+	padding-bottom: 20px;
+	border-right: 1px solid #e3e3e3;
+	border-bottom: none;
+}
+
+.qrcode-container{
+	text-align: center;
+}
+
+@media(max-width: 768px){
+	.settings-input-border{
+		border-right: none;
+		border-bottom: 1px solid #e3e3e3;
+	}
+
+	body.rtl .qrcode-container{
+		text-align: right;
+	}
+	
+	.qrcode-container{
+		text-align: left;
+	}
+}
+
+a.android-app-link, a.ios-app-link{
+	position: relative;
+}
+
+a.android-app-link > div, a.ios-app-link > div{
+	position: absolute;
+	left: -105px;
+	top: 30px;
+	border: 1px solid #eee;
+	display: none;
+}

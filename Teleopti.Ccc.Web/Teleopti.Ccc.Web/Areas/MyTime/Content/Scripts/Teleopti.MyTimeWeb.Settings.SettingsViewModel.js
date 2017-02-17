@@ -4,6 +4,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	var self = this;
 	
 	self.isSetAgentDescriptionEnabled = ko.observable(false);
+	self.isQRCodeForMobileAppsEnabled = ko.observable(false);
 	self.settingsLoaded = ko.observable(false);
 	self.avoidReload = false;
 	self.cultures = ko.observableArray();
@@ -140,7 +141,56 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	};
 
 	self.featureCheck = function () {
-		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Settings_SetAgentDescription_23257");
-		self.isSetAgentDescriptionEnabled(toggleEnabled);
+		self.isSetAgentDescriptionEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Settings_SetAgentDescription_23257"));
+		self.isQRCodeForMobileAppsEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("QRCodeForMobileApps_42695"));
+	};
+
+	self.getBaseUrl = function(){
+		var fakeUrl = "http://bing.com/";
+		return fakeUrl;
+	}
+
+	self.generateQRCode = function() {
+		var typeNumber = 7;
+		var errorCorrectionLevel = 'M';
+		var qr = qrcode(typeNumber, errorCorrectionLevel);
+		qr.addData(self.getBaseUrl());
+		qr.make();
+		document.getElementById('#QRCodePlaceHolder').innerHTML = qr.createImgTag(5);
+	};
+
+	self.setMouseEnterEventForAppsQRCode = function(){
+		$('.android-app-link').mouseenter(function(event) {
+			$('.android-app-link div').show();
+		});
+
+		$('.android-app-link').mouseleave(function(event) {
+			$('.android-app-link div').hide();
+		});
+
+		$('.ios-app-link').mouseenter(function(event) {
+			$('.ios-app-link div').show();
+		});
+
+		$('.ios-app-link').mouseleave(function(event) {
+			$('.ios-app-link div').hide();
+		});
+	};
+
+	self.generateAppLinkQRCode = function(){
+		var androidAppLink = "https://play.google.com/store/apps/details?id=com.teleopti.mobile";
+		var iOSAppLink = "https://itunes.apple.com/";
+		
+		var typeNumber = 7;
+		var errorCorrectionLevel = 'M';
+		var qrAndroid = qrcode(typeNumber, errorCorrectionLevel);
+		qrAndroid.addData(androidAppLink);
+		qrAndroid.make();
+		document.getElementById('#AndroidApp').innerHTML = qrAndroid.createImgTag(5);
+
+		var qriOS = qrcode(typeNumber, errorCorrectionLevel);
+		qriOS.addData(iOSAppLink);
+		qriOS.make();
+		document.getElementById('#iOSApp').innerHTML = qriOS.createImgTag(5);
 	};
 };

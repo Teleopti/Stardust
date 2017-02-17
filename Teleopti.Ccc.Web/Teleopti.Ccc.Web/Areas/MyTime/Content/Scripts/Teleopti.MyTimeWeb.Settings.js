@@ -37,6 +37,10 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 				.done(function () {
 					readyForInteraction();
 					completelyLoaded();
+					if(vm.isQRCodeForMobileAppsEnabled()){
+						vm.generateQRCode();
+						vm.generateAppLinkQRCode();
+					}
 				});
 		    _bindData();
 		},
