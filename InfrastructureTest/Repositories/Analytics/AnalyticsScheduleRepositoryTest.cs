@@ -152,6 +152,69 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			});
 		}
 
+		[Test]
+		public void ShouldThrowWhenDatesAreNotSqlDateTimeCompatible()
+		{
+			insertPerson(10, new DateTime(2010, 1, 1), AnalyticsDate.Eternity.DateDate);
+			setupThingsForFactSchedule();
+			analyticsDataFactory.Persist();
+			var shiftStartDateLocalId = 1;
+			var personId = 10;
+			var datePart = new AnalyticsFactScheduleDate
+			{
+				ScheduleStartDateLocalId = shiftStartDateLocalId,
+				ScheduleDateId = shiftStartDateLocalId,
+				IntervalId = 32,
+				ActivityStartDateId = shiftStartDateLocalId,
+				ActivityEndDateId = shiftStartDateLocalId,
+				ShiftStartIntervalId = 32,
+				ShiftEndIntervalId = 68,
+				ShiftStartDateId = shiftStartDateLocalId,
+				ShiftEndDateId = shiftStartDateLocalId,
+				DatasourceUpdateDate = DateTime.Now
+			};
+			var timePart = new AnalyticsFactScheduleTime
+			{
+				AbsenceId = -1,
+				ActivityId = 22,
+				ContractTimeAbsenceMinutes = 0,
+				ContractTimeActivityMinutes = 15,
+				ContractTimeMinutes = 15,
+				OverTimeId = -1,
+				OverTimeMinutes = 0,
+				PaidTimeMinutes = 15,
+				PaidTimeAbsenceMinutes = 0,
+				PaidTimeActivityMinutes = 15,
+				ReadyTimeMinues = 15,
+				ScheduledMinutes = 15,
+				ScheduledAbsenceMinutes = 0,
+				ScheduledActivityMinutes = 15,
+				ScenarioId = 10,
+				ShiftLengthId = 4,
+				WorkTimeMinutes = 15,
+				WorkTimeAbsenceMinutes = 0,
+				WorkTimeActivityMinutes = 15
+			};
+
+			var personPart = new AnalyticsFactSchedulePerson
+			{
+				BusinessUnitId = businessUnitId,
+				PersonId = personId
+			};
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Assert.Throws<ArgumentOutOfRangeException>(() => Target.PersistFactScheduleBatch(new List<IFactScheduleRow>
+				{
+					new FactScheduleRow
+					{
+						PersonPart = personPart,
+						DatePart = datePart,
+						TimePart = timePart
+					}
+				}));
+			});
+		}
+
 		private void insertPerson(int personId, DateTime validFrom, DateTime validTo, bool toBeDeleted = false,
 			int validateFromDateId = 0, int validateToDateId = -2)
 		{

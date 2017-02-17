@@ -92,17 +92,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					row.DatePart.ScheduleDateId,
 					row.PersonPart.PersonId,
 					row.DatePart.IntervalId,
-					row.DatePart.ActivityStartTime,
+					getSqlDateCompatibleOrDefault(row.DatePart.ActivityStartTime, throwOnNotCompatible(nameof(row.DatePart.ActivityStartTime), row.DatePart.ActivityStartTime)),
 					row.TimePart.ScenarioId,
 					row.TimePart.ActivityId,
 					row.TimePart.AbsenceId,
 					row.DatePart.ActivityStartDateId,
 					row.DatePart.ActivityEndDateId,
-					row.DatePart.ActivityEndTime,
+					getSqlDateCompatibleOrDefault(row.DatePart.ActivityEndTime, throwOnNotCompatible(nameof(row.DatePart.ActivityEndTime), row.DatePart.ActivityEndTime)),
 					row.DatePart.ShiftStartDateId,
-					row.DatePart.ShiftStartTime,
+					getSqlDateCompatibleOrDefault(row.DatePart.ShiftStartTime, throwOnNotCompatible(nameof(row.DatePart.ShiftStartTime), row.DatePart.ShiftStartTime)),
 					row.DatePart.ShiftEndDateId,
-					row.DatePart.ShiftEndTime,
+					getSqlDateCompatibleOrDefault(row.DatePart.ShiftEndTime, throwOnNotCompatible(nameof(row.DatePart.ShiftEndTime), row.DatePart.ShiftEndTime)),
 					row.DatePart.ShiftStartIntervalId,
 					row.DatePart.ShiftEndIntervalId,
 					row.TimePart.ShiftCategoryId,
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					row.TimePart.PaidTimeActivityMinutes,
 					row.TimePart.PaidTimeAbsenceMinutes,
 					row.PersonPart.BusinessUnitId,
-					getSqlDateCompatibleOrDefault(row.DatePart.DatasourceUpdateDate, DateTime.UtcNow),
+					getSqlDateCompatibleOrDefault(row.DatePart.DatasourceUpdateDate, () => DateTime.UtcNow),
 					row.TimePart.OverTimeId);
 			}
 
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetGuid(nameof(personId), personId)
 				.SetGuid(nameof(scenarioId), scenarioId)
 				.SetGuid(nameof(businessUnitId), businessUnitId)
-				.SetDateTime(nameof(datasourceUpdateDate), getSqlDateCompatibleOrDefault(datasourceUpdateDate, DateTime.UtcNow))
+				.SetDateTime(nameof(datasourceUpdateDate), getSqlDateCompatibleOrDefault(datasourceUpdateDate, () => DateTime.UtcNow))
 				.ExecuteUpdate();
 		}
 
@@ -254,11 +254,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.UniqueResult<int>();
 		}
 
-		private static DateTime getSqlDateCompatibleOrDefault(DateTime input, DateTime defaultValue)
+		private static DateTime getSqlDateCompatibleOrDefault(DateTime input, Func<DateTime> defaultValue)
 		{
 			if (input < SqlDateTime.MinValue.Value || input > SqlDateTime.MaxValue.Value)
-				return defaultValue;
+				return defaultValue();
 			return input;
+		}
+
+		private static Func<DateTime> throwOnNotCompatible(string parameterName, DateTime value)
+		{
+			return () => { throw new ArgumentOutOfRangeException(parameterName, $"'{value}' is not valid to convert to a SqlDateTime"); };
 		}
 	}
 
