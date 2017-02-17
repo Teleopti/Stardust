@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private void createBasicStuff()
 		{
-			_longPeriod = new DateTimePeriod(1999, 12, 31, 2001, 1, 3);
+			_longPeriod = new DateTimePeriod(1999, 12, 31, 2001, 1, 4);
 			_longDateOnlyPeriod = new DateOnlyPeriod(1999, 12, 31, 2001, 1, 3);
 			_searchPeriod = new DateOnlyPeriod(2000, 1, 1, 2001, 1, 2);
 			_schedPeriod = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 2));
