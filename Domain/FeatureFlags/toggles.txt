@@ -51,7 +51,7 @@ WfmPermission_ReplaceOldPermission_34671 = true
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
 WfmTeamSchedule_SaveFavoriteSearches_42073 = true
-WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576 = RC
+WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576 = true
 WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260 = true
 WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252 = true
 
@@ -75,7 +75,7 @@ WfmTeamSchedule_EditAndDisplayInternalNotes_40671 = true
 
 WfmTeamSchedule_WeekView_39870 = true
 WfmTeamSchedule_WeeklyContractTime_39871 = true
-WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557 = RC
+WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557 = true
 
 WfmTeamSchedule_ShowNightlyRestWarning_39619 = true
 WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 = true
@@ -132,8 +132,8 @@ Wfm_Requests_ApprovingModifyRequests_41930 = true
 wfm_Requests_ReadModelOldData_42046 = true
 Wfm_Requests_ShowBudgetAllowanceDetail_41945 = true
 Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309 = true
-Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450 = RC
-Wfm_Requests_SaveFavoriteSearches_42578 = RC
+Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450 = true
+Wfm_Requests_SaveFavoriteSearches_42578 = true
 
 Wfm_Seatplan_UseDatePeriodForPlanning_42167 = true
 
@@ -229,7 +229,7 @@ WfmStaffing_AllowActions_42524 = RC
 Staffing_ReadModel_UseSkillCombination_42663 = RC
 Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
 Wfm_ResourcePlanner_AgentGroup_42871 = Dev
-Landing_Page_Data_Protection_Question_35721 = RC
+Landing_Page_Data_Protection_Question_35721 = true
 StaffingActions_UseRealForecast_42663 = false
 
 QRCodeForMobileApps_42695 = DEV
