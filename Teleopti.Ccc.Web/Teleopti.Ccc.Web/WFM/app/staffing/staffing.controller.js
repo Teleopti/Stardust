@@ -20,7 +20,8 @@
         vm.draggable = false;
         vm.toggleDraggable = toggleDraggable;
         vm.triggerResourceCalc = triggerResourceCalc;
-	    vm.timeSerie = [];
+        vm.timeSerie = [];
+	    vm.OverTimeModels = [];
         var allSkills = [];
         var allSkillAreas = [];
         getSkills();
@@ -177,6 +178,7 @@
 		    query.$promise.then(function(response) {
 			    console.log(staffingData);
 			    staffingData.suggestedStaffing = response.SuggestedStaffingWithOverTime;
+			    vm.OverTimeModels = response.OverTimeModels;
 			    staffingData.suggestedStaffing.unshift("Suggested Staffing");
 			    generateChartForView();
 		    });

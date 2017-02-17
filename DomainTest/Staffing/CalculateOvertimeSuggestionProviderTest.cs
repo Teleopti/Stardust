@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.IocCommon;
@@ -32,9 +28,13 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
-		//public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonForOvertimeProvider PersonForOvertimeProvider;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakePersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
+		}
 
 		[Test]
 		public void ShouldGiveSuggestionForOverTime()
@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var skill = SkillRepository.Has("SkillA", activity);
 			skill.DefaultResolution = 60;
 			var agent = PersonRepository.Has(skill);
-			//var period = new DateTimePeriod(now, now.AddHours(2));
 			PersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel>
 										   {
 											   new SuggestedPersonsModel
@@ -77,8 +76,55 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, new DateOnly(now),TimeSpan.FromHours(1), new Tuple<int, TimeSpan> (9, TimeSpan.FromHours(2))));
 
-			var intervals = Target.GetOvertimeSuggestions(new List<Guid> {skill.Id.GetValueOrDefault()}, now.AddHours(1), now.AddHours(2));
-			intervals.FirstOrDefault(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
+			var model = Target.GetOvertimeSuggestions(new List<Guid> {skill.Id.GetValueOrDefault()}, now.AddHours(1), now.AddHours(2));
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldCreateOverTimeModels()
+		{
+			var now = new DateTime(2017, 02, 15, 8, 0, 0).Utc();
+			Now.Is(now);
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("Activity");
+			var skill = SkillRepository.Has("SkillA", activity);
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			PersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel>
+										   {
+											   new SuggestedPersonsModel
+											   {
+												   PersonId = agent.Id.GetValueOrDefault(),
+												   End = now.AddHours(1),
+												   TimeToAdd = 60
+											   }
+										   });
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(now, new List<SkillCombinationResource>
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = now,
+																					   EndDateTime = now.AddHours(1),
+																					   Resource = 1,
+																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																				   },
+																					new SkillCombinationResource
+																				   {
+																					   StartDateTime = now.AddHours(1),
+																					   EndDateTime = now.AddHours(2),
+																					   Resource = 1,
+																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																				   }
+																			   });
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, new DateOnly(now), TimeSpan.FromHours(1), new Tuple<int, TimeSpan>(9, TimeSpan.FromHours(2))));
+
+			var model = Target.GetOvertimeSuggestions(new List<Guid> { skill.Id.GetValueOrDefault() }, now.AddHours(1), now.AddHours(2));
+			model.OverTimeModels.First(x => x.StartDateTime == now.AddHours(1)).EndDateTime.Should().Be.EqualTo(now.AddHours(2));
+			model.OverTimeModels.First(x => x.StartDateTime == now.AddHours(1)).ActivityId.Should().Be.EqualTo(activity.Id);
+			model.OverTimeModels.First(x => x.StartDateTime == now.AddHours(1)).PersonId.Should().Be.EqualTo(agent.Id);
+
 		}
 
 		[Test]
@@ -121,9 +167,9 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, new DateOnly(now), TimeSpan.FromHours(1), new Tuple<int, TimeSpan>(9, TimeSpan.FromHours(2))));
 
-			var intervals = Target.GetOvertimeSuggestions(new List<Guid> { skill.Id.GetValueOrDefault() }, now, now.AddHours(2));
-			intervals.First(x => x.StartDateTime == now).CalculatedResource.Should().Be.EqualTo(1);
-			intervals.First(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
+			var model = Target.GetOvertimeSuggestions(new List<Guid> { skill.Id.GetValueOrDefault() }, now, now.AddHours(2));
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now).CalculatedResource.Should().Be.EqualTo(1);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -173,10 +219,10 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, new DateOnly(now), TimeSpan.FromHours(1), new Tuple<int, TimeSpan>(9, TimeSpan.FromHours(2))));
 
-			var intervals = Target.GetOvertimeSuggestions(new List<Guid> { skill.Id.GetValueOrDefault() }, now, now.AddHours(3));
-			intervals.First(x => x.StartDateTime == now).CalculatedResource.Should().Be.EqualTo(1);
-			intervals.First(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
-			intervals.First(x => x.StartDateTime == now.AddHours(2)).CalculatedResource.Should().Be.EqualTo(1);
+			var model = Target.GetOvertimeSuggestions(new List<Guid> { skill.Id.GetValueOrDefault() }, now, now.AddHours(3));
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now).CalculatedResource.Should().Be.EqualTo(1);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(2)).CalculatedResource.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -262,18 +308,15 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var skillDay = skill.CreateSkillDayWithDemandOnIntervalWithSkillDataPeriodDuplicate(scenario, new DateOnly(now), 1, new Tuple<TimePeriod, double>(new TimePeriod(9, 10), 2), new Tuple<TimePeriod, double>(new TimePeriod(11, 12), 2));
 			SkillDayRepository.Has(skillDay);
 
-			var intervals = Target.GetOvertimeSuggestions(new List<Guid> { skill.Id.GetValueOrDefault() }, now, now.AddHours(5));
+			var model = Target.GetOvertimeSuggestions(new List<Guid> { skill.Id.GetValueOrDefault() }, now, now.AddHours(5));
 
-			intervals.First(x => x.StartDateTime == now).CalculatedResource.Should().Be.EqualTo(1);
-			intervals.First(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
-			intervals.First(x => x.StartDateTime == now.AddHours(2)).CalculatedResource.Should().Be.EqualTo(1);
-			intervals.First(x => x.StartDateTime == now.AddHours(3)).CalculatedResource.Should().Be.EqualTo(2);
-			intervals.First(x => x.StartDateTime == now.AddHours(4)).CalculatedResource.Should().Be.EqualTo(1);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now).CalculatedResource.Should().Be.EqualTo(1);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(1)).CalculatedResource.Should().Be.EqualTo(2);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(2)).CalculatedResource.Should().Be.EqualTo(1);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(3)).CalculatedResource.Should().Be.EqualTo(2);
+			model.SkillStaffingIntervals.First(x => x.StartDateTime == now.AddHours(4)).CalculatedResource.Should().Be.EqualTo(1);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<FakePersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
-		}
+		
 	}
 }

@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersTomorrow = new DateOnly(usersNow.AddHours(24));
 			var userstomorrowUtc = TimeZoneHelper.ConvertToUtc(usersTomorrow.Date, _timeZone.TimeZone());
-			var staffingIntervals = _calculateOvertimeSuggestionProvider.GetOvertimeSuggestions(overTimeSuggestionModel.SkillIds, _now.UtcDateTime(), userstomorrowUtc);
-			var overTimescheduledStaffingPerSkill = staffingIntervals.Select(x => new SkillStaffingIntervalLightModel
+			var overTimeStaffingSuggestion = _calculateOvertimeSuggestionProvider.GetOvertimeSuggestions(overTimeSuggestionModel.SkillIds, _now.UtcDateTime(), userstomorrowUtc);
+			var overTimescheduledStaffingPerSkill = overTimeStaffingSuggestion.SkillStaffingIntervals.Select(x => new SkillStaffingIntervalLightModel
 																			 {
 																				 Id = x.SkillId,
 																				 StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _timeZone.TimeZone()),
@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 																			 }).ToList();
 			return new OverTimeSuggestionResultModel
 			{
-				SuggestedStaffingWithOverTime = _scheduledStaffingProvider.DataSeries(overTimescheduledStaffingPerSkill, overTimeSuggestionModel.TimeSerie)
+				SuggestedStaffingWithOverTime = _scheduledStaffingProvider.DataSeries(overTimescheduledStaffingPerSkill, overTimeSuggestionModel.TimeSerie),
+				OverTimeModels = overTimeStaffingSuggestion.OverTimeModels
 			};
 		}
 	}
@@ -68,9 +69,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 		OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel skillIds);
 	}
 
+	public class OverTimeStaffingSuggestionModel
+	{
+		public IList<SkillStaffingInterval> SkillStaffingIntervals { get; set; }
+		public IList<OverTimeModel> OverTimeModels { get; set; }
+	}
+
+
 	public class OverTimeSuggestionResultModel
 	{
 		public double?[] SuggestedStaffingWithOverTime { get; set; }
+		public IList<OverTimeModel> OverTimeModels { get; set; }
 	}
 
 	public class OverTimeSuggestionModel
@@ -79,5 +88,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public DateTime[] TimeSerie { get; set; }
 	}
 
+	public class OverTimeModel
+	{
+		public Guid ActivityId { get; set; }
+		public Guid PersonId { get; set; }
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+	}
 
 }

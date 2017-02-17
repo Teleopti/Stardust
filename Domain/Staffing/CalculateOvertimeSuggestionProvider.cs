@@ -30,20 +30,19 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_skillRepository = skillRepository;
 		}
 
-		public IList<SkillStaffingInterval> GetOvertimeSuggestions(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime )
+		public OverTimeStaffingSuggestionModel GetOvertimeSuggestions(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime )
 		{
 			// persons that we maybe can add overtime to
 			// sorted by the biggest difference between weekly target and actually scheduled, maybe
 			var personsModels = _personProviderForOvertime.Persons(skillIds, startDateTime, endDateTime);
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
-			//load the persons with the data needed, personskills for example
 			var skills = _skillRepository.LoadAllSkills().Where(x => skillIds.Contains(x.Id.GetValueOrDefault()));
-
 			var period = new DateTimePeriod(startDateTime, endDateTime);
 
-			// load skillcombinationdata
 			var resources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
 			var intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources);
+
+			var overTimeModels = new List<OverTimeModel>();
 
 			//börja med skill som har öppet längst på längsta workload
 			foreach (var skill in skills)
@@ -75,25 +74,26 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 					//assume whole resource
 					relevantResources.ForEach(x => x.Resource += 1);
+					overTimeModels.Add(new OverTimeModel
+									   {
+										   ActivityId = act.Id.GetValueOrDefault(),
+										   PersonId = person.Id.GetValueOrDefault(),
+										   StartDateTime = shiftStart,
+										   EndDateTime = shiftEnd
+									   });
+
 					intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources);
 
 				}
 			}
-
-
-			//foreach pers
-
-			//loopar
-			//Ändra resources - lägg på övertiden på relevanta mha öt-intervall och skills och act
-			//validera /kolla om underbemannat
-
-
 			// filter persons smart when demand is filled on A and there is still demand on B
 			// so we just try on add overtime that has Skill B
-			
-			// loop in some way and add overtime, then check if the demand is fulfilled
 
-			return intervals.Where(x => skillIds.Contains(x.SkillId)).ToList();
+			return new OverTimeStaffingSuggestionModel
+			{
+				OverTimeModels = overTimeModels,
+				SkillStaffingIntervals = intervals.Where(x => skillIds.Contains(x.SkillId)).ToList()
+			};
 		}
 	}
 	public class SkillIntervalsForOvertime

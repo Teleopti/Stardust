@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Staffing
 {
 	public class AddOverTimeModel
 	{
-		//public DateTimePeriod Period;
 		public IList<Guid> Skills;
 	}
 }
