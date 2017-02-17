@@ -473,72 +473,71 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoRealTimeAdherenceForTeamsOnSite(Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId);
+			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&pollingInterval=100");
 		}
 		
 		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillIds=" + skillId);
+			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillIds=" + skillId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillForSites(Guid skillId)
 		{
-
-			GoToPage("wfm/#/rta/?skillIds=" + skillId);
+			GoToPage("wfm/#/rta/?skillIds=" + skillId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaForSites(Guid skillAreaId)
 		{
-			GoToPage("wfm/#/rta/?skillAreaId=" + skillAreaId);
+			GoToPage("wfm/#/rta/?skillAreaId=" + skillAreaId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(Guid skillAreaId, Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId);
+			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceAgentsOnTeam(Guid businessUnitId, Guid siteId, Guid teamId)
 		{
-			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceAllAgentsOnTeam(Guid siteId, Guid teamId)
 		{
-			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&showAllAgents=true");
+			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&showAllAgents=true" + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceAgentsWithoutStateOnTeam(Guid siteId, Guid teamId, Guid state)
 		{
-			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&es=" + state);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&es=" + state + "&pollingInterval=100");
 		}
 		
 		public static void GotoRealTimeAdherenceAllAgentsWithSkill(Guid skillId)
 		{
-			GoToPage("wfm/#/rta/agents/?skillIds=" + skillId);
+			GoToPage("wfm/#/rta/agents/?skillIds=" + skillId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillOnTeams(IEnumerable<Guid> teamIds, Guid skillId)
 		{
 			var teamString = string.Join("&teamIds=", teamIds);
-			GoToPage("wfm/#/rta/agents/?teamIds=" + teamString + "&skillIds=" + skillId);
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teamString + "&skillIds=" + skillId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaOnTeams(IEnumerable<Guid> teamIds, Guid idForSkillArea)
 		{
 			var teamString = string.Join("&teamIds=", teamIds);
-			GoToPage("wfm/#/rta/agents/?teamIds=" + teamString + "&idForSkillArea=" + idForSkillArea);
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teamString + "&idForSkillArea=" + idForSkillArea + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillOnSites(IEnumerable<Guid> siteIds, Guid skillId)
 		{
 			var sites = string.Join("&siteIds=", siteIds);
-			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&skillIds=" + skillId);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&skillIds=" + skillId + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaOnSites(IEnumerable<Guid> siteIds, Guid skillAreaId)
 		{
 			var sites = string.Join("&siteIds=", siteIds);
-			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&skillAreaId=" + skillAreaId);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&skillAreaId=" + skillAreaId + "&pollingInterval=100");
 		}
 
 
@@ -546,7 +545,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			var sites = string.Join("&siteIds=", siteIds);
 			var teams = string.Join("&teamIds=", teamIds);
-			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&teamIds=" + teams + "&skillIds=" + skillId);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&teamIds=" + teams + "&skillIds=" + skillId + "&pollingInterval=100");
 		}
 
 		public static void GoToAgentDetails(Guid personId)

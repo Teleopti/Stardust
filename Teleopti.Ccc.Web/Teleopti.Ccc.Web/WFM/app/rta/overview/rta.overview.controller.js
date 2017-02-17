@@ -52,6 +52,7 @@
 		var stateForTeams = 'rta.teams({siteIds: site.Id})';
 		var stateForAgentsByTeamsAndSkill = 'rta.agents({teamIds: team.Id, skillIds: vm.skillId})';
 		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.skillAreaId})';
+		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 		/***scoped variables */
 		vm.selectedItemIds = [];
 		vm.displaySkillOrSkillAreaFilter = false;
@@ -128,7 +129,7 @@
 				rtaService.getAdherenceForAllSites()
 					.then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
 			}
-		}, 5000);
+		}, pollingInterval);
 
 		rtaOrganizationService.getSiteName(vm.siteIds)
 			.then(function (name) { vm.siteName = name; });

@@ -102,6 +102,7 @@
 		vm.historicalAdherenceUrl = historicalAdherenceUrl;
 		vm.goToOverview = function () { rtaRouteService.goToSites(); }
 		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
+		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 		/**************RIGHT PANEL**************/
 		vm.rightPanelOptions = {
 			panelState: false,
@@ -112,7 +113,6 @@
 			showResizer: true,
 			showPopupButton: true
 		};
-
 		allGrid.data = 'vm.filteredData';
 		inAlarmGrid.data = 'vm.filteredData';
 
@@ -472,7 +472,7 @@
 					updateStatesDelegate();
 				}
 
-			}, 5000);
+			}, pollingInterval);
 		}
 
 		function cancelPolling() {

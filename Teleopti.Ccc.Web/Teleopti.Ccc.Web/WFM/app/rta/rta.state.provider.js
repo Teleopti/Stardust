@@ -18,7 +18,7 @@ angular
 				templateUrl: 'app/rta/rta.html'
 			})
 				.state('rta.sites', {
-					url: '/?skillIds&skillAreaId',
+					url: '/?skillIds&skillAreaId&pollingInterval',
 					templateUrl: 'app/rta/overview/rta-sites.html',
 					controller: 'RtaOverviewController as vm',
 					params: {
@@ -31,7 +31,7 @@ angular
 					}
 				})
 				.state('rta.teams', {
-					url: '/teams/?siteIds&skillIds&skillAreaId',
+					url: '/teams/?siteIds&skillIds&skillAreaId&pollingInterval',
 					templateUrl: 'app/rta/overview/rta-teams.html',
 					controller: 'RtaOverviewController as vm',
 					params: {
@@ -47,7 +47,7 @@ angular
 					}
 				})
 				.state('rta.agents', {
-					url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
+					url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es&pollingInterval',
 					templateUrl: 'app/rta/agents/rta-agents.html',
 					controller: 'RtaAgentsController as vm',
 					params: {
