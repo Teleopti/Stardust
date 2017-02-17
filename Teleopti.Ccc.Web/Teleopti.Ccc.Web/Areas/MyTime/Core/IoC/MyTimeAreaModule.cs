@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using AutoMapper;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -24,6 +23,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -45,6 +45,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			registerTeamScheduleTypes(builder);
 			registerStudentAvailabilityTypes(builder);
 			registerPreferenceTypes(builder);
-			registerAutoMapperTypes(builder);
+			registerMapperTypes(builder);
 			registerRequestsType(builder);
 			registerSettingsTypes(builder);
 			registerAsmTypes(builder);
@@ -161,24 +162,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftTradeSiteOpenHourFilter>().As<IShiftTradeSiteOpenHourFilter>();
 		}
 
-		private void registerAutoMapperTypes(ContainerBuilder builder)
+		private void registerMapperTypes(ContainerBuilder builder)
 		{
-			builder.Register(c => Mapper.Engine).As<IMappingEngine>().SingleInstance().ExternallyOwned();
-			builder.RegisterAssemblyTypes(GetType().Assembly)
-				.AssignableTo<Profile>()
-				.SingleInstance()
-				.As<Profile>();
-			builder.RegisterType<StudentAvailabilityDomainData>();
-			builder.RegisterType<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>()
+			builder.RegisterType<StudentAvailabilityDayFormMapper>()
 				.SingleInstance();
-			builder.RegisterType<PreferenceDayInputMappingProfile.PreferenceDayInputToPreferenceDay>().SingleInstance();
-			builder.RegisterType<PreferenceTemplateInputMappingProfile.PreferenceTemplateInputToExtendedPreferenceTemplate>()
+			builder.RegisterType<PreferenceDayInputMapper>().SingleInstance();
+			builder.RegisterType<RequestsViewModelMapper>().SingleInstance();
+			builder.RegisterType<CommonViewModelMapper>().SingleInstance();
+			builder.RegisterType<PreferenceViewModelMapper>().SingleInstance();
+			builder.RegisterType<PersonAccountViewModelMapper>().SingleInstance();
+			builder.RegisterType<PreferenceDomainDataMapper>().SingleInstance();
+			builder.RegisterType<PreferenceDayFeedbackViewModelMapper>().SingleInstance();
+			builder.RegisterType<PreferenceDayViewModelMapper>().SingleInstance();
+			builder.RegisterType<ShiftTradeSwapDetailViewModelMapper>().SingleInstance();
+			builder.RegisterType<StudentAvailabilityDayViewModelMapper>().SingleInstance();
+			builder.RegisterType<StudentAvailabilityViewModelMapper>().SingleInstance();
+			builder.RegisterType<StudentAvailabilityDayFeedbackViewModelMapper>().SingleInstance();
+			builder.RegisterType<TeamScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<TeamScheduleDomainDataMapper>().SingleInstance();
+			builder.RegisterType<DateTimePeriodFormMapper>().SingleInstance();
+			builder.RegisterType<OvertimeAvailabilityInputMapper>().SingleInstance();
+			builder.RegisterType<OvertimeAvailabilityViewModelMapper>().SingleInstance();
+			builder.RegisterType<PreferenceAndScheduleDayViewModelMapper>().SingleInstance();
+			builder.RegisterType<MonthScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<WeekScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<ExtendedPreferenceTemplateMapper>()
 				.SingleInstance();
-			builder.RegisterType<TextRequestFormMappingProfile.TextRequestFormToPersonRequest>()
-				.As<ITypeConverter<TextRequestForm, IPersonRequest>>()
+			builder.RegisterType<TextRequestFormMapper>()
 				.SingleInstance();
-			builder.RegisterType<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>()
-				.As<ITypeConverter<AbsenceRequestForm, IPersonRequest>>()
+			builder.RegisterType<AbsenceRequestFormMapper>()
 				.SingleInstance();
 			builder.RegisterType<PreferenceNightRestChecker>().As<IPreferenceNightRestChecker>().SingleInstance();
 		}

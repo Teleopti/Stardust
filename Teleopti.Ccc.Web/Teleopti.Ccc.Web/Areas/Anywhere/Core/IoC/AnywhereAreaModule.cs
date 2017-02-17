@@ -6,13 +6,11 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Interfaces.Domain;
@@ -42,8 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<GroupScheduleViewModelMapper>().As<IGroupScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<PersonScheduleViewModelFactory>().As<IPersonScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<PersonScheduleDayViewModelFactory>().As<IPersonScheduleDayViewModelFactory>().SingleInstance();
-			builder.RegisterType<PersonScheduleViewModelMapper>().As<IPersonScheduleViewModelMapper>().SingleInstance();
-			builder.RegisterType<PersonScheduleDayViewModelMapper>().As<IPersonScheduleDayViewModelMapper>().SingleInstance();
+			builder.RegisterType<PersonScheduleViewModelMapper>().As<PersonScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<ReportItemsProvider>().As<IReportItemsProvider>().SingleInstance();
 
 			builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>()))

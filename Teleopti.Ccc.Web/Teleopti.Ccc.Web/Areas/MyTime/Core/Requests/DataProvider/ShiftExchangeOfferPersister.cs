@@ -1,4 +1,3 @@
-using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -9,15 +8,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	public class ShiftExchangeOfferPersister : IShiftExchangeOfferPersister
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IMappingEngine _autoMapper;
+		private readonly RequestsViewModelMapper _mapper;
 		private readonly IShiftExchangeOfferMapper _shiftExchangeOfferMapper;
 
 		public ShiftExchangeOfferPersister(IPersonRequestRepository personRequestRepository,
-														IMappingEngine autoMapper, IShiftExchangeOfferMapper shiftExchangeOfferMapper)
+														RequestsViewModelMapper mapper, IShiftExchangeOfferMapper shiftExchangeOfferMapper)
 		{
-			_autoMapper = autoMapper;
 			_shiftExchangeOfferMapper = shiftExchangeOfferMapper;
 			_personRequestRepository = personRequestRepository;
+			_mapper = mapper;
 		}
 
 		public RequestViewModel Persist(ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status)
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				personRequest = _shiftExchangeOfferMapper.Map(form, status);
 				_personRequestRepository.Add (personRequest);
 			}
-			return _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			return _mapper.Map(personRequest);
 		}
 	}
 }

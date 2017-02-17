@@ -1,17 +1,19 @@
 using System;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
+using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
@@ -29,9 +31,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 			var schedule = ScheduleDayFactory.Create(date, person);
 			var scheduleProvider = new FakeScheduleProvider(schedule);
 
+			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				MockRepository.GenerateMock<IMappingEngine>(),
-				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
@@ -70,9 +73,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 			var schedule = ScheduleDayFactory.Create(date, person);
 			var scheduleProvider = new FakeScheduleProvider(schedule);
 
+			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				MockRepository.GenerateMock<IMappingEngine>(),
-				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
@@ -106,9 +110,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 			var schedule = ScheduleDayFactory.Create(date, person);
 			var scheduleProvider = new FakeScheduleProvider(schedule);
 
+			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				MockRepository.GenerateMock<IMappingEngine>(),
-				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
@@ -143,9 +148,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 			var schedule = ScheduleDayFactory.Create(date, person);
 			var scheduleProvider = new FakeScheduleProvider(schedule);
 
+			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				MockRepository.GenerateMock<IMappingEngine>(),
-				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
 			{
@@ -178,9 +184,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 			var schedule = ScheduleDayFactory.Create(date, person);
 			var scheduleProvider = new FakeScheduleProvider(schedule);
 
+			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				MockRepository.GenerateMock<IMappingEngine>(),
-				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
 			{

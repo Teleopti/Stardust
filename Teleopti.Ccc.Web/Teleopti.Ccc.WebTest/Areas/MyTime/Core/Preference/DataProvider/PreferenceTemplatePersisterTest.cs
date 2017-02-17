@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Web;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
@@ -17,40 +19,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		[Test]
 		public void ShouldAddPreferenceTemplate()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var preferenceTemplateRepository = MockRepository.GenerateMock<IExtendedPreferenceTemplateRepository>();
-			var target = new PreferenceTemplatePersister(preferenceTemplateRepository, mapper);
+			var target = new PreferenceTemplatePersister(preferenceTemplateRepository, new FakeLoggedOnUser(), new FakeShiftCategoryRepository(), new FakeAbsenceRepository(), new FakeDayOffTemplateRepository(), new FakeActivityRepository());
 			var input = new PreferenceTemplateInput();
-			var extendedPreferenceTemplate = MockRepository.GenerateMock<IExtendedPreferenceTemplate>();
-			mapper.Stub(x => x.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input)).Return(extendedPreferenceTemplate);
-
+			
 			target.Persist(input);
 
-			preferenceTemplateRepository.AssertWasCalled(x => x.Add(extendedPreferenceTemplate));
+			preferenceTemplateRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldReturnInputResultModelOnAdd()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var template = MockRepository.GenerateMock<IExtendedPreferenceTemplate>();
-			var target = new PreferenceTemplatePersister(MockRepository.GenerateStub<IExtendedPreferenceTemplateRepository>(), mapper);
+			var target = new PreferenceTemplatePersister(MockRepository.GenerateStub<IExtendedPreferenceTemplateRepository>(), new FakeLoggedOnUser(), new FakeShiftCategoryRepository(), new FakeAbsenceRepository(), new FakeDayOffTemplateRepository(), new FakeActivityRepository());
 			var input = new PreferenceTemplateInput();
-			var inputResult = new PreferenceTemplateViewModel();
 
-			mapper.Stub(x => x.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input)).Return(template);
-			mapper.Stub(x => x.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(template)).Return(inputResult);
-
-			var result = target.Persist(input);
-
-			result.Should().Be.SameInstanceAs(inputResult);
+			target.Persist(input).Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldDeletePreferenceTemplate()
 		{
 			var preferenceTemplateRepository = MockRepository.GenerateMock<IExtendedPreferenceTemplateRepository>();
-			var target = new PreferenceTemplatePersister(preferenceTemplateRepository, null);
+			var target = new PreferenceTemplatePersister(preferenceTemplateRepository, new FakeLoggedOnUser(), new FakeShiftCategoryRepository(), new FakeAbsenceRepository(), new FakeDayOffTemplateRepository(), new FakeActivityRepository());
 			var id = Guid.NewGuid();
 			var extendedPreferenceTemplate = MockRepository.GenerateMock<IExtendedPreferenceTemplate>();
 			preferenceTemplateRepository.Stub(x => x.Find(id)).Return(extendedPreferenceTemplate);
@@ -65,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		{
 			var preferenceTemplateRepository = MockRepository.GenerateMock<IExtendedPreferenceTemplateRepository>();
 			var id = Guid.NewGuid();
-			var target = new PreferenceTemplatePersister(MockRepository.GenerateStub<IExtendedPreferenceTemplateRepository>(), null);
+			var target = new PreferenceTemplatePersister(MockRepository.GenerateStub<IExtendedPreferenceTemplateRepository>(), new FakeLoggedOnUser(), new FakeShiftCategoryRepository(), new FakeAbsenceRepository(), new FakeDayOffTemplateRepository(), new FakeActivityRepository());
 
 			preferenceTemplateRepository.Stub(x => x.Find(id)).Return(null);
 

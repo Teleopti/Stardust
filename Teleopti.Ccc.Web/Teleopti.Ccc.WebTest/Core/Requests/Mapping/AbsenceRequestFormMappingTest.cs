@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -21,9 +20,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private ILoggedOnUser _loggedOnUser;
 		private Person _person;
 		private IUserTimeZone _userTimeZone;
-		private AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest _absenceRequestFormToPersonRequest;
 		private IAbsenceRepository _absenceRepository;
-		
+		private AbsenceRequestFormMapper target;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -33,24 +32,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(_person);
 			_absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
 
-			_absenceRequestFormToPersonRequest =
-				new AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest(() => Mapper.Engine, () => _loggedOnUser, () => _absenceRepository, () => _userTimeZone);
-
-			Mapper.Reset();
-			Mapper.Initialize(c =>
-			                  	{
-			                  		c.AddProfile(new AbsenceRequestFormMappingProfile(() => _absenceRequestFormToPersonRequest));
-			                  		c.AddProfile(new DateTimePeriodFormMappingProfile(() => _userTimeZone));
-			                  	});
+			target = new AbsenceRequestFormMapper(_loggedOnUser, _absenceRepository, _userTimeZone);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapPerson()
 		{
-			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(new AbsenceRequestForm());
+			var result = target.Map(new AbsenceRequestForm());
 
 			result.Person.Should().Be.SameInstanceAs(_person);
 		}
@@ -60,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new AbsenceRequestForm { Subject = "Test" };
 
-			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			result.GetSubject(new NoFormatting()).Should().Be("Test");
 		}
@@ -68,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapToAbsenceRequest()
 		{
-			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(new AbsenceRequestForm());
+			var result = target.Map(new AbsenceRequestForm());
 
 			result.Request.Should().Be.OfType<AbsenceRequest>();
 		}
@@ -78,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new AbsenceRequestForm { Message = "Message" };
 
-			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			result.GetMessage(new NoFormatting()).Should().Be("Message");
 		}
@@ -92,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var form = new AbsenceRequestForm {AbsenceId = id};
 
-			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			((AbsenceRequest) result.Request).Absence.Should().Be.SameInstanceAs(absence);
 		}
@@ -100,11 +88,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapFullDayAbsence()
 		{
-			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			var form = new AbsenceRequestForm {FullDay = true};
 
-			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), timeZone);
 			var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), timeZone);
@@ -117,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPeriod()
 		{
-			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			var form = new AbsenceRequestForm
 			{
@@ -129,9 +117,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 					EndTime = new TimeOfDay(TimeSpan.FromHours(13))
 				}
 			};
-			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
-			var expected = Mapper.Map<DateTimePeriodForm, DateTimePeriod>(form.Period);
+			var expected = new DateTimePeriodFormMapper(_userTimeZone).Map(form.Period);
 			result.Request.Period.Should().Be(expected);
 		}
 	}

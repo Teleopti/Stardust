@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		private ITeamScheduleProjectionForMTWProvider _projectionForMtwProvider;
 		private ISchedulePersonProvider personProvider;
 		private IUserTimeZone userTimeZone;
-		private TimeZoneInfo timeZone;
+		private TeamScheduleDomainDataMapper target;
 
 		[SetUp]
 		public void Setup()
@@ -30,29 +29,15 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			personProvider = MockRepository.GenerateMock<ISchedulePersonProvider>();
 			_projectionForMtwProvider = MockRepository.GenerateStub<ITeamScheduleProjectionForMTWProvider>();
-			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-
-			timeZone = (TimeZoneInfo.Utc);
-			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			userTimeZone.Stub(x => x.TimeZone()).Do((Func<TimeZoneInfo>)(() => timeZone));
-
-			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new TeamScheduleDomainDataMappingProfile(
-			                                    	() => Mapper.Engine,
-			                                    	() => personProvider,
-			                                    	() => scheduleProvider,
-			                                    	() => _projectionForMtwProvider,
-			                                    	() => userTimeZone
-			                                    	)));
+			userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
+			
+			target = new TeamScheduleDomainDataMapper(personProvider,scheduleProvider,_projectionForMtwProvider, userTimeZone);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapDate()
 		{
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.Date.Should().Be.EqualTo(DateOnly.Today);
 		}
@@ -62,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		{
 			var id = Guid.NewGuid();
 
-			var result = Mapper.Map<Tuple<DateOnly, Guid>, TeamScheduleDomainData>(new Tuple<DateOnly, Guid>(DateOnly.Today, id));
+			var result = target.Map(DateOnly.Today, id);
 
 			result.TeamOrGroupId.Should().Be(id);
 		}
@@ -75,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, id, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
 
-			Mapper.Map<Tuple<DateOnly, Guid>, TeamScheduleDomainData>(new Tuple<DateOnly, Guid>(DateOnly.Today, id));
+			target.Map(DateOnly.Today, id);
 
 			scheduleProvider.AssertWasCalled(x => x.GetScheduleForPersons(DateOnly.Today, persons));
 		}
@@ -87,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(new[] { person });
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.Days.Single().Person.Should().Be(person);
 		}
@@ -103,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			_projectionForMtwProvider.Stub(x => x.Projection(scheduleDay)).Return(teamScheduleProjection);
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.Days.First().Projection.Should().Be.SameInstanceAs(teamScheduleProjection);
 		}
@@ -126,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			_projectionForMtwProvider.Stub(x => x.Projection(scheduleDays.ElementAt(0))).Return(eveningProjection);
 			_projectionForMtwProvider.Stub(x => x.Projection(scheduleDays.ElementAt(1))).Return(morningProjection);
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.Days.Select(d => d.Projection)
 				.Should().Have.SameSequenceAs(new[] {morningProjection, eveningProjection});
@@ -152,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			_projectionForMtwProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 7, 45, 0));
 			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 17, 15, 0));
@@ -178,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			_projectionForMtwProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 8, 0, 0));
 			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 17, 30, 0));
@@ -204,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			_projectionForMtwProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 8, 30, 0));
 			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 17, 30, 0));
@@ -213,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapDisplayTimeToDefaultIfNull()
 		{
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 
 			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime).AddMinutes(-15));
 			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime).AddMinutes(15));
@@ -222,9 +207,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapDefaultDisplayTimeInUsersTimeZone()
 		{
-			timeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			var timeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			target = new TeamScheduleDomainDataMapper(personProvider, scheduleProvider, _projectionForMtwProvider, new FakeUserTimeZone(timeZone));
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today, Guid.Empty);
 			
 			var startDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime).AddMinutes(-15);
 			var expectedStartDateTime = timeZone.SafeConvertTimeToUtc(startDateTimeLocal);
@@ -245,7 +231,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today,Guid.Empty);
 
 			result.Days.First().HasDayOffUnder.Should().Be.True();
 		}

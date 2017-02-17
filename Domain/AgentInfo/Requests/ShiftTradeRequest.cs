@@ -116,15 +116,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var timeZoneInfo = PersonFrom.PermissionInformation.DefaultTimeZone();
 		    var dateOnlyPeriod = new DateOnlyPeriod (startDate, endDate).ToDateTimePeriod (timeZoneInfo);
 			// Remove one minute so is end of last day
-			return dateOnlyPeriod.ChangeEndTime(new TimeSpan(0, -1, 0)); 
+			return dateOnlyPeriod.ChangeEndTime(TimeSpan.FromMinutes(-1)); 
 	    }
 
-        public virtual ReadOnlyCollection<IShiftTradeSwapDetail> ShiftTradeSwapDetails
-        {
-            get { return new ReadOnlyCollection<IShiftTradeSwapDetail>(_shiftTradeSwapDetails); }
-        }
+        public virtual ReadOnlyCollection<IShiftTradeSwapDetail> ShiftTradeSwapDetails => new ReadOnlyCollection<IShiftTradeSwapDetail>(_shiftTradeSwapDetails);
 
-        public virtual void AddShiftTradeSwapDetail(IShiftTradeSwapDetail shiftTradeSwapDetail)
+	    public virtual void AddShiftTradeSwapDetail(IShiftTradeSwapDetail shiftTradeSwapDetail)
         {
             verifyEditingShiftTradeIsAllowed();
             shiftTradeSwapDetail.SetParent(this);
@@ -454,26 +451,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 
         #region PersonfromTo
-        public override IPerson PersonFrom
-        {
-            get
-            {
-	            return _shiftTradeSwapDetails.Any()
-		            ? _shiftTradeSwapDetails.First().PersonFrom
-		            : null;
-            }
-        }
+        public override IPerson PersonFrom => _shiftTradeSwapDetails.Any()
+	        ? _shiftTradeSwapDetails.First().PersonFrom
+	        : null;
 
-        public override IPerson PersonTo
-        {
-            get
-            {
-	            return _shiftTradeSwapDetails.Any()
-		            ? _shiftTradeSwapDetails.First().PersonTo
-		            : null;
-            }
-        }
-        #endregion //PersonfromTo
+	    public override IPerson PersonTo => _shiftTradeSwapDetails.Any()
+		    ? _shiftTradeSwapDetails.First().PersonTo
+		    : null;
+
+	    #endregion //PersonfromTo
 
         public virtual IEnumerable<IPerson> InvolvedPeople()
         {

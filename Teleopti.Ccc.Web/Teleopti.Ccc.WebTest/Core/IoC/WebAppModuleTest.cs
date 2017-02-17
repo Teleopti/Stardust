@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using AutoMapper;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
@@ -295,15 +294,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<ILayoutBaseViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
-
-		[Test]
-		public void ShouldRegisterMappingEngine()
-		{
-			var result = requestContainer.Resolve<IMappingEngine>();
-
-			result.Should().Be.SameInstanceAs(Mapper.Engine);
-		}
-
+		
 		[Test]
 		public void ShouldRegisterPrincipalProvider()
 		{
@@ -338,19 +329,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<IAbsenceTypesProvider>()
 				.Should().Not.Be.Null();
 		}
-
-		[Test]
-		public void ShouldResolveMappingProfiles()
-		{
-			var result = requestContainer.Resolve<IEnumerable<Profile>>();
-
-			var profileTypes = from t in typeof (ContainerConfiguration).Assembly.GetTypes()
-			                   let isProfile = typeof (Profile).IsAssignableFrom(t)
-			                   where isProfile
-			                   select t;
-			result.Select(p => p.GetType()).Should().Have.SameValuesAs(profileTypes);
-		}
-
+		
 		[Test]
 		public void ShouldResolvePortalViewModelFactory()
 		{
@@ -408,26 +387,15 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			var result1 =
 				requestContainer.Resolve
-					<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>();
+					<StudentAvailabilityDayFormMapper>();
 			var result2 =
 				requestContainer.Resolve
-					<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>();
+					<StudentAvailabilityDayFormMapper>();
 
 			result1.Should().Not.Be.Null();
 			result2.Should().Be.SameInstanceAs(result1);
 		}
-
-		[Test]
-		public void ShouldResolveStudentAvailabilityMappingDomainData()
-		{
-			var result1 = requestContainer.Resolve<StudentAvailabilityDomainData>();
-			var result2 = requestContainer.Resolve<StudentAvailabilityDomainData>();
-
-			result1.Should().Not.Be.Null();
-			result2.Should().Not.Be.Null();
-			result2.Should().Not.Be.SameInstanceAs(result1);
-		}
-
+		
 		[Test]
 		public void ShouldResolveTeamScheduleController()
 		{

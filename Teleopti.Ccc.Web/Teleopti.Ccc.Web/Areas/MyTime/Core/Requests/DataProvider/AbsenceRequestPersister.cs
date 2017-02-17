@@ -1,8 +1,8 @@
 using System;
-using AutoMapper;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -11,27 +11,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	public class AbsenceRequestPersister : IAbsenceRequestPersister
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IMappingEngine _mapper;
-
 		private readonly IAbsenceRequestSynchronousValidator _absenceRequestSynchronousValidator;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IAbsenceRequestIntradayFilter _absenceRequestIntradayFilter;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IToggleManager _toggleManager;
+		private readonly AbsenceRequestFormMapper _mapper;
+		private readonly RequestsViewModelMapper _requestsMapper;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
-									   IMappingEngine mapper, 
 									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator, 
 									   IPersonRequestCheckAuthorization personRequestCheckAuthorization, 
-									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IToggleManager toggleManager)
+									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IToggleManager toggleManager, AbsenceRequestFormMapper mapper, RequestsViewModelMapper requestsMapper)
 		{
 			_personRequestRepository = personRequestRepository;
-			_mapper = mapper;
 			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_absenceRequestIntradayFilter = absenceRequestIntradayFilter;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_toggleManager = toggleManager;
+			_mapper = mapper;
+			_requestsMapper = requestsMapper;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -44,19 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			if (personRequest != null)
 			{
 				var existingPeriod = personRequest.Request.Period;
-				try
-				{
-					_mapper.Map(form, personRequest);
-				}
-				catch (AutoMapperMappingException e)
-				{
-					if (e.InnerException is InvalidOperationException)
-					{
-						// this catch is intent to catch InvalidOperationException throw from PersonRequest#CheckIfEditable
-						throw e.InnerException;
-					}
-					throw;
-				}
+				_mapper.Map(form, personRequest);
 
 				checkAndProcessDeny(personRequest);
 				
@@ -68,12 +56,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						if (updatedRows == 0)
 							throw new InvalidOperationException();
 					}
-						
 				}
 			}
 			else
 			{
-				personRequest = _mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+				personRequest = _mapper.Map(form);
 				checkAndProcessDeny(personRequest);
 				_personRequestRepository.Add(personRequest);
 
@@ -84,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			}
 
-			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			return _requestsMapper.Map(personRequest);
 		}
 
 		private void checkAndProcessDeny(IPersonRequest personRequest)

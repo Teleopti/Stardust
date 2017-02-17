@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 	public class RequestsViewModelFactory : IRequestsViewModelFactory
 	{
 		private readonly IPersonRequestProvider _personRequestProvider;
-		private readonly IMappingEngine _mapper;
 		private readonly IAbsenceTypesProvider _absenceTypesProvider;
 		private readonly IAbsenceAccountProvider _personAccountProvider;
 		private readonly IPermissionProvider _permissionProvider;
@@ -27,10 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeScheduleViewModelMapper _shiftTradeScheduleViewModelMapper;
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly RequestsViewModelMapper _mapper;
+		private readonly ShiftTradeSwapDetailViewModelMapper _shiftTradeSwapDetailViewModelMapper;
+		private readonly PersonAccountViewModelMapper _personAccountViewModelMapper;
 
 		public RequestsViewModelFactory(
 			IPersonRequestProvider personRequestProvider,
-			IMappingEngine mapper,
 			IAbsenceTypesProvider absenceTypesProvider,
 			IPermissionProvider permissionProvider,
 			IShiftTradeRequestProvider shiftTradeRequestprovider,
@@ -40,10 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			ILoggedOnUser loggedOnUser,
 			IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper,
 			IAbsenceAccountProvider personAccountProvider,
-			IPersonRequestRepository personRequestRepository)
+			IPersonRequestRepository personRequestRepository,
+			RequestsViewModelMapper mapper,
+			ShiftTradeSwapDetailViewModelMapper shiftTradeSwapDetailViewModelMapper,
+			PersonAccountViewModelMapper personAccountViewModelMapper)
 		{
 			_personRequestProvider = personRequestProvider;
-			_mapper = mapper;
 			_absenceTypesProvider = absenceTypesProvider;
 			_permissionProvider = permissionProvider;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
@@ -54,6 +56,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeScheduleViewModelMapper = shiftTradeScheduleViewModelMapper;
 			_personAccountProvider = personAccountProvider;
 			_personRequestRepository = personRequestRepository;
+			_mapper = mapper;
+			_shiftTradeSwapDetailViewModelMapper = shiftTradeSwapDetailViewModelMapper;
+			_personAccountViewModelMapper = personAccountViewModelMapper;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -94,13 +99,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging, RequestListFilter filter)
 		{
 			var requests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(paging, filter);
-			return _mapper.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(requests);
+			return requests.Select(_mapper.Map);
 		}
 
 		public RequestViewModel CreateRequestViewModel(Guid id)
 		{
 			var request = _personRequestProvider.RetrieveRequest(id);
-			return _mapper.Map<IPersonRequest, RequestViewModel>(request);
+			return _mapper.Map(request);
 		}
 
 		public AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date)
@@ -109,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			if (absence==null) return null;
 
 			var absenceAccount = _personAccountProvider.GetPersonAccount(absence, date);
-			return _mapper.Map<IAccount, AbsenceAccountViewModel>(absenceAccount);
+			return _personAccountViewModelMapper.Map(absenceAccount);
 		}
 
 		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel(Guid? id = null)
@@ -124,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				{
 					if (shiftTrade.Offer == null)
 					{
-						ret.MiscSetting = new ShiftTradeRequestMiscSetting()
+						ret.MiscSetting = new ShiftTradeRequestMiscSetting
 						{
 							AnonymousTrading = false
 						};
@@ -149,7 +154,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 			foreach (var detail in req.ShiftTradeSwapDetails)
 			{
-				var shiftTradeSwapDetails = _mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(detail);
+				var shiftTradeSwapDetails = _shiftTradeSwapDetailViewModelMapper.Map(detail);
 
 				var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
 

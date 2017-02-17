@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public DateTime Date { get; set; }
-		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
+		public DateOnly BelongsToDate => new DateOnly(Date);
 		public DateTime? Start { get; set; }
 		public DateTime? End { get; set; }
 		public bool IsDayOff { get; set; }

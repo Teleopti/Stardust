@@ -80,10 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public int DayOfWeekNumber { get; set; }
 		public bool Availability { get; set; }
 
-		public bool HasNote
-		{
-			get { return Note != null && !string.IsNullOrWhiteSpace(Note.Message); }
-		}
+		public bool HasNote => !string.IsNullOrWhiteSpace(Note?.Message);
 
 		public string ProbabilityClass { get; set; }
 		public string ProbabilityText { get; set; }

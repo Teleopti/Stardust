@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -15,9 +14,11 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
@@ -39,7 +40,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private TimePeriod minMaxTime;
         private IPerson person;
         private DateTime localDate;
-	    private IMappingEngine _mapper;
 
 	    [SetUp]
         public void Setup()
@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             period = new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc));
             factory = new VisualLayerFactory();
-            activity = ActivityFactory.CreateActivity("Phone");
-            activity.SetId(Guid.NewGuid());
+	        activity = ActivityFactory.CreateActivity("Phone").WithId();
 
 		    var scheduleDay = ScheduleDayFactory.Create(new DateOnly(localDate));
 			scheduleDay.CreateAndAddActivity(activity, period,new ShiftCategory("Shift Category") );
@@ -65,9 +64,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             minMaxTime = new TimePeriod(8, 0, 19, 0);
 
             visualActivityLayer = factory.CreateShiftSetupLayer(activity, period, person);
-
-			_mapper = MockRepository.GenerateMock<IMappingEngine>();
-			target = new PeriodViewModelFactory(_mapper, new SpecificTimeZone(timeZone));
+			
+			target = new PeriodViewModelFactory(new SpecificTimeZone(timeZone), new OvertimeAvailabilityViewModelMapper(new ThreadCulture()));
         }
 
         private void setPrincipal()
@@ -279,10 +277,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		    var start = new TimeSpan(12, 0, 0);
 		    var end = new TimeSpan(25, 0, 0);
 		    var overtimeAvailabilityYesterday = new OvertimeAvailability(new Person(), DateOnly.Today, start, end);
-		    var overtimeAvailabilityViewModel = new OvertimeAvailabilityViewModel();
-		    _mapper.Stub(x => x.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailabilityYesterday))
-			    .Return(overtimeAvailabilityViewModel);
-
+		    
 		    var result =
 			    target.CreateOvertimeAvailabilityPeriodViewModels(null, overtimeAvailabilityYesterday, minMaxTime).First();
 
@@ -295,7 +290,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			    .Be.EqualTo((decimal) (end.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks/
 							(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
 		    result.IsOvertimeAvailability.Should().Be.True();
-		    result.OvertimeAvailabilityYesterday.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
 		    result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 	    }
 

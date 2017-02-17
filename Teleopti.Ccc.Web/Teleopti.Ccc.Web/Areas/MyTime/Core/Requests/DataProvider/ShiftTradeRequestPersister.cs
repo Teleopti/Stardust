@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IShiftTradeRequestMapper _shiftTradeRequestMapper;
-		private readonly IMappingEngine _autoMapper;
 		private readonly IEventPublisher _publisher;
 		private readonly INow _now;
 		private readonly ICurrentDataSource _dataSourceProvider;
@@ -29,10 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IToggleManager _toggleManager;
 		private readonly IShiftTradeRequestPersonToPermissionValidator _shiftTradeRequestPermissionValidator;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
+		private readonly RequestsViewModelMapper _mapper;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository,
 			IShiftTradeRequestMapper shiftTradeRequestMapper,
-			IMappingEngine autoMapper,
 			IEventPublisher publisher,
 			INow now,
 			ICurrentDataSource dataSourceProvider,
@@ -42,11 +40,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			IShiftTradeRequestProvider shiftTradeRequestprovider,
 			IToggleManager toggleManager,
 			IShiftTradeRequestPersonToPermissionValidator shiftTradePersonToPermissionValidator,
-			IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+			RequestsViewModelMapper mapper)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
-			_autoMapper = autoMapper;
 			_publisher = publisher;
 			_now = now;
 			_dataSourceProvider = dataSourceProvider;
@@ -57,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_toggleManager = toggleManager;
 			_shiftTradeRequestPermissionValidator = shiftTradePersonToPermissionValidator;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
+			_mapper = mapper;
 		}
 
 		public RequestViewModel Persist(ShiftTradeRequestForm form)
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				personRequest.Deny( Resources.RecipientHasNoShiftTradePermission, _personRequestCheckAuthorization);
 			}
 
-			var requestViewModel = _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			var requestViewModel = _mapper.Map(personRequest);
 			if (!permissionSatisfied)
 			{
 				return requestViewModel;

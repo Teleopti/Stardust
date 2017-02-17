@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -16,14 +15,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 	public class SettingsViewModelFactoryTest
 	{
 		private SettingsViewModelFactory _target;
-		private IMappingEngine _mapper;
 		private ILoggedOnUser _loggedOnUser;
 
 		[SetUp]
 		public void Setup()
 		{
-			Mapper.Initialize(c => c.AddProfile(new SettingsMappingProfile()));
-			_mapper = Mapper.Engine; 
 			_loggedOnUser = MockRepository.GenerateStrictMock<ILoggedOnUser>();
 			_loggedOnUser.Expect(obj => obj.CurrentUser()).Return(PersonFactory.CreatePersonWithGuid("", ""));
 		}
@@ -34,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 		{
 			var nameFormatPersisterAndProvider = MockRepository.GenerateStrictMock<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			nameFormatPersisterAndProvider.Expect(obj => obj.Get()).Return(new NameFormatSettings() { NameFormatId = 0 });
-			_target = new SettingsViewModelFactory(_mapper, _loggedOnUser, nameFormatPersisterAndProvider);
+			_target = new SettingsViewModelFactory(new SettingsMapper(), _loggedOnUser, nameFormatPersisterAndProvider);
 
 			var result = _target.CreateViewModel();
 			Assert.That(result.NameFormats.First().text, Is.EqualTo(Resources.AgentNameFormatFirstNameLastName));
@@ -48,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 		{
 			var nameFormatPersisterAndProvider = MockRepository.GenerateStrictMock<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			nameFormatPersisterAndProvider.Expect(obj => obj.Get()).Return(new NameFormatSettings() { NameFormatId = 0 });
-			_target = new SettingsViewModelFactory(_mapper, _loggedOnUser, nameFormatPersisterAndProvider);
+			_target = new SettingsViewModelFactory(new SettingsMapper(), _loggedOnUser, nameFormatPersisterAndProvider);
 
 			var result = _target.CreateViewModel();
 			Assert.That(result.ChosenNameFormat.text, Is.EqualTo(Resources.AgentNameFormatFirstNameLastName));
@@ -60,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 		{
 			var nameFormatPersisterAndProvider = MockRepository.GenerateStrictMock<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			nameFormatPersisterAndProvider.Expect(obj => obj.Get()).Return(new NameFormatSettings() { NameFormatId = 1 });
-			_target = new SettingsViewModelFactory(_mapper, _loggedOnUser, nameFormatPersisterAndProvider);
+			_target = new SettingsViewModelFactory(new SettingsMapper(), _loggedOnUser, nameFormatPersisterAndProvider);
 
 			var result = _target.CreateViewModel();
 			Assert.That(result.ChosenNameFormat.text, Is.EqualTo(Resources.AgentNameFormatLastNameFirstName));

@@ -1,9 +1,9 @@
 using System;
 using System.Web;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	public class TextRequestPersister : ITextRequestPersister
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IMappingEngine _mapper;
+		private readonly RequestsViewModelMapper _mapper;
+		private readonly TextRequestFormMapper _formMapper;
 
-		public TextRequestPersister(IPersonRequestRepository personRequestRepository, IMappingEngine mapper)
+		public TextRequestPersister(IPersonRequestRepository personRequestRepository, RequestsViewModelMapper mapper, TextRequestFormMapper formMapper)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
+			_formMapper = formMapper;
 		}
 
 		public RequestViewModel Persist(TextRequestForm form)
@@ -29,15 +31,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			if (personRequest != null)
 			{
-				_mapper.Map(form, personRequest);
+				_formMapper.Map(form, personRequest);
 			}
 			else
 			{
-				personRequest = _mapper.Map<TextRequestForm, IPersonRequest>(form);
+				personRequest = _formMapper.Map(form);
 				_personRequestRepository.Add(personRequest);	
 			}
 
-			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			return _mapper.Map(personRequest);
 		}
 
 		public void Delete(Guid id)
@@ -59,18 +61,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private void setExchangeOfferBack(IPersonRequest personRequest)
 		{
 			var shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
-			if (shiftTradeRequest == null) return;
-			var offer = shiftTradeRequest.Offer;
+			var offer = shiftTradeRequest?.Offer;
 			if (offer != null && offer.Status == ShiftExchangeOfferStatus.PendingAdminApproval)
 			{
 				offer.Status = ShiftExchangeOfferStatus.Pending;
 			}
 		}
 	}
-
-
-
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly"), Serializable]
+	
+	[Serializable]
 	public class RequestPersistException : HttpException
 	{
 		public string Shortmessage { get; set; }

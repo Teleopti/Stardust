@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -21,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
 		private FakePreferenceDayRepository preferenceDayRepository;
 		private IPerson person;
+		private PreferenceDomainDataMapper target;
 
 		[SetUp]
 		public void Setup()
@@ -42,17 +42,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceDomainDataMappingProfile(virtualScheduleProvider, loggedOnUser,mustHaveRestrictionProvider)));
+			target = new PreferenceDomainDataMapper(virtualScheduleProvider,loggedOnUser,mustHaveRestrictionProvider);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapSelectedDate()
 		{
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.SelectedDate.Should().Be.EqualTo(DateOnly.Today);
 		}
@@ -63,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
 
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.Period.Should().Be(period);
 		}
@@ -71,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapWorkflowControlSet()
 		{
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.WorkflowControlSet.Should().Be.SameInstanceAs(person.WorkflowControlSet);
 		}
@@ -83,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
 
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			var expected = DateOnly.Today.DateRange(4);
 			result.Days.Select(d => d.Date).Should().Have.SameSequenceAs(expected);
@@ -97,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			virtualSchedulePeriod.Stub(x => x.MustHavePreference).Return(maxMustHave);
 			virtualScheduleProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
 
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.MaxMustHave.Should().Be.EqualTo(maxMustHave);
 		}
@@ -119,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			virtualSchedulePeriod.Stub(x => x.MustHavePreference).Return(maxMustHave);
 			virtualScheduleProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
 
-			var result = Mapper.Map<DateOnly,PreferenceDomainData>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 			result.CurrentMustHave.Should().Be.EqualTo(1);
 		}
 	}

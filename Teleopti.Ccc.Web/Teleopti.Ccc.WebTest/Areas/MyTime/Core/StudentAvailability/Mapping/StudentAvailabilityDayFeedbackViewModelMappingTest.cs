@@ -1,5 +1,4 @@
 using System;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
@@ -17,29 +15,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 	public class StudentAvailabilityDayFeedbackViewModelMappingTest
 	{
 		private IStudentAvailabilityFeedbackProvider studentAvailabilityFeedbackProvider;
+		private StudentAvailabilityDayFeedbackViewModelMapper target;
 
 		[SetUp]
 		public void Setup()
 		{
 			studentAvailabilityFeedbackProvider = MockRepository.GenerateMock<IStudentAvailabilityFeedbackProvider>();
 
-			Mapper.Reset();
-			Mapper.Initialize(
-				x =>
-					x.AddProfile(new StudentAvailabilityDayFeedbackViewModelMappingProfile(studentAvailabilityFeedbackProvider,
-						new Lazy<IMappingEngine>(() => Mapper.Engine))));
+			target = new StudentAvailabilityDayFeedbackViewModelMapper(studentAvailabilityFeedbackProvider);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly()
-		{
-			Mapper.AssertConfigurationIsValid();
-		}
-
+		
 		[Test]
 		public void ShouldMapDate()
 		{
-			var result = Mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.Date.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
@@ -54,11 +43,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			studentAvailabilityFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today))
 				.Return(new WorkTimeMinMaxCalculationResult {WorkTimeMinMax = workTimeMinMax});
 
-			var result = Mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
-			var expectedResult = string.Format("{0}-{1}",
-				workTimeMinMax.StartTimeLimitation.StartTimeString,
-				workTimeMinMax.StartTimeLimitation.EndTimeString);
+			var expectedResult =
+				$"{workTimeMinMax.StartTimeLimitation.StartTimeString}-{workTimeMinMax.StartTimeLimitation.EndTimeString}";
 			result.PossibleStartTimes.Should().Be(expectedResult);
 		}
 
@@ -73,11 +61,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			studentAvailabilityFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today))
 				.Return(new WorkTimeMinMaxCalculationResult {WorkTimeMinMax = workTimeMinMax});
 
-			var result = Mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
-			var expectedResult = string.Format("{0}-{1}", 
-				workTimeMinMax.EndTimeLimitation.StartTimeString,
-				workTimeMinMax.EndTimeLimitation.EndTimeString);
+			var expectedResult =
+				$"{workTimeMinMax.EndTimeLimitation.StartTimeString}-{workTimeMinMax.EndTimeLimitation.EndTimeString}";
 			result.PossibleEndTimes.Should().Be(expectedResult);
 		}
 
@@ -91,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			studentAvailabilityFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today))
 				.Return(new WorkTimeMinMaxCalculationResult {WorkTimeMinMax = workTimeMinMax});
 
-			var result = Mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.PossibleContractTimeMinutesLower.Should()
 				.Be(workTimeMinMax.WorkTimeLimitation.StartTime.Value.TotalMinutes.ToString());
@@ -107,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			studentAvailabilityFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today))
 				.Return(new WorkTimeMinMaxCalculationResult {WorkTimeMinMax = workTimeMinMax});
 
-			var result = Mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.PossibleContractTimeMinutesUpper.Should()
 				.Be(workTimeMinMax.WorkTimeLimitation.EndTime.Value.TotalMinutes.ToString());
@@ -117,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		public void ShouldMapValidationErrors()
 		{
 			studentAvailabilityFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(null);
-			var result = Mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 			result.FeedbackError.Should().Be(Resources.NoAvailableShifts);
 		}
 	}

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using AutoMapper;
+using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
@@ -10,31 +10,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 {
 	public class PreferenceViewModelFactory : IPreferenceViewModelFactory
 	{
-		private readonly IMappingEngine _mapper;
 		private readonly IPreferenceProvider _preferenceProvider;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceTemplateProvider _preferenceTemplateProvider;
 		private readonly IPreferenceWeeklyWorkTimeSettingProvider _preferenceWeeklyWorkTimeSettingProvider;
+		private readonly PreferenceAndScheduleDayViewModelMapper _preferenceAndScheduleMapper;
+		private readonly PreferenceDayViewModelMapper _preferenceDayMapper;
+		private readonly PreferenceDayFeedbackViewModelMapper _feedbackMapper;
+		private readonly PreferenceViewModelMapper _preferenceViewMapper;
+		private readonly PreferenceDomainDataMapper _preferenceDomainMapper;
+		private readonly ExtendedPreferenceTemplateMapper _templateMapper;
 
-		public PreferenceViewModelFactory(IMappingEngine mapper, IPreferenceProvider preferenceProvider, IScheduleProvider scheduleProvider, IPreferenceTemplateProvider preferenceTemplateProvider, IPreferenceWeeklyWorkTimeSettingProvider preferenceWeeklyWorkTimeSettingProvider)
+		public PreferenceViewModelFactory(IPreferenceProvider preferenceProvider, IScheduleProvider scheduleProvider, IPreferenceTemplateProvider preferenceTemplateProvider, IPreferenceWeeklyWorkTimeSettingProvider preferenceWeeklyWorkTimeSettingProvider, PreferenceAndScheduleDayViewModelMapper preferenceAndScheduleMapper, PreferenceDayViewModelMapper preferenceDayMapper, PreferenceDayFeedbackViewModelMapper feedbackMapper, PreferenceViewModelMapper preferenceViewMapper, PreferenceDomainDataMapper preferenceDomainMapper, ExtendedPreferenceTemplateMapper templateMapper)
 		{
-			_mapper = mapper;
 			_preferenceProvider = preferenceProvider;
 			_scheduleProvider = scheduleProvider;
 			_preferenceTemplateProvider = preferenceTemplateProvider;
 			_preferenceWeeklyWorkTimeSettingProvider = preferenceWeeklyWorkTimeSettingProvider;
+			_preferenceAndScheduleMapper = preferenceAndScheduleMapper;
+			_preferenceDayMapper = preferenceDayMapper;
+			_feedbackMapper = feedbackMapper;
+			_preferenceViewMapper = preferenceViewMapper;
+			_preferenceDomainMapper = preferenceDomainMapper;
+			_templateMapper = templateMapper;
 		}
 
 		public PreferenceViewModel CreateViewModel(DateOnly date)
 		{
-			var preferenceDomainData = _mapper.Map<DateOnly, PreferenceDomainData>(date);
-			return _mapper.Map<PreferenceDomainData, PreferenceViewModel>(preferenceDomainData);
+			var preferenceDomainData = _preferenceDomainMapper.Map(date);
+			return _preferenceViewMapper.Map(preferenceDomainData);
 		}
 
 		public PreferenceDayFeedbackViewModel CreateDayFeedbackViewModel(DateOnly date)
 		{
-			var result = _mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(date);
-			return result;
+			return _feedbackMapper.Map(date);
 		}
 
 		public PreferenceDayViewModel CreateDayViewModel(DateOnly date)
@@ -42,20 +51,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			var preferenceDay = _preferenceProvider.GetPreferencesForDate(date);
 			if (preferenceDay == null) return null;
 
-			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			return _preferenceDayMapper.Map(preferenceDay);
 		}
 
-		public IEnumerable<PreferenceAndScheduleDayViewModel> CreatePreferencesAndSchedulesViewModel(DateOnly @from, DateOnly to)
+		public IEnumerable<PreferenceAndScheduleDayViewModel> CreatePreferencesAndSchedulesViewModel(DateOnly from, DateOnly to)
 		{
-			var period = new DateOnlyPeriod(@from, to);
+			var period = new DateOnlyPeriod(from, to);
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period);
-			return _mapper.Map<IEnumerable<IScheduleDay>, IEnumerable<PreferenceAndScheduleDayViewModel>>(scheduleDays);
+			return scheduleDays.Select(_preferenceAndScheduleMapper.Map);
 		}
 
 		public IEnumerable<PreferenceTemplateViewModel> CreatePreferenceTemplateViewModels()
 		{
 			var templates = _preferenceTemplateProvider.RetrievePreferenceTemplates();
-			return _mapper.Map<IEnumerable<IExtendedPreferenceTemplate>, IEnumerable<PreferenceTemplateViewModel>>(templates);
+			return templates.Select(_templateMapper.Map);
 		}
 
 		public PreferenceWeeklyWorkTimeViewModel CreatePreferenceWeeklyWorkTimeViewModel(DateOnly date)
@@ -67,6 +76,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 				  MinWorkTimePerWeekMinutes = setting.MinWorkTimePerWeekMinutes,
 			 };
 		}
-
 	}
 }

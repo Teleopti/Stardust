@@ -1,10 +1,9 @@
 using System.Linq;
 using System.Web;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
@@ -12,14 +11,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 	public class StudentAvailabilityPersister : IStudentAvailabilityPersister
 	{
 		private readonly IStudentAvailabilityDayRepository _studentAvailabilityDayRepository;
-		private readonly IMappingEngine _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly StudentAvailabilityDayFormMapper _formMapper;
+		private readonly StudentAvailabilityDayViewModelMapper _modelMapper;
 
-		public StudentAvailabilityPersister(IStudentAvailabilityDayRepository studentAvailabilityDayRepository, IMappingEngine mapper, ILoggedOnUser loggedOnUser)
+		public StudentAvailabilityPersister(IStudentAvailabilityDayRepository studentAvailabilityDayRepository, ILoggedOnUser loggedOnUser, StudentAvailabilityDayFormMapper formMapper, StudentAvailabilityDayViewModelMapper modelMapper)
 		{
 			_studentAvailabilityDayRepository = studentAvailabilityDayRepository;
-			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
+			_formMapper = formMapper;
+			_modelMapper = modelMapper;
 		}
 
 		public StudentAvailabilityDayViewModel Persist(StudentAvailabilityDayInput input)
@@ -27,14 +28,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 			var studentAvailabilityDay = _studentAvailabilityDayRepository.Find(input.Date, _loggedOnUser.CurrentUser()).SingleOrDefaultNullSafe();
 			if (studentAvailabilityDay != null)
 			{
-				studentAvailabilityDay = _mapper.Map(input, studentAvailabilityDay);
+				studentAvailabilityDay = _formMapper.Map(input, studentAvailabilityDay);
 			}
 			else
 			{
-				studentAvailabilityDay = _mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(input);
+				studentAvailabilityDay = _formMapper.Map(input);
 				_studentAvailabilityDayRepository.Add(studentAvailabilityDay);
 			}
-			return _mapper.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
+			return _modelMapper.Map(studentAvailabilityDay);
 		}
 
 		public StudentAvailabilityDayViewModel Delete(DateOnly date)

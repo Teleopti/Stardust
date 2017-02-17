@@ -1,11 +1,11 @@
 ﻿using System;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -17,39 +17,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	public class TextRequestFormMappingTest
 	{
 		private ILoggedOnUser loggedOnUser;
-		private Person person;
 		private IUserTimeZone userTimeZone;
-		private TextRequestFormMappingProfile.TextRequestFormToPersonRequest textRequestFormToPersonRequest;
+		private TextRequestFormMapper target;
+		private IPerson person;
 
 		[SetUp]
 		public void Setup()
 		{
-			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			person = new Person();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-
-			textRequestFormToPersonRequest =
-				new TextRequestFormMappingProfile.TextRequestFormToPersonRequest(() => Mapper.Engine, () => loggedOnUser, () => userTimeZone);
-
-			Mapper.Reset();
-			Mapper.Initialize(c =>
-			                  	{
-			                  		c.AddProfile(
-			                  			new TextRequestFormMappingProfile(
-			                  				() => textRequestFormToPersonRequest
-			                  				));
-			                  		c.AddProfile(new DateTimePeriodFormMappingProfile(() => userTimeZone));
-			                  	});
+			loggedOnUser = new FakeLoggedOnUser(person);
+			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			
+			target = new TextRequestFormMapper(loggedOnUser,userTimeZone,new DateTimePeriodFormMapper(userTimeZone));
 		}	
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapPerson()
 		{
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(new TextRequestForm());
+			var result = target.Map(new TextRequestForm());
 
 			result.Person.Should().Be.SameInstanceAs(person);
 		}
@@ -59,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new TextRequestForm {Subject = "Test"};
 
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			result.GetSubject(new NoFormatting()).Should().Be("Test");
 		}
@@ -67,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapToTextRequest()
 		{
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(new TextRequestForm());
+			var result = target.Map(new TextRequestForm());
 
 			result.Request.Should().Be.OfType<TextRequest>();
 		}
@@ -75,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapAsPending()
 		{
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(new TextRequestForm());
+			var result = target.Map(new TextRequestForm());
 
 			result.IsPending.Should().Be.True();
 		}
@@ -83,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPeriod()
 		{
-			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			var form = new TextRequestForm
 			           	{
@@ -95,9 +80,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 											EndTime = new TimeOfDay(TimeSpan.FromHours(13))
 										}
 			           	};
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
-			var expected = Mapper.Map<DateTimePeriodForm, DateTimePeriod>(form.Period);
+			var expected = new DateTimePeriodFormMapper(new FakeUserTimeZone(timeZone)).Map(form.Period);
 			result.Request.Period.Should().Be(expected);
 		}
 
@@ -106,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new TextRequestForm {Message = "Message"};
 			
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			result.GetMessage(new NoFormatting()).Should().Be("Message");
 		}
@@ -117,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var id = Guid.NewGuid();
 			var form = new TextRequestForm {EntityId = id};
 
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			result.Id.Should().Be(id);
 		}
@@ -127,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var destination = new PersonRequest(new Person());
 
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(new TextRequestForm(), destination);
+			var result = target.Map(new TextRequestForm(), destination);
 
 			result.Should().Be.SameInstanceAs(destination);
 		}
@@ -138,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var form = new TextRequestForm {Message = "message"};
 			var destination = new PersonRequest(new Person());
 
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form, destination);
+			var result = target.Map(form, destination);
 
 			result.GetMessage(new NoFormatting()).Should().Be.EqualTo(form.Message);
 		}
@@ -149,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var form = new TextRequestForm {Subject = "subject"};
 			var destination = new PersonRequest(new Person());
 
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form, destination);
+			var result = target.Map(form, destination);
 
 			result.GetSubject(new NoFormatting()).Should().Be.EqualTo(form.Subject);
 		}
@@ -157,11 +142,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapFullDayRequest()
 		{
-			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			var form = new TextRequestForm { FullDay = true };
 
-			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
+			var result = target.Map(form);
 
 			var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), timeZone);
 			var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), timeZone);

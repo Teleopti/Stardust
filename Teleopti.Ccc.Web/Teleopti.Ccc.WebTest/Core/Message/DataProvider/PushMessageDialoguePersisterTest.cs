@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -8,9 +7,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -39,11 +37,9 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			var id = Guid.Empty;
 			pushMessageDialogue.SetId(id);
 
-			pushMessageDialogueRepository.Expect(x => x.Get(id))
-				.Return(pushMessageDialogue)
-				.Repeat.Once();
+			pushMessageDialogueRepository.Stub(x => x.Get(id)).Return(pushMessageDialogue).Repeat.Once();
 
-			var result = target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
+			var result = target.PersistMessage(new ConfirmMessageViewModel { Id = id });
 			Assert.That(result.MessageId, Is.EqualTo(id.ToString()));
 		}
 
@@ -56,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			pushMessageDialogue.SetId(id);
 
 			var target = CreateTargetWithDialogueInRepository(pushMessageDialogue);
-			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = id , ReplyOption = "OK"});
+			var viewModel = target.PersistMessage(new ConfirmMessageViewModel { Id = id , ReplyOption = "OK"});
          
 			viewModel.IsRead.Should().Be.True();
 		}
@@ -71,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			pushMessageDialogue.SetId(dialogueId);
 
 			var target = CreateTargetWithDialogueInRepository(pushMessageDialogue);
-			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = dialogueId, Reply = newMessage });
+			var viewModel = target.PersistMessage(new ConfirmMessageViewModel { Id = dialogueId, Reply = newMessage });
 
 			Assert.That(viewModel.DialogueMessages.First().Text,Is.EqualTo(newMessage));
 		}
@@ -116,30 +112,14 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 		{
 			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
 			pushMessageDialogueRepository.Stub(x => x.Get((Guid)dialogue.Id)).Return(dialogue);
-			return CreateTarget(pushMessageDialogueRepository,null);
+			return CreateTarget(pushMessageDialogueRepository, MockRepository.GenerateMock<IPushMessageRepository>());
 		}
-
-		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository pushMessageDialogueRepository)
+		
+		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository pushMessageDialogueRepository,IPushMessageRepository pushMessageRepository = null)
 		{
-			return CreateTarget(pushMessageDialogueRepository, MockRepository.GenerateStub<IPushMessageRepository>());
-		}
-
-		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository pushMessageDialogueRepository,IPushMessageRepository pushMessageRepository)
-		{
-			var user = new Person();
-			user.SetId(Guid.NewGuid());
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(l => l.CurrentUser()).Return(user);
-			return new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), _loggedOnUser, pushMessageRepository); 
-		}
-
-		private static IMappingEngine SetupMapper()
-		{
-			Mapper.Initialize(c => c.AddProfile(new MessageViewModelMappingProfile(
-				() => new UserTimeZone(null), _personNameProvider
-				)));
-
-			return Mapper.Engine;
+			var user = new Person().WithId();
+			_loggedOnUser = new FakeLoggedOnUser(user);
+			return new PushMessageDialoguePersister(pushMessageDialogueRepository, _loggedOnUser, pushMessageRepository ?? MockRepository.GenerateMock<IPushMessageRepository>(), _personNameProvider, new FakeUserTimeZone()); 
 		}
 	}
 }

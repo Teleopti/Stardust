@@ -58,10 +58,6 @@
       <HintPath>..\..\packages\Autofac.Extras.DynamicProxy2.3.0.4\lib\net40\Autofac.Extras.DynamicProxy2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
@@ -231,7 +227,6 @@
     <Compile Include="Areas\Anywhere\Rta\GetTeamAdherenceTest.cs" />
     <Compile Include="Areas\Anywhere\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleDayViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Anywhere\PersonScheduleDayViewModelMapperTest.cs" />
     <Compile Include="Areas\Anywhere\FakeClientBuilder.cs" />
     <Compile Include="Areas\Anywhere\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>
@@ -563,7 +558,6 @@
     <Compile Include="Filters\IdentityProviderProviderTest.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttributeTest.cs" />
     <Compile Include="Filters\LicenseAttributeTest.cs" />
-    <Compile Include="MappingProfileForProbing.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="PreserveStackTest.cs" />
@@ -606,7 +600,6 @@
     <Compile Include="Core\ErrorMessageResolverTest.cs" />
     <Compile Include="Core\JsonSerializationExtentionTest.cs" />
     <Compile Include="Core\Logging\Log4NetModuleTest.cs" />
-    <Compile Include="Core\Mapping\AutoMapperConfigurationTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\DatePickerGlobalizationViewModelDataFactoryTest.cs" />
     <Compile Include="Core\Portal\DataProvider\PermissionProviderTest.cs" />
     <Compile Include="Core\Portal\PortalHtmlHelperTest.cs" />
@@ -626,7 +619,6 @@
     <Compile Include="Core\Portal\ViewModelFactory\LayoutBaseViewModelFactoryTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\CultureSpecificViewModelDataFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\ProjectionProviderTest.cs" />
-    <Compile Include="Core\Mapping\TestMappingDependencyResolver.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\Startup\ApplicationStartModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterModelBindersTaskTest.cs" />

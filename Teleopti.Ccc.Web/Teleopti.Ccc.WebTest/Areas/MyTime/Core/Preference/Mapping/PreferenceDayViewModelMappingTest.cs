@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
@@ -19,25 +17,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceDayViewModelMappingTest
 	{
 		private IExtendedPreferencePredicate extendedPreferencePredicate;
+		private PreferenceDayViewModelMapper target;
 
 		[SetUp]
 		public void Setup()
 		{
 			extendedPreferencePredicate = MockRepository.GenerateMock<IExtendedPreferencePredicate>();
 
-			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceDayViewModelMappingProfile(extendedPreferencePredicate)));
+			target = new PreferenceDayViewModelMapper(extendedPreferencePredicate);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapEmptyPreferenceShiftCategoryWhenNoShiftCategory()
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Be.Null();
 		}
@@ -48,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory("AM")};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Be(preferenceRestriction.ShiftCategory.Description.Name);
 		}
@@ -59,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory("sc") {DisplayColor = Color.PeachPuff}};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Color
 				.Should().Be(Color.PeachPuff.ToCSV());
@@ -71,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var preferenceRestriction = new PreferenceRestriction { DayOffTemplate = new DayOffTemplate(new Description("Day Off", "DO"))};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Be(preferenceRestriction.DayOffTemplate.Description.Name);
 		}
@@ -85,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			                            	};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Color
 				.Should().Be(Color.Sienna.ToCSV());
@@ -98,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var preferenceRestriction = new PreferenceRestriction { Absence = absence};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Be(preferenceRestriction.Absence.Description.Name);
 		}
@@ -112,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			                            	};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Color
 				.Should().Be(Color.Thistle.ToCSV());
@@ -125,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Extended.Should().Be.True();
 		}
@@ -135,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Extended.Should().Be.False();
 		}
@@ -147,7 +142,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Be(Resources.Extended);
 		}
@@ -165,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Not.Be(Resources.Extended);
 		}
@@ -182,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Not.Be(Resources.Extended);
 		}
@@ -199,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Preference.Should().Not.Be(Resources.Extended);
 		}
@@ -209,7 +204,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.ExtendedTitle.Should().Be(Resources.Extended);
 		}
@@ -224,7 +219,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					ShiftCategory = new ShiftCategory("Late")
 				});
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.ExtendedTitle.Should().Be("Late");
 		}
@@ -239,7 +234,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					Absence = new Absence() { Description = new Description("Absence")}
 				});
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.ExtendedTitle.Should().Be("Absence");
 		}
@@ -254,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					DayOffTemplate = new DayOffTemplate(new Description("DayOff"))
 				});
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.ExtendedTitle.Should().Be("DayOff");
 		}
@@ -269,7 +264,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					MustHave = true
 				});
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.MustHave.Should().Be.True();
 		}
@@ -284,7 +279,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9)) 
 				});
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.StartTimeLimitation.Should().Be(
 				preferenceDay.Restriction.StartTimeLimitation.StartTimeString + "-" + preferenceDay.Restriction.StartTimeLimitation.EndTimeString
@@ -301,7 +296,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
 				});
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.EndTimeLimitation.Should().Be(
 				preferenceDay.Restriction.EndTimeLimitation.StartTimeString + "-" + preferenceDay.Restriction.EndTimeLimitation.EndTimeString
@@ -318,7 +313,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
 				});
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.WorkTimeLimitation.Should().Be(
 				preferenceDay.Restriction.WorkTimeLimitation.StartTimeString + "-" + preferenceDay.Restriction.WorkTimeLimitation.EndTimeString
@@ -331,7 +326,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 			preferenceDay.Restriction.AddActivityRestriction(new ActivityRestriction(new Activity("Lunch")));
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Activity.Should().Be("Lunch");
 		}
@@ -341,7 +336,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.Activity.Should().Be("(" + Resources.NoActivity + ")");
 		}
@@ -356,7 +351,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			                          	};
 			preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.ActivityStartTimeLimitation.Should().Be(activityRestriction.StartTimeLimitation.StartTimeString + "-" + activityRestriction.StartTimeLimitation.EndTimeString);
 		}
@@ -371,7 +366,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			};
 			preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.ActivityEndTimeLimitation.Should().Be(activityRestriction.EndTimeLimitation.StartTimeString + "-" + activityRestriction.EndTimeLimitation.EndTimeString);
 		}
@@ -386,7 +381,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			};
 			preferenceDay.Restriction.AddActivityRestriction(activityRestriction);
 
-			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			var result = target.Map(preferenceDay);
 
 			result.ActivityTimeLimitation.Should().Be(activityRestriction.WorkTimeLimitation.StartTimeString + "-" + activityRestriction.WorkTimeLimitation.EndTimeString);
 		}

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -22,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IDayOffTemplateRepository dayOffRepository;
 		private IAbsenceRepository absenceRepository;
 		private IActivityRepository activityRepository;
+		private PreferenceDayInputMapper target;
 
 		[SetUp]
 		public void Setup()
@@ -32,36 +32,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
 			activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 
-			Mapper.Reset();
-			Mapper.Initialize(
-				c =>
-					{
-						c.ConstructServicesUsing(t => 
-							new PreferenceDayInputMappingProfile.PreferenceDayInputToPreferenceDay(
-								() => Mapper.Engine, 
-								() => loggedOnUser
-							));
-						c.AddProfile(
-							new PreferenceDayInputMappingProfile(
-						        shiftCategoryRepository,
-						        dayOffRepository,
-						        absenceRepository,
-								activityRepository,
-								new Lazy<IMappingEngine>(() => Mapper.Engine))
-							);
-					}
-				);
+			target = new PreferenceDayInputMapper(shiftCategoryRepository,dayOffRepository,absenceRepository,activityRepository,loggedOnUser);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
 
 		[Test]
 		public void ShouldMapToDestination()
 		{
 			var destination = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(new PreferenceDayInput(), destination);
+			var result = target.Map(new PreferenceDayInput(), destination);
 
 			result.Should().Be.SameInstanceAs(destination);
 		}
@@ -75,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(shiftCategory);
 
-			Mapper.Map<PreferenceDayInput, IPreferenceDay>(input, destination);
+			target.Map(input, destination);
 
 			destination.Restriction.ShiftCategory.Should().Be(shiftCategory);
 		}
@@ -86,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var destination = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) {TemplateName = "name2"};
 			var input = new PreferenceDayInput {PreferenceId = Guid.NewGuid(), TemplateName = "name1"};
 
-			Mapper.Map<PreferenceDayInput, IPreferenceDay>(input, destination);
+			target.Map(input, destination);
 
 			destination.TemplateName.Should().Be.EqualTo("name1");
 		}
@@ -94,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapTemplateName()
 		{
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(
+			var result = target.Map(
 				new PreferenceDayInput
 					{
 						TemplateName = "name1"
@@ -109,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(new PreferenceDayInput());
+			var result = target.Map(new PreferenceDayInput());
 
 			result.Person.Should().Be.SameInstanceAs(person);
 		}
@@ -119,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var input = new PreferenceDayInput { Date = DateOnly.Today.AddDays(1) };
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.RestrictionDate.Should().Be(input.Date);
 		}
@@ -133,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(shiftCategory);
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
 		}
@@ -147,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			dayOffRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(dayOffTemplate);
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.DayOffTemplate.Should().Be.SameInstanceAs(dayOffTemplate);
 		}
@@ -161,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			absenceRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(absence);
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.Absence.Should().Be.SameInstanceAs(absence);
 		}
@@ -175,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 								LatestStartTime = new TimeOfDay(TimeSpan.FromHours(9))
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.StartTimeLimitation
 				.Should().Be.EqualTo(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
@@ -190,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 								LatestEndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.EndTimeLimitation
 				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(16), TimeSpan.FromHours(17)));
@@ -207,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 								LatestEndTimeNextDay = true
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.EndTimeLimitation
 				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(24 + 2), TimeSpan.FromHours(24 + 3)));
@@ -222,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 								MaximumWorkTime = TimeSpan.FromHours(8)
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.WorkTimeLimitation
 				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(8)));
@@ -237,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 								ActivityEarliestStartTime = new TimeOfDay(TimeSpan.FromHours(8))
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.ActivityRestrictionCollection.Should().Have.Count.EqualTo(0);
 		}
@@ -251,7 +230,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			activityRepository.Stub(x => x.Get(input.ActivityPreferenceId.Value)).Return(activity);
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.ActivityRestrictionCollection.Single().Activity.Should().Be(activity);
 		}
@@ -266,7 +245,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 								ActivityLatestStartTime = new TimeOfDay(TimeSpan.FromHours(12)),
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.ActivityRestrictionCollection.Single().StartTimeLimitation
 				.Should().Be.EqualTo(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(12)));
@@ -282,7 +261,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			            		ActivityLatestEndTime = new TimeOfDay(TimeSpan.FromHours(13)),
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.ActivityRestrictionCollection.Single().EndTimeLimitation
 				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(11), TimeSpan.FromHours(13)));
@@ -298,7 +277,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			            		ActivityMaximumTime = TimeSpan.FromHours(3),
 			            	};
 
-			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+			var result = target.Map(input);
 
 			result.Restriction.ActivityRestrictionCollection.Single().WorkTimeLimitation
 				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(3)));

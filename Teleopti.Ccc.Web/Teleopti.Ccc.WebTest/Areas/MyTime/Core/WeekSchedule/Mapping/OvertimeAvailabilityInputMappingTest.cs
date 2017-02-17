@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -14,24 +13,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.Mapping
 	public class OvertimeAvailabilityInputMappingTest
 	{
 		private ILoggedOnUser loggedOnUser;
+		private OvertimeAvailabilityInputMapper target;
+
 		[SetUp]
 		public void Setup()
 		{
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new OvertimeAvailabilityInputMappingProfile(loggedOnUser)));
+			target = new OvertimeAvailabilityInputMapper(loggedOnUser);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapPerson()
 		{
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var result = Mapper.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(new OvertimeAvailabilityInput());
+			var result = target.Map(new OvertimeAvailabilityInput());
 
 			result.Person.Should().Be.SameInstanceAs(person);
 		}
@@ -42,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.Mapping
 			var dateOnly = DateOnly.Today;
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			var result = Mapper.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(new OvertimeAvailabilityInput
+			var result = target.Map(new OvertimeAvailabilityInput
 				{
 					Date = dateOnly
 				});
@@ -54,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.Mapping
 		public void ShouldMapStartTime()
 		{
 			var timeSpan = new TimeSpan(1, 1, 1);
-			var result = Mapper.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(new OvertimeAvailabilityInput
+			var result = target.Map(new OvertimeAvailabilityInput
 				{
 					StartTime = new TimeOfDay(timeSpan)
 				});
@@ -65,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.Mapping
 		public void ShouldMapEndTime()
 		{
 			var timeSpan = new TimeSpan(1, 1, 1);
-			var result = Mapper.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(new OvertimeAvailabilityInput
+			var result = target.Map(new OvertimeAvailabilityInput
 				{
 					EndTime = new TimeOfDay(timeSpan)
 				});
@@ -76,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.Mapping
 		public void ShouldMapEndTimeNextDay()
 		{
 			var timeSpan = new TimeSpan(1, 1, 1);
-			var result = Mapper.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(new OvertimeAvailabilityInput
+			var result = target.Map(new OvertimeAvailabilityInput
 				{
 					EndTime = new TimeOfDay(timeSpan),
 					EndTimeNextDay = true

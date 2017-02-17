@@ -1,6 +1,7 @@
-﻿using AutoMapper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Interfaces.Domain;
 
@@ -8,30 +9,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 {
 	public class StudentAvailabilityViewModelFactory : IStudentAvailabilityViewModelFactory
 	{
-		private readonly IMappingEngine _mapper;
+		private readonly StudentAvailabilityViewModelMapper _mapper;
+		private readonly StudentAvailabilityDayFeedbackViewModelMapper _feedbackMapper;
+		private readonly StudentAvailabilityDayViewModelMapper _dayMapper;
 		private readonly IStudentAvailabilityProvider _studentAvailabilityProvider;
 
-		public StudentAvailabilityViewModelFactory(IMappingEngine mapper, IStudentAvailabilityProvider studentAvailabilityProvider)
+		public StudentAvailabilityViewModelFactory(StudentAvailabilityViewModelMapper mapper, StudentAvailabilityDayFeedbackViewModelMapper feedbackMapper, StudentAvailabilityDayViewModelMapper dayMapper, IStudentAvailabilityProvider studentAvailabilityProvider)
 		{
 			_mapper = mapper;
+			_feedbackMapper = feedbackMapper;
+			_dayMapper = dayMapper;
 			_studentAvailabilityProvider = studentAvailabilityProvider;
 		}
 
 		public StudentAvailabilityViewModel CreateViewModel(DateOnly dateInPeriod)
 		{
-			return _mapper.Map<DateOnly, StudentAvailabilityViewModel>(dateInPeriod);
+			return _mapper.Map(dateInPeriod);
 		}
 
 		public StudentAvailabilityDayFeedbackViewModel CreateDayFeedbackViewModel(DateOnly date)
 		{
-			return _mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(date);
+			return _feedbackMapper.Map(date);
 		}
 
 		public StudentAvailabilityDayViewModel CreateDayViewModel(DateOnly date)
 		{
 			var studentAvailability = _studentAvailabilityProvider.GetStudentAvailabilityDayForDate(date);
 			if (studentAvailability == null) return null;
-			return _mapper.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailability);
+			return _dayMapper.Map(studentAvailability);
 		}
 
 		public IEnumerable<StudentAvailabilityDayViewModel> CreateStudentAvailabilityAndSchedulesViewModels(
@@ -40,9 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 			var period = new DateOnlyPeriod(from, to);
 			var studentAvailabilityDays = _studentAvailabilityProvider.GetStudentAvailabilityDayForPeriod(period);
 
-			return
-				_mapper.Map<IEnumerable<IStudentAvailabilityDay>, IEnumerable<StudentAvailabilityDayViewModel>>(
-					studentAvailabilityDays);
+			return studentAvailabilityDays.Select(_dayMapper.Map);
 		}
 	}
 }

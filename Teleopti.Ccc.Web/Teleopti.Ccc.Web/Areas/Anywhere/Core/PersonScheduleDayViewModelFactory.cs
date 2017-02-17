@@ -6,19 +6,30 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class PersonScheduleDayViewModelFactory : IPersonScheduleDayViewModelFactory
 	{
-		private readonly IPersonScheduleDayViewModelMapper _personScheduleDayViewModelMapper;
+		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
 
-		public PersonScheduleDayViewModelFactory(IPersonScheduleDayViewModelMapper personScheduleDayViewModelMapper, IPersonScheduleDayReadModelFinder personScheduleDayReadModelFinder)
+		public PersonScheduleDayViewModelFactory(IUserTimeZone userTimeZone, IPersonScheduleDayReadModelFinder personScheduleDayReadModelFinder)
 		{
-			_personScheduleDayViewModelMapper = personScheduleDayViewModelMapper;
+			_userTimeZone = userTimeZone;
 			_personScheduleDayReadModelFinder = personScheduleDayReadModelFinder;
 		}
 
 		public PersonScheduleDayViewModel CreateViewModel(Guid personId, DateTime date)
 		{
-			var data = _personScheduleDayReadModelFinder.ForPerson(new DateOnly(date.Year, date.Month, date.Day), personId);
-			return _personScheduleDayViewModelMapper.Map(data);
+			var data = _personScheduleDayReadModelFinder.ForPerson(new DateOnly(date), personId);
+
+			var sourceTimeZone = _userTimeZone.TimeZone();
+			return new PersonScheduleDayViewModel
+			{
+				Date = data.Date,
+				Person = data.PersonId,
+				StartTime =
+					data.Start.HasValue ? TimeZoneHelper.ConvertFromUtc(data.Start.Value, sourceTimeZone) : (DateTime?) null,
+				EndTime =
+					data.End.HasValue ? TimeZoneHelper.ConvertFromUtc(data.End.Value, sourceTimeZone) : (DateTime?) null,
+				IsDayOff = data.IsDayOff
+			};
 		}
 	}
 }

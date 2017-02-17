@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
@@ -45,8 +44,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IAbsenceRequestPersister Persister;
-		public AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest AbsenceRequestFormToPersonRequest;
-		public RequestsViewModelMappingProfile RequestsViewModelMappingProfile;
+		public AbsenceRequestFormMapper AbsenceRequestFormToPersonRequest;
+		public RequestsViewModelMapper RequestsViewModelMappingProfile;
 		public FakeCommandDispatcher CommandDispatcher;
 		public FakeToggleManager ToggleManager;
 
@@ -74,19 +73,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble(new FakeQueuedAbsenceRequestRepository()).For<IQueuedAbsenceRequestRepository>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
 			system.UseTestDouble(new ThisIsNow(nowTime)).For<INow>();
-			system.UseTestDouble<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>().For<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest> ();
-			system.UseTestDouble<RequestsViewModelMappingProfile>().For<RequestsViewModelMappingProfile> ();
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit> ();
+			system.UseTestDouble<AbsenceRequestFormMapper>().For<AbsenceRequestFormMapper>();
+			system.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 
 		}
 
 		[Test]
 		public void ShouldAddRequest()
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -104,9 +99,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldHandleRequestDirectlyWhenRequestShorterThan24HoursAndEndsWithin24HourWindow()
 		{
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
 			
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
@@ -132,10 +124,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonHasNoWorkflowControlSet()
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -151,10 +139,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotDenyWhenPersonHasZeroBalanceButWorkflowControlSetHasNoPersonAccountValidation()
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -186,10 +170,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyExpiredRequest([Values]bool autoGrant)
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -206,10 +186,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenAutoDenyIsOn()
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -226,10 +202,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenAlreadyAbsent([Values]bool autoGrant)
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -261,9 +233,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenUpdateAbsenceOutOfDate()
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
 			_absence = createAbsence();
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
@@ -284,10 +253,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonAccountDaysAreExceeded([Values]bool autoGrant)
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -322,10 +287,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonAccountTimeIsExceeded([Values]bool autoGrant)
 		{
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -368,9 +329,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldUpdatePeriodForQueuedRequest()
 		{
 			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
 			_absence = createAbsence();
 			setWorkflowControlSet();
 
@@ -402,9 +360,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldNotUpdatePeriodForQueuedRequestIfToggleIsDisabled()
 		{
 			ToggleManager.Disable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
 			_absence = createAbsence();
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
@@ -434,9 +389,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldNotUpdateQueuedRequestPeriodIfItsSameAsRequest()
 		{
 			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
 			_absence = createAbsence();
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
@@ -472,9 +424,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private void tryPersist()
 		{
 			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
-			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
-			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
-			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
 			_absence = createAbsence();
 			setWorkflowControlSet();
 			var newPersonRequest = setupSimpleAbsenceRequest();

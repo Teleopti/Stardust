@@ -1,69 +1,51 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public class PreferencePersister : IPreferencePersister
 	{
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
-		private readonly IMappingEngine _mapper;
 		private readonly IMustHaveRestrictionSetter _mustHaveRestrictionSetter;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly ICurrentBusinessUnit _businessUnitProvider;
-		private readonly INow _now;
-		private readonly ICurrentDataSource _currentDataSource;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IEventPublisher _publisher;
+		private readonly PreferenceDayInputMapper _inputMapper;
+		private readonly PreferenceDayViewModelMapper _mapper;
 
 		public PreferencePersister(
 			IPreferenceDayRepository preferenceDayRepository, 
-			IMappingEngine mapper,  
 			IMustHaveRestrictionSetter mustHaveRestrictionSetter,
-			ILoggedOnUser loggedOnUser, 
-			ICurrentUnitOfWork currentUnitOfWork, 
-			ICurrentBusinessUnit businessUnitProvider, 
-			INow now, 
-			ICurrentDataSource currentDataSource,
-			IEventPublisher publisher)
+			ILoggedOnUser loggedOnUser, PreferenceDayInputMapper inputMapper, PreferenceDayViewModelMapper mapper)
 		{
 			_preferenceDayRepository = preferenceDayRepository;
-			_mapper = mapper;
 			_mustHaveRestrictionSetter = mustHaveRestrictionSetter;
 			_loggedOnUser = loggedOnUser;
-			_currentUnitOfWork = currentUnitOfWork;
-			_businessUnitProvider = businessUnitProvider;
-			_now = now;
-			_currentDataSource = currentDataSource;
-			_publisher = publisher;
+			_inputMapper = inputMapper;
+			_mapper = mapper;
 		}
 
 		public PreferenceDayViewModel Persist(PreferenceDayInput input)
 		{
 			var preferenceDays = _preferenceDayRepository.Find(input.Date, _loggedOnUser.CurrentUser());
-			preferenceDays = DeleteOrphanPreferenceDays(preferenceDays);
+			preferenceDays = deleteOrphanPreferenceDays(preferenceDays);
 			var preferenceDay = preferenceDays.SingleOrDefaultNullSafe();
 			if (preferenceDay == null)
 			{
-				preferenceDay = _mapper.Map<PreferenceDayInput, IPreferenceDay>(input);
+				preferenceDay = _inputMapper.Map(input);
 				_preferenceDayRepository.Add(preferenceDay);
 			}
 			else
 			{
-				ClearExtendedAndMustHave(preferenceDay);
-				_mapper.Map(input, preferenceDay);
+				clearExtendedAndMustHave(preferenceDay);
+				_inputMapper.Map(input, preferenceDay);
 			}
 
-			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+			return _mapper.Map(preferenceDay);
 		}
 
 		public bool MustHave(MustHaveInput input)
@@ -71,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return _mustHaveRestrictionSetter.SetMustHave(input.Date, _loggedOnUser.CurrentUser(), input.MustHave);
 		}
 
-		private static void ClearExtendedAndMustHave(IPreferenceDay preferenceDay)
+		private static void clearExtendedAndMustHave(IPreferenceDay preferenceDay)
 		{
 			if (preferenceDay.Restriction != null)
 			{
@@ -84,11 +66,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		}
 
 
-		private IList<IPreferenceDay> DeleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
+		private IList<IPreferenceDay> deleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
 		{
-			preferenceDays = preferenceDays != null
-				                 ? preferenceDays.OrderBy(k => k.UpdatedOn).ToList()
-				                 : new List<IPreferenceDay>();
+			preferenceDays = preferenceDays?.OrderBy(k => k.UpdatedOn).ToList() ?? new List<IPreferenceDay>();
 			while (preferenceDays.Count > 1)
 			{
 				_preferenceDayRepository.Remove(preferenceDays.First());
@@ -105,8 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			return new PreferenceDayViewModel { Color = "" };
 		}
-
-
+		
 		public IEnumerable<PreferenceDayViewModel> Delete(List<DateOnly> dates)
 		{
 			return dates.Select (date => _preferenceDayRepository.FindAndLock (date, _loggedOnUser.CurrentUser()))

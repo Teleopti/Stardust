@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Web;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
+using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvider
@@ -18,70 +23,52 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 		[Test]
 		public void ShouldAddStudentAvailability()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
-			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
+			var loggedOnUser = new FakeLoggedOnUser();
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
 			var form = new StudentAvailabilityDayInput();
-
-			mapper.Stub(x => x.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(form)).Return(studentAvailabilityDay);
-
+			
 			target.Persist(form);
 
-			studentAvailabilityDayRepository.AssertWasCalled(x => x.Add(studentAvailabilityDay));
+			studentAvailabilityDayRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldReturnFormResultModelOnAdd()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
-			var target = new StudentAvailabilityPersister(MockRepository.GenerateMock<IStudentAvailabilityDayRepository>(), mapper, MockRepository.GenerateMock<ILoggedOnUser>());
+			var loggedOnUser = new FakeLoggedOnUser();
+			var target = new StudentAvailabilityPersister(new FakeStudentAvailabilityDayRepository(), loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
 			var form = new StudentAvailabilityDayInput();
-			var viewModel = new StudentAvailabilityDayViewModel();
-
-			mapper.Stub(x => x.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(form)).Return(studentAvailabilityDay);
-			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay)).Return(viewModel);
-
-			var result = target.Persist(form);
-
-			result.Should().Be.SameInstanceAs(viewModel);
+			
+			target.Persist(form).Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldUpdateExistingStudentAvailability()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var form = new StudentAvailabilityDayInput {Date = DateOnly.Today};
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
+			var loggedOnUser = new FakeLoggedOnUser();
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
 
 			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
-			mapper.Stub(x => x.Map(form, studentAvailabilityDay)).Return(studentAvailabilityDay);
-
+			
 			target.Persist(form);
-
-			mapper.AssertWasCalled(x => x.Map(form, studentAvailabilityDay));
 		}
 
 		[Test]
 		public void ShouldReturnFormResultModelOnUpdate()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
-			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var form = new StudentAvailabilityDayInput { Date = DateOnly.Today };
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
-			var viewModel = new StudentAvailabilityDayViewModel();
-
-			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
-			mapper.Stub(x => x.Map(form, studentAvailabilityDay)).Return(studentAvailabilityDay);
-			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay)).Return(viewModel);
-
-			var result = target.Persist(form);
-
-			result.Should().Be.SameInstanceAs(viewModel);
+			var loggedOnUser = new FakeLoggedOnUser();
+			var studentAvailabilityDay = new StudentAvailabilityDay(loggedOnUser.CurrentUser(),DateOnly.Today, new List<IStudentAvailabilityRestriction> {new StudentAvailabilityRestriction()});
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			
+			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
+			
+			target.Persist(form).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -89,9 +76,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 		{
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
+			var loggedOnUser = new FakeLoggedOnUser();
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
 
-			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
+			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 
 			target.Delete(DateOnly.Today);
 
@@ -103,9 +91,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 		{
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
+			var loggedOnUser = new FakeLoggedOnUser();
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
 
-			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
+			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 
 			var result = target.Delete(DateOnly.Today);
 
@@ -117,13 +106,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 		public void ShouldThrowHttp404OIfStudentAvailabilityDoesNotExists()
 		{
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
+			var loggedOnUser = new FakeLoggedOnUser();
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
 
-			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay>());
+			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay>());
 
 			var exception = Assert.Throws<HttpException>(() => target.Delete(DateOnly.Today));
 			exception.GetHttpCode().Should().Be(404);
 		}
-
 	}
 }

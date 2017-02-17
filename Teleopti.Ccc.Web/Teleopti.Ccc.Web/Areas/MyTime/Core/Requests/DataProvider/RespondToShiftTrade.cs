@@ -1,5 +1,4 @@
 using System;
-using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
@@ -7,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IMappingEngine _mapper;
 		private readonly IEventPublisher _publisher;
 		private readonly INow _nu;
 		private readonly ICurrentDataSource _dataSourceProvider;
@@ -25,29 +24,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	    private readonly IEventSyncronization _eventSyncronization;
 	    private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 		private readonly IToggleManager _toggleManager;
+		private readonly RequestsViewModelMapper _mapper;
 
-        public RespondToShiftTrade(IPersonRequestRepository personRequestRepository,
+		public RespondToShiftTrade(IPersonRequestRepository personRequestRepository,
 			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 			ILoggedOnUser loggedOnUser,
-			IMappingEngine mapper,
 			IEventPublisher publisher,
 			INow nu,
 			ICurrentDataSource dataSourceProvider,
 			ICurrentBusinessUnit businessUnitProvider,
-            IEventSyncronization eventSyncronization, IToggleManager toggleManager)
+            IEventSyncronization eventSyncronization, IToggleManager toggleManager, RequestsViewModelMapper mapper)
 		{
 			_personRequestRepository = personRequestRepository;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_loggedOnUser = loggedOnUser;
-			_mapper = mapper;
 			_publisher = publisher;
 			_nu = nu;
 			_dataSourceProvider = dataSourceProvider;
 			_businessUnitProvider = businessUnitProvider;
             _eventSyncronization = eventSyncronization;
 	        _toggleManager = toggleManager;
-	        _shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
+			_mapper = mapper;
+			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
 
 		public RequestViewModel OkByMe(Guid requestId, string message)
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 			personRequest.TrySetMessage(message);
             _eventSyncronization.WhenDone(() => persistWithBus(personRequest));
-           return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+           return _mapper.Map(personRequest);
 		}
 
 		public RequestViewModel Deny(Guid requestId, string message)
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			personRequest.TrySetMessage(message);
 			personRequest.Deny("RequestDenyReasonOtherPart", _personRequestCheckAuthorization, _loggedOnUser.CurrentUser());
 
-			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			return _mapper.Map(personRequest);
 		}
 
 		public RequestViewModel ResendReferred(Guid requestId)
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
                 Timestamp = _nu.UtcDateTime()
             }));
 
-            return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+            return _mapper.Map(personRequest);
 		}
 
 		private void persistWithBus(IPersonRequest personRequest)

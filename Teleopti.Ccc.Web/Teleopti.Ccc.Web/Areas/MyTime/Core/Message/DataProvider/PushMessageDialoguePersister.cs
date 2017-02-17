@@ -1,7 +1,10 @@
-using AutoMapper;
+using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
@@ -9,16 +12,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 	public class PushMessageDialoguePersister : IPushMessageDialoguePersister
 	{
 		private readonly IPushMessageDialogueRepository _pushMessageDialogueRepository;
-		private readonly IMappingEngine _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPushMessageRepository _pushMessageRepository;
+		private readonly IPersonNameProvider _personNameProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public PushMessageDialoguePersister(IPushMessageDialogueRepository pushMessageDialogueRepository, IMappingEngine mapper, ILoggedOnUser loggedOnUser,IPushMessageRepository pushMessageRepository)
+		public PushMessageDialoguePersister(IPushMessageDialogueRepository pushMessageDialogueRepository,ILoggedOnUser loggedOnUser,IPushMessageRepository pushMessageRepository, IPersonNameProvider personNameProvider, IUserTimeZone userTimeZone)
 		{
 			_pushMessageDialogueRepository = pushMessageDialogueRepository;
-			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_pushMessageRepository = pushMessageRepository;
+			_personNameProvider = personNameProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		public MessageViewModel PersistMessage(ConfirmMessageViewModel confirmMessage)
@@ -31,9 +36,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 				
 			pushMessageDialogue.SetReply(confirmMessage.ReplyOption);
 
-			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
+			return new MessageViewModel
+			{
+				MessageType = (int) pushMessageDialogue.PushMessage.MessageType,
+				MessageId = pushMessageDialogue.Id.ToString(),
+				Title = pushMessageDialogue.PushMessage.GetTitle(new NoFormatting()),
+				Message = pushMessageDialogue.Message(new NoFormatting()),
+				Sender = pushMessageDialogue.PushMessage.Sender == null ? null : _personNameProvider.BuildNameFromSetting(pushMessageDialogue.PushMessage.Sender.Name),
+				Date =
+					pushMessageDialogue.UpdatedOn.HasValue
+						? TimeZoneInfo.ConvertTimeFromUtc(pushMessageDialogue.UpdatedOn.Value, _userTimeZone.TimeZone())
+						: (DateTime?) null,
+				IsRead = pushMessageDialogue.IsReplied,
+				AllowDialogueReply = pushMessageDialogue.PushMessage.AllowDialogueReply,
+				DialogueMessages = pushMessageDialogue.DialogueMessages.Select(d => new DialogueMessageViewModel {Created = TimeZoneInfo.ConvertTimeFromUtc(d.Created,_userTimeZone.TimeZone()).ToShortDateTimeString() ,Text = d.Text,Sender = _personNameProvider.BuildNameFromSetting(d.Sender.Name),SenderId = d.Sender.Id.GetValueOrDefault()}).ToList(),
+				ReplyOptions = pushMessageDialogue.PushMessage.ReplyOptions
+			};
 		}
-
+		
 		public void SendNewPushMessageToLoggedOnUser(string title, string message)
 		{
 			SendPushMessageService.CreateConversation(title, message, false).To(_loggedOnUser.CurrentUser()).From(_loggedOnUser.CurrentUser()).AddReplyOption("OK").SendConversation(_pushMessageRepository,_pushMessageDialogueRepository);

@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
@@ -21,32 +19,24 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 	public class MonthScheduleViewModelMappingTest
 	{
 		private IProjectionProvider _projectionProvider;
+		private MonthScheduleViewModelMapper target;
 
 		[SetUp]
 		public void Setup()
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
-			Mapper.Reset();
-			Mapper.Initialize(c =>
-			{
-				c.AddProfile(new MonthScheduleViewModelMappingProfile(_projectionProvider));
-				c.CreateMap<DateOnly, DateTime>().ConvertUsing(d => d.Date);
-				c.CreateMap<DateTime, DateOnly>().ConvertUsing(d => new DateOnly(d));
-			});
+			target = new MonthScheduleViewModelMapper(_projectionProvider);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapDate()
 		{
 			var stub = new StubFactory();
 			var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(domainData);
+			var result = target.Map(new MonthScheduleDomainData {Days = new [] { domainData }});
 
-			result.Date.Should().Be.EqualTo(DateTime.Today);
+			result.ScheduleDays.First().Date.Should().Be.EqualTo(DateTime.Today);
 		}
 
 		[Test]
@@ -55,9 +45,9 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var stub = new StubFactory();
 			var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(domainData);
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } });
 
-			result.FixedDate.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
+			result.ScheduleDays.First().FixedDate.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
 
 		[Test]
@@ -67,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
 			var monthDomainData = new MonthScheduleDomainData { Days = new[] { domainData } };
 
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			var result = target.Map(monthDomainData);
 
 			result.ScheduleDays.Count().Should().Be.EqualTo(1);
 		}
@@ -76,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapCurrentDate()
 		{
 			var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			var result = target.Map(monthDomainData);
 			result.CurrentDate.Should().Be.EqualTo(DateTime.Today);
 		}
 
@@ -84,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapFixedCurrentDate()
 		{
 			var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			var result = target.Map(monthDomainData);
 			result.FixedDate.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
 
@@ -95,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
 
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			var result = target.Map(monthDomainData);
 
 			result.DayHeaders.First().Name.Should().Be.EqualTo("Montag");
 			result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
@@ -111,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
 
 			//act
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			var result = target.Map(monthDomainData);
 
 			//assert
 			result.ScheduleDays.Single().Absence.Name.Should().Be.EqualTo("Illness");
@@ -131,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
 			var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
 
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			var result = target.Map(monthDomainData);
 
 			result.ScheduleDays.Single().Absence.ShortName.Should().Be.EqualTo("IL");
 		}
@@ -152,7 +142,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 				};
 
 			//act
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			var result = target.Map(monthDomainData);
 
 			//assert
 			result.ScheduleDays.Single().Absence.IsFullDayAbsence.Should().Be.True();
@@ -165,9 +155,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.DayOff, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } });
 
-			result.IsDayOff.Should().Be.True();
+			result.ScheduleDays.First().IsDayOff.Should().Be.True();
 		}
 
 		[Test]
@@ -177,9 +168,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } });
 
-			result.IsDayOff.Should().Be.False();
+			result.ScheduleDays.First().IsDayOff.Should().Be.False();
 		}
 
 		[Test]
@@ -189,9 +181,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.ContractDayOff, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } });
 
-			result.IsDayOff.Should().Be.True();
+			result.ScheduleDays.First().IsDayOff.Should().Be.True();
 		}
 
 		[Test]
@@ -203,9 +196,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			personAssignment.SetShiftCategory(new ShiftCategory("Late"));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } });
 
-			result.Shift.Name.Should().Be.EqualTo("Late");
+			result.ScheduleDays.First().Shift.Name.Should().Be.EqualTo("Late");
 		}
 
 		[Test]
@@ -217,9 +211,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			personAssignment.SetShiftCategory(new ShiftCategory("sc") { Description = new Description("sc", "PM") });
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } });
 
-			result.Shift.ShortName.Should().Be.EqualTo("PM");
+			result.ScheduleDays.First().Shift.ShortName.Should().Be.EqualTo("PM");
 		}
 
 		[Test]
@@ -231,9 +226,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			personAssignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Green });
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } });
 
-			result.Shift.Color.Should().Be.EqualTo("rgb(0,128,0)");
+			result.ScheduleDays.First().Shift.Color.Should().Be.EqualTo("rgb(0,128,0)");
 		}
 
 		[Test]
@@ -246,7 +242,8 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } }).ScheduleDays.First();
 
 			result.Shift.Should().Not.Be.Null();
 			result.Shift.TimeSpan.Should().Be.EqualTo(personAssignment.Period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
@@ -265,7 +262,8 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011,5,18),SchedulePartView.MainShift,personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData,MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } }).ScheduleDays.First();
 
 			result.Shift.Should().Not.Be.Null();
 			result.Shift.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
@@ -282,7 +280,8 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } }).ScheduleDays.First();
 
 			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
 		}
@@ -293,7 +292,8 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			PersonAssignment personAssignment = null;
 			var scheduleDay = new StubFactory().ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = scheduleDay };
+			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } }).ScheduleDays.First();
 			result.Shift.Should().Not.Be.Null();
 		}
 	}

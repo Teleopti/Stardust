@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -13,7 +11,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -22,14 +19,13 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 	[TestFixture]
 	public class MessageViewModelMappingProfileTest
 	{
-		private IList<IPushMessageDialogue> _domainMessages;
 		private PushMessage _pushMessage;
-		private IList<MessageViewModel> _result;
 		private IPerson _person;
 		private PushMessageDialogue _pushMessageDialogue;
 		private TimeZoneInfo _cccTimeZone;
 		private IPerson _replier;
 		private IPersonNameProvider _personNameProvider;
+		private MessageViewModelMapper target;
 
 		[SetUp]
 		public void Setup()
@@ -60,69 +56,55 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_person.Name)).Return(_person.Name.FirstName + " " + _person.Name.LastName);
 			
-			_domainMessages = new[] { _pushMessageDialogue };
-
-			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new MessageViewModelMappingProfile(
-				() => timeZone, _personNameProvider
-				)));
+			target = new MessageViewModelMapper(timeZone, _personNameProvider);
 		}
-
-
-		[Test]
-		public void ShouldConfigure()
-		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
-
-			Mapper.AssertConfigurationIsValid();
-		}
-
+		
 		[Test]
 		public void ShouldMapOneMesageCount()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.Count.Should().Be.EqualTo(1);
+			result.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldMapSenderOfDialogueMessage()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().DialogueMessages.First().SenderId.Should().Be.EqualTo(_replier.Id);
+			result.DialogueMessages.First().SenderId.Should().Be.EqualTo(_replier.Id);
 		}
 
 		[Test]
 		public void ShouldMapTitle()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().Title.Should().Be.EqualTo(_pushMessage.GetTitle(new NoFormatting()));
+			result.Title.Should().Be.EqualTo(_pushMessage.GetTitle(new NoFormatting()));
 		}
 
 		[Test]
 		public void ShouldMapMessageType()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().MessageType.Should().Be.EqualTo((int)_pushMessage.MessageType);
+			result.MessageType.Should().Be.EqualTo((int)_pushMessage.MessageType);
 		}
 
 		[Test]
 		public void ShouldMapMessageToShowShortMessage()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));
+			result.Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));
 		}
 
 		[Test]
 		public void ShouldMapAllowDialogueReply()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().AllowDialogueReply.Should().Be.EqualTo(_pushMessage.AllowDialogueReply);
+			result.AllowDialogueReply.Should().Be.EqualTo(_pushMessage.AllowDialogueReply);
 		}
 
 		[Test]
@@ -130,55 +112,55 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		{
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_replier.Name)).Return(_replier.Name.FirstName + " " + _replier.Name.LastName);
 
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().DialogueMessages.First().Text.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Text);
-			_result.First().DialogueMessages.First().Sender.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Sender.Name.FirstName + " " + _pushMessageDialogue.DialogueMessages.First().Sender.Name.LastName);
+			result.DialogueMessages.First().Text.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Text);
+			result.DialogueMessages.First().Sender.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Sender.Name.FirstName + " " + _pushMessageDialogue.DialogueMessages.First().Sender.Name.LastName);
 			var localDateTimeString = TimeZoneInfo.ConvertTimeFromUtc(_pushMessageDialogue.DialogueMessages.First().Created,_cccTimeZone).ToShortDateTimeString();
-			_result.First().DialogueMessages.First().Created.Should().Be.EqualTo(localDateTimeString);
+			result.DialogueMessages.First().Created.Should().Be.EqualTo(localDateTimeString);
 		}
 
 		[Test]
 		public void ShouldMapReplyOptions()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().ReplyOptions.Count.Should().Be.EqualTo(_pushMessageDialogue.PushMessage.ReplyOptions.Count);
+			result.ReplyOptions.Count.Should().Be.EqualTo(_pushMessageDialogue.PushMessage.ReplyOptions.Count);
 		}
 
 		[Test]
 		public void ShouldMapSender()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().Sender.Should().Be.EqualTo(_pushMessage.Sender.Name.FirstName + " " + _pushMessage.Sender.Name.LastName);
+			result.Sender.Should().Be.EqualTo(_pushMessage.Sender.Name.FirstName + " " + _pushMessage.Sender.Name.LastName);
 		}
 
 		[Test]
 		public void ShouldMapDate()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
 			var localDateTimeString = TimeZoneInfo.ConvertTimeFromUtc(_pushMessageDialogue.UpdatedOn.Value,_cccTimeZone).ToShortDateTimeString();
-			_result.First().Date.Value.ToShortDateTimeString().Should().Be.EqualTo(localDateTimeString);
+			result.Date.Value.ToShortDateTimeString().Should().Be.EqualTo(localDateTimeString);
 		}
 
 		[Test]
 		public void ShouldMapMessageId()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
-			_result.First().MessageId.Should().Be.EqualTo(_pushMessageDialogue.Id.ToString());
+			result.MessageId.Should().Be.EqualTo(_pushMessageDialogue.Id.ToString());
 		}
 
 		[Test]
 		public void ShouldMapMessageIsRead()
 		{
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+			var result = target.Map(_pushMessageDialogue);
 
 			_pushMessageDialogue.SetReply(_pushMessage.ReplyOptions.First());
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
-			_result.First().IsRead.Should().Be.True();
+			result = target.Map(_pushMessageDialogue);
+			result.IsRead.Should().Be.True();
 		}
 
         [Test]
@@ -187,8 +169,8 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
             _pushMessage.TranslateMessage = true;
             _pushMessage.Message = "TextRequestHasBeenDeniedDot";
 
-            _result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
-            _result.First().Message.Should().Be.EqualTo(UserTexts.Resources.TextRequestHasBeenDeniedDot);
+            var result = target.Map(_pushMessageDialogue);
+            result.Message.Should().Be.EqualTo(UserTexts.Resources.TextRequestHasBeenDeniedDot);
         }
 
 		public static void SetDate(IAggregateRoot root, DateTime dateTime, string property)

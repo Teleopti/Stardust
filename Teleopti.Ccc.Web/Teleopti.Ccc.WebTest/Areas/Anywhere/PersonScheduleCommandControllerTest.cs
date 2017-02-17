@@ -236,5 +236,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			result.Result<PersonScheduleDayViewModel>().Should().Be.SameInstanceAs(model);
 		}
 	}
-
 }

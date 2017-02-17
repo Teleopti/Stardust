@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Web;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -20,48 +21,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 		[Test]
 		public void ShouldAddOvertimeAvailability()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var overtimeAvailabilityRepository = MockRepository.GenerateMock<IOvertimeAvailabilityRepository>();
 			var input = new OvertimeAvailabilityInput();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			overtimeAvailabilityRepository.Stub(x => x.Find(input.Date, person)).Return(null);
-			var overtimeAvailability = new OvertimeAvailability(person, input.Date, input.StartTime.ToTimeSpan(), input.EndTime.ToTimeSpan());
-			mapper.Stub(x => x.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(input))
-			      .Return(overtimeAvailability);
 			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository,
-			                                               loggedOnUser, mapper);
+			                                               loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
 			target.Persist(input);
 
-			overtimeAvailabilityRepository.AssertWasCalled(x => x.Add(overtimeAvailability));
-			mapper.AssertWasNotCalled(x => x.Map(input, (IOvertimeAvailability)null));
+			overtimeAvailabilityRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldReturnInputResultModelOnAdd()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var overtimeAvailabilityRepository = MockRepository.GenerateMock<IOvertimeAvailabilityRepository>();
-			var overtimeAvailability = MockRepository.GenerateMock<IOvertimeAvailability>();
-			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, mapper);
+			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
 			var input = new OvertimeAvailabilityInput();
-
-			mapper.Stub(x => x.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(input))
-			      .Return(overtimeAvailability);
-			var viewModel = new OvertimeAvailabilityViewModel();
-			mapper.Stub(x => x.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailability))
-			      .Return(viewModel);
-
-			var result = target.Persist(input);
-			result.Should().Be.SameInstanceAs(viewModel);
+			
+			target.Persist(input).Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldUpdateExistingOvertimeAvailability()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var overtimeAvailabilityRepository = MockRepository.GenerateMock<IOvertimeAvailabilityRepository>();
 			var person = new Person();
@@ -73,42 +59,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 				                              {
 					                              existingOvertimeAvailability
 				                              });
-			var newOvertimeAvailability = MockRepository.GenerateMock<IOvertimeAvailability>();
-			mapper.Stub(x => x.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(input))
-			      .Return(newOvertimeAvailability);
-
-			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, mapper);
+			
+			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
 			target.Persist(input);
 
 			overtimeAvailabilityRepository.AssertWasCalled(x => x.Remove(existingOvertimeAvailability));
-			overtimeAvailabilityRepository.AssertWasCalled(x => x.Add(newOvertimeAvailability));
+			overtimeAvailabilityRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldReturnFormResultModelOnUpdate()
 		{
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var overtimeAvailabilityRepository = MockRepository.GenerateMock<IOvertimeAvailabilityRepository>();
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			var input = new OvertimeAvailabilityInput();
-			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, mapper);
+			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
 			var existingOvertimeAvailability = MockRepository.GenerateMock<IOvertimeAvailability>();
 			overtimeAvailabilityRepository.Stub(x => x.Find(input.Date, person))
 			                              .Return(new List<IOvertimeAvailability>
 				                              {
 					                              existingOvertimeAvailability
 				                              });
-			var newOvertimeAvailability = MockRepository.GenerateMock<IOvertimeAvailability>();
-			mapper.Stub(x => x.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(input))
-			      .Return(newOvertimeAvailability);
-			var viewModel = new OvertimeAvailabilityViewModel();
-			mapper.Stub(x => x.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(newOvertimeAvailability))
-			      .Return(viewModel);
 
-			var result = target.Persist(input);
-			result.Should().Be.SameInstanceAs(viewModel);
+			target.Persist(input).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -125,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 				                              {
 					                              overtimeAvailability
 				                              });
-			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, null);
+			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
 
 			var result = target.Delete(date);
 
@@ -143,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			overtimeAvailabilityRepository.Stub(x => x.Find(date, person))
 										  .Return(new List<IOvertimeAvailability>());
-			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, null);
+			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
 
 			var exception = Assert.Throws<HttpException>(() => target.Delete(DateOnly.Today));
 			exception.GetHttpCode().Should().Be(404);

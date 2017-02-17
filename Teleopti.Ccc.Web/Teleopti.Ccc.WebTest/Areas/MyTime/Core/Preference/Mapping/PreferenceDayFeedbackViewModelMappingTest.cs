@@ -1,8 +1,7 @@
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using System;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -27,8 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-
-			system.AddService<PreferenceDayFeedbackViewModelMappingProfile>();
+			
 			system.UseTestDouble<FakePreferenceProvider>().For<IPreferenceProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 			system.UseTestDouble<FakePersonRuleSetBagProvider>().For<IPersonRuleSetBagProvider>();
@@ -50,11 +47,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	[MyTimeWebPreferenceMappingTest]
 	public class PreferenceDayFeedbackViewModelMappingTestByFake
 	{
-		public PreferenceDayFeedbackViewModelMappingProfile PreferenceDayFeedbackViewModelMappingProfile;
 		public IScheduleProvider ScheduleProvider;
 		public IPreferenceProvider PreferenceProvider;
 		public FakePersonContractProvider PersonContractProvider;
 		public Person Person;
+		public PreferenceDayFeedbackViewModelMapper Mapper;
 
 		private IScheduleDay buildPersonSchedule(DateOnly date, TimeSpan startTime, TimeSpan endTime)
 		{
@@ -78,9 +75,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 		private void Setup()
 		{
-			Mapper.Reset();
-			Mapper.Initialize(x => x.AddProfile(PreferenceDayFeedbackViewModelMappingProfile));
-
 			var nightRest1 = new TimeSpan(12, 0, 0);
 			var nightRest2 = new TimeSpan(6, 0, 0);
 
@@ -183,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate = new DateOnly(2029, 1, 2);
-			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			var targetReturn =  Mapper.Map(testDate);
 			targetReturn.Date.Should().Be.EqualTo(testDate.ToFixedClientDateOnlyFormat());
 		}
 
@@ -192,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate = new DateOnly(2029, 1, 2);
-			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			var targetReturn = Mapper.Map(testDate);
 			targetReturn.ExpectedNightRest.Should().Be.EqualTo(new TimeSpan(12, 0, 0));
 		}
 
@@ -201,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate = new DateOnly(2029, 1, 2);
-			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			var targetReturn = Mapper.Map(testDate);
 			targetReturn.HasNightRestViolationToNextDay.Should().Be.True();
 			targetReturn.HasNightRestViolationToPreviousDay.Should().Be.True();
 		}
@@ -211,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate = new DateOnly(2029, 1, 6);
-			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			var targetReturn = Mapper.Map(testDate);
 			targetReturn.HasNightRestViolationToNextDay.Should().Be.False();
 		}
 
@@ -220,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate = new DateOnly(2029, 1, 5);
-			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			var targetReturn = Mapper.Map(testDate);
 			targetReturn.HasNightRestViolationToNextDay.Should().Be.True();
 			targetReturn.HasNightRestViolationToPreviousDay.Should().Be.True();
 		}
@@ -230,7 +224,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate = new DateOnly(2029, 1, 10);
-			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			var targetReturn = Mapper.Map(testDate);
 			targetReturn.HasNightRestViolationToPreviousDay.Should().Be.False();
 		}
 
@@ -239,11 +233,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate1 = new DateOnly(2029, 1, 10);
-			var targetReturn1 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate1);
+			var targetReturn1 = Mapper.Map(testDate1);
 			targetReturn1.HasNightRestViolationToNextDay.Should().Be.True();
 
 			var testDate2 = new DateOnly(2029, 1, 10);
-			var targetReturn2 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate2);
+			var targetReturn2 = Mapper.Map(testDate2);
 			targetReturn2.HasNightRestViolationToPreviousDay.Should().Be.False();
 		}
 
@@ -252,11 +246,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate1 = new DateOnly(2029, 1, 20);
-			var targetReturn1 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate1);
+			var targetReturn1 = Mapper.Map(testDate1);
 			targetReturn1.HasNightRestViolationToNextDay.Should().Be.True();
 
 			var testDate2 = new DateOnly(2029, 1, 21);
-			var targetReturn2 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate2);
+			var targetReturn2 = Mapper.Map(testDate2);
 			targetReturn2.HasNightRestViolationToPreviousDay.Should().Be.True();
 		}
 	}
@@ -265,6 +259,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceDayFeedbackViewModelMappingTest
 	{
 		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
+		private PreferenceDayFeedbackViewModelMapper target;
 
 		[SetUp]
 		public void Setup()
@@ -272,17 +267,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 			preferenceFeedbackProvider.Stub(x => x.CheckNightRestViolation(DateOnly.Today)).Return(new PreferenceNightRestCheckResult());
 
-			Mapper.Reset();
-			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(preferenceFeedbackProvider)));
+			target = new PreferenceDayFeedbackViewModelMapper(preferenceFeedbackProvider);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapDate()
 		{
-			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 			result.Date.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
 
@@ -295,7 +286,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			};
 			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(new WorkTimeMinMaxCalculationResult { WorkTimeMinMax = workTimeMinMax });
 
-			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.PossibleStartTimes.Should().Be(workTimeMinMax.StartTimeLimitation.StartTimeString + "-" + workTimeMinMax.StartTimeLimitation.EndTimeString);
 		}
@@ -310,7 +301,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(new WorkTimeMinMaxCalculationResult { WorkTimeMinMax = workTimeMinMax });
 
-			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 			result.PossibleEndTimes.Should().Be(workTimeMinMax.EndTimeLimitation.StartTimeString + "-" + workTimeMinMax.EndTimeLimitation.EndTimeString);
 		}
 
@@ -323,7 +314,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			};
 			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(new WorkTimeMinMaxCalculationResult { WorkTimeMinMax = workTimeMinMax });
 
-			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.PossibleContractTimeMinutesLower.Should().Be(workTimeMinMax.WorkTimeLimitation.StartTime.Value.TotalMinutes.ToString());
 		}
@@ -337,7 +328,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			};
 			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(new WorkTimeMinMaxCalculationResult { WorkTimeMinMax = workTimeMinMax });
 
-			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.PossibleContractTimeMinutesUpper.Should().Be(workTimeMinMax.WorkTimeLimitation.EndTime.Value.TotalMinutes.ToString());
 		}
@@ -347,7 +338,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(null);
 
-			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
+			var result = target.Map(DateOnly.Today);
 
 			result.FeedbackError.Should().Be(Resources.NoAvailableShifts);
 		}

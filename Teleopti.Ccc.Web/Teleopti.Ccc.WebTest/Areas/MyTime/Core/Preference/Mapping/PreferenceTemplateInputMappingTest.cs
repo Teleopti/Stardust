@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IDayOffTemplateRepository dayOffRepository;
 		private IAbsenceRepository absenceRepository;
 		private IActivityRepository activityRepository;
+		private PreferenceTemplatePersister target;
+		private FakeExtendedPreferenceTemplateRepository extendedPreferenceTemplateRepository;
 
 		[SetUp]
 		public void Setup()
@@ -30,31 +32,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			dayOffRepository = MockRepository.GenerateMock<IDayOffTemplateRepository>();
 			absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
 			activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			extendedPreferenceTemplateRepository = new FakeExtendedPreferenceTemplateRepository();
 
-			Mapper.Reset();
-			Mapper.Initialize(
-				c =>
-					{
-						c.ConstructServicesUsing(t =>
-						                         new PreferenceTemplateInputMappingProfile.PreferenceTemplateInputToExtendedPreferenceTemplate(
-							                         () => Mapper.Engine,
-							                         () => loggedOnUser
-							                         ));
-						c.AddProfile(
-							new PreferenceTemplateInputMappingProfile(
-								shiftCategoryRepository,
-								dayOffRepository,
-								absenceRepository,
-								activityRepository,
-								new Lazy<IMappingEngine>(() => Mapper.Engine))
-							);
-					}
-				);
+			target = new PreferenceTemplatePersister(extendedPreferenceTemplateRepository, loggedOnUser,
+				shiftCategoryRepository, absenceRepository, dayOffRepository, activityRepository);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapTemplateName()
 		{
@@ -62,9 +45,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				{
 					NewTemplateName = "name1"
 				};
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Name.Should().Be.EqualTo(input.NewTemplateName);
+			extendedPreferenceTemplateRepository.LoadAll().First().Name.Should().Be.EqualTo(input.NewTemplateName);
 		}
 
 		[Test]
@@ -73,9 +56,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(new PreferenceTemplateInput());
-
-			result.Person.Should().Be.SameInstanceAs(person);
+			target.Persist(new PreferenceTemplateInput());
+			
+			extendedPreferenceTemplateRepository.LoadAll().First().Person.Should().Be.SameInstanceAs(person);
 		}
 
 		[Test]
@@ -87,9 +70,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(shiftCategory);
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
 		}
 
 		[Test]
@@ -101,9 +84,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			dayOffRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(dayOffTemplate);
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.DayOffTemplate.Should().Be.SameInstanceAs(dayOffTemplate);
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.DayOffTemplate.Should().Be.SameInstanceAs(dayOffTemplate);
 		}
 
 		[Test]
@@ -115,9 +98,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			absenceRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(absence);
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.Absence.Should().Be.SameInstanceAs(absence);
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.Absence.Should().Be.SameInstanceAs(absence);
 		}
 
 		[Test]
@@ -129,9 +112,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				LatestStartTime = new TimeOfDay(TimeSpan.FromHours(9))
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.StartTimeLimitation
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.StartTimeLimitation
 				.Should().Be.EqualTo(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
 		}
 
@@ -144,9 +127,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				LatestEndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.EndTimeLimitation
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.EndTimeLimitation
 				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(16), TimeSpan.FromHours(17)));
 		}
 
@@ -161,9 +144,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				LatestEndTimeNextDay = true
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.EndTimeLimitation
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.EndTimeLimitation
 				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(24 + 2), TimeSpan.FromHours(24 + 3)));
 		}
 
@@ -176,9 +159,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				MaximumWorkTime = TimeSpan.FromHours(8)
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.WorkTimeLimitation
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.WorkTimeLimitation
 				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(8)));
 		}
 
@@ -191,9 +174,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				ActivityEarliestStartTime = new TimeOfDay(TimeSpan.FromHours(8))
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.ActivityRestrictionCollection.Should().Have.Count.EqualTo(0);
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.ActivityRestrictionCollection.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -205,9 +188,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			activityRepository.Stub(x => x.Get(input.ActivityPreferenceId.Value)).Return(activity);
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.ActivityRestrictionCollection.Single().Activity.Should().Be(activity);
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.ActivityRestrictionCollection.Single().Activity.Should().Be(activity);
 		}
 
 		[Test]
@@ -220,9 +203,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				ActivityLatestStartTime = new TimeOfDay(TimeSpan.FromHours(12)),
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.ActivityRestrictionCollection.Single().StartTimeLimitation
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.ActivityRestrictionCollection.Single().StartTimeLimitation
 				.Should().Be.EqualTo(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(12)));
 		}
 
@@ -236,9 +219,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				ActivityLatestEndTime = new TimeOfDay(TimeSpan.FromHours(13)),
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.ActivityRestrictionCollection.Single().EndTimeLimitation
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.ActivityRestrictionCollection.Single().EndTimeLimitation
 				.Should().Be.EqualTo(new EndTimeLimitation(TimeSpan.FromHours(11), TimeSpan.FromHours(13)));
 		}
 
@@ -252,9 +235,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				ActivityMaximumTime = TimeSpan.FromHours(3),
 			};
 
-			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			target.Persist(input);
 
-			result.Restriction.ActivityRestrictionCollection.Single().WorkTimeLimitation
+			extendedPreferenceTemplateRepository.LoadAll().First().Restriction.ActivityRestrictionCollection.Single().WorkTimeLimitation
 				.Should().Be.EqualTo(new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(3)));
 		}
 	}

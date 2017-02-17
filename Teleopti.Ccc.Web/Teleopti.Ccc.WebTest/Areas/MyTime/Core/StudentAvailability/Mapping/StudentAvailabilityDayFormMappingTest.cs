@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
@@ -17,41 +15,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 	[TestFixture]
 	public class StudentAvailabilityDayFormMappingTest
 	{
-		private TestMappingDependencyResolver _mappingDependencyResolver;
 		private ILoggedOnUser _loggedOnUser;
+		private StudentAvailabilityDayFormMapper target;
 
 		[SetUp]
 		public void Setup()
 		{
-
-			_mappingDependencyResolver = new TestMappingDependencyResolver();
-
-			Mapper.Reset();
-			Mapper.Initialize(
-				c =>
-					{
-						c.ConstructServicesUsing(_mappingDependencyResolver.Resolve);
-						c.AddProfile(new StudentAvailabilityDayFormMappingProfile());
-					}
-				);
-
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var typeConverter = new StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay(_loggedOnUser, Mapper.Engine);
-			_mappingDependencyResolver
-				.Register(typeConverter)
-				.Register(_loggedOnUser)
-				;
+			target = new StudentAvailabilityDayFormMapper(_loggedOnUser);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapToDestination()
 		{
 			var destination = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction>{new StudentAvailabilityRestriction()});
 
-			var result = Mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(new StudentAvailabilityDayInput(), destination);
+			var result = target.Map(new StudentAvailabilityDayInput(), destination);
 
 			result.Should().Be.SameInstanceAs(destination);
 		}
@@ -62,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			var destination = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction> { new StudentAvailabilityRestriction() });
 			var form = new StudentAvailabilityDayInput { StartTime = new TimeOfDay(TimeSpan.FromHours(7)) };
 
-			Mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(form, destination);
+			target.Map(form, destination);
 
 			destination.RestrictionCollection.Single().StartTimeLimitation.StartTime.Value.Should().Be(form.StartTime.Time);
 		}
@@ -73,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			var person = new Person();
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var result = Mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(new StudentAvailabilityDayInput());
+			var result = target.Map(new StudentAvailabilityDayInput());
 
 			result.Person.Should().Be.SameInstanceAs(person);
 		}
@@ -83,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			var form = new StudentAvailabilityDayInput { Date = DateOnly.Today };
 
-			var result = Mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(form);
+			var result = target.Map(form);
 
 			result.RestrictionDate.Should().Be(form.Date);
 		}
@@ -93,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			var form = new StudentAvailabilityDayInput {StartTime = new TimeOfDay(TimeSpan.FromHours(7))};
 
-			var result = Mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(form);
+			var result = target.Map(form);
 
 			result.RestrictionCollection.Single().StartTimeLimitation.StartTime.Value.Should().Be(form.StartTime.Time);
 		}
@@ -103,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			var form = new StudentAvailabilityDayInput { EndTime = new TimeOfDay(TimeSpan.FromHours(7)) };
 
-			var result = Mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(form);
+			var result = target.Map(form);
 
 			result.RestrictionCollection.Single().EndTimeLimitation.EndTime.Value.Should().Be(form.EndTime.Time);
 		}
@@ -113,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			var form = new StudentAvailabilityDayInput { EndTime = new TimeOfDay(TimeSpan.FromHours(7)), NextDay = true };
 
-			var result = Mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityDay>(form);
+			var result = target.Map(form);
 
 			var nextDayTimeSpan = form.EndTime.Time.Add(TimeSpan.FromDays(1));
 			result.RestrictionCollection.Single().EndTimeLimitation.EndTime.Value.Should().Be(nextDayTimeSpan);

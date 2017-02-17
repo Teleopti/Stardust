@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string Name { get; set; }
 
 		public IEnumerable<PersonScheduleViewModelActivity> Activities { get; set; }
-		public IEnumerable<PersonScheduleViewModelAbsence> Absences { get; private set; }
-		public IEnumerable<PersonScheduleViewModelPersonAbsence> PersonAbsences  { get; private set; }
+		public IEnumerable<PersonScheduleViewModelAbsence> Absences { get; set; }
+		public IEnumerable<PersonScheduleViewModelPersonAbsence> PersonAbsences  { get; set; }
 		public DefaultIntradayAbsenceViewModel DefaultIntradayAbsenceData { get; set; }
 	    public string TimeZoneName { get; set; }
 	    public string IanaTimeZoneOther { get; set; }

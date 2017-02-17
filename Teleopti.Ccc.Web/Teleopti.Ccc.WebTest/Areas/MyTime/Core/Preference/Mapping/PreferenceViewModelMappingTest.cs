@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using System;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -33,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider;
 		private ILoggedOnUser loggedOnUser;
 		private IToggleManager toggleManager;
+		private PreferenceViewModelMapper target;
 
 		[SetUp]
 		public void Setup()
@@ -89,28 +88,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			Mapper.Reset();
-			Mapper.Initialize(c =>
-			{
-				c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(),
-					() => preferenceOptionProvider,
-					toggleManager,
-					new Now(),
-					virtualSchedulePeriodProvider,
-					loggedOnUser));
-				c.AddProfile(new CommonViewModelMappingProfile());
-			});
+			target = new PreferenceViewModelMapper(new FakePermissionProvider(), preferenceOptionProvider, toggleManager,
+				new Now(), virtualSchedulePeriodProvider, loggedOnUser);
 		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
+		
 		[Test]
 		public void ShouldMapPeriodSelectionDate()
 		{
 			data.SelectedDate = DateOnly.Today;
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PeriodSelection.Date.Should().Be.EqualTo(data.SelectedDate.ToFixedClientDateOnlyFormat());
 		}
@@ -120,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			data.Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PeriodSelection.Display.Should().Be.EqualTo(data.Period.DateString);
 		}
@@ -130,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			data.Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PeriodSelection.PeriodNavigation.CanPickPeriod.Should().Be.True();
 			result.PeriodSelection.PeriodNavigation.HasNextPeriod.Should().Be.True();
@@ -142,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldFillPeriodSelectaleDateRange()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PeriodSelection.SelectableDateRange.MinDate.Should().Be.EqualTo(new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat());
 			result.PeriodSelection.SelectableDateRange.MaxDate.Should().Be.EqualTo(new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat());
@@ -151,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapPeriodSelectedDateRange()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PeriodSelection.SelectedDateRange.MinDate.Should().Be.EqualTo(data.Period.StartDate.ToFixedClientDateOnlyFormat());
 			result.PeriodSelection.SelectedDateRange.MaxDate.Should().Be.EqualTo(data.Period.EndDate.ToFixedClientDateOnlyFormat());
@@ -160,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldFillWeekDayHeaders()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.WeekDayHeaders.Should().Have.Count.EqualTo(7);
 			result.WeekDayHeaders.Select(x => x.Title).Should().Have.SameSequenceAs(DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture));
@@ -178,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var shownTime = firstDateNotShown.Subtract(firstDisplayedDate);
 			var shownWeeks = shownTime.Days / 7;
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.Weeks.Should().Have.Count.EqualTo(shownWeeks);
 		}
@@ -188,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			data.Period = new DateOnlyPeriod(data.SelectedDate.AddDays(-7), data.SelectedDate.AddDays(7).AddDays(-1));
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.Weeks.ForEach(
 				week =>
@@ -202,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldFillDayViewModelDate()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate).Date.Should().Be(data.SelectedDate);
 		}
@@ -210,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldFillDayViewHeaderDayNumber()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate).Header.DayNumber.Should().Be(data.SelectedDate.Day.ToString());
 		}
@@ -221,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var firstDateInMonth = new DateOnly(data.SelectedDate.Year, data.SelectedDate.Month, 1);
 			data.SelectedDate = firstDateInMonth;
 			data.Period = new DateOnlyPeriod(firstDateInMonth, firstDateInMonth);
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate).Header.DayDescription
 				.Should().Be(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(data.SelectedDate.Month));
@@ -234,7 +221,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			data.SelectedDate = dateThatIsNotTheFirstInThePeriodAndNotFirstOfMonth;
 			data.Period = new DateOnlyPeriod(2011, 9, 5, 2011, 9, 11);
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.Header.DayDescription.Should().Be.Empty();
@@ -245,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var firstDisplayedDate = new DateOnly(DateHelper.GetFirstDateInWeek(data.Period.StartDate.Date, CultureInfo.CurrentCulture).AddDays(-7));
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(firstDisplayedDate)
 				.Header.DayDescription.Should().Be.EqualTo(
@@ -255,7 +242,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldSetEditable()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.Editable.Should().Be.True();
@@ -267,7 +254,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var outsideDate = data.Period.EndDate.AddDays(1);
 			data.SelectedDate = outsideDate;
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.Editable.Should().Be.False();
@@ -278,7 +265,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			data.WorkflowControlSet = null;
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.Editable.Should().Be.False();
@@ -291,7 +278,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			data.WorkflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(closedDate, closedDate);
 			data.WorkflowControlSet.PreferencePeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.Editable.Should().Be.False();
@@ -304,7 +291,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			data.WorkflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 			data.WorkflowControlSet.PreferencePeriod = new DateOnlyPeriod(closedDate, closedDate);
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.Editable.Should().Be.False();
@@ -315,7 +302,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			data.SelectedDate = data.Period.StartDate;
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.InPeriod.Should().Be.True();
@@ -327,7 +314,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var outsideDate = data.Period.EndDate.AddDays(1);
 			data.SelectedDate = outsideDate;
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.InPeriod.Should().Be.False();
@@ -336,7 +323,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapPreferencePeriod()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PreferencePeriod.Period.Should().Be.EqualTo(data.WorkflowControlSet.PreferencePeriod.DateString);
 		}
@@ -344,7 +331,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapPreferenceInputPeriod()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PreferencePeriod.OpenPeriod.Should().Be.EqualTo(data.WorkflowControlSet.PreferenceInputPeriod.DateString);
 		}
@@ -354,7 +341,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			data.WorkflowControlSet = null;
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.PreferencePeriod.Should().Be.Null();
 		}
@@ -362,7 +349,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapMaxMustHave()
 		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			result.MaxMustHave.Should().Be.EqualTo(8);
 		}
@@ -375,7 +362,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			
 			preferenceOptionProvider.Stub(x => x.RetrieveActivityOptions()).Return(new[] { activity });
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			assertOption(result.Options.ActivityOptions, Resources.Activity, activity.Description.Name, activity.Id.Value);
 		}
@@ -392,7 +379,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			preferenceOptionProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { dayOff });
 			preferenceOptionProvider.Stub(x => x.RetrieveAbsenceOptions()).Return(new[] { absence });
 
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			var shiftCategoriesGroup = result.Options.PreferenceOptions.First();
 			var dayOffsGroup = result.Options.PreferenceOptions.ElementAt(1);
@@ -407,7 +394,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapIsWeeklyWorkTimeEnabled()
 		{
 			toggleManager.Stub(x => x.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635)).Return(true);
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+			var result = target.Map(data);
 
 			Assert.That(result.IsWeeklyWorkTimeEnabled, Is.True);
 		}

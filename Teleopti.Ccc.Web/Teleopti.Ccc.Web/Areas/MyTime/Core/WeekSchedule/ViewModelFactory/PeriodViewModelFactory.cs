@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public class PeriodViewModelFactory : IPeriodViewModelFactory
     {
-		private readonly IMappingEngine _mapper;
 		private readonly IUserTimeZone _timeZone;
+	    private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
 
-		public PeriodViewModelFactory(IMappingEngine mapper, IUserTimeZone timeZone)
-		{
-			_mapper = mapper;
-			_timeZone = timeZone;
-		}
+	    public PeriodViewModelFactory(IUserTimeZone timeZone, OvertimeAvailabilityViewModelMapper overtimeMapper)
+	    {
+		    _timeZone = timeZone;
+		    _overtimeMapper = overtimeMapper;
+	    }
 
 		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateTime localDate, TimeZoneInfo timeZone)
         {
@@ -107,20 +107,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						StartPositionPercentage = 0,
 						EndPositionPercentage = endPositionPercentageYesterday,
 						IsOvertimeAvailability = true,
-						OvertimeAvailabilityYesterday = _mapper.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailabilityYesterday),
+						OvertimeAvailabilityYesterday = _overtimeMapper.Map(overtimeAvailabilityYesterday),
 						Color = Color.Gray.ToCSV()
 					});
 				}
 			}
 			return overtimeAvailabilityPeriods;
 		}
-
-
+		
 		private static string colorToString(Color color)
 		{
 			var colorCode = color.ToArgb();
 			return string.Concat("color_", ColorTranslator.ToHtml(Color.FromArgb(colorCode)).Replace("#", ""));
 		}
-
 	}
 }

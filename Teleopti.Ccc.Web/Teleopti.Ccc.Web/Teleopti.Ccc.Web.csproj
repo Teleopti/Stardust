@@ -97,10 +97,6 @@
       <HintPath>..\..\packages\Autofac.WebApi2.Owin.3.3.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
@@ -439,10 +435,7 @@
     <Compile Include="Areas\Global\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelMapper.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
@@ -498,6 +491,8 @@
     <Compile Include="Areas\MultiTenancy\MultiTenancyAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\StaffingAvailabilityController.cs" />
     <Compile Include="Areas\MyTime\Controllers\WidgetController.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\ExtendedPreferenceTemplateMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IStaffingPossibilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\StaffingPossibilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\GuidConstraint.cs" />
@@ -866,7 +861,7 @@
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\IBadgeLeaderBoardReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\EnumerationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DetailedAdherenceMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\IDailyMetricsMapper.cs" />
@@ -889,7 +884,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceAccountProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftExchangeOfferPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftExchangeOfferPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceAccountViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\PersonAccountViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeBulletinScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
@@ -915,12 +910,12 @@
     <Compile Include="Areas\MyTime\Core\ShareCalendar\IFindSharedCalendarScheduleDays.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\IPrincipalAuthorizationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\PrincipalAuthorizationFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonDayData.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityPeriodFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPeriodFeedbackProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityeDayFeedbackViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFeedbackViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityPeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityPeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
@@ -934,9 +929,9 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceReportPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\BadgeLeaderBoardReport\BadgeLeaderBoardReportViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
@@ -1053,17 +1048,13 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplateProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingProfile.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleData.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\WebPersonRequestCheckAuthorization.cs" />
@@ -1109,7 +1100,7 @@
     <Compile Include="Areas\Anywhere\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
     <Compile Include="Areas\MyTime\Controllers\UserDataController.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Message\MessagesInformationViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PersonAssignmentDayViewModel.cs" />
@@ -1120,7 +1111,7 @@
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageDialoguePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\PushMessageDialoguePersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Message\Mapping\MessageViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\Mapping\MessageViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\IMessageViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\MessageViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageProvider.cs" />
@@ -1143,8 +1134,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\IPersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimePeriodFormMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimePeriodFormMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
@@ -1187,8 +1178,8 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamProvider.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
@@ -1204,11 +1195,11 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionForMtwForMtwProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjection.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainDataMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Common\Mapping\CommonViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\Mapping\CommonViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorSource.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\ICultureSpecificViewModelFactory.cs" />
@@ -1272,7 +1263,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ITextRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsController.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\TextRequestPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\TextRequestFormMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\TextRequestFormMapper.cs" />
     <Compile Include="Core\Startup\Booter\Bootstrapper.cs" />
     <Compile Include="Core\Startup\Booter\IBootstrapper.cs" />
     <Compile Include="Core\Startup\Booter\IBootstrapperTask.cs" />
@@ -1300,23 +1291,23 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceOptionsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainDataMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainDataMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPersonRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PersonRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateTimeExtensions.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\RequestsViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\RequestsViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDayDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\TimeOfDayModelBinder.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInput.cs" />
@@ -1349,13 +1340,12 @@
     <Compile Include="Areas\MyTime\Core\DateOnlyModelBinder.cs" />
     <Compile Include="Areas\MyTime\Core\IoC\MyTimeAreaModule.cs" />
     <Compile Include="Core\RequestContext\SetThreadCulture.cs" />
-    <Compile Include="Areas\MyTime\Core\Mapping\AutoMapperConfiguration.cs" />
     <Compile Include="Areas\MyTime\Core\ColorExtensions.cs" />
     <Compile Include="Areas\Start\Core\LayoutBase\CultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\LayoutBase\ICultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\IPortalViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PortalHtmlHelper.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultScenarioScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\HeaderViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ScheduleHtmlHelper.cs" />
@@ -1376,7 +1366,7 @@
     <Compile Include="Core\Startup\RegisterRoutesTask.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IVirtualSchedulePeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\VirtualSchedulePeriodProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />
@@ -2709,6 +2699,7 @@
   <ItemGroup>
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
+    <Folder Include="Areas\MyTime\Core\Mapping\" />
     <Folder Include="Areas\People\Views\PeopleData\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\PerformanceTool\Views\Dangerous\" />

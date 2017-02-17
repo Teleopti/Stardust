@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IActivityRepository _activityRepository;
-		private readonly IPersonScheduleViewModelMapper _personScheduleViewModelMapper;
+		private readonly PersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IJsonDeserializer _deserializer;
 		private readonly IPermissionProvider _permissionProvider;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ICurrentScenario _scenarioRepository;
 
-		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone, ICurrentScenario scenarioRepository)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, PersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone, ICurrentScenario scenarioRepository)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
 		{
-			
 			var person = _personRepository.Get(personId);
 			var hasViewConfidentialPermission = _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
 																				  DateOnly.Today, person);
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			{
 				var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
 				data.PersonAbsences = calculatePersonAbsences(date, person, personScheduleDayReadModel);
-				if (personScheduleDayReadModel != null && personScheduleDayReadModel.Model != null)
+				if (personScheduleDayReadModel?.Model != null)
 					data.Model = _deserializer.DeserializeObject<Model>(personScheduleDayReadModel.Model);
 			}
 			return _personScheduleViewModelMapper.Map(data);

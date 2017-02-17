@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -13,26 +12,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	public class DateTimePeriodFormMappingTest
 	{
 		private IUserTimeZone _userTimeZone;
-		
+		private DateTimePeriodFormMapper target;
+
 		[SetUp]
 		public void Setup()
 		{
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 
-			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(
-				new DateTimePeriodFormMappingProfile(
-					() => _userTimeZone
-					)));
+			target = new DateTimePeriodFormMapper(_userTimeZone);
 		}	
-		
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
 		
 		[Test]
 		public void ShouldMapToUtcPeriod()
 		{
-			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
 			var periodForm = new DateTimePeriodForm
@@ -43,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			             		EndTime = new TimeOfDay(TimeSpan.FromHours(13))
 			             	};
 
-			var result = Mapper.Map<DateTimePeriodForm, DateTimePeriod>(periodForm);
+			var result = target.Map(periodForm);
 
 			var expected = new DateTimePeriod(
 				TimeZoneHelper.ConvertToUtc(periodForm.StartDate.Date.Add(periodForm.StartTime.Time), timeZone),

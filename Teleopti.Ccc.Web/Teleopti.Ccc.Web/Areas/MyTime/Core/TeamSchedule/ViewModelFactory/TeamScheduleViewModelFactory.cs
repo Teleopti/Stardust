@@ -1,5 +1,4 @@
 using System;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -9,19 +8,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
 	public class TeamScheduleViewModelFactory : ITeamScheduleViewModelFactory
 	{
-		private readonly IMappingEngine _mapper;
+		private readonly TeamScheduleDomainDataMapper _mapper;
+		private readonly TeamScheduleViewModelMapper _viewModelMapper;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public TeamScheduleViewModelFactory(IMappingEngine mapper, IPermissionProvider permissionProvider)
+		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, TeamScheduleViewModelMapper viewModelMapper, TeamScheduleDomainDataMapper mapper)
 		{
-			_mapper = mapper;
 			_permissionProvider = permissionProvider;
+			_viewModelMapper = viewModelMapper;
+			_mapper = mapper;
 		}
 
 		public TeamScheduleViewModel CreateViewModel(DateOnly date, Guid id)
 		{
-			var domainData = _mapper.Map<Tuple<DateOnly, Guid>, TeamScheduleDomainData>(new Tuple<DateOnly, Guid>(date, id));
-			var viewmodel = _mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(domainData);
+			var domainData = _mapper.Map(date, id);
+			var viewmodel = _viewModelMapper.Map(domainData);
 			viewmodel.ShiftTradePermisssion =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			viewmodel.ShiftTradeBulletinBoardPermission =
@@ -39,6 +40,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard)
 			};
 		}
-
 	}
 }

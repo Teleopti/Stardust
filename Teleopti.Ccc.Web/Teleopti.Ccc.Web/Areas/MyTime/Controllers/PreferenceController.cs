@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			const JsonRequestBehavior requestOption = JsonRequestBehavior.AllowGet;
 
 			var preferenceModel = _viewModelFactory.CreateViewModel(date);
-			if (preferenceModel == null || preferenceModel.Options == null)
+			if (preferenceModel?.Options == null)
 			{
 				return Json(new
 				{

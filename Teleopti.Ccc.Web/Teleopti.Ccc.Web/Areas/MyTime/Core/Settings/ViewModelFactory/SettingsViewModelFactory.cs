@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using AutoMapper;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Interfaces.Domain;
 
@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 {
 	public class SettingsViewModelFactory : ISettingsViewModelFactory
 	{
-		private readonly IMappingEngine _mapper;
+		private readonly SettingsMapper _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatPersisterAndProvider;
 
-		public SettingsViewModelFactory(IMappingEngine mapper, ILoggedOnUser loggedOnUser, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatPersisterAndProvider)
+		public SettingsViewModelFactory(SettingsMapper mapper, ILoggedOnUser loggedOnUser, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatPersisterAndProvider)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 		{
 			// as the settings view model requires values from the person, create the view model
 			// using an automapper mapping.		
-			var settingsViewModel = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
+			var settingsViewModel = _mapper.Map(_loggedOnUser.CurrentUser());
 			var persistedNameFormatSettings = _nameFormatPersisterAndProvider.Get();
 
 			settingsViewModel.NameFormats =	from Enum e in Enum.GetValues(typeof(AgentNameFormat))
