@@ -51,7 +51,7 @@
             <li class="col-xs-12 col-sm-4">
                 <span class="input-group " style="max-width: 329px;">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
+                        <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button"  id="btnPreviousWeek">
                             <i class="glyphicon glyphicon-chevron-left"></i>
                         </button>
                     </span>
@@ -60,7 +60,7 @@
                         <button class="btn btn-default moment-datepicker" type="button">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </button>
-                        <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
+                        <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button" id="btnNextWeek">
                             <i class="glyphicon glyphicon-chevron-right"></i>
                         </button>
                     </span>
@@ -71,7 +71,7 @@
             <li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month, visible: !Teleopti.MyTimeWeb.Common.UseJalaaliCalendar">@Resources.Month</a></li>
             <li class="col-xs-12 col-sm-4 pull-right" data-bind="visible: staffingProbabilityEnabled()">
                 <div class="input-group pull-right" style="width: 200px; margin-left: 50px;">
-                    <div class="btn-group" role="group" aria-describedby="basic-addon1">
+                    <div class="btn-group" role="group" aria-describedby="basic-addon1" id="probabilityDropdownMenu">
                         <a class="btn btn-default dropdown-toggle" id="dropdown-probability-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': probabilityType() > 0, 'glyphicon-eye-close': probabilityType() === 0}"></i>
                             <span data-bind="text: probabilityLabel()"></span>

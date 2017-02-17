@@ -156,6 +156,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertUrlContains("Request");
 		}
 
+		[When(@"I click the month button")]
+		public void WhenIClickTheMonthButton()
+		{
+			Browser.Interactions.Click(".submenu #week-schedule-month");
+		}
+
+		[When(@"I click the next week button")]
+		public void WhenIClickTheNextWeekButton()
+		{
+			Browser.Interactions.Click("#btnNextWeek");
+		}
+
 		[When(@"I click the current week button")]
 		public void WhenIClickTheCurrentWeekButton()
 		{
@@ -231,6 +243,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
 			AssertAbsenceIndicators(0);
+		}
+
+		[When(@"I select '(.*)' as probability value")]
+		public void WhenISelectAsProbabilityValue(string probability)
+		{
+			Browser.Interactions.ClickUsingJQuery("#probabilityDropdownMenu .dropdown-menu a:contains('{0}')", probability);
+		}
+
+		[Then(@"I should see the selected value for probability is '(.*)'")]
+		public void ThenIShouldSeeTheSelectedValueForProbabilityIs(string probability)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(
+				"#dropdown-probability-type span:contains('{0}')", probability);
 		}
 
 		private void AssertAbsenceIndicators(int visibleIndicatorCount)

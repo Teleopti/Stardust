@@ -131,7 +131,8 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 	};
 
 	self.today = function () {
-		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+		var probabilityPart = getProbabilityUrlPart();
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + probabilityPart);
 	};
 
 	this.week = function (day) {
@@ -140,14 +141,19 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 			d = self.selectedDate();
 			d.startOf('month');
 		}
+		var probabilityPart = getProbabilityUrlPart();
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')) 
+			+ probabilityPart);
+	};
+
+	function getProbabilityUrlPart() {
 		var probabilityPart = '';
 		var probability = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 		if (probability) {
 			probabilityPart = "/Probability/" + probability;
 		}
-		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')) 
-			+ probabilityPart);
-	};
+		return probabilityPart;
+	}
 
 	self.month = function () {
 		var d = self.selectedDate();
