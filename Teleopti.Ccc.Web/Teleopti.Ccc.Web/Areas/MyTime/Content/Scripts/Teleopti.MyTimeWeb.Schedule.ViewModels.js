@@ -164,6 +164,11 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 		}
 	};
 
+	var convertTimePointToMinutes = function (time) {
+		var baseDate = "2017-01-01 ";
+		return (moment(baseDate + time).diff(moment(baseDate)) / (60 * 1000));
+	}
+
 	var parseTimeSpan = function (timespan) {
 		var splitterIndex = timespan.indexOf(" - ");
 		var periodEndPosition = splitterIndex + 3;
@@ -171,13 +176,12 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 		var periodEnd = timespan.substring(periodEndPosition, timespan.length);
 		var isCrossDayperiod = periodEnd.indexOf("+1") >= 0;
 
-		var baseDate = "2017-01-01 ";
 		var startTimeInMinutes = !isCrossDayperiod
-			? (moment(baseDate + periodStart).diff(moment(baseDate)) / (60 * 1000))
+			? convertTimePointToMinutes(periodStart)
 			: 0;
-		var endTimeInMinutes = moment(baseDate + (isCrossDayperiod
+		var endTimeInMinutes = convertTimePointToMinutes(isCrossDayperiod
 				? periodEnd.substring(0, periodEnd.length - "+1".length)
-				: periodEnd)).diff(moment(baseDate)) / (60 * 1000);
+				: periodEnd);
 		return {
 			startMinutes: startTimeInMinutes,
 			endMinutes: endTimeInMinutes
@@ -237,10 +241,9 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 
 		if (day.IsFullDayAbsence || day.IsDayOff) {
 			var timelines = parent.timeLines();
-			if (parent.intradayOpenPeriod != null) {
-				var openPeriodTimeSpan = parseTimeSpan(parent.intradayOpenPeriod);
-				shiftStartMinutes = openPeriodTimeSpan.startMinutes;
-				shiftEndMinutes = openPeriodTimeSpan.endMinutes;
+			if (parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
+				shiftStartMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
+				shiftEndMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
 			} else {
 				shiftStartMinutes = timelines[0].minutes;
 				shiftEndMinutes = timelines[timelines.length - 1].minutes;

@@ -38,7 +38,7 @@ $(document).ready(function () {
 		return result;
 	}
 
-	var createWeekViewmodel = function (probabilityType, timelineStartHour, timelineEndHour) {
+	var createWeekViewmodel = function (probabilityType, timelineStartHour, timelineEndHour, intradayOpenPeriod) {
 		return {
 			"userTexts":
 			{
@@ -48,7 +48,7 @@ $(document).ready(function () {
 				"probabilityForAbsence": "Probability to get absence:",
 				"probabilityForOvertime": "Probability to get overtime:"
 			},
-			"intradayOpenPeriod": null,
+			"intradayOpenPeriod": intradayOpenPeriod,
 			"textPermission": function () { return true; },
 			"requestPermission": function () { return true; },
 			"absenceRequestPermission": function () { return true; },
@@ -239,6 +239,31 @@ $(document).ready(function () {
 		// In this scenario will show prabability based on length of timeline
 		// So should be (19 - 8) * 4 + 1
 		equal(vm.probabilities.length, 45);
+		for (var i = 0; i < vm.probabilities.length; i++) {
+			var probability = vm.probabilities[i];
+			if (i === 0) {
+				equal(probability.cssClass, "probability-none");
+				equal(probability.tooltips.length, 0);
+			} else {
+				notEqual(probability.cssClass, "probability-none");
+				equal(probability.tooltips.length > 0, true);
+			}
+		}
+	});
+
+	test("should show overtime possibility for dayoff based on intraday open hour", function () {
+		var day = createRawDaySchedule(true, false, creatPeriods());
+		var intradayOpenHour = {
+			"startTime": "10:00:00",
+			"endTime": "15:00:00"
+		};
+		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19, intradayOpenHour);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+
+		// In this scenario will show prabability based on length of initraday open houru
+		// So should be (15 - 10) * 4 + 1
+		equal(vm.probabilities.length, 21);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
