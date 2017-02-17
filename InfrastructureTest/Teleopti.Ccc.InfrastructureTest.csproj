@@ -321,6 +321,7 @@
     <Compile Include="Rta\Persisters\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="Rta\UnrecognizedStatesTest2.cs" />
     <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
+    <Compile Include="Schema\ApplicationDatabaseClusteredIndexTest.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />

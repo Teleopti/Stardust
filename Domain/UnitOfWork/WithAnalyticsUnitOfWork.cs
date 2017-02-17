@@ -30,5 +30,11 @@ namespace Teleopti.Ccc.Domain.UnitOfWork
 		{
 			return func.Invoke();
 		}
+
+		[AnalyticsUnitOfWork]
+		public virtual T Get<T>(Func<ICurrentAnalyticsUnitOfWork, T> func)
+		{
+			return func.Invoke(_unitOfWork);
+		}
 	}
 }
