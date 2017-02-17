@@ -21,7 +21,7 @@
         vm.toggleDraggable = toggleDraggable;
         vm.triggerResourceCalc = triggerResourceCalc;
         vm.timeSerie = [];
-	    vm.OverTimeModels = [];
+        vm.overTimeModels = [];
         var allSkills = [];
         var allSkillAreas = [];
         getSkills();
@@ -91,11 +91,11 @@
             if (!skill) {
                 currentSkills = area;
                 vm.selectedSkillArea = area;
-                vm.selectedSkill = "";
+                vm.selectedSkill = null;
             } else {
                 currentSkills = skill;
                 vm.selectedSkill = currentSkills;
-                vm.selectedArea = "";
+                vm.selectedArea = null;
             }
         }
 
@@ -152,16 +152,15 @@
         };
 
         function addOvertime() {
-            var skillIds;
-            if (currentSkills.Skills) {
-                skillIds = currentSkills.Skills.map(function (skill) {
-	                return skill.Id;
-                });
-                // staffingService.addOvertime.save({ Skills: [skillIds] });
-            } else {
-                skillIds = [currentSkills.Id];
-            }
-            staffingService.addOvertime.save({ Skills: skillIds });
+	        if (vm.overTimeModels.length === 0) return;
+	        staffingService.addOvertime.save(vm.overTimeModels);
+	        if (vm.selectedSkill) {
+	        	generateChart(vm.selectedSkill.Id, null);
+	        }
+	        else if (vm.selectedSkillArea) {
+	        	generateChart(null, vm.selectedSkillArea);
+	        }
+	        
         };
 
 	    function suggestOvertime() {
@@ -170,7 +169,6 @@
 			    skillIds = currentSkills.Skills.map(function(skill) {
 				    return skill.Id;
 			    });
-			    // staffingService.addOvertime.save({ Skills: [skillIds] });
 		    } else {
 			    skillIds = [currentSkills.Id];
 		    }
@@ -178,7 +176,7 @@
 		    query.$promise.then(function(response) {
 			    console.log(staffingData);
 			    staffingData.suggestedStaffing = response.SuggestedStaffingWithOverTime;
-			    vm.OverTimeModels = response.OverTimeModels;
+			    vm.overTimeModels = response.OverTimeModels;
 			    staffingData.suggestedStaffing.unshift("Suggested Staffing");
 			    generateChartForView();
 		    });

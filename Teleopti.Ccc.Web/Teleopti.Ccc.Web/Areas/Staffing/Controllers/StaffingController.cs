@@ -1,22 +1,17 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 {
 	public class StaffingController : ApiController
 	{
-		private readonly IStardustSender _stardustSender;
 		private readonly IAddOverTime _addOverTime;
 
-		public StaffingController(IStardustSender stardustSender, IAddOverTime addOverTime)
+		public StaffingController(IAddOverTime addOverTime)
 		{
-			_stardustSender = stardustSender;
 			_addOverTime = addOverTime;
 		}
 
@@ -31,19 +26,17 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/overtime")]
-		public virtual IHttpActionResult AddOvertime([FromBody]AddOverTimeModel model)
+		public virtual IHttpActionResult AddOvertime([FromBody]IList<OverTimeModel> models)
 		{
 
-			if (model == null || model.Skills.IsEmpty()) return BadRequest();
+			if (models == null || models.IsEmpty()) return BadRequest();
 
-			_stardustSender.Send(new AddOverTimeEvent
-			{
-				OvertimeDurationMin = TimeSpan.FromHours(1),
-				OvertimeDurationMax = TimeSpan.FromHours(5),
-				Skills = model.Skills
-			});
+			_addOverTime.Apply(models);
+
 			return Ok();
 		}
+
+		//Remove stardust leftovers
 
 	}
 }

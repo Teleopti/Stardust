@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -12,35 +15,26 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class AddOverTime : IAddOverTime
 	{
-		private readonly TimeSeriesProvider _timeSeriesProvider;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
-		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly ISkillRepository _skillRepository;
-		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
-		private readonly ISkillDayRepository _skillDayRepository;
-		private readonly IScenarioRepository _scenarioRepository;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly CalculateOvertimeSuggestionProvider _calculateOvertimeSuggestionProvider;
+		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
+		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 
-		public AddOverTime(TimeSeriesProvider timeSeriesProvider,
-						   ScheduledStaffingProvider scheduledStaffingProvider,
-						   IIntervalLengthFetcher intervalLengthFetcher,
-						   ISkillRepository skillRepository,
-						   ForecastedStaffingProvider forecastedStaffingProvider,
-						   ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository,
-						   INow now, IUserTimeZone timeZone, CalculateOvertimeSuggestionProvider calculateOvertimeSuggestionProvider)
+		public AddOverTime(ScheduledStaffingProvider scheduledStaffingProvider,
+						   INow now, IUserTimeZone timeZone, CalculateOvertimeSuggestionProvider calculateOvertimeSuggestionProvider, 
+						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
+						   ISkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
-			_timeSeriesProvider = timeSeriesProvider;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
-			_intervalLengthFetcher = intervalLengthFetcher;
-			_skillRepository = skillRepository;
-			_forecastedStaffingProvider = forecastedStaffingProvider;
-			_skillDayRepository = skillDayRepository;
-			_scenarioRepository = scenarioRepository;
 			_now = now;
 			_timeZone = timeZone;
 			_calculateOvertimeSuggestionProvider = calculateOvertimeSuggestionProvider;
+			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
+			_commandDispatcher = commandDispatcher;
+			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
 		public OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel)
@@ -62,11 +56,37 @@ namespace Teleopti.Ccc.Domain.Staffing
 				OverTimeModels = overTimeStaffingSuggestion.OverTimeModels
 			};
 		}
+
+		public void Apply(IList<OverTimeModel> overTimeModels )
+		{
+			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
+			if (multiplicationDefinition == null) return;
+
+			foreach (var overTimeModel in overTimeModels)
+			{
+				_commandDispatcher.Execute(new AddOvertimeActivityCommand
+										   {
+											   ActivityId = overTimeModel.ActivityId,
+											   Date = new DateOnly(overTimeModel.StartDateTime),
+											   MultiplicatorDefinitionSetId = multiplicationDefinition.Id.GetValueOrDefault(),
+											   Period = new DateTimePeriod(overTimeModel.StartDateTime.Utc(), overTimeModel.EndDateTime.Utc()),
+											   PersonId = overTimeModel.PersonId
+										   });
+				foreach (var delta in overTimeModel.Deltas)
+				{
+					_skillCombinationResourceRepository.PersistChange(delta);
+				}
+			}
+			
+			
+
+		}
 	}
 
 	public interface IAddOverTime
 	{
 		OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel skillIds);
+		void Apply(IList<OverTimeModel> overTimeModels);
 	}
 
 	public class OverTimeStaffingSuggestionModel
@@ -94,6 +114,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public Guid PersonId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
+		public IList<SkillCombinationResource> Deltas { get; set; }
 	}
 
 }

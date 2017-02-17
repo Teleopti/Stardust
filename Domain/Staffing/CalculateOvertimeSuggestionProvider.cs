@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources);
 
 			var overTimeModels = new List<OverTimeModel>();
-
 			//börja med skill som har öppet längst på längsta workload
 			foreach (var skill in skills)
 			{
@@ -72,14 +71,26 @@ namespace Teleopti.Ccc.Domain.Staffing
 					
 					var relevantResources = resources.Where(x => x.SkillCombination.NonSequenceEquals(skillsForActivity) && x.EndDateTime > shiftStart && x.StartDateTime < shiftEnd);
 
+					var deltas = new List<SkillCombinationResource>();
 					//assume whole resource
-					relevantResources.ForEach(x => x.Resource += 1);
+					foreach (var resource in relevantResources)
+					{
+						resource.Resource += 1;
+						deltas.Add(new SkillCombinationResource
+								   {
+									   Resource = 1,
+									   StartDateTime = resource.StartDateTime,
+									   EndDateTime = resource.EndDateTime,
+									   SkillCombination = resource.SkillCombination
+								   });
+					}
 					overTimeModels.Add(new OverTimeModel
 									   {
 										   ActivityId = act.Id.GetValueOrDefault(),
 										   PersonId = person.Id.GetValueOrDefault(),
 										   StartDateTime = shiftStart,
-										   EndDateTime = shiftEnd
+										   EndDateTime = shiftEnd,
+										   Deltas = deltas
 									   });
 
 					intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources);
