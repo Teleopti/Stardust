@@ -141,3 +141,43 @@ table tr td a:hover {
 	text-decoration: none;
 	color:#266d99;
 }
+
+.qrcode-container{
+	text-align: center;
+	padding-top: 100px;
+}
+
+.qrcode-container .input-group{
+	margin: 0 auto;
+	margin-bottom: 50px;
+	min-width: 400px;
+}
+
+.qrcode-container .input-group input.form-control{
+	width: calc(100% - 60px);
+	min-width: 340px;
+}
+
+.qrcode-container .input-group button.btn{
+	width: 50px;
+}
+
+.qrcode-container qrcode{
+	display: block;
+	text-align: center;
+}
+
+.qrcode-container .qrcode-tip{
+	font-size: 0.8em;
+}
+
+.qrcode-container h4 a {
+	position: relative;
+	display: inline-block;
+}
+
+.qrcode-container a > qrcode{
+	position: absolute;
+	left: -105px;
+	top: 30px;
+}
