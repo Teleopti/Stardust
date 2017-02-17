@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				DoLoadByPerson = false
 			};
 
-			var schedulesThatOverlap = _scheduleStorage.FindSchedulesForPersons(schedulePeriod, _currentScenario.Current(),
+			var schedulesThatOverlap = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePeriod), _currentScenario.Current(),
 				personProvider, new ScheduleDictionaryLoadOptions(false, false), personList);
 			return
 				personList.Any(

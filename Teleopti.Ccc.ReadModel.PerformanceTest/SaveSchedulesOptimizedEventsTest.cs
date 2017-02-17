@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 					.ToList();
 
 				schedules = Schedules.FindSchedulesForPersons(
-					new DateTimePeriod(dates.Min().Utc(), dates.Max().AddDays(1).Utc()),
+					new ScheduleDateTimePeriod(new DateTimePeriod(dates.Min().Utc(), dates.Max().AddDays(1).Utc())),
 					scenario,
 					new PersonProvider(persons),
 					new ScheduleDictionaryLoadOptions(false, false),

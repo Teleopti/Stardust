@@ -16,7 +16,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     {
         private FakeScheduleStorage _scheduleStorage;
         private IScenarioRepository _scenarioRepository;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
         private CancelAbsenceCommandHandler _target;
         private IPerson _person;
         private IAbsence _absence;
@@ -47,7 +45,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 			_scheduleStorage = new FakeScheduleStorage();
 			_scenarioRepository = new FakeScenarioRepository(_scenario);
-            _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
@@ -66,7 +63,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
 		    _scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
 
-		    _scheduleStorage.SetUnitOfWork(_unitOfWorkFactory.CurrentUnitOfWork());
 		    _target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault() });
 
 		    _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
@@ -83,8 +79,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(absence2, _period)).WithId());
-
-			_scheduleStorage.SetUnitOfWork(_unitOfWorkFactory.CurrentUnitOfWork());
 			
 			_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
 				new ScheduleDictionaryLoadOptions(false, false), _period,
@@ -107,8 +101,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, otherScenario, _period).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, otherScenario, new AbsenceLayer(_absence, _period)).WithId());
-
-			_scheduleStorage.SetUnitOfWork(_unitOfWorkFactory.CurrentUnitOfWork());
 			
 			_target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault(),ScenarioId = otherScenario.Id.GetValueOrDefault()});
 
@@ -126,9 +118,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(2)))).WithId());
 			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(4)))).WithId());
-
-			_scheduleStorage.SetUnitOfWork(_unitOfWorkFactory.CurrentUnitOfWork());
-
 			_periodDto.UtcEndTime = _period.EndDateTime.Add(TimeSpan.FromDays(2));
 			_target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault() });
 

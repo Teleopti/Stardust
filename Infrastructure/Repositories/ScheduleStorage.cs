@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -210,21 +208,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			retDic.TakeSnapshot();
             return retDic[person];
         }
-
-	    public IScheduleDictionary FindSchedulesForPersons(
-		    DateTimePeriod period,
-			    IScenario scenario,
-			    IPersonProvider personsProvider,
-			    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			    IEnumerable<IPerson> visiblePersons)
-	    {
-		    return FindSchedulesForPersons(
-			    new ScheduleDateTimePeriod(period),
-			    scenario,
-			    personsProvider,
-			    scheduleDictionaryLoadOptions,
-			    visiblePersons);
-	    }
 
 	    public IScheduleDictionary FindSchedulesForPersons(
 		    IScheduleDateTimePeriod period,

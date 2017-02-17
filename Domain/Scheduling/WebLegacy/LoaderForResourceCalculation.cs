@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var timeZone = _principal.Current().Regional.TimeZone;
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 			var personsProvider = new PersonsInOrganizationProvider(_agents) { DoLoadByPerson = false }; //TODO: this is experimental
-			return _scheduleStorage.FindSchedulesForPersons(dateTimePeriod, _scenario, personsProvider, new ScheduleDictionaryLoadOptions(false, false, false) { LoadAgentDayScheduleTags = false }, _agents);
+			return _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), _scenario, personsProvider, new ScheduleDictionaryLoadOptions(false, false, false) { LoadAgentDayScheduleTags = false }, _agents);
 		}
 
 		public void PreFillInformation(DateOnlyPeriod period)

@@ -31,13 +31,6 @@ namespace Teleopti.Interfaces.Domain
 			IAbsence absence = null);
 
 		IScheduleDictionary FindSchedulesForPersons(
-			DateTimePeriod period,
-			IScenario scenario,
-			IPersonProvider personsProvider,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			IEnumerable<IPerson> visiblePersons);
-
-		IScheduleDictionary FindSchedulesForPersons(
 			IScheduleDateTimePeriod period,
 			IScenario scenario,
 			IPersonProvider personsProvider,

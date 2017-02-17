@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand);
 
 			Assert.AreEqual(false, personRequest.IsCancelled);
-			Assert.AreEqual(1, ScheduleStorage.LoadAll().Count);
+			Assert.AreEqual(1, ScheduleStorage.LoadAll().Count());
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 		}
 

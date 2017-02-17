@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -26,28 +25,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_data.Remove (entity);
 		}
 
-		public void Clear()
-		{
-			_data.Clear();
-		}
-
-		public IList<IPersistableScheduleData> LoadAll()
-		{
-			return _data;
-		}
-
-		public void SetUnitOfWork(IUnitOfWork unitOfWork)
-		{
-			UnitOfWork = unitOfWork;
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public IPersistableScheduleData Get(Type concreteType, Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
+		public IEnumerable<IPersistableScheduleData> LoadAll()
+		{
+			return _data;
+		}
+
+	public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
@@ -111,12 +99,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario)).ToArray();
 			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, absencesPeriod, scheduleData)[person];
-		}
-
-		public IScheduleDictionary FindSchedulesForPersons(DateTimePeriod period, IScenario scenario, IPersonProvider personsProvider,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons)
-		{
-			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period, _data.Where(d => d.BelongsToScenario(scenario) && visiblePersons.Contains(d.Person)).ToArray());
 		}
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,

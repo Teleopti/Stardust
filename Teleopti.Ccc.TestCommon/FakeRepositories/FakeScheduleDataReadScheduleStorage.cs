@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -38,32 +37,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_data.Remove(entity);
 		}
 
-		public IPersistableScheduleData Get(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IPersistableScheduleData> LoadAll()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IPersistableScheduleData Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IPersistableScheduleData> entityCollection)
-		{
-			entityCollection.ForEach(Add);
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public IPersistableScheduleData Get(Type concreteType, Guid id)
 		{
 			throw new NotImplementedException();
@@ -103,12 +76,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var dict = ScheduleDictionaryForTest.WithScheduleData(person, scenario, period, _data.ToArray());
 			return new FakeScheduleRange(dict, new ScheduleParameters(scenario, person, period));
-		}
-
-		public IScheduleDictionary FindSchedulesForPersons(DateTimePeriod period, IScenario scenario, IPersonProvider personsProvider,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons)
-		{
-			return null;
 		}
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,
