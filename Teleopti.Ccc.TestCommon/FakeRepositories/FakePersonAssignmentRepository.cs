@@ -88,16 +88,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; private set; }
-
 		public IPersonAssignment LoadAggregate(Guid id)
 		{
 			return _storage.LoadAll<IPersonAssignment>().First(x => x.Id == id);
-		}
-
-		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
-		{
-			throw new NotImplementedException();
 		}
 
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
@@ -107,7 +100,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
 		{
-			return new Collection<IPersonAssignment>(_storage.LoadAll<IPersonAssignment>().ToList());
+			return _storage.LoadAll<IPersonAssignment>().Where(ass => ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario)).ToList();
 		}
 
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
