@@ -59,16 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<PreferenceDomainData, PreferenceViewModel>()
 				.ForMember(d => d.PeriodSelection, o => o.MapFrom(s => s))
-				.ForMember(d => d.WeekDayHeaders, o => o.ResolveUsing(s =>
-				{
-					var days = DateHelper.GetWeekPeriod(s.Period.StartDate, CultureInfo.CurrentCulture);
-
-					return days.DayCollection().Select(d => new WeekDayHeader
-					{
-						Date = d,
-						Title = CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(d.DayOfWeek)
-					});									
-				}))
+				.ForMember(d => d.WeekDayHeaders,o => o.MapFrom(s => DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture)))
 				.ForMember(d => d.Weeks, o => o.ResolveUsing(s =>
 				                                        	{
 				                                        		var firstDatesOfWeeks = new List<DateOnly>();

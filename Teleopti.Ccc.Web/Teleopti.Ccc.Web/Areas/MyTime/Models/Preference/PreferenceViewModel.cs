@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	public class WeekDayHeader
 	{
 		public string Title { get; set; }
-		public DateOnly Date { get; set; }
 	}
 
 	public class WeekViewModel
