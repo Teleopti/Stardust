@@ -94,17 +94,35 @@
 			var selectedAgents = vm.gridApi.selection.getSelectedRows();
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
 			var distinctAgents = [];
-			rtaToolService.sendBatch(selectedAgents.map(function (s) {
-				var key = s.dataSource + "__" + s.UserCode;
-				if (distinctAgents.indexOf(key) == -1) {
-					distinctAgents.push(key);
-					return createState(vm.authKey, s.UserCode, s.DataSource, stateCode(), now());
-				}
-			})).then(function () {
-				if (vm.snapshot)
-					closeSnapshot(vm.authKey, selectedAgents[0].DataSource, now);
+			var distinctDatasources = [];
+			distinctDatasources =
+				selectedAgents.map(function (s) {
+					if (distinctDatasources.indexOf(s.DataSource) == -1) {
+						distinctDatasources.push(s.DataSource);
+						return s.DataSource;
+					}
+				}).filter(function (d) { return d != null });
+
+			distinctDatasources.forEach(function (d) {
+				rtaToolService.sendBatch(
+					selectedAgents.filter(function (s) {
+						return s.DataSource == d
+					})
+						.map(function (s) {
+							var key = s.DataSource + "__" + s.UserCode;
+							if (distinctAgents.indexOf(key) == -1) {
+								distinctAgents.push(key);
+								return createState(vm.authKey, s.UserCode, s.DataSource, stateCode(), now());
+							}
+						})
+						.filter(function (s) { return s != null; }))
+					.then(function () {
+						if (vm.snapshot)
+							closeSnapshot(vm.authKey, selectedAgents[0].DataSource, now);
+					});
 			});
 		}
+
 
 		vm.sendState = function (userCode, dataSource, code) {
 			rtaToolService.sendState(createState(vm.authKey, userCode, dataSource, code, now()))

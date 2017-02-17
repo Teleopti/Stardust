@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -92,7 +93,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CurrentScheduleReadModelUpdater>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ActivityChangeChecker>().AsSelf().As<IActivityChangeCheckerFromScheduleChangeProcessor>().SingleInstance();
-			
+
+			if (_config.Toggle(Toggles.RTA_FasterAgentsView_42039))
+				builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
+			else
+				builder.RegisterType<RtaToolViewModelBuilderFromRepositories>().As<IRtaToolViewModelBuilder>().SingleInstance();
 		}
 
 	}
