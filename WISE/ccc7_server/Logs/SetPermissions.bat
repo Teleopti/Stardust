@@ -93,10 +93,19 @@ ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%Batch
 CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
 ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
 CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+
+::Set folder permissions for DatabaseInstaller
 ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
 CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
 ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
 CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\DatabaseInstaller" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+
+::Set folder permissions for Client
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC\Client" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC\Client" "(OI)(CI)R" "IIS_IUSRS" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC\Client" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "" "" "%BatchPath%\..\TeleoptiCCC\Client" "(OI)(CI)R" "IUSR" >> "%BatchLogFile%"
+
 ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
