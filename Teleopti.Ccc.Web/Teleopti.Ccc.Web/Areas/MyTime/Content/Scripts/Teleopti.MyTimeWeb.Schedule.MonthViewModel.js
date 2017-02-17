@@ -140,7 +140,13 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 			d = self.selectedDate();
 			d.startOf('month');
 		}
-		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+		var probabilityPart = '';
+		var probability = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
+		if (probability) {
+			probabilityPart = "/Probability/" + probability;
+		}
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')) 
+			+ probabilityPart);
 	};
 
 	self.month = function () {

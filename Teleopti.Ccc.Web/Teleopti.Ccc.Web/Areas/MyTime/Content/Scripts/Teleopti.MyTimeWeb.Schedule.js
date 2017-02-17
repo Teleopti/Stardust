@@ -186,7 +186,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				self.selectedDateSubscription.dispose();
 			self.selectedDate(date);
 			self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-				var probabilityPart = self.staffingProbabilityEnabled() ? "/Probability/" + self.probabilityType() : "";
+				var probabilityPart = getProbabilityPart();
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD"))
 					+ probabilityPart);
 			});
@@ -215,18 +215,21 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.today = function () {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+			var probabilityPart = getProbabilityPart();
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + probabilityPart);
 		};
 
 		self.week = function (date) {
-			var probabilityPart = self.staffingProbabilityEnabled() ? "/Probability/" + self.probabilityType() : "";
+			var probabilityPart = getProbabilityPart();
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"))
 				+ probabilityPart);
 		};
 
 		self.month = function () {
+			var probabilityPart = getProbabilityPart();
 			var d = self.selectedDate();
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD")));
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD"))
+				+ probabilityPart);
 		};
 
 		self.isWithinSelected = function (startDate, endDate) {
@@ -236,6 +239,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.mobile = function () {
 			var date = self.selectedDate();
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD")));
+		}
+
+		function getProbabilityPart() {
+			return self.staffingProbabilityEnabled() ? "/Probability/" + self.probabilityType() : "";
 		}
 
 		function _fillFormData(data) {

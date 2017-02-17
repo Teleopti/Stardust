@@ -195,6 +195,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				_loadContent(hashInfo);
 			});
 
+		crossroads.addRoute(new RegExp("^(" + viewRegex + ")/(" + actionRegex + ")/Probability/(" + intOptionRegex + ")$", "i"),
+			function (view, action, probability) {
+				var hashInfo = _parseHash("#" + view + "/" + action);
+				_invokeDisposeCallback(currentViewId);
+				_adjustTabs(hashInfo);
+				_loadContent(hashInfo);
+			});
+
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
@@ -263,7 +271,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
 		parts.length = 8;
 
-		var probability = (isWeekSchedule && parts[5] === "Probability") ? parseInt(parts[6]) : 0;
+		var probability = 0;
+		if (isWeekSchedule) {
+			if (parts[5] === "Probability") {
+				probability = parseInt(parts[6]);
+			}
+			else if (parts[2] === "Probability") {
+				probability = parseInt(parts[3]);
+			}
+		}
 
 		var controller = parts[0];
 		var action = parts[1];
