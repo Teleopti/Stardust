@@ -132,9 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 		private IHttpActionResult nextPlanningPeriod(IAgentGroup agentGroup)
 		{
-			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
-			if (agentGroup != null)
-				allPlanningPeriods = allPlanningPeriods.Where(p => p.AgentGroup == agentGroup).ToList();
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll().Where(p => p.AgentGroup == agentGroup).ToList();
 			var last = allPlanningPeriods.OrderByDescending(p => p.Range.StartDate).FirstOrDefault();
 
 			if (last == null)
