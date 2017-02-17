@@ -79,6 +79,7 @@
 			var strlist = terms.indexOf(";") > -1 ? terms.split(";"): [terms];
 			if (strlist.indexOf("") > -1)
 				strlist.pop();
+
 			for (var i in strlist) {
 				if (strlist.hasOwnProperty(i)) {
 					if (strlist[i].indexOf("FirstName:") > -1) this.fillTermItem('FirstName', strlist[i], formated);
