@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -11,13 +12,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
 	public class ScheduleStorageFindSchedulesTest
 	{
 		public IScheduleStorage Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		[Test]
-		[Ignore("42639")]
 		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
 		{
 			var date = DateOnly.Today;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -11,6 +12,19 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
+	[RemoveMeWithToggle("Merge this with ScheduleStorage when toggle is removed and remove this class", Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
+	public class ScheduleStorage42639 : ScheduleStorage
+	{
+		public ScheduleStorage42639(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper) : 
+			base(currentUnitOfWork, repositoryFactory, dataPermissionChecker, scheduleStorageRepositoryWrapper)
+		{
+		}
+
+		protected override void LoadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft, IEnumerable<IPerson> selectedPersons)
+		{
+		}
+	}
+
     public class ScheduleStorage : IScheduleStorage
     {
 	    private readonly IRepositoryFactory _repositoryFactory;
@@ -252,8 +266,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			    }
 			    else
 			    {
-				    loadScheduleForAll(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod,
-					    scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+				    LoadScheduleForAll(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, scheduleDictionaryLoadOptions.LoadDaysAfterLeft, visiblePersons);
 
 				    if (scheduleDictionaryLoadOptions.LoadNotes)
 				    {
@@ -290,16 +303,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    return scheduleDictionary;
 	    }
 
-	    private void loadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary,
-		    DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft)
+	    protected virtual void LoadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft, IEnumerable<IPerson> selectedPersons)
 	    {
 		    var uow = _currentUnitOfWork.Current();
-		    addPersonAbsences(scheduleDictionary,
-			    _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario), loadDaysAfterLeft);
+		    addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario), loadDaysAfterLeft);
 		    var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(uow);
 		    addPersonAssignments(scheduleDictionary, personAssignmentRepository.Find(dateOnlyPeriod, scenario));
-		    addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario),
-			    false, new List<IPerson>());
+		    addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario), false, new List<IPerson>());
 	    }
 
 	    private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> persons, bool loadDaysAfterLeft)

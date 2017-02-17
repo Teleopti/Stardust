@@ -39,10 +39,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			builder.RegisterType<ScheduleStorageRepositoryWrapper>().As<IScheduleStorageRepositoryWrapper>();
-			builder.RegisterType<ScheduleStorage>()
-				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-				.AsImplementedInterfaces()
-				.SingleInstance();
 			builder.RegisterType<ProjectionVersionPersister>()
 				.As<IProjectionVersionPersister>()
 				.SingleInstance();

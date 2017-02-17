@@ -73,6 +73,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			if(_configuration.Toggle(Toggles.ResourcePlanner_LoadingLessSchedules_42639))
+			{
+				builder.RegisterType<ScheduleStorage42639>()
+					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+					.As<IScheduleStorage>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ScheduleStorage>()
+					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+					.As<IScheduleStorage>()
+					.SingleInstance();
+			}
+
 			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<IsOverMaxSeat>().SingleInstance();
 			builder.RegisterType<LockDaysOnTeamBlockInfos>().SingleInstance();
