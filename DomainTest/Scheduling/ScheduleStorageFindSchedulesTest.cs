@@ -13,10 +13,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
+	[TestFixture(true)]
+	[TestFixture(false)]
 	public class ScheduleStorageFindSchedulesTest
 	{
+		private readonly bool _loadByPerson;
 		public IScheduleStorage Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+
+		public ScheduleStorageFindSchedulesTest(bool loadByPerson)
+		{
+			_loadByPerson = loadByPerson;
+		}
 
 		[Test]
 		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
@@ -31,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var schedules = Target.FindSchedulesForPersons(
 					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] {selectedAgent, notSelectedAgent}),
 					scenario,
-					new PersonProvider(new[] {selectedAgent, notSelectedAgent}),
+					new PersonProvider(new[] {selectedAgent, notSelectedAgent}) {DoLoadByPerson = _loadByPerson },
 					new ScheduleDictionaryLoadOptions(false, false),
 					new[] {selectedAgent});
 
