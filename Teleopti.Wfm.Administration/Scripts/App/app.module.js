@@ -64,25 +64,22 @@
 				})
 				.when('/StardustDashboard/jobs', {
 					templateUrl: 'StardustDashboard/jobs.html',
-					//controller: 'jobController'
 				})
 				.when('/StardustDashboard/jobs/:jobId', {
 					templateUrl: 'StardustDashboard/jobdetails.html',
-					//controller: 'jobDetailsController'
 				})
-
 				.when('/StardustDashboard/queue', {
 					templateUrl: 'StardustDashboard/queue.html',
-					//controller: 'jobQueueController'
 				})
 				.when('/StardustDashboard/queue/:jobId', {
 					templateUrl: 'StardustDashboard/jobqueuedetails.html',
-					//controller: 'jobQueueDetailsController'
+				})
+				.when('/StardustDashboard/failedJobs', {
+					templateUrl: 'StardustDashboard/failedJobs.html',
 				})
 
 				.when('/HangfireDashboard', {
 					templateUrl: 'HangfireDashboard.html',
-					//controller: 'hangfireController'
 				})
 				.when('/HangfireMonitoring', {
 					templateUrl: 'HangfireMonitoring.html'

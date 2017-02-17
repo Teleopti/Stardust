@@ -281,7 +281,9 @@
     <Content Include="Scripts\StardustApp\menuController.js" />
     <Content Include="Scripts\StardustApp\nodeController.js" />
     <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
+    <Content Include="Scripts\StardustApp\jobFailedController.js" />
     <Content Include="Scripts\StardustApp\summaryController.js" />
+    <Content Include="StardustDashboard\failedJobs.html" />
     <Content Include="StardustDashboard\jobqueuedetails.html" />
     <Content Include="StardustDashboard\nodedetails.html" />
     <Content Include="StardustDashboard\jobdetails.html" />

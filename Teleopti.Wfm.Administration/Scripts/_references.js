@@ -38,6 +38,7 @@
 /// <reference path="respond.js" />
 /// <reference path="stardustapp/jobcontroller.js" />
 /// <reference path="stardustapp/jobdetailscontroller.js" />
+/// <reference path="stardustapp/jobfailedcontroller.js" />
 /// <reference path="stardustapp/jobqueuecontroller.js" />
 /// <reference path="stardustapp/jobqueuedetailscontroller.js" />
 /// <reference path="stardustapp/menucontroller.js" />
