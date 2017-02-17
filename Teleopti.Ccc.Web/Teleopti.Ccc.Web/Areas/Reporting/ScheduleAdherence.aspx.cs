@@ -13,6 +13,7 @@ using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting
 {
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			new Dictionary<DateTime, IList<IntervalToolTip>>();
 
 		readonly SortedDictionary<int, summaryData> _colSummary = new SortedDictionary<int, summaryData>();
+
 		class summaryData
 		{
 			public decimal Adherence { get; set; }
@@ -157,6 +159,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		{
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 			{
+				tdTodaysDateTime.InnerText = commonReports.GetReportPullDate(_sqlParameterList, ParameterSelector.UserTimeZone);
 				var dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, _sqlParameterList);
 				if (dataset != null && dataset.Tables.Count > 0)
 				{
@@ -291,7 +294,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			tdTimeZoneLabel.InnerText = Resources.ResTimeZoneColon;
 			tdDateLabel.InnerText = Resources.ResShiftStartDateColon;
 
-			tdTodaysDateTime.InnerText = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
 			imageButtonPreviousDay.ToolTip = Resources.ResPrevious;
 			imageButtonNextDay.ToolTip = Resources.ResNext;
 
@@ -1054,7 +1056,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				Response.Redirect($"~/Reporting/Report/{ReportId}#{ReportId}");
 			}
 			var princip = Thread.CurrentPrincipal;
-			var id = ((TeleoptiPrincipalCacheable)princip).Person.Id;
+			var loggedOnPerson = ((TeleoptiPrincipalCacheable) princip).Person;
+			var id = loggedOnPerson.Id;
 			var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
 			var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
 
@@ -1062,6 +1065,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
 			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
+			ParameterSelector.UserTimeZone = loggedOnPerson.PermissionInformation.DefaultTimeZone();
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId))
 			{
 				ParameterSelector.DbTimeout = commonReports.DbTimeout;

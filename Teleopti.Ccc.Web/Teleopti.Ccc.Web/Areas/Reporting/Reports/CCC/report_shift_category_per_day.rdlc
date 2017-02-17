@@ -1890,7 +1890,7 @@ FormatPercent(Iif(InScope("matrix1_RowGroup1"),1, 1),0))
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
+                  <Value>=Parameters!ReportPullDateTime.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2268,6 +2268,10 @@ FormatPercent(Iif(InScope("matrix1_RowGroup1"),1, 1),0))
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+	 <ReportParameter Name="ReportPullDateTime">
+      <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 			var textParams = getTestTextParams();
 
 			var report = _reportGenerator.GenerateReport(reportId, _dataSource.Analytics.ConnectionString, sqlParams,
-				textParams, userId, buId, ReportGenerator.ReportFormat.Pdf);
+				textParams, userId, buId, ReportGenerator.ReportFormat.Pdf, TimeZoneInfo.Utc);
 
 			SaveTestFile(report);
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 			var textParams = getTestTextParams();
 
 			var report = _reportGenerator.GenerateReport(reportId, _dataSource.Analytics.ConnectionString, sqlParams,
-				textParams, userId, buId, ReportGenerator.ReportFormat.Word);
+				textParams, userId, buId, ReportGenerator.ReportFormat.Word, TimeZoneInfo.Utc);
 
 			SaveTestFile(report);
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 			var textParams = getTestTextParams();
 
 			var report = _reportGenerator.GenerateReport(reportId, _dataSource.Analytics.ConnectionString, sqlParams,
-				textParams, userId, buId, ReportGenerator.ReportFormat.WordOpenXml);
+				textParams, userId, buId, ReportGenerator.ReportFormat.WordOpenXml, TimeZoneInfo.Utc);
 
 			SaveTestFile(report);
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 			var textParams = getTestTextParams();
 
 			var report = _reportGenerator.GenerateReport(reportId, _dataSource.Analytics.ConnectionString, sqlParams,
-				textParams, userId, buId, ReportGenerator.ReportFormat.Excel);
+				textParams, userId, buId, ReportGenerator.ReportFormat.Excel, TimeZoneInfo.Utc);
 
 			SaveTestFile(report);
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 			var textParams = getTestTextParams();
 
 			var report = _reportGenerator.GenerateReport(reportId, _dataSource.Analytics.ConnectionString, sqlParams,
-				textParams, userId, buId, ReportGenerator.ReportFormat.ExcelOpenXml);
+				textParams, userId, buId, ReportGenerator.ReportFormat.ExcelOpenXml, TimeZoneInfo.Utc);
 
 			SaveTestFile(report);
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 			var textParams = getTestTextParams();
 
 			var report = _reportGenerator.GenerateReport(reportId, _dataSource.Analytics.ConnectionString, sqlParams,
-				textParams, userId, buId, ReportGenerator.ReportFormat.Image);
+				textParams, userId, buId, ReportGenerator.ReportFormat.Image, TimeZoneInfo.Utc);
 
 			SaveTestFile(report);
 

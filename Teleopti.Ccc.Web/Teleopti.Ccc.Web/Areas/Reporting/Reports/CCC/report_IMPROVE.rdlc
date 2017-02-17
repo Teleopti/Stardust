@@ -2120,7 +2120,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
+                  <Value>=Parameters!ReportPullDateTime.Value</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
@@ -2601,6 +2601,10 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+	 <ReportParameter Name="ReportPullDateTime">
+      <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

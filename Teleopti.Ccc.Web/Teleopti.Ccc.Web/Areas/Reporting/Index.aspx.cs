@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
 			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
+			ParameterSelector.UserTimeZone = person.PermissionInformation.DefaultTimeZone();
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 			{
 				ParameterSelector.DbTimeout = commonReports.DbTimeout;
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			
 			var generatedReport = reportGenerator.GenerateReport(ReportId, ParameterSelector.ConnectionString,
 				ParameterSelector.Parameters, ParameterSelector.ParameterTexts, ParameterSelector.UserCode,
-				ParameterSelector.BusinessUnitCode, format);
+				ParameterSelector.BusinessUnitCode, format, ParameterSelector.UserTimeZone);
 
 			Response.Clear();
 			Response.ContentType = generatedReport.MimeType;

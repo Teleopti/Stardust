@@ -489,6 +489,8 @@ namespace Teleopti.Analytics.Parameters
 			set { userReportParams.DbTimeout = value; }
 		}
 
+		public TimeZoneInfo UserTimeZone { get; set; }
+
 		protected override void RenderContents(HtmlTextWriter writer)
 		{
 			//ParameterBase Paractrl;

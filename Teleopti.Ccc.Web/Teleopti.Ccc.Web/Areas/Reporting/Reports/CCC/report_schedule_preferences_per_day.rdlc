@@ -1987,7 +1987,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
+                  <Value>=Parameters!ReportPullDateTime.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2393,6 +2393,10 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
     <ReportParameter Name="details">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+	 <ReportParameter Name="ReportPullDateTime">
+      <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

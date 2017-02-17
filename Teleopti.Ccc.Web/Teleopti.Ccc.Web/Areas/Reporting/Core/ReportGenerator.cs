@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using Microsoft.Reporting.WebForms;
 using Teleopti.Analytics.ReportTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
@@ -17,11 +19,13 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			_pathProvider = pathProvider;
 		}
 
-		public GeneratedReport GenerateReport(Guid reportId, string connectionString, IList<SqlParameter> parameters, IList<string> paramtersText, Guid userCode, Guid businessUnitCode, ReportFormat format)
+		public GeneratedReport GenerateReport(Guid reportId, string connectionString, IList<SqlParameter> parameters, IList<string> paramtersText, Guid userCode, Guid businessUnitCode, ReportFormat format, TimeZoneInfo userTimeZone)
 		{
 			using (var commonReports = new CommonReports(connectionString, reportId))
 			{
 				commonReports.LoadReportInfo();
+
+				var pullDateTime = commonReports.GetReportPullDate(parameters, userTimeZone);
 				var dataset = commonReports.GetReportData(userCode, businessUnitCode, parameters);
 
 				var reportName = commonReports.ReportFileName.Replace("~/", "");
@@ -48,7 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 							added = true;
 						}
 						if (!added && repInfo.Name == "culture")
+						{
 							@params.Add(new ReportParameter("culture", Thread.CurrentThread.CurrentCulture.IetfLanguageTag, false));
+							added = true;
+						}
+						if (!added && repInfo.Name == "ReportPullDateTime")
+							@params.Add(new ReportParameter("ReportPullDateTime", pullDateTime, false));
 						i += 1;
 					}
 				}

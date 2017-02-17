@@ -2240,6 +2240,10 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+	 <ReportParameter Name="ReportPullDateTime">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <Code>
     Public Function ToFormat(var as String, a as integer) as String

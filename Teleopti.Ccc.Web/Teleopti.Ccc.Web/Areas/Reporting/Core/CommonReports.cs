@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
@@ -128,11 +129,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			var returnValue = new DataSet { Locale = CultureInfo.CurrentCulture };
 			var adapter = new SqlDataAdapter();
 			var sqlCommand = new SqlCommand
-				{
-					CommandText = procedureName,
-					CommandTimeout = _dbTimeout,
-					CommandType = CommandType.StoredProcedure
-				};
+			{
+				CommandText = procedureName,
+				CommandTimeout = _dbTimeout,
+				CommandType = CommandType.StoredProcedure
+			};
 
 			sqlCommand.Parameters.AddRange(parameters.ToArray());
 			sqlCommand.Connection = _connection;
@@ -146,6 +147,38 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			_connection.Close();
 
 			return returnValue;
+		}
+
+		public object ExecuteScalar(string commandText)
+		{
+			object retVal = default(object);
+			if (_connection.State != ConnectionState.Open)
+				_connection.Open();
+
+			using (var tran = _connection.BeginTransaction())
+			{
+				using (var command = SetCommand(tran, commandText))
+				{
+					retVal = command.ExecuteScalar();
+					tran.Commit();
+				}
+			}
+			return retVal;
+		}
+
+		private SqlCommand SetCommand(SqlTransaction transaction, string commandText)
+		{
+			var timeout = "60";
+			if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
+				timeout = ConfigurationManager.AppSettings["databaseTimeout"];
+			return new SqlCommand
+			{
+				CommandText = commandText,
+				Transaction = transaction,
+				Connection = transaction.Connection,
+				CommandType = CommandType.Text,
+				CommandTimeout = int.Parse(timeout, CultureInfo.InvariantCulture)
+			};
 		}
 
 		public void Dispose()
@@ -175,9 +208,24 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 
 			return returnValue;
 		}
+		
+		public string GetReportPullDate(IList<SqlParameter> sqlParameters, TimeZoneInfo userTimeZone)
+		{
+			SqlParameter userPickedTimeZone = sqlParameters.SingleOrDefault(x => x.ParameterName == "@time_zone_id");
+			if (userPickedTimeZone != null)
+			{
+				string timezoneId = (string)ExecuteScalar($"SELECT time_zone_code FROM mart.dim_time_zone WHERE time_zone_id = {userPickedTimeZone.Value}");
+				if (!string.IsNullOrEmpty(timezoneId))
+				{
+					userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+				}
+			}
+			
+			return TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, userTimeZone).ToString();
+		}
 	}
 
-	public interface ICommonReports: IDisposable
+	public interface ICommonReports : IDisposable
 	{
 		void LoadReportInfo();
 		string ResourceKey { get; }

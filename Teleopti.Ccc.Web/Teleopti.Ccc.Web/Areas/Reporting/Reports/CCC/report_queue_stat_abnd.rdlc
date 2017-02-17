@@ -2604,7 +2604,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
+                  <Value>=Parameters!ReportPullDateTime.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3054,6 +3054,10 @@
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ResIntervalType</Prompt>
+    </ReportParameter>
+	 <ReportParameter Name="ReportPullDateTime">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
   <Code>Public Function ToPeriod(ByVal TheDate As DateTime, ByVal Period As String, ByVal PeriodType As Integer) as String

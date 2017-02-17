@@ -2697,7 +2697,7 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
+                  <Value>=Parameters!ReportPullDateTime.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3183,6 +3183,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
     <ReportParameter Name="details">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+	 <ReportParameter Name="ReportPullDateTime">
+      <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
