@@ -162,6 +162,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
 		}
 
+		[Test, SetCulture("sv")]
+		public void ShouldUsePermissionInformationUICulture()
+		{
+			var shiftTradeTargetTimeSpecificationRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(ShiftTradeTargetTimeSpecification).FullName,
+				Enabled = true,
+				HandleOptionOnFailed = RequestHandleOption.Pending
+			};
+			var siteOpenHourRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(SiteOpenHoursRule).FullName,
+				Enabled = true,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			};
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[]
+			{
+				shiftTradeTargetTimeSpecificationRuleConfig,
+				siteOpenHourRuleConfig
+			});
+			Assert.IsTrue(personRequest.IsPending);
+
+			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest, true);
+			Assert.IsTrue(personRequest.IsDenied);
+			Assert.IsTrue(personRequest.DenyReason.Contains("No open hours for"));
+
+			var denyReasonInSV = "Toleransen för kontraktstiden har överskridits";
+			var denyReasonInEN = "Schedule contract time tolerance was exceeded";
+			var message = personRequest.GetMessage(new NoFormatting());
+			Assert.IsFalse(message.Contains(denyReasonInSV));
+			Assert.IsTrue(message.Contains(denyReasonInEN));
+		}
+
 		private IPersonRequest createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(
 			ShiftTradeBusinessRuleConfig[] shiftTradeBusinessRuleConfigs
 			, bool autoGrantShiftTrade = true, bool useSpecificationCheckerWithConfig = true)

@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private static string getValidationMessage(ShiftTradeRequestValidationResult validationResult, IPersonRequest personRequest)
 		{
 			return Resources.ResourceManager.GetString(validationResult.DenyReason,
-				personRequest.Person.PermissionInformation.Culture());
+				personRequest.Person.PermissionInformation.UICulture());
 		}
 
 		private void setUpdatedMessage(AcceptShiftTradeEvent @event, IPersonRequest personRequest)
