@@ -102,6 +102,16 @@
 		vm.historicalAdherenceUrl = historicalAdherenceUrl;
 		vm.goToOverview = function () { rtaRouteService.goToSites(); }
 		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
+		/**************RIGHT PANEL**************/
+		vm.rightPanelOptions = {
+			panelState: false,
+			panelTitle: " ",
+			sidePanelTitle: " ",
+			showCloseButton: true,
+			showBackdrop: true,
+			showResizer: true,
+			showPopupButton: true
+		};
 
 		allGrid.data = 'vm.filteredData';
 		inAlarmGrid.data = 'vm.filteredData';
