@@ -81,19 +81,19 @@
 				strlist.pop();
 			for (var i in strlist) {
 				if (strlist.hasOwnProperty(i)) {
-					if (strlist[i].indexOf("FirstName") > -1) this.fillTermItem('FirstName', strlist[i], formated);
-					else if (strlist[i].indexOf("LastName") > -1) this.fillTermItem('LastName', strlist[i], formated);
-					else if (strlist[i].indexOf("EmploymentNumber") > -1) this.fillTermItem('EmploymentNumber', strlist[i], formated);
-					else if (strlist[i].indexOf("Organization") > -1) this.fillTermItem('Organization', strlist[i], formated);
-					else if (strlist[i].indexOf("Role") > -1) this.fillTermItem('Role', strlist[i], formated);
-					else if (strlist[i].indexOf("Contract") > -1) this.fillTermItem('Contract', strlist[i], formated);
-					else if (strlist[i].indexOf("ContractSchedule") > -1) this.fillTermItem('ContractSchedule', strlist[i], formated);
-					else if (strlist[i].indexOf("ShiftBags") > -1) this.fillTermItem('ShiftBag', strlist[i], formated);
-					else if (strlist[i].indexOf("PartTimePercentage") > -1) this.fillTermItem('PartTimePercentage', strlist[i], formated);
-					else if (strlist[i].indexOf("Skill") > -1) this.fillTermItem('Skill', strlist[i], formated);
-					else if (strlist[i].indexOf("BudgetGroup") > -1) this.fillTermItem('BudgetGroup', strlist[i], formated);
-					else if (strlist[i].indexOf("Note") > -1) this.fillTermItem('Note', strlist[i], formated);
-					else this.fillTermItem('All', strlist[i], formated);
+					if (strlist[i].indexOf("FirstName:") > -1) this.fillTermItem('FirstName', strlist[i], formated);
+					else if (strlist[i].indexOf("LastName:") > -1) this.fillTermItem('LastName', strlist[i], formated);
+					else if (strlist[i].indexOf("EmploymentNumber:") > -1) this.fillTermItem('EmploymentNumber', strlist[i], formated);
+					else if (strlist[i].indexOf("Organization:") > -1) this.fillTermItem('Organization', strlist[i], formated);
+					else if (strlist[i].indexOf("Role:") > -1) this.fillTermItem('Role', strlist[i], formated);
+					else if (strlist[i].indexOf("Contract:") > -1) this.fillTermItem('Contract', strlist[i], formated);
+					else if (strlist[i].indexOf("ContractSchedule:") > -1) this.fillTermItem('ContractSchedule', strlist[i], formated);
+					else if (strlist[i].indexOf("ShiftBag:") > -1) this.fillTermItem('ShiftBag', strlist[i], formated);
+					else if (strlist[i].indexOf("PartTimePercentage:") > -1) this.fillTermItem('PartTimePercentage', strlist[i], formated);
+					else if (strlist[i].indexOf("Skill:") > -1) this.fillTermItem('Skill', strlist[i], formated);
+					else if (strlist[i].indexOf("BudgetGroup:") > -1) this.fillTermItem('BudgetGroup', strlist[i], formated);
+					else if (strlist[i].indexOf("Note:") > -1) this.fillTermItem('Note', strlist[i], formated);
+					else this.fillTermItem('All:', strlist[i], formated);
 				}
 			}
 			return formated;
@@ -106,7 +106,7 @@
 				StartDate: moment(filter.period.startDate).format('YYYY-MM-DD'),
 				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),
 				SortingOrders: sortingOrders,
-				AgentSearchTerm: terms,
+				AgentSearchTerm: terms, 
 				SelectedTeamIds: filter.selectedTeamIds,
 				Filters: filters
 			};

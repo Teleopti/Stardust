@@ -11,7 +11,7 @@
 			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
 			searchKeywordChanged: false,
 			searchFields : [
-				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBags',
+				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
 		};
