@@ -19,11 +19,10 @@
         function selectCurrentTab() {
             var current = $location.path();
             if (!current.indexOf('StardustDashboard/')) return;
-            current = current.slice(19,24);
+            current = current.slice(19);
             var currentElement = [current] + 'isActive';
             vm[currentElement] = true;
-
-
+        	// ¯\_(ツ)_/¯
         }
         selectCurrentTab();
 
