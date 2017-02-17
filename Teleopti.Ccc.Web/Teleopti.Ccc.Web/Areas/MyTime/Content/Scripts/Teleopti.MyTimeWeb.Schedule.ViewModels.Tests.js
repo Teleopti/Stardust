@@ -48,6 +48,7 @@ $(document).ready(function () {
 				"probabilityForAbsence": "Probability to get absence:",
 				"probabilityForOvertime": "Probability to get overtime:"
 			},
+			"staffingProbabilityEnabled": function () { return true; },
 			"intradayOpenPeriod": intradayOpenPeriod,
 			"textPermission": function () { return true; },
 			"requestPermission": function () { return true; },
@@ -268,22 +269,146 @@ $(document).ready(function () {
 		equal(vm.probabilities.length, 0);
 	});
 
+	test("should show no absence possibility if the feature is disabled", function () {
+		var day = createRawDaySchedule(false, false, creatPeriods());
+		var week = createWeekViewmodel(absenceProbabilityType, 8, 19);
+		week.staffingProbabilityEnabled = function () { return false; }
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+
+		equal(vm.probabilities.length, 0);
+	});
+
+	test("should show no overtime possibility if the feature is disabled", function () {
+		var day = createRawDaySchedule(false, false, creatPeriods());
+		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19);
+		week.staffingProbabilityEnabled = function () { return false; }
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+
+		equal(vm.probabilities.length, 0);
+	});
+
 	test("should show absence possibility within schedule time range", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
 		var week = createWeekViewmodel(absenceProbabilityType, 8, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
 		// Total 9 hours * 4 = 36 periods, and there is one extra period at the end
 		equal(vm.probabilities.length, 37);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length, 0);
+				equal(probability.actualClass, "probability-none");
+				equal(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length > 0, true);
+				notEqual(probability.actualClass, "probability-none");
+				notEqual(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length > 0, true);
+				equal(probability.tooltips().length > 0, true);
+			}
+		}
+	});
+
+	test("should show overtime possibility within schedule time range", function () {
+		var day = createRawDaySchedule(false, false, creatPeriods());
+		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
+
+		// Total 9 hours * 4 = 36 periods, and there is one extra period at the end
+		equal(vm.probabilities.length, 37);
+		for (var i = 0; i < vm.probabilities.length; i++) {
+			var probability = vm.probabilities[i];
+			if (i === 0) {
+				equal(probability.actualClass, "probability-none");
+				equal(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
+			} else {
+				notEqual(probability.actualClass, "probability-none");
+				notEqual(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length > 0, true);
+				equal(probability.tooltips().length > 0, true);
+			}
+		}
+	});
+
+	test("should hide absence possibility earlier than now", function () {
+		var day = createRawDaySchedule(false, false, creatPeriods());
+		var week = createWeekViewmodel(absenceProbabilityType, 8, 19);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(750); // 12:30
+
+		// Total 9 hours * 4 = 36 periods, and there is one extra period at the end
+		equal(vm.probabilities.length, 37);
+
+		for (var i = 0; i < vm.probabilities.length; i++) {
+			var probability = vm.probabilities[i];
+			if (i === 0) {
+				equal(probability.actualClass, "probability-none");
+				equal(probability.actualTooltips.length, 0);
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
+			} else {
+				notEqual(probability.actualClass, "probability-none");
+				equal(probability.actualTooltips.length > 0, true);
+
+				// Schedule started from 09:30, current time is 12:30
+				// Then the first (12:30 - 09:30) * 4 probabilities should be invisible
+				if (i <= 12) {
+					equal(probability.cssClass(), "probability-none");
+					equal(probability.tooltips().length, 0);
+				} else {
+					notEqual(probability.cssClass(), "probability-none");
+					equal(probability.tooltips().length > 0, true);
+				}
+			}
+		}
+	});
+
+	test("should hide overtime possibility earlier than now", function () {
+		var day = createRawDaySchedule(false, false, creatPeriods());
+		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(750); // 12:30
+
+		// Total 9 hours * 4 = 36 periods, and there is one extra period at the end
+		equal(vm.probabilities.length, 37);
+
+		for (var i = 0; i < vm.probabilities.length; i++) {
+			var probability = vm.probabilities[i];
+			if (i === 0) {
+				equal(probability.actualClass, "probability-none");
+				equal(probability.actualTooltips.length, 0);
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
+			} else {
+				notEqual(probability.actualClass, "probability-none");
+				equal(probability.actualTooltips.length > 0, true);
+
+				// Schedule started from 09:30, current time is 12:30
+				// Then the first (12:30 - 09:30) * 4 probabilities should be invisible
+				if (i <= 12) {
+					equal(probability.cssClass(), "probability-none");
+					equal(probability.tooltips().length, 0);
+				} else {
+					notEqual(probability.cssClass(), "probability-none");
+					equal(probability.tooltips().length > 0, true);
+				}
 			}
 		}
 	});
@@ -309,6 +434,7 @@ $(document).ready(function () {
 		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
 		// In this scenario will show prabability based on length of timeline
 		// So should be (19 - 8) * 4 + 1
@@ -316,11 +442,17 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length, 0);
+				equal(probability.actualClass, "probability-none");
+				equal(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length > 0, true);
+				notEqual(probability.actualClass, "probability-none");
+				notEqual(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length > 0, true);
+				equal(probability.tooltips().length > 0, true);
 			}
 		}
 	});
@@ -334,6 +466,7 @@ $(document).ready(function () {
 		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19, intradayOpenHour);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
 		// In this scenario will show prabability based on length of initraday open houru
 		// So should be (15 - 10) * 4 + 1
@@ -341,11 +474,17 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length, 0);
+				equal(probability.actualClass, "probability-none");
+				equal(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length > 0, true);
+				notEqual(probability.actualClass, "probability-none");
+				notEqual(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length > 0, true);
+				equal(probability.tooltips().length > 0, true);
 			}
 		}
 	});
@@ -355,6 +494,7 @@ $(document).ready(function () {
 		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
 		// In this scenario will show prabability based on length of timeline
 		// So should be (19 - 8) * 4 + 1
@@ -362,11 +502,17 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length, 0);
+				equal(probability.actualClass, "probability-none");
+				equal(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length > 0, true);
+				notEqual(probability.actualClass, "probability-none");
+				notEqual(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length > 0, true);
+				equal(probability.tooltips().length > 0, true);
 			}
 		}
 	});
@@ -376,6 +522,7 @@ $(document).ready(function () {
 		var week = createWeekViewmodel(overtimeProbabilityType, 0, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
 		// In this scenario timeline will start from 00:00
 		// So should be (18.5 - 0) * 4 + 1
@@ -383,11 +530,17 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length, 0);
+				equal(probability.actualClass, "probability-none");
+				equal(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length > 0, true);
+				notEqual(probability.actualClass, "probability-none");
+				notEqual(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length > 0, true);
+				equal(probability.tooltips().length > 0, true);
 			}
 		}
 	});
@@ -397,6 +550,7 @@ $(document).ready(function () {
 		var week = createWeekViewmodel(absenceProbabilityType, 0, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
 		// In this scenario timeline will start from 00:00
 		// So should be (18.5 - 0) * 4 + 1
@@ -406,11 +560,17 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0 || (7 <= i && i <= 38)) {
-				equal(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length, 0);
+				equal(probability.actualClass, "probability-none");
+				equal(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length, 0);
+				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.cssClass, "probability-none");
-				equal(probability.tooltips.length > 0, true);
+				notEqual(probability.actualClass, "probability-none");
+				notEqual(probability.cssClass(), "probability-none");
+
+				equal(probability.actualTooltips.length > 0, true);
+				equal(probability.tooltips().length > 0, true);
 			}
 		}
 	});

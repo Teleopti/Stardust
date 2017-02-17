@@ -9,7 +9,10 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 	self.fixedDate = ko.observable(day.FixedDate);
 
 	self.date = ko.observable(day.Date);
+	self.userNowInMinute = ko.observable(-1);
 	self.state = ko.observable(day.State);
+
+	self.staffingProbabilityEnabled = ko.observable(parent.staffingProbabilityEnabled());
 
 	var dayDescription = "";
 	var dayNumberDisplay = "";
@@ -231,7 +234,9 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 	};
 
 	var createProbabilityModels = function (rawProbabilities) {
-		if (rawProbabilities == undefined || rawProbabilities.length === 0) return [];
+		if (!self.staffingProbabilityEnabled() || rawProbabilities == undefined || rawProbabilities.length === 0) {
+			return [];
+		}
 
 		// If today is full day absence or dayoff, Then hide absence probabilities
 		var probabilityType = parent.probabilityType();
@@ -290,8 +295,10 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 
 		// Add an "invisible" probability on top to make all probabilities displayed from correct position
 		probabilities.push({
-			cssClass: "probability-none",
-			tooltips: "",
+			actualClass: "probability-none",
+			actualTooltips: "",
+			cssClass: function () { return "probability-none"; },
+			tooltips: function () { return "" },
 			styleJson: {
 				"top": 0,
 				"height": Math.round(scheduleHeight * shiftStartPosition) + "px"
@@ -340,17 +347,32 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 			var index = intervalProbability.Possibility;
 			var timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat;
 			var intervalTimeSpan = startMoment.format(timeFormat) + " - " + endMoment.format(timeFormat);
-			var tooltips = inScheduleTimeRange
-				? "<div style='text-align: center'>" +
+
+			var tooltips = "";
+			var cssClass = "probability-none";
+			if (inScheduleTimeRange) {
+				cssClass = "probability-" + probabilityNames[index];
+				tooltips = "<div style='text-align: center'>" +
 				"  <div>" + tooltipsTitle + "</div>" +
 				"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + probabilityLabels[index] + "</div>" +
 				"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalTimeSpan + "</div>" +
-				"</div>"
-				: "";
+				"</div>";
+			}
 
 			probabilities.push({
-				cssClass: "probability-" + (inScheduleTimeRange ? probabilityNames[index] : "none"),
-				tooltips: tooltips
+				endInMinutes: intervalEndMinutes,
+				actualClass: cssClass,
+				actualTooltips: tooltips,
+				cssClass: function () {
+					return (self.userNowInMinute() >= 0 && self.userNowInMinute() < this.endInMinutes)
+						? this.actualClass
+						: "probability-none";
+				},
+				tooltips: function () {
+					return (self.userNowInMinute() >= 0 && self.userNowInMinute() < this.endInMinutes)
+						? this.actualTooltips
+						: "";
+				}
 			});
 		}
 

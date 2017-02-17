@@ -494,6 +494,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			timeIndicator.hide();
 			timeIndicatorTimeLine.hide();
 		}
+
+		var days = vm.days();
+		for (var i = 0; i < days.length; i++) {
+			days[i].userNowInMinute(clientNowMinutes);
+		}
 	}
 
 	function getMinutes(elementSelector, first) {

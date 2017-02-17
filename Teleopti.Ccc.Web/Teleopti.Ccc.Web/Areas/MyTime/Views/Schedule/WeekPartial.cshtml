@@ -51,7 +51,7 @@
             <li class="col-xs-12 col-sm-4">
                 <span class="input-group " style="max-width: 329px;">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button"  id="btnPreviousWeek">
+                        <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button" id="btnPreviousWeek">
                             <i class="glyphicon glyphicon-chevron-left"></i>
                         </button>
                     </span>
@@ -215,7 +215,7 @@
                         </div>
                         <div class="probability-pane">
                             <!--ko foreach: probabilities-->
-                            <div data-bind="css:cssClass, tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+                            <div data-bind="css:cssClass(), tooltip: {title: tooltips(), html:true}, style: styleJson"></div>
                             <!-- /ko -->
                         </div>
                         <!-- /ko -->
