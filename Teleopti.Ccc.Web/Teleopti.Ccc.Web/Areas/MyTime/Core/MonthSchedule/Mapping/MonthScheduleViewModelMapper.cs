@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 		{
 			return new MonthScheduleViewModel
 			{
-				ScheduleDays = s.Days.Select(map),
+				ScheduleDays = s.Days.Select(map).ToArray(),
 				CurrentDate = s.CurrentDate.Date,
 				FixedDate = s.CurrentDate.ToFixedClientDateOnlyFormat(),
 				DayHeaders = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture)

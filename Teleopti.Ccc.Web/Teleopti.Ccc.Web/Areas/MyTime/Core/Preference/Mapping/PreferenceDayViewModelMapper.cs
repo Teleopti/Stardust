@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 		private static string extendedTitle(IPreferenceDay s)
 		{
+			if (s.Restriction == null) return string.Empty;
 			if (s.Restriction.DayOffTemplate != null)
 				return s.Restriction.DayOffTemplate.Description.Name;
 			if (s.Restriction.Absence != null)
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 		private static string color(IPreferenceDay s)
 		{
+			if (s.Restriction == null) return string.Empty;
 			if (s.Restriction.DayOffTemplate != null)
 				return s.Restriction.DayOffTemplate.DisplayColor.ToCSV();
 			if (s.Restriction.Absence != null)
@@ -67,6 +69,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		{
 			if (s.TemplateName != null)
 				return s.TemplateName;
+			if (s.Restriction == null)
+				return string.Empty;
 			if (s.Restriction.DayOffTemplate != null)
 				return s.Restriction.DayOffTemplate.Description.Name;
 			if (s.Restriction.Absence != null)
@@ -75,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				return s.Restriction.ShiftCategory.Description.Name;
 			if (_extendedPreferencePredicate.IsExtended(s))
 				return Resources.Extended;
-			return null;
+			return string.Empty;
 		}
 
 		private T GetActivityRestrictionValue<T>(IPreferenceDay preferenceDay, Func<IActivityRestriction, T> getter)

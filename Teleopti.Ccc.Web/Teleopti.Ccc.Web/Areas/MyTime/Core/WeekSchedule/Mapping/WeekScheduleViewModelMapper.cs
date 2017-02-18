@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				PeriodSelection = _periodSelectionViewModelFactory.CreateModel(s.Date),
 				Styles = s.Days == null ? null : map(_scheduleColorProvider.GetColors(s.ColorSource)),
 				TimeLineCulture = currentUser.PermissionInformation.Culture().ToString(),
-				TimeLine = createTimeLine(s.MinMaxTime),
+				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
 				RequestPermission = map(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
 				DatePickerFormat = cultureInfo.DateTimeFormat.ShortDatePattern,
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					OvertimeAvailabililty = overtimeAvailability(s),
 					Availability = s.Availability
 				};
-			});
+			}).ToArray();
 		}
 
 		private NoteViewModel map(ReadOnlyCollection<IPublicNote> s)
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 		private IEnumerable<StyleClassViewModel> map(IEnumerable<Color> colors)
 		{
-			return colors?.Select(_commonMapper.Map);
+			return colors?.Select(_commonMapper.Map).ToArray();
 		}
 
 		private IEnumerable<TimeLineViewModel> createTimeLine(TimePeriod timelinePeriod)

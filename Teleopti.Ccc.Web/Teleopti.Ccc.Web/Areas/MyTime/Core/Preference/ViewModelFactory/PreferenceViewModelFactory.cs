@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var period = new DateOnlyPeriod(from, to);
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period);
-			return scheduleDays.Select(_preferenceAndScheduleMapper.Map);
+			return scheduleDays.Select(_preferenceAndScheduleMapper.Map).ToArray();
 		}
 
 		public IEnumerable<PreferenceTemplateViewModel> CreatePreferenceTemplateViewModels()
 		{
 			var templates = _preferenceTemplateProvider.RetrievePreferenceTemplates();
-			return templates.Select(_templateMapper.Map);
+			return templates.Select(_templateMapper.Map).ToArray();
 		}
 
 		public PreferenceWeeklyWorkTimeViewModel CreatePreferenceWeeklyWorkTimeViewModel(DateOnly date)

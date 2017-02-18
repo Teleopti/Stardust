@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var sourceTimeZone = _userTimeZone.TimeZone();
 			return new PersonScheduleDayViewModel
 			{
-				Date = data.Date,
-				Person = data.PersonId,
+				Date = date,
+				Person = personId,
 				StartTime =
-					data.Start.HasValue ? TimeZoneHelper.ConvertFromUtc(data.Start.Value, sourceTimeZone) : (DateTime?) null,
+					data?.Start != null ? TimeZoneHelper.ConvertFromUtc(data.Start.Value, sourceTimeZone) : (DateTime?) null,
 				EndTime =
-					data.End.HasValue ? TimeZoneHelper.ConvertFromUtc(data.End.Value, sourceTimeZone) : (DateTime?) null,
-				IsDayOff = data.IsDayOff
+					data?.End != null ? TimeZoneHelper.ConvertFromUtc(data.End.Value, sourceTimeZone) : (DateTime?) null,
+				IsDayOff = data?.IsDayOff ?? false
 			};
 		}
 	}
