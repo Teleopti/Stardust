@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				return s.Restriction.Absence.DisplayColor.ToCSV();
 			if (s.Restriction.ShiftCategory != null)
 				return s.Restriction.ShiftCategory.DisplayColor.ToCSV();
-			return "";
+			return null;
 		}
 
 		private string preference(IPreferenceDay s)
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				return s.Restriction.ShiftCategory.Description.Name;
 			if (_extendedPreferencePredicate.IsExtended(s))
 				return Resources.Extended;
-			return string.Empty;
+			return null;
 		}
 
 		private T GetActivityRestrictionValue<T>(IPreferenceDay preferenceDay, Func<IActivityRestriction, T> getter)
