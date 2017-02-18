@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory
 						: (DateTime?)null,
 				IsRead = pushMessageDialogue.IsReplied,
 				AllowDialogueReply = pushMessageDialogue.PushMessage.AllowDialogueReply,
-				DialogueMessages = pushMessageDialogue.DialogueMessages.Select(d => new DialogueMessageViewModel { Created = TimeZoneInfo.ConvertTimeFromUtc(d.Created, _userTimeZone.TimeZone()).ToShortDateTimeString(), Text = d.Text, Sender = _personNameProvider.BuildNameFromSetting(d.Sender.Name), SenderId = d.Sender.Id.GetValueOrDefault() }).ToList(),
-				ReplyOptions = pushMessageDialogue.PushMessage.ReplyOptions
+				DialogueMessages = pushMessageDialogue.DialogueMessages.Select(d => new DialogueMessageViewModel { Created = TimeZoneInfo.ConvertTimeFromUtc(d.Created, _userTimeZone.TimeZone()).ToShortDateTimeString(), Text = d.Text, Sender = _personNameProvider.BuildNameFromSetting(d.Sender.Name), SenderId = d.Sender.Id.GetValueOrDefault() }).ToArray(),
+				ReplyOptions = pushMessageDialogue.PushMessage.ReplyOptions.ToArray()
 			};
 		}
     }

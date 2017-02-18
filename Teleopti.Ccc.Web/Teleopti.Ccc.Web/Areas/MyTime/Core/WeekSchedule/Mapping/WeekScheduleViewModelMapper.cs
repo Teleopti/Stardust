@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					Date = s.Date.ToShortDateString(),
 					FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
 					DayOfWeekNumber = (int) s.Date.DayOfWeek,
-					Periods = projections(s),
+					Periods = projections(s).ToArray(),
 					TextRequestCount =
 						s.PersonRequests?.Count(
 							r => r.Request is TextRequest || r.Request is AbsenceRequest || (r.Request is ShiftExchangeOffer)) ?? 0,
@@ -195,16 +195,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return _overtimeMapper.Map(s.OvertimeAvailability);
 			if (s.ScheduleDay?.SignificantPartForDisplay() == SchedulePartView.MainShift)
 			{
+				var personAssignment = s.ScheduleDay.PersonAssignment();
 				return new OvertimeAvailabilityViewModel
 				{
 					HasOvertimeAvailability = false,
 					DefaultStartTime = TimeHelper.TimeOfDayFromTimeSpan(
-						s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime, CultureInfo.CurrentCulture),
+						personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime, CultureInfo.CurrentCulture),
 					DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(
-						s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(TimeSpan.FromHours(1)),
+						personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(TimeSpan.FromHours(1)),
 						CultureInfo.CurrentCulture),
 					DefaultEndTimeNextDay =
-						s.ScheduleDay.PersonAssignment()
+						personAssignment
 							.Period.TimePeriod(s.ScheduleDay.TimeZone)
 							.EndTime.Add(TimeSpan.FromHours(1))
 							.Days > 0

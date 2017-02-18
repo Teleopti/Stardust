@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
 				Date = m.UpdatedOn.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(m.UpdatedOn.Value, _userTimeZone.TimeZone()) : (DateTime?)null,
 				IsRead = m.IsReplied,
 				AllowDialogueReply = m.PushMessage.AllowDialogueReply,
-				DialogueMessages = m.DialogueMessages.Select(map).ToList(),
-				ReplyOptions = m.PushMessage.ReplyOptions
+				DialogueMessages = m.DialogueMessages.Select(map).ToArray(),
+				ReplyOptions = m.PushMessage.ReplyOptions.ToArray()
 		    };
 	    }
 

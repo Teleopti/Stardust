@@ -24,15 +24,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 		public PreferenceAndScheduleDayViewModel Map(IScheduleDay s)
 		{
-			var personRestrictionCollection = s.PersonRestrictionCollection();
+			var personRestrictionCollection = s.PersonRestrictionCollection()?.OfType<IPreferenceDay>().SingleOrDefault();
 			var significantPartForDisplay = s.SignificantPartForDisplay();
 			return new PreferenceAndScheduleDayViewModel
 			{
 				Date = s.DateOnlyAsPeriod.DateOnly.ToFixedClientDateOnlyFormat(),
 				Preference =
-					personRestrictionCollection == null
-						? null
-						: _preferenceDayModelMapper.Map(personRestrictionCollection.OfType<IPreferenceDay>().SingleOrDefault()),
+					personRestrictionCollection == null ? null : _preferenceDayModelMapper.Map(personRestrictionCollection),
 				DayOff = s.HasDayOff() ? map(s.PersonAssignment().DayOff()) : null,
 				Absence = (significantPartForDisplay == SchedulePartView.FullDayAbsence ||
 						   significantPartForDisplay == SchedulePartView.ContractDayOff) &&
