@@ -36,6 +36,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
@@ -181,6 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<TeamScheduleDomainDataMapper>().SingleInstance();
 			builder.RegisterType<DateTimePeriodFormMapper>().SingleInstance();
+			builder.RegisterType<SettingsMapper>().SingleInstance();
 			builder.RegisterType<OvertimeAvailabilityInputMapper>().SingleInstance();
 			builder.RegisterType<OvertimeAvailabilityViewModelMapper>().SingleInstance();
 			builder.RegisterType<PreferenceAndScheduleDayViewModelMapper>().SingleInstance();
