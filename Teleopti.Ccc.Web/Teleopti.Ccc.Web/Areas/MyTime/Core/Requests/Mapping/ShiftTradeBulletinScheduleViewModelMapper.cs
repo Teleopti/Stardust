@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				MySchedule = mySchedule,
 				PossibleTradeSchedules = possibleTradeSchedule,
 				TimeLineHours = timeLineHours,
-				PageCount = pageCount,
+				PageCount = pageCount
 			};
 		}
 

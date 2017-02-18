@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			{
 				Person = s.Item1,
 				Projection = s.Item2 == null ? null : _projectionProvider.Projection(s.Item2),
-				HasDayOffUnder = s.Item2 != null && s.Item2.SignificantPartForDisplay() == SchedulePartView.ContractDayOff
+				HasDayOffUnder = s.Item2 != null && s.Item2.SignificantPartForDisplay() == SchedulePartView.ContractDayOff,
 			};
 		}
 		
