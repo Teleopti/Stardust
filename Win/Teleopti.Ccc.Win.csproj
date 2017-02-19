@@ -817,6 +817,13 @@
     <Compile Include="Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.Designer.cs">
       <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerModel.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.Designer.cs">
+      <DependentUpon>ResourceCalculationAnalyzerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\ValidationAlertsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3095,6 +3102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.resx">
       <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.resx">
+      <DependentUpon>ResourceCalculationAnalyzerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\ValidationAlertsView.resx">
       <DependentUpon>ValidationAlertsView.cs</DependentUpon>
