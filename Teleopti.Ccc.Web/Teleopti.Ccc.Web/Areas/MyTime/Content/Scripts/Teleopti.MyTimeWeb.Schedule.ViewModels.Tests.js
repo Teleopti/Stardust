@@ -134,6 +134,80 @@ $(document).ready(function () {
 		];
 	}
 
+	var createNightShiftPeriods = function () {
+		return [{
+			"Title": "Phone",
+			"TimeSpan": "10:00 - 12:00",
+			"Summary": "2:00",
+			"StyleClassName": "color_80FF80",
+			"Meeting": null,
+			"StartPositionPercentage": 0.4166714892533478396740703017,
+			"EndPositionPercentage": 0.5000057871040174076088843621,
+			"Color": "128,255,128",
+			"IsOvertime": false
+		}, {
+			"Title": "Short break",
+			"TimeSpan": "12:00 - 12:15",
+			"Summary": "0:15",
+			"StyleClassName": "color_FF0000",
+			"Meeting": null,
+			"StartPositionPercentage": 0.5000057871040174076088843621,
+			"EndPositionPercentage": 0.5104225743353511036007361196,
+			"Color": "255,0,0",
+			"IsOvertime": false
+		}, {
+			"Title": "Phone",
+			"TimeSpan": "12:15 - 14:15",
+			"Summary": "2:00",
+			"StyleClassName": "color_80FF80",
+			"Meeting": null,
+			"StartPositionPercentage": 0.5104225743353511036007361196,
+			"EndPositionPercentage": 0.59375687218602067153555018,
+			"Color": "128,255,128",
+			"IsOvertime": false
+		}, {
+			"Title": "Lunch",
+			"TimeSpan": "14:15 - 15:15",
+			"Summary": "1:00",
+			"StyleClassName": "color_FFFF00",
+			"Meeting": null,
+			"StartPositionPercentage": 0.59375687218602067153555018,
+			"EndPositionPercentage": 0.6354240211113554555029572102,
+			"Color": "255,255,0",
+			"IsOvertime": false
+		}, {
+			"Title": "Social Media",
+			"TimeSpan": "15:15 - 17:00",
+			"Summary": "1:45",
+			"StyleClassName": "color_1E90FF",
+			"Meeting": null,
+			"StartPositionPercentage": 0.6354240211113554555029572102,
+			"EndPositionPercentage": 0.708341531730691327445919513,
+			"Color": "30,144,255",
+			"IsOvertime": false
+		}, {
+			"Title": "Short break",
+			"TimeSpan": "17:00 - 17:15",
+			"Summary": "0:15",
+			"StyleClassName": "color_FF0000",
+			"Meeting": null,
+			"StartPositionPercentage": 0.708341531730691327445919513,
+			"EndPositionPercentage": 0.7187583189620250234377712705,
+			"Color": "255,0,0",
+			"IsOvertime": false
+		}, {
+			"Title": "Phone",
+			"TimeSpan": "17:15 - 01:30 +1",
+			"Summary": "8:15",
+			"StyleClassName": "color_80FF80",
+			"Meeting": null,
+			"StartPositionPercentage": 0.7187583189620250234377712705,
+			"EndPositionPercentage": 1.0,
+			"Color": "128,255,128",
+			"IsOvertime": false
+		}];
+	}
+
 	var createRawDaySchedule = function (isDayoff, isFullDayAbsence, periods) {
 		return {
 			"TextRequestCount": 0,
@@ -339,5 +413,13 @@ $(document).ready(function () {
 				equal(probability.tooltips.length > 0, true);
 			}
 		}
+	});
+
+	test("should show absence possibility for night shift schedule", function () {
+		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
+		var week = createWeekViewmodel(absenceProbabilityType, 0, 23);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		equal(vm.probabilities.length, 57);
 	});
 });
