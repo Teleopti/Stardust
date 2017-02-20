@@ -193,11 +193,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IScheduleDictionary createScheduleInitializationExpectation()
         {
             var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-            var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage>();
+            var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage, IFindSchedulesForPersons>();
         	var period = _schedulerState.RequestedPeriod.Period();
 
 			_scheduleStorageFactory.Stub(x => x.Create(_uow)).Return(scheduleRepository);
-        	scheduleRepository.Stub(x=>x.FindSchedulesForPersons(null, null, null, null, null)).Constraints(
+        	scheduleRepository.Stub(x=>((IFindSchedulesForPersons)x).FindSchedulesForPersons(null, null, null, null, null)).Constraints(
         		Rhino.Mocks.Constraints.Is.Matching(
         			new Predicate<IScheduleDateTimePeriod>(
         				x =>
