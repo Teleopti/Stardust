@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly IScheduleStorage _scheduleStorage;
+		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IPersonRepository _personRepository;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public FillSchedulerStateHolderFromDatabase(PersonalSkillsProvider personalSkillsProvider,
 					IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
-					IScheduleStorage scheduleStorage,
+					IFindSchedulesForPersons findSchedulesForPersons,
 					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 					IRepositoryFactory repositoryFactory,
 					IPersonRepository personRepository,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
-			_scheduleStorage = scheduleStorage;
+			_findSchedulesForPersons = findSchedulesForPersons;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_repositoryFactory = repositoryFactory;
 			_personRepository = personRepository;
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
 			schedulerStateHolderTo.SetRequestedScenario(scenario);
 			var personProvider = new PersonsInOrganizationProvider(agents) {DoLoadByPerson = true }; //TODO: this is experimental
-			schedulerStateHolderTo.LoadSchedules(_scheduleStorage, personProvider,
+			schedulerStateHolderTo.LoadSchedules(_findSchedulesForPersons, personProvider,
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, agents, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 		}

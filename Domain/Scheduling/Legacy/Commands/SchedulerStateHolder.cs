@@ -156,13 +156,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_shiftTradeRequestStatusChecker?.ClearReferredShiftTradeRequests();
 		}
 
-		public void LoadSchedules(IScheduleStorage scheduleStorage, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period)
+		public void LoadSchedules(IFindSchedulesForPersons findSchedulesForPersons, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period)
 		{
-			if (scheduleStorage == null) throw new ArgumentNullException(nameof(scheduleStorage));
+			if (findSchedulesForPersons == null) throw new ArgumentNullException(nameof(findSchedulesForPersons));
 			if (period == null) throw new ArgumentNullException(nameof(period));
 
 			SchedulingResultState.Schedules =
-				scheduleStorage.FindSchedulesForPersons(period, RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, AllPermittedPersons);
+				findSchedulesForPersons.FindSchedulesForPersons(period, RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, AllPermittedPersons);
 
 			_loadedPeriod = period.LoadedPeriod();
 		}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -12,10 +11,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	[RemoveMeWithToggle("Merge this with ScheduleStorage when toggle is removed and remove this class", Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
-	public class ScheduleStorage42639 : ScheduleStorage
+	public class FindSchedulesForPersons : ScheduleStorage
 	{
-		public ScheduleStorage42639(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper) 
+		public FindSchedulesForPersons(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper) 
 			:base(currentUnitOfWork, repositoryFactory, dataPermissionChecker, scheduleStorageRepositoryWrapper)
 		{
 		}
@@ -33,8 +31,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 	}
 
-	public class ScheduleStorage : IScheduleStorage
-    {
+	public class ScheduleStorage : IScheduleStorage, IFindSchedulesForPersons
+	{
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 	    private readonly IPersistableScheduleDataPermissionChecker _dataPermissionChecker;

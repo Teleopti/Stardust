@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	[Toggle(Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	public class ScheduleStorageFindSchedulesTest
+	public class FindSchedulesForPersonsTest
 	{
 		private readonly bool _loadByPerson;
-		public IScheduleStorage Target;
+		public IFindSchedulesForPersons Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
-		public ScheduleStorageFindSchedulesTest(bool loadByPerson)
+		public FindSchedulesForPersonsTest(bool loadByPerson)
 		{
 			_loadByPerson = loadByPerson;
 		}

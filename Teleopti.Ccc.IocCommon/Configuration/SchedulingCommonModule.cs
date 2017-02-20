@@ -75,18 +75,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if(_configuration.Toggle(Toggles.ResourcePlanner_LoadingLessSchedules_42639))
 			{
-				builder.RegisterType<ScheduleStorage42639>()
+				builder.RegisterType<FindSchedulesForPersons>()
 					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-					.As<IScheduleStorage>()
+					.As<IFindSchedulesForPersons>()
 					.SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<ScheduleStorage>()
-					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-					.As<IScheduleStorage>()
+					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory),typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+					.As<IFindSchedulesForPersons>()
 					.SingleInstance();
 			}
+
+
+			builder.RegisterType<ScheduleStorage>()
+				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+				.As<IScheduleStorage>()
+				.AsSelf()
+				.SingleInstance();
 
 			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<IsOverMaxSeat>().SingleInstance();

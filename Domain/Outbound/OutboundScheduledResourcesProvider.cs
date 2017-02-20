@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ScheduleStorage _scheduleStorage;
 		private readonly IPeopleAndSkillLoaderDecider _decider;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public OutboundScheduledResourcesProvider(IResourceCalculation resourceOptimizationHelper,
 			IUserTimeZone userTimeZone, Func<ISchedulerStateHolder> schedulerStateHolder, IScenarioRepository scenarioRepository,
-			ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IScheduleStorage scheduleStorage,
+			ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, ScheduleStorage scheduleStorage,
 			IPeopleAndSkillLoaderDecider decider,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IRepositoryFactory repositoryFactory,
 			OutboundAssignedStaffProvider outboundAssignedStaffProvider,
@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(),
 				_repositoryFactory);
 			schedulerStateHolder.ResetFilteredPersons();
+			//TODO: using schedulestorage here will load unnecesary big period
 			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.FixedStaffPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
