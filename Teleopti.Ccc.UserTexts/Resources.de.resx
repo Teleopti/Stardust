@@ -2946,7 +2946,7 @@ Ausschließlich</value>
     <comment>Default workload name when creating a new workload</comment>
   </data>
   <data name="LicensedToColon" xml:space="preserve">
-    <value>Lizensiert für:</value>
+    <value>Lizenziert für:</value>
     <comment>Title bar</comment>
   </data>
   <data name="Limit" xml:space="preserve">
@@ -11845,7 +11845,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Es gibt keine Stellen zu Verfügung</value>
   </data>
   <data name="PlanningPeriodsFor" xml:space="preserve">
-    <value>Perioden werden verplant für</value>
+    <value>Perioden werden für den folgenden Zeitraum verplant</value>
   </data>
   <data name="PlanSeats" xml:space="preserve">
     <value>Sitze planen</value>
@@ -12364,7 +12364,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Überschreibbar</value>
   </data>
   <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
-    <value>Sie sind nicht die entsprechende Berechtigung um diese Seite einzusehen</value>
+    <value>Sie haben nicht die entsprechende Berechtigung um diese Seite einzusehen</value>
   </data>
   <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
     <value>Ihre Abwesenheitsanfrage wurde automatisch abgelehnt. Die Startzeit der Anfrage ist {0}, sie muss mindestens {1} Minute(n) später als die aktuelle Zeit sein</value>
@@ -12907,7 +12907,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Die Abwesenheitsanfrage für Mitarbeiter {0} kann nicht am {1} gelöscht werden, da es nicht genehmigt worden ist.</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
-    <value>{0} ist verbessert worden! Wir sind für Ihren {1}Feedback sehr dankbar. {2} Das alte Modul {3} ist für eine begrenzte Zeit zugänglich.</value>
+    <value>{0} ist verbessert worden! Wir sind für Ihr {1}Feedback sehr dankbar. {2} Das alte Modul {3} ist für eine begrenzte Zeit zugänglich.</value>
   </data>
   <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
     <value>Sie können keine Aktivität an {0} ohne Schicht für den nächsten Tag hinzufügen</value>
@@ -12925,7 +12925,7 @@ Folgende Optionen und Module sind aktiviert:
     <value>Ihnen fehlt die Berechtigung persönliche Aktivitäten für Mitarbeiter {0} hinzuzufügen.</value>
   </data>
   <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
-    <value>{0} ist verbessert worden! Wir sind für Ihren {1}Feedback sehr dankbar.{2}</value>
+    <value>{0} ist verbessert worden! Wir sind für Ihr {1}Feedback sehr dankbar.{2}</value>
   </data>
   <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
     <value>Anfragen basierend auf Budgetzuteilung validieren.</value>
@@ -13292,5 +13292,148 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="NonWorkingDays" xml:space="preserve">
     <value>Nicht verplante Tage</value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>Abgelehnte Dateien</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Das System ist an "{0}", entsprechend den im Lizenzvertrag vorgegebenen Konditionen, lizensiert worden.
+
+Der Lizenzschlüssel ist für {1} Sitzplätze aktiv.
+
+Major version: {4}
+
+Der Lizenzschlüssel gilt für "{2}"
+Folgende Funktionen sind aktiv:
+{3}</value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Das System ist an "{0}", entsprechend den im Lizenzvertrag vorgegebenen Konditionen, lizensiert worden.
+
+Der Lizenzschlüssel ist für {1} zu verplanende Mitarbeiter aktiv.
+
+Major version: {4}
+
+Der Lizenzschlüssel gilt für "{2}"
+Folgende Funktionen sind aktiv:
+{3}</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>Bitte beziehen Sie Sich auf die Dateivorlage</value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>Es gibt unter den aktuellen Voraussetzungen keine Berichte.</value>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>Die Personenzuordnung ist nicht gültig</value>
+  </data>
+  <data name="MatchColon" xml:space="preserve">
+    <value>Passend:</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>.XLS oder .XLSX - Datein hier ablegen</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>Die neue Zeit wird nicht verwendet:</value>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>Doppelt eingerichteter Windows-User</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>Sie werden vielleicht die Schichtsammlung entsprechend anpassen müssen</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>Der Plan wurde von anderen Benutzern bereits geändert. Bitte laden Sie den Plan erneut.</value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>Die markierten Anfragen werden auf Basis der Geschäftsregeln geprüft.</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>Die Bearbeitung der Anfragen wurden, auf Basis der Geschäftssregeln, abgeschlossen</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Queue-Statistiken ohne Ausreißer</value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>Es fehlt Ihnen die Berechtigung die Aktivität für Mitarbeiter {0} zu verschieben</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Ausreißer</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(Mehrere Sitzplätze markiert)</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Die Bildgröße entspricht nicht dem Format. Die Bildgröße kann nicht größer als 2000x4000 sein.</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>Die Zeit in der Zeitzone der aktuellen Anfrage anzeigen</value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>Volle Zuteilung</value>
+  </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>Die Optimierungsschritte {0} werden nicht vorgenommen wenn ein Team oder ein Block ausgewählt sind</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>Vorgabe nach Grenzwert</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Die Zeit in meiner Zeitzone anzeigen</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Zeit verschieben: </value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Forecast-Methoden ID:</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>Die ausgewählte Datei kann nicht akzeptiert werden. Bitte kontrollieren Sie den Dateityp.</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>Die Antwort enthält mehr als 2000 Zeichen und kann daher nicht gespeichert werden.</value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>Das System ist an "{0}", entsprechend den im Lizenzvertrag vorgegebenen Konditionen, lizensiert worden. Der Lizenzschlüssel läuft am {1} ab.
+
+Der Lizenzschlüssel ist für {2} Sitsplatz-Zuordnungen aktiv.
+
+Major version: {5}
+
+Der Lizenzschlüssel gilt für "{3}"
+Folgende Funktionen sind aktiv:
+{4}</value>
+  </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>Die Schichttauschanfrage wurde abgelehnt, da nicht genügend Sitzplätze verfügbar sind.</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Ausführen</value>
+  </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>Das System ist an "{0}", entsprechend den im Lizenzvertrag vorgegebenen Konditionen, lizensiert worden. Der Lizenzschlüssel läuft am {1} ab.
+
+Der Lizenzschlüssel ist für {2} zu verplanende Mitarbeiter aktiv.
+
+Major version: {5}
+
+Der Lizenzschlüssel gilt für "{3}"
+Folgende Funktionen sind aktiv:
+{4}</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>Das Hinzufügen der Aktivitäten ist nicht zugelassen</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>Ein Teleopti WFM version 8 Lizenzschlüssel ist erforderlich um das System in Betrieb zu nehmen. Bitte kontaktieren Sie den Teleopti Servicedesk oder Ihren Account Manager um einen entsprechenden Lizenzschlüssel zu bekommen.</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Abwesenheiten wurden erfolgreich für die markierten Mitarbeiter hinzugefügt</value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>Abbruchrate</value>
   </data>
 </root>
