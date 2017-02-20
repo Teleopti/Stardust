@@ -1,6 +1,6 @@
 <div ui-tree data-drag-enabled="false" ng-if="$ctrl.functions.length>0">
 	<ol ui-tree-nodes="" ng-model="$ctrl.functions">
-		<li ng-repeat="function in $ctrl.functions | orderBy:'LocalizedFunctionDescription'" ui-tree-node ng-hide="function.IsHidden">
+		<li ng-repeat="function in $ctrl.functions | orderBy:'LocalizedFunctionDescription'" class="perm-tree" ui-tree-node ng-hide="function.IsHidden">
 
 			<div ng-cloak class="modal-box">
 				<div ng-cloak ng-show="function.multiDeselectModal">
@@ -21,7 +21,9 @@
 			</div>
 
 			<div class="tree-toggle-group">
-				<div class="toggle-handle" ng-class="{open: $ctrl.isFunctionOpen(function), 'non-pointer':function.ChildFunctions.length===0 } " ng-click="$ctrl.toggleFunctionOpen(function)"><i ng-hide="function.ChildFunctions.length===0 " class="mdi mdi-chevron-right "></i></div>
+				<div class="toggle-handle" ng-class="{open: $ctrl.isFunctionOpen(function), 'non-pointer':function.ChildFunctions.length===0 } " ng-click="$ctrl.toggleFunctionOpen(function)">
+					<i ng-hide="function.ChildFunctions.length===0 " class="mdi mdi-chevron-right "></i>
+				</div>
 				<div class="tree-handle-wrapper">
 					<div ui-tree-handle ng-class="{selected: $ctrl.shouldFunctionBeSelected(function)}" ng-click="$ctrl.checkParent(function)">
 						{{function.LocalizedFunctionDescription}}

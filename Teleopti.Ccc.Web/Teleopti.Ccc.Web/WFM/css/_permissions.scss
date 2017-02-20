@@ -194,6 +194,10 @@
 }
 
 /*refact*/
+.perm-tree{
+	border-top: 1px solid $gray012;
+}
+
 .permissions-tabs{
 	md-tabs{
 		transition: height .01s!important;
