@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("sv-SE");
 			Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("sv-SE");
 
-			date = DateOnly.Today;
+			date = new DateOnly(2017, 03, 05); // require the period to cover first-of-month
 			period = new DateOnlyPeriod(date.AddDays(-7), date.AddDays(7).AddDays(-1));
 			firstDisplayedDate = DateHelper.GetFirstDateInWeek(period.StartDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(-7);
 			lastDisplayedDate = DateHelper.GetFirstDateInWeek(period.EndDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(6).AddDays(7);
