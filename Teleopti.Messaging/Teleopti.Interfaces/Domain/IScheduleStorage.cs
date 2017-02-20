@@ -27,10 +27,8 @@ namespace Teleopti.Interfaces.Domain
 			DateOnlyPeriod period,
 			IScenario scenario);
 
-		IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person,
-			IAbsence absence = null);
+		IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null);
 
-		[Obsolete("Use IFindSchedulesForPersons instead. Or, if you want to load a specific period, don't use this method at all.")]
 		IScheduleDictionary FindSchedulesForPersons(
 			IScheduleDateTimePeriod period,
 			IScenario scenario,
