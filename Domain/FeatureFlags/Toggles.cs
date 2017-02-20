@@ -23,6 +23,7 @@
 		RTA_SpreadTransactionLocksStrategy_41823,
 		RTA_FasterAgentsView_42039,
 		RTA_MonitorAgentsInPermittedOrganizaionlOnly_40660,
+		RTA_SolidProofWhenManagingAgentAdherence_39351,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
