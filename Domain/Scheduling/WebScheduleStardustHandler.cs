@@ -34,18 +34,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual void Handle(WebScheduleStardustEvent @event)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
+			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule);
 			try
 			{
 				var period = planningPeriod.Range;
 				var people = _agentGroupStaffLoader.Load(period, planningPeriod.AgentGroup);
 				var result = _fullScheduling.DoScheduling(period, people.AllPeople.Select(x => x.Id.Value));
-				planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule).AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
+				webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
 
+				planningPeriod.JobResults.Add(new JobResult(JobCategory.WebOptimization, webScheduleJobResult.Period, webScheduleJobResult.Owner, DateTime.UtcNow));
 				_eventPublisher.Publish(new WebOptimizationStardustEvent(@event));
 			}
 			catch (Exception e)
 			{
-				planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule).AddDetail(new JobResultDetail(DetailLevel.Error, null, DateTime.UtcNow, e));
+				webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Error, null, DateTime.UtcNow, e));
 			}
 		}
 	}

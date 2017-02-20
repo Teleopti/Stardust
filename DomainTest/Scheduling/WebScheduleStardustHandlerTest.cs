@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			ScenarioRepository.Has("some name");
 
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
-			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31),
-				PersonFactory.CreatePerson(), DateTime.UtcNow));
+			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow));
 			PlanningPeriodRepository.Add(planningPeriod);
 			var reqEvent = new WebScheduleStardustEvent
 			{
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			
 			Target.Handle(reqEvent);
 
-			var jobResultDetail = planningPeriod.JobResults.Single().Details.Single();
+			var jobResultDetail = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule).Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Info);
 			jobResultDetail.ExceptionMessage.Should().Be.Null();
 			jobResultDetail.Message.Should().Not.Be.Null();
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			Target.Handle(reqEvent);
 
-			var jobResultDetail = planningPeriod.JobResults.Single().Details.Single();
+			var jobResultDetail = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule).Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
 			jobResultDetail.ExceptionMessage.Should().Not.Be.Null();
 			jobResultDetail.Message.Should().Be.Null();
@@ -106,6 +105,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			Target.Handle(reqEvent);
 
+			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule);
+			var webOptimizationJobResult = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebOptimization);
+			webOptimizationJobResult.Should().Not.Be.Null();
+			webOptimizationJobResult.Owner.Should().Be.EqualTo(webScheduleJobResult.Owner);
+			webOptimizationJobResult.Period.Should().Be.EqualTo(webScheduleJobResult.Period);
 			EventPublisher.PublishedEvents.Single().GetType().Should().Be.EqualTo(typeof(WebOptimizationStardustEvent));
 			(EventPublisher.PublishedEvents.Single() as WebOptimizationStardustEvent).PlanningPeriodId.Should()
 				.Be.EqualTo(planningPeriod.Id.Value);

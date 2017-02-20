@@ -445,6 +445,7 @@
     <Compile Include="Scheduling\TeamBlock\Bug39939.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleCommandTest.cs" />
+    <Compile Include="Scheduling\WebOptimizationStardustHandlerTest.cs" />
     <Compile Include="Scheduling\WebScheduleStardustHandlerTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
