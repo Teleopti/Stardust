@@ -243,7 +243,6 @@
     <Content Include="changePassword.html" />
     <Content Include="addSuperUser.html" />
     <Content Include="HangfireDashboard.html" />
-    <Content Include="MobileApps.html" />
     <Content Include="Scripts\angular-animate\angular-animate.js" />
     <Content Include="Scripts\angular-animate\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria\angular-aria.js" />
@@ -254,14 +253,12 @@
     <Content Include="Scripts\angular-material\angular-material.js" />
     <Content Include="Scripts\angular-material\angular-material.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
-    <Content Include="Scripts\angular-qrcode.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\App\adduserController.js" />
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
-    <Content Include="Scripts\App\MobileAppsController.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
@@ -274,7 +271,6 @@
     <Content Include="Scripts\jquery-3.1.0.min.js" />
     <Content Include="Scripts\jquery-3.1.0.slim.js" />
     <Content Include="Scripts\jquery-3.1.0.slim.min.js" />
-    <Content Include="Scripts\qrcode.js" />
     <Content Include="Scripts\StardustApp\jobController.js" />
     <Content Include="Scripts\StardustApp\jobQueueDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobQueueController.js" />

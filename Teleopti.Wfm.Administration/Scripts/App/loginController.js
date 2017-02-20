@@ -64,19 +64,7 @@
 			text: "Hangfire Monitoring",
 			link: "#/HangfireMonitoring"
 		}];
-		$scope.message = "något som jag vill visa";
-
-		$http.get("/Toggle/IsEnabled?toggle=QRCodeForMobileApps_42695")
-			.then(function (res) {
-				if(res.data.IsEnabled){
-					$scope.menuItems.push({
-						text: "Mobile Apps",
-						link: "#/MobileApps"
-					});
-				}
-			},function(err) {
-				console.error(err);
-			});
+		$scope.message = "något som jag vill visa"; 
 
 		$http.get("./HasNoUser").success(function (data) {
 			firstUser = data;

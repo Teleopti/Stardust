@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'monospaced.qrcode'])
+		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies'])
 		.config(function ($routeProvider, $httpProvider) {
 
 			$routeProvider
@@ -83,11 +83,6 @@
 				})
 				.when('/HangfireMonitoring', {
 					templateUrl: 'HangfireMonitoring.html'
-				})
-				.when('/MobileApps',
-				{
-					templateUrl: 'MobileApps.html',
-					//controller: 'MobileAppsController'
 				});
 
 			$httpProvider.interceptors.push('httpInterceptor');
