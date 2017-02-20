@@ -228,7 +228,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return retDic[person];
         }
 
-	    public IScheduleDictionary FindSchedulesForPersons(
+		[Obsolete("Use IFindSchedulesForPersons instead. Or, if you want to load a specific period, don't use this method at all.")]
+		public IScheduleDictionary FindSchedulesForPersons(
 		    IScheduleDateTimePeriod period,
 			    IScenario scenario,
 			    IPersonProvider personsProvider,

@@ -75,7 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			 var scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod(period.StartDateTime.AddDays(-9), period.EndDateTime.AddDays(2)));
 			schedulingResultStateHolder.Schedules =
+#pragma warning disable 618
 				_scheduleStorage.FindSchedulesForPersons(
+#pragma warning restore 618
 					scheduleDateTimePeriod,
 					scenario, 
 					personsProvider,

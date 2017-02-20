@@ -33,7 +33,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				DoLoadByPerson = false
 			};
 
+#pragma warning disable 618
 			var schedulesThatOverlap = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePeriod), _currentScenario.Current(),
+#pragma warning restore 618
 				personProvider, new ScheduleDictionaryLoadOptions(false, false), personList);
 			return
 				personList.Any(

@@ -77,7 +77,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
+#pragma warning disable 618
 				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null))
+#pragma warning restore 618
 				.IgnoreArguments()
 				.Return(scheduleDictionary);
 			_peopleAndSkillLoadDecider.Stub(x => x.Execute(scenario, period, peopleInOrganization)).Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
@@ -109,7 +111,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
+#pragma warning disable 618
 				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null))
+#pragma warning restore 618
 				.IgnoreArguments()
 				.Return(scheduleDictionary);
 			_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
@@ -120,7 +124,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, false);
 
 			_scheduleStorage.AssertWasCalled(
+#pragma warning disable 618
 				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null),
+#pragma warning restore 618
 				o =>
 					o.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Same(scenario),
 						Rhino.Mocks.Constraints.Is.Anything(),
@@ -148,7 +154,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
 				x =>
+#pragma warning disable 618
 					x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions,
+#pragma warning restore 618
 						visiblePeople)).IgnoreArguments().Return(scheduleDictionary);
 			_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
 			_peopleAndSkillLoadDecider.Stub(x => x.Execute(scenario, period, requestedPeople))

@@ -60,7 +60,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Record())
 			{
+#pragma warning disable 618
 				Expect.Call(_scheduleStorage.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null)).IgnoreArguments
+#pragma warning restore 618
 					().Return(scheduleDictionary);
 			}
 			using (_mocks.Playback())
