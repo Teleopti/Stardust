@@ -14,13 +14,27 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private readonly IUndoRedoContainer _undoRedoContainer;
 		private readonly ILifetimeScope _container;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
+		private DateOnly _selectedDate;
+		private TimeSpan? _selectedTime;
 
-		public ResourceCalculationAnalyzerModel(SchedulingScreen scheduler, IUndoRedoContainer undoRedoContainer, ILifetimeScope container, IResourceOptimizationHelperExtended optimizationHelperExtended)
+		public ResourceCalculationAnalyzerModel(SchedulingScreen scheduler, IUndoRedoContainer undoRedoContainer, ILifetimeScope container, IResourceOptimizationHelperExtended optimizationHelperExtended, DateOnly selectedDate, TimeSpan? selectedTime)
 		{
 			_scheduler = scheduler;
 			_undoRedoContainer = undoRedoContainer;
 			_container = container;
 			_optimizationHelperExtended = optimizationHelperExtended;
+			_selectedDate = selectedDate;
+			_selectedTime = selectedTime;
+		}
+
+		public DateOnly SelectedDate
+		{
+			get { return _selectedDate; }
+		}
+
+		public TimeSpan? SelectedTime
+		{
+			get { return _selectedTime; }
 		}
 
 		public DateOnlyPeriod Period()
@@ -36,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			if (!_undoRedoContainer.CanUndo())
 				return null;
 
-			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, _scheduler.SchedulerState.TimeZoneInfo);
+			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, _scheduler.SchedulerState.TimeZoneInfo).AddTicks(1);
 			var result = new Dictionary<ISkill, ResourceCalculationAnalyzerModelResult>();
 			var skills =
 				_scheduler.SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.Where(

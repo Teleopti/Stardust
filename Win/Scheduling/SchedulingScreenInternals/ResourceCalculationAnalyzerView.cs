@@ -24,8 +24,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		{
 			dateTimePicker2.MinDate =  _model.Period().StartDate.Date;
 			dateTimePicker2.MaxDate = _model.Period().EndDate.Date;
-			dateTimePicker2.Value = dateTimePicker2.MinDate;
-			dateTimePicker1.Value = DateTime.Now;
+			dateTimePicker2.Value = _model.SelectedDate.Date;
+
+			var selectedTime = _model.SelectedTime.HasValue
+				? DateTime.Now.Date.AddTicks(_model.SelectedTime.Value.Ticks)
+				: DateTime.Now;
+			dateTimePicker1.Value = selectedTime;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
