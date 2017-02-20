@@ -69,7 +69,7 @@
 		};
 
 		function getOrganizationForSkills(data) {
-			return $resource('../api/Sites/Organization', {}, {
+			return $resource('../api/Sites/OrganizationForSkills', {}, {
 				query: {
 					method: 'GET',
 					isArray: true
