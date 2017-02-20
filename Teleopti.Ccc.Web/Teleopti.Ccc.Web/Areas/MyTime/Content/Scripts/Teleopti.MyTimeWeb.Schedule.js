@@ -95,23 +95,27 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		return moment(timeWithoutTimezone + "+00:00");
 	}
 
-	function _startUpTimeIndicator() {
-		setInterval(function () {
-			var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
+	function getCurrentUserDateTime() {
+		var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
 				? stripTeleoptiTimeToUTCForScenarioTest().zone(-baseUtcOffsetInMinutes)
 				: moment().zone(-baseUtcOffsetInMinutes);//work in user timezone, just make life easier
 
-			_ensureDST(currentUserDateTime);
+		_ensureDST(currentUserDateTime);
+		return currentUserDateTime;
+	}
 
+	var currentTimeInterval;
+	function _initTimeIndicator() {
+		if (currentTimeInterval != undefined) {
+			clearInterval(currentTimeInterval);
+		}
+		currentTimeInterval = setInterval(function () {
+			var currentUserDateTime = getCurrentUserDateTime();
 			if (timeIndicatorDateTime === undefined || currentUserDateTime.minutes() !== timeIndicatorDateTime.minutes()) {
 				timeIndicatorDateTime = currentUserDateTime;
 				_setTimeIndicator(timeIndicatorDateTime);
 			}
 		}, 1000);
-	};
-
-	function _initTimeIndicator() {
-		_startUpTimeIndicator();
 	};
 
 	var TimelineViewModel = function (timeline, timelineCulture) {
@@ -207,7 +211,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.switchProbabilityType = function (probabilityType) {
 			self.probabilityType(probabilityType);
-			_fetchData();
+			_fetchData(function () {
+				_setTimeIndicator(getCurrentUserDateTime());
+			});
 		}
 
 		self.previousWeek = function () {
