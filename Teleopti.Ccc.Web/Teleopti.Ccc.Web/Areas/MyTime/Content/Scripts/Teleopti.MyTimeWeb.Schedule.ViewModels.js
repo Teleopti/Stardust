@@ -234,13 +234,18 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 	};
 
 	var createProbabilityModels = function (rawProbabilities) {
+		var noneProbabilityType = 0;
+		var absenceProbabilityType = 1;
+		var overtimeProbabilityType = 2;
+
 		if (!self.staffingProbabilityEnabled() || rawProbabilities == undefined || rawProbabilities.length === 0) {
 			return [];
 		}
 
 		// If today is full day absence or dayoff, Then hide absence probabilities
 		var probabilityType = parent.probabilityType();
-		if (probabilityType === 0 || (probabilityType === 1 && (day.IsFullDayAbsence || day.IsDayOff))) {
+		if (probabilityType === noneProbabilityType ||
+			(probabilityType === absenceProbabilityType && (day.IsFullDayAbsence || day.IsDayOff))) {
 			return [];
 		}
 
@@ -295,7 +300,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 			probabilityStart = shiftStartMinutes;
 			probabilityEnd = shiftEndMinutes;
 
-			if (probabilityType === 2 && parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
+			if (probabilityType === overtimeProbabilityType && parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
 				var openPeriodStart = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
 				var openPeriodEnd = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
 
@@ -328,10 +333,10 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 
 		var continousPeriods = [];
 		var tooltipsTitle = "";
-		if (probabilityType === 1) {
+		if (probabilityType === absenceProbabilityType) {
 			tooltipsTitle = parent.userTexts.probabilityForAbsence;
 			continousPeriods = getContinousPeriods(day.Periods);
-		} else if (probabilityType === 2) {
+		} else if (probabilityType === overtimeProbabilityType) {
 			tooltipsTitle = parent.userTexts.probabilityForOvertime;
 		}
 
@@ -350,7 +355,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 			if (!visible) continue;
 
 			var inScheduleTimeRange = false;
-			if (probabilityType === 1) {
+			if (probabilityType === absenceProbabilityType) {
 				// Show absence probability within schedule time range only
 				for (var m = 0; m < continousPeriods.length; m++) {
 					var continousPeriod = continousPeriods[m];
@@ -359,7 +364,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 						break;
 					}
 				}
-			} else if (probabilityType === 2) {
+			} else if (probabilityType === overtimeProbabilityType) {
 				inScheduleTimeRange = probabilityStart <= intervalStartMinutes && intervalEndMinutes <= probabilityEnd;;
 			}
 
