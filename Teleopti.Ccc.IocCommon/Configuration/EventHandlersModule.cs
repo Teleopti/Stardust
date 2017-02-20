@@ -116,14 +116,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 							.InstancePerLifetimeScope()
 							.ApplyAspects();
 				})
-				.Except<AddOverTimeHandler>(ct =>
-				{
-					ct.As(
-							typeof(IHandleEvent<AddOverTimeEvent>))
-							.AsSelf()
-							.InstancePerLifetimeScope()
-							.ApplyAspects();
-				})
 				.ApplyAspects();
 
 

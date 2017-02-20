@@ -186,7 +186,6 @@
     <Compile Include="NodeHandlers\AbsenceRequstHandler.cs" />
     <Compile Include="NodeHandlers\ApproveRequestsWithValidatorsEventStardustHandler.cs" />
     <Compile Include="NodeHandlers\ExportPayrollHandler.cs" />
-    <Compile Include="NodeHandlers\AddOverTimeHandler.cs" />
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />
     <Compile Include="NodeHandlers\FixReadModelsHandler.cs" />
     <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />

@@ -232,7 +232,6 @@
     <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\INonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
-    <Compile Include="ApplicationLayer\Events\AddOverTimeEvent.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsTimeZoneChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommonNameDescriptionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ManageScheduleEvent.cs" />
@@ -744,7 +743,6 @@
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeWithoutStateHolder.cs" />
     <Compile Include="Staffing\AddOverTime.cs" />
-    <Compile Include="Staffing\AddOverTimeHandler.cs" />
     <Compile Include="Staffing\CalculateOvertimeSuggestionProvider.cs" />
     <Compile Include="Staffing\IPersonForOvertimeProvider.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
