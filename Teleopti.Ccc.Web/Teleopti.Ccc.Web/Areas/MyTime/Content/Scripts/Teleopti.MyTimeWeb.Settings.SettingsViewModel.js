@@ -5,7 +5,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	
 	self.isSetAgentDescriptionEnabled = ko.observable(false);
 	self.isQRCodeForMobileAppsEnabled = ko.observable(false);
-	self.myTimeWebBaseUrl = window.location.host + "/mytime";
+	self.myTimeWebBaseUrl = window.location.href.slice(0,-15);
 	self.androidAppLink = ko.observable("https://play.google.com/store/apps/details?id=com.teleopti.mobile");
 	self.iOSAppLink = ko.observable("https://itunes.apple.com/");
 	self.settingsLoaded = ko.observable(false);
