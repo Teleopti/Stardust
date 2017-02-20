@@ -344,7 +344,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\HangfireController.cs" />
-    <Compile Include="Controllers\ToggleController.cs" />
     <Compile Include="Core\CreateBusinessUnit.cs" />
     <Compile Include="Core\Hangfire\HangfireCookie.cs" />
     <Compile Include="Core\Hangfire\HangfireStatisticsViewModelBuilder.cs" />
