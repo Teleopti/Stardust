@@ -213,6 +213,10 @@
 	width: 80%;
 }
 
+.toggle-handle.open i{
+	display: inline-block;
+}
+
 //helpers to the styleguide
 .non-pointer{
 	pointer-events: none;
@@ -221,7 +225,6 @@
 		display: none;
 	}
 }
-
 .locked {
 	color: $text-color-muted!important;
 	cursor: not-allowed;
