@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 		public NameFormatViewModel ChosenNameFormat { get; set; }
 		public CultureViewModel ChoosenUiCulture { get; set; }
 		public CultureViewModel ChoosenCulture { get; set; }
+		public bool HasPermissionToViewQRCode { get; set; }
 	}
 
 	public class CultureViewModel

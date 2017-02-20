@@ -15,6 +15,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	self.selectedCulture = ko.observable();
 	self.nameFormats = ko.observableArray();
 	self.selectedNameFormat = ko.observable();
+	self.hasPermissionToViewQRCode = ko.observable(false);
 
 	self.CalendarSharingActive = ko.observable(false);
 	self.CalendarUrl = ko.observable();
@@ -68,6 +69,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 				self.selectedNameFormat(data.ChosenNameFormat.id);
 				self.avoidReload = false;
 				self.settingsLoaded(true);
+				self.hasPermissionToViewQRCode(data.HasPermissionToViewQRCode);
 			}
 		});
 	};
@@ -145,7 +147,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 
 	self.featureCheck = function () {
 		self.isSetAgentDescriptionEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Settings_SetAgentDescription_23257"));
-		self.isQRCodeForMobileAppsEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("QRCodeForMobileApps_42695"));
+		self.isQRCodeForMobileAppsEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("QRCodeForMobileApps_42695") && self.hasPermissionToViewQRCode());
 	};
 
 	self.generateQRCode = function() {

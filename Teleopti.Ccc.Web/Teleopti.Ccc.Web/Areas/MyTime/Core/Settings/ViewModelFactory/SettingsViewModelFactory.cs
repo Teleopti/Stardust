@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping;
@@ -13,12 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 		private readonly SettingsMapper _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatPersisterAndProvider;
+		private readonly IPermissionProvider _permissionProvider;
 
-		public SettingsViewModelFactory(SettingsMapper mapper, ILoggedOnUser loggedOnUser, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatPersisterAndProvider)
+		public SettingsViewModelFactory(SettingsMapper mapper, ILoggedOnUser loggedOnUser, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatPersisterAndProvider, IPermissionProvider permissionProvider)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_nameFormatPersisterAndProvider = nameFormatPersisterAndProvider;
+			_permissionProvider = permissionProvider;
 		}
 
 		public SettingsViewModel CreateViewModel()
@@ -34,7 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 			settingsViewModel.ChosenNameFormat = persistedNameFormatSettings != null ?
 				settingsViewModel.NameFormats.FirstOrDefault(i => i.id == persistedNameFormatSettings.NameFormatId) :
 				settingsViewModel.NameFormats.FirstOrDefault();
-			
+
+			settingsViewModel.HasPermissionToViewQRCode =
+				_permissionProvider.HasApplicationFunctionPermission(
+					DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration);
 			return settingsViewModel;
 		}
 	}
