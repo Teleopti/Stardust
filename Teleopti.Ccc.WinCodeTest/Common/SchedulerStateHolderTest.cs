@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             IScheduleDateTimePeriod period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             IScheduleDictionary scheduleDictionary = new ScheduleDictionary(ScenarioFactory.CreateScenarioAggregate(),period, _permissionChecker);
-            IScheduleStorage scheduleStorage = mocks.StrictMock<IScheduleStorage>();
+            var scheduleStorage = mocks.StrictMock<IFindSchedulesForPersons>();
             IPersonProvider personsProvider = mocks.StrictMock<IPersonProvider>();
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
             using(mocks.Record())
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
 			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
 			var personRequestRepository = MockRepository.GenerateStrictMock<IPersonRequestRepository>();
-			var scheduleRepository = MockRepository.GenerateStrictMock<IScheduleStorage>();
+			var scheduleRepository = MockRepository.GenerateStrictMock<IFindSchedulesForPersons>();
 			var person = PersonFactory.CreatePerson();
 			var person2 = PersonFactory.CreatePerson();
 			var personList = new List<IPerson> {person};
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
 			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
 			var personRequestRepository = MockRepository.GenerateStrictMock<IPersonRequestRepository>();
-			var scheduleRepository = MockRepository.GenerateStrictMock<IScheduleStorage>();
+			var scheduleRepository = MockRepository.GenerateStrictMock<IFindSchedulesForPersons>();
 			var person = PersonFactory.CreatePerson();
 			var person2 = PersonFactory.CreatePerson();
 			var personList = new List<IPerson> { person };
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
 			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
 			var personRequestRepository = MockRepository.GenerateStrictMock<IPersonRequestRepository>();
-			var scheduleRepository = MockRepository.GenerateStrictMock<IScheduleStorage>();
+			var scheduleRepository = MockRepository.GenerateStrictMock<IFindSchedulesForPersons>();
 			var person = PersonFactory.CreatePerson();
 			var person2 = PersonFactory.CreatePerson();
 			var personList = new List<IPerson> { person };
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             var personProvider = mocks.StrictMock<IPersonProvider>();
             var scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-            var scheduleRepository = mocks.StrictMock<IScheduleStorage>();
+            var scheduleRepository = mocks.StrictMock<IFindSchedulesForPersons>();
 			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, null));
         }
 

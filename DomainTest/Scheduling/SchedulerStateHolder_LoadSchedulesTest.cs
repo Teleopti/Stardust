@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	public class SchedulerStateHolder_LoadSchedulesTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IScheduleStorage ScheduleStorage;
+		public IFindSchedulesForPersons ScheduleStorage;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		[Test]

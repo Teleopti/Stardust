@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WinCode.Common
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, true);
 
             var schedulePeriod = new ScheduleDateTimePeriod(requestedPeriod, SchedulerState.AllPermittedPersons);
-            SchedulerState.LoadSchedules(scheduleStorage, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);
+            SchedulerState.LoadSchedules((IFindSchedulesForPersons) scheduleStorage, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);
         }
 
         public void InitializeScheduleData()

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -227,7 +228,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
-				_schedulerState.LoadSchedules(scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
+				_schedulerState.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
 			}
 		}
 
