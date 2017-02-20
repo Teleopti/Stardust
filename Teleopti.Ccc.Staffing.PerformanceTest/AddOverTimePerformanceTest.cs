@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Linq;
-using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -12,14 +12,13 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Requests.PerformanceTuningTest
+namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
-	[RequestPerformanceTuningTest]
-	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
-	[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
+	[StaffingPerformanceTest]
+	//[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
 	[Toggle(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
-	[Ignore("WIP")]
+	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	public class AddOverTimePerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		[Test]
-		public void ShouldProvideCalculatedSuggestions()
+		public void ProvideSuggestionsAndApply()
 		{
 			Now.Is("2016-08-21 07:00");
 
@@ -63,8 +62,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			WithUnitOfWork.Do(() =>
 			{
-				//var startDateTime = new DateTime(2016, 08, 21, 15, 0, 0);
-				//var endDateTime = new DateTime(2016, 08, 21, 18, 0, 0);
 				var resultModel = AddOverTime.GetSuggestion(new OverTimeSuggestionModel
 										  {
 											  SkillIds = skillIds.ToList(),

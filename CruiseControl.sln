@@ -222,6 +222,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Requests.Perfo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.ViewSchedule.PerformanceTest", "Teleopti.Ccc.ViewSchedule.PerformanceTest\Teleopti.Ccc.ViewSchedule.PerformanceTest.csproj", "{3D4691C7-A41C-49B8-8F16-86F70C721D1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Staffing.PerformanceTest", "Teleopti.Ccc.Staffing.PerformanceTest\Teleopti.Ccc.Staffing.PerformanceTest.csproj", "{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1226,6 +1228,22 @@ Global
 		{3D4691C7-A41C-49B8-8F16-86F70C721D1D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3D4691C7-A41C-49B8-8F16-86F70C721D1D}.Release|x86.ActiveCfg = Release|Any CPU
 		{3D4691C7-A41C-49B8-8F16-86F70C721D1D}.Release|x86.Build.0 = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|.NET.Build.0 = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Debug|x86.Build.0 = Debug|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|.NET.ActiveCfg = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|.NET.Build.0 = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1265,10 +1283,11 @@ Global
 		{74915EF1-0759-4E25-A521-5A2F67B6F6A1} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
 		{EC1EB94E-ABAD-49FD-B608-2CD31F208261} = {60EAE402-FE16-440F-897D-6222012A77F0}
 		{3D4691C7-A41C-49B8-8F16-86F70C721D1D} = {60EAE402-FE16-440F-897D-6222012A77F0}
+		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA} = {60EAE402-FE16-440F-897D-6222012A77F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

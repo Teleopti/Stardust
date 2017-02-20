@@ -224,7 +224,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 					.SetParameter("SkillCombinationId", id)
 					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
 					.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
-					.SetParameter("TimeStamp", _now.UtcDateTime())
+					.SetParameter("TimeStamp", DateTime.UtcNow)
 					.SetParameter("DeltaResource", skillCombinationResource.Resource)
 					.ExecuteUpdate();
 
