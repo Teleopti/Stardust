@@ -116,5 +116,11 @@ namespace Teleopti.Ccc.TestCommon
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
 			return agent;
 		}
+
+		public static Person WithSchedulePeriodOneMonth(this Person agent, DateOnly date)
+		{
+			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Month, 1));
+			return agent;
+		}
 	}
 }

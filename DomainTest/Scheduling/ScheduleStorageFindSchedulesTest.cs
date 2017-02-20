@@ -28,6 +28,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
+		public void ShouldIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
+		{
+			var date = new DateOnly(2000,1,1);
+			var dateWithNotSelectedAgentAss = date.AddWeeks(3);
+			var scenario = new Scenario("_");
+			var selectedAgent = new Person().WithSchedulePeriodOneMonth(date).InTimeZone(TimeZoneInfo.Utc).WithId();
+			var notSelectedAgent = new Person().WithSchedulePeriodOneDay(dateWithNotSelectedAgentAss).InTimeZone(TimeZoneInfo.Utc).WithId();
+			PersonAssignmentRepository.Has(notSelectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithNotSelectedAgentAss, new TimePeriod(8, 17));
+
+			var schedules = Target.FindSchedulesForPersons(
+					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent, notSelectedAgent }),
+					scenario,
+					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new ScheduleDictionaryLoadOptions(false, false),
+					new[] { selectedAgent });
+
+			schedules[notSelectedAgent].ScheduledDay(dateWithNotSelectedAgentAss).PersonAssignment(true).ShiftLayers
+				.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
 		{
 			if (!_loadByPerson)
