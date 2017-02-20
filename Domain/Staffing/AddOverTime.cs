@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 	public interface IAddOverTime
 	{
-		OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel skillIds);
+		OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel);
 		void Apply(IList<OverTimeModel> overTimeModels);
 	}
 
