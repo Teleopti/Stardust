@@ -132,7 +132,6 @@ namespace Teleopti.Analytics.Parameters
 			_textBox.TextChanged += textBoxTextChanged;
 
 			//"Knappar" av imagetyp för att slippa att sidan skickas vid klick
-
 			_buttonMoveOne = new Image { ID = "ButtonOne" + Dbid, ImageUrl = "images/right_light.gif", ImageAlign = ImageAlign.AbsMiddle };
 			_buttonMoveOne.Style.Add(HtmlTextWriterStyle.MarginLeft, "5px");
 			_buttonMoveOne.Style.Add(HtmlTextWriterStyle.MarginRight, "5px");
@@ -214,18 +213,21 @@ namespace Teleopti.Analytics.Parameters
 
 		protected override void RenderContents(HtmlTextWriter writer)//Ritar upp kontrollerna samt skapar sökvägar till filer och sätter attribut på knapparna
 		{
-			const string submitOrNo = "Yes";
-			//string submitOrNo = "No";
-			//if (Dependent.Count > 0)
-			//    submitOrNo = "Yes";
+			_buttonMoveOne.Attributes.Add("onclick", 
+				string.Format("moveListItem('{0}','{1}',0 ,'{1}','{2}','{3}','{4}');", 
+				_listBox.ClientID, _listBox2.ClientID, _textBox.ClientID, _textBoxText.ClientID, _buttonMoveOne.ClientID));
 
-			_buttonMoveOne.Attributes.Add("onclick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveAll.Attributes.Add("onclick", 
+				string.Format("moveListItem('{0}','{1}',1 ,'{1}','{2}','{3}','{4}');",
+				_listBox.ClientID, _listBox2.ClientID, _textBox.ClientID, _textBoxText.ClientID, _buttonMoveAll.ClientID));
 
-			_buttonMoveAll.Attributes.Add("onclick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveOneBack.Attributes.Add("onclick",
+				string.Format("moveListItem('{0}','{1}',0 ,'{0}','{2}','{3}','{4}');",
+				_listBox2.ClientID, _listBox.ClientID, _textBox.ClientID, _textBoxText.ClientID, _buttonMoveOneBack.ClientID));
 
-			_buttonMoveOneBack.Attributes.Add("onclick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-
-			_buttonMoveAllBack.Attributes.Add("onclick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveAllBack.Attributes.Add("onclick", 
+				string.Format("moveListItem('{0}','{1}',1 ,'{0}','{2}','{3}','{4}');",
+				_listBox2.ClientID, _listBox.ClientID, _textBox.ClientID, _textBoxText.ClientID, _buttonMoveAllBack.ClientID));
 
 			_listBox.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOne.ClientID + "')");
 			_listBox2.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOneBack.ClientID + "')");
@@ -274,6 +276,7 @@ namespace Teleopti.Analytics.Parameters
 			writer.Write("<Br/>");
 			writer.Write("<Br/>");
 			_buttonMoveOne.RenderControl(writer);
+			writer.Write("<Br/>");
 			writer.Write("<Br/>");
 			writer.Write("<Br/>");
 			_buttonMoveOneBack.RenderControl(writer);
@@ -358,7 +361,7 @@ namespace Teleopti.Analytics.Parameters
 					theform.src=pic;
 				}
 
-				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
+				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, buttonId)
 				{
 					document.body.style.cursor  = 'wait';
 					var lstFrom = document.getElementById(ListFrom);
@@ -387,19 +390,17 @@ namespace Teleopti.Analytics.Parameters
 						str = str + lstVal[i].value + "","";
 					}
 
-					str = str.substring(0, str.length -1);			
+					str = str.substring(0, str.length -1);
 					txtVal.value = str;
 					document.body.style.cursor  = 'default';
-					if (SubmitOrNo == 'Yes')
-						{window.document.getElementById('aspnetForm').submit();}
+					__doPostBack(buttonId, '');
 				}
-					 function callMoveOneButton(buttonId)
-					 {
-						  var btnMoveOnlyOne = document.getElementById(buttonId);
-						  btnMoveOnlyOne.click();
-					 }
-					 -->
-					</script>";
+				function callMoveOneButton(buttonId){
+					var btnMoveOnlyOne = document.getElementById(buttonId);
+					btnMoveOnlyOne.click();
+				}
+				-->
+				</script>";
 
 				Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
 			}

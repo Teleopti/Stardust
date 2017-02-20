@@ -170,18 +170,14 @@ namespace Teleopti.Analytics.Parameters
 
 		protected override void RenderContents(HtmlTextWriter writer)//Ritar upp kontrollerna samt skapar sökvägar till filer och sätter attribut på knapparna
 		{
-			string submitOrNo = "No";
-			if (Dependent.Count > 0)
-				submitOrNo = "Yes";
-
-			_buttonMoveOne.Attributes.Add("onClick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-			_buttonMoveAll.Attributes.Add("onClick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-			_buttonMoveOneBack.Attributes.Add("onClick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
-			_buttonMoveAllBack.Attributes.Add("onClick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveOne.Attributes.Add("onClick", "moveListItemOptional('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "')");
+			_buttonMoveAll.Attributes.Add("onClick", "moveListItemOptional('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "')");
+			_buttonMoveOneBack.Attributes.Add("onClick", "moveListItemOptional('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "')");
+			_buttonMoveAllBack.Attributes.Add("onClick", "moveListItemOptional('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "')");
 
 			// Doubleclick one item in the list to move it to the other
-			_listBox.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOne.ClientID + "')");
-			_listBox2.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOneBack.ClientID + "')");
+			_listBox.Attributes.Add("ondblclick", "callMoveOneButtonOptional('" + _buttonMoveOne.ClientID + "')");
+			_listBox2.Attributes.Add("ondblclick", "callMoveOneButtonOptional('" + _buttonMoveOneBack.ClientID + "')");
 
 			// Label
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
@@ -305,7 +301,7 @@ namespace Teleopti.Analytics.Parameters
 					theform.src=pic;
 				}
 
-				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
+				function moveListItemOptional(ListFrom, ListTo, Type, ListVal, TextVal, TextText)
 				{
 					document.body.style.cursor  = 'wait';
 					var lstFrom = document.getElementById(ListFrom);
@@ -337,16 +333,14 @@ namespace Teleopti.Analytics.Parameters
 					str = str.substring(0, str.length -1);			
 					txtVal.value = str;
 					document.body.style.cursor  = 'default';
-					if (SubmitOrNo == 'Yes')
-						{window.document.getElementById('aspnetForm').submit();}
 				}
-					 function callMoveOneButton(buttonId)
-					 {
-						  var btnMoveOnlyOne = document.getElementById(buttonId);
-						  buttonId.click();
-					 }
-					 -->
-					</script>";
+				function callMoveOneButtonOptional(buttonId)
+				{
+					var btnMoveOnlyOne = document.getElementById(buttonId);
+					btnMoveOnlyOne.click();
+				}
+				-->
+				</script>";
 
 				Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
 			}
