@@ -16,14 +16,6 @@ Background:
 	| Field      | Value      |
 	| Team       | Motorhead  |
 	| Start Date | 2014-01-21 |
-	And Mikkey Dee has a shift with
-	| Field                    | Value            |
-	| Start time               | 2016-10-11 09:00 |
-	| End time                 | 2016-10-11 17:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2016-10-11 11:00 |
-	| Next activity end time   | 2016-10-11 12:00 |
 	And there is a rule with 
 	| Field       | Value    |
 	| Name        | Adhering |
@@ -35,7 +27,7 @@ Background:
 	| Name        | Not adhering |
 	| Adherence   | Out          |
 	| Activity    | Phone        |
-	| Phone state | Pause        |
+	| Phone state | LoggedOff    |
 	And there is a rule with 
 	| Field       | Value    |
 	| Name        | Positive |
@@ -43,26 +35,50 @@ Background:
 	| Activity    |          |
 	| Phone state | Ready    |
 	And there is a rule with 
-	| Field       | Value    |
-	| Name        | Adhering |
-	| Adherence   | In       |
-	| Activity    |          |
-	| Phone state | Pause    |
+	| Field       | Value     |
+	| Name        | Neutral   |
+	| Adherence   | Neutral   |
+	| Activity    |           |
+	| Phone state | LoggedOff |
 	
 @OnlyRunIfEnabled('RTA_SolidProofWhenManagingAgentAdherence_39351')
-Scenario: See state changes
-	Given the time is '2016-10-11 08:30:00'
-	And 'Mikkey Dee' sets his phone state to 'Ready'
-	And at '2016-10-11 08:45:00' 'Mikkey Dee' sets his phone state to 'Pause'
-	And at '2016-10-11 09:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
-	And at '2016-10-11 10:00:00' 'Mikkey Dee' sets his phone state to 'Pause'
-	And at '2016-10-11 10:20:00' 'Mikkey Dee' sets his phone state to 'Ready'
+Scenario: See rule changes
+	Given Mikkey Dee has a shift with
+	| Field                    | Value            |
+	| Start time               | 2016-10-11 09:00 |
+	| End time                 | 2016-10-11 17:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
+	| Next activity start time | 2016-10-11 11:00 |
+	| Next activity end time   | 2016-10-11 12:00 |
+	And at '2016-10-11 08:30:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
+	And the time is '2016-10-11 09:00:00'
+	And the time is '2016-10-11 10:00:00'
 	And the time is '2016-10-11 11:00:00'
+	And the time is '2016-10-11 12:00:00'
 	When I view historical adherence for 'Mikkey Dee'
-	Then I should see states
-	| State | Adherence | Rule         | Start time          |
-	| Ready | Out       | Positive     | 2016-10-11 08:30:00 |
-	| Pause | In        | Adhering     | 2016-10-11 08:45:00 |
-	| Ready | In        | Adhering     | 2016-10-11 09:00:00 |
-	| Pause | Out       | Not adhering | 2016-10-11 10:00:00 |
-	| Ready | In        | Adhering     | 2016-10-11 10:20:00 |
+	Then I should rule and state changes
+	| Time                | Activity | State     | Rule         | Adherence         |
+	| 2016-10-11 08:30:00 |          | LoggedOff | Neutral      | Neutral adherence |
+	| 2016-10-11 09:00:00 | Phone    | LoggedOff | Not adhering | Out of adherence  |
+	| 2016-10-11 11:00:00 | Lunch    | LoggedOff | Adhering     | In adherence      |
+
+@OnlyRunIfEnabled('RTA_SolidProofWhenManagingAgentAdherence_39351')
+Scenario: See state changes
+	Given Mikkey Dee has a shift with
+	| Field                    | Value            |
+	| Start time               | 2016-10-11 09:00 |
+	| End time                 | 2016-10-11 17:00 |
+	| Activity                 | Phone            |
+	And at '2016-10-11 08:30:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
+	And at '2016-10-11 08:40:00' 'Mikkey Dee' sets his phone state to 'Ready'
+	And at '2016-10-11 08:50:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
+	And at '2016-10-11 09:10:00' 'Mikkey Dee' sets his phone state to 'Ready'
+	And the time is '2016-10-11 12:00:00'
+	When I view historical adherence for 'Mikkey Dee'
+	Then I should rule and state changes
+	| Time                | Activity | State     | Rule     | Adherence         |
+	| 2016-10-11 08:30:00 |          | LoggedOff | Neutral  | Neutral adherence |
+	| 2016-10-11 08:40:00 | Phone    | Ready     | Positive | Out of adherence  |
+	| 2016-10-11 08:50:00 | Phone    | LoggedOff | Neutral  | Neutral adherence |
+	| 2016-10-11 10:10:00 | Phone    | Ready     | Adhering | In adherence      |

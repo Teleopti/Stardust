@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			});
 		}
 
-		[Then(@"I should see states")]
+		[Then(@"I should rule and state changes")]
 		public void ThenIShouldSeeStates(Table table)
 		{
 			ScenarioContext.Current.Pending();
