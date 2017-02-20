@@ -7,7 +7,6 @@ describe('RtaAgentsController', function() {
 		$fakeBackend,
 		$controllerBuilder,
 		scope,
-		NoticeService,
 		vm;
 
 	var stateParams = {};
@@ -23,13 +22,12 @@ describe('RtaAgentsController', function() {
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
+	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
-		NoticeService = _NoticeService_;
 		$controllerBuilder = _ControllerBuilder_;
 
 		$fakeBackend.clear();

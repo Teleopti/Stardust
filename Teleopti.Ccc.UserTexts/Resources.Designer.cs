@@ -16736,6 +16736,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Monitor up to 50 agents.
+        /// </summary>
+        public static string MonitorUpToXAgents {
+            get {
+                return ResourceManager.GetString("MonitorUpToXAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Month.
         /// </summary>
         public static string Month {

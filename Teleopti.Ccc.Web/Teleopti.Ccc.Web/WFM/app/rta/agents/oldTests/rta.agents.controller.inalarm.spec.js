@@ -7,7 +7,6 @@ describe('RtaAgentsController', function() {
 		$fakeBackend,
 		$controllerBuilder,
 		scope,
-		NoticeService,
 		vm;
 
 	var stateParams = {};
@@ -23,14 +22,13 @@ describe('RtaAgentsController', function() {
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
+	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
-		NoticeService = _NoticeService_;
 
 		scope = $controllerBuilder.setup('RtaAgentsController');
 
@@ -197,23 +195,5 @@ describe('RtaAgentsController', function() {
 		c.apply(vm.agentsInAlarm = true);
 
 		expect(vm.openedMaxNumberOfAgents).toEqual(false);
-	});
-
-	it('should trigger notice when max number of agents exceeded', function() {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-
-		for (var i = 0; i < 51; i++) {
-			$fakeBackend.withAgent({
-					PersonId: i,
-					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-				})
-				.withState({
-					PersonId: i
-				});
-		}
-		spyOn(NoticeService, 'warning');
-		$controllerBuilder.createController();
-
-		expect(NoticeService.warning).toHaveBeenCalled();
 	});
 });

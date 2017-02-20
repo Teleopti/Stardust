@@ -15584,4 +15584,8 @@ Do you want to participate?</value>
     <value>View QR Code For Configuration</value>
     <comment>Used in MyTimeWeb, permission of viewing the QR code  to configure mobile App</comment>
   </data>
+  <data name="MonitorUpToXAgents" xml:space="preserve">
+    <value>Monitor up to 50 agents</value>
+    <comment>Subitle of agents view in RTA</comment>
+  </data>
 </root>

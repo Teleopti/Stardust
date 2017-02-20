@@ -19,7 +19,10 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<span ng-if="vm.pausedAt" class="h4">{{'PausedAt'|translate}} {{vm.pausedAt}}</span>
+		<p>{{'MonitorUpToXAgents'|translate}}</p>
+	</div>
+	<div class="con-flex">
+		<p ng-if="vm.pausedAt" class="pull-right">{{'PausedAt'|translate}} {{vm.pausedAt}}</p>
 	</div>
 </div>
 
@@ -34,7 +37,7 @@
 	</div>
 	<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agents.length >= vm.maxNumberOfAgents}">
 		<div class="con-flex">
-		<label for="filter-agents" class="input-icon">
+			<label for="filter-agents" class="input-icon">
 			<i class="mdi mdi-filter-outline">
 				<input type="text" id="filter-agents" ng-change="vm.filterData()" ng-model="vm.filterText" placeholder="{{'Search'|translate}}...">
 					<md-tooltip>{{'Search'|translate}}</md-tooltip>
@@ -55,20 +58,22 @@
 	</div>
 	<div class="con-row">
 		<div class="con-flex agent-table-wrapper">
-			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="vm.allGrid"></div>
-			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
-		</div>
-	</div>
-	<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause"  class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
-		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
-		<div ng-repeat="state in vm.states">
-			<div class="wfm-checkbox">
-				<label>
+			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns
+				ui-grid-disable-animation ui-grid="vm.allGrid"></div>
+		<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns
+			ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
+</div>
+</div>
+<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
+	<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
+	<div ng-repeat="state in vm.states">
+		<div class="wfm-checkbox">
+			<label>
 					<input type="checkbox" name="checkbox" id="{{state.Id}}" ng-model="state.Selected" />
 					<span class="wfm-checkbox-toggle"></span>
 					<span class="wfm-checkbox-label rta-deselect-state">{{state.Name}}</span>
 				</label>
-			</div>
 		</div>
-	</wfm-right-panel>
+	</div>
+</wfm-right-panel>
 </div>

@@ -490,12 +490,6 @@
 			if (vm.agentsInAlarm) {
 				vm.filteredData = $filter('filter')(vm.filteredData, { TimeInAlarm: '' });
 				vm.openedMaxNumberOfAgents = (vm.filteredData.length === vm.maxNumberOfAgents);
-				if (!vm.notifySwitchDisabled && vm.agents.length > vm.maxNumberOfAgents) {
-					NoticeService.warning($translate.instant('RTAMaxNumberOfAgentsNotice')
-						.replace('{0}', vm.maxNumberOfAgents)
-						.replace('{1}', vm.maxNumberOfAgents), null, true);
-					vm.notifySwitchDisabled = true;
-				}
 			}
 		}
 
