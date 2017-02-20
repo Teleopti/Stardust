@@ -579,7 +579,6 @@
     <Compile Include="ResourceCalculation\FilterPersonsOnSkill.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataConatainerFromSkillCombinations.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationExtensions.cs" />
-    <Compile Include="ResourceCalculation\SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
