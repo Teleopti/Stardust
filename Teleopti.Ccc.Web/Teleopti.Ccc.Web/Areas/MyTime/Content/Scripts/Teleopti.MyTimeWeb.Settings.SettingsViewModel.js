@@ -5,7 +5,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	
 	self.isSetAgentDescriptionEnabled = ko.observable(false);
 	self.isQRCodeForMobileAppsEnabled = ko.observable(false);
-	self.myTimeWebBaseUrl = ko.observable();
+	self.myTimeWebBaseUrl = window.location.host + "/mytime";
 	self.androidAppLink = ko.observable("https://play.google.com/store/apps/details?id=com.teleopti.mobile");
 	self.iOSAppLink = ko.observable("https://itunes.apple.com/");
 	self.settingsLoaded = ko.observable(false);
@@ -68,7 +68,6 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 				self.selectedNameFormat(data.ChosenNameFormat.id);
 				self.avoidReload = false;
 				self.settingsLoaded(true);
-				self.myTimeWebBaseUrl(data.MyTimeWebBaseUrl);
 			}
 		});
 	};
@@ -150,11 +149,11 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	};
 
 	self.generateQRCode = function() {
-		if (self.myTimeWebBaseUrl().length > 0) {
+		if (self.myTimeWebBaseUrl.length > 0) {
 			var typeNumber = 7;
 			var errorCorrectionLevel = 'M';
 			var qr = qrcode(typeNumber, errorCorrectionLevel);
-			qr.addData(self.myTimeWebBaseUrl());
+			qr.addData(self.myTimeWebBaseUrl);
 			qr.make();
 			document.getElementById('#QRCodePlaceHolder').innerHTML = qr.createImgTag(5);
 			self.generateAppLinkQRCode();
