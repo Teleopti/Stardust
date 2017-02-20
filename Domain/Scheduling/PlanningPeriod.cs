@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -16,10 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private  int _number;
 		private PlanningPeriodState _state;
 		private readonly IAgentGroup _agentGroup;
+		private ISet<IJobResult> _jobResults;
 
 		protected PlanningPeriod()
 		{
 			_state = PlanningPeriodState.New;
+			_jobResults = new HashSet<IJobResult>();
 		}
 
 		protected PlanningPeriod(IAgentGroup agentGroup):this()
@@ -55,6 +58,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual IAgentGroup AgentGroup
 		{
 			get { return _agentGroup; }
+		}
+
+		public virtual ISet<IJobResult> JobResults
+		{
+			get { return _jobResults; }
 		}
 
 		public virtual void Scheduled()

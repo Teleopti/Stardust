@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces
@@ -10,6 +11,7 @@ namespace Teleopti.Interfaces
 		IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup);
 		PlanningPeriodState State { get; }
 		IAgentGroup AgentGroup { get; }
+		ISet<IJobResult> JobResults { get; }
 		void Scheduled();
 		void Publish(params IPerson[] people);
 	}

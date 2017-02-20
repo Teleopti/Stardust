@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
@@ -24,15 +25,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	public class PlanningPeriodRepositoryTest : RepositoryTest<IPlanningPeriod>
 	{
 		private static readonly DateOnly _startDate = new DateOnly(2001, 1, 1);
+		private IPerson person;
+		private DateOnlyPeriod period;
+		private DateTime timestamp;
+		private IJobResult jobResult;
+
+		protected override void ConcreteSetup()
+		{
+			period = new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31);
+			person = PersonFactory.CreatePerson();
+			timestamp = DateTime.UtcNow;
+			PersistAndRemoveFromUnitOfWork(person);
+			jobResult = new JobResult(JobCategory.WebSchedule, period, person, timestamp);
+			PersistAndRemoveFromUnitOfWork(jobResult);
+		}
 
 		protected override IPlanningPeriod CreateAggregateWithCorrectBusinessUnit()
 		{
-			return new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			planningPeriod.JobResults.Add(jobResult);
+			return planningPeriod;
 		}
 
 		protected override void VerifyAggregateGraphProperties(IPlanningPeriod loadedAggregateFromDatabase)
 		{
-			loadedAggregateFromDatabase.Range.Should().Be.EqualTo(CreateAggregateWithCorrectBusinessUnit().Range);
+			var aggregateWithCorrectBusinessUnit = CreateAggregateWithCorrectBusinessUnit();
+			loadedAggregateFromDatabase.Range.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.Range);
+			loadedAggregateFromDatabase.AgentGroup.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.Range);
+			loadedAggregateFromDatabase.JobResults.Single().JobCategory.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.JobResults.Single().JobCategory);
+			loadedAggregateFromDatabase.JobResults.Single().Owner.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.JobResults.Single().Owner);
 		}
 
 		protected override Repository<IPlanningPeriod> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

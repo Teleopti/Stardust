@@ -46,6 +46,12 @@
 					 class="Teleopti.Ccc.Domain.Optimization.AgentGroup"
 						access="nosetter.camelcase-underscore"
 					 foreign-key="FK_PlanningPeriod_AgentGroup"/>
+    
+    <set name="JobResults" table="PlanningPeriodJobResult">
+        <key column="PlanningPeriod" foreign-key="FK_PlanningPeriodJobResult_PlanningPeriod" />
+        <many-to-many column="JobResult" class="Teleopti.Ccc.Domain.Common.JobResult" foreign-key="FK_PlanningPeriodJobResult_JobResult" />
+    </set>
+
 
 		<many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
