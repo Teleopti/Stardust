@@ -1,7 +1,7 @@
 ﻿<div class="container body-content" ng-controller="summaryController as vm">
 	<h2>Welcome to Stardust Dashboard!</h2>
 	<div class="row">
-		<div class="col-md-4 panel panel-default">
+		<div class="col-md-6 panel panel-default">
 			<div class="panel-heading">Nodes</div>
 			<div class="panel-body text-container">
 				Monitor the nodes that executes the long running background jobs. You can see their latest heartbeats and what jobs they are running.
@@ -14,7 +14,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="col-md-4 panel panel-default ">
+		<div class="col-md-6 panel panel-default ">
 			<div class="panel-heading">Queue</div>
 			<div class="panel-body text-container">
 				Monitor jobs that are in queue waiting for a free node.
@@ -27,7 +27,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="col-md-4 panel panel-default">
+		<div class="col-md-6 panel panel-default">
 			<div class="panel-heading">Jobs</div>
 			<div class="panel-body text-container">
 				Monitor the history of jobs and the current processing ones. You can see details about the jobs, when they were processed, what node was running it, see logs from the job etc.
@@ -41,20 +41,20 @@
 
 			</div>
 		</div>
-		<div class="col-md-4 panel panel-default ">
-			<div class="panel-heading">Show Failed jobs</div>
+		<div class="col-md-6 panel panel-default ">
+			<div class="panel-heading">Failures</div>
 			<div class="panel-body text-container">
-				See jobs that have failed
+				Monitor jobs that have caused errors.
 			</div>
 			<div class="panel-footer">
 				<a href="#StardustDashboard/failedJobs">
 					<button class="btn btn-primary">
-						<span class="text-white">Monitor fails &raquo;</span>
+						<span class="text-white">Monitor failures &raquo;</span>
 					</button>
 				</a>
 			</div>
 		</div>
-		<div class="col-md-8 panel panel-default ">
+		<div class="col-md-12 panel panel-default ">
 			<h3>Stardust Summary</h3>
 			<h4>Nodes</h4>
 			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.NodeError}}</div>
