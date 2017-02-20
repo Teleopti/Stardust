@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				EndDateTime = end,
 				Resource = 8
 			});
-			Now.Is("2016-12-19 08:01");
+			Thread.Sleep(TimeSpan.FromSeconds(1));  //insertedOn is PK
 			Target.PersistChange(new SkillCombinationResource
 			{
 				SkillCombination = new[] { skill },
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				EndDateTime = end,
 				Resource = -1
 			});
-			Now.Is("2016-12-19 08:01");
+			Thread.Sleep(TimeSpan.FromSeconds(1));  //insertedOn is PK
 			Target.PersistChange(new SkillCombinationResource
 			{
 				SkillCombination = new[] { skill, skill2 },
