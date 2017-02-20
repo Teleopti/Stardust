@@ -58,7 +58,7 @@
 				}
 			}).query().$promise;
 		};
-
+		
 		function getOrganization(data) {
 			return $resource('../api/Sites/Organization', {}, {
 				query: {
@@ -66,6 +66,15 @@
 					isArray: true
 				}
 			}).query().$promise;
+		};
+
+		function getOrganizationForSkills(data) {
+			return $resource('../api/Sites/Organization', {}, {
+				query: {
+					method: 'GET',
+					isArray: true
+				}
+			}).query({skillIds:data.skillIds}).$promise;
 		};
 
 		function agentStatesFor(data) {
