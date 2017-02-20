@@ -4347,13 +4347,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void skillGridMenuItemAnalyzeResorceChangesClick(object sender, EventArgs e)
 		{
-			var selectedDate = _scheduleView.SelectedDateLocal();
-			TimeSpan? selectedTime = null;
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
-			{
-				selectedTime = _skillIntradayGridControl.Presenter.SelectedIntervalTime();
-			}
-			var model = new ResourceCalculationAnalyzerModel(this, _undoRedo, _container, _optimizationHelperExtended, selectedDate, selectedTime);
+			var model = new ResourceCalculationAnalyzerModel(this, _undoRedo, _container, _optimizationHelperExtended);
 			using (var resourceChanges = new ResourceCalculationAnalyzerView(model))
 			{
 				resourceChanges.ShowDialog(this);

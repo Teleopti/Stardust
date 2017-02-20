@@ -35,15 +35,15 @@
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+			this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+			this.button1 = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-			this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-			this.button1 = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// listView1
@@ -65,7 +65,7 @@
             this.columnHeader11});
 			this.listView1.Location = new System.Drawing.Point(0, 28);
 			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(1188, 460);
+			this.listView1.Size = new System.Drawing.Size(807, 417);
 			this.listView1.TabIndex = 0;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
@@ -100,6 +100,42 @@
 			this.columnHeader6.Text = "P Gain/Loss";
 			this.columnHeader6.Width = 80;
 			// 
+			// dateTimePicker1
+			// 
+			this.dateTimePicker1.CustomFormat = "HH:mm";
+			this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			this.dateTimePicker1.Location = new System.Drawing.Point(332, 96);
+			this.dateTimePicker1.Name = "dateTimePicker1";
+			this.dateTimePicker1.ShowUpDown = true;
+			this.dateTimePicker1.Size = new System.Drawing.Size(85, 20);
+			this.dateTimePicker1.TabIndex = 1;
+			// 
+			// dateTimePicker2
+			// 
+			this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+			this.dateTimePicker2.Location = new System.Drawing.Point(332, 70);
+			this.dateTimePicker2.Name = "dateTimePicker2";
+			this.dateTimePicker2.Size = new System.Drawing.Size(85, 20);
+			this.dateTimePicker2.TabIndex = 2;
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(361, 123);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(56, 23);
+			this.button1.TabIndex = 3;
+			this.button1.Text = "Go";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(13, 9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(0, 13);
+			this.label1.TabIndex = 4;
+			// 
 			// columnHeader7
 			// 
 			this.columnHeader7.Text = "% S Before";
@@ -125,47 +161,11 @@
 			this.columnHeader11.Text = "S Gain/Loss";
 			this.columnHeader11.Width = 80;
 			// 
-			// dateTimePicker1
-			// 
-			this.dateTimePicker1.CustomFormat = "HH:mm";
-			this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dateTimePicker1.Location = new System.Drawing.Point(510, 149);
-			this.dateTimePicker1.Name = "dateTimePicker1";
-			this.dateTimePicker1.ShowUpDown = true;
-			this.dateTimePicker1.Size = new System.Drawing.Size(85, 20);
-			this.dateTimePicker1.TabIndex = 1;
-			// 
-			// dateTimePicker2
-			// 
-			this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePicker2.Location = new System.Drawing.Point(510, 123);
-			this.dateTimePicker2.Name = "dateTimePicker2";
-			this.dateTimePicker2.Size = new System.Drawing.Size(85, 20);
-			this.dateTimePicker2.TabIndex = 2;
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(539, 176);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(56, 23);
-			this.button1.TabIndex = 3;
-			this.button1.Text = "Go";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(13, 9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(0, 13);
-			this.label1.TabIndex = 4;
-			// 
 			// ResourceCalculationAnalyzerView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1188, 488);
+			this.ClientSize = new System.Drawing.Size(807, 445);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.dateTimePicker2);
