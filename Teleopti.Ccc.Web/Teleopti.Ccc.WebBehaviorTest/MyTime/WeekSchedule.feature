@@ -365,6 +365,7 @@ Scenario: Show black absence text when absence background color is white
 	When I view my week schedule for date '2013-01-01'
 	Then I should see the text for date '2013-01-01' in 'black'
 
+@ignore
 Scenario: Keep selected probability when switching back from month view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -374,6 +375,7 @@ Scenario: Keep selected probability when switching back from month view
 	When I click the current week button
 	Then I should see the selected value for probability is 'Show absence probability'
 
+@ignore
 Scenario: Keep selected probability when switching back from non current week view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
