@@ -108,6 +108,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				};
 			return org.ToArray();
 		}
+
+		public IEnumerable<OrganizationSiteViewModel> ForOrganizationWithSkills(Guid[] skillIds)
+		{
+			var sites = allPermittedSites();
+			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.ForSkills(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
+			var org = from num in numberOfAgents
+					  from site in sites
+					  where num.Key == site.Id.Value && num.Value > 0 && site.TeamCollection.Count > 0
+					  select new OrganizationSiteViewModel
+					  {
+						  Id = site.Id.Value,
+						  Name = site.Description.Name,
+						  Teams = site.TeamCollection.Select(
+							  team => new OrganizationTeamViewModel
+							  {
+								  Id = team.Id.Value,
+								  Name = team.Description.Name
+							  }).ToArray()
+					  };
+			return org.ToArray();
+		}
 	}
 
 	public class OrganizationSiteViewModel

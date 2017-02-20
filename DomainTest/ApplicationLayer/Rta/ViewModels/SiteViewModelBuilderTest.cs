@@ -183,5 +183,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team1");
 		}
 
+		[Test]
+		public void ShouldBuildForOrganizationWithSkills()
+		{
+			var london = Guid.NewGuid();
+			var wrongSite = Guid.NewGuid();
+			var team = Guid.NewGuid();
+			var wrongTeam = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+
+			Database
+				.WithSite(london, "London")
+				.WithTeam(team, "Team")
+				.WithSite(wrongSite, "WrongSite")
+				.WithTeam(wrongTeam, "WrongTeam");
+
+			AgentsInSite.Has(wrongSite, 20);
+			AgentsInSite.Has(london, skillId, 20);
+			var org = Target.ForOrganizationWithSkills(new[] { skillId }).Single();
+
+			org.Id.Should().Be(london);
+			org.Name.Should().Be("London");
+			org.Teams.Select(t => t.Id).Should().Have.SameValuesAs(team);
+			org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team");
+
+		}
+
 	}
 }
