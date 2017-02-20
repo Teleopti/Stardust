@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			{
 				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Started desc) AS 'RowNumber' FROM (SELECT * FROM [Stardust].Job
 								WHERE SentToWorkerNodeUri IN (SELECT Url FROM [Stardust].WorkerNode WHERE Id = @nodeId)) as b ORDER BY Started desc ) 
-								SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
+								SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
 
 				connection.OpenWithRetry(_retryPolicy);
 				using (var selectCommand = new SqlCommand(selectCommandText, connection))
@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-											FROM Stardust.Job ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
+											FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
@@ -96,7 +96,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				const string selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] 
-													FROM [Stardust].[Job] WHERE Ended IS NULL order by Created desc";
+													FROM [Stardust].[Job] WITH(NOLOCK) WHERE Ended IS NULL order by Created desc";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
@@ -122,7 +122,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				const string selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] 
-											FROM [Stardust].[Job] WHERE JobId = @jobId";
+											FROM [Stardust].[Job] WITH(NOLOCK) WHERE JobId = @jobId";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
@@ -167,8 +167,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		public WorkerNode WorkerNode(Guid nodeId)
 		{
 			const string selectCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
-													(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-												FROM [Stardust].WorkerNode) w WHERE w.Id = @Id";
+													(SELECT SentToWorkerNodeUri FROM Stardust.Job WITH(NOLOCK) WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
+												FROM [Stardust].WorkerNode WITH(NOLOCK)) w WHERE w.Id = @Id";
 			var node = new WorkerNode();
 			using (var connection = new SqlConnection(_connectionString))
 			{
@@ -199,8 +199,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			var listToReturn = new List<WorkerNode>();
 
 			const string commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
-								(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-									FROM [Stardust].WorkerNode) w";
+								(SELECT SentToWorkerNodeUri FROM Stardust.Job WITH(NOLOCK) WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
+									FROM [Stardust].WorkerNode WITH(NOLOCK)) w";
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.OpenWithRetry(_retryPolicy);
@@ -241,7 +241,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Created asc) AS 'RowNumber'
-											FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
+											FROM Stardust.JobQueue WITH(NOLOCK) ORDER BY Created asc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
@@ -266,7 +266,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			var job = new Job(); ;
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				var selectCommandText = $"SELECT * FROM Stardust.JobQueue WHERE JobId = @jobId";
+				var selectCommandText = $"SELECT * FROM Stardust.JobQueue WITH(NOLOCK) WHERE JobId = @jobId";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
 				{
@@ -307,7 +307,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-											FROM Stardust.Job WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
+											FROM Stardust.Job WITH(NOLOCK) WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
