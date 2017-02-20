@@ -45,5 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var people = _agentGroupStaffLoader.Load(period, planningPeriod.AgentGroup);
 			return new Tuple<DateOnlyPeriod, IList<Guid>>(period, people.AllPeople.Select(x => x.Id.Value).ToList());
 		}
+
 	}
 }

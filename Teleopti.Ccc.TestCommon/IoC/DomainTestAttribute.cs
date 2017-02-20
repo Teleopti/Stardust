@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -54,6 +55,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			system.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
+
+			system.UseTestDouble<FakeAgentGroupStaffLoader>().For<IAgentGroupStaffLoader>();
+			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 
 			// Tenant (and datasource) stuff
 			system.AddModule(new TenantServerModule(configuration));

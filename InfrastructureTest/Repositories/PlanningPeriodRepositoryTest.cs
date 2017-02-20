@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var aggregateWithCorrectBusinessUnit = CreateAggregateWithCorrectBusinessUnit();
 			loadedAggregateFromDatabase.Range.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.Range);
-			loadedAggregateFromDatabase.AgentGroup.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.Range);
 			loadedAggregateFromDatabase.JobResults.Single().JobCategory.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.JobResults.Single().JobCategory);
 			loadedAggregateFromDatabase.JobResults.Single().Owner.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.JobResults.Single().Owner);
 		}

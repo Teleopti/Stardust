@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 		public PlanningPeriodState State { get; private set; }
 		public IAgentGroup AgentGroup { get; private set; }
+		public ISet<IJobResult> JobResults { get; }
 
 		public void Scheduled()
 		{

@@ -305,8 +305,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.AddService<PlanningPeriodController>();
 			system.AddModule(new ResourcePlannerModule());
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
-			system.UseTestDouble<FakeAgentGroupStaffLoader>().For<IAgentGroupStaffLoader>();
-			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
+
 		}
 	}
 }
