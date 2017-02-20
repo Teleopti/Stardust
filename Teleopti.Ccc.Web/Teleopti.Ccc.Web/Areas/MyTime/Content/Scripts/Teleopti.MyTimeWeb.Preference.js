@@ -176,7 +176,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				periodFeedbackViewModel.LoadFeedback();
 				loadNeighborFeedback();
 				periodFeedbackViewModel.PossibleNightRestViolations();
-				cb();
+				if (cb) cb();
 			});
 		}
 	}
