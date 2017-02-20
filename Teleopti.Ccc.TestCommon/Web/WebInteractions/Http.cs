@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,11 +37,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			var post = _client.SendAsync(request);
 			var response = post.Result;
-			if (response.StatusCode != HttpStatusCode.OK)
-			{
-				var responseContent = response.Content.ReadAsStringAsync().Result;
-				throw new Exception($"Posting json returned http code {response.StatusCode}, Sent: {json}, Response: {responseContent}");
-			}
+
+			if (new[] {HttpStatusCode.OK, HttpStatusCode.Created}
+				.Contains(response.StatusCode))
+				return;
+
+			var responseContent = response.Content.ReadAsStringAsync().Result;
+			throw new Exception($"Posting json returned http code {response.StatusCode}, Sent: {json}, Response: {responseContent}");
 		}
 		
 		// will "sometimes always" return 200 for html if the server responds with friendly custom error page
