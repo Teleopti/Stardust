@@ -26,8 +26,8 @@ BEGIN
 	SELECT upds.table_schema, upds.table_name, ISNULL(upds.options,'SAMPLE 25 PERCENT')
 	FROM information_schema.tables t
 	INNER JOIN [mart].[sys_updatestat_tables] upds
-		ON upds.table_schema = t.table_schema
-		AND upds.table_name	 = t.table_name
+		ON upds.table_schema = t.table_schema COLLATE database_default
+		AND upds.table_name	 = t.table_name COLLATE database_default
 	WHERE t.TABLE_TYPE = 'BASE TABLE'
 
 	OPEN updatestats
