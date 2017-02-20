@@ -113,6 +113,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
+		[Ignore("Thought this was your problem Claes, but obviously it wasn't... Why is this green?")]
+		public void ShouldNotIncludeSelectedAgentsScheduleOutsideSelectedAgentPeriod()
+		{
+			var date = new DateOnly(2000,1,1);
+			var dateWithAssignment = date.AddWeeks(3);
+			var scenario = new Scenario("_");
+			var selectedAgent = new Person().WithSchedulePeriodOneDay(date).InTimeZone(TimeZoneInfo.Utc).WithId();
+			var notSelectedAgent = new Person().WithSchedulePeriodOneMonth(date).InTimeZone(TimeZoneInfo.Utc).WithId();
+			PersonAssignmentRepository.Has(selectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithAssignment, new TimePeriod(8, 17));
+
+			var schedules = Target.FindSchedulesForPersons(
+					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent, notSelectedAgent }),
+					scenario,
+					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new ScheduleDictionaryLoadOptions(false, false),
+					new[] { selectedAgent });
+
+			schedules[selectedAgent].ScheduledDay(dateWithAssignment).PersonAssignment(true).ShiftLayers
+				.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldIncludeSelectedAgentsScheduleOnceOnly()
 		{
 			var date = DateOnly.Today;
