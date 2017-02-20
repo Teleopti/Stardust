@@ -22,11 +22,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				DataMaker.Data().Apply(new StateGroupConfigurable {Name = state, PhoneState = state});
 			}
 		}
-
-		[Then(@"I should see states")]
-		public void ThenIShouldSeeStates(Table table)
-		{
-			ScenarioContext.Current.Pending();
-		}
 	}
 }

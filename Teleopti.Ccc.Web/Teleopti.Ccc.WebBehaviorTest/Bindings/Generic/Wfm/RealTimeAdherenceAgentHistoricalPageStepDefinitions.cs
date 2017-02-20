@@ -39,6 +39,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			});
 		}
 
+		[Then(@"I should see states")]
+		public void ThenIShouldSeeStates(Table table)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 		public class StartEndTimePair
 		{
 			public string StartTime;
