@@ -249,6 +249,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 		var shiftStartPosition = 1;
 		var shiftEndPosition = 0;
 
+		var probabilityStart, probabilityEnd;
 		if (day.IsFullDayAbsence || day.IsDayOff) {
 			var timelines = parent.timeLines();
 			if (parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
@@ -266,6 +267,9 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 			var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
 			shiftStartPosition = (shiftStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
 			shiftEndPosition = (shiftEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
+
+			probabilityStart = shiftStartMinutes;
+			probabilityEnd = shiftEndMinutes;
 		} else {
 			for (var i = 0; i < day.Periods.length; i++) {
 				var period = day.Periods[i];
@@ -285,6 +289,21 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 				}
 				if (shiftEndPosition < period.EndPositionPercentage) {
 					shiftEndPosition = period.EndPositionPercentage;
+				}
+			}
+
+			probabilityStart = shiftStartMinutes;
+			probabilityEnd = shiftEndMinutes;
+
+			if (probabilityType === 2 && parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
+				var openPeriodStart = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
+				var openPeriodEnd = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
+
+				if (probabilityStart < openPeriodStart) {
+					probabilityStart = openPeriodStart;
+				}
+				if (openPeriodEnd < probabilityEnd) {
+					probabilityEnd = openPeriodEnd;
 				}
 			}
 		}
@@ -340,8 +359,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, probabilities, parent)
 						break;
 					}
 				}
-			} else {
-				inScheduleTimeRange = true;
+			} else if (probabilityType === 2) {
+				inScheduleTimeRange = probabilityStart <= intervalStartMinutes && intervalEndMinutes <= probabilityEnd;;
 			}
 
 			var index = intervalProbability.Possibility;
