@@ -9,8 +9,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 {
 	public class StardustRepository
 	{
-		const int maxRetry = 5;
-		const int delayMs = 100;
+		private const int maxRetry = 5;
+		private const int delayMs = 100;
 
 		private readonly string _connectionString;
 		private readonly RetryPolicy _retryPolicy;
@@ -23,38 +23,38 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 		public IList<Job> GetJobsByNodeId(Guid nodeId, int from, int to)
 		{
-			var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Started desc) AS 'RowNumber' FROM (SELECT * FROM [Stardust].Job
-WHERE SentToWorkerNodeUri IN (SELECT Url FROM [Stardust].WorkerNode WHERE Id = '{nodeId}')) as b ORDER BY Started desc ) 
-SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
-
-			var returnList = new List<Job>();
+			var jobs = new List<Job>();
 
 			using (var connection = new SqlConnection(_connectionString))
 			{
+				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Started desc) AS 'RowNumber' FROM (SELECT * FROM [Stardust].Job
+								WHERE SentToWorkerNodeUri IN (SELECT Url FROM [Stardust].WorkerNode WHERE Id = @nodeId)) as b ORDER BY Started desc ) 
+								SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
+
 				connection.OpenWithRetry(_retryPolicy);
 				using (var selectCommand = new SqlCommand(selectCommandText, connection))
 				{
+					selectCommand.Parameters.AddWithValue("@nodeId", nodeId);
+					selectCommand.Parameters.AddWithValue("@from", from);
+					selectCommand.Parameters.AddWithValue("@to", to);
 					using (var reader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (reader.HasRows)
+						if (!reader.HasRows) return jobs;
+						while (reader.Read())
 						{
-							while (reader.Read())
-							{
-								var job = createJobFromSqlDataReader(reader);
-								setTotalDuration(job);
-								returnList.Add(job);
-							}
+							var job = createJobFromSqlDataReader(reader);
+							setTotalDuration(job);
+							jobs.Add(job);
 						}
 					}
 				}
-				connection.Close();
 			}
-			return returnList;
+			return jobs;
 		}
 
-		private void setTotalDuration(Job job)
+		private static void setTotalDuration(Job job)
 		{
-			string totalDuration = (DateTime.UtcNow - job.Started).ToString();
+			var totalDuration = (DateTime.UtcNow - job.Started).ToString();
 			if (!string.IsNullOrEmpty(job.Ended.ToString()))
 				totalDuration = (job.Ended - job.Started).ToString();
 			job.TotalDuration = totalDuration.Substring(0, 8);
@@ -67,20 +67,21 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
+				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
+											FROM Stardust.Job ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' FROM Stardust.Job ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					getAllJobsCommand.Parameters.AddWithValue("@from", from);
+					getAllJobsCommand.Parameters.AddWithValue("@to", to);
+					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (sqlDataReader.HasRows)
+						if (!reader.HasRows) return jobs;
+						while (reader.Read())
 						{
-							while (sqlDataReader.Read())
-							{
-								var job = createJobFromSqlDataReader(sqlDataReader);
-								setTotalDuration(job);
-								jobs.Add(job);
-							}
+							var job = createJobFromSqlDataReader(reader);
+							setTotalDuration(job);
+							jobs.Add(job);
 						}
 					}
 				}
@@ -94,20 +95,19 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
+				const string selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] 
+													FROM [Stardust].[Job] WHERE Ended IS NULL order by Created desc";
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] FROM [Stardust].[Job] WHERE Ended IS NULL order by Created desc";
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (sqlDataReader.HasRows)
+						if (!sqlDataReader.HasRows) return jobs;
+						while (sqlDataReader.Read())
 						{
-							while (sqlDataReader.Read())
-							{
-								var job = createJobFromSqlDataReader(sqlDataReader);
-								setTotalDuration(job);
-								jobs.Add(job);
-							}
+							var job = createJobFromSqlDataReader(sqlDataReader);
+							setTotalDuration(job);
+							jobs.Add(job);
 						}
 					}
 				}
@@ -121,20 +121,18 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
+				const string selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] 
+											FROM [Stardust].[Job] WHERE JobId = @jobId";
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] FROM [Stardust].[Job] WHERE JobId = @jobId";
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					selectCommand.Parameters.AddWithValue("@JobId", jobId);
 					using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (sqlDataReader.HasRows)
-						{
-							sqlDataReader.Read();
-
-							job = createJobFromSqlDataReader(sqlDataReader);
-							setTotalDuration(job);
-						}
+						if (!sqlDataReader.HasRows) return job;
+						sqlDataReader.Read();
+						job = createJobFromSqlDataReader(sqlDataReader);
+						setTotalDuration(job);
 					}
 				}
 			}
@@ -147,20 +145,18 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
+				const string selectCommandText = @"SELECT Id, JobId, Created, Detail FROM [Stardust].[JobDetail] WITH (NOLOCK) WHERE JobId = @JobId ORDER BY Created desc";
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT Id, JobId, Created, Detail	FROM [Stardust].[JobDetail] WITH (NOLOCK) WHERE JobId = @JobId ORDER BY Created desc";
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					selectCommand.Parameters.AddWithValue("@JobId", jobId);
 					using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (sqlDataReader.HasRows)
+						if (!sqlDataReader.HasRows) return jobDetails;
+						while (sqlDataReader.Read())
 						{
-							while (sqlDataReader.Read())
-							{
-								var jobDetail = CreateJobDetailFromSqlDataReader(sqlDataReader);
-								jobDetails.Add(jobDetail);
-							}
+							var jobDetail = createJobDetailFromSqlDataReader(sqlDataReader);
+							jobDetails.Add(jobDetail);
 						}
 					}
 				}
@@ -171,8 +167,9 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 		public WorkerNode WorkerNode(Guid nodeId)
 		{
 			const string selectCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
-(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running FROM [Stardust].WorkerNode) w WHERE w.Id = @Id";
-			WorkerNode node = null;
+													(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
+												FROM [Stardust].WorkerNode) w WHERE w.Id = @Id";
+			var node = new WorkerNode();
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.OpenWithRetry(_retryPolicy);
@@ -180,21 +177,18 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 				{
 					selectCommand.Parameters.AddWithValue("@Id", nodeId);
 					var reader = selectCommand.ExecuteReader();
-					if (reader.HasRows)
+					if (!reader.HasRows) return node;
+					while (reader.Read())
 					{
-						while (reader.Read())
+						node = new WorkerNode
 						{
-							node = new WorkerNode
-							{
-								Id = reader.GetGuid(reader.GetOrdinal("Id")),
-								Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
-								Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
-								Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat")),
-								Running = reader.GetBoolean(reader.GetOrdinal("Running"))
-							};
-						}
+							Id = reader.GetGuid(reader.GetOrdinal("Id")),
+							Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
+							Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
+							Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat")),
+							Running = reader.GetBoolean(reader.GetOrdinal("Running"))
+						};
 					}
-					connection.Close();
 				}
 			}
 			return node;
@@ -203,36 +197,36 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 		public List<WorkerNode> GetAllWorkerNodes()
 		{
 			var listToReturn = new List<WorkerNode>();
-			var commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
-(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running FROM [Stardust].WorkerNode) w";
+
+			const string commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
+								(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
+									FROM [Stardust].WorkerNode) w";
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.OpenWithRetry(_retryPolicy);
-
 				using (var selectCommand = new SqlCommand(commandText, connection))
 				{
 					using (var reader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (reader.HasRows)
-						{
-							var ordinalPositionForIdField = reader.GetOrdinal("Id");
-							var ordinalPositionForUrlField = reader.GetOrdinal("Url");
-							var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
-							var ordinalPositionForRunningField = reader.GetOrdinal("Running");
-							var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
+						if (!reader.HasRows) return listToReturn;
 
-							while (reader.Read())
+						var ordinalPositionForIdField = reader.GetOrdinal("Id");
+						var ordinalPositionForUrlField = reader.GetOrdinal("Url");
+						var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
+						var ordinalPositionForRunningField = reader.GetOrdinal("Running");
+						var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
+
+						while (reader.Read())
+						{
+							var workerNode = new WorkerNode
 							{
-								var workerNode = new WorkerNode
-								{
-									Id = (Guid)reader.GetValue(ordinalPositionForIdField),
-									Url = new Uri((string)reader.GetValue(ordinalPositionForUrlField)),
-									Alive = (bool)reader.GetValue(ordinalPositionForAliveField),
-									Heartbeat = (DateTime)reader.GetValue(ordinalPositionForHeartbeatField),
-									Running = (bool)reader.GetValue(ordinalPositionForRunningField),
-								};
-								listToReturn.Add(workerNode);
-							}
+								Id = (Guid)reader.GetValue(ordinalPositionForIdField),
+								Url = new Uri((string)reader.GetValue(ordinalPositionForUrlField)),
+								Alive = (bool)reader.GetValue(ordinalPositionForAliveField),
+								Heartbeat = (DateTime)reader.GetValue(ordinalPositionForHeartbeatField),
+								Running = (bool)reader.GetValue(ordinalPositionForRunningField),
+							};
+							listToReturn.Add(workerNode);
 						}
 					}
 				}
@@ -246,20 +240,20 @@ SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
+				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Created asc) AS 'RowNumber'
+											FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Created asc) AS 'RowNumber'
-FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
+					getAllQueuedJobsCommand.Parameters.AddWithValue("@from", from);
+					getAllQueuedJobsCommand.Parameters.AddWithValue("@to", to);
 					using (var sqlDataReader = getAllQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (sqlDataReader.HasRows)
+						if (!sqlDataReader.HasRows) return jobs;
+						while (sqlDataReader.Read())
 						{
-							while (sqlDataReader.Read())
-							{
-								var job = createQueuedJobFromSqlDataReader(sqlDataReader);
-								jobs.Add(job);
-							}
+							var job = createQueuedJobFromSqlDataReader(sqlDataReader);
+							jobs.Add(job);
 						}
 					}
 				}
@@ -272,18 +266,16 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 			var job = new Job(); ;
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
+				var selectCommandText = $"SELECT * FROM Stardust.JobQueue WHERE JobId = @jobId";
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = $"SELECT * FROM Stardust.JobQueue WHERE JobId = '{jobId}'";
 				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
 				{
+					getQueuedJob.Parameters.AddWithValue("@jobId", jobId);
 					using (var sqlDataReader = getQueuedJob.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (sqlDataReader.HasRows)
-						{
-							sqlDataReader.Read();
-							job = createQueuedJobFromSqlDataReader(sqlDataReader);
-
-						}
+						if (!sqlDataReader.HasRows) return job;
+						sqlDataReader.Read();
+						job = createQueuedJobFromSqlDataReader(sqlDataReader);
 					}
 				}
 			}
@@ -298,9 +290,12 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 				foreach (var ids in jobIds.Batch(400))
 				{
 					var stringIds = string.Join("','", ids);
-					var sql = $@"DELETE FROM Stardust.JobQueue WHERE JobId IN ('{stringIds}')";
-					var comm = new SqlCommand(sql, sqlConnection);
-					comm.ExecuteNonQuery();
+					const string sql = @"DELETE FROM Stardust.JobQueue WHERE JobId IN (@ids)";
+					using (var comm = new SqlCommand(sql, sqlConnection))
+					{
+						comm.Parameters.AddWithValue("@ids", stringIds);
+						comm.ExecuteNonQuery();
+					}
 				}
 			}
 		}
@@ -311,20 +306,21 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
+				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
+											FROM Stardust.Job WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN @from AND @to";
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' FROM Stardust.Job WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
+					getAllJobsCommand.Parameters.AddWithValue("@from", from);
+					getAllJobsCommand.Parameters.AddWithValue("@to", to);
 					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (sqlDataReader.HasRows)
+						if (!sqlDataReader.HasRows) return jobs;
+						while (sqlDataReader.Read())
 						{
-							while (sqlDataReader.Read())
-							{
-								var job = createJobFromSqlDataReader(sqlDataReader);
-								setTotalDuration(job);
-								jobs.Add(job);
-							}
+							var job = createJobFromSqlDataReader(sqlDataReader);
+							setTotalDuration(job);
+							jobs.Add(job);
 						}
 					}
 				}
@@ -332,13 +328,13 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 			return jobs;
 		}
 
-		private T getDBNullSafeValue<T>(object value) where T : class
+		private static T getDBNullSafeValue<T>(object value) where T : class
 		{
 			return value == DBNull.Value ? null : (T)value;
 		}
 
 
-		private Job createJobFromSqlDataReader(SqlDataReader sqlDataReader)
+		private static Job createJobFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
 			var job = new Job
 			{
@@ -356,7 +352,7 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 			return job;
 		}
 
-		private Job createQueuedJobFromSqlDataReader(SqlDataReader sqlDataReader)
+		private static Job createQueuedJobFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
 			var job = new Job
 			{
@@ -369,7 +365,7 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 			return job;
 		}
 
-		private JobDetail CreateJobDetailFromSqlDataReader(SqlDataReader sqlDataReader)
+		private static JobDetail createJobDetailFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
 			var jobDetail = new JobDetail
 			{
@@ -393,11 +389,7 @@ FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber 
 
 		public static string GetNullableString(this SqlDataReader reader, int ordinalPosition)
 		{
-			if (reader.IsDBNull(ordinalPosition))
-			{
-				return null;
-			}
-			return reader.GetString(ordinalPosition);
+			return reader.IsDBNull(ordinalPosition) ? null : reader.GetString(ordinalPosition);
 		}
 	}
 }
