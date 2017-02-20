@@ -12,25 +12,53 @@
 </head>
 <body ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
 	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
-	<div class="pulse">
-	 <div class="loader">
-	   <svg width="1em" height="1em"><circle cx="0.5em" cy="0.5em" r="0.45em"/></svg>
-	 </div>
-	</div>
-	</div>
-<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
-<div class="layout-container">
-	<div id="leftsidenav" class="sidenav material-depth-1 left" ng-class="{'is-hidden':toggleLeftSide}">
-		<div ng-include="'html/left-sidenav.html'"></div>
-	</div>
-	<div id="lefttoogle" class="sidenav-toggle">
-		<div class="sidenav-wrapper left">
-			<input type="checkbox" id="nav-left" ng-model="toggleLeftSide"/>
-			<label for="nav-left">
-				<i class="mdi" ng-class=" {'mdi-menu':toggleLeftSide, 'mdi-backburger':!toggleLeftSide}"></i>
-			</label>
+		<div class="pulse">
+			<div class="loader">
+				<svg width="1em" height="1em"><circle cx="0.5em" cy="0.5em" r="0.45em"/></svg>
+			</div>
 		</div>
 	</div>
+	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
+	<div class="layout-container">
+
+		<div class="main-menu">
+			<h2 class="main-menu-ctrls">
+				<input type="checkbox" id="nav-left" ng-model="toggleLeftSide"/>
+				<label for="nav-left" class="pointer" id="main-menu-trigger">
+					<div tabindex=0 class="context-menu card-context">
+						<i class="mdi main-menu-trigger-icon" ng-class=" {'mdi-menu':!toggleLeftSide, 'mdi-backburger':toggleLeftSide}"></i>
+						<md-tooltip>{{'Navigate'|translate}}</md-tooltip>
+					</div>
+				</label>
+				<b class="pointer" ui-sref="main">Teleopti WFM
+					<md-tooltip>
+						{{'MainScreen' | translate}}
+					</md-tooltip>
+				</b>
+				<label ng-controller="BusinessUnitsController as businessunit" class="inline-flex">
+					<div tabindex=0 class="context-menu businessunit-menu" id="business-unit-select">
+						-
+						<span>
+							{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i>
+							<md-tooltip>{{'BusinessUnit'|translate}}</md-tooltip>
+						</span>
+						<span class="context-menu-bottom">
+							<ul class="wfm-list">
+								<li ng-repeat="bu in businessunit.data.businessUnits" ng-click="businessunit.changeBusinessUnit(bu)">
+									<i class="mdi mdi-vector-square businessunit-menu-icon"></i>
+									{{bu.Name}}
+								</li>
+							</ul>
+						</span>
+					</div>
+			</label>
+		</h2>
+		<div ng-controller="AreasController as vm" ng-show="toggleLeftSide" class="main-menu-slide main-menu-link-wrapper material-depth-1">
+			<mainmenu data="a" open="toggleLeftSide" ng-repeat="a in vm.areas"></mainmenu>
+		</div>
+	</div>
+
+
 	<div id="materialcontainer" class="container content">
 		<div ui-view></div>
 		<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
@@ -38,67 +66,67 @@
 
 </div>
 
-	<script type="text/javascript">
-		function iAmCalledFromFatClient() {
-			removeElements();
-			expandMaterialContainer();
-			changeToClassicTheme();
-		};
+<script type="text/javascript">
+function iAmCalledFromFatClient() {
+	removeElements();
+	expandMaterialContainer();
+	changeToClassicTheme();
+};
 
-		var removeElements = function() {
-			var elementsToRemove = [
-				document.getElementById('nav'),
-				document.getElementById('leftsidenav'),
-				document.getElementById('notice'),
-				document.getElementById('lefttoogle')
-			];
+var removeElements = function() {
+	var elementsToRemove = [
+		document.getElementById('nav'),
+		document.getElementById('leftsidenav'),
+		document.getElementById('notice'),
+		document.getElementById('lefttoogle')
+	];
 
-			elementsToRemove.forEach(function(elmt) {
-				if (elmt) elmt.style.display = 'none';
-			});
-		};
+	elementsToRemove.forEach(function(elmt) {
+		if (elmt) elmt.style.display = 'none';
+	});
+};
 
-		var expandMaterialContainer = function() {
-			var materialcontainer = document.getElementById('materialcontainer');
-			if (materialcontainer) {
-				materialcontainer.style["margin-top"] = '0';
-				materialcontainer.style.height = '100vh';
-			}
-		};
+var expandMaterialContainer = function() {
+	var materialcontainer = document.getElementById('materialcontainer');
+	if (materialcontainer) {
+		materialcontainer.style["margin-top"] = '0';
+		materialcontainer.style.height = '100vh';
+	}
+};
 
-		var changeToClassicTheme = function() {
-			if (angular.element(document.getElementById('darkTheme')).scope() == null || angular.element(document.getElementById('overlay')).scope() == null) {
-				return;
-			} else {
-				angular.element(document.getElementById('darkTheme')).scope().toggleTheme('classic');
-				angular.element(document.getElementById('overlay')).scope().toggleOverlay(false);
-			}
-		};
+var changeToClassicTheme = function() {
+	if (angular.element(document.getElementById('darkTheme')).scope() == null || angular.element(document.getElementById('overlay')).scope() == null) {
+		return;
+	} else {
+		angular.element(document.getElementById('darkTheme')).scope().toggleTheme('classic');
+		angular.element(document.getElementById('overlay')).scope().toggleOverlay(false);
+	}
+};
 
-	</script>
-	<!-- build:template
-	<% if (environment === 'dev') { %>
-	<script src="dist/modules.js"></script>
-	<script src="dist/templates.js"></script>
-	<script src="dist/main.min.js"></script>
-	<% } else { %>
-	<script src="dist/modules.min.js"></script>
-	<script src="dist/templates.min.js"></script>
-	<script src="dist/main.min.js"></script>
-	<% } %>
-	/build -->
+</script>
+<!-- build:template
+<% if (environment === 'dev') { %>
+<script src="dist/modules.js"></script>
+<script src="dist/templates.js"></script>
+<script src="dist/main.min.js"></script>
+<% } else { %>
+<script src="dist/modules.min.js"></script>
+<script src="dist/templates.min.js"></script>
+<script src="dist/main.min.js"></script>
+<% } %>
+/build -->
 
-	<!--dummy links to disable IE default alt-key shortcuts-->
-	<div class="shortcut-trick-ie">
-		<a href="" accesskey="a"></a>
-		<a href="" accesskey="c"></a>
-		<a href="" accesskey="e"></a>
-		<a href="" accesskey="f"></a>
-		<a href="" accesskey="h"></a>
-		<a href="" accesskey="t"></a>
-		<a href="" accesskey="v"></a>
-		<a href="" accesskey="x"></a>
-	</div>
+<!--dummy links to disable IE default alt-key shortcuts-->
+<div class="shortcut-trick-ie">
+	<a href="" accesskey="a"></a>
+	<a href="" accesskey="c"></a>
+	<a href="" accesskey="e"></a>
+	<a href="" accesskey="f"></a>
+	<a href="" accesskey="h"></a>
+	<a href="" accesskey="t"></a>
+	<a href="" accesskey="v"></a>
+	<a href="" accesskey="x"></a>
+</div>
 </body>
 
 </html>

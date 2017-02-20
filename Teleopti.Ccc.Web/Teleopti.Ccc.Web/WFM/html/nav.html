@@ -1,19 +1,5 @@
 <div class="con-row nav-row" ng-controller="SearchCtrl">
-	<div class="con-flex nav-inline">
-		<span class="brand" ui-sref="main">Teleopti WFM </span>
-
-		<div class="navbar-left">
-			<span ng-controller="BusinessUnitsController as businessunit">
-				<span ng-if="businessunit.show">
-					<md-select class="bu-select" name="business-unit-select" id="business-unit-select" ng-change="businessunit.changeBusinessUnit(businessunit.data.selectedBu)" ng-model="businessunit.data.selectedBu" placeholder="{{businessunit.data.selectedBu.Name}}">
-						<!--<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>-->
-						<md-option ng-repeat="bu in businessunit.data.businessUnits" ng-value="bu">{{bu.Name}}</md-option>
-					</md-select>
-				</span>
-			</span>
-		</div>
-	</div>
-	<div class="con-flex split-1-2" ng-show="searchmode">
+	<div class="con-flex" ng-show="searchmode">
 		<div >
 			<input type="text" id="searchbar" ng-blur="delayFocus()" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
 			<div class="search-results material-depth-2">

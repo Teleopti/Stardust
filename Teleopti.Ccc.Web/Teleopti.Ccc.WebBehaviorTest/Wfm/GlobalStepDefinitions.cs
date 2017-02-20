@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void ThenIShouldHaveAvailableBusinessUnitsWith(Table table)
 		{
 			var buNames = table.CreateSet<BusinessUnitData>();
-			buNames.ForEach(bu => Browser.Interactions.AssertExistsUsingJQuery(string.Format(".navbar-left .bu-select md-option:contains({0})", bu.Name)));
+			buNames.ForEach(bu => Browser.Interactions.AssertExistsUsingJQuery(string.Format("#business-unit-select li:contains({0})", bu.Name)));
 		}
 
 
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void WhenIPickBusinessUnit(string businessUnit)
 		{
 			Browser.Interactions.Click("#business-unit-select");
-			Browser.Interactions.ClickContaining("md-option", businessUnit);
+			Browser.Interactions.ClickContaining("li", businessUnit);
 		}
 
 		public class BusinessUnitData

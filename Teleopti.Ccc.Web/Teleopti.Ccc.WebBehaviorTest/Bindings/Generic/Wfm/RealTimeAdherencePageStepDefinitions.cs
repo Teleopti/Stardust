@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIChangeToBusinessUnit(string businessUnitName)
 		{
 			Browser.Interactions.Click("#business-unit-select");
-			Browser.Interactions.ClickContaining("md-option", businessUnitName);
+			Browser.Interactions.ClickContaining("li", businessUnitName);
 		}
 
 		[When(@"I select skill area '(.*)'")]

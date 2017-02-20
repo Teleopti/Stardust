@@ -1,4 +1,98 @@
-﻿.navbar{
+﻿//main menu
+.main-menu{
+	.main-menu-ctrls{
+		position: fixed;
+		z-index: 99999;
+		top:-10px;
+		left: -3px;
+		color:$white;
+
+		input{
+			display: none;
+		}
+
+		.main-menu-trigger-icon{
+			position: relative;
+			top:2px;
+			color: white!important;
+		}
+	}
+
+	a{
+		text-decoration: none;
+		color: $text-color-standard!important;
+	}
+
+	.main-menu-link-wrapper{
+		background: $white;
+		margin-top: 5rem;
+		padding-bottom: 5rem;
+		max-height: 100vh;
+		height: 100%;
+		overflow-y: auto;
+	}
+
+	.main-menu-link{
+		padding: $full-padding;
+		border-bottom: 1px solid $gray012;
+	}
+
+	.main-menu-link:hover{
+		background: $gray012;
+		color:$gray087!important;
+	}
+
+	.main-menu-link-active > .main-menu-link{
+		background: $green-100!important;
+	}
+}
+
+// active state
+.main-menu-slide.ng-hide-add.ng-hide-add-active,
+.main-menu-slide.ng-hide-remove {
+	transform: translate(-100%);
+	transform-origin: left;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+// hidden state
+.main-menu-slide.ng-hide-remove.ng-hide-remove-active,
+.main-menu-slide.ng-hide-add {
+	transform: translate(0);
+}
+
+
+/*nav-context-menu*/
+.businessunit-menu:focus{
+	box-shadow: none!important;
+}
+
+.businessunit-menu-icon{
+	vertical-align: middle!important;
+}
+
+// mobile media query
+@media screen and (max-width:768px){
+	.main-menu-link-wrapper{
+		position: fixed;
+		top: 5rem;
+		left:0;
+		width: 100%!important;
+		bottom:0!important;
+		z-index: 100!important;
+		background: $white;
+		margin-top: 0!important;
+	}
+}
+
+// top bar
+.nav-row{
+	padding-top:5px;
+	.nav-inline{
+		display:inline-flex; //replace this with inline-flex class on element
+	}
+}
+
+.navbar{
 	position:fixed;
 	top: 0;
 	left: 0;
@@ -22,10 +116,6 @@
 
 	.navbar-right .card-context{
 		margin:0;
-	}
-
-	.bu-select{
-		color:$white;
 	}
 
 	.nav-context-menu .arrow-up{

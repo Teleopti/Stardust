@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		{
 			Browser.Interactions.TryUntil(() =>
 				{
+					Browser.Interactions.Click("#main-menu-trigger");
 					Browser.Interactions.Click(".nav-item-active");
 					Browser.Interactions.Click("#view-seatbookings-button");
 				},

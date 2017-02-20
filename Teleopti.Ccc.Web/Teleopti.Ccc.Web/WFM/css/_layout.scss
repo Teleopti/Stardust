@@ -23,9 +23,6 @@ a{
 	min-height: 92vh;
 	padding: 0;
 }
-.fab-wrapper .wfm-fab {
-	margin-top: 0;
-}
 .notice-item{
 	display: flex;
 }
@@ -33,61 +30,13 @@ a{
 	margin-left: auto;
 }
 
-/*nav-context-menu*/
-.nav-row{
-	padding-top:5px;
-	.nav-inline{
-		display:inline-flex;
-	}
-}
-
 /*Project specific*/
 .fab-wrapper .wfm-fab{
 	float:right;
-}
-#lefttoogle > div{
-	position: fixed;
-	top: -69px;
-	z-index: 9999;
-	left: 5px;
-	background: transparent;
-	box-shadow: none;
-	color:$white;
-	font-size:250%;
-}
-.list-mark{
-	padding:3px;
-	background:$green-100;
-	border-radius:50%;
-	text-align:center;
-	font-size:15px!important;
-}
-.list-check{
-    height: 25px;
-    width: 25px;
-    line-height:25px;
-    display: inline-block;
-    position: absolute;
-    left: 5px;
-    background:$green-100;
-	border-radius:50%;
-	text-align:center;
-}
-.list-check .mdi{
-    vertical-align: middle;
-}
-.list-check .mdi-semicheck{
-    height:10px;
-    width:10px;
-    display:inline-block;
-    background-color:#000;
-    margin-bottom:3px;
+	margin-top: 0;
 }
 .wfm-card-unselected{
 	background: $white;
-}
-.sidenav.is-hidden{
-	flex-basis: 40px!important;
 }
 .col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;
@@ -107,12 +56,6 @@ wfm-notice{
 }
 md-progress-circular{
 	transform: scale(0.4)!important;
-}
-.nav-item-wrap:focus > .sidenav-header{
-	background: $gray012;
-}
-.nav-item-active > .sidenav-header{
-	background: $green-100!important;
 }
 
 /*Mobile view Query*/
@@ -155,6 +98,36 @@ md-progress-circular{
 	.navbar .navbar-search{
 		padding: 1px;
 	}
+}
+
+// semi list check
+.list-mark{
+	padding:3px;
+	background:$green-100;
+	border-radius:50%;
+	text-align:center;
+	font-size:15px!important;
+}
+.list-check{
+    height: 25px;
+    width: 25px;
+    line-height:25px;
+    display: inline-block;
+    position: absolute;
+    left: 5px;
+    background:$green-100;
+	border-radius:50%;
+	text-align:center;
+}
+.list-check .mdi{
+    vertical-align: middle;
+}
+.list-check .mdi-semicheck{
+    height:10px;
+    width:10px;
+    display:inline-block;
+    background-color:#000;
+    margin-bottom:3px;
 }
 
 //Temp move us to styleguide
