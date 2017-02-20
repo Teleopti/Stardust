@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_siteViewModelBuilder.ForOrganization());
 		}
 
-		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/Organization")]
+		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/OrganizationForSkills")]
 		public virtual IHttpActionResult GetOrganizationForSkills([FromUri]Guid[] skillIds)
 		{
 			return Ok(_siteViewModelBuilder.ForOrganizationWithSkills(skillIds));
