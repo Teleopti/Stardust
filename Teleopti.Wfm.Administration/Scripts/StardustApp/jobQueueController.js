@@ -5,7 +5,7 @@
 		.module('adminApp')
 		.controller('jobQueueController', jobQueueController, ['tokenHeaderService']);
 
-	function jobQueueController($http, tokenHeaderService) {
+	function jobQueueController($http, $interval, tokenHeaderService) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = 'Stardust Queue';
@@ -25,6 +25,7 @@
 		vm.toggleAll = toggleAll;
 		vm.Jobs = [];
 		vm.selected = [];
+		var refreshInterval = 10000;
 
 		getJobs();
 
@@ -105,5 +106,11 @@
 					}
 				});
 		};
+		function pollNewData() {
+			vm.Jobs = [];
+			getJobs();
+		}
+
+		$interval(pollNewData, refreshInterval);
 	}
 })();

@@ -5,15 +5,19 @@
 		.module('adminApp')
 		.controller('nodeController', nodeController, ['tokenHeaderService']);
 
-	function nodeController($http, tokenHeaderService) {
+	function nodeController($http, $interval, tokenHeaderService) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = 'Stardust Nodes';
 		vm.NodeError = '';
 		vm.JobError = '';
+		vm.WorkerNodes = [];
+		var refreshInterval = 10000;
+		getWorkerNodes();
 
+		function getWorkerNodes() {	
 		$http.get("./Stardust/WorkerNodes", tokenHeaderService.getHeaders())
-			.success(function(data) {
+			.success(function (data) {
 				vm.WorkerNodes = data;
 			})
 			.error(function(xhr, ajaxOptions, thrownError) {
@@ -24,5 +28,11 @@
 				}
 
 			});
+		};
+		function pollWorkerNodes() {
+			vm.WorkerNodes = [];
+			getWorkerNodes();
+		}
+		$interval(pollWorkerNodes, refreshInterval);
 	}
 })();

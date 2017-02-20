@@ -5,7 +5,7 @@
 		.module('adminApp')
 		.controller('jobController', jobController, ['tokenHeaderService']);
 
-	function jobController($http, tokenHeaderService) {
+	function jobController($http, $interval, tokenHeaderService) {
 		/* jshint validthis:true */
 
 		var vm = this;
@@ -18,6 +18,7 @@
 		vm.noMoreJobs = false;
 		vm.getNewFreshData = getNewFreshData;
 		vm.Jobs = [];
+		var refreshInterval = 10000;
 
 		getJobs();
 
@@ -47,5 +48,12 @@
 			vm.resultsTo += vm.limit;
 			getJobs(true);
 		}
+
+		function pollNewData() {
+			vm.Jobs = [];
+			getJobs();
+		}
+
+		$interval(pollNewData, refreshInterval);
 	}
 })();
