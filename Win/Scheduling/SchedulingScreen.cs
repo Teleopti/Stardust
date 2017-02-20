@@ -715,6 +715,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
 					skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;
 					_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+
+					var skillGridMenuItem1 = new ToolStripMenuItem("Analyze resourses compared to last change");
+					skillGridMenuItem1.Click += skillGridMenuItemAnalyzeResorceChangesClick;
+					_contextMenuSkillGrid.Items.Add(skillGridMenuItem1);
 				}
 			}
 			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
@@ -4339,6 +4343,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillMonthGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillFullPeriodGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+		}
+
+		private void skillGridMenuItemAnalyzeResorceChangesClick(object sender, EventArgs e)
+		{
+			var selectedDate = _scheduleView.SelectedDateLocal();
+			TimeSpan? selectedTime = null;
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			{
+				selectedTime = _skillIntradayGridControl.Presenter.SelectedIntervalTime();
+			}
+			var model = new ResourceCalculationAnalyzerModel(this, _undoRedo, _container, _optimizationHelperExtended, selectedDate, selectedTime);
+			using (var resourceChanges = new ResourceCalculationAnalyzerView(model))
+			{
+				resourceChanges.ShowDialog(this);
+			}
 		}
 
 		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)

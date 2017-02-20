@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -57,6 +58,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         {
             get{return new ReadOnlyCollection<IGridRow>(_gridRows);}
         }
+
+	    public TimeSpan? SelectedIntervalTime()
+	    {
+		    var x = _gridRows[0] as IntervalHeaderGridRow;
+		    return x?.Time(new CellInfo {ColHeaderCount = 1, ColIndex = _gridControl.CurrentCellInfo?.ColIndex ?? 1});
+	    }
 
         public ReadOnlyCollection<IntervalDefinition> Intervals
         {
