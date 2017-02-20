@@ -26,10 +26,6 @@
 	<div class="panel material-depth-1">
 		<div class="con-row demo-outline">
 			<div class="con-flex">
-				<div class="sub-header">
-					<a class="cursor-pointer" href="{{vm.goBackToRootWithUrl}}">{{'RealTimeAdherence'|translate}}</a> /
-					<span>{{vm.siteName}}</span>
-				</div>
 				<div class="wfm-grid">
 					<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in vm.teams | orderBy:'Name': sortByLocaleLanguage">
 						<a ui-sref="{{vm.getStateForAgents()}}" class="rta-card-link">

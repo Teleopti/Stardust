@@ -1477,7 +1477,6 @@
     <Content Include="WFM\app\rtaTool\rtaTool.statesCellTemplate.html" />
     <Content Include="WFM\app\rtaTool\_modules.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.alarmcontext.spec.js" />
-    <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.breadcrumb.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.byOrganizationAndSkills.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.filter.spec.js" />
     <Content Include="WFM\app\rta\agents\oldTests\rta.agents.controller.hideStates.spec.js" />
@@ -1493,10 +1492,8 @@
     <Content Include="WFM\app\rta\agents\rta-agents-rowtemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents-shiftcelltemplate.html" />
     <Content Include="WFM\app\rta\agents\rta-agents.html" />
-    <Content Include="WFM\app\rta\agents\rta.agents.breadCrumb.service.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.build.service.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.alarmcontext.spec.js" />
-    <Content Include="WFM\app\rta\agents\rta.agents.controller.breadcrumb.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.byOrganizationAndSkills.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.filter.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.hideStates.spec.js" />

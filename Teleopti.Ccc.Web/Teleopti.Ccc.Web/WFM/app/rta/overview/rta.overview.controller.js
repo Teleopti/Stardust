@@ -63,12 +63,10 @@
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
-		vm.goBackToRootWithUrl = rtaRouteService.urlForSites(vm.skillId, vm.skillAreaId);
 		/***scoped functions */
 		vm.urlForSelectSkill = urlForSelectSkill;
 		vm.getStateForTeams = getStateForTeams;
 		vm.getStateForAgents = getStateForAgents;
-		vm.goBackWithUrl = goBackWithUrl;
 		vm.goToDashboard = goToDashboard;
 		vm.goToSelectSkill = goToSelectSkill;
 		vm.toggleSelection = toggleSelection;
@@ -94,7 +92,6 @@
 			return newValue !== oldValue && angular.isDefined(oldValue) && oldValue != null && newValue == null;
 		}
 
-		function goBackWithUrl() { return rtaRouteService.urlForSites(); };
 		function goToDashboard() { rtaRouteService.goToSites(); }
 		function goToSelectSkill() { rtaRouteService.goToSelectSkill(); };
 
