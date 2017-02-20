@@ -2,11 +2,9 @@
 	angular.module('restResourcePlannerService', ['ngResource']).service('PlanningPeriodSvrc', [
 		'$resource', '$http', function($resource, $http) {
 			//scheduling
-			this.launchScheduling = $resource('../api/ResourcePlanner/Schedule/FixedStaff', {}, {
-				query: { method: 'POST', params: name, isArray: false }
+			this.launchScheduling = $resource('../api/ResourcePlanner/Schedule/:id', { id: "@id" }, {
 			});
-			this.launchOptimization = $resource('../api/ResourcePlanner/optimize/FixedStaff/:id', { id: "@id" }, {
-				query: { method: 'POST', params: name, isArray: false }
+			this.launchOptimization = $resource('../api/ResourcePlanner/optimize/:id', { id: "@id" }, {
 			});
 			//planning period
 			this.getPlanningPeriod = $resource('../api/resourceplanner/planningperiod/:id', {id:"@id"}, {

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			}
 			else
 			{
-				var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
+				var people = LoadPeople(planningPeriodId);
 				intradayOptimizationCommand = new IntradayOptimizationCommand
 				{
 					Period = planningPeriod.Range,
@@ -48,6 +50,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		protected virtual IPlanningPeriod LoadPlanningPeriod(Guid planningPeriodId)
 		{
 			return _planningPeriodRepository.Get(planningPeriodId);
+		}
+
+		[UnitOfWork]
+		protected virtual IList<IPerson> LoadPeople(Guid planningPeriodId)
+		{
+			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
+			return _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
 		}
 	}
 }

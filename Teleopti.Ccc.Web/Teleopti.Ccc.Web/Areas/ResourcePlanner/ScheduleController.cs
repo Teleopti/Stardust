@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -27,20 +29,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff")]
-		public virtual IHttpActionResult FixedStaff([FromBody] StaffSchedulingInput input)
-		{
-			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
-			return Ok(_fullScheduling.DoScheduling(period));
-		}
-
 		[HttpPost, Route("api/ResourcePlanner/Schedule/{id}")]
 		public virtual IHttpActionResult ScheduleForPlanningPeriod(Guid id)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(id);
+			var schedulingData = GetInfoFromPlanningPeriod(id);
+			return Ok(_fullScheduling.DoScheduling(schedulingData.Item1, schedulingData.Item2));
+		}
+
+		// Temporary until we move to stardust
+		[UnitOfWork]
+		protected virtual Tuple<DateOnlyPeriod, IList<Guid>> GetInfoFromPlanningPeriod(Guid planningPeriodId)
+		{
+			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			var people = _agentGroupStaffLoader.Load(period, planningPeriod.AgentGroup);
-			return Ok(_fullScheduling.DoScheduling(period, people.AllPeople.Select(x => x.Id.Value)));
+			return new Tuple<DateOnlyPeriod, IList<Guid>>(period, people.AllPeople.Select(x => x.Id.Value).ToList());
 		}
 	}
 }

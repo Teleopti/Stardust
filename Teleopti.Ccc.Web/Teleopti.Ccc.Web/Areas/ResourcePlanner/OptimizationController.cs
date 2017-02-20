@@ -19,12 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_intradayOptimizationFromWeb = intradayOptimizationFromWeb;
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff/{id}")]
-		public virtual IHttpActionResult FixedStaff(Guid id)
-		{
-			return Ok(_scheduleOptimization.Execute(id));
-		}
-
 		[HttpPost, Route("api/ResourcePlanner/Optimize/{id}")]
 		public virtual IHttpActionResult OptimizeForPlanningPeriod(Guid id)
 		{
@@ -32,12 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/optimize/intraday/{id}")]
-		public void OptimizeIntraday(Guid id)
-		{
-			_intradayOptimizationFromWeb.Execute(id);
-		}
-
-		[HttpPost, Route("api/ResourcePlanner/OptimizeIntraday/{id}")]
 		public void OptimizeIntradayForPlanningPeriod(Guid id)
 		{
 			_intradayOptimizationFromWeb.Execute(id);

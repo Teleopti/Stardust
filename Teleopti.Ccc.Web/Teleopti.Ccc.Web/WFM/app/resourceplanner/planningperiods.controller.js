@@ -38,17 +38,13 @@
 					$scope.schedulingPerformed = false;
 					$scope.scheduleClicked = true;
 
-					var planningPeriod = {
-						StartDate: p.StartDate,
-						EndDate: p.EndDate
-					};
 					$scope.status = $translate.instant('PresentTenseSchedule');
-					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function(scheduleResult) {
+					PlanningPeriodSvrc.launchScheduling.save({ id: p.Id }).$promise.then(function (scheduleResult) {
 						$scope.status = $translate.instant('OptimizingDaysOff');
 						//to make sure long optimization request doesn't create a new cookie based on current time
 						//we call keepAlive here again
 						PlanningPeriodSvrc.keepAlive().then(function() {
-							PlanningPeriodSvrc.launchOptimization.query({id: p.Id}).$promise.then(function(result) {
+							PlanningPeriodSvrc.launchOptimization.save({ id: p.Id }).$promise.then(function (result) {
 								$scope.schedulingPerformed = true;
 								$state.go('resourceplanner.report', {
 									id:p.Id,

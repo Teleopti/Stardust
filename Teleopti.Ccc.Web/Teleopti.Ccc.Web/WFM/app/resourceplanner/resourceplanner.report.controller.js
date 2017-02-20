@@ -28,7 +28,7 @@
 					function(newData) {
 						if (newData.length !== 0) {
 							parseRelativeDifference(newData);
-							parseWeekends(newData)
+							parseWeekends(newData);
 						}
 					}
 				);
