@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Web.Core
 			var currentBusinessUnit = _currentBusinessUnit.Current();
 			var sites = _siteRepository.LoadAll().Where(site => site.BusinessUnit.Id == currentBusinessUnit.Id).OrderBy(site => site.Description.Name);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
-			var logonUserTeamId = _loggedOnUser.CurrentUser().MyTeam(date) != null ? _loggedOnUser.CurrentUser().MyTeam(date).Id : null;
 
+			var logonUserTeamId = (_loggedOnUser.CurrentUser().MyTeam(date) != null && _loggedOnUser.CurrentUser().MyTeam(date).Site.BusinessUnit == currentBusinessUnit ) ? _loggedOnUser.CurrentUser().MyTeam(date).Id : null;
 
 			foreach (var site in sites)
 			{

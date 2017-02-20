@@ -97,6 +97,55 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldNotReturnLogonUserTeamIdUnderOtherNotCurrentBusinessUnit()
+		{
+			var date = new DateOnly(2016, 11, 29);
+
+			var team = TeamFactory.CreateTeamWithId("team");
+			var anotherTeam = TeamFactory.CreateTeamWithId("anotherTeam").WithId();
+			var site = SiteFactory.CreateSimpleSite("site").WithId();
+			var site2 = SiteFactory.CreateSimpleSite("site2").WithId();
+
+			var bu = BusinessUnitFactory.CreateWithId("bu");
+			var bu2 = BusinessUnitFactory.CreateWithId("bu2");
+
+			site.AddTeam(team);
+			site.SetBusinessUnit(bu);
+			site2.AddTeam(anotherTeam);
+			site2.SetBusinessUnit(bu2);
+
+			CurrentBusinessUnit.FakeBusinessUnit(bu);
+
+			SiteRepository.Add(site);
+			SiteRepository.Add(site2);
+			TeamRepository.Add(team);
+			TeamRepository.Add(anotherTeam);
+
+			PermissionProvider.Enable();
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, anotherTeam, date);
+
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, anotherTeam);
+
+			var meOfAnotherTeam = PersonFactory.CreatePerson().WithId();
+			meOfAnotherTeam.AddPersonPeriod(personPeriod);
+
+			personRepository.Add(meOfAnotherTeam);
+			CurrentLoggedOnUser.SetFakeLoggedOnUser(meOfAnotherTeam);
+
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
+			permittedHierachy.Name.Should().Be.EqualTo("bu");
+			permittedHierachy.Children.First().Name.Should().Be.EqualTo("site");
+			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("team");
+			permittedHierachy.LogonUserTeamId.Should().Be(null);
+		}
+
+		[Test]
 		public void ShouldReturnLogonUserTeamIdWhenUserHasMyTeamSchedulesPermission()
 		{
 
