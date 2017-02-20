@@ -68,7 +68,7 @@ a.android-app-link, a.ios-app-link{
 
 a.android-app-link > div, a.ios-app-link > div{
 	position: absolute;
-	left: -105px;
+	right: 0;
 	top: 30px;
 	border: 1px solid #eee;
 	display: none;

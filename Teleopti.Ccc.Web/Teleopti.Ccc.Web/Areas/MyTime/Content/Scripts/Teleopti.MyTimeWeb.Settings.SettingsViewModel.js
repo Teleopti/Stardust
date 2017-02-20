@@ -5,6 +5,9 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	
 	self.isSetAgentDescriptionEnabled = ko.observable(false);
 	self.isQRCodeForMobileAppsEnabled = ko.observable(false);
+	self.myTimeWebBaseUrl = ko.observable();
+	self.androidAppLink = ko.observable("https://play.google.com/store/apps/details?id=com.teleopti.mobile");
+	self.iOSAppLink = ko.observable("https://itunes.apple.com/");
 	self.settingsLoaded = ko.observable(false);
 	self.avoidReload = false;
 	self.cultures = ko.observableArray();
@@ -65,6 +68,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 				self.selectedNameFormat(data.ChosenNameFormat.id);
 				self.avoidReload = false;
 				self.settingsLoaded(true);
+				self.myTimeWebBaseUrl(data.MyTimeWebBaseUrl);
 			}
 		});
 	};
@@ -145,21 +149,34 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 		self.isQRCodeForMobileAppsEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("QRCodeForMobileApps_42695"));
 	};
 
-	self.getBaseUrl = function(){
-		var fakeUrl = "http://bing.com/";
-		return fakeUrl;
-	}
-
 	self.generateQRCode = function() {
-		var typeNumber = 7;
-		var errorCorrectionLevel = 'M';
-		var qr = qrcode(typeNumber, errorCorrectionLevel);
-		qr.addData(self.getBaseUrl());
-		qr.make();
-		document.getElementById('#QRCodePlaceHolder').innerHTML = qr.createImgTag(5);
+		if (self.myTimeWebBaseUrl().length > 0) {
+			var typeNumber = 7;
+			var errorCorrectionLevel = 'M';
+			var qr = qrcode(typeNumber, errorCorrectionLevel);
+			qr.addData(self.myTimeWebBaseUrl());
+			qr.make();
+			document.getElementById('#QRCodePlaceHolder').innerHTML = qr.createImgTag(5);
+			self.generateAppLinkQRCode();
+			self.setupMouseEnterLeaveEventForAppsQRCode();
+		}
 	};
 
-	self.setMouseEnterEventForAppsQRCode = function(){
+	self.generateAppLinkQRCode = function(){
+		var typeNumber = 7;
+		var errorCorrectionLevel = 'M';
+		var qrAndroid = qrcode(typeNumber, errorCorrectionLevel);
+		qrAndroid.addData(self.androidAppLink());
+		qrAndroid.make();
+		document.getElementById('#AndroidApp').innerHTML = qrAndroid.createImgTag(5);
+
+		var qriOS = qrcode(typeNumber, errorCorrectionLevel);
+		qriOS.addData(self.iOSAppLink());
+		qriOS.make();
+		document.getElementById('#iOSApp').innerHTML = qriOS.createImgTag(5);
+	};
+
+	self.setupMouseEnterLeaveEventForAppsQRCode = function(){
 		$('.android-app-link').mouseenter(function(event) {
 			$('.android-app-link div').show();
 		});
@@ -175,22 +192,5 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 		$('.ios-app-link').mouseleave(function(event) {
 			$('.ios-app-link div').hide();
 		});
-	};
-
-	self.generateAppLinkQRCode = function(){
-		var androidAppLink = "https://play.google.com/store/apps/details?id=com.teleopti.mobile";
-		var iOSAppLink = "https://itunes.apple.com/";
-		
-		var typeNumber = 7;
-		var errorCorrectionLevel = 'M';
-		var qrAndroid = qrcode(typeNumber, errorCorrectionLevel);
-		qrAndroid.addData(androidAppLink);
-		qrAndroid.make();
-		document.getElementById('#AndroidApp').innerHTML = qrAndroid.createImgTag(5);
-
-		var qriOS = qrcode(typeNumber, errorCorrectionLevel);
-		qriOS.addData(iOSAppLink);
-		qriOS.make();
-		document.getElementById('#iOSApp').innerHTML = qriOS.createImgTag(5);
 	};
 };

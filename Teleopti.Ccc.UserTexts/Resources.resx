@@ -15572,4 +15572,12 @@ Do you want to participate?</value>
     <value>Your request has been denied due to technical issues. Please try again later. </value>
     <comment>Replace DenyDueToTechnicalProblems, be more general</comment>
   </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Teleopti Mobile App</value>
+    <comment>Teleopti Mobile App - a title for QR code on setting page in MyTime </comment>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>Use Teleopti Mobile App to scan this QRCode</value>
+    <comment>Tips of QRCode on settings page in MyTime web</comment>
+  </data>
 </root>

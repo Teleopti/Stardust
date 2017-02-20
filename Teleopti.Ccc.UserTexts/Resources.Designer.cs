@@ -31056,6 +31056,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Teleopti Mobile App.
+        /// </summary>
+        public static string TeleoptiMobileApp {
+            get {
+                return ResourceManager.GetString("TeleoptiMobileApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Teleopti Product Activation Key Exception.
         /// </summary>
         public static string TeleoptiProductActivationKeyException {
@@ -33393,6 +33402,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UseTeamScheduling {
             get {
                 return ResourceManager.GetString("UseTeamScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Teleopti Mobile App to scan this QRCode.
+        /// </summary>
+        public static string UseTeleoptiMobileAppToScanThisQRCode {
+            get {
+                return ResourceManager.GetString("UseTeleoptiMobileAppToScanThisQRCode", resourceCulture);
             }
         }
         
