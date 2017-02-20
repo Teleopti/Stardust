@@ -12231,7 +12231,7 @@ Teleopti R&amp;D</value>
     <value>成功移除选定座席代表的活动</value>
   </data>
   <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
-    <value>您确定想要移除活动：{0} 自座席代表：{1}?	</value>
+    <value>您确定要为 {1} 位座席代表移除 {0} 项活动吗？</value>
   </data>
   <data name="ToggleIncludedSkills" xml:space="preserve">
     <value>切换所包括的技能</value>
@@ -12252,7 +12252,7 @@ Teleopti R&amp;D</value>
     <value>显示右侧面板</value>
   </data>
   <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
-    <value>您确定想要移除缺勤：{0} 自座席代表：{1}?	</value>
+    <value>您确定要为 {1} 位座席代表移除 {0} 项缺勤吗？</value>
   </data>
   <data name="FailedToRemoveAbsence" xml:space="preserve">
     <value>移除选定缺勤失败。</value>
@@ -12285,7 +12285,7 @@ Teleopti R&amp;D</value>
     <value>你没有权限为{0}添加全天缺勤</value>
   </data>
   <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
-    <value>没有权限为座席代表 {0} 移除活动。</value>
+    <value>没有权限为以下座席代表移除活动</value>
   </data>
   <data name="NoPermissionAddAgentActivity" xml:space="preserve">
     <value>没有权限为座席代表 {0} 添加活动。</value>

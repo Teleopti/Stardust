@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>放棄的電話</value>
@@ -12231,7 +12231,7 @@ Teleopti R&amp;D</value>
     <value>成功移除選定座席代表的活動</value>
   </data>
   <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
-    <value>您確定想要移除活動：{0} 自座席代表：{1}?	</value>
+    <value>您確定要為 {1} 位座席代表移除 {0} 項活動嗎？</value>
   </data>
   <data name="ToggleIncludedSkills" xml:space="preserve">
     <value>切換所包括的技能</value>
@@ -12252,7 +12252,7 @@ Teleopti R&amp;D</value>
     <value>顯示右側面板</value>
   </data>
   <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
-    <value>您確定想要移除缺勤：{0} 自座席代表：{1}?	</value>
+    <value>您確定要為 {1} 位座席代表移除 {0} 項缺勤嗎？</value>
   </data>
   <data name="FailedToRemoveAbsence" xml:space="preserve">
     <value>移除選定缺勤失敗。</value>
@@ -12285,7 +12285,7 @@ Teleopti R&amp;D</value>
     <value>你沒有許可權為{0}添加全天缺勤</value>
   </data>
   <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
-    <value>沒有許可權為座席代表 {0} 移除活動。</value>
+    <value>沒有許可權為以下座席代表移除活動</value>
   </data>
   <data name="NoPermissionAddAgentActivity" xml:space="preserve">
     <value>沒有許可權為座席代表 {0} 添加活動。</value>
