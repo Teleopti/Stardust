@@ -107,6 +107,8 @@
 		function updateSelectFieldText() {
 			var howManyTeamsSelected = countTeamsSelected();
 			vm.selectFieldText = howManyTeamsSelected === 0 ? vm.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected);
+			//var howManyTeamsSelected = showTeamSelected();
+			//vm.selectFieldText = howManyTeamsSelected.length === 0 ? vm.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected +"...");
 		}
 		function countTeamsSelected() {
 			var checkedTeamsCount = 0;
@@ -117,6 +119,36 @@
 			});
 			checkedTeamsCount = checkedTeamsCount + vm.teamsSelected.length;
 			return checkedTeamsCount;
+		}
+		function showTeamSelected() {
+			var checkedTeamsName = "";
+			var countTeams = 1;
+			var maxCountTeam = 2;
+
+			if ((siteIds.length > 0 || teamIds.length > 0) && countTeams < maxCountTeam) {
+				vm.sites.forEach(function (site) {
+					if (countTeams > maxCountTeam)
+						return;
+					if (siteIds.indexOf(site.Id) > -1) {
+						site.Teams.forEach(function (t) {
+							if (countTeams > maxCountTeam)
+								return;
+							++countTeams;
+							checkedTeamsName = checkedTeamsName + t.Name + ",";
+						})
+					} else if (teamIds.length > 0 && countTeams < maxCountTeam) {
+						site.Teams.forEach(function (t) {
+							if (countTeams > maxCountTeam)
+								return;
+							if (teamIds.indexOf(t.Id) > -1) {
+								++countTeams;
+								checkedTeamsName = checkedTeamsName + t.Name + ",";
+							}
+						})
+					}
+				});
+			}
+			return checkedTeamsName.slice(0,-1);
 		}
 
 		/*********AUTOCOMPLETE*****/
