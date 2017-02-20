@@ -68,7 +68,7 @@ Scenario: Show Correctly Formatted Absence Request Date
 Scenario: Open Schedule 
 	Given I am an agent
 	When I view my week schedule for date '2015-05-17'
-	Then I should see the day header text for date '2015-05-17' is 'Jیک‌شنبه'
+	Then I should see the day header text for date '2015-05-17' is 'یک‌شنبه'
 
 
 @Ignore
