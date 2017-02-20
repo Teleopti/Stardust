@@ -1,117 +1,138 @@
 ﻿<div class="container body-content" ng-controller="summaryController as vm">
-	<h2>Welcome to Stardust Dashboard!</h2>
+	<h2>Stardust Dashboard</h2>
 	<div class="row">
-		<div class="col-md-6 panel panel-default">
-			<div class="panel-heading">Nodes</div>
-			<div class="panel-body text-container">
-				Monitor the nodes that executes the long running background jobs. You can see their latest heartbeats and what jobs they are running.
-			</div>
-			<div class="panel-footer">
-				<a href="#StardustDashboard/nodes">
-					<button class="btn btn-primary" md-svg-icon="alarm">
-						<span class="text-white">Monitor nodes &raquo;</span>
-					</button>
-				</a>
-			</div>
-		</div>
-		<div class="col-md-6 panel panel-default ">
-			<div class="panel-heading">Queue</div>
-			<div class="panel-body text-container">
-				Monitor jobs that are in queue waiting for a free node.
-			</div>
-			<div class="panel-footer">
-				<a href="#StardustDashboard/queue">
-					<button class="btn btn-primary">
-						<span class="text-white">Monitor queue &raquo;</span>
-					</button>
-				</a>
-			</div>
-		</div>
-		<div class="col-md-6 panel panel-default">
-			<div class="panel-heading">Jobs</div>
-			<div class="panel-body text-container">
-				Monitor the history of jobs and the current processing ones. You can see details about the jobs, when they were processed, what node was running it, see logs from the job etc.
-			</div>
-			<div class="panel-footer">
-				<a href="#StardustDashboard/jobs">
-					<button class="btn btn-primary">
-						<span class="text-white">Monitor jobs &raquo;</span>
-					</button>
-				</a>
-
-			</div>
-		</div>
-		<div class="col-md-6 panel panel-default ">
-			<div class="panel-heading">Failures</div>
-			<div class="panel-body text-container">
-				Monitor jobs that have caused errors.
-			</div>
-			<div class="panel-footer">
-				<a href="#StardustDashboard/failedJobs">
-					<button class="btn btn-primary">
-						<span class="text-white">Monitor failures &raquo;</span>
-					</button>
-				</a>
-			</div>
-		</div>
-		<div class="col-md-12 panel panel-default ">
-			<h3>Stardust Summary</h3>
-			<h4>Nodes</h4>
-			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.NodeError}}</div>
-			<div>
-				<table>
-					<thead>
-					<tr>
-						<th>Url</th>
-						<th>Latest Heartbeat (UTC)</th>
-						<th>Working</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
-						<td><a href="#StardustDashboard/nodes/{{node.Id}}">{{node.Url}}</a></td>
-						<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-						<td>{{node.Running}}</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<h4>Currently Running Jobs</h4>
-			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.JobError}}</div>
-			<div>
-				<table>
-					<thead>
-					<tr>
-						<th>Type</th>
-						<th>Started (UTC)</th>
-						<th>Sent to</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr ng-repeat="job in vm.RunningJobs">
-						<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
-						<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-						<td>{{job.SentToWorkerNodeUri}}</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<h4>Queue - Top 5</h4>
-			<div>
-				<table>
-					<thead>
+		<div class="col-md-7 summary-jobs ">
+			<div class="col-md-12 panel panel-default ">
+				<div class="panel-heading">Failures</div>
+				<div class="panel-body">
+					<p>
+						Monitor jobs that have caused errors.
+					</p>
+					<table>
+						<thead>
 						<tr>
 							<th>Type</th>
-							<th>Created (UTC)</th>
+							<th>Started (UTC)</th>
+							<th>Sent to</th>
+							<th>Result</th>
 						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="job in vm.QueuedJobs">
-							<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
-							<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						</thead>
+						<tbody>
+						<tr ng-repeat="job in vm.FailedJobs">
+							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
+							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{job.SentToWorkerNodeUri}}</td>
+							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
 						</tr>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
+				<div class="panel-footer">
+					<a href="#StardustDashboard/failedJobs">
+						<button class="btn btn-primary">
+							<span class="text-white">Monitor Failures &raquo;</span>
+						</button>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-12 panel panel-default ">
+				<div class="panel-heading">Queue</div>
+				<div class="panel-body">
+					<p>
+						Monitor jobs that are in queue waiting for a free node.
+					</p>
+					<table>
+						<thead>
+							<tr>
+								<th>Type</th>
+								<th>Created (UTC)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="job in vm.QueuedJobs">
+								<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
+								<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="panel-footer">
+					<a href="#StardustDashboard/queue">
+						<button class="btn btn-primary">
+							<span class="text-white">Monitor Queue &raquo;</span>
+						</button>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-12 panel panel-default">
+				<div class="panel-heading">History</div>
+				<div class="panel-body ">
+					<p>
+						Monitor the history of jobs and the current processing ones. You can see details about the jobs, when they were processed, what node was running it, see logs from the job etc.
+					</p>
+					<table>
+						<thead>
+							<tr>
+								<th>Type</th>
+								<th>Started (UTC)</th>
+								<th>Sent to</th>
+								<th>Result</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="job in vm.RunningJobs">
+								<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
+								<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								<td>{{job.SentToWorkerNodeUri}}</td>
+								<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="panel-footer">
+					<a href="#StardustDashboard/jobs">
+						<button class="btn btn-primary">
+							<span class="text-white">Monitor History &raquo;</span>
+						</button>
+					</a>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-md-5 summary-nodes">
+			<div class="col-md-12 panel panel-default ">
+				<div class="panel-heading">Nodes</div>
+				<div class="panel-body">
+					<p>
+						Monitor the nodes that executes the long running background jobs. You can see their latest heartbeats and what jobs they are running.
+					</p>
+					<table>
+						<thead>
+							<tr>
+								<th>Url</th>
+								<th>Latest Heartbeat (UTC)</th>
+								<th>Working</th>
+								<th>Alive</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
+								<td><a href="#StardustDashboard/nodes/{{node.Id}}">{{node.Url}}</a></td>
+								<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								<td>{{node.Running}}</td>
+								<td ng-class="node.Alive === true ? 'green' : 'red'">{{node.Alive}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="panel-footer">
+					<a href="#StardustDashboard/nodes">
+						<button class="btn btn-primary" md-svg-icon="alarm">
+							<span class="text-white">Monitor Nodes &raquo;</span>
+						</button>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>

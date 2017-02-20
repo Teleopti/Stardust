@@ -12,9 +12,21 @@
 		vm.NodeError = '';
 		vm.JobError = '';
 
-		$http.get("./Stardust/RunningJobs", tokenHeaderService.getHeaders())
+		$http.get("./Stardust/Jobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.RunningJobs = data;
+			})
+			.error(function(xhr, ajaxOptions, thrownError) {
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				vm.JobError = ajaxOptions;
+				if (xhr !== "") {
+					vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+				}
+			});
+
+		$http.get("./Stardust/FailedJobs/1/5", tokenHeaderService.getHeaders())
+			.success(function(data) {
+				vm.FailedJobs = data;
 			})
 			.error(function(xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
