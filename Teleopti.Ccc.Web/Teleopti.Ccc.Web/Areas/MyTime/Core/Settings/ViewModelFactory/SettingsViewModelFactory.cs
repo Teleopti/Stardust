@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Linq;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -34,6 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 			settingsViewModel.ChosenNameFormat = persistedNameFormatSettings != null ?
 				settingsViewModel.NameFormats.FirstOrDefault(i => i.id == persistedNameFormatSettings.NameFormatId) :
 				settingsViewModel.NameFormats.FirstOrDefault();
+
+			settingsViewModel.MyTimeWebBaseUrl = ConfigurationManager.AppSettings["MyTimeWebBaseUrl"];
 			
 			return settingsViewModel;
 		}
