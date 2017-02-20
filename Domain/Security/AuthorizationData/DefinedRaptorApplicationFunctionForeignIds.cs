@@ -119,6 +119,7 @@
 		public const string AbsenceReport = "0103";
 		public const string MyTimeCancelRequest = "0132";
 		public const string ViewPossibility = "0143";
+		public const string ViewQRCodeForConfiguration = "0144";
 
 		// Web
 		public const string Anywhere = "0080";

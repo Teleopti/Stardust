@@ -15580,4 +15580,8 @@ Do you want to participate?</value>
     <value>Use Teleopti Mobile App to scan this QRCode</value>
     <comment>Tips of QRCode on settings page in MyTime web</comment>
   </data>
+  <data name="ViewQRCodeForConfiguration" xml:space="preserve">
+    <value>View QR Code For Configuration</value>
+    <comment>Used in MyTimeWeb, permission of viewing the QR code  to configure mobile App</comment>
+  </data>
 </root>

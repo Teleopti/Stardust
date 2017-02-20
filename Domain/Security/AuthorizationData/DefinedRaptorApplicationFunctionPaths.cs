@@ -118,7 +118,8 @@
 		public const string ViewBadgeLeaderboard = "Raptor/MyTimeWeb/ViewBadgeLeaderboard";
 		public const string AbsenceReport = "Raptor/MyTimeWeb/AbsenceReport";
 		public const string ViewPossibility = "Raptor/MyTimeWeb/ViewPossibility";
-		
+		public const string ViewQRCodeForConfiguration = "Raptor/MyTimeWeb/ViewQRCodeForConfiguration";
+
 		// Web
 		public const string MyTeamSchedules = "Raptor/Anywhere/Schedules";
 		public const string AddFullDayAbsence = "Raptor/Anywhere/Schedules/AddFullDayAbsence";
