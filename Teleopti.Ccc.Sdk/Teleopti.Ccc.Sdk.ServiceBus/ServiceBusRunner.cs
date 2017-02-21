@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				initializePayrollFormats.Initialize();
 			}).ContinueWith(t =>
 			{
-                nodeStarter(toggleManager);
+                nodeStarter();
             }
             );
 		}
@@ -193,12 +193,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private void nodeStarter(IToggleManager toggleManager)
+		private void nodeStarter()
 		{
-			
+
 			var port = _configReader.ReadValue("port", 14100);
-			if (toggleManager.IsEnabled(Toggles.Stardust_RunMultipleNodes_41224))
-			{
 				var totalNodes = _configReader.ReadValue("NumberOfNodes", Environment.ProcessorCount);
 				for (int portIndex = 1; portIndex <= totalNodes; portIndex++)
 				{
@@ -210,12 +208,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					Thread.Sleep(1000);
 					port++;
 				}
-			}
-			else
-			{
-				var nodeThread = new Thread(() => startNode(port, "Node1"));
-				nodeThread.Start();
-			}
+			
 			
 			
 		}
