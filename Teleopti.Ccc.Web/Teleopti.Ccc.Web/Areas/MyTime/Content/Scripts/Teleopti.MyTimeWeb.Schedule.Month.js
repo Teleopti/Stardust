@@ -37,7 +37,8 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 		            if (vm != null) {
 			            var date = vm.selectedDate();
 			            date.startOf('month');
-			            Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+			            var probabilityPart = _getProbabilityUrlPart();
+			            Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')) + probabilityPart);
 		            }
 	            });
 	            
@@ -52,6 +53,15 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
             vm.weekViewModels([]);
             vm = null;
         }
+	}
+
+	function _getProbabilityUrlPart() {
+		var probabilityPart = '';
+		var probability = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
+		if (probability) {
+			probabilityPart = "/Probability/" + probability;
+		}
+		return probabilityPart;
 	}
     
 	return {
