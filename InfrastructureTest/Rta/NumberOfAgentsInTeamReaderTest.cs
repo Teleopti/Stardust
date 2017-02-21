@@ -52,6 +52,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldGetForCorrectDate()
+		{
+			Now.Is("2017-02-21 16:00");
+			Database
+				.WithPerson()
+				.WithPersonPeriod("2017-01-01")
+				.WithPersonPeriod("2017-02-22");
+			var teamId = Database.CurrentTeamId();
+
+			WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] {teamId}))
+				[teamId].Should().Be(1);
+		}
+
 
 
 		[Test]
@@ -154,8 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			result[teamId].Should().Be(1);
 		}
-
-
+		
 		[Test]
 		public void ShouldNotLoadTerminatedAgentForSkill()
 		{
@@ -172,6 +185,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { phoneId }));
 
 			result[teamId].Should().Be(1);
+		}
+		
+		[Test]
+		public void ShouldGetForSkillWithCorrectDate()
+		{
+			Now.Is("2017-02-21 16:00");
+			Database
+				.WithPerson()
+				.WithPersonPeriod("2017-01-01")
+				.WithSkill("phone")
+				.WithPersonPeriod("2017-02-22")
+				.WithSkill("phone")
+				.UpdateGroupings();
+			var teamId = Database.CurrentTeamId();
+			var phoneId = Database.SkillIdFor("phone");
+
+			WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { phoneId }))
+				[teamId].Should().Be(1);
 		}
 	}
 }

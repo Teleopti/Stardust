@@ -39,7 +39,7 @@ WHERE :now BETWEEN StartDate AND EndDate
 and Team in (:teams)
 group by Team
 ")
-					.SetDateTime("now", _now.UtcDateTime())
+					.SetDateTime("now", _now.UtcDateTime().Date)
 					.SetParameterList("teams", teams)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(teamViewModel)))
 					.List()
@@ -71,7 +71,7 @@ AND :now BETWEEN g.StartDate AND g.EndDate
 AND pp.Team in (:teams)
 GROUP BY pp.Team
 ")
-				.SetDateTime("now", _now.UtcDateTime())
+				.SetDateTime("now", _now.UtcDateTime().Date)
 				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetParameterList("skillIds", skillIds)
 				.SetParameterList("teams", teamIds)

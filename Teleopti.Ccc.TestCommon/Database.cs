@@ -232,6 +232,13 @@ namespace Teleopti.Ccc.TestCommon
 			return t;
 		}
 
+
+		public virtual Database WithPerson()
+		{
+			WithPerson(RandomName.Make());
+			return this;
+		}
+
 		[UnitOfWork]
 		public virtual Database WithPerson(string name)
 		{

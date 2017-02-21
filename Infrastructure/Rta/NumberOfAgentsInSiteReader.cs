@@ -33,7 +33,7 @@ FROM dbo.v_PersonPeriodTeamSiteBu WITH(NOEXPAND)
 WHERE :now BETWEEN StartDate AND EndDate 
 AND Site in (:sites)
 group by Site")
-					.SetDateTime("now", _now.UtcDateTime())
+					.SetDateTime("now", _now.UtcDateTime().Date)
 					.SetParameterList("sites", siteIds)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(siteViewModel)))
 					.List()
@@ -66,7 +66,7 @@ AND :now BETWEEN g.StartDate AND g.EndDate
 AND pp.Site in (:sites)
 GROUP BY pp.Site
 ")
-					.SetDateTime("now", _now.UtcDateTime())
+					.SetDateTime("now", _now.UtcDateTime().Date)
 					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetParameterList("sites", siteIds)
 					.SetParameterList("skillIds", skillIds)

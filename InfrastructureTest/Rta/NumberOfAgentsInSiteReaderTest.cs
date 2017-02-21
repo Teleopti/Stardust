@@ -74,6 +74,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result[siteId].Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldGetForCorrectDate()
+		{
+			Now.Is("2017-02-21 16:00");
+			Database
+				.WithPerson()
+				.WithPersonPeriod("2017-01-01")
+				.WithPersonPeriod("2017-02-22");
+			var siteId = Database.CurrentSiteId();
+
+			WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] { siteId }))
+				[siteId].Should().Be(1);
+		}
 
 
 
@@ -178,6 +191,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { phoneId }));
 
 			result[siteId].Should().Be(1);
+		}
+
+
+		[Test]
+		public void ShouldGetForSkillWithCorrectDate()
+		{
+			Now.Is("2017-02-21 16:00");
+			Database
+				.WithPerson()
+				.WithPersonPeriod("2017-01-01")
+				.WithSkill("phone")
+				.WithPersonPeriod("2017-02-22")
+				.WithSkill("phone")
+				.UpdateGroupings();
+			var siteId = Database.CurrentSiteId();
+			var phoneId = Database.SkillIdFor("phone");
+
+			WithUnitOfWork.Get(() => Target.ForSkills(new[] {siteId}, new[] {phoneId}))
+				[siteId].Should().Be(1);
 		}
 
 	}
