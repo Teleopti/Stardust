@@ -86,5 +86,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Browser.Interactions.AssertAnyContains(".alert", Resources.MissingWorkflowControlSet);
 		}
+
+		[Then(@"I should see the period to be '(.*)'")]
+		public void ThenIShouldSeeThePeriodToBe(string periodString)
+		{
+			Browser.Interactions.AssertInputValue("input.date-input-style",periodString);
+		}
+
 	}
 }

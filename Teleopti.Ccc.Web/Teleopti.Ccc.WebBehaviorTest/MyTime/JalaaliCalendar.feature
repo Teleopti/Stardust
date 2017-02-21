@@ -71,6 +71,12 @@ Scenario: Open Schedule
 	Then I should see the day header text for date '2015-05-17' is 'یک‌شنبه'
 
 
+Scenario: Open Preference
+	Given I am an agent
+	And the time is '2014-05-02 08:00'
+	When I view preferences
+	Then I should see the period to be '1394/02/11 - 1394/02/11'
+
 @Ignore
 Scenario: Show correctly formatted Text Request Date From Schedule
 	Given I am an agent
