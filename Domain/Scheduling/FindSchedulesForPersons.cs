@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		protected override void LoadSchedulesByPersons(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, IScheduleDateTimePeriod period, IEnumerable<IPerson> personsInOrganization, IEnumerable<IPerson> selectedPersons)
 		{
-			DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, period.LongLoadedDateOnlyPeriod(), selectedPersons);
+			var periodBasedOnSelectedPersons = new ScheduleDateTimePeriod(period.VisiblePeriod, selectedPersons);
+			DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, periodBasedOnSelectedPersons.LongLoadedDateOnlyPeriod(), selectedPersons);
 			DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, period.LongVisibleDateOnlyPeriod(), personsInOrganization.Except(selectedPersons));
 		}
 	}

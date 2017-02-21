@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -113,7 +114,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		[Ignore("Thought this was your problem Claes, but obviously it wasn't... Why is this green?")]
 		public void ShouldNotIncludeSelectedAgentsScheduleOutsideSelectedAgentPeriod()
 		{
 			var date = new DateOnly(2000,1,1);
@@ -121,7 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var scenario = new Scenario("_");
 			var selectedAgent = new Person().WithSchedulePeriodOneDay(date).InTimeZone(TimeZoneInfo.Utc).WithId();
 			var notSelectedAgent = new Person().WithSchedulePeriodOneMonth(date).InTimeZone(TimeZoneInfo.Utc).WithId();
-			PersonAssignmentRepository.Has(selectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithAssignment, new TimePeriod(8, 17));
+			var selectedAgentAss = new PersonAssignment(selectedAgent, scenario, dateWithAssignment);
+			PersonAssignmentRepository.Has(selectedAgentAss);
 
 			var schedules = Target.FindSchedulesForPersons(
 					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent, notSelectedAgent }),
@@ -130,8 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 					new ScheduleDictionaryLoadOptions(false, false),
 					new[] { selectedAgent });
 
-			schedules[selectedAgent].ScheduledDay(dateWithAssignment).PersonAssignment(true).ShiftLayers
-				.Should().Be.Empty();
+			schedules[selectedAgent].Contains(selectedAgentAss, true).Should().Be.False();
 		}
 
 		[Test]
