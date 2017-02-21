@@ -384,7 +384,6 @@
 				});
 		}
 
-
 		fake(/\.\.\/api\/Skills\/NameFor(.*)/,
 			function (params) {
 				var result = skills
@@ -422,19 +421,14 @@
 
 		fake(/\.\.\/api\/Sites\/OrganizationForSkills(.*)/,
 			function (params) {
-				//console.log(params)
-				var returnOrg = [];
-				var firstKey = "";		
+				var returnOrg = [];	
 				var skillIdsArray = angular.isArray(params.skillIds) ? params.skillIds :params.skillIds.split(",");
 				skillIdsArray.forEach(function(key){
-					if(key)
-					{firstKey = key;
-					returnOrg.push(organizationsOnSkills[key]);}
-				})
-				//console.log(angular.isArray(params.skillIds) ? params.skillIds :params.skillIds.split(","))
-				console.log(returnOrg,firstKey)				
-				//console.log(params.skillIds, firstKey, returnOrg.length)
-				return [200, returnOrg.length > 1 ? [returnOrg[firstKey]] : returnOrg];
+					if(returnOrg.length > 0)
+						return;
+					returnOrg.push(organizationsOnSkills[key]);
+				});
+				return [200, returnOrg];
 			});
 
 		fake(/\.\.\/api\/Sites\/Organization(.*)/,
@@ -773,8 +767,10 @@
 		}
 
 		function withOrganizationOnSkills(organization, skillIds) {
+			
 			skillIds.split(",").forEach(function(key){
-				organizationsOnSkills[key] = organization;
+				var skillIdAsAKey = key.trim();
+				organizationsOnSkills[skillIdAsAKey] = organization;	
 			});
 			return this;
 		}

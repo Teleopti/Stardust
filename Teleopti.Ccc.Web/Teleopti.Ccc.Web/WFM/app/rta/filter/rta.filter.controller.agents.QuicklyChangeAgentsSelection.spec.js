@@ -79,7 +79,7 @@ describe('RtaFilterController', function () {
 		}]);
 	});
 
-	fit('should get organization by skill', function () {
+	it('should get organization by skill', function () {
 		stateParams.skillIds = "phoneGuid";
 		$fakeBackend.withOrganizationOnSkills({
 			Id: 'LondonGuid',
@@ -109,7 +109,7 @@ describe('RtaFilterController', function () {
 		}]);
 	});
 
-	fit('should get organization by skill area', function () {
+	it('should get organization by skill area', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		$fakeBackend
 			.withSkillAreas([{
