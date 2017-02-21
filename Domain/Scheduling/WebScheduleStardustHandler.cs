@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -20,13 +21,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IAgentGroupStaffLoader _agentGroupStaffLoader;
 		private readonly FullScheduling _fullScheduling;
 		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly IJobResultRepository _jobResultRepository;
 
-		public WebScheduleStardustHandler(IPlanningPeriodRepository planningPeriodRepository, IAgentGroupStaffLoader agentGroupStaffLoader, FullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher)
+		public WebScheduleStardustHandler(IPlanningPeriodRepository planningPeriodRepository, IAgentGroupStaffLoader agentGroupStaffLoader, FullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_agentGroupStaffLoader = agentGroupStaffLoader;
 			_fullScheduling = fullScheduling;
 			_eventPublisher = eventPublisher;
+			_jobResultRepository = jobResultRepository;
 		}
 
 		[ImpersonateSystem]
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual void Handle(WebScheduleStardustEvent @event)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule);
+			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
 			try
 			{
 				var period = planningPeriod.Range;
@@ -42,8 +45,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var result = _fullScheduling.DoScheduling(period, people.AllPeople.Select(x => x.Id.Value));
 				webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
 
-				planningPeriod.JobResults.Add(new JobResult(JobCategory.WebOptimization, webScheduleJobResult.Period, webScheduleJobResult.Owner, DateTime.UtcNow));
-				_eventPublisher.Publish(new WebOptimizationStardustEvent(@event));
+				var jobResult = new JobResult(JobCategory.WebOptimization, webScheduleJobResult.Period, webScheduleJobResult.Owner, DateTime.UtcNow);
+				_jobResultRepository.Add(jobResult);
+				planningPeriod.JobResults.Add(jobResult);
+				_eventPublisher.Publish(new WebOptimizationStardustEvent(@event)
+				{
+					JobResultId = jobResult.Id.Value
+				});
 			}
 			catch (Exception e)
 			{

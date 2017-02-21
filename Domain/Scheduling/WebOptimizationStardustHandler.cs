@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual void Handle(WebOptimizationStardustEvent @event)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webOptimizationJobResult = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebOptimization);
+			var webOptimizationJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
 			try
 			{
 				var result = _scheduleOptimization.Execute(@event.PlanningPeriodId);

@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			PlanningPeriodId = @event.PlanningPeriodId;
 		}
 		public Guid PlanningPeriodId { get; set; }
+		public Guid JobResultId { get; set; }
 	}
 
 	public class WebScheduleStardustEvent : WebScheduleStardustBaseEvent
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public WebScheduleStardustEvent(WebScheduleStardustBaseEvent @event) : base(@event)
 		{
 		}
+
 	}
 
 	public class WebOptimizationStardustEvent : WebScheduleStardustBaseEvent
