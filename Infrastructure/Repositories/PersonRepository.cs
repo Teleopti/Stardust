@@ -689,19 +689,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var groupStuff = Restrictions.Disjunction();
 				foreach (var filter in group)
 				{
-					if (filter.GetType() == typeof(TeamFilter))
+					if (filter is TeamFilter)
 					{
 						groupStuff.Add(Subqueries.Exists(findActivePeriod(((TeamFilter)filter).Team, period)));
 					}
-					else if (filter.GetType() == typeof(SiteFilter))
+					else if (filter is SiteFilter)
 					{
 						groupStuff.Add(Subqueries.Exists(findActivePeriod(((SiteFilter)filter).Site.TeamCollection.ToArray(), period)));
 					}
-					else if (filter.GetType() == typeof(ContractFilter))
+					else if (filter is ContractFilter)
 					{
 						groupStuff.Add(Subqueries.Exists(findActivePeriod(((ContractFilter)filter).Contract, period)));
 					}
-					else if (filter.GetType() == typeof(SkillFilter))
+					else if (filter is SkillFilter)
 					{
 						groupStuff.Add(Subqueries.Exists(findBySkill(((SkillFilter)filter).Skill, period)));
 					}

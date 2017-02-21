@@ -1885,9 +1885,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			var agentGroup = testCase.CreateAgentGroup(new AgentGroup("Group"), testData);
 			PersistAndRemoveFromUnitOfWork(agentGroup);
+			var loadedAgentGroup = new AgentGroupRepository(new ThisUnitOfWork(UnitOfWork)).Get(agentGroup.Id.Value);
 
 			//load
-			var testList = new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInAgentGroup(agentGroup, new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6));
+			var testList = target.FindPeopleInAgentGroup(loadedAgentGroup, new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6));
 
 			//verify
 			var expectedPeople = testCase.ExpectedPeople(testData);
