@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public double BaseUtcOffsetInMinutes { get; set; }
 		public string CurrentWeekEndDate { get; set; }
 		public string CurrentWeekStartDate { get; set; }
+		public bool CheckStaffingByIntraday { get; set; }
 		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
 		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
 	}

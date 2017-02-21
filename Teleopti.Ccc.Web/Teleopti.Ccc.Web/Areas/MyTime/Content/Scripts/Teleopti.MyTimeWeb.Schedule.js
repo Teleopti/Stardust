@@ -46,7 +46,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			type: "GET",
 			data: {
 				date: selectedDate,
-				staffingPossiblity: vm.probabilityType()
+				staffingPossiblityType: vm.probabilityType()
 			},
 			success: function (data) {
 				_bindData(data);
@@ -410,6 +410,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
 		Initialize: function (data) {
 			var self = this;
+
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
 			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
 			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
@@ -419,7 +420,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
 			self.viewProbabilityPermission(data.ViewPossibilityPermission);
 
-			self.staffingProbabilityEnabled(self.viewProbabilityPermission()
+			self.staffingProbabilityEnabled(data.CheckStaffingByIntraday && self.viewProbabilityPermission()
 				&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608"));
 
 			self.periodSelection(JSON.stringify(data.PeriodSelection));

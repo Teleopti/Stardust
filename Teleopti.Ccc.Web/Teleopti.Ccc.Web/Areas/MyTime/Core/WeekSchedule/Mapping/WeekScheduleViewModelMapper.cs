@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
+
 			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(
 				timeZone, _now.LocalDateTime().Year);
 			var daylightModel = daylightSavingAdjustment != null
@@ -81,8 +83,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Days = days(s),
 				AsmPermission = s.AsmPermission,
 				IsCurrentWeek = s.IsCurrentWeek,
-				SiteOpenHourIntradayPeriod = s.SiteOpenHourIntradayPeriod
+				SiteOpenHourIntradayPeriod = s.SiteOpenHourIntradayPeriod,
+				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone)
 			};
+		}
+
+		private static bool isCheckStaffingByIntraday(IWorkflowControlSet workflowControlSet,
+			TimeZoneInfo timeZone)
+		{
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.Now, timeZone));
+			var currentAbsenceOpenPeriod =
+				workflowControlSet.AbsenceRequestOpenPeriods.SingleOrDefault(p => p.OpenForRequestsPeriod.Contains(today));
+			var checkStaffingValidator = currentAbsenceOpenPeriod?.StaffingThresholdValidator;
+
+			return checkStaffingValidator is StaffingThresholdValidator;
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData)
@@ -95,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				{
 					Date = s.Date.ToShortDateString(),
 					FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
-					DayOfWeekNumber = (int) s.Date.DayOfWeek,
+					DayOfWeekNumber = (int)s.Date.DayOfWeek,
 					Periods = projections(s).ToArray(),
 					TextRequestCount =
 						s.PersonRequests?.Count(
@@ -165,12 +179,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var diff = endTime - startTime;
 			var cultureInfo = _culture.GetCulture();
 			return from t in times
-				select new TimeLineViewModel
-				{
-					Time = t,
-					TimeLineDisplay = new DateTime().Add(t).ToString(cultureInfo.DateTimeFormat.ShortTimePattern),
-					PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal) (t - startTime).Ticks/diff.Ticks
-				};
+				   select new TimeLineViewModel
+				   {
+					   Time = t,
+					   TimeLineDisplay = new DateTime().Add(t).ToString(cultureInfo.DateTimeFormat.ShortTimePattern),
+					   PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks
+				   };
 		}
 
 		private IEnumerable<PeriodViewModel> projections(WeekScheduleDayDomainData s)
@@ -225,7 +239,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			if (s.ScheduleDay != null)
 			{
 				var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-				
+
 				if (significantPart == SchedulePartView.ContractDayOff)
 				{
 					var personAbsence = s.ScheduleDay.PersonAbsenceCollection()
@@ -288,7 +302,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 								.Layer.Payload.DisplayColor.ToStyleClass(),
 						Color =
 							$"rgb({personAbsence.Layer.Payload.DisplayColor.R},{personAbsence.Layer.Payload.DisplayColor.G},{personAbsence.Layer.Payload.DisplayColor.B})",
-					};}
+					};
+				}
 			}
 			return new PeriodViewModel();
 		}
