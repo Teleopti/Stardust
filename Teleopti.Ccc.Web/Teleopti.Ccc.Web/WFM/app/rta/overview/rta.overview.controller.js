@@ -69,8 +69,6 @@
 		vm.getStateForAgents = getStateForAgents;
 		vm.goToDashboard = goToDashboard;
 		vm.goToSelectSkill = goToSelectSkill;
-		vm.toggleSelection = toggleSelection;
-		vm.openSelectedItems = openSelectedItems;
 		(function initialize() {
 			rtaService.getSkillAreas().then(function(skillAreas){
 				vm.skillAreas = skillAreas.SkillAreas;
@@ -94,18 +92,6 @@
 
 		function goToDashboard() { rtaRouteService.goToSites(); }
 		function goToSelectSkill() { rtaRouteService.goToSelectSkill(); };
-
-
-		function toggleSelection(itemId) {
-			var index = vm.selectedItemIds.indexOf(itemId);
-			if (index > -1) vm.selectedItemIds.splice(index, 1);
-			else vm.selectedItemIds.push(itemId);
-		}
-
-		function openSelectedItems() {
-			if (vm.selectedItemIds.length === 0) return;
-			goToAgents(vm.selectedItemIds);
-		};
 
 		var polling = $interval(function () {
 			if (vm.skillId !== null || vm.skillAreaId !== null) {
