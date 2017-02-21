@@ -1309,6 +1309,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private void deletePersonPeriod(int index, bool isRows)
 		{
+			if (index == 0)
+				return;
 			if (FilteredPeopleHolder.PersonPeriodGridViewCollection[index -
 																	PeopleAdminConstants.GridCurrentRowIndexMapValue].ExpandState)
 			{

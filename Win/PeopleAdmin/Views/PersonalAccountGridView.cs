@@ -1111,6 +1111,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private void DeleteWhenRangeSelected(GridRangeInfo gridRangeInfo)
 		{
+			if (gridRangeInfo.Top == 0)
+				return;
+			
 			var actualGridInColumnCellIndex = GridInCellColumnIndex - 1;
 
 			if (gridRangeInfo.Height == 1)

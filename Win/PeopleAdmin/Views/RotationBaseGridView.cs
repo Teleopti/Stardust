@@ -1518,6 +1518,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private void DeleteRotations(GridRangeInfo gridRangeInfo, int index)
 		{
+			if(index == 0)
+				return;
+			
 			// Child list remove
 			if (_parentAdapterCollection[index - 1].ExpandState)
 			{

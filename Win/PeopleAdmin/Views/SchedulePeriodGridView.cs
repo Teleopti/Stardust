@@ -905,6 +905,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private void DeleteSchedulePeriod(int index, bool isRows)
 		{
+			if (index == 0)
+				return;
 			if (FilteredPeopleHolder.SchedulePeriodGridViewCollection[index - 1].ExpandState)
 			{
 				// Remove child for child grid
