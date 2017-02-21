@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				workflowControlSet.AbsenceRequestOpenPeriods.SingleOrDefault(p => p.OpenForRequestsPeriod.Contains(today));
 			var checkStaffingValidator = currentAbsenceOpenPeriod?.StaffingThresholdValidator;
 
-			return checkStaffingValidator is StaffingThresholdValidator;
+			return checkStaffingValidator is StaffingThresholdWithShrinkageValidator ||
+				   checkStaffingValidator is StaffingThresholdValidator;
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData)
