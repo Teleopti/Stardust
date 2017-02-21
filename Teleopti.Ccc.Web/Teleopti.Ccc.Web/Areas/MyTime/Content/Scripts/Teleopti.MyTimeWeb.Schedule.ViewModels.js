@@ -13,6 +13,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 	var noneProbabilityType = 0;
 	var absenceProbabilityType = 1;
 	var overtimeProbabilityType = 2;
+	var intervalLengthInMinutes = 15;
 
 	self.fixedDate = ko.observable(day.FixedDate);
 
@@ -241,16 +242,23 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		return continousPeriods;
 	};
 
-	var calculateScheduleAndProbabilityBoundaries = function (scheduleDay, probabilityType) {
+	var calculateScheduleAndProbabilityBoundaries = function (scheduleDay, probabilityType, probabilities) {
 		var shiftStartMinutes = 0;
 		var shiftEndMinutes = totalMinutesOfOneDay;
 		var shiftStartPosition = 1;
 		var shiftEndPosition = 0;
 
-		var probabilityStart;
-		var probabilityEnd;
+		var probabilityStartMinutes;
+		var probabilityEndMinutes;
+		var probabilityStartPosition;
+		var probabilityEndPosition;
+
+		var timelines = parent.timeLines();
+		var timelineStartMinutes = timelines[0].minutes;
+		var timelineEndMinutes = timelines[timelines.length - 1].minutes;
+		var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
+
 		if (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff) {
-			var timelines = parent.timeLines();
 			if (parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
 				shiftStartMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
 				shiftEndMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
@@ -260,15 +268,13 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			}
 
 			// Calculate shiftStartPosition and shiftEndPosition since this could not get from raw data
-			var timelineStartMinutes = timelines[0].minutes;
-			var timelineEndMinutes = timelines[timelines.length - 1].minutes;
-
-			var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
 			shiftStartPosition = (shiftStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
 			shiftEndPosition = (shiftEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
 
-			probabilityStart = shiftStartMinutes;
-			probabilityEnd = shiftEndMinutes;
+			probabilityStartMinutes = shiftStartMinutes;
+			probabilityEndMinutes = shiftEndMinutes;
+			probabilityStartPosition = shiftStartPosition;
+			probabilityEndPosition = shiftEndPosition;
 		} else {
 			for (var i = 0; i < scheduleDay.Periods.length; i++) {
 				var period = scheduleDay.Periods[i];
@@ -291,20 +297,40 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 				}
 			}
 
-			probabilityStart = shiftStartMinutes;
-			probabilityEnd = shiftEndMinutes;
+			probabilityStartMinutes = shiftStartMinutes;
+			probabilityEndMinutes = shiftEndMinutes;
+			probabilityStartPosition = shiftStartPosition;
+			probabilityEndPosition = shiftEndPosition;
+
+			if (probabilities.length > 0) {
+				var startOfDay = moment(probabilities[0].StartTime).startOf("day");
+				var firstProbabilityStartTime = moment(probabilities[0].StartTime);
+				var firstProbabilityStartMinute = (firstProbabilityStartTime.diff(startOfDay)) / (60 * 1000);
+				if (firstProbabilityStartMinute > probabilityStartMinutes) {
+					probabilityStartMinutes = firstProbabilityStartMinute;
+				}
+
+				var lastProbabilityEndTime = moment(probabilities[probabilities.length - 1].EndTime);
+				var lastProbabilityEndMinute = (lastProbabilityEndTime.diff(startOfDay)) /
+					(60 * 1000);
+				if (probabilityEndMinutes > lastProbabilityEndMinute) {
+					probabilityEndMinutes = lastProbabilityEndMinute;
+				}
+			}
 
 			if (probabilityType === overtimeProbabilityType && parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
 				var openPeriodStart = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
 				var openPeriodEnd = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
 
-				if (probabilityStart < openPeriodStart) {
-					probabilityStart = openPeriodStart;
+				if (probabilityStartMinutes < openPeriodStart) {
+					probabilityStartMinutes = openPeriodStart;
 				}
-				if (openPeriodEnd < probabilityEnd) {
-					probabilityEnd = openPeriodEnd;
+				if (openPeriodEnd < probabilityEndMinutes) {
+					probabilityEndMinutes = openPeriodEnd;
 				}
 			}
+			probabilityStartPosition = (probabilityStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
+			probabilityEndPosition = (probabilityEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
 		}
 
 		return {
@@ -312,12 +338,14 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			shiftEndMinutes: shiftEndMinutes,
 			shiftStartPosition: shiftStartPosition,
 			shiftEndPosition: shiftEndPosition,
-			probabilityStart: probabilityStart,
-			probabilityEnd: probabilityEnd
+			probabilityStartMinutes: probabilityStartMinutes,
+			probabilityEndMinutes: probabilityEndMinutes,
+			probabilityStartPosition: probabilityStartPosition,
+			probabilityEndPosition: probabilityEndPosition
 		};
 	}
 
-	var createProbabilityModel = function (rawProbability, probabilityType, boundaries, continousPeriods, tooltipsTitle) {
+	var createProbabilityModel = function (rawProbability, probabilityType, boundaries, continousPeriods, tooltipsTitle, heightPerInterval) {
 		var probabilityNames = ["low", "high"];
 		var probabilityLabels = [parent.userTexts.low, parent.userTexts.high];
 
@@ -330,21 +358,21 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			? endMoment.diff(startOfToday) / (60 * 1000)
 			: 1439; // 23:59
 
-		var visible = boundaries.shiftStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.shiftEndMinutes;
-		if (!visible) return undefined;
+		var shouldGenerateViewModel = boundaries.probabilityStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEndMinutes;
+		if (!shouldGenerateViewModel) return undefined;
 
-		var inScheduleTimeRange = false;
+		var visible = false;
 		if (probabilityType === absenceProbabilityType) {
 			// Show absence probability within schedule time range only
 			for (var m = 0; m < continousPeriods.length; m++) {
 				var continousPeriod = continousPeriods[m];
 				if (continousPeriod.startTime <= intervalStartMinutes && intervalEndMinutes <= continousPeriod.endTime) {
-					inScheduleTimeRange = true;
+					visible = true;
 					break;
 				}
 			}
 		} else if (probabilityType === overtimeProbabilityType) {
-			inScheduleTimeRange = boundaries.probabilityStart <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEnd;;
+			visible = boundaries.probabilityStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEndMinutes;;
 		}
 
 		var index = rawProbability.Possibility;
@@ -353,7 +381,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 
 		var tooltips = "";
 		var cssClass = "probability-none";
-		if (inScheduleTimeRange) {
+		if (visible) {
 			cssClass = "probability-" + probabilityNames[index];
 			tooltips = "<div style='text-align: center'>" +
 			"  <div>" + tooltipsTitle + "</div>" +
@@ -363,9 +391,11 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		}
 
 		return {
+			startMinutes: intervalStartMinutes,
 			endInMinutes: intervalEndMinutes,
 			actualClass: cssClass,
 			actualTooltips: tooltips,
+			styleJson: { "height": scheduleHeight * heightPerInterval + "px" },
 			cssClass: function () {
 				return (self.userNowInMinute() >= 0 && self.userNowInMinute() < this.endInMinutes)
 					? this.actualClass
@@ -391,21 +421,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			return [];
 		}
 
-		var boundaries = calculateScheduleAndProbabilityBoundaries(day, probabilityType);
-
-		var probabilitieModels = [];
-		// Add an "invisible" probability on top to make all probabilities displayed from correct position
-		probabilitieModels.push({
-			actualClass: "probability-none",
-			actualTooltips: "",
-			cssClass: function () { return "probability-none"; },
-			tooltips: function () { return "" },
-			styleJson: {
-				"top": 0,
-				"height": Math.round(scheduleHeight * boundaries.shiftStartPosition) + "px"
-			}
-		});
-
 		var continousPeriods = [];
 		var tooltipsTitle = "";
 		if (probabilityType === absenceProbabilityType) {
@@ -415,21 +430,28 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			tooltipsTitle = parent.userTexts.probabilityForOvertime;
 		}
 
+		var boundaries = calculateScheduleAndProbabilityBoundaries(day, probabilityType, rawProbabilities);
+
+		var probabilitieModels = [];
+		// Add an "invisible" probability on top to make all probabilities displayed from correct position
+		probabilitieModels.push({
+			actualClass: "probability-none",
+			actualTooltips: "",
+			cssClass: function () { return "probability-none"; },
+			tooltips: function () { return "" },
+			styleJson: { "height": Math.round(scheduleHeight * boundaries.probabilityStartPosition) + "px" }
+		});
+
+		var totalHeight = boundaries.shiftEndPosition - boundaries.shiftStartPosition;
+		var totalIntervalCount = (boundaries.shiftEndMinutes - boundaries.shiftStartMinutes) / intervalLengthInMinutes;
+		var heightPerInterval = totalHeight / totalIntervalCount;
+
 		for (var j = 0; j < rawProbabilities.length; j++) {
-			var probabilityModel = createProbabilityModel(rawProbabilities[j], probabilityType, boundaries, continousPeriods, tooltipsTitle);
+			var probabilityModel = createProbabilityModel(rawProbabilities[j], probabilityType, boundaries,
+				continousPeriods, tooltipsTitle, heightPerInterval);
 			if (probabilityModel != undefined) {
 				probabilitieModels.push(probabilityModel);
 			}
-		}
-
-		var totalHeight = boundaries.shiftEndPosition - boundaries.shiftStartPosition;
-		var heightPerInterval = totalHeight / (probabilitieModels.length - 1);
-		for (var k = 1; k < probabilitieModels.length; k++) {
-			var topPositionPercentage = boundaries.shiftStartPosition + heightPerInterval * (k - 1);
-			probabilitieModels[k].styleJson = {
-				"top": scheduleHeight * topPositionPercentage + "px",
-				"height": scheduleHeight * heightPerInterval + "px"
-			};
 		}
 
 		return probabilitieModels;
