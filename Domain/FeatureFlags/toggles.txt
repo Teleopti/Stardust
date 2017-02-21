@@ -181,7 +181,6 @@ ETL_SpeedUpFactScheduleNightly_38019 = RC # not to be released until pbi 38304 a
 ETL_SpeedUpScenarioNightly_38300 = false
 ETL_SpeedUpNightlyActivity_38303 = RC
 ETL_SpeedUpNightlySkill_37543 = RC
-Wfm_MoveExportMultiSiteSkillOnStardust_38134 = true
 Payroll_ToStardust_38204 = true
 Scheduler_LoadWithoutRequests_38567 = true
 ETL_SpeedUpNightlyOvertime_38304 = RC
