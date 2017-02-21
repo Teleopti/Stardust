@@ -222,7 +222,8 @@
 		Wfm_Web_Intraday_Rta_As_first_Choice_42206,
 		Wfm_ResourcePlanner_AgentGroup_42871,
 		Landing_Page_Data_Protection_Question_35721,
-		StaffingActions_UseRealForecast_42663
+		StaffingActions_UseRealForecast_42663,
+		MainNavigation_Improved_42853
 		// ReSharper restore InconsistentNaming
 	}
 }
