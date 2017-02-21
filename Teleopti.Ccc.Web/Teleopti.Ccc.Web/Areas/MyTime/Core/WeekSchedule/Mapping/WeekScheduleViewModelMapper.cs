@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return false;
 			}
 
-			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.Now, timeZone));
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, timeZone));
 			var currentAbsenceOpenPeriod =
 				workflowControlSet.AbsenceRequestOpenPeriods.SingleOrDefault(p => p.OpenForRequestsPeriod.Contains(today));
 			var checkStaffingValidator = currentAbsenceOpenPeriod?.StaffingThresholdValidator;
