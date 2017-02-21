@@ -124,7 +124,7 @@
 			return target;
 		};
 
-		this.normalizeRequestsFilter_old = function (filter, sortingOrders, paging) {
+		this.normalizeRequestsFilter_old = function (filter, sortingOrders) {
 			var target = {
 				StartDate: filter.period.startDate,
 				EndDate: filter.period.endDate,
@@ -132,15 +132,6 @@
 				AgentSearchTerm: filter.agentSearchTerm,
 				SelectedTeamIds: filter.selectedTeamIds
 			};
-
-			if (paging !== null) {
-				target.Paging = {
-					Skip: Math.max((paging.pageNumber - 1), 0) * paging.pageSize,
-					Take: paging.pageSize
-				};
-				target.Skip = target.Paging.Skip;
-				target.Take = target.Paging.Take;
-			}
 
 			return target;
 		};

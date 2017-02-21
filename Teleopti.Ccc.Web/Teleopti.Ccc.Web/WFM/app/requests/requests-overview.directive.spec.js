@@ -44,6 +44,16 @@
 			requestsFilterService = _RequestsFilter_;
 		}));
 
+		function setupTargetElement() {
+			var count = 0;
+			function initCallBack(count) {
+			}
+			targetElement = $compile('<requests-overview ' +
+				'on-init-call-back="' + initCallBack(count) + '"' +
+				'period="absencePeriod"></requests-overview>')(targetScope);
+			targetScope.$digest();
+		}
+
 		it("show requests table container", function () {
 			requestsDataService.setRequests([]);
 			targetElement = $compile('<requests-overview ></requests-overview>')(targetScope);
@@ -57,10 +67,8 @@
 				Id: 1,
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
 			};
-
 			requestsDataService.setRequests([request]);
-			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
-			targetScope.$digest();
+			setupTargetElement();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
 			scope.requestsOverview.selectedTeamIds = ["team"];
@@ -128,7 +136,6 @@
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
-
 			targetScope.$digest();
 
 			var scope = getInnerScope(targetElement);
@@ -186,28 +193,6 @@
 			expect(scope.requestsOverview.isLoading).toBeFalsy();
 		});
 
-		it('should show selected requests information when requests get selected and nothing vice verse', function () {
-			var requestIds = [{ id: 1 }, { id: 2 }];
-			requestsDataService.setRequests([]);
-
-			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
-			targetScope.$digest();
-
-			var requestCommandParamsHolder = $injector.get('requestCommandParamsHolder');
-			requestCommandParamsHolder.setSelectedRequestIds(requestIds, false);
-
-			var vm = getInnerScope(targetElement).requestsOverview;
-
-			vm.selectedRequestsInfoText = 'Selected {0} of {1} requests';
-			vm.paging.totalRequestsCount = 10;
-			targetScope.$digest();
-			expect(vm.showSelectedRequestsInfo()).toEqual('Selected 2 of 10 requests');
-
-			requestCommandParamsHolder.setSelectedRequestIds([]);
-			targetScope.$digest();
-			expect(vm.showSelectedRequestsInfo()).toEqual('');
-		});
-
 		it('should show pending and waitlisted absence requests only by default', function () {
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
@@ -250,9 +235,14 @@
 				endDate: moment().endOf('week')._d
 			};
 			targetScope.selectedTeams = ["team"];
+			var count = 0;
+			function initCallBack(count) {
+				
+			}
 			targetElement = $compile('<requests-overview ' +
 				'is-active="selectedTabIndex == 0" ' +
 				'selected-team-ids="selectedTeams"' +
+				'on-init-call-back="' + initCallBack(count) + '"' +
 				'period="absencePeriod"></requests-overview>')(targetScope);
 			targetScope.$digest();
 

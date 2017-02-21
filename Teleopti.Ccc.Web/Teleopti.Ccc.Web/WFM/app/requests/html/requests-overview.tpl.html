@@ -7,16 +7,3 @@
 						  filters="requestsOverview.filters"
 						  filter-enabled="requestsOverview.filterEnabled"
 						  sorting-orders="requestsOverview.sortingOrders"></requests-table-container>
-
-<div class="paging pull-right" ng-if="requestsOverview.isPaginationEnabled" ng-show="!requestsOverview.isLoading">
-	<wfm-pagination pagination-options="requestsOverview.paging" get-data-for-page-callback="requestsOverview.forceRequestsReloadWithSelection"></wfm-pagination>
-	<div class="total-requests-count pull-left">
-		<span>{{requestsOverview.showSelectedRequestsInfo()}}</span>
-	</div>
-	<md-select aria-label="page size" ng-if="requestsOverview.paging.totalRequestsCount > 0"
-		    class="page-size-selector pull-left"
-		    ng-model="requestsOverview.paging.pageSize"
-			ng-change="requestsOverview.onPageSizeChanges()">
-		<md-option ng-repeat="option in requestsOverview.pageSizeOptions" ng-value="option"><span ng-bind="option"></span></md-option>
-	</md-select>
-</div>

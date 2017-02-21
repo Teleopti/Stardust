@@ -25,21 +25,12 @@
 		vm.sortingOrders = [];
 
 		vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
-		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
-		vm.pageSizeOptions = [20, 50, 100, 200];
-		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.init = init;
 		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
 		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
 
 		getSelectedRequestsInfoText();
 
-		vm.paging = {
-			pageSize: 20,
-			pageNumber: 1,
-			totalPages: 1,
-			totalRequestsCount: 0
-		};
 
 		function init() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
@@ -81,21 +72,6 @@
 			}
 		}
 
-		function onPageSizeChanges() {
-			vm.paging.totalPages = Math.ceil(vm.paging.totalRequestsCount / vm.paging.pageSize);
-			vm.paging.pageNumber = 1;
-			forceRequestsReloadWithSelection();
-		}
-
-		function onTotalRequestsCountChanges(totalRequestsCount) {
-
-			var totalPages = Math.ceil(totalRequestsCount / vm.paging.pageSize);
-			if (totalPages !== vm.paging.totalPages) vm.paging.pageNumber = 1;
-
-			vm.paging.totalPages = totalPages;
-			vm.paging.totalRequestsCount = totalRequestsCount;
-		}
-
 		function getRequests(requestsFilter, sortingOrders, paging) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
 
@@ -111,8 +87,7 @@
 
 				if (vm.totalRequestsCount !== requests.data.TotalCount) {
 					vm.totalRequestsCount = requests.data.TotalCount;
-					if (typeof vm.onTotalRequestsCountChanges == 'function')
-						vm.onTotalRequestsCountChanges(vm.totalRequestsCount);
+					vm.onInitCallBack({ count: requests.data.TotalCount });
 				}
 
 				vm.isLoading = false;
@@ -164,7 +139,9 @@
 				selectedTeamIds: '=?',
 				filters: '=?',
 				filterEnabled: '=?',
-				isActive: '=?'
+				isActive: '=?',
+				onInitCallBack: '&?',
+				paging: '=?'
 			},
 			restrict: 'E',
 			templateUrl: 'app/requests/html/requests-overview.tpl.html',
@@ -180,7 +157,8 @@
 					endDate: vm.period ? vm.period.endDate : null,
 					filters: vm.filters,
 					isActive: vm.isActive,
-					sortingOrders: vm.sortingOrders
+					sortingOrders: vm.sortingOrders,
+					paging:vm.paging
 				};
 				return target;
 			}, function (newValue, oldValue) {
