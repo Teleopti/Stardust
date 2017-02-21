@@ -71,6 +71,7 @@
 													 selected-team-ids="requests.selectedTeamIds"
 													 paging="requests.paging"
 													 on-init-call-back="requests.initFooter(count)"
+													 is-using-request-submitter-time-zone="requests.isUsingRequestSubmitterTimeZone"
 													 filter-enabled="requests.filterEnabled" >
 							</requests-overview>
 						</md-content>
@@ -83,6 +84,9 @@
 													 period="requests.shiftTradePeriod"
 													 agent-search-term="requests.agentSearchTerm"
 													 selected-team-ids="requests.selectedTeamIds"
+													 paging="requests.paging"
+													 on-init-call-back="requests.initFooter(count)"
+													 is-using-request-submitter-time-zone="requests.isUsingRequestSubmitterTimeZone"
 													 filter-enabled="requests.filterEnabled">
 							</requests-overview>
 						</md-content>
@@ -98,6 +102,8 @@
 			ng-if="requests.isFooterInited"
 			paging="requests.paging"
 			page-size-options="requests.pageSizeOptions"
+			is-shift-trade-view-active="requests.isShiftTradeViewActive()"
+			is-using-request-submitter-time-zone="requests.isUsingRequestSubmitterTimeZone"
 		></requests-footer>
 	</div>
 </div>

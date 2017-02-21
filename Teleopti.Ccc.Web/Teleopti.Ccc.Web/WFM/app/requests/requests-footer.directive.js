@@ -13,7 +13,8 @@
 		vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
-
+		vm.isUsingRequestSubmitterTimeZone = true;
+		
 		function onPageSizeChanges() {
 			vm.paging.totalPages = Math.ceil(vm.paging.totalRequestsCount / vm.paging.pageSize);
 			vm.paging.pageNumber = 1;
@@ -32,7 +33,9 @@
 			bindToController: true,
 			scope: {
 				paging: '=?',
-				pageSizeOptions:'=?'
+				pageSizeOptions: '=?',
+				isShiftTradeViewActive: '=?',
+				isUsingRequestSubmitterTimeZone: '=?'
 			},
 			restrict: 'E',
 			templateUrl: 'app/requests/html/requests-footer.tpl.html',
@@ -42,23 +45,6 @@
 		function postlink(scope, elem, attrs, ctrl) {
 			var vm = scope.requestsOverview;
 
-			
-
-			function listenToReload() {
-				scope.$on('reload.requests.with.selection', function (event, data) {
-					if ((!angular.isArray(vm.selectedTeamIds) || vm.selectedTeamIds.length == 0) && angular.isUndefined(data)) {
-						return;
-					}
-
-					ctrl.reload(data);
-				});
-
-				scope.$on('reload.requests.without.selection', function (event) {
-					ctrl.reload();
-				});
-
-				ctrl.loadRequestWatchersInitialized = true;
-			}
 		}
 	}
 })();

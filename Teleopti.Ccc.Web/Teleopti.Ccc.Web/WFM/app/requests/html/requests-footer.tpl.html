@@ -1,4 +1,49 @@
-﻿<div class="paging pull-right" ng-if="requestsFooter.isPaginationEnabled">
+﻿<div class="pull-left">
+	<form ng-if="!requestsFooter.isShiftTradeViewActive">
+		<span class="wfm-radio">
+			<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone"
+					 checked="!requestsFooter.isUsingRequestSubmitterTimeZone"
+					 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = false" />
+			<label for="radioUserTimezone">
+				<span class="wfm-radio-toggle"></span>
+				<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
+			</label>
+		</span>
+		<span class="wfm-radio">
+			<input type="radio" name="groupTimezoneSetting" id="radioRequestTimezone"
+					 checked="requestsFooter.isUsingRequestSubmitterTimeZone"
+					 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = true" />
+			<label for="radioRequestTimezone">
+				<span class="wfm-radio-toggle"></span>
+				<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
+			</label>
+		</span>
+	</form>
+	
+	<form ng-if="requestsFooter.isShiftTradeViewActive">
+		<span class="wfm-radio">
+			<input type="radio" name="groupTimezoneSetting1" id="radioUserTimezone1"
+					 checked="!requestsFooter.isUsingRequestSubmitterTimeZone"
+					 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = false" />
+			<label for="radioUserTimezone1">
+				<span class="wfm-radio-toggle"></span>
+				<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
+			</label>
+		</span>
+		<span class="wfm-radio">
+			<input type="radio" name="groupTimezoneSetting1" id="radioRequestTimezone1"
+					 checked="requestsFooter.isUsingRequestSubmitterTimeZone"
+					 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = true" />
+			<label for="radioRequestTimezone1">
+				<span class="wfm-radio-toggle"></span>
+				<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
+			</label>
+		</span>
+	</form>
+</div>
+
+
+<div class="paging pull-right" ng-if="requestsFooter.isPaginationEnabled">
 	<wfm-pagination pagination-options="requestsFooter.paging" get-data-for-page-callback="requestsFooter.forceRequestsReloadWithSelection"></wfm-pagination>
 	<div class="total-requests-count pull-left">
 		<span>{{requestsFooter.showSelectedRequestsInfo()}}</span>

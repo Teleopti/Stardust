@@ -102,7 +102,6 @@
 		}
 
 		function setupShiftTradeVisualisation(requests) {
-
 			if (vm.shiftTradeView && vm.shiftTradeRequestDateSummary) {
 				vm.shiftTradeDayViewModels = vm.gridConfigurationService.getDayViewModels(requests, vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
 				vm.shiftTradeScheduleViewModels = vm.gridConfigurationService.getShiftTradeScheduleViewModels(requests, vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
@@ -421,7 +420,8 @@
 				sortingOrders: '=',
 				filterEnabled: '=',
 				filters: '=?',
-				shiftTradeView: '=?'
+				shiftTradeView: '=?',
+				isUsingRequestSubmitterTimeZone: '=?'
 			},
 			require: ['requestsTableContainer'],
 			templateUrl: 'app/requests/html/requests-table-container.tpl.html',
@@ -430,9 +430,7 @@
 
 		function postlink(scope, elem, attrs, ctrls) {
 			var requestsTableContainerCtrl = ctrls[0];
-
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
-			scope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
 
 			scope.$watch(function () {
 
@@ -442,7 +440,6 @@
 
 				}
 			}, function (requestWatch) {
-
 				var requests = requestWatch.requests;
 
 				requestsTableContainerCtrl.prepareComputedColumns(requests);
@@ -451,13 +448,18 @@
 
 			}, true);
 
-			scope.$watch('requestsTableContainer.isUsingRequestSubmitterTimeZone', function (newValue, oldValue) {
+			scope.$watch(function () {
+				return {
+					isUsingRequestSubmitterTimeZone: scope.requestsTableContainer.isUsingRequestSubmitterTimeZone
+				}
+			}, function () {
 				var ctrl = requestsTableContainerCtrl;
 				if (ctrl.shiftTradeView && ctrl.shiftTradeRequestDateSummary) {
 					var requests = ctrl.requests;
 					ctrl.setupShiftTradeVisualisation(requests);
 				}
-			});
+
+			}, true);
 
 			scope.$on('reload.requests.without.selection', function () {
 				requestsTableContainerCtrl.clearSelection();

@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	describe('Requests overview directive', function () {
+	xdescribe('Requests overview directive', function () {
 		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector, requestsFilterService;
 
 		var targetElement, targetScope;
@@ -279,7 +279,7 @@
 		
 	});
 
-	describe('requests table container directive', function () {
+	xdescribe('requests table container directive', function () {
 		var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule, currentUserInfo;
 
 		beforeEach(module('wfm.templates'));

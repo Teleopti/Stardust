@@ -85,10 +85,8 @@
 					}
 				}
 
-				if (vm.totalRequestsCount !== requests.data.TotalCount) {
-					vm.totalRequestsCount = requests.data.TotalCount;
-					vm.onInitCallBack({ count: requests.data.TotalCount });
-				}
+				vm.totalRequestsCount = requests.data.TotalCount;
+				vm.onInitCallBack({ count: requests.data.TotalCount });
 
 				vm.isLoading = false;
 			});
@@ -128,6 +126,7 @@
 		return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
 	}
 
+
 	function requestsOverviewDirective() {
 		return {
 			controller: 'requestsOverviewCtrl',
@@ -141,7 +140,8 @@
 				filterEnabled: '=?',
 				isActive: '=?',
 				onInitCallBack: '&?',
-				paging: '=?'
+				paging: '=?',
+				isUsingRequestSubmitterTimeZone: '=?'
 			},
 			restrict: 'E',
 			templateUrl: 'app/requests/html/requests-overview.tpl.html',
@@ -150,7 +150,6 @@
 
 		function postlink(scope, elem, attrs, ctrl) {
 			var vm = scope.requestsOverview;
-
 			scope.$watch(function() {
 				var target = {
 					startDate: vm.period ? vm.period.startDate : null,
@@ -158,7 +157,7 @@
 					filters: vm.filters,
 					isActive: vm.isActive,
 					sortingOrders: vm.sortingOrders,
-					paging:vm.paging
+					paging: vm.paging
 				};
 				return target;
 			}, function (newValue, oldValue) {
