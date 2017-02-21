@@ -13,6 +13,7 @@
 			getSkills: getSkills,
 			getSkillAreas: getSkillAreas,
 			getOrganization: getOrganization,
+			getOrganizationForSkills: getOrganizationForSkills,
 			agentStatesFor: agentStatesFor,
 			agentStatesInAlarmFor: agentStatesInAlarmFor,
 			agentStatesInAlarmExcludingPhoneStatesFor: agentStatesInAlarmExcludingPhoneStatesFor,
@@ -74,7 +75,7 @@
 					method: 'GET',
 					isArray: true
 				}
-			}).query({skillIds:data.skillIds}).$promise;
+			}).query({skillIds: data.skillIds}).$promise;
 		};
 
 		function agentStatesFor(data) {

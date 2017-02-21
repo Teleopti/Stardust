@@ -34,7 +34,8 @@
 			withSkills: withSkills,
 			withSkillAreas: withSkillAreas,
 			withPhoneState: withPhoneState,
-			withOrganization: withOrganization
+			withOrganization: withOrganization,
+			withOrganizationOnSkills: withOrganizationOnSkills
 		};
 
 		///////////////////////////////
@@ -55,6 +56,7 @@
 		var skillAreas = [];
 		var phoneStates = [];
 		var organizations = [];
+		var organizationsOnSkills = [];
 		var siteAdherencesForSkill = [];
 		var teamAdherencesForSkill = [];
 		var paramsOf = function (url) {
@@ -418,11 +420,27 @@
 				return [200, skills];
 			});
 
+		fake(/\.\.\/api\/Sites\/OrganizationForSkills(.*)/,
+			function (params) {
+				//console.log(params)
+				var returnOrg = [];
+				var firstKey = "";		
+				var skillIdsArray = angular.isArray(params.skillIds) ? params.skillIds :params.skillIds.split(",");
+				skillIdsArray.forEach(function(key){
+					if(key)
+					{firstKey = key;
+					returnOrg.push(organizationsOnSkills[key]);}
+				})
+				//console.log(angular.isArray(params.skillIds) ? params.skillIds :params.skillIds.split(","))
+				console.log(returnOrg,firstKey)				
+				//console.log(params.skillIds, firstKey, returnOrg.length)
+				return [200, returnOrg.length > 1 ? [returnOrg[firstKey]] : returnOrg];
+			});
+
 		fake(/\.\.\/api\/Sites\/Organization(.*)/,
 			function () {
 				return [200, organizations];
 			});
-
 
 		fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
 			function (params) {
@@ -751,6 +769,13 @@
 
 		function withOrganization(organization) {
 			organizations.push(organization)
+			return this;
+		}
+
+		function withOrganizationOnSkills(organization, skillIds) {
+			skillIds.split(",").forEach(function(key){
+				organizationsOnSkills[key] = organization;
+			});
 			return this;
 		}
 
