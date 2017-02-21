@@ -4,12 +4,31 @@
 }
 
 .wfm-requests {
-    position: relative;
+    background-color: #fff;
+    border-right: 1px solid #fff;
+    overflow: hidden;
+    padding: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
 
     //Temp fix:remove this when styleguide updated wfm-multiple-search-input
     wfm-multiple-search-input i.mdi-magnify {
         display: none;
     }
+	.request-footer{
+		height:35px;
+	}
+	.m-t-5{
+		margin-top:5px;
+	}
+	.request-body{
+		border-bottom: 1px solid rgba(0,0,0,.26);
+		margin-bottom:10px;
+	}
+	.h-60-vh{
+		/*height:inherit !important;*/
+		height:60vh;
+	}
 
     .wfm-checkbox-toggle {
         position: relative;
@@ -142,14 +161,6 @@
         position: relative;
     }
 
-    .h-78-vh {
-        height: 78vh;
-    }
-
-    .m-t-2r {
-        margin-top: 2rem;
-    }
-
     .filter-switch {
         display: inline-block;
         padding-left: 3px;
@@ -216,8 +227,8 @@
     }
 
     .ui-grid {
-        height: 68vh;
-        margin: 15px;
+        /*height: 68vh;*/
+        margin: 15px 0;
         /*align filter input to the left*/
         div[ui-grid-filter] {
             text-align: left !important;
@@ -243,10 +254,7 @@
         height: 60px;
     }
 
-    .paging {
-        position: relative;
-        top: -24px;
-
+    .paging {wfm
         .total-requests-count {
             margin-top: 5px;
             margin-right: 20px;
