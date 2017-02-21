@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Now.Is("2016-10-18 08:00");
 			Database
 				.WithAgent()
-				.WithTerminatedAgent("2016-10-18");
+				.WithTerminatedAgent("2016-10-17");
 			var teamId = Database.CurrentTeamId();
 
 			var result = WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] { teamId }));
