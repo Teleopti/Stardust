@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, timeZone));
 			var currentAbsenceOpenPeriod =
-				workflowControlSet.AbsenceRequestOpenPeriods.SingleOrDefault(p => p.OpenForRequestsPeriod.Contains(today));
+				workflowControlSet.AbsenceRequestOpenPeriods.FirstOrDefault(p => p.OpenForRequestsPeriod.Contains(today));
 			var checkStaffingValidator = currentAbsenceOpenPeriod?.StaffingThresholdValidator;
 
 			return checkStaffingValidator is StaffingThresholdWithShrinkageValidator ||
