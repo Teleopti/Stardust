@@ -21,7 +21,7 @@
 		vm.disableCommands = disableCommands;
 		vm.canCancelRequests = canCancelRequests;
 		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
-		vm.isUpdateResourceCalculationsEnabled = toggleSvc.AbsenceRequests_SpeedupIntradayRequests_40754;
+		vm.isUpdateResourceCalculationsEnabled = toggleSvc.Wfm_Requests_TriggerResourceCalculationFromGui_43129;
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 		vm.toggleProcessWaitlistModal = toggleProcessWaitlistModal;
 		vm.processWaitlistRequests = processWaitlistRequests;

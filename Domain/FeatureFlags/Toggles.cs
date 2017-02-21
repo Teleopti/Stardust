@@ -137,6 +137,7 @@
 		Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309,
 		Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450,
 		Wfm_Requests_SaveFavoriteSearches_42578,
+		Wfm_Requests_TriggerResourceCalculationFromGui_43129,
 
 		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
 
@@ -194,8 +195,7 @@
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
 		QRCodeForMobileApps_42695,
-
-		AbsenceRequests_SpeedupIntradayRequests_40754,
+		
 		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
 		NewPasswordHash_40460,

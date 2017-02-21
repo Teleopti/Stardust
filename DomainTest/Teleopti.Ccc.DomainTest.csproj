@@ -172,7 +172,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\CancelAbsenceRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\UpdateStaffingLevelReadModelHandlerTest.cs" />

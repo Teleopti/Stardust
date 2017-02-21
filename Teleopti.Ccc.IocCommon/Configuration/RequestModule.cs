@@ -43,10 +43,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RequestApprovalServiceFactory>().As<IRequestApprovalServiceFactory>().InstancePerDependency();
 			builder.RegisterType<AbsenceRequestValidatorProvider>().As<IAbsenceRequestValidatorProvider>().SingleInstance();
 			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope();
-
-			registerType<IAbsenceRequestIntradayFilter, AbsenceRequestIntradayFilter,
-					AbsenceRequestIntradayFilterIntradayRequestDisabled>(builder,
-						Toggles.AbsenceRequests_SpeedupIntradayRequests_40754);
+			builder.RegisterType<AbsenceRequestIntradayFilter>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
 
 			registerType<IFilterRequestsWithDifferentVersion, FilterRequestsWithDifferentVersion, FilterRequestsWithDifferentVersion41930ToggleOff>(builder,
 				Toggles.Wfm_Requests_ApprovingModifyRequests_41930);

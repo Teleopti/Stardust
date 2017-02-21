@@ -191,11 +191,10 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayResourceCalculationForAbsenceHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestIntradayFilter.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceCalculationPeriodDictionary.cs" />

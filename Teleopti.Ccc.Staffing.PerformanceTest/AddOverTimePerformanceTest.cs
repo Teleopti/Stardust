@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
 	//[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
-	[Toggle(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
 	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	public class AddOverTimePerformanceTest : PerformanceTestWithOneTimeSetup

@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	[TestFixture,
 	RequestsTest,
 		Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747), 
-		Toggle(Toggles.Wfm_Requests_Check_Expired_Requests_40274), 
-		Toggle(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+		Toggle(Toggles.Wfm_Requests_Check_Expired_Requests_40274)]
 	public class AbsenceRequestPersisterTest : ISetup
 	{
 		public IPersonRequestRepository PersonRequestRepository;

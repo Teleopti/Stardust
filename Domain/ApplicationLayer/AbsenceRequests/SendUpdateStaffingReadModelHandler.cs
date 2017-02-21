@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,8 +16,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-    [EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
-    public class IntradayResourceCalculationForAbsenceHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
+    public class SendUpdateStaffingReadModelHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
     {
         private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 	    private readonly IJobStartTimeRepository _jobStartTimeRepository;
@@ -31,10 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
         private readonly IConfigReader _configReader;
 	    private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayResourceCalculationForAbsenceHandler));
+        private static readonly ILog logger = LogManager.GetLogger(typeof(SendUpdateStaffingReadModelHandler));
 
 
-        public IntradayResourceCalculationForAbsenceHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository,
+        public SendUpdateStaffingReadModelHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository,
 			IPersonRepository personRepository, IUpdatedByScope updatedByScope, IBusinessUnitScope businessUnitScope, INow now, IEventPublisher publisher, 
 			IConfigReader configReader, IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository)
         {

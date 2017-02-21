@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.IocCommon;
@@ -22,10 +21,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
     [TestFixture]
     [DomainTest]
-    [Toggle(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
     public class IntradayResourceCalculationForAbsenceHandlerTest : ISetup
     {
-        public IntradayResourceCalculationForAbsenceHandler Target;
+        public SendUpdateStaffingReadModelHandler Target;
         public FakeBusinessUnitRepository BusinessUnitRepository;
         public FakeConfigReader ConfigReader;
         public FakePersonRepository PersonRepository;
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Setup(ISystem system, IIocConfiguration configuration)
         {
             system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
-            system.UseTestDouble<IntradayResourceCalculationForAbsenceHandler>().For<IHandleEvent<TenantMinuteTickEvent>>();
+            system.UseTestDouble<SendUpdateStaffingReadModelHandler>().For<IHandleEvent<TenantMinuteTickEvent>>();
             system.UseTestDouble<FakeConfigReader>().For<IConfigReader>();
 			system.UseTestDouble<FakeCurrentBusinessUnit>().For<IBusinessUnitScope>();
 			system.UseTestDouble<FakeJobStartTimeRepository>().For<IJobStartTimeRepository>();

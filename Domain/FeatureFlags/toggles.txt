@@ -134,6 +134,7 @@ Wfm_Requests_ShowBudgetAllowanceDetail_41945 = true
 Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309 = true
 Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450 = true
 Wfm_Requests_SaveFavoriteSearches_42578 = true
+Wfm_Requests_TriggerResourceCalculationFromGui_43129 = false
 
 Wfm_Seatplan_UseDatePeriodForPlanning_42167 = true
 
@@ -200,7 +201,6 @@ HealthCheck_EasyValidateAndFixReadModels_39696 = true
 HealthCheck_ReinitializeReadModels_39697 = true
 ETL_SpeedUpIntradayBusinessUnit_38932 = RC
 ETL_SpeedUpNightlyBusinessUnit_38932 = RC
-AbsenceRequests_SpeedupIntradayRequests_40754 = true
 ETL_EventbasedDate_39562 = true
 ReadModel_ToHangfire_39147 = true
 NewPasswordHash_40460 = true

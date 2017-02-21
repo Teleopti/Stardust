@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
@@ -139,6 +140,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personReq1.SetCreated(createdOn);
 			return personReq1;
 		}
+	}
 
+	public static class PersonRequestExtensions
+	{
+		public static void SetCreated(this PersonRequest request, DateTime timestamp)
+		{
+			var field = typeof(PersonRequest).GetProperty(nameof(request.CreatedOn),
+				BindingFlags.Instance | BindingFlags.Public);
+			field.SetValue(request, timestamp);
+		}
 	}
 }
