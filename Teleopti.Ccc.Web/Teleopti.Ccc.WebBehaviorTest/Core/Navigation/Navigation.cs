@@ -475,7 +475,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&pollingInterval=100");
 		}
-		
+
+		public static void GotoRealTimeAdherenceForSites(IEnumerable<Guid> siteIds)
+		{
+			var sites = string.Join("&siteIds=", siteIds);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&pollingInterval=100");
+		}
+
+		public static void GotoRealTimeAdherenceForTeams(IEnumerable<Guid> teamIds)
+		{
+			var teams = string.Join("&teamIds=", teamIds);
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teams + "&pollingInterval=100");
+		}
+
 		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid siteId)
 		{
 			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillIds=" + skillId + "&pollingInterval=100");
@@ -592,5 +604,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/resourceplanner/importschedule");
 		}
+
 	}
 }

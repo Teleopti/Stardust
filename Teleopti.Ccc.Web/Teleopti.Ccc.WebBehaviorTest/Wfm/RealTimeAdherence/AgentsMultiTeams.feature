@@ -18,11 +18,8 @@ Scenario: See agents for multiple sites
 	 | Field      | Value       |
 	 | Team       | Team London |
 	 | Start Date | 2014-01-21  |
-	When  I view Real time adherence sites
-	And I click the site checkbox for 'London'
-	And I click the site checkbox for 'Paris'
-	And I click 'open'
-	And I click the toggle to see all agents
+	Given I am viewing real time adherence on sites 'London, Paris' only
+	When I click the toggle to see all agents
 	Then I should see agent status for 'Pierre Baldi'
 	And I should see agent status for 'Ashley Andeen'
 
@@ -30,6 +27,7 @@ Scenario: See agents for multiple teams
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'
 	And there is a team named 'Garnisonen' on site 'Stockholm'
+	And there is a team named 'Sollentuna' on site 'Stockholm'
 	And I have a role with full access
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
@@ -39,10 +37,7 @@ Scenario: See agents for multiple teams
 	 | Field      | Value      |
 	 | Team       | Garnisonen |
 	 | Start Date | 2014-01-21 |
-	When I view Real time adherence for teams on site 'Stockholm'
-	And I click the team checkbox for 'Täby'
-	And I click the team checkbox for 'Garnisonen'
-	And I click 'open'
-	And I click the toggle to see all agents
+	Given I am viewing real time adherence on teams 'Täby, Garnisonen'
+	When I click the toggle to see all agents
 	Then I should see agent status for 'Pierre Baldi'
 	And I should see agent status for 'Ashley Andeen'
