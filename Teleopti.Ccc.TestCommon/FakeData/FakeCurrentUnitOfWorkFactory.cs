@@ -4,14 +4,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeCurrentUnitOfWorkFactory : ICurrentUnitOfWorkFactory
 	{
-		private readonly IUnitOfWorkFactory _current;
+		private IUnitOfWorkFactory _current;
 
-		public FakeCurrentUnitOfWorkFactory()
-		{
-		}
-		public FakeCurrentUnitOfWorkFactory(IUnitOfWorkFactory current)
+		public ICurrentUnitOfWorkFactory WithCurrent(IUnitOfWorkFactory current)
 		{
 			_current = current;
+			return this;
 		}
 
 		public IUnitOfWorkFactory Current()

@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
 			// level 0 root 
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.All, "xxAll", DefinedRaptorApplicationFunctionForeignIds.All);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.All, "xxAll", DefinedRaptorApplicationFunctionForeignIds.All);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication, "xxOpenRaptorApplication", DefinedRaptorApplicationFunctionForeignIds.OpenRaptorApplication, 10);
 
 			//level 1 modules 

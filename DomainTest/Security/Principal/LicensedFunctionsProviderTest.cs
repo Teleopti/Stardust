@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void Setup()
         {
             functionFactory = new DefinedRaptorApplicationFunctionFactory();
-			_currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeUnitOfWorkFactory { Name = tenantName });
+			_currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory().WithCurrent(new FakeUnitOfWorkFactory { Name = tenantName });
 			target = new LicensedFunctionsProvider(functionFactory);
         }
 
