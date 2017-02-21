@@ -232,4 +232,4 @@ Wfm_ResourcePlanner_AgentGroup_42871 = Dev
 Landing_Page_Data_Protection_Question_35721 = true
 StaffingActions_UseRealForecast_42663 = false
 
-QRCodeForMobileApps_42695 = DEV
+QRCodeForMobileApps_42695 = RC
