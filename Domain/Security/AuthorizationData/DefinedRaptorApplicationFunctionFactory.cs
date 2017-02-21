@@ -28,151 +28,155 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
 		private static IApplicationFunction[] createApplicationFunctionList()
 		{
-			List<IApplicationFunction> applicationFunctionList = new List<IApplicationFunction>();
+			var result = new List<IApplicationFunction>();
 
 			// level 0 root 
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.All, "xxAll", DefinedRaptorApplicationFunctionForeignIds.All, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication, "xxOpenRaptorApplication", DefinedRaptorApplicationFunctionForeignIds.OpenRaptorApplication, 10);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.All, "xxAll", DefinedRaptorApplicationFunctionForeignIds.All);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.All, "xxAll", DefinedRaptorApplicationFunctionForeignIds.All);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication, "xxOpenRaptorApplication", DefinedRaptorApplicationFunctionForeignIds.OpenRaptorApplication, 10);
 
 			//level 1 modules 
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RaptorGlobal, "xxGlobalFunctions", DefinedRaptorApplicationFunctionForeignIds.RaptorGlobal, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage, "xxOpenSchedulePage", DefinedRaptorApplicationFunctionForeignIds.OpenSchedulePage, 50);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenForecasterPage, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.OpenForecasterPage, 30);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, "xxOpenPersonAdminPage", DefinedRaptorApplicationFunctionForeignIds.OpenPersonAdminPage, 20);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AccessToReports, "xxReports", DefinedRaptorApplicationFunctionForeignIds.AccessToReports, 60);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports, "xxOnlineReports", DefinedRaptorApplicationFunctionForeignIds.AccessToOnlineReports, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenPermissionPage, "xxOpenPermissionPage", DefinedRaptorApplicationFunctionForeignIds.OpenPermissionPage, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Shifts, "xxShifts", DefinedRaptorApplicationFunctionForeignIds.Shifts, 40);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage, "xxOptions", DefinedRaptorApplicationFunctionForeignIds.OpenOptionsPage, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenIntradayPage, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.OpenIntradayPage, 55);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenBudgets, "xxBudgets", DefinedRaptorApplicationFunctionForeignIds.OpenBudgets, 70);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager, "xxPerformanceManager", DefinedRaptorApplicationFunctionForeignIds.AccessToPerformanceManager, 80);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RaptorGlobal, "xxGlobalFunctions", DefinedRaptorApplicationFunctionForeignIds.RaptorGlobal);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenSchedulePage, "xxOpenSchedulePage", DefinedRaptorApplicationFunctionForeignIds.OpenSchedulePage, 50);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.OpenForecasterPage, 30);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, "xxOpenPersonAdminPage", DefinedRaptorApplicationFunctionForeignIds.OpenPersonAdminPage, 20);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AccessToReports, "xxReports", DefinedRaptorApplicationFunctionForeignIds.AccessToReports, 60);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports, "xxOnlineReports", DefinedRaptorApplicationFunctionForeignIds.AccessToOnlineReports);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage, "xxOpenPermissionPage", DefinedRaptorApplicationFunctionForeignIds.OpenPermissionPage);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Shifts, "xxShifts", DefinedRaptorApplicationFunctionForeignIds.Shifts, 40);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage, "xxOptions", DefinedRaptorApplicationFunctionForeignIds.OpenOptionsPage);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenIntradayPage, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.OpenIntradayPage, 55);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenBudgets, "xxBudgets", DefinedRaptorApplicationFunctionForeignIds.OpenBudgets, 70);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager, "xxPerformanceManager", DefinedRaptorApplicationFunctionForeignIds.AccessToPerformanceManager, 80);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound);
 
 			// Global
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, "xxModifyAssignment", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonAssignment, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence, "xxModifyAbsence", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonAbsence, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction, "xxModifyPersonRestriction", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonRestriction, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedules, "xxViewSchedules", DefinedRaptorApplicationFunctionForeignIds.ViewSchedules, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, "xxViewUnpublishedSchedules", DefinedRaptorApplicationFunctionForeignIds.ViewUnpublishedSchedules, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyMeetings, "xxModifyMeetings", DefinedRaptorApplicationFunctionForeignIds.ModifyMeetings, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule, "xxModifyWriteProtectedSchedule", DefinedRaptorApplicationFunctionForeignIds.ModifyWriteProtectedSchedule, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SetWriteProtection, "xxSetWriteProtection", DefinedRaptorApplicationFunctionForeignIds.SetWriteProtection, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewConfidential, "xxViewConfidential", DefinedRaptorApplicationFunctionForeignIds.ViewConfidential, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, "xxViewRestrictedScenario", DefinedRaptorApplicationFunctionForeignIds.ViewRestrictedScenario, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario, "xxModifyRestrictedScenario", DefinedRaptorApplicationFunctionForeignIds.ModifyRestrictedScenario, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewActiveAgents, "xxViewActiveAgents", DefinedRaptorApplicationFunctionForeignIds.ViewActiveAgents, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities, "xxModifyAvailabilities", DefinedRaptorApplicationFunctionForeignIds.ModifyAvailabilities, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PublishSchedule, "xxPublishSchedule", DefinedRaptorApplicationFunctionForeignIds.PublishSchedule, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills, "xxOrganizeCascadingSkills", DefinedRaptorApplicationFunctionForeignIds.OrganizeCascadingSkills, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ArchiveSchedule, "xxArchiveSchedule", DefinedRaptorApplicationFunctionForeignIds.ArchiveSchedule, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ImportSchedule, "xxImportSchedule", DefinedRaptorApplicationFunctionForeignIds.ImportSchedule, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SaveFavoriteSearch, "xxSaveFavoriteSearch", DefinedRaptorApplicationFunctionForeignIds.SaveFavoriteSearch, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, "xxModifyAssignment", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonAssignment);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence, "xxModifyAbsence", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonAbsence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction, "xxModifyPersonRestriction", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonRestriction);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewSchedules, "xxViewSchedules", DefinedRaptorApplicationFunctionForeignIds.ViewSchedules);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, "xxViewUnpublishedSchedules", DefinedRaptorApplicationFunctionForeignIds.ViewUnpublishedSchedules);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyMeetings, "xxModifyMeetings", DefinedRaptorApplicationFunctionForeignIds.ModifyMeetings);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule, "xxModifyWriteProtectedSchedule", DefinedRaptorApplicationFunctionForeignIds.ModifyWriteProtectedSchedule);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SetWriteProtection, "xxSetWriteProtection", DefinedRaptorApplicationFunctionForeignIds.SetWriteProtection);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewConfidential, "xxViewConfidential", DefinedRaptorApplicationFunctionForeignIds.ViewConfidential);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, "xxViewRestrictedScenario", DefinedRaptorApplicationFunctionForeignIds.ViewRestrictedScenario);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario, "xxModifyRestrictedScenario", DefinedRaptorApplicationFunctionForeignIds.ModifyRestrictedScenario);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewActiveAgents, "xxViewActiveAgents", DefinedRaptorApplicationFunctionForeignIds.ViewActiveAgents);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities, "xxModifyAvailabilities", DefinedRaptorApplicationFunctionForeignIds.ModifyAvailabilities);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PublishSchedule, "xxPublishSchedule", DefinedRaptorApplicationFunctionForeignIds.PublishSchedule);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills, "xxOrganizeCascadingSkills", DefinedRaptorApplicationFunctionForeignIds.OrganizeCascadingSkills);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule, "xxArchiveSchedule", DefinedRaptorApplicationFunctionForeignIds.ArchiveSchedule);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ImportSchedule, "xxImportSchedule", DefinedRaptorApplicationFunctionForeignIds.ImportSchedule);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SaveFavoriteSearch, "xxSaveFavoriteSearch", DefinedRaptorApplicationFunctionForeignIds.SaveFavoriteSearch);
 
 			// PersonAdmin
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, "xxModifyPersonNameAndPassword", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonNameAndPassword, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyGroupPage, "xxModifyGroupPage", DefinedRaptorApplicationFunctionForeignIds.ModifyGroupPage, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage, "xxModifyPeopleWithinGroupPage", DefinedRaptorApplicationFunctionForeignIds.ModifyPeopleWithinGroupPage, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SendAsm, "xxSendAsm", DefinedRaptorApplicationFunctionForeignIds.SendAsm, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AllowPersonModifications, "xxAllowPersonModifications", DefinedRaptorApplicationFunctionForeignIds.AllowPersonModifications, null);
-            createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.DeletePerson, "xxDeletePerson", DefinedRaptorApplicationFunctionForeignIds.DeletePerson, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddPerson, "xxAddPerson", DefinedRaptorApplicationFunctionForeignIds.AddPerson, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, "xxModifyPersonNameAndPassword", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonNameAndPassword);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyGroupPage, "xxModifyGroupPage", DefinedRaptorApplicationFunctionForeignIds.ModifyGroupPage);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage, "xxModifyPeopleWithinGroupPage", DefinedRaptorApplicationFunctionForeignIds.ModifyPeopleWithinGroupPage);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SendAsm, "xxSendAsm", DefinedRaptorApplicationFunctionForeignIds.SendAsm);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AllowPersonModifications, "xxAllowPersonModifications", DefinedRaptorApplicationFunctionForeignIds.AllowPersonModifications);
+            result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.DeletePerson, "xxDeletePerson", DefinedRaptorApplicationFunctionForeignIds.DeletePerson);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AddPerson, "xxAddPerson", DefinedRaptorApplicationFunctionForeignIds.AddPerson);
 
 			// Options
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ManageRealTimeAdherence, "xxManageRTA", DefinedRaptorApplicationFunctionForeignIds.ManageRealTimeAdherence, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ManageScorecards, "xxManageScorecards", DefinedRaptorApplicationFunctionForeignIds.ManageScorecards, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AbsenceRequests, "xxAbsenceRequest", DefinedRaptorApplicationFunctionForeignIds.AbsenceRequests, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests, "xxShiftTradeRequest", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequests, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AuditTrailSettings, "xxAuditTrailSettings", DefinedRaptorApplicationFunctionForeignIds.AuditTrailSettings, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ManageRealTimeAdherence, "xxManageRTA", DefinedRaptorApplicationFunctionForeignIds.ManageRealTimeAdherence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ManageScorecards, "xxManageScorecards", DefinedRaptorApplicationFunctionForeignIds.ManageScorecards);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AbsenceRequests, "xxAbsenceRequest", DefinedRaptorApplicationFunctionForeignIds.AbsenceRequests);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests, "xxShiftTradeRequest", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequests);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AuditTrailSettings, "xxAuditTrailSettings", DefinedRaptorApplicationFunctionForeignIds.AuditTrailSettings);
 
 			// Scheduler
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AutomaticScheduling, "xxAutomaticScheduling", DefinedRaptorApplicationFunctionForeignIds.AutomaticScheduling, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestScheduler, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.RequestScheduler, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove, "xxApprove", DefinedRaptorApplicationFunctionForeignIds.RequestSchedulerApprove, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance, "xxViewAllowance", DefinedRaptorApplicationFunctionForeignIds.RequestSchedulerViewAllowance, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling, "xxAutomaticScheduling", DefinedRaptorApplicationFunctionForeignIds.AutomaticScheduling);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RequestScheduler, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.RequestScheduler);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove, "xxApprove", DefinedRaptorApplicationFunctionForeignIds.RequestSchedulerApprove);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance, "xxViewAllowance", DefinedRaptorApplicationFunctionForeignIds.RequestSchedulerViewAllowance);
 
 			// Forecaster
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit, "xxExportForecastToOtherBusinessUnit", DefinedRaptorApplicationFunctionForeignIds.ExportForecastToOtherBusinessUnit, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile, "xxImportForecastFromFile", DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ExportForecastFile, "xxExportToFile", DefinedRaptorApplicationFunctionForeignIds.ExportForecastFile, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit, "xxExportForecastToOtherBusinessUnit", DefinedRaptorApplicationFunctionForeignIds.ExportForecastToOtherBusinessUnit);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile, "xxImportForecastFromFile", DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExportForecastFile, "xxExportToFile", DefinedRaptorApplicationFunctionForeignIds.ExportForecastFile);
 
 			// Budget
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestAllowances, "xxRequestAllowances", DefinedRaptorApplicationFunctionForeignIds.RequestAllowances, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RequestAllowances, "xxRequestAllowances", DefinedRaptorApplicationFunctionForeignIds.RequestAllowances);
 
 			// Intraday
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence, "xxRealTimeAdherence", DefinedRaptorApplicationFunctionForeignIds.IntradayRealTimeAdherence, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning, "xxEarlyWarning", DefinedRaptorApplicationFunctionForeignIds.IntradayEarlyWarning, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayReForecasting, "xxReforecast", DefinedRaptorApplicationFunctionForeignIds.IntradayReForecasting, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence, "xxRealTimeAdherence", DefinedRaptorApplicationFunctionForeignIds.IntradayRealTimeAdherence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning, "xxEarlyWarning", DefinedRaptorApplicationFunctionForeignIds.IntradayEarlyWarning);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.IntradayReForecasting, "xxReforecast", DefinedRaptorApplicationFunctionForeignIds.IntradayReForecasting);
 
 			// Performance Manager
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport, "xxCreatePerformanceManagerReport", DefinedRaptorApplicationFunctionForeignIds.CreatePerformanceManagerReport, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport, "xxViewPerformanceManagerReport", DefinedRaptorApplicationFunctionForeignIds.ViewPerformanceManagerReport, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport, "xxCreatePerformanceManagerReport", DefinedRaptorApplicationFunctionForeignIds.CreatePerformanceManagerReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport, "xxViewPerformanceManagerReport", DefinedRaptorApplicationFunctionForeignIds.ViewPerformanceManagerReport);
 
 			// Online Reports
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport, "xxScheduledTimePerActivityReport", DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport, "xxScheduledTimeVsTarget", DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport, "xxScheduledTimePerActivityReport", DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport, "xxScheduledTimeVsTarget", DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
 
 			// Reports
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, "xxBadgeLeaderBoardReport", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboardUnderReports, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, "xxBadgeLeaderBoardReport", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboardUnderReports);
 
 			// Agent Portal Web
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyTimeWeb, "xxMyTimeWeb", DefinedRaptorApplicationFunctionForeignIds.MyTimeWeb, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.StudentAvailability, "xxStudentAvailability", DefinedRaptorApplicationFunctionForeignIds.StudentAvailability, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.StandardPreferences, "xxModifyShiftCategoryPreferences", DefinedRaptorApplicationFunctionForeignIds.StandardPreferences, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.TextRequests, "xxCreateTextRequest", DefinedRaptorApplicationFunctionForeignIds.TextRequests, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.TeamSchedule, "xxTeamSchedule", DefinedRaptorApplicationFunctionForeignIds.TeamSchedule, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages, "xxViewAllGroupPages", DefinedRaptorApplicationFunctionForeignIds.ViewAllGroupPages, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, "xxAbsenceRequestsWeb", DefinedRaptorApplicationFunctionForeignIds.AbsenceRequestsWeb, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, "xxCancelRequest", DefinedRaptorApplicationFunctionForeignIds.MyTimeCancelRequest, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb, "xxExtendedPreferencesWeb", DefinedRaptorApplicationFunctionForeignIds.ExtendedPreferencesWeb, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, "xxAgentScheduleMessengerPermission", DefinedRaptorApplicationFunctionForeignIds.AgentScheduleMessenger, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, "xxShiftTradeRequests", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequestsWeb, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard, "xxShiftTradeBulletinBoard", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeBulletinBoard, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShareCalendar, "xxShareCalendar", DefinedRaptorApplicationFunctionForeignIds.ShareCalendar, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb, "xxOvertimeAvailabilityWeb", DefinedRaptorApplicationFunctionForeignIds.OvertimeAvailabilityWeb, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyReportWeb, "xxMyReportWeb", DefinedRaptorApplicationFunctionForeignIds.MyReportWeb, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount, "xxViewPersonalAccount", DefinedRaptorApplicationFunctionForeignIds.ViewPersonalAccount, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics, "xxQueueMetrics", DefinedRaptorApplicationFunctionForeignIds.MyReportQueueMetrics, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewBadge, "xxViewBadge", DefinedRaptorApplicationFunctionForeignIds.ViewBadge, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, "xxViewBadgeLeaderboard", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboard, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AbsenceReport, "xxAbsenceReport", DefinedRaptorApplicationFunctionForeignIds.AbsenceReport, null);	
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewPossibility, "xxViewPossibility", DefinedRaptorApplicationFunctionForeignIds.ViewPossibility, null);	
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration, "xxViewQRCodeForConfiguration", DefinedRaptorApplicationFunctionForeignIds.ViewQRCodeForConfiguration, null);	
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, "xxMyTimeWeb", DefinedRaptorApplicationFunctionForeignIds.MyTimeWeb);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.StudentAvailability, "xxStudentAvailability", DefinedRaptorApplicationFunctionForeignIds.StudentAvailability);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.StandardPreferences, "xxModifyShiftCategoryPreferences", DefinedRaptorApplicationFunctionForeignIds.StandardPreferences);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.TextRequests, "xxCreateTextRequest", DefinedRaptorApplicationFunctionForeignIds.TextRequests);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.TeamSchedule, "xxTeamSchedule", DefinedRaptorApplicationFunctionForeignIds.TeamSchedule);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages, "xxViewAllGroupPages", DefinedRaptorApplicationFunctionForeignIds.ViewAllGroupPages);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, "xxAbsenceRequestsWeb", DefinedRaptorApplicationFunctionForeignIds.AbsenceRequestsWeb);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, "xxCancelRequest", DefinedRaptorApplicationFunctionForeignIds.MyTimeCancelRequest);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb, "xxExtendedPreferencesWeb", DefinedRaptorApplicationFunctionForeignIds.ExtendedPreferencesWeb);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, "xxAgentScheduleMessengerPermission", DefinedRaptorApplicationFunctionForeignIds.AgentScheduleMessenger);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, "xxShiftTradeRequests", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequestsWeb);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard, "xxShiftTradeBulletinBoard", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeBulletinBoard);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ShareCalendar, "xxShareCalendar", DefinedRaptorApplicationFunctionForeignIds.ShareCalendar);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb, "xxOvertimeAvailabilityWeb", DefinedRaptorApplicationFunctionForeignIds.OvertimeAvailabilityWeb);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyReportWeb, "xxMyReportWeb", DefinedRaptorApplicationFunctionForeignIds.MyReportWeb);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount, "xxViewPersonalAccount", DefinedRaptorApplicationFunctionForeignIds.ViewPersonalAccount);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics, "xxQueueMetrics", DefinedRaptorApplicationFunctionForeignIds.MyReportQueueMetrics);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadge, "xxViewBadge", DefinedRaptorApplicationFunctionForeignIds.ViewBadge);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, "xxViewBadgeLeaderboard", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboard);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AbsenceReport, "xxAbsenceReport", DefinedRaptorApplicationFunctionForeignIds.AbsenceReport);	
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewPossibility, "xxViewPossibility", DefinedRaptorApplicationFunctionForeignIds.ViewPossibility);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration, "xxViewQRCodeForConfiguration", DefinedRaptorApplicationFunctionForeignIds.ViewQRCodeForConfiguration);	
 
 			// Web
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, "xxTeamsModule", DefinedRaptorApplicationFunctionForeignIds.MyTeamSchedules, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, "xxAddFullDayAbsence", DefinedRaptorApplicationFunctionForeignIds.AddFullDayAbsence, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, "xxAddIntradayAbsence", DefinedRaptorApplicationFunctionForeignIds.AddIntradayAbsence, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RemoveAbsence, "xxRemoveAbsence", DefinedRaptorApplicationFunctionForeignIds.RemoveAbsence, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddActivity, "xxAddActivity", DefinedRaptorApplicationFunctionForeignIds.AddActivity, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddPersonalActivity, "xxAddPersonalActivity", DefinedRaptorApplicationFunctionForeignIds.AddPersonalActivity, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity, "xxAddOvertimeActivity", DefinedRaptorApplicationFunctionForeignIds.AddOvertimeActivity, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MoveActivity, "xxMoveActivity", DefinedRaptorApplicationFunctionForeignIds.MoveActivity, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RemoveActivity, "xxRemoveActivity", DefinedRaptorApplicationFunctionForeignIds.RemoveActivity, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SwapShifts, "xxSwapShifts", DefinedRaptorApplicationFunctionForeignIds.SwapShifts, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.EditShiftCategory, "xxEditShiftCategory", DefinedRaptorApplicationFunctionForeignIds.EditShiftCategory, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, "xxMoveInvalidOverlappedActivity", DefinedRaptorApplicationFunctionForeignIds.MoveInvalidOverlappedActivity, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebSchedules, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.WebSchedules, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebPeople, "xxPeople", DefinedRaptorApplicationFunctionForeignIds.WebPeople, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebRequests, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.WebRequests, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebCancelRequest, "xxCancelRequest", DefinedRaptorApplicationFunctionForeignIds.WebCancelRequest, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebModifySkill, "xxModifySkill", DefinedRaptorApplicationFunctionForeignIds.WebModifySkill, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebIntraday, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.WebIntraday, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebModifySkillArea, "xxModifySkillArea", DefinedRaptorApplicationFunctionForeignIds.WebModifySkillArea, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebStaffing, "xxWebStaffing", DefinedRaptorApplicationFunctionForeignIds.WebStaffing, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RemoveOvertime, "xxRemoveOvertime", DefinedRaptorApplicationFunctionForeignIds.RemoveOvertime, null);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, "xxTeamsModule", DefinedRaptorApplicationFunctionForeignIds.MyTeamSchedules);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, "xxAddFullDayAbsence", DefinedRaptorApplicationFunctionForeignIds.AddFullDayAbsence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, "xxAddIntradayAbsence", DefinedRaptorApplicationFunctionForeignIds.AddIntradayAbsence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RemoveAbsence, "xxRemoveAbsence", DefinedRaptorApplicationFunctionForeignIds.RemoveAbsence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AddActivity, "xxAddActivity", DefinedRaptorApplicationFunctionForeignIds.AddActivity);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity, "xxAddPersonalActivity", DefinedRaptorApplicationFunctionForeignIds.AddPersonalActivity);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity, "xxAddOvertimeActivity", DefinedRaptorApplicationFunctionForeignIds.AddOvertimeActivity);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MoveActivity, "xxMoveActivity", DefinedRaptorApplicationFunctionForeignIds.MoveActivity);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RemoveActivity, "xxRemoveActivity", DefinedRaptorApplicationFunctionForeignIds.RemoveActivity);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SwapShifts, "xxSwapShifts", DefinedRaptorApplicationFunctionForeignIds.SwapShifts);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.EditShiftCategory, "xxEditShiftCategory", DefinedRaptorApplicationFunctionForeignIds.EditShiftCategory);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, "xxMoveInvalidOverlappedActivity", DefinedRaptorApplicationFunctionForeignIds.MoveInvalidOverlappedActivity);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebSchedules, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.WebSchedules);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPeople, "xxPeople", DefinedRaptorApplicationFunctionForeignIds.WebPeople);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebRequests, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.WebRequests);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebCancelRequest, "xxCancelRequest", DefinedRaptorApplicationFunctionForeignIds.WebCancelRequest);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebModifySkill, "xxModifySkill", DefinedRaptorApplicationFunctionForeignIds.WebModifySkill);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebIntraday, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.WebIntraday);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea, "xxModifySkillArea", DefinedRaptorApplicationFunctionForeignIds.WebModifySkillArea);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebStaffing, "xxWebStaffing", DefinedRaptorApplicationFunctionForeignIds.WebStaffing);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RemoveOvertime, "xxRemoveOvertime", DefinedRaptorApplicationFunctionForeignIds.RemoveOvertime);
 
-			return applicationFunctionList.ToArray();
+			return result.ToArray();
 		}
+	}
 
+	internal static class ApplicationFunctionCollectionExtension
+	{
 		/// <summary>
 		/// Creates a new application function.
 		/// </summary>
@@ -181,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 		/// <param name="functionDescription">The function description.</param>
 		/// <param name="definedKey">The foreign GUID id.</param>
 		/// <param name="sortOrder"></param>
-		private static void createAndAddApplicationFunction(ICollection<IApplicationFunction> applicationFunctionList, string functionPath, string functionDescription, string definedKey, int? sortOrder)
+		public static void CreateAndAdd(this ICollection<IApplicationFunction> applicationFunctionList, string functionPath, string functionDescription, string definedKey, int? sortOrder = null)
 		{
 			string codeName = ApplicationFunction.GetCode(functionPath);
 			string parentPath = ApplicationFunction.GetParentPath(functionPath);

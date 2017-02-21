@@ -38,14 +38,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string tenantName)
 		{
-			var licensedFunctions =
-				LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions.ToArray()
-				.SelectMany(o =>
-				{
-					o.EnableApplicationFunctions(_definedRaptorApplicationFunctionFactory.ApplicationFunctions);
-					return o.EnabledApplicationFunctions;
-				});
-			return new HashSet<IApplicationFunction>(licensedFunctions);
+			var result = new HashSet<IApplicationFunction>();
+			foreach (var licenseOption in LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions)
+			{
+				licenseOption.EnableApplicationFunctions(_definedRaptorApplicationFunctionFactory.ApplicationFunctions);
+				foreach (var enabledApplicationFunction in licenseOption.EnabledApplicationFunctions)
+					result.Add(enabledApplicationFunction);
+			}
+			return result;
 		}
 	}
 
@@ -74,16 +74,16 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string tenantName)
 		{
-			var licensedFunctions =
-				LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions
-				.SelectMany(o =>
-				{
-					var option = o as TeleoptiCccBaseLicenseOption;
-					option?.SetNotIncludeWebTeams();
-					o.EnableApplicationFunctions(_definedRaptorApplicationFunctionFactory.ApplicationFunctions);
-					return o.EnabledApplicationFunctions;
-				});
-			return new HashSet<IApplicationFunction>(licensedFunctions);
+			var result = new HashSet<IApplicationFunction>();
+			foreach (var licenseOption in LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions)
+			{
+				var option = licenseOption as TeleoptiCccBaseLicenseOption;
+				option?.SetNotIncludeWebTeams();
+				licenseOption.EnableApplicationFunctions(_definedRaptorApplicationFunctionFactory.ApplicationFunctions);
+				foreach (var enabledApplicationFunction in licenseOption.EnabledApplicationFunctions)
+					result.Add(enabledApplicationFunction);
+			}
+			return result;
 		}
 	}
 }

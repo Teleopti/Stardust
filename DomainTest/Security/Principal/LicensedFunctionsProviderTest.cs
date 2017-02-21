@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Security.Principal
@@ -19,17 +17,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private ILicensedFunctionsProvider target;
 		private LicenseSchema schema;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+	    private const string tenantName = "for test";
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             functionFactory = new DefinedRaptorApplicationFunctionFactory();
-            _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            _currentUnitOfWorkFactory.Stub(x => x.Current())
-                .Return(unitOfWorkFactory);
-            unitOfWorkFactory.Stub(x => x.Name).Return("for test");
-            target = new LicensedFunctionsProvider(functionFactory);
+			_currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeUnitOfWorkFactory { Name = tenantName });
+			target = new LicensedFunctionsProvider(functionFactory);
         }
 
 		[TearDown]
@@ -49,9 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             schema.LicenseOptions.ElementAt(1).Enabled = false;
             schema.EnabledLicenseSchema = DefinedLicenseSchemaCodes.TeleoptiWFMSchema;
             
-            var result = target.LicensedFunctions("for test");
+            var result = target.LicensedFunctions(tenantName);
             result.IsEmpty().Should().Be.False();
-
         }
 
 		[Test]
@@ -59,20 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		{
 			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
 			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.Current().Name, schema);
-			var mocks = new MockRepository();
-			var defRaptorAppFactory = mocks.DynamicMock<IDefinedRaptorApplicationFunctionFactory>();
-			target = new LicensedFunctionsProvider(defRaptorAppFactory);
 
-			using(mocks.Record())
-			{
-				Expect.Call(defRaptorAppFactory.ApplicationFunctions).Return(new IApplicationFunction[0]);
-			}
-			using(mocks.Playback())
-			{
-				var res1 = target.LicensedFunctions("for test");
-				var res2 = target.LicensedFunctions("for test");
-				res1.Should().Be.SameInstanceAs(res2);
-			}
+			var res1 = target.LicensedFunctions(tenantName);
+			var res2 = target.LicensedFunctions(tenantName);
+			res1.Should().Be.SameInstanceAs(res2);
 		}
 
 		[Test]
@@ -81,15 +65,15 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			schema = LicenseDataFactory.CreateBaseLicenseSchemaForTest();
 			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.Current().Name, schema);
 
-			var result = target.LicensedFunctions("for test");
+			var result = target.LicensedFunctions(tenantName);
 
 			var baseLicensedApplicationFunctions = 0;
 			var applicationFunctions = functionFactory.ApplicationFunctions.ToList();
 
-			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema("for test").EnabledLicenseOptions)
+			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions)
 			{
 				enabledLicenseOption.EnableApplicationFunctions(applicationFunctions);
-				baseLicensedApplicationFunctions += enabledLicenseOption.EnabledApplicationFunctions.Count();
+				baseLicensedApplicationFunctions += enabledLicenseOption.EnabledApplicationFunctions.Count;
 			}
 
 			result.Count().Should().Be.EqualTo(baseLicensedApplicationFunctions);
