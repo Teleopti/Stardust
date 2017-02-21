@@ -23,7 +23,7 @@
 
 		<div class="main-menu">
 			<h2 class="main-menu-ctrls">
-				<input type="checkbox" id="nav-left" ng-model="toggleLeftSide"/>
+				<input type="checkbox" id="nav-left" ng-init="toggleLeftSide = main.detectMobile()" ng-model="toggleLeftSide"/>
 				<label for="nav-left" class="pointer" id="main-menu-trigger">
 					<div tabindex=0 class="context-menu card-context">
 						<i class="mdi main-menu-trigger-icon" ng-class=" {'mdi-menu':!toggleLeftSide, 'mdi-backburger':toggleLeftSide}"></i>
