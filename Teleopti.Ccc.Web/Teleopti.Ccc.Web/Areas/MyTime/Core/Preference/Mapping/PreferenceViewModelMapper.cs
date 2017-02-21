@@ -84,7 +84,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						PrevPeriod = s.Period.StartDate.AddDays(-1).ToFixedClientDateOnlyFormat()
 					}
 				},
-				WeekDayHeaders = DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture).Select(h => new WeekDayHeader {Title = h}),
+				WeekDayHeaders = DateHelper.GetWeekPeriod(s.SelectedDate,CultureInfo.CurrentCulture).DayCollection().Select(d => new WeekDayHeader
+				{
+					Date = d,
+					Title = CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(d.Date.DayOfWeek)
+				}),											
 				Weeks = weeks(s),
 				PreferencePeriod = map(s.WorkflowControlSet),
 				ExtendedPreferencesPermission =
@@ -93,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				Options = new PreferenceOptionsViewModel(PreferenceOptions(s.SelectedDate), ActivityOptions()),
 				MaxMustHave = s.MaxMustHave,
 				CurrentMustHave = s.CurrentMustHave
-			};
+			};			
 		}
 
 		private PreferencePeriodViewModel map(IWorkflowControlSet s)

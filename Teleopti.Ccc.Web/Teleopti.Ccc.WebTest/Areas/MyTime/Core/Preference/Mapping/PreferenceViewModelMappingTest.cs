@@ -151,6 +151,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.WeekDayHeaders.Should().Have.Count.EqualTo(7);
 			result.WeekDayHeaders.Select(x => x.Title).Should().Have.SameSequenceAs(DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture));
+
+			foreach (var header in result.WeekDayHeaders)
+			{
+				header.Title.Should().Be.EqualTo(CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(header.Date.Date.DayOfWeek));
+			}
 		}
 
 		[Test]

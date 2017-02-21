@@ -347,6 +347,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		var dayViewModelsInPeriod = {};
 
+		$(".header-week-day")
+			.each(function(i, f) {
+				var s = $(f).data('date');
+				$(f).text(moment(s).format('dddd'));
+			});
+
 
 		$('li[data-mytime-week]').each(function (index, element) {
 			weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel(ajax);
@@ -365,7 +371,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			if ($('li[data-mytime-week]').length > 0) {
 				weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
 			}
-
 		});
 
 
@@ -387,7 +392,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement) {
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
-
 		}
 
 		loader = loader || function (call) { call(); };

@@ -200,7 +200,7 @@
 				}
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
-					<li>@weekDayName.Title</li>
+					<li class="header-week-day" data-date="@weekDayName.Date.Date.ToString("yyyy-MM-dd")"></li>
 				}
 			</ul>
 
