@@ -233,17 +233,22 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 				.SetParameter("id", id)
 				.UniqueResult<int>();
 
-			if (numberResources == 0)
-				PersistSkillCombinationResource(GetLastCalculatedTime(), new List<SkillCombinationResource>
-												{
-													new SkillCombinationResource
-													{
-														StartDateTime = skillCombinationResource.StartDateTime,
-														EndDateTime = skillCombinationResource.EndDateTime,
-														Resource = 0,
-														SkillCombination = skillCombinationResource.SkillCombination
-													}
-												});
+
+			if (numberResources != 0) return;
+
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+			var lastUpdated = GetLastCalculatedTime();
+			_currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
+							VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, :InsertedOn, :BusinessUnit)")
+				.SetParameter("SkillCombinationId", id)
+				.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
+				.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
+				.SetParameter("Resource", 0)
+				.SetParameter("InsertedOn", lastUpdated)
+				.SetParameter("BusinessUnit", bu)
+				.ExecuteUpdate();
 		}
 
 		public DateTime GetLastCalculatedTime()
