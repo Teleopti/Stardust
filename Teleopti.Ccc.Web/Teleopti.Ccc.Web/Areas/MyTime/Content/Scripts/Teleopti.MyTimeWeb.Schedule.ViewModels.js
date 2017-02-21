@@ -372,8 +372,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 					: "probability-none";
 			},
 			tooltips: function () {
-				return (self.userNowInMinute() >= 0 && self.userNowInMinute() < this.endInMinutes)
-					? this.actualTooltips
+				return (self.userNowInMinute() >= 0 && self.userNowInMinute() < intervalEndMinutes)
+					? tooltips
 					: "";
 			}
 		};
