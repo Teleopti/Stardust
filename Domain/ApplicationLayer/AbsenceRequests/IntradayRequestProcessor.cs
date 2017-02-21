@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
 					logger.Warn(Resources.DenyReasonTechnicalIssues + "Read model is not up to date");
-					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyReasonTechnicalIssues);
+					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 					return;
 				}
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (!combinationResources.Any())
 				{
 					logger.Warn(Resources.DenyReasonTechnicalIssues + " Can not find any skillcombinations.");
-					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyReasonTechnicalIssues);
+					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 					return;
 				}
 
@@ -81,7 +81,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						skillIds.Add(skillId);
 					}
 				}
-				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.Value)).Min(x => x.DefaultResolution);
+				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.GetValueOrDefault())).Min(x => x.DefaultResolution);
+
+				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+
+				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
+				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
 				var deltaResourcesForAgent = new List<SkillCombinationResource>();
 				foreach (var day in scheduleDays)
@@ -91,8 +97,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var layers = projection.ToResourceLayers(skillInterval);
 					if (!layers.Any())
 					{
+						if (!autoGrant) return;
 						logger.Info($"Absence request {personRequest.Id.GetValueOrDefault()} is approved as the agent is not scheduled.");
-						sendApproveCommand(personRequest.Id.GetValueOrDefault());
+						sendApproveCommand(personRequest);
 						return;
 					}
 
@@ -104,8 +111,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 
 				var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList());
-				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
-				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 
 				var staffingThresholdValidator = validators.OfType<StaffingThresholdValidator>().FirstOrDefault();
 				if (staffingThresholdValidator != null)
@@ -113,7 +118,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);
 					if (validatedRequest.IsValid)
 					{
-						var result = sendApproveCommand(personRequest.Id.GetValueOrDefault());
+						if (!autoGrant) return;
+						var result = sendApproveCommand(personRequest);
 						if (result)
 						{
 							foreach (var delta in deltaResourcesForAgent)
@@ -123,24 +129,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						}
 						else
 						{
-							sendDenyCommand(personRequest.Id.GetValueOrDefault(), validatedRequest.ValidationErrors);
+							sendDenyCommand(personRequest, validatedRequest.ValidationErrors);
 						}
 					}
 					else
 					{
-						sendDenyCommand(personRequest.Id.GetValueOrDefault(), validatedRequest.ValidationErrors);
+						sendDenyCommand(personRequest, validatedRequest.ValidationErrors);
 					}
 				}
 				else
 				{
 					logger.Error(Resources.DenyReasonTechnicalIssues + " Can not find any staffingThresholdValidator.");
-					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyReasonTechnicalIssues);
+					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 				}
 			}
 			catch (Exception exp)
 			{
 				logger.Error(Resources.DenyReasonTechnicalIssues + exp);
-				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyReasonTechnicalIssues);
+				sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 			}
 		}
 
@@ -166,11 +172,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return skillCombinationChange;
 		}
 
-		private bool sendDenyCommand(Guid personRequestId, string denyReason)
+		private bool sendDenyCommand(IPersonRequest personRequest, string denyReason)
 		{
 			var command = new DenyRequestCommand
 			{
-				PersonRequestId = personRequestId,
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				DenyReason = denyReason
 			};
 			_commandDispatcher.Execute(command);
@@ -183,11 +189,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return !command.ErrorMessages.Any();
 		}
 
-		private bool sendApproveCommand(Guid personRequestId)
+		private bool sendApproveCommand(IPersonRequest personRequest)
 		{
 			var command = new ApproveRequestCommand
 			{
-				PersonRequestId = personRequestId,
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				IsAutoGrant = true
 			};
 			_commandDispatcher.Execute(command);
