@@ -34,20 +34,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return _monthMapper.Map(domainData);
 		}
 
-		public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblity staffingPossiblity)
+		public WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblityType staffingPossiblityType)
 		{
 			var domainData = _weekScheduleDomainDataProvider.Get(dateOnly);
 			domainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
-			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblity, domainData);
+			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, domainData);
 			var weekScheduleViewModel = _weekMapper.Map(domainData);
-			setPossibilities(staffingPossiblity, weekScheduleViewModel);
+			setPossibilities(staffingPossiblityType, weekScheduleViewModel);
 			return weekScheduleViewModel;
 		}
 
-		private void adjustScheduleMinMaxTimeBySiteOpenHour(StaffingPossiblity staffingPossiblity,
+		private void adjustScheduleMinMaxTimeBySiteOpenHour(StaffingPossiblityType staffingPossiblityType,
 			WeekScheduleDomainData weekScheduleDomainData)
 		{
-			if (staffingPossiblity != StaffingPossiblity.Overtime)
+			if (staffingPossiblityType != StaffingPossiblityType.Overtime)
 				return;
 
 			var scheduleMinMaxTime = weekScheduleDomainData.MinMaxTime;
@@ -80,12 +80,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 		}
 
-		private void setPossibilities(StaffingPossiblity staffingPossiblity, WeekScheduleViewModel weekScheduleViewModel)
+		private void setPossibilities(StaffingPossiblityType staffingPossiblityType, WeekScheduleViewModel weekScheduleViewModel)
 		{
-			if (staffingPossiblity != StaffingPossiblity.None && containsIntradaySchedule(weekScheduleViewModel))
+			if (staffingPossiblityType != StaffingPossiblityType.None && containsIntradaySchedule(weekScheduleViewModel))
 			{
 				weekScheduleViewModel.Possibilities =
-					_staffingPossibilityViewModelFactory.CreateIntradayPeriodStaffingPossibilityViewModels(staffingPossiblity);
+					_staffingPossibilityViewModelFactory.CreateIntradayPeriodStaffingPossibilityViewModels(staffingPossiblityType);
 			}
 			else
 			{

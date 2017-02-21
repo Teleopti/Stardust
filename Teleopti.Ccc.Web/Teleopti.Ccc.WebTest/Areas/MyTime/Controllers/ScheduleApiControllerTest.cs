@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var now = MockRepository.GenerateMock<INow>();
 			now.Stub(x => x.UtcDateTime()).Return(new DateTime(2012, 8, 1));
 			var weekScheduleViewModel = new WeekScheduleViewModel();
-			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.LocalDateOnly(), StaffingPossiblity.None)).Return(weekScheduleViewModel);
+			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.LocalDateOnly(), StaffingPossiblityType.None)).Return(weekScheduleViewModel);
 
 			using (var target = new ScheduleApiController(viewModelFactory, now))
 			{
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				result.Should().Be.SameInstanceAs(monthScheduleViewModel);
 			}
 		}
+
 		[Test]
 		public void ShouldViewWeekScheduleForGivenDate()
 		{
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IScheduleViewModelFactory>();
 			var now = MockRepository.GenerateMock<INow>();
 			var weekScheduleViewModel = new WeekScheduleViewModel();
-			viewModelFactory.Stub(x => x.CreateWeekViewModel(date, StaffingPossiblity.None)).Return(weekScheduleViewModel);
+			viewModelFactory.Stub(x => x.CreateWeekViewModel(date, StaffingPossiblityType.None)).Return(weekScheduleViewModel);
 			using (var target = new ScheduleApiController(viewModelFactory, now))
 			{
 				var result = target.FetchData(date);

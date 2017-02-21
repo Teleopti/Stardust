@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public MutableNow Now;
 		public FakeUserCulture Culture;
 		public FakeUserTimeZone TimeZone;
-		
+
 		[Test]
 		public void ShouldMap()
 		{
-			var viewModel = Target.CreateWeekViewModel(new DateOnly(Now.UtcDateTime()), StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.None);
 
 			viewModel.Should().Not.Be.Null();
 		}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 08:00".Utc(), "2015-03-29 17:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment });
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("07:45");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("17:15");
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-28 07:45".Utc(), "2015-03-28 17:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment });
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("08:30");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("18:15");
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 07:45".Utc(), "2015-03-29 17:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment });
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("09:30");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("19:15");
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 04:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("00:45");
 			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("01:00");
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-10-25 00:00".Utc(), "2015-10-25 04:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("01:45");
 			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("02:00");
@@ -157,15 +157,13 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Now.Is("2015-03-29 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 			viewModel.BaseUtcOffsetInMinutes.Should().Be(-10 * 60);
 		}
-
 
 		[Test]
 		public void ShouldMapDaylightSavingTimeAdjustment()
 		{
-
 			Culture.IsSwedish();
 			TimeZone.IsSweden();
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
@@ -173,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Now.Is("2015-03-29 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 
 			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
 			viewModel.DaylightSavingTimeAdjustment.StartDateTime.Should().Be(new DateTime(2015, 3, 29, 1, 0, 0, DateTimeKind.Utc));
@@ -191,9 +189,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Now.Is("2015-03-29 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
 
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 			Assert.IsNull(viewModel.DaylightSavingTimeAdjustment);
-
 		}
 
 		[Test]
@@ -202,14 +199,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Culture.IsSwedish();
 			TimeZone.IsSweden();
 			var date = new DateOnly(2015, 07, 06);
-			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblity.None);
-
+			var viewModel = Target.CreateWeekViewModel(date, StaffingPossiblityType.None);
 
 			Assert.AreEqual("2015-07-06", viewModel.CurrentWeekStartDate);
 			Assert.AreEqual("2015-07-12", viewModel.CurrentWeekEndDate);
 		}
-
 	}
-
-
 }

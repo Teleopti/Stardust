@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Interfaces.Domain
 {
-	public enum StaffingPossiblity
+	public enum StaffingPossiblityType
 	{
 		None = 0,
 		Absence = 1,

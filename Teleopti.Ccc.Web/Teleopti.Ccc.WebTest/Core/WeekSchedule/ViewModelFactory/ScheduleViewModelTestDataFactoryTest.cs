@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		[Test]
 		public void ShouldCreateModelForWeekScheduleWithSevenDays()
 		{
-			var result = target.CreateWeekViewModel(DateOnly.Today, StaffingPossiblity.None);
+			var result = target.CreateWeekViewModel(DateOnly.Today, StaffingPossiblityType.None);
 
 			result.Days.Count().Should().Be.EqualTo(7);
 		}

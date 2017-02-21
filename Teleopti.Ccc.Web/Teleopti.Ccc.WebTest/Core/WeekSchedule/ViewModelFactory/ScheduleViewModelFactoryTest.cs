@@ -32,18 +32,18 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 					new HeaderViewModelFactory(), new ScheduleColorProvider(), new FakeLoggedOnUser(), new Now(), new SwedishCulture(),
 					new CommonViewModelMapper(), new OvertimeAvailabilityViewModelMapper(new SwedishCulture())),
 				weekScheduleDomainDataProvider, monthScheduleDomainDataProvider, new FakeLoggedOnUser(), null);
-			var domainData = new WeekScheduleDomainData {Date = DateOnly.Today};
-			
+			var domainData = new WeekScheduleDomainData { Date = DateOnly.Today };
+
 			weekScheduleDomainDataProvider.Stub(x => x.Get(DateOnly.Today)).Return(domainData);
 
-			target.CreateWeekViewModel(DateOnly.Today, StaffingPossiblity.None).Should().Not.Be.Null();
+			target.CreateWeekViewModel(DateOnly.Today, StaffingPossiblityType.None).Should().Not.Be.Null();
 		}
-		
+
 		[Test]
 		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriod()
 		{
 			var user = createUserWithSiteOpenHours(8, 17);
-			var result = createWeekViewModel(user, new TimePeriod(9, 10), StaffingPossiblity.Overtime);
+			var result = createWeekViewModel(user, new TimePeriod(9, 10), StaffingPossiblityType.Overtime);
 			assertTimeLine(result, "08:00", "17:00");
 		}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		public void ShouldNotAdjustTimelineForOverTimeWhenSchedulePeriodContainsSiteOpenHourPeriod()
 		{
 			var user = createUserWithSiteOpenHours(8, 17);
-			var result = createWeekViewModel(user, new TimePeriod(7, 18), StaffingPossiblity.Overtime);
+			var result = createWeekViewModel(user, new TimePeriod(7, 18), StaffingPossiblityType.Overtime);
 			assertTimeLine(result, "07:00", "18:00");
 		}
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		public void ShouldNotAdjustTimelineBySiteOpenHourWhenAskForAbsence()
 		{
 			var user = createUserWithSiteOpenHours(8, 17);
-			var result = createWeekViewModel(user, new TimePeriod(9, 10), StaffingPossiblity.Absence);
+			var result = createWeekViewModel(user, new TimePeriod(9, 10), StaffingPossiblityType.Absence);
 			assertTimeLine(result, "09:00", "10:00");
 		}
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		{
 			var user = new FakeLoggedOnUser();
 			user.SetFakeLoggedOnUser(createPerson());
-			var result = createWeekViewModel(user, new TimePeriod(9, 10), StaffingPossiblity.Overtime);
+			var result = createWeekViewModel(user, new TimePeriod(9, 10), StaffingPossiblityType.Overtime);
 			assertTimeLine(result, "09:00", "10:00");
 		}
 
@@ -84,11 +84,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 				Date = requestDate
 			};
 			var target = setupTarget(weekScheduleDomainData, user, requestDate);
-			var result = target.CreateWeekViewModel(requestDate, StaffingPossiblity.Absence);
+			var result = target.CreateWeekViewModel(requestDate, StaffingPossiblityType.Absence);
 			Assert.AreEqual(0, result.Possibilities.Count());
 		}
 
-		private WeekScheduleViewModel createWeekViewModel(ILoggedOnUser loggedOnUser, TimePeriod scheduleMinMaxTime, StaffingPossiblity staffingPossiblity)
+		private WeekScheduleViewModel createWeekViewModel(ILoggedOnUser loggedOnUser, TimePeriod scheduleMinMaxTime, StaffingPossiblityType staffingPossiblity)
 		{
 			var weekScheduleDomainData = new WeekScheduleDomainData
 			{
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			user.SetFakeLoggedOnUser(person);
 			return user;
 		}
-		
+
 		private static IPerson createPersonWithSiteOpenHours(int startHour, int endHour, bool isOpenHoursClosed = false)
 		{
 			var person = createPerson();
