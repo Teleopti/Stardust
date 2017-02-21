@@ -72,6 +72,17 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
+		public void ShouldNotCacheEmptyStaffingData()
+		{
+			_callStaffingViewModelCreatorTimes = 2;
+			setupTestDataForOneSkill(new double?[] {}, new double?[] {});
+			Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			Assert.AreEqual(0, possibilities.Count);
+			StaffingViewModelCreator.VerifyAllExpectations();
+		}
+
+		[Test]
 		public void ShouldGetPossibilitiesWhenCacheIsNoAvailable()
 		{
 			_callStaffingViewModelCreatorTimes = 2;
@@ -341,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			StaffingViewModelCreator.Stub(s => s.Load(new[] {skillId})).Return(new IntradayStaffingViewModel
 			{
-				StaffingHasData = true,
+				StaffingHasData = forecastedStaffing.Any(),
 				DataSeries = new StaffingDataSeries
 				{
 					ForecastedStaffing = forecastedStaffing,
