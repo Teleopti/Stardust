@@ -91,6 +91,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private static bool isCheckStaffingByIntraday(IWorkflowControlSet workflowControlSet,
 			TimeZoneInfo timeZone)
 		{
+			if (workflowControlSet?.AbsenceRequestOpenPeriods == null || !workflowControlSet.AbsenceRequestOpenPeriods.Any())
+			{
+				return false;
+			}
+
 			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.Now, timeZone));
 			var currentAbsenceOpenPeriod =
 				workflowControlSet.AbsenceRequestOpenPeriods.SingleOrDefault(p => p.OpenForRequestsPeriod.Contains(today));
