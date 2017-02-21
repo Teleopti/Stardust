@@ -544,22 +544,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonValidation.Checked = _validation;
 		}
 
+		[RemoveMeWithToggle("Remove inside !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadingLessSchedules_42639) ", Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
 		private void setHeaderText(DateOnly start, DateOnly end, DateOnly? outerStart, DateOnly? outerEnd)
 		{
-			CultureInfo currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			string startDate = start.Date.ToString("d", currentCultureInfo);
-			string endDate = end.Date.ToString("d", currentCultureInfo);
-			if (outerStart.HasValue && outerEnd.HasValue)
+			var currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var startDate = start.Date.ToString("d", currentCultureInfo);
+			var endDate = end.Date.ToString("d", currentCultureInfo);
+
+			if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadingLessSchedules_42639))
 			{
-				if(start.AddDays(-7) != outerStart || end.AddDays(14) != outerEnd)
+				if (outerStart.HasValue && outerEnd.HasValue)
 				{
-					startDate = start.Date.ToString("d", currentCultureInfo) + "-" + end.Date.ToString("d", currentCultureInfo);
-					endDate = "(" + outerStart.Value.Date.ToString("d", currentCultureInfo) + "-" + outerEnd.Value.Date.ToString("d", currentCultureInfo) + ")";			
+					if (start.AddDays(-7) != outerStart || end.AddDays(14) != outerEnd)
+					{
+						startDate = start.Date.ToString("d", currentCultureInfo) + "-" + end.Date.ToString("d", currentCultureInfo);
+						endDate = "(" + outerStart.Value.Date.ToString("d", currentCultureInfo) + "-" +
+								  outerEnd.Value.Date.ToString("d", currentCultureInfo) + ")";
+					}
 				}
 			}
-			
-			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon,
-				Resources.Schedules, startDate, endDate, _scenario.Description.Name);
+
+			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon, Resources.Schedules, startDate, endDate, _scenario.Description.Name);
 		}
 
 		private void _schedulerMeetingHelper_ModificationOccured(object sender, ModifyMeetingEventArgs e)
