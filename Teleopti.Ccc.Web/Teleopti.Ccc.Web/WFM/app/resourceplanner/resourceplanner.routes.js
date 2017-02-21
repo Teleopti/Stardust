@@ -11,7 +11,8 @@
 			templateUrl: 'app/resourceplanner/resourceplanner.html'
 		}).state('resourceplanner.overview', {
 			templateUrl: 'app/resourceplanner/planningperiods-overview.html',
-			controller: 'ResourcePlannerCtrl'
+			controller: 'ResourcePlannerCtrl',
+			url: '/planningperiods'
 		}).state('resourceplanner.filter', {
 			params: {
 				filterId: {},
