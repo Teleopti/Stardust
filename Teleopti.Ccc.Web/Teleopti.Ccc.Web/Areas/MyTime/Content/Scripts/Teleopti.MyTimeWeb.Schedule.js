@@ -504,7 +504,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		var days = vm.days();
 		for (var i = 0; i < days.length; i++) {
-			days[i].userNowInMinute(clientNowMinutes);
+			var day = days[i];
+			var isToday = moment(day.FixedDate).isSame(moment(), "day");
+			if (isToday) {
+				day.userNowInMinute(clientNowMinutes);
+			}
 		}
 	}
 
