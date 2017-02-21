@@ -25,21 +25,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_planningPeriodRepository = planningPeriodRepository;
 		}
 
-		[ImpersonateSystem]
-		[UnitOfWork]
+		[AsSystem]
 		public virtual void Handle(WebOptimizationStardustEvent @event)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webOptimizationJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
 			try
 			{
 				var result = _scheduleOptimization.Execute(@event.PlanningPeriodId);
-				webOptimizationJobResult.AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
+				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 			}
 			catch (Exception e)
 			{
-				webOptimizationJobResult.AddDetail(new JobResultDetail(DetailLevel.Error, null, DateTime.UtcNow, e));
+				SaveDetailToJobResult(@event, DetailLevel.Error, null, e);
 			}
+		}
+
+		[UnitOfWork]
+		protected virtual void SaveDetailToJobResult(WebOptimizationStardustEvent @event, DetailLevel level, string message, Exception exception)
+		{
+			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
+			var webOptimizationJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
+			webOptimizationJobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
 		}
 	}
 }

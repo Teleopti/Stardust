@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				PlanningPeriodId = id,
 				JobResultId = jobResult.Id.Value
 			});
-			return Ok(jobResult);
+			return Ok();
 		}
 	}
 }

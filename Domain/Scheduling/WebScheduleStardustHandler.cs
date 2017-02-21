@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -13,9 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class WebScheduleStardustHandler :
-		IHandleEvent<WebScheduleStardustEvent>,
-		IRunOnStardust
+	public class WebScheduleStardustHandler : IHandleEvent<WebScheduleStardustEvent>, IRunOnStardust
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IAgentGroupStaffLoader _agentGroupStaffLoader;
@@ -32,32 +31,53 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_jobResultRepository = jobResultRepository;
 		}
 
-		[ImpersonateSystem]
-		[UnitOfWork]
+		[AsSystem]
 		public virtual void Handle(WebScheduleStardustEvent @event)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
 			try
 			{
-				var period = planningPeriod.Range;
-				var people = _agentGroupStaffLoader.Load(period, planningPeriod.AgentGroup);
-				var result = _fullScheduling.DoScheduling(period, people.AllPeople.Select(x => x.Id.Value));
-				webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
-
-				var jobResult = new JobResult(JobCategory.WebOptimization, webScheduleJobResult.Period, webScheduleJobResult.Owner, DateTime.UtcNow);
-				_jobResultRepository.Add(jobResult);
-				planningPeriod.JobResults.Add(jobResult);
+				var tuple = GetScheduleInfo(@event.PlanningPeriodId);
+				var result = _fullScheduling.DoScheduling(tuple.Item1, tuple.Item2);
+				var jobResultId = SaveJobResult(@event, result);
 				_eventPublisher.Publish(new WebOptimizationStardustEvent(@event)
 				{
-					JobResultId = jobResult.Id.Value
+					JobResultId = jobResultId
 				});
 			}
 			catch (Exception e)
 			{
-				webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Error, null, DateTime.UtcNow, e));
+				SaveExceptionDetailToJobResult(@event, DetailLevel.Error, null, e);
 			}
 		}
-	}
 
+		[UnitOfWork]
+		protected virtual Tuple<DateOnlyPeriod, IList<Guid>> GetScheduleInfo(Guid planningPeriodId)
+		{
+			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
+			var period = planningPeriod.Range;
+			var people = _agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup);
+			var peopleIds = people.AllPeople.Select(x => x.Id.Value).ToList();
+			return new Tuple<DateOnlyPeriod, IList<Guid>>(period, peopleIds);
+		}
+
+		[UnitOfWork]
+		protected virtual Guid SaveJobResult(WebScheduleStardustEvent @event, SchedulingResultModel result)
+		{
+			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
+			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
+			webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
+			var jobResult = new JobResult(JobCategory.WebOptimization, webScheduleJobResult.Period, webScheduleJobResult.Owner, DateTime.UtcNow);
+			_jobResultRepository.Add(jobResult);
+			planningPeriod.JobResults.Add(jobResult);
+			return jobResult.Id.Value;
+		}
+
+		[UnitOfWork]
+		protected virtual void SaveExceptionDetailToJobResult(WebScheduleStardustEvent @event, DetailLevel level, string message, Exception exception)
+		{
+			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
+			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
+			webScheduleJobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
+		}
+	}
 }
