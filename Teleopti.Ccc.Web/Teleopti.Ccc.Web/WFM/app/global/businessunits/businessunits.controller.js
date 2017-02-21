@@ -10,9 +10,14 @@
     function BusinessUnitsController($filter,  $window, BusinessUnitsService) {
         var vm = this;
 				vm.show = false;
+        vm.buMenu = false;
 				vm.data = {
 					selectedBu: null
 				};
+
+        vm.toggleBuMenu = function () {
+          vm.buMenu = !vm.buMenu;
+        }
 
 				vm.changeBusinessUnit = function (selectedBu) {
 					BusinessUnitsService.setBusinessUnit(selectedBu.Id);

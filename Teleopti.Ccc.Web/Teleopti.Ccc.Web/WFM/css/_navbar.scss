@@ -5,7 +5,7 @@
 		z-index: 99999;
 		top:-10px;
 		left: -3px;
-		color:$white;
+		color:$text-color-standard;
 
 		input{
 			display: none;
@@ -69,6 +69,12 @@
 
 .businessunit-menu-icon{
 	vertical-align: middle!important;
+	color:$text-color-standard;
+}
+
+.show-businessunit-menu{
+	opacity: 1!important;
+	visibility: visible!important;
 }
 
 // mobile media query
