@@ -217,37 +217,33 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 		{
 			var skillCombinations = loadSkillCombination();
 			Guid id;
-			if (skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id))
-			{
-				_currentUnitOfWork.Current().Session()
-					.CreateSQLQuery("INSERT INTO [ReadModel].[SkillCombinationResourceDelta] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn, DeltaResource) VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :TimeStamp, :DeltaResource)")
-					.SetParameter("SkillCombinationId", id)
-					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
-					.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
-					.SetParameter("TimeStamp", DateTime.UtcNow)
-					.SetParameter("DeltaResource", skillCombinationResource.Resource)
-					.ExecuteUpdate();
+			if (!skillCombinations.TryGetValue(keyFor(skillCombinationResource.SkillCombination), out id)) return;
 
-				_currentUnitOfWork.Current().PersistAll();
+			_currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"INSERT INTO [ReadModel].[SkillCombinationResourceDelta] (SkillCombinationId, StartDateTime, EndDateTime, InsertedOn, DeltaResource)
+									VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, GETUTCDATE(), :DeltaResource)")
+				.SetParameter("SkillCombinationId", id)
+				.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
+				.SetParameter("EndDateTime", skillCombinationResource.EndDateTime)
+				.SetParameter("DeltaResource", skillCombinationResource.Resource)
+				.ExecuteUpdate();
 
-				var numberResources = _currentUnitOfWork.Current().Session().CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
-					.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
-					.SetParameter("id", id)
-					.UniqueResult<int>();
+			var numberResources = _currentUnitOfWork.Current().Session().CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
+				.SetParameter("StartDateTime", skillCombinationResource.StartDateTime)
+				.SetParameter("id", id)
+				.UniqueResult<int>();
 
-				if (numberResources == 0)
-					PersistSkillCombinationResource(GetLastCalculatedTime(), new List<SkillCombinationResource>
+			if (numberResources == 0)
+				PersistSkillCombinationResource(GetLastCalculatedTime(), new List<SkillCombinationResource>
+												{
+													new SkillCombinationResource
 													{
-														new SkillCombinationResource
-														{
-															StartDateTime = skillCombinationResource.StartDateTime,
-															EndDateTime = skillCombinationResource.EndDateTime,
-															Resource = 0,
-															SkillCombination = skillCombinationResource.SkillCombination
-														}
-													});
-
-			}
+														StartDateTime = skillCombinationResource.StartDateTime,
+														EndDateTime = skillCombinationResource.EndDateTime,
+														Resource = 0,
+														SkillCombination = skillCombinationResource.SkillCombination
+													}
+												});
 		}
 
 		public DateTime GetLastCalculatedTime()
