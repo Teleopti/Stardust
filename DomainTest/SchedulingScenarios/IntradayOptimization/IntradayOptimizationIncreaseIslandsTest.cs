@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Islands;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -25,14 +21,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationIncreaseIslandsTest : ISetup
+	public class IntradayOptimizationIncreaseIslandsTest
 	{
 		public IntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
+		public FakeSkillDayRepository SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
 
@@ -61,23 +57,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			PersonAssignmentRepository.Has(agentA, scenario, activityAB, shiftCategory, date, new TimePeriod(8, 15, 16, 15));
 			PersonAssignmentRepository.Has(agentABC, scenario, activityAB, shiftCategory, date, new TimePeriod(8, 15, 16, 15));
-			SkillDayRepository.Has(new List<Func<ISkillDay>>
-			{
-				() => skillA.CreateSkillDayWithDemand(scenario, date, 100),
-				() => skillB.CreateSkillDayWithDemand(scenario, date, 1),
-				() => skillC.CreateSkillDayWithDemand(scenario, date, 10)
-			});
+			SkillDayRepository.Has(
+				skillA.CreateSkillDayWithDemand(scenario, date, 100),
+				skillB.CreateSkillDayWithDemand(scenario, date, 1),
+				skillC.CreateSkillDayWithDemand(scenario, date, 10));
 
 			Target.Execute(planningPeriod.Id.Value);
 
 			var shiftLayer = PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single();
 			shiftLayer.Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(8));
 			shiftLayer.Payload.Should().Be.EqualTo(activityC);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<FakeSkillDayRepositorySimulateNewUnitOfWork>().For<ISkillDayRepository>();
 		}
 	}
 }

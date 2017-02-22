@@ -126,18 +126,6 @@ namespace Teleopti.Ccc.TestCommon
 				.ToList();
 		}
 
-		public static Func<ISkillDay> CreateSkillDayWithDemandFactory(this ISkill skill, IScenario scenario, DateOnly date, TimeSpan demand)
-		{
-			return () => CreateSkillDayWithDemand(skill, scenario, date, demand);
-		}
-
-		public static IList<Func<ISkillDay>> CreateSkillDayWithDemandFactory(this ISkill skill, IScenario scenario, DateOnlyPeriod period, TimeSpan demand)
-		{
-			return period.DayCollection()
-				.Select(day => CreateSkillDayWithDemandFactory(skill, scenario, day, demand))
-				.ToList();
-		}
-
 		public static IList<ISkillDay> CreateSkillDaysWithDemandOnConsecutiveDays(this ISkill skill, IScenario scenario, DateOnly startDate, params double[] numberOfAgentsPerIntervalDemand)
 		{
 			var skillDays = Enumerable.Range(0, numberOfAgentsPerIntervalDemand.Length).Select(day =>
