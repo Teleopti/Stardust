@@ -8,7 +8,6 @@
 	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.permissionsReady = false;
-		vm.toggleSearchFocus = false;
 
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.paging = {
@@ -61,8 +60,7 @@
 
 		vm.changeSelectedTeams = function (teams) {
 			internalSelectedTeamIds = teams;
-			vm.focusSearch();
-			vm.activeSearchIcon();
+			vm.agentSearchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 		};
@@ -75,31 +73,7 @@
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 
 			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:currentFavorite.TeamIds,agentSearchTerm:currentFavorite.SearchTerm});
-			vm.resetSearchStatus();
-		};
-
-		vm.resetFocusSearch = function(){
-			vm.toggleSearchFocus = false;
-		};
-
-		vm.resetSearchStatus = function(){
-			vm.resetFocusSearch();
-			vm.deactiveSearchIcon();
-		};
-
-		vm.focusSearch = function(){
-			vm.toggleSearchFocus = true;
-		};
-
-		vm.activeSearchIcon = function($event){
-			vm.activeSearchIconColor = true;
-			if($event && $event.which == 13)
-				vm.deactiveSearchIcon();
-			setSearchFilter();
-		};
-
-		vm.deactiveSearchIcon = function(){
-			vm.activeSearchIconColor = false;
+			vm.agentSearchOptions.focusingSearch = false;
 		};
 
 		vm.getSearch = function () {
@@ -112,7 +86,7 @@
 		vm.keyDownOnSearchTermChanged = function() {
 			setSearchFilter();
 			vm.selectedFavorite = false;
-			vm.resetSearchStatus();
+			vm.agentSearchOptions.focusingSearch = false;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 
@@ -172,6 +146,7 @@
 				keyword: "",
 				isAdvancedSearchEnabled: true,
 				searchKeywordChanged: false,
+				focusingSearch: false,
 				searchFields: [
 					'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
 					'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
@@ -297,7 +272,7 @@
 				}
 
 				requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-				vm.resetSearchStatus();
+				vm.agentSearchOptions.focusingSearch = false;
 			});
 		});
 	}

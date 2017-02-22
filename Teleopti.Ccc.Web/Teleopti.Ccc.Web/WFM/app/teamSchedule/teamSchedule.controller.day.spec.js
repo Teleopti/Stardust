@@ -121,44 +121,45 @@ describe("teamschedule controller tests", function() {
 	it("should active search status after selected teams changed", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 
-		controller.activeSearchIconColor = false;
-		controller.focusToSearch = false;
+		controller.searchOptions = {
+			focusingSearch: false
+		};
 
 		controller.onSelectedTeamsChanged(['empty Team']);
 
-		expect(controller.activeSearchIconColor).toEqual(true);
-		expect(controller.focusToSearch).toEqual(true);
+		expect(controller.searchOptions.focusingSearch).toEqual(true);
 	});
 
 	it("should deactive search status after selected date changed", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 
-		controller.activeSearchIconColor = true;
-		controller.focusToSearch = true;
+		controller.searchOptions = {
+			focusingSearch: true
+		};
 
 		controller.onScheduleDateChanged();
 
-		expect(controller.activeSearchIconColor).toEqual(false);
-		expect(controller.focusToSearch).toEqual(false);
+		expect(controller.searchOptions.focusingSearch).toEqual(false);
 	});
 
 	it("should deactive search status after search text changed", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 
-		controller.activeSearchIconColor = true;
-		controller.focusToSearch = true;
+		controller.searchOptions = {
+			focusingSearch: true
+		};
 
 		controller.onKeyWordInSearchInputChanged();
 
-		expect(controller.activeSearchIconColor).toEqual(false);
-		expect(controller.focusToSearch).toEqual(false);
+		expect(controller.searchOptions.focusingSearch).toEqual(false);
 	});
 
 	it("should deactive search status after selected favorite changed", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 
-		controller.activeSearchIconColor = true;
-		controller.focusToSearch = true;
+		controller.searchOptions = {
+			focusingSearch: true
+		};
 
 		controller.applyFavorite({
 			Name: 'fakeFavorite',
@@ -166,8 +167,7 @@ describe("teamschedule controller tests", function() {
 			TeamIds: ['fakeTeam1Id']
 		});
 
-		expect(controller.activeSearchIconColor).toEqual(false);
-		expect(controller.focusToSearch).toEqual(false);
+		expect(controller.searchOptions.focusingSearch).toEqual(false);
 	});
 
 	function setUpController($controller) {

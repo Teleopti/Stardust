@@ -41,6 +41,7 @@ describe('RequestsControllerTests', function () {
 
 	function setUpTarget() {
 		var scope = $rootScope.$new();
+
 		var target = $controller('RequestsCtrl', {
 			$scope: scope
 		});		
@@ -107,13 +108,13 @@ describe('RequestsControllerTests', function () {
 	it('should active search status after selected teams changed', function(){
 		var target = setUpTarget().target;
 
-		target.toggleSearchFocus = false;
-		target.activeSearchIconColor = false;
+		target.agentSearchOptions = {
+			focusingSearch: false
+		};
 
 		target.changeSelectedTeams(['fakeTeamId']);
 
-		expect(target.toggleSearchFocus).toEqual(true);
-		expect(target.activeSearchIconColor).toEqual(true);
+		expect(target.agentSearchOptions.focusingSearch).toEqual(true);
 	});
 
 	it('should deactive search status after applying favorite', function(){
@@ -123,13 +124,12 @@ describe('RequestsControllerTests', function () {
 				keyword: "",
 				isAdvancedSearchEnabled: true,
 				searchKeywordChanged: false,
+				focusingSearch: true,
 				searchFields: [
 					'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
 					'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 				]
 			};
-		target.toggleSearchFocus = true;
-		target.activeSearchIconColor = true;
 
 		target.applyFavorite({
 			Name: 'fakeFavorite',
@@ -137,28 +137,28 @@ describe('RequestsControllerTests', function () {
 			TeamIds: ['fakeTeam1Id']
 		});
 
-		expect(target.toggleSearchFocus).toEqual(false);
-		expect(target.activeSearchIconColor).toEqual(false);
+		expect(target.agentSearchOptions.focusingSearch).toEqual(false);
 	});
 
 	it('should deactive search status after search term changed and enter pressed', function(){
 		var target = setUpTarget().target;
 
-		target.toggleSearchFocus = true;
-		target.activeSearchIconColor = true;
+		target.agentSearchOptions = {
+			focusingSearch: true
+		};
 
 		target.keyDownOnSearchTermChanged();
 
-		expect(target.toggleSearchFocus).toEqual(false);
-		expect(target.activeSearchIconColor).toEqual(false);
+		expect(target.agentSearchOptions.focusingSearch).toEqual(false);
 	});
 
 	it('should deactive search status after period changed', function(){
 		var test = setUpTarget();
 		var target = test.target;
 
-		target.toggleSearchFocus = true;
-		target.activeSearchIconColor = true;
+		target.agentSearchOptions = {
+			focusingSearch: true
+		};
 
 		target.period = {
 			startDate: moment().startOf('week')._d,
@@ -167,8 +167,7 @@ describe('RequestsControllerTests', function () {
 
 		test.scope.$digest();
 
-		expect(target.toggleSearchFocus).toEqual(false);
-		expect(target.activeSearchIconColor).toEqual(false);
+		expect(target.agentSearchOptions.focusingSearch).toEqual(false);
 	});
 
 	it('should clear the selection after selected period changed', function(){
@@ -190,6 +189,10 @@ describe('RequestsControllerTests', function () {
 	it('should clear the selection after search term changed and enter press', function(){
 		var target = setUpTarget().target;
 
+		target.agentSearchOptions = {
+			focusingSearch: false
+		};
+
 		requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
 		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
 
@@ -199,6 +202,10 @@ describe('RequestsControllerTests', function () {
 
 	it('should clear the selection after selected teams changed', function(){
 		var target = setUpTarget().target;
+
+		target.agentSearchOptions = {
+			focusingSearch: false
+		};
 
 		requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
 		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);

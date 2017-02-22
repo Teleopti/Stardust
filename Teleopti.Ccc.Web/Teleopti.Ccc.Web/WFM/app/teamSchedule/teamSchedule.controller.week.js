@@ -10,6 +10,7 @@
 		vm.searchOptions = {
 			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
 			searchKeywordChanged: false,
+			focusingSearch: false,
 			searchFields : [
 				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
@@ -35,29 +36,6 @@
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.resetSchedulePage();
 			});
-		};
-
-		vm.resetFocusSearch = function(){
-			vm.focusToSearch = false;
-		};
-
-		vm.resetSearchStatus = function(){
-			vm.resetFocusSearch();
-			vm.deactiveSearchIcon();
-		};
-
-		vm.focusSearch = function(){
-			vm.focusToSearch = true;
-		};
-
-		vm.activeSearchIcon = function($event){
-			vm.activeSearchIconColor = true;
-			if($event && $event.which == 13)
-				vm.deactiveSearchIcon();
-		};
-
-		vm.deactiveSearchIcon = function(){
-			vm.activeSearchIconColor = false;
 		};
 
 		vm.resetSchedulePage = function () {
@@ -92,14 +70,13 @@
 			}).catch(function() {
 				vm.isLoading = false;
 			});
-			vm.resetSearchStatus();
+			vm.searchOptions.focusingSearch = false;
 		};
 
 		vm.onSelectedTeamsChanged = function(teams) {
 			vm.selectedTeamIds = teams;
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
-			vm.focusSearch();
-			vm.activeSearchIcon();
+			vm.searchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
 		};
 

@@ -4,10 +4,6 @@
 }
 
 .wfm-requests {
-    //Temp fix:remove this when styleguide updated wfm-multiple-search-input
-    wfm-multiple-search-input i.mdi-magnify {
-        display: none;
-    }
 	.request-footer{
 		height:35px;
 		.pagination{
@@ -186,6 +182,25 @@
 
             wfm-multiple-search-input {
                 margin: 0;
+
+                .full-padding {
+                    width: 50%;
+                }
+
+                .advanced-input-dropdown {
+                    top: 28px;
+                    left: 17px;
+                    width: 321px;
+                }
+
+                .advanced-input {
+                    width: 316px;
+                    vertical-align: top;
+                }
+
+                .expand-advanced-input {
+                    max-width: 100%;
+                }
             }
 
     		.focusing-search {
@@ -575,29 +590,6 @@
     .request-broken-rules .ui-grid-cell-contents {
         white-space: normal;
         word-wrap: break-word;
-    }
-
-    wfm-multiple-search-input {
-        vertical-align: top;
-        margin-top: 15px;
-
-        .full-padding {
-            width: 50%;
-        }
-
-        .advanced-input-dropdown {
-            top: 28px;
-            left: 17px;
-            width: 321px;
-        }
-
-        .advanced-input {
-            width: 316px;
-        }
-
-        .expand-advanced-input {
-            max-width: 100%;
-        }
     }
 
     working-hours-picker {

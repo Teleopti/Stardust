@@ -25,7 +25,6 @@
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
-		vm.focusToSearch = false;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
@@ -163,29 +162,6 @@
 			vm.resetSchedulePage();
 		};
 
-		vm.resetFocusSearch = function(){
-			vm.focusToSearch = false;
-		};
-
-		vm.resetSearchStatus = function(){
-			vm.resetFocusSearch();
-			vm.deactiveSearchIcon();
-		};
-
-		vm.focusSearch = function(){
-			vm.focusToSearch = true;
-		};
-
-		vm.activeSearchIcon = function($event){
-			vm.activeSearchIconColor = true;
-			if($event && $event.which == 13)
-				vm.deactiveSearchIcon();
-		};
-
-		vm.deactiveSearchIcon = function(){
-			vm.activeSearchIconColor = false;
-		};
-
 		vm.resetSchedulePage = function () {
 			vm.paginationOptions.pageNumber = 1;
 			vm.hasSelectedAllPeopleInEveryPage = false;
@@ -280,7 +256,7 @@
 					vm.isLoading = false;
 				});
 			}
-			vm.resetSearchStatus();
+			vm.searchOptions.focusingSearch = false;
 		};
 
 		vm.toggleShowAbsenceOnly = function () {
@@ -347,7 +323,8 @@
 		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
 		vm.searchOptions = {
 			keyword: $stateParams.keyword || '',
-			searchKeywordChanged: false
+			searchKeywordChanged: false,
+			focusingSearch: false
 		};
 		vm.selectedFavorite = $stateParams.do? $stateParams.selectedFavorite: null;
 	
@@ -367,8 +344,7 @@
 			vm.selectedTeamIds = teams;
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			personSelectionSvc.clearPersonInfo();
-			vm.focusSearch();
-			vm.activeSearchIcon();
+			vm.searchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
 		};
 
