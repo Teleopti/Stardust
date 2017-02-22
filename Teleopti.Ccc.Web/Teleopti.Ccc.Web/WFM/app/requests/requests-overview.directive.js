@@ -26,11 +26,7 @@
 
 		vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
 		vm.init = init;
-		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
 		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
-
-		getSelectedRequestsInfoText();
-
 
 		function init() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
@@ -50,26 +46,6 @@
 
 		function forceRequestsReloadWithSelection() {
 			$scope.$broadcast('reload.requests.with.selection');
-		}
-
-
-		function getSelectedRequestsInfoText() {
-			$translate("SelectedRequestsInfo").then(function (text) {
-				vm.selectedRequestsInfoText = text;
-			});
-		}
-
-		function showSelectedRequestsInfo() {
-
-			vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(vm.shiftTradeView).length;
-			if (vm.selectedRequestsCount > 0 && vm.selectedRequestsInfoText) {
-				return vm.selectedRequestsInfoText.replace(/\{0\}|\{1\}/gi, function(target) {
-					if (target == '{0}') return vm.selectedRequestsCount;
-					if (target == '{1}') return vm.paging.totalRequestsCount;
-				});
-			} else {
-				return '';
-			}
 		}
 
 		function getRequests(requestsFilter, sortingOrders, paging) {

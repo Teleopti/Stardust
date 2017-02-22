@@ -1,19 +1,19 @@
 ﻿(function () {
-
 	'use strict';
-
 	angular.module('wfm.requests')
 		.controller('requestsFooterCtrl', requestsFooterController)
 		.directive('requestsFooter', requestsFooterDirective);
 
-	requestsFooterController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestCommandParamsHolder", "$translate"];
+	requestsFooterController.$inject = ['$scope', 'requestsDataService', "Toggle", "requestCommandParamsHolder", "$translate"];
 
-	function requestsFooterController($scope, $attrs, requestsDataService, toggleService, requestCommandParamsHolder, $translate) {
+	function requestsFooterController($scope, requestsDataService, toggleService, requestCommandParamsHolder, $translate) {
 		var vm = this;
 		vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
 		vm.isUsingRequestSubmitterTimeZone = true;
+		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
+		getSelectedRequestsInfoText();
 		
 		function onPageSizeChanges() {
 			vm.paging.totalPages = Math.ceil(vm.paging.totalRequestsCount / vm.paging.pageSize);
@@ -22,6 +22,24 @@
 
 		function forceRequestsReloadWithSelection(data) {
 			vm.paging.pageNumber = data;
+		}
+
+		function getSelectedRequestsInfoText() {
+			$translate("SelectedRequestsInfo").then(function (text) {
+				vm.selectedRequestsInfoText = text;
+			});
+		}
+
+		function showSelectedRequestsInfo() {
+			vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive).length;
+			if (vm.selectedRequestsCount > 0 && vm.selectedRequestsInfoText) {
+				return vm.selectedRequestsInfoText.replace(/\{0\}|\{1\}/gi, function (target) {
+					if (target == '{0}') return vm.selectedRequestsCount;
+					if (target == '{1}') return vm.paging.totalRequestsCount;
+				});
+			} else {
+				return '';
+			}
 		}
 	}
 
@@ -43,8 +61,6 @@
 		};
 
 		function postlink(scope, elem, attrs, ctrl) {
-			var vm = scope.requestsOverview;
-
 		}
 	}
 })();

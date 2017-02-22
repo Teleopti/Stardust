@@ -4,19 +4,19 @@
 }
 
 .wfm-requests {
-    background-color: #fff;
-    border-right: 1px solid #fff;
-    overflow: hidden;
-    padding: 0;
-    padding-bottom: 0;
-    margin-bottom: 0;
-
     //Temp fix:remove this when styleguide updated wfm-multiple-search-input
     wfm-multiple-search-input i.mdi-magnify {
         display: none;
     }
 	.request-footer{
 		height:35px;
+		.pagination{
+			margin:inherit !important;
+		}
+	}
+	.total-requests-count{
+		margin-right: 40px;
+		margin-top: 5px;
 	}
 	.m-t-5{
 		margin-top:5px;
@@ -253,25 +253,6 @@
     .request-header-full-height {
         height: 60px;
     }
-
-    .paging {wfm
-        .total-requests-count {
-            margin-top: 5px;
-            margin-right: 20px;
-        }
-
-        .page-size-selector {
-            margin-top: -2px;
-            margin-right: 10px;
-        }
-
-        .pagination {
-            margin-top: 0;
-            margin-bottom: 0;
-            margin-left: 20px;
-        }
-    }
-
     requests-overview[shift-trade-view] .paging {
         position: relative;
         top: 8px;
