@@ -13,13 +13,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class RequestModuleTest
 	{
-		[Test]
-		public void ShouldResolveNewAbsenceRequestHandler()
-		{
-			var builder = buildContainer();
-			builder.Resolve<IHandleEvent<NewAbsenceRequestCreatedEvent>>().Should().Not.Be.Null();
-		}
-
+		
 		[Test]
 		public void ShouldResolveRunRequestWaitlistStartdustHandler()
 		{
