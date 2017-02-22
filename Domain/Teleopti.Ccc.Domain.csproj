@@ -187,7 +187,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsWithDifferentVersion.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IApproveRequestsWithValidatorsEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IIntradayRequestProcessor.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\INewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
@@ -420,7 +419,6 @@
     <Compile Include="ApplicationLayer\Payroll\RunPayrollExportEvent.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IErrorAttachedCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandHandler.cs" />
@@ -438,7 +436,6 @@
     <Compile Include="ApplicationLayer\Events\NewAbsenceReportCreatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PreferenceChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAssignmentLayerRemovedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\NewAbsenceRequestCreatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadsEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkill.cs" />
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkillCollectionEvent.cs" />

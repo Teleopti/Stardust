@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 	public class LegacyMessageTransformer :
 		ConsumerOf<ScheduleChanged>,
 		ConsumerOf<DenormalizeScheduleProjection>,
-		ConsumerOf<NewAbsenceRequestCreated>,
 		ConsumerOf<GroupPageChangedMessage>,
 		ConsumerOf<PersonPeriodChangedMessage>,
 		ConsumerOf<PersonChangedMessage>, 
@@ -60,20 +59,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				StartDateTime = message.StartDateTime,
 				EndDateTime = message.EndDateTime,
 				Timestamp = message.Timestamp
-			});
-		}
-
-		public void Consume(NewAbsenceRequestCreated message)
-		{
-			_publisher.Publish(new NewAbsenceRequestCreatedEvent
-			{
-				InitiatorId = message.InitiatorId,
-				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
-				LogOnDatasource = message.LogOnDatasource,
-				PersonRequestId = message.PersonRequestId,
-				Timestamp = message.Timestamp,
-				JobName = "Absence Request",
-				UserName = message.InitiatorId.ToString()
 			});
 		}
 

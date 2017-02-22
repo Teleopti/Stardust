@@ -153,13 +153,6 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         PersonRequestDto SavePersonRequest(PersonRequestDto personRequestDto);
 
         /// <summary>
-        /// Saves the absence request.
-        /// </summary>
-        /// <param name="personRequestDto">The person request.</param>
-        [OperationContract, FaultContract(typeof(FaultException))]
-        void SavePersonAbsenceRequest(PersonRequestDto personRequestDto);
-
-        /// <summary>
         /// Gets all requests for the given person.
         /// </summary>
         /// <param name="person">The person.</param>

@@ -176,7 +176,6 @@
     <Compile Include="CommandHandler\QuickForecastCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\RecalculateForecastOnSkillCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandlerTest.cs" />
-    <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandlerTest.cs" />
     <Compile Include="MultiTenancy\TenantPeopleSaverTest.cs" />

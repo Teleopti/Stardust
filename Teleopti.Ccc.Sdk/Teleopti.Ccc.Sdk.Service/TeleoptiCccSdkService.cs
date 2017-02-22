@@ -1370,16 +1370,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		}
 
 		/// <summary>
-		/// Saves the person absence request.
-		/// </summary>
-		/// <param name="personRequestDto">The person request dto.</param>
-		public void SavePersonAbsenceRequest(PersonRequestDto personRequestDto)
-		{
-			var command = new SavePersonAbsenceRequestCommandDto { PersonRequestDto = personRequestDto };
-			ExecuteCommand(command);
-		}
-
-		/// <summary>
 		/// Creates a new shift trade request data transfer object.
 		/// The request must be persisted using SavePersonRequest.
 		/// </summary>
