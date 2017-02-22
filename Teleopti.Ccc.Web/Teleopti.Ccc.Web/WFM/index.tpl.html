@@ -40,7 +40,9 @@
 				<label ng-controller="BusinessUnitsController as businessunit" class="inline-flex">
 					<div tabindex="0" class="context-menu businessunit-menu" id="business-unit-select" ng-click="businessunit.toggleBuMenu()" ng-blur="businessunit.toggleBuMenu()">
 						<span>
-							{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i>
+							<span ng-if="vm.detectMobile()">{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i></span>
+							<span ng-if="!vm.detectMobile()"><i class="mdi mdi-vector-square"></i></span>
+
 							<md-tooltip>
 								{{'BusinessUnit'|translate}}
 							</md-tooltip>
