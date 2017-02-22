@@ -147,7 +147,6 @@
 
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
-		Scheduler_AgentSkillAnalyzer_12345,
 		Scheduler_ShowSkillPrioLevels_41980,
 
 		WfmGlobalLayout_personalOptions_37114,
@@ -157,7 +156,6 @@
 		ResourcePlanner_NegativeOrderIndex_39062,
 		ResourcePlanner_MaxSeatsNew_40939,
 		ResourcePlanner_HideSkillPrioSliders_41312,
-		ResourcePlanner_SplitBigIslands_42049,
 		ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318,
 		ResourcePlanner_LessPersonAssignmentUpdates_42159,
 		ResourcePlanner_ShiftCategoryLimitations_42680,

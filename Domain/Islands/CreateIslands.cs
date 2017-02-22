@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class CreateIslands : ICreateIslands
+	public class CreateIslands
 	{
 		private readonly CreateSkillGroups _createSkillGroups;
 		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			_moveSkillGroupToCorrectIsland = moveSkillGroupToCorrectIsland;
 		}
 
-		[RemoveMeWithToggle("When toggle is gone, pass in reduceskillgroups as ctor arg", Toggles.ResourcePlanner_SplitBigIslands_42049)]
-		public IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
+		public IEnumerable<Island> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
 		{
 			var allSkillGroups = new List<SkillGroup>(_createSkillGroups.Create(peopleInOrganization, period.StartDate));
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillGroups);

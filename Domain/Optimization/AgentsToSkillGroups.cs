@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class AgentsToSkillGroups
 	{
-		private readonly ISkillGroupInfoProvider _skillGroupInfoProvider;
+		private readonly SkillGroupInfoProvider _skillGroupInfoProvider;
 
-		public AgentsToSkillGroups(ISkillGroupInfoProvider skillGroupInfoProvider)
+		public AgentsToSkillGroups(SkillGroupInfoProvider skillGroupInfoProvider)
 		{
 			_skillGroupInfoProvider = skillGroupInfoProvider;
 		}

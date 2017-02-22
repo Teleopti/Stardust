@@ -387,8 +387,6 @@
     <Compile Include="ApplicationLayer\TickEvent\TenantTickEventTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTester.cs" />
-    <Compile Include="DayOffPlanning\SkillGroupIslandsAnalyzerTest.cs" />
-    <Compile Include="DayOffPlanning\VirtualSkillGroupsCreatorTest.cs" />
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacadeTest.cs" />

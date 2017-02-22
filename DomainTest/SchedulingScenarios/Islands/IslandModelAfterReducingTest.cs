@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
@@ -14,13 +13,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class IslandModelAfterReducingTest
 	{
 		public IslandModelFactory IslandModelFactory;
 		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
-
 
 		[Test]
 		public void ShouldNotLeaveDuplicateSkillgroupsAfterReducing()

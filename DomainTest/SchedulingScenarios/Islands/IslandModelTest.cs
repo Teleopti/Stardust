@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class IslandModelTest
 	{
 		public IslandModelFactory IslandModelFactory;

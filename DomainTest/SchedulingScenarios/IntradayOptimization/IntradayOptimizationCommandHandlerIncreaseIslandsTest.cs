@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	//Reuse tests here later when same/similar stuff are used for creating islands when scheduling, DO opt etc
 
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class IntradayOptimizationCommandHandlerIncreaseIslandsTest
 	{
 		public IntradayOptimizationCommandHandler Target;

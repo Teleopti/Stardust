@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SkillGroupContext : ISkillGroupContext
+	public class SkillGroupContext
 	{
 		private readonly CreateSkillGroups _createSkillGroups;
 

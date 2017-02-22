@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 
 		private IslandsModel createIslandsModel(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			IEnumerable<IIsland> islands=null;
+			IEnumerable<Island> islands=null;
 			var timeToGenerate = MeasureTime.Do(() => islands = _createIslands.Create(reduceSkillGroups, agents, period));
 			var islandModels = (from Island island in islands select island.CreateClientModel()).ToList();
 			islandModels.Sort();

@@ -4,27 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Islands;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class VirtualSkillGroupsKeepStateTest : IConfigureToggleManager
+	public class VirtualSkillGroupsKeepStateTest
 	{
-		private readonly bool _resourcePlannerSplitBigIslands42049;
-		public ISkillGroupInfoProvider Target;
-		public ISkillGroupContext Context;
-
-		public VirtualSkillGroupsKeepStateTest(bool resourcePlannerSplitBigIslands42049)
-		{
-			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
-		}
+		public SkillGroupInfoProvider Target;
+		public SkillGroupContext Context;
 
 		[Test]
 		public void ShouldKeepResultInternally()
@@ -42,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateOnlyPeriod(2000, 1, 1, 2001, 1,1);
 			const int numberOfThreads = 10;
 
-			var uniqueResults = new ConcurrentDictionary<ISkillGroupInfo, byte>();
+			var uniqueResults = new ConcurrentDictionary<SkillGroups, byte>();
 			Parallel.For(0, numberOfThreads, i =>
 			{
 				using (Context.Create(Enumerable.Empty<IPerson>(), period))
@@ -72,12 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					}
 				});
 			}
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if(_resourcePlannerSplitBigIslands42049)
-				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

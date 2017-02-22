@@ -18,7 +18,7 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
-using Teleopti.Ccc.Domain.Islands.Legacy;
+
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -174,25 +174,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationContext>().InstancePerLifetimeScope();
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<SkillGroupIslandsAnalyzer>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			builder.RegisterType<ReduceSkillGroups>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049))
-			{
-				builder.RegisterType<CreateIslands>().AsSelf().As<ICreateIslands>().SingleInstance();
-				builder.RegisterType<MoveSkillGroupToCorrectIsland>().SingleInstance();
-				builder.RegisterType<SkillGroupInfoProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
-				builder.RegisterType<SkillGroupContext>().As<ISkillGroupContext>().SingleInstance();
-				builder.RegisterType<VirtualSkillGroupsCreatorThatThrows>().As<IVirtualSkillGroupsCreator>().SingleInstance();
-				builder.RegisterType<IslandModelFactory>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<CreateIslandsOld>().As<ICreateIslands>().SingleInstance();
-				builder.RegisterType<VirtualSkillGroupsCreator>().As<IVirtualSkillGroupsCreator>().SingleInstance();
-				builder.RegisterType<VirtualSkillGroupsResultProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
-				builder.RegisterType<VirtualSkillContext>().As<ISkillGroupContext>().SingleInstance();
-			}
+			builder.RegisterType<CreateIslands>().SingleInstance();
+			builder.RegisterType<MoveSkillGroupToCorrectIsland>().SingleInstance();
+			builder.RegisterType<SkillGroupInfoProvider>().SingleInstance();
+			builder.RegisterType<SkillGroupContext>().SingleInstance();
+			builder.RegisterType<IslandModelFactory>().SingleInstance();
 			builder.RegisterType<CreateSkillGroups>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
 			builder.RegisterType<SeatImpactOnPeriodForProjection>()

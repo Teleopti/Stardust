@@ -4,12 +4,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -18,18 +16,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class AgentsToSkillGroupsTest : ISetup, IConfigureToggleManager
+	public class AgentsToSkillGroupsTest : ISetup
 	{
-		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public AgentsToSkillGroups Target;
-		public ISkillGroupContext Context;
-
-		public AgentsToSkillGroupsTest(bool resourcePlannerSplitBigIslands42049)
-		{
-			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
-		}
+		public SkillGroupContext Context;
 
 		[Test]
 		public void ShouldSplitTwoAgentsWithDifferentSkillsIntoTwoGroups()
@@ -73,12 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if (_resourcePlannerSplitBigIslands42049)
-				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

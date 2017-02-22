@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	public class IntradayOptimizationCommandHandler
 	{
 		private readonly IEventPublisher _eventPublisher;
-		private readonly ICreateIslands _createIslands;
+		private readonly CreateIslands _createIslands;
 		private readonly IGridlockManager _gridLockManager;
 		private readonly ReduceSkillGroups _reduceSkillGroups;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 
 		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, 
-												ICreateIslands createIslands, 
+												CreateIslands createIslands, 
 												IGridlockManager gridLockManager, 
 												ReduceSkillGroups reduceSkillGroups,
 												IPeopleInOrganization peopleInOrganization)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		}
 
 		[UnitOfWork]
-		protected virtual IEnumerable<IIsland> CreateIslands(DateOnlyPeriod period, IntradayOptimizationCommand command)
+		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, IntradayOptimizationCommand command)
 		{
 			using (CommandScope.Create(command))
 			{

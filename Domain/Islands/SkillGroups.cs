@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SkillGroups : ISkillGroupInfo, IEnumerable<SkillGroup>
+	public class SkillGroups : IEnumerable<SkillGroup>
 	{
 		private readonly IEnumerable<SkillGroup> _skillGroups;
 

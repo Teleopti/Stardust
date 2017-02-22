@@ -4,12 +4,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -18,19 +16,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class ResourceCalculateAfterDeleteDeciderTest : ISetup, IConfigureToggleManager
+	public class ResourceCalculateAfterDeleteDeciderTest : ISetup
 	{
-		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public IResourceCalculateAfterDeleteDecider Target;
 		public LimitForNoResourceCalculation LimitForNoResourceCalculation;
-		public ISkillGroupContext Context;
-
-		public ResourceCalculateAfterDeleteDeciderTest(bool resourcePlannerSplitBigIslands42049)
-		{
-			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
-		}
+		public SkillGroupContext Context;
 
 		[Test]
 		public void ShouldAlwaysDoCalculationIfNoOtherAgentHasSameSkills()
@@ -236,17 +226,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 		}
 
-
-
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if (_resourcePlannerSplitBigIslands42049)
-				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

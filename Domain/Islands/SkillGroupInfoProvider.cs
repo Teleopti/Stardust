@@ -2,9 +2,9 @@
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SkillGroupInfoProvider : ISkillGroupInfoProvider
+	public class SkillGroupInfoProvider
 	{
-		public ISkillGroupInfo Fetch()
+		public SkillGroups Fetch()
 		{
 			var current = SkillGroupContext.SkillGroups;
 			if (current == null)

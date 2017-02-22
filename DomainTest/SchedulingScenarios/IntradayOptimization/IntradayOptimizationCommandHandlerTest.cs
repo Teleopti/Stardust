@@ -5,9 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -16,19 +14,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class IntradayOptimizationCommandHandlerTest : IConfigureToggleManager
+	public class IntradayOptimizationCommandHandlerTest
 	{
-		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public IntradayOptimizationCommandHandler Target;
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
-
-		public IntradayOptimizationCommandHandlerTest(bool resourcePlannerSplitBigIslands42049)
-		{
-			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
-		}
 
 		[Test]
 		public void ShouldSetPeriod()
@@ -245,14 +235,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var theEvent = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single();
 			theEvent.AgentsInIsland.Count().Should().Be.EqualTo(3);
 			theEvent.AgentsToOptimize.Count().Should().Be.EqualTo(3);
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if (_resourcePlannerSplitBigIslands42049)
-			{
-				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
-			}
 		}
 	}
 }

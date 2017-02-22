@@ -6,14 +6,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -25,11 +23,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup, IConfigureToggleManager
+	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
 	{
-		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public IntradayOptimizationFromWeb Target;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 		public IntradayOptmizerLimiter IntradayOptimizerLimiter;
@@ -40,11 +35,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-
-		public IntradayOptimizationStopWhenLargeGroupTest(bool resourcePlannerSplitBigIslands42049)
-		{
-			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
-		}
 
 		[Test]
 		public void ShouldOptimizeNoneIf0PercentShouldBeOptimized()
@@ -253,12 +243,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			system.UseTestDouble<TrackOptimizeDaysForAgents>().For<IIntradayOptimizeOneDayCallback>();
 			system.UseTestDouble<FakeSkillDayRepositorySimulateNewUnitOfWork>().For<ISkillDayRepository>();
 			system.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if(_resourcePlannerSplitBigIslands42049)
-				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

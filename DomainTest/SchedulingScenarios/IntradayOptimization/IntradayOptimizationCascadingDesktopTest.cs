@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -26,20 +24,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class IntradayOptimizationCascadingDesktopTest : ISetup, IConfigureToggleManager
+	public class IntradayOptimizationCascadingDesktopTest : ISetup
 	{
-		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory;
 		public FullResourceCalculation FullResourceCalculation;
-
-		public IntradayOptimizationCascadingDesktopTest(bool resourcePlannerSplitBigIslands42049)
-		{
-			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
-		}
 
 		[Test]
 		public void ShouldShovelResources()
@@ -216,12 +206,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization>();
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if (_resourcePlannerSplitBigIslands42049)
-				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

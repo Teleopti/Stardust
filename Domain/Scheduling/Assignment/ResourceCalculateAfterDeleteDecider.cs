@@ -5,10 +5,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ResourceCalculateAfterDeleteDecider : IResourceCalculateAfterDeleteDecider
 	{
-		private readonly ISkillGroupInfoProvider _skillGroupInfoProvider;
+		private readonly SkillGroupInfoProvider _skillGroupInfoProvider;
 		private readonly ILimitForNoResourceCalculation _limitForNoResourceCalculation;
 
-		public ResourceCalculateAfterDeleteDecider(ISkillGroupInfoProvider skillGroupInfoProvider, 
+		public ResourceCalculateAfterDeleteDecider(SkillGroupInfoProvider skillGroupInfoProvider, 
 							ILimitForNoResourceCalculation limitForNoResourceCalculation)
 		{
 			_skillGroupInfoProvider = skillGroupInfoProvider;

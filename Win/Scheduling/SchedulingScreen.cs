@@ -717,10 +717,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				drawSkillGrid();
 				if (TestMode.Micke)
 				{
-					var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
-					skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;
-					_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-
 					var skillGridMenuItem1 = new ToolStripMenuItem("Analyze resourses compared to last change");
 					skillGridMenuItem1.Click += skillGridMenuItemAnalyzeResorceChangesClick;
 					_contextMenuSkillGrid.Items.Add(skillGridMenuItem1);
@@ -4331,14 +4327,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 			skillGridMenuItem = new ToolStripMenuItem(Resources.DeleteSkillSummery) {Name = "Delete", Enabled = false};
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_AgentSkillAnalyzer_12345) || TestMode.Micke)
-			{
-				skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
-				skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;
-				_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-			}
-
 			_skillDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillIntradayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
@@ -4358,16 +4346,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (var resourceChanges = new ResourceCalculationAnalyzerView(model))
 			{
 				resourceChanges.ShowDialog(this);
-			}
-		}
-
-		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)
-		{
-			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.PersonsInOrganization,
-				SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.SkillDays, SchedulerState.RequestedPeriod.DateOnlyPeriod))
-			{
-				analyzer.LoadData();
-				analyzer.ShowDialog(this);
 			}
 		}
 

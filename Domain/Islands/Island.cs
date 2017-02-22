@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class Island : IIsland
+	public class Island
 	{
 		private readonly IEnumerable<SkillGroup> _skillGroups;
 		private readonly IDictionary<ISkill, int> _noAgentsKnowingSkill;
