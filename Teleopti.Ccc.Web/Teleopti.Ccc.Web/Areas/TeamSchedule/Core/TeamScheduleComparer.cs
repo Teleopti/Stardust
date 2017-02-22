@@ -100,8 +100,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		}
 
 		private int getMinActivityStartTimeOffset(scheduleDayDetail schedule)
-		{
-			return (int)schedule.PersonAssignment.Value.Period.StartDateTime.Subtract(schedule.ScheduleDay.Period.StartDateTime).TotalMinutes;
+		{			
+			var fixedReferencePoint = schedule.ScheduleDay.DateOnlyAsPeriod.DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc).StartDateTime;
+			return (int)schedule.PersonAssignment.Value.Period.StartDateTime.Subtract(fixedReferencePoint).TotalMinutes;
 		}
 
 		private int getMinAbsenceStartTimeOffset(scheduleDayDetail schedule)

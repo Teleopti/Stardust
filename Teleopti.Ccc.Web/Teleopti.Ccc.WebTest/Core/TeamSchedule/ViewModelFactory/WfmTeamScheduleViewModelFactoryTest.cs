@@ -29,23 +29,32 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public FakeUserTimeZone UserTimeZone;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		private ITeam team;
-		private IPerson person;
+		private IPerson personInUtc;
+		private IPerson personInHongKong;
 
-		private void SetUpPersonAndCulture()
+		private void SetUpPersonAndCulture(bool addSecondPerson = false)
 		{
-			person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
-
+			personInUtc = PersonFactory.CreatePerson("Sherlock","Holmes");
+			personInHongKong = PersonFactory.CreatePerson("A","Detective");
+			personInUtc.WithId();
+			personInHongKong.WithId();
+			personInHongKong.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010,1,1),personContract,team);
 
-			person.AddPersonPeriod(personPeriod);
-			PeopleSearchProvider.Add(person);
-
-			PersonRepository.Has(person);
+			personInUtc.AddPersonPeriod(personPeriod);
+			personInHongKong.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(personInUtc);
+			if (addSecondPerson)
+			{
+				PeopleSearchProvider.Add(personInHongKong);
+				PersonRepository.Has(personInHongKong);
+			}
+			PersonRepository.Has(personInUtc);
+			
 		}
 
 		[Test]
@@ -55,6 +64,35 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldSortScheduleInDifferentTimezoneByAbsoluteStartTime()
+		{
+			SetUpPersonAndCulture(true);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
+				scenario,
+				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
+
+			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInHongKong,
+				scenario,
+				new DateTimePeriod(new DateTime(2020,1,1,4,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,13,0,0,DateTimeKind.Utc)),ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
+
+
+			ScheduleStorage.Add(pa);
+			ScheduleStorage.Add(pa2);
+
+			var searchTerm = new Dictionary<PersonFinderField, string>();			
+
+			var result = Target.CreateViewModel(new[] { team.Id.Value },searchTerm,new DateOnly(2020,1,1),20,1, false);
+
+			result.Total.Should().Be(2);
+			result.Schedules.First().Name.Should().Be.EqualTo("A@Detective");			
+		}
+
+
+		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForWorkingDay()
 		{
 			SetUpPersonAndCulture();
@@ -62,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8,0,0, DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 
@@ -79,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count().Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -97,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, scheduleDate, DayOffFactory.CreateDayOff(new Description("DayOff")));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(personInUtc, scenario, scheduleDate, DayOffFactory.CreateDayOff(new Description("DayOff")));
 
 			ScheduleStorage.Add(pa);
 
@@ -112,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count().Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -129,10 +167,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
@@ -150,7 +188,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -165,12 +203,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-			person.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
+			personInUtc.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
@@ -188,7 +226,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -204,17 +242,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			
 			PeopleSearchProvider.EnableDateFilter();
-			PeopleSearchProvider.Add(new DateOnly(2020, 1, 5), person);
+			PeopleSearchProvider.Add(new DateOnly(2020, 1, 5), personInUtc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 
-			person.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
+			personInUtc.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person,scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc,scenario,
 				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),
 					new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),AbsenceFactory.CreateAbsence("abs"));
 
@@ -232,7 +270,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019,12,30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020,1,5));
@@ -249,10 +287,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person,scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc,scenario,
 				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),
 					new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),AbsenceFactory.CreateAbsence("abs"));
 
@@ -270,7 +308,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019,12,30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020,1,5));
@@ -288,12 +326,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var absence = AbsenceFactory.CreateAbsence("absence","abs", Color.Blue);
 			absence.Confidential = true;
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), absence);
 
@@ -311,7 +349,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -325,17 +363,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
-			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(person);
+			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(personInUtc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 			var absence = AbsenceFactory.CreateAbsence("absence","abs", Color.Blue);
 			absence.Confidential = true;
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), absence);
 
@@ -353,7 +391,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -367,18 +405,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
-			person.WorkflowControlSet = new WorkflowControlSet();
-			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019,1,1);
+			personInUtc.WorkflowControlSet = new WorkflowControlSet();
+			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019,1,1);
 
 			PermissionProvider.Enable();
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
@@ -396,7 +434,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -409,8 +447,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
-			person.WorkflowControlSet = new WorkflowControlSet();
-			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019,1,1);
+			personInUtc.WorkflowControlSet = new WorkflowControlSet();
+			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019,1,1);
 
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
@@ -418,10 +456,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
@@ -439,7 +477,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
@@ -460,7 +498,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			activity.InContractTime = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", "blue");
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, activity, new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), shiftCategory);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,scenario, activity, new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), shiftCategory);
 		
 			ScheduleStorage.Add(pa);
 
@@ -475,7 +513,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.First();
 
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());			
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());			
 			first.ContractTimeMinutes.Should().Be.EqualTo(9*60);
 		}
 
@@ -531,11 +569,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 
-			var result = Target.CreateViewModelForPeople(new[] {person.Id.Value}, scheduleDate);
+			var result = Target.CreateViewModelForPeople(new[] {personInUtc.Id.Value}, scheduleDate);
 
 			result.Total.Should().Be.EqualTo(1);
 			var schedule = result.Schedules.Single();
-			schedule.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault().ToString());
+			schedule.PersonId.Should().Be.EqualTo(personInUtc.Id.GetValueOrDefault().ToString());
 			schedule.Projection.Should().Be.Empty();
 		}
 
