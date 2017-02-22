@@ -5,7 +5,7 @@
 		z-index: 99999;
 		top:-10px;
 		left: -3px;
-		color:$text-color-standard;
+		color:$white;
 
 		input{
 			display: none;
@@ -14,8 +14,15 @@
 		.main-menu-trigger-icon{
 			position: relative;
 			top:2px;
-			color: white!important;
+
+
 		}
+		.card-context:focus, .card-context:hover{
+			.main-menu-trigger-icon{
+				color:$text-color-standard;
+			}
+		}
+
 	}
 
 	a{
