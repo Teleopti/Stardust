@@ -249,6 +249,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenISelectAsProbabilityValue(string probability)
 		{
 			Browser.Interactions.ClickUsingJQuery("#probabilityDropdownMenu .dropdown-menu a:contains('{0}')", probability);
+			Browser.Interactions.AssertExistsUsingJQuery("#dropdown-probability-type span:contains('{0}')", probability);
 		}
 
 		[Then(@"I should see the selected value for probability is '(.*)'")]

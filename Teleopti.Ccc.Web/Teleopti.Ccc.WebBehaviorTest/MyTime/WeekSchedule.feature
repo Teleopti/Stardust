@@ -384,7 +384,6 @@ Scenario: Keep selected probability when switching back from month view
 	When I click the current week button
 	Then I should see the selected value for probability is 'Show absence probability'
 
-@ignore
 Scenario: Keep selected probability when switching back from non current week view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Intraday staffing check'
