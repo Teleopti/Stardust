@@ -11,17 +11,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
     {
         private readonly string _displayMember;
         private readonly Type _baseClass;
-	    private readonly bool _hideLastInList;
 	    private readonly string _comboItemsProperty;
 
-        public SFGridDynamicDropDownColumn(string bindingProperty, string headerText, string groupHeaderText, string comboItemsProperty, string displayMember, Type baseClass, bool hideLastInList = false)
+        public SFGridDynamicDropDownColumn(string bindingProperty, string headerText, string groupHeaderText, string comboItemsProperty, string displayMember, Type baseClass)
             : base(bindingProperty, headerText)
         {
             GroupHeaderText = groupHeaderText;
             _comboItemsProperty = comboItemsProperty;
             _displayMember = displayMember;
             _baseClass = baseClass;
-	        _hideLastInList = hideLastInList;
         }
 
         public override int PreferredWidth
@@ -33,10 +31,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         {
 			e.Style.CellType = GridCellModelConstants.CellTypeComboBox;
             var comboItems = (IList<TItem>)PropertyReflectorHelper.GetValue(currentItem, _comboItemsProperty);
-				if(_hideLastInList)
-					comboItems.RemoveAt(comboItems.Count -1);
 
-				e.Style.DataSource = comboItems;
+	        e.Style.DataSource = comboItems;
             e.Style.DisplayMember = _displayMember;
             var selectedItem = (TItem)PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
 

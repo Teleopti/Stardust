@@ -206,7 +206,6 @@ ReadModel_ToHangfire_39147 = true
 NewPasswordHash_40460 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC
-AbsenceRequest_WithOrWithoutShrinkage_41060 = true
 LastHandlers_ToHangfire_41203 = true
 ETL_EventbasedTimeZone_40870 = RC
 ETL_RemoveTimeZoneAndDateNightly_40870 = true

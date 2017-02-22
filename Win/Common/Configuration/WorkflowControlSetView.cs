@@ -164,12 +164,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					typeof(IAbsenceRequestValidator));
 
 			columnList.Add(checkPersonAccountColumn);
-			//hack this can be removed completely when AbsenceRequests_SpeedupIntradayRequests_40754 is removed, remove it in SFGridDynamicDropDownColumn too
-			var hideLastValidator = !_toggleManager.IsEnabled(Toggles.AbsenceRequest_WithOrWithoutShrinkage_41060);
 			var checkStaffingColumn =
 				new SFGridDynamicDropDownColumn<AbsenceRequestPeriodModel, IAbsenceRequestValidator>(
 					"StaffingThresholdValidator", Resources.CheckStaffing, " ", "StaffingThresholdValidatorList", "DisplayText",
-					typeof(IAbsenceRequestValidator), hideLastValidator);
+					typeof(IAbsenceRequestValidator));
 
 			columnList.Add(checkStaffingColumn);
 
