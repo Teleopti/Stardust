@@ -50,6 +50,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			},
 			success: function (data) {
 				_bindData(data);
+				_setTimeIndicator(getCurrentUserDateTime());
 				if (dataHandler != undefined) {
 					dataHandler(data);
 				}
@@ -211,9 +212,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.switchProbabilityType = function (probabilityType) {
 			self.probabilityType(probabilityType);
-			_fetchData(function () {
-				_setTimeIndicator(getCurrentUserDateTime());
-			});
+			_fetchData();
 		}
 
 		self.previousWeek = function () {
