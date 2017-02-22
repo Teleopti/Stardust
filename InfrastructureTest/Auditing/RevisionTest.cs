@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-namespace Teleopti.Ccc.DomainTest.Auditing
+namespace Teleopti.Ccc.InfrastructureTest.Auditing
 {
     [TestFixture]
     public class RevisionTest

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Auditing
+namespace Teleopti.Ccc.InfrastructureTest.Auditing
 {
 	[TestFixture]
 	public class AuditSettingTest

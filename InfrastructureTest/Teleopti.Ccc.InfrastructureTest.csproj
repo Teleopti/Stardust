@@ -175,6 +175,8 @@
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyUpdaterTest.cs" />
+    <Compile Include="Auditing\AuditSettingTest.cs" />
+    <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Authentication\NonceInfoRepositoryTest.cs" />
