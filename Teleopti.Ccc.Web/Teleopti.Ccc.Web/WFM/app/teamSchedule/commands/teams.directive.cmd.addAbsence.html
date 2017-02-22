@@ -13,7 +13,7 @@
 			<h3>{{'From'|translate}}: </h3>
 			<div class="con-row">
 				<span class="col-sm-7 teamschedule-datepicker">
-					<team-schedule-datepicker selected-date="vm.timeRange.startTime" onDateChange="vm.isAbsenceDateValid()"/>
+					<team-schedule-datepicker selected-date="vm.timeRange.startTime" />
 				</span>
 				<span class="col-sm-5 uib-timepicker">
 					<div uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.startTime"></div>
@@ -23,7 +23,7 @@
 			<h3>{{'To'|translate}}: </h3>
 			<div class="con-row">
 				<span class="col-sm-7 teamschedule-datepicker">
-					<team-schedule-datepicker selected-date="vm.timeRange.endTime" onDateChange="vm.isAbsenceDateValid()"/>
+					<team-schedule-datepicker selected-date="vm.timeRange.endTime" />
 				</span>
 				<span class="col-sm-5 uib-timepicker">
 					<div uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.endTime"></div>
