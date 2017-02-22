@@ -50,6 +50,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			var stateGroups = _stateGroups.LoadAll();
 
+			var existingStateGroup = (
+				from g in stateGroups
+				from s in g.StateCollection
+				where g.BusinessUnit.Id.Value == @event.BusinessUnitId &&
+					  s.PlatformTypeId == @event.PlatformTypeId &&
+					  s.StateCode == @event.StateCode
+				select g
+			).SingleOrDefault();
+
+			if (existingStateGroup != null)
+				return;
+
 			var defaultStateGroup = (
 				from g in stateGroups
 				where g.BusinessUnit.Id.Value == @event.BusinessUnitId &&
@@ -62,8 +74,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 			var stateDescription = @event.StateDescription ?? @event.StateCode;
 
-			var hasStateCode = defaultStateGroup.StateCollection
-				.Any(x => x.StateCode == @event.StateCode && x.PlatformTypeId == @event.PlatformTypeId);
+			var hasStateCode = defaultStateGroup
+				.StateCollection
+				.Any(x =>
+						x.PlatformTypeId == @event.PlatformTypeId &&
+						x.StateCode == @event.StateCode
+				);
 			if (!hasStateCode)
 				defaultStateGroup.AddState(stateDescription, @event.StateCode, @event.PlatformTypeId);
 		}
