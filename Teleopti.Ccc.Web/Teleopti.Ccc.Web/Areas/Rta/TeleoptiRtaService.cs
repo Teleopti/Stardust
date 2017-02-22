@@ -157,14 +157,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				rtaCall.Invoke();
 				return 1;
 			}
-			catch (InvalidAuthenticationKeyException e)
-			{
-				throw new FaultException<InvalidAuthenticationKeyException>(e);
-			}
-			catch (LegacyAuthenticationKeyException e)
-			{
-				throw new FaultException<LegacyAuthenticationKeyException>(e);
-			}
 			catch (InvalidSourceException e)
 			{
 				Log.Error("Source id was invalid.", e);
@@ -191,8 +183,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					Log.Info("Batch contained invalid user code.", e);
 					return -100;
 				}
-				Log.Error("Exceptions while processing batch.", e);
-				return -500;
+				throw;
 			}
 		}
 	}
