@@ -1,7 +1,7 @@
 ﻿body {
-	padding-top: 50px;
 	padding-bottom: 20px;
 	font-family: "Segoe UI";
+	padding: 1px!important;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -137,4 +137,29 @@ table tr td a {
 table tr td a:hover {
 	text-decoration: none;
 	color:#266d99;
+}
+.ui-widget-content {
+
+}
+.ui-widget-overlay {
+	background: rgb(153, 214, 255)!important;
+	background: -webkit-linear-gradient(top, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%)!important;
+    background: -moz-linear-gradient(top, rgba(153,214,255,1) 0%, rgba(153,214,255,1) 45%, rgba(0,153,255,1) 100%)!important;
+    background: linear-gradient(to bottom, rgba(153,214,255,1) 0%,rgba(153,214,255,1) 45%,rgba(0,153,255,1) 100%)!important;
+	opacity: 1!important;
+}
+.ui-corner-all {
+	border-bottom-left-radius: 0!important;
+	border-bottom-right-radius: 0!important;
+	border-top-left-radius: 0!important;
+	border-top-right-radius: 0!important;
+}
+.ui-dialog .ui-dialog-titlebar {
+	display: none!important;
+}
+.signInBtn {
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26)!important;
+	color: #fff!important;
+	background-color: #09F!important;
+	border-color: transparent!important;
 }

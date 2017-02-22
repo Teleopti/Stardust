@@ -71,7 +71,7 @@
 
 
 <div style="visibility: hidden">
-	<div id="modal-login">
+	<div id="modal-login" class="loginWrapper">
 		<form role="form">
 			<h3>Log In</h3>
 
@@ -83,7 +83,7 @@
 				<label>Password</label>
 				<input class="form-control" type="password" ng-model="loginVm.loginPassword">
 			</div>
-			<button type="submit" ng-click="loginVm.login()" class="btn btn-default">Log In</button>
+			<button type="submit" ng-click="loginVm.login()" class="btn btn-default signInBtn">Log In</button>
 			<div>
 				<label class="ErrorLabel">{{loginVm.Message}}</label>
 			</div>
