@@ -66,6 +66,11 @@ function MenuController() {
 		return match.i;
 	}
 
+	ctrl.closeMenuOnPhones = function () {
+		ctrl.open = false;
+		console.log(ctrl.open);
+	}
+
 }
 
 angular.module('wfm.areas').component('mainmenu', {

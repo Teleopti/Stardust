@@ -6,7 +6,7 @@
 
 #seatmap-toolbar{
     .context-menu{
-        z-index:999;
+        z-index:99;
     }
 }
 
@@ -55,7 +55,7 @@
     .dropdown-menu {
                 text-align: left !important;
     }
-    
+
     .line-center{
             text-align: left !important;
 
@@ -65,13 +65,13 @@
 
         box-shadow: none !important;
 
-              
+
 
         .sub-header{
             text-align: center;
         }
     }
-	
+
 }*/
 
 .seatplan-planning-periods{
@@ -227,9 +227,9 @@
 }
 
 .seatplan-report-filter .alert-error {
-	
-    position: relative; 
-    width: 100%; 
+
+    position: relative;
+    width: 100%;
 
     margin-left: auto;
     margin-right: auto;
@@ -305,7 +305,7 @@
 	}
 }
 
-/*work around for IE issues with date range picker*/ 
+/*work around for IE issues with date range picker*/
 @media screen and (min-width:0\0) {
 	.seatplan-report-filter .date-range-end-date {
 		margin-left: 280px;
@@ -315,4 +315,3 @@
 		margin-left: 555px;
 	}
 }
-

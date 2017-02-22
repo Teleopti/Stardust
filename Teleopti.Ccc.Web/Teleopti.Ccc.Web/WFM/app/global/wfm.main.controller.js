@@ -61,10 +61,5 @@
       }
       return returnValue;
     }
-
-
-    vm.detectMobile  = function() {
-      return window.innerWidth >= 768 ? true : false;
-    }
   }
 })();
