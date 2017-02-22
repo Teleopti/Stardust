@@ -74,24 +74,26 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _ensureDST(userTime) {
 		//whether in DST is judged in UTC time
-		if (daylightSavingAdjustment !== null) {
-			var userTimestamp = userTime.valueOf();
-			var dstStartTimestamp = moment(daylightSavingAdjustment.StartDateTime + "+00:00").valueOf();
-			var dstEndTimestamp = moment(daylightSavingAdjustment.EndDateTime + "+00:00").add(-daylightSavingAdjustment.AdjustmentOffsetInMinutes, "minutes").valueOf();// EndDateTime has DST
+		if (daylightSavingAdjustment == undefined || daylightSavingAdjustment === null) {
+			return;
+		}
 
-			if (dstStartTimestamp < dstEndTimestamp) {
-				if (dstStartTimestamp < userTimestamp && userTimestamp < dstEndTimestamp) {
-					adjustToDST(userTime);
-				} else {
-					resetToUserTimeWithoutDST(userTime);
-				}
-			} else { // for DST like Brasilia
-				if (dstEndTimestamp <= userTimestamp && userTimestamp <= dstStartTimestamp) {
-					resetToUserTimeWithoutDST(userTime);
-				}
-				else {
-					adjustToDST(userTime);
-				}
+		var userTimestamp = userTime.valueOf();
+		var dstStartTimestamp = moment(daylightSavingAdjustment.StartDateTime + "+00:00").valueOf();
+		var dstEndTimestamp = moment(daylightSavingAdjustment.EndDateTime + "+00:00").add(-daylightSavingAdjustment.AdjustmentOffsetInMinutes, "minutes").valueOf();// EndDateTime has DST
+
+		if (dstStartTimestamp < dstEndTimestamp) {
+			if (dstStartTimestamp < userTimestamp && userTimestamp < dstEndTimestamp) {
+				adjustToDST(userTime);
+			} else {
+				resetToUserTimeWithoutDST(userTime);
+			}
+		} else { // for DST like Brasilia
+			if (dstEndTimestamp <= userTimestamp && userTimestamp <= dstStartTimestamp) {
+				resetToUserTimeWithoutDST(userTime);
+			}
+			else {
+				adjustToDST(userTime);
 			}
 		}
 	};
@@ -468,8 +470,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return new TimelineViewModel(item, data.TimeLineCulture);
 			});
 			self.timeLines(timelines);
+			var currentUserDate = getCurrentUserDateTime().format("YYYY-MM-DD");
 			var days = ko.utils.arrayMap(data.Days, function (item) {
-				var isToday = moment(item.FixedDate).isSame(moment(), "day");
+				var isToday = item.FixedDate === currentUserDate;
 				return new Teleopti.MyTimeWeb.Schedule.DayViewModel(item, isToday ? data.Possibilities : undefined, self);
 			});
 			self.days(days);
@@ -518,9 +521,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		var days = vm.days();
+		var currentUserDate = getCurrentUserDateTime().format("YYYY-MM-DD");
 		for (var i = 0; i < days.length; i++) {
 			var day = days[i];
-			var isToday = moment(day.FixedDate).isSame(moment(), "day");
+			var isToday = day.fixedDate() === currentUserDate;
 			if (isToday) {
 				day.userNowInMinute(clientNowMinutes);
 			}
