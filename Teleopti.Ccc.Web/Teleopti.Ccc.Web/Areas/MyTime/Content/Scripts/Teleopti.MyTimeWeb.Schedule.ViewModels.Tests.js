@@ -340,15 +340,15 @@ $(document).ready(function () {
 		}
 	});
 
-	test("should show overtime possibility from schedule start to end of today", function () {
+	test("should show overtime possibility within timeline range", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
 		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
 
-		// Will generate all overtime possibility from schedule start to end of today (from 09:30 to 00:00+1)
-		equal(vm.probabilities.length, 59);
+		// Will generate all overtime possibility within timeline range (from 08:00 to 19:00)
+		equal(vm.probabilities.length, 45);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
@@ -409,8 +409,8 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(750); // 12:30
 
-		// Will generate all overtime possibility from schedule start to end of today (from 09:30 to 00:00+1)
-		equal(vm.probabilities.length, 59);
+		// Will generate all overtime possibility within timeline range (from 08:00 to 19:00)
+		equal(vm.probabilities.length, 45);
 
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
@@ -424,9 +424,9 @@ $(document).ready(function () {
 				notEqual(probability.actualClass, "probability-none");
 				equal(probability.actualTooltips.length > 0, true);
 
-				// Schedule started from 09:30, current time is 12:30
-				// Then the first (12:30 - 09:30) * 4 probabilities should be invisible
-				if (i <= 12) {
+				// Open hour period started from 08:00, current time is 12:30
+				// Then the first (12:30 - 08:00) * 4 probabilities should be invisible
+				if (i <= 18) {
 					equal(probability.cssClass(), "probability-none");
 					equal(probability.tooltips().length, 0);
 				} else {
@@ -579,9 +579,9 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
 
-		// In this scenario timeline will start from 00:00, then all probabilities will be generated for whole day
-		// So should be (24 - 0) * 4 + 1
-		equal(vm.probabilities.length, 97);
+		// In this scenario timeline will start from 00:00, then all probabilities will be generated for whole timeline
+		// So should be (19 - 0) * 4 + 1
+		equal(vm.probabilities.length, 77);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
@@ -632,9 +632,11 @@ $(document).ready(function () {
 
 	test("should show absence possibility for night shift schedule", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(absenceProbabilityType, 0, 23);
+		var week = createWeekViewmodel(absenceProbabilityType, 0, 24);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+
+		// Will generate probabilities from schedule start (10:00) to schedule end (00:00+)
 		equal(vm.probabilities.length, 57);
 	});
 });

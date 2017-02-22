@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					EndTime = intervalPossibility.Key.AddMinutes(intervalLengthInMinutes),
 					Possibility = intervalPossibility.Value
 				});
-			return possibilities;
+			return possibilities.OrderBy(x => x.StartTime);
 		}
 	}
 }

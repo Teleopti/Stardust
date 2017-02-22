@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var overtimeAvailabilityPeriodViewModels =
 				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability,
 					s.OvertimeAvailabilityYesterday, s.MinMaxTime) ?? new OvertimeAvailabilityPeriodViewModel[0];
-			return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels);
+			return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels).OrderBy(p => p.StartTime);
 		}
 
 		private OvertimeAvailabilityViewModel overtimeAvailability(WeekScheduleDayDomainData s)

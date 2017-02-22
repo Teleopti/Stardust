@@ -313,15 +313,20 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 					var openPeriodStart = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
 					var openPeriodEnd = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
 
-					if (probabilityStartMinutes < openPeriodStart) {
-						probabilityStartMinutes = openPeriodStart;
-					}
-					if (openPeriodEnd < probabilityEndMinutes) {
-						probabilityEndMinutes = openPeriodEnd;
-					}
+					probabilityStartMinutes = openPeriodStart;
+					probabilityEndMinutes = openPeriodEnd;
 				} else {
-					probabilityEndMinutes = constants.totalMinutesOfOneDay;
+					probabilityStartMinutes = timelineStartMinutes;
+					probabilityEndMinutes = timelineEndMinutes;
 				}
+			}
+
+			if (probabilityStartMinutes < timelineStartMinutes) {
+				probabilityStartMinutes = timelineStartMinutes;
+			}
+
+			if (probabilityEndMinutes > timelineEndMinutes) {
+				probabilityEndMinutes = timelineEndMinutes;
 			}
 
 			probabilityStartPosition = (probabilityStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
@@ -351,7 +356,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		var intervalStartMinutes = startMoment.diff(startOfToday) / (60 * 1000);
 		var intervalEndMinutes = endMoment.isSame(startMoment, "day")
 			? endMoment.diff(startOfToday) / (60 * 1000)
-			: 1439; // 23:59
+			: constants.totalMinutesOfOneDay - 1;
 
 		var shouldGenerateViewModel = boundaries.probabilityStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEndMinutes;
 		if (!shouldGenerateViewModel) return undefined;
