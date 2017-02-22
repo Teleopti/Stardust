@@ -215,8 +215,7 @@
 		}
 
 		function selectedSkillAreaChange(skillArea) {
-			if ((!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) && vm.showOrganization) {
-				stateGoToAgents({
+			if ((!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) && vm.showOrganization) {				stateGoToAgents({
 					skillIds: skillArea ? [] : $stateParams.skillIds,
 					skillAreaId: skillArea ? skillArea.Id : undefined,
 					siteIds: siteIds,
@@ -233,6 +232,7 @@
 				if ($state.current.name !== "rta.teams" && $stateParams.siteId)
 					rtaRouteService.goToTeams(vm.siteIds, vm.selectedSkill, skillArea.Id);
 				else {
+					console.log('hej');
 					rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
 				}
 			}
@@ -247,6 +247,10 @@
 			var selectedTeamIds = vm.teamsSelected;
 			selection['siteIds'] = selectedSiteIds;
 			selection['teamIds'] = selectedTeamIds;
+			if($stateParams.skillIds)
+				selection['skillIds'] = $stateParams.skillIds;
+			else if ($stateParams.skillAreaId)
+				selection['skillAreaId'] = $stateParams.skillAreaId;
 			stateGoToAgents(selection);
 		}
 
