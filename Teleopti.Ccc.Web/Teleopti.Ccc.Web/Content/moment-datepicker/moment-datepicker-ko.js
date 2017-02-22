@@ -84,10 +84,16 @@
     ko.bindingHandlers.datepicker = {
     	init: function (element, valueAccessor, allBindingsAccessor) {
     		var options = allBindingsAccessor().datepickerOptions || {};
-		    if ($(element).is('button')) {
-			    options.calendarPlacement = 'left';
+    		if ($('body').hasClass('rtl')) {
+    			if ($(element).is('button')) {
+    				options.calendarPlacement = 'right';
+    			}			   
+		    } else {
+    			if ($(element).is('button')) {
+    				options.calendarPlacement = 'left';
+    			}
 		    }
-            
+
             var dataType = options.dataType || detectDataType(ko.utils.unwrapObservable(valueAccessor()));
             dataType = !dataType || dataType == 'string' ? 'iso' : dataType;
 
