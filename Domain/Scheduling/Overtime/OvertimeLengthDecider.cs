@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
         private readonly ICalculateBestOvertime _calculateBestOvertime;
         private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
-	    private readonly IPersonSkillsForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
+	    private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 
 
 	    public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                                      IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
                                      Func<ISchedulingResultStateHolder> schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper, 
                                      IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator,
-																		 IPersonSkillsForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider
+																		 PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider
 			)
         {
             _overtimePeriodValueMapper = overtimePeriodValueMapper;

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
 		private readonly IWorkShiftSelector _workShiftSelector;
-		private readonly IPersonSkillsForNonOvertimeProvider _personSkillsForNonOvertimeProvider;
+		private readonly PrimaryOrAllPersonSkillForNonOvertimeProvider _personSkillsForNonOvertimeProvider;
 		
 		public ScheduleOvertimeOnNonScheduleDays(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
 			IWorkShiftSelector workShiftSelector,
-			IPersonSkillsForNonOvertimeProvider personSkillsForNonOvertimeProvider)
+			PrimaryOrAllPersonSkillForNonOvertimeProvider personSkillsForNonOvertimeProvider)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockScheduler = teamBlockScheduler;

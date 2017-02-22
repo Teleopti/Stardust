@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -20,18 +18,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class OvertimeOnNonScheduleDaysCascadingTest : IConfigureToggleManager
+	public class OvertimeOnNonScheduleDaysCascadingTest
 	{
-		private readonly bool _resourcePlannerCascadingScheduleOvertimeOnPrimary41318;
 		public ScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-
-		public OvertimeOnNonScheduleDaysCascadingTest(bool resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
-		{
-			_resourcePlannerCascadingScheduleOvertimeOnPrimary41318 = resourcePlannerCascadingScheduleOvertimeOnPrimary41318;
-		}
 
 		[Test]
 		public void ShouldNotPlaceOvertimeShiftDueToNoUnderstaffingAfterShoveling()
@@ -90,15 +80,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly) });
 
-			var overtimeWasPlaced = stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Any();
-			if (_resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
-			{
-				overtimeWasPlaced.Should().Be.False();
-			}
-			else
-			{
-				overtimeWasPlaced.Should().Be.True();
-			}
+			stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Any()
+					.Should().Be.False();
 		}
 
 		[Test]
@@ -132,14 +115,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			var overtimeWasPlaced = stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Any();
 			overtimeWasPlaced.Should().Be.True();
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if (_resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
-			{
-				toggleManager.Enable(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318);
-			}
 		}
 	}
 }

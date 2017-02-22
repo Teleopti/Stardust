@@ -156,7 +156,6 @@
 		ResourcePlanner_NegativeOrderIndex_39062,
 		ResourcePlanner_MaxSeatsNew_40939,
 		ResourcePlanner_HideSkillPrioSliders_41312,
-		ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318,
 		ResourcePlanner_LessPersonAssignmentUpdates_42159,
 		ResourcePlanner_ShiftCategoryLimitations_42680,
 		ResourcePlanner_IntradayNoDailyValueCheck_42767,

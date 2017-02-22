@@ -26,14 +26,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ITimeZoneGuard _timeZoneGuard;
-		private readonly IPersonSkillsForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
+		private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 
 		public ScheduleOvertimeService(IOvertimeLengthDecider overtimeLengthDecider, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IGridlockManager gridlockManager,
 			ITimeZoneGuard timeZoneGuard,
-			IPersonSkillsForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider)
+			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider)
 		{
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;

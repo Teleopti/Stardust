@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_dateOnly = new DateOnly(2014, 1, 1);
 			_scheduleTagSetter = _mock.StrictMock<IScheduleTagSetter>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager(), new FakeTimeZoneGuard(), new PersonSkillsUseAllForScheduleDaysOvertimeProvider());
+			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager(), new FakeTimeZoneGuard(), new PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider(new PersonSkillsUseAllForScheduleDaysOvertimeProvider(), new PersonalSkillsProvider()));
 			_person = PersonFactory.CreatePerson("person");
 			_activity = ActivityFactory.CreateActivity("activity");
 			_skill = SkillFactory.CreateSkill("skill");

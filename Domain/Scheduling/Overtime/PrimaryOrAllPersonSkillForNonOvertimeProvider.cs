@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public class PrimaryOrAllPersonSkillForNonOvertimeProvider : IPersonSkillsForNonOvertimeProvider
+	public class PrimaryOrAllPersonSkillForNonOvertimeProvider
 	{
 		private readonly PrimaryGroupPersonSkillAggregator _primaryGroupPersonSkillAggregator;
 		private readonly IGroupPersonSkillAggregator _allGroupPersonSkillAggregator;

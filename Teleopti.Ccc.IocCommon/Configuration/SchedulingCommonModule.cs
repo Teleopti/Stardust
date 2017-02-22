@@ -18,7 +18,6 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
-
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule(new IntraIntervalOptimizationServiceModule(_configuration));
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
-			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
+			builder.RegisterModule<ScheduleOvertimeModule>();
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().As<IClassicScheduleCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleCommand>().InstancePerLifetimeScope().ApplyAspects();

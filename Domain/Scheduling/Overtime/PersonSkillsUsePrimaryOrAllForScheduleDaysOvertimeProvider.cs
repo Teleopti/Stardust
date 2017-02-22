@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public class PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider : IPersonSkillsForScheduleDaysOvertimeProvider
+	public class PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider
 	{
 		private readonly PersonSkillsUseAllForScheduleDaysOvertimeProvider _personSkillsUseAllForScheduleDaysOvertimeProvider;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;

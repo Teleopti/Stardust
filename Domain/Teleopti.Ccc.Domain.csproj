@@ -583,9 +583,6 @@
     <Compile Include="Scheduling\Legacy\Commands\DoFullResourceOptimizationOneTime.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOptimizerHelper.cs" />
-    <Compile Include="Scheduling\Overtime\AllPersonSkillForNonOvertimeProvider.cs" />
-    <Compile Include="Scheduling\Overtime\IPersonSkillsForNonOvertimeProvider.cs" />
-    <Compile Include="Scheduling\Overtime\IPersonSkillsForScheduleDaysOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\PersonSkillsUseAllForScheduleDaysOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\PrimaryGroupPersonSkillAggregator.cs" />
