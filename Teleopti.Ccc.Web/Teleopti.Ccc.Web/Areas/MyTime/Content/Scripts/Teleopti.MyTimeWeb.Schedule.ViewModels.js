@@ -2,18 +2,10 @@
 /// <reference path="~/Content/jalaali-calendar-datepicker/moment-jalaali.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
 
-// Same value as height of class "weekview-day-schedule"
-var scheduleHeight = 668;
-var pixelToDisplayAll = 38;
-var pixelToDisplayTitle = 16;
-
 Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, parent) {
 	var self = this;
 
-	var noneProbabilityType = 0;
-	var absenceProbabilityType = 1;
-	var overtimeProbabilityType = 2;
-	var intervalLengthInMinutes = 15;
+	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
 
 	self.fixedDate = ko.observable(day.FixedDate);
 
@@ -181,8 +173,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		return (moment(baseDate + time).diff(moment(baseDate)) / (60 * 1000));
 	}
 
-	var totalMinutesOfOneDay = 1440; // = 24 * 60, Total minutes of a day
-
 	var getContinousPeriods = function (date, periods) {
 		if (!periods || periods.length === 0) return [];
 
@@ -197,8 +187,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 				currentPeriodStartMinutes = 0;
 			}
 
-			if (currentPeriodEndMinutes > totalMinutesOfOneDay) {
-				currentPeriodEndMinutes = totalMinutesOfOneDay;
+			if (currentPeriodEndMinutes > constants.totalMinutesOfOneDay) {
+				currentPeriodEndMinutes = constants.totalMinutesOfOneDay;
 			}
 
 			if (currentPeriodStartMinutes === currentPeriodEndMinutes) continue;
@@ -229,7 +219,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 
 	var calculateScheduleAndProbabilityBoundaries = function (scheduleDay, probabilityType, probabilities) {
 		var shiftStartMinutes = 0;
-		var shiftEndMinutes = totalMinutesOfOneDay;
+		var shiftEndMinutes = constants.totalMinutesOfOneDay;
 		var shiftStartPosition = 1;
 		var shiftEndPosition = 0;
 
@@ -271,15 +261,15 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 					periodStartMinutes = 0;
 				}
 
-				if (periodEndMinutes > totalMinutesOfOneDay) {
-					periodEndMinutes = totalMinutesOfOneDay;
+				if (periodEndMinutes > constants.totalMinutesOfOneDay) {
+					periodEndMinutes = constants.totalMinutesOfOneDay;
 				}
 
 				if (i === 0) {
 					shiftStartMinutes = periodStartMinutes;
 				}
 
-				if (i === scheduleDay.Periods.length - 1 && periodEndMinutes <= totalMinutesOfOneDay) {
+				if (i === scheduleDay.Periods.length - 1 && periodEndMinutes <= constants.totalMinutesOfOneDay) {
 					shiftEndMinutes = periodEndMinutes;
 				}
 
@@ -309,8 +299,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 
 				var lastProbabilityEndTime = moment(probabilities[probabilities.length - 1].EndTime);
 				var lastProbabilityEndMinute = (lastProbabilityEndTime.diff(momentDate)) / (60 * 1000);
-				if (lastProbabilityEndMinute > totalMinutesOfOneDay) {
-					lastProbabilityEndMinute = totalMinutesOfOneDay;
+				if (lastProbabilityEndMinute > constants.totalMinutesOfOneDay) {
+					lastProbabilityEndMinute = constants.totalMinutesOfOneDay;
 				}
 
 				if (probabilityEndMinutes > lastProbabilityEndMinute) {
@@ -318,7 +308,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 				}
 			}
 
-			if (probabilityType === overtimeProbabilityType) {
+			if (probabilityType === constants.overtimeProbabilityType) {
 				if (parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
 					var openPeriodStart = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
 					var openPeriodEnd = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
@@ -330,7 +320,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 						probabilityEndMinutes = openPeriodEnd;
 					}
 				} else {
-					probabilityEndMinutes = totalMinutesOfOneDay;
+					probabilityEndMinutes = constants.totalMinutesOfOneDay;
 				}
 			}
 
@@ -367,7 +357,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		if (!shouldGenerateViewModel) return undefined;
 
 		var visible = false;
-		if (probabilityType === absenceProbabilityType) {
+		if (probabilityType === constants.absenceProbabilityType) {
 			// Show absence probability within schedule time range only
 			for (var m = 0; m < continousPeriods.length; m++) {
 				var continousPeriod = continousPeriods[m];
@@ -376,7 +366,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 					break;
 				}
 			}
-		} else if (probabilityType === overtimeProbabilityType) {
+		} else if (probabilityType === constants.overtimeProbabilityType) {
 			visible = boundaries.probabilityStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEndMinutes;;
 		}
 
@@ -400,7 +390,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			endInMinutes: intervalEndMinutes,
 			actualClass: cssClass,
 			actualTooltips: tooltips,
-			styleJson: { "height": scheduleHeight * heightPerInterval + "px" },
+			styleJson: { "height": constants.scheduleHeight * heightPerInterval + "px" },
 			cssClass: function () {
 				return (self.userNowInMinute() >= 0 && self.userNowInMinute() < this.endInMinutes)
 					? this.actualClass
@@ -421,8 +411,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 
 		// If today is full day absence or dayoff, Then hide absence probabilities
 		var probabilityType = parent.probabilityType();
-		if (probabilityType === noneProbabilityType ||
-			(probabilityType === absenceProbabilityType && (day.IsFullDayAbsence || day.IsDayOff))) {
+		if (probabilityType === constants.noneProbabilityType ||
+			(probabilityType === constants.absenceProbabilityType && (day.IsFullDayAbsence || day.IsDayOff))) {
 			return [];
 		}
 
@@ -430,10 +420,10 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		var tooltipsTitle = "";
 
 		var date = moment(day.FixedDate);
-		if (probabilityType === absenceProbabilityType) {
+		if (probabilityType === constants.absenceProbabilityType) {
 			tooltipsTitle = parent.userTexts.probabilityForAbsence;
 			continousPeriods = getContinousPeriods(date, day.Periods);
-		} else if (probabilityType === overtimeProbabilityType) {
+		} else if (probabilityType === constants.overtimeProbabilityType) {
 			tooltipsTitle = parent.userTexts.probabilityForOvertime;
 		}
 
@@ -446,11 +436,11 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			actualTooltips: "",
 			cssClass: function () { return "probability-none"; },
 			tooltips: function () { return "" },
-			styleJson: { "height": Math.round(scheduleHeight * boundaries.probabilityStartPosition) + "px" }
+			styleJson: { "height": Math.round(constants.scheduleHeight * boundaries.probabilityStartPosition) + "px" }
 		});
 
 		var totalHeight = boundaries.shiftEndPosition - boundaries.shiftStartPosition;
-		var totalIntervalCount = (boundaries.shiftEndMinutes - boundaries.shiftStartMinutes) / intervalLengthInMinutes;
+		var totalIntervalCount = (boundaries.shiftEndMinutes - boundaries.shiftStartMinutes) / constants.intervalLengthInMinutes;
 		var heightPerInterval = totalHeight / totalIntervalCount;
 
 		for (var j = 0; j < rawProbabilities.length; j++) {
@@ -474,6 +464,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 
 Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, userTexts, parent) {
 	var self = this;
+
+	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
 
 	self.title = ko.observable(layer.Title);
 	self.hasMeeting = ko.computed(function () {
@@ -547,10 +539,10 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, userTexts, parent)
 	self.isOvertime = layer.IsOvertime;
 
 	self.top = ko.computed(function () {
-		return Math.round(scheduleHeight * self.startPositionPercentage());
+		return Math.round(constants.scheduleHeight * self.startPositionPercentage());
 	});
 	self.height = ko.computed(function () {
-		var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1;
+		var bottom = Math.round(constants.scheduleHeight * self.endPositionPercentage()) + 1;
 		var top = self.top();
 		return bottom > top ? bottom - top : 0;
 	});
@@ -613,12 +605,12 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, userTexts, parent)
 	});
 
 	self.heightDouble = ko.computed(function () {
-		return scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
+		return constants.scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
 	});
 	self.showTitle = ko.computed(function () {
-		return self.heightDouble() > pixelToDisplayTitle;
+		return self.heightDouble() > constants.pixelToDisplayTitle;
 	});
 	self.showDetail = ko.computed(function () {
-		return self.heightDouble() > pixelToDisplayAll;
+		return self.heightDouble() > constants.pixelToDisplayAll;
 	});
 };

@@ -8,6 +8,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.RequestViewModel.Tests.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ViewModels.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js" />
 
 if (typeof (Teleopti) === "undefined") {
 	Teleopti = {};
@@ -19,6 +20,19 @@ if (typeof (Teleopti) === "undefined") {
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var vm;
+
+	var constants = {
+		scheduleHeight: 668, // Same value as height of class "weekview-day-schedule"
+		pixelToDisplayAll: 38,
+		pixelToDisplayTitle: 16,
+
+		noneProbabilityType: 0,
+		absenceProbabilityType: 1,
+		overtimeProbabilityType: 2,
+
+		intervalLengthInMinutes: 15,
+		totalMinutesOfOneDay: 1440 //: 24 * 60, Total minutes of a day
+	};
 
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668; // Same value as height of class "weekview-day-schedule"
@@ -467,7 +481,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 	});
 
-
 	function _setTimeIndicator(theDate) {
 		if ($(".week-schedule-ASM-permission-granted").text().indexOf("yes") === -1 ||
 			$(".week-schedule-current-week").text().indexOf("yes") === -1) {
@@ -601,7 +614,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
-		}
+		},
+		Constants: constants
 	};
 })(jQuery);
 
