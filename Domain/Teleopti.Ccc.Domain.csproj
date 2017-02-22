@@ -257,6 +257,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IExternalLogonReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IContextLoadingStrategy.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\InvalidStateCodeException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PerTenant.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />

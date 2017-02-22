@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			stateCode = stateCode.Trim();
 			const int stateCodeMaxLength = 25;
 			if (stateCode.Length > stateCodeMaxLength)
-				return stateCode.Substring(0, stateCodeMaxLength);
+				throw new InvalidStateCodeException("State code can not exceed 25 characters");
 			return stateCode;
 		}
 
