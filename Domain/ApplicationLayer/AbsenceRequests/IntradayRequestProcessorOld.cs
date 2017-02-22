@@ -110,6 +110,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var resourcesForCalculation = new ResourcesExtractorCalculation(combinationResources, allSkills, skillInterval);
 				var resourcesForShovel = new ResourcesExtractorShovel(combinationResources, allSkills, skillInterval);
 
+				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+
+				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
+				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
+
 				var skillCombinationResourcesForAgent = new List<SkillCombinationResource>();
 				foreach (var day in scheduleDays)
 				{
@@ -119,6 +125,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					if (!layers.Any())
 					{
+						if (!autoGrant) return;
 						logger.Info($"Absence request {personRequest.Id.GetValueOrDefault()}  is approved as the agent is not scheduled.");
 						sendApproveCommand(personRequest.Id.GetValueOrDefault());
 						return;
@@ -165,15 +172,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 
-				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
-				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
-
 				var staffingThresholdValidator = validators.OfType<StaffingThresholdValidator>().FirstOrDefault();
 				if (staffingThresholdValidator != null)
 				{
 					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);
 					if (validatedRequest.IsValid)
 					{
+						if (!autoGrant) return;
 						var result = sendApproveCommand(personRequest.Id.GetValueOrDefault());
 						if (result)
 						{
