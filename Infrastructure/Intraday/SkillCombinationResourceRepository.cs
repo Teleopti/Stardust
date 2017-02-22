@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
+		private readonly object skillCombinationLock = new object();
 
 		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork, 
 			ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader)
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination)
 		{
-
+			var combinationId = Guid.NewGuid();
 			var dt = new DataTable();
 			dt.Columns.Add("Id", typeof(Guid));
 			dt.Columns.Add("SkillId", typeof(Guid));
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 			var insertedOn = _now.UtcDateTime();
 
-			var combinationId = Guid.NewGuid();
+
 			foreach (var skill in skillCombination)
 			{
 				var row = dt.NewRow();
@@ -125,12 +126,14 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				{
 					var key = keyFor(skillCombinationResource.SkillCombination);
 					Guid id;
-					if (!skillCombinations.TryGetValue(key, out id))
+					lock (skillCombinationLock)
 					{
-						id = persistSkillCombination(skillCombinationResource.SkillCombination);
-						skillCombinations.Add(key, id);
+						if (!skillCombinations.TryGetValue(key, out id))
+						{
+							id = persistSkillCombination(skillCombinationResource.SkillCombination);
+							skillCombinations.Add(key, id);
+						}
 					}
-
 
 
 					using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
