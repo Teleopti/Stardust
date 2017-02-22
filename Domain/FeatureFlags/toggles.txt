@@ -171,6 +171,7 @@ ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318 = true
 ResourcePlanner_LessPersonAssignmentUpdates_42159 = true
 ResourcePlanner_ShiftCategoryLimitations_42680 = true
 ResourcePlanner_IntradayNoDailyValueCheck_42767 = RC
+ResourcePlanner_LoadingLessSchedules_42639 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
