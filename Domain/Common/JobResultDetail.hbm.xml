@@ -18,7 +18,7 @@
                  not-null ="true"
                  foreign-key="FK_JobResultDetail_JobResult"/>
 
-    <property name="Message" length="1000" type="string" not-null ="true" />
+    <property name="Message" length="1000000" type="string" not-null ="true" />
     <property name="ExceptionStackTrace" length="8000" type="string" not-null ="false" />
     <property name="ExceptionMessage" length="2000" type="string" not-null ="false" />
     <property name="InnerExceptionStackTrace" length="8000" type="string" not-null ="false" />

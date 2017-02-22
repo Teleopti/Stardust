@@ -7,19 +7,24 @@ namespace Teleopti.Ccc.TestCommon.TestData
 	// shouldnt they be explicit, if relevant?
 	public static class RandomName
 	{
-		private static readonly Random random = new Random();
-
 		public static string Make(string baseName)
 		{
-			return baseName + " " + randomString(6) + "~";
+			return baseName + " " + RandomString.Make(6) + "~";
 		}
 
 		public static string Make()
 		{
-			return randomString(6) + "~";
+			return RandomString.Make(6) + "~";
 		}
 
-		private static string randomString(int length)
+		
+	}
+
+	public static class RandomString
+	{
+		private static readonly Random random = new Random();
+
+		public static string Make(int length)
 		{
 			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 			return new string(

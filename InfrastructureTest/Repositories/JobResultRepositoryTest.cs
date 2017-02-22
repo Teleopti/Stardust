@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IJobResult CreateAggregateWithCorrectBusinessUnit()
         {
             var jobResult = new JobResult(JobCategory.QuickForecast,period,person,timestamp);
-            jobResult.AddDetail(new JobResultDetail(DetailLevel.Warning,"No beer in fridge",timestamp.AddMinutes(1),new PermissionException("Action not allowed.",new PermissionException("Not authorized to buy beer."))));
+            jobResult.AddDetail(new JobResultDetail(DetailLevel.Warning,RandomString.Make(10001),timestamp.AddMinutes(1),new PermissionException("Action not allowed.",new PermissionException("Not authorized to buy beer."))));
             return jobResult;
         }
 
