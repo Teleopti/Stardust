@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.Caching;
 using Teleopti.Interfaces.Domain;
 
@@ -24,8 +25,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 				return intradyStaffingViewModelCache;
 
 			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId});
-			if (!intradyStaffingViewModel.StaffingHasData) return intradyStaffingViewModel;
-			var cachePolicy = new CacheItemPolicy { SlidingExpiration = new TimeSpan(0, 10, 0) };
+			if (!intradyStaffingViewModel.StaffingHasData || intradyStaffingViewModel.DataSeries.ScheduledStaffing?.Length == 0)
+				return intradyStaffingViewModel;
+			var cachePolicy = new CacheItemPolicy {SlidingExpiration = new TimeSpan(0, 10, 0)};
 			MemoryCache.Default.Set(cacheKey, intradyStaffingViewModel, cachePolicy);
 			return intradyStaffingViewModel;
 		}
