@@ -244,19 +244,15 @@ namespace Teleopti.Ccc.Win.Payroll
 					message.ExportPersonIdCollection =
 						payrollExport.Persons.Select(p => p.Id.GetValueOrDefault()).ToList();
 				}
+				try
+				{
+					_stardustSender.Send(message);
+				}
+				catch
+				{
+					ViewBase.ShowErrorMessage("An error occured when trying to run a payroll export.", "");
+				}
 
-				if (_toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
-					try
-					{
-						_stardustSender.Send(message);
-					}
-					catch
-					{
-						ViewBase.ShowErrorMessage("An error occured when trying to run a payroll export.", "");
-					}
-
-				else
-					_messageSender.Send(message, true);
 			}
 		}
 

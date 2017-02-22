@@ -171,7 +171,6 @@
 		ETL_SpeedUpPersonPeriodNightly_38097,
 		ETL_SpeedUpNightlyReloadDatamart_38131,
 		ETL_SpeedUpNightlySkill_37543,
-		Payroll_ToStardust_38204,
 		ETL_SpeedUpScenarioNightly_38300,
 		Scheduler_LoadWithoutRequests_38567,
 		ETL_SpeedUpNightlyActivity_38303,

@@ -60,10 +60,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				message.ExportPersonIdCollection =
 					payrollExport.ExportPersonCollection;
 			}
-			if (_toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
-				_stardustSender.Send(message);
-			else
-				_serviceBusSender.Send(message, true);
+			_stardustSender.Send(message);
 
 			return payrollResultId;
 		}

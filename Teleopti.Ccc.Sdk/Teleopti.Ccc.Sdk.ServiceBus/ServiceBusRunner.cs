@@ -45,9 +45,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[NonSerialized]
 		private ConfigFileDefaultHost _denormalizeBus;
 
-		[NonSerialized]
-		private ConfigFileDefaultHost _payrollBus;
-
 		private IContainer _sharedContainer;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
 
@@ -93,12 +90,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 				_denormalizeBus.Start();
-
-				if (!toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
-				{
-					_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-					_payrollBus.Start();
-				}
 			}
 			AppDomain.MonitoringIsEnabled = true;
 
@@ -174,17 +165,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				try
 				{
 					_denormalizeBus.Dispose();
-				}
-				catch (Exception)
-				{
-					// ignored
-				}
-			}
-			if (_payrollBus != null)
-			{
-				try
-				{
-					_payrollBus.Dispose();
 				}
 				catch (Exception)
 				{
