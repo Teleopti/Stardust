@@ -316,15 +316,15 @@ $(document).ready(function () {
 		}
 	});
 
-	test("should show overtime possibility within schedule time range", function () {
+	test("should show overtime possibility from schedule start to end of today", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
 		var week = createWeekViewmodel(overtimeProbabilityType, 8, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
 
-		// Total 9 hours * 4 = 36 periods, and there is one extra period at the end
-		equal(vm.probabilities.length, 37);
+		// Will generate all overtime possibility from schedule start to end of today (from 09:30 to 00:00+1)
+		equal(vm.probabilities.length, 59);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
@@ -385,8 +385,8 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(750); // 12:30
 
-		// Total 9 hours * 4 = 36 periods, and there is one extra period at the end
-		equal(vm.probabilities.length, 37);
+		// Will generate all overtime possibility from schedule start to end of today (from 09:30 to 00:00+1)
+		equal(vm.probabilities.length, 59);
 
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
@@ -555,9 +555,9 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
 
-		// In this scenario timeline will start from 00:00
-		// So should be (18.5 - 0) * 4 + 1
-		equal(vm.probabilities.length, 75);
+		// In this scenario timeline will start from 00:00, then all probabilities will be generated for whole day
+		// So should be (24 - 0) * 4 + 1
+		equal(vm.probabilities.length, 97);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
