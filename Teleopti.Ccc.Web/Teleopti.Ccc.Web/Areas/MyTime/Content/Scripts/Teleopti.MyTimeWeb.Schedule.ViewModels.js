@@ -183,22 +183,32 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 
 	var totalMinutesOfOneDay = 1440; // = 24 * 60, Total minutes of a day
 
-	var parseTimeSpan = function (timespan, addCrossDayMinutesToEndTime) {
+	var parseTimeSpan = function (timespan, addCrossDayMinutesToEndTime, isFirstPeriod) {
+		if (isFirstPeriod == undefined) isFirstPeriod = false;
+
 		var splitterIndex = timespan.indexOf(" - ");
 		var periodEndPosition = splitterIndex + 3;
 		var periodStart = timespan.substring(0, splitterIndex);
 		var periodEnd = timespan.substring(periodEndPosition, timespan.length);
-		var isCrossDayperiod = periodEnd.indexOf("+1") >= 0;
 
-		var startTimeInMinutes = !isCrossDayperiod
-			? convertTimePointToMinutes(periodStart)
-			: 0;
-		var endTimeInMinutes = convertTimePointToMinutes(isCrossDayperiod
-				? periodEnd.substring(0, periodEnd.length - "+1".length)
-				: periodEnd);
-		if (isCrossDayperiod && addCrossDayMinutesToEndTime) {
+		var isCrossDayPeriod = periodEnd.indexOf("+") >= 0;
+		if (isCrossDayPeriod) {
+			periodEnd = periodEnd.substring(0, periodEnd.length - "+1".length);
+		}
+
+		var startTimeInMinutes, endTimeInMinutes;
+		if (isCrossDayPeriod) {
+			startTimeInMinutes = isFirstPeriod ? 0 : convertTimePointToMinutes(periodStart);
+			endTimeInMinutes = isFirstPeriod ? convertTimePointToMinutes(periodEnd) : totalMinutesOfOneDay;
+		} else {
+			startTimeInMinutes = convertTimePointToMinutes(periodStart);
+			endTimeInMinutes = convertTimePointToMinutes(periodEnd);
+		}
+
+		if (isCrossDayPeriod && addCrossDayMinutesToEndTime) {
 			endTimeInMinutes = endTimeInMinutes + totalMinutesOfOneDay;
 		}
+
 		return {
 			startMinutes: startTimeInMinutes,
 			endMinutes: endTimeInMinutes
@@ -212,7 +222,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		var previousEndTime = 0;
 		var continousPeriodStart = 0;
 		for (var l = 0; l < periods.length; l++) {
-			var currentPeriodTimeSpan = parseTimeSpan(day.Periods[l].TimeSpan);
+			var isFirstPeriod = l === 0;
+			var currentPeriodTimeSpan = parseTimeSpan(day.Periods[l].TimeSpan, false, isFirstPeriod);
 			var currentPeriodStartTime = currentPeriodTimeSpan.startMinutes;
 			var currentPeriodEndTime = currentPeriodTimeSpan.endMinutes;
 
@@ -279,7 +290,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			for (var i = 0; i < scheduleDay.Periods.length; i++) {
 				var period = scheduleDay.Periods[i];
 
-				var periodTimeSpan = parseTimeSpan(period.TimeSpan, true);
+				var isFirstPeriod = i === 0;
+				var periodTimeSpan = parseTimeSpan(period.TimeSpan, true, isFirstPeriod);
 
 				if (i === 0) {
 					shiftStartMinutes = periodTimeSpan.startMinutes;
@@ -318,15 +330,19 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 				}
 			}
 
-			if (probabilityType === overtimeProbabilityType && parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
-				var openPeriodStart = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
-				var openPeriodEnd = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
+			if (probabilityType === overtimeProbabilityType) {
+				if (parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
+					var openPeriodStart = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
+					var openPeriodEnd = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
 
-				if (probabilityStartMinutes < openPeriodStart) {
-					probabilityStartMinutes = openPeriodStart;
-				}
-				if (openPeriodEnd < probabilityEndMinutes) {
-					probabilityEndMinutes = openPeriodEnd;
+					if (probabilityStartMinutes < openPeriodStart) {
+						probabilityStartMinutes = openPeriodStart;
+					}
+					if (openPeriodEnd < probabilityEndMinutes) {
+						probabilityEndMinutes = openPeriodEnd;
+					}
+				} else {
+					probabilityEndMinutes = totalMinutesOfOneDay;
 				}
 			}
 			probabilityStartPosition = (probabilityStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
@@ -454,6 +470,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			}
 		}
 
+		//return probabilitieModels.length > 1 ? probabilitieModels : [];
 		return probabilitieModels;
 	}
 
