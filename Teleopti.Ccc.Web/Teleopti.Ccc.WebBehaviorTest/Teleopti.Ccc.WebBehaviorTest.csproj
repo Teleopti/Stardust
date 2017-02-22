@@ -830,7 +830,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\PlanningPeriod.feature.cs">
+    <Compile Include="Wfm\ResourcePlanner\PlanningPeriod.feature.cs">
       <DependentUpon>PlanningPeriod.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1411,7 +1411,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Permissions.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\PlanningPeriod.feature">
+    <None Include="Wfm\ResourcePlanner\PlanningPeriod.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlanningPeriod.feature.cs</LastGenOutput>
     </None>

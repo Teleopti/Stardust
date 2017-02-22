@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoResourcePlanner()
 		{
-			GoToPage("wfm/#/resourceplanner");
+			GoToPage("wfm/#/resourceplanner/planningperiods");
 		}
 
 		public static void GotoPermissions()
