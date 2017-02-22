@@ -865,10 +865,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod)
 		{
 			return  Session.CreateSQLQuery(
-				  "SELECT DISTINCT pr.Id from PersonRequest pr, request r  where " +
-				  "	pr.id = r.parent and" +
-				  "	RequestStatus = 5 and " +
-				  "	(r.startDateTime <= :endDate and r.endDateTime >= :startDate)" )
+				  @"SELECT DISTINCT pr.Id from PersonRequest pr, request r WITH(NOLOCK) 
+					where
+				  		pr.id = r.parent and 
+						pr.RequestStatus = 5 and
+				  		r.startDateTime <= :endDate and 
+						r.endDateTime >= :startDate" )
 										  .SetDateTime("startDate", dateTimePeriod.StartDateTime)
 										  .SetDateTime("endDate", dateTimePeriod.EndDateTime)
 										  .List<Guid>();
