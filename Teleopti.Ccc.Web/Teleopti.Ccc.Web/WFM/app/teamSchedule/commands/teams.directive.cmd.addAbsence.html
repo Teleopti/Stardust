@@ -39,8 +39,14 @@
 			</div>
 			<p class="text-danger" ng-if="!vm.isTimeRangeValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
 			<div class="text-danger" ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0">
-				<i class="mdi mdi-alert-octagon"></i>
-				<span>{{'TheAbsenceCanNotBeAddedTo'|translate}} <b>{{vm.invalidAgentNameListString}}</b></span>
+				<p ng-if="vm.isFullDayAbsence">
+					<i class="mdi mdi-alert-octagon"></i>
+					<span>{{'AbsenceCannotBeAddedToAgentsInAnotherTimeZone'|translate}}: <b>{{vm.invalidAgentNameListString}}</b></span>
+				</p>
+				<p ng-if="!vm.isFullDayAbsence">
+					<i class="mdi mdi-alert-octagon"></i>
+					<span>{{'TheAbsenceCanNotBeAddedTo'|translate}} <b>{{vm.invalidAgentNameListString}}</b></span>
+				</p>
 			</div>
 
 		</form>

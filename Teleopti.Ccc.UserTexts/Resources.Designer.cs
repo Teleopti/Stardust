@@ -178,6 +178,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t add to agent(s) in another time zone.
+        /// </summary>
+        public static string AbsenceCannotBeAddedToAgentsInAnotherTimeZone {
+            get {
+                return ResourceManager.GetString("AbsenceCannotBeAddedToAgentsInAnotherTimeZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absence can not be reported..
         /// </summary>
         public static string AbsenceCanNotBeReported {

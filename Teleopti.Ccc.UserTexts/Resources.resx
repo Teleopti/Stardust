@@ -15588,4 +15588,8 @@ Do you want to participate?</value>
     <value>Monitor up to 50 agents</value>
     <comment>Subitle of agents view in RTA</comment>
   </data>
+  <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Can't add to agent(s) in another time zone</value>
+    <comment>Error message for adding full-day absence to agent in another time zone in Teams</comment>
+  </data>
 </root>
