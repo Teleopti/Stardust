@@ -20,7 +20,6 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	[RequestPerformanceTuningTest]
-	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;

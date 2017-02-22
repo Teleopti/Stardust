@@ -293,18 +293,4 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 		public Guid SkillCombinationId { get; set; }
 	}
 
-
-	public class SkillCombinationResourceRepositoryEmpty : SkillCombinationResourceRepository
-	{
-		public override void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
-		{
-
-		}
-
-		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader) 
-			: base(now, currentUnitOfWork, currentBusinessUnit, requestStrategySettingsReader)
-		{
-		}
-	}
-
 }

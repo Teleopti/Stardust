@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	[TestFixture]
 	[RequestPerformanceTuningTest]
-	[Toggle(Toggles.AbsenceRequests_Intraday_UseCascading_41969)]
 	public class IntradayReadModelUpdatePerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
