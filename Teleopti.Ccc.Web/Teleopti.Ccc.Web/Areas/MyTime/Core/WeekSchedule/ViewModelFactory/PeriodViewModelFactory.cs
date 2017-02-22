@@ -45,15 +45,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 				var isOvertimeLayer = visualLayer.DefinitionSet != null && visualLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
 
-                newList.Add(new PeriodViewModel
+	            var timePeriod = visualLayer.Period.TimePeriod(_timeZone.TimeZone());
+				newList.Add(new PeriodViewModel
                                 {
                                     Summary =
                                         TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
                                                                                CultureInfo.CurrentUICulture),
                                     Title = visualLayer.DisplayDescription().Name,
-                                    TimeSpan =
-										visualLayer.Period.TimePeriod(_timeZone.TimeZone()).
-                                        ToShortTimeString(),
+                                    TimeSpan = timePeriod.ToShortTimeString(),
+									DateTimePeriod = getDateTimePeriod(localDate, timePeriod),
                                     StyleClassName = colorToString(visualLayer.DisplayColor()),
                                     Meeting = meetingModel,
                                     Color = visualLayer.DisplayColor().ToCSV(),
@@ -120,5 +120,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var colorCode = color.ToArgb();
 			return string.Concat("color_", ColorTranslator.ToHtml(Color.FromArgb(colorCode)).Replace("#", ""));
 		}
+
+		private static DateTimePeriod getDateTimePeriod(DateTime localDate, TimePeriod timePeriod)
+		{
+			var date = localDate.Date.Utc();
+			var startDateTime = date.Add(timePeriod.StartTime);
+			var endDateTime = date.Add(timePeriod.EndTime);
+			return new DateTimePeriod(startDateTime, endDateTime);
+		}
+
 	}
 }

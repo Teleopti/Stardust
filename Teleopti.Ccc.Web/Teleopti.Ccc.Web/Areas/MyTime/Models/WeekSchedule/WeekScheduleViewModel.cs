@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public decimal EndPositionPercentage { get; set; }
 		public string Color { get; set; }
 		public bool IsOvertime { get; set; }
+		public DateTimePeriod DateTimePeriod { get; set; }
 	}
 
 	public class PersonDayOffPeriodViewModel : PeriodViewModel
