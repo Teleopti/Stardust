@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	xdescribe('Requests overview directive', function () {
+	describe('Requests overview directive', function () {
 		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector, requestsFilterService;
 
 		var targetElement, targetScope;
@@ -44,16 +44,6 @@
 			requestsFilterService = _RequestsFilter_;
 		}));
 
-		function setupTargetElement() {
-			var count = 0;
-			function initCallBack(count) {
-			}
-			targetElement = $compile('<requests-overview ' +
-				'on-init-call-back="' + initCallBack(count) + '"' +
-				'period="absencePeriod"></requests-overview>')(targetScope);
-			targetScope.$digest();
-		}
-
 		it("show requests table container", function () {
 			requestsDataService.setRequests([]);
 			targetElement = $compile('<requests-overview ></requests-overview>')(targetScope);
@@ -68,7 +58,11 @@
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
 			};
 			requestsDataService.setRequests([request]);
-			setupTargetElement();
+			targetScope.initFooter = function () { };
+			targetElement = $compile('<requests-overview ' +
+				'on-init-call-back="initCallBack(count)"' +
+				'period="absencePeriod"></requests-overview>')(targetScope);
+			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
 			scope.requestsOverview.selectedTeamIds = ["team"];
@@ -135,7 +129,8 @@
 		it("should request data when filter change to valid values", function () {
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
-			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
+			targetScope.initFooter = function () { };
+			targetElement = $compile('<requests-overview on-init-call-back="initFooter(count)" period="period"></requests-overview>')(targetScope);
 			targetScope.$digest();
 
 			var scope = getInnerScope(targetElement);
@@ -157,8 +152,9 @@
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetScope.agentSearchTerm = "";
+			targetScope.initFooter = function () { };
 
-			targetElement = $compile('<requests-overview period="period" agent-search-term="agentSearchTerm"></requests-overview>')(targetScope);
+			targetElement = $compile('<requests-overview on-init-call-back="initFooter(count)" period="period" agent-search-term="agentSearchTerm"></requests-overview>')(targetScope);
 
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
@@ -176,8 +172,8 @@
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetScope.agentSearchTerm = "";
-
-			targetElement = $compile('<requests-overview period="period" agent-search-term="agentSearchTerm"></requests-overview>')(targetScope);
+			targetScope.initFooter = function () { };
+			targetElement = $compile('<requests-overview on-init-call-back="initFooter(count)" period="period" agent-search-term="agentSearchTerm"></requests-overview>')(targetScope);
 
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
@@ -261,8 +257,10 @@
 				endDate: moment().add(1, 'd')._d
 			};
 			targetScope.selectedTeams = ["team"];
-			targetElement = $compile('<requests-overview is-active="selectedTabIndex == 0" period="absencePeriod"></requests-overview>' +
-				'<requests-overview is-active="selectedTabIndex == 1" period="shiftTradePeriod" selected-team-ids="selectedTeams"></requests-overview>')(targetScope);
+			targetScope.initFooter = function () { };
+
+			targetElement = $compile('<requests-overview on-init-call-back="initFooter(count)" is-active="selectedTabIndex == 0" period="absencePeriod"></requests-overview>' +
+				'<requests-overview on-init-call-back="initFooter(count)" is-active="selectedTabIndex == 1" period="shiftTradePeriod" selected-team-ids="selectedTeams"></requests-overview>')(targetScope);
 			targetScope.$digest();
 
 			requestsDataService.reset();
