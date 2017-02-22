@@ -151,6 +151,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.personAccountPermission = ko.observable();
 		self.viewProbabilityPermission = ko.observable();
 		self.staffingProbabilityEnabled = ko.observable();
+		self.absenceProbabilityEnabled = ko.observable();
 
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
@@ -419,8 +420,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
 			self.viewProbabilityPermission(data.ViewPossibilityPermission);
 
-			self.staffingProbabilityEnabled(data.CheckStaffingByIntraday && self.viewProbabilityPermission()
+			self.staffingProbabilityEnabled(self.viewProbabilityPermission()
 				&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608"));
+
+			self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled());
 
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);

@@ -83,7 +83,7 @@
                                     @Resources.HideStaffingProbability
                                 </a>
                             </li>
-                            <li>
+                            <li data-bind="visible: absenceProbabilityEnabled()">
                                 <a href="#" data-bind="click: function (data, event) { switchProbabilityType(1); }">
                                     @Resources.ShowAbsenceProbability
                                 </a>

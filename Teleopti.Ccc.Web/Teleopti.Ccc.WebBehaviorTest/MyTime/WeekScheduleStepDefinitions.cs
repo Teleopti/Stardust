@@ -259,6 +259,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				"#dropdown-probability-type span:contains('{0}')", probability);
 		}
 
+		[Then(@"I should not see option '(.*)'in probability value list")]
+		public void ThenIShouldNotSeeOptionInProbabilityValueList(string probability)
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery($"#probabilityDropdownMenu .dropdown-menu a:contains('{probability}')");
+		}
+
+
 		private void AssertAbsenceIndicators(int visibleIndicatorCount)
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.holiday-agents:visible').length",
