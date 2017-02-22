@@ -157,39 +157,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		}
 	}
 
-	public class StaffingThresholdValidatorCascadingSkills : StaffingThresholdValidator
-	{
-		public override IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
-		{
-			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-			var culture = absenceRequest.Person.PermissionInformation.Culture();
-			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
-			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCount();
-
-			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
-
-			var underStaffingResultDict = staffingThresholdValidatorHelper.GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new CascadingPersonSkillProvider());
-
-			if (underStaffingResultDict.IsNotUnderstaffed())
-			{
-				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
-			}
-			string validationError = numberOfRequestedDays > 1
-				? GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture)
-				: GetUnderStaffingHourString(underStaffingResultDict, culture, uiCulture, timeZone, absenceRequest.Period.StartDateTimeLocal(timeZone));
-			return new ValidatedRequest
-			{
-				IsValid = false,
-				ValidationErrors = validationError
-			};
-		}
-
-		public override IAbsenceRequestValidator CreateInstance()
-		{
-			return new StaffingThresholdValidatorCascadingSkills();
-		}
-	}
-
 	public class StaffingThresholdValidator :  IAbsenceRequestValidator
 	{
 		private const int maxUnderStaffingItemCount = 4;// bug #40906 needs to be max 4 
