@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -28,8 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_feedback = feedback;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
-
-		[TestLog]
+		
 		public virtual void Update(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
@@ -93,8 +91,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 		}
-
-		[TestLog]
+		
 		public virtual IList<SkillStaffingInterval> CreateReadModel(
 			ISkillResourceCalculationPeriodDictionary skillResourceCalculationPeriodDictionary, DateTimePeriod period)
 		{
