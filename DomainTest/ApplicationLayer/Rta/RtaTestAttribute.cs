@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			system.UseTestDouble<FakeEventPublisher_ExperimentalEventPublishing>().For<FakeEventPublisher, IEventPublisher>();
 			system.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
-			system.UseTestDouble<FakeUnitOfWorkAspect_ExperimentalEventPublishing>().For<IUnitOfWorkAspect>();
+			system.UseTestDouble<FakeUnitOfWorkAspect_ExperimentalEventPublishing>().For<IUnitOfWorkAspect, IAllBusinessUnitsUnitOfWorkAspect>();
 
 			// disable activity change checker triggered by minute tick which is triggered by Now.Is(...)
 			system.UseTestDouble<DontCheckForActivityChangesFromScheduleChangeProcessor>().For<IActivityChangeCheckerFromScheduleChangeProcessor>();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 	}
 
-	public class FakeUnitOfWorkAspect_ExperimentalEventPublishing : IUnitOfWorkAspect
+	public class FakeUnitOfWorkAspect_ExperimentalEventPublishing : IUnitOfWorkAspect, IAllBusinessUnitsUnitOfWorkAspect
 	{
 		private readonly IEventPopulatingPublisher _publisher;
 		private readonly FakeStorage _storage;
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			if (changes.IsEmpty())
 				return;
 
-			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} OnAfterInvocation {changes.Count()}");
-			//changes.ForEach(x => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {x.Root.GetType()} {x.Status}"));
+			Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} OnAfterInvocation {changes.Count()}");
+			changes.ForEach(x => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {x.Root.GetType()} {x.Status}"));
 
 			// required for rta tests, really, PA is missing events...
 			new ScheduleChangedEventPublisher(_publisher, _now).AfterCompletion(changes);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			base.Is(utc);
 
-			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {utc}");
+			Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {utc}");
 
 			if (dayTick)
 				_publisher.Publish(new TenantDayTickEvent());
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					if (method == null)
 						continue;
 
-					//events.ForEach(e => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {e} to {handlerType}"));
+					events.ForEach(e => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {e} to {handlerType}"));
 
 					onAnotherThread(() =>
 					{

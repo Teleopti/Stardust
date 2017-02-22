@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
@@ -10,12 +11,14 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
+		private readonly ICurrentDataSource _dataSource;
 		private readonly List<Type> _handlerTypes = new List<Type>();
 
-		public ConfigurableSyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
+		public ConfigurableSyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor, ICurrentDataSource dataSource)
 		{
 			_resolver = resolver;
 			_processor = processor;
+			_dataSource = dataSource;
 		}
 
 		public void AddHandler<T>()
@@ -30,6 +33,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Publish(params IEvent[] events)
 		{
+			var tenant = _dataSource.CurrentName();
 			onAnotherThread(() =>
 			{
 				foreach (var @event in events)
@@ -39,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon
 						var method = _resolver.HandleMethodFor(handlerType, @event);
 						if (method == null)
 							continue;
-						_processor.Process(@event, handlerType);
+						_processor.Process(tenant, @event, handlerType);
 					}
 				}
 			});

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -28,19 +30,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class StateMapper
 	{
-		private readonly IStateCodeAdder _stateCodeAdder;
 		private readonly IMappingReader _reader;
+		private readonly ICurrentEventPublisher _eventPublisher;
+		private readonly IRtaStateGroupRepository _stateGroups;
 
 		private readonly PerTenant<string> _version;
+
 		private readonly PerTenant<IDictionary<ruleMappingKey, MappedRule>> _ruleMappings;
+
 		private readonly PerTenant<IDictionary<stateCodeMappingKey, MappedState>> _stateCodeMappings;
 		private readonly PerTenant<IDictionary<Guid, MappedState>> _stateMappings;
 		private readonly PerTenant<IEnumerable<Guid>> _loggedOutStateGroupIds;
 
-		public StateMapper(IStateCodeAdder stateCodeAdder, IMappingReader reader, ICurrentDataSource dataSource)
+		public StateMapper(IMappingReader reader, ICurrentDataSource dataSource, ICurrentEventPublisher eventPublisher, IRtaStateGroupRepository stateGroups)
 		{
-			_stateCodeAdder = stateCodeAdder;
 			_reader = reader;
+			_eventPublisher = eventPublisher;
+			_stateGroups = stateGroups;
 
 			_version = new PerTenant<string>(dataSource);
 			_ruleMappings = new PerTenant<IDictionary<ruleMappingKey, MappedRule>>(dataSource);
@@ -62,10 +68,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					platformTypeId = platformTypeId,
 					stateCode = stateCode
 				}, out match);
+
 			if (match != null) return match;
-			return _stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
+
+			_eventPublisher.Current().Publish(new UnknownStateCodeReceviedEvent
+			{
+				BusinessUnitId = businessUnitId,
+				PlatformTypeId = platformTypeId,
+				StateCode = stateCode,
+				StateDescription = stateDescription
+			});
+
+			return readDefaultStateGroup(businessUnitId);
 		}
-		
+
+		// use same uow as rta transaction
+		private MappedState readDefaultStateGroup(Guid businessUnitId)
+		{
+			var stateGroups = _stateGroups.LoadAll();
+			var defaultStateGroup = (
+				from g in stateGroups
+				where g.BusinessUnit.Id.Value == businessUnitId &&
+					  g.DefaultStateGroup
+				select g
+				).SingleOrDefault();
+			if (defaultStateGroup == null)
+				return null;
+			return new MappedState
+			{
+				StateGroupId = defaultStateGroup.Id.Value,
+				StateGroupName = defaultStateGroup.Name
+			};
+		}
+
 		public MappedState StateFor(Guid? stateGroupId)
 		{
 			if (stateGroupId == null)

@@ -21,13 +21,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IRtaStateGroup>();
         }
-
-		public IEnumerable<IRtaStateGroup> LoadAllExclusive()
-		{
-			return Session.CreateCriteria<RtaStateGroup>()
-				.SetLockMode(LockMode.Write)
-				.List<RtaStateGroup>();
-		}
-
-	}
+    }
 }

@@ -66,11 +66,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return _storage.LoadAll<IRtaStateGroup>().ToList();
 		}
-
-		public IEnumerable<IRtaStateGroup> LoadAllExclusive()
-		{
-			return _storage.LoadAll<IRtaStateGroup>();
-		}
-		
 	}
 }

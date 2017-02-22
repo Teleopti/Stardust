@@ -235,6 +235,7 @@
     <Compile Include="ApplicationLayer\Events\ManageScheduleEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleBackoutEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\UnknownStateCodeReceviedEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
     <Compile Include="ApplicationLayer\Intraday\SkillStaffingIntervalProvider.cs" />
@@ -908,7 +909,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\StateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteInAlarmModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherencePercentageReadModelPersister.cs" />

@@ -6,6 +6,5 @@ namespace Teleopti.Ccc.Domain.Repositories
     public interface IRtaStateGroupRepository : IRepository<IRtaStateGroup>
     {
         IList<IRtaStateGroup> LoadAllCompleteGraph();
-        IEnumerable<IRtaStateGroup> LoadAllExclusive();
     }
 }

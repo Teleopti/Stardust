@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	public class MappingReadModelUpdater :
+		IHandleEvent<UnknownStateCodeReceviedEvent>,
 		IHandleEvent<TenantMinuteTickEvent>,
 		IHandleEvent<ActivityChangedEvent>,
 		IHandleEvent<RtaStateGroupChangedEvent>,
@@ -42,6 +43,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_businessUnits = businessUnits;
 			_persister = persister;
 			_distributedLock = distributedLock;
+		}
+
+		[AllBusinessUnitsUnitOfWork]
+		public virtual void Handle(UnknownStateCodeReceviedEvent @event)
+		{
+			var stateGroups = _stateGroups.LoadAll();
+
+			var defaultStateGroup = (
+				from g in stateGroups
+				where g.BusinessUnit.Id.Value == @event.BusinessUnitId &&
+					  g.DefaultStateGroup
+				select g
+				).SingleOrDefault();
+
+			if (defaultStateGroup == null)
+				return;
+
+			var stateDescription = @event.StateDescription ?? @event.StateCode;
+
+			var hasStateCode = defaultStateGroup.StateCollection
+				.Any(x => x.StateCode == @event.StateCode && x.PlatformTypeId == @event.PlatformTypeId);
+			if (!hasStateCode)
+				defaultStateGroup.AddState(stateDescription, @event.StateCode, @event.PlatformTypeId);
 		}
 
 		[ReadModelUnitOfWork]
@@ -226,5 +250,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				};
 			return mappings;
 		}
+
 	}
 }
