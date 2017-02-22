@@ -11,68 +11,67 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public class PeriodViewModelFactory : IPeriodViewModelFactory
-    {
+	{
 		private readonly IUserTimeZone _timeZone;
-	    private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
+		private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
 
-	    public PeriodViewModelFactory(IUserTimeZone timeZone, OvertimeAvailabilityViewModelMapper overtimeMapper)
-	    {
-		    _timeZone = timeZone;
-		    _overtimeMapper = overtimeMapper;
-	    }
+		public PeriodViewModelFactory(IUserTimeZone timeZone, OvertimeAvailabilityViewModelMapper overtimeMapper)
+		{
+			_timeZone = timeZone;
+			_overtimeMapper = overtimeMapper;
+		}
 
 		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateTime localDate, TimeZoneInfo timeZone)
-        {
-            var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
-            var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
+		{
+			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
+			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
 
-            var newList = new List<PeriodViewModel>();
-            
-            foreach (var visualLayer in layerExtendedList)
-            {
-                MeetingViewModel meetingModel = null;
-                
-                var meetingPayload = visualLayer.Payload as IMeetingPayload;
-                if (meetingPayload!=null)
-                {
-                    meetingModel = new MeetingViewModel
-                                        {
-                                            Location = meetingPayload.Meeting.GetLocation(new NoFormatting()),
-                                            Title = meetingPayload.Meeting.GetSubject(new NoFormatting()),
-														  Description = meetingPayload.Meeting.GetDescription(new NoFormatting())
-                                        };
-                }
+			var newList = new List<PeriodViewModel>();
 
-				var isOvertimeLayer = visualLayer.DefinitionSet != null && visualLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
+			foreach (var visualLayer in layerExtendedList)
+			{
+				MeetingViewModel meetingModel = null;
 
-	            var timePeriod = visualLayer.Period.TimePeriod(_timeZone.TimeZone());
+				var meetingPayload = visualLayer.Payload as IMeetingPayload;
+				if (meetingPayload != null)
+				{
+					meetingModel = new MeetingViewModel
+					{
+						Location = meetingPayload.Meeting.GetLocation(new NoFormatting()),
+						Title = meetingPayload.Meeting.GetSubject(new NoFormatting()),
+						Description = meetingPayload.Meeting.GetDescription(new NoFormatting())
+					};
+				}
+
+				var isOvertimeLayer = visualLayer.DefinitionSet != null &&
+									  visualLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
+
+				var timezone = _timeZone.TimeZone();
+				var startPositionPercentage =
+					(decimal)(visualLayer.VisualPeriod.TimePeriod(timezone).StartTime - minMaxTime.StartTime).Ticks /
+					(minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+				var endPositionPercentage =
+					(decimal)(visualLayer.VisualPeriod.TimePeriod(timezone).EndTime - minMaxTime.StartTime).Ticks /
+					(minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 				newList.Add(new PeriodViewModel
-                                {
-                                    Summary =
-                                        TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
-                                                                               CultureInfo.CurrentUICulture),
-                                    Title = visualLayer.DisplayDescription().Name,
-                                    TimeSpan = timePeriod.ToShortTimeString(),
-									DateTimePeriod = getDateTimePeriod(localDate, timePeriod),
-                                    StyleClassName = colorToString(visualLayer.DisplayColor()),
-                                    Meeting = meetingModel,
-                                    Color = visualLayer.DisplayColor().ToCSV(),
-                                    StartPositionPercentage =
-                                        (decimal)
-										(visualLayer.VisualPeriod.TimePeriod(_timeZone.TimeZone()).
-                                             StartTime - minMaxTime.StartTime).Ticks/
-                                        (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
-                                    EndPositionPercentage =
-                                        (decimal)
-										(visualLayer.VisualPeriod.TimePeriod(_timeZone.TimeZone()).
-                                             EndTime - minMaxTime.StartTime).Ticks/
-                                        (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
-									IsOvertime = isOvertimeLayer
-                                });
-
-            }
-            return newList;
-        }
+				{
+					Summary =
+						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
+							CultureInfo.CurrentUICulture),
+					Title = visualLayer.DisplayDescription().Name,
+					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
+					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
+					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),
+					StyleClassName = colorToString(visualLayer.DisplayColor()),
+					Meeting = meetingModel,
+					Color = visualLayer.DisplayColor().ToCSV(),
+					StartPositionPercentage = startPositionPercentage,
+					EndPositionPercentage = endPositionPercentage,
+					IsOvertime = isOvertimeLayer
+				});
+			}
+			return newList;
+		}
 
 		public IEnumerable<OvertimeAvailabilityPeriodViewModel> CreateOvertimeAvailabilityPeriodViewModels(IOvertimeAvailability overtimeAvailability, IOvertimeAvailability overtimeAvailabilityYesterday, TimePeriod minMaxTime)
 		{
@@ -114,20 +113,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 			return overtimeAvailabilityPeriods;
 		}
-		
+
 		private static string colorToString(Color color)
 		{
 			var colorCode = color.ToArgb();
 			return string.Concat("color_", ColorTranslator.ToHtml(Color.FromArgb(colorCode)).Replace("#", ""));
 		}
-
-		private static DateTimePeriod getDateTimePeriod(DateTime localDate, TimePeriod timePeriod)
-		{
-			var date = localDate.Date.Utc();
-			var startDateTime = date.Add(timePeriod.StartTime);
-			var endDateTime = date.Add(timePeriod.EndTime);
-			return new DateTimePeriod(startDateTime, endDateTime);
-		}
-
 	}
 }

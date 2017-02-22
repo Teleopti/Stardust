@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 	var createRawProbabilities = function () {
 		var result = [];
-		var dateStart = "2017-02-13";
+		var dateStart = "2017-02-16";
 		for (var i = 0; i < 24 * 60 / 15; i++) {
 			result.push({
 				"StartTime": moment(dateStart).add(15 * i, "minutes").toDate(),
@@ -75,6 +75,8 @@ $(document).ready(function () {
 			{
 				"Title": "Phone",
 				"TimeSpan": "09:30 - 18:30",
+				"StartTime": "2017-02-16T09:30:00",
+				"EndTime": "2017-02-16T18:30:00",
 				"Summary": "8:00",
 				"StyleClassName": "color_80FF80",
 				"Meeting": null,
@@ -91,6 +93,8 @@ $(document).ready(function () {
 			{
 				"Title": "Phone",
 				"TimeSpan": "22:45 - 00:00 +1",
+				"StartTime": "2017-02-15T22:45:00",
+				"EndTime": "2017-02-16T00:00:00",
 				"Summary": "1:15",
 				"StyleClassName": "color_80FF80",
 				"Meeting": null,
@@ -102,6 +106,8 @@ $(document).ready(function () {
 			{
 				"Title": "Short break",
 				"TimeSpan": "00:00 - 00:15",
+				"StartTime": "2017-02-16T00:00:00",
+				"EndTime": "2017-02-16T00:15:00",
 				"Summary": "0:15",
 				"StyleClassName": "color_FF0000",
 				"Meeting": null,
@@ -113,6 +119,8 @@ $(document).ready(function () {
 			{
 				"Title": "Email",
 				"TimeSpan": "00:15 - 01:30",
+				"StartTime": "2017-02-16T00:15:00",
+				"EndTime": "2017-02-16T01:30:00",
 				"Summary": "1:15",
 				"StyleClassName": "color_80FF80",
 				"Meeting": null,
@@ -124,6 +132,8 @@ $(document).ready(function () {
 			{
 				"Title": "Phone",
 				"TimeSpan": "09:30 - 18:30",
+				"StartTime": "2017-02-16T09:30:00",
+				"EndTime": "2017-02-16T18:30:00",
 				"Summary": "9:00",
 				"StyleClassName": "color_80FF80",
 				"Meeting": null,
@@ -139,6 +149,8 @@ $(document).ready(function () {
 		return [{
 			"Title": "Phone",
 			"TimeSpan": "10:00 - 12:00",
+			"StartTime": "2017-02-16T10:00:00",
+			"EndTime": "2017-02-16T12:00:00",
 			"Summary": "2:00",
 			"StyleClassName": "color_80FF80",
 			"Meeting": null,
@@ -149,6 +161,8 @@ $(document).ready(function () {
 		}, {
 			"Title": "Short break",
 			"TimeSpan": "12:00 - 12:15",
+			"StartTime": "2017-02-16T12:00:00",
+			"EndTime": "2017-02-16T12:15:00",
 			"Summary": "0:15",
 			"StyleClassName": "color_FF0000",
 			"Meeting": null,
@@ -159,6 +173,8 @@ $(document).ready(function () {
 		}, {
 			"Title": "Phone",
 			"TimeSpan": "12:15 - 14:15",
+			"StartTime": "2017-02-16T12:15:00",
+			"EndTime": "2017-02-16T14:15:00",
 			"Summary": "2:00",
 			"StyleClassName": "color_80FF80",
 			"Meeting": null,
@@ -169,6 +185,8 @@ $(document).ready(function () {
 		}, {
 			"Title": "Lunch",
 			"TimeSpan": "14:15 - 15:15",
+			"StartTime": "2017-02-16T14:15:00",
+			"EndTime": "2017-02-16T15:15:00",
 			"Summary": "1:00",
 			"StyleClassName": "color_FFFF00",
 			"Meeting": null,
@@ -179,6 +197,8 @@ $(document).ready(function () {
 		}, {
 			"Title": "Social Media",
 			"TimeSpan": "15:15 - 17:00",
+			"StartTime": "2017-02-16T15:15:00",
+			"EndTime": "2017-02-16T17:00:00",
 			"Summary": "1:45",
 			"StyleClassName": "color_1E90FF",
 			"Meeting": null,
@@ -189,6 +209,8 @@ $(document).ready(function () {
 		}, {
 			"Title": "Short break",
 			"TimeSpan": "17:00 - 17:15",
+			"StartTime": "2017-02-16T17:00:00",
+			"EndTime": "2017-02-16T17:15:00",
 			"Summary": "0:15",
 			"StyleClassName": "color_FF0000",
 			"Meeting": null,
@@ -199,6 +221,8 @@ $(document).ready(function () {
 		}, {
 			"Title": "Phone",
 			"TimeSpan": "17:15 - 01:30 +1",
+			"StartTime": "2017-02-16T17:15:00",
+			"EndTime": "2017-02-17T01:30:00",
 			"Summary": "8:15",
 			"StyleClassName": "color_80FF80",
 			"Meeting": null,

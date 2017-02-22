@@ -108,6 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	{
 		public string Title { get; set; }
 		public string TimeSpan { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
 		public string Summary { get; set; }
 		public string StyleClassName { get; set; }
 		public MeetingViewModel Meeting { get; set; }
@@ -115,7 +117,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public decimal EndPositionPercentage { get; set; }
 		public string Color { get; set; }
 		public bool IsOvertime { get; set; }
-		public DateTimePeriod DateTimePeriod { get; set; }
 	}
 
 	public class PersonDayOffPeriodViewModel : PeriodViewModel
