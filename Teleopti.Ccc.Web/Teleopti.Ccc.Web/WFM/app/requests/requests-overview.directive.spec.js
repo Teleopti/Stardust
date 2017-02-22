@@ -279,7 +279,7 @@
 		
 	});
 
-	xdescribe('requests table container directive', function () {
+	describe('requests table container directive', function () {
 		var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule, currentUserInfo;
 
 		beforeEach(module('wfm.templates'));
@@ -353,7 +353,6 @@
 
 		it("startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says", function () {
 			var test = setUpTarget();
-
 			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-05T00:00:00', PeriodEndTime: '2016-01-07T23:59:00', CreatedTime: '2016-01-05T03:29:37', TimeZone: 'Europe/Berlin', UpdatedTime: '2016-01-05T03:29:37' }];
 			test.scope.$digest();
 
@@ -652,7 +651,7 @@
 			var directiveElem = getCompiledElement();
 
 			function getCompiledElement() {
-				var element = angular.element('<requests-table-container filters="filters" requests="requests" shift-trade-view="shiftTradeView" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
+				var element = angular.element('<requests-table-container filters="filters" is-using-request-submitter-time-zone="true" requests="requests" shift-trade-view="shiftTradeView" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
 				var compiledElement = $compile(element)(scope);
 				//scope.$digest();
 				return compiledElement;

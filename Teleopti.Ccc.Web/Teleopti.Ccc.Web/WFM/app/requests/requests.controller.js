@@ -10,7 +10,6 @@
 		vm.permissionsReady = false;
 		vm.toggleSearchFocus = false;
 
-		//
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.paging = {
 			pageSize: 20,
@@ -24,14 +23,12 @@
 			onTotalRequestsCountChanges(count);
 		}
 		function onTotalRequestsCountChanges(totalRequestsCount) {
-
 			var totalPages = Math.ceil(totalRequestsCount / vm.paging.pageSize);
 			if (totalPages !== vm.paging.totalPages) vm.paging.pageNumber = 1;
 
 			vm.paging.totalPages = totalPages;
 			vm.paging.totalRequestsCount = totalRequestsCount;
 		}
-		//
 
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
