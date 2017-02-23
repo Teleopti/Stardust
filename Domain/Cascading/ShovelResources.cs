@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				return;
 
 			var activitiesAndIntervalLengths = cascadingSkills.AffectedActivities().ToArray();
-
+			shovelingCallback.BeforeShoveling(shovelResourceData);
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
 				var context = getResourceCalculationContext == null ? getDefaultContext(scheduleDictionary, allSkills, period) : getResourceCalculationContext();

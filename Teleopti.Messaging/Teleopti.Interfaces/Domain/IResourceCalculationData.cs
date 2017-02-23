@@ -23,6 +23,7 @@ namespace Teleopti.Interfaces.Domain
 	{
 		void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources);
 		void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources);
+		void BeforeShoveling(IShovelResourceData shovelResourceData);
 	}
 
 	public class SkillCombinationResource

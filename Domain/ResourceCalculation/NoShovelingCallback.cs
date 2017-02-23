@@ -12,5 +12,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources)
 		{
 		}
+
+		public void BeforeShoveling(IShovelResourceData shovelResourceData)
+		{
+		}
 	}
 }

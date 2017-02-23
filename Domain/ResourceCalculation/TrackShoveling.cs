@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 		public IEnumerable<AddedResource> AddedResources => _addedResources;
 		public IEnumerable<RemovedResource> RemovedResources => _removedResources;
+		public double ResourcesBeforeShoveling { get; private set; }
 
 		public void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
 		{
@@ -34,6 +36,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				_removedResources.Add(new RemovedResource(resources));
 			}
+		}
+
+		public void BeforeShoveling(IShovelResourceData shovelResourceData)
+		{
+			ResourcesBeforeShoveling = shovelResourceData.GetDataForInterval(_skillToTrack, _intervalToTrack).CalculatedResource;
 		}
 	}
 
