@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IEnumerable<RemovedResource> RemovedResources => _removedResources;
 		public double ResourcesBeforeShoveling { get; private set; }
 
-		public void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
+		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
 		{
 			if (skillToMoveTo.Equals(_skillToTrack) && interval == _intervalToTrack)
 			{
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources)
+		void IShovelingCallback.ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources)
 		{
 			if (primarySkill.Equals(_skillToTrack) && interval == _intervalToTrack)
 			{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public void BeforeShoveling(IShovelResourceData shovelResourceData)
+		void IShovelingCallback.BeforeShoveling(IShovelResourceData shovelResourceData)
 		{
 			ResourcesBeforeShoveling = shovelResourceData.GetDataForInterval(_skillToTrack, _intervalToTrack).CalculatedResource;
 		}
