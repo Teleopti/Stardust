@@ -8,13 +8,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ISkill _skillToTrack;
 		private readonly DateTimePeriod _intervalToTrack;
 		private readonly ICollection<AddedResource> _addedResources;
+		private readonly ICollection<RemovedResource> _removedResources;
 
 		public TrackShoveling(ISkill skillToTrack, DateTimePeriod intervalToTrack)
 		{
 			_skillToTrack = skillToTrack;
 			_intervalToTrack = intervalToTrack;
 			_addedResources = new List<AddedResource>();
+			_removedResources = new List<RemovedResource>();
 		}
+		public IEnumerable<AddedResource> AddedResources => _addedResources;
+		public IEnumerable<RemovedResource> RemovedResources => _removedResources;
 
 		public void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
 		{
@@ -23,7 +27,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				_addedResources.Add(new AddedResource(primarySkillsMovedFrom, resources));
 			}
 		}
-		public IEnumerable<AddedResource> AddedResources => _addedResources;
+
+		public void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources)
+		{
+			if (primarySkill.Equals(_skillToTrack) && interval == _intervalToTrack)
+			{
+				_removedResources.Add(new RemovedResource(resources));
+			}
+		}
 	}
 
 	public class AddedResource
@@ -36,5 +47,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IEnumerable<ISkill> FromPrimarySkills { get; }
 		public double ResourcesMoved { get; }
+	}
+
+	public class RemovedResource
+	{
+		public RemovedResource(double resources)
+		{
+			Resources = resources;
+		}
+
+		public double Resources { get; }
 	}
 }

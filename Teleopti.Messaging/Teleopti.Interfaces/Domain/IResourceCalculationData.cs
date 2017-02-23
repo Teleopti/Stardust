@@ -22,6 +22,7 @@ namespace Teleopti.Interfaces.Domain
 	public interface IShovelingCallback
 	{
 		void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources);
+		void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources);
 	}
 
 	public class SkillCombinationResource

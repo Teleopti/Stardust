@@ -8,5 +8,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
 		{
 		}
+
+		public void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources)
+		{
+		}
 	}
 }

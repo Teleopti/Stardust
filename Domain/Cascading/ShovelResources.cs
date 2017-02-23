@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 								{
 									var state = _primarySkillOverstaff.AvailableSum(shovelResourceData, allSkillGroups, skillGroupsWithSameIndex, interval);
 									_addResourcesToSubSkills.Execute(state, shovelResourceData, skillGroupsWithSameIndex, interval, shovelingCallback);
-									_reducePrimarySkillResources.Execute(state, shovelResourceData, interval);
+									_reducePrimarySkillResources.Execute(state, shovelResourceData, interval, shovelingCallback);
 								}
 							}
 						}
