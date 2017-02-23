@@ -21,18 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				})
 				);
 		}
-
-		[Test]
-		public void ShouldThrowIfNoPlatformId()
-		{
-			Assert.Throws<InvalidPlatformException>(() =>
-				Target.SaveState(new StateForTest
-				{
-					PlatformTypeId = string.Empty
-				})
-				);
-		}
-
+		
 		[Test]
 		public void ShouldThrowIfNoPerson()
 		{

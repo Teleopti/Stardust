@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				TheService.DoesOnAllBusinessUnits(uow =>
 				{
 
-					RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
+					RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone");
 					throw new Exception("derp!");
 				});
 			}

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				if (stateGroup == null)
 				{
 					stateGroup = new RtaStateGroup(PhoneState, false, true);
-					stateGroup.AddState(PhoneState, PhoneState, Guid.Empty);
+					stateGroup.AddState(PhoneState, PhoneState);
 					stateGroupRepository.Add(stateGroup);
 				}
 				RtaStateGroup = stateGroup;

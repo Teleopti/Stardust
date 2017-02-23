@@ -78,7 +78,6 @@ UPDATE [dbo].[AgentState]
 SET
 	SnapshotId = :SnapshotId,
 	SnapshotDataSourceId = :SnapshotDataSourceId,
-	PlatformTypeId = :PlatformTypeId,
 	ReceivedTime = :ReceivedTime,
 	StateGroupId = :StateGroupId,
 	StateStartTime = :StateStartTime,
@@ -95,7 +94,6 @@ WHERE
 					.SetParameter("PersonId", model.PersonId)
 					.SetParameter("SnapshotId", model.SnapshotId)
 					.SetParameter("SnapshotDataSourceId", model.SnapshotDataSourceId)
-					.SetParameter("PlatformTypeId", model.PlatformTypeId)
 					.SetParameter("ReceivedTime", model.ReceivedTime)
 					.SetParameter("StateGroupId", model.StateGroupId)
 					.SetParameter("StateStartTime", model.StateStartTime)

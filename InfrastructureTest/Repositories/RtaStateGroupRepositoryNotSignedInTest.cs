@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Context.Logout();
 
 			TheService.DoesWhileNotLoggedIn(uow => 
-				StateGroupRepository.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid()));
+				StateGroupRepository.LoadAll().Single().AddState("phone", "phone"));
 
 			TheService.DoesWhileNotLoggedIn(uow => 
 				StateGroupRepository.LoadAll().Single().StateCollection.Single()
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				StateGroupRepository.Add(new RtaStateGroup(" ", true, true)));
 
 			TheService.DoesWhileNotLoggedIn(uow => 
-				StateGroupRepository.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid()));
+				StateGroupRepository.LoadAll().Single().AddState("phone", "phone"));
 
 			TheService.DoesWhileNotLoggedIn(uow => 
 				StateGroupRepository.LoadAll().Single().StateCollection.Single()

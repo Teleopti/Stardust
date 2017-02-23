@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadStateFromMapping()
 		{
 			var group = new RtaStateGroup("Phone", true, true);
-			group.AddState(".", "phone", Guid.NewGuid());
+			group.AddState("phone", ".");
 			WithUnitOfWork.Do(() =>
 			{
 				Groups.Add(group);
@@ -81,14 +81,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			mapping.StateGroupId.Should().Be(group.Id.Value);
 			mapping.StateGroupName.Should().Be("Phone");
 			mapping.StateCode.Should().Be("phone");
-			mapping.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
 		}
 
 		[Test]
 		public void ShouldReadStateWithoutMapping()
 		{
 			var group = new RtaStateGroup("Phone", true, true);
-			group.AddState(".", "phone", Guid.NewGuid());
+			group.AddState("phone", ".");
 			WithUnitOfWork.Do(() =>
 			{
 				Groups.Add(group);
@@ -99,7 +98,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			mapping.StateGroupId.Should().Be(group.Id.Value);
 			mapping.StateGroupName.Should().Be("Phone");
 			mapping.StateCode.Should().Be("phone");
-			mapping.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
 		}
 
 		[Test]
@@ -165,7 +163,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadBusinessUnitFromState()
 		{
 			var group = new RtaStateGroup("Phone", true, true);
-			group.AddState("Phone", Guid.Empty);
+			group.AddState("Phone");
 			WithUnitOfWork.Do(() =>
 			{
 				Groups.Add(group);

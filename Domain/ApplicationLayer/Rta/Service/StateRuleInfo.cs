@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_context = context;
 			_mappedState = new Lazy<MappedState>(() =>
 					context.HasInput() ?
-						context.StateMapper.StateFor(context.BusinessUnitId, context.PlatformTypeId, context.InputStateCode(), context.InputStateDescription()) :
+						context.StateMapper.StateFor(context.BusinessUnitId, context.InputStateCode(), context.InputStateDescription()) :
 						context.StateMapper.StateFor(context.Stored.StateGroupId)
 			);
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));

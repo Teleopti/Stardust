@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				BusinessUnitId = Guid.NewGuid(),
 				TeamId = null,
 				SiteId = null,
-				PlatformTypeId = Guid.NewGuid(),
 				ReceivedTime = "2015-01-02 10:00".Utc(),
 				SnapshotId = null,
 

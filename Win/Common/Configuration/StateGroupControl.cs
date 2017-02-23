@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			foreach (var state in stateToMoveList)
 			{
 				if (defaultStateGroup != null)
-					defaultStateGroup.AddState(state.Name, state.StateCode, state.PlatformTypeId);
+					defaultStateGroup.AddState(state.StateCode, state.Name);
 				updateTreeViewAfterDelete(nodeWithDefaultGroup, state);
 			}
 

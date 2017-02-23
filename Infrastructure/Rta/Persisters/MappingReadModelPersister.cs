@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 (
 :BusinessUnitId{i},
 :StateCode{i},
-:PlatformTypeId{i},
 :StateGroupId{i},
 :StateGroupName{i},
 :ActivityId{i},
@@ -78,7 +77,6 @@ USING
 ) AS S (
 	BusinessUnitId,
 	StateCode,
-	PlatformTypeId,
 	StateGroupId,
 	StateGroupName,
 	ActivityId,
@@ -94,14 +92,12 @@ USING
 ) ON
 	T.BusinessUnitId = S.BusinessUnitId
 	AND T.StateCode = S.StateCode
-	AND T.PlatformTypeId = S.PlatformTypeId
 	AND T.ActivityId = S.ActivityId
 WHEN NOT MATCHED THEN
 INSERT
 (
 	BusinessUnitId,
 	StateCode,
-	PlatformTypeId,
 	StateGroupId,
 	StateGroupName,
 	ActivityId,
@@ -119,7 +115,6 @@ INSERT
 VALUES (
 	S.BusinessUnitId,
 	S.StateCode,
-	S.PlatformTypeId,
 	S.StateGroupId,
 	S.StateGroupName,
 	S.ActivityId,
@@ -158,7 +153,6 @@ UPDATE SET
 						query
 							.SetParameter("BusinessUnitId" + i, mapping.BusinessUnitId)
 							.SetParameter("StateCode" + i, mapping.StateCode ?? MappingReadModelReader.MagicString)
-							.SetParameter("PlatformTypeId" + i, mapping.PlatformTypeId)
 							.SetParameter("StateGroupId" + i, mapping.StateGroupId)
 							.SetParameter("StateGroupName" + i, mapping.StateGroupName)
 							.SetParameter("ActivityId" + i, mapping.ActivityId ?? Guid.Empty)

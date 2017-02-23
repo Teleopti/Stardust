@@ -2,7 +2,7 @@
 <Rta>
   <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:RtaStates"> Not working for now!!!-->
   <DefaultStateGroup>Ungrouped states</DefaultStateGroup>
-  <RtaState name="Ungrouped states" platformTypeId="00000000-0000-0000-0000-000000000000">
+  <RtaState name="Ungrouped states">
     <state name="CCC Logged out">CCC Logged out</state>
   </RtaState>
 </Rta>

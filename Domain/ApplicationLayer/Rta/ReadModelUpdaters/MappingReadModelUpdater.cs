@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				from g in stateGroups
 				from s in g.StateCollection
 				where g.BusinessUnit.Id.Value == @event.BusinessUnitId &&
-					  s.PlatformTypeId == @event.PlatformTypeId &&
 					  s.StateCode == @event.StateCode
 				select g
 			).SingleOrDefault();
@@ -76,12 +75,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 			var hasStateCode = defaultStateGroup
 				.StateCollection
-				.Any(x =>
-						x.PlatformTypeId == @event.PlatformTypeId &&
-						x.StateCode == @event.StateCode
-				);
+				.Any(x => x.StateCode == @event.StateCode);
 			if (!hasStateCode)
-				defaultStateGroup.AddState(stateDescription, @event.StateCode, @event.PlatformTypeId);
+				defaultStateGroup.AddState(@event.StateCode, stateDescription);
 		}
 
 		[ReadModelUnitOfWork]
@@ -174,15 +170,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					where legal
 					select new
 					{
-						c.StateCode,
-						PlatformTypeId = c.PlatformTypeId as Guid?
+						c.StateCode
 					}
 				let codes = legalStateCodes.IsEmpty()
 					? legalStateCodes.Append(
 						new
 						{
-							StateCode = null as string,
-							PlatformTypeId = null as Guid?
+							StateCode = null as string
 						})
 					: legalStateCodes
 				from c in codes
@@ -192,7 +186,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					StateGroupId = g.Id,
 					StateGroupName = g.Name,
 					IsLoggedOut = g.IsLoggedOut,
-					PlatformTypeId = c.PlatformTypeId,
 					BusinessUnitId = g.BusinessUnitId
 				};
 
@@ -204,15 +197,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					where legal
 					select new
 					{
-						c.StateCode,
-						PlatformTypeId = c.PlatformTypeId as Guid?
+						c.StateCode
 					}
 				let codes = m.StateGroup == null
 					? legalStateCodes.Append(
 						new
 						{
-							StateCode = null as string,
-							PlatformTypeId = null as Guid?
+							StateCode = null as string
 						})
 					: legalStateCodes
 				from c in codes
@@ -221,7 +212,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					BusinessUnitId = m.BusinessUnit.Id.Value,
 					ActivityId = m.Activity?.Id,
 					StateCode = c.StateCode,
-					PlatformTypeId = c.PlatformTypeId,
 					Rule = m.RtaRule
 				};
 
@@ -233,8 +223,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					where
 						m.BusinessUnitId == s.BusinessUnitId &&
 						m.ActivityId == a &&
-						m.StateCode == s.StateCode &&
-						m.PlatformTypeId == s.PlatformTypeId
+						m.StateCode == s.StateCode
 					select m
 					).SingleOrDefault()
 				let businessUnitId = mapping?.BusinessUnitId ?? s.BusinessUnitId
@@ -261,8 +250,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					DisplayColor = displayColor,
 					IsAlarm = isAlarm,
 					ThresholdTime = thresholdTime,
-					AlarmColor = alarmColor,
-					PlatformTypeId = s.PlatformTypeId
+					AlarmColor = alarmColor
 				};
 			return mappings;
 		}

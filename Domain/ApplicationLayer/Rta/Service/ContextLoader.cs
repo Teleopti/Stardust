@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				new BatchInputModel
 				{
 					AuthenticationKey = input.AuthenticationKey,
-					PlatformTypeId = input.PlatformTypeId,
 					SnapshotId = input.SnapshotId,
 					SourceId = input.SourceId,
 					States = new[]

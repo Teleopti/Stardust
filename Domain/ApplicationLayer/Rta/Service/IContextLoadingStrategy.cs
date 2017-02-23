@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var input = _matches[state.PersonId];
 			return new InputInfo
 			{
-				PlatformTypeId = _batch.PlatformTypeId,
 				SourceId = _batch.SourceId,
 				UserCode = input.UserCode,
 				StateCode = input.StateCode,
@@ -139,7 +138,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return new InputInfo
 			{
 				StateCode = Rta.LogOutBySnapshot,
-				PlatformTypeId = Guid.Empty.ToString(),
 				SnapshotId = _snapshotId,
 				SnapshotDataSourceId = _dataSourceId
 			};

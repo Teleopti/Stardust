@@ -69,16 +69,16 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             set { _isLogOutState = value; }
         }
 
-		public virtual IRtaStateGroup AddState(string stateCode, Guid platformTypeId)
+		public virtual IRtaStateGroup AddState(string stateCode)
 		{
-			IRtaState state = new RtaState(stateCode, platformTypeId);
+			IRtaState state = new RtaState(stateCode);
 			AddStateInternal(state);
 			return this;
 		}
 
-		public virtual IRtaStateGroup AddState(string stateName, string stateCode, Guid platformTypeId)
+		public virtual IRtaStateGroup AddState(string stateCode, string stateName)
         {
-            IRtaState state = new RtaState(stateName, stateCode, platformTypeId);
+            IRtaState state = new RtaState(stateName, stateCode);
             AddStateInternal(state);
             return this;
         }
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             RtaStateGroup internalAdd = target as RtaStateGroup;
             if (internalAdd==null) return null;
             if (state==null) return null;
-	        var rtaState = new RtaState(state.Name, state.StateCode, state.PlatformTypeId);
+	        var rtaState = new RtaState(state.Name, state.StateCode);
 	        internalAdd.AddStateInternal(rtaState);
 	        return rtaState;
         }

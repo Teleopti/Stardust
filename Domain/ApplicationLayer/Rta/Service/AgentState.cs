@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public DateTime? SnapshotId { get; set; }
 		public int? SnapshotDataSourceId { get; set; }
-		public Guid PlatformTypeId { get; set; }
 
 		public Guid PersonId { get; set; }
 		public Guid BusinessUnitId { get; set; }
@@ -45,11 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public static class AgentStateExtensions
 	{
-		public static Guid PlatformTypeId(this AgentState stored)
-		{
-			return stored?.PlatformTypeId ?? default(Guid);
-		}
-
 		public static DateTime ReceivedTime(this AgentState stored)
 		{
 			return stored?.ReceivedTime ?? DateTime.MinValue;

@@ -11,20 +11,18 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         private IRtaState _target;
         const string _name = "Logged on";
         const string _stateCode = "100";
-        readonly Guid _platformTypeId = Guid.NewGuid();
 
         [Test]
         public void CanCreateAndPropertiesWork()
         {
             var stateGroup = new RtaStateGroup("StateGroup A", true, false);
 
-            stateGroup.AddState(_name, _stateCode, _platformTypeId);
+            stateGroup.AddState(_stateCode, _name);
             _target = stateGroup.StateCollection[0];
 
             Assert.AreEqual(_name, _target.Name);
             Assert.AreEqual(_stateCode, _target.StateCode);
             Assert.AreEqual(stateGroup, _target.StateGroup);
-            Assert.AreEqual(_platformTypeId, _target.PlatformTypeId);
 
             _target.Name = "Pause";
             _target.StateCode = "P001";
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         {
             var stateGroup1 = new RtaStateGroup("Pause", false, true);
             var stateGroup2 = new RtaStateGroup("ACD", true, false);
-            stateGroup1.AddState(_name, _stateCode, _platformTypeId);
+            stateGroup1.AddState(_stateCode, _name);
 			_target = stateGroup1.MoveStateTo(stateGroup2, stateGroup1.StateCollection[0]);
 			
             Assert.AreEqual(stateGroup2.Name, _target.StateGroup.Name);

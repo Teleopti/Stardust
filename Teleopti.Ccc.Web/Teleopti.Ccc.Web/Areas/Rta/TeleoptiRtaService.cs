@@ -17,12 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private readonly PlatformTypeInjector _platformTypeInjector;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(TeleoptiRtaService));
-		private static readonly ILog _logger = LogManager.GetLogger("PerfLog.Rta");
 
-		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta)
+		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, PlatformTypeInjector platformTypeInjector)
 		{
 			_rta = rta;
+			_platformTypeInjector = platformTypeInjector;
 		}
 
 		public int SaveExternalUserState(
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return handleRtaExceptions(() =>
 			{
 				userCode = fixUserCode(userCode);
-				stateCode = fixStateCode(stateCode, isLoggedOn);
+				stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
 				if (isClosingSnapshot(userCode, isSnapshot))
 				{
 					_rta.CloseSnapshot(new CloseSnapshotInputModel
@@ -59,7 +60,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						UserCode = userCode,
 						StateCode = stateCode,
 						StateDescription = stateDescription,
-						PlatformTypeId = platformTypeId,
 						SourceId = sourceId,
 						SnapshotId = fixSnapshotId(batchId, isSnapshot)
 					});
@@ -69,17 +69,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch)
 		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-
-			var response = handleRtaExceptions(() =>
+			return handleRtaExceptions(() =>
 			{
 				IEnumerable<BatchStateInputModel> states = (
 					from s in externalUserStateBatch
 					select new BatchStateInputModel
 					{
 						UserCode = fixUserCode(s.UserCode),
-						StateCode = fixStateCode(s.StateCode, s.IsLoggedOn),
+						StateCode = fixStateCode(s.StateCode, platformTypeId, s.IsLoggedOn),
 						StateDescription = s.StateDescription,
 					})
 					.ToArray();
@@ -93,7 +90,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				_rta.SaveStateBatch(new BatchInputModel
 				{
 					AuthenticationKey = authenticationKey,
-					PlatformTypeId = platformTypeId,
 					SourceId = sourceId,
 					SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId, isSnapshot),
 					States = states
@@ -107,11 +103,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						SourceId = sourceId
 					});
 			});
-
-			stopwatch.Stop();
-			_logger.Info($"Request completed, batchsize: {externalUserStateBatch.Count}, time: {stopwatch.ElapsedMilliseconds} => {stopwatch.ElapsedMilliseconds / externalUserStateBatch.Count} ms / state");
-
-			return response;
 		}
 
 		private static bool isClosingSnapshot(string userCode, bool isSnapshot)
@@ -123,18 +114,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return userCode.Trim();
 		}
-
-		private static string fixStateCode(string stateCode, bool isLoggedOn)
+		
+		private string fixStateCode(string stateCode, string platformTypeId, bool isLoggedOn)
 		{
 			if (!isLoggedOn)
-				return "LOGGED-OFF";
+				stateCode = "LOGGED-OFF";
 			if (stateCode == null)
 				return null;
+
 			stateCode = stateCode.Trim();
-			const int stateCodeMaxLength = 25;
-			if (stateCode.Length > stateCodeMaxLength)
+
+			if (stateCode.Length > 25)
 				throw new InvalidStateCodeException("State code can not exceed 25 characters");
-			return stateCode;
+
+			if (string.IsNullOrEmpty(platformTypeId))
+				throw new InvalidPlatformException("Platform id is required");
+
+			return _platformTypeInjector.Inject(stateCode, platformTypeId);
 		}
 
 		private static DateTime? fixSnapshotId(DateTime snapshotId, bool isSnapshot)

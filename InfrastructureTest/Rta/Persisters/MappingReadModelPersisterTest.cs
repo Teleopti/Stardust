@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					BusinessUnitId = businessUnit,
 					StateCode = "0",
-					PlatformTypeId = platformType,
 					StateGroupId = group,
 					ActivityId = activity,
 					RuleId = rule,
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var model = Reader.Read().Single();
 			model.BusinessUnitId.Should().Be(businessUnit);
 			model.StateCode.Should().Be("0");
-			model.PlatformTypeId.Should().Be(platformType);
 			model.StateGroupId.Should().Be(group);
 			model.ActivityId.Should().Be(activity);
 			model.RuleId.Should().Be(rule);
@@ -82,7 +80,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var model = Reader.Read().Single();
 			model.BusinessUnitId.Should().Be(Guid.Empty);
 			model.StateCode.Should().Be.Null();
-			model.PlatformTypeId.Should().Be(null);
 			model.StateGroupId.Should().Be(null);
 			model.ActivityId.Should().Be(null);
 			model.RuleId.Should().Be(null);

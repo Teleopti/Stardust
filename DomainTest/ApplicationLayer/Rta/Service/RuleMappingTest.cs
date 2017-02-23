@@ -68,16 +68,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-05-11 08:00", "2015-05-11 09:00")
-				.WithRule("AUX1", platform1, phone, -1, Adherence.Out)
-				.WithRule("AUX1", platform2, phone, 0, Adherence.In)
+				.WithRule("AUX1 " + platform1, phone, -1, Adherence.Out)
+				.WithRule("AUX1 " + platform2, phone, 0, Adherence.In)
 				;
 			Now.Is("2015-05-11 08:00");
 
 			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "AUX1",
-				PlatformTypeId = platform2.ToString()
+				StateCode = "AUX1 " + platform2
 			});
 
 			EventPublisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);

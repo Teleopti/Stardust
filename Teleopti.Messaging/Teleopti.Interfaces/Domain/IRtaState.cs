@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Interfaces.Domain
 {
     public interface IRtaState : IAggregateEntity, ICloneableEntity<IRtaState>
@@ -8,6 +6,5 @@ namespace Teleopti.Interfaces.Domain
         string Name { get; set; }
         string StateCode { get; set; }
         IRtaStateGroup StateGroup { get; }
-        Guid PlatformTypeId { get; }
     }
 }

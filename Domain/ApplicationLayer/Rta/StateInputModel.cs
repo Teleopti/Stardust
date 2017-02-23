@@ -8,11 +8,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public interface IValidatable
 	{
 		string AuthenticationKey { get; set; }
-		string PlatformTypeId { get; set; }
 		string SourceId { get; set; }
 	}
 
-	public class CloseSnapshotInputModel
+	public class CloseSnapshotInputModel : IValidatable
 	{
 		public string AuthenticationKey { get; set; }
 		public string SourceId { get; set; }
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class BatchInputModel : IValidatable
 	{
 		public string AuthenticationKey { get; set; }
-		public string PlatformTypeId { get; set; }
 		public string SourceId { get; set; }
 		public DateTime? SnapshotId { get; set; }
 		public IEnumerable<BatchStateInputModel> States { get; set; }
@@ -39,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var states = States.EmptyIfNull()
 				.Select(x => x.ToString())
 				.Aggregate((current, next) => current + ", " + next);
-			return $"AuthenticationKey: {AuthenticationKey}, PlatformTypeId: {PlatformTypeId}, SourceId: {SourceId}, SnapshotId: {SnapshotId}, States: {states}";
+			return $"AuthenticationKey: {AuthenticationKey}, SourceId: {SourceId}, SnapshotId: {SnapshotId}, States: {states}";
 		}
 
 	}
@@ -61,7 +59,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class StateInputModel : IValidatable
 	{
 		public string AuthenticationKey { get; set; }
-		public string PlatformTypeId { get; set; }
 		public string SourceId { get; set; }
 		public string UserCode { get; set; }
 		public string StateCode { get; set; }
@@ -71,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		// for logging
 		public override string ToString()
 		{
-			return $"AuthenticationKey: {AuthenticationKey}, UserCode: {UserCode}, StateCode: {StateCode}, StateDescription: {StateDescription}, PlatformTypeId: {PlatformTypeId}, SourceId: {SourceId}, SnapshotId: {SnapshotId}";
+			return $"AuthenticationKey: {AuthenticationKey}, UserCode: {UserCode}, StateCode: {StateCode}, StateDescription: {StateDescription}, SourceId: {SourceId}, SnapshotId: {SnapshotId}";
 		}
 	}
 	

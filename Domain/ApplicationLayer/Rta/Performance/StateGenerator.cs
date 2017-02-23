@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			{
 				var name = Convert.ToString(i);
 				var stateGroup = new RtaStateGroup(name, false, true);
-				stateGroup.AddState(name, name, Guid.Empty);
+				stateGroup.AddState(name, name);
 				_rtaStateGroupRepository.Add(stateGroup);
 				return name;
 			}).ToArray();

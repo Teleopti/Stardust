@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         [Test]
         public void VerifyAddState()
         {
-            _target.AddState("state 1", "100", Guid.NewGuid());
+            _target.AddState("100", "state 1");
             IRtaState state1 = _target.StateCollection[0];
 
             Assert.AreEqual(state1.StateGroup.Name, _name);

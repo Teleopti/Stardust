@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Common.Logging;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
@@ -11,10 +10,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	public class StateController : ApiController
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private readonly PlatformTypeInjector _platformTypeInjector;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, PlatformTypeInjector platformTypeInjector)
 		{
 			_rta = rta;
+			_platformTypeInjector = platformTypeInjector;
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
@@ -22,14 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			try
 			{
-                _rta.SaveState(
+				_rta.SaveState(
 					new StateInputModel
 					{
 						AuthenticationKey = input.AuthenticationKey,
-						PlatformTypeId = input.PlatformTypeId,
 						SourceId = input.SourceId,
 						UserCode = input.UserCode,
-						StateCode = input.StateCode,
+						StateCode = _platformTypeInjector.Inject(input.StateCode, input.PlatformTypeId),
 						StateDescription = input.StateDescription,
 						SnapshotId = parseSnapshotId(input.SnapshotId),
 					});
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				var states = input.Select(i => new BatchStateInputModel
 				{
 					UserCode = i.UserCode,
-					StateCode = i.StateCode,
+					StateCode = _platformTypeInjector.Inject(i.StateCode, i.PlatformTypeId),
 					StateDescription = i.StateDescription,
 				}).ToArray();
 
@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				_rta.SaveStateBatch(new BatchInputModel
 				{
 					AuthenticationKey = root.AuthenticationKey,
-					PlatformTypeId = root.PlatformTypeId,
 					SourceId = root.SourceId,
 					SnapshotId = parseSnapshotId(root.SnapshotId),
 					States = states

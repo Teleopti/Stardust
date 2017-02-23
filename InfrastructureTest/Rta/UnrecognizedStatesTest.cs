@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Target.SaveState(new StateInputModel
 			{
 				AuthenticationKey = "!#¤atAbgT%",
-				PlatformTypeId = Guid.Empty.ToString(),
 				StateCode = "InCall",
 				StateDescription = "InCall",
 				UserCode = "usercode",
@@ -100,7 +99,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Target.SaveStateBatch(new BatchInputModel
 			{
 				AuthenticationKey = "!#¤atAbgT%",
-				PlatformTypeId = Guid.Empty.ToString(),
 				SourceId = "-1",
 				States = Enumerable.Range(0, 20)
 					.Select(i => new BatchStateInputModel

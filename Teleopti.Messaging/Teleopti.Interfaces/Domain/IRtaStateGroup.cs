@@ -16,8 +16,8 @@ namespace Teleopti.Interfaces.Domain
 
 		bool IsLogOutState { get; set; }
 
-		IRtaStateGroup AddState(string stateName, string stateCode, Guid platformTypeId);
-		IRtaStateGroup AddState(string stateCode, Guid platformTypeId);
+		IRtaStateGroup AddState(string stateCode, string stateName);
+		IRtaStateGroup AddState(string stateCode);
 		IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state);
 		void DeleteState(IRtaState state);
 		void ClearStates();

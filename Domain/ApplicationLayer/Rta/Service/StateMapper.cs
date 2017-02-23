@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_loggedOutStateGroupIds = new PerTenant<IEnumerable<Guid>>(dataSource);
 		}
 
-		public MappedState StateFor(Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
+		public MappedState StateFor(Guid businessUnitId, string stateCode, string stateDescription)
 		{
 			if (stateCode == null)
 				return null;
@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.TryGetValue(new stateCodeMappingKey
 				{
 					businessUnitId = businessUnitId,
-					platformTypeId = platformTypeId,
 					stateCode = stateCode
 				}, out match);
 
@@ -74,7 +73,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisher.Current().Publish(new UnknownStateCodeReceviedEvent
 			{
 				BusinessUnitId = businessUnitId,
-				PlatformTypeId = platformTypeId,
 				StateCode = stateCode,
 				StateDescription = stateDescription
 			});
@@ -191,7 +189,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.GroupBy(x => new stateCodeMappingKey
 					{
 						businessUnitId = x.BusinessUnitId,
-						platformTypeId = x.PlatformTypeId,
 						stateCode = x.StateCode
 					})
 					.ToDictionary(x => x.Key, m =>
@@ -268,7 +265,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private class stateCodeMappingKey
 		{
 			public Guid businessUnitId;
-			public Guid? platformTypeId;
 			public string stateCode;
 
 			#region 
@@ -276,7 +272,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			protected bool Equals(stateCodeMappingKey other)
 			{
 				return businessUnitId.Equals(other.businessUnitId)
-					&& platformTypeId.Equals(other.platformTypeId)
 					&& string.Equals(stateCode, other.stateCode);
 			}
 
@@ -293,7 +288,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				unchecked
 				{
 					var hashCode = businessUnitId.GetHashCode();
-					hashCode = (hashCode * 397) ^ platformTypeId.GetHashCode();
 					hashCode = (hashCode * 397) ^ (stateCode?.GetHashCode() ?? 0);
 					return hashCode;
 				}

@@ -8,24 +8,21 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     {
         private string _stateCode;
         private string _name;
-        private readonly Guid _platformTypeId;
 
         protected RtaState() { }
 
-		protected internal RtaState(string stateCode, Guid platformTypeId)
+		protected internal RtaState(string stateCode)
 			: this()
 		{
 			_name = stateCode;
 			_stateCode = stateCode;
-			_platformTypeId = platformTypeId;
 		}
 
-		protected internal RtaState(string name, string stateCode, Guid platformTypeId) 
+		protected internal RtaState(string name, string stateCode) 
 			: this()
         {
             _name = name;
             _stateCode = stateCode;
-            _platformTypeId = platformTypeId;
         }
 
 	    public virtual IBusinessUnit BusinessUnit
@@ -49,12 +46,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             get { return Parent as IRtaStateGroup; }
         }
-
-        public virtual Guid PlatformTypeId
-        {
-            get { return _platformTypeId; }
-        }
-
+		
 	    public virtual object Clone()
 	    {
 		    return MemberwiseClone();

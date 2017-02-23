@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithStateCode(string code)
 		{
-			stateGroup().AddState(code, Guid.Empty);
+			stateGroup().AddState(code);
 			return this;
 		}
 

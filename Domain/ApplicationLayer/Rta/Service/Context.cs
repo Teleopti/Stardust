@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? SnapshotId => _input?.SnapshotId ?? Stored.SnapshotId;
 		public int? SnapshotDataSourceId => _input?.SnapshotDataSourceId ??  Stored.SnapshotDataSourceId;
-		public Guid PlatformTypeId => string.IsNullOrEmpty(_input?.PlatformTypeId) ? Stored.PlatformTypeId() : (_input?.ParsedPlatformTypeId() ?? Guid.Empty);
 		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored.StateStartTime;
 		public DateTime? RuleStartTime => State.RuleChanged() ? CurrentTime : Stored.RuleStartTime;
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
@@ -115,7 +114,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				SnapshotId = SnapshotId,
 				SnapshotDataSourceId = SnapshotDataSourceId,
 
-				PlatformTypeId = PlatformTypeId,
 				ReceivedTime = CurrentTime,
 
 				StateGroupId = State.StateGroupId(),

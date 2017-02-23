@@ -10,7 +10,6 @@ namespace Teleopti.Wfm.Administration.Core
     public class RtaStateGroupCreator
     {
         private const string DEFAULT_STATE_GROUP_SECTION = "DefaultStateGroup";
-        private const string PLATFORM_TYPE_ID = "platformTypeId";
         private const string STATE = "state";
         private const string NAME = "name";
         private const string RTA_STATE = "RtaState";
@@ -43,16 +42,14 @@ namespace Teleopti.Wfm.Administration.Core
                 XmlAttribute xmlAttribute = xmlNode.Attributes[NAME];
                 string stateGroupName = xmlAttribute.InnerText.Trim();
                 IRtaStateGroup rtaStateGroup = new RtaStateGroup(stateGroupName, false, true);
-                xmlAttribute = xmlNode.Attributes[PLATFORM_TYPE_ID];
-                string platformTypeId = xmlAttribute.InnerText.Trim();
 
-                foreach (XmlNode node in xmlNode.ChildNodes)
+				foreach (XmlNode node in xmlNode.ChildNodes)
                 {
                     if (node.Name.Equals(STATE))
                     {
                         string stateCode = node.InnerText.Trim();
                         string stateName = node.Attributes[NAME].Value.Trim();
-                        rtaStateGroup.AddState(stateName, stateCode, new Guid(platformTypeId));
+                        rtaStateGroup.AddState(stateCode, stateName);
                     }
                 }
                 _rtaGroupCollection.Add(rtaStateGroup);
@@ -66,16 +63,13 @@ namespace Teleopti.Wfm.Administration.Core
             string xpath = string.Format(CultureInfo.CurrentCulture, "{0}[@{1}='{2}']", RTA_STATE, NAME, _defaultStateGroup);
             XmlNode xmlNode = root.SelectSingleNode(xpath);
                                                    
-            XmlAttribute xmlAttribute = xmlNode.Attributes[PLATFORM_TYPE_ID];
-            string platformTypeId = xmlAttribute.InnerText.Trim();
-
-            foreach (XmlNode node in xmlNode.ChildNodes)
+			foreach (XmlNode node in xmlNode.ChildNodes)
             {
                 if (node.Name.Equals(STATE))
                 {
                     string stateCode = node.InnerText.Trim();
                     string stateName = node.Attributes[NAME].Value.Trim();
-                    rtaStateGroup.AddState(stateName, stateCode, new Guid(platformTypeId));
+	                rtaStateGroup.AddState(stateCode, stateName);
                 }
             }
             _rtaGroupCollection.Add(rtaStateGroup);

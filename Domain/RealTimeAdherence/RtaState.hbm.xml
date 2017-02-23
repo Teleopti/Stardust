@@ -11,7 +11,6 @@
 		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="readonly" />
 		<property name="Name" />
 		<property name="StateCode" />
-		<property name="PlatformTypeId" />
 		<many-to-one class="RtaStateGroup" name="Parent" />
 	</class>
 </hibernate-mapping>

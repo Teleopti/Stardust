@@ -151,62 +151,62 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		public static FakeDatabase WithRule(this FakeDatabase database)
 		{
-			return database.WithRule(null, "", null, null, 0, null, null);
+			return database.WithRule(null, "", null, 0, null, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode)
 		{
-			return database.WithRule(null, stateCode, null, null, 0, null, null);
+			return database.WithRule(null, stateCode, null, 0, null, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, null, null);
+			return database.WithRule(Guid.NewGuid(), stateCode, activityId, 0, null, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, null);
+			return database.WithRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId)
 		{
-			return database.WithRule(ruleId, stateCode, null, activityId, 0, null, null);
+			return database.WithRule(ruleId, stateCode, activityId, 0, null, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId, string name)
 		{
-			return database.WithRule(ruleId, stateCode, null, activityId, 0, name, null);
+			return database.WithRule(ruleId, stateCode, activityId, 0, name, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, string name)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, name, null);
+			return database.WithRule(Guid.NewGuid(), stateCode, activityId, 0, name, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid platformTypeId, Guid activityId, int staffingEffect, Adherence adherence)
+		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid activityId, int staffingEffect, Adherence adherence)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, platformTypeId, activityId, staffingEffect, null, adherence);
+			return database.WithRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, adherence);
+			return database.WithRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId)
 		{
-			return database.WithRule(ruleId, stateCode, null, activityId, 0, null, null);
+			return database.WithRule(ruleId, stateCode, activityId, 0, null, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId, string name)
 		{
-			return database.WithRule(ruleId, stateCode, null, activityId, 0, name, null);
+			return database.WithRule(ruleId, stateCode, activityId, 0, name, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
+		public static FakeDatabase WithRule(this FakeDatabase database, Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
 		{
-			return database.WithRule(ruleId, stateCode, platformTypeId, activityId, staffingEffect, name, adherence, null);
+			return database.WithRule(ruleId, stateCode, activityId, staffingEffect, name, adherence, null);
 		}
 
 	}
@@ -338,7 +338,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private PersonAbsence _personAbsence;
 		private Activity _activity;
 		private Skill _skill;
-		private Guid? _platform;
 		private RtaStateGroup _stateGroup;
 		private RtaRule _rule;
 		private Meeting _meeting;
@@ -475,13 +474,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ensureExists(_teams, null, () => WithTeam(null, null));
 			return _team.Id.Value;
 		}
-
-		public Guid CurrentPlatform()
-		{
-			ensurePlatformExists(null);
-			return _platform.Value;
-		}
-
+		
 		public int CurrentDataSourceId()
 		{
 			return _dataSources.Datasources.Last().Value;
@@ -829,13 +822,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skills.Has(skill);
 			_skill = skill;
 		}
-
-		public FakeDatabase WithPlatform(Guid? platform)
-		{
-			_platform = platform ?? Guid.NewGuid();
-			return this;
-		}
-
+		
 		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
 			return WithStateGroup(id, name, _stateGroups.LoadAll().IsEmpty());
@@ -862,15 +849,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public virtual FakeDatabase WithStateCode(string stateCode)
 		{
 			ensureExists(_stateGroups, null, () => WithStateGroup(null, null));
-			ensurePlatformExists(null);
-			_stateGroup.AddState(stateCode, stateCode, _platform.Value);
+			_stateGroup.AddState(stateCode, stateCode);
 			return this;
 		}
 
 		[UnitOfWork]
-		public virtual FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color? displayColor)
+		public virtual FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color? displayColor)
 		{
-			ensurePlatformExists(platformTypeId);
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 
 			_rule = null;
@@ -893,8 +878,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				stateGroup = (
 					from g in _stateGroups.LoadAll()
 					from s in g.StateCollection
-					where s.StateCode == stateCode &&
-						  s.PlatformTypeId == _platform
+					where s.StateCode == stateCode
 					select g
 					).FirstOrDefault();
 				if (stateGroup == null)
@@ -903,7 +887,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					stateGroup = new RtaStateGroup(name, isDefaultStateGroup, true);
 					stateGroup.SetId(Guid.NewGuid());
 					stateGroup.SetBusinessUnit(_businessUnit);
-					stateGroup.AddState(null, stateCode, _platform.Value);
+					stateGroup.AddState(stateCode, null);
 					_stateGroups.Add(stateGroup);
 				}
 			}
@@ -998,14 +982,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 
 
-
-		private void ensurePlatformExists(Guid? platform)
-		{
-			if (platform != null)
-				WithPlatform(platform);
-			if (_platform == null)
-				WithPlatform(null);
-		}
 		
 		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot

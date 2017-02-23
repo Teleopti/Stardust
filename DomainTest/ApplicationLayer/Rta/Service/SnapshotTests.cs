@@ -319,66 +319,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StoredStateFor(user2)
 				.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
-
-		[Test]
-		public void ShouldUseEmptyPlatformTypeIdWhenLoggingOutAgent()
-		{
-			var personId = Guid.NewGuid();
-			var platformTypeId = Guid.NewGuid();
-			var loggedout = Guid.NewGuid();
-			Database
-				.WithPlatform(platformTypeId)
-				.WithAgent("usercode1", Guid.NewGuid())
-				.WithAgent("usercode2", personId)
-				.WithStateGroup(loggedout, "loggedout", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithStateGroup(null, "state")
-				.WithStateCode("statecode")
-				;
-			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new BatchForTest
-			{
-				SnapshotId = "2014-10-20 10:00".Utc(),
-				PlatformTypeId = platformTypeId.ToString(),
-				States = new[]
-				{
-					new BatchStateForTest
-					{
-						UserCode = "usercode1",
-						StateCode = "statecode"
-					},
-					new BatchStateForTest
-					{
-						UserCode = "usercode2",
-						StateCode = "statecode"
-					}
-				}
-			});
-			Target.CloseSnapshot(new CloseSnapshotForTest
-			{
-				SnapshotId = "2014-10-20 10:00".Utc()
-			});
-
-			Target.SaveStateBatch(new BatchForTest
-			{
-				SnapshotId = "2014-10-20 10:05".Utc(),
-				PlatformTypeId = platformTypeId.ToString(),
-				States = new[]
-				{
-					new BatchStateForTest
-					{
-						UserCode = "usercode1",
-						StateCode = "statecode"
-					}
-				}
-			});
-			Target.CloseSnapshot(new CloseSnapshotForTest
-			{
-				SnapshotId = "2014-10-20 10:05".Utc()
-			});
-
-			Database.StoredStateFor(personId)
-				.PlatformTypeId.Should().Be.EqualTo(Guid.Empty);
-		}
+		
 	}
 }

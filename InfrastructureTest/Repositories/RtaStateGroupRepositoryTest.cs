@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IRtaStateGroup CreateAggregateWithCorrectBusinessUnit()
         {
             var stateGroup = new RtaStateGroup("test", true, false);
-	        stateGroup.AddState("state1", "01", Guid.NewGuid());
+	        stateGroup.AddState("01", "state1");
             return stateGroup;
         }
 
@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    var stateGroup1 = new RtaStateGroup("group 1", false, true);
 		    var stateGroup2 = new RtaStateGroup("group 2", false, true);
 		    var platformTypeId = Guid.NewGuid();
-			stateGroup1.AddState("", "dupe", platformTypeId);
-			stateGroup2.AddState("", "dupe", platformTypeId);
+			stateGroup1.AddState("dupe " + platformTypeId, "");
+			stateGroup2.AddState("dupe " + platformTypeId, "");
 
 			PersistAndRemoveFromUnitOfWork(stateGroup1);
 			Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(stateGroup2));
@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var stateGroup1 = new RtaStateGroup("group 1", false, true);
 			var stateGroup2 = new RtaStateGroup("group 2", false, true);
-			stateGroup1.AddState("", "same", Guid.NewGuid());
-			stateGroup2.AddState("", "same", Guid.NewGuid());
+			stateGroup1.AddState("same", "");
+			stateGroup2.AddState("same", "");
 
 			PersistAndRemoveFromUnitOfWork(stateGroup1);
 			PersistAndRemoveFromUnitOfWork(stateGroup2);

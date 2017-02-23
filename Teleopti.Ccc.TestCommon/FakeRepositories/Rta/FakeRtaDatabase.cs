@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public BatchForTest()
 		{
 			AuthenticationKey = LegacyAuthenticationKey.TheKey;
-			PlatformTypeId = Guid.Empty.ToString();
 			SourceId = "sourceId";
 		}
 	}
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public StateForTest()
 		{
 			AuthenticationKey = LegacyAuthenticationKey.TheKey;
-			PlatformTypeId = Guid.Empty.ToString();
 			SourceId = "sourceId";
 			UserCode = "8808";
 			StateCode = "AUX2";
@@ -124,7 +122,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_agentStateReadModels = agentStateReadModels;
 
 			WithDataSource(new StateForTest().SourceId);
-			WithPlatform(new Guid(new StateForTest().PlatformTypeId));
 		}
 
 		public AgentState StoredState => _agentStates.LockNLoad(_agentStates.FindForCheck().Select(x => x.PersonId), DeadLockVictim.Yes).AgentStates.SingleOrDefault();
