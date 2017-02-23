@@ -4354,15 +4354,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void skillGridMenuItemShovelAnalyzerClick(object sender, EventArgs e)
 		{
-			var selectedDate = _scheduleView.SelectedDateLocal();
-			TimeSpan? selectedTime = null;
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 			{
-				selectedTime = _skillIntradayGridControl.Presenter.SelectedIntervalTime();
-			}
-			using (var resourceChanges = new ShovelingAnalyzerView(selectedDate, selectedTime.GetValueOrDefault()))
-			{
-				resourceChanges.ShowDialog(this);
+				using (var resourceChanges = new ShovelingAnalyzerView(_container.Resolve<IResourceCalculation>(), _container.Resolve<ITimeZoneGuard>()))
+				{
+					resourceChanges.FillForm(_schedulerState.SchedulingResultState,
+						_skillIntradayGridControl.Presenter.Skill, 
+						_scheduleView.SelectedDateLocal(), 
+						_skillIntradayGridControl.Presenter.SelectedIntervalTime().GetValueOrDefault());
+					resourceChanges.ShowDialog(this);
+				}
 			}
 		}
 

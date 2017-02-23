@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(trackShoveling, scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subSkillDay }, false, false));
 
 			var resourcesRemoved = trackShoveling.RemovedResources.Single();
-			resourcesRemoved.Resources.Should().Be.EqualTo(1);
+			resourcesRemoved.ResourcesMoved.Should().Be.EqualTo(1);
 		}
 
 		[Test]

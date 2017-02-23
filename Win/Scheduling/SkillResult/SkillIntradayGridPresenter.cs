@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         private readonly IList<IGridRow> _gridRows = new List<IGridRow>();
         private readonly TeleoptiGridControl _gridControl;
         private RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> _rowManager;
-        private ISkill _skill;
-        private IList<IntervalDefinition> _intervals = new List<IntervalDefinition>();
+	    public ISkill Skill { get; private set; }
+	    private IList<IntervalDefinition> _intervals = new List<IntervalDefinition>();
         private ISkillType _lastSkillType;
         private bool _isLastVirtual;
     	private bool _hasHelp = true;
@@ -109,16 +109,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			else
 			{
 				_gridControl.Cols.DefaultSize = 55;
-				_skill = skill;
+				Skill = skill;
 
 				var period = createDateTimePeriod(skillStaffPeriods);
 				createIntervalList(period, stateHolder);
 
-				if (_gridRows.Count == 0 || !_skill.SkillType.Equals(_lastSkillType) || !_skill.IsVirtual.Equals(_isLastVirtual))
+				if (_gridRows.Count == 0 || !Skill.SkillType.Equals(_lastSkillType) || !Skill.IsVirtual.Equals(_isLastVirtual))
 				{
 					createGridRows(includeStatistics, skill.IsVirtual, stateHolder);
-					_lastSkillType = _skill.SkillType;
-					_isLastVirtual = _skill.IsVirtual;
+					_lastSkillType = Skill.SkillType;
+					_isLastVirtual = Skill.IsVirtual;
 				}
 				else
 				{
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 					_gridRows[0] = new IntervalHeaderGridRow(_intervals);
 					//2. Fix the rowmanager intervals and resolution
 					_rowManager.Intervals = _intervals;
-					_rowManager.IntervalLength = _skill.DefaultResolution;
+					_rowManager.IntervalLength = Skill.DefaultResolution;
 				}
 
 				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(stateHolder.TimeZoneInfo).Date,
@@ -149,11 +149,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
             _gridRows.Clear();
             _gridRows.Add(new IntervalHeaderGridRow(_intervals));
-            _rowManager = new RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod>(_gridControl, _intervals, _skill.DefaultResolution, stateHolder);
+            _rowManager = new RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod>(_gridControl, _intervals, Skill.DefaultResolution, stateHolder);
             _gridControl.CoveredRanges.Clear();
         	SkillStaffPeriodGridRowScheduler gridRow;
 
-			if (_skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
+			if (Skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 			{
 				gridRow = new SkillStaffPeriodGridRowSchedulerMaxSeatIssues(_rowManager, "NumericReadOnlyCell", "Payload.CalculatedUsedSeats", UserTexts.Resources.UsedSeats);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
@@ -164,8 +164,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
 
-			TextManager manager = new TextManager(_skill.SkillType);
-			if (_skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
+			TextManager manager = new TextManager(Skill.SkillType);
+			if (Skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 			{
 				gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell", "FStaff",
 				                                               manager.WordDictionary["ForecastedAgents"]);
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
                 gridRow = new SkillStaffPeriodGridRowBoostedRelativeDifference(_rowManager, "NumericReadOnlyCell",
                                                                                 "RelativeBoostedDifferenceForDisplayOnly",
-                                                                                UserTexts.Resources.AdjustedDifference, _skill, _skillPriorityProvider);
+                                                                                UserTexts.Resources.AdjustedDifference, Skill, _skillPriorityProvider);
                 gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                 _gridRows.Add(_rowManager.AddRow(gridRow));
 
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
-				if ((_skill.SkillType.ForecastSource == ForecastSource.InboundTelephony || _skill.SkillType.ForecastSource == ForecastSource.Chat) 
+				if ((Skill.SkillType.ForecastSource == ForecastSource.InboundTelephony || Skill.SkillType.ForecastSource == ForecastSource.Chat) 
 					&& !isVirtual)
 				{
 					gridRow = new SkillStaffPeriodGridRowIntraIntervalIssues(_rowManager, "PercentReadOnlyCell", "IntraIntervalValue", Resources.IntraIntervalOptimization);
@@ -255,9 +255,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
-				if (_skill.SkillType.ForecastSource == ForecastSource.Email ||
-				    _skill.SkillType.ForecastSource == ForecastSource.Backoffice ||
-				    _skill.SkillType.ForecastSource == ForecastSource.Time)
+				if (Skill.SkillType.ForecastSource == ForecastSource.Email ||
+				    Skill.SkillType.ForecastSource == ForecastSource.Backoffice ||
+				    Skill.SkillType.ForecastSource == ForecastSource.Time)
 				{
 
 					gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
         	if (includeStatistics)
             {
-                if (_skill.SkillType.ForecastSource == ForecastSource.InboundTelephony)
+                if (Skill.SkillType.ForecastSource == ForecastSource.InboundTelephony)
                 {
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
                                                                     "Payload.TaskData.Tasks",
@@ -464,7 +464,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         private void createIntervalList(DateTimePeriod period, ISchedulerStateHolder stateHolder)
         {
             _intervals.Clear();
-            _intervals = period.IntervalsFromHourCollection(_skill.DefaultResolution, stateHolder.TimeZoneInfo);
+            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, stateHolder.TimeZoneInfo);
         }
 
         private static DateTimePeriod createDateTimePeriod(ICollection<ISkillStaffPeriod> list)

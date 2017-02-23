@@ -58,11 +58,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class RemovedResource
 	{
-		public RemovedResource(double resources)
+		public RemovedResource(double resourcesMoved)
 		{
-			Resources = resources;
+			ResourcesMoved = resourcesMoved;
 		}
 
-		public double Resources { get; }
+		public double ResourcesMoved { get; }
 	}
 }
