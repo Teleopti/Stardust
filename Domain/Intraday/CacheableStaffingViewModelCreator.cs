@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Caching;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class CacheableStaffingViewModelCreator : ICacheableStaffingViewModelCreator
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
 
-		public CacheableStaffingViewModelCreator(IStaffingViewModelCreator staffingViewModelCreator,
-			ILoggedOnUser loggedOnUser)
+		public CacheableStaffingViewModelCreator(IStaffingViewModelCreator staffingViewModelCreator)
 		{
 			_staffingViewModelCreator = staffingViewModelCreator;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public IntradayStaffingViewModel Load(Guid skillId)
@@ -34,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		private string getCacheKey(Guid skillId)
 		{
-			return $"{_loggedOnUser.CurrentUser().Id.GetValueOrDefault()}_{skillId}";
+			return skillId.ToString();
 		}
 	}
 

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			{
 				var person = PersonRepository.Get(new Guid(personId));
 				var currentUser = new FakeLoggedOnUser(person);
-				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator, currentUser);
+				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator);
 				_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
 					cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario);
 				var possibilities = _scheduleStaffingPossibilityCalculator.CalcuateIntradayAbsenceIntervalPossibilities();
