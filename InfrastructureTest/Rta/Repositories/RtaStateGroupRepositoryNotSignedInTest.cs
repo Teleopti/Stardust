@@ -10,7 +10,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.Repositories
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Repositories
 {
 	[TestFixture]
 	[PrincipalAndStateTest]

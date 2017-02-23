@@ -5,10 +5,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.InfrastructureTest.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.Repositories
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Repositories
 {
     [TestFixture]
     [Category("BucketB")]

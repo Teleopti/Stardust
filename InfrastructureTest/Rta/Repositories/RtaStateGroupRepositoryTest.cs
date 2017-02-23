@@ -1,25 +1,30 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.Repositories
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Repositories
 {
     [TestFixture]
     [Category("BucketB")]
     public class RtaStateGroupRepositoryTest : RepositoryTest<IRtaStateGroup>
     {
+		private readonly PlatformTypeInjector platformTypeInjector = new PlatformTypeInjector();
+
         protected override IRtaStateGroup CreateAggregateWithCorrectBusinessUnit()
         {
             var stateGroup = new RtaStateGroup("test", true, false);
-	        stateGroup.AddState("01", "state1");
+			var platformTypeId = Guid.NewGuid().ToString();
+			stateGroup.AddState(platformTypeInjector.Inject("01", platformTypeId), "state1");
             return stateGroup;
         }
 
@@ -73,9 +78,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    {
 		    var stateGroup1 = new RtaStateGroup("group 1", false, true);
 		    var stateGroup2 = new RtaStateGroup("group 2", false, true);
-		    var platformTypeId = Guid.NewGuid();
-			stateGroup1.AddState("dupe " + platformTypeId, "");
-			stateGroup2.AddState("dupe " + platformTypeId, "");
+		    var platformTypeId = Guid.NewGuid().ToString();
+			stateGroup1.AddState(platformTypeInjector.Inject("dupe ", platformTypeId), "");
+			stateGroup2.AddState(platformTypeInjector.Inject("dupe ", platformTypeId), "");
 
 			PersistAndRemoveFromUnitOfWork(stateGroup1);
 			Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(stateGroup2));
@@ -86,8 +91,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var stateGroup1 = new RtaStateGroup("group 1", false, true);
 			var stateGroup2 = new RtaStateGroup("group 2", false, true);
-			stateGroup1.AddState("same", "");
-			stateGroup2.AddState("same", "");
+			stateGroup1.AddState(platformTypeInjector.Inject("same", Guid.NewGuid().ToString()), "");
+			stateGroup2.AddState(platformTypeInjector.Inject("same", Guid.NewGuid().ToString()), "");
 
 			PersistAndRemoveFromUnitOfWork(stateGroup1);
 			PersistAndRemoveFromUnitOfWork(stateGroup2);
