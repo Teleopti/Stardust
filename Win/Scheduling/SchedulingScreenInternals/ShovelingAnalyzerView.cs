@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		public void FillForm(ISchedulingResultStateHolder schedulingResultStateHolder, ISkill skill, DateOnly date, TimeSpan timeStart)
 		{
-			//hackeri hackera
 			var baseDate = TimeZoneHelper.ConvertToUtc(date.Date, _timeZoneGuard.CurrentTimeZone());
 			var intervalLength = TimeSpan.FromMinutes(skill.DefaultResolution);
 			var period = new DateTimePeriod(baseDate.Add(timeStart), baseDate.Add(timeStart).Add(intervalLength));
@@ -48,13 +47,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			output.AppendLine();
 			output.AppendLine($"Resources at start: {trackShovling.ResourcesBeforeShoveling}");
 			output.AppendLine();
-			output.AppendLine("---ADDED---");
+			output.AppendLine("---ADDED RESOURCES---");
 			foreach (var addedResource in trackShovling.AddedResources)
 			{
-				output.AppendLine($"{addedResource.ResourcesMoved} added resources from skillgroup: {string.Join("::", addedResource.FromPrimarySkills.Select(x => x.Name))}");
+				var addedLine = $"{addedResource.ResourcesMoved} added resources " +
+												$"from skillgroup: {string.Join("::", addedResource.FromPrimarySkills.Select(x => x.Name))}";
+				addedLine += addedResource.ParallellSkills.Any()
+					? $", parallell skills:  {string.Join("::", addedResource.ParallellSkills.Select(x => x.Name))}"
+					: " (no parallel skills)";
+				output.AppendLine(addedLine);
 			}
 			output.AppendLine();
-			output.AppendLine("---REMOVED---");
+			output.AppendLine("---REMOVED RESOURCES---");
 			foreach (var removedResource in trackShovling.RemovedResources)
 			{
 				output.AppendLine($"{removedResource.ResourcesMoved} removed resources");

@@ -42,6 +42,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
+		public void ShouldTrackWhatParallellSkillsExistsWhenShovelingTo()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = new DateOnly(2000, 1, 1);
+			var primarySkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var primarySkillDay = primarySkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var subSkill1 = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var subSkill1Day = subSkill1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var subSkill2 = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var subSkill2Day = subSkill2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subSkill1, subSkill2);
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subSkill1, subSkill2);
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
+			var trackShoveling = new TrackShoveling(subSkill1, new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 8, 15, 0, 0, DateTimeKind.Utc)));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(trackShoveling, scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subSkill1Day, subSkill2Day }, false, false));
+
+			var resourcesAdded = trackShoveling.AddedResources.Single();
+			resourcesAdded.ParallellSkills.Should().Have.SameValuesAs(subSkill2);
+		}
+
+		[Test]
 		public void ShouldTrackShoveledFromPrimarySkillsResources()
 		{
 			var scenario = new Scenario("_");

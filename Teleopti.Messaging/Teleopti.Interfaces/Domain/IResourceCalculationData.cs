@@ -21,7 +21,7 @@ namespace Teleopti.Interfaces.Domain
 
 	public interface IShovelingCallback
 	{
-		void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources);
+		void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, IEnumerable<ISkill> parallellSkills, double resources);
 		void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources);
 		void BeforeShoveling(IShovelResourceData shovelResourceData);
 	}
