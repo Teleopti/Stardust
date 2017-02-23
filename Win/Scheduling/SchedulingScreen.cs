@@ -720,6 +720,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var skillGridMenuItem1 = new ToolStripMenuItem("Analyze resourses compared to last change");
 					skillGridMenuItem1.Click += skillGridMenuItemAnalyzeResorceChangesClick;
 					_contextMenuSkillGrid.Items.Add(skillGridMenuItem1);
+					var skillGridMenuItem2 = new ToolStripMenuItem("Analyze shoveling");
+					skillGridMenuItem2.Click += skillGridMenuItemShovelAnalyzerClick;
+					_contextMenuSkillGrid.Items.Add(skillGridMenuItem2);
 				}
 			}
 			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
@@ -4344,6 +4347,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			var model = new ResourceCalculationAnalyzerModel(this, _undoRedo, _container, _optimizationHelperExtended, selectedDate, selectedTime);
 			using (var resourceChanges = new ResourceCalculationAnalyzerView(model))
+			{
+				resourceChanges.ShowDialog(this);
+			}
+		}
+
+		private void skillGridMenuItemShovelAnalyzerClick(object sender, EventArgs e)
+		{
+			var selectedDate = _scheduleView.SelectedDateLocal();
+			TimeSpan? selectedTime = null;
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			{
+				selectedTime = _skillIntradayGridControl.Presenter.SelectedIntervalTime();
+			}
+			using (var resourceChanges = new ShovelingAnalyzerView(selectedDate, selectedTime.GetValueOrDefault()))
 			{
 				resourceChanges.ShowDialog(this);
 			}

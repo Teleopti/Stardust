@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 	    public TimeSpan? SelectedIntervalTime()
 	    {
 		    var x = _gridRows[0] as IntervalHeaderGridRow;
-		    return x?.Time(new CellInfo {ColHeaderCount = 1, ColIndex = _gridControl.CurrentCellInfo?.ColIndex ?? 1});
+		    return x?.Time(new CellInfo {ColHeaderCount = 2, ColIndex = _gridControl.CurrentCellInfo?.ColIndex-1 ?? 1});
 	    }
 
         public ReadOnlyCollection<IntervalDefinition> Intervals

@@ -825,6 +825,12 @@
     <Compile Include="Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.Designer.cs">
       <DependentUpon>ResourceCalculationAnalyzerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\ShovelingAnalyzerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\ShovelingAnalyzerView.Designer.cs">
+      <DependentUpon>ShovelingAnalyzerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\SchedulingScreenInternals\SkillGroupIslandsAnalyzer.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\VirtualSkillGroupsCreator.cs" />
     <Compile Include="Scheduling\ValidationAlertsView.cs">
@@ -3108,6 +3114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.resx">
       <DependentUpon>ResourceCalculationAnalyzerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\ShovelingAnalyzerView.resx">
+      <DependentUpon>ShovelingAnalyzerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\ValidationAlertsView.resx">
       <DependentUpon>ValidationAlertsView.cs</DependentUpon>
