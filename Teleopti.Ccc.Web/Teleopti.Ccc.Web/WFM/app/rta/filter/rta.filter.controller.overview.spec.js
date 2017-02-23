@@ -328,10 +328,9 @@ describe('RtaFilterController', function () {
 		expect(vm.selectedSkillArea.Name).toEqual('Email and phone');
 	});
 
-	xit('should update url when on teams and changing from skill to skill area', function () {
-		$state.current.name = "rta.teams";
+	it('should update url when on teams and changing from skill to skill area', function () {
 		stateParams.skillIds = "phoneGuid";
-		stateParams.siteIds = "parisGuid";
+		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
 			.withSkill({
 				Id: "phoneGuid",
@@ -345,7 +344,13 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: "emailGuid"
 				}]
-			}]);;
+			}])
+			.withOrganizationOnSkills({
+				Id: 'parisGuid',
+				Teams: [{
+					Id: 'parisTeamGuid',
+				}]
+			}, "phoneGuid");
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -361,9 +366,9 @@ describe('RtaFilterController', function () {
 		});
 	});
 
-	xit('should update url when on teams and changing from skill area to skill', function () {
+	it('should update url when on teams and changing from skill area to skill', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		stateParams.siteIds = "parisGuid";
+		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
 			.withSkill({
 				Id: "phoneGuid",
@@ -377,7 +382,13 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: "emailGuid"
 				}]
-			}]);;
+			}])
+			.withOrganizationOnSkills({
+				Id: 'parisGuid',
+				Teams: [{
+					Id: 'parisTeamGuid',
+				}]
+			}, "phoneGuid, emailGuid");
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;

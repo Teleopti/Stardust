@@ -123,6 +123,7 @@
 				return;
 			siteIds.forEach(function (sid) {
 				var theSite = vm.sites.find(function (site) {
+					console.log(site)
 					return site.Id == sid;
 				});
 				theSite.isChecked = true;
