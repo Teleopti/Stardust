@@ -14,6 +14,7 @@
 			'$timeout',
 			'rtaService',
 			'rtaRouteService',
+			'rtaNamesFormatService',
 			'$q'
 		];
 
@@ -25,6 +26,7 @@
 		$timeout,
 		rtaService,
 		rtaRouteService,
+		rtaNamesFormatService,
 		$q
 	) {
 		var vm = this;
@@ -131,71 +133,10 @@
 		}
 
 		function updateSelectFieldText() {
-			var selectedOrg = showTeamSelected();
-			var selectedFieldText = '';
-			var trailingCommaFlag = 0;
-			if (selectedOrg['siteNames'].length > 0 || selectedOrg['teamNames'].length > 0) {
-				if (selectedOrg['siteNames'].length > 0) {
-					selectedFieldText = 'Sites: ';
-					selectedOrg['siteNames'].forEach(function (siteName) {
-						++trailingCommaFlag;
-						selectedFieldText = selectedFieldText + siteName + ", ";
-					});
-					selectedFieldText = selectedFieldText + selectedOrg['sitesLimitStr'];
-				}
-				trailingCommaFlag = 0;
-
-				if (selectedOrg['teamNames'].length > 0) {
-					{
-						selectedFieldText = selectedFieldText + 'Teams: ';
-						selectedOrg['teamNames'].forEach(function (teamName) {
-							++trailingCommaFlag;
-							var trailingComma = selectedOrg['teamNames'].length > trailingCommaFlag ? ", " : "";
-							selectedFieldText = selectedFieldText + teamName + trailingComma;
-						})
-					}
-					selectedFieldText = selectedFieldText + selectedOrg['teamsLimitStr'];
-				}
-				else {
-					if(selectedOrg['sitesLimitStr'].length == 0)
-						selectedFieldText = selectedFieldText.slice(0, -2);
-				}
-			}
-			// var howManyTeamsSelected = countTeamsSelected();
-			// vm.selectFieldText = howManyTeamsSelected === 0 ? vm.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected);
+			var selectedFieldText = rtaNamesFormatService.getSelectedFieldText(vm.sites,siteIds, teamIds);
 			if (selectedFieldText.length > 0)
 				vm.selectFieldText = selectedFieldText;
 
-		}
-
-		function showTeamSelected() {
-			var countTeams = 1;
-			var countSites = 1;
-			var maxCount = 2;
-			var siteOrTeamNames = [];
-			siteOrTeamNames['siteNames'] = []
-			siteOrTeamNames['teamNames'] = []
-			if ((siteIds.length > 0 || teamIds.length > 0)) {
-
-				vm.sites.forEach(function (site) {
-					if (siteIds.indexOf(site.Id) > -1 && countSites <= maxCount) {
-						++countSites;
-						siteOrTeamNames['siteNames'] = siteOrTeamNames['siteNames'].concat([site.Name]);
-					}
-					if (teamIds.length > 0 && countTeams <= maxCount) {
-						site.Teams.forEach(function (t) {
-
-							if (teamIds.indexOf(t.Id) > -1 && countTeams <= maxCount) {
-								++countTeams;
-								siteOrTeamNames['teamNames'] = siteOrTeamNames['teamNames'].concat([t.Name]);
-							}
-						})
-					}
-				});
-			}
-			siteOrTeamNames['sitesLimitStr'] = siteIds.length > maxCount ? "..." : "";
-			siteOrTeamNames['teamsLimitStr'] = teamIds.length > maxCount ? "..." : "";
-			return siteOrTeamNames;
 		}
 
 		/*********AUTOCOMPLETE*****/
