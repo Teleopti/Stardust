@@ -16,10 +16,12 @@ $(document).ready(function () {
 		var startHour = timelineStartHour;
 		var endHour = timelineEndHour;
 
-		timelinePoints.push({
-			"minutes": startHour * 60 - intervalLengthInMinutes,
-			"timeText": (startHour - 1) + ":45"
-		});
+		if (startHour > 0) {
+			timelinePoints.push({
+				"minutes": startHour * 60 - intervalLengthInMinutes,
+				"timeText": (startHour - 1) + ":45"
+			});
+		}
 
 		for (var i = startHour; i <= endHour; i++) {
 			timelinePoints.push({
@@ -28,10 +30,12 @@ $(document).ready(function () {
 			});
 		}
 
-		timelinePoints.push({
-			"minutes": endHour * 60 + intervalLengthInMinutes,
-			"timeText": endHour + ":15"
-		});
+		if (endHour < 24) {
+			timelinePoints.push({
+				"minutes": endHour * 60 + intervalLengthInMinutes,
+				"timeText": endHour + ":15"
+			});
+		}
 
 		return timelinePoints;
 	}

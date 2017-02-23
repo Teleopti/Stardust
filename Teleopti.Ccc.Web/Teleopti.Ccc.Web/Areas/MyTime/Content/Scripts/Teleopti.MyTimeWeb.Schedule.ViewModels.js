@@ -235,6 +235,13 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			timelineEndMinutes = constants.totalMinutesOfOneDay;
 		}
 
+		// If timeline is not start or end at 00:00, there will exist an extra 15 minutes at start or end
+		// Need handle with this scenario.
+		var timelineStartMinutesForBoundary = timelineStartMinutes > 0 ? timelineStartMinutes + constants.intervalLengthInMinutes : 0;
+		var timelineEndMinutesForBoundary = timelineEndMinutes < constants.totalMinutesOfOneDay
+			? timelineEndMinutes - constants.intervalLengthInMinutes
+			: timelineEndMinutes;
+
 		var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
 
 		var momentDate = moment(scheduleDay.FixedDate);
@@ -244,8 +251,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 				shiftStartMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
 				shiftEndMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
 			} else {
-				shiftStartMinutes = timelines[0].minutes + constants.intervalLengthInMinutes;
-				shiftEndMinutes = timelines[timelines.length - 1].minutes - constants.intervalLengthInMinutes;
+				shiftStartMinutes = timelineStartMinutesForBoundary;
+				shiftEndMinutes = timelineEndMinutesForBoundary;
 			}
 
 			// Calculate shiftStartPosition and shiftEndPosition since this could not get from raw data
@@ -308,10 +315,10 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			}
 
 			var startTimeCandidates = [
-				rawProbabilityStartMinutes, timelineStartMinutes + constants.intervalLengthInMinutes
+				rawProbabilityStartMinutes, timelineStartMinutesForBoundary
 			];
 			var endTimeCandidates = [
-				rawProbabilityEndMinutes, timelineEndMinutes - constants.intervalLengthInMinutes
+				rawProbabilityEndMinutes, timelineEndMinutesForBoundary
 			];
 
 			if (probabilityType === constants.absenceProbabilityType) {
