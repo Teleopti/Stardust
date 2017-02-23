@@ -22,5 +22,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public bool SkipResourceCalculation { get; }
 		public SkillCombinationHolder SkillCombinationHolder { get; }
 		public ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; private set; }
+
+		public IShovelingCallback ShovelingCallback
+		{
+			get { throw new System.NotImplementedException(); }
+			set { throw new System.NotImplementedException(); }
+		}
+
+		public void SetShovelingCallback(IShovelingCallback shovelingCallback)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

@@ -30,5 +30,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData),
 				skillDaysDic.Keys, skillDaysDic, considerShortbreaks, doIntraIntervalCalculation);
 		}
+
+		public static IResourceCalculationData WithData(IShovelingCallback shovelingCallback,
+									IScenario scenario,
+									DateOnly date,
+									IEnumerable<IPersistableScheduleData> persistableScheduleData,
+									IEnumerable<ISkillDay> skillDays,
+									bool considerShortbreaks,
+									bool doIntraIntervalCalculation)
+		{
+			var ret = WithData(scenario, date.ToDateOnlyPeriod(), persistableScheduleData, skillDays, considerShortbreaks, doIntraIntervalCalculation);
+			ret.SetShovelingCallback(shovelingCallback);
+			return ret;
+		}
 	}
 }

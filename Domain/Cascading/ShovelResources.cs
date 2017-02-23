@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public void Execute(IShovelResourceData shovelResourceData, IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period, Func<IDisposable> getResourceCalculationContext )
+		public void Execute(IShovelResourceData shovelResourceData, IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period, IShovelingCallback shovelingCallback, Func<IDisposable> getResourceCalculationContext)
 		{
 			var cascadingSkills = new CascadingSkills(allSkills); 
 			if (!cascadingSkills.Any())
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 								foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 								{
 									var state = _primarySkillOverstaff.AvailableSum(shovelResourceData, allSkillGroups, skillGroupsWithSameIndex, interval);
-									_addResourcesToSubSkills.Execute(state, shovelResourceData, skillGroupsWithSameIndex, interval);
+									_addResourcesToSubSkills.Execute(state, shovelResourceData, skillGroupsWithSameIndex, interval, shovelingCallback);
 									_reducePrimarySkillResources.Execute(state, shovelResourceData, interval);
 								}
 							}
