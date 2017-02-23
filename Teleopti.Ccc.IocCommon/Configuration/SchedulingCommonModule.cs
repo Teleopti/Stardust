@@ -426,6 +426,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
+			builder.RegisterType<SchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //can be single after remove ExecuteAndReturn method
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
 			builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().ApplyAspects().InstancePerLifetimeScope();

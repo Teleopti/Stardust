@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IJobResult entity)
 		{
+			entity.SetId(Guid.NewGuid());
 			_result.Add(entity);
 		}
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IJobResult> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _result.ToList();
 		}
 
 		public IJobResult Load(Guid id)

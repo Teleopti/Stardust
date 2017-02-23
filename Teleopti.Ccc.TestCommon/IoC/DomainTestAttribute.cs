@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
 			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 
 			fakePrincipal(system);
 		}
