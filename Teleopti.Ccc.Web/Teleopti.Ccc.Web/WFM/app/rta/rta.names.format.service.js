@@ -11,7 +11,9 @@
 		}
 		return service;
 
-		function getSelectedFieldText(sites,siteIds, teamIds, siteString="Sites: ", teamString="Teams: ") {
+		function getSelectedFieldText(sites,siteIds, teamIds, siteString, teamString) {
+			siteString = siteString || "Sites: ";
+			teamString = teamString || "Teams: ";
 			var selectedOrg = getSelectionArray(sites,siteIds, teamIds);
 			var selectedFieldText = '';
 			if (selectedOrg['siteNames'].length > 0 || selectedOrg['teamNames'].length > 0) {
