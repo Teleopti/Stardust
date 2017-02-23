@@ -70,11 +70,10 @@
 					}
 				});
 			}
-			siteOrTeamNames['sitesLimitStr'] = siteIds.length > maxCount ? "..." : "";
+			siteOrTeamNames['sitesLimitStr'] = (siteIds.length > maxCount && teamIds.length === 0) ? "..." 
+			: ((siteIds.length > maxCount) ? "..., " : "");
 			siteOrTeamNames['teamsLimitStr'] = teamIds.length > maxCount ? "..." : "";
 			return siteOrTeamNames;
 		}
-
-
 	};
 })();
