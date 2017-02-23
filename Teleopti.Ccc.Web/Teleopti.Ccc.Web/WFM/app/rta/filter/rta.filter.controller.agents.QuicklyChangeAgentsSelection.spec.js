@@ -1160,5 +1160,101 @@ describe('RtaFilterController', function () {
 		});
 	});
 
+	it('should go to agents by skill and clear site from stateParams when on agents view', function () {
+		$state.current.name = "rta.agents";
+		stateParams.skillAreaId = "phoneAndEmailGuid";
+		stateParams.siteIds = ['londonGuid'];
+		$fakeBackend
+			.withSkill({
+				Id: "phoneGuid"
+			})
+			.withSkillAreas([{
+				Id: "phoneAndEmailGuid",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				},]
+			}])
+			.withOrganizationOnSkills({
+				Id: 'londonGuid',
+				Teams: [{
+					Id: 'londonTeamGuid',
+				}]
+			}, "phoneGuid")
+			.withOrganizationOnSkills({
+				Id: 'londonGuid',
+				Teams: [{
+					Id: 'londonTeamGuid',
+				}]
+			}, "phoneGuid, emailGuid");
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.selectedSkillChange({
+				Id: "phoneGuid"
+			});
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			skillAreaId: undefined,
+			skillIds: "phoneGuid",
+			siteIds: [],
+			teamIds: []
+		}, {
+				reload: true,
+				notify: true
+			});
+	});
+
+	it('should go to agents by skill area and clear site from stateParams when on agents view', function () {
+		$state.current.name = "rta.agents";
+		stateParams.skillIds = "phoneGuid";
+		stateParams.siteIds = ['londonGuid'];
+		$fakeBackend
+			.withSkill({
+				Id: "phoneGuid"
+			})
+			.withSkillAreas([{
+				Id: "phoneAndEmailGuid",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				},]
+			}])
+			.withOrganizationOnSkills({
+				Id: 'londonGuid',
+				Teams: [{
+					Id: 'londonTeamGuid',
+				}]
+			}, "phoneGuid")
+			.withOrganizationOnSkills({
+				Id: 'londonGuid',
+				Teams: [{
+					Id: 'londonTeamGuid',
+				}]
+			}, "phoneGuid, emailGuid");
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.selectedSkillAreaChange({
+				Id: "phoneAndEmailGuid"
+			});
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			skillAreaId: "phoneAndEmailGuid",
+			skillIds: [],
+			siteIds: [],
+			teamIds: []
+		}, {
+				reload: true,
+				notify: true
+			});
+	});
+
 
 });

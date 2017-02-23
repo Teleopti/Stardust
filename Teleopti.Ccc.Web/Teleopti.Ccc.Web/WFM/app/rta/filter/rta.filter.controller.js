@@ -123,7 +123,6 @@
 				return;
 			siteIds.forEach(function (sid) {
 				var theSite = vm.sites.find(function (site) {
-					console.log(site)
 					return site.Id == sid;
 				});
 				theSite.isChecked = true;
@@ -134,7 +133,7 @@
 		}
 
 		function updateSelectFieldText() {
-			var selectedFieldText = rtaNamesFormatService.getSelectedFieldText(vm.sites,siteIds, teamIds);
+			var selectedFieldText = rtaNamesFormatService.getSelectedFieldText(vm.sites, siteIds, teamIds);
 			if (selectedFieldText.length > 0)
 				vm.selectFieldText = selectedFieldText;
 
@@ -155,18 +154,24 @@
 		};
 
 		function selectedSkillChange(skill) {
-			if ((!skill || (skill.Id != skillIds || $stateParams.skillAreaId)) && vm.showOrganization) {
+			if (!skill && vm.showOrganization) //
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
 					skillAreaId: skill ? undefined : skillAreaId,
 					siteIds: siteIds,
 					teamIds: teamIds
 				});
+			else if ((skill.Id != skillIds || $stateParams.skillAreaId) && vm.showOrganization) {
+				stateGoToAgents({
+					skillIds: skill ? skill.Id : undefined,
+					skillAreaId: skill ? undefined : skillAreaId,
+					siteIds: [],
+					teamIds: []
+				});
 			}
 			else if (!skill) { rtaRouteService.goToSites(); }
 			else {
 				if (skill.Id == skillIds) return;
-				skillIds = skill.Id;
 				vm.selectedSkill = skill;
 				vm.selectedSkillArea = undefined;
 				if ($state.current.name !== "rta.teams" && angular.isDefined($stateParams.siteId))
@@ -178,7 +183,7 @@
 		}
 
 		function selectedSkillAreaChange(skillArea) {
-			if ((!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) && vm.showOrganization) {
+				if (!skillArea && vm.showOrganization) {
 				stateGoToAgents({
 					skillIds: skillArea ? [] : $stateParams.skillIds,
 					skillAreaId: skillArea ? skillArea.Id : undefined,
@@ -186,11 +191,19 @@
 					teamIds: teamIds
 				});
 			}
-
+			
+			else if (!(skillArea.Id == $stateParams.skillAreaId) && vm.showOrganization) {
+				stateGoToAgents({
+					skillIds: skillArea ? [] : $stateParams.skillIds,
+					skillAreaId: skillArea ? skillArea.Id : undefined,
+					siteIds: [],
+					teamIds: []
+				});
+			}
 			else if (!skillArea) { rtaRouteService.goToSites(); }
 			else {
 				if (skillArea.Id === $stateParams.skillAreaId) return;
-				vm.skillAreaId = skillArea.Id;
+				//vm.skillAreaId = skillArea.Id;
 				vm.selectedSkillArea = skillArea;
 				vm.selectedSkill = undefined;
 				if ($state.current.name !== "rta.teams" && $stateParams.siteId)

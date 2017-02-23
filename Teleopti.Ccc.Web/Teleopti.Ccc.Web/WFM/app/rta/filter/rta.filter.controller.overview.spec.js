@@ -328,7 +328,7 @@ describe('RtaFilterController', function () {
 		expect(vm.selectedSkillArea.Name).toEqual('Email and phone');
 	});
 
-	it('should update url when on teams and changing from skill to skill area', function () {
+	it('should go to sites when on teams and changing from skill to skill area', function () {
 		stateParams.skillIds = "phoneGuid";
 		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
@@ -366,7 +366,7 @@ describe('RtaFilterController', function () {
 		});
 	});
 
-	it('should update url when on teams and changing from skill area to skill', function () {
+	it('should go to sites when on teams and changing from skill area to skill', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
@@ -404,6 +404,4 @@ describe('RtaFilterController', function () {
 			skillAreaId: undefined
 		});
 	});
-
-
 });
