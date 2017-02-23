@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IntradayStaffingViewModel Load(Guid[] skillIdList)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
-			if (minutesPerInterval <= 0) throw new Exception($"Reoslution is {minutesPerInterval}! Something is very fishy");
+			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
 

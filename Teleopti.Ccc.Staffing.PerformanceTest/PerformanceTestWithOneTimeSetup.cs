@@ -10,6 +10,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -59,9 +60,12 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		//Register what's needed for OneTimeSetup here
 		public static void SetupSystem(ISystem system, IocConfiguration configuration, FakeConfigReader config, FakeToggleManager toggles)
 		{
+			var intervalFetcher = new FakeIntervalLengthFetcher();
+			intervalFetcher.Has(15);  //because we don't restore Analytics
 			system.AddModule(new CommonModule(configuration));
 			system.UseTestDouble(new MutableNow(new DateTime(2017, 02, 13, 8, 0, 0))).For<INow>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
+			system.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
 			system.UseTestDouble(config).For<IConfigReader>();
 			system.UseTestDouble(toggles).For<IToggleManager>();
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
