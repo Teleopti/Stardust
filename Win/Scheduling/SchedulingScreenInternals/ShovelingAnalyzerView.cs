@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
-using ResourceCalculationData = Teleopti.Ccc.Domain.ResourceCalculation.ResourceCalculationData;
-using TrackShoveling = Teleopti.Ccc.Domain.ResourceCalculation.TrackShoveling;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 {
