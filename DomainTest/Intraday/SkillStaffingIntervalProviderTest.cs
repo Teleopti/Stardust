@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var staffingIntervals = Target.StaffingForSkills(new[] { skill.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(1);
-			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(8.7);
+			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(9.7);
 		}
 
 
