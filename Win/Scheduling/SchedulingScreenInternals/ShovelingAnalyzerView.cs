@@ -48,12 +48,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			output.AppendLine("---ADDED RESOURCES---");
 			foreach (var addedResource in trackShovling.AddedResources)
 			{
-				var addedLine = $"{addedResource.ResourcesMoved} added resources " +
-												$"from skillgroup: {string.Join("::", addedResource.FromPrimarySkills.Select(x => x.Name))}";
-				addedLine += addedResource.ParallellSkills.Any()
-					? $", parallell skills:  {string.Join("::", addedResource.ParallellSkills.Select(x => x.Name))}"
-					: " (no parallel skills)";
-				output.AppendLine(addedLine);
+				output.AppendLine($"{addedResource.ResourcesMoved} added resources " +
+												$"from skillgroup: {string.Join("::", addedResource.FromPrimarySkills.Select(x => x.Name))}");
 			}
 			output.AppendLine();
 			output.AppendLine("---REMOVED RESOURCES---");

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class NoShovelingCallback : IShovelingCallback
 	{
-		public void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, IEnumerable<ISkill> parallellSkills, double resources)
+		public void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
 		{
 		}
 

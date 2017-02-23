@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Interfaces.Domain;
 
@@ -23,11 +22,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IEnumerable<RemovedResource> RemovedResources => _removedResources;
 		public double ResourcesBeforeShoveling { get; private set; }
 
-		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, IEnumerable<ISkill> parallellSkills, double resources)
+		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
 		{
 			if (skillToMoveTo.Equals(_skillToTrack) && interval == _intervalToTrack)
 			{
-				_addedResources.Add(new AddedResource(primarySkillsMovedFrom, parallellSkills.Where(x => !x.Equals(_skillToTrack)), resources));
+				_addedResources.Add(new AddedResource(primarySkillsMovedFrom, resources));
 			}
 		}
 
@@ -47,16 +46,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class AddedResource
 	{
-		public AddedResource(IEnumerable<ISkill> fromPrimarySkills, IEnumerable<ISkill> parallellSkills, double resourcesMoved)
+		public AddedResource(IEnumerable<ISkill> fromPrimarySkills, double resourcesMoved)
 		{
 			FromPrimarySkills = fromPrimarySkills;
 			ResourcesMoved = resourcesMoved;
-			ParallellSkills = parallellSkills;
 		}
 
 		public IEnumerable<ISkill> FromPrimarySkills { get; }
 		public double ResourcesMoved { get; }
-		public IEnumerable<ISkill> ParallellSkills { get; }
 	}
 
 	public class RemovedResource

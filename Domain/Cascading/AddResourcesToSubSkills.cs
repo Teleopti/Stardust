@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 						var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 						shovelResourcesState.AddResourcesTo(dataForIntervalTo, skillGroup, resourceToMove);
-						shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroup.PrimarySkills, subSkillsWithSameIndex, resourceToMove);
+						shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroup.PrimarySkills, resourceToMove);
 					}
 				}
 			}
