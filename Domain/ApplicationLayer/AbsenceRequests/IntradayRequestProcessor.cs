@@ -124,10 +124,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var result = sendApproveCommand(personRequest);
 						if (result)
 						{
-							foreach (var delta in deltaResourcesForAgent)
-							{
-								_skillCombinationResourceRepository.PersistChange(delta);
-							}
+							_skillCombinationResourceRepository.PersistChanges(deltaResourcesForAgent);
 						}
 						else
 						{

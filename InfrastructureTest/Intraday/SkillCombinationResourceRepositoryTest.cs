@@ -104,13 +104,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
-			Target.PersistChange(new SkillCombinationResource
-			{
-				SkillCombination = new[] { skill },
-				StartDateTime = start,
-				EndDateTime = end,
-				Resource = 1
-			});
+			Target.PersistChanges(new[]
+								  {
+									  new SkillCombinationResource
+									  {
+										  SkillCombination = new[] {skill},
+										  StartDateTime = start,
+										  EndDateTime = end,
+										  Resource = 1
+									  }
+								  });
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(3d);
@@ -138,21 +141,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
 
-			Target.PersistChange(new SkillCombinationResource
-			{
-				SkillCombination = new[] { skill },
-				StartDateTime = start,
-				EndDateTime = end,
-				Resource = 8
-			});
+			Target.PersistChanges(new[]
+								  {
+									  new SkillCombinationResource
+									  {
+										  SkillCombination = new[] {skill},
+										  StartDateTime = start,
+										  EndDateTime = end,
+										  Resource = 8
+									  }
+								  });
 			Thread.Sleep(TimeSpan.FromSeconds(1));  //insertedOn is PK
-			Target.PersistChange(new SkillCombinationResource
-			{
-				SkillCombination = new[] { skill },
-				StartDateTime = start,
-				EndDateTime = end,
-				Resource = -3
-			});
+			Target.PersistChanges(new[]
+								  {
+									  new SkillCombinationResource
+									  {
+										  SkillCombination = new[] {skill},
+										  StartDateTime = start,
+										  EndDateTime = end,
+										  Resource = -3
+									  }
+								  });
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(7d);
@@ -178,13 +187,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
 
-			Target.PersistChange(new SkillCombinationResource
-			{
-				SkillCombination = new[] { skill },
-				StartDateTime = start,
-				EndDateTime = end,
-				Resource = 1
-			});
+			Target.PersistChanges(new[]
+								  {
+									  new SkillCombinationResource
+									  {
+										  SkillCombination = new[] {skill},
+										  StartDateTime = start,
+										  EndDateTime = end,
+										  Resource = 1
+									  }
+								  });
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
@@ -212,13 +224,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
-			Target.PersistChange(new SkillCombinationResource
-			{
-				SkillCombination = new[] { skill, skill2 },
-				StartDateTime = start,
-				EndDateTime = end,
-				Resource = -1
-			});
+			Target.PersistChanges(new[]
+								  {
+									  new SkillCombinationResource
+									  {
+										  SkillCombination = new[] {skill, skill2},
+										  StartDateTime = start,
+										  EndDateTime = end,
+										  Resource = -1
+									  }
+								  });
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(2d);
@@ -252,21 +267,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(),combinationResources);
 
-			Target.PersistChange(new SkillCombinationResource
+			Target.PersistChanges(new []{
+				new SkillCombinationResource
 			{
 				SkillCombination = new[] { skill, skill2 },
 				StartDateTime = start,
 				EndDateTime = end,
 				Resource = -1
-			});
+			}});
 			Thread.Sleep(TimeSpan.FromSeconds(1));  //insertedOn is PK
-			Target.PersistChange(new SkillCombinationResource
-			{
-				SkillCombination = new[] { skill, skill2 },
-				StartDateTime = start,
-				EndDateTime = end,
-				Resource = -1
-			});
+			Target.PersistChanges(new[]
+								  {
+									  new SkillCombinationResource
+									  {
+										  SkillCombination = new[] {skill, skill2},
+										  StartDateTime = start,
+										  EndDateTime = end,
+										  Resource = -1
+									  }
+								  });
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single(x => x.StartDateTime.Equals(start)).Resource.Should().Be.EqualTo(1d);

@@ -182,10 +182,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var result = sendApproveCommand(personRequest.Id.GetValueOrDefault());
 						if (result)
 						{
-							foreach (var combinationResource in skillCombinationResourcesForAgent)
-							{
-								_skillCombinationResourceRepository.PersistChange(combinationResource);
-							}
+							_skillCombinationResourceRepository.PersistChanges(skillCombinationResourcesForAgent);
+
 						}
 						else
 						{

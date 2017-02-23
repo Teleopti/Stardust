@@ -441,13 +441,24 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																				   }
 																			   });
 
-			SkillCombinationResourceRepository.PersistChange(new SkillCombinationResource
-															 {
-																 StartDateTime = period.StartDateTime,
-																 EndDateTime = period.EndDateTime,
-																 Resource = 1,
-																 SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-															 });
+			SkillCombinationResourceRepository.PersistChanges(new[]
+															  {
+																  new SkillCombinationResource
+																  {
+																	  StartDateTime = period.StartDateTime,
+																	  EndDateTime = period.EndDateTime,
+																	  Resource = 1,
+																	  SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																  },
+																   new SkillCombinationResource
+																  {
+																	  StartDateTime = period.StartDateTime,
+																	  EndDateTime = period.EndDateTime,
+																	  Resource = 3,
+																	  SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																  }
+															  });
+				
 
 			ScheduleForecastSkillReadModelRepository.Persist(new[]
 															 {
@@ -463,7 +474,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var staffingIntervals = Target.StaffingForSkills(new[] { skill.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(1);
-			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(6.7);
+			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(8.7);
 		}
 
 

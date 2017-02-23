@@ -72,10 +72,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 											   Period = new DateTimePeriod(overTimeModel.StartDateTime.Utc(), overTimeModel.EndDateTime.Utc()),
 											   PersonId = overTimeModel.PersonId
 										   });
-				foreach (var delta in overTimeModel.Deltas)
-				{
-					_skillCombinationResourceRepository.PersistChange(delta);
-				}
+
+				_skillCombinationResourceRepository.PersistChanges(overTimeModel.Deltas);
+
 			}
 			
 			

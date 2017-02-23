@@ -37,12 +37,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 
-		public void PersistChange(SkillCombinationResource skillCombinationResource)
+		public void PersistChanges(IEnumerable<SkillCombinationResource> deltas)
 		{
-			foreach (var combinationResource in _combinationResources.Where(x => x.StartDateTime == skillCombinationResource.StartDateTime && x.SkillCombination.NonSequenceEquals(skillCombinationResource.SkillCombination)))
+			foreach (var delta in deltas)
 			{
-				combinationResource.Resource += skillCombinationResource.Resource;
+				foreach (var combinationResource in _combinationResources.Where(x => x.StartDateTime == delta.StartDateTime && x.SkillCombination.NonSequenceEquals(delta.SkillCombination)))
+				{
+					combinationResource.Resource += delta.Resource;
+				}
 			}
+			
 		}
 
 		public DateTime GetLastCalculatedTime()

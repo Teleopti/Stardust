@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources);
 		IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period);
-		void PersistChange(SkillCombinationResource skillCombinationResource);
+		void PersistChanges(IEnumerable<SkillCombinationResource> deltas);
 		DateTime GetLastCalculatedTime();
 	}
 }
