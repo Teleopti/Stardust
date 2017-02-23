@@ -232,9 +232,10 @@
 					}
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 
-					vm.isLoading = false;
 					vm.checkValidationWarningForCurrentPage();
 					populateAvailableTimezones(result);
+					vm.isLoading = false;
+					vm.searchOptions.focusingSearch = false;
 				});
 			} else if (preSelectPersonIds.length > 0) {
 				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
@@ -254,9 +255,9 @@
 					vm.checkValidationWarningForCurrentPage();
 					populateAvailableTimezones(result);
 					vm.isLoading = false;
+					vm.searchOptions.focusingSearch = false;
 				});
 			}
-			vm.searchOptions.focusingSearch = false;
 		};
 
 		vm.toggleShowAbsenceOnly = function () {

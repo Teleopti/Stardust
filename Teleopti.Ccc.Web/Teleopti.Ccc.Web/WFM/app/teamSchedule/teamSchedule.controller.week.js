@@ -67,10 +67,11 @@
 				vm.paginationOptions.totalPages = vm.paginationOptions.pageSize > 0? Math.ceil(data.Total / (vm.paginationOptions.pageSize + 0.01) ) : 0;
 				vm.isLoading = false;
 				vm.scheduleFullyLoaded = true;
+				vm.searchOptions.focusingSearch = false;
 			}).catch(function() {
 				vm.isLoading = false;
+				vm.searchOptions.focusingSearch = false;
 			});
-			vm.searchOptions.focusingSearch = false;
 		};
 
 		vm.onSelectedTeamsChanged = function(teams) {

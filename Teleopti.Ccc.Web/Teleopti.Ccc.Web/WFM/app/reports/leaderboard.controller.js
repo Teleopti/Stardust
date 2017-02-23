@@ -43,10 +43,10 @@
 				};
 
 				vm.isLoading = true;
-				vm.searchOptions.focusingSearch = false;
 				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, period).then(function(data) {
 					vm.searchOptions.keyword = data.Keyword;
 					vm.leaderBoardTableList = LeaderBoardViewModelFactory.Create(data.AgentBadges);
+					vm.searchOptions.focusingSearch = false;
 					vm.isLoading = false;
 				});
 			}
