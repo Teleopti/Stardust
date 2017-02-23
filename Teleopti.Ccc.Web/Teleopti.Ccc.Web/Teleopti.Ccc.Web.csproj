@@ -1467,6 +1467,8 @@
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.createform.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.createform.html" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.detail.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.detail.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.service.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroups.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroups.html" />
