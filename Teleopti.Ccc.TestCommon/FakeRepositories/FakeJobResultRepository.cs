@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IJobResult entity)
 		{
-			entity.SetId(Guid.NewGuid());
+			if(!entity.Id.HasValue)
+				entity.SetId(Guid.NewGuid());
 			_result.Add(entity);
 		}
 
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IJobResult Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _result.Single(x => x.Id.Value == id);
 		}
 
 		public IList<IJobResult> LoadAll()

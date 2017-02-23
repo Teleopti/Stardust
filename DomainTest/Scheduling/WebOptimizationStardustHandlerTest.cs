@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakeDataSourceForTenant DataSourceForTenant;
 		public FakeCurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
 		public FakePersonRepository PersonRepository;
+		public FakeJobResultRepository JobResultRepository;
 
 		private void setDataSource()
 		{
@@ -79,10 +80,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			var jobResultId = Guid.NewGuid();
-			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebOptimization, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId));
+			var jobResult = new JobResult(JobCategory.WebOptimization, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
+			planningPeriod.JobResults.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
+			JobResultRepository.Add(jobResult);
 
-			
 			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			var reqEvent = new WebOptimizationStardustEvent
 			{
@@ -112,8 +114,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			setCurrentPrincipal();
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			var jobResultId = Guid.NewGuid();
-			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebOptimization, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId));
+			var jobResult = new JobResult(JobCategory.WebOptimization, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
+			planningPeriod.JobResults.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
+			JobResultRepository.Add(jobResult);
 			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			var reqEvent = new WebOptimizationStardustEvent
 			{
@@ -127,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
 			BusinessUnitRepository.Add(businessUnit);
 
-			Target.Handle(reqEvent);
+			Assert.Throws<InvalidOperationException>(() => Target.Handle(reqEvent));
 
 			var jobResultDetail = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebOptimization).Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Error);

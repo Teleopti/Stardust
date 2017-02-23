@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected virtual Guid SaveJobResult(WebScheduleStardustEvent @event, SchedulingResultModel result)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
+			var webScheduleJobResult = _jobResultRepository.Get(@event.JobResultId);
 			webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
 			var jobResult = new JobResult(JobCategory.WebOptimization, webScheduleJobResult.Period, webScheduleJobResult.Owner, DateTime.UtcNow);
 			_jobResultRepository.Add(jobResult);
