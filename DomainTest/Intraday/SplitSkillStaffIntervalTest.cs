@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					EndDateTime = dateTimeIs(8,20)
 				}
 			};
-			var result = Target.Split(staffingList, TimeSpan.FromMinutes(10));
+			var result = Target.Split(staffingList, TimeSpan.FromMinutes(10), false);
 			result.Count.Should().Be.EqualTo(2);
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					EndDateTime = dateTimeIs(8,20)
 				}
 			};
-			var result = Target.Split(staffingList, TimeSpan.FromMinutes(5));
+			var result = Target.Split(staffingList, TimeSpan.FromMinutes(5), false);
 			result.Count.Should().Be.EqualTo(4);
 			var expectations = new List<SkillStaffingIntervalLightModel>()
 			{
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					StaffingLevel = 10
 				}
 			};
-			var result = Target.Split(staffingList, TimeSpan.FromMinutes(10));
+			var result = Target.Split(staffingList, TimeSpan.FromMinutes(10), false);
 			result.Count.Should().Be.EqualTo(4);
 
 			var expectations = new List<SkillStaffingIntervalLightModel>()

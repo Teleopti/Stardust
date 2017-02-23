@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Intraday;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			_extractSkillForecastIntervals = extractSkillForecastIntervals;
 		}
 
-		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution)
+		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage)
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
 			if (!combinationResources.Any())
@@ -37,14 +38,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				return new List<SkillStaffingIntervalLightModel>();
 			}
 
-			var allSkillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources);
+			var allSkillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources, useShrinkage);
 			var relevantSkillStaffingIntervals = allSkillStaffingIntervals.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.SkillId)).ToList();
-			var splittedIntervals = _splitSkillStaffInterval.Split(relevantSkillStaffingIntervals, resolution);
+			var splittedIntervals = _splitSkillStaffInterval.Split(relevantSkillStaffingIntervals, resolution, false);  // needs to be fixed. GetSkillStaffIntervalsAllSkills sets shrinkage value on Staffing and not on staffing with shrinkage
 			return splittedIntervals;
 
 		}
 
-		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources)
+		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShrinkage)
 		{
 			var skills = _skillRepository.LoadAllSkills().ToList();
 
@@ -60,6 +61,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 																							 s => (IResourceCalculationPeriod)s)));
 			var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
+
+			if (useShrinkage)
+				setUseShrinkage(resCalcData);
+
 			using (getContext(combinationResources, skills, dateOnlyPeriod, false))
 			{
 				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, dateOnlyPeriod, true));
@@ -71,6 +76,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, DateOnlyPeriod dateOnlyPeriod, bool useAllSkills)
 		{
 			return new ResourceCalculationContextFactory(null, null).Create(combinationResources, skills, false, dateOnlyPeriod, useAllSkills);
+		}
+
+		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData)
+		{
+
+			//To be fixed! 
+
+			throw new NotImplementedException();
+
+			//resourceCalculationData.SkillCombinationHolder?.StartRecodingValuesWithShrinkage();
+
+			//var items = resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items();
+			//foreach (var keyValuePair in items)
+			//{
+			//	var dic = keyValuePair.Value;
+			//	foreach (var resourceCalculationPeriod in dic.OnlyValues())
+			//	{
+			//		((ISkillStaffPeriod)resourceCalculationPeriod).Payload.UseShrinkage = true;
+			//	}
+			//}
+
 		}
 	}
 
@@ -87,16 +113,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			_splitSkillStaffInterval = splitSkillStaffInterval;
 		}
 
-		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution)
+		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage)
 		{
 			var skillIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skillIdList, period);
-			var splittedIntervals = _splitSkillStaffInterval.Split(skillIntervals.ToList(), resolution);
+			var splittedIntervals = _splitSkillStaffInterval.Split(skillIntervals.ToList(), resolution, useShrinkage);
 			return splittedIntervals
 				.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime)
 				.ToList();
 		}
 
-		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources)
+		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShrinkage)
 		{
 			throw new NotImplementedException();
 		}
@@ -104,8 +130,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
 	public interface ISkillStaffingIntervalProvider
 	{
-		IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution);
-		List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources);
+		IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage);
+		List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShinkage);
 	}
 
 

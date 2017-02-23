@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var period = new DateTimePeriod(startDateTime, endDateTime);
 
 			var resources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
-			var intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources);
+			var intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources, false);  // do we need to consider shrinkage?!
 
 			var overTimeModels = new List<OverTimeModel>();
 			//börja med skill som har öppet längst på längsta workload
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 										   Deltas = deltas
 									   });
 
-					intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources);
+					intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources, false);  // do we need to consider shrinkage??
 
 				}
 			}

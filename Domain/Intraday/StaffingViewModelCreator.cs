@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
-		public IntradayStaffingViewModel Load(Guid[] skillIdList)
+		public IntradayStaffingViewModel Load(Guid[] skillIdList, bool useShrinkage = false)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var latestStatsTime = getLastestStatsTime(actualCallsPerSkillInterval);
 			
 			var forecastedCallsModel = _forecastedCallsProvider.Load(skills, skillDays, latestStatsTime, minutesPerInterval);
-			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills, minutesPerInterval);
+			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills, minutesPerInterval, useShrinkage);
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills, skillDays, minutesPerInterval);
 			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
 			var updatedForecastedSeries = _reforecastedStaffingProvider.DataSeries(
@@ -111,6 +111,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public interface IStaffingViewModelCreator
 	{
-		IntradayStaffingViewModel Load(Guid[] skillIdList);
+		IntradayStaffingViewModel Load(Guid[] skillIdList, bool useShrinkage = false);
 	}
 }

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] {skill.Id.GetValueOrDefault()},period, TimeSpan.FromHours(1));
+			var staffingIntervals = Target.StaffingForSkills(new[] {skill.Id.GetValueOrDefault()},period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(1);
 			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(10);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(2);
 			staffingIntervals.First().StaffingLevel.Should().Be.EqualTo(5);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault()}, period, TimeSpan.FromHours(1));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault()}, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(1);
 			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(5);
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(2);
 			staffingIntervals.First().StaffingLevel.Should().Be.EqualTo(5);
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromMinutes(skillResolution));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromMinutes(skillResolution), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(4);
 			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime && x.Id == skillA.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(1);
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromMinutes(30));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromMinutes(30), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(4);
 			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime && x.Id == skillA.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(2);
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(2);
 			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime && x.Id == skillA.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(7);
@@ -460,7 +460,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skill.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skill.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(1);
 			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(6.7);
@@ -516,7 +516,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																 }
 															 }, Now.UtcDateTime());
 
-			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1));
+			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(2);
 

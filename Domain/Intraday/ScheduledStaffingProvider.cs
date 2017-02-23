@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 		}
 
-		public IList<SkillStaffingIntervalLightModel> StaffingPerSkill(IList<ISkill> skills, int minutesPerInterval)
+		public IList<SkillStaffingIntervalLightModel> StaffingPerSkill(IList<ISkill> skills, int minutesPerInterval, bool useShrinkage = false)
 		{
 			var skillIdArray = skills.Select(x => x.Id.Value).ToArray();
 			var startTimeLocal = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
 			var endTimeLocal = startTimeLocal.AddDays(1);
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startTimeLocal, _timeZone.TimeZone()),
 				TimeZoneHelper.ConvertToUtc(endTimeLocal, _timeZone.TimeZone()));
-			var scheduledStaffing = _skillStaffingIntervalProvider.StaffingForSkills(skillIdArray, period, TimeSpan.FromMinutes(minutesPerInterval));
+			var scheduledStaffing = _skillStaffingIntervalProvider.StaffingForSkills(skillIdArray, period, TimeSpan.FromMinutes(minutesPerInterval), useShrinkage);
 
 			return scheduledStaffing
 				.Select(x => new SkillStaffingIntervalLightModel()

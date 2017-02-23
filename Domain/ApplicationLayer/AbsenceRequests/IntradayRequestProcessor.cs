@@ -110,7 +110,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						select distributeResourceSmartly(combinationResources, skillCombination, layer));
 				}
 
-				var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList());
+
+				//Fix to check if shrikage is needed!!!!
+				var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList(), false);
 
 				var staffingThresholdValidator = validators.OfType<StaffingThresholdValidator>().FirstOrDefault();
 				if (staffingThresholdValidator != null)
