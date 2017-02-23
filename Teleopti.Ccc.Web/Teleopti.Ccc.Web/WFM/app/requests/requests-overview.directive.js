@@ -24,7 +24,6 @@
 		vm.isLoading = false;
 		vm.sortingOrders = [];
 
-		vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
 		vm.init = init;
 		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
 
@@ -43,10 +42,6 @@
 		}
 
 		toggleService.togglesLoaded.then(init);
-
-		function forceRequestsReloadWithSelection() {
-			$scope.$broadcast('reload.requests.with.selection');
-		}
 
 		function getRequests(requestsFilter, sortingOrders, paging) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {

@@ -45,7 +45,7 @@
 
 
 	<div class="pull-right" ng-if="requestsFooter.isPaginationEnabled">
-		<wfm-pagination pagination-options="requestsFooter.paging" get-data-for-page-callback="requestsFooter.forceRequestsReloadWithSelection"></wfm-pagination>
+		<wfm-pagination pagination-options="requestsFooter.paging" get-data-for-page-callback="requestsFooter.onPageNumberchange"></wfm-pagination>
 		<div class="total-requests-count pull-left">
 			<span>{{requestsFooter.showSelectedRequestsInfo()}}</span>
 		</div>
