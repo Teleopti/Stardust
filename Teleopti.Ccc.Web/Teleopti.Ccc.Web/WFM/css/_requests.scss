@@ -30,11 +30,6 @@
         position: relative;
     }
 
-    .wfm-date-range-picker-wrap .popup-control {
-        height: inherit;
-        width: inherit;
-    }
-
     md-tab-content.md-active {
         transform: inherit !important; //why transform nothing? what about all the position fixed element inside
     }
@@ -43,7 +38,7 @@
         display: block !important;
     }
 
-    .inline-block, .wfm-date-range-picker-wrap {
+    .inline-block{
         display: inline-block;
     }
 
@@ -222,22 +217,6 @@
     .request-filter {
         .input-prepend {
             width: 300px;
-        }
-    }
-
-    .wfm-date-range-picker-wrap {
-        width: 260px;
-
-        .con-row {
-            display: inline-flex;
-
-            .con-flex {
-                flex: 1 1 auto;
-            }
-        }
-
-        input {
-            width: 100px !important;
         }
     }
 
@@ -554,27 +533,6 @@
         }
     }
 
-    .request-date-range-picker {
-
-        .date-range-start-date {
-            margin-right: 0;
-            margin-top: 0;
-        }
-
-        .date-range-end-date {
-            margin-left: 0;
-            margin-top: 0;
-        }
-
-        .wfm-datepicker-popup-row .con-flex {
-            padding-top: 0;
-        }
-        /*TODO: Fix the problem that error message was hidden; should be removed when it's fixed in StyleGuide*/
-        .error-msg-container {
-            z-index: 999;
-        }
-    }
-
     .ng-cloak {
         display: none !important;
     }
@@ -618,10 +576,6 @@
 
         team-schedule-datepicker > span {
             bottom: 6px;
-        }
-
-        .wfm-datepicker-wrap {
-            min-height:inherit;
         }
     }
 }

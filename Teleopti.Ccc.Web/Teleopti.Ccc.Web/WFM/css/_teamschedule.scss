@@ -1,4 +1,28 @@
-﻿//TeamSchedule module
+﻿//Put those into StyleGuide later.
+.wfm-date-range-picker {
+	display: inline-block;
+}
+@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
+	.wfm-date-range-picker-wrap .popup-control {
+		height: inherit;
+		width: inherit;
+	}
+	.wfm-date-range-picker-wrap {
+		width: 260px;
+
+		.con-row {
+			display: inline-flex;
+
+			.con-flex {
+				flex: 1 1 auto;
+			}
+		}
+		input {
+			width: 100px !important;
+		}
+	}
+}
+//TeamSchedule module
 .team-schedule {
 	background-color: $white;
 	border-right: 1px solid $white;
@@ -9,11 +33,11 @@
 
 	md-sidenav {
 		background: $white;
+
 		md-content {
 			color: inherit;
 		}
 	}
-
 	input {
 		background-color: transparent;
 	}
@@ -22,7 +46,6 @@
 		height: 100%;
 		margin: 0;
 	}
-
 	.start-ellipsis, .end-ellipsis {
 		position: absolute;
 		top: 2px;
@@ -258,9 +281,8 @@
 			top: 14px;
 			left: -5px;
 		}
-
 		@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
-			.advanced-input-dropdown > .con-row{
+			.advanced-input-dropdown > .con-row {
 				display: block;
 			}
 		}
@@ -363,10 +385,10 @@
 		button {
 			margin: 0;
 		}
-		& > span{
+		& > span {
 			color: $blue-500;
 		}
-		.disable-save{
+		.disable-save {
 			color: $gray026;
 			cursor: not-allowed;
 		}
@@ -866,7 +888,7 @@ teamschedule-command-container {
 .add-activity i.mdi-alert-octagon {
 	vertical-align: middle;
 }
-.settings-panel .sidenav-header {	
+.settings-panel .sidenav-header {
 	color: $text-color-standard;
 	font-weight: 600;
 }
@@ -978,4 +1000,3 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 		font-size: 12px !important;
 	}
 }
-

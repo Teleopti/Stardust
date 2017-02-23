@@ -1,147 +1,98 @@
 ﻿.wfm-reports {
-    max-width: 100em;
+	max-width: 100em;
 
-    .report-filter {
-        padding: 1em;
-    }
+	.report-filter {
+		padding: 1em;
+	}
+	.report-filter input {
+		width: 316px;
+	}
+	.report-list {
+		display: flex;
+		flex-wrap: wrap;
 
-    .report-filter input {
-        width: 316px;
-    }
+		.report-item {
+			// IE 10:display: -ms-flexbox;
+			-ms-flex-negative: 1;
+			-ms-flex-preferred-size: 30%;
+			display: flex;
+			flex-shrink: 1;
+			flex-basis: 30%;
 
-    .report-list {
-        display: flex;
-        flex-wrap: wrap;
+			.wfm-card {
+				min-height: 0;
+				margin: 8px;
+				padding: 16px;
+				width: 100%;
 
-        .report-item {
-            // IE 10:
-            display: -ms-flexbox;
-            -ms-flex-negative: 1;
-            -ms-flex-preferred-size: 30%;
-            display: flex;
-            flex-shrink: 1;
-            flex-basis: 30%;
+				h3 {
+					font-weight: normal;
+					margin: 4px 0 4px 0 !important;
+				}
+			}
+		}
+	}
+	wfm-multiple-search-input {
+		.advanced-input-dropdown {
+			top: 20px;
+		}
+		.advanced-input {
+			width: 316px;
+		}
+		.expand-advanced-input {
+			max-width: 100%;
+		}
+	}
+	.people-search-input {
+		display: inline-block;
+		padding-top: 10px;
+	}
+	.leader-board {
+		padding: 10px 10px 80px 10px;
+		background: $white;
+		max-height: 83vh;
+		min-height: 500px;
+		overflow-y: auto;
 
-            .wfm-card {
-                min-height: 0;
-                margin: 8px;
-                padding: 16px;
-                width: 100%;
-
-                h3 {
-                    font-weight: normal;
-                    margin: 4px 0 4px 0 !important;
-                }
-            }
-        }
-    }
-
-    wfm-multiple-search-input{
-        .advanced-input-dropdown{
-            top: 14px;
-            left: 17px;
-            width: 321px;
-        }
-
-        .advanced-input{
-            width: 316px;
-        }
-
-        .expand-advanced-input{
-            max-width:100%;
-        }
-    }
-
-   .people-search-input {
-        display: inline-block;
-    }
-
-    .leader-board {
-        padding: 20px 10px 80px 10px;
-        background: $white;
-        max-height: 83vh;
-        min-height: 500px;
-        overflow-y: auto;
-
-        .wfm-btn-sm{
-            padding: 5px;
-        }
-
-        .daterange-picker{
-            margin: 10px 20px;
-            position: relative;
-            display: inline-block;
-            
-            & > input{
-                text-align: center;
-            }
-
-            date-range-picker{
-                position: absolute;
-                left: 0;
-                top: 100%;
-            }
-        }
-
-        table {
-            width: 100%;
-        }
-
-        table thead tr {
-            height: 42px;
-            font-weight: bold;
-        }
-
-        table tr {
-            height: 30px;
-        }
-
-        table td.agent-badge-num {
-            width: 10%;
-            text-align: center;
-        }
-
-        .background-gray {
-            background: $gray-300!important;
-            -webkit-print-color-adjust: exact;
-        }
-    }
+		.leader-board-header {
+			padding: .8em .5em .2em .5em;
+			min-height: 60px;
+			border-bottom: 1px solid $gray026;
+			display: -ms-flexbox;
+			display: flex;
+			flex-direction: row;
+			-ms-flex-wrap: wrap;
+			flex-wrap: wrap;
+		}
+		.wfm-btn-sm {
+			padding: 5px;
+		}
+		table {
+			width: 100%;
+		}
+		table thead tr {
+			height: 42px;
+			font-weight: bold;
+		}
+		table tr {
+			height: 30px;
+		}
+		table td.agent-badge-num {
+			width: 10%;
+			text-align: center;
+		}
+		.background-gray {
+			background: $gray-300 !important;
+			-webkit-print-color-adjust: exact;
+		}
+	}
 }
-
- // CSS hack for IE10, IE11 and edge
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
-    .wfm-reports {
-        .people-search-input {
-            vertical-align: middle;
-            padding-bottom: 18px;
-        }
-
-        .leader-board{
-            .daterange-picker{
-                vertical-align: bottom;
-
-                .con-row {
-                    display: -ms-flexbox;
-                }
-
-                .con-flex{
-                    padding-bottom: 0;
-                }
-
-                .con-flex > input{
-                    width: 200px;
-                }
-
-                .date-range-end-date{
-                    margin-left: 300px;
-                }
-
-                @media (max-width: 768px){
-                    .date-range-end-date{
-                        margin-left: 0px;
-                    }                    
-                }
-            }
-        }
-    }
+// CSS hack for IE10, IE11 and edge
+@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
+	.wfm-reports {
+		.people-search-input {
+			vertical-align: middle;
+			padding-bottom: 18px;
+		}
+	}
 }
