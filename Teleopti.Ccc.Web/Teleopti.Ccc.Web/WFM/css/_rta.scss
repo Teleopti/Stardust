@@ -47,6 +47,9 @@
 
 /////////End of Sites & teams///////////////
 ///////////rta-skills///////////////////////
+.rta-filter-panel {
+	color: $gray087 !important;
+} 
 
 .rta-top-buttons-wrapper {
 	margin-left: $full-padding*4;
@@ -59,10 +62,6 @@
 	&:hover {
 		box-shadow: none;
 	}
-}
-
-.rta-md-select {
-	color: $text-color-muted;
 }
 
 .rta-option-group {
@@ -123,6 +122,10 @@
 		border-color: $gray-300;
 		min-height: 0;
 		padding: 0;
+	}
+	
+	.md-select-placeholder {
+		color: $text-color-muted !important;
 	}
 } 
 
@@ -244,3 +247,5 @@
 .rta-full-shift-wrapper {
 	height: $full-padding*10;
 }
+
+
