@@ -165,10 +165,16 @@
 							Name: $scope.name,
 							Default: $scope.default,
 							Filters: $scope.selectedResults
-						}).$promise.then(function() {
-							$state.go('resourceplanner.planningperiod', {
-								id: $stateParams.periodId
-							});
+						}).$promise.then(function () {
+							if ($stateParams.groupId) {
+								$state.go('resourceplanner.oneagentroup', {
+									groupId: $stateParams.groupId
+								});
+							} else {
+								$state.go('resourceplanner.planningperiod', {
+									id: $stateParams.periodId
+								});
+							}
 						});
 					}
 				}

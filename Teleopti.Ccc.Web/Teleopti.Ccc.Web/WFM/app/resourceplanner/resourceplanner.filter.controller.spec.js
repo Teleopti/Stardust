@@ -7,10 +7,10 @@ describe('ResourcePlannerCtrl', function () {
 		maxHits = 5; //same as in controller
 
 	var filterUrl = function (searchString) {
-		return "../api/filters?maxHits=" + maxHits + "&searchString=" & searchString
+		return "../api/filters?maxHits=" + maxHits + "&searchString=" & searchString;
 	}
 	var singleFilter = function (id) {
-		return "../api/resourceplanner/dayoffrules/"+id
+		return "../api/resourceplanner/dayoffrules/" + id;
 	}
 	beforeEach(function() {
 		module(function($provide) {
@@ -357,7 +357,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		var sentData;
 		spyOn($state, 'go');
-
+		mockStateParams.periodId = 'asd';
 
 		$controller('ResourceplannerFilterCtrl', { $scope: scope,$state:$state, $stateParams:mockStateParams });
 		scope.name = 'asdfasdf';
@@ -385,7 +385,7 @@ describe('ResourcePlannerCtrl', function () {
 		expect(sentData.MaxConsecutiveDayOffs).toEqual(scope.consecDaysOff.MaxConsecDaysOff);
 		expect(sentData.Filters[0].FilterType).toEqual(scope.selectedResults[0].FilterType);
 		expect(sentData.Filters[0].Id).toEqual(scope.selectedResults[0].Id);
-		expect($state.go).toHaveBeenCalledWith('resourceplanner.planningperiod',{id:$stateParams.period});
+		expect($state.go).toHaveBeenCalledWith('resourceplanner.planningperiod', { id: mockStateParams.periodId });
 
 	}));
 

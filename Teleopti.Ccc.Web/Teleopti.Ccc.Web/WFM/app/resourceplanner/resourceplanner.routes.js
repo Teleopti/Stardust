@@ -17,7 +17,8 @@
 			params: {
 				filterId: {},
 				periodId: {},
-				isDefault: {}
+				isDefault: {},
+				groupId: undefined
 			},
 			url: '/dayoffrules',
 			templateUrl: 'app/resourceplanner/resourceplanner-filters.html',
