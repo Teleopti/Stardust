@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			var output = new StringBuilder();
 			output.AppendLine($"Skill [{skill.Name}] at UTC period [{period}]");
 			output.AppendLine();
-			output.AppendLine($"Resources at start: {trackShovling.ResourcesBeforeShoveling}");
+			output.AppendLine($"Resources before shoveling: {trackShovling.ResourcesBeforeShoveling}");
 			output.AppendLine();
 			output.AppendLine("---ADDED RESOURCES---");
 			foreach (var addedResource in trackShovling.AddedResources)
