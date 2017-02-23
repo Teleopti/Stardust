@@ -49,13 +49,13 @@ describe('rtaNamesFormatService', function () {
 	it('should get two sites and teams name with trailing dots', function () {
 		var siteIds = ["londonGuid", "helsinkiGuid", "denverGuid"];
 		var teamIds = ["team1Guid", "team2Guid", "team3Guid"];
-		expect(target.getSelectedFieldText(sites, siteIds, teamIds)).toEqual("Sites: London, Helsinki, ...Teams: Team 1, Team 2, ...");
+		expect(target.getSelectedFieldText(sites, siteIds, teamIds)).toEqual("Sites: London, Helsinki, ..., Teams: Team 1, Team 2, ...");
 	});
 
 	it('should get two sites and teams name with trailing dots with translation', function () {
 		var siteIds = ["londonGuid", "helsinkiGuid", "denverGuid"];
 		var teamIds = ["team1Guid", "team2Guid", "team3Guid"];
-		expect(target.getSelectedFieldText(sites, siteIds, teamIds, "Sajter: ", "Lag: ")).toEqual("Sajter: London, Helsinki, ...Lag: Team 1, Team 2, ...");
+		expect(target.getSelectedFieldText(sites, siteIds, teamIds, "Sajter: ", "Lag: ")).toEqual("Sajter: London, Helsinki, ..., Lag: Team 1, Team 2, ...");
 	});
 
 	it('should get no sites and teams name', function () {
