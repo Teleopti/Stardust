@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		public void FillForm(ISchedulingResultStateHolder schedulingResultStateHolder, ISkill skill, DateOnly date, TimeSpan timeStart)
 		{
 			//hackeri hackera
-			var baseDate = TimeZoneHelper.ConvertFromUtc(date.Date, _timeZoneGuard.CurrentTimeZone());
+			var baseDate = TimeZoneHelper.ConvertToUtc(date.Date, _timeZoneGuard.CurrentTimeZone());
 			var intervalLength = TimeSpan.FromMinutes(skill.DefaultResolution);
 			var period = new DateTimePeriod(baseDate.Add(timeStart), baseDate.Add(timeStart).Add(intervalLength));
 			var resCalcData = new ResourceCalculationData(schedulingResultStateHolder, false, false);
@@ -38,22 +38,26 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			resCalcData.SetShovelingCallback(trackShovling);
 			_resourceCalculation.ResourceCalculate(date.ToDateOnlyPeriod(), resCalcData);
 
-			textBox1.Text = createOutput(trackShovling);
+			textBox1.Text = createOutput(trackShovling, skill, period);
 		}
 
-		private static string createOutput(TrackShoveling trackShovling)
+		private static string createOutput(TrackShoveling trackShovling, ISkill skill, DateTimePeriod period)
 		{
 			var output = new StringBuilder();
+			output.AppendLine($"Skill [{skill.Name}] at UTC period [{period}]");
+			output.AppendLine();
 			output.AppendLine($"Resources at start: {trackShovling.ResourcesBeforeShoveling}");
+			output.AppendLine();
 			output.AppendLine("---ADDED---");
 			foreach (var addedResource in trackShovling.AddedResources)
 			{
 				output.AppendLine($"{addedResource.ResourcesMoved} added resources from skillgroup: {string.Join("::", addedResource.FromPrimarySkills.Select(x => x.Name))}");
 			}
+			output.AppendLine();
 			output.AppendLine("---REMOVED---");
 			foreach (var removedResource in trackShovling.RemovedResources)
 			{
-				output.AppendLine($"{removedResource.ResourcesMoved} added resources");
+				output.AppendLine($"{removedResource.ResourcesMoved} removed resources");
 			}
 			return output.ToString();
 		}
