@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 			stateCode = stateCode.Trim();
 
-			if (stateCode.Length > 25)
-				throw new InvalidStateCodeException("State code can not exceed 25 characters");
+			if (stateCode.Length > 255)
+				throw new InvalidStateCodeException("State code can not exceed 255 characters");
 
 			if (string.IsNullOrEmpty(platformTypeId))
 				throw new InvalidPlatformException("Platform id is required");
