@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -57,6 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			IRtaStateGroup stateGroup = null;
 			if (PhoneState != null)
 			{
+				PhoneState = new PlatformTypeInjector().Inject(PhoneState, Guid.Empty.ToString());
 				var stateGroupRepository = new RtaStateGroupRepository(currentUnitOfWork);
 				stateGroup = (from g in stateGroupRepository.LoadAll()
 					from s in g.StateCollection

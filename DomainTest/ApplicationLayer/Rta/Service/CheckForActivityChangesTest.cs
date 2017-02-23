@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.StateCode.Should().Be("phone");
+			Database.PersistedReadModel.StateName.Should().Be("phone");
 		}
 
 		[Test]

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.StateCode.Should().Be("phone");
+			Database.PersistedReadModel.StateName.Should().Be("phone");
 		}
 
 		[Test]

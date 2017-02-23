@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public DateTime? NextActivityStartTime { get; set; }
-
-		public string StateCode { get; set; }
+		
 		public string StateName { get; set; }
 		public Guid? StateGroupId { get; set; }
 		public DateTime? StateStartTime { get; set; }
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public override string ToString()
 		{
 			return $"PersonId: {PersonId}, " +
-				   $"StateCode: {StateCode} " +
 				   $"StateName: {StateName}, " +
 				   $"Activity: {Activity}, " +
 				   $"StateStartTime: {StateStartTime}, " +

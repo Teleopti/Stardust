@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BelongsToDate = info.Schedule.BelongsToDate,
 				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
-				StateCode = info.InputStateCode(),
 				StateGroupName = info.State.StateGroupName(),
 				StateGroupId = info.State.StateGroupId(),
 				AdherenceWithPreviousActivity = info.Adherence.AdherenceForNewStateAndPreviousActivity(),

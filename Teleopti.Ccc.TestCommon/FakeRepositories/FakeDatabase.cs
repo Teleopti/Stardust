@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode)
 		{
-			return database.WithRule(null, stateCode, null, 0, null, null);
+			return database.WithRule(null, stateCode, null, 0, stateCode, null);
 		}
 
 		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId)
@@ -848,7 +848,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		[UnitOfWork]
 		public virtual FakeDatabase WithStateCode(string stateCode)
 		{
-			ensureExists(_stateGroups, null, () => WithStateGroup(null, null));
+			ensureExists(_stateGroups, null, () => WithStateGroup(null, stateCode));
 			_stateGroup.AddState(stateCode, stateCode);
 			return this;
 		}

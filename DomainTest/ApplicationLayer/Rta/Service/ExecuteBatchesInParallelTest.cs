@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			}));
 
-			Persister.Load(personId).StateCode.Should().Be("phone");
+			Persister.Load(personId).StateName.Should().Be("phone");
 		}
 
 		[Test]
@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2016-07-11 08:10".Utc()
 			});
 
-			Persister.Load(personId1).StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
-			Persister.Load(personId2).StateCode.Should().Be("phone");
+			Persister.Load(personId1).StateName.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+			Persister.Load(personId2).StateName.Should().Be("phone");
 		}
 
 		[Test]

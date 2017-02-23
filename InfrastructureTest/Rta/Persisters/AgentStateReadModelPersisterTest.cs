@@ -155,8 +155,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				TeamName = null,
 
 				ReceivedTime = "2015-01-02 10:00".Utc(),
-
-				StateCode = null,
+				
 				StateStartTime = null,
 				StateName = null,
 

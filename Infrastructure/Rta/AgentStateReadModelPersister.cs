@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						ReceivedTime = :ReceivedTime,
 						Activity = :Activity,
 						NextActivity = :NextActivity, 
-						NextActivityStartTime = :NextActivityStartTime, 
-						StateCode = :StateCode, 
+						NextActivityStartTime = :NextActivityStartTime,  
 						StateName = :StateName, 
 						StateStartTime = :StateStartTime, 
 						RuleName = :RuleName, 
@@ -58,7 +57,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("Activity", model.Activity)
 				.SetParameter("NextActivity", model.NextActivity)
 				.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
-				.SetParameter("StateCode", model.StateCode)
 				.SetParameter("StateName", model.StateName)
 				.SetParameter("StateStartTime", model.StateStartTime)
 				.SetParameter("RuleName", model.RuleName)
@@ -88,7 +86,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							Activity,
 							NextActivity, 
 							NextActivityStartTime, 
-							StateCode, 
 							StateName, 
 							StateStartTime, 
 							RuleName, 
@@ -112,7 +109,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							:Activity,
 							:NextActivity, 
 							:NextActivityStartTime, 
-							:StateCode, 
 							:StateName, 
 							:StateStartTime, 
 							:RuleName, 
@@ -135,7 +131,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.SetParameter("Activity", model.Activity)
 					.SetParameter("NextActivity", model.NextActivity)
 					.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
-					.SetParameter("StateCode", model.StateCode)
 					.SetParameter("StateName", model.StateName)
 					.SetParameter("StateStartTime", model.StateStartTime)
 					.SetParameter("RuleName", model.RuleName)

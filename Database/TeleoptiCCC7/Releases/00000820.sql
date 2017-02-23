@@ -33,3 +33,6 @@ GO
 
 ALTER TABLE dbo.AgentState DROP COLUMN PlatformTypeId
 GO
+
+ALTER TABLE ReadModel.AgentState DROP COLUMN StateCode
+GO
