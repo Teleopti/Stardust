@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -32,23 +36,57 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeEventPublisher EventPublisher;
+		public FakeDataSourceForTenant DataSourceForTenant;
+		public FakeCurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
+		public FakePersonRepository PersonRepository;
+
+		private void setDataSource()
+		{
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			dataSource.Stub(d => d.DataSourceName).Return("Teleopti WFM");
+			dataSource.Stub(d => d.Application).Return(new FakeUnitOfWorkFactory());
+			DataSourceForTenant.Has(dataSource);
+		}
+
+		private IPerson createPerson()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.WorkflowControlSet = new WorkflowControlSet();
+			PersonRepository.Add(person);
+			return person;
+		}
+
+		private void setCurrentPrincipal()
+		{
+			var person = createPerson();
+			var identity = new TeleoptiIdentity("testPerson", null, null, null, null);
+			CurrentTeleoptiPrincipal.SetCurrentPrincipal(new TeleoptiPrincipal(identity, person));
+		}
 
 		[Test]
 		public void ShouldDoScheduling()
 		{
+			setDataSource();
+			setCurrentPrincipal();
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var activity = ActivityRepository.Has("_");
 			SkillRepository.Has("skill", activity);
 			ScenarioRepository.Has("some name");
 
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
-			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow));
+			var jobResultId = Guid.NewGuid();
+			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId));
 			PlanningPeriodRepository.Add(planningPeriod);
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			var reqEvent = new WebScheduleStardustEvent
 			{
-				PlanningPeriodId = planningPeriod.Id.Value
+				PlanningPeriodId = planningPeriod.Id.Value,
+				InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(),
+				LogOnDatasource = "Teleopti WFM",
+				Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+				JobResultId = jobResultId
 			};
-			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
 			BusinessUnitRepository.Add(businessUnit);
 			
@@ -63,15 +101,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldSaveExceptionToJobResult()
 		{
+			setDataSource();
+			setCurrentPrincipal();
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
-			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31),
-				PersonFactory.CreatePerson(), DateTime.UtcNow));
+			var jobResultId = Guid.NewGuid();
+			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId));
 			PlanningPeriodRepository.Add(planningPeriod);
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			var reqEvent = new WebScheduleStardustEvent
 			{
-				PlanningPeriodId = planningPeriod.Id.Value
+				PlanningPeriodId = planningPeriod.Id.Value,
+				InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(),
+				LogOnDatasource = "Teleopti WFM",
+				Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+				JobResultId = jobResultId
 			};
-			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
 			BusinessUnitRepository.Add(businessUnit);
 
@@ -86,20 +131,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldPublishOptimizationEvent()
 		{
+			setDataSource();
+			setCurrentPrincipal();
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var activity = ActivityRepository.Has("_");
 			SkillRepository.Has("skill", activity);
 			ScenarioRepository.Has("some name");
 
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
-			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31),
-				PersonFactory.CreatePerson(), DateTime.UtcNow));
+			var jobResultId = Guid.NewGuid();
+			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId));
 			PlanningPeriodRepository.Add(planningPeriod);
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			var reqEvent = new WebScheduleStardustEvent
 			{
-				PlanningPeriodId = planningPeriod.Id.Value
+				PlanningPeriodId = planningPeriod.Id.Value,
+				InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(),
+				LogOnDatasource = "Teleopti WFM",
+				Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+				JobResultId = jobResultId
 			};
-			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
 			BusinessUnitRepository.Add(businessUnit);
 
@@ -118,6 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
 		}
 	}
 }
