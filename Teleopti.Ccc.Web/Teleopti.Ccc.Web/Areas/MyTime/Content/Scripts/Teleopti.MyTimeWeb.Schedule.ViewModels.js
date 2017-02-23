@@ -168,11 +168,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		}
 	};
 
-	var convertTimePointToMinutes = function (time) {
-		var baseDate = "2017-01-01 ";
-		return (moment(baseDate + time).diff(moment(baseDate)) / (60 * 1000));
-	}
-
 	var getContinousPeriods = function (date, periods) {
 		if (!periods || periods.length === 0) return [];
 
@@ -217,138 +212,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 		return continousPeriods;
 	};
 
-	var calculateScheduleAndProbabilityBoundaries = function (scheduleDay, probabilityType, probabilities) {
-		var shiftStartMinutes = 0;
-		var shiftEndMinutes = constants.totalMinutesOfOneDay;
-		var shiftStartPosition = 1;
-		var shiftEndPosition = 0;
-
-		var probabilityStartMinutes;
-		var probabilityEndMinutes;
-		var probabilityStartPosition;
-		var probabilityEndPosition;
-
-		var timelines = parent.timeLines();
-		var timelineStartMinutes = timelines[0].minutes;
-		var timelineEndMinutes = timelines[timelines.length - 1].minutes;
-		if (timelineEndMinutes === constants.totalMinutesOfOneDay - 1) {
-			timelineEndMinutes = constants.totalMinutesOfOneDay;
-		}
-
-		// If timeline is not start or end at 00:00, there will exist an extra 15 minutes at start or end
-		// Need handle with this scenario.
-		var timelineStartMinutesForBoundary = timelineStartMinutes > 0 ? timelineStartMinutes + constants.intervalLengthInMinutes : 0;
-		var timelineEndMinutesForBoundary = timelineEndMinutes < constants.totalMinutesOfOneDay
-			? timelineEndMinutes - constants.intervalLengthInMinutes
-			: timelineEndMinutes;
-
-		var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
-
-		var momentDate = moment(scheduleDay.FixedDate);
-		if (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff) {
-			if (probabilityType === constants.overtimeProbabilityType &&
-				parent.intradayOpenPeriod != undefined && parent.intradayOpenPeriod != null) {
-				shiftStartMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
-				shiftEndMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
-			} else {
-				shiftStartMinutes = timelineStartMinutesForBoundary;
-				shiftEndMinutes = timelineEndMinutesForBoundary;
-			}
-
-			// Calculate shiftStartPosition and shiftEndPosition since this could not get from raw data
-			shiftStartPosition = (shiftStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
-			shiftEndPosition = (shiftEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
-
-			probabilityStartMinutes = shiftStartMinutes;
-			probabilityEndMinutes = shiftEndMinutes;
-			probabilityStartPosition = shiftStartPosition;
-			probabilityEndPosition = shiftEndPosition;
-		} else {
-			shiftStartMinutes = -1;
-			shiftEndMinutes = constants.totalMinutesOfOneDay + 1;
-			if (scheduleDay.Periods.length > 0) {
-				var firstPeriod = scheduleDay.Periods[0];
-				var lastPeriod = scheduleDay.Periods[scheduleDay.Periods.length - 1];
-
-				shiftStartMinutes = moment(firstPeriod.StartTime).diff(momentDate) / (60 * 1000);
-				if (shiftStartMinutes < 0) {
-					shiftStartMinutes = 0;
-				}
-
-				shiftEndMinutes = moment(lastPeriod.EndTime).diff(momentDate) / (60 * 1000);
-				if (shiftEndMinutes > constants.totalMinutesOfOneDay) {
-					shiftEndMinutes = constants.totalMinutesOfOneDay;
-				}
-			}
-
-			var rawProbabilityStartMinutes = -1;
-			var rawProbabilityEndMinutes = constants.totalMinutesOfOneDay + 1;
-			if (probabilities.length > 0) {
-				var firstProbabilityStartTime = moment(probabilities[0].StartTime);
-				var firstProbabilityStartMinute = (firstProbabilityStartTime.diff(momentDate)) / (60 * 1000);
-				if (firstProbabilityStartMinute < 0) {
-					firstProbabilityStartMinute = 0;
-				}
-
-				if (firstProbabilityStartMinute > rawProbabilityStartMinutes) {
-					rawProbabilityStartMinutes = firstProbabilityStartMinute;
-				}
-
-				var lastProbabilityEndTime = moment(probabilities[probabilities.length - 1].EndTime);
-				var lastProbabilityEndMinute = (lastProbabilityEndTime.diff(momentDate)) / (60 * 1000);
-				if (lastProbabilityEndMinute > constants.totalMinutesOfOneDay) {
-					lastProbabilityEndMinute = constants.totalMinutesOfOneDay;
-				}
-
-				if (rawProbabilityEndMinutes > lastProbabilityEndMinute) {
-					rawProbabilityEndMinutes = lastProbabilityEndMinute;
-				}
-			}
-
-			var openPeriodStartMinutes = -1;
-			var openPeriodEndMinutes = constants.totalMinutesOfOneDay + 1;
-			if (probabilityType === constants.overtimeProbabilityType &&
-				parent.intradayOpenPeriod != undefined &&
-				parent.intradayOpenPeriod != null) {
-				openPeriodStartMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.startTime);
-				openPeriodEndMinutes = convertTimePointToMinutes(parent.intradayOpenPeriod.endTime);
-			}
-
-			var startTimeCandidates = [
-				rawProbabilityStartMinutes, timelineStartMinutesForBoundary
-			];
-			var endTimeCandidates = [
-				rawProbabilityEndMinutes, timelineEndMinutesForBoundary
-			];
-
-			if (probabilityType === constants.absenceProbabilityType) {
-				startTimeCandidates.push(shiftStartMinutes);
-				endTimeCandidates.push(shiftEndMinutes);
-			} else if (probabilityType === constants.overtimeProbabilityType) {
-				startTimeCandidates.push(openPeriodStartMinutes);
-				endTimeCandidates.push(openPeriodEndMinutes);
-			}
-
-			probabilityStartMinutes = Math.max.apply(null, startTimeCandidates);
-			probabilityEndMinutes = Math.min.apply(null, endTimeCandidates);
-
-			probabilityStartPosition = (probabilityStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
-			probabilityEndPosition = (probabilityEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
-		}
-
-		return {
-			heightPercentagePerMinute: heightPercentagePerMinute,
-			shiftStartMinutes: shiftStartMinutes,
-			shiftEndMinutes: shiftEndMinutes,
-			shiftStartPosition: shiftStartPosition,
-			shiftEndPosition: shiftEndPosition,
-			probabilityStartMinutes: probabilityStartMinutes,
-			probabilityEndMinutes: probabilityEndMinutes,
-			probabilityStartPosition: probabilityStartPosition,
-			probabilityEndPosition: probabilityEndPosition
-		};
-	}
-
 	var createProbabilityModel = function (rawProbability, probabilityType, boundaries, continousPeriods, tooltipsTitle, heightPerInterval) {
 		var probabilityNames = ["low", "high"];
 		var probabilityLabels = [parent.userTexts.low, parent.userTexts.high];
@@ -362,7 +225,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			? endMoment.diff(startOfToday) / (60 * 1000)
 			: constants.totalMinutesOfOneDay - 1;
 
-		var shouldGenerateViewModel = boundaries.probabilityStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEndMinutes;
+		var shouldGenerateViewModel = boundaries.probabilityStartMinutes <= intervalStartMinutes
+			&& intervalEndMinutes <= boundaries.probabilityEndMinutes;
 		if (!shouldGenerateViewModel) return undefined;
 
 		var visible = false;
@@ -376,7 +240,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 				}
 			}
 		} else if (probabilityType === constants.overtimeProbabilityType) {
-			visible = boundaries.probabilityStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEndMinutes;;
+			visible = boundaries.probabilityStartMinutes <= intervalStartMinutes
+				&& intervalEndMinutes <= boundaries.probabilityEndMinutes;;
 		}
 
 		var index = rawProbability.Possibility;
@@ -436,7 +301,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			tooltipsTitle = parent.userTexts.probabilityForOvertime;
 		}
 
-		var boundaries = calculateScheduleAndProbabilityBoundaries(day, probabilityType, rawProbabilities);
+		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(day, parent.timeLines(),
+			probabilityType, rawProbabilities, parent.intradayOpenPeriod);
 
 		var probabilitieModels = [];
 		// Add an "invisible" probability on top to make all probabilities displayed from correct position
