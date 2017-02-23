@@ -343,8 +343,6 @@ people-selection-list {
 
 	wfm-multiple-search-input {
 		.advanced-input-dropdown {
-			top: 14px;
-			left: 17px;
 			width: 321px;
 		}
 		.advanced-input {
@@ -361,7 +359,7 @@ people-selection-list {
 people-selection-list > div.view-header {
 	display: none;
 }
-people-selection-list .panel {
+people-selection-list > .panel {
 	bottom: 80px;
 	position: absolute;
 	top: 0px;

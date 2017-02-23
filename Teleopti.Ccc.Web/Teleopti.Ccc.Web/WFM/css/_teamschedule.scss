@@ -1,4 +1,13 @@
 ﻿//Put those into StyleGuide later.
+wfm-multiple-search-input .wfm-multiple-search-wrapper{
+	height: auto;
+}
+wfm-multiple-search-input div.advanced-input-dropdown {
+	top: calc(100% - 10px);
+}
+wfm-multiple-search-input .advanced-input {
+	vertical-align: top;
+}
 .wfm-date-range-picker {
 	display: inline-block;
 }
@@ -277,10 +286,6 @@
 	.people-search-container {
 		margin: 10px 10px 10px 0;
 
-		.advanced-input-dropdown {
-			top: 14px;
-			left: -5px;
-		}
 		@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
 			.advanced-input-dropdown > .con-row {
 				display: block;
@@ -288,7 +293,6 @@
 		}
 		.advanced-input {
 			width: 150px;
-			vertical-align: top;
 		}
 		wfm-multiple-search-input .expand-advanced-input {
 			width: 150px !important;

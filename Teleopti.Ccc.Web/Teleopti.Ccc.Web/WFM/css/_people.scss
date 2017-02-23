@@ -7,20 +7,27 @@
 }
 
 .people-module {
-	.people-panel {
-		padding-top: 10px;
-	}
-
 	.people-panel > con-row {
 		position: relative;
 	}
 
+	.people-header{
+		padding: 10px 10px 0 10px;
+	}
+	.people-search-container{
+		display: inline-block;
+	}
 	.people-search {
 		padding: 10px 0;
 
 		#simple-people-search {
 			width: 220px;
 		}
+	}
+	.context-menu .context-menu-left {
+		z-index: 1000;
+		text-transform: none;
+		white-space: nowrap;
 	}
 
 	.pagination-item {
@@ -173,10 +180,6 @@
 		padding-bottom: 0px;
 	}
 
-	.select-all-dialog {
-		margin-bottom: 10px;
-	}
-
 	.selection-cart-indicator {
 		position: absolute;
 		top: -0.4rem;
@@ -244,12 +247,6 @@
 	}
 
 	wfm-multiple-search-input{
-		.advanced-input-dropdown{
-			top: 14px;
-			left: 17px;
-			width: 321px;
-		}
-
 		.advanced-input{
 			width: 316px;
 		}
