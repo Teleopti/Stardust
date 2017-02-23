@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			catch (Exception e)
 			{
 				SaveExceptionDetailToJobResult(@event, DetailLevel.Error, null, e);
+				throw;
 			}
 		}
 
@@ -75,8 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void SaveExceptionDetailToJobResult(WebScheduleStardustEvent @event, DetailLevel level, string message, Exception exception)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
+			var webScheduleJobResult = _jobResultRepository.Get(@event.JobResultId);
 			webScheduleJobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
 		}
 	}

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -7,8 +6,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -17,12 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		IRunOnStardust
 	{
 		private readonly IScheduleOptimization _scheduleOptimization;
-		private readonly IPlanningPeriodRepository _planningPeriodRepository;
+		private readonly IJobResultRepository _jobResultRepository;
 
-		public WebOptimizationStardustHandler(IScheduleOptimization scheduleOptimization, IPlanningPeriodRepository planningPeriodRepository)
+		public WebOptimizationStardustHandler(IScheduleOptimization scheduleOptimization, IJobResultRepository jobResultRepository)
 		{
 			_scheduleOptimization = scheduleOptimization;
-			_planningPeriodRepository = planningPeriodRepository;
+			_jobResultRepository = jobResultRepository;
 		}
 
 		[AsSystem]
@@ -36,14 +35,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			catch (Exception e)
 			{
 				SaveDetailToJobResult(@event, DetailLevel.Error, null, e);
+				throw;
 			}
 		}
 
 		[UnitOfWork]
 		protected virtual void SaveDetailToJobResult(WebOptimizationStardustEvent @event, DetailLevel level, string message, Exception exception)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webOptimizationJobResult = planningPeriod.JobResults.Single(x => x.Id.Value == @event.JobResultId);
+			var webOptimizationJobResult = _jobResultRepository.Get(@event.JobResultId);
 			webOptimizationJobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
 		}
 	}

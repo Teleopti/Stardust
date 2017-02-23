@@ -43,17 +43,17 @@
 						$scope.status = $translate.instant('OptimizingDaysOff');
 						//to make sure long optimization request doesn't create a new cookie based on current time
 						//we call keepAlive here again
-						//PlanningPeriodSvrc.keepAlive().then(function() {
-						//	PlanningPeriodSvrc.launchOptimization.save({ id: p.Id }).$promise.then(function (result) {
-						//		$scope.schedulingPerformed = true;
-						//		$state.go('resourceplanner.report', {
-						//			id:p.Id,
-						//			result: scheduleResult,
-						//			interResult: result,
-						//			planningperiod: p
-						//		});
-						//	}, handleScheduleOrOptimizeError);
-						//}, handleScheduleOrOptimizeError);
+						PlanningPeriodSvrc.keepAlive().then(function() {
+							PlanningPeriodSvrc.launchOptimization.save({ id: p.Id }).$promise.then(function (result) {
+								$scope.schedulingPerformed = true;
+								$state.go('resourceplanner.report', {
+									id:p.Id,
+									result: scheduleResult,
+									interResult: result,
+									planningperiod: p
+								});
+							}, handleScheduleOrOptimizeError);
+						}, handleScheduleOrOptimizeError);
 					}, handleScheduleOrOptimizeError);
 				};
 
