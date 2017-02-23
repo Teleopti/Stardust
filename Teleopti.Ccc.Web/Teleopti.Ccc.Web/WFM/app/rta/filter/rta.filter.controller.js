@@ -131,50 +131,71 @@
 		}
 
 		function updateSelectFieldText() {
+			var selectedOrg = showTeamSelected();
+			var selectedFieldText = '';
+			var trailingCommaFlag = 0;
+			if (selectedOrg['siteNames'].length > 0 || selectedOrg['teamNames'].length > 0) {
+				if (selectedOrg['siteNames'].length > 0) {
+					selectedFieldText = 'Sites: ';
+					selectedOrg['siteNames'].forEach(function (siteName) {
+						++trailingCommaFlag;
+						selectedFieldText = selectedFieldText + siteName + ", ";
+					});
+					selectedFieldText = selectedFieldText + selectedOrg['sitesLimitStr'];
+				}
+				trailingCommaFlag = 0;
+
+				if (selectedOrg['teamNames'].length > 0) {
+					{
+						selectedFieldText = selectedFieldText + 'Teams: ';
+						selectedOrg['teamNames'].forEach(function (teamName) {
+							++trailingCommaFlag;
+							var trailingComma = selectedOrg['teamNames'].length > trailingCommaFlag ? ", " : "";
+							selectedFieldText = selectedFieldText + teamName + trailingComma;
+						})
+					}
+					selectedFieldText = selectedFieldText + selectedOrg['teamsLimitStr'];
+				}
+				else {
+					if(selectedOrg['sitesLimitStr'].length == 0)
+						selectedFieldText = selectedFieldText.slice(0, -2);
+				}
+			}
 			// var howManyTeamsSelected = countTeamsSelected();
 			// vm.selectFieldText = howManyTeamsSelected === 0 ? vm.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected);
-			var howManyTeamsSelected = showTeamSelected();
-			vm.selectFieldText = howManyTeamsSelected.length === 0 ? vm.selectFieldText : $translate.instant("SeveralTeamsSelected").replace('{0}', howManyTeamsSelected + "...");
-		}
-		function countTeamsSelected() {
-			var checkedTeamsCount = 0;
-			vm.sites.forEach(function (site) {
-				if (siteIds.indexOf(site.Id) > -1) {
-					checkedTeamsCount = checkedTeamsCount + site.Teams.length;
-				}
-			});
-			checkedTeamsCount = checkedTeamsCount + vm.teamsSelected.length;
-			return checkedTeamsCount;
-		}
-		function showTeamSelected() {
-			var checkedTeamsName = "";
-			var countTeams = 1;
-			var maxCountTeam = 2;
+			if (selectedFieldText.length > 0)
+				vm.selectFieldText = selectedFieldText;
 
-			if ((siteIds.length > 0 || teamIds.length > 0) && countTeams < maxCountTeam) {
+		}
+
+		function showTeamSelected() {
+			var countTeams = 1;
+			var countSites = 1;
+			var maxCount = 2;
+			var siteOrTeamNames = [];
+			siteOrTeamNames['siteNames'] = []
+			siteOrTeamNames['teamNames'] = []
+			if ((siteIds.length > 0 || teamIds.length > 0)) {
+
 				vm.sites.forEach(function (site) {
-					if (countTeams > maxCountTeam)
-						return;
-					if (siteIds.indexOf(site.Id) > -1) {
+					if (siteIds.indexOf(site.Id) > -1 && countSites <= maxCount) {
+						++countSites;
+						siteOrTeamNames['siteNames'] = siteOrTeamNames['siteNames'].concat([site.Name]);
+					}
+					if (teamIds.length > 0 && countTeams <= maxCount) {
 						site.Teams.forEach(function (t) {
-							if (countTeams > maxCountTeam)
-								return;
-							++countTeams;
-							checkedTeamsName = checkedTeamsName + t.Name + ",";
-						})
-					} else if (teamIds.length > 0 && countTeams < maxCountTeam) {
-						site.Teams.forEach(function (t) {
-							if (countTeams > maxCountTeam)
-								return;
-							if (teamIds.indexOf(t.Id) > -1) {
+
+							if (teamIds.indexOf(t.Id) > -1 && countTeams <= maxCount) {
 								++countTeams;
-								checkedTeamsName = checkedTeamsName + t.Name + ",";
+								siteOrTeamNames['teamNames'] = siteOrTeamNames['teamNames'].concat([t.Name]);
 							}
 						})
 					}
 				});
 			}
-			return checkedTeamsName.slice(0, -1);
+			siteOrTeamNames['sitesLimitStr'] = siteIds.length > maxCount ? "..." : "";
+			siteOrTeamNames['teamsLimitStr'] = teamIds.length > maxCount ? "..." : "";
+			return siteOrTeamNames;
 		}
 
 		/*********AUTOCOMPLETE*****/
@@ -215,7 +236,8 @@
 		}
 
 		function selectedSkillAreaChange(skillArea) {
-			if ((!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) && vm.showOrganization) {				stateGoToAgents({
+			if ((!skillArea || !(skillArea.Id == $stateParams.skillAreaId)) && vm.showOrganization) {
+				stateGoToAgents({
 					skillIds: skillArea ? [] : $stateParams.skillIds,
 					skillAreaId: skillArea ? skillArea.Id : undefined,
 					siteIds: siteIds,
@@ -232,7 +254,6 @@
 				if ($state.current.name !== "rta.teams" && $stateParams.siteId)
 					rtaRouteService.goToTeams(vm.siteIds, vm.selectedSkill, skillArea.Id);
 				else {
-					console.log('hej');
 					rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
 				}
 			}
@@ -247,10 +268,12 @@
 			var selectedTeamIds = vm.teamsSelected;
 			selection['siteIds'] = selectedSiteIds;
 			selection['teamIds'] = selectedTeamIds;
-			if($stateParams.skillIds)
-				selection['skillIds'] = $stateParams.skillIds;
-			else if ($stateParams.skillAreaId)
-				selection['skillAreaId'] = $stateParams.skillAreaId;
+			if (!vm.showOrganization) {
+				if ($stateParams.skillIds)
+					selection['skillIds'] = $stateParams.skillIds;
+				else if ($stateParams.skillAreaId)
+					selection['skillAreaId'] = $stateParams.skillAreaId;
+			}
 			stateGoToAgents(selection);
 		}
 
