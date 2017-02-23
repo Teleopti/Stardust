@@ -122,10 +122,6 @@
 								staffingData.scheduledStaffing
 							],
 							type: 'line',
-							groups: [
-								['Forecasted_staffing'], ['Updated_forecasted_staffing'], ['Actual_staffing'], ['Scheduled_staffing']
-							],
-							order: 'asc',
 							hide: hiddenArray,
 							names: {
 								Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',

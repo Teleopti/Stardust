@@ -143,10 +143,6 @@
 									performanceData.estimatedServiceLevelObj.series,
 									performanceData.currentInterval
 								],
-								groups: [
-									['ASA'],['Abandoned_rate'],['Service_level'],['ESL']
-								],
-								order: 'desc',
 								hide: hiddenArray,
 								types: {
 									Current:'bar'

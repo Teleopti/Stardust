@@ -149,10 +149,6 @@
 									trafficData.actualAverageHandleTimeObj.series,
 									trafficData.currentInterval
 								],
-								groups: [
-									['Forecasted_calls'], ['Calls'], ['Forecasted_AHT'],['AHT']
-								],
-								order: 'asc',
 								hide: hiddenArray,
 								types: {
 									Current:'bar'
