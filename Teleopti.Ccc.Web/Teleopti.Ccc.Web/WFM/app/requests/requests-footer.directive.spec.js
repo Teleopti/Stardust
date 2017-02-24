@@ -148,7 +148,7 @@
 				test.scope.$digest();
 
 				var footer = test.target.isolateScope().requestsFooter;
-				footer.onPageNumberchange(2);
+				footer.onPageNumberChange(2);
 				expect(footer.paging.pageNumber).toEqual(2);
 			});
 		});

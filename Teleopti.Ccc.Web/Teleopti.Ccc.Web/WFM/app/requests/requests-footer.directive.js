@@ -10,7 +10,7 @@
 		var vm = this;
 		vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 		vm.onPageSizeChanges = onPageSizeChanges;
-		vm.onPageNumberchange = onPageNumberchange;
+		vm.onPageNumberChange = onPageNumberChange;
 		vm.isUsingRequestSubmitterTimeZone = true;
 		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
 		getSelectedRequestsInfoText();
@@ -20,7 +20,7 @@
 			vm.paging.pageNumber = 1;
 		}
 
-		function onPageNumberchange(data) {
+		function onPageNumberChange(data) {
 			vm.paging.pageNumber = data;
 		}
 
