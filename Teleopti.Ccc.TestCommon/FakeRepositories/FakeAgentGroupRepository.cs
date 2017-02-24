@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IAgentGroup root)
 		{
-			_agentGroups.Remove(root);
+			((IDeleteTag)Get(root.Id.GetValueOrDefault())).SetDeleted();
 		}
 
 		public IAgentGroup Get(Guid id)

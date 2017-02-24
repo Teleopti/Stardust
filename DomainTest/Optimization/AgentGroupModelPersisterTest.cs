@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -227,6 +228,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Persist(model);
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			inDb.Name.Should().Be.EqualTo(expectedName);
+		}
+
+		[Test]
+		public void ShouldRemoveAgentGroup()
+		{
+			var existing = new AgentGroup()
+				.WithId();
+			AgentGroupRepository.Add(existing);
+
+			Target.Delete(existing.Id.GetValueOrDefault());
+
+			var inDb = AgentGroupRepository.Get(existing.Id.GetValueOrDefault()) as IDeleteTag;
+			inDb.Should().Not.Be.Null();
+			inDb.IsDeleted.Should().Be.True();
 		}
 
 	}

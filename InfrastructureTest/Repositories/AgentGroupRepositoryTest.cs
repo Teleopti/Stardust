@@ -1,4 +1,3 @@
-using System;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Infrastructure.Repositories;

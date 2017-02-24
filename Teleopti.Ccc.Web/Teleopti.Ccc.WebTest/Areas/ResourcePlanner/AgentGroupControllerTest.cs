@@ -47,5 +47,17 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			target.Get(id).Result<AgentGroupModel>()
 				.Should().Be.SameInstanceAs(model);
 		}
+
+		[Test]
+		public void ShouldCallPersisterToRemove()
+		{
+			var persister = MockRepository.GenerateMock<IAgentGroupModelPersister>();
+			var target = new AgentGroupController(persister, null);
+
+			var agentGroupdId = Guid.NewGuid();
+			target.DeleteAgentGroup(agentGroupdId);
+
+			persister.AssertWasCalled(x => x.Delete(agentGroupdId));
+		}
 	}
 }
