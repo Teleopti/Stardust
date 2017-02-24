@@ -1,0 +1,274 @@
+﻿/// <reference path="~/Content/Scripts/qunit.js" />
+/// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ViewModels.js" />
+
+$(document).ready(function () {
+	module("Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel");
+
+	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+
+	var userTexts = {
+		"high": "High",
+		"low": "Low",
+		"probabilityForAbsence": "Probability to get absence:",
+		"probabilityForOvertime": "Probability to get overtime:"
+	};
+
+	var probabilityNames = ["low", "high"];
+	var probabilityLabels = [userTexts.low, userTexts.high];
+
+	var createDayViewModel = function () {
+		return {
+			currentTimeInMinutes: -1,
+			setUserNowInMinutes: function (nowInMinutes) { this.currentTimeInMinutes = nowInMinutes; },
+			userNowInMinute: function () { return this.currentTimeInMinutes; }
+		}
+	}
+
+	var boundaries = {
+		"heightPercentagePerMinute": 0.01,
+		"shiftStartMinutes": 60, //01:00
+		"shiftEndMinutes": 1380, // 23:00
+		"probabilityStartMinutes": 240, // 04:00
+		"probabilityEndMinutes": 1380, // 23:00
+		"probabilityStartPosition": 0.14,
+		"probabilityEndPosition": 0.86
+	};
+
+	var invisibleProbabilityCssClass = "probability-none";
+
+	var baseDate = "2017-02-24";
+
+	test("Will not create absence possibility view model before probability start", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T03:00:00",
+			"EndTime": baseDate + "T03:15:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		equal($.isEmptyObject(vm), true);
+	});
+
+	test("Will not create absence possibility view model after probability start", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T23:15:00",
+			"EndTime": baseDate + "T23:30:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		equal($.isEmptyObject(vm), true);
+	});
+
+	test("Create normal absence possibility view model within continous periods", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T06:00:00",
+			"EndTime": baseDate + "T06:15:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
+			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		equal(vm.actualClass, "probability-" + probabilityNames[rawProbability.Possibility]);
+		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+
+		// Will not show by default (Current user time is not set)
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+
+		// Show before current time
+		dayViewModel.setUserNowInMinutes(0);
+		equal(vm.cssClass(), vm.actualClass);
+		equal(vm.tooltips(), vm.actualTooltips);
+
+		// Hide after current time
+		dayViewModel.setUserNowInMinutes(420);
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+	});
+
+	test("Will create a absence possibility view model never visible between continous periods", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T06:00:00",
+			"EndTime": baseDate + "T06:15:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60,
+				"endTime": 300
+			},
+			{
+				"startTime": 600,
+				"endTime": 1200
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
+			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		equal(vm.actualClass, invisibleProbabilityCssClass);
+		equal(vm.actualTooltips, "");
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+
+		// Will not show by default (Current user time is not set)
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+
+		// Invisible before current time
+		dayViewModel.setUserNowInMinutes(0);
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+
+		// Invisible after current time
+		dayViewModel.setUserNowInMinutes(0);
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+	});
+
+	test("Will not create overtime possibility view model before probability start", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T03:00:00",
+			"EndTime": baseDate + "T03:15:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		equal($.isEmptyObject(vm), true);
+	});
+
+	test("Will not create overtime possibility view model after probability start", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T23:15:00",
+			"EndTime": baseDate + "T23:30:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		equal($.isEmptyObject(vm), true);
+	});
+
+	test("Create normal overtime possibility view model within continous periods", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T06:00:00",
+			"EndTime": baseDate + "T06:15:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
+			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		equal(vm.actualClass, "probability-" + probabilityNames[rawProbability.Possibility]);
+		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+
+		// Will not show by default (Current user time is not set)
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+
+		// Show before current time
+		dayViewModel.setUserNowInMinutes(0);
+		equal(vm.cssClass(), vm.actualClass);
+		equal(vm.tooltips(), vm.actualTooltips);
+
+		// Hide after current time
+		dayViewModel.setUserNowInMinutes(420);
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+	});
+
+	test("Will create a normal overtime possibility view model between continous periods", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T06:00:00",
+			"EndTime": baseDate + "T06:15:00",
+			"Possibility": 1
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60,
+				"endTime": 300
+			},
+			{
+				"startTime": 600,
+				"endTime": 1200
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
+			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		equal(vm.actualClass, "probability-" + probabilityNames[rawProbability.Possibility]);
+		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+
+		// Will not show by default (Current user time is not set)
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+
+		// Show before current time
+		dayViewModel.setUserNowInMinutes(0);
+		equal(vm.cssClass(), vm.actualClass);
+		equal(vm.tooltips(), vm.actualTooltips);
+
+		// Hide after current time
+		dayViewModel.setUserNowInMinutes(420);
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+	});
+});
