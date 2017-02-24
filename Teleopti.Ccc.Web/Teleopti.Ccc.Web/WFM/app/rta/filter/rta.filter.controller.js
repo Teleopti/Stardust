@@ -154,13 +154,15 @@
 		};
 
 		function selectedSkillChange(skill) {
-			if (!skill && vm.showOrganization) //
+			
+			if (!skill && vm.showOrganization)
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
 					skillAreaId: skill ? undefined : skillAreaId,
 					siteIds: siteIds,
 					teamIds: teamIds
 				});
+			else if (!skill) { rtaRouteService.goToSites(); }
 			else if ((skill.Id != skillIds || $stateParams.skillAreaId) && vm.showOrganization) {
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
@@ -169,7 +171,6 @@
 					teamIds: []
 				});
 			}
-			else if (!skill) { rtaRouteService.goToSites(); }
 			else {
 				if (skill.Id == skillIds) return;
 				vm.selectedSkill = skill;
@@ -183,7 +184,7 @@
 		}
 
 		function selectedSkillAreaChange(skillArea) {
-				if (!skillArea && vm.showOrganization) {
+			if (!skillArea && vm.showOrganization) {
 				stateGoToAgents({
 					skillIds: skillArea ? [] : $stateParams.skillIds,
 					skillAreaId: skillArea ? skillArea.Id : undefined,
@@ -191,7 +192,7 @@
 					teamIds: teamIds
 				});
 			}
-			
+			else if (!skillArea) { rtaRouteService.goToSites(); }
 			else if (!(skillArea.Id == $stateParams.skillAreaId) && vm.showOrganization) {
 				stateGoToAgents({
 					skillIds: skillArea ? [] : $stateParams.skillIds,
@@ -200,7 +201,6 @@
 					teamIds: []
 				});
 			}
-			else if (!skillArea) { rtaRouteService.goToSites(); }
 			else {
 				if (skillArea.Id === $stateParams.skillAreaId) return;
 				//vm.skillAreaId = skillArea.Id;
