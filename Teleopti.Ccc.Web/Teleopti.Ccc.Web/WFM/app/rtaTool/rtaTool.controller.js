@@ -80,17 +80,17 @@
 				}));
 		}
 
-		vm.sendBatches = function (stateCode) {
-			sendBatch(function () { return stateCode; });
+		vm.sendBatches = function (stateName) {
+			sendBatch(function () { return stateName; });
 		}
 
 		vm.sendRandomBatch = function () {
 			sendBatch(function () {
-				return vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Code;
+				return vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
 			});
 		}
 
-		function sendBatch(stateCode) {
+		function sendBatch(stateName) {
 			var selectedAgents = vm.gridApi.selection.getSelectedRows();
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
 			var distinctAgents = [];
@@ -112,7 +112,7 @@
 							var key = s.DataSource + "__" + s.UserCode;
 							if (distinctAgents.indexOf(key) == -1) {
 								distinctAgents.push(key);
-								return createState(vm.authKey, s.UserCode, s.DataSource, stateCode(), now());
+								return createState(vm.authKey, s.UserCode, s.DataSource, stateName(), now());
 							}
 						})
 						.filter(function (s) { return s != null; }))
@@ -124,8 +124,8 @@
 		}
 
 
-		vm.sendState = function (userCode, dataSource, code) {
-			rtaToolService.sendState(createState(vm.authKey, userCode, dataSource, code, now()))
+		vm.sendState = function (userCode, dataSource, stateName) {
+			rtaToolService.sendState(createState(vm.authKey, userCode, dataSource, stateName, now()))
 				.then(function () {
 					if (vm.snapshot)
 						closeSnapshot(vm.authKey, dataSource, now)
@@ -136,11 +136,14 @@
 			return moment.utc().format('YYYY-MM-DD HH:mm:ss');
 		}
 
-		function createState(authKey, userCode, dataSource, code, now) {
+		function createState(authKey, userCode, dataSource, stateName, now) {
+			var statecode = vm.stateCodes
+				.filter(function (s) { return s.Name == stateName; })
+				.map(function (s) { return s.Code; })[0];
 			return {
 				AuthenticationKey: authKey,
 				UserCode: userCode,
-				StateCode: code,
+				StateCode: statecode,
 				IsLoggedOn: true,
 				SecondsInState: 0,
 				TimeStamp: now,
