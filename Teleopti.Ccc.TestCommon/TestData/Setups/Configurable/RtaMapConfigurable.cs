@@ -58,15 +58,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			IRtaStateGroup stateGroup = null;
 			if (PhoneState != null)
 			{
+				var stateCode = new PlatformTypeInjector().Inject(PhoneState, Guid.Empty.ToString());
 				var stateGroupRepository = new RtaStateGroupRepository(currentUnitOfWork);
 				stateGroup = (from g in stateGroupRepository.LoadAll()
 					from s in g.StateCollection
-					where s.StateCode == PhoneState
+					where s.StateCode == stateCode
 					select g).SingleOrDefault();
 				if (stateGroup == null)
 				{
 					stateGroup = new RtaStateGroup(PhoneState, false, true);
-					stateGroup.AddState(new PlatformTypeInjector().Inject(PhoneState, Guid.Empty.ToString()), PhoneState);
+					stateGroup.AddState(stateCode, PhoneState);
 					stateGroupRepository.Add(stateGroup);
 				}
 				RtaStateGroup = stateGroup;
