@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public IDictionary<DateTime, int> CalcuateIntradayAbsenceIntervalPossibilities()
 		{
-			var skillStaffingDatas = getSkillStaffingData();
-			var useShrinkageValidator = isShrinkageValidatorExists();
+			var useShrinkageValidator = isShrinkageValidatorEnabled();
+			var skillStaffingDatas = getSkillStaffingData(useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
 				skill => useShrinkageValidator
 					? new IntervalShrinkageHasUnderstaffing(skill) as Specification<IValidatePeriod>
@@ -47,18 +47,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public IDictionary<DateTime, int> CalcuateIntradayOvertimeIntervalPossibilities()
 		{
-			var skillStaffingDatas = getSkillStaffingData();
+			var skillStaffingDatas = getSkillStaffingData(false);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
 				skill => new IntervalHasOverstaffing(skill);
 			return calcuateIntervalPossibilities(skillStaffingDatas, getStaffingSpecification);
 		}
 
-		private IEnumerable<skillStaffingData> getSkillStaffingData()
+		private IEnumerable<skillStaffingData> getSkillStaffingData(bool useShrinkage)
 		{
 			var personSkills = getPersonSkills().ToList();
 
 			return from skill in personSkills.Select(x => x.Skill)
-					let intradayStaffingModel = _staffingViewModelCreator.Load(skill.Id.GetValueOrDefault())
+					let intradayStaffingModel = _staffingViewModelCreator.Load(skill.Id.GetValueOrDefault(), useShrinkage)
 					select new skillStaffingData
 					{
 						Skill = skill,
@@ -140,30 +140,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return intervalPossibilities;
 		}
 
-		private bool isShrinkageValidatorExists()
+		private bool isShrinkageValidatorEnabled()
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var isShrinkageValidatorExist = false;
 			if (person.WorkflowControlSet?.AbsenceRequestOpenPeriods == null)
 				return false;
 
-			var openPeriods = person.WorkflowControlSet.AbsenceRequestOpenPeriods;
-			var unSorted = openPeriods.Where(
-				absenceRequestOpenPeriod =>
-					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
-
-			var userTimezone = person.PermissionInformation.DefaultTimeZone();
-
-			var today = new DateOnly(_now.UtcDateTime());
-			isShrinkageValidatorExist =
-				unSorted.Any(
-					u =>
-						u.OpenForRequestsPeriod.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone))) &&
-						u.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone)))
-							.Contains(today) &&
-						u.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest));
-
-			return isShrinkageValidatorExist;
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			return person.WorkflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(timeZone);
 		}
 
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)

@@ -295,5 +295,7 @@ namespace Teleopti.Interfaces.Domain
 		bool WaitlistingIsEnabled(IAbsenceRequest absenceRequest);
 
 		IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest);
+
+		bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone) where T : IAbsenceRequestValidator;
 	}
 }

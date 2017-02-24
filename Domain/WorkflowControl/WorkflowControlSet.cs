@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -380,6 +381,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
 			return getMergedOpenPeriods(absenceRequest, dateOnlyPeriod);
+		}
+
+		public virtual bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone)
+			where T : IAbsenceRequestValidator
+		{
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, timeZone));
+			var currentAbsenceOpenPeriod =
+				AbsenceRequestOpenPeriods.FirstOrDefault(
+					p => p.OpenForRequestsPeriod.Contains(today)
+						 && p.GetPeriod(today).Contains(today)
+						 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)
+					);
+			var checkStaffingValidator = currentAbsenceOpenPeriod?.StaffingThresholdValidator;
+			return checkStaffingValidator != null && checkStaffingValidator.GetType() == typeof(T);
 		}
 
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)

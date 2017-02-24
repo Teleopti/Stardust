@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		[Test]
 		public void ShouldGetPossibilitiesWhenUsingShrinkageValidator()
 		{
-			setupTestDataForOneSkill();
+			setupTestDataForOneSkill(useShrinkage: true);
 			var person = LoggedOnUser.CurrentUser();
 			var absence = AbsenceFactory.CreateAbsenceWithId();
 			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new PendingAbsenceRequest(),
@@ -282,13 +282,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(2, possibilities.Count);
 		}
 
-		private void setupTestDataForOneSkill(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null)
+		private void setupTestDataForOneSkill(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null, bool useShrinkage = false)
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			var activity = createActivity();
 			createAssignment(person, activity);
 			setPersonSkill(person, activity, forecastedStaffing ?? new double?[] { 10d, 10d },
-				scheduledStaffing ?? new double?[] { 8d, 8d });
+				scheduledStaffing ?? new double?[] { 8d, 8d }, useShrinkage);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 		}
 
@@ -300,14 +300,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		private void setPersonSkill(IPerson person, IActivity activity, double?[] forecastedStaffing,
-			double?[] scheduledStaffing)
+			double?[] scheduledStaffing, bool useShrinkage)
 		{
 			var personSkill = createPersonSkill(activity);
 			var personPeriod = createPersonPeriod(personSkill);
 			person.AddPersonPeriod(personPeriod);
 			personSkill.Skill.StaffingThresholds = createStaffingThresholds();
 			setupIntradayStaffingViewModelForSkill(personSkill.Skill.Id.GetValueOrDefault(), forecastedStaffing,
-				scheduledStaffing);
+				scheduledStaffing, useShrinkage);
 		}
 
 		private StaffingThresholds createStaffingThresholds()
@@ -344,13 +344,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		private void setupIntradayStaffingViewModelForSkill(Guid skillId, double?[] forecastedStaffing,
-			double?[] scheduledStaffing)
+			double?[] scheduledStaffing, bool useShrinkage = false)
 		{
 			var startDate = _today.AddHours(8);
 			var interval1 = startDate.AddMinutes(15);
 			var interval2 = startDate.AddMinutes(30);
 
-			StaffingViewModelCreator.Stub(s => s.Load(new[] {skillId})).Return(new IntradayStaffingViewModel
+			StaffingViewModelCreator.Stub(s => s.Load(new[] {skillId}, useShrinkage)).Return(new IntradayStaffingViewModel
 			{
 				StaffingHasData = forecastedStaffing.Any(),
 				DataSeries = new StaffingDataSeries

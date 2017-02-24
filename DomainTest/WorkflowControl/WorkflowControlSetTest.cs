@@ -363,5 +363,50 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_target.SetFairnessType(FairnessType.Seniority);
 			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType());
 	    }
-    }
+
+		[Test]
+		public void ShouldReturnTrueWhenAbsenceValidatorIsInRange()
+		{
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneInfo.Utc));
+			var period = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
+			_target.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				OpenForRequestsPeriod = period,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = period,
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			});
+			Assert.IsTrue(_target.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(TimeZoneInfo.Utc));
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenAbsenceValidatorIsOutOfRange()
+		{
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneInfo.Utc));
+			var period = new DateOnlyPeriod(today.AddDays(-5), today.AddDays(-1));
+			_target.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				OpenForRequestsPeriod = period,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = period,
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			});
+			Assert.IsFalse(_target.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(TimeZoneInfo.Utc));
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenAbsenceValidatorIsNotSet()
+		{
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneInfo.Utc));
+			var period = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
+			_target.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				OpenForRequestsPeriod = period,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = period,
+				StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator()
+			});
+			Assert.IsFalse(_target.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(TimeZoneInfo.Utc));
+		}
+	}
 }

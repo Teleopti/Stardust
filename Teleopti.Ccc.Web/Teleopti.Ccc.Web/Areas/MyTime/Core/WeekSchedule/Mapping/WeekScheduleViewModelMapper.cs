@@ -95,14 +95,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			{
 				return false;
 			}
-
-			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, timeZone));
-			var currentAbsenceOpenPeriod =
-				workflowControlSet.AbsenceRequestOpenPeriods.FirstOrDefault(p => p.OpenForRequestsPeriod.Contains(today));
-			var checkStaffingValidator = currentAbsenceOpenPeriod?.StaffingThresholdValidator;
-
-			return checkStaffingValidator is StaffingThresholdWithShrinkageValidator ||
-				   checkStaffingValidator is StaffingThresholdValidator;
+			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(timeZone) ||
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(timeZone);
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData)

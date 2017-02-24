@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.Caching;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -13,14 +12,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_staffingViewModelCreator = staffingViewModelCreator;
 		}
 
-		public IntradayStaffingViewModel Load(Guid skillId)
+		public IntradayStaffingViewModel Load(Guid skillId, bool useShrinkage)
 		{
 			var cacheKey = getCacheKey(skillId);
 			var intradyStaffingViewModelCache = MemoryCache.Default.Get(cacheKey) as IntradayStaffingViewModel;
 			if (intradyStaffingViewModelCache != null)
 				return intradyStaffingViewModelCache;
 
-			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId});
+			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId}, useShrinkage);
 			if (!intradyStaffingViewModel.StaffingHasData || intradyStaffingViewModel.DataSeries.ScheduledStaffing?.Length == 0)
 				return intradyStaffingViewModel;
 			var cachePolicy = new CacheItemPolicy {SlidingExpiration = new TimeSpan(0, 10, 0)};
@@ -36,6 +35,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public interface ICacheableStaffingViewModelCreator
 	{
-		IntradayStaffingViewModel Load(Guid skillId);
+		IntradayStaffingViewModel Load(Guid skillId, bool useShrinkage);
 	}
 }
