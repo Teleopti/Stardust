@@ -214,32 +214,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
 		}
-
-		[Test, Ignore("Investigate this further... SEtup below will create duplicate copies of skillgroups when shoveling. This is WRONG, but haven't find what issues it causes yet....")]
-		public void ShouldHandleDifferentSkillGroupsWithSharedCascadingSkillsCorrectly()
-		{
-			var scenario = new Scenario("_");
-			var activity = new Activity("_");
-			var dateOnly = DateOnly.Today;
-			var prioritizedSkill = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
-			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var nonPrioritizedSkill = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
-			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var nonCascadingSkill1 = new Skill("noncascading1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpenBetween(8, 9);
-			var nonCascadingSkill1Day = nonCascadingSkill1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var nonCascadingSkill2 = new Skill("noncascading2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpenBetween(8, 9);
-			var nonCascadingSkill2Day = nonCascadingSkill2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(prioritizedSkill, nonCascadingSkill1, nonPrioritizedSkill);
-			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
-			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(prioritizedSkill, nonCascadingSkill2, nonPrioritizedSkill);
-			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
-
-			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass1, ass2 }, new[] { prioritizedSkillDay, nonCascadingSkill1Day, nonCascadingSkill2Day, nonPrioritizedSkillDay }, false, false));
-
-			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference.IsZero()
-				.Should().Be.True();
-			nonCascadingSkill1Day.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(-0.5);
-		}
 	}
 }
