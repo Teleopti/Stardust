@@ -7,7 +7,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	self.isQRCodeForMobileAppsEnabled = ko.observable(false);
 	self.myTimeWebBaseUrl = ko.observable();
 	self.androidAppLink = ko.observable("https://play.google.com/store/apps/details?id=com.teleopti.mobile");
-	self.iOSAppLink = ko.observable("https://itunes.apple.com/");
+	self.iOSAppLink = ko.observable("https://itunes.apple.com/us/app/teleopti-wfm-mytime/id1196833421#");
 	self.settingsLoaded = ko.observable(false);
 	self.avoidReload = false;
 	self.cultures = ko.observableArray();
