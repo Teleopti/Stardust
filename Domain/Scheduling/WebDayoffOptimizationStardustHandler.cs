@@ -11,21 +11,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class WebOptimizationStardustHandler :
-		IHandleEvent<WebOptimizationStardustEvent>,
+	public class WebDayoffOptimizationStardustHandler :
+		IHandleEvent<WebDayoffOptimizationStardustEvent>,
 		IRunOnStardust
 	{
 		private readonly IScheduleOptimization _scheduleOptimization;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public WebOptimizationStardustHandler(IScheduleOptimization scheduleOptimization, IJobResultRepository jobResultRepository)
+		public WebDayoffOptimizationStardustHandler(IScheduleOptimization scheduleOptimization, IJobResultRepository jobResultRepository)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_jobResultRepository = jobResultRepository;
 		}
 
 		[AsSystem]
-		public virtual void Handle(WebOptimizationStardustEvent @event)
+		public virtual void Handle(WebDayoffOptimizationStardustEvent @event)
 		{
 			try
 			{
@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[UnitOfWork]
-		protected virtual void SaveDetailToJobResult(WebOptimizationStardustEvent @event, DetailLevel level, string message, Exception exception)
+		protected virtual void SaveDetailToJobResult(WebDayoffOptimizationStardustEvent @event, DetailLevel level, string message, Exception exception)
 		{
-			var webOptimizationJobResult = _jobResultRepository.Get(@event.JobResultId);
-			webOptimizationJobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
+			// expected success is 2 here, because one is scheduling, the other is dayoff optimization
+			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), 2);
 		}
 	}
 }

@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			Target.Handle(reqEvent);
 
-			var webOptimizationStardustEvent = EventPublisher.PublishedEvents.Single() as WebOptimizationStardustEvent;
+			var webOptimizationStardustEvent = EventPublisher.PublishedEvents.Single() as WebDayoffOptimizationStardustEvent;
 			webOptimizationStardustEvent.PlanningPeriodId.Should().Be.EqualTo(planningPeriod.Id.Value);
 			webOptimizationStardustEvent.JobResultId.Should().Be.EqualTo(jobResult.Id.Value);
 		}

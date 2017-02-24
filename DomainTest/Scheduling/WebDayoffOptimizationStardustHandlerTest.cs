@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[TestFixture]
 	[DomainTest]
-	public class WebOptimizationStardustHandlerTest : ISetup
+	public class WebDayoffOptimizationStardustHandlerTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		private PlanningPeriod planningPeriod;
-		public WebOptimizationStardustHandler Target;
+		public WebDayoffOptimizationStardustHandler Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeAgentGroupStaffLoader AgentGroupStaffLoader;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			JobResultRepository.Add(jobResult);
 
 			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
-			var reqEvent = new WebOptimizationStardustEvent
+			var reqEvent = new WebDayoffOptimizationStardustEvent
 			{
 				PlanningPeriodId = planningPeriod.Id.Value,
 				InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PlanningPeriodRepository.Add(planningPeriod);
 			JobResultRepository.Add(jobResult);
 			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
-			var reqEvent = new WebOptimizationStardustEvent
+			var reqEvent = new WebDayoffOptimizationStardustEvent
 			{
 				PlanningPeriodId = planningPeriod.Id.Value,
 				InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),

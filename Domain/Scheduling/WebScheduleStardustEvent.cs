@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	}
 
-	public class WebOptimizationStardustEvent : WebScheduleStardustBaseEvent
+	public class WebDayoffOptimizationStardustEvent : WebScheduleStardustBaseEvent
 	{
-		public WebOptimizationStardustEvent()
+		public WebDayoffOptimizationStardustEvent()
 		{
 		}
-		public WebOptimizationStardustEvent(WebScheduleStardustBaseEvent @event) : base(@event)
+		public WebDayoffOptimizationStardustEvent(WebScheduleStardustBaseEvent @event) : base(@event)
 		{
 		}
 	}

@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class WebOptimizationHandler : IHandle<WebOptimizationStardustEvent>
+	public class WebOptimizationHandler : IHandle<WebDayoffOptimizationStardustEvent>
 	{
 		private readonly IComponentContext _componentContext;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		}
 
 		[AsSystem]
-		public virtual void Handle(WebOptimizationStardustEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public virtual void Handle(WebDayoffOptimizationStardustEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
-			var theRealOne = _componentContext.Resolve<IHandleEvent<WebOptimizationStardustEvent>>();
+			var theRealOne = _componentContext.Resolve<IHandleEvent<WebDayoffOptimizationStardustEvent>>();
 			theRealOne.Handle(parameters);
 			_stardustJobFeedback.SendProgress = null;
 		}

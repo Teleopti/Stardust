@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var tuple = GetScheduleInfo(@event.PlanningPeriodId);
 				var result = _fullScheduling.DoScheduling(tuple.Item1, tuple.Item2);
 				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
-				_eventPublisher.Publish(new WebOptimizationStardustEvent(@event)
+				_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
 				{
 					JobResultId = @event.JobResultId
 				});
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void SaveDetailToJobResult(WebScheduleStardustEvent @event, DetailLevel level, string message, Exception exception)
 		{
-			var webScheduleJobResult = _jobResultRepository.Get(@event.JobResultId);
-			webScheduleJobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
+			var jobResult = _jobResultRepository.Get(@event.JobResultId);
+			jobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
 		}
 	}
 }
