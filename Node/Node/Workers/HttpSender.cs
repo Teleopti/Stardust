@@ -14,11 +14,14 @@ namespace Stardust.Node.Workers
 	public class HttpSender : IHttpSender
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(HttpSender));
+
 		private const string Mediatype = "application/json";
-		private readonly HttpClient _client = new HttpClient
+		private static readonly HttpClient Client = new HttpClient();
+
+		public HttpSender()
 		{
-			DefaultRequestHeaders = { Accept = { new MediaTypeWithQualityHeaderValue(Mediatype) } }
-		};
+			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Mediatype));
+		}
 
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data)
@@ -35,10 +38,10 @@ namespace Stardust.Node.Workers
 
 				var sez = JsonConvert.SerializeObject(data);
 
-				_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Mediatype));
+				Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Mediatype));
 
 				var response =
-					await _client.PostAsync(url,
+					await Client.PostAsync(url,
 					                        new StringContent(sez, Encoding.Unicode, Mediatype),
 					                        cancellationToken)
 						.ConfigureAwait(false);

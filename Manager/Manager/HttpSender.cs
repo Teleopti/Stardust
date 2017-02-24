@@ -12,10 +12,12 @@ namespace Stardust.Manager
 	public class HttpSender : IHttpSender
 	{
 		private const string Mediatype = "application/json";
-		private readonly HttpClient _client = new HttpClient
+		private static readonly HttpClient Client = new HttpClient();
+
+		public HttpSender()
 		{
-			DefaultRequestHeaders = {Accept = {new MediaTypeWithQualityHeaderValue(Mediatype) }}
-		};
+			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Mediatype));
+		}
 
 		public async Task<HttpResponseMessage> PutAsync(Uri url, object data)
 		{
@@ -24,7 +26,7 @@ namespace Stardust.Manager
 				var sez = JsonConvert.SerializeObject(data);
 
 				var response =
-					await _client.PutAsync(url, new StringContent(sez, Encoding.Unicode, Mediatype))
+					await Client.PutAsync(url, new StringContent(sez, Encoding.Unicode, Mediatype))
 						.ConfigureAwait(false);
 
 				return response;
@@ -45,7 +47,7 @@ namespace Stardust.Manager
 				var sez = JsonConvert.SerializeObject(data);
 
 				var response =
-					await _client.PostAsync(url, new StringContent(sez, Encoding.Unicode, Mediatype))
+					await Client.PostAsync(url, new StringContent(sez, Encoding.Unicode, Mediatype))
 						.ConfigureAwait(false);
 
 				return response;
@@ -63,7 +65,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				var response = await _client.DeleteAsync(url)
+				var response = await Client.DeleteAsync(url)
 					.ConfigureAwait(false);
 
 				return response;
