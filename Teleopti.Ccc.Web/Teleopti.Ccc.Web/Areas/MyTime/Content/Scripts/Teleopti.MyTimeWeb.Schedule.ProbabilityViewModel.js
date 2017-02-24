@@ -42,7 +42,9 @@
 
 	var index = rawProbability.Possibility;
 	var timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat;
-	var intervalTimeSpan = startMoment.format(timeFormat) + " - " + endMoment.format(timeFormat);
+	var dayDiff = endMoment.diff(startOfToday, "days");
+	var intervalTimeSpan = startMoment.format(timeFormat) + " - " + endMoment.format(timeFormat)
+		+ (dayDiff > 0 ? " +" + dayDiff : "");
 
 	var tooltips = "";
 	var cssClass = "probability-none";
