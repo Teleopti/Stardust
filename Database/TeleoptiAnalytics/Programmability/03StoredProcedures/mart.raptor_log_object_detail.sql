@@ -20,7 +20,7 @@ SELECT
 	l.log_object_id,
 	d.detail_desc,
 	d.proc_name,
-	DATEADD(mi,d.int_value*(1440/96),d.date_value) AS last_update
+	DATEADD(mi,d.int_value*(1440/l.intervals_per_day),d.date_value) AS last_update
 FROM mart.v_log_object l
 INNER JOIN [mart].[v_log_object_detail] d 
 	ON l.log_object_id=d.log_object_id
