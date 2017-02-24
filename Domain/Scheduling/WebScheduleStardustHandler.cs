@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 			catch (Exception e)
 			{
-				SaveDetailToJobResult(@event, DetailLevel.Error, null, e);
+				SaveDetailToJobResult(@event, DetailLevel.Error, "", e);
 				throw;
 			}
 		}

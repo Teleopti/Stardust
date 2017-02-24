@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var jobResultDetail = planningPeriod.JobResults.Single().Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
 			jobResultDetail.ExceptionMessage.Should().Not.Be.Null();
-			jobResultDetail.Message.Should().Be.Null();
+			jobResultDetail.Message.Should().Be.Empty();
 		}
 	}
 }

@@ -36,6 +36,26 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_agentGroupRepository = agentGroupRepository;
 		}
 
+
+		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/status/{id}")]
+		public virtual IHttpActionResult JobResult(Guid id)
+		{
+			var planningPeriod = _planningPeriodRespository.Get(id);
+			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();
+			if (lastJobResult != null)
+				return
+					Ok(
+						new
+						{
+							HasJob = true,
+							CurrentStep = lastJobResult.Details.Count(),
+							TotalSteps = 2,
+							Successful = lastJobResult.FinishedOk,
+							Failed = lastJobResult.Details.Any(x => x.DetailLevel == DetailLevel.Error)
+						});
+			return Ok(new {HasJob = false});
+		}
+
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodforagentgroup/{agentGroupId}")]
 		public virtual IHttpActionResult GetAllPlanningPeriods(Guid agentGroupId)
 		{

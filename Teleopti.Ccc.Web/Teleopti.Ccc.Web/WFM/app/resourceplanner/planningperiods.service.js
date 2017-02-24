@@ -4,10 +4,13 @@
 			//scheduling
 			this.launchScheduling = $resource('../api/ResourcePlanner/Schedule/:id', { id: "@id" }, {
 			});
-			this.launchOptimization = $resource('../api/ResourcePlanner/optimize/:id', { id: "@id" }, {
+			this.launchOptimization = $resource('../api/ResourcePlanner/Optimize/:id', { id: "@id" }, {
 			});
 			//planning period
 			this.getPlanningPeriod = $resource('../api/resourceplanner/planningperiod/:id', {id:"@id"}, {
+				query: { method: 'GET', params: {}, isArray: false }
+			});
+			this.jobStatus = $resource('../api/resourceplanner/planningperiod/status/:id', { id: "@id" }, {
 				query: { method: 'GET', params: {}, isArray: false }
 			});
 			this.changeRange = $resource('../api/resourceplanner/planningperiod/:id', { id: "@id" }, {
