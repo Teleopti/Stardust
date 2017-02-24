@@ -38,15 +38,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				var tuple = GetScheduleInfo(@event.PlanningPeriodId);
 				var result = _fullScheduling.DoScheduling(tuple.Item1, tuple.Item2);
-				var jobResultId = SaveJobResult(@event, result);
+				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 				_eventPublisher.Publish(new WebOptimizationStardustEvent(@event)
 				{
-					JobResultId = jobResultId
+					JobResultId = @event.JobResultId
 				});
 			}
 			catch (Exception e)
 			{
-				SaveExceptionDetailToJobResult(@event, DetailLevel.Error, null, e);
+				SaveDetailToJobResult(@event, DetailLevel.Error, null, e);
 				throw;
 			}
 		}
@@ -62,19 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[UnitOfWork]
-		protected virtual Guid SaveJobResult(WebScheduleStardustEvent @event, SchedulingResultModel result)
-		{
-			var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-			var webScheduleJobResult = _jobResultRepository.Get(@event.JobResultId);
-			webScheduleJobResult.AddDetail(new JobResultDetail(DetailLevel.Info, JsonConvert.SerializeObject(result), DateTime.UtcNow, null));
-			var jobResult = new JobResult(JobCategory.WebOptimization, webScheduleJobResult.Period, webScheduleJobResult.Owner, DateTime.UtcNow);
-			_jobResultRepository.Add(jobResult);
-			planningPeriod.JobResults.Add(jobResult);
-			return jobResult.Id.Value;
-		}
-
-		[UnitOfWork]
-		protected virtual void SaveExceptionDetailToJobResult(WebScheduleStardustEvent @event, DetailLevel level, string message, Exception exception)
+		protected virtual void SaveDetailToJobResult(WebScheduleStardustEvent @event, DetailLevel level, string message, Exception exception)
 		{
 			var webScheduleJobResult = _jobResultRepository.Get(@event.JobResultId);
 			webScheduleJobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));

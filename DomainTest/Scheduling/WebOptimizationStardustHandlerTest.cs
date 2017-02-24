@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			var jobResultId = Guid.NewGuid();
-			var jobResult = new JobResult(JobCategory.WebOptimization, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
+			var jobResult = new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
 			JobResultRepository.Add(jobResult);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			Target.Handle(reqEvent);
 
-			var jobResultDetail = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebOptimization).Details.Single();
+			var jobResultDetail = planningPeriod.JobResults.Single().Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Info);
 			jobResultDetail.ExceptionMessage.Should().Be.Null();
 			jobResultDetail.Message.Should().Not.Be.Null();
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			setCurrentPrincipal();
 			planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			var jobResultId = Guid.NewGuid();
-			var jobResult = new JobResult(JobCategory.WebOptimization, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
+			var jobResult = new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
 			JobResultRepository.Add(jobResult);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			Assert.Throws<InvalidOperationException>(() => Target.Handle(reqEvent));
 
-			var jobResultDetail = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebOptimization).Details.Single();
+			var jobResultDetail = planningPeriod.JobResults.Single().Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
 			jobResultDetail.ExceptionMessage.Should().Not.Be.Null();
 			jobResultDetail.Message.Should().Be.Null();

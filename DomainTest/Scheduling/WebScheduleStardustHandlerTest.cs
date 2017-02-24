@@ -164,14 +164,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			Target.Handle(reqEvent);
 
-			var webScheduleJobResult = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule);
-			var webOptimizationJobResult = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebOptimization);
-			webOptimizationJobResult.Should().Not.Be.Null();
-			webOptimizationJobResult.Owner.Should().Be.EqualTo(webScheduleJobResult.Owner);
-			webOptimizationJobResult.Period.Should().Be.EqualTo(webScheduleJobResult.Period);
-			EventPublisher.PublishedEvents.Single().GetType().Should().Be.EqualTo(typeof(WebOptimizationStardustEvent));
-			(EventPublisher.PublishedEvents.Single() as WebOptimizationStardustEvent).PlanningPeriodId.Should()
-				.Be.EqualTo(planningPeriod.Id.Value);
+			var webOptimizationStardustEvent = EventPublisher.PublishedEvents.Single() as WebOptimizationStardustEvent;
+			webOptimizationStardustEvent.PlanningPeriodId.Should().Be.EqualTo(planningPeriod.Id.Value);
+			webOptimizationStardustEvent.JobResultId.Should().Be.EqualTo(jobResult.Id.Value);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
