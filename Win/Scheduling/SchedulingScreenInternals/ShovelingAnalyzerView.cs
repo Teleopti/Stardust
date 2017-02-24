@@ -49,13 +49,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			output.AppendLine("---ADDED RESOURCES---");
 			foreach (var addedResource in trackShovling.AddedResources)
 			{
-				output.AppendLine($"Adding {addedResource.ResourcesMoved} resources based on skillgroup: {skillGroupAsString(addedResource.FromSkillGroup)}");
+				output.AppendLine($"Adding {addedResource.ResourcesMoved} resources");
+				output.AppendLine($" -> moved from skillgroup: {skillGroupAsString(addedResource.FromSkillGroup)}");
 			}
 			output.AppendLine();
 			output.AppendLine("---REMOVED RESOURCES---");
 			foreach (var removedResource in trackShovling.RemovedResources)
 			{
 				output.AppendLine($"Removing {removedResource.ResourcesMoved} resources");
+				output.AppendLine($" -> moved to subskills: {string.Join("::", removedResource.ToSubskills.Select(x => x.Name))}");
 			}
 			return output.ToString();
 		}

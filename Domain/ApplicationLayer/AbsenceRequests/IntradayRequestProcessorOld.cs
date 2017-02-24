@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						{
 							var state = _primarySkillOverstaff.AvailableSum(skillStaffIntervalHolder, allSkillGroups, skillGroupsWithSameIndex, layer.Period);
 							_addResourcesToSubSkills.Execute(state, skillStaffIntervalHolder, skillGroupsWithSameIndex, layer.Period, new NoShovelingCallback());
-							_reducePrimarySkillResources.Execute(state, skillStaffIntervalHolder, layer.Period, new NoShovelingCallback());
+							_reducePrimarySkillResources.Execute(state, skillStaffIntervalHolder, layer.Period, null, new NoShovelingCallback());
 						}
 					}
 				}

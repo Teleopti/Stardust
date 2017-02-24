@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ReducePrimarySkillResources
 	{
-		public void Execute(ShovelResourcesState state, IShovelResourceData shovelResourceData, DateTimePeriod interval, IShovelingCallback shovelingCallback)
+		public void Execute(ShovelResourcesState state, IShovelResourceData shovelResourceData, DateTimePeriod interval, IEnumerable<CascadingSkillGroup> skillGroup, IShovelingCallback shovelingCallback)
 		{
 			if (jumpOutEarly(state))
 				return;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				var percentageOverstaff = overstaffForSkill / state.TotalOverstaffingAtStart;
 				var resourceToSubtract = state.ResourcesMoved * percentageOverstaff;
 				shovelDataForInterval.AddResources(-resourceToSubtract);
-				shovelingCallback.ResourcesWasRemovedFrom(primarySkill, interval, resourceToSubtract);
+				shovelingCallback.ResourcesWasRemovedFrom(primarySkill, interval, skillGroup, resourceToSubtract);
 			}
 		}
 

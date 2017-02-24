@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			foreach (var skillGroup in skillGroupsWithSameIndex)
 			{
-				doForSkillgroup(shovelResourcesState, shovelResourceData, skillGroup, interval, shovelingCallback);
+				doForSkillgroup(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback);
 			}
 		}
 
-		private static void doForSkillgroup(ShovelResourcesState shovelResourcesState, IShovelResourceData shovelResourceData, CascadingSkillGroup skillGroup, DateTimePeriod interval, IShovelingCallback shovelingCallback)
+		private static void doForSkillgroup(ShovelResourcesState shovelResourcesState, IShovelResourceData shovelResourceData, CascadingSkillGroup skillGroup, DateTimePeriod interval, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, IShovelingCallback shovelingCallback)
 		{
 			var maxToMoveForThisSkillGroup = shovelResourcesState.MaxToMoveForThisSkillGroup(skillGroup);
 			var anySubSkillIsUnderstaffed = true;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 						var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 						shovelResourcesState.AddResourcesTo(dataForIntervalTo, skillGroup, resourceToMove);
-						shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroup, resourceToMove);
+						shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroupsWithSameIndex, skillGroup, resourceToMove);
 					}
 				}
 			}
