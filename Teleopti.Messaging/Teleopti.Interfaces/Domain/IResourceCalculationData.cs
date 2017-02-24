@@ -14,16 +14,8 @@ namespace Teleopti.Interfaces.Domain
 		bool SkipResourceCalculation { get; }
 		SkillCombinationHolder SkillCombinationHolder {get;}
 		ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; }
-		IShovelingCallback ShovelingCallback { get; }
-
-		void SetShovelingCallback(IShovelingCallback shovelingCallback);
-	}
-
-	public interface IShovelingCallback
-	{
-		void ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources);
-		void ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, double resources);
-		void BeforeShoveling(IShovelResourceData shovelResourceData);
+		object ShovelingCallback { get; }
+		void SetShovelingCallback(object shovelingCallback);
 	}
 
 	public class SkillCombinationResource

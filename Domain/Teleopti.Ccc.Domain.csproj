@@ -285,6 +285,7 @@
     <Compile Include="Cascading\ShovelResourceDataExtensions.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
+    <Compile Include="Cascading\IShovelingCallback.cs" />
     <Compile Include="ResourceCalculation\TrackShoveling.cs" />
     <Compile Include="Common\ClearPersonRelatedInformation.cs" />
     <Compile Include="Common\FavoriteSearch.cs" />
