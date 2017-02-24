@@ -141,6 +141,7 @@ Wfm_Seatplan_UseDatePeriodForPlanning_42167 = true
 Wfm_Intraday_38074 = true
 
 Wfm_People_PrepareForRelease_39040 = true
+Wfm_People_ImportAndCreateAgentFromFile_42528 = DEV
 
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
