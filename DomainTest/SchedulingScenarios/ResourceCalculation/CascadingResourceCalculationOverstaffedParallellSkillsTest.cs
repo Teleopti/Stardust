@@ -467,5 +467,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			skillDaySilver1.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		[Ignore("#41763")]
+		public void IsolatedSkillGroupsShouldNotAffectEachOther()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA1 = new Skill("A1").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB1 = new Skill("B1").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 100);
+			var skillA2 = new Skill("A2").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var skillB2 = new Skill("B2").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var assignments = new List<IPersonAssignment>();
+			for (var i = 0; i < 101; i++)
+			{
+				var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillB1);
+				assignments.Add(new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
+			}
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA2, skillB2);
+			assignments.Add(new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, assignments, new[] { skillDayA1, skillDayA2, skillDayB1, skillDayB2 }, false, false));
+
+			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayA2.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+		}
 	}
 }

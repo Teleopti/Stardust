@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public string SkillGroupIndexHash()
 		{
+			//TODO: returning unique hash here/removing this fixes /removing IsolatedSkillGroupsShouldNotAffectEachOther/#41763
 			var hash = new StringBuilder();
 			foreach (var primarySkill in PrimarySkills)
 			{
