@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/agentgroup/{id}")]
 		public virtual IHttpActionResult DeleteAgentGroup(Guid id)
 		{
+			_agentGroupModelPersister.Delete(id);
 			return Ok();
 		}
 	}
-
 }

@@ -35,8 +35,15 @@
       </many-to-any>
     </set>
 
+		<property name="IsDeleted"
+		  type="boolean"
+		  not-null="true"/>
+		
 		<filter name="businessUnitFilter"
 			condition=":businessUnitParameter = BusinessUnit" />
+
+		<filter name="deletedFlagFilter"
+		  condition="IsDeleted = 0" />
 	</class>
 
 </hibernate-mapping>

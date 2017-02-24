@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class AgentGroup : NonversionedAggregateRootWithBusinessUnit, IAgentGroup
+	public class AgentGroup : NonversionedAggregateRootWithBusinessUnit, IAgentGroup, IDeleteTag
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
+		private bool _isDeleted;
 
 		public AgentGroup():this(string.Empty)
 		{
@@ -34,6 +36,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_filters.Add(filter);
 			return this;
+		}
+
+		public virtual bool IsDeleted => _isDeleted;
+		public virtual void SetDeleted()
+		{
+			_isDeleted = true;
 		}
 	}
 }

@@ -41,5 +41,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				agentGroup.AddFilter(filter);
 			}
 		}
+
+		public void Delete(Guid id)
+		{
+			var agentGroup = _agentGroupRepository.Get(id);
+			if (agentGroup != null)
+				_agentGroupRepository.Remove(agentGroup);
+		}
 	}
 }

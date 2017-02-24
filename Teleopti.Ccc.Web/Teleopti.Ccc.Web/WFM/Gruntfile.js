@@ -399,6 +399,7 @@ module.exports = function (grunt) {
     grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
+	grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
 
     // for desktop client
     grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
