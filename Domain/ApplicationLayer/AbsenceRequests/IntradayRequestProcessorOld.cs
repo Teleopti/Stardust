@@ -112,6 +112,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
 				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+			
+				if(validators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator)))
+					foreach (var skillStaffingInterval in skillStaffingIntervals)
+					{
+						skillStaffingInterval.FStaff = skillStaffingInterval.ForecastWithShrinkage;
+					}
 
 				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
@@ -243,6 +249,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				relevantStaffingInterval.ForecastWithShrinkage = 0;
 				relevantStaffingInterval.FStaff = 0;
 			}
+		}
+
+		private static void setUseShrinkage(IEnumerable<SkillStaffingInterval> skillStaffingIntervals)
+		{
+
+			//To be fixed! 
+			//throw new NotImplementedException();
+
+			foreach (var skillStaffingInterval in skillStaffingIntervals)
+			{
+				skillStaffingInterval.FStaff = skillStaffingInterval.ForecastWithShrinkage;
+			}
+
+			//resourceCalculationData.SkillCombinationHolder?.StartRecodingValuesWithShrinkage();
+
+			//var items = resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items();
+			//foreach (var keyValuePair in items)
+			//{
+			//	var dic = keyValuePair.Value;
+			//	foreach (var resourceCalculationPeriod in dic.OnlyValues())
+			//	{
+			//		((ISkillStaffPeriod)resourceCalculationPeriod).Payload.UseShrinkage = true;
+			//	}
+			//}
+
 		}
 
 		private bool sendDenyCommand(Guid personRequestId, string denyReason)

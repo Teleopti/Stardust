@@ -1511,7 +1511,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
-		[Test][Ignore("WIP")]
+		[Test]
 		public void ShouldApproveWithShrinkageAdvanced()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -1579,7 +1579,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		[Ignore("WIP")]
 		public void ShouldApproveWithShrinkageAndCascading()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
