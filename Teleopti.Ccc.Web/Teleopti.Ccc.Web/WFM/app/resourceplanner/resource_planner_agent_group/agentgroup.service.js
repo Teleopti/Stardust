@@ -9,15 +9,15 @@
 
 	function factory($resource) {
 
-		var agentGroup = $resource('../api/ResourcePlanner/AgentGroup');
-		var agentGroupById = $resource('../api/ResourcePlanner/AgentGroup/:id', {id: "@id"});
+		var agentGroup = $resource('../api/ResourcePlanner/AgentGroup/:id', { id: "@id" });
 		var filterResult = $resource('../api/filtersagentgroup', {searchString: '@searchString', maxHits: 100});
 
 		var service = {
-			getAgentGroups: agentGroup,
-			saveAgentGroup: agentGroup,
-			getAgentGroupbyId: agentGroupById,
-			getFilterData: filterResult
+			getAgentGroups: agentGroup.query,
+			saveAgentGroup: agentGroup.save,
+			getAgentGroupbyId: agentGroup.get,
+			getFilterData: filterResult,
+			removeAgentGroup: agentGroup.remove
 		};
 		return service;
 	}

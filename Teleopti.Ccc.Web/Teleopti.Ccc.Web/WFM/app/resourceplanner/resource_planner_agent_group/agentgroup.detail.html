@@ -25,11 +25,16 @@
 				<md-tab label="Info">
 					<md-content class="md-padding">
 						<div class="con-flex">
+							<button type="button" name="button" ng-click="vm.removeAgentGroup(vm.agentGroup)" class="wfm-btn wfm-btn-default" translate>
+								Delete Agent Group
+							</button>
+						</div>
+						<div class="con-flex">
 							<h2> Agent Group: {{vm.agentGroup.Name}} </h2>
 							<div class="wfm-chip-wrap" ng-repeat="each in vm.agentGroup.Filters">
 								<span class="wfm-chip">
-						    <span class="chip-handle">{{each.FilterType}}</span>
-								<span class="chip-text" style="margin-right:20px;">{{each.Name}}</span>
+									<span class="chip-handle">{{each.FilterType}}</span>
+									<span class="chip-text" style="margin-right: 20px;">{{each.Name}}</span>
 								</span>
 							</div>
 						</div>

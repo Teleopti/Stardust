@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			return Ok(_fetchAgentGroupModel.Fetch(id));
 		}
+
+		[UnitOfWork, HttpDelete, Route("api/resourceplanner/agentgroup/{id}")]
+		public virtual IHttpActionResult DeleteAgentGroup(Guid id)
+		{
+			return Ok();
+		}
 	}
 
 }

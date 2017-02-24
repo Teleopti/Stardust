@@ -18,8 +18,8 @@
         getAgentGroups();
 
         function getAgentGroups(){
-          var getAgentGroups = agentGroupService.getAgentGroups.query();
-    			return getAgentGroups.$promise.then(function(data) {
+          var query = agentGroupService.getAgentGroups();
+          return query.$promise.then(function (data) {
     				vm.agentGroups = data;
     				return vm.agentGroups;
     			});
