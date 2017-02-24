@@ -816,6 +816,39 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ShouldReturnScheduledStaffingWithShrinkageSplit()
+		{
+			TimeZone.IsSweden();
+			fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false);
+			skill.DefaultResolution = minutesPerInterval*2;
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scheduledStaffingList = new List<SkillStaffingInterval>
+			{
+				new SkillStaffingInterval {
+					SkillId = skill.Id.Value,
+					StartDateTime = userNow,
+					EndDateTime = userNow.AddMinutes(minutesPerInterval*2),
+					StaffingLevel = 5.7d,
+					StaffingLevelWithShrinkage = 6.2d
+				}
+			};
+
+			SkillRepository.Has(skill);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+			var vm = Target.Load(new[] { skill.Id.Value }, true);
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduledStaffingList.First().StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(scheduledStaffingList.First().StaffingLevelWithShrinkage);
+			vm.DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(scheduledStaffingList.First().StaffingLevelWithShrinkage);
+		}
+
+		[Test]
 		public void ShouldReturnScheduledStaffingStartingBeforeForecasted()
 		{
 			TimeZone.IsSweden();
