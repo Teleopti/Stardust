@@ -5,7 +5,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod, firstDayOfWeek, defaultDateTimes) {
+Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstDayOfWeek, defaultDateTimes) {
 	var self = this;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template", "shiftexchangeoffer-request-detail-template"];
@@ -14,7 +14,11 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 
 	self.IsLoadingPersonalAccount = ko.observable(true);
 
-	var urlDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
+	var urlDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash.replace(/\//g, "-");
+	if (urlDate && urlDate.indexOf("/") >= 0) {
+		// Change date in style "2017/12/31" to "2017-12-31" to fix momentjs warning
+		urlDate = urlDate.replace(/\//g, "-");
+	}
 	self.DateFrom = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
 	self.DateTo = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
 
@@ -23,25 +27,25 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.TimeToInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultEndTime : null);
 	self.DateFormat = ko.observable();
 	self.TimeFrom = ko.computed({
-		read: function() {
+		read: function () {
 			if (self.IsFullDay()) {
 				return defaultDateTimes.defaultFulldayStartTime;
 			}
 			return self.TimeFromInternal();
 		},
-		write: function(value) {
+		write: function (value) {
 			if (self.IsFullDay()) return;
 			self.TimeFromInternal(value);
 		}
 	});
 	self.TimeTo = ko.computed({
-		read: function() {
+		read: function () {
 			if (self.IsFullDay()) {
 				return defaultDateTimes.defaultFulldayEndTime;
 			}
 			return self.TimeToInternal();
 		},
-		write: function(value) {
+		write: function (value) {
 			if (self.IsFullDay()) return;
 			self.TimeToInternal(value);
 		}
@@ -68,14 +72,14 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.IsEditable = ko.observable(true);
 	self.IsNewInProgress = ko.observable(false);
 	self.weekStart = ko.observable(firstDayOfWeek);
-	self.IsTimeInputEnabled = ko.computed(function() {
+	self.IsTimeInputEnabled = ko.computed(function () {
 		return !self.IsFullDay() && self.IsEditable();
 	});
-	self.IsTimeInputVisible = ko.computed(function() {
+	self.IsTimeInputVisible = ko.computed(function () {
 		return !self.IsFullDay();
 	});
 
-	self.Initialize = function(data) {
+	self.Initialize = function (data) {
 		self.Subject(data.Subject);
 		self.Message(data.Text);
 		self.DateFrom(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
@@ -83,8 +87,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		self.TimeFrom(Teleopti.MyTimeWeb.Common.FormatTime(data.DateTimeFrom));
 		self.TimeTo(Teleopti.MyTimeWeb.Common.FormatTime(data.DateTimeTo));
 
-		self.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth))); 
-		
+		self.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
+
 		self.EntityId(data.Id);
 		self.AbsenceId(data.PayloadId);
 		self.DenyReason(data.DenyReason);
@@ -93,16 +97,16 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		self.WaitlistPosition(data.WaitlistPosition);
 
 		self.onLoadComplete();
-		
+
 	};
 
-	self.onLoadComplete = function() {
+	self.onLoadComplete = function () {
 
-		self.AbsenceId.subscribe(function() {
+		self.AbsenceId.subscribe(function () {
 			loadAbsenceAccount(false);
 		});
 
-		self.DateTo.subscribe(function() {
+		self.DateTo.subscribe(function () {
 			loadAbsenceAccount(false);
 		});
 
@@ -117,7 +121,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		}
 	};
 
-	self.readAbsenceAccount = function(data) {
+	self.readAbsenceAccount = function (data) {
 		if (data) {
 			self.AbsenceAccountExists(true);
 			self.AbsenceTrackedAsDay(data.TrackerType == "Days");
@@ -140,9 +144,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 
 		self.IsLoadingPersonalAccount(false);
 	};
-	
+
 	function loadAbsenceAccount(forceAccountUpdate) {
-		if (!self.PersonalAccountPermission || self.AbsenceId() == undefined || self.AbsenceId() == null )
+		if (!self.PersonalAccountPermission || self.AbsenceId() == undefined || self.AbsenceId() == null)
 			return;
 		var absenceChanged = self.AbsenceId() != self.PreviousAbsenceId();
 		var dateToChanged = !self.DateTo().isSame(self.PreviousDateTo().format("YYYY-MM-DD HH:mm:ss"));
@@ -159,7 +163,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 				data: {
 					absenceId: self.AbsenceId(),
 					date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateTo())
-		},
+				},
 				success: function (data, textStatus, jqXHR) {
 					self.readAbsenceAccount(data);
 				},
@@ -174,66 +178,66 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		if ((absenceChanged)) {
 			self.PreviousAbsenceId(self.AbsenceId());
 		}
-	    
+
 		if (dateToChanged) {
 			self.PreviousDateTo(self.DateTo());
 		}
 	};
 	self.PersonalAccountPermission = ko.observable(false);
-	self.readPersonalAccountPermission = function(data) {
+	self.readPersonalAccountPermission = function (data) {
 		self.PersonalAccountPermission(data);
 	};
 
-	self.ShowAbsenceAccount = ko.computed(function() {
+	self.ShowAbsenceAccount = ko.computed(function () {
 		return self.PersonalAccountPermission() && self.AbsenceAccountExists() && self.IsEditable();
 	});
-	
-	
+
+
 	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
-    });
-    
-    self.ShowAbsencesCombo = ko.computed(function() {
-        return self.TypeEnum() === 1 ? true : false;
-    });
+	});
 
-    self.AddRequestCallback = undefined;
+	self.ShowAbsencesCombo = ko.computed(function () {
+		return self.TypeEnum() === 1 ? true : false;
+	});
 
-    self.AddRequest = function() {
-        addRequestMethod(self, self.AddRequestCallback);
-    };
-	
-    function _setDefaultDates() {
-        var year = defaultDateTimes.todayYear;
-        var month = defaultDateTimes.todayMonth;
-        var day = defaultDateTimes.todayDay;
+	self.AddRequestCallback = undefined;
 
-        self.DateFrom(moment(new Date(year, month - 1, day)));
-        self.DateTo(moment(new Date(year, month - 1, day)));
-    }
-	
-    self.AddTextRequest = function (useDefaultDates) {
-        if (useDefaultDates != undefined && useDefaultDates === true)
-            _setDefaultDates();
-        self.IsNewInProgress(true);
+	self.AddRequest = function () {
+		addRequestMethod(self, self.AddRequestCallback);
+	};
+
+	function _setDefaultDates() {
+		var year = defaultDateTimes.todayYear;
+		var month = defaultDateTimes.todayMonth;
+		var day = defaultDateTimes.todayDay;
+
+		self.DateFrom(moment(new Date(year, month - 1, day)));
+		self.DateTo(moment(new Date(year, month - 1, day)));
+	}
+
+	self.AddTextRequest = function (useDefaultDates) {
+		if (useDefaultDates != undefined && useDefaultDates === true)
+			_setDefaultDates();
+		self.IsNewInProgress(true);
 		self.TypeEnum(0);
 		self.IsFullDay(false);
-		
-    };
 
-    self.AddAbsenceRequest = function (useDefaultDates) {
-        if (useDefaultDates != undefined && useDefaultDates === true)
-            _setDefaultDates();
-        self.IsNewInProgress(true);
+	};
+
+	self.AddAbsenceRequest = function (useDefaultDates) {
+		if (useDefaultDates != undefined && useDefaultDates === true)
+			_setDefaultDates();
+		self.IsNewInProgress(true);
 		self.TypeEnum(1);
 		self.IsFullDay(true);
 
-	    self.onLoadComplete();
-    };
+		self.onLoadComplete();
+	};
 
-    self.CancelAddingNewRequest = function() {
+	self.CancelAddingNewRequest = function () {
 
-        self.IsNewInProgress(false);
-    };
-	
+		self.IsNewInProgress(false);
+	};
+
 };
