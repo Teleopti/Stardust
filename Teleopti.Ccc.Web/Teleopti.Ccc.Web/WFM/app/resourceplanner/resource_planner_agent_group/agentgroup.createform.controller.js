@@ -22,6 +22,11 @@
 		vm.results = [];
 		vm.selectedResults = [];
 		vm.name = '';
+		vm.cancelCreate = cancelCreate;
+
+		function cancelCreate() {
+			$state.go('resourceplanner.agentgroups');
+		}
 
 		function inputFilterData() {
 			var searchString = vm.searchString;

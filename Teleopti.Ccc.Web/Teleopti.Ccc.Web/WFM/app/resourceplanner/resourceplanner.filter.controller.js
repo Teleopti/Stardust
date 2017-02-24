@@ -166,18 +166,25 @@
 							Default: $scope.default,
 							Filters: $scope.selectedResults
 						}).$promise.then(function () {
-							if ($stateParams.groupId) {
-								$state.go('resourceplanner.oneagentroup', {
-									groupId: $stateParams.groupId
-								});
-							} else {
-								$state.go('resourceplanner.planningperiod', {
-									id: $stateParams.periodId
-								});
-							}
+							returnFromCreate();
 						});
 					}
 				}
+				$scope.cancelCreate = returnFromCreate;
+
+				function returnFromCreate() {
+					if ($stateParams.groupId) {
+						$state.go('resourceplanner.oneagentroup',
+						{
+							groupId: $stateParams.groupId
+						});
+					} else {
+						$state.go('resourceplanner.planningperiod',
+						{
+							id: $stateParams.periodId
+						});
+					}
+				};
 			}
 		]);
 })();

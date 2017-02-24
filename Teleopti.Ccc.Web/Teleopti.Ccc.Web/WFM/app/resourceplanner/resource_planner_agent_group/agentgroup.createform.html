@@ -53,6 +53,7 @@
 			</div>
 			<div class="con-row">
 				<div class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelCreate()">{{'Cancel'|translate}}</button>
 					<button class="wfm-btn" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}" ng-click="vm.persist()" translate>Save</button>
 				</div>
 			</div>
