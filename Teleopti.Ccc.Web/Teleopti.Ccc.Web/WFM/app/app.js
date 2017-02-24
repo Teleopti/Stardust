@@ -49,7 +49,8 @@ var wfm = angular.module('wfm', [
 	'wfm.utilities',
 	'wfm.rtaTool',
 	'wfm.staffing',
-	'wfm.dataProtection'
+	'wfm.dataProtection',
+	'wfm.templates'
 ]);
 
 wfm.config([

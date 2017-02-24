@@ -32,7 +32,7 @@
         var themeComponent = document.getElementById('theme' + element);
         if (themeComponent) {
           var hash = extractHash(themeComponent);
-          themeComponent.setAttribute('href', 'dist/' + element.toLowerCase() + '_' + theme + '.min.css' + hash);
+          themeComponent.setAttribute('href', 'dist/' + element.toLowerCase() + '_' + theme + '.min.css' + hash + '?' + new Date().getTime());
           themeComponent.setAttribute('class',theme);
           if (element === "Modules") {
             themeComponent.onload = function() {
