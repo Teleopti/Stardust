@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
 			if (useShrinkage)
-				setUseShrinkage(resCalcData);
+				setUseShrinkage(skillStaffingIntervals);
 
 			using (getContext(combinationResources, skills, dateOnlyPeriod, false))
 			{
@@ -78,25 +78,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			return new ResourceCalculationContextFactory(null, null).Create(combinationResources, skills, false, dateOnlyPeriod, useAllSkills);
 		}
 
-		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData)
+		private static void setUseShrinkage(IEnumerable<SkillStaffingInterval> relevantSkillStaffPeriods)
 		{
-
-			//To be fixed! 
-
-			throw new NotImplementedException();
-
-			//resourceCalculationData.SkillCombinationHolder?.StartRecodingValuesWithShrinkage();
-
-			//var items = resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items();
-			//foreach (var keyValuePair in items)
-			//{
-			//	var dic = keyValuePair.Value;
-			//	foreach (var resourceCalculationPeriod in dic.OnlyValues())
-			//	{
-			//		((ISkillStaffPeriod)resourceCalculationPeriod).Payload.UseShrinkage = true;
-			//	}
-			//}
-
+			foreach (var skillStaffPeriod in relevantSkillStaffPeriods)
+			{
+				skillStaffPeriod.FStaff = skillStaffPeriod.ForecastWithShrinkage;
+			}
 		}
 	}
 

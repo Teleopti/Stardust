@@ -110,14 +110,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						select distributeResourceSmartly(combinationResources, skillCombination, layer));
 				}
 
-
-				//Fix to check if shrikage is needed!!!!
-				var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList(), false);
-
-				var staffingThresholdValidator = validators.OfType<StaffingThresholdValidator>().FirstOrDefault();
-				if (staffingThresholdValidator != null)
+				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
+				if (staffingThresholdValidators.Any())
 				{
-					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);
+					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
+					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList(), useShrinkage);
+					
+					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);
 					if (validatedRequest.IsValid)
 					{
 						if (!autoGrant) return;
