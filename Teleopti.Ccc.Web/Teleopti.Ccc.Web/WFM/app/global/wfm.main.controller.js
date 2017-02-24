@@ -31,8 +31,7 @@
       styleElements.forEach(function(element) {
         var themeComponent = document.getElementById('theme' + element);
         if (themeComponent) {
-          var hash = extractHash(themeComponent);
-          themeComponent.setAttribute('href', 'dist/' + element.toLowerCase() + '_' + theme + '.min.css' + hash + '?' + new Date().getTime());
+          themeComponent.setAttribute('href', 'dist/' + element.toLowerCase() + '_' + theme + '.min.css' + '?' + new Date().getTime());
           themeComponent.setAttribute('class',theme);
           if (element === "Modules") {
             themeComponent.onload = function() {
@@ -51,15 +50,6 @@
         currentStyle = document.getElementById('themeStyle').className;
       }
       return currentStyle;
-    }
-
-    function extractHash(element) {
-      var hashvalue = element.href.match("\\?(.*)"); //[^\\?]*$
-      var returnValue = "";
-      if (hashvalue) {
-        returnValue = hashvalue[0];
-      }
-      return returnValue;
     }
   }
 })();
