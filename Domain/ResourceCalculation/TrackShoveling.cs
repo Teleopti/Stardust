@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IEnumerable<RemovedResource> RemovedResources => _removedResources;
 		public double ResourcesBeforeShoveling { get; private set; }
 
-		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<ISkill> primarySkillsMovedFrom, double resources)
+		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, CascadingSkillGroup fromSkillGroup, double resources)
 		{
 			if (skillToMoveTo.Equals(_skillToTrack) && interval == _intervalToTrack)
 			{
-				_addedResources.Add(new AddedResource(primarySkillsMovedFrom, resources));
+				_addedResources.Add(new AddedResource(fromSkillGroup, resources));
 			}
 		}
 
@@ -46,13 +46,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class AddedResource
 	{
-		public AddedResource(IEnumerable<ISkill> fromPrimarySkills, double resourcesMoved)
+		public AddedResource(CascadingSkillGroup fromSkillGroup, double resourcesMoved)
 		{
-			FromPrimarySkills = fromPrimarySkills;
+			FromSkillGroup = fromSkillGroup;
 			ResourcesMoved = resourcesMoved;
 		}
-
-		public IEnumerable<ISkill> FromPrimarySkills { get; }
+		public CascadingSkillGroup FromSkillGroup { get; }
 		public double ResourcesMoved { get; }
 	}
 

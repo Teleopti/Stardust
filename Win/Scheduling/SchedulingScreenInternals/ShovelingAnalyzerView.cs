@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			output.AppendLine("---ADDED RESOURCES---");
 			foreach (var addedResource in trackShovling.AddedResources)
 			{
-				output.AppendLine($"Adding {addedResource.ResourcesMoved} resources based on skillgroup: {string.Join("::", addedResource.FromPrimarySkills.Select(x => x.Name))}");
+				output.AppendLine($"Adding {addedResource.ResourcesMoved} resources based on skillgroup: {skillGroupAsString(addedResource.FromSkillGroup)}");
 			}
 			output.AppendLine();
 			output.AppendLine("---REMOVED RESOURCES---");
@@ -57,6 +58,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				output.AppendLine($"Removing {removedResource.ResourcesMoved} resources");
 			}
 			return output.ToString();
+		}
+
+		private static string skillGroupAsString(CascadingSkillGroup skillGroup)
+		{
+			var allSkills = skillGroup.PrimarySkills.Union(skillGroup.SubSkillsWithSameIndex.SelectMany(x => x));
+			return string.Join("::", allSkills.Select(x => x.Name));
 		}
 	}
 }
