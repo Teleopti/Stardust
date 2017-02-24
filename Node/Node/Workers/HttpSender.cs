@@ -13,7 +13,8 @@ namespace Stardust.Node.Workers
 {
 	public class HttpSender : IHttpSender
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (HttpSender));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(HttpSender));
+		private readonly HttpClient _client = new HttpClient();
 
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data)
@@ -27,21 +28,20 @@ namespace Stardust.Node.Workers
 		{
 			try
 			{
-				using (var client = new HttpClient())
-				{
-					var sez = JsonConvert.SerializeObject(data);
 
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				var sez = JsonConvert.SerializeObject(data);
 
-					var response =
-						await client.PostAsync(url,
-						                       new StringContent(sez,
-						                                         Encoding.Unicode,
-						                                         "application/json"),
-						                       cancellationToken)
-							.ConfigureAwait(false);
-					return response;
-				}
+				_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+				var response =
+					await _client.PostAsync(url,
+					                        new StringContent(sez,
+					                                          Encoding.Unicode,
+					                                          "application/json"),
+					                        cancellationToken)
+						.ConfigureAwait(false);
+				return response;
+
 			}
 			catch (Exception exp)
 			{

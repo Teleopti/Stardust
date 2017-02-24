@@ -11,21 +11,20 @@ namespace Stardust.Manager
 {
 	public class HttpSender : IHttpSender
 	{
+		private readonly HttpClient _client = new HttpClient();
 		public async Task<HttpResponseMessage> PutAsync(Uri url, object data)
 		{
 			try
 			{
-				using (var client = new HttpClient())
-				{
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+					_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 					var sez = JsonConvert.SerializeObject(data);
 
 					var response =
-						await client.PutAsync(url, new StringContent(sez, Encoding.Unicode, "application/json"))
+						await _client.PutAsync(url, new StringContent(sez, Encoding.Unicode, "application/json"))
 							.ConfigureAwait(false);
 
 					return response;
-				}
+				
 			}
 			catch (Exception exp)
 			{
@@ -39,17 +38,15 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				using (var client = new HttpClient())
-				{
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-					var sez = JsonConvert.SerializeObject(data);
+				_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				var sez = JsonConvert.SerializeObject(data);
 
-					var response =
-						await client.PostAsync(url, new StringContent(sez, Encoding.Unicode, "application/json"))
-							.ConfigureAwait(false);
+				var response =
+					await _client.PostAsync(url, new StringContent(sez, Encoding.Unicode, "application/json"))
+						.ConfigureAwait(false);
 
-					return response;
-				}
+				return response;
+
 			}
 			catch (Exception exp)
 			{
@@ -63,15 +60,13 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				using (var client = new HttpClient())
-				{
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-					var response = await client.DeleteAsync(url)
-						.ConfigureAwait(false);
+				var response = await _client.DeleteAsync(url)
+					.ConfigureAwait(false);
 
-					return response;
-				}
+				return response;
+
 			}
 			catch (Exception exp)
 			{
