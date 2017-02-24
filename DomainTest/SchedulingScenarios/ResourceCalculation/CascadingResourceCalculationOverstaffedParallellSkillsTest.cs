@@ -4,10 +4,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -15,9 +17,23 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationOverstaffedParallellSkillsTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class CascadingResourceCalculationOverstaffedParallellSkillsTest : IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerNotShovelCorrectly41763;
 		public IResourceCalculation Target;
+
+		public CascadingResourceCalculationOverstaffedParallellSkillsTest(bool resourcePlannerNotShovelCorrectly41763)
+		{
+			_resourcePlannerNotShovelCorrectly41763 = resourcePlannerNotShovelCorrectly41763;
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if(_resourcePlannerNotShovelCorrectly41763)
+				toggleManager.Enable(Toggles.ResourcePlanner_NotShovelCorrectly_41763);
+		}
 
 		[Test]
 		public void ShouldMoveResourceToTwoSkillsWithSameDemand()
@@ -469,9 +485,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("#41763")]
 		public void IsolatedSkillGroupsShouldNotAffectEachOther()
 		{
+			if(!_resourcePlannerNotShovelCorrectly41763)
+				Assert.Ignore("only works if toggle is on");
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;

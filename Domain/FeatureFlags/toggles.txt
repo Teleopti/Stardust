@@ -170,6 +170,7 @@ ResourcePlanner_LessPersonAssignmentUpdates_42159 = true
 ResourcePlanner_ShiftCategoryLimitations_42680 = true
 ResourcePlanner_IntradayNoDailyValueCheck_42767 = RC
 ResourcePlanner_LoadingLessSchedules_42639 = RC
+ResourcePlanner_NotShovelCorrectly_41763 = true
 
 Wfm_DisplayOnlineHelp_39402 = RC
 

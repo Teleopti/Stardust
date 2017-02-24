@@ -104,7 +104,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
 			builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
 			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
-			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_NotShovelCorrectly_41763))
+			{
+				builder.RegisterType<SkillGroupPerActivityProvider2>().As<SkillGroupPerActivityProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
+			}
 
 			builder.RegisterType<FullResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();

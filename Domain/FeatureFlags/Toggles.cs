@@ -161,6 +161,7 @@
 		ResourcePlanner_ShiftCategoryLimitations_42680,
 		ResourcePlanner_IntradayNoDailyValueCheck_42767,
 		ResourcePlanner_LoadingLessSchedules_42639,
+		ResourcePlanner_NotShovelCorrectly_41763,
 
 		Wfm_DisplayOnlineHelp_39402,
 

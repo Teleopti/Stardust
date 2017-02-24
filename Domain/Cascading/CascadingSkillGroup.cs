@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
@@ -20,23 +21,37 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public IEnumerable<SubSkillsWithSameIndex> SubSkillsWithSameIndex { get; }
 		public double RemainingResources { get; set; }
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_NotShovelCorrectly_41763)]
 		public string SkillGroupIndexHash()
 		{
-			//TODO: returning unique hash here/removing this fixes /removing IsolatedSkillGroupsShouldNotAffectEachOther/#41763
-			var hash = new StringBuilder();
+			var primaryHash = new StringBuilder();
 			foreach (var primarySkill in PrimarySkills)
 			{
-				hash.Append(primarySkill.CascadingIndex + "|");
+				primaryHash.Append(primarySkill.CascadingIndex + "|");
 			}
+			return primaryHash.Append(subskillHash()).ToString();
+		}
+
+		public bool HasSameSkillGroupIndexAs(CascadingSkillGroup otherSkillGroup)
+		{
+			var thisPrimary = new HashSet<ISkill>(PrimarySkills);
+			if (!thisPrimary.SetEquals(otherSkillGroup.PrimarySkills))
+				return false;
+			return subskillHash() == otherSkillGroup.subskillHash();
+		}
+
+		private string subskillHash()
+		{
+			var subHash = new StringBuilder();
 			foreach (var subSkills in SubSkillsWithSameIndex)
 			{
-				hash.Append("subindex:" + subSkills.CascadingIndex);
+				subHash.Append("subindex:" + subSkills.CascadingIndex);
 				foreach (var subSkill in subSkills)
 				{
-					hash.Append(subSkill.CascadingIndex);
+					subHash.Append(subSkill.CascadingIndex);
 				}
 			}
-			return hash.ToString();
+			return subHash.ToString();
 		}
 	}
 }

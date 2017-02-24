@@ -1,9 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_NotShovelCorrectly_41763)]
+	public class SkillGroupPerActivityProvider2 : SkillGroupPerActivityProvider
+	{
+		protected override bool SameSkillGroupIndexHash(CascadingSkillGroup thisSkillGroup, CascadingSkillGroup thatSkillGroup)
+		{
+			return thisSkillGroup.HasSameSkillGroupIndexAs(thatSkillGroup);
+		}
+	}
+
 	public class SkillGroupPerActivityProvider
 	{
 		public OrderedSkillGroups FetchOrdered(CascadingSkills cascadingSkills, IResourcesForShovelAndCalculation resources, IActivity activity, DateTimePeriod period)
@@ -41,13 +51,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 			return mergeSkillGroupsWithSameIndex(cascadingSkillGroups);
 		}
 
-		private static OrderedSkillGroups mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillGroup> cascadingSkillGroups)
+		private OrderedSkillGroups mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillGroup> cascadingSkillGroups)
 		{
 			var ret = new List<List<CascadingSkillGroup>>();
 			foreach (var skillGroup in cascadingSkillGroups)
 			{
 				var retLast = ret.LastOrDefault();
-				if (retLast == null || retLast.First().SkillGroupIndexHash() != skillGroup.SkillGroupIndexHash())
+				if (retLast == null || !SameSkillGroupIndexHash(retLast.First(), skillGroup))
 				{
 					ret.Add(new List<CascadingSkillGroup> {skillGroup});
 				}
@@ -57,6 +67,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 				}
 			}
 			return new OrderedSkillGroups(ret);
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_NotShovelCorrectly_41763)]
+		protected virtual bool SameSkillGroupIndexHash(CascadingSkillGroup thisSkillGroup, CascadingSkillGroup thatSkillGroup)
+		{
+			return thisSkillGroup.SkillGroupIndexHash() == thatSkillGroup.SkillGroupIndexHash();
 		}
 	}
 }
