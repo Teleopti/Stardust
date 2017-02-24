@@ -1475,10 +1475,12 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroups.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.html" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.service.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_v2\resourceplanner.route.service.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.service.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.controller.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.html" />
     <Content Include="WFM\app\rtaTool\rtaTool.service.js" />
