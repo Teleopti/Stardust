@@ -10,7 +10,7 @@ using Stardust.Manager.Interfaces;
 namespace Stardust.Manager
 {
 	public class HttpSender : IHttpSender
-	{
+	{	
 		private const string Mediatype = "application/json";
 		private static readonly HttpClient Client = new HttpClient();
 
