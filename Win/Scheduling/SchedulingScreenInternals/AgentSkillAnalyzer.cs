@@ -36,13 +36,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			InitializeComponent();
 		}
 
-		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod)
-		{		
+		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList,
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod)
+		{
 			InitializeComponent();
 			_dtpDate = new DateTimePicker {Format = DateTimePickerFormat.Short};
 			toolStripMain.Items.Add(new ToolStripControlHost(_dtpDate));
 			_personList = personList;
-			_loadedSkillList = skillList.Where(s=> s.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToList();
+			_loadedSkillList = skillList.Where(s => s.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToList();
 			_skillDays = skillDays;
 			_datePeriod = datePeriod;
 			_date = datePeriod.StartDate;

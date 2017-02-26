@@ -723,6 +723,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var skillGridMenuItem2 = new ToolStripMenuItem("Analyze shoveling");
 					skillGridMenuItem2.Click += skillGridMenuItemShovelAnalyzerClick;
 					_contextMenuSkillGrid.Items.Add(skillGridMenuItem2);
+					var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
+					skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;
+					_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 				}
 			}
 			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
@@ -4364,6 +4367,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_skillIntradayGridControl.Presenter.SelectedIntervalTime().GetValueOrDefault());
 					resourceChanges.ShowDialog(this);
 				}
+			}
+		}
+
+		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)
+		{
+			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.PersonsInOrganization,
+				SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.SkillDays,
+				SchedulerState.RequestedPeriod.DateOnlyPeriod))
+			{
+				analyzer.LoadData();
+				analyzer.ShowDialog(this);
 			}
 		}
 
