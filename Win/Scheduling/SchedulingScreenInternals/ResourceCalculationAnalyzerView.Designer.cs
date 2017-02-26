@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResourceCalculationAnalyzerView));
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -43,7 +44,16 @@
 			this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
 			this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
 			this.button1 = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripButtonBefore = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonShowNotAffected = new System.Windows.Forms.ToolStripButton();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+			this.toolStrip1.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// listView1
@@ -65,7 +75,7 @@
             this.columnHeader11});
 			this.listView1.Location = new System.Drawing.Point(0, 28);
 			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(1188, 460);
+			this.listView1.Size = new System.Drawing.Size(1188, 435);
 			this.listView1.TabIndex = 0;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
@@ -153,27 +163,100 @@
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
-			// label1
+			// toolStrip1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(13, 9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(0, 13);
-			this.label1.TabIndex = 4;
+			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.toolStripButtonBefore,
+            this.toolStripButtonShowNotAffected});
+			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip1.Name = "toolStrip1";
+			this.toolStrip1.Size = new System.Drawing.Size(1188, 25);
+			this.toolStrip1.TabIndex = 5;
+			this.toolStrip1.Text = "toolStrip1";
+			// 
+			// toolStripLabel1
+			// 
+			this.toolStripLabel1.Name = "toolStripLabel1";
+			this.toolStripLabel1.Size = new System.Drawing.Size(56, 22);
+			this.toolStripLabel1.Text = "här är jag";
+			// 
+			// toolStripButtonBefore
+			// 
+			this.toolStripButtonBefore.Checked = true;
+			this.toolStripButtonBefore.CheckOnClick = true;
+			this.toolStripButtonBefore.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toolStripButtonBefore.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonBefore.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonBefore.Image")));
+			this.toolStripButtonBefore.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonBefore.Name = "toolStripButtonBefore";
+			this.toolStripButtonBefore.Size = new System.Drawing.Size(77, 22);
+			this.toolStripButtonBefore.Text = "Show before";
+			this.toolStripButtonBefore.CheckedChanged += new System.EventHandler(this.toolStripButtonBefore_CheckedChanged);
+			// 
+			// toolStripButtonShowNotAffected
+			// 
+			this.toolStripButtonShowNotAffected.Checked = true;
+			this.toolStripButtonShowNotAffected.CheckOnClick = true;
+			this.toolStripButtonShowNotAffected.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toolStripButtonShowNotAffected.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonShowNotAffected.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShowNotAffected.Image")));
+			this.toolStripButtonShowNotAffected.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonShowNotAffected.Name = "toolStripButtonShowNotAffected";
+			this.toolStripButtonShowNotAffected.Size = new System.Drawing.Size(107, 22);
+			this.toolStripButtonShowNotAffected.Text = "Show not affected";
+			this.toolStripButtonShowNotAffected.CheckedChanged += new System.EventHandler(this.toolStripButtonShowNotAffected_CheckedChanged);
+			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.WorkerReportsProgress = true;
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripProgressBar1});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 466);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(1188, 22);
+			this.statusStrip1.TabIndex = 6;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(39, 17);
+			this.toolStripStatusLabel1.Text = "Ready";
+			// 
+			// toolStripProgressBar1
+			// 
+			this.toolStripProgressBar1.Maximum = 5;
+			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+			this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+			this.toolStripProgressBar1.Step = 1;
+			this.toolStripProgressBar1.Visible = false;
 			// 
 			// ResourceCalculationAnalyzerView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1188, 488);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.statusStrip1);
+			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.dateTimePicker2);
 			this.Controls.Add(this.dateTimePicker1);
 			this.Controls.Add(this.listView1);
 			this.Name = "ResourceCalculationAnalyzerView";
-			this.Text = "ResourceCalculationAnalyzerView";
+			this.Text = "Resource Calculation Analyzer";
 			this.Load += new System.EventHandler(this.ResourceCalculationAnalyzerView_Load);
+			this.toolStrip1.ResumeLayout(false);
+			this.toolStrip1.PerformLayout();
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -191,11 +274,18 @@
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
 		private System.Windows.Forms.ColumnHeader columnHeader6;
-		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ColumnHeader columnHeader7;
 		private System.Windows.Forms.ColumnHeader columnHeader8;
 		private System.Windows.Forms.ColumnHeader columnHeader9;
 		private System.Windows.Forms.ColumnHeader columnHeader10;
 		private System.Windows.Forms.ColumnHeader columnHeader11;
+		private System.Windows.Forms.ToolStrip toolStrip1;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+		private System.Windows.Forms.ToolStripButton toolStripButtonBefore;
+		private System.Windows.Forms.ToolStripButton toolStripButtonShowNotAffected;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -10,16 +11,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 {
 	public class ResourceCalculationAnalyzerModel
 	{
-		private readonly SchedulingScreen _scheduler;
+		private readonly ISchedulerStateHolder _stateHolder;
 		private readonly IUndoRedoContainer _undoRedoContainer;
 		private readonly ILifetimeScope _container;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
 		private DateOnly _selectedDate;
 		private TimeSpan? _selectedTime;
 
-		public ResourceCalculationAnalyzerModel(SchedulingScreen scheduler, IUndoRedoContainer undoRedoContainer, ILifetimeScope container, IResourceOptimizationHelperExtended optimizationHelperExtended, DateOnly selectedDate, TimeSpan? selectedTime)
+		public ResourceCalculationAnalyzerModel(ISchedulerStateHolder stateHolder, IUndoRedoContainer undoRedoContainer, ILifetimeScope container, IResourceOptimizationHelperExtended optimizationHelperExtended, DateOnly selectedDate, TimeSpan? selectedTime)
 		{
-			_scheduler = scheduler;
+			_stateHolder = stateHolder;
 			_undoRedoContainer = undoRedoContainer;
 			_container = container;
 			_optimizationHelperExtended = optimizationHelperExtended;
@@ -39,27 +40,28 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		public DateOnlyPeriod Period()
 		{
-			return _scheduler.SchedulerState.RequestedPeriod.DateOnlyPeriod;
+			return _stateHolder.RequestedPeriod.DateOnlyPeriod;
 		}
 
-		public IDictionary<ISkill, ResourceCalculationAnalyzerModelResult> AnalyzeLastChange(DateTime localDateTime)
+		public IDictionary<ISkill, ResourceCalculationAnalyzerModelResult> AnalyzeLastChange(DateTime localDateTime, BackgroundWorker worker)
 		{
-			if(_undoRedoContainer.InUndoRedo)
+			if (_undoRedoContainer.InUndoRedo)
 				return null;
 
 			if (!_undoRedoContainer.CanUndo())
 				return null;
 
-			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, _scheduler.SchedulerState.TimeZoneInfo).AddTicks(1);
+			worker.ReportProgress(1, "Analyzing Step 1...");
+			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, _stateHolder.TimeZoneInfo).AddTicks(1);
 			var result = new Dictionary<ISkill, ResourceCalculationAnalyzerModelResult>();
 			var skills =
-				_scheduler.SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.Where(
+				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.Where(
 					s => s.SkillType.ForecastSource != ForecastSource.MaxSeatSkill);
-			
-			_undoRedoContainer.Undo();
-			var period = new DateOnlyPeriod(_scheduler.SchedulerState.DaysToRecalculate.Min(),
-				_scheduler.SchedulerState.DaysToRecalculate.Max());
-			var skillStaffperiods = _scheduler.SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
+
+			var period = new DateOnlyPeriod(new DateOnly(localDateTime.Date), new DateOnly(localDateTime.Date));
+			IList<ISkillStaffPeriod> skillStaffperiods;
+			skillStaffperiods =
+				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
 					new DateTimePeriod(utcDateTime, utcDateTime));
 
 			foreach (var skillStaffperiod in skillStaffperiods)
@@ -67,13 +69,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				result.Add(skillStaffperiod.SkillDay.Skill, new ResourceCalculationAnalyzerModelResult());
 			}
 
+			_undoRedoContainer.Undo();
+
 			using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling>().MakeSureExists(period))
 			{
-				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(), _scheduler.SchedulerState.ConsiderShortBreaks, true);
+				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(),
+					_stateHolder.ConsiderShortBreaks, true);
 			}
 
+			worker.ReportProgress(2, "Analyzing Step 2...");
+
 			skillStaffperiods =
-				_scheduler.SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
+				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
 					new DateTimePeriod(utcDateTime, utcDateTime));
 			foreach (var skillStaffperiod in skillStaffperiods)
 			{
@@ -84,16 +91,19 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			foreach (var dateOnly in period.DayCollection())
 			{
-				_scheduler.SchedulerState.MarkDateToBeRecalculated(dateOnly);
+				_stateHolder.MarkDateToBeRecalculated(dateOnly);
 			}
 
 			using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(period))
 			{
-				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(), _scheduler.SchedulerState.ConsiderShortBreaks, true);
+				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(),
+					_stateHolder.ConsiderShortBreaks, true);
 			}
 
+			worker.ReportProgress(3, "Analyzing Step 3...");
+
 			skillStaffperiods =
-				_scheduler.SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
+				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
 					new DateTimePeriod(utcDateTime, utcDateTime));
 			foreach (var skillStaffperiod in skillStaffperiods)
 			{
@@ -104,13 +114,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			_undoRedoContainer.Redo();
 
+
+			//after
 			using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling>().MakeSureExists(period))
 			{
-				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(), _scheduler.SchedulerState.ConsiderShortBreaks, true);
+				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(),
+					_stateHolder.ConsiderShortBreaks, true);
 			}
-			//after
+
+			worker.ReportProgress(4, "Analyzing Step 4...");
+
 			skillStaffperiods =
-				_scheduler.SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
+				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
 					new DateTimePeriod(utcDateTime, utcDateTime));
 			foreach (var skillStaffperiod in skillStaffperiods)
 			{
@@ -121,16 +136,19 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			foreach (var dateOnly in period.DayCollection())
 			{
-				_scheduler.SchedulerState.MarkDateToBeRecalculated(dateOnly);
+				_stateHolder.MarkDateToBeRecalculated(dateOnly);
 			}
 
 			using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(period))
 			{
-				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(), _scheduler.SchedulerState.ConsiderShortBreaks, true);
+				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(),
+					_stateHolder.ConsiderShortBreaks, true);
 			}
-			//after
+
+			worker.ReportProgress(5, "Analyzing Step 5...");
+
 			skillStaffperiods =
-				_scheduler.SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
+				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
 					new DateTimePeriod(utcDateTime, utcDateTime));
 			foreach (var skillStaffperiod in skillStaffperiods)
 			{
