@@ -34,12 +34,21 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			label: 'ImportUsers',
 			icon: 'mdi-file',
 			action: function () {
-				$scope.toggleImportPeople();
+				$scope.toggleImportUsers();
 			},
 			active: function () {
-				return true;
+				return !toggleSvc.Wfm_People_ImportAndCreateAgentFromFile_42528;
 			}
-		}, {
+		},	{
+			label: 'ImportAgents',
+			icon: 'mdi-file',
+			action: function () {
+				$scope.toggleImportAgents();
+			},
+			active: function () {
+				return toggleSvc.Wfm_People_ImportAndCreateAgentFromFile_42528;
+			}
+		},	{
 			label: 'AdjustSkill',
 			icon: 'mdi-package',
 			action: function () {
@@ -60,8 +69,20 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		}
 	];
 
-	$scope.toggleImportPeople = function () {
-		$scope.showImportPanel = !$scope.showImportPanel;
+	$scope.importOptions = {
+		showImportModal: false,
+		importType: 'user',
+		title: ''
+	};
+
+	$scope.toggleImportUsers = function(){
+		$scope.importOptions.title = $scope.commands[0].label;
+		$scope.importOptions.showImportModal = !$scope.importOptions.showImportModal;
+	};
+
+	$scope.toggleImportAgents = function(){
+		$scope.importOptions.showImportModal = !$scope.importOptions.showImportModal;
+		$scope.importOptions.title = $scope.commands[1].label;
 	};
 
 	$scope.dynamicColumnLoaded = false;

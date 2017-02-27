@@ -40,7 +40,7 @@
 	</div>
 
 
-	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper" style="position: relative">
+	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper">
 		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns ui-grid-disable-animation class="grid people-list"></div>
 	</div>
 	<div ng-if="dataInitialized" class="con-footer">
@@ -48,8 +48,10 @@
 				<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 		</span>
 
+
 		<wfm-pagination pagination-options="paginationOptions" get-data-for-page-callback="getPageData"></wfm-pagination>
 	</div>
 
-	<import-people ng-if="showImportPanel" ng-cloak></import-people>
+	<import-people ng-if="importOptions && importOptions.showImportModal" import-options="importOptions" ng-cloak></import-people>
 </div>
+

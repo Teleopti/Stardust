@@ -1,12 +1,23 @@
-﻿'use strict';
+﻿(function() {
+	'use strict';
 
-(function() {
 	angular.module('wfm.people')
-		.controller('ImportPeopleCtrl', [
-			'$translate','Upload', 'uiGridExporterConstants', '$timeout', 'People', PeopleImportController
-		]);
+		.directive('importPeople', ImportPeopleDirective)
+		.controller('ImportPeopleCtrl', ['$timeout', 'People', ImportPeopleController]);
 
-	function PeopleImportController($translate, Upload, uiGridExporterConstants, $timeout, peopleSvc) {
+	function ImportPeopleDirective() {
+		return {
+			controller: 'ImportPeopleCtrl',
+			controllerAs: 'vm',
+			bindToController: true,
+			scope: {
+				importOptions: '=?'
+			},
+			templateUrl: "app/people/html/importPeople.html"
+		};
+	};
+
+	function ImportPeopleController($timeout, peopleSvc) {
 		var vm = this;
 
 		vm.files = [];
@@ -21,9 +32,11 @@
 		vm.hasParsingError = false;
 		vm.isProcessing = false;
 		vm.errorMsg = '';
-		vm.toggleImportPeople = function() {
-			vm.parentVm.toggleImportPeople();
+
+		vm.closeImportPeople = function() {
+			vm.importOptions.showImportModal = false;
 		};
+
 		vm.hasInvalidData = false;
 		vm.getFileTemplate = function() {
 			peopleSvc.downloadFileTemplate().then(function(response) {
@@ -32,15 +45,10 @@
 				});
 				saveAs(blob, 'userTemplate.xls');
 			});
-		}
+		};
 		vm.successCount = 0;
 		vm.failedCount = 0;
 		vm.upload = function (files) {
-			vm.isSuccessful = false;
-			vm.isFailed = false;
-			vm.hasParsingError = false;
-			vm.hasInvalidData = false;
-			vm.errorMsg = '';
 			if (files && files.length) {
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];

@@ -1922,7 +1922,6 @@
     <Content Include="WFM\app\outbound\outbound.service.translation.js" />
     <Content Include="WFM\app\people\people.cart.controller.js" />
     <Content Include="WFM\app\people\people.importPeople.controller.js" />
-    <Content Include="WFM\app\people\people.importPeople.directive.js" />
     <Content Include="WFM\app\seatManagement\html\locationpicker.html" />
     <Content Include="WFM\app\seatManagement\html\seatmapoccupancylist.html" />
     <Content Include="WFM\app\seatManagement\html\seatplanreport.html" />

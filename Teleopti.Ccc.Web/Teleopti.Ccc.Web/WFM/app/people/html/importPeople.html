@@ -2,12 +2,12 @@
 	<div class="modalbg import-people">
 		<div class="dialog">
 			<h1 class="modal-title">
-				{{'ImportUsers'|translate}}
+				{{ vm.importOptions.title |translate}}
 			</h1>
 			<div class="modal-inner-content">
 				<div class="wfm-block">
 					<div ngf-drop ngf-select ng-model="vm.files" ng-model-rejected="vm.rejFiles" class="drop-box"
-						 ngf-change="vm.upload($files)" ngf-multiple="false" ngf-allow-dir="true"
+						 ngf-change="vm.upload($files)" ngf-multiple="false" ngf-allow-dir="false"
 						 ngf-accept="'.xls,.xlsx'" ngf-drop-available="dropAvailable">
 						{{'DragAndDropExcelFilesHereOrClickToUpload'|translate}}
 					</div>
@@ -53,7 +53,7 @@
 			</div>
 			<div class="modal-actions">
 				<aside>
-					<button ng-click="toggleImportPeople()" class="wfm-btn wfm-btn-invis-default">{{'Back'|translate}}</button>
+					<button ng-click="vm.closeImportPeople()" class="wfm-btn wfm-btn-invis-default">{{'Back'|translate}}</button>
 				</aside>
 			</div>
 		</div>
