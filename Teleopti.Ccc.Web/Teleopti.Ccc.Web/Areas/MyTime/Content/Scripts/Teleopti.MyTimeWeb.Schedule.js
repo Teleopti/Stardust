@@ -36,7 +36,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668; // Same value as height of class "weekview-day-schedule"
-	var timeLineOffset = 110;
+	var timeLineOffset = 119;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var completelyLoaded;
 	var daylightSavingAdjustment;
