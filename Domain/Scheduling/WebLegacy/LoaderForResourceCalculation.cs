@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				_activityRepository.LoadAll();
 				_absenceRepository.LoadAll();
 				_shiftCategoryRepository.LoadAll();
-			}
+			}	
 			_skillRepository.FindAllWithSkillDays(period);
 		}
 

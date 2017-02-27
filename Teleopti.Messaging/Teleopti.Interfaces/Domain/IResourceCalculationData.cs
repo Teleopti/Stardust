@@ -38,20 +38,16 @@ namespace Teleopti.Interfaces.Domain
 
 	public class SkillCombinationHolder
 	{
-		private readonly List<SkillCombinationResource> _skillCombinationResources = new List<SkillCombinationResource>();
-		private bool _withShrinkage;
+		private List<SkillCombinationResource> _skillCombinationResources = new List<SkillCombinationResource>();
 
 		public void Add(SkillCombinationResource skillCombinationResource)
 		{
-			if (!_withShrinkage)
-			{
-				_skillCombinationResources.Add(skillCombinationResource);
-			}
+			_skillCombinationResources.Add(skillCombinationResource);
 		}
 
 		public void StartRecodingValuesWithShrinkage()
 		{
-			_withShrinkage = true;
+			_skillCombinationResources = new List<SkillCombinationResource>();
 		}
 
 		public IEnumerable<SkillCombinationResource> SkillCombinationResources => _skillCombinationResources;

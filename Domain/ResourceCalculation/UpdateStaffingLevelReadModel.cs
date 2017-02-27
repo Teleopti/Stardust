@@ -87,7 +87,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 								w.SkillId.Equals(skill.Id.GetValueOrDefault()) &&
 								w.StartDateTime.Equals(periodPair.Key.StartDateTime));
 					if (model != null)
+					{
 						model.StaffingLevelWithShrinkage = ((ISkillStaffPeriod)periodPair.Value).CalculatedResource;
+						model.ForecastWithShrinkage = ((ISkillStaffPeriod)periodPair.Value).FStaff;
+					}
+						
 				}
 			}
 		}
@@ -112,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						EndDateTime = periodPair.Key.EndDateTime,
 						Forecast = periodPair.Value.FStaff,
 						StaffingLevel = skillStaffPeriod.CalculatedResource,
-						ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage
+						ForecastWithShrinkage = periodPair.Value.FStaff
 					});
 				_feedback.SendProgress($"Updated {skill}.");
 			}
