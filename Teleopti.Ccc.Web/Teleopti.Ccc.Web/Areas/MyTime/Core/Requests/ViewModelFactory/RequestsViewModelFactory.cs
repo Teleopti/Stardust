@@ -114,6 +114,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			if (absence==null) return null;
 
 			var absenceAccount = _personAccountProvider.GetPersonAccount(absence, date);
+			if (absenceAccount == null) return null;
+
 			return _personAccountViewModelMapper.Map(absenceAccount);
 		}
 

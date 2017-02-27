@@ -120,6 +120,35 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldReturnEmptyAbsenceAccountModelWhenNoMatchingAccountFound()
+		{
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			var loggedOnUser = new FakeLoggedOnUser(person);
+			var timeZone = new FakeUserTimeZone();
+			var threadCulture = new ThreadCulture();
+
+			var absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
+
+			var absenceRepository = new FakeAbsenceRepository();
+			absenceRepository.Add(absence);
+
+			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
+
+			var target = new RequestsViewModelFactory(null, absenceTypesProvider, new FakePermissionProvider(), null, null,
+				null, null, loggedOnUser, null, new AbsenceAccountProvider(loggedOnUser,new FakePersonAbsenceAccountRepository()), new FakePersonRequestRepository(), 
+				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
+					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new ShiftTradeSwapDetailViewModelMapper(
+					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
+						timeZone), new ProjectionProvider(), threadCulture, timeZone,
+					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+
+			var result = target.GetAbsenceAccountViewModel(absence.Id.Value, new DateOnly(2013, 1, 1));
+			result.Should().Be.Null();
+		}
+
+		[Test]
 		public void ShouldRetrieveReportableAbsenceTypesforViewModel()
 		{
 			var absence = new Absence { Description = new Description("Vacation") }.WithId();
