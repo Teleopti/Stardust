@@ -14,6 +14,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 	{
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly ITimeZoneGuard _timeZoneGuard;
+		private ResourceCalculationData resourceCalculationData;
+		private DateTimePeriod period;
+		private DateOnly date;
 
 		public ShovelingAnalyzerView()
 		{
@@ -27,20 +30,37 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			InitializeComponent();
 		}
 
-		public void FillForm(ISchedulingResultStateHolder schedulingResultStateHolder, ISkill skill, DateOnly date, TimeSpan timeStart)
+		public void FillForm(ISchedulingResultStateHolder schedulingResultStateHolder, ISkill skill, DateOnly theDate, TimeSpan timeStart)
 		{
+			date = theDate;
 			var baseDate = TimeZoneHelper.ConvertToUtc(date.Date, _timeZoneGuard.CurrentTimeZone());
 			var intervalLength = TimeSpan.FromMinutes(skill.DefaultResolution);
-			var period = new DateTimePeriod(baseDate.Add(timeStart), baseDate.Add(timeStart).Add(intervalLength));
-			var resCalcData = new ResourceCalculationData(schedulingResultStateHolder, false, false);
+			period = new DateTimePeriod(baseDate.Add(timeStart), baseDate.Add(timeStart).Add(intervalLength));
+			resourceCalculationData = new ResourceCalculationData(schedulingResultStateHolder, false, false);
 			var trackShovling = new TrackShovelingOneSkill(skill, period);
-			resCalcData.SetShovelingCallback(trackShovling);
-			_resourceCalculation.ResourceCalculate(date.ToDateOnlyPeriod(), resCalcData);
+			resourceCalculationData.SetShovelingCallback(trackShovling);
+			_resourceCalculation.ResourceCalculate(date.ToDateOnlyPeriod(), resourceCalculationData);
 
-			textBox1.Text = createOutput(trackShovling, skill, period);
+			textBox1.Text = createOutputForOneSkill(trackShovling, skill, period);
 		}
 
-		private static string createOutput(TrackShovelingOneSkill trackShovling, ISkill skill, DateTimePeriod period)
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			var skills = resourceCalculationData.Skills.OrderBy(x => x.Name);
+			var trackShovling = new TrackShoveling(skills, period);
+			resourceCalculationData.SetShovelingCallback(trackShovling);
+			_resourceCalculation.ResourceCalculate(date, resourceCalculationData);
+
+			var output = new StringBuilder();
+			foreach (var skill in skills)
+			{
+				output.Append(createOutputForOneSkill(trackShovling.For(skill), skill, period));
+			}
+			textBox1.Text = output.ToString();
+		}
+
+		private static string createOutputForOneSkill(TrackShovelingOneSkill trackShovling, ISkill skill, DateTimePeriod period)
 		{
 			var output = new StringBuilder();
 			output.AppendLine($"Skill [{skill.Name}] at UTC period [{period}]");
@@ -60,6 +80,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				output.AppendLine($"Removing {removedResource.ResourcesMoved} resources");
 				output.AppendLine($" -> moved to subskills: {string.Join("::", removedResource.ToSubskills.Select(x => x.Name))}");
 			}
+			output.AppendLine();
+			output.AppendLine("------------------------------------------------");
+			output.AppendLine();
 			return output.ToString();
 		}
 
