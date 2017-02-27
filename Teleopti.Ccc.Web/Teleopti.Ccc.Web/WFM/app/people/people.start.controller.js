@@ -77,12 +77,14 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 	$scope.toggleImportUsers = function(){
 		$scope.importOptions.title = $scope.commands[0].label;
+		$scope.importOptions.importType = 'user';
 		$scope.importOptions.showImportModal = !$scope.importOptions.showImportModal;
 	};
 
 	$scope.toggleImportAgents = function(){
-		$scope.importOptions.showImportModal = !$scope.importOptions.showImportModal;
 		$scope.importOptions.title = $scope.commands[1].label;
+		$scope.importOptions.importType = 'agent';
+		$scope.importOptions.showImportModal = !$scope.importOptions.showImportModal;
 	};
 
 	$scope.dynamicColumnLoaded = false;

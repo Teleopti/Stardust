@@ -53,38 +53,70 @@
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
 					vm.isProcessing = true;
-					peopleSvc.uploadUserFromFile(file).then(function (response) {
-						vm.isProcessing = false;
-						vm.isSuccessful = true;
-						var isXlsx = response.headers()['content-type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-						var blob = new Blob([response.data], {
-							type: response.headers()['content-type']
+
+					if(vm.importOptions.importType == 'user') {
+						peopleSvc.uploadUserFromFile(file).then(function (response) {
+							vm.isProcessing = false;
+							vm.isSuccessful = true;
+							var isXlsx = response.headers()['content-type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+							var blob = new Blob([response.data], {
+								type: response.headers()['content-type']
+							});
+							var processResult = response.headers()['message'].match(/[0-9]+/g);;
+							vm.successCount = processResult[0];
+							vm.failedCount = processResult[1];
+							if (vm.failedCount > 0) {
+								vm.hasInvalidData = true;
+								var extension = isXlsx ? '.xlsx' : '.xls';
+								saveAs(blob, 'invalidUsers' + extension);
+							}
+
+						}, function (response) {
+							vm.isProcessing = false;
+							vm.isFailed = true;
+							//Some error log
+							arrayBuffer2String(response.data,
+									function (string) {
+										$timeout(function() {
+											vm.errorMsg = string; 
+										});
+									}
+								);
 						});
-						var processResult = response.headers()['message'].match(/[0-9]+/g);;
-						vm.successCount = processResult[0];
-						vm.failedCount = processResult[1];
-						if (vm.failedCount > 0) {
-							vm.hasInvalidData = true;
-							var extension = isXlsx ? '.xlsx' : '.xls';
-							saveAs(blob, 'invalidUsers' + extension);
-						}
+					}else if(vm.importOptions.importType == 'agent') {
+						peopleSvc.uploadAgentFromFile(file).then(function (response) {
+							vm.isProcessing = false;
+							vm.isSuccessful = true;
+							var isXlsx = response.headers()['content-type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+							var blob = new Blob([response.data], {
+								type: response.headers()['content-type']
+							});
+							var processResult = response.headers()['message'].match(/[0-9]+/g);;
+							vm.successCount = processResult[0];
+							vm.failedCount = processResult[1];
+							if (vm.failedCount > 0) {
+								vm.hasInvalidData = true;
+								var extension = isXlsx ? '.xlsx' : '.xls';
+								saveAs(blob, 'invalidUsers' + extension);
+							}
 
-					}, function (response) {
-						vm.isProcessing = false;
-						vm.isFailed = true;
-						//Some error log
-						arrayBuffer2String(response.data,
-								function (string) {
-									$timeout(function() {
-										vm.errorMsg = string; 
-									});
-								}
-							);
-					});
-
+						}, function (response) {
+							vm.isProcessing = false;
+							vm.isFailed = true;
+							//Some error log
+							arrayBuffer2String(response.data,
+									function (string) {
+										$timeout(function() {
+											vm.errorMsg = string; 
+										});
+									}
+								);
+						});
+					}
 				}
 			}
 		};
+
 		function arrayBuffer2String(buf, callback) {
 			var bb = new Blob([buf]);
 			var f = new FileReader();
@@ -94,5 +126,4 @@
 			f.readAsText(bb);
 		}
 	};
-
 }());

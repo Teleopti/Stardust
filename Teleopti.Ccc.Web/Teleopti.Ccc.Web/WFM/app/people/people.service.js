@@ -69,6 +69,20 @@ angular.module('peopleService', ['ngResource']).service('People', [
 
 		};
 
+		this.uploadAgentFromFile = function(file) {
+			var config = overload({
+				url: '../api/People/UploadAgent',
+				method: 'POST',
+				responseType: 'arraybuffer',
+				file: file,
+				headers: {
+					'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/json'
+				}
+			});
+			return $http(config);
+
+		};
+
 		this.downloadFileTemplate = function() {
 			var config = overload({
 				url: '../api/People/UserTemplate',
