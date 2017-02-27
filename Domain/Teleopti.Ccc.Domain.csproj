@@ -286,8 +286,10 @@
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
     <Compile Include="Cascading\IShovelingCallback.cs" />
+    <Compile Include="Cascading\TrackShoveling\AddedResource.cs" />
+    <Compile Include="Cascading\TrackShoveling\TrackShovelingOneSkill.cs" />
     <Compile Include="Optimization\IAgentGroupModelPersister.cs" />
-    <Compile Include="ResourceCalculation\TrackShoveling.cs" />
+    <Compile Include="Cascading\TrackShoveling\RemovedResource.cs" />
     <Compile Include="Common\ClearPersonRelatedInformation.cs" />
     <Compile Include="Common\FavoriteSearch.cs" />
     <Compile Include="Common\IFavoriteSearch.cs" />

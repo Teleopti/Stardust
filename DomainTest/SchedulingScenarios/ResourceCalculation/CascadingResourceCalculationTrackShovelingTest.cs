@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Cascading.TrackShoveling;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill);
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
-			var trackShoveling = new TrackShoveling(subskill, new DateTimePeriod(new DateTime(2000,1,1,8,0,0,DateTimeKind.Utc), new DateTime(2000,1,1,8,15,0,0, DateTimeKind.Utc)));
+			var trackShoveling = new TrackShovelingOneSkill(subskill, new DateTimePeriod(new DateTime(2000,1,1,8,0,0,DateTimeKind.Utc), new DateTime(2000,1,1,8,15,0,0, DateTimeKind.Utc)));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(trackShoveling, scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subSkillDay }, false, false));
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill);
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
-			var trackShoveling = new TrackShoveling(primarySkill, new DateTimePeriod(new DateTime(2000, 1, 1, 7, 30, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 7, 45, 0, 0, DateTimeKind.Utc)));
+			var trackShoveling = new TrackShovelingOneSkill(primarySkill, new DateTimePeriod(new DateTime(2000, 1, 1, 7, 30, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 7, 45, 0, 0, DateTimeKind.Utc)));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(trackShoveling, scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subSkillDay }, false, false));
 
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill);
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
-			var trackShoveling = new TrackShoveling(primarySkill, new DateTimePeriod(new DateTime(2000, 1, 1, 7, 30, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 7, 45, 0, 0, DateTimeKind.Utc)));
+			var trackShoveling = new TrackShovelingOneSkill(primarySkill, new DateTimePeriod(new DateTime(2000, 1, 1, 7, 30, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 7, 45, 0, 0, DateTimeKind.Utc)));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(trackShoveling, scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subSkillDay }, false, false));
 
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill);
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
-			var trackShoveling = new TrackShoveling(primarySkill, new DateTimePeriod(new DateTime(2000, 1, 1, 7, 30, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 7, 45, 0, 0, DateTimeKind.Utc)));
+			var trackShoveling = new TrackShovelingOneSkill(primarySkill, new DateTimePeriod(new DateTime(2000, 1, 1, 7, 30, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 7, 45, 0, 0, DateTimeKind.Utc)));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(trackShoveling, scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subSkillDay }, false, false));
 

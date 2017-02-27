@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation
+namespace Teleopti.Ccc.Domain.Cascading.TrackShoveling
 {
-	public class TrackShoveling : IShovelingCallback
+	public class TrackShovelingOneSkill : IShovelingCallback
 	{
 		private readonly ISkill _skillToTrack;
 		private readonly DateTimePeriod _intervalToTrack;
 		private readonly ICollection<AddedResource> _addedResources;
 		private readonly IDictionary<IEnumerable<CascadingSkillGroup>, RemovedResource> _removedResources;
 
-		public TrackShoveling(ISkill skillToTrack, DateTimePeriod intervalToTrack)
+		public TrackShovelingOneSkill(ISkill skillToTrack, DateTimePeriod intervalToTrack)
 		{
 			_skillToTrack = skillToTrack;
 			_intervalToTrack = intervalToTrack;
@@ -60,27 +59,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_removedResources[skillGroups] = removedResource;
 			return removedResource;
 		}
-	}
-
-	public class AddedResource
-	{
-		public AddedResource(CascadingSkillGroup fromSkillGroup, double resourcesMoved)
-		{
-			FromSkillGroup = fromSkillGroup;
-			ResourcesMoved = resourcesMoved;
-		}
-		public CascadingSkillGroup FromSkillGroup { get; }
-		public double ResourcesMoved { get; }
-	}
-
-	public class RemovedResource
-	{
-		public RemovedResource()
-		{
-			ToSubskills = new List<ISkill>();
-		}
-
-		public double ResourcesMoved { get; set; }
-		public ICollection<ISkill> ToSubskills { get; }
 	}
 }

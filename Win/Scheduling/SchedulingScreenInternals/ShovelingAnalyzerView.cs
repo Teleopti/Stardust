@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Cascading;
+using Teleopti.Ccc.Domain.Cascading.TrackShoveling;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -32,14 +33,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			var intervalLength = TimeSpan.FromMinutes(skill.DefaultResolution);
 			var period = new DateTimePeriod(baseDate.Add(timeStart), baseDate.Add(timeStart).Add(intervalLength));
 			var resCalcData = new ResourceCalculationData(schedulingResultStateHolder, false, false);
-			var trackShovling = new TrackShoveling(skill, period);
+			var trackShovling = new TrackShovelingOneSkill(skill, period);
 			resCalcData.SetShovelingCallback(trackShovling);
 			_resourceCalculation.ResourceCalculate(date.ToDateOnlyPeriod(), resCalcData);
 
 			textBox1.Text = createOutput(trackShovling, skill, period);
 		}
 
-		private static string createOutput(TrackShoveling trackShovling, ISkill skill, DateTimePeriod period)
+		private static string createOutput(TrackShovelingOneSkill trackShovling, ISkill skill, DateTimePeriod period)
 		{
 			var output = new StringBuilder();
 			output.AppendLine($"Skill [{skill.Name}] at UTC period [{period}]");
