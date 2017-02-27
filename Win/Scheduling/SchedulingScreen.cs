@@ -3560,15 +3560,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
-			var optimizationCommand = _container.Resolve<OptimizationExecuter>();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(argument.DaysOffPreferences);
 
-			optimizationCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
-				_schedulerState,
-				argument.SelectedScheduleDays, 
-				_optimizationPreferences, argument.OptimizationMethod == OptimizationMethod.BackToLegalState,
-				argument.DaysOffPreferences,
-				dayOffOptimizationPreferenceProvider);
+			if (argument.OptimizationMethod == OptimizationMethod.BackToLegalState)
+			{
+				_container.Resolve<BackToLegalStateExecuter>().Execute(
+					_optimizerOriginalPreferences,
+					new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
+					_schedulerState,
+					argument.SelectedScheduleDays,
+					_optimizationPreferences,
+					dayOffOptimizationPreferenceProvider);
+			}
+			else
+			{
+				_container.Resolve<OptimizationExecuter>().Execute(_optimizerOriginalPreferences,
+					new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
+					_schedulerState,
+					argument.SelectedScheduleDays,
+					_optimizationPreferences, false,
+					argument.DaysOffPreferences,
+					dayOffOptimizationPreferenceProvider);
+			}
 		}
 
 		private void checkPastePermissions()
