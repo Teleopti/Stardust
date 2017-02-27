@@ -38,8 +38,6 @@ namespace Stardust.Node.Workers
 
 				var sez = JsonConvert.SerializeObject(data);
 
-				Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Mediatype));
-
 				var response =
 					await Client.PostAsync(url,
 					                        new StringContent(sez, Encoding.Unicode, Mediatype),
