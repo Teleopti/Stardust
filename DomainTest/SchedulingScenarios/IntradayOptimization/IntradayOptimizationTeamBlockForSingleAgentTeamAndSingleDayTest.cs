@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	public class IntradayOptimizationTeamBlockAsClassicTest : ISetup
+	public class IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest : ISetup
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderOrg;

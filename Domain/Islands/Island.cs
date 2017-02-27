@@ -61,5 +61,28 @@ namespace Teleopti.Ccc.Domain.Islands
 			ret.NumberOfAgentsOnIsland = ret.SkillGroups.Sum(x => x.NumberOfAgentsOnSkillGroup);
 			return ret;
 		}
+
+		public IslandExtendedModel CreatExtendedClientModel()
+		{
+			var ret = new IslandExtendedModel();
+			var skillsInIsland = new HashSet<ISkill>();
+			var skillGroups = new List<SkillGroupExtendedModel>();
+			foreach (var skillGroup in _skillGroups)
+			{
+				skillGroups.Add(new SkillGroupExtendedModel
+				{
+					AgentsInSkillGroup = skillGroup.Agents,
+					SkillsInSkillGroup = skillGroup.Skills
+				});
+				foreach (var skill in skillGroup.Skills)
+				{
+					skillsInIsland.Add(skill);
+				}
+			}
+			ret.SkillsInIsland = skillsInIsland;
+			ret.SkillGroupsInIsland = skillGroups;
+
+			return ret;
+		}
 	}
 }

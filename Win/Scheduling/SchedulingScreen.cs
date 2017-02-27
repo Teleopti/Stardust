@@ -53,6 +53,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -4386,7 +4387,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.PersonsInOrganization,
 				SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.SkillDays,
-				SchedulerState.RequestedPeriod.DateOnlyPeriod))
+				SchedulerState.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>(), _container.Resolve<ReduceSkillGroups>()))
 			{
 				analyzer.LoadData();
 				analyzer.ShowDialog(this);
