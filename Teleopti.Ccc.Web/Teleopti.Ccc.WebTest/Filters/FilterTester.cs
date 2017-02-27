@@ -100,6 +100,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.RequestContext)
 				.Return(new RequestContext(controller.ControllerContext.HttpContext, controller.ControllerContext.RouteData));
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.Url).Return(new Uri("http://tempuri.org/foo"));
+			controller.ControllerContext.HttpContext.Request.Stub(x => x.Path).Return("foo");
 
 			var cache = MockRepository.GenerateMock<HttpCachePolicyBase>();
 			controller.ControllerContext.HttpContext.Response.Stub(x => x.Cache).Return(cache);

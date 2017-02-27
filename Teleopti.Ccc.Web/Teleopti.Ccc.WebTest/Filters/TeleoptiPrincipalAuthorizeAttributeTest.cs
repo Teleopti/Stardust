@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
 			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
-			result.RouteValues.Values.Should().Have.SameValuesAs("Return", "Hash", "Start", "http://myissuer/?wa=wsignin1.0&wtrealm=http%3a%2f%2fmytime&wctx=ru%3d&whr=urn%3aProviderX");
+			result.RouteValues.Values.Should().Have.SameValuesAs("Return", "Hash", "Start", "http://myissuer/?wa=wsignin1.0&wtrealm=http%3a%2f%2fmytime&wctx=ru%3dfoo%2f&whr=urn%3aProviderX");
 		}
 
 		[Test]
