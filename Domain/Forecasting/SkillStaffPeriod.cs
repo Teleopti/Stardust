@@ -306,8 +306,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                                 		Period = newPeriod,
                                                 		CalculatedResource = CalculatedResource,
                                                 		ForecastedIncomingDemand = Payload.ForecastedIncomingDemand,
-                                                		ForecastedIncomingDemandWithShrinkage =
-                                                			Payload.CalculatedTrafficIntensityWithShrinkage,
                                                 		FStaff = FStaff
                                                 	};
             	newViews.Add(newView);

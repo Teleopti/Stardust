@@ -43,16 +43,6 @@ namespace Teleopti.Interfaces.Domain
         ///  Created date: 2009-07-06    
         /// /// </remarks>
         double CalculatedResource { get; set; }
-        /// <summary>
-        /// Gets or sets the calculated traffic intensity with shrinkage.
-        /// </summary>
-        /// <value>The calculated traffic intensity with shrinkage.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-07-06    
-        /// /// </remarks>
-        double ForecastedIncomingDemandWithShrinkage { get; set; }
 
         /// <summary>
         /// Gets or sets the F staff.

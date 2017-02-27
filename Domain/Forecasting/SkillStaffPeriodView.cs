@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public DateTimePeriod Period { get; set; }
         public double ForecastedIncomingDemand { get; set; }
         public double CalculatedResource { get; set; }
-        public double ForecastedIncomingDemandWithShrinkage { get; set; }
         public double FStaff { get; set; }
     }
 }

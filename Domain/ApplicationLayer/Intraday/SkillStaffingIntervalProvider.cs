@@ -171,7 +171,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				StartDateTime = skillStaffPeriod.Period.StartDateTime,
 				EndDateTime = skillStaffPeriod.Period.EndDateTime,
 				Forecast = skillStaffPeriod.FStaff,
-				ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage,
 				StaffingLevel = 0,
 			});
 		}

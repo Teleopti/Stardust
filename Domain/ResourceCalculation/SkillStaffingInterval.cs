@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double AbsoluteDifference => CalculatedResource - FStaff;
 		public double RelativeDifference => new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviation;
-		public double RelativeDifferenceWithShrinkage => new DeviationStatisticData(ForecastWithShrinkage, CalculatedResource).RelativeDeviation;
 		public DateTimePeriod DateTimePeriod => new DateTimePeriod(StartDateTime.Utc(), EndDateTime.Utc());
 
 		public double CalculatedResource	

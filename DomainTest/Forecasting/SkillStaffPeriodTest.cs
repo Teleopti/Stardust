@@ -2190,12 +2190,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 IList<ISkillStaffPeriodView> views = stPeriod1.Split(new TimeSpan(0, 15, 0));
                 Assert.AreEqual(2, views.Count);
                 Assert.AreEqual(5, views[0].CalculatedResource);
-                Assert.AreEqual(7, views[0].ForecastedIncomingDemandWithShrinkage);
                 Assert.AreEqual(9, views[0].ForecastedIncomingDemand);
                 Assert.AreEqual(15,views[0].Period.ElapsedTime().TotalMinutes);
                 Assert.AreEqual(start, views[0].Period.StartDateTime);
                 Assert.AreEqual(5, views[1].CalculatedResource);
-                Assert.AreEqual(7, views[1].ForecastedIncomingDemandWithShrinkage);
                 Assert.AreEqual(9, views[1].ForecastedIncomingDemand);
                 Assert.AreEqual(15, views[1].Period.ElapsedTime().TotalMinutes);
                 Assert.AreEqual(start.AddMinutes(15), views[1].Period.StartDateTime);
