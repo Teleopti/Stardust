@@ -52,14 +52,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    public IList<int> IntraIntervalSamples { get; set; }
 
-	    public double RelativeDifferenceWithShrinkage
-	    {
-		    get
-		    {
-				return new DeviationStatisticData(FStaff * (1d + Payload.Shrinkage.Value), CalculatedResource).RelativeDeviation;
-			}
-	    }
-
 		public DateTimePeriod DateTimePeriod => Period;
 
 		public double ScheduledAgentsIncoming
