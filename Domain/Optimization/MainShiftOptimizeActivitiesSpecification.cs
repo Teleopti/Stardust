@@ -76,57 +76,31 @@ namespace Teleopti.Ccc.Domain.Optimization
             return other.Period().Value.EndDateTime.Equals(_visualLayerColl.Value.Period().Value.EndDateTime);
         }
 
-        public bool CorrectAlteredBetween(IVisualLayerCollection other)
-        {
-            if(!_optimizerActivitiesPreferences.AllowAlterBetween.HasValue)
-                return true;
+		public bool CorrectAlteredBetween(IVisualLayerCollection other)
+		{
+			if (!_optimizerActivitiesPreferences.AllowAlterBetween.HasValue)
+				return true;
 
-            if (!isIdenticalPeriodBefore(other))
-                return false;
-
-            if (!isIdenticalPeriodAfter(other))
-                return false;
-
-
-            return true;
-        }
-
-        private bool isIdenticalPeriodBefore(IVisualLayerCollection other)
-        {
-			var allowPeriod = allowAlterBetweenDateTimePeriod();
-	        var baseDate = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone);
+			var allowPeriod = _optimizerActivitiesPreferences.UtcPeriodFromDateAndTimePeriod(_viewerDate, _viewerTimeZone).Value;
+			var baseDate = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone);
 			var start = baseDate.AddDays(-1).Add(allowPeriod.EndDateTime.Subtract(baseDate));
 			var periodBefore = new DateTimePeriod(start, allowPeriod.StartDateTime);
-                        
-            IVisualLayerCollection shiftLayersOutsideBefore =
-                other.FilterLayers(periodBefore);
+			var shiftLayersOutsideBefore = other.FilterLayers(periodBefore);
+			var originalLayersOutsideBefore = _visualLayerColl.Value.FilterLayers(periodBefore);
 
-            IVisualLayerCollection originalLayersOutsideBefore =
-                _visualLayerColl.Value.FilterLayers(periodBefore);
+			if (!shiftLayersOutsideBefore.IsSatisfiedBy(VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideBefore)))
+				return false;
 
-            return
-                shiftLayersOutsideBefore.IsSatisfiedBy(
-                    VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideBefore));
-
-        }
-
-        private bool isIdenticalPeriodAfter(IVisualLayerCollection other)
-        {
-	        var allowPeriod = allowAlterBetweenDateTimePeriod();
-			var baseDate = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone);
 			var end = baseDate.AddDays(1).Add(allowPeriod.StartDateTime.Subtract(baseDate));
-					var periodAfter = new DateTimePeriod(allowPeriod.EndDateTime, end);
+			var periodAfter = new DateTimePeriod(allowPeriod.EndDateTime, end);
+			var shiftLayersOutsideAfter = other.FilterLayers(periodAfter);
+			var originalLayersOutsideAfter = _visualLayerColl.Value.FilterLayers(periodAfter);
+			if (!shiftLayersOutsideAfter.IsSatisfiedBy(VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideAfter)))
+				return false;
 
-            IVisualLayerCollection shiftLayersOutsideAfter =
-                other.FilterLayers(periodAfter);
 
-            IVisualLayerCollection originalLayersOutsideAfter =
-                _visualLayerColl.Value.FilterLayers(periodAfter);
-
-            return
-                shiftLayersOutsideAfter.IsSatisfiedBy(
-                    VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideAfter));
-        }
+			return true;
+		}
 
 		private bool compareLengthOfStaticLengthActivity(IVisualLayerCollection compareFrom, IVisualLayerCollection compareTo)
 		{
@@ -166,10 +140,5 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
             return true;
         }
-
-       private DateTimePeriod allowAlterBetweenDateTimePeriod()
-       {
-           return _optimizerActivitiesPreferences.UtcPeriodFromDateAndTimePeriod(_viewerDate, _viewerTimeZone).Value;
-       }
     }
 }
