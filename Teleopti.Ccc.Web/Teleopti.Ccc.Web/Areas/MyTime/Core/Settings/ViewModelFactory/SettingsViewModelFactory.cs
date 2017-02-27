@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 
 		public SettingsViewModel CreateViewModel()
 		{
-			// as the settings view model requires values from the person, create the view model
-			// using an automapper mapping.		
 			var settingsViewModel = _mapper.Map(_loggedOnUser.CurrentUser());
 			var persistedNameFormatSettings = _nameFormatPersisterAndProvider.Get();
 
