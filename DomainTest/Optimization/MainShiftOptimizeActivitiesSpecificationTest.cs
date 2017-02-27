@@ -35,9 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shbrAct.InContractTime = true;
             _originalMainShift = EditableShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             DateOnly dateOnly = new DateOnly(2007, 1, 1);
-            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
-            _target = new MainShiftOptimizeActivitiesSpecification(new CorrectAlteredBetween(UserTimeZone.Make()), _preferences, _originalMainShift, dateOnly);
-            _interface = new MainShiftOptimizeActivitiesSpecification(new CorrectAlteredBetween(UserTimeZone.Make()), _preferences, _originalMainShift, dateOnly);
+            _target = new MainShiftOptimizeActivitiesSpecification(new CorrectAlteredBetween(new UtcTimeZone()), _preferences, _originalMainShift, dateOnly);
+            _interface = new MainShiftOptimizeActivitiesSpecification(new CorrectAlteredBetween(new UtcTimeZone()), _preferences, _originalMainShift, dateOnly);
 		}
 
         [Test]
