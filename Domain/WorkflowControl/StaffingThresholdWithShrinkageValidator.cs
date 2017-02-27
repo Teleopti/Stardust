@@ -1,8 +1,6 @@
-using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -16,13 +14,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
 			var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCount();
 
-			var staffingThresholdValidatorHelper = new StaffingThresholdValidatorHelper(GetIntervalsForUnderstaffing, GetIntervalsForSeriousUnderstaffing);
-
-			var underStaffingResultDict = staffingThresholdValidatorHelper.GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new CascadingPersonSkillProvider());
+			var underStaffingResultDict = GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new CascadingPersonSkillProvider());
 
 			if (underStaffingResultDict.IsNotUnderstaffed())
 			{
-				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+				return new ValidatedRequest {IsValid = true, ValidationErrors = string.Empty};
 			}
 			string validationError = numberOfRequestedDays > 1
 				? GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture)
@@ -37,6 +33,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 	public class StaffingThresholdWithShrinkageValidator : StaffingThresholdValidator
 	{
+		public override IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
+		{
+			setUseShrinkage(requiredForHandlingAbsenceRequest.SchedulingResultStateHolder, absenceRequest.Period);
+			return base.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+		}
+
 		public override IAbsenceRequestValidator CreateInstance()
 		{
 			return new StaffingThresholdWithShrinkageValidator();
@@ -58,19 +60,19 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			unchecked
 			{
 				int result = (GetType().GetHashCode());
-				result = (result * 397) ^ (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
+				result = (result*397) ^ (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
 				return result;
 			}
 		}
-		
-		public override Specification<IValidatePeriod> GetIntervalsForUnderstaffing(ISkill skill)
-		{
-			return new IntervalShrinkageHasUnderstaffing(skill);
-		}
 
-		public override Specification<IValidatePeriod> GetIntervalsForSeriousUnderstaffing(ISkill skill)
+		private static void setUseShrinkage(ISchedulingResultStateHolder schedulingResultStateHolder, DateTimePeriod period)
 		{
-			return new IntervalShrinkageHasSeriousUnderstaffing(skill);
+			var skillStaffPeriodDictionaries = schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(schedulingResultStateHolder.Skills, period).Values;
+			foreach (var skillStaffPeriodDictionary in skillStaffPeriodDictionaries)
+			{
+				skillStaffPeriodDictionary.Values.ForEach(x => x.Payload.UseShrinkage = true);
+			}
+
 		}
 	}
 }

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -39,9 +38,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var useShrinkageValidator = isShrinkageValidatorEnabled();
 			var skillStaffingDatas = getSkillStaffingData(useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
-				skill => useShrinkageValidator
-					? new IntervalShrinkageHasUnderstaffing(skill) as Specification<IValidatePeriod>
-					: new IntervalHasUnderstaffing(skill);
+				skill => new IntervalHasUnderstaffing(skill);
 			return calcuateIntervalPossibilities(skillStaffingDatas, getStaffingSpecification);
 		}
 

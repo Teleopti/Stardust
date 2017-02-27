@@ -364,8 +364,6 @@
     <Compile Include="Exceptions\SkillMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\TimeZoneMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\WorkloadMissingInAnalyticsException.cs" />
-    <Compile Include="Forecasting\IntervalShrinkageHasUnderstaffing.cs" />
-    <Compile Include="Forecasting\IntervalShrinkageHasSeriousUnderstaffing.cs" />
     <Compile Include="Forecasting\SkillDayExtensions.cs" />
     <Compile Include="Forecasting\SkillPriorityProvider.cs" />
     <Compile Include="Helper\MeasureTime.cs" />

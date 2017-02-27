@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -686,6 +687,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 			agent.WorkflowControlSet = wfcs;
 			
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldApproveWithShrinkage()
+		{
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var skillA = SkillRepository.Has("skillA", activity).WithId().CascadingIndex(1);
+			var skillB = SkillRepository.Has("skillB", activity).WithId().CascadingIndex(2);
+			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
+
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 0.5));
+			var skillday = skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 0.5);
+			skillday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
+			SkillDayRepository.Has(skillday);
+
+
+			var agent = PersonRepository.Has(skillA, skillB );
+			var agent2 = PersonRepository.Has(skillA, skillB );
+			var agent3 = PersonRepository.Has(skillA, skillB);
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent2, scenario, activity, period, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent3, scenario, activity, period, new ShiftCategory("category")));
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			agent.WorkflowControlSet = wfcs;
+
 			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
