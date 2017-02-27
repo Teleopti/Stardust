@@ -87,6 +87,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				TimeSpan.FromMilliseconds(1000));
 		}
 
+		[When(@"I see anonym shift on Shift Trade Bulletin Board on date '(.*)'")]
+		public void WhenISeeAnonymShiftOnDate(DateTime date)
+		{
+			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
+			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.IsRunningBehaviorTest(); return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeBulletinBoardDate('{0}');", dateAsSwedishString);
+
+			gotoShiftTradeBulletinBoardToday();
+
+			Browser.Interactions.TryUntil(
+				() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
+				() => Browser.Interactions.IsContain("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym"),
+				TimeSpan.FromMilliseconds(1000));
+		}
+
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
 		public void ThenIShouldSeeAMessageTextSayingIAmMissingAWorkflowControlSet()
 		{
