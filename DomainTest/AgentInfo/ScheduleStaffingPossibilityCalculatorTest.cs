@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 					.PersonPeriods(new DateOnly(_today).ToDateOnlyPeriod())
 					.FirstOrDefault()
 					?.PersonSkillCollection.FirstOrDefault();
-			var cacheKey = personSkill?.Skill.Id.ToString();
+			var cacheKey = $"{personSkill?.Skill.Id}_{false}";
 			MemoryCache.Default.Remove(cacheKey);
 
 			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();

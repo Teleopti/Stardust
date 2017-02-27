@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public IntradayStaffingViewModel Load(Guid skillId, bool useShrinkage)
 		{
-			var cacheKey = getCacheKey(skillId);
+			var cacheKey = getCacheKey(skillId, useShrinkage);
 			var intradyStaffingViewModelCache = MemoryCache.Default.Get(cacheKey) as IntradayStaffingViewModel;
 			if (intradyStaffingViewModelCache != null)
 				return intradyStaffingViewModelCache;
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return intradyStaffingViewModel;
 		}
 
-		private string getCacheKey(Guid skillId)
+		private string getCacheKey(Guid skillId, bool useShrinkage)
 		{
-			return skillId.ToString();
+			return $"{skillId}_{useShrinkage}";
 		}
 	}
 
