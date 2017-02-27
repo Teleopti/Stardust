@@ -29,6 +29,8 @@
 
 					parseRelativeDifference($scope.dayNodes);
 					parseWeekends($scope.dayNodes);
+
+					displayGird();
 				}
 
 				var initLoad = function() {
@@ -98,23 +100,27 @@
 				var parseWeekends = function(period) {
 					ResourcePlannerReportSrvc.parseWeek(period);
 				};
-				
-				$scope.gridOptions = {
-					columnDefs: [{
-						name: 'Agent',
-						field: 'Name',
-						enableColumnMenu: false
-					}, {
-						name: 'Detail',
-						field: 'Message',
-						enableColumnMenu: false
-					}, {
-						name: 'Issue-type',
-						field: 'BusinessRuleCategoryText',
-						enableColumnMenu: false
-					}],
-					data: $scope.issues
-				};
+
+				var displayGird = function() {
+					$scope.gridOptions = {
+						columnDefs: [
+							{
+								name: 'Agent',
+								field: 'Name',
+								enableColumnMenu: false
+							}, {
+								name: 'Detail',
+								field: 'Message',
+								enableColumnMenu: false
+							}, {
+								name: 'Issue-type',
+								field: 'BusinessRuleCategoryText',
+								enableColumnMenu: false
+							}
+						],
+						data: $scope.issues
+					};
+				}
 
 				$scope.publishSchedule = function() {
 					//Translate me better

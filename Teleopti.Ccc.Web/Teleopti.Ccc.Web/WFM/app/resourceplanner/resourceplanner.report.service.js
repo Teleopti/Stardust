@@ -1,7 +1,8 @@
 (function() {
 	'use strict';
 	angular.module('wfm.resourceplanner')
-		.service('ResourcePlannerReportSrvc', [
+		.service('ResourcePlannerReportSrvc',
+		[
 			'$resource',
 			function($resource) {
 
@@ -14,16 +15,19 @@
 					period.forEach(function(node) {
 						node.SkillDetails.forEach(function(subnode) {
 							var day = new Date(subnode.Date).getDay();
-							if (day == culturalDaysOff.a || day == culturalDaysOff.b) {
+							if (day === culturalDaysOff.a || day === culturalDaysOff.b) {
 								return subnode.weekend = true;
 							}
-							if (day == culturalDaysOff.start) {
+							if (day === culturalDaysOff.start) {
 								return subnode.weekstart = true;
 							}
-						})
-					})
+						});
+					});
 				};
-				this.intraOptimize = $resource('../api/ResourcePlanner/optimize/intraday/:id', {id:'@id'}, {
+				this.intraOptimize = $resource('../api/ResourcePlanner/optimize/intraday/:id',
+				{ id: '@id' },
+				{
+				
 				});
 
 				this.parseRelDif = function(period) {
@@ -32,13 +36,13 @@
 							if (isNaN(subnode.RelativeDifference)) {
 								subnode.ColorId = 3;
 							}
-							var tempParseDif = (subnode.RelativeDifference * 100).toFixed(1)
+							var tempParseDif = (subnode.RelativeDifference * 100).toFixed(1);
 							return subnode.parseDif = tempParseDif;
-						})
-					})
+						});
+					});
 				};
 
 
 			}
-		])
+		]);
 })();

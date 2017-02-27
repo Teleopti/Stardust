@@ -4,6 +4,8 @@ describe('ResourceplannerReportCtrl', function () {
 	$rootScope,
 	$httpBackend;
 
+	var mockToggleService;
+
 	beforeEach(module('wfm.resourceplanner'));
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
@@ -12,6 +14,16 @@ describe('ResourceplannerReportCtrl', function () {
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 		$httpBackend.whenGET("../ToggleHandler/AllToggles").respond(200, {});
+
+		mockToggleService = function (Scheduler_IntradayOptimization_36617_Value, Wfm_ResourcePlanner_SchedulingOnStardust_42874_Value) {
+			var deferred = $q.defer();
+			deferred.resolve();
+			return {
+				togglesLoaded: deferred.promise,
+				Scheduler_IntradayOptimization_36617: Scheduler_IntradayOptimization_36617_Value,
+				Wfm_ResourcePlanner_SchedulingOnStardust_42874: Wfm_ResourcePlanner_SchedulingOnStardust_42874_Value
+			}
+		};
 	}));
 	var result = {};
 
@@ -38,35 +50,35 @@ describe('ResourceplannerReportCtrl', function () {
 	}));
     it('should detect and process issues', inject(function ($controller) {
         var scope = $rootScope.$new();
-        $controller('ResourceplannerReportCtrl', { $scope: scope,$stateParams: result.withIssues() });
-
+        $controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withIssues(), Toggle: mockToggleService(false, false) });
+	    scope.$digest();
         expect(scope.issues.length).toEqual(1);
         expect(scope.hasIssues).toEqual(true);
     }));
     it('should find weekends', inject(function ($controller) {
         var scope = $rootScope.$new();
-        $controller('ResourceplannerReportCtrl', { $scope: scope,$stateParams:  result.withNoIssues() });
-
+        $controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withNoIssues(), Toggle: mockToggleService(false, false) });
+	    scope.$digest();
         expect(scope.dayNodes[0].SkillDetails[0].weekend).toBe(true);
     }));
     it('should find and ignore weekends', inject(function ($controller) {
         var scope = $rootScope.$new();
-        $controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withNoWeekends() });
-
+        $controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withNoWeekends(), Toggle: mockToggleService(false, false) });
+        scope.$digest();
         expect(scope.dayNodes[0].SkillDetails[0].weekend).toBe(undefined);
     }));
 	it('should be possible to publish a schedule', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withPeriodId() });
 
-		scope.publishSchedule()
+		scope.publishSchedule();
 		expect(scope.publishedClicked).toBe(true);
 	}));
 	it('should be possible to publish a schedule only once', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withPeriodId() });
 
-		scope.publishSchedule()
+		scope.publishSchedule();
 		expect(scope.publishedClicked).toBe(true);
 	}));
 	it('should default values if none are loaded', inject(function ($controller) {
@@ -85,16 +97,8 @@ describe('ResourceplannerReportCtrl', function () {
 	}));
 	it('should return true if params are provided', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		var deferred = $q.defer();
-		deferred.resolve();
-		var mockToggleService = {
-			togglesLoaded: deferred.promise,
-			Scheduler_IntradayOptimization_36617:function(){
-				return true;
-			}
-		};
 		var mockstateParams = {id:"111-111",result:{},interResult:[],planningperiod:{}}
-		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams, Toggle:mockToggleService});
+		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams, Toggle: mockToggleService(true, false) });
 		scope.$digest();
 		expect(scope.optimizeDayOffIsEnabled()).toBe(true);
 	}));
