@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
 			var range = planningPeriod.Range;
-			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();
+			var lastJobResult = planningPeriod.JobResults.Where(x=>x.JobCategory==JobCategory.WebSchedule && x.FinishedOk).OrderByDescending(x => x.Timestamp).FirstOrDefault();
 			if (lastJobResult != null)
 				return
 					Ok(
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult JobStatus(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
-			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();
+			var lastJobResult = planningPeriod.JobResults.Where(x => x.JobCategory == JobCategory.WebSchedule).OrderByDescending(x => x.Timestamp).FirstOrDefault();
 			if (lastJobResult != null)
 				return
 					Ok(
