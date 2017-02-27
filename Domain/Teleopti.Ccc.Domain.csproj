@@ -589,6 +589,7 @@
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\FindSchedulesForPersons.cs" />
     <Compile Include="Scheduling\IFindSchedulesForPersons.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\BackToLegalStateExecuter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DoFullResourceOptimizationOneTime.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOptimizerHelper.cs" />

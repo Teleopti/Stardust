@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Extra = new ExtraPreferences { UseTeamBlockOption = true, UseBlockSameShiftCategory = true }
 			};
 
-			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] {stateHolder.Schedules[agent].ScheduledDay(date)}, optimizationPreferences, false, new DaysOffPreferences(), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {stateHolder.Schedules[agent].ScheduledDay(date)}, optimizationPreferences,  new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().ShiftCategory
 				.Should().Be.EqualTo(shiftCategoryAm);

@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -122,14 +121,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats
 			};
 			Target.Execute(
-				new OptimizerOriginalPreferences(new SchedulingOptions
-				{
-					TagToUseOnScheduling = NullScheduleTag.Instance,
-					GroupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(UserTexts.Resources.NoTeam)
-				}),
 				new NoSchedulingProgress(), StateHolder,
 				new[] {dictionary[person].ScheduledDay(date)},
-					OptimizationPreferences, false, new DaysOffPreferences(),
+					OptimizationPreferences, 
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftLayers.Should().Be.Empty();

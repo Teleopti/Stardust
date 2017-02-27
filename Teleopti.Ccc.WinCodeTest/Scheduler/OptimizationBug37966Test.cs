@@ -154,16 +154,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats
 			};
 			Target.Execute(
-				new OptimizerOriginalPreferences(new SchedulingOptions
-				{
-					TagToUseOnScheduling = NullScheduleTag.Instance,
-					GroupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(UserTexts.Resources.NoTeam)
-				}),
 				new NoSchedulingProgress(), StateHolder,
 				new[] { dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date) },
 					OptimizationPreferences, 
-					false, 
-					new DaysOffPreferences(),
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			dictionary[person].ScheduledDay(date).PersonAssignment().ShiftLayers.Should().Be.Empty();

@@ -3574,12 +3574,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			else
 			{
-				_container.Resolve<OptimizationExecuter>().Execute(_optimizerOriginalPreferences,
+				_container.Resolve<OptimizationExecuter>().Execute(
 					new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
 					_schedulerState,
 					argument.SelectedScheduleDays,
-					_optimizationPreferences, false,
-					argument.DaysOffPreferences,
+					_optimizationPreferences, 
 					dayOffOptimizationPreferenceProvider);
 			}
 		}
