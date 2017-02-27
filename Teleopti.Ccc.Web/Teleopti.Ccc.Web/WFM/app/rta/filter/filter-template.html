@@ -21,6 +21,9 @@
 						{{'RepViewerNoMoreMatches'|translate}}
 					</md-not-found>
 					</md-autocomplete>
+					<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.clearSelection()">
+						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+					</i>
 					</span>
 					<span class="con-flex">
 						<md-autocomplete id="skill-area-id"
@@ -42,6 +45,9 @@
 						{{'RepViewerNoMoreMatches'|translate}}
 					</md-not-found>
 					</md-autocomplete>
+					<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea" ng-click="vm.clearSelection()">
+						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+					</i>
 					</span>
 					<span class="con-flex rta-multiple-selection-panel">
 						<md-input-container class="rta-md-input-container" id="organization" md-no-float>

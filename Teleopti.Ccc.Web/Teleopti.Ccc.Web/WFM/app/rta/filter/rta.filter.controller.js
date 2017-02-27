@@ -56,6 +56,7 @@
 		vm.skillsLoaded = false;
 		vm.skillAreasLoaded = false;
 		vm.showOrganization = $state.current.name === agentsState;
+		vm.clearSelection = clearSelection;
 
 		(function initialize() {
 			rtaService.getSkills()
@@ -203,7 +204,6 @@
 			}
 			else {
 				if (skillArea.Id === $stateParams.skillAreaId) return;
-				//vm.skillAreaId = skillArea.Id;
 				vm.selectedSkillArea = skillArea;
 				vm.selectedSkill = undefined;
 				if ($state.current.name !== "rta.teams" && $stateParams.siteId)
@@ -212,6 +212,10 @@
 					rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
 				}
 			}
+		}
+
+		function clearSelection() {
+			vm.selectedSkill ? vm.selectedSkill = null : vm.selectedSkillArea = null;
 		}
 
 		/***********MULTI-SELECT************/
