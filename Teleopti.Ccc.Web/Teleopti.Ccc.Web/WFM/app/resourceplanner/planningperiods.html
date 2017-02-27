@@ -66,6 +66,9 @@
 			<button class="wfm-btn material-depth-1 wfm-btn-primary test-schedule-button" ng-class="{'shrink-in': disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">
 				{{'ScheduleVerb' | translate }}
 			</button>
+			<button class="wfm-btn material-depth-1 wfm-btn-primary" ng-class="{'shrink-in': disableReport()}" ng-disabled="disableReport()" ng-click="goToReport(planningPeriod)">
+				{{'LatestScheduleResult' | translate }}
+			</button>
 		</div>
 	</div>
 

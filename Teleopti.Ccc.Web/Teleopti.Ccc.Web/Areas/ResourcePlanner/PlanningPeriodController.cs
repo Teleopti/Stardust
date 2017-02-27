@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -36,9 +37,25 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_agentGroupRepository = agentGroupRepository;
 		}
 
+		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/result/{id}")]
+		public virtual IHttpActionResult JobResult(Guid id)
+		{
+			var planningPeriod = _planningPeriodRespository.Get(id);
+			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();
+			if (lastJobResult != null)
+				return
+					Ok(
+						new
+						{
+							ScheduleResult = JsonConvert.DeserializeObject(lastJobResult.Details.First().Message),
+							OptimizationResult = JsonConvert.DeserializeObject(lastJobResult.Details.Last().Message)
+						});
+			return NotFound();
+		}
+
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/status/{id}")]
-		public virtual IHttpActionResult JobResult(Guid id)
+		public virtual IHttpActionResult JobStatus(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Get(id);
 			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();

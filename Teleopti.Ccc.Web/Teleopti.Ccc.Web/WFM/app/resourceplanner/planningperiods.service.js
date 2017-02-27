@@ -10,7 +10,10 @@
 			this.getPlanningPeriod = $resource('../api/resourceplanner/planningperiod/:id', {id:"@id"}, {
 				query: { method: 'GET', params: {}, isArray: false }
 			});
-			this.jobStatus = $resource('../api/resourceplanner/planningperiod/status/:id', { id: "@id" }, {
+			this.lastJobStatus = $resource('../api/resourceplanner/planningperiod/status/:id', { id: "@id" }, {
+				query: { method: 'GET', params: {}, isArray: false }
+			});
+			this.lastJobResult = $resource('../api/resourceplanner/planningperiod/result/:id', { id: "@id" }, {
 				query: { method: 'GET', params: {}, isArray: false }
 			});
 			this.changeRange = $resource('../api/resourceplanner/planningperiod/:id', { id: "@id" }, {

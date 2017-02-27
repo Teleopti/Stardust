@@ -6,18 +6,50 @@
 			'$scope', '$state', '$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'NoticeService', 'Toggle', '$interval',
 			function($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, NoticeService, toggleService, $interval) {
 				var toggledOptimization = false;
-				var scheduleResult = $stateParams.interResult.SkillResultList ? $stateParams.interResult.SkillResultList : [];
-				$scope.issues = $stateParams.result.BusinessRulesValidationResults ? $stateParams.result.BusinessRulesValidationResults : [];
-				$scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount ? $stateParams.result.ScheduledAgentsCount : 0;
+				var toggledSchedulingOnStardust = false;
+				$scope.issues = [];
+				$scope.scheduledAgents = 0;
 				$scope.planningPeriod = $stateParams.planningperiod;
-				$scope.hasIssues = $scope.issues.length > 0;
-				$scope.isDataAvailable = scheduleResult.length > 0;
-				$scope.dayNodes = scheduleResult;
+				$scope.hasIssues = false;
+				$scope.isDataAvailable = false;
+				$scope.dayNodes = [];
 				$scope.optimizeRunning = false;
 				$scope.optimizationHasBeenRun = false;
 
+
+				var initResult = function (interResult, result) {
+					var scheduleResult = interResult.SkillResultList ? interResult.SkillResultList : [];
+					$scope.issues = result.BusinessRulesValidationResults ? result.BusinessRulesValidationResults : [];
+					$scope.scheduledAgents = result.ScheduledAgentsCount ? result.ScheduledAgentsCount : 0;
+					$scope.hasIssues = $scope.issues.length > 0;
+					$scope.isDataAvailable = scheduleResult.length > 0;
+					$scope.dayNodes = scheduleResult;
+					$scope.optimizeRunning = false;
+					$scope.optimizationHasBeenRun = false;
+
+					parseRelativeDifference($scope.dayNodes);
+					parseWeekends($scope.dayNodes);
+				}
+
+				var initLoad = function() {
+					if (toggledSchedulingOnStardust) {
+						PlanningPeriodSvrc.lastJobResult.query({ id: $stateParams.id })
+							.$promise.then(function (data) {
+								var interResult = data.OptimizationResult;
+								var result = data.ScheduleResult;
+								initResult(interResult, result);
+							});
+					} else {
+						var interResult = $stateParams.interResult;
+						var result = $stateParams.result;
+						initResult(interResult, result);
+					}
+				}
+
 				toggleService.togglesLoaded.then(function() {
 					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
+					toggledSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
+					initLoad();
 				});
 				$scope.optimizeDayOffIsEnabled = function() {
 					return (toggledOptimization && $stateParams.id !== "");
@@ -66,8 +98,7 @@
 				var parseWeekends = function(period) {
 					ResourcePlannerReportSrvc.parseWeek(period);
 				};
-				parseRelativeDifference($scope.dayNodes);
-				parseWeekends($scope.dayNodes)
+				
 				$scope.gridOptions = {
 					columnDefs: [{
 						name: 'Agent',

@@ -5,6 +5,7 @@
 		.controller('PlanningPeriodsCtrl', [
 			'$scope', '$state', '$stateParams', '$interval', 'PlanningPeriodSvrc', 'Toggle', '$translate',
 			function ($scope, $state, $stateParams, $interval, PlanningPeriodSvrc, toggleService, $translate) {
+				var toggleSchedulingOnStardust = false;
 				//schedulings
 				$scope.status = '';
 				$scope.schedulingPerformed = false;
@@ -13,8 +14,12 @@
 				$scope.isEnabled = false;
 				$scope.dayoffRules = [];
 				$scope.planningPeriod = {};
+				$scope.lastJobSuccessful = false;
 				$scope.disableSchedule = function() {
 					return !$scope.initialized || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
+				};
+				$scope.disableReport = function () {
+					return !($scope.schedulingPerformed && $scope.lastJobSuccessful && toggleSchedulingOnStardust);
 				};
 
 				function handleScheduleOrOptimizeError() {
@@ -35,19 +40,21 @@
 
 
 				var checkProgress = function(planningPeriodId) {
-					PlanningPeriodSvrc.jobStatus.query({ id: planningPeriodId })
+					PlanningPeriodSvrc.lastJobStatus.query({ id: planningPeriodId })
 						.$promise.then(function(result) {
 							if (!result.HasJob) {
 								$scope.schedulingPerformed = false;
 								$scope.scheduleClicked = false;
+								$scope.lastJobSuccessful = false;
 							} else {
 								if (result.Successful) {
 									$scope.scheduleClicked = false;
 									$scope.schedulingPerformed = true;
+									$scope.lastJobSuccessful = true;
 								} else if (result.Failed) {
 									handleScheduleOrOptimizeError();
-								}
-								else{
+									$scope.lastJobSuccessful = false;
+								} else {
 									$scope.scheduleClicked = true;
 									$scope.schedulingPerformed = false;
 									if (result.CurrentStep === 0) {
@@ -55,6 +62,7 @@
 									} else if (result.CurrentStep === 1) {
 										$scope.status = $translate.instant('OptimizingDaysOff');
 									}
+									$scope.lastJobSuccessful = false;
 								}
 							}
 						});
@@ -75,7 +83,7 @@
 					$scope.errorMessage = undefined;
 					$scope.schedulingPerformed = false;
 					$scope.scheduleClicked = true;
-
+					
 					$scope.status = $translate.instant('PresentTenseSchedule');
 					PlanningPeriodSvrc.launchScheduling.save({ id: p.Id }).$promise.then(function (scheduleResult) {
 						$scope.status = $translate.instant('OptimizingDaysOff');
@@ -101,11 +109,19 @@
 				}
 
 				$scope.launchSchedule = function(p) {
-					if (toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874) {
+					if (toggleSchedulingOnStardust) {
 						launchScheduleNew(p);
 					} else {
 						launchScheduleOld(p);
 					}
+				};
+
+				$scope.goToReport = function(p) {
+					$state.go('resourceplanner.report',
+					{
+						id: p.Id,
+						planningperiod: p
+					});
 				};
 
 				$scope.shouldShowValidationErrors = function (planningPeriod) {
@@ -116,6 +132,7 @@
 
 				toggleService.togglesLoaded.then(function() {
 					$scope.isEnabled = toggleService.Wfm_ChangePlanningPeriod_33043;
+					toggleSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
 				});
 
 				var checkProgressRef;
@@ -125,7 +142,7 @@
 				}).$promise.then(function(result) {
 					$scope.planningPeriod = result;
 					$scope.initialized = true;
-					if (toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874) {
+					if (toggleSchedulingOnStardust) {
 						checkProgress($stateParams.id);
 						checkProgressRef = $interval(function () {
 							checkProgress($stateParams.id);
