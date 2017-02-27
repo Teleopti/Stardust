@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             _deleteSchedulePartService = _mock.StrictMock<IDeleteSchedulePartService>();
 			_scheduleDayIsLockedSpecification = _mock.StrictMock<IScheduleDayIsLockedSpecification>();
 	        _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
-			_target = new DeleteScheduleDayFromUnsolvedPersonWeek(_deleteSchedulePartService, _scheduleDayIsLockedSpecification);
+			_target = new DeleteScheduleDayFromUnsolvedPersonWeek(_deleteSchedulePartService, _scheduleDayIsLockedSpecification, new CorrectAlteredBetween(new UtcTimeZone()), new OptimizerActivitiesPreferencesFactory());
         }
 
         [Test]

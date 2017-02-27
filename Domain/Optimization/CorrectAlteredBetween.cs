@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 											IVisualLayerCollection currentProjection,
 											OptimizerActivitiesPreferences optimizerActivitiesPreferences)
 		{
-			if (!optimizerActivitiesPreferences.AllowAlterBetween.HasValue)
+			if (optimizerActivitiesPreferences?.AllowAlterBetween == null)
 				return true;
 
 			var timeZone = _userTimeZone.TimeZone();

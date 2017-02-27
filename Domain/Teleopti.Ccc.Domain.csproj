@@ -584,6 +584,7 @@
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
+    <Compile Include="Scheduling\Assignment\NoProjectionMerger.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleDayExtensions.cs" />
     <Compile Include="Scheduling\DoNothingResourceCalculateDelayer.cs" />
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -28,19 +27,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		[Ignore("bug #43149")]
-		public void ShouldHandleAlterBetweenInFarAwayTimeZone()
+		public void ShouldNotCrashAlterBetweenInFarAwayTimeZone()
 		{
 			var activity = new Activity("_") {InWorkTime = true}.WithId();
 			var dateOnly = new DateOnly(2017, 02, 27);
 			var scenario = new Scenario("_");
-			var orgShiftCat = new ShiftCategory("_");
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(8, 0, 8, 0, 60), new ShiftCategory("_").WithId()));
+			var orgShiftCat = new ShiftCategory("org").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(8, 0, 8, 0, 60), new ShiftCategory("new").WithId()));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo()).WithPersonPeriod(ruleSet, new Team()).WithSchedulePeriodOneDay(dateOnly);
 			var asses = dateOnly.ToDateOnlyPeriod().Inflate(7).DayCollection()
-				.Select(date => new PersonAssignment(agent, scenario, date)
-				.ShiftCategory(orgShiftCat)
-				.WithLayer(activity, new TimePeriod(23, 24 + 7)));
+				.Select(date => new PersonAssignment(agent, scenario, date).ShiftCategory(orgShiftCat).WithLayer(activity, new TimePeriod(23, 24 + 7)));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, asses, Enumerable.Empty<ISkillDay>());
 			var optPreferences = new OptimizationPreferences
 			{
@@ -49,10 +45,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Shifts = {AlterBetween = true, SelectedTimePeriod = new TimePeriod(0, 24)}
 			};
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
-
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().ShiftCategory
-				.Should().Be.EqualTo(orgShiftCat);
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+			});
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

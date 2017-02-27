@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -11,12 +13,18 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
     {
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 	    private readonly IScheduleDayIsLockedSpecification _scheduleDayIsLockedSpecification;
+	    private readonly CorrectAlteredBetween _correctAlteredBetween;
+	    private readonly OptimizerActivitiesPreferencesFactory _optimizerActivitiesPreferencesFactory;
 
 	    public DeleteScheduleDayFromUnsolvedPersonWeek(IDeleteSchedulePartService deleteSchedulePartService, 
-			IScheduleDayIsLockedSpecification scheduleDayIsLockedSpecification)
+			IScheduleDayIsLockedSpecification scheduleDayIsLockedSpecification,
+			CorrectAlteredBetween correctAlteredBetween,
+			OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory)
         {
 	        _deleteSchedulePartService = deleteSchedulePartService;
 	        _scheduleDayIsLockedSpecification = scheduleDayIsLockedSpecification;
+	        _correctAlteredBetween = correctAlteredBetween;
+	        _optimizerActivitiesPreferencesFactory = optimizerActivitiesPreferencesFactory;
         }
 
 	    public void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff,
@@ -60,10 +68,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				return false;
 
 			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var timeZoneInfo = scheduleDay.TimeZone;
-
 			var keepSelectedActivities = isKeepSelectedActivitiesAffecting(optimizationPreferences, projection);
-			var alterBetween = isAlterBetweenAffecting(optimizationPreferences, projection, timeZoneInfo);
+			var alterBetween = !_correctAlteredBetween.Execute(scheduleDay.DateOnlyAsPeriod.DateOnly, 
+				projection,
+				VisualLayerCollection.CreateEmptyProjection(scheduleDay.Person),
+				_optimizerActivitiesPreferencesFactory.Create(optimizationPreferences));
 			var keepActivityLength = isKeepActivityLengthAffecting(optimizationPreferences, projection);
 
 			return	(optimizationPreferences.Shifts.KeepStartTimes ||
@@ -73,29 +82,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 					keepActivityLength ||
 					alterBetween);
 		}
-
-	    private bool isAlterBetweenAffecting(IOptimizationPreferences optimizationPreferences, IVisualLayerCollection projection, TimeZoneInfo timeZone)
-	    {
-		    if (!optimizationPreferences.Shifts.AlterBetween)
-			    return false;
-
-		    var dateTimePeriod = projection.Period();
-		    if (dateTimePeriod == null)
-			    return false;
-
-			var shiftStartDate = dateTimePeriod.Value.StartDateTime.Date;
-		    var shiftStart = dateTimePeriod.Value.StartDateTime;
-			var shiftEnd = dateTimePeriod.Value.EndDateTime;
-			var dateOffset = (int)shiftEnd.Date.Subtract(shiftStartDate).TotalDays;
-			var shiftStartUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(shiftStart, timeZone);
-		    var shiftEndUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(shiftEnd, timeZone);
-		    var shiftTimePeriod = new TimePeriod(shiftStartUserLocalDateTime.TimeOfDay, shiftEndUserLocalDateTime.TimeOfDay.Add((TimeSpan.FromDays(dateOffset))));
-
-		    if (optimizationPreferences.Shifts.SelectedTimePeriod.Contains(shiftTimePeriod))
-			    return false;
-
-		    return true;
-	    }
 
 	    private bool isKeepSelectedActivitiesAffecting(IOptimizationPreferences optimizationPreferences, IVisualLayerCollection projection)
 	    {
