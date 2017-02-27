@@ -23,11 +23,11 @@
     };
 
     vm.detectMobile = function() {
-      return window.innerWidth >= 768 ? true : false;
+      return window.innerWidth >= 770 ? true : false;
     }
 
     vm.toggleMobileMenu = function () {
-      if (vm.mainMenuState && !vm.detectMobile()) {
+      if (vm.detectMobile() == false && vm.mainMenuState) {
         vm.mainMenuState = false;
       }
     }

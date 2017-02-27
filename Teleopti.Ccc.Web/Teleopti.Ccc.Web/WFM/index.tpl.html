@@ -38,10 +38,10 @@
 				</b>
 				-
 				<label ng-controller="BusinessUnitsController as businessunit" class="inline-flex">
-					<div tabindex="0" class="context-menu businessunit-menu" id="business-unit-select" ng-click="businessunit.toggleBuMenu()" ng-blur="businessunit.toggleBuMenu()">
+					<div tabindex="0" class="context-menu businessunit-menu" id="business-unit-select" ng-click="businessunit.toggleBuMenu();" ng-blur="businessunit.toggleBuMenu();">
 						<span>
-							<span ng-if="vm.detectMobile()">{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i></span>
-							<span ng-if="!vm.detectMobile()"><i class="mdi mdi-vector-square"></i></span>
+							<span ng-if="vm.detectMobile();">{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i></span>
+							<span ng-if="!vm.detectMobile();"><i class="mdi mdi-vector-square"></i></span>
 
 							<md-tooltip>
 								{{'BusinessUnit'|translate}}
@@ -59,7 +59,7 @@
 			</label>
 		</h2>
 		<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
-			<mainmenu data="a" open="vm.mainMenuState" ng-repeat="a in vm.areas" ng-click="vm.toggleMobileMenu()"></mainmenu>
+			<mainmenu data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();" ng-repeat="a in vm.areas"></mainmenu>
 		</div>
 	</div>
 
