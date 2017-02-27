@@ -18,7 +18,7 @@
         getDayOffRules();
 
         function getDayOffRules() {
-        	return dayOffRuleService.dayoffRules.query().$promise.then(function (data) {
+        	return dayOffRuleService.getDayOffRules().$promise.then(function (data) {
     				vm.dayoffRules = data;
     				return vm.dayoffRules;
     			});
@@ -36,7 +36,7 @@
 
         function destoryRuleset(dayOffRule) {
         	if (!dayOffRule.Default) {
-				dayOffRuleService.dayoffRules.remove({ id: dayOffRule.Id }).$promise.then(getDayOffRules());
+				dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id }).$promise.then(getDayOffRules());
 	        }
         }
 

@@ -7,7 +7,7 @@
 			function($resource) {
 
 
-				this.parseWeek = function(period) {
+				function parseWeek(period) {
 					var culturalDaysOff = {};
 					culturalDaysOff.a = 6; //saturday
 					culturalDaysOff.b = 0; //sunday
@@ -24,13 +24,9 @@
 						});
 					});
 				};
-				this.intraOptimize = $resource('../api/ResourcePlanner/optimize/intraday/:id',
-				{ id: '@id' },
-				{
-				
-				});
+				var intraOptimize = $resource('../api/resourceplanner/planningperiod/:id/optimizeintraday', { id: '@id' },{});
 
-				this.parseRelDif = function(period) {
+				function parseRelDif(period) {
 					period.forEach(function(node) {
 						node.SkillDetails.forEach(function(subnode) {
 							if (isNaN(subnode.RelativeDifference)) {
@@ -42,7 +38,11 @@
 					});
 				};
 
-
+				return {
+					parseWeek: parseWeek,
+					parseRelDif: parseRelDif,
+					intraOptimize: intraOptimize.save
+				}
 			}
 		]);
 })();

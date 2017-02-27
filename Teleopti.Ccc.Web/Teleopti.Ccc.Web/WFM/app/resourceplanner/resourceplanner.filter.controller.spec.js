@@ -32,9 +32,7 @@ describe('ResourcePlannerCtrl', function () {
 					sentData = JSON.parse(getData);
 					return true;
 				}).respond(200, true);
-
 	}));
-
 
 	it('should cancel previous search request', inject(function (ResourcePlannerFilterSrvc) {
 		var scope = $rootScope.$new();
@@ -471,13 +469,12 @@ describe('ResourcePlannerCtrl', function () {
 		var $stateParams = {filterId:'1',period: '10'};
 		var singleResult = {
 			Id: '111-111-111',
-			Name: 'newName',
+			Name: 'newName'
 		};
-
 
 		$httpBackend.whenGET(singleFilter($stateParams.filterId))
 			.respond(200, singleResult);
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:$stateParams });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams: $stateParams });
 
 		$httpBackend.flush();
 		expect(scope.name).toBe("newName");

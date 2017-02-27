@@ -8,10 +8,13 @@
 	factory.$inject = ['$resource'];
 
 	function factory($resource) {
-		var dayoffRules = $resource('../api/resourceplanner/dayoffrules/:id', {id:'@id'});
+		var dayOffRule = $resource('../api/resourceplanner/dayoffrules/:id', { id: '@id' });
 
 		var service = {
-			dayoffRules: dayoffRules
+			getDayOffRules: dayOffRule.query,
+			removeDayOffRule: dayOffRule.remove,
+			getDayOffRule: dayOffRule.get,
+			saveDayOffRule: dayOffRule.save
 		};
 
 		return service;

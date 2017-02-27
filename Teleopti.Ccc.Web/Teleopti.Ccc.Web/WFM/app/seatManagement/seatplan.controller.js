@@ -4,9 +4,9 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', '$timeout', '$scope', 'Toggle'];
+	seatPlanDirectiveController.$inject = ['planningPeriodService', 'seatPlanService', '$stateParams', '$timeout', '$scope', 'Toggle'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, $timeout, $scope, toggleService) {
+	function seatPlanDirectiveController(planningPeriodService, seatPlanService, params, $timeout, $scope, toggleService) {
 
 		var vm = this;
 
@@ -81,8 +81,7 @@
 				endDate: moment(dateMoment).endOf('month').format('YYYY-MM-DD')
 			};
 
-			resourcePlannerService.getPlanningPeriodsForRange
-				.query(planningPeriodParams)
+			planningPeriodService.getPlanningPeriods(planningPeriodParams)
 				.$promise.then(function (data) {
 					vm.planningPeriods = data;
 					vm.isLoadingPlanningPeriods = false;

@@ -5,10 +5,10 @@
 			'$scope', '$state', '$stateParams','ResourcePlannerReportSrvc',
 			function($scope, $state, $stateParams, ResourcePlannerReportSrvc) {
 				$scope.isEnabled = false;
-				var status = "waiting"
+				var status = "waiting";
 				$scope.optimizeRunning = false;
-				$scope.checkStatus = function(){
-					return status
+				$scope.checkStatus = function() {
+					return status;
 				}
 				$scope.intraOptimize = function() {
 					status = 'running';

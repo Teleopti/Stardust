@@ -1961,7 +1961,6 @@
     <Content Include="WFM\app\permissions\functions\permissions.rolefunctions.service.js" />
     <Content Include="WFM\app\permissions\roles\roles.service.js" />
     <Content Include="WFM\app\permissions\_modules.js" />
-    <Content Include="WFM\app\resourceplanner\resourceplanner.service.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.controller.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner-report.html" />
@@ -1996,7 +1995,6 @@
     <Content Include="WFM\app\resourceplanner\planningperiods.controller.js" />
     <Content Include="WFM\app\resourceplanner\planningperiods.html" />
     <Content Include="WFM\app\resourceplanner\planningperiods-modal.html" />
-    <Content Include="WFM\app\resourceplanner\planningperiods.service.js" />
     <Content Include="WFM\app\seatManagement\seatmap.controller.js" />
     <Content Include="WFM\app\people\people.start.controller.js" />
     <Content Include="WFM\app\people\people.service.js" />

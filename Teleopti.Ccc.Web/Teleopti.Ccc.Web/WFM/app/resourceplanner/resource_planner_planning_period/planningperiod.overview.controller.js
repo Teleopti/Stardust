@@ -18,7 +18,7 @@
 
         function getPlanningPeriod(id){
           if (id) {
-          	var query = planningPeriodService.getPlanningPeriods({ agentGroupId: id });
+          	var query = planningPeriodService.getPlanningPeriodsForAgentGroup({ agentGroupId: id });
           	return query.$promise.then(function (data) {
               vm.planningPeriods = data;
 

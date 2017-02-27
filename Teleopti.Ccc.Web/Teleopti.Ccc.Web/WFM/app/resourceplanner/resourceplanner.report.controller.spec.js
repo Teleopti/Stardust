@@ -102,12 +102,12 @@ describe('ResourceplannerReportCtrl', function () {
 		scope.$digest();
 		expect(scope.optimizeDayOffIsEnabled()).toBe(true);
 	}));
-	it('should call keep alive each 10th minute to make sure session is alive', inject(function ($controller, $interval, PlanningPeriodSvrc) {
+	it('should call keep alive each 10th minute to make sure session is alive', inject(function ($controller, $interval, planningPeriodService) {
 		var scope = $rootScope.$new();
 
 		var numberOfKeepAliveCalls = 0;
 
-		PlanningPeriodSvrc.keepAlive = function () { numberOfKeepAliveCalls++; };
+		planningPeriodService.keepAlive = function () { numberOfKeepAliveCalls++; };
 
 		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withNoIssues() });
 
@@ -116,7 +116,7 @@ describe('ResourceplannerReportCtrl', function () {
 
 		expect(numberOfKeepAliveCalls).toBe(2);
 	}));
-	it('should update relative difference when new data is available', inject(function ($controller, $interval, PlanningPeriodSvrc) {
+	it('should update relative difference when new data is available', inject(function ($controller, $interval, planningPeriodService) {
 		var scope = $rootScope.$new();
 		var mockstateParams = {id:"",result:{},planningperiod:{},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{RelativeDifference:2,Date:'2015-11-14'}]}]}}
 		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams });

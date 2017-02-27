@@ -3,8 +3,8 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
-			'$scope', '$state', '$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'NoticeService', 'Toggle', '$interval',
-			function($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, NoticeService, toggleService, $interval) {
+			'$scope', '$state', '$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'planningPeriodService', 'NoticeService', 'Toggle', '$interval',
+			function ($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, planningPeriodService, NoticeService, toggleService, $interval) {
 				var toggledOptimization = false;
 				var toggledSchedulingOnStardust = false;
 				$scope.issues = [];
@@ -36,7 +36,7 @@
 
 				var initLoad = function() {
 					if (toggledSchedulingOnStardust) {
-						PlanningPeriodSvrc.lastJobResult.query({ id: $stateParams.id })
+						planningPeriodService.lastJobResult({ id: $stateParams.id })
 							.$promise.then(function (data) {
 								initResult(data.OptimizationResult, data.ScheduleResult, data.PlanningPeriod);
 							});
@@ -68,8 +68,8 @@
 					$scope.optimizeRunning = true;
 					//to make sure long optimization request doesn't create a new cookie based on current time
 					//we call keepAlive here again
-					PlanningPeriodSvrc.keepAlive().then(function() {
-						ResourcePlannerReportSrvc.intraOptimize.save({
+					planningPeriodService.keepAlive().then(function () {
+						ResourcePlannerReportSrvc.intraOptimize({
 							id: $stateParams.id
 						}).$promise.then(function(result) {
 							$scope.optimizeRunning = false;
@@ -85,7 +85,7 @@
 
 				var tenMinutes = 1000 * 60 * 10;
 				var keepAliveRef = $interval(function() {
-					PlanningPeriodSvrc.keepAlive();
+					planningPeriodService.keepAlive();
 				}, tenMinutes);
 
 				var notifyOptimizationDone = function() {
@@ -128,7 +128,7 @@
 						return;
 					}
 					$scope.publishedClicked = true;
-					PlanningPeriodSvrc.publishPeriod.query({
+					planningPeriodService.publishPeriod({
 						id: $stateParams.id
 					}).$promise.then(function() {
 						NoticeService.success( $translate.instant('Done'), null, true);

@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_agentGroupRepository = agentGroupRepository;
 		}
 
-		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/result/{id}")]
-		public virtual IHttpActionResult JobResult(Guid id)
+		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/result")]
+		public virtual IHttpActionResult JobResult(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Get(id);
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
 			var range = planningPeriod.Range;
 			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();
 			if (lastJobResult != null)
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 
-		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/status/{id}")]
-		public virtual IHttpActionResult JobStatus(Guid id)
+		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/status")]
+		public virtual IHttpActionResult JobStatus(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Get(id);
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
 			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();
 			if (lastJobResult != null)
 				return
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodsforrange")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
 		public virtual IHttpActionResult GetAllPlanningPeriods(DateTime startDate, DateTime endDate)
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
@@ -110,10 +110,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}")]
-		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
+		public virtual IHttpActionResult GetPlanningPeriod(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(id);
+			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
 			var validationResult = new ValidationResult();
 			if (planningPeriod.AgentGroup != null)
 			{
@@ -127,10 +127,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(planningPeriodModel);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions")]
-		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid id)
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/suggestions")]
+		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(id);
+			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
 			var suggestion = _planningPeriodRespository.Suggestions(_now);
 			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
 			return Ok(result.Select(r => new SuggestedPlanningPeriodRangeModel
@@ -142,10 +142,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}));
 		}
 
-		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{id}")]
-		public virtual IHttpActionResult ChangeRange(Guid id, [FromBody] PlanningPeriodChangeRangeModel model)
+		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
+		public virtual IHttpActionResult ChangeRange(Guid planningPeriodId, [FromBody] PlanningPeriodChangeRangeModel model)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(id);
+			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
 			planningPeriod.ChangeRange(new SchedulePeriodForRangeCalculation
 			{
 				Number = model.Number,

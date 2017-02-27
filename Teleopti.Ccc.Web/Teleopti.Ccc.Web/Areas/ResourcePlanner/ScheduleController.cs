@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/Schedule/{id}")]
-		public virtual IHttpActionResult ScheduleForPlanningPeriod(Guid id)
+		[HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/schedule")]
+		public virtual IHttpActionResult ScheduleForPlanningPeriod(Guid planningPeriodId)
 		{
 			var schedulePlanningPeriodCommand = new SchedulePlanningPeriodCommand
 			{
-				PlanningPeriodId = id
+				PlanningPeriodId = planningPeriodId
 			};
 			return Ok(_schedulePlanningPeriodCommandHandler.Execute(schedulePlanningPeriodCommand));
 		}
