@@ -9,17 +9,16 @@
 
 	function factory($resource) {
 
-		var planningPeriodByAgentGroupId = $resource('../api/resourceplanner/planningperiodforagentgroup/:agentGroupId', {
-			agentGroupId: "@agentGroupId"
-		});
-
-		var nextplanningperiod = $resource('../api/resourceplanner/nextplanningperiod/:agentGroupId', {
-			agentGroupId: "@agentGroupId"
+		var agentGroupBaseUrl = '../api/resourceplanner/agentgroup/:agentGroupId';
+		var agentGroup = $resource(agentGroupBaseUrl, { agentGroupId: "@agentGroupId" },
+		{
+			nextPlanningPeriod: { method: 'POST', params: { agentGroupId: "@agentGroupId" }, url: agentGroupBaseUrl + '/nextplanningperiod' },
+			getPlanningPeriods: { method: 'GET', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/planningperiods' }
 		});
 
 		var service = {
-			getPlanningPeriodByAgentGroupId: planningPeriodByAgentGroupId,
-			getNextPlanningPeriod: nextplanningperiod
+			getPlanningPeriods: agentGroup.getPlanningPeriods,
+			nextPlanningPeriod: agentGroup.nextPlanningPeriod
 		};
 
 		return service;

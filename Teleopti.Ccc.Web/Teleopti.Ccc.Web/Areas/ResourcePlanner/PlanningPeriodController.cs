@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(new {HasJob = false});
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodforagentgroup/{agentGroupId}")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/agentgroup/{agentGroupId}/planningperiods")]
 		public virtual IHttpActionResult GetAllPlanningPeriods(Guid agentGroupId)
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return nextPlanningPeriod(null);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod/{agentGroupId}")]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/agentgroup/{agentGroupId}/nextplanningperiod")]
 		public virtual IHttpActionResult GetNextPlanningPeriod(Guid agentGroupId)
 		{
 			var agentGroup = _agentGroupRepository.Load(agentGroupId);

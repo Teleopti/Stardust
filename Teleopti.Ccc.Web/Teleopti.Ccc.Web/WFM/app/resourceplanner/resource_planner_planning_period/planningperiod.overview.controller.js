@@ -18,8 +18,8 @@
 
         function getPlanningPeriod(id){
           if (id) {
-            var getPlanningPeriod = planningPeriodService.getPlanningPeriodByAgentGroupId.query({agentGroupId:id});
-            return getPlanningPeriod.$promise.then(function(data){
+          	var query = planningPeriodService.getPlanningPeriods({ agentGroupId: id });
+          	return query.$promise.then(function (data) {
               vm.planningPeriods = data;
 
               return vm.planningPeriods;
@@ -29,8 +29,8 @@
 
         function startNextPlanningPeriod() {
           var id = agentGroupId;
-          var getNextPlanningPeriod = planningPeriodService.getNextPlanningPeriod.save({agentGroupId:id});
-          return getNextPlanningPeriod.$promise.then(function(data){
+          var nextPlanningPeriod = planningPeriodService.nextPlanningPeriod({ agentGroupId: id });
+          return nextPlanningPeriod.$promise.then(function (data) {
             vm.planningPeriods.push(data);
             goAgentGroup(agentGroupId);
             return vm.planningPeriods;
