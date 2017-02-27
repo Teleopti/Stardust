@@ -18,6 +18,9 @@ $(document).ready(function () {
 	var probabilityNames = ["low", "high"];
 	var probabilityLabels = [userTexts.low, userTexts.high];
 
+	var invisibleProbabilityCssClass = "probability-none";
+	var expiredProbabilityCssClass = "probability-expired";
+
 	var createDayViewModel = function () {
 		return {
 			currentTimeInMinutes: -1,
@@ -36,15 +39,13 @@ $(document).ready(function () {
 		"probabilityEndPosition": 0.86
 	};
 
-	var invisibleProbabilityCssClass = "probability-none";
-
 	var baseDate = "2017-02-24";
 
 	test("Will not create absence possibility view model before probability start", function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T03:00:00",
 			"EndTime": baseDate + "T03:15:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -63,7 +64,7 @@ $(document).ready(function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T23:15:00",
 			"EndTime": baseDate + "T23:30:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -82,7 +83,7 @@ $(document).ready(function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T06:00:00",
 			"EndTime": baseDate + "T06:15:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -96,7 +97,8 @@ $(document).ready(function () {
 
 		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
 			constants.intervalLengthInMinutes * constants.scheduleHeight;
-		equal(vm.actualClass, "probability-" + probabilityNames[rawProbability.Possibility]);
+		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
+		equal(vm.actualClass, expectedActualClass);
 		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
 
@@ -109,9 +111,9 @@ $(document).ready(function () {
 		equal(vm.cssClass(), vm.actualClass);
 		equal(vm.tooltips(), vm.actualTooltips);
 
-		// Hide after current time
+		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
 		equal(vm.tooltips(), "");
 	});
 
@@ -119,7 +121,7 @@ $(document).ready(function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T06:00:00",
 			"EndTime": baseDate + "T06:15:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -150,9 +152,9 @@ $(document).ready(function () {
 		equal(vm.cssClass(), invisibleProbabilityCssClass);
 		equal(vm.tooltips(), "");
 
-		// Invisible after current time
-		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		// Masked after current time
+		dayViewModel.setUserNowInMinutes(750);
+		equal(vm.cssClass(), invisibleProbabilityCssClass + " " + expiredProbabilityCssClass);
 		equal(vm.tooltips(), "");
 	});
 
@@ -160,7 +162,7 @@ $(document).ready(function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T03:00:00",
 			"EndTime": baseDate + "T03:15:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -179,7 +181,7 @@ $(document).ready(function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T23:15:00",
 			"EndTime": baseDate + "T23:30:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -198,7 +200,7 @@ $(document).ready(function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T06:00:00",
 			"EndTime": baseDate + "T06:15:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -212,7 +214,8 @@ $(document).ready(function () {
 
 		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
 			constants.intervalLengthInMinutes * constants.scheduleHeight;
-		equal(vm.actualClass, "probability-" + probabilityNames[rawProbability.Possibility]);
+		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
+		equal(vm.actualClass, expectedActualClass);
 		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
 
@@ -225,9 +228,9 @@ $(document).ready(function () {
 		equal(vm.cssClass(), vm.actualClass);
 		equal(vm.tooltips(), vm.actualTooltips);
 
-		// Hide after current time
+		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
 		equal(vm.tooltips(), "");
 	});
 
@@ -235,7 +238,7 @@ $(document).ready(function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T06:00:00",
 			"EndTime": baseDate + "T06:15:00",
-			"Possibility": 1
+			"Possibility": Math.round(Math.random())
 		};
 		var continousPeriods = [
 			{
@@ -253,7 +256,8 @@ $(document).ready(function () {
 
 		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
 			constants.intervalLengthInMinutes * constants.scheduleHeight;
-		equal(vm.actualClass, "probability-" + probabilityNames[rawProbability.Possibility]);
+		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
+		equal(vm.actualClass, expectedActualClass);
 		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
 
@@ -268,7 +272,7 @@ $(document).ready(function () {
 
 		// Hide after current time
 		dayViewModel.setUserNowInMinutes(420);
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
 		equal(vm.tooltips(), "");
 	});
 });

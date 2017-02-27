@@ -120,6 +120,10 @@
 	background-color: yellow;
 }
 
+.probability-expired {
+	opacity: 0.2;
+}
+
 .weekview-timeline {
 	width: 31px;
 	height: 792px;

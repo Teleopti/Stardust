@@ -2,6 +2,8 @@
 	continousPeriods, userTexts, parent) {
 
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var invisibleProbabilityClass = "probability-none";
+	var expiredProbabilityClass = "probability-expired";
 
 	var probabilityNames = ["low", "high"];
 	var probabilityLabels = [userTexts.low, userTexts.high];
@@ -46,16 +48,14 @@
 	var intervalTimeSpan = startMoment.format(timeFormat) + " - " + endMoment.format(timeFormat)
 		+ (dayDiff > 0 ? " +" + dayDiff : "");
 
-	var tooltips = "";
-	var cssClass = "probability-none";
-	if (visible) {
-		cssClass = "probability-" + probabilityNames[index];
-		tooltips = "<div style='text-align: center'>" +
-			"  <div>" + tooltipsTitle + "</div>" +
-			"  <div class='tooltip-wordwrap' style='font-weight: bold'>" + probabilityLabels[index] + "</div>" +
-			"  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalTimeSpan + "</div>" +
-			"</div>";
-	}
+	var cssClass = visible ? "probability-" + probabilityNames[index] : invisibleProbabilityClass;
+	var tooltips = visible
+		? "<div style='text-align: center'>"
+		+ "  <div>" + tooltipsTitle + "</div>"
+		+ "  <div class='tooltip-wordwrap' style='font-weight: bold'>" + probabilityLabels[index] + "</div>"
+		+ "  <div class='tooltip-wordwrap' style='overflow: hidden'>" + intervalTimeSpan + "</div>"
+		+ "</div>"
+		: "";
 
 	var heightPerIntervalInPx = boundaries.heightPercentagePerMinute * constants.intervalLengthInMinutes *
 		constants.scheduleHeight;
@@ -66,9 +66,13 @@
 		actualTooltips: tooltips,
 		styleJson: { "height": heightPerIntervalInPx + "px" },
 		cssClass: function () {
-			return (parent.userNowInMinute() >= 0 && parent.userNowInMinute() < this.endInMinutes)
-				? this.actualClass
-				: "probability-none";
+			if (parent.userNowInMinute() < 0) {
+				return invisibleProbabilityClass;
+			} else if (parent.userNowInMinute() < this.endInMinutes) {
+				return this.actualClass;
+			} else {
+				return this.actualClass + " " + expiredProbabilityClass;
+			}
 		},
 		tooltips: function () {
 			return (parent.userNowInMinute() >= 0 && parent.userNowInMinute() < intervalEndMinutes)
