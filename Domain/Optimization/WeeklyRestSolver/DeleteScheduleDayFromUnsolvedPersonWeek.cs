@@ -68,19 +68,16 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				return false;
 
 			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var keepSelectedActivities = isKeepSelectedActivitiesAffecting(optimizationPreferences, projection);
-			var alterBetween = !_correctAlteredBetween.Execute(scheduleDay.DateOnlyAsPeriod.DateOnly, 
-				projection,
-				VisualLayerCollection.CreateEmptyProjection(scheduleDay.Person),
-				_optimizerActivitiesPreferencesFactory.Create(optimizationPreferences));
-			var keepActivityLength = isKeepActivityLengthAffecting(optimizationPreferences, projection);
 
-			return	(optimizationPreferences.Shifts.KeepStartTimes ||
-					optimizationPreferences.Shifts.KeepEndTimes ||
-					optimizationPreferences.Shifts.KeepShiftCategories ||
-					keepSelectedActivities ||
-					keepActivityLength ||
-					alterBetween);
+			return optimizationPreferences.Shifts.KeepStartTimes ||
+						 optimizationPreferences.Shifts.KeepEndTimes ||
+						 optimizationPreferences.Shifts.KeepShiftCategories ||
+						 isKeepSelectedActivitiesAffecting(optimizationPreferences, projection) ||
+						 isKeepActivityLengthAffecting(optimizationPreferences, projection) ||
+						 !_correctAlteredBetween.Execute(scheduleDay.DateOnlyAsPeriod.DateOnly,
+										 projection,
+										 VisualLayerCollection.CreateEmptyProjection(scheduleDay.Person),
+										 _optimizerActivitiesPreferencesFactory.Create(optimizationPreferences));
 		}
 
 	    private bool isKeepSelectedActivitiesAffecting(IOptimizationPreferences optimizationPreferences, IVisualLayerCollection projection)
