@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -14,29 +15,23 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 
 		public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
 		{
-			EnabledApplicationFunctions.Clear();
-
 			var realTimeAdherenceLicenseOption = new TeleoptiCccRealTimeAdherenceLicenseOption();
 			realTimeAdherenceLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
-			foreach (IApplicationFunction applicationFunction in realTimeAdherenceLicenseOption.EnabledApplicationFunctions)
-				EnabledApplicationFunctions.Add(applicationFunction);
+			IEnumerable<IApplicationFunction> functions = realTimeAdherenceLicenseOption.EnabledApplicationFunctions;
 
 			var scheduleMessengerLicenseOption = new TeleoptiCccAgentScheduleMessengerLicenseOption();
 			scheduleMessengerLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
-			foreach (IApplicationFunction applicationFunction in scheduleMessengerLicenseOption.EnabledApplicationFunctions)
-				EnabledApplicationFunctions.Add(applicationFunction);
+			functions = functions.Union(scheduleMessengerLicenseOption.EnabledApplicationFunctions);
 
 			var smsLinkLicenseOption = new TeleoptiCccSmsLinkLicenseOption();
 			smsLinkLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
-			foreach (IApplicationFunction applicationFunction in smsLinkLicenseOption.EnabledApplicationFunctions)
-				EnabledApplicationFunctions.Add(applicationFunction);
+			functions = functions.Union(smsLinkLicenseOption.EnabledApplicationFunctions);
 
 			var calendarLinkLicenseOption = new TeleoptiCccCalendarLinkLicenseOption();
 			calendarLinkLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
-			foreach (IApplicationFunction applicationFunction in calendarLinkLicenseOption.EnabledApplicationFunctions)
-				EnabledApplicationFunctions.Add(applicationFunction);
+			functions = functions.Union(calendarLinkLicenseOption.EnabledApplicationFunctions);
 
-			
+			EnableFunctions(functions.ToArray());
 		}
 	}
 }

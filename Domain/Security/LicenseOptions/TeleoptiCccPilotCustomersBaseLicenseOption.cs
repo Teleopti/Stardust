@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 		/// <param name="allApplicationFunctions">All application functions.</param>
 		/// <value>The enabled application functions.</value>
 		public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
-        {
-            EnabledApplicationFunctions.Clear();
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RaptorGlobal));
-        }
+		{
+			EnableFunctions(
+				ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication),
+				ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RaptorGlobal));
+		}
 
         #endregion
     }

@@ -28,13 +28,16 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	    /// <param name="allApplicationFunctions"></param>
 	    /// <value>The enabled application functions.</value>
 	    public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
-        {
-            EnabledApplicationFunctions.Clear();
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
-				EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard));
-        }
+	    {
+		    EnableFunctions(
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove),
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests),
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard));
+	    }
 
         #endregion
     }

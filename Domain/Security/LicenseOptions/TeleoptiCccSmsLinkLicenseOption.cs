@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 
 		public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
 		{
-			EnabledApplicationFunctions.Clear();
+			EnableApplicationFunctions(new IApplicationFunction[0]);
 		}
 	}
 }

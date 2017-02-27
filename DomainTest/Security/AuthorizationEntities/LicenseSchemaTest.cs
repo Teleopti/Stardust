@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             // every option holds an empty list
             foreach (LicenseOption licenseOption in _licenseList)
             {
-                Assert.AreEqual(0, licenseOption.EnabledApplicationFunctions.Count);
+                Assert.AreEqual(0, licenseOption.EnabledApplicationFunctions.Length);
             }
         }
 

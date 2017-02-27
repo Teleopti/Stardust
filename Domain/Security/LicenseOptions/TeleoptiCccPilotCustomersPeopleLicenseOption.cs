@@ -28,13 +28,15 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	    /// <param name="allApplicationFunctions">All application functions.</param>
 	    /// <value>The enabled application functions.</value>
 	    public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
-        {
-            EnabledApplicationFunctions.Clear();
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ModifyGroupPage));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword));
-        }
+	    {
+		    EnableFunctions(
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage),
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ModifyGroupPage),
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage),
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword));
+	    }
 
         #endregion
     }

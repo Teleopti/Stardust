@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     {
 	    private string _optionCode;
         private string _schemaCode;
-	    private readonly IList<IApplicationFunction> _enabledApplicationFunctions;
+	    private readonly List<IApplicationFunction> _enabledApplicationFunctions;
 
 	    /// <summary>
         /// Finds the license option by path.
@@ -93,7 +94,13 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets or sets the enabled application functions.
         /// </summary>
         /// <value>The enabled application functions.</value>
-        public virtual IList<IApplicationFunction> EnabledApplicationFunctions => _enabledApplicationFunctions;
+        public virtual IApplicationFunction[] EnabledApplicationFunctions => _enabledApplicationFunctions.ToArray();
+
+	    protected void EnableFunctions(params IApplicationFunction[] functionsToEnable)
+	    {
+		    _enabledApplicationFunctions.Clear();
+			_enabledApplicationFunctions.AddRange(functionsToEnable);
+	    }
 
 	    /// <summary>
 	    /// Sets the enabled (licensed) application functions.
@@ -102,11 +109,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 	    /// <value>The enabled application functions.</value>
 	    public virtual void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
         {
-            EnabledApplicationFunctions.Clear();
-            foreach (IApplicationFunction applicationFunction in allApplicationFunctions)
-            {
-                EnabledApplicationFunctions.Add(applicationFunction);
-            }
+			EnableFunctions(allApplicationFunctions.ToArray());
         }
 
         /// <summary>

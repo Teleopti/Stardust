@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	    /// <param name="allApplicationFunctions">All application functions.</param>
 	    /// <value>The enabled application functions.</value>
 	    public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
-        {
-            EnabledApplicationFunctions.Clear();
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RaptorGlobal));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenForecasterPage));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ExportForecastFile));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenBudgets));
-        }
+	    {
+		    EnableFunctions(
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication),
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RaptorGlobal),
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenForecasterPage),
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ExportForecastFile),
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenBudgets));
+	    }
     }
 }

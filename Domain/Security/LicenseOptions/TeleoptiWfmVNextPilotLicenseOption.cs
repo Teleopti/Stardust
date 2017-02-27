@@ -24,11 +24,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			};
 
 			var all = allApplicationFunctions.ToList();
-			EnabledApplicationFunctions.Clear();
-			foreach (var func in applicationFunctions)
-			{
-				EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, func));
-			}
+			EnableFunctions(applicationFunctions.Select(func => ApplicationFunction.FindByPath(all, func)).ToArray());
 		}
 	}
 }

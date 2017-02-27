@@ -28,13 +28,16 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	    /// <param name="allApplicationFunctions"></param>
 	    /// <value>The enabled application functions.</value>
 	    public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
-        {
-            EnabledApplicationFunctions.Clear();
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ManageScorecards));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport));
-        }
+	    {
+		    EnableFunctions(
+			    ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ManageScorecards),
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager),
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport),
+			    ApplicationFunction.FindByPath(allApplicationFunctions,
+				    DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport));
+	    }
 
         #endregion
     }

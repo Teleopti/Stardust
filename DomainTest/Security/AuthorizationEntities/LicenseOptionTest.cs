@@ -82,18 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             // Perform Assert Tests
             Assert.AreEqual(setValue, getValue);
         }
-
-        [Test]
-        public void VerifyEnabledApplicationFunctions()
-        {
-            // Test set method
-            _target.EnabledApplicationFunctions.Add(new ApplicationFunction("APP1"));
-            _target.EnabledApplicationFunctions.Add(new ApplicationFunction("APP2"));
-
-            // Perform Assert Tests
-            Assert.AreEqual(2, _target.EnabledApplicationFunctions.Count);
-        }
-
+		
         [Test]
         public void VerifyEnabled()
         {
@@ -107,20 +96,19 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyEnableApplicationFunctions()
         {
+            Assert.AreEqual(0, _target.EnabledApplicationFunctions.Length);
 
-            Assert.AreEqual(0, _target.EnabledApplicationFunctions.Count);
+            var applicationFunctions = new List<IApplicationFunction>
+            {
+	            new ApplicationFunction("APP1"),
+	            new ApplicationFunction("APP2")
+            };
 
-            IList<IApplicationFunction> applicationFunctions = new List<IApplicationFunction>();
-            applicationFunctions.Add(new ApplicationFunction("APP1"));
-            applicationFunctions.Add(new ApplicationFunction("APP2"));
+	        _target.EnableApplicationFunctions(applicationFunctions);
 
-            _target.EnableApplicationFunctions(applicationFunctions);
-
-            Assert.AreEqual(2, _target.EnabledApplicationFunctions.Count);
+            Assert.AreEqual(2, _target.EnabledApplicationFunctions.Length);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), 
-        System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ByPath")]
+		
         [Test]
         public void VerifyFindLicenseOptionByPath()
         {
@@ -141,9 +129,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             Assert.IsNotNull(result);
             Assert.AreEqual(pathNotExist, result.LicenseOptionPath);
             Assert.AreEqual(expectedNotExistenceOptionName, result.OptionName);
-
         }
-
     }
-
 }

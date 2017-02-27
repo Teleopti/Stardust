@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions)
 			{
 				enabledLicenseOption.EnableApplicationFunctions(applicationFunctions);
-				baseLicensedApplicationFunctions += enabledLicenseOption.EnabledApplicationFunctions.Count;
+				baseLicensedApplicationFunctions += enabledLicenseOption.EnabledApplicationFunctions.Length;
 			}
 
 			result.Count().Should().Be.EqualTo(baseLicensedApplicationFunctions);

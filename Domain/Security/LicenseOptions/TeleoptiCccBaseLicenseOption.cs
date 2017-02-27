@@ -118,11 +118,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			if (! _notIncludeWebTeams) webTeamsFunctionPaths.ForEach(appFunctionPaths.Add);
 
 			var all = allApplicationFunctions.ToList();
-			EnabledApplicationFunctions.Clear();
-			foreach (var appFunctionPath in appFunctionPaths)
-			{
-				EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, appFunctionPath));
-			}
+			EnableFunctions(appFunctionPaths.Select(appFunctionPath => ApplicationFunction.FindByPath(all, appFunctionPath)).ToArray());
 		}
 
 		[DisabledBy(Toggles.WfmTeamSchedule_MoveToBaseLicense_41039)]

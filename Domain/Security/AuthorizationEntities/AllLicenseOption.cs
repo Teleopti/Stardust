@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
@@ -28,12 +29,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 	    /// <value>The enabled application functions.</value>
 	    public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
         {
-            EnabledApplicationFunctions.Clear();
-            foreach (ApplicationFunction applicationFunction in allApplicationFunctions)
-            {
-                //if ((applicationFunction.Level <= 1) || (applicationFunction.ForeignSource == DefinedForeignSourceNames.SourceMatrix))
-                EnabledApplicationFunctions.Add(applicationFunction);
-            }
+			EnableFunctions(allApplicationFunctions.ToArray());
         }
 
         #endregion

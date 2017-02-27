@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -14,22 +15,19 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 
         public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
         {
-            EnabledApplicationFunctions.Clear();
-
             var shiftTradesLicenseOption = new TeleoptiCccShiftTraderLicenseOption();
             shiftTradesLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
-            foreach (IApplicationFunction applicationFunction in shiftTradesLicenseOption.EnabledApplicationFunctions)
-                EnabledApplicationFunctions.Add(applicationFunction);
-
+	        IEnumerable<IApplicationFunction> functions = shiftTradesLicenseOption.EnabledApplicationFunctions;
+			
             var vacationPlannerLicenseOption = new TeleoptiCccVacationPlannerLicenseOption();
             vacationPlannerLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
-            foreach (IApplicationFunction applicationFunction in vacationPlannerLicenseOption.EnabledApplicationFunctions)
-                EnabledApplicationFunctions.Add(applicationFunction);
-
+	        functions = functions.Union(vacationPlannerLicenseOption.EnabledApplicationFunctions);
+                
 			var overtimeAvailabilityLicenseOption = new TeleoptiCccOvertimeAvailabilityLicenseOption();
 			overtimeAvailabilityLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
-			foreach (IApplicationFunction applicationFunction in overtimeAvailabilityLicenseOption.EnabledApplicationFunctions)
-				EnabledApplicationFunctions.Add(applicationFunction);
+	        functions = functions.Union(overtimeAvailabilityLicenseOption.EnabledApplicationFunctions);
+			
+			EnableFunctions(functions.ToArray());
         }
     }
 }
