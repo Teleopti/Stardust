@@ -320,7 +320,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStandardDeviationTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockAsClassicTest.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodTaskCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelBeforeReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelTest.cs" />

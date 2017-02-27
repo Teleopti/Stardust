@@ -433,8 +433,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
-			builder.RegisterType<SchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); 
-			builder.RegisterType<SchedulePlanningPeriodTaskCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //can be single after remove ExecuteAndReturn method
+			if (_configuration.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
+			{
+				builder.RegisterType<SchedulePlanningPeriodTaskCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //can be single after remove ExecuteAndReturn method
+			}
+			else
+			{
+				builder.RegisterType<SchedulePlanningPeriodCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
+			}
 
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();

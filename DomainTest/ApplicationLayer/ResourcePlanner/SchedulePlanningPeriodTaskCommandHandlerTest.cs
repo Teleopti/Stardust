@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
@@ -15,9 +16,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
 	[DomainTest]
+	[Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874)]
 	public class SchedulePlanningPeriodTaskCommandHandlerTest
 	{
-		public SchedulePlanningPeriodTaskCommandHandler Target;
+		public ISchedulePlanningPeriodCommandHandler Target;
 		public FakeJobResultRepository JobResultRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeEventPublisher EventPublisher;

@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
-	public class SchedulePlanningPeriodCommandHandler
+	public class SchedulePlanningPeriodCommandHandler : ISchedulePlanningPeriodCommandHandler
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly FullScheduling _fullScheduling;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_agentGroupStaffLoader = agentGroupStaffLoader;
 		}
 
-		public SchedulingResultModel Execute(SchedulePlanningPeriodCommand command)
+		public object Execute(SchedulePlanningPeriodCommand command)
 		{
 			var schedulingData = GetInfoFromPlanningPeriod(command.PlanningPeriodId);
 			return _fullScheduling.DoScheduling(schedulingData.Item1, schedulingData.Item2);

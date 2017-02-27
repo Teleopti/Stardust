@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
-	public class SchedulePlanningPeriodTaskCommandHandler
+	public class SchedulePlanningPeriodTaskCommandHandler: ISchedulePlanningPeriodCommandHandler
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		}
 
 		[UnitOfWork]
-		public virtual void Execute(SchedulePlanningPeriodCommand command)
+		public virtual object Execute(SchedulePlanningPeriodCommand command)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(command.PlanningPeriodId);
 			var jobResult = new JobResult(JobCategory.WebSchedule, planningPeriod.Range, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				PlanningPeriodId = command.PlanningPeriodId,
 				JobResultId = jobResult.Id.Value
 			});
+			return jobResult.Id.Value;
 		}
 	}
 }
