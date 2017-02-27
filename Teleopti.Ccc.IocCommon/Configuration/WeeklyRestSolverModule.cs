@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
 			builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
 			builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
-			builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
+			builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>().SingleInstance();
 			builder.RegisterType<IdentifyDayOffWithHighestSpan>();
 			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
 			builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>().SingleInstance();
 			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
 			builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
-			builder.RegisterType<ScheduleDayIsLockedSpecification>().As<IScheduleDayIsLockedSpecification>();
+			builder.RegisterType<ScheduleDayIsLockedSpecification>().As<IScheduleDayIsLockedSpecification>().SingleInstance();
 			builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>().SingleInstance();
 			builder.RegisterType<PersonWeekViolatingWeeklyRestSpecification>().As<IPersonWeekViolatingWeeklyRestSpecification>();
 			builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>();
