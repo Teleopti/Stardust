@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizationEventHandler : IHandleEvent<OptimizationWasOrdered>, IRunInProcess
+	public abstract class IntradayOptimizationEventBaseHandler: IHandleEvent<OptimizationWasOrdered>
 	{
 		private readonly IntradayOptimization _intradayOptimization;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IFillStateHolderWithMaxSeatSkills _fillStateHolderWithMaxSeatSkills;
 
-		public IntradayOptimizationEventHandler(IntradayOptimization intradayOptimization,
+		protected IntradayOptimizationEventBaseHandler(IntradayOptimization intradayOptimization,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									IFillSchedulerStateHolder fillSchedulerStateHolder,
 									ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult,
@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[UnitOfWork]
-		protected virtual void DoOptimization(DateOnlyPeriod period, 
-							IEnumerable<Guid> agentsInIsland, 
-							IEnumerable<Guid> agentsToOptimize, 
-							IEnumerable<LockInfo> locks, 
+		protected virtual void DoOptimization(DateOnlyPeriod period,
+							IEnumerable<Guid> agentsInIsland,
+							IEnumerable<Guid> agentsToOptimize,
+							IEnumerable<LockInfo> locks,
 							IEnumerable<Guid> onlyUseSkills,
 							bool runResolveWeeklyRestRule)
 		{
@@ -59,6 +59,37 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, _gridlockManager, locks, period, onlyUseSkills);
 			_fillStateHolderWithMaxSeatSkills.Execute(schedulerStateHolder.SchedulingResultState.MinimumSkillIntervalLength());
 			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize), runResolveWeeklyRestRule);
+		}
+	}
+
+
+	public class IntradayOptimizationEventRunInProcessHandler: IntradayOptimizationEventBaseHandler, IRunInProcess
+	{
+		public IntradayOptimizationEventRunInProcessHandler(IntradayOptimization intradayOptimization,
+			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
+			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
+			IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills)
+			: base(
+				intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,
+				gridlockManager, fillStateHolderWithMaxSeatSkills)
+		{
+		}
+	}
+
+	public class IntradayOptimizationEventStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust
+	{
+		public IntradayOptimizationEventStardustHandler(IntradayOptimization intradayOptimization,
+			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
+			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
+			IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills)
+			: base(
+				intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,
+				gridlockManager, fillStateHolderWithMaxSeatSkills)
+		{
+		}
+
+		public override void Handle(OptimizationWasOrdered @event)
+		{
 		}
 	}
 }

@@ -94,21 +94,34 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	                select i)
                 .AsSelf()
                 .SingleInstance()
-                .Except<IntradayOptimizationEventHandler>(ct =>
+                .Except<IntradayOptimizationEventRunInProcessHandler>(ct =>
                 {
-                    ct.As<IHandleEvent<OptimizationWasOrdered>>()
-                        .AsSelf()
-                        .InstancePerLifetimeScope()
-                        .ApplyAspects();
+					if (!_config.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
+					{
+						ct.As<IHandleEvent<OptimizationWasOrdered>>()
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
+					}
                 })
+				.Except<IntradayOptimizationEventStardustHandler>(ct =>
+				{
+					if (_config.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
+					{
+						ct.As<IHandleEvent<OptimizationWasOrdered>>()
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
+					}
+				})
                 .Except<ShiftTradeRequestHandler>(ct =>
                 {
-                    ct.As(
-                            typeof(IHandleEvent<NewShiftTradeRequestCreatedEvent>),
-                            typeof(IHandleEvent<AcceptShiftTradeEvent>))
-                            .AsSelf()
-                            .InstancePerLifetimeScope()
-                            .ApplyAspects();
+					ct.As(
+						typeof(IHandleEvent<NewShiftTradeRequestCreatedEvent>),
+						typeof(IHandleEvent<AcceptShiftTradeEvent>))
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
                 })
 				.Except<MultiAbsenceRequestsHandler>(ct =>
 				{
