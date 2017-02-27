@@ -18,7 +18,7 @@
 		vm.isValid = isValid;
 		vm.removeNode = removeNode;
 		vm.persist = persist;
-		vm.searchString;
+		vm.searchString = undefined;
 		vm.results = [];
 		vm.selectedResults = [];
 		vm.name = '';
@@ -34,19 +34,20 @@
 			if (!searchString) {
 				return vm.results;
 			}
+
 			if (searchString.length > 0) {
-        var getFilterData = agentGroupService.getFilterData.query({
-          searchString: searchString
-        });
-        getFilterData.$promise.then(function(data) {
-          vm.results = data;
-        });
+				var getFilterData = agentGroupService.getFilterData.query({
+					searchString: searchString
+				});
+				getFilterData.$promise.then(function(data) {
+					vm.results = data;
+				});
 			}
 		}
 
 		function selectResultItem(item) {
 			if (item === null) {
-				return
+				return;
 			}
 			if (isVaildUnit(item)) {
 				vm.selectedResults.push(item);
@@ -71,7 +72,7 @@
 			var check = true;
 			vm.selectedResults.forEach(function(node) {
 				if (node.Id === item.Id) {
-					check = false
+					check = false;
 				};
 			});
 			return check;
@@ -93,7 +94,7 @@
 
 		function persist() {
 			if (isValid()) {
-				agentGroupService.saveAgentGroup.save({
+				agentGroupService.saveAgentGroup({
 					Name: vm.name,
 					Filters: vm.selectedResults
 				}).$promise.then(function() {
