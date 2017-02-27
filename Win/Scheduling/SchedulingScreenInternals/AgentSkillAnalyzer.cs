@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -26,15 +25,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private readonly DateOnlyPeriod _datePeriod;
 		private readonly CreateIslands _createIslands;
 		private readonly ReduceSkillGroups _reduceSkillGroups;
-		private VirtualSkillGroupsCreatorResult _skillGroupsCreatorResult;
-		private IList<OldIsland> _islandList;
 		private IList<Island> _islandListBeforeReducing;
 		private IDictionary<ISkill,TimeSpan> _skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 		private TimeSpan _totalForecastedForDate;
 		private readonly TimeFormatter _timeFormatter = new TimeFormatter(new ThisCulture(CultureInfo.CurrentCulture));
 		private IList<ISkill> _allSkills;
 		private readonly DateTimePicker _dtpDate;
-		private readonly IList<IPersonSkill> _modifiedPersonSkills = new List<IPersonSkill>(); 
 
 		public AgentSkillAnalyzer()
 		{
@@ -81,22 +77,19 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			listViewIslands.Groups.Clear();
 			listViewIslands.SuspendLayout();
 			var islandNumber = 0;		
-			foreach (var island in _islandList)
-			{			
+			foreach (var island in _islandListBeforeReducing)
+			{
+				var islandModel = island.CreatExtendedClientModel();
 				var notLoadedSkills = 0;
 				var loadedSkills = 0;
 				var personsInIsland = 0;
-				foreach (var groupKey in island.GroupKeys)
+				foreach (var skillgroup in islandModel.SkillGroupsInIsland)
 				{
-					personsInIsland += _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(groupKey).Count();
+					personsInIsland += skillgroup.AgentsInSkillGroup.Count();
 				}
-				foreach (var guidString in island.SkillGuidStrings)
+				foreach (var islandSkill in islandModel.SkillsInIsland)
 				{
-					Guid guid;
-					if (!Guid.TryParse(guidString, out guid))
-						continue;
-
-					var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
+					var skill = _loadedSkillList.FirstOrDefault(s => s.Id == islandSkill.Id);
 					if (skill == null)
 						notLoadedSkills++;
 					else
@@ -106,8 +99,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				}
 				islandNumber++;
 				var item = new ListViewItem("Island " + islandNumber);
-				item.Tag = island;
-				item.SubItems.Add(island.GroupKeys.Count.ToString(CultureInfo.InvariantCulture));
+				item.Tag = islandModel;
+				item.SubItems.Add(islandModel.SkillGroupsInIsland.Count().ToString(CultureInfo.InvariantCulture));
 				item.SubItems.Add(loadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + " (" + notLoadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + ")");
 				item.SubItems.Add(personsInIsland.ToString(CultureInfo.InvariantCulture).PadLeft(6));
 				listViewIslands.Items.Add(item);
@@ -179,7 +172,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			//listView.ResumeLayout();
 		}
 
-		private void drawVirtualGroupList(string filterGuid, ListView listView)
+		private void drawVirtualGroupList(ISkill filterSkill, ListView listView)
 		{
 			listView.Items.Clear();
 			listView.SuspendLayout();
@@ -203,6 +196,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 						else
 							loadedSkills++;
 					}
+
+					if (filterSkill != null && skillGroupModel.SkillsInSkillGroup.Contains(filterSkill))
+						return;
 
 					var item = new ListViewItem(islandCounter + ";" + skillGroupCounter) {Tag = skillGroupModel};
 					item.SubItems.Add(loadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + " (" + notLoadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + ")");
@@ -356,16 +352,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				return;
 
 			var selectedItem = listViewSkillViewSkills.SelectedItems[0];
-			var key = selectedItem.Tag as string;
-			if (key == null)
+			var selectedSkill = selectedItem.Tag as ISkill;
+			if (selectedSkill == null)
 				return;
 
-			drawVirtualGroupList(key, listViewSkillGroupsForSkill);
+			drawVirtualGroupList(selectedSkill, listViewSkillGroupsForSkill);
 
 			listViewSkillViewAgents.SuspendLayout();
 			listViewSkillViewAgents.Items.Clear();
 
-			foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillKey(key))
+			foreach (var person in getPersonsOnSkill(selectedSkill))
 			{
 				listViewSkillViewAgents.Items.Add(person.Name.ToString());
 			}
@@ -374,40 +370,45 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			listViewSkillViewAgents.ResumeLayout();
 		}
 
+		private IEnumerable<IPerson> getPersonsOnSkill(ISkill skill)
+		{
+			return (from person in _personList
+				let personPeriod = person.Period(_date)
+				where personPeriod.PersonSkillCollection.Select(ps => ps.Skill.Id == skill.Id && ps.Active).Any()
+				select person).ToList();
+		}
+
 		private void listViewIslandsSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (listViewIslands.SelectedItems.Count == 0)
 				return;
 
-			var island = listViewIslands.SelectedItems[0].Tag as OldIsland;
-			if (island == null)
+			var selectedIsland = listViewIslands.SelectedItems[0].Tag as IslandExtendedModel;
+			if (selectedIsland == null)
 				return;
 
 			listViewGroupsInIsland.Items.Clear();
 			listViewGroupsInIsland.SuspendLayout();
 
-			foreach (var key in island.GroupKeys)
+			var skillGroupCounter = 0;
+			foreach (var skillGroup in selectedIsland.SkillGroupsInIsland)
 			{
-				var splitted = key.Split("|".ToCharArray());
+				skillGroupCounter++;
 				int loadedSkills = 0;
 				int notLoadedSkills = 0;
-				foreach (var guidString in splitted)
+				foreach (var skillGroupSkill in skillGroup.SkillsInSkillGroup)
 				{
-					Guid guid;
-					if (!Guid.TryParse(guidString, out guid))
-						continue;
-
-					var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
+					var skill = _loadedSkillList.FirstOrDefault(s => s.Id == skillGroupSkill.Id);
 					if (skill == null)
 						notLoadedSkills++;
 					else
 						loadedSkills++;
 				}
 
-				var item = new ListViewItem(_skillGroupsCreatorResult.GetNameForKey(key));
-				item.Tag = key;
+				var item = new ListViewItem(skillGroupCounter.ToString());
+				item.Tag = skillGroup;
 				item.SubItems.Add(loadedSkills.ToString().PadLeft(3) + " (" + notLoadedSkills.ToString().PadLeft(3) + ")");
-				item.SubItems.Add(_skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key).Count().ToString().PadLeft(6));
+				item.SubItems.Add(skillGroup.AgentsInSkillGroup.Count().ToString().PadLeft(6));
 				listViewGroupsInIsland.Items.Add(item);
 			}
 
@@ -464,40 +465,39 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
 			_islandListBeforeReducing = _createIslands.Create(new ReduceNoSkillGroups(), _personList, _date.ToDateOnlyPeriod()).ToList();
-			var creator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
-			_skillGroupsCreatorResult = creator.GroupOnDate(_date, _personList);
 			createSkillDayForSkillsDic();
-			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
-			_islandList = skillGroupIslandsAnalyzer.FindIslands(_skillGroupsCreatorResult);
 		}
 
 		private void toolStripButtonRemoveNotLoadedSkillsClick(object sender, EventArgs e)
 		{
-			foreach (var key in _skillGroupsCreatorResult.GetKeys())
-			{
-				var splitted = key.Split("|".ToCharArray());
-				foreach (var guidString in splitted)
-				{
-					Guid guid;
-					if (!Guid.TryParse(guidString, out guid))
-						continue;
+			MessageBox.Show("Not implemented");
+			//Gör något annat dessa skills ska redan vara borttagna, indikerar bara att det finns oanvända skills för agenterna och det vill jag visa
+			
+			//foreach (var key in _skillGroupsCreatorResult.GetKeys())
+			//{
+			//	var splitted = key.Split("|".ToCharArray());
+			//	foreach (var guidString in splitted)
+			//	{
+			//		Guid guid;
+			//		if (!Guid.TryParse(guidString, out guid))
+			//			continue;
 
-					var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
+			//		var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
 
-					if (skill == null)
-					{
-						skill = _allSkills.FirstOrDefault(s => s.Id == guid);
-						if (skill == null)
-							continue;
+			//		if (skill == null)
+			//		{
+			//			skill = _allSkills.FirstOrDefault(s => s.Id == guid);
+			//			if (skill == null)
+			//				continue;
 
-						foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key))
-						{
-							inactivatePersonalSkillFor(person, guidString);
-						}
-					}
-				}
-			}
-			LoadData();
+			//			foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key))
+			//			{
+			//				inactivatePersonalSkillFor(person, guidString);
+			//			}
+			//		}
+			//	}
+			//}
+			//LoadData();
 		}
 
 		private void toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick(object sender, EventArgs e)
@@ -512,107 +512,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			{
 				x.ShowDialog(this);
 			}
-		}
-
-		private void toolStripMenuItemRemoveSkillClick(object sender, EventArgs e)
-		{
-			var selectedGroupKey = string.Empty;
-			var selectedSkillKey = string.Empty;
-			if (tabControl1.SelectedIndex == 2)
-			{
-				selectedGroupKey = listViewGroupsInIsland.SelectedItems[0].Tag as string;
-				selectedSkillKey = listViewIslandsSkillsOnGroup.SelectedItems[0].Tag as string;
-			}
-			if (tabControl1.SelectedIndex == 1)
-			{
-				selectedGroupKey = listViewAllVirtualGroups.SelectedItems[0].Tag as string;
-				selectedSkillKey = listViewSkillInSkillGroup.SelectedItems[0].Tag as string;
-			}
-
-			foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(selectedGroupKey))
-			{
-				inactivatePersonalSkillFor(person, selectedSkillKey);
-			}
-			calculate();
-			drawLists();
-		}
-
-		private void inactivatePersonalSkillFor(IPerson person, string selectedSkillKey)
-		{
-			Guid guid;
-			if (!Guid.TryParse(selectedSkillKey, out guid))
-				return;
-
-			var skill = _allSkills.FirstOrDefault(s => s.Id == guid);
-			if (skill == null)
-				return;
-
-			var period = person.Period(_date);
-			var personSkills = period.PersonSkillCollection.Where(ps => ps.Skill.Equals(skill)).ToList();
-			if (personSkills.Any())
-			{
-				var personSkill = personSkills.First();
-				((IPersonSkillModify)personSkill).Active = false;
-				_modifiedPersonSkills.Add(personSkill);
-			}
-		}
-
-		private void toolStripButtonReduceAnders_Click(object sender, EventArgs e)
-		{
-			reduce(true);
-		}
-
-		private void toolStripButtonReduceMicke_Click(object sender, EventArgs e)
-		{
-			reduce(false);
-		}
-
-		private void reduce(bool desc)
-		{		
-			var agentsAffected = new HashSet<IPerson>();
-			var currentIslandsCount = _islandList.Count;
-			while (true)
-			{
-				if (_islandList.Count > currentIslandsCount)
-				{				
-					currentIslandsCount = _islandList.Count;
-					drawLists();				
-				}
-				OldIsland largestIsland = null;
-				var maxAgents = 0;
-				foreach (var island in _islandList)
-				{
-					var agentCount = island.AgentsInIsland().Count();
-					if (agentCount > maxAgents)
-					{
-						largestIsland = island;
-						maxAgents = agentCount;
-					}
-				}
-				if (maxAgents < 500)
-					break;
-
-				var reducer = new AgentSkillReducer();
-				var affectedPersons = reducer.ReduceOne(largestIsland, _skillGroupsCreatorResult, _loadedSkillList, _date, desc, _modifiedPersonSkills).ToList();
-				if (!affectedPersons.Any())
-					break;
-
-				agentsAffected.UnionWith(affectedPersons);
-				calculate();
-			}
-			drawLists();
-			MessageBox.Show(agentsAffected.Count + " agents affected", "Done!");
-		}
-
-		private void toolStripButtonResetReducedClick(object sender, EventArgs e)
-		{
-			foreach (var modifiedPersonSkill in _modifiedPersonSkills)
-			{
-				((IPersonSkillModify)modifiedPersonSkill).Active = true;
-			}
-			_modifiedPersonSkills.Clear();
-			calculate();
-			drawLists();
 		}
 	}
 }

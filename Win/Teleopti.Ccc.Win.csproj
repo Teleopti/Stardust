@@ -810,8 +810,6 @@
     <Compile Include="Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.Designer.cs">
       <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SchedulingScreenInternals\AgentSkillReducer.cs" />
-    <Compile Include="Scheduling\SchedulingScreenInternals\OldIsland.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -831,8 +829,6 @@
     <Compile Include="Scheduling\SchedulingScreenInternals\ShovelingAnalyzerView.Designer.cs">
       <DependentUpon>ShovelingAnalyzerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SchedulingScreenInternals\SkillGroupIslandsAnalyzer.cs" />
-    <Compile Include="Scheduling\SchedulingScreenInternals\VirtualSkillGroupsCreator.cs" />
     <Compile Include="Scheduling\ValidationAlertsView.cs">
       <SubType>UserControl</SubType>
     </Compile>

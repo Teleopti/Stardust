@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentSkillAnalyzer));
 			this.listViewAllVirtualGroups = new System.Windows.Forms.ListView();
 			this.columnHeaderVirtualGroup = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -42,8 +41,6 @@
 			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.toolStripMenuItemRemoveSkill = new System.Windows.Forms.ToolStripMenuItem();
 			this.listViewAgents = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -89,10 +86,6 @@
 			this.toolStripMain = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonReduceAnders = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonReduceMicke = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonResetReduced = new System.Windows.Forms.ToolStripButton();
-			this.contextMenuStrip1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -154,7 +147,6 @@
             this.columnHeader7,
             this.columnHeader3,
             this.columnHeader4});
-			this.listViewSkillInSkillGroup.ContextMenuStrip = this.contextMenuStrip1;
 			this.listViewSkillInSkillGroup.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewSkillInSkillGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.listViewSkillInSkillGroup.FullRowSelect = true;
@@ -202,20 +194,6 @@
 			// columnHeader4
 			// 
 			this.columnHeader4.Text = "Activity";
-			// 
-			// contextMenuStrip1
-			// 
-			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemRemoveSkill});
-			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(205, 26);
-			// 
-			// toolStripMenuItemRemoveSkill
-			// 
-			this.toolStripMenuItemRemoveSkill.Name = "toolStripMenuItemRemoveSkill";
-			this.toolStripMenuItemRemoveSkill.Size = new System.Drawing.Size(204, 22);
-			this.toolStripMenuItemRemoveSkill.Text = "Remove skill from group";
-			this.toolStripMenuItemRemoveSkill.Click += new System.EventHandler(this.toolStripMenuItemRemoveSkillClick);
 			// 
 			// listViewAgents
 			// 
@@ -465,7 +443,6 @@
             this.columnHeader26,
             this.columnHeader27,
             this.columnHeader28});
-			this.listViewIslandsSkillsOnGroup.ContextMenuStrip = this.contextMenuStrip1;
 			this.listViewIslandsSkillsOnGroup.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewIslandsSkillsOnGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.listViewIslandsSkillsOnGroup.FullRowSelect = true;
@@ -630,13 +607,10 @@
 			this.toolStripMain.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRemoveNotLoadedSkills,
-            this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod,
-            this.toolStripButtonReduceAnders,
-            this.toolStripButtonReduceMicke,
-            this.toolStripButtonResetReduced});
+            this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(692, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(429, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -659,36 +633,6 @@
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Text = "Find agents with skillgroup changes during period";
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Click += new System.EventHandler(this.toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick);
 			// 
-			// toolStripButtonReduceAnders
-			// 
-			this.toolStripButtonReduceAnders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonReduceAnders.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonReduceAnders.Image")));
-			this.toolStripButtonReduceAnders.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonReduceAnders.Name = "toolStripButtonReduceAnders";
-			this.toolStripButtonReduceAnders.Size = new System.Drawing.Size(77, 22);
-			this.toolStripButtonReduceAnders.Text = "Reduce desc";
-			this.toolStripButtonReduceAnders.Click += new System.EventHandler(this.toolStripButtonReduceAnders_Click);
-			// 
-			// toolStripButtonReduceMicke
-			// 
-			this.toolStripButtonReduceMicke.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonReduceMicke.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonReduceMicke.Image")));
-			this.toolStripButtonReduceMicke.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonReduceMicke.Name = "toolStripButtonReduceMicke";
-			this.toolStripButtonReduceMicke.Size = new System.Drawing.Size(70, 22);
-			this.toolStripButtonReduceMicke.Text = "Reduce asc";
-			this.toolStripButtonReduceMicke.Click += new System.EventHandler(this.toolStripButtonReduceMicke_Click);
-			// 
-			// toolStripButtonResetReduced
-			// 
-			this.toolStripButtonResetReduced.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonResetReduced.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonResetReduced.Image")));
-			this.toolStripButtonResetReduced.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonResetReduced.Name = "toolStripButtonResetReduced";
-			this.toolStripButtonResetReduced.Size = new System.Drawing.Size(85, 22);
-			this.toolStripButtonResetReduced.Text = "Reset reduced";
-			this.toolStripButtonResetReduced.Click += new System.EventHandler(this.toolStripButtonResetReducedClick);
-			// 
 			// AgentSkillAnalyzer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -697,7 +641,6 @@
 			this.Controls.Add(this.toolStripContainer1);
 			this.Name = "AgentSkillAnalyzer";
 			this.Text = "Agent Skill Analyzer";
-			this.contextMenuStrip1.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
@@ -777,10 +720,5 @@
 		private System.Windows.Forms.ColumnHeader columnHeader32;
 		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
 		private System.Windows.Forms.ToolStripButton toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRemoveSkill;
-		private System.Windows.Forms.ToolStripButton toolStripButtonReduceAnders;
-		private System.Windows.Forms.ToolStripButton toolStripButtonReduceMicke;
-		private System.Windows.Forms.ToolStripButton toolStripButtonResetReduced;
 	}
 }
