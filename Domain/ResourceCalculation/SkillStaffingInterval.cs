@@ -25,11 +25,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double StaffingLevelWithShrinkage { get; set; }
 
-		public double GetForecast(bool withShrinkage)
-		{
-			return withShrinkage ? ForecastWithShrinkage : Forecast;
-		}
-
 		public double GetStaffingLevel(bool withShrinkage)
 		{
 			return withShrinkage ? StaffingLevelWithShrinkage : StaffingLevel;

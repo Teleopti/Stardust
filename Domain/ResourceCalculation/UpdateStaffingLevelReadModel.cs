@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var models = CreateReadModel(resCalcData.SkillResourceCalculationPeriodDictionary, period);
 
-			setUseShrinkage(resCalcData, period);
+			setUseShrinkage(resCalcData);
 			_extractSkillStaffDataForResourceCalculation.DoCalculation(periodDateOnly, resCalcData);
 
 			updateModelsAfterCalculatingWithShrinkage(models, resCalcData.SkillResourceCalculationPeriodDictionary, period);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return ret;
 		}
 
-		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData, DateTimePeriod period)
+		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData)
 		{
 			resourceCalculationData.SkillCombinationHolder?.StartRecodingValuesWithShrinkage();
 			
