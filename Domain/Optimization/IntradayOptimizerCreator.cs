@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizerHelperHelper optimizerHelperHelper, 
 			IMatrixListFactory matrixListFactory,
 			PersonalSkillsProvider personalSkillsProvider,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 			_personalSkillsProvider = personalSkillsProvider;
 			_userTimeZone = userTimeZone;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -115,9 +118,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
-
-				var optimizer = CreateIntradayOptimizer(optimizerPreferences, personalSkillsDataExtractor, scheduleMatrix, dailyValueCalculator, rollbackService, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator, mainShiftOptimizeActivitySpecificationSetter);
+			
+				var optimizer = CreateIntradayOptimizer(optimizerPreferences, personalSkillsDataExtractor, scheduleMatrix, dailyValueCalculator, rollbackService, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator);
 
 				result.Add(optimizer);
 			}
@@ -129,14 +131,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleResultDataExtractor personalSkillsDataExtractor, IScheduleMatrixPro scheduleMatrix,
 			IScheduleResultDailyValueCalculator dailyValueCalculator, SchedulePartModifyAndRollbackService rollbackService,
 			OptimizationLimits optimizationLimits, IScheduleMatrixOriginalStateContainer workShiftStateContainer,
-			ISchedulingOptionsCreator schedulingOptionsCreator,
-			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
+			ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker, scheduleMatrix,
 				new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
 					_resourceOptimizationHelper,
 					_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
-					mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService,
+					_mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService,
 					scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone));
 			return optimizer;
 		}

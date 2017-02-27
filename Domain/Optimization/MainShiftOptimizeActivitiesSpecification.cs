@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
@@ -8,18 +7,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class MainShiftOptimizeActivitiesSpecification : Specification<IEditableShift>
 	{
-        private readonly OptimizerActivitiesPreferences _optimizerActivitiesPreferences;
+		private readonly CorrectAlteredBetween _correctAlteredBetween;
+		private readonly OptimizerActivitiesPreferences _optimizerActivitiesPreferences;
 		private readonly IEditableShift _originalMainShift;
 		private readonly DateOnly _viewerDate;
-        private readonly TimeZoneInfo _viewerTimeZone;
         private readonly Lazy<IVisualLayerCollection> _visualLayerColl;
 
-		public MainShiftOptimizeActivitiesSpecification(OptimizerActivitiesPreferences optimizerActivitiesPreferences, IEditableShift originalMainShift, DateOnly viewerDate, TimeZoneInfo viewerTimeZone)
+		public MainShiftOptimizeActivitiesSpecification(CorrectAlteredBetween correctAlteredBetween,
+																						OptimizerActivitiesPreferences optimizerActivitiesPreferences, 
+																						IEditableShift originalMainShift, 
+																						DateOnly viewerDate)
         {
-            _optimizerActivitiesPreferences = optimizerActivitiesPreferences;
+	        _correctAlteredBetween = correctAlteredBetween;
+	        _optimizerActivitiesPreferences = optimizerActivitiesPreferences;
 			_originalMainShift = originalMainShift;
 			_viewerDate = viewerDate;
-			_viewerTimeZone = viewerTimeZone;
 
 			_visualLayerColl = new Lazy<IVisualLayerCollection>(()=>_originalMainShift.ProjectionService().CreateProjection());
         }
@@ -78,28 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool CorrectAlteredBetween(IVisualLayerCollection other)
 		{
-			if (!_optimizerActivitiesPreferences.AllowAlterBetween.HasValue)
-				return true;
-
-			var allowPeriod = _optimizerActivitiesPreferences.UtcPeriodFromDateAndTimePeriod(_viewerDate, _viewerTimeZone).Value;
-			var baseDate = TimeZoneHelper.ConvertToUtc(_viewerDate.Date, _viewerTimeZone);
-			var start = baseDate.AddDays(-1).Add(allowPeriod.EndDateTime.Subtract(baseDate));
-			var periodBefore = new DateTimePeriod(start, allowPeriod.StartDateTime);
-			var shiftLayersOutsideBefore = other.FilterLayers(periodBefore);
-			var originalLayersOutsideBefore = _visualLayerColl.Value.FilterLayers(periodBefore);
-
-			if (!shiftLayersOutsideBefore.IsSatisfiedBy(VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideBefore)))
-				return false;
-
-			var end = baseDate.AddDays(1).Add(allowPeriod.StartDateTime.Subtract(baseDate));
-			var periodAfter = new DateTimePeriod(allowPeriod.EndDateTime, end);
-			var shiftLayersOutsideAfter = other.FilterLayers(periodAfter);
-			var originalLayersOutsideAfter = _visualLayerColl.Value.FilterLayers(periodAfter);
-			if (!shiftLayersOutsideAfter.IsSatisfiedBy(VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideAfter)))
-				return false;
-
-
-			return true;
+			return _correctAlteredBetween.Execute(_viewerDate, _visualLayerColl.Value, other, _optimizerActivitiesPreferences);
 		}
 
 		private bool compareLengthOfStaticLengthActivity(IVisualLayerCollection compareFrom, IVisualLayerCollection compareTo)

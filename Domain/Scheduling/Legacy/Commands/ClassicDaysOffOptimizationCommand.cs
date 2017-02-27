@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ScheduleChangesAffectedDates _resourceCalculateDaysDecider;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, 
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			PersonalSkillsProvider personalSkillsProvider,
 			ScheduleChangesAffectedDates resourceCalculateDaysDecider,
 			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_bitArrayConverter = bitArrayConverter;
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_userTimeZone = userTimeZone;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public void Execute(
@@ -176,7 +179,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_deleteAndResourceCalculateService,
 					scheduleService, _workShiftFinderResultHolder,
 					resourceCalculateDelayer);
-			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(scheduleResultStateHolder, _userTimeZone);
 			var deviationStatisticData = new DeviationStatisticData();
 			var dayOffOptimizerPreMoveResultPredictor =
@@ -199,7 +201,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					optimizationLimits,
 					nightRestWhiteSpotSolverService,
 					_schedulingOptionsCreator,
-					mainShiftOptimizeActivitySpecificationSetter,
+					_mainShiftOptimizeActivitySpecificationSetter,
 					dayOffOptimizerPreMoveResultPredictor,
 					daysOffPreferences,
 					_schedulerStateHolder().SchedulingResultState,

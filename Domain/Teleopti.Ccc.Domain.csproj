@@ -291,6 +291,7 @@
     <Compile Include="Cascading\TrackShoveling\AddedResource.cs" />
     <Compile Include="Cascading\TrackShoveling\TrackShoveling.cs" />
     <Compile Include="Cascading\TrackShoveling\TrackShovelingOneSkill.cs" />
+    <Compile Include="Optimization\CorrectAlteredBetween.cs" />
     <Compile Include="Optimization\IAgentGroupModelPersister.cs" />
     <Compile Include="Cascading\TrackShoveling\RemovedResource.cs" />
     <Compile Include="Common\ClearPersonRelatedInformation.cs" />

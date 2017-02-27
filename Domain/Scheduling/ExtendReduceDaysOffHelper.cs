@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IDaysOffLegalStateValidatorsFactory _daysOffLegalStateValidatorsFactory;
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public ExtendReduceDaysOffHelper(Func<IWorkShiftFinderResultHolder> allResults,
 										IMatrixListFactory matrixListFactory,
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 										IUserTimeZone userTimeZone,
 										IDaysOffLegalStateValidatorsFactory daysOffLegalStateValidatorsFactory,
 										WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
-										IScheduleDayEquator scheduleDayEquator)
+										IScheduleDayEquator scheduleDayEquator,
+										IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
 		{
 			_allResults = allResults;
 			_matrixListFactory = matrixListFactory;
@@ -60,6 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_daysOffLegalStateValidatorsFactory = daysOffLegalStateValidatorsFactory;
 			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
 			_scheduleDayEquator = scheduleDayEquator;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public void RunExtendReduceDayOffOptimization(IOptimizationPreferences optimizerPreferences,
@@ -152,8 +155,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizationOverLimitDecider);
 
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
-
 				IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
 					personalSkillsPeriodValueCalculator,
 					personalSkillsDataExtractor,
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					dayOffOptimizerValidator,
 					optimizationLimits,
 					schedulingOptionsCreator,
-					mainShiftOptimizeActivitySpecificationSetter,
+					_mainShiftOptimizeActivitySpecificationSetter,
 					scheduleMatrixPro);
 
 				optimizers.Add(optimizer);

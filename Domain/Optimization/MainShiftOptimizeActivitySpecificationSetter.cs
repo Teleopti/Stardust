@@ -9,10 +9,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class MainShiftOptimizeActivitySpecificationSetter : IMainShiftOptimizeActivitySpecificationSetter
 	{
+		private readonly CorrectAlteredBetween _correctAlteredBetween;
 		private readonly OptimizerActivitiesPreferencesFactory _optimizerActivitiesPreferencesFactory;
 
-		public MainShiftOptimizeActivitySpecificationSetter(OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory)
+		public MainShiftOptimizeActivitySpecificationSetter(CorrectAlteredBetween correctAlteredBetween, OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory)
 		{
+			_correctAlteredBetween = correctAlteredBetween;
 			_optimizerActivitiesPreferencesFactory = optimizerActivitiesPreferencesFactory;
 		}
 
@@ -27,8 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return;
 
 			schedulingOptions.MainShiftOptimizeActivitySpecification =
-				new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate,
-															 StateHolderReader.Instance.StateReader.UserTimeZone);
+				new MainShiftOptimizeActivitiesSpecification(_correctAlteredBetween, optimizerActivitiesPreferences, mainShift, viewDate);
 		}
 	}
 }

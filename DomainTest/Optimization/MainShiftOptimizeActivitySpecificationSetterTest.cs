@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class MainShiftOptimizeActivitySpecificationSetterTest
 	{
 		private IMainShiftOptimizeActivitySpecificationSetter _target;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[SetUp]
 		public void Setup()
 		{
-			_target = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
+			_target = new MainShiftOptimizeActivitySpecificationSetter(new CorrectAlteredBetween(UserTimeZone.Make()), new OptimizerActivitiesPreferencesFactory());
 			_schedulingOptionsCreator = new SchedulingOptionsCreator();
 			_optimizationPreferences = new OptimizationPreferences();
 			_mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
 			optimizerActivitiesPreferences.SetDoNotMoveActivities(new List<IActivity>());
 
-			minShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, _mainShift, DateOnly.MinValue, StateHolderReader.Instance.StateReader.UserTimeZone);
+			minShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(new CorrectAlteredBetween(UserTimeZone.Make()), optimizerActivitiesPreferences, _mainShift, DateOnly.MinValue);
 
 			Assert.AreEqual(typeof(MainShiftOptimizeActivitiesSpecification), minShiftOptimizeActivitySpecification.GetType());
 		}

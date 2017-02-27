@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public MoveTimeOptimizerCreator(
 			IMoveTimeDecisionMaker decisionMaker,
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculation resourceOptimizationHelper, 
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService, 
 			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, 
-			IUserTimeZone userTimeZone) 
+			IUserTimeZone userTimeZone,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter) 
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_userTimeZone = userTimeZone;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public IList<IMoveTimeOptimizer> Create(IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -71,8 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
 				var schedulingOptionsCreator = new SchedulingOptionsCreator();
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
-
+			
 				IMoveTimeOptimizer optimizer =
 					new MoveTimeOptimizer(
 						periodValueCalculator,
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						workShiftContainer,
 						optimizationLimits,
 						schedulingOptionsCreator,
-						mainShiftOptimizeActivitySpecificationSetter,
+						_mainShiftOptimizeActivitySpecificationSetter,
 						scheduleMatrixPro,
 						_schedulingResultStateHolder(),
 						_userTimeZone);

@@ -7,18 +7,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class SetMainShiftOptimizeActivitySpecificationForTeamBlock
 	{
-		private readonly IUserTimeZone _userTimeZone;
 		private readonly OptimizerActivitiesPreferencesFactory _optimizerActivitiesPreferencesFactory;
+		private readonly CorrectAlteredBetween _correctAlteredBetween;
 
-		public SetMainShiftOptimizeActivitySpecificationForTeamBlock(IUserTimeZone userTimeZone, OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory)
+		public SetMainShiftOptimizeActivitySpecificationForTeamBlock(
+													OptimizerActivitiesPreferencesFactory optimizerActivitiesPreferencesFactory,
+													CorrectAlteredBetween correctAlteredBetween)
 		{
-			_userTimeZone = userTimeZone;
 			_optimizerActivitiesPreferencesFactory = optimizerActivitiesPreferencesFactory;
+			_correctAlteredBetween = correctAlteredBetween;
 		}
 
 		public void Execute(IOptimizationPreferences optimizationPreferences, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
 		{
-			var userTimeZone = _userTimeZone.TimeZone();
 			var optimizerActivitiesPreferences = _optimizerActivitiesPreferencesFactory.Create(optimizationPreferences);
 			if (optimizerActivitiesPreferences != null)
 			{
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 							continue;
 
 						var editableShift = scheduleMatrixPro.GetScheduleDayByKey(unLockedDate).DaySchedulePart().GetEditorShift();
-						specification = specification.And(new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, editableShift, unLockedDate, userTimeZone));
+						specification = specification.And(new MainShiftOptimizeActivitiesSpecification(_correctAlteredBetween, optimizerActivitiesPreferences, editableShift, unLockedDate));
 					}
 				}
 				schedulingOptions.MainShiftOptimizeActivitySpecification = specification;

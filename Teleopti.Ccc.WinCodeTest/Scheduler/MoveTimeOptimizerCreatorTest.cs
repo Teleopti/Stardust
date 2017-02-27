@@ -70,7 +70,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _effectiveRestrictionCreator,
 												   _resourceOptimizationHelper,
 													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>(),
-													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider(), UserTimeZone.Make()), UserTimeZone.Make());
+													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider(), UserTimeZone.Make()), UserTimeZone.Make(),
+													 new MainShiftOptimizeActivitySpecificationSetter(new CorrectAlteredBetween(UserTimeZone.Make()), new OptimizerActivitiesPreferencesFactory()));
 		}
 
 		[Test]

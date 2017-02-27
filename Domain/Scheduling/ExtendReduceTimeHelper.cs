@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private ISchedulingProgress _backgroundWorker;
 
 		public ExtendReduceTimeHelper(IMatrixListFactory matrixListFactory, 
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 										ScheduleChangesAffectedDates scheduleChangesAffectedDates,
 										IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 										IUserTimeZone userTimeZone,
-										IScheduleDayEquator scheduleDayEquator)
+										IScheduleDayEquator scheduleDayEquator,
+										IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
 		{
 			_matrixListFactory = matrixListFactory;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 			_userTimeZone = userTimeZone;
 			_scheduleDayEquator = scheduleDayEquator;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public void RunExtendReduceTimeOptimization(IOptimizationPreferences optimizerPreferences,
@@ -117,7 +120,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				ISchedulingOptions schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter(new OptimizerActivitiesPreferencesFactory());
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
 
 				IExtendReduceTimeOptimizer optimizer = new ExtendReduceTimeOptimizer(
@@ -134,7 +136,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					originalStateListForScheduleTag[i],
 					optimizationLimits,
 					schedulingOptions,
-					mainShiftOptimizeActivitySpecificationSetter,
+					_mainShiftOptimizeActivitySpecificationSetter,
 					scheduleMatrixPro);
 
 				optimizers.Add(optimizer);

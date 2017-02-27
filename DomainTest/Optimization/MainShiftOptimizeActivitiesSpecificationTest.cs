@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -35,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _originalMainShift = EditableShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             DateOnly dateOnly = new DateOnly(2007, 1, 1);
             TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
-            _target = new MainShiftOptimizeActivitiesSpecification(_preferences, _originalMainShift, dateOnly, timeZoneInfo);
-            _interface = new MainShiftOptimizeActivitiesSpecification(_preferences, _originalMainShift, dateOnly, timeZoneInfo);
-        }
+            _target = new MainShiftOptimizeActivitiesSpecification(new CorrectAlteredBetween(UserTimeZone.Make()), _preferences, _originalMainShift, dateOnly);
+            _interface = new MainShiftOptimizeActivitiesSpecification(new CorrectAlteredBetween(UserTimeZone.Make()), _preferences, _originalMainShift, dateOnly);
+		}
 
         [Test]
         public void VerifyIsSatisfiedBy()
