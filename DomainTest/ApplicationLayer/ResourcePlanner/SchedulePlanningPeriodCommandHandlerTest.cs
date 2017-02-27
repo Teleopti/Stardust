@@ -15,9 +15,9 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
 	[DomainTest]
-	public class SchedulePlanningPeriodCommandHandlerTest
+	public class SchedulePlanningPeriodTaskCommandHandlerTest
 	{
-		public SchedulePlanningPeriodCommandHandler Target;
+		public SchedulePlanningPeriodTaskCommandHandler Target;
 		public FakeJobResultRepository JobResultRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeEventPublisher EventPublisher;

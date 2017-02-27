@@ -8,13 +8,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class ScheduleController : ApiController
 	{
-		private readonly SchedulePlanningPeriodCommandHandler _schedulePlanningPeriodCommandHandler;
 		private readonly IToggleManager _toggleManager;
+		private readonly SchedulePlanningPeriodCommandHandler _schedulePlanningPeriodCommandHandler;
+		private readonly SchedulePlanningPeriodTaskCommandHandler _schedulePlanningPeriodTaskCommandHandler;
 
-		public ScheduleController(SchedulePlanningPeriodCommandHandler schedulePlanningPeriodCommandHandler, IToggleManager toggleManager)
+
+		public ScheduleController(IToggleManager toggleManager, SchedulePlanningPeriodCommandHandler schedulePlanningPeriodCommandHandler, SchedulePlanningPeriodTaskCommandHandler schedulePlanningPeriodTaskCommandHandler)
 		{
-			_schedulePlanningPeriodCommandHandler = schedulePlanningPeriodCommandHandler;
 			_toggleManager = toggleManager;
+			_schedulePlanningPeriodCommandHandler = schedulePlanningPeriodCommandHandler;
+			_schedulePlanningPeriodTaskCommandHandler = schedulePlanningPeriodTaskCommandHandler;
 		}
 
 		//remove me when we move scheduling/optimization out of http request
@@ -33,10 +36,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			};
 			if (toggle)
 			{
-				_schedulePlanningPeriodCommandHandler.Execute(schedulePlanningPeriodCommand);
+				_schedulePlanningPeriodTaskCommandHandler.Execute(schedulePlanningPeriodCommand);
 				return Ok();
 			}
-			return Ok(_schedulePlanningPeriodCommandHandler.ExecuteAndReturn(schedulePlanningPeriodCommand));
+			return Ok(_schedulePlanningPeriodCommandHandler.Execute(schedulePlanningPeriodCommand));
 		}
 	}
 
