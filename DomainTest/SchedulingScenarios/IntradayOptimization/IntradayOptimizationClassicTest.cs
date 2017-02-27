@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -33,10 +34,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var activity = new Activity("_") {InWorkTime = true}.WithId();
 			var dateOnly = new DateOnly(2017, 02, 27);
 			var scenario = new Scenario("_");
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var orgShiftCat = new ShiftCategory("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(8, 0, 8, 0, 60), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo()).WithPersonPeriod(ruleSet, new Team()).WithSchedulePeriodOneDay(dateOnly);
 			var asses = dateOnly.ToDateOnlyPeriod().Inflate(7).DayCollection()
 				.Select(date => new PersonAssignment(agent, scenario, date)
+				.ShiftCategory(orgShiftCat)
 				.WithLayer(activity, new TimePeriod(23, 24 + 7)));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, asses, Enumerable.Empty<ISkillDay>());
 			var optPreferences = new OptimizationPreferences
@@ -48,7 +51,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
 
-			//don't know what to assert on yet...
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().ShiftCategory
+				.Should().Be.EqualTo(orgShiftCat);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
