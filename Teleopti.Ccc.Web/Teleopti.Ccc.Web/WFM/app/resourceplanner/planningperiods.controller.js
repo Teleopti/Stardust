@@ -119,8 +119,7 @@
 				$scope.goToReport = function(p) {
 					$state.go('resourceplanner.report',
 					{
-						id: p.Id,
-						planningperiod: p
+						id: p.Id
 					});
 				};
 

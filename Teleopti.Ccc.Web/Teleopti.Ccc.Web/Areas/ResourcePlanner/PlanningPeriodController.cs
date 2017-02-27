@@ -41,12 +41,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult JobResult(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Get(id);
+			var range = planningPeriod.Range;
 			var lastJobResult = planningPeriod.JobResults.OrderByDescending(x => x.Timestamp).FirstOrDefault();
 			if (lastJobResult != null)
 				return
 					Ok(
 						new
 						{
+							PlanningPeriod = new
+							{
+								StartDate = range.StartDate.Date,
+								EndDate = range.EndDate.Date
+							},
 							ScheduleResult = JsonConvert.DeserializeObject(lastJobResult.Details.First().Message),
 							OptimizationResult = JsonConvert.DeserializeObject(lastJobResult.Details.Last().Message)
 						});

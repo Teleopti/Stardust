@@ -9,7 +9,7 @@
 				var toggledSchedulingOnStardust = false;
 				$scope.issues = [];
 				$scope.scheduledAgents = 0;
-				$scope.planningPeriod = $stateParams.planningperiod;
+				
 				$scope.hasIssues = false;
 				$scope.isDataAvailable = false;
 				$scope.dayNodes = [];
@@ -17,7 +17,8 @@
 				$scope.optimizationHasBeenRun = false;
 
 
-				var initResult = function (interResult, result) {
+				var initResult = function (interResult, result, planningPeriod) {
+					$scope.planningPeriod = planningPeriod;
 					var scheduleResult = interResult.SkillResultList ? interResult.SkillResultList : [];
 					$scope.issues = result.BusinessRulesValidationResults ? result.BusinessRulesValidationResults : [];
 					$scope.scheduledAgents = result.ScheduledAgentsCount ? result.ScheduledAgentsCount : 0;
@@ -37,14 +38,10 @@
 					if (toggledSchedulingOnStardust) {
 						PlanningPeriodSvrc.lastJobResult.query({ id: $stateParams.id })
 							.$promise.then(function (data) {
-								var interResult = data.OptimizationResult;
-								var result = data.ScheduleResult;
-								initResult(interResult, result);
+								initResult(data.OptimizationResult, data.ScheduleResult, data.PlanningPeriod);
 							});
 					} else {
-						var interResult = $stateParams.interResult;
-						var result = $stateParams.result;
-						initResult(interResult, result);
+						initResult($stateParams.interResult, $stateParams.result, $stateParams.planningperiod);
 					}
 				}
 
