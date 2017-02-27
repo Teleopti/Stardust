@@ -98,6 +98,8 @@
 					ResourcePlannerReportSrvc.parseWeek(period);
 				};
 
+				$scope.gridOptions = {};
+
 				var displayGird = function() {
 					$scope.gridOptions = {
 						columnDefs: [
