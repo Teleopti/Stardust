@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IDayOffToTimeSpanExtractor _dayOffToTimeSpanExtractor;
 		private readonly IShiftNudgeManager _shiftNudgeManager;
 		private readonly IdentifyDayOffWithHighestSpan _identifyDayOffWithHighestSpan;
-		private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
+		private readonly DeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly IPersonWeekViolatingWeeklyRestSpecification  _personWeekViolatingWeeklyRestSpecification;
 		private readonly IBrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
 			IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor, IShiftNudgeManager shiftNudgeManager,
 			IdentifyDayOffWithHighestSpan identifyDayOffWithHighestSpan,
-			IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek,
+			DeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, 
 			IPersonWeekViolatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification, 
 			IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson,

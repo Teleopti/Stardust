@@ -7,11 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
-    public interface IDeleteScheduleDayFromUnsolvedPersonWeek
-    {
-        void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff, ISchedulePartModifyAndRollbackService rollbackService, DateOnlyPeriod selectedPeriod, IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences);
-    }
-    public class DeleteScheduleDayFromUnsolvedPersonWeek : IDeleteScheduleDayFromUnsolvedPersonWeek
+    public class DeleteScheduleDayFromUnsolvedPersonWeek
     {
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 	    private readonly IScheduleDayIsLockedSpecification _scheduleDayIsLockedSpecification;
