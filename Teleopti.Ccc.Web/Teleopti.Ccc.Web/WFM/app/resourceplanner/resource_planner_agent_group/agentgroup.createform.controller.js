@@ -5,13 +5,13 @@
 		.module('wfm.resourceplanner')
 		.controller('agentGroupFormController', Controller);
 
-	Controller.$inject = ['$state', '$timeout', '$q','agentGroupService', 'NoticeService', '$translate'];
+	Controller.$inject = ['$state', '$timeout','agentGroupService', 'NoticeService', '$translate', 'debounceService'];
 
 	/* @ngInject */
-	function Controller($state, $timeout, $q, agentGroupService, NoticeService, $translate) {
+	function Controller($state, $timeout, agentGroupService, NoticeService, $translate, debounceService) {
 		var vm = this;
 
-		vm.inputFilterData = inputFilterData;
+		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
 		vm.isValidName = isValidName;
@@ -19,7 +19,6 @@
 		vm.removeNode = removeNode;
 		vm.persist = persist;
 		vm.searchString = undefined;
-		vm.results = [];
 		vm.selectedResults = [];
 		vm.name = '';
 		vm.cancelCreate = cancelCreate;
@@ -30,18 +29,10 @@
 
 		function inputFilterData() {
 			var searchString = vm.searchString;
-
-			if (!searchString) {
-				return vm.results;
-			}
-
 			if (searchString.length > 0) {
-				var getFilterData = agentGroupService.getFilterData.query({
-					searchString: searchString
-				});
-				getFilterData.$promise.then(function(data) {
-					vm.results = data;
-				});
+				return agentGroupService.getFilterData({ searchString: searchString }).$promise;
+			} else {
+				return [];
 			}
 		}
 

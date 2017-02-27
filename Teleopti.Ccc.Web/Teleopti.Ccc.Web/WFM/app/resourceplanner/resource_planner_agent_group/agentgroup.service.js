@@ -16,7 +16,7 @@
 			getAgentGroups: agentGroup.query,
 			saveAgentGroup: agentGroup.save,
 			getAgentGroupbyId: agentGroup.get,
-			getFilterData: filterResult,
+			getFilterData: filterResult.query,
 			removeAgentGroup: agentGroup.remove
 		};
 		return service;

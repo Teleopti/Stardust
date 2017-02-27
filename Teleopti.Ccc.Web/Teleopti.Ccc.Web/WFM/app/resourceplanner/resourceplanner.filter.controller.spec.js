@@ -4,7 +4,8 @@ describe('ResourcePlannerCtrl', function () {
 	var $q,
 		$rootScope,
 		$httpBackend,
-		maxHits = 5; //same as in controller
+		maxHits = 5, //same as in controller
+		dayOffRuleService;
 
 	var filterUrl = function (searchString) {
 		return "../api/filters?maxHits=" + maxHits + "&searchString=" & searchString;
@@ -32,25 +33,17 @@ describe('ResourcePlannerCtrl', function () {
 					sentData = JSON.parse(getData);
 					return true;
 				}).respond(200, true);
+
+		dayOffRuleService = function(filterData){
+			return {
+				getFilterData: function () {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve(filterData);
+					return { $promise: queryDeferred.promise };
+				}
+			}
+		}
 	}));
-
-	it('should cancel previous search request', inject(function (ResourcePlannerFilterSrvc) {
-		var scope = $rootScope.$new();
-
-		var searchString = 'searchString';
-
-		$httpBackend.whenGET(filterUrl(searchString))
-			.respond(200, []);
-		ResourcePlannerFilterSrvc.getData({ searchString: searchString, maxHits: maxHits });
-		//should cancel query above - skipping params so not create new one
-		ResourcePlannerFilterSrvc.getData();
-
-
-		scope.$digest();
-
-		$httpBackend.verifyNoOutstandingRequest();
-	}));
-
 
 	it('should load one search result', inject(function ($controller,$stateParams) {
 		var searchString = 'something';
@@ -60,17 +53,15 @@ describe('ResourcePlannerCtrl', function () {
 			FilterType: 'asdfasdfasdf'
 		};
 		var scope = $rootScope.$new();
-		$httpBackend.whenGET(filterUrl(searchString))
-			.respond(200, [singleResult]);
-		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams: mockStateParams, dayOffRuleService: dayOffRuleService([singleResult]) });
 
-		scope.query(searchString);
-		$httpBackend.flush();
-
-		var result = scope.results[0];
-		expect(result.Id).toEqual(singleResult.Id);
-		expect(result.FilterType).toEqual(singleResult.FilterType);
-		expect(result.Name).toEqual(singleResult.Name);
+		scope.query(searchString).then(function(results) {
+			var result = results[0];
+			expect(result.Id).toEqual(singleResult.Id);
+			expect(result.FilterType).toEqual(singleResult.FilterType);
+			expect(result.Name).toEqual(singleResult.Name);
+		});
+		
 	}));
 
 	it('should not put loaded item to selected array', inject(function ($controller,$stateParams) {
@@ -80,62 +71,12 @@ describe('ResourcePlannerCtrl', function () {
 			Name: 'asdfasdf',
 			FilterType: 'asdfasdfasdf'
 		};
-		$httpBackend.whenGET(filterUrl(searchString))
-			.respond(200, [singleResult]);
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams: mockStateParams, dayOffRuleService: dayOffRuleService([singleResult]) });
 
-		scope.query(searchString);
-		$httpBackend.flush();
-
-		expect(scope.selectedResults.length).toEqual(0);
-	}));
-
-	it('should have isSearching set to false before first call', inject(function ($controller,$stateParams) {
-		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
-
-		expect(scope.isSearching).toEqual(false);
-	}));
-
-	it('should set isSearching during search', inject(function ($controller,$stateParams) {
-		var searchString = 'something';
-		var expectedToHaveBeenTrue=false;
-
-		$httpBackend.whenGET(filterUrl(searchString))
-			.respond(200, []);
-
-		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
-
-		scope.$watch(function () { return scope.isSearching; }, function (value) {
-			if (value)
-				expectedToHaveBeenTrue = true;
+		scope.query(searchString).then(function() {
+			expect(scope.selectedResults.length).toEqual(0);
 		});
-		scope.query(searchString);
-
-
-		$httpBackend.flush();
-
-		expect(expectedToHaveBeenTrue).toEqual(true);
-		expect(scope.isSearching).toEqual(false);
-	}));
-
-	it('should falsify isSearching if non successful call', inject(function ($controller,$stateParams) {
-		var searchString = "blabla";
-
-		$httpBackend.whenGET(filterUrl(searchString))
-			.respond(500, [{}]);
-
-
-		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
-
-		scope.query(searchString);
-
-		$httpBackend.flush();
-
-		expect(scope.isSearching).toEqual(false);
 	}));
 
 	it('should not call service when model is undefined ', inject(function ($controller,$stateParams) {

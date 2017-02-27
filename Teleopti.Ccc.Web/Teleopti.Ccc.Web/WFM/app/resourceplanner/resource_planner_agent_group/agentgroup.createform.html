@@ -21,8 +21,8 @@
 				<div class="con-flex split-1-2">
 					<div class="wfm-option form-input-wrap">
 						<form name="autocomplete-form" class="autosearch-input">
-							<md-autocomplete md-selected-item="selectedItem" md-search-text="vm.searchString" md-search-text-change="vm.inputFilterData()" placeholder="{{'Find'|translate}}: {{'Skill'|translate}} / {{'BusinessUnit'|translate}} / {{'Contract'|translate}} / {{'Team'|translate}}"
-											md-items="item in vm.results" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
+							<md-autocomplete  md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'Find'|translate}}: {{'Skill'|translate}} / {{'BusinessUnit'|translate}} / {{'Contract'|translate}} / {{'Team'|translate}}"
+											md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
 								<md-item-template>
 									<div>
 										<span md-highlight-text class="item-type filter-handle">{{item.FilterType}}</span>

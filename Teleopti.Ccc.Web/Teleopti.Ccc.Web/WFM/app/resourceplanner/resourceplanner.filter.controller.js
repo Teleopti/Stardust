@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerFilterCtrl', [
-			'$scope', 'ResourcePlannerFilterSrvc', '$state', '$stateParams', 'NoticeService', 'dayOffRuleService',
-			function ($scope, ResourcePlannerFilterSrvc, $state, $stateParams, NoticeService, dayOffRuleService) {
+			'$scope', '$state', '$stateParams', 'NoticeService', 'dayOffRuleService','debounceService',
+			function ($scope, $state, $stateParams, NoticeService, dayOffRuleService, debounceService) {
 				var maxHits = 100;
 				$scope.name = "";
 				$scope.isEnabled = true;
@@ -24,7 +24,6 @@
 					MinConsecWorkDays: 2,
 					MaxConsecWorkDays: 6
 				};
-				$scope.isSearching = false;
 				if (Object.keys($stateParams.filterId).length > 0) {
 					if ($stateParams.isDefault) {
 						$scope.default = $stateParams.isDefault;
@@ -70,21 +69,17 @@
 							});
 					}
 				};
-				$scope.query = function (input) {
+				$scope.query = debounceService.debounce(function (input) {
 					if (input === "") {
-						return;
+						return [];
 					};
-					$scope.isSearching = true;
-					ResourcePlannerFilterSrvc.getData({
+
+					return dayOffRuleService.getFilterData({
 						searchString: input,
 						maxHits: maxHits
-					}).then(function (results) {
-						$scope.results = results.data;
-						$scope.isSearching = false;
-					}, function () {
-						$scope.isSearching = false;
-					});
-				}
+					}).$promise;
+				}, 250);
+
 				$scope.isValid = function () {
 					return $scope.isValidDayOffsPerWeek() &&
 						$scope.isValidConsecDaysOff() &&

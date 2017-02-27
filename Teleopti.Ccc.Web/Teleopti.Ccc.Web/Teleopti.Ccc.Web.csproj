@@ -1451,6 +1451,7 @@
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.hierarchy.service.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.hierarchy.controller.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resourceplanner.debounce.service.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />
@@ -1712,7 +1713,6 @@
     <Content Include="WFM\app\resourceplanner\resourceplanner.report.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.filter.controller.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.temp.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resourceplanner.filter.service.js" />
     <Content Include="WFM\app\global\http\http.service.js" />
     <Content Include="WFM\app\search\search.controller.spec.js" />
     <Content Include="WFM\app\seatManagement\locationpicker.controller.spec.js" />
