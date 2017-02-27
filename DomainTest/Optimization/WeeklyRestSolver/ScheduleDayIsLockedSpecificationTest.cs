@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsFalse(_target.IsSatisfy(_day, _currentSchedules, _scheduleMatrixPro));
+				Assert.IsFalse(_target.IsSatisfy(_currentSchedules.ScheduledDay(_day), _scheduleMatrixPro));
 			}
 		}
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsTrue(_target.IsSatisfy(_day, _currentSchedules, _scheduleMatrixPro));
+				Assert.IsTrue(_target.IsSatisfy(_currentSchedules.ScheduledDay(_day), _scheduleMatrixPro));
 			}
 		}
     }
