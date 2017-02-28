@@ -4,12 +4,9 @@ using System.Drawing;
 using NHibernate;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	[IsNotDeadCode("Used in NH mapping files.")]
     public class ColorNumber : IUserType
     {
         public new bool Equals(object x, object y)

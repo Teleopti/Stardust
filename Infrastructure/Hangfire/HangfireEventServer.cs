@@ -1,9 +1,7 @@
 using System;
 using System.ComponentModel;
 using Hangfire;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -17,7 +15,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		}
 		
 		[Obsolete("backward compatible")]
-		[IsNotDeadCode("don't delete it jågej. /erik")]
 		public void Process(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
 			_processor.Process(displayName, tenant, eventType, serializedEvent, handlerType);

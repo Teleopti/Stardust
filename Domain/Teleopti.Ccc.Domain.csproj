@@ -952,7 +952,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\IScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ISeatBookingReportCommand.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ISeatBookingReportModel.cs" />
-    <Compile Include="InterfaceLegacy\Infrastructure\IsNotDeadCodeAttribute.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IStardustJobFeedback.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IStatelessUnitOfWork.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IUnitOfWork.cs" />
