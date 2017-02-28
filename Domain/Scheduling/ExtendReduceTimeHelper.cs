@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				IPeriodValueCalculator personalSkillsPeriodValueCalculator =
 					periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
-				IExtendReduceTimeDecisionMaker decisionMaker = new ExtendReduceTimeDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
+				var decisionMaker = new ExtendReduceTimeDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
 				
 				ICheckerRestriction restrictionChecker = new RestrictionChecker();
 

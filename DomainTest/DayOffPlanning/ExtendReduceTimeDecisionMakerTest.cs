@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
     [TestFixture]
     public class ExtendReduceTimeDecisionMakerTest
     {
-        private IExtendReduceTimeDecisionMaker _target;
+        private ExtendReduceTimeDecisionMaker _target;
         private MockRepository _mocks;
         private IScheduleResultDataExtractor _scheduleResultDataExtractor;
         private IScheduleMatrixPro _matrix;

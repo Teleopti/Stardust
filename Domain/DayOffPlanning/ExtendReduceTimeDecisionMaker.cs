@@ -5,12 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-    public interface IExtendReduceTimeDecisionMaker
-    {
-		ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor);
-    }
-
-    public class ExtendReduceTimeDecisionMaker : IExtendReduceTimeDecisionMaker
+    public class ExtendReduceTimeDecisionMaker
     {
 	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 
