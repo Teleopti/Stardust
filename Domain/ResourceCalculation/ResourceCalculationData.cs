@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -52,11 +53,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool SkipResourceCalculation { get; }
 		public SkillCombinationHolder SkillCombinationHolder { get; }
 		public ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; }
-
-		//"object" here should be IShovelingCallback but this !""#¤%"#¤#"¤"#¤ interface assembly prevent that (if I don't want to create interfaces for everything)
-		//change this when #34355 is done
-		public object ShovelingCallback { get; private set; } = new NoShovelingCallback();
-		public void SetShovelingCallback(object shovelingCallback)
+		public IShovelingCallback ShovelingCallback { get; private set; } = new NoShovelingCallback();
+		public void SetShovelingCallback(IShovelingCallback shovelingCallback)
 		{
 			ShovelingCallback = shovelingCallback;
 		}

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 			if (!ResourceCalculationContext.PrimarySkillMode())
 			{
-				_shovelResources.Execute(resourceCalculationData.SkillResourceCalculationPeriodDictionary, resourceCalculationData.Schedules, resourceCalculationData.Skills, period, (IShovelingCallback) resourceCalculationData.ShovelingCallback, getResourceCalculationContext);
+				_shovelResources.Execute(resourceCalculationData.SkillResourceCalculationPeriodDictionary, resourceCalculationData.Schedules, resourceCalculationData.Skills, period, resourceCalculationData.ShovelingCallback, getResourceCalculationContext);
 			}
 		}
 	}

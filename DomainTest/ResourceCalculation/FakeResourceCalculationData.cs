@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public SkillCombinationHolder SkillCombinationHolder { get; }
 		public ISkillResourceCalculationPeriodDictionary SkillResourceCalculationPeriodDictionary { get; private set; }
 
-		public object ShovelingCallback
+		public IShovelingCallback ShovelingCallback
 		{
 			get { throw new System.NotImplementedException(); }
 			set { throw new System.NotImplementedException(); }
 		}
 
-		public void SetShovelingCallback(object shovelingCallback)
+		public void SetShovelingCallback(IShovelingCallback shovelingCallback)
 		{
 			throw new System.NotImplementedException();
 		}
