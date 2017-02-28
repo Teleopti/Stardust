@@ -620,9 +620,9 @@
     <Compile Include="InterfaceLegacy\Domain\IRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRequestAllowanceProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRequestApprovalService.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IResourceCalculateDelayer.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IResourceCalculation.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IResourceCalculationData.cs" />
+    <Compile Include="ResourceCalculation\IResourceCalculateDelayer.cs" />
+    <Compile Include="ResourceCalculation\IResourceCalculation.cs" />
+    <Compile Include="ResourceCalculation\IResourceCalculationData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IResourceCalculationPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRestrictionBase.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRestrictionChecker.cs" />
@@ -3387,7 +3387,9 @@
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\BusinessUnit.hbm.xml" />
+    <EmbeddedResource Include="Common\BusinessUnit.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Common\Scenario.hbm.xml" />
     <EmbeddedResource Include="Scheduling\ShiftCategory.hbm.xml">
       <SubType>Designer</SubType>

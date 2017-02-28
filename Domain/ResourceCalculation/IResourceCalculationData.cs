@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	//This interface is not needed but circle ref otherwise. Need to get rid of interface assembly first!
 	public interface IResourceCalculationData
