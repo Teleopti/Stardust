@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -15,13 +16,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class IntradayOptimizer2 : IIntradayOptimizer2
 	{
 		private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
-		private readonly IIntradayDecisionMaker _decisionMaker;
+		private readonly IntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleMatrixPro _matrix;
 		private readonly IIntradayOptimizeOneday _optimizeOneday;
 
 		public IntradayOptimizer2(
 						IScheduleResultDataExtractor personalSkillsDataExtractor,
-						IIntradayDecisionMaker decisionMaker,
+						IntradayDecisionMaker decisionMaker,
 						IScheduleMatrixPro matrix,
 						IIntradayOptimizeOneday optimizeOneday)
 		{

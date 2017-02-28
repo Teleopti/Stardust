@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizer2Creator : IIntradayOptimizerCreator
 	{
-		private readonly IIntradayDecisionMaker _decisionMaker;
+		private readonly IntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleService;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public IntradayOptimizer2Creator(
-			IIntradayDecisionMaker decisionMaker,
+			IntradayDecisionMaker decisionMaker,
 			IScheduleService scheduleService,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,

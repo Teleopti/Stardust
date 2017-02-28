@@ -467,7 +467,6 @@
     <Compile Include="InterfaceLegacy\Domain\IGroupShiftCategoryFairnessCreator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IHasContractDayOffDefinition.cs" />
     <Compile Include="InterfaceLegacy\Domain\IIncreasePeriodByOne.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IIntradayDecisionMaker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IJobResult.cs" />
     <Compile Include="InterfaceLegacy\Domain\IJobResultDetail.cs" />
     <Compile Include="InterfaceLegacy\Domain\IJobResultProgress.cs" />

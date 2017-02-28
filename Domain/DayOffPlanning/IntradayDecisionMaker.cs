@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-    public class IntradayDecisionMaker : IIntradayDecisionMaker
+    public class IntradayDecisionMaker
     {
 	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[RemoveMeWithToggle("Put the method override on IntradayOptimizer2Creator when done and remove this", Toggles.ResourcePlanner_IntradayNoDailyValueCheck_42767)]
 	public class IntradayOptimizerCreatorNoPeriodValueCheck : IntradayOptimizer2Creator
 	{
-		private readonly IIntradayDecisionMaker _decisionMaker;
+		private readonly IntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleService;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public IntradayOptimizerCreatorNoPeriodValueCheck(
-			IIntradayDecisionMaker decisionMaker,
+			IntradayDecisionMaker decisionMaker,
 			IScheduleService scheduleService,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
