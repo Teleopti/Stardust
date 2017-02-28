@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(contract.EmploymentType).Return(EmploymentType.HourlyStaff);
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			IList<IScheduleDay> current = new List<IScheduleDay>();
+			IList<IScheduleDay> current;
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.True);
 			_mocks.VerifyAll();
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			IList<IScheduleDay> current = new List<IScheduleDay>();
+			IList<IScheduleDay> current;
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.False);
 			Assert.That(targetDaysOff,Is.EqualTo(5));
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			IList<IScheduleDay> current = new List<IScheduleDay>();
+			IList<IScheduleDay> current;
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.False);
 			Assert.That(targetDaysOff, Is.EqualTo(2));
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			IList<IScheduleDay> current = new List<IScheduleDay>();
+			IList<IScheduleDay> current;
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.True);
 			Assert.That(targetDaysOff, Is.EqualTo(3));

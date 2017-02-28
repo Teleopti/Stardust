@@ -604,7 +604,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var random = new Random();
 			var agents = 19 * random.Next(100, 110) / 100d;
 
-			ISkillDay skillDay = null;
+			ISkillDay skillDay;
 			if (addSkillDataPeriodDuplicate)
 				skillDay =
 					skill.CreateSkillDayWithDemandOnIntervalWithSkillDataPeriodDuplicate(scenario, new DateOnly(userNow), 3,

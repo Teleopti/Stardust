@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
-			var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
+			ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
 			var skillOpenHoursCollection =
 				new ReadOnlyCollection<DateTimePeriod>(new List<DateTimePeriod> { period });
 
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
-			var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
+			ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
 
 			var skillOpenHoursCollection =
 				new ReadOnlyCollection<DateTimePeriod>(new List<DateTimePeriod> { period.MovePeriod(TimeSpan.FromMinutes(15)) });

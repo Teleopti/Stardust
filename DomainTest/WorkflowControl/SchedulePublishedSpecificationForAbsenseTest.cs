@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void ShouldNullWorkflowControlSetMeansNotPublished()
         {
-	        PublishedScheduleData data = null;
+	        PublishedScheduleData data;
             using (_mocks.Record())
             {
 				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone(_period);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 		public void ShouldScheduleDataOtherThatAbsenceMeansNotPublished()
 		{
-			PublishedScheduleData data = null;
+			PublishedScheduleData data;
 			using (_mocks.Record())
 			{
 				data = _publishedScheduleDataFactory.CreateMockedNonAbsenceTypeData(_period);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
 		public void ShouldOutsidePreferencePeriodMeansNotPublished()
         {
-			PublishedScheduleData data = null;
+			PublishedScheduleData data;
 			using (_mocks.Record())
 			{
 				SetOuterPreferencePeriod();
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 		public void ShouldAbsenceStartInPreferencePeriodMeansPublished()
 		{
-			PublishedScheduleData data = null;
+			PublishedScheduleData data;
 			var absencePeriodInPreferencePeriod = new DateOnlyPeriod(_periodStartDate.AddDays(1), _periodStartDate.AddDays(2)).ToDateTimePeriod(_timeZoneInfo);
 			using (_mocks.Record())
 			{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 		public void ShouldAbsenceStartBeforePreferencePeriodAlsoMeansPublished()
 		{
-			PublishedScheduleData data = null;
+			PublishedScheduleData data;
 			var absencePeriodStartBeforePreferencePeriod = new DateOnlyPeriod(_periodStartDate.AddDays(-1), _periodStartDate.AddDays(1)).ToDateTimePeriod(_timeZoneInfo);
 			using (_mocks.Record())
 			{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 		public void ShouldAbsenceEndAfterPreferencePeriodAlsoMeansPublished()
 		{
-			PublishedScheduleData data = null;
+			PublishedScheduleData data;
 			var absencePeriodEndAfterPreferencePeriod = new DateOnlyPeriod(_periodStartDate.AddDays(-1), _periodStartDate.AddDays(1)).ToDateTimePeriod(_timeZoneInfo);
 			using (_mocks.Record())
 			{
