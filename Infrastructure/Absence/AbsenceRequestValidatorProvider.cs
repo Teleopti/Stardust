@@ -22,16 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			var validators = absenceRequestOpenPeriod.GetSelectedValidatorList().ToList();
 
-			if (!validateAllAgentSkills())
-			{
-				var staffingThresholdValidator = validators.FirstOrDefault(x => x.GetType() == typeof(StaffingThresholdValidator));
-				if (staffingThresholdValidator != null)
-				{
-					var index = validators.IndexOf(staffingThresholdValidator);
-					validators[index] = getStaffingThresholdValidatorCascadingSkills(staffingThresholdValidator);
-				}
-			}
-
 			if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_Check_Expired_Requests_40274))
 			{
 				var requestExpirationValidator = new RequestExpirationValidator(_expiredRequestValidator);
@@ -70,26 +60,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			{
 				return new StaffingThresholdValidator();
 			}
-			if (!validateAllAgentSkills())
-			{
-				staffingThresholdValidator = getStaffingThresholdValidatorCascadingSkills(staffingThresholdValidator);
-			}
+
 			return staffingThresholdValidator;
-		}
-
-		private bool validateAllAgentSkills()
-		{
-			return _toggleManager.IsEnabled(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
-		}
-
-		private IAbsenceRequestValidator getStaffingThresholdValidatorCascadingSkills(
-			IAbsenceRequestValidator staffingThresholdValidator)
-		{
-			if (staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator))
-			{
-				return new StaffingThresholdValidatorCascadingSkillsWithShrinkage();
-			}
-			return new StaffingThresholdValidatorCascadingSkills();
 		}
 	}
 }
