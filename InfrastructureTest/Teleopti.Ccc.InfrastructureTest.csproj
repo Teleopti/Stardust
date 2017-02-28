@@ -153,6 +153,7 @@
     <Compile Include="Aop\OrderedAspectsTest.cs" />
     <Compile Include="Aop\ValidationTest.cs" />
     <Compile Include="ApplicationLayer\AnalyticsPersonPeriodUpdaterIntegrationTests.cs" />
+    <Compile Include="ApplicationLayer\AnalyticsScheduleMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Archiving\MoveTestCase.cs" />

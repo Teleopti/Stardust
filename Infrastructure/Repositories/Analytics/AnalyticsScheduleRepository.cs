@@ -258,12 +258,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public int BusinessUnitId { get; set; }
 	}
 
-	public class AnalyticsGeneric : IAnalyticsGeneric
-	{
-		public int Id { get; set; }
-		public Guid Code { get; set; }
-	}
-
 	public class AnalyticsShiftLength : IAnalyticsShiftLength
 	{
 		public int Id { get; set; }
