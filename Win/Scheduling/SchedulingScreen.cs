@@ -4389,7 +4389,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.PersonsInOrganization,
 				SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.SkillDays,
-				SchedulerState.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>(), _container.Resolve<ReduceSkillGroups>()))
+				SchedulerState.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>()))
 			{
 				analyzer.LoadData();
 				analyzer.ShowDialog(this);

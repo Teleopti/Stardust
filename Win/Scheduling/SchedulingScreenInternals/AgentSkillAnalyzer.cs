@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly DateOnlyPeriod _datePeriod;
 		private readonly CreateIslands _createIslands;
-		private readonly ReduceSkillGroups _reduceSkillGroups;
 		private IList<Island> _islandListBeforeReducing;
 		private IDictionary<ISkill,TimeSpan> _skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 		private TimeSpan _totalForecastedForDate;
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod,
-			CreateIslands createIslands, ReduceSkillGroups reduceSkillGroups)
+			CreateIslands createIslands)
 		{
 			InitializeComponent();
 			_dtpDate = new DateTimePicker {Format = DateTimePickerFormat.Short};
@@ -51,7 +50,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			_skillDays = skillDays;
 			_datePeriod = datePeriod;
 			_createIslands = createIslands;
-			_reduceSkillGroups = reduceSkillGroups;
 			_date = datePeriod.StartDate;
 			_dtpDate.MinDate = datePeriod.StartDate.Date;
 			_dtpDate.MaxDate = datePeriod.EndDate.Date;
