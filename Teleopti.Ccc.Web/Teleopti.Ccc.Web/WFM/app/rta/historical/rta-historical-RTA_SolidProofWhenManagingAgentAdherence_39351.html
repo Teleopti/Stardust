@@ -1,0 +1,142 @@
+<style>
+    .highlight>td {
+        background-color: #C2E085;
+    }
+    
+    .diamond {
+        position: absolute;
+        height: 8px;
+        top: 50%;
+        margin-top: -8px;
+        cursor: pointer;
+        border-right: 1px solid white;
+    }
+    
+    .label {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+    }
+    
+    .label:empty {
+        display: none;
+    }
+    
+    .rta-change-row {
+        border-bottom: 1px solid #eee;
+    }
+    
+    .rta-change-row .time {
+        font-weight: bold;
+    }
+    
+    .rta-list {
+        max-height: 100%;
+    }
+    
+    .test {
+        font-size: 24px;
+    }
+    
+    @media screen and (max-width: 768px) {
+        .hidden-sm {
+            display: none;
+        }
+    }
+    
+    @media screen and (max-width: 960px) {
+        .hidden-md {
+            display: none;
+        }
+    }
+</style>
+
+<div class="view-header with-fab with-desc">
+    <div class="view-title">
+        <div class="pull-left">
+            <h1>
+                <i class="mdi mdi-alarm"></i> <b>{{vm.agentName}}</b>
+            </h1>
+        </div>
+    </div>
+    <div class="fab-wrapper pull-right"></div>
+</div>
+
+<div class="panel material-depth-1">
+    <div class="sub-header">
+        <h2>Adherence for {{vm.date | amDateFormat: "YYYY-MM-DD"}}</h2>
+    </div>
+    <div class="con-row">
+        <div class="con-flex">
+            <div class="rta-historical-adherence-row-wrapper">
+                <div ng-repeat="row in vm.fullTimeline" class="label label-info" ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%; width: 36px; margin-left: -18px;">{{row.Time | amDateFormat: 'HH.mm'}}</div>
+            </div>
+
+            <div class="rta-out-of-adherences-wrapper">
+                <!--<span class="rta-schedule-overlay" style="background-color: rgba(0,0,0,.26); border: 1px solid rgba(0,0,0,.46); position: absolute; top: 4%; height: 85%; left: 18.181818181818183%; z-index: 5; width: calc(27.272727272727273% - 18.181818181818183%);"></span>-->
+                <span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline out-of-adherence" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;" data-starttime="{{outOfAdherence.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
+                    data-endtime="{{outOfAdherence.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
+					<md-tooltip md-direction="top">
+						{{vm.ooaTooltipTime(outOfAdherence.StartTime)}} - {{vm.ooaTooltipTime(outOfAdherence.EndTime)}}
+					</md-tooltip>
+				</span>
+
+                <span class="rta-current-time" ng-attr-style="left: {{vm.currentTimeOffset}}; height: 70%; margin-top: 6px;">
+					<md-tooltip md-direction="top">
+						{{vm.date | amDateFormat: "HH:mm:ss"}}
+					</md-tooltip>
+				</span>
+
+                <div class="rta-shift rta-full-shift-wrapper">
+                    <div ng-repeat="activity in vm.agentsFullSchedule" class="rta-layer absolute floatleft activity" tabindex="0" ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;" data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
+                        data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="hidden-md" style="height: 30px; position: relative;">
+            <div data-id="{{rulechange.id}}" class="diamond" ng-repeat="rulechange in vm.rulechanges" ng-click="vm.scrollTo(rulechange.id)" ng-attr-style="left: {{rulechange.offset}}; width: {{rulechange.width}}; background-color: {{rulechange.ruleColor}}"></div>
+        </div>
+    </div>
+</div>
+
+
+<rta-card ng-repeat="rulechange in vm.rulechanges2">
+    <rta-card-header ng-attr-styles="background-color: {{rulechange.items[0].activityColor}}; left: 20px;">{{rulechange.header}}</rta-card-header>
+    <rta-card-body>
+        <div class="con-row">
+            <div class="con-flex">
+                <ul class="wfm-simple-list rta-list">
+                    <li>
+                        <div class="con-row rta-change-row hidden-sm">
+                            <div class="con-flex"><b>Time</b></div>
+                            <div class="con-flex"><b>Activity</b></div>
+                            <div class="con-flex"><b>State</b></div>
+                            <div class="con-flex"><b>Rule</b></div>
+                            <div class="con-flex"><b>Adherence</b></div>
+                        </div>
+                    </li>
+                    <li ng-repeat="item in rulechange.items">
+                        <div class="con-row rta-change-row">
+                            <div class="con-flex time">{{item.time | amDateFormat: 'HH:mm:ss'}}</div>
+                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.activityColor}};">{{item.activity}}</span></div>
+                            <div class="con-flex">{{item.state}}</div>
+                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.ruleColor}};">{{item.rule}}</span></div>
+                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.adherenceColor}};">{{item.adherence}}</span></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </rta-card-body>
+</rta-card>

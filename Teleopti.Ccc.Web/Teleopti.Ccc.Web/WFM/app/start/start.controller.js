@@ -1,10 +1,11 @@
-﻿(function () {
-	'use strict';
-	var start = angular.module('wfm.start', []);
+﻿(function() {
+    'use strict';
+    var start = angular.module('wfm.start', []);
 
-	start.controller("FeedCtrl", [
-	'$scope', function ($scope) {
+    start.controller("FeedCtrl", [
+        '$scope',
+        function($scope) {
 
-	}
-	]);
+        }
+    ]);
 })();

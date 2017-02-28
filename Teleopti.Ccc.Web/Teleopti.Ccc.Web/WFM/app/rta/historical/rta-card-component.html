@@ -1,0 +1,6 @@
+<div class="rta-card wfm-card-list" toggleable>
+    <md-card ng-class="{'wfm-card-selected material-depth-2': $ctrl.isOpen(), 'wfm-card-unselected': !$ctrl.isOpen()}">
+        <div ng-transclude="header"></div>
+        <div ng-if="$ctrl.isOpen()" ng-transclude="body"></div>
+    </md-card>
+</div>
