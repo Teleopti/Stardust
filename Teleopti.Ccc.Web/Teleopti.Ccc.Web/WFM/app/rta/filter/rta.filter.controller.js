@@ -57,6 +57,7 @@
 		vm.skillAreasLoaded = false;
 		vm.showOrganization = $state.current.name === agentsState;
 		vm.clearSelection = clearSelection;
+		vm.stopOnKeyDown = stopOnKeyDown;
 
 		(function initialize() {
 			rtaService.getSkills()
@@ -155,7 +156,7 @@
 		};
 
 		function selectedSkillChange(skill) {
-			
+
 			if (!skill && vm.showOrganization)
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
@@ -227,12 +228,10 @@
 			var selectedTeamIds = vm.teamsSelected;
 			selection['siteIds'] = selectedSiteIds;
 			selection['teamIds'] = selectedTeamIds;
-			if (!vm.showOrganization) {
-				if ($stateParams.skillIds)
-					selection['skillIds'] = $stateParams.skillIds;
-				else if ($stateParams.skillAreaId)
-					selection['skillAreaId'] = $stateParams.skillAreaId;
-			}
+			if ($stateParams.skillIds)
+				selection['skillIds'] = $stateParams.skillIds;
+			else if ($stateParams.skillAreaId)
+				selection['skillAreaId'] = $stateParams.skillAreaId;
 			stateGoToAgents(selection);
 		}
 
@@ -306,6 +305,7 @@
 
 		function clearSearchTerm() { vm.searchTerm = ''; }
 		function onSearchOrganization($event) { $event.stopPropagation(); };
+		function stopOnKeyDown($event) { $event.stopImmediatePropagation(); };
 
 		function forTest_selectSite(site) {
 			site.isChecked = !site.isChecked;

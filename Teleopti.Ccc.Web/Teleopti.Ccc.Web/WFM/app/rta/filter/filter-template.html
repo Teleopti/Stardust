@@ -52,7 +52,7 @@
 					<span class="con-flex rta-multiple-selection-panel">
 						<md-input-container class="rta-md-input-container" id="organization" md-no-float>
 							<label class="for-searchTerm"></label>
-							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" multiple md-on-close="vm.goToAgents()">
+							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" ng-keydown="vm.stopOnKeyDown($event)" multiple md-on-close="vm.goToAgents()">
 								<div class="rta-select-header">
 									<md-select-header>
 										<i class="mdi mdi-magnify"></i>
