@@ -148,6 +148,8 @@
 			
 			vm.requestFiltersMgr.ResetFilter();
 			vm.filters = vm.requestFiltersMgr.Filters;
+			vm.subjectFilter = undefined;
+			vm.messageFilter = undefined;
 		};
 
 		vm.clearFilters = clearAllFilters;

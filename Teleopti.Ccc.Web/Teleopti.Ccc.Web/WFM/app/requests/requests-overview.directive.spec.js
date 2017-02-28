@@ -592,6 +592,20 @@
 			expect(shiftTradeScheduleViewModels[1][0].dayNumber).toEqual("08");
 		});
 
+		it('should clear subject and message filters', function() {
+			var test = setUpTarget();
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+			isolatedScope.requestsTableContainer.subjectFilter = ['a'];
+			isolatedScope.requestsTableContainer.messageFilter = ['b'];
+			test.scope.$digest();
+
+			isolatedScope.requestsTableContainer.clearFilters();
+			expect(isolatedScope.requestsTableContainer.subjectFilter).toEqual(undefined);
+			expect(isolatedScope.requestsTableContainer.messageFilter).toEqual(undefined);
+		});
+
 		xit('should load schedules for shift trade request', function () {
 			var test = setUpTarget();
 
