@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 				
 				int x;
-				IList<IScheduleDay> y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 			
 				int x;
-				IList<IScheduleDay> y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 
 				int x;
-				IList<IScheduleDay> y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 
 				int x;
-				IList<IScheduleDay> y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1);
 				int x;
-				IList<IScheduleDay> y;
+				IList<IScheduleDay> y = new List<IScheduleDay>{_scheduleDay};
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
 			}
 
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1);
 				int x;
-				IList<IScheduleDay> y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(0, y);
 			}
 

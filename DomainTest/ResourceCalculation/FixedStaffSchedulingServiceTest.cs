@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseOnCorrectNumberOfDaysOffIfDaysOffPeriodCalculatorReturnsFalse()
 		{
 			int target;
-			IList<IScheduleDay> current;
+			IList<IScheduleDay> current = new IScheduleDay[] { };
 			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), new DateOnly(2014,9,22));
 			var virtualPeriod = person.VirtualSchedulePeriod(new DateOnly(2014,9,22));
 
