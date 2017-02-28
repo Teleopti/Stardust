@@ -124,7 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Messages.ico" />
-    <Content Include="_DONT_PUT_NEW_TYPES_HERE.txt" />
+    <Content Include="_DONT_PUT_NEW_TYPES_IN_THIS_ASSEMBLY.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
