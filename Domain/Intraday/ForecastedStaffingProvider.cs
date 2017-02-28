@@ -10,16 +10,22 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly IUserTimeZone _timeZone;
 		private readonly INow _now;
+		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 
-		public ForecastedStaffingProvider(IUserTimeZone timeZone, INow now)
+		public ForecastedStaffingProvider(IUserTimeZone timeZone, INow now, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
 		{
 			_timeZone = timeZone;
 			_now = now;
+			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
-		public IList<StaffingIntervalModel> StaffingPerSkill(IList<ISkill> skills, ICollection<ISkillDay> skillDays, int minutesPerInterval)
+		public IList<StaffingIntervalModel> StaffingPerSkill(IList<ISkill> skills, ICollection<ISkillDay> skillDays, int minutesPerInterval, bool useShrinkage)
 		{
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
+
+			if (useShrinkage)
+				return getForecastWithShrinkageFromReadModel(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), new DateTimePeriod(usersNow.Date.ToUniversalTime(), usersNow.AddDays(1).Date.ToUniversalTime()));
+
 			var staffingIntervals = new List<StaffingIntervalModel>();
 			var resolution = TimeSpan.FromMinutes(minutesPerInterval);
 			foreach (var skill in skills)
@@ -34,6 +40,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return staffingIntervals
 				.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
 				.ToList();
+		}
+
+		private IList<StaffingIntervalModel> getForecastWithShrinkageFromReadModel(Guid[] skillIdList, DateTimePeriod period )
+		{
+			var skillIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skillIdList, period);
+			var intervals = skillIntervals.Select(x => new StaffingIntervalModel
+												  {
+													  Agents = x.ForecastWithShrinkage,
+													  SkillId = x.SkillId,
+													  StartTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _timeZone.TimeZone()),
+			});
+			return intervals.ToList();
 		}
 
 		private IEnumerable<StaffingIntervalModel> getStaffingIntervalModels(ISkillDay skillDay, TimeSpan resolution)
