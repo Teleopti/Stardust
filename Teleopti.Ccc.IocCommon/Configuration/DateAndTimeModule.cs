@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<MutableNow>().As<INow>().As<IMutateNow>().SingleInstance();
 			builder.RegisterType<Time>().As<ITime>().SingleInstance();
-			builder.RegisterType<TimeFormatter>().As<ITimeFormatter>().SingleInstance();
+			builder.RegisterType<TimeFormatter>().SingleInstance();
 		}
 	}
 }

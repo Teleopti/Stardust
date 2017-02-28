@@ -6,21 +6,7 @@ namespace Teleopti.Interfaces.Domain
 	/// <summary>
 	/// Time formatter
 	/// </summary>
-	public interface ITimeFormatter
-	{
-
-		/// <summary>
-		/// TimeSpan to xx:yy format, xx hours, yy minutes
-		/// </summary>
-		/// <param name="timeSpan">TimeSpan want to format</param>
-		/// <returns></returns>
-		string GetLongHourMinuteTimeString(TimeSpan timeSpan);
-	}
-
-	/// <summary>
-	/// Time formatter
-	/// </summary>
-	public class TimeFormatter : ITimeFormatter
+	public class TimeFormatter
 	{
 		private readonly IUserCulture _culture;
 
