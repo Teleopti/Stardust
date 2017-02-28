@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			{
 				errorMessages.Add(Resources.DuplicatedApplicationLogonErrorMsgSemicolon);
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				errorMessages.Add(Resources.InternalErrorXMsg);
 			}
