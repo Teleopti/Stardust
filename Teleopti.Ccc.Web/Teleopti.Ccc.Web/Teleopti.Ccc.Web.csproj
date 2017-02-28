@@ -544,6 +544,7 @@
     <Compile Include="Areas\People\Controllers\SmartAssignWorkflowControlSetModel.cs" />
     <Compile Include="Areas\People\Controllers\WorkflowControlSetModel.cs" />
     <Compile Include="Areas\People\Core\ImportAgentFileValidator.cs" />
+    <Compile Include="Areas\People\Core\Persisters\TenantUserPersister.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Reporting\Core\ServerPathProvider.cs" />

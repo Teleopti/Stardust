@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 			builder.RegisterType<PersonDataProvider>().As<IPersonDataProvider>().SingleInstance();
 			builder.RegisterType<PersonInfoUpdater>().As<IPersonInfoUpdater>().SingleInstance();
 			builder.RegisterType<ImportAgentFileValidator>().As<IImportAgentFileValidator>().SingleInstance();
+			builder.RegisterType<TenantUserPersister>().As<ITenantUserPersister>().SingleInstance();
 		}
 	}
 }

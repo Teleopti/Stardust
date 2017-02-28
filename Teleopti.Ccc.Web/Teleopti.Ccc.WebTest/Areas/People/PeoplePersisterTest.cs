@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
-using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Interfaces.Domain;
@@ -37,8 +36,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				DescriptionText = "role2"
 			});
 
+			
 			var personInfoPersister = new PersistPersonInfoFake();
 			var personInfoMapper = new PersonInfoMapperFake();
+
+			var tenantUserPersister = new TenantUserPersister(personInfoPersister, personInfoMapper);
+
 
 			var person1 = new Person().WithName(new Name("Jenny", "Morgan"));
 			person1.SetId(Guid.NewGuid());
@@ -48,8 +51,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var fakePersonRepository = new FakePersonRepositoryLegacy(person1, person2);
 
-			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository,
-				fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
+			target = new PeoplePersister( fakeApplicationRoleRepository,
+				fakePersonRepository, new FakeLoggedOnUser(), new UserValidator(),tenantUserPersister);
 		}
 
 		[Test]

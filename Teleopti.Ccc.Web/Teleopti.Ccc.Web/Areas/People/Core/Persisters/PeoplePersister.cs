@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
-using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -20,24 +16,22 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public class PeoplePersister : IPeoplePersister
 	{
-		private readonly IPersistPersonInfo _personInfoPersister;
-		private readonly IPersonInfoMapper _mapper;
 		private readonly IApplicationRoleRepository _roleRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _currentLoggedOnUser;
 		private readonly IUserValidator _userValidator;
 		private IDictionary<string, IApplicationRole> _allRoles;
+		private readonly ITenantUserPersister _tenantUserPersister;
 		private bool initialized;
 
-		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper, IApplicationRoleRepository roleRepository,
-			IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, IUserValidator userValidator)
+		public PeoplePersister(IApplicationRoleRepository roleRepository,
+			IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, IUserValidator userValidator, ITenantUserPersister tenantUserPersister)
 		{
-			_personInfoPersister = personInfoPersister;
-			_mapper = mapper;
 			_roleRepository = roleRepository;
 			_personRepository = personRepository;
 			_currentLoggedOnUser = currentLoggedOnUser;
 			_userValidator = userValidator;
+			_tenantUserPersister = tenantUserPersister;
 
 			initialized = false;
 		}
@@ -80,34 +74,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 							PersonId = person.Id.GetValueOrDefault()
 						};
 
-						try
-						{
-							PersistTenatData(tenantUserData);
-						}
-						catch (PasswordStrengthException)
+						var errorMessages = _tenantUserPersister.Persist(tenantUserData);
+
+						if (errorMessages.Any())
 						{
 							isUserValid = false;
-							errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
+
 							RemovePerson(person);
-						}
-						catch (DuplicateIdentityException)
-						{
-							isUserValid = false;
-							errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
-							RemovePerson(person);
-						}
-						catch (DuplicateApplicationLogonNameException)
-						{
-							isUserValid = false;
-							errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
-							RemovePerson(person);
-						}
-						catch (Exception e)
-						{
-							isUserValid = false;
-							errorMsgBuilder.AppendFormat((Resources.InternalErrorXMsg + " "), e.Message);
-							RemovePerson(person);
-						}
+
+							errorMessages.ForEach(m =>
+							{
+								errorMsgBuilder.Append(m + " ");
+							});
+						}						
 					}
 				}
 
@@ -168,12 +147,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		protected virtual void RemovePerson(IPerson person)
 		{
 			_personRepository.Remove(person);
-		}
-
-		[TenantUnitOfWork]
-		protected virtual void PersistTenatData(PersonInfoModel tenantUserData)
-		{
-			_personInfoPersister.Persist(_mapper.Map(tenantUserData));
 		}
 	}
 }
