@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[LoggedOnAppDomain]
 	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
 	{
-		public IntradayOptimizationFromWeb Target;
+		public IIntradayOptimizationFromWeb Target;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 		public IntradayOptmizerLimiter IntradayOptimizerLimiter;
 		public FakeSkillRepository SkillRepository;

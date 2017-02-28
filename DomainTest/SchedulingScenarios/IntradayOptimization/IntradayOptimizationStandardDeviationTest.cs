@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public IntradayOptimizationFromWeb Target;
+		public IIntradayOptimizationFromWeb Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]

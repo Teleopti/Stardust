@@ -440,17 +440,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			if (_configuration.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
 			{
-				builder.RegisterType<SchedulePlanningPeriodTaskCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //can be single after remove ExecuteAndReturn method
+				builder.RegisterType<SchedulePlanningPeriodJobCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //can be single after remove ExecuteAndReturn method
+				builder.RegisterType<IntradayOptimizationFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			else
 			{
 				builder.RegisterType<SchedulePlanningPeriodCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<IntradayOptimizationJobFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			}
 
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
 			builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().ApplyAspects().InstancePerLifetimeScope();
-			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<PersistIntradayOptimizationResult>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();

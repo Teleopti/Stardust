@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class OptimizationController : ApiController
 	{
 		private readonly IScheduleOptimization _scheduleOptimization;
-		private readonly IntradayOptimizationFromWeb _intradayOptimizationFromWeb;
+		private readonly IIntradayOptimizationFromWeb _intradayOptimizationFromWeb;
 
-		public OptimizationController(IScheduleOptimization scheduleOptimization, IntradayOptimizationFromWeb intradayOptimizationFromWeb)
+		public OptimizationController(IScheduleOptimization scheduleOptimization, IIntradayOptimizationFromWeb intradayOptimizationFromWeb)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_intradayOptimizationFromWeb = intradayOptimizationFromWeb;

@@ -1,68 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public abstract class IntradayOptimizationEventBaseHandler: IHandleEvent<OptimizationWasOrdered>
-	{
-		private readonly IntradayOptimization _intradayOptimization;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
-		private readonly ISynchronizeIntradayOptimizationResult _synchronizeIntradayOptimizationResult;
-		private readonly IGridlockManager _gridlockManager;
-		private readonly IFillStateHolderWithMaxSeatSkills _fillStateHolderWithMaxSeatSkills;
-
-		protected IntradayOptimizationEventBaseHandler(IntradayOptimization intradayOptimization,
-									Func<ISchedulerStateHolder> schedulerStateHolder,
-									IFillSchedulerStateHolder fillSchedulerStateHolder,
-									ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult,
-									IGridlockManager gridlockManager,
-									IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills)
-		{
-			_intradayOptimization = intradayOptimization;
-			_schedulerStateHolder = schedulerStateHolder;
-			_fillSchedulerStateHolder = fillSchedulerStateHolder;
-			_synchronizeIntradayOptimizationResult = synchronizeIntradayOptimizationResult;
-			_gridlockManager = gridlockManager;
-			_fillStateHolderWithMaxSeatSkills = fillStateHolderWithMaxSeatSkills;
-		}
-
-		[TestLog]
-		public virtual void Handle(OptimizationWasOrdered @event)
-		{
-			using (CommandScope.Create(@event))
-			{
-				DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule);
-				_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, @event.Period);
-			}
-		}
-
-		[UnitOfWork]
-		protected virtual void DoOptimization(DateOnlyPeriod period,
-							IEnumerable<Guid> agentsInIsland,
-							IEnumerable<Guid> agentsToOptimize,
-							IEnumerable<LockInfo> locks,
-							IEnumerable<Guid> onlyUseSkills,
-							bool runResolveWeeklyRestRule)
-		{
-			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, _gridlockManager, locks, period, onlyUseSkills);
-			_fillStateHolderWithMaxSeatSkills.Execute(schedulerStateHolder.SchedulingResultState.MinimumSkillIntervalLength());
-			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize), runResolveWeeklyRestRule);
-		}
-	}
-
-
 	public class IntradayOptimizationEventRunInProcessHandler: IntradayOptimizationEventBaseHandler, IRunInProcess
 	{
 		public IntradayOptimizationEventRunInProcessHandler(IntradayOptimization intradayOptimization,
@@ -72,23 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			: base(
 				intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,
 				gridlockManager, fillStateHolderWithMaxSeatSkills)
-		{
-		}
-	}
-
-	public class IntradayOptimizationEventStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust
-	{
-		public IntradayOptimizationEventStardustHandler(IntradayOptimization intradayOptimization,
-			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
-			IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills)
-			: base(
-				intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,
-				gridlockManager, fillStateHolderWithMaxSeatSkills)
-		{
-		}
-
-		public override void Handle(OptimizationWasOrdered @event)
 		{
 		}
 	}

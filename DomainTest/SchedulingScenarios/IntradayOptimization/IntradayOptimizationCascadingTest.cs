@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public IntradayOptimizationFromWeb Target;
+		public IIntradayOptimizationFromWeb Target;
 
 		[Test]
 		public void ShouldOnlyConsiderPrimarySkillDuringOptimization()

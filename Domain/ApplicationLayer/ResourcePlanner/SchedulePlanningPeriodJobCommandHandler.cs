@@ -8,14 +8,14 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
-	public class SchedulePlanningPeriodTaskCommandHandler: ISchedulePlanningPeriodCommandHandler
+	public class SchedulePlanningPeriodJobCommandHandler: ISchedulePlanningPeriodCommandHandler
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 
-		public SchedulePlanningPeriodTaskCommandHandler(IPlanningPeriodRepository planningPeriodRepository, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
+		public SchedulePlanningPeriodJobCommandHandler(IPlanningPeriodRepository planningPeriodRepository, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_loggedOnUser = loggedOnUser;

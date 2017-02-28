@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[LoggedOnAppDomain]
 	public class IntradayOptimizationIslandTests
 	{
-		public IntradayOptimizationFromWeb Target;
+		public IIntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;

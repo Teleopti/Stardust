@@ -55,6 +55,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					});
 				}
 			}
+			events.ForEach(e => e.TotalEvents = events.Count);
+			if(command.JobResultId!=null)
+				events.ForEach(e => e.JobResultId = command.JobResultId.Value);
 			_eventPublisher.Publish(events.ToArray());
 		}
 
