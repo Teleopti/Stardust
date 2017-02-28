@@ -9,7 +9,7 @@
       <generator class="guid.comb" />
     </id>
 
-    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces">
+    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Ccc.Domain">
       <property name="Name" not-null="true" type="string" length="50"/>
       <property name="ShortName" not-null="false" type="string" length="25"/>
     </component>

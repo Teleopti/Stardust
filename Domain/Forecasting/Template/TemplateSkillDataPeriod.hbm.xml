@@ -20,8 +20,8 @@
     Puh - a lot of nested components/value types below...
     Poor Micke - cursed late at night.
     -->
-		<component name="ServiceAgreement" class="Teleopti.Interfaces.Domain.ServiceAgreement, Teleopti.Interfaces">
-			<component name="ServiceLevel" class="Teleopti.Interfaces.Domain.ServiceLevel, Teleopti.Interfaces">
+		<component name="ServiceAgreement" class="Teleopti.Interfaces.Domain.ServiceAgreement, Teleopti.Ccc.Domain">
+			<component name="ServiceLevel" class="Teleopti.Interfaces.Domain.ServiceLevel, Teleopti.Ccc.Domain">
         <component name="Percent" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
           <property name="Value"
 							  not-null="true"
@@ -48,7 +48,7 @@
 
     <property name="ManualAgents" type="double" not-null="false" />
 
-		<component name="SkillPersonData" class="Teleopti.Interfaces.Domain.SkillPersonData, Teleopti.Interfaces">
+		<component name="SkillPersonData" class="Teleopti.Interfaces.Domain.SkillPersonData, Teleopti.Ccc.Domain">
 				<property name="MaximumPersons"
 						  column ="PersonBoundary_Maximum"
 						  not-null="true"

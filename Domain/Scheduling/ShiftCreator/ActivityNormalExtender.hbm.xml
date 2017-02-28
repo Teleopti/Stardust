@@ -5,7 +5,7 @@
                    default-access="field.camelcase-underscore">
   <subclass name="ActivityNormalExtender"
             extends="ActivityExtender">
-    <component name="ActivityPositionWithSegment" class="Teleopti.Interfaces.Domain.TimePeriodWithSegment, Teleopti.Interfaces">
+    <component name="ActivityPositionWithSegment" class="Teleopti.Interfaces.Domain.TimePeriodWithSegment, Teleopti.Ccc.Domain">
       <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
         <component name="period" access="field">
           <property name="Minimum"

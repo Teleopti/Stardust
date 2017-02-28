@@ -35,7 +35,7 @@
           not-null="true"
           type="TimeSpan"/>
     
-    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces">
+    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Ccc.Domain">
 		  <property name="Name"
 					not-null="true"
 					type="string"
@@ -48,12 +48,12 @@
 						 
 	  <property name="EmploymentType"				
 				not-null="true" />
-	  <component name="WorkTime" class="Teleopti.Interfaces.Domain.WorkTime, Teleopti.Interfaces">
+	  <component name="WorkTime" class="Teleopti.Interfaces.Domain.WorkTime, Teleopti.Ccc.Domain">
 		  <property name="AvgWorkTimePerDay"
 					not-null="true"
 					type="TimeSpan" />
 	  </component>
-	  <component name="WorkTimeDirective" class="Teleopti.Interfaces.Domain.WorkTimeDirective, Teleopti.Interfaces">
+	  <component name="WorkTimeDirective" class="Teleopti.Interfaces.Domain.WorkTimeDirective, Teleopti.Ccc.Domain">
 		  <property name="MinTimePerWeek"
 					not-null="true"
 					type="TimeSpan" />

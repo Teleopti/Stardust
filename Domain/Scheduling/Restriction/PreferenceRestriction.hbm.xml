@@ -13,17 +13,17 @@
       </generator>
     </id>
 
-    <component  name="StartTimeLimitation" class="Teleopti.Interfaces.Domain.StartTimeLimitation, Teleopti.Interfaces">
+    <component  name="StartTimeLimitation" class="Teleopti.Interfaces.Domain.StartTimeLimitation, Teleopti.Ccc.Domain">
       <property name="StartTime" column="StartTimeMinimum"  />
       <property name="EndTime" column="StartTimeMaximum" />
     </component>
 
-    <component name="EndTimeLimitation" class="Teleopti.Interfaces.Domain.EndTimeLimitation, Teleopti.Interfaces">
+    <component name="EndTimeLimitation" class="Teleopti.Interfaces.Domain.EndTimeLimitation, Teleopti.Ccc.Domain">
       <property name="StartTime" column="EndTimeMinimum"  />
       <property name="EndTime" column="EndTimeMaximum" />
     </component>
 
-    <component name="WorkTimeLimitation" class="Teleopti.Interfaces.Domain.WorkTimeLimitation, Teleopti.Interfaces">
+    <component name="WorkTimeLimitation" class="Teleopti.Interfaces.Domain.WorkTimeLimitation, Teleopti.Ccc.Domain">
       <property name="StartTime" column="WorkTimeMinimum" />
       <property name="EndTime" column="WorkTimeMaximum" />
     </component>

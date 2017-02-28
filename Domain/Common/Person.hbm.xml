@@ -43,7 +43,7 @@
 				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
 				not-null="false"/>
 
-		<component name="Name" class="Teleopti.Interfaces.Domain.Name, Teleopti.Interfaces">
+		<component name="Name" class="Teleopti.Interfaces.Domain.Name, Teleopti.Ccc.Domain">
 			<property name="FirstName"
 					  type="string"
 					  not-null="true"
