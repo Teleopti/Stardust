@@ -536,6 +536,25 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
+		public static void SetProfiencyForSelectedPersonPeriods(IList<IPersonPeriodModel> selectedPersonPeriods, IPersonSkill personSkill, Percent skillPercentage)
+		{
+			//TODO: This is happened when user is not selecting any row in grid and setting skills using skill panel
+			// Need to come up with proper exception
+			if (selectedPersonPeriods == null)
+				return;
+
+			foreach (var personPeriodModel in selectedPersonPeriods)
+			{
+				var currentPeriod = personPeriodModel.Period;
+
+				var personSkillFromCollection = currentPeriod?.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill));
+
+				if (personSkillFromCollection == null || personSkillFromCollection.SkillPercentage == skillPercentage) continue;
+				personPeriodModel.Parent.ChangeSkillProficiency(personSkill.Skill, skillPercentage, currentPeriod);
+				personPeriodModel.CanBold = true;
+			}
+		}
+
 		public static void SetExternalLogOnForSelectedPersonPeriods(IList<IPersonPeriodModel> selectedPersonPeriods,
 				IExternalLogOn externalLogOn)
 		{

@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			if (e.DataItem.TriState == 1)
 				WorksheetStateHolder.SetPersonSkillForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, new Percent(e.DataItem.Proficiency / 100d));
-
+			// this will fix bug #43259 if want to do it that way, remove the other check of tristate and call then 2 rows above
+			//WorksheetStateHolder.SetProfiencyForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, new Percent(e.DataItem.Proficiency / 100d));
 		}
 
 		internal override void PrepareView()
