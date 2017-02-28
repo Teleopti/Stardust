@@ -53,7 +53,7 @@
 					day = convertTimezone(day, submitterTimezone, CurrentUserInfo.CurrentUserInfo().DefaultTimeZone);
 				}
 				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
-				
+
 				return {
 					date: day.toDate(),
 					shortDate: $filter('date')(day.toDate(), 'shortDate'),
@@ -212,7 +212,8 @@
 						minWidth: 111,
 						cellTooltip: true,
 						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" ' +
-							'style=\"background-color:#FFF\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ' +
+							'type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"grid.appScope.subjectFilter\" ' +
+							'ng-model-options=\"{ debounce: 500 }\" ng-change=\"grid.appScope.subjectFilterChanged()\" ' +
 							'ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 					},
 					{
@@ -231,7 +232,8 @@
 							placeholder: $translate.instant('FilterThreeDots')
 						},
 						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" ' +
-							'type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ' +
+							'type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"grid.appScope.messageFilter\" n' +
+							'g-model-options=\"{ debounce: 500 }\" ng-change=\"grid.appScope.messageFilterChanged()\" ' +
 							'ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 					},
 					{
@@ -313,7 +315,7 @@
 					enableHiding: false,
 					cellTemplate: 'shift-trade-day-template.html',
 					width: numberOfDays * 40,
-					
+
 					enableSorting: false,
 					enableFiltering: false,
 					isShiftTradeDayColumn: true
