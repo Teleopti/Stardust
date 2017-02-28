@@ -1,0 +1,3 @@
+﻿Legacy namespace only (old interface assembly)
+
+If you need interfaces, put them in "right" namespace instead.

@@ -1,0 +1,1 @@
+﻿Don't put new files here. This assembly is here for legacy reason only -> backward comp for payrolls.

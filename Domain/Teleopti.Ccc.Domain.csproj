@@ -3856,6 +3856,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\AgentGroup.hbm.xml">
       <SubType>Designer</SubType>
