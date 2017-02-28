@@ -14,6 +14,7 @@
 				 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode" xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" xmlns:Domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                  xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
                  xmlns:payroll="clr-namespace:Teleopti.Ccc.Win.SmartParts.Payroll"
+                 xmlns:domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Ccc.Domain"
                  GuiHelpers:HelpProvider.HelpString="PayrollExort+Prepare" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
@@ -43,7 +44,7 @@
             <Payroll:StatusWorkingView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type Domain:JobResultProgress}">
+        <DataTemplate DataType="{x:Type domain:JobResultProgress}">
             <Payroll:ProgressView DataContext="{Binding}" />
         </DataTemplate>
 
