@@ -3,7 +3,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Appender;
 using log4net.Config;

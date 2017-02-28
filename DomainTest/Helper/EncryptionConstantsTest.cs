@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {

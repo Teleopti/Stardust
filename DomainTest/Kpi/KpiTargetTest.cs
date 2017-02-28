@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Kpi
 {

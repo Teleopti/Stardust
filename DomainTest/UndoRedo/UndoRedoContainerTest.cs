@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.UndoRedo
 {

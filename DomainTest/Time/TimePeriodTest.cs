@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Time
                     new TimePeriod(TimeSpan.FromHours(10),
                                    TimeSpan.FromHours(12).Add(new TimeSpan(1)))));
             Assert.IsFalse(new TimePeriod().Equals(null));
-            Assert.AreEqual(_per, (object) _per);
+            Assert.AreEqual(_per, _per);
             Assert.IsFalse(new TimeSpan().Equals(3));
         }
 

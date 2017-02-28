@@ -9,8 +9,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Security
 {
@@ -438,7 +436,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             extraFunction.FunctionCode = "REPORT1";
             extraFunction.FunctionDescription = "Report 1 function";
             extraFunction.Parent = ApplicationFunction.FindByForeignId(applicationFunctions, DefinedForeignSourceNames.SourceRaptor, DefinedRaptorApplicationFunctionForeignIds.OpenRaptorApplication);
-            ((IEntity)extraFunction).SetId(Guid.NewGuid());
+            extraFunction.SetId(Guid.NewGuid());
             extraFunction.ForeignId = "1";
             extraFunction.ForeignSource = DefinedForeignSourceNames.SourceMatrix;
             applicationFunctions.Add(extraFunction);

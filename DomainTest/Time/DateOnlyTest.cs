@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsFalse((target < new DateOnly(2008, 1, 1)));
             Assert.IsTrue((target > new DateOnly(2007, 2, 2)));
             Assert.IsFalse((target > new DateOnly(2009, 1, 1)));
-            Assert.IsFalse(target.Equals((object)null));
+            Assert.IsFalse(target.Equals(null));
             Assert.IsFalse(target.Equals(3));
             Assert.AreEqual(target, target);
         }

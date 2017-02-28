@@ -1,8 +1,6 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 {

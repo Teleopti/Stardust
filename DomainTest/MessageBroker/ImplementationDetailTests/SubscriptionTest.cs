@@ -4,7 +4,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 {
