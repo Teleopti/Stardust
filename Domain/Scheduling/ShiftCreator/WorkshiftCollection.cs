@@ -1,5 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator

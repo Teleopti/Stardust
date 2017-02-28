@@ -2,7 +2,6 @@
 using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {

@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {

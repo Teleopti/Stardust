@@ -1,11 +1,9 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Interfaces.Domain;
 using System.Drawing;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {

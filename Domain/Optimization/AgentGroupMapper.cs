@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {

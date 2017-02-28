@@ -2,7 +2,6 @@ using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {

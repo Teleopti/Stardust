@@ -1,7 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.MessageBroker.Legacy
 {
