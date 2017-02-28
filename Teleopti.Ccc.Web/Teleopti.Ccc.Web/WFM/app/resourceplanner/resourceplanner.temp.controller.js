@@ -12,7 +12,7 @@
 				}
 				$scope.intraOptimize = function() {
 					status = 'running';
-					ResourcePlannerReportSrvc.intraOptimize.save({
+					ResourcePlannerReportSrvc.intraOptimize({
 						id: $stateParams.id
 					}).$promise.then(function(result) {
 						status = 'done';
