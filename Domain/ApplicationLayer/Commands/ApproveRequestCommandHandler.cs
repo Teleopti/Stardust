@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 
 		private bool approveRequest(IPersonRequest personRequest, ApproveRequestCommand command)
-		{			
+		{
 			if (personRequest.IsDeleted || (personRequest.IsDenied && !personRequest.IsWaitlisted) || personRequest.IsCancelled)
 			{
 				return invalidRequestState(personRequest, command);
@@ -98,12 +99,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				var diff = range.DifferenceSinceSnapshot(_differenceService);
 
-				if (anyRuleBroken && diff.Any())
+				if (diff.Any())
 				{
-					scheduleChangedWithBrokenRules = true;
-					logger.Warn($"Total {brokenRuleResponses.Count} business rules broken on approving the request with Id=\"{personRequest.Id}\", "
-								+ $"but the schedule from {range.Period.StartDateTime:yyyy-mm-dd} "
-								+ $"to {range.Period.EndDateTime:yyyy-mm-dd} was changed.");
+					if (personRequest.StatusText != Resources.Approved)
+					{
+						logger.Warn($"Schedule from {range.Period.StartDateTime:yyyy-mm-dd} to {range.Period.EndDateTime:yyyy-mm-dd} "
+									+ "was changed on approving the request with Id=\"{personRequest.Id}\", "
+									+ "but request status (\"{personRequest.StatusText}\") is not approved.");
+					}
+
+					if (anyRuleBroken)
+					{
+						scheduleChangedWithBrokenRules = true;
+						logger.Warn($"Total {brokenRuleResponses.Count} business rules broken on approving "
+									+ "the request with Id=\"{personRequest.Id}\", "
+									+ $"but the schedule from {range.Period.StartDateTime:yyyy-mm-dd} "
+									+ $"to {range.Period.EndDateTime:yyyy-mm-dd} was changed.");
+					}
 				}
 
 				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
@@ -130,14 +142,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			if (personRequest.IsDeleted)
 			{
-				command.ErrorMessages.Add(UserTexts.Resources.RequestHasBeenDeleted);
+				command.ErrorMessages.Add(Resources.RequestHasBeenDeleted);
 			}
 			else
 			{
-				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition,personRequest.StatusText,
-				UserTexts.Resources.Approved));
+				command.ErrorMessages.Add(string.Format(Resources.RequestInvalidStateTransition, personRequest.StatusText,
+					Resources.Approved));
 			}
-			
+
 			return false;
 		}
 
