@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IPeriodValueCalculator _periodValueCalculator;
 		private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
-		private readonly IExtendReduceDaysOffDecisionMaker _decisionMaker;
+		private readonly ExtendReduceDaysOffDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleServiceForFlexibleAgents;
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public ExtendReduceDaysOffOptimizer(
 			IPeriodValueCalculator periodValueCalculator,
 			IScheduleResultDataExtractor personalSkillsDataExtractor,
-			IExtendReduceDaysOffDecisionMaker decisionMaker,
+			ExtendReduceDaysOffDecisionMaker decisionMaker,
 			IScheduleService scheduleServiceForFlexibleAgents,
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,

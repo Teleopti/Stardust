@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				var dayOffOptimizePreference = dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrixPro.Person, scheduleMatrixPro.EffectivePeriodDays.First().Day);
 
-				IExtendReduceDaysOffDecisionMaker decisionMaker = new ExtendReduceDaysOffDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
+				var decisionMaker = new ExtendReduceDaysOffDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
 				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(scheduleMatrixPro, dayOffOptimizePreference.ConsiderWeekBefore, dayOffOptimizePreference.ConsiderWeekAfter);
 				var daysOffLegalStateValidatorsFactory = _daysOffLegalStateValidatorsFactory;
 				var validators = daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(bitArray,
