@@ -1,3 +1,5 @@
 ﻿Legacy namespace only (old interface assembly)
 
 If you need interfaces, put them in "right" namespace instead.
+
+If you "own" some of these interface, feel free to move them to the "right" place.
