@@ -75,15 +75,15 @@
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="card-group">
-				<div class="panel material-depth-1 wfm-card filter-boxes" ng-repeat="node in dayoffRules">
+				<div class="panel material-depth-1 wfm-card filter-boxes" ng-repeat="dayOffRule in dayOffRules track by dayOffRule.Id">
 					<div class="sub-header">
-						<h2>{{node.Name}}</h2>
+						<h2>{{dayOffRule.Name}}</h2>
 						<div class="head-actions panel-menu">
-							<div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
-								<i class=" filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
+							<div tabindex="0" class="context-menu card-context" ng-click="editRuleset(dayOffRule)">
+								<i class="filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 							</div>
-							<div ng-show="!node.Default" tabindex=0 class="context-menu card-context" ng-click="destoryRuleset(node)">
-								<i class=" filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
+							<div ng-show="!dayOffRule.Default" tabindex="0" class="context-menu card-context" ng-click="destoryRuleset(dayOffRule)">
+								<i class="filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
 							</div>
 
 						</div>
@@ -102,30 +102,30 @@
 								<tbody>
 									<tr>
 										<td translate>DaysOffPerWeek</td>
-										<td>{{node.MinDayOffsPerWeek}}</td>
-										<td>{{node.MaxDayOffsPerWeek}}</td>
+										<td>{{dayOffRule.MinDayOffsPerWeek}}</td>
+										<td>{{dayOffRule.MaxDayOffsPerWeek}}</td>
 									</tr>
 									<tr>
 										<td translate>ConsecutiveWorkDays</td>
-										<td>{{node.MinConsecutiveWorkdays}}</td>
-										<td>{{node.MaxConsecutiveWorkdays}}</td>
+										<td>{{dayOffRule.MinConsecutiveWorkdays}}</td>
+										<td>{{dayOffRule.MaxConsecutiveWorkdays}}</td>
 									</tr>
 									<tr>
 										<td translate>ConsecutiveDaysOff</td>
-										<td>{{node.MinConsecutiveDayOffs}}</td>
-										<td>{{node.MaxConsecutiveDayOffs}}</td>
+										<td>{{dayOffRule.MinConsecutiveDayOffs}}</td>
+										<td>{{dayOffRule.MaxConsecutiveDayOffs}}</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 					<div class="con-row">
-						<div class="con-flex" ng-show="!node.Default">{{'AppliedFilters'|translate}}
-							<span class="appliedFilters con-row" ng-repeat="filter in node.Filters | limitTo:5">
+						<div class="con-flex" ng-show="!dayOffRule.Default">{{'AppliedFilters'|translate}}
+							<span class="appliedFilters con-row" ng-repeat="filter in dayOffRule.Filters | limitTo:5">
 								<span class="filter-handle">{{filter.FilterType}}</span>
 							<span class="filter-chip">{{filter.Name}}</span>
 							</span>
-							<span class="moreExists" ng-show="node.Filters.length>5">{{'ThreeDots' | translate}}</span>
+							<span class="moreExists" ng-show="dayOffRule.Filters.length>5">{{'ThreeDots' | translate}}</span>
 						</div>
 					</div>
 					<div class="con-footer">

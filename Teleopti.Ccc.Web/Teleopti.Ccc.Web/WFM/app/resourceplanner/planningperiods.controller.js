@@ -12,7 +12,7 @@
 				$scope.scheduleClicked = false;
 				$scope.initialized = false;
 				$scope.isEnabled = false;
-				$scope.dayoffRules = [];
+				$scope.dayOffRules = [];
 				$scope.planningPeriod = {};
 				$scope.lastJobSuccessful = false;
 				$scope.disableSchedule = function () {
@@ -30,7 +30,7 @@
 				}
 
 				dayOffRuleService.getDayOffRules().$promise.then(function (result) {
-					$scope.dayoffRules = result;
+					$scope.dayOffRules = result;
 				}, handleScheduleOrOptimizeError);
 
 				var tenMinutes = 1000 * 60 * 10;
@@ -196,7 +196,7 @@
 					dayOffRuleService.removeDayOffRule({ id: node.Id })
 						.$promise.then(function () {
 							dayOffRuleService.getDayOffRules().$promise.then(function (result) {
-								$scope.dayoffRules = result;
+								$scope.dayOffRules = result;
 							});
 						});
 				};

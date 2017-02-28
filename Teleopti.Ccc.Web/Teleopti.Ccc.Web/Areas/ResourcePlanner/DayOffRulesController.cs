@@ -30,9 +30,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/dayoffrules/{id}")]
-		public virtual void Delete(Guid id)
+		public virtual IHttpActionResult Delete(Guid id)
 		{
 			_dayOffRulesModelPersister.Delete(id);
+			return Ok();
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/{id}")]

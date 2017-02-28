@@ -110,7 +110,7 @@ describe('PlanningPeriodsCtrl', function () {
 
 		$httpBackend.flush();
 
-		expect(scope.dayoffRules[0].Id).toEqual('something');
+		expect(scope.dayOffRules[0].Id).toEqual('something');
 	}));
 
 	it('should set dayoffrules to empty array before loaded', inject(function ($controller) {
@@ -118,7 +118,7 @@ describe('PlanningPeriodsCtrl', function () {
 
 		$controller('PlanningPeriodsCtrl', { $scope: scope });
 
-		expect(scope.dayoffRules.length).toEqual(0);
+		expect(scope.dayOffRules.length).toEqual(0);
 	}));
 	it('should be able to edit each ruleset', inject(function ($controller, $state) {
 		var scope = $rootScope.$new();
@@ -141,12 +141,12 @@ describe('PlanningPeriodsCtrl', function () {
 			.respond(200, result);
 
 		$controller('PlanningPeriodsCtrl', { $scope: scope, $state: $state });
-	    scope.dayoffRules = [{ Id: 1 }, { Id: 2 }, { Id: 3 }];
-		scope.destoryRuleset(scope.dayoffRules[1]);
+		scope.dayOffRules = [{ Id: 1 }, { Id: 2 }, { Id: 3 }];
+		scope.destoryRuleset(scope.dayOffRules[1]);
 
 		$httpBackend.flush();
 
-		expect(scope.dayoffRules[1].Id).toBe(3);
+		expect(scope.dayOffRules[1].Id).toBe(3);
 
 	}));
 

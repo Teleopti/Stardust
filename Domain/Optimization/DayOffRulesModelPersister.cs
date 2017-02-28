@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Delete(Guid id)
 		{
 			var dayOffRule = _dayOffRulesRepository.Get(id);
-			_dayOffRulesRepository.Remove(dayOffRule);
+			if (dayOffRule != null)
+				_dayOffRulesRepository.Remove(dayOffRule);
 		}
 
 		private void setProperies(DayOffRules dayOffRules, DayOffRulesModel dayOffRulesModel)

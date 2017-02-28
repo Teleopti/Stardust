@@ -1,51 +1,53 @@
-(function() {
-    'use strict';
+(function () {
+	'use strict';
 
-    angular
+	angular
         .module('wfm.resourceplanner')
         .controller('dayoffRuleOverviewController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', 'dayOffRuleService'];
+	Controller.$inject = ['$state', '$stateParams', 'dayOffRuleService'];
 
-    function Controller($state, $stateParams, dayOffRuleService) {
-        var vm = this;
+	function Controller($state, $stateParams, dayOffRuleService) {
+		var vm = this;
 
-        vm.dayoffRules = [];
-        vm.editRuleset = editRuleset;
-	    vm.destoryRuleset = destoryRuleset;
-	    vm.createRuleset = createRuleset;
+		vm.dayOffRules = [];
+		vm.editRuleset = editRuleset;
+		vm.destoryRuleset = destoryRuleset;
+		vm.createRuleset = createRuleset;
 
-        getDayOffRules();
+		getDayOffRules();
 
-        function getDayOffRules() {
-        	return dayOffRuleService.getDayOffRules().$promise.then(function (data) {
-    				vm.dayoffRules = data;
-    				return vm.dayoffRules;
-    			});
-        }
+		function getDayOffRules() {
+			return dayOffRuleService.getDayOffRules()
+				.$promise.then(function (data) {
+					vm.dayOffRules = data;
+					return vm.dayOffRules;
+				});
+		}
 
-        function editRuleset(dayOffRule) {
+		function editRuleset(dayOffRule) {
 			// temporary use the old one, should be rebuilt
-        	$state.go('resourceplanner.filter', {
-        		filterId: dayOffRule.Id,
-        		groupId: $stateParams.groupId,
-        		isDefault: dayOffRule.Default,
+			$state.go('resourceplanner.filter', {
+				filterId: dayOffRule.Id,
+				groupId: $stateParams.groupId,
+				isDefault: dayOffRule.Default,
 				periodId: undefined
-        	});
-        }
+			});
+		}
 
-        function destoryRuleset(dayOffRule) {
-        	if (!dayOffRule.Default) {
-				dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id }).$promise.then(getDayOffRules());
-	        }
-        }
+		function destoryRuleset(dayOffRule) {
+			if (!dayOffRule.Default) {
+				dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id })
+					.$promise.then(getDayOffRules);
+			}
+		}
 
-        function createRuleset() {
-        	// temporary use the old one, should be rebuilt
-        	$state.go('resourceplanner.filter', {
-        		groupId: $stateParams.groupId,
-        		periodId: undefined
-        	});
-        }
-    }
+		function createRuleset() {
+			// temporary use the old one, should be rebuilt
+			$state.go('resourceplanner.filter', {
+				groupId: $stateParams.groupId,
+				periodId: undefined
+			});
+		}
+	}
 })();
