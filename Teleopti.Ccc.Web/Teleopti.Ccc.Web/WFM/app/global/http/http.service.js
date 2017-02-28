@@ -46,6 +46,10 @@
 				NoticeService.error("<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewErrorMessage'), null, false);
 				break;
 
+				case (rejection.status === 422):
+				/* 422 Unprocessable Entity */
+				break;
+
 				case (rejection.status > 403 && rejection.status < 600):
 				//don't remove class test-alert - used in perf tests
 				NoticeService.error("<span class='test-alert'></span>" + $translate.instant('InternalErrorMessage') +
