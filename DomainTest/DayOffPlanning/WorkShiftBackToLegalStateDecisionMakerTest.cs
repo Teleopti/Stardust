@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		private MockRepository _mock;
 		private IWorkShiftBackToLegalStateDecisionMaker _target;
 		private IRelativeDailyDifferencesByAllSkillsExtractor _scheduleResultDataExtractor;
-		private IWorkShiftLegalStateDayIndexCalculator _workShiftLegalStateDayIndexCalculator;
+		private WorkShiftLegalStateDayIndexCalculator _workShiftLegalStateDayIndexCalculator;
 		private DateOnlyPeriod _dateOnlyPeriod;
 
 		[SetUp]

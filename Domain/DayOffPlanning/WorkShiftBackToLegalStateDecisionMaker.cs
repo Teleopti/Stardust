@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
     public class WorkShiftBackToLegalStateDecisionMaker : IWorkShiftBackToLegalStateDecisionMaker
     {
 		private readonly IRelativeDailyDifferencesByAllSkillsExtractor _dataExtractor;
-        private readonly IWorkShiftLegalStateDayIndexCalculator _dayIndexCalculator;
+        private readonly WorkShiftLegalStateDayIndexCalculator _dayIndexCalculator;
 
         public WorkShiftBackToLegalStateDecisionMaker(
 			IRelativeDailyDifferencesByAllSkillsExtractor dataExtractor,
-            IWorkShiftLegalStateDayIndexCalculator dayIndexCalculator)
+						WorkShiftLegalStateDayIndexCalculator dayIndexCalculator)
         {
             _dataExtractor = dataExtractor;
             _dayIndexCalculator = dayIndexCalculator;

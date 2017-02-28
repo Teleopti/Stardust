@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
 		private readonly SchedulingStateHolderAllSkillExtractor _allSkillExtractor;
-		private readonly IWorkShiftLegalStateDayIndexCalculator _dayIndexCalculator;
+		private readonly WorkShiftLegalStateDayIndexCalculator _dayIndexCalculator;
 		private readonly IDeleteSchedulePartService _deleteService;
 
 		public WorkShiftBackToLegalStateServiceProFactory(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
 			SchedulingStateHolderAllSkillExtractor allSkillExtractor,
-			IWorkShiftLegalStateDayIndexCalculator dayIndexCalculator,
+			WorkShiftLegalStateDayIndexCalculator dayIndexCalculator,
 			IDeleteSchedulePartService deleteService)
 		{
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;

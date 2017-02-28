@@ -5,24 +5,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-    public interface IWorkShiftLegalStateDayIndexCalculator
-    {
-        /// <summary>
-        /// Calculates the indexes for raising the working hours in a shift.
-        /// </summary>
-        /// <param name="relativeDeficits">The relative deficits.</param>
-        /// <returns></returns>
-        ReadOnlyCollection<double?> CalculateIndexForRaising(IEnumerable<double?> relativeDeficits);
-
-        /// <summary>
-        /// Calculates the index for reducing the working hours in a shift.
-        /// </summary>
-        /// <param name="relativeDeficits">The relative deficits.</param>
-        /// <returns></returns>
-        ReadOnlyCollection<double?> CalculateIndexForReducing(IEnumerable<double?> relativeDeficits);
-    }
-
-    public class WorkShiftLegalStateDayIndexCalculator : IWorkShiftLegalStateDayIndexCalculator
+    public class WorkShiftLegalStateDayIndexCalculator
     {
         public ReadOnlyCollection<double?> CalculateIndexForRaising(IEnumerable<double?> relativeDeficits)
         {
