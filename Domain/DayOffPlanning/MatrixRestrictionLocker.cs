@@ -4,33 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-
-    /// <summary>
-    /// Locks the days of
-    /// <list type="bullet">
-    /// 	<item>
-    /// 		<description>Rotations,</description>
-    /// 	</item>
-    /// 	<item>
-    /// 		<description>Availability,</description>
-    /// 	</item>
-    /// 	<item>
-    /// 		<description>Preferences</description>
-    /// 	</item>
-    /// </list>
-    /// </summary>
-    public interface IMatrixRestrictionLocker
-    {
-	    /// <summary>
-	    /// Returns the days with restrictions
-	    /// </summary>
-	    /// <param name="matrix">The matrix.</param>
-	    /// <param name="schedulingOptions">The scheduling options.</param>
-	    /// <returns></returns>
-	    IList<DateOnly> Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
-    }
-
-    public class MatrixRestrictionLocker : IMatrixRestrictionLocker
+    public class MatrixRestrictionLocker
     {
         private readonly IRestrictionExtractor _extractor;
 

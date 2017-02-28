@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
 			//Not needed anymore i think, 
-			IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(_restrictionExtractor);
+			var restrictionLocker = new MatrixRestrictionLocker(_restrictionExtractor);
 			foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
 				lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker, schedulingOptions);
 			IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			matrixUnselectedDaysLocker.Execute();
 		}
 
-		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker, ISchedulingOptions schedulingOptions)
+		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, MatrixRestrictionLocker locker, ISchedulingOptions schedulingOptions)
 		{
 			IList<DateOnly> daysToLock = locker.Execute(matrix, schedulingOptions);
 			foreach (var dateOnly in daysToLock)

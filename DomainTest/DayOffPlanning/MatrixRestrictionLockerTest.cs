@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
     [TestFixture]
     public class MatrixRestrictionLockerTest
     {
-        private IMatrixRestrictionLocker _target;
+        private MatrixRestrictionLocker _target;
         private MockRepository _mocks;
         private ISchedulingOptions _schedulingOptions;
         private IRestrictionExtractor _extractor;
