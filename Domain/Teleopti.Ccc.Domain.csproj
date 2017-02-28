@@ -1779,7 +1779,6 @@
     <Compile Include="DayOffPlanning\FreeWeekendDayValidator.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendSolver.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendValidator.cs" />
-    <Compile Include="DayOffPlanning\GeneticDayOffBackToLegalStateSolver.cs" />
     <Compile Include="DayOffPlanning\IDayOffBackToLegalStateSolver.cs" />
     <Compile Include="DayOffPlanning\IDayOffLegalStateValidatorListCreator.cs" />
     <Compile Include="DayOffPlanning\IntradayDecisionMaker.cs" />
