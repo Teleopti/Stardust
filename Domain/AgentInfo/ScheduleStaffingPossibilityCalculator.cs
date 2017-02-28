@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public IDictionary<DateTime, int> CalcuateIntradayOvertimeIntervalPossibilities()
 		{
-			var skillStaffingDatas = getSkillStaffingData(false);
+			var useShrinkageValidator = isShrinkageValidatorEnabled();
+			var skillStaffingDatas = getSkillStaffingData(useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
 				skill => new IntervalHasOverstaffing(skill);
 			return calcuateIntervalPossibilities(skillStaffingDatas, getStaffingSpecification);
