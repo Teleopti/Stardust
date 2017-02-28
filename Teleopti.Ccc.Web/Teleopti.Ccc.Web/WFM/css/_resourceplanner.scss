@@ -291,3 +291,13 @@ background-color: #cacaca;
 	background-color: inherit !important;
 	cursor: not-allowed !important;
 }
+
+.agent-group-chip {
+	border-left-style: solid; 
+	border-left-color: tomato; 
+	word-wrap: break-word
+}
+
+.agent-group-chip > span {
+	margin: 10px;
+}

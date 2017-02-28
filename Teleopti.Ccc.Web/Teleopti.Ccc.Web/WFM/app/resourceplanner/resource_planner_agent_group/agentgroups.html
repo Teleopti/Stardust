@@ -1,11 +1,11 @@
 <div ui-view>
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
-			<h1><i class="mdi mdi-account-multiple"></i> Agent Groups</h1>
+			<h1><i class="mdi mdi-account-multiple"></i>Agent Groups</h1>
 			<p>Create And Manage Your Agent Groups</p>
 		</div>
 		<div class="fab-wrapper">
-			<button ng-click="vm.goForm()" class="wfm-fab  material-depth-1 grow-out">
+			<button ng-click="vm.goForm()" class="wfm-fab material-depth-1 grow-out">
 				<i class="mdi mdi-plus"></i>
 				<md-tooltip>
 					Create new agent group
@@ -17,10 +17,8 @@
 		<div class="con-flex">
 			<div class="wfm-grid">
 				<div class="grid-card-mini planingperiod-container" ng-repeat="agentGroup in vm.agentGroups">
-					<div class="list-content " ng-click="vm.goAgentGroup(agentGroup.Id)" style="border-left-style: solid; border-left-color: tomato;">
-						<span  style="margin: 10px;">
-							{{agentGroup.Name}}
-						</span>
+					<div class="list-content agent-group-chip" ng-click="vm.goAgentGroup(agentGroup.Id)">
+						<span>{{agentGroup.Name}}</span>
 					</div>
 				</div>
 			</div>
