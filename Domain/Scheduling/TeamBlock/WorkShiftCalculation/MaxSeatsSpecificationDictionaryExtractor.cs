@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				var localStartTime = DateTime.SpecifyKind(utcPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
 				var maxSeat = skillStaffPeriod.Payload.MaxSeats;
 				var calculatedUsedSeats = _usedSeats.Fetch(skillStaffPeriod);
-				var isMaxSeatsReachedOnGivenInterval = false;
+				bool isMaxSeatsReachedOnGivenInterval;
 				if(considerEqualMaxAndCalSeatAsBroken )
 					isMaxSeatsReachedOnGivenInterval =_isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedByWithEqualCondition(calculatedUsedSeats,maxSeat);
 				else

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var scheduleDate = ScheduleDay.DateOnlyAsPeriod.DateOnly;
 				var person = ScheduleDay.Person;
-				long workLengthTicks = 0;
+				long workLengthTicks;
 
 				var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(scheduleDate);
 				if (averageWorkTimeOfDay.WorkTimeSource == WorkTimeSource.FromContract)

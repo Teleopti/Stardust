@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting
             lock (_serializeLock)
             {
                 IFormatter formatter = new BinaryFormatter();
-                T ret = null;
+                T ret;
                 try
                 {
                     ret = deserializeAndSetParent<T>(formatter);
@@ -37,16 +37,13 @@ namespace Teleopti.Ccc.Domain.SystemSetting
                 catch (SerializationException)
                 {
                     SetValue(defaultValue);
-                    ret = deserializeAndSetParent<T>(formatter);
-                    return ret;
+                    return deserializeAndSetParent<T>(formatter);
                 }
 
                 if (ret != null)
                     return ret;
                 SetValue(defaultValue);
-                ret = deserializeAndSetParent<T>(formatter);
-
-                return ret;
+                return deserializeAndSetParent<T>(formatter);
             }
         }
 
