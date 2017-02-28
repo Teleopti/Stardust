@@ -265,6 +265,7 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\SiteProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\SiteViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
+    <Compile Include="Areas\People\ImportAgentFileValidatorTest.cs" />
     <Compile Include="Areas\People\PeopleSmartWorkflowControlSetControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\AgentGroupControllerTest.cs" />

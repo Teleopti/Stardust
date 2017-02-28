@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,8 @@ using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Teleopti.Ccc.Web.Areas.People.Core;
+using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
@@ -28,10 +31,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const int colIndexErrorMessage = 6;
 
 		private readonly IPeoplePersister _peoplePersister;
+		private readonly IImportAgentFileValidator _fileValidator;
 
-		public ImportPeopleController(IPeoplePersister peoplePersister)
+		public ImportPeopleController(IPeoplePersister peoplePersister, IImportAgentFileValidator fileValidator)
 		{
 			_peoplePersister = peoplePersister;
+			_fileValidator = fileValidator;
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
@@ -58,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				if (anyColumnMissing(headerRow, out errorMessage))
 				{
 					var errorMsg = string.Format(UserTexts.Resources.MissingColumnX, errorMessage.Trim(',', ' '));
-					var invalidFileResponse = Request.CreateResponse(HttpStatusCode.InternalServerError);
+					var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
 					invalidFileResponse.Headers.Clear();
 					invalidFileResponse.Content = new StringContent(errorMsg);
 					invalidFileResponse.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -67,6 +72,52 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				}
 				break;
 			}
+
+			var userList = parseWorkBook(workbook);
+			var invalidUsers = _peoplePersister.Persist(userList);
+			var successCount = userList.Count - invalidUsers.Count;
+			var failedCount = invalidUsers.Count;
+
+			var response = Request.CreateResponse(HttpStatusCode.OK);
+			response.Headers.Clear();
+			response.Headers.Add("Message", string.Format("success count:{0}, failed count:{1}", successCount, failedCount));
+
+			if (invalidUsers.Count == 0)
+			{
+				return response;
+			}
+
+			var ms = constructReturnedFile(isXlsx, invalidUsers, true);
+			response.Content = new ByteArrayContent(ms.ToArray());
+			response.Content.Headers.ContentType =
+				new MediaTypeHeaderValue(isXlsx ? newExcelFileContentType : oldExcelFileContentType);
+
+			return response;
+		}
+
+		[Route("api/People/UploadAgent"), HttpPost]
+		async public Task<HttpResponseMessage> UploadAgent()
+		{
+			if (!Request.Content.IsMimeMultipartContent())
+			{
+				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+			}
+
+			var provider = new MultipartMemoryStreamProvider();
+			await Request.Content.ReadAsMultipartAsync(provider);
+
+			var workbook = parseFiles(provider.Contents.First());
+			var isXlsx = workbook is XSSFWorkbook;
+
+			var errorMessages = _fileValidator.ValidateColumnNames(_fileValidator.ExtractColumnNames(workbook));
+			if (errorMessages.Any())
+			{				
+				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
+				invalidFileResponse.Headers.Clear();
+				invalidFileResponse.Content = new StringContent(string.Format(UserTexts.Resources.MissingColumnX, string.Join(", ", errorMessages)));
+				return invalidFileResponse;
+			}
+
 
 			var userList = parseWorkBook(workbook);
 			var invalidUsers = _peoplePersister.Persist(userList);
@@ -233,16 +284,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var obj = row.GetCell(columnIndex);
 			return obj == null ? string.Empty : obj.ToString();
 		}
-	}
 
-	public class RawUser
-	{
-		public string Firstname { get; set; }
-		public string Lastname { get; set; }
-		public string WindowsUser { get; set; }
-		public string ApplicationUserId { get; set; }
-		public string Password { get; set; }
-		public string Role { get; set; }
-		public string ErrorMessage { get; set; }
 	}
 }

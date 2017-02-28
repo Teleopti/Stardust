@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
@@ -54,33 +54,5 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			});
 			return Json(result);
 		}
-	}
-
-	public class ShiftBagDataModel
-	{
-		public Guid ShiftBagId { get; set; }
-		public string ShiftBagName { get; set; }
-	}
-
-	public class SkillDataModel
-	{
-		public Guid SkillId { get; set; }
-		public string SkillName { get; set; }
-	}
-
-	public class PersonDataModel
-	{
-		public Guid PersonId { get; set; }
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public string Team { get; set; }
-		public IList<Guid> SkillIdList { get; set; }
-		public Guid? ShiftBagId { get; set; }
-	}
-
-	public class InputModel
-	{
-		public DateTime Date { get; set; }
-		public IEnumerable<Guid> PersonIdList { get; set; }
 	}
 }

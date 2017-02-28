@@ -2,6 +2,7 @@
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
