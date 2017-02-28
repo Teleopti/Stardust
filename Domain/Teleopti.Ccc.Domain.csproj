@@ -300,6 +300,8 @@
     <Compile Include="InterfaceLegacy\Domain\ClipboardAction.cs" />
     <Compile Include="InterfaceLegacy\Domain\ClipboardItems.cs" />
     <Compile Include="InterfaceLegacy\Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="InterfaceLegacy\Domain\DateOnlyExtensions.cs" />
+    <Compile Include="InterfaceLegacy\Domain\DateOnlyPeriodExtensions.cs" />
     <Compile Include="InterfaceLegacy\Domain\DateScenarioPersonId.cs" />
     <Compile Include="InterfaceLegacy\Domain\DefaultAccessibility.cs" />
     <Compile Include="InterfaceLegacy\Domain\Description.cs" />
