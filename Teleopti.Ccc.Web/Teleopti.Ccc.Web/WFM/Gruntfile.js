@@ -1,4 +1,4 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         watch: {
@@ -99,7 +99,7 @@ module.exports = function (grunt) {
             }
         },
         concat: {
-            distJs: {
+            distModules: {
                 src: [
                     'node_modules/angular/angular.min.js',
                     'node_modules/angular-ui-router/release/angular-ui-router.min.js',
@@ -147,6 +147,13 @@ module.exports = function (grunt) {
                     '../Content/signalr/broker-hubs.js'
                 ],
                 dest: 'dist/modules.js'
+            },
+            devJs: {
+                options: {
+                    separator: ';' + grunt.util.linefeed,
+                },
+                src: ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
+                dest: 'dist/main.js'
             },
             distJsForDesktop: {
                 src: [
@@ -247,16 +254,6 @@ module.exports = function (grunt) {
             distForDesktop: {
                 files: {
                     'dist/mainForDesktop.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app.js']
-                }
-            },
-            dev: {
-                files: {
-                    'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js']
-                },
-                options: {
-                    sourceMap: true,
-                    beautify: true,
-                    mangle: false
                 }
             }
         },
@@ -390,18 +387,18 @@ module.exports = function (grunt) {
     // Default task(s).
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
-    grunt.registerTask('devTest', ['ngtemplates','karma:dev']);
-    grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'newer:cssmin', 'newer:copy', 'newer:uglify:dev', 'generateIndexDev']);
+    grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
+    grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'cssmin', 'newer:copy', 'generateIndexDev']);
     grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist','cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
     grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
-	grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
+    grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
 
     // for desktop client
-    grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
+    grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
 
 };
