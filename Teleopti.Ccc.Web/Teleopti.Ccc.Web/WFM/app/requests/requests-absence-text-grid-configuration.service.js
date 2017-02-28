@@ -11,7 +11,6 @@
 			}
 
 			function setupColumns() {
-
 				columns = [
 				{ displayName: 'StartTime', field: 'FormatedPeriodStartTime()', headerCellFilter: 'translate', cellClass: 'request-period-start-time', headerCellClass: 'request-period-start-time-header' },
 				{ displayName: 'EndTime', field: 'FormatedPeriodEndTime()', headerCellFilter: 'translate', cellClass: 'request-period-end-time', headerCellClass: 'request-period-end-time-header' },
@@ -47,7 +46,10 @@
 						placeholder: $translate.instant('FilterThreeDots')
 					},
 					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">' +
-						'<input ng-enter=\"enter()\" type=\"text\" ng-change=\"grid.appScope.subjectFilterChanged()\" ng-model=\"grid.appScope.subjectFilter\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
+						'<input ng-enter=\"enter()\" type=\"text\" ng-change=\"grid.appScope.subjectFilterChanged()\" ' +
+						'ng-model=\"grid.appScope.subjectFilter\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" ' +
+						'ng-model-options=\"{ debounce: 500 }\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" />' +
+						'</div>'
 				},
 				{
 					displayName: 'Message',
@@ -61,7 +63,12 @@
 						disableCancelFilterButton: true,
 						placeholder: $translate.instant('FilterThreeDots')
 					},
-					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" type=\"text\" ng-change=\"grid.appScope.messageFilterChanged()\" ng-model=\"grid.appScope.messageFilter\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
+					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" >' +
+						'<input ng-enter=\"enter()\" type=\"text\" ng-change=\"grid.appScope.messageFilterChanged()\"' +
+						'ng-model=\"grid.appScope.messageFilter\" ng-model-options=\"{ debounce: 500 }\"' +
+						'ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\"' +
+						'ria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" />' +
+						'</div>'
 				},
 				{ displayName: 'DenyReason', field: 'DenyReason', headerCellFilter: 'translate', cellClass: 'request-deny-reason', headerCellClass: 'request-deny-reason-header', visible: false, cellTooltip: true },
 				{
