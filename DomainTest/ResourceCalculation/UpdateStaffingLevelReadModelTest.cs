@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -14,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-	[DomainTest, Toggle(Toggles.Wfm_Requests_ImproveStaffingForCascadingSkills_41969)]
+	[DomainTest]
 	public class UpdateStaffingLevelReadModelTest : ISetup
 	{
 		public UpdateStaffingLevelReadModel Target;

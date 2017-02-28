@@ -452,8 +452,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<UpdateStaffingLevelReadModel>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope().ApplyAspects();
-			registerType<IExtractSkillStaffDataForResourceCalculation, ExtractSkillStaffDataForResourceCalculation, ExtractCascadingSkillStaffDataForResourceCalculation>(builder,
-				Toggles.Wfm_Requests_ImproveStaffingForCascadingSkills_41969);
+			builder.RegisterType<ExtractCascadingSkillStaffDataForResourceCalculation>().As<IExtractSkillStaffDataForResourceCalculation>().InstancePerLifetimeScope();
 
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312))
