@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Contains the absolute and relative deviation data.

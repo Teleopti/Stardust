@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Creates and build up a <see cref="ISchedulePeriodShiftCategoryBackToLegalStateService"/> 

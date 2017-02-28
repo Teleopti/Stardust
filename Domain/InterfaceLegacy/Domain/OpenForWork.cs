@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Class that implements properties that the day is open for Incoming work or not.

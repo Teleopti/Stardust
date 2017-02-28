@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces
+namespace Teleopti.Ccc.Domain.InterfaceLegacy
 {
 	public interface IJsonDeserializer
 	{

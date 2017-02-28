@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;

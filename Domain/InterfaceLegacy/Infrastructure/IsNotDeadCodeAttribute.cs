@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
 	/// <summary>
 	/// A marker attribute telling our builds that the methods/types

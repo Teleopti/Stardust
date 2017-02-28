@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 

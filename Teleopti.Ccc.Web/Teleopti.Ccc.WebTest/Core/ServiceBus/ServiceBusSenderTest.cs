@@ -3,11 +3,13 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 {

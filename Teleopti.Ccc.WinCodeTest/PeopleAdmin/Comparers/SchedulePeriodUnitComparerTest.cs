@@ -1,6 +1,7 @@
 ﻿#region Imports
 
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;

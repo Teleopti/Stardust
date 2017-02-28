@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     ///<summary>
     /// Provides a way to check permissions for person requests

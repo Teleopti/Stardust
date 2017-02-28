@@ -1,4 +1,4 @@
-using Teleopti.Interfaces.Infrastructure.Analytics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {

@@ -1,4 +1,6 @@
-namespace Teleopti.Interfaces.Domain
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Blabla - dont know really. Copy/paste from old businessrules

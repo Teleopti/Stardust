@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 

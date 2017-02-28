@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Interfaces;
 using Event = DDay.iCal.Event;
 

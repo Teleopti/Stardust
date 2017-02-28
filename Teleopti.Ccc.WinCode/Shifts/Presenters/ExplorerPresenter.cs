@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Shifts.Events;

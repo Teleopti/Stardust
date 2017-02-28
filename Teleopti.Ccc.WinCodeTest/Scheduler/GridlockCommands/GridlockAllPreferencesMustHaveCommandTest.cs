@@ -5,6 +5,7 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.GridlockCommands;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.GridlockCommands

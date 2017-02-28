@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -63,9 +64,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return EventAdherence.Out;
 			}
 
-			if (adherence == Interfaces.Domain.Adherence.In)
+			if (adherence == InterfaceLegacy.Domain.Adherence.In)
 				return EventAdherence.In;
-			if (adherence == Interfaces.Domain.Adherence.Out)
+			if (adherence == InterfaceLegacy.Domain.Adherence.Out)
 				return EventAdherence.Out;
 
 			return EventAdherence.Neutral;

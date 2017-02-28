@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Describes the actual historical data retrieved from the Matrix

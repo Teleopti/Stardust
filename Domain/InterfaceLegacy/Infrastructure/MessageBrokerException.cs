@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
     [Serializable]
     public class MessageBrokerException : Exception

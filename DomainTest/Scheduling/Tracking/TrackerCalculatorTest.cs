@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 {

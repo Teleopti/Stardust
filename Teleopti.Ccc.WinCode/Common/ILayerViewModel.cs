@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
 using DateTimePeriod=Teleopti.Interfaces.Domain.DateTimePeriod;

@@ -12,6 +12,8 @@ using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Specialized;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces.Infrastructure;

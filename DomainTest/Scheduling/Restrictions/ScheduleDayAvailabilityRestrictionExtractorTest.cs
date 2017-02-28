@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions

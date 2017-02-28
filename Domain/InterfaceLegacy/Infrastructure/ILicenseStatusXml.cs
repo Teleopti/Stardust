@@ -1,7 +1,7 @@
 using System;
 using System.Xml;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
     ///<summary>
     ///</summary>

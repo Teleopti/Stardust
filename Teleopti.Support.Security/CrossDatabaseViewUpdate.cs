@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Support.Security

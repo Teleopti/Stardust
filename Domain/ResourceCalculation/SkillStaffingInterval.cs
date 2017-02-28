@@ -1,5 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 

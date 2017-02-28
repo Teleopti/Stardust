@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
     /// <summary>
     /// Stateless unit of work. Doesn't keep track of changed objects.

@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
 

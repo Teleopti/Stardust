@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     ///<summary>
     /// Enumeration for different type of ways to notify users

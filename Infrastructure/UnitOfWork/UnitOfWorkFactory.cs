@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
 

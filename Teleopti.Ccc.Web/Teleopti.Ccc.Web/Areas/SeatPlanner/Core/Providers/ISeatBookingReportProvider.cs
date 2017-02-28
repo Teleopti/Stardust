@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;

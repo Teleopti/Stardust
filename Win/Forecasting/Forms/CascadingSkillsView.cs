@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Forecasting.Cascading;
 using Teleopti.Interfaces.Domain;

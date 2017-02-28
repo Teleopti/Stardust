@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Stores and retrieves the official week-start and WeekEnd days for a given culture.

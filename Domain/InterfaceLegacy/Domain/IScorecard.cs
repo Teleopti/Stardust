@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     ///<summary>
     /// Holds values for one Scorecard, the Name and the Key Performance Indicators that are used in the Scorecard

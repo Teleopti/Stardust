@@ -1,7 +1,7 @@
 ﻿
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// 

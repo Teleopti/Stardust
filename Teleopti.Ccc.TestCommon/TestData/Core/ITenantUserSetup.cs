@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core

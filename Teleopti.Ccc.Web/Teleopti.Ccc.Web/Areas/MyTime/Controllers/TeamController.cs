@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;

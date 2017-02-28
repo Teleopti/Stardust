@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.CompositeUI.SmartParts;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;

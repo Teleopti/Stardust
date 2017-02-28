@@ -6,6 +6,7 @@ using System.IdentityModel.Policy;
 using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Interfaces.Domain;
 

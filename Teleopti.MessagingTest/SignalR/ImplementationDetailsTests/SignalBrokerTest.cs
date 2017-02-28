@@ -4,6 +4,7 @@ using Microsoft.AspNet.SignalR.Client.Transports;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client.SignalR;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;

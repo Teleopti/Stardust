@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
 using System;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 

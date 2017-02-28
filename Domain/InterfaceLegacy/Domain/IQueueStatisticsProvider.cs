@@ -1,4 +1,6 @@
-namespace Teleopti.Interfaces.Domain
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Used for calculation of statistics from queue and when transferring those values to the workload days

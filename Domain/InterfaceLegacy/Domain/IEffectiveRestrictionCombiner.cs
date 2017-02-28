@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// Combines effective restrictions a given effective restriction

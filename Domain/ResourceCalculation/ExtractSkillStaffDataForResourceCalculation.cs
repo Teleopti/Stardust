@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 

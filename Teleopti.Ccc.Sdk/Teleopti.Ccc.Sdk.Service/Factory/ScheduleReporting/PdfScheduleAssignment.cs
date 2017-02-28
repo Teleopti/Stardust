@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting

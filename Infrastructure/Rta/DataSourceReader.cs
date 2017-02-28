@@ -2,6 +2,7 @@
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 

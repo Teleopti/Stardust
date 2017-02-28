@@ -2,6 +2,7 @@ using System;
 using Autofac;
 using Autofac.Builder;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;

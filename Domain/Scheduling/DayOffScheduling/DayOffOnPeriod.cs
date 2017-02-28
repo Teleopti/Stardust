@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {

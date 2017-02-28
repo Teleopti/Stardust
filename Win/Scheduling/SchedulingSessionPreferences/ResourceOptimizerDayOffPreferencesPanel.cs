@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Win

@@ -1,5 +1,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Interfaces.Domain;

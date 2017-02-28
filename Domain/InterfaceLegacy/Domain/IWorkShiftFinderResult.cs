@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Holds the result of a try to find a workshift on a Person and Date

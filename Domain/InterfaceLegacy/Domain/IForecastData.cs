@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Interface used by forecasting entities (primarily for listening to any changes in forecast via message broker)

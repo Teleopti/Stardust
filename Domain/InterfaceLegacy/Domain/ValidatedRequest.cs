@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// This class contains validation result for the absence request.

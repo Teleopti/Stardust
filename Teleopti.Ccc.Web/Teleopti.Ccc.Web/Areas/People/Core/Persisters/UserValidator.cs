@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Controllers;

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Payroll.DefinitionSets;
 using Teleopti.Ccc.WinCode.Shifts;

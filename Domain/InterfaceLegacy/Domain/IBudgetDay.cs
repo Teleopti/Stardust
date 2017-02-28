@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// The budget for a particular date, planning group and scenario.

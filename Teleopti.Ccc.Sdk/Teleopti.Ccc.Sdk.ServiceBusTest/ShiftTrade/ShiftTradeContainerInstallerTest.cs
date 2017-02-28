@@ -4,9 +4,9 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Requests;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.ServiceBus.Legacy;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 {

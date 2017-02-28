@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

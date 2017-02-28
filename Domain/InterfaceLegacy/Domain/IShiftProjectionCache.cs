@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Object fo caching a shift projection.

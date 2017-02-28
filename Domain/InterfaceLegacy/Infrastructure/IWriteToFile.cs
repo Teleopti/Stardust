@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Infrastructure
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
     /// <summary>
     /// Writes stuff to disc

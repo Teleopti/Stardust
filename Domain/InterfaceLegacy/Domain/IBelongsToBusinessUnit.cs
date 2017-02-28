@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// This object belongs to a specific business unit

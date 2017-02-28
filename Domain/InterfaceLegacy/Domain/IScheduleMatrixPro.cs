@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Represents a list of <see cref="IScheduleDayPro"/> in the optimization process, plus some necessary properties and methods that are

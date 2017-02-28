@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Interfaces.Messages
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages
 {
 	public class Queues
 	{

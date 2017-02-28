@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;

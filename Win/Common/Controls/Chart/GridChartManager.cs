@@ -8,6 +8,7 @@ using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common.Chart;

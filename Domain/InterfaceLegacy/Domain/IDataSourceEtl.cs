@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Handles datasources (log objects) in ETL Tool

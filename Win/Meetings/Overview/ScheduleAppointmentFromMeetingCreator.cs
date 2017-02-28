@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
 

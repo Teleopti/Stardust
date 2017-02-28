@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     ///<summary>
     /// Class holding what Period the scorecard should show

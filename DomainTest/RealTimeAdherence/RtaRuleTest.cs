@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;

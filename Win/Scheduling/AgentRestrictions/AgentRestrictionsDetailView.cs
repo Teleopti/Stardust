@@ -21,6 +21,7 @@ using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {

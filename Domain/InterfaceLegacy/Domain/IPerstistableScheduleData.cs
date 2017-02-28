@@ -1,6 +1,6 @@
-﻿using Teleopti.Interfaces.Infrastructure;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IPersistableScheduleData : IScheduleData, IAggregateRoot, IChangeInfo, IMainReference
 	{

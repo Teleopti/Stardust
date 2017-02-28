@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 

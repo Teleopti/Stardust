@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Import;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;

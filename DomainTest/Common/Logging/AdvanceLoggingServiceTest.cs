@@ -8,6 +8,7 @@ using log4net;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Filter;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common.Logging
 {

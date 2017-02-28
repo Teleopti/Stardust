@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
 using Teleopti.Interfaces.Domain;

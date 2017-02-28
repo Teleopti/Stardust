@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.XPath;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface INotificationConfigReader
 	{

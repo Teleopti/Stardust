@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Interfaces.Domain;
 

@@ -5,12 +5,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 

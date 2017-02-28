@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// A specification for checking head counts allowance in the budget group

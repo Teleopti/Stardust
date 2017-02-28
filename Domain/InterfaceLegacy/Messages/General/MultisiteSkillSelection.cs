@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General
 {
 	///<summary>
 	/// The selection of data to export for one multisite skill.

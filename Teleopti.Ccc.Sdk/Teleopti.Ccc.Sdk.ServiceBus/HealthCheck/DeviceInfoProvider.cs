@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.HealthCheck

@@ -1,8 +1,9 @@
 ﻿using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Interfaces.Messages.Denormalize;
-using Teleopti.Interfaces.Messages.Requests;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize.Legacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 {

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.XPath;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Contains information about a payroll export made at a certain time

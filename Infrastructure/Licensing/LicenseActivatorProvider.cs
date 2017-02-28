@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Infrastructure;
 

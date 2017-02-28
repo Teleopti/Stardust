@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
         {
-            if(text.Length > Interfaces.Domain.Description.MaxLengthOfName || string.IsNullOrWhiteSpace(text))
+            if(text.Length > Domain.InterfaceLegacy.Domain.Description.MaxLengthOfName || string.IsNullOrWhiteSpace(text))
                 return false;
 
             style.CellValue = new Description(text, ((Description)style.CellValue).ShortName);

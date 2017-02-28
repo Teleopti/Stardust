@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// What is most significant when doing a "day projection"

@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
 using Teleopti.Ccc.Infrastructure.Foundation;

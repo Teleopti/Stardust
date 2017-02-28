@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// The schedule for one person during a period of time.

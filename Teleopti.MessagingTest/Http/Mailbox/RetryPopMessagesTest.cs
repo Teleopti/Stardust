@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;

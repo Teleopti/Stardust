@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Infrastructure;
 

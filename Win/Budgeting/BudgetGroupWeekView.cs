@@ -8,6 +8,7 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Budgeting.Events;
 using Teleopti.Ccc.Win.Common;

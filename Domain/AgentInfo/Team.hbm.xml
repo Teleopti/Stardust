@@ -27,7 +27,7 @@
     <many-to-one name="Site"
                  class="Teleopti.Ccc.Domain.Common.Site"
                  not-null="true" foreign-key="FK_Team_Site"/>
-    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Ccc.Domain">
+    <component name="Description" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description">
       <property name="Name"
 					not-null="true"
 					type="string"

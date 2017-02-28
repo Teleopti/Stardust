@@ -14,6 +14,8 @@ using Teleopti.Interfaces.Domain;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler

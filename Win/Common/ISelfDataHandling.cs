@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Infrastructure;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common
 {

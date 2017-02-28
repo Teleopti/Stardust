@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Tracking;
 using Teleopti.Interfaces.Domain;
 

@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Interfaces.Domain;
 

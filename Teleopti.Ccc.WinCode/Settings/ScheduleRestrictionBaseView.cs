@@ -4,6 +4,7 @@ using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.WinCode.Settings
 {

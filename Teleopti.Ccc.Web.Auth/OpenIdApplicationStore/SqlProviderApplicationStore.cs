@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DotNetOpenAuth.Messaging.Bindings;
 using DotNetOpenAuth.OpenId;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Interfaces.Domain;
 

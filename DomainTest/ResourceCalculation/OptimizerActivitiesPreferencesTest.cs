@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation

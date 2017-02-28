@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure;

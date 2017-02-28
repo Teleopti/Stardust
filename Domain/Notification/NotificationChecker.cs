@@ -4,6 +4,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
+using IPerson = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.IPerson;
+using NotificationType = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.NotificationType;
 
 namespace Teleopti.Ccc.Domain.Notification
 {

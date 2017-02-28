@@ -1,6 +1,8 @@
 ﻿using System;
 using log4net;
 using Teleopti.Ccc.Domain.Coders;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Interfaces.Domain;

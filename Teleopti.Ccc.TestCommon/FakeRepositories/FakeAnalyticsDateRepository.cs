@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

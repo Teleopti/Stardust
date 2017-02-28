@@ -2,6 +2,7 @@
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 

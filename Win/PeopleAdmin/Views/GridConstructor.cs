@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using System.ComponentModel;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;

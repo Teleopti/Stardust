@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;

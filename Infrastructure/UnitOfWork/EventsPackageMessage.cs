@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Interfaces.Messages;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
 	public interface IUpgradeLog : IDisposable
 	{

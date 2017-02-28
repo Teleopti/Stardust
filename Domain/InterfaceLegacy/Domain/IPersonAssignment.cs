@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// Represents a person's work assignment. Roughly speaking it contains 

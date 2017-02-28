@@ -4,6 +4,8 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
 using NHibernate.Criterion;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

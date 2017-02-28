@@ -9,11 +9,11 @@ using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.SqlQueues.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Autofac;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 {

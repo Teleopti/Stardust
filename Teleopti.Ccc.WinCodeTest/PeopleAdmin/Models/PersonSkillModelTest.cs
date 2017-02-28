@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Settings;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Configuration

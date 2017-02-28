@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Exceptions;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 

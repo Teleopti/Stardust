@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Models;
 using Teleopti.Interfaces.Domain;

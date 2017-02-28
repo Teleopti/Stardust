@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -55,17 +56,17 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		{
 			new adherenceWithText
 			{
-				Adherence = Interfaces.Domain.Adherence.In,
+				Adherence = InterfaceLegacy.Domain.Adherence.In,
 				Text = Resources.InAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = Interfaces.Domain.Adherence.Out,
+				Adherence = InterfaceLegacy.Domain.Adherence.Out,
 				Text = Resources.OutOfAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = Interfaces.Domain.Adherence.Neutral,
+				Adherence = InterfaceLegacy.Domain.Adherence.Neutral,
 				Text = Resources.NeutralAdherence
 			}
 		};

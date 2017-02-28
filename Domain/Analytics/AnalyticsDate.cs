@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Analytics
 {

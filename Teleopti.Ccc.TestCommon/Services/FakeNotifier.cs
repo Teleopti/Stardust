@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Util;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Interfaces.Domain;
 

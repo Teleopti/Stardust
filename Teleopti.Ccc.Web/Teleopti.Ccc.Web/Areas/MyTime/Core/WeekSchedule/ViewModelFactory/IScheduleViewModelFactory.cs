@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 

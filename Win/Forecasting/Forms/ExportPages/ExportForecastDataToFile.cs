@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages

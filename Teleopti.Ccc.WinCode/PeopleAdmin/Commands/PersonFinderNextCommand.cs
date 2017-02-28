@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin.Commands

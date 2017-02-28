@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Teleopti.Interfaces
+namespace Teleopti.Ccc.Domain.InterfaceLegacy
 {
     /// <summary>
     /// Interface for MAPI class that handles email creation

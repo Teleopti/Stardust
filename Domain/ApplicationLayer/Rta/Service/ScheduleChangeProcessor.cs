@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Interfaces.Messages;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {

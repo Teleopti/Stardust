@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Hold information about when and who created this object.

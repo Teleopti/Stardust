@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.WinCode.Presentation
 {

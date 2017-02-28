@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

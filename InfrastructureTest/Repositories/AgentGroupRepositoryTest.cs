@@ -1,4 +1,6 @@
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;

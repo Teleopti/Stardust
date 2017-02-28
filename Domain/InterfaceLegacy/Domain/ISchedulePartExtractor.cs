@@ -1,5 +1,7 @@
 
-namespace Teleopti.Interfaces.Domain
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Gets som important information for a SchedulePart

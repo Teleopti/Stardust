@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core

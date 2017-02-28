@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition
 {

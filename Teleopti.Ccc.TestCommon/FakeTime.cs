@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon

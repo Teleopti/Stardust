@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Exceptions;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
@@ -374,8 +375,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.outlierBoxControl.Size = new System.Drawing.Size(182, 115);
 			this.outlierBoxControl.TabIndex = 8;
 			this.outlierBoxControl.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBoxControlAddOutlier);
-			this.outlierBoxControl.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControlDeleteOutlier);
-			this.outlierBoxControl.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControlUpdateOutlier);
+			this.outlierBoxControl.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<IOutlier>>(this.outlierBoxControlDeleteOutlier);
+			this.outlierBoxControl.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<IOutlier>>(this.outlierBoxControlUpdateOutlier);
 			// 
 			// splitContainerAdv2
 			// 

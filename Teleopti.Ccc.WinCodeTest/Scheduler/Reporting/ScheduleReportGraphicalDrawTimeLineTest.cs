@@ -4,6 +4,7 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Pdf;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;

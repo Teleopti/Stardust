@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Interfaces.Infrastructure;
 

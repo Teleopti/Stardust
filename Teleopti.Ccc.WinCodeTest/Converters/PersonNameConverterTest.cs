@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Converters;
 using Teleopti.Interfaces.Domain;

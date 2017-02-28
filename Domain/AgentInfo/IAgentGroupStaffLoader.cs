@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 

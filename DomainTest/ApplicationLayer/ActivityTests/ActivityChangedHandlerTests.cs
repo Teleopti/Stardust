@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Activity;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ActivityTests
 			assertMapping(activity, updatedAnalyticsActivity);
 		}
 
-		private static void assertMapping(Interfaces.Domain.IActivity activity, AnalyticsActivity analyticsActivity)
+		private static void assertMapping(IActivity activity, AnalyticsActivity analyticsActivity)
 		{
 			analyticsActivity.ActivityCode.Should().Be.EqualTo(activity.Id);
 			analyticsActivity.ActivityName.Should().Be.EqualTo(activity.Name);

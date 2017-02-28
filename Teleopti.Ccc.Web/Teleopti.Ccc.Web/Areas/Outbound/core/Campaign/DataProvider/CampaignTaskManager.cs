@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
 

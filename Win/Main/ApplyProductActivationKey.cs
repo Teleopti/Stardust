@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;

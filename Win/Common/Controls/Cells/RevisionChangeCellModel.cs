@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Scheduling.AuditHistory;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;

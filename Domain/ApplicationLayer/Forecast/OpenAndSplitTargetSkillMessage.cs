@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Interfaces.Messages.General;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {

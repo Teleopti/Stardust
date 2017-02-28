@@ -3,6 +3,8 @@ using log4net;
 using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
 	public interface IAggregateRootInitializer
 	{

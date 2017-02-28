@@ -72,7 +72,7 @@
 			condition="IsDeleted = 0" />
 		</set>
 	
-	<component name="StaffingThresholds" class="Teleopti.Interfaces.Domain.StaffingThresholds, Teleopti.Ccc.Domain">
+	<component name="StaffingThresholds" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.StaffingThresholds">
 	  <component name="SeriousUnderstaffing" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
 		<property name="Value"
 			not-null="true"

@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider

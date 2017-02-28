@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces
+namespace Teleopti.Ccc.Domain.InterfaceLegacy
 {
 	public class ToStringSerializer : IJsonSerializer
 	{

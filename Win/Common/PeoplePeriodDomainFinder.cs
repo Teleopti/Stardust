@@ -4,6 +4,7 @@ using System.Text;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Syncfusion.Windows.Forms.Grid;
 using System.Globalization;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common

@@ -4,6 +4,8 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

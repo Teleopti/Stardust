@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Data;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Filter

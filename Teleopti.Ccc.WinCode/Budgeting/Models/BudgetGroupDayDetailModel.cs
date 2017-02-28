@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Budgeting.Models

@@ -5,6 +5,7 @@ using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;

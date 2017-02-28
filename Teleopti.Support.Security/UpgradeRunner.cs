@@ -6,6 +6,7 @@ using System.Threading;
 using log4net;
 using log4net.Config;
 using log4net.Core;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Interfaces.Infrastructure;

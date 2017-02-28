@@ -2,7 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
 	public interface IHttpServer
 	{

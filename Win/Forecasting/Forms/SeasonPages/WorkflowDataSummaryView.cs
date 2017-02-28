@@ -9,6 +9,7 @@ using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.Forecasting.Forms.WFControls;

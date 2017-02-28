@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;

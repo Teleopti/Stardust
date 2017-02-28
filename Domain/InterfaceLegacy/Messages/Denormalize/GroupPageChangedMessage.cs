@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Teleopti.Interfaces.Messages.Denormalize
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize
 {
 	/// <summary>
 	/// Denormalize the grouping message.

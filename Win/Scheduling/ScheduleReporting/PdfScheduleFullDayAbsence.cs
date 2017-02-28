@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting

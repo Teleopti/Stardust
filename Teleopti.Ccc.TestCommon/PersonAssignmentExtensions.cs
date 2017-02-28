@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon

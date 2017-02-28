@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Win.Common;

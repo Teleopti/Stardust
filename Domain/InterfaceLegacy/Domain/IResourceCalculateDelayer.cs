@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// Used to decide if it is time to do a resource calculation

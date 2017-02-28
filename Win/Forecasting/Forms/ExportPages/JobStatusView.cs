@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Infrastructure.Foundation;

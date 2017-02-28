@@ -30,7 +30,7 @@
       <many-to-one name="Category"
                 class="Teleopti.Ccc.Domain.Scheduling.ShiftCategory"
                 not-null="true" foreign-key="FK_WorkShiftRuleSet_ShiftCategory"/>
-      <component name="StartPeriod" class="Teleopti.Interfaces.Domain.TimePeriodWithSegment, Teleopti.Ccc.Domain">
+      <component name="StartPeriod" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriodWithSegment">
         <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
           <component name="period" access="field">
             <property name="Minimum"
@@ -48,7 +48,7 @@
                   not-null="true"
                   type="TimeSpan"/>
       </component>
-      <component name="EndPeriod" class="Teleopti.Interfaces.Domain.TimePeriodWithSegment, Teleopti.Ccc.Domain">
+      <component name="EndPeriod" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriodWithSegment">
         <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
           <component name="period" access="field">
             <property name="Minimum"
@@ -68,7 +68,7 @@
       </component>
     </component>
 
-    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Ccc.Domain">
+    <component name="Description" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description">
 		<property name="Name"
 			not-null="true"
 			type="string"

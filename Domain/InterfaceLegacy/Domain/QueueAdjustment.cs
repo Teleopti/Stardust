@@ -1,6 +1,7 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Queue adjustment figures used when calculating statistics from the queue data

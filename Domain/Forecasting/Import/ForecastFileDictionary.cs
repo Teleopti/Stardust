@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Import
 {

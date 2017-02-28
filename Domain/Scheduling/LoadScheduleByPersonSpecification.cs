@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Specification;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling

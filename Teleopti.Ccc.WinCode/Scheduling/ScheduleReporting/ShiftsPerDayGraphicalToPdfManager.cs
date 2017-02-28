@@ -6,6 +6,7 @@ using System.Linq;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;

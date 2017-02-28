@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Tells if an activity is considered as a short break, lunch or none

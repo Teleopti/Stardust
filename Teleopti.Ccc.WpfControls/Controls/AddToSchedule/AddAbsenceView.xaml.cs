@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
 using Teleopti.Ccc.WinCode.Scheduling;

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Intraday;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday

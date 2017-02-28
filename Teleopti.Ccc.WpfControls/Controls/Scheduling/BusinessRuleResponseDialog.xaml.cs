@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WpfControls.Common.Interop;
 using Teleopti.Interfaces.Domain;

@@ -5,6 +5,7 @@ using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -13,7 +14,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

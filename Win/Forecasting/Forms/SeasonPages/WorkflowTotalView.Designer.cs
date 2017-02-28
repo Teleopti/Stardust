@@ -1,4 +1,5 @@
-﻿using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 {
@@ -188,8 +189,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.outlierBox.Size = new System.Drawing.Size(161, 110);
 			this.outlierBox.TabIndex = 0;
 			this.outlierBox.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBox_AddOutlier);
-			this.outlierBox.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBox_DeleteOutlier);
-			this.outlierBox.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBox_UpdateOutlier);
+			this.outlierBox.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<IOutlier>>(this.outlierBox_DeleteOutlier);
+			this.outlierBox.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<IOutlier>>(this.outlierBox_UpdateOutlier);
 			// 
 			// WorkflowTotalView
 			// 

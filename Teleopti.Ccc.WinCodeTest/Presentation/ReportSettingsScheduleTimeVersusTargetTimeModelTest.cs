@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
 

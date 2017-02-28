@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
 {

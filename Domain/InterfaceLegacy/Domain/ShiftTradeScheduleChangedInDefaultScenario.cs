@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     ///<summary>
 	/// A message that schedule has changed in the default scenario and the shift trade request is denied.

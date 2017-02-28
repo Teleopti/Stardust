@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public static class PersianCultureHelper
 	{

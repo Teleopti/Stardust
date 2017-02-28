@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Holds a reference to a schedule matrix and records the matrix schedule state when constructed

@@ -2,6 +2,7 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Interfaces.Domain;
 

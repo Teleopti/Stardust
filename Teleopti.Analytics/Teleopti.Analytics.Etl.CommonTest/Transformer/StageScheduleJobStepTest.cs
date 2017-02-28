@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;

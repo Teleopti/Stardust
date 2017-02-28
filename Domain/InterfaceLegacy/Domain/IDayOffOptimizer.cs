@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Performs a complete day off move. Moves a set of days decided by the decisionmaker (mostly 1 or 2 days), then reschedule the days

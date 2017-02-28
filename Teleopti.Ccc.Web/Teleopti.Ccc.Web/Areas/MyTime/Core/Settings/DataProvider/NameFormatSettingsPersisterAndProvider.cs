@@ -1,4 +1,5 @@
 ﻿
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 			return _personalSettingDataRepository.FindValueByKey(nameFormatKey, new NameFormatSettings());
 		}
 
-		public NameFormatSettings GetByOwner(Interfaces.Domain.IPerson person)
+		public NameFormatSettings GetByOwner(IPerson person)
 		{
 			return _personalSettingDataRepository.FindValueByKeyAndOwnerPerson(nameFormatKey, person, new NameFormatSettings());
 		}

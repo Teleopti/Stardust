@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.Rules;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver

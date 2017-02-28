@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// (Please fill in more appropiate desc here. I don't know myself...)

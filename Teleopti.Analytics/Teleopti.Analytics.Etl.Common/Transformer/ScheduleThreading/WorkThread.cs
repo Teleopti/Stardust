@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading

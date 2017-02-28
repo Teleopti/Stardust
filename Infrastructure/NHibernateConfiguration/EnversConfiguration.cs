@@ -5,6 +5,7 @@ using NHibernate.Envers.Configuration;
 using NHibernate.Envers.Configuration.Fluent;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;

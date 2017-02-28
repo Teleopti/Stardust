@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;

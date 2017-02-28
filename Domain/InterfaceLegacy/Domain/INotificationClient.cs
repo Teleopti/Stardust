@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     public interface INotificationClient : IDisposable
     {

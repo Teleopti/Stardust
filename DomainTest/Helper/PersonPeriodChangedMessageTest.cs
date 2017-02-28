@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Interfaces.Messages.Denormalize;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize;
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {

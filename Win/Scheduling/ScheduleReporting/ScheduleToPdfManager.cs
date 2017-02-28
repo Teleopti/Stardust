@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;

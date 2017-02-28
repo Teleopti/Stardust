@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Ccc.WinCode.Permissions.Commands;

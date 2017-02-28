@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using log4net;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.Authentication;

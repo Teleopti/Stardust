@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General
 {
     /// <summary>
     /// Represents a forecast row

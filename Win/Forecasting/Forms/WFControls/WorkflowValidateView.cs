@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;

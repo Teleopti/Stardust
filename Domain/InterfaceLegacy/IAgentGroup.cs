@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Interfaces
+namespace Teleopti.Ccc.Domain.InterfaceLegacy
 {
 	public interface IAgentGroup : IAggregateRoot
 	{

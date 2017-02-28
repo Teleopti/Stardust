@@ -62,7 +62,7 @@
 			</many-to-many>
 		</bag>
 
-    <component name="QueueAdjustments" class="Teleopti.Interfaces.Domain.QueueAdjustment, Teleopti.Ccc.Domain">
+    <component name="QueueAdjustments" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.QueueAdjustment">
       <component name="OfferedTasks" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
         <property name="Value"
             not-null="true"

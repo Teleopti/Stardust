@@ -17,6 +17,7 @@ using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using System.Collections.Generic;
 using Autofac;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views

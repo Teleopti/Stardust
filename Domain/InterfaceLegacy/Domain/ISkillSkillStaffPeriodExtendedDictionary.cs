@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface ISkillResourceCalculationPeriodDictionary : IShovelResourceData
 	{
@@ -177,7 +177,7 @@ namespace Teleopti.Interfaces.Domain
         Dictionary<ISkill, ISkillStaffPeriodDictionary>.ValueCollection Values { get; }
 
         /// <summary>
-        /// Gets or sets the <see cref="Teleopti.Interfaces.Domain.ISkillStaffPeriodDictionary"/> with the specified key.
+        /// Gets or sets the <see cref="ISkillStaffPeriodDictionary"/> with the specified key.
         /// </summary>
         /// <value></value>
         /// <remarks>

@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using NHibernate;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration

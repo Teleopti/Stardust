@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Represents a shift category, a grouping of shifts

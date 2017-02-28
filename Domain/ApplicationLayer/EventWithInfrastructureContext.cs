@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Interfaces.Messages;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {

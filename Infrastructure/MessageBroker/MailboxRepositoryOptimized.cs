@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;

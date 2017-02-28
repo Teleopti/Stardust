@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.Domain;

@@ -3,6 +3,7 @@
 using System;
 using System.Drawing;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.WinCode.Settings;

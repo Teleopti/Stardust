@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// A version number and a bool telling if it's used.

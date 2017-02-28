@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Ccc.WinCode.Common.Models;
 using Teleopti.Interfaces.Domain;

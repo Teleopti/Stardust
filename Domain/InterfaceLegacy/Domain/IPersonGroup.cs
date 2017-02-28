@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// Common Interface for RootPersonGroup and ChildPersonGroup

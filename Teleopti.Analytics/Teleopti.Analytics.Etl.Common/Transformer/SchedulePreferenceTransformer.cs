@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 

@@ -1,4 +1,4 @@
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IWriteSideRepositoryTypedId<T, TId> : ILoadAggregateByTypedId<T, TId>
 	{

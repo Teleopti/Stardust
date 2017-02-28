@@ -1,4 +1,6 @@
-namespace Teleopti.Interfaces.Domain
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Daily data holder class for representing a selected schedule day in a selected schedule period.

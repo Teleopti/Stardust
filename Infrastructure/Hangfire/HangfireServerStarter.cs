@@ -3,7 +3,7 @@ using System.Linq;
 using Hangfire;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Interfaces.Messages;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {

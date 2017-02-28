@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Recurring information for meetings a certain week day and number of week in month

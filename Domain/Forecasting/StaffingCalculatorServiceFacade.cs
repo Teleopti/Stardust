@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Calculation;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.Calculation;
 using Teleopti.Interfaces.Domain;
 

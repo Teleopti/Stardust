@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General
 {
 	///<summary>
 	/// Message with details to perform an export of forecasting data from sub skills of multisite skills to a regular skill.

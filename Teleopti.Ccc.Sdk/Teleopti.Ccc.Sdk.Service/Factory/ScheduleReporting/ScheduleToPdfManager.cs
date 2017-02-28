@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

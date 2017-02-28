@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Interfaces.Messages
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages
 {
 	public interface ILogOnContext
 	{

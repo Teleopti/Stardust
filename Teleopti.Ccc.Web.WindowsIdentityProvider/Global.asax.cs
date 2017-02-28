@@ -6,6 +6,7 @@ using Autofac.Integration.Mvc;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Provider;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;

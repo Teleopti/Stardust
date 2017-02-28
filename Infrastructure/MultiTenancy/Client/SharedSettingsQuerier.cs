@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Infrastructure;
 

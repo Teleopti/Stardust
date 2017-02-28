@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Common.Commands

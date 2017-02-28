@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {

@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Validates a DayOff against a set of valid legal state rules.

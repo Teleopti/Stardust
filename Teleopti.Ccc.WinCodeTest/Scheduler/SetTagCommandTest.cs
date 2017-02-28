@@ -6,6 +6,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

@@ -22,7 +22,7 @@
 				  type="UtcDateTime"
 				  not-null="true"/>
 		<!--IEntity-->
-    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Ccc.Domain">
+    <component name="Description" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description">
       <property name="Name"
 					not-null="true"
 					type="string"

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Exception type for exceptions regarding invalid status modes for shift trade requests

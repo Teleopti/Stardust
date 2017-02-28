@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Interfaces.Domain;

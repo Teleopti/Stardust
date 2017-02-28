@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData

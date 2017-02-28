@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using System.Globalization;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 #endregion
 
 namespace Teleopti.Ccc.WinCodeTest.Settings

@@ -1,5 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 using System.Windows.Input;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Common.Commands;
 
 namespace Teleopti.Ccc.WinCode.Scheduling

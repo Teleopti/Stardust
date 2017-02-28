@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Interfaces.Messages.Denormalize
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize.Legacy
 {
 	[Serializable]
 	public class PersonChangedMessage : MessageWithLogOnContext, IEvent

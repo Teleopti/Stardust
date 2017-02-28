@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Kpi;
 using System.Drawing;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Kpi

@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Messages.General;
-
-namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
+﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 {
 	 partial class ImportForecastView
 	 {

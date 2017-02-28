@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Class that contains under staffing and serious under staffing dates and hours information.

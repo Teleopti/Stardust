@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.Denormalize
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize
 {
     /// <summary>
     /// Legacy message type, here only to be able to read old messages from denormalization queue.

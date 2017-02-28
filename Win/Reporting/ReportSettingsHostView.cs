@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;

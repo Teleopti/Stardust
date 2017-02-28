@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Contains permission information about the data that is available for an

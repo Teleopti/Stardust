@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// An interface for containing splitted interval data

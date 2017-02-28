@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Interfaces.Domain;
 

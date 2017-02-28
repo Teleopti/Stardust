@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Check if a schedule period should be splitted due to breaking changes in PersonPeriods

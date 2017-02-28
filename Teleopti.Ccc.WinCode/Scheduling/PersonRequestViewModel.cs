@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Events;

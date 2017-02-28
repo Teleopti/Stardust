@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

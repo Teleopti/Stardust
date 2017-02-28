@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Collection
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Teleopti.Interfaces.Domain.ISkillStaffPeriod"/> with the specified key.
+        /// Gets or sets the <see cref="ISkillStaffPeriod"/> with the specified key.
         /// </summary>
         /// <value></value>
         /// <remarks>

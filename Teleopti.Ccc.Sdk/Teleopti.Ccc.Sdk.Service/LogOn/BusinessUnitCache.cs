@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Caching;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn

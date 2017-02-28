@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using log4net;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Notification

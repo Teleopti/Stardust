@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.XPath;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 

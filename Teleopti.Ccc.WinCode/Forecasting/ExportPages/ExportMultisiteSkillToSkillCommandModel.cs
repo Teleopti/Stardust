@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using NHibernate.Util;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;

@@ -16,6 +16,7 @@ using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

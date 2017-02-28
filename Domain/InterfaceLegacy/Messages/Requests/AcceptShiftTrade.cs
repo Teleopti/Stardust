@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.Requests
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Requests
 {
     public class AcceptShiftTrade : MessageWithLogOnContext
     {

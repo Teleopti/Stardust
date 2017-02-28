@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Clipboard
 {

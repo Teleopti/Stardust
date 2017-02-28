@@ -1,5 +1,6 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Toggle;

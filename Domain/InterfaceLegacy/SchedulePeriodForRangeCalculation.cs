@@ -1,7 +1,8 @@
 using System.Globalization;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces
+namespace Teleopti.Ccc.Domain.InterfaceLegacy
 {
 	public struct SchedulePeriodForRangeCalculation
 	{

@@ -9,7 +9,7 @@ using Hangfire.Storage;
 using Hangfire.Storage.Monitoring;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Interfaces.Messages;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Infrastructure
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
     /// <summary>
     /// Used for roots that should not

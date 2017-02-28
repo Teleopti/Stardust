@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using Hangfire;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Infrastructure;
 

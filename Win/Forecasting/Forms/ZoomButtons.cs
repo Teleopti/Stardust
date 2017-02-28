@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;

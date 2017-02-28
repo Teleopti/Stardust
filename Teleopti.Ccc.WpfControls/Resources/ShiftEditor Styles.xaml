@@ -5,7 +5,8 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     
     xmlns:Interfaces="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces"
-    xmlns:domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Ccc.Domain">
+    xmlns:domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Ccc.Domain"
+    xmlns:domain1="clr-namespace:Teleopti.Ccc.Domain.InterfaceLegacy.Domain;assembly=Teleopti.Ccc.Domain">
     
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml"/>
@@ -416,7 +417,7 @@
         </DrawingBrush.Drawing>
     </DrawingBrush>
     
-    <DataTemplate DataType="{x:Type domain:Description}">
+    <DataTemplate DataType="{x:Type domain1:Description}">
         
             <TextBlock Text="{Binding Path=Name}" />
             

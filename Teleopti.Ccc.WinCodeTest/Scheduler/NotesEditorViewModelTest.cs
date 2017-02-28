@@ -13,6 +13,7 @@ using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WinCode.Scheduling;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler

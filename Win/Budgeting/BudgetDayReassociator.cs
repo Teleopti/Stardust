@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Infrastructure.Foundation;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

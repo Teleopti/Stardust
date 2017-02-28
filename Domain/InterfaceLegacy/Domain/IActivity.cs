@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// An activity

@@ -1,4 +1,6 @@
-namespace Teleopti.Interfaces.Domain
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Gives support to the scheduler on what needed to load, what to show etc

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.Denormalize
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize
 {
 	/// <summary>
 	/// Initial load of schedule projections

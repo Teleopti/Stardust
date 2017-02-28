@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Backlog;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
 

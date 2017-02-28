@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Interfaces.Infrastructure.Analytics
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics
 {
 	public interface IAnalyticsGeneric
 	{

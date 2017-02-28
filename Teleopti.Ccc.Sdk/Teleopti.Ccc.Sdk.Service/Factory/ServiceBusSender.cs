@@ -8,8 +8,8 @@ using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {

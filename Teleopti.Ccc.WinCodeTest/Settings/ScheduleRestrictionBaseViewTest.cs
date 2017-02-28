@@ -7,6 +7,7 @@ using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using System.Globalization;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Settings
 {

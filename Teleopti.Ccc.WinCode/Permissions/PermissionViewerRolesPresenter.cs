@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Permissions.Commands;
 using Teleopti.Ccc.WinCode.Permissions.Events;

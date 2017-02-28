@@ -7,6 +7,7 @@ using System.Linq;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Grid.Grouping;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;

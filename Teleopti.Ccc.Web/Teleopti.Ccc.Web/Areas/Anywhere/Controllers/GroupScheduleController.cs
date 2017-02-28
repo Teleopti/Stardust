@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
 

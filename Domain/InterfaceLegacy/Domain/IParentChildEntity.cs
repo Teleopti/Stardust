@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Interface for the objects that has a parent.

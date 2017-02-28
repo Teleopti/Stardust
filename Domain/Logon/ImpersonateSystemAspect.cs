@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.Logon
 {

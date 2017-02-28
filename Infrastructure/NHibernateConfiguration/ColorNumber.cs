@@ -4,6 +4,7 @@ using System.Drawing;
 using NHibernate;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration

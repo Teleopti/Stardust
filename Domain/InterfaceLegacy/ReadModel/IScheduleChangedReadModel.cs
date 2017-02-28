@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.ReadModel
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel
 {
 	/// <summary>
 	/// 

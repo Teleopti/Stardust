@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;

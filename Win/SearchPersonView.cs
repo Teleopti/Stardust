@@ -6,6 +6,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using System.Collections;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Win
 {

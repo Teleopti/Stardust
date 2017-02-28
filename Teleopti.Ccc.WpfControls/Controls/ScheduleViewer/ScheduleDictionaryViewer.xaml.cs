@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models;
 using Teleopti.Interfaces.Domain;
 

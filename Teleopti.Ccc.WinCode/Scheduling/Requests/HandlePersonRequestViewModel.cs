@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Common.Collections;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;

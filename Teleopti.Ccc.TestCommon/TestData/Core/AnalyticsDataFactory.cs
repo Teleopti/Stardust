@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core

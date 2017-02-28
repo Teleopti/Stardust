@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Interfaces.Domain;
 
