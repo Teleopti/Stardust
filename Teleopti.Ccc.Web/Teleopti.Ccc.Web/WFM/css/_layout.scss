@@ -130,7 +130,7 @@ md-progress-circular{
     margin-bottom:3px;
 }
 
-//Temp move us to styleguide
+//Temp move us to styleguide - remove after next release
 textarea{
 	background-color: $white;
 	color:$text-color-standard;
@@ -138,16 +138,14 @@ textarea{
 	width:100%;
 }
 
-md-select-menu md-content md-option:not([disabled]):hover{
-	background: $gray012!important;
-}
-
 .md-autocomplete-suggestions-container li .highlight{
 	color:$gray087 !important;
 	font-weight: bold;
 }
 
-md-autocomplete[disabled]:not([md-floating-label]) {
+md-select-menu md-content md-option:not([disabled]):hover,
+md-autocomplete[disabled]:not([md-floating-label]),
+.md-autocomplete-suggestions-container li.selected {
 	background: $gray012!important;
 }
 
