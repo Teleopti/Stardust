@@ -5,21 +5,26 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public class AnalyticsFactScheduleDayCountHandler : IAnalyticsFactScheduleDayCountHandler
+	public interface IAnalyticsFactScheduleDayCountMapper
 	{
-		private readonly IAnalyticsFactScheduleDateHandler _dateHandler;
-		private readonly IAnalyticsFactScheduleTimeHandler _timeHandler;
+		IAnalyticsFactScheduleDayCount Map(ProjectionChangedEventScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, int scenarioId, int shiftCategoryId);
+	}
 
-		public AnalyticsFactScheduleDayCountHandler(
-			IAnalyticsFactScheduleDateHandler dateHandler, 
-			IAnalyticsFactScheduleTimeHandler timeHandler)
+	public class AnalyticsFactScheduleDayCountMapper : IAnalyticsFactScheduleDayCountMapper
+	{
+		private readonly IAnalyticsFactScheduleDateMapper _dateMapper;
+		private readonly IAnalyticsFactScheduleTimeMapper _timeMapper;
+
+		public AnalyticsFactScheduleDayCountMapper(
+			IAnalyticsFactScheduleDateMapper dateMapper, 
+			IAnalyticsFactScheduleTimeMapper timeMapper)
 
 		{
-			_dateHandler = dateHandler;
-			_timeHandler = timeHandler;
+			_dateMapper = dateMapper;
+			_timeMapper = timeMapper;
 		}
 
-		public IAnalyticsFactScheduleDayCount Handle(
+		public IAnalyticsFactScheduleDayCount Map(
 			ProjectionChangedEventScheduleDay scheduleDay,
 			IAnalyticsFactSchedulePerson personPart, 
 			int scenarioId, 
@@ -27,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		{
 			int dateId;
-			if (!_dateHandler.MapDateId(new DateOnly(scheduleDay.Date), out dateId)) return null;
+			if (!_dateMapper.MapDateId(new DateOnly(scheduleDay.Date), out dateId)) return null;
 
 			DateTime starTime;
 			var absenceId = -1;
@@ -36,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			{
 				var firstLayer = scheduleDay.Shift.Layers.First();
 				starTime = firstLayer.StartDateTime;
-				var absence = _timeHandler.MapAbsenceId(firstLayer.PayloadId);
+				var absence = _timeMapper.MapAbsenceId(firstLayer.PayloadId);
 				if (absence == null) return null;
 				absenceId = absence.AbsenceId;
 			}

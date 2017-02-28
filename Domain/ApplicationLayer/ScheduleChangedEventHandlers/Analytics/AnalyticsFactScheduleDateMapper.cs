@@ -6,11 +6,24 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public class AnalyticsFactScheduleDateHandler : IAnalyticsFactScheduleDateHandler
+	public interface IAnalyticsFactScheduleDateMapper
+	{
+		bool MapDateId(DateOnly date, out int dateId);
+
+		IAnalyticsFactScheduleDate Map(
+			DateTime shiftStartDateUtc,
+			DateTime shiftEndDateUtc,
+			DateOnly shiftStartDateLocal,
+			ProjectionChangedEventLayer layer,
+			DateTime scheduleChangeTime,
+			int minutesPerInterval);
+	}
+
+	public class AnalyticsFactScheduleDateMapper : IAnalyticsFactScheduleDateMapper
 	{
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 
-		public AnalyticsFactScheduleDateHandler(IAnalyticsDateRepository analyticsDateRepository)
+		public AnalyticsFactScheduleDateMapper(IAnalyticsDateRepository analyticsDateRepository)
 		{
 			_analyticsDateRepository = analyticsDateRepository;
 		}
@@ -29,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			return true;
 		}
 
-		public IAnalyticsFactScheduleDate Handle(
+		public IAnalyticsFactScheduleDate Map(
 			DateTime shiftStartDateUtc, 
 			DateTime shiftEndDateUtc, 
 			DateOnly shiftStartDateLocal, 

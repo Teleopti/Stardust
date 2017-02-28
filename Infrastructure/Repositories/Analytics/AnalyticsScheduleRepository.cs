@@ -220,21 +220,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.UniqueResult<int>();
 		}
 
-		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT 
-						person_id {nameof(AnalyticsPersonBusinessUnit.PersonId)}, 
-						business_unit_id {nameof(AnalyticsPersonBusinessUnit.BusinessUnitId)} 
-					FROM mart.dim_person WITH (NOLOCK) 
-					WHERE person_period_code =:{nameof(personPeriodCode)} ")
-				.SetGuid(nameof(personPeriodCode), personPeriodCode)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonBusinessUnit)))
-				.SetReadOnly(true)
-				//.SetTimeout(120)
-				.UniqueResult<IAnalyticsPersonBusinessUnit>();
-		}
-
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(

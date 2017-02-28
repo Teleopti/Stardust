@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	[TestFixture]
 	public class AnalyticsFactScheduleDayCountHandlerTest
 	{
-		private IAnalyticsFactScheduleDateHandler _dateHandler;
-		private IAnalyticsFactScheduleTimeHandler _timeHandler;
-		private AnalyticsFactScheduleDayCountHandler _target;
+		private IAnalyticsFactScheduleDateMapper _dateMapper;
+		private IAnalyticsFactScheduleTimeMapper _timeMapper;
+		private AnalyticsFactScheduleDayCountMapper _target;
 		private ProjectionChangedEventScheduleDay _scheduleDay;
 		private AnalyticsFactSchedulePerson _personPart;
 		private const int scenarioId = 10;
@@ -27,39 +27,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[SetUp]
 		public void Setup()
 		{
-			_dateHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleDateHandler>();
-			_timeHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleTimeHandler>();
+			_dateMapper = MockRepository.GenerateMock<IAnalyticsFactScheduleDateMapper>();
+			_timeMapper = MockRepository.GenerateMock<IAnalyticsFactScheduleTimeMapper>();
 			_scheduleDay = new ProjectionChangedEventScheduleDay
 			{
 				Date = DateTime.Now.Date,
 				Shift = new ProjectionChangedEventShift { StartDateTime = DateTime.Now }
 			};
 			_personPart = new AnalyticsFactSchedulePerson { PersonId = 1, BusinessUnitId = 2 };
-			_target = new AnalyticsFactScheduleDayCountHandler(_dateHandler, _timeHandler);
+			_target = new AnalyticsFactScheduleDayCountMapper(_dateMapper, _timeMapper);
 		}
 
 		[Test]
 		public void ShouldMapLocalShiftStartId()
 		{
-			_dateHandler.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
+			_dateMapper.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
 			result.ShiftStartDateLocalId.Should().Be.EqualTo(dateId);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenDateMappingFails()
 		{
-			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(false);
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
+			_dateMapper.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(false);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
 			result.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldMapPersonAndBusienssUnitAndAScenarioId()
 		{
-			_dateHandler.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_dateMapper.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
 
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
 
 			result.PersonId.Should().Be.EqualTo(_personPart.PersonId);
 			result.BusinessUnitId.Should().Be.EqualTo(_personPart.BusinessUnitId);
@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapShift()
 		{
-			_dateHandler.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_dateMapper.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
 
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
 
 			result.ShiftCategoryId.Should().Be.EqualTo(shiftCategoryId);
 			result.StartTime.Should().Be.EqualTo(_scheduleDay.Shift.StartDateTime);
@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullIfShiftButNoShiftCategory()
 		{
-			_dateHandler.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, -1);
+			_dateMapper.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, -1);
 			result.Should().Be.Null();
 		}
 
@@ -102,10 +102,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 					PayloadId = absence.AbsenceCode
 				}
 			};
-			_dateHandler.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
-			_timeHandler.Stub(x => x.MapAbsenceId(absence.AbsenceCode)).Return(absence);
+			_dateMapper.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_timeMapper.Stub(x => x.MapAbsenceId(absence.AbsenceCode)).Return(absence);
 
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, -1);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, -1);
 
 			result.AbsenceId.Should().Be.EqualTo(absence.AbsenceId);
 			result.StartTime.Should().Be.EqualTo(_scheduleDay.Shift.Layers.First().StartDateTime);
@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 					PayloadId = invalidCode
 				}
 			};
-			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
-			_timeHandler.Stub(x => x.MapAbsenceId(invalidCode)).Return(null);
+			_dateMapper.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_timeMapper.Stub(x => x.MapAbsenceId(invalidCode)).Return(null);
 
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, -1);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, -1);
 
 			result.Should().Be.Null();
 		}
@@ -143,9 +143,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_scheduleDay.Name = "MyDayOff";
 			_scheduleDay.ShortName = "DO";
 
-			_dateHandler.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_dateMapper.Stub(x => x.MapDateId(Arg.Is(new DateOnly(_scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
 
-			IAnalyticsFactScheduleDayCount result = _target.Handle(_scheduleDay, _personPart, scenarioId, -1);
+			IAnalyticsFactScheduleDayCount result = _target.Map(_scheduleDay, _personPart, scenarioId, -1);
 
 			result.DayOffName.Should().Be.EqualTo(_scheduleDay.Name);
 			result.DayOffShortName.Should().Be.EqualTo(_scheduleDay.ShortName);

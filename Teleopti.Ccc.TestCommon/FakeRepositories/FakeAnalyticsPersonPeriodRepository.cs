@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -82,6 +84,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public int GetOrCreateSite(Guid siteCode, string siteName, int businessUnitId)
 		{
 			return 123;
+		}
+
+		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
+		{
+			var personPeriod = fakePersonPeriods.SingleOrDefault(x => x.PersonPeriodCode == personPeriodCode);
+			return personPeriod == null ? null : new AnalyticsPersonBusinessUnit {BusinessUnitId = personPeriod.BusinessUnitId, PersonId = personPeriod.PersonId};
 		}
 	}
 }

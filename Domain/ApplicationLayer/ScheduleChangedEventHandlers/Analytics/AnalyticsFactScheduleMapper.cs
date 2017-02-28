@@ -9,26 +9,31 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public class AnalyticsFactScheduleHandler : IAnalyticsFactScheduleHandler
+	public interface IAnalyticsFactScheduleMapper
+	{
+		List<IFactScheduleRow> AgentDaySchedule(ProjectionChangedEventScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, DateTime scheduleChangeTime, int shiftCategoryId, int scenarioId, Guid scenarioCode, Guid personCode);
+	}
+
+	public class AnalyticsFactScheduleMapper : IAnalyticsFactScheduleMapper
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly IAnalyticsFactScheduleDateHandler _dateHandler;
-		private readonly IAnalyticsFactScheduleTimeHandler _timeHandler;
+		private readonly IAnalyticsFactScheduleDateMapper _dateMapper;
+		private readonly IAnalyticsFactScheduleTimeMapper _timeMapper;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 
-		public AnalyticsFactScheduleHandler(
+		public AnalyticsFactScheduleMapper(
 			IIntervalLengthFetcher intervalLengthFetcher,
-			IAnalyticsFactScheduleDateHandler dateHandler,
-			IAnalyticsFactScheduleTimeHandler timeHandler,
+			IAnalyticsFactScheduleDateMapper dateMapper,
+			IAnalyticsFactScheduleTimeMapper timeMapper,
 			IScheduleStorage scheduleStorage,
 			IScenarioRepository scenarioRepository,
 			IPersonRepository personRepository)
 		{
 			_intervalLengthFetcher = intervalLengthFetcher;
-			_dateHandler = dateHandler;
-			_timeHandler = timeHandler;
+			_dateMapper = dateMapper;
+			_timeMapper = timeMapper;
 			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
@@ -74,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 				foreach (var layer in intervalLayers)
 				{
-					var datePart = _dateHandler.Handle(shiftStart, shiftEnd, localStartDate, layer, scheduleChangeTime, intervalLength);
+					var datePart = _dateMapper.Map(shiftStart, shiftEnd, localStartDate, layer, scheduleChangeTime, intervalLength);
 					if (datePart == null)
 						return null;
 					var dateTimePeriod = new DateTimePeriod(layer.StartDateTime, layer.EndDateTime);
@@ -90,7 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						PersonPart = personPart,
 						DatePart = datePart,
-						TimePart = _timeHandler.Handle(layer, shiftCategoryId, scenarioId, shiftLength)
+						TimePart = _timeMapper.Handle(layer, shiftCategoryId, scenarioId, shiftLength)
 					};
 					scheduleRows.Add(factScheduleRow);
 				}

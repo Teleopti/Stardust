@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	[TestFixture]
 	public class AnalyticsFactScheduleHandlerTest
 	{
-		IAnalyticsFactScheduleHandler _target;
+		IAnalyticsFactScheduleMapper _target;
 		private IIntervalLengthFetcher _intervalLengthFetcher;
-		private IAnalyticsFactScheduleDateHandler _dateHandler;
-		private IAnalyticsFactScheduleTimeHandler _timeHandler;
+		private IAnalyticsFactScheduleDateMapper _dateMapper;
+		private IAnalyticsFactScheduleTimeMapper _timeMapper;
 		private IScheduleStorage _scheduleStorage;
 		private IScenarioRepository _scenarioRepository;
 		private IPersonRepository _personRepository;
@@ -33,12 +33,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void Setup()
 		{
 			_intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			_dateHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleDateHandler>();
-			_timeHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleTimeHandler>();
+			_dateMapper = MockRepository.GenerateMock<IAnalyticsFactScheduleDateMapper>();
+			_timeMapper = MockRepository.GenerateMock<IAnalyticsFactScheduleTimeMapper>();
 			_scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler, _scheduleStorage, _scenarioRepository,_personRepository);
+			_target = new AnalyticsFactScheduleMapper(_intervalLengthFetcher, _dateMapper, _timeMapper, _scheduleStorage, _scenarioRepository,_personRepository);
 		}
 
 		[Test]
@@ -80,19 +80,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 
-			_dateHandler.Stub(x => x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+			_dateMapper.Stub(x => x.Map(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
 				Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(new AnalyticsFactScheduleDate());
 
 			var repoMock = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
 			var analyticsActivityMock = MockRepository.GenerateMock<IAnalyticsActivityRepository>();
 			var overtimeRepository = MockRepository.GenerateMock<IAnalyticsOvertimeRepository>();
-			_timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock, new FakeAnalyticsAbsenceRepository(), overtimeRepository, analyticsActivityMock);
+			_timeMapper = new AnalyticsFactScheduleTimeMapper(repoMock, new FakeAnalyticsAbsenceRepository(), overtimeRepository, analyticsActivityMock);
 			overtimeRepository.Stub(x => x.Overtimes()).Return(new List<AnalyticsOvertime>());
 
 			repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
 			analyticsActivityMock.Stub(x => x.Activities()).Return(new List<AnalyticsActivity>());
 
-			_target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler, _scheduleStorage, _scenarioRepository, _personRepository);
+			_target = new AnalyticsFactScheduleMapper(_intervalLengthFetcher, _dateMapper, _timeMapper, _scheduleStorage, _scenarioRepository, _personRepository);
 
 			var result = _target.AgentDaySchedule(scheduleDay, null, DateTime.Now, 1, 1, Guid.NewGuid(), Guid.NewGuid());
 
@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			scheduleDay.Shift.Layers = createLayers(shiftStart, new[] { 60 });
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
-			_dateHandler.Stub(
+			_dateMapper.Stub(
 				x =>
-					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+					x.Map(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
 						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(null);
 
 			var result = _target.AgentDaySchedule(scheduleDay, null, DateTime.Now, 1, 1, Guid.NewGuid(), Guid.NewGuid());
@@ -146,12 +146,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 
-			_dateHandler.Stub(
+			_dateMapper.Stub(
 				x =>
-					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+					x.Map(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
 						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(datePart);
 
-			_timeHandler.Stub(
+			_timeMapper.Stub(
 				x =>
 					x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything,
 						Arg<int>.Is.Anything)).Return(timePart);
@@ -217,9 +217,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 
-			_dateHandler.Stub(
+			_dateMapper.Stub(
 				x =>
-					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+					x.Map(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
 						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(datePart);
 
 			var repoMock = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
@@ -230,13 +230,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			{
 				AbsenceCode = absenceId
 			});
-			_timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock, fakeAnalyticsAbsenceRepository, overtimeRepository, analyticsActivityMock);
+			_timeMapper = new AnalyticsFactScheduleTimeMapper(repoMock, fakeAnalyticsAbsenceRepository, overtimeRepository, analyticsActivityMock);
 			overtimeRepository.Stub(x => x.Overtimes()).Return(new List<AnalyticsOvertime>());
 
 			repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
 			analyticsActivityMock.Stub(x => x.Activities()).Return(new List<AnalyticsActivity>());
 
-			_target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler, _scheduleStorage, _scenarioRepository, _personRepository);
+			_target = new AnalyticsFactScheduleMapper(_intervalLengthFetcher, _dateMapper, _timeMapper, _scheduleStorage, _scenarioRepository, _personRepository);
 
 			var result = _target.AgentDaySchedule(scheduleDay, personPart, DateTime.Now, 1, 1, scenarioCode, personCode);
 

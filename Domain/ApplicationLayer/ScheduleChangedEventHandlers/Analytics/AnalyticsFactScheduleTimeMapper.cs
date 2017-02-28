@@ -6,14 +6,21 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public class AnalyticsFactScheduleTimeHandler : IAnalyticsFactScheduleTimeHandler
+	public interface IAnalyticsFactScheduleTimeMapper
+	{
+		IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId, int shiftLength);
+		AnalyticsAbsence MapAbsenceId(Guid absenceCode);
+		int MapOvertimeId(Guid overtimeCode);
+	}
+
+	public class AnalyticsFactScheduleTimeMapper : IAnalyticsFactScheduleTimeMapper
 	{
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 		private readonly IAnalyticsActivityRepository _analyticsActivityRepository;
 		private readonly IAnalyticsOvertimeRepository _analyticsOvertimeRepository;
 
-		public AnalyticsFactScheduleTimeHandler(IAnalyticsScheduleRepository analyticsScheduleRepository, 
+		public AnalyticsFactScheduleTimeMapper(IAnalyticsScheduleRepository analyticsScheduleRepository, 
 			IAnalyticsAbsenceRepository analyticsAbsenceRepository, 
 			IAnalyticsOvertimeRepository analyticsOvertimeRepository,
 			IAnalyticsActivityRepository analyticsActivityRepository)

@@ -63,20 +63,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadPerson()
-		{
-			var personPeriodCode = Guid.NewGuid();
-			analyticsDataFactory.Setup(new Person(10, Guid.NewGuid(), personPeriodCode, "Ashley", "Andeen", new DateTime(2010, 1, 1),
-										AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
-
-			analyticsDataFactory.Persist();
-			var pers = WithAnalyticsUnitOfWork.Get(() => Target.PersonAndBusinessUnit(personPeriodCode));
-			pers.Should().Not.Be.Null();
-			pers.PersonId.Should().Be.EqualTo(10);
-			pers.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
-		}
-
-		[Test]
 		public void ShouldInsertFactSchedule()
 		{
 			insertPerson(10, new DateTime(2010, 1, 1), AnalyticsDate.Eternity.DateDate);

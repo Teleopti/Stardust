@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	[TestFixture]
 	public class AnalyticsFactScheduleTimeHandlerTest
 	{
-		private AnalyticsFactScheduleTimeHandler _target;
+		private AnalyticsFactScheduleTimeMapper _target;
 		private IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private IAnalyticsActivityRepository _analyticsActivityRepository;
 		private IAnalyticsOvertimeRepository _overtimeRepository;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				new AnalyticsAbsence {AbsenceCode = _guidAbsInPaid, AbsenceId = 1, InPaidTime = true},
 				new AnalyticsAbsence {AbsenceCode = _guidAbsNotPaid, AbsenceId = 2, InPaidTime = false}
 			};
-			_target = new AnalyticsFactScheduleTimeHandler(_analyticsScheduleRepository, new FakeAnalyticsAbsenceRepository(_absences), _overtimeRepository, _analyticsActivityRepository);
+			_target = new AnalyticsFactScheduleTimeMapper(_analyticsScheduleRepository, new FakeAnalyticsAbsenceRepository(_absences), _overtimeRepository, _analyticsActivityRepository);
 
 			_activities = new List<AnalyticsActivity>
 			{

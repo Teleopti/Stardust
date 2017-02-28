@@ -23,11 +23,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
 			throw new NotImplementedException();

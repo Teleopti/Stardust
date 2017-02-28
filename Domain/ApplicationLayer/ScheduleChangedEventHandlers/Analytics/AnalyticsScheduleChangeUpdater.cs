@@ -15,29 +15,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
-		private readonly IAnalyticsFactScheduleHandler _factScheduleHandler;
-		private readonly IAnalyticsFactSchedulePersonHandler _factSchedulePersonHandler;
-		private readonly IAnalyticsFactScheduleDateHandler _factScheduleDateHandler;
-		private readonly IAnalyticsFactScheduleDayCountHandler _factScheduleDayCountHandler;
+		private readonly IAnalyticsFactScheduleMapper _factScheduleMapper;
+		private readonly IAnalyticsFactSchedulePersonMapper _factSchedulePersonMapper;
+		private readonly IAnalyticsFactScheduleDateMapper _factScheduleDateMapper;
+		private readonly IAnalyticsFactScheduleDayCountMapper _factScheduleDayCountMapper;
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private readonly IAnalyticsScheduleChangeUpdaterFilter _analyticsScheduleChangeUpdaterFilter;
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
 
 		public AnalyticsScheduleChangeUpdater(
-			IAnalyticsFactScheduleHandler factScheduleHandler,
-			IAnalyticsFactScheduleDateHandler factScheduleDateHandler,
-			IAnalyticsFactSchedulePersonHandler factSchedulePersonHandler,
-			IAnalyticsFactScheduleDayCountHandler factScheduleDayCountHandler,
+			IAnalyticsFactScheduleMapper factScheduleMapper,
+			IAnalyticsFactScheduleDateMapper factScheduleDateMapper,
+			IAnalyticsFactSchedulePersonMapper factSchedulePersonMapper,
+			IAnalyticsFactScheduleDayCountMapper factScheduleDayCountMapper,
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
 			IAnalyticsScheduleChangeUpdaterFilter analyticsScheduleChangeUpdaterFilter,
 			IAnalyticsScenarioRepository analyticsScenarioRepository,
 			IAnalyticsShiftCategoryRepository analyticsShiftCategoryRepository)
 		{
-			_factScheduleHandler = factScheduleHandler;
-			_factScheduleDateHandler = factScheduleDateHandler;
-			_factSchedulePersonHandler = factSchedulePersonHandler;
-			_factScheduleDayCountHandler = factScheduleDayCountHandler;
+			_factScheduleMapper = factScheduleMapper;
+			_factScheduleDateMapper = factScheduleDateMapper;
+			_factSchedulePersonMapper = factSchedulePersonMapper;
+			_factScheduleDayCountMapper = factScheduleDayCountMapper;
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 			_analyticsScheduleChangeUpdaterFilter = analyticsScheduleChangeUpdaterFilter;
 			_analyticsScenarioRepository = analyticsScenarioRepository;
@@ -65,14 +65,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var dateOnly = new DateOnly(scheduleDay.Date);
 
 				int dateId;
-				if (!_factScheduleDateHandler.MapDateId(dateOnly, out dateId))
+				if (!_factScheduleDateMapper.MapDateId(dateOnly, out dateId))
 				{
 					logger.Warn($"Date {scheduleDay.Date} could not be mapped to Analytics date_id. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 					//throw new DateMissingInAnalyticsException(scheduleDay.Date);
 					continue;
 				}
 
-				var personPart = _factSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
+				var personPart = _factSchedulePersonMapper.Map(scheduleDay.PersonPeriodId);
 				if (personPart.PersonId == -1)
 				{
 					logger.Warn($"PersonPeriodId {scheduleDay.PersonPeriodId} could not be found. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
@@ -87,11 +87,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					if (scheduleDay.Shift != null)
 						shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
 
-					var dayCount = _factScheduleDayCountHandler.Handle(scheduleDay, personPart, scenarioId, shiftCategoryId);
+					var dayCount = _factScheduleDayCountMapper.Map(scheduleDay, personPart, scenarioId, shiftCategoryId);
 					if (dayCount != null)
 						_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
 
-					var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId, @event.ScenarioId, @event.PersonId);
+					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId, @event.ScenarioId, @event.PersonId);
 					if (agentDaySchedule == null)
 					{
 						_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);

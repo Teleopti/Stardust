@@ -5,12 +5,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 
@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
 	[Category("BucketB")]
-	[AnalyticsUnitOfWorkTest]
+	[AnalyticsDatabaseTest]
 	public class AnalyticsPersonPeriodRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
+		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public IAnalyticsPersonPeriodRepository Target;
 		private AnalyticsPersonPeriod personPeriod1;
 		private Guid personId;
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			setUpData();
 
-			var result = Target.GetPersonPeriods(personId2);
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetPersonPeriods(personId2));
 			result.Count.Should().Be.EqualTo(1);
 		}
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			setUpData();
 
-			var result = Target.GetPersonPeriods(personId);
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetPersonPeriods(personId));
 			result.Count.Should().Be.EqualTo(2);
 		}
 
@@ -93,11 +93,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			setUpData();
 
-			Target.DeletePersonPeriod(new AnalyticsPersonPeriod
+			WithAnalyticsUnitOfWork.Do(() => Target.DeletePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonPeriodCode = personPeriodCode1
-			});
-			var result = Target.GetPersonPeriods(personId);
+			}));
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetPersonPeriods(personId));
 			result.Count(a => a.ToBeDeleted).Should().Be.EqualTo(1);
 			result.Count(a => !a.ToBeDeleted).Should().Be.EqualTo(1);
 		}
@@ -107,11 +107,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			setUpData();
 			
-			var personPeriod = Target.PersonPeriod(personPeriodCode1);
+			var personPeriod = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
 			personPeriod.Email = "fun@stuff.com";
-			Target.UpdatePersonPeriod(personPeriod);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonPeriod(personPeriod));
 
-			var result = Target.PersonPeriod(personPeriodCode1);
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
 			result.Should().Not.Be.Null();
 			result.Email.Should().Be.EqualTo(personPeriod.Email);
 		}
@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			setUpData();
 			var commonNameDescription = new CommonNameDescriptionSetting(commonNameDescriptionSetting);
-			Target.UpdatePersonNames(commonNameDescription, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonNames(commonNameDescription, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()));
 			var correctName = commonNameDescription.BuildCommonNameDescription(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
-			var updatedName = Target.PersonPeriod(personPeriodCode1).PersonName;
+			var updatedName = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1).PersonName);
 			updatedName.Should().Be.EqualTo(correctName);
 		}
 
@@ -132,9 +132,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			setUpData();
 			var commonNameDescription = new CommonNameDescriptionSetting("#123 {FirstName}");
-			Target.UpdatePersonNames(commonNameDescription, Guid.NewGuid());
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonNames(commonNameDescription, Guid.NewGuid()));
 			var newName = commonNameDescription.BuildCommonNameDescription(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
-			var personName = Target.PersonPeriod(personPeriodCode1).PersonName;
+			var personName = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1).PersonName);
 			personName.Should().Not.Be.EqualTo(newName);
 		}
 
@@ -190,7 +190,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				ValidToDateId = 1
 			};
 
-			Target.AddPersonPeriod(personPeriod1);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddPersonPeriod(personPeriod1));
+		}
+
+		[Test]
+		public void ShouldLoadPerson()
+		{
+			setUpData();
+
+			var expected = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
+			var pers = WithAnalyticsUnitOfWork.Get(() => Target.PersonAndBusinessUnit(personPeriodCode1));
+			pers.Should().Not.Be.Null();
+			pers.PersonId.Should().Be.EqualTo(expected.PersonId);
+			pers.BusinessUnitId.Should().Be.EqualTo(expected.BusinessUnitId);
 		}
 	}
 }
