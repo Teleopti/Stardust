@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
     public interface IExtendReduceDaysOffDecisionMaker
     {
 		ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor, IList<IDayOffLegalStateValidator> validatorList);
-
-        bool ValidateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList);
     }
 
     public class ExtendReduceDaysOffDecisionMaker : IExtendReduceDaysOffDecisionMaker
@@ -122,7 +120,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return -1*x.Value.CompareTo(y.Value);
         }
 
-        public bool ValidateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList)
+        private bool ValidateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList)
         {
             BitArray longBitArray = array.ToLongBitArray();
             int offset = 0;
