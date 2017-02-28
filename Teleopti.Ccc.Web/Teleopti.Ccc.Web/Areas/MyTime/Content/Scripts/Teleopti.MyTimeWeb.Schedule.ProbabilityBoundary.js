@@ -2,8 +2,8 @@
 	probabilities, intradayOpenPeriod) {
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
 
-	var shiftStartMinutes = 0;
-	var shiftEndMinutes = constants.totalMinutesOfOneDay;
+	var shiftStartMinutes = -1;
+	var shiftEndMinutes = constants.totalMinutesOfOneDay + 1;
 
 	var probabilityStartMinutes;
 	var probabilityEndMinutes;
@@ -34,12 +34,6 @@
 		return (moment(baseDate + time).diff(moment(baseDate)) / (60 * 1000));
 	}
 
-	shiftStartMinutes = -1;
-	shiftEndMinutes = constants.totalMinutesOfOneDay + 1;
-	if (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff) {
-		shiftStartMinutes = timelineStartMinutesForBoundary;
-		shiftEndMinutes = timelineEndMinutesForBoundary;
-	}
 	if (scheduleDay.Periods.length > 0) {
 		var firstPeriod = scheduleDay.Periods[0];
 		var lastPeriod = scheduleDay.Periods[scheduleDay.Periods.length - 1];
@@ -110,8 +104,6 @@
 
 	return {
 		heightPercentagePerMinute: heightPercentagePerMinute,
-		shiftStartMinutes: shiftStartMinutes,
-		shiftEndMinutes: shiftEndMinutes,
 		probabilityStartMinutes: probabilityStartMinutes,
 		probabilityEndMinutes: probabilityEndMinutes,
 		probabilityStartPosition: probabilityStartPosition,

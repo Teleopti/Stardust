@@ -86,8 +86,6 @@ $(document).ready(function () {
 			constants.absenceProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 0);
-		equal(vm.shiftEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -101,8 +99,6 @@ $(document).ready(function () {
 			constants.absenceProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 0);
-		equal(vm.shiftEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -116,8 +112,6 @@ $(document).ready(function () {
 			constants.overtimeProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 0);
-		equal(vm.shiftEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -131,8 +125,6 @@ $(document).ready(function () {
 			constants.overtimeProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 0);
-		equal(vm.shiftEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -146,8 +138,6 @@ $(document).ready(function () {
 			constants.absenceProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 570); // 09:30
-		equal(vm.shiftEndMinutes, 1110); // 18:30
 		equal(vm.probabilityStartMinutes, 570);
 		equal(vm.probabilityEndMinutes, 1110);
 		equal(Math.round(vm.probabilityStartPosition * 1000), Math.round(570 * 1000 / constants.totalMinutesOfOneDay));
@@ -174,8 +164,6 @@ $(document).ready(function () {
 			constants.overtimeProbabilityType, [], openHourPeriod);
 
 		equal(vm.heightPercentagePerMinute, 1 / timelineLengthInMinutes);
-		equal(vm.shiftStartMinutes, 570); // 09:30
-		equal(vm.shiftEndMinutes, 1110); // 18:30
 		equal(vm.probabilityStartMinutes, 420); // 07:00
 		equal(vm.probabilityEndMinutes, 960); // 16:00
 		equal(Math.round(vm.probabilityStartPosition * 1000),
@@ -191,8 +179,6 @@ $(document).ready(function () {
 			constants.absenceProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 0); // 00:30
-		equal(vm.shiftEndMinutes, 60); // 01:00
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 60);
 		equal(vm.probabilityStartPosition, 0);
@@ -206,8 +192,6 @@ $(document).ready(function () {
 			constants.absenceProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 1020); // 17:00
-		equal(vm.shiftEndMinutes, 1440); // 00:00+
 		equal(vm.probabilityStartMinutes, 1020);
 		equal(vm.probabilityEndMinutes, 1440);
 		equal(Math.round(vm.probabilityStartPosition * 1000), Math.round(1020 * 1000 / constants.totalMinutesOfOneDay));
@@ -221,8 +205,6 @@ $(document).ready(function () {
 			constants.overtimeProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 0); // 00:30
-		equal(vm.shiftEndMinutes, 60); // 01:00
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 1440);
 		equal(vm.probabilityStartPosition, 0);
@@ -236,11 +218,9 @@ $(document).ready(function () {
 			constants.overtimeProbabilityType, [], undefined);
 
 		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
-		equal(vm.shiftStartMinutes, 1020); // 17:00
-		equal(vm.shiftEndMinutes, 1440); // 00:00+
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 1440);
-		equal(vm.probabilityStartPosition * 1000, 0);
+		equal(vm.probabilityStartPosition, 0);
 		equal(vm.probabilityEndPosition, 1);
 	});
 });

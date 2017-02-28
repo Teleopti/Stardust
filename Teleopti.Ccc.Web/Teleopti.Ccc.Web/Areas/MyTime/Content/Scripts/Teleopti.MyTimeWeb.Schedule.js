@@ -35,7 +35,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	};
 
 	var timeIndicatorDateTime;
-	var scheduleHeight = 668; // Same value as height of class "weekview-day-schedule"
 	var timeLineOffset = 119;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var completelyLoaded;
@@ -145,7 +144,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.timeText = timeline.TimeLineDisplay;
 
 		self.topPosition = ko.computed(function () {
-			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + "px";
+			return Math.round(constants.scheduleHeight * self.positionPercentage()) + timeLineOffset + "px";
 		});
 		self.evenHour = ko.computed(function () {
 			return timeFromMinutes.minute() === 0;

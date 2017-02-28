@@ -31,8 +31,6 @@ $(document).ready(function () {
 
 	var boundaries = {
 		"heightPercentagePerMinute": 0.01,
-		"shiftStartMinutes": 60, //01:00
-		"shiftEndMinutes": 1380, // 23:00
 		"probabilityStartMinutes": 240, // 04:00
 		"probabilityEndMinutes": 1380, // 23:00
 		"probabilityStartPosition": 0.14,
@@ -270,7 +268,7 @@ $(document).ready(function () {
 		equal(vm.cssClass(), vm.actualClass);
 		equal(vm.tooltips(), vm.actualTooltips);
 
-		// Hide after current time
+		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
 		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
 		equal(vm.tooltips(), "");
