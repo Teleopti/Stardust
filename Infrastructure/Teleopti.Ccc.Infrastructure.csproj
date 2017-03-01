@@ -245,7 +245,7 @@
     <Compile Include="Foundation\TokenIdentityProvider.cs" />
     <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
     <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
-    <Compile Include="Hangfire\AllowFailuresAttribute.cs" />
+    <Compile Include="Hangfire\AllowFailuresFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\HangfireClientStarter.cs" />
     <Compile Include="Hangfire\HangfireDashboardStarter.cs" />
     <Compile Include="Hangfire\HangfireEventClient.cs" />

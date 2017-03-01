@@ -68,10 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void WorkerIteration()
 		{
 			// will hang if nothing to work with
-			var count = Queues.OrderOfPriority()
-				.Select(x => monitoring.EnqueuedCount(x))
-				.Sum();
-			if (count > 0)
+			if (NumberOfEnqueuedJobs() > 0)
 				new Worker(Queues.OrderOfPriority().ToArray()).Execute(
 					new BackgroundProcessContext(
 						"fake server",
@@ -98,6 +95,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public long NumberOfJobsInQueue(string name)
 		{
 			return monitoring.EnqueuedCount(name);
+		}
+
+		public long NumberOfEnqueuedJobs()
+		{
+			return Queues.OrderOfPriority()
+				.Select(x => monitoring.EnqueuedCount(x))
+				.Sum();
 		}
 
 		public long NumberOfFailedJobs()

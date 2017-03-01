@@ -8,9 +8,9 @@ using Hangfire.States;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public class AllowFailuresFromArgument : JobFilterAttribute, IElectStateFilter
+	public class AllowFailuresFromArgumentAttribute : JobFilterAttribute, IElectStateFilter
 	{
-		private static readonly ILog Logger = LogProvider.For<AllowFailuresFromArgument>();
+		private static readonly ILog Logger = LogProvider.For<AllowFailuresFromArgumentAttribute>();
 
 		public void OnStateElection(ElectStateContext context)
 		{
