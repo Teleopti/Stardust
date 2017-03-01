@@ -12,11 +12,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizationEventStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust
+	public class WebIntradayOptimizationStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust
 	{
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public IntradayOptimizationEventStardustHandler(IntradayOptimization intradayOptimization,
+		public WebIntradayOptimizationStardustHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
 			IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills, IJobResultRepository jobResultRepository)

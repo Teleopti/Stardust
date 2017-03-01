@@ -1256,7 +1256,7 @@
     <Compile Include="Optimization\AgentGroupAllAgents.cs" />
     <Compile Include="Optimization\Filters\SkillFilter.cs" />
     <Compile Include="Optimization\IntradayOptimizationEventBaseHandler.cs" />
-    <Compile Include="Optimization\IntradayOptimizationEventStardustHandler.cs" />
+    <Compile Include="Optimization\WebIntradayOptimizationStardustHandler.cs" />
     <Compile Include="Optimization\OptimizationLimitsForAgent.cs" />
     <Compile Include="Optimization\OptimizationLimitsForAgentFactory.cs" />
     <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />

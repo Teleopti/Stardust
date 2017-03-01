@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.ApplyAspects();
 					}
                 })
-				.Except<IntradayOptimizationEventStardustHandler>(ct =>
+				.Except<WebIntradayOptimizationStardustHandler>(ct =>
 				{
 					if (_config.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
 					{
