@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
-		async public Task<HttpResponseMessage> Post()
+		public async Task<HttpResponseMessage> Post()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
 			{
@@ -242,11 +241,5 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return obj == null ? string.Empty : obj.ToString();
 		}
 
-	}
-
-	public enum TemplateType
-	{
-		User = 0,
-		Agent
 	}
 }
