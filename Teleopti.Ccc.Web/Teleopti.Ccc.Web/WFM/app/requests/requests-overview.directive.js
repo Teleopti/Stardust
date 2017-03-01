@@ -67,9 +67,11 @@
 			if (!vm.isActive) {
 				return;
 			}
-			if(params){
-				vm.agentSearchTerm = params.agentSearchTerm;
-				vm.selectedTeamIds = params.selectedTeamIds;
+			if (params) {
+				console.log("params: ", params);
+				if (params.agentSearchTerm) vm.agentSearchTerm = params.agentSearchTerm;
+				if (params.selectedTeamIds) vm.selectedTeamIds = params.selectedTeamIds;
+				if (params.paging) vm.paging = params.paging;
 			}
 
 			var requestsFilter = {
@@ -127,15 +129,14 @@
 					endDate: vm.period ? vm.period.endDate : null,
 					filters: vm.filters,
 					isActive: vm.isActive,
-					sortingOrders: vm.sortingOrders,
-					paging: vm.paging
+					sortingOrders: vm.sortingOrders
 				};
 				return target;
 			}, function (newValue, oldValue) {
 				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
 					return;
 				}
-				
+
 				scope.$broadcast('reload.requests.without.selection');
 
 				if (!ctrl.loadRequestWatchersInitialized) {

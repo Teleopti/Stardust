@@ -4,9 +4,9 @@
 		.controller('requestsFooterCtrl', requestsFooterController)
 		.directive('requestsFooter', requestsFooterDirective);
 
-	requestsFooterController.$inject = ['$scope', "Toggle", "requestCommandParamsHolder", "$translate"];
+	requestsFooterController.$inject = ['$rootScope', '$scope', "Toggle", "requestCommandParamsHolder", "$translate"];
 
-	function requestsFooterController($scope, toggleService, requestCommandParamsHolder, $translate) {
+	function requestsFooterController($rootScope, $scope, toggleService, requestCommandParamsHolder, $translate) {
 		var vm = this;
 		vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 		vm.onPageSizeChanges = onPageSizeChanges;
@@ -18,10 +18,16 @@
 		function onPageSizeChanges() {
 			vm.paging.totalPages = Math.ceil(vm.paging.totalRequestsCount / vm.paging.pageSize);
 			vm.paging.pageNumber = 1;
+			forceRequestsReloadWithPagingChange();
 		}
 
 		function onPageNumberChange(data) {
 			vm.paging.pageNumber = data;
+			forceRequestsReloadWithPagingChange();
+		}
+
+		function forceRequestsReloadWithPagingChange() {
+			$rootScope.$broadcast('reload.requests.with.selection', { paging: vm.paging });
 		}
 
 		function getSelectedRequestsInfoText() {
