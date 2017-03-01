@@ -299,6 +299,25 @@ module.exports = function(grunt) {
             }
         },
         copy: {
+            devCss: {
+                files: [{
+                    expand: true,
+                    cwd: 'dist',
+                    src: ['*.css', '!*.min.css'],
+                    dest: 'dist/',
+                    rename: function(dest, src) {
+                        return dest + src.replace('.css', '.min.css')
+                    }
+                }, {
+                    expand: true,
+                    cwd: 'css',
+                    src: '*.css',
+                    dest: 'dist/',
+                    rename: function(dest, src) {
+                        return dest + src.replace('.css', '.min.css')
+                    }
+                }]
+            },
             sourceMaps: {
                 files: [
                     // includes files within path
@@ -388,7 +407,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
     grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
-    grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'cssmin', 'newer:copy', 'generateIndexDev']);
+    grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'copy:devCss', 'newer:copy', 'generateIndexDev']);
     grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
     grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
     grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
