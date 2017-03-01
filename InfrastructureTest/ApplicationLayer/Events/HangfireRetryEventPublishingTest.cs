@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<FailsAfterAttribute.FailsAfterAspect>();
+			system.AddService<FailingAfterAspect>();
 			system.AddService<FailingHandlerImpl>();
 		}
 		
 		[Test]
 		public void ShouldScheduleRetry()
 		{
-			Publisher.Publish(new RetryEvent());
+			Publisher.Publish(new ThreeRetryEvent());
 
 			Hangfire.WorkerIteration();
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldScheduleSecondAttempt()
 		{
-			Publisher.Publish(new RetryEvent());
+			Publisher.Publish(new ThreeRetryEvent());
 
 			Hangfire.WorkerIteration();
 			Hangfire.RequeueScheduledJobs();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldFailOnLastAttempt()
 		{
-			Publisher.Publish(new RetryEvent());
+			Publisher.Publish(new ThreeRetryEvent());
 
 			Hangfire.WorkerIteration();
 			Hangfire.RequeueScheduledJobs();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldSucceedOnSecondAttempt()
 		{
-			Publisher.Publish(new RetryEvent());
+			Publisher.Publish(new ThreeRetryEvent());
 
 			Hangfire.WorkerIteration();
 			Hangfire.RequeueScheduledJobs();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldNotRetryMinutelyRecurringJobs()
 		{
-			Recurring.PublishMinutely(new RecurringEvent());
+			Recurring.PublishMinutely(new MinutelyEvent());
 
 			Hangfire.TriggerReccuringJobs();
 			20.Times(() =>
@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldHandleRetriesWheAspectFails()
+		public void ShouldRetry10TimesWhenAspectFails()
 		{
-			Publisher.Publish(new AspectEvent());
+			Publisher.Publish(new TenRetryAspectEvent());
 
 			11.Times(() =>
 			{
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			FailingHandler.Attempts.Should().Be(10);
 		}
 		
-		public class RetryEvent : IEvent
+		public class ThreeRetryEvent : IEvent
 		{
 		}
 
@@ -131,38 +131,19 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 		}
 
-		public class RecurringEvent : IEvent
+		public class MinutelyEvent : IEvent
 		{
 		}
 
-		public class AspectEvent : IEvent
+		public class TenRetryAspectEvent : IEvent
 		{
-		}
-
-		public class FailsAfterAttribute : AspectAttribute
-		{
-			
-			public FailsAfterAttribute() : base(typeof(FailsAfterAspect))
-			{
-			}
-			public class FailsAfterAspect : IAspect
-			{
-				public void OnBeforeInvocation(IInvocationInfo invocation)
-				{
-				}
-
-				public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
-				{
-					throw new NotImplementedException();
-				}
-			}
 		}
 
 		public class FailingHandlerImpl :
-			IHandleEvent<RetryEvent>,
+			IHandleEvent<ThreeRetryEvent>,
 			IHandleEvent<DefaultRetryEvent>,
-			IHandleEvent<RecurringEvent>,
-			IHandleEvent<AspectEvent>,
+			IHandleEvent<MinutelyEvent>,
+			IHandleEvent<TenRetryAspectEvent>,
 			IRunOnHangfire
 		{
 
@@ -170,13 +151,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			public bool Succeeds = false;
 
 			[Attempts(3)]
-			public void Handle(RetryEvent @event)
+			public void Handle(ThreeRetryEvent @event)
 			{
 				Attempts++;
 				if (!Succeeds)
 					throw new Exception("fail!");
 			}
-
+			
 			public void Handle(DefaultRetryEvent @event)
 			{
 				Attempts++;
@@ -184,18 +165,37 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 					throw new Exception("fail!");
 			}
 
-			public void Handle(RecurringEvent @event)
+			public void Handle(MinutelyEvent @event)
 			{
 				Attempts++;
 				if (!Succeeds)
 					throw new Exception("fail!");
 			}
 
-			[FailsAfter]
+			[FailingAfterAspect]
 			[Attempts(10)]
-			public virtual void Handle(AspectEvent @event)
+			public virtual void Handle(TenRetryAspectEvent @event)
 			{
 				Attempts++;
+			}
+		}
+
+		public class FailingAfterAspectAttribute : AspectAttribute
+		{
+			public FailingAfterAspectAttribute() : base(typeof(FailingAfterAspect))
+			{
+			}
+		}
+
+		public class FailingAfterAspect : IAspect
+		{
+			public void OnBeforeInvocation(IInvocationInfo invocation)
+			{
+			}
+
+			public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+			{
+				throw new NotImplementedException();
 			}
 		}
 	}
