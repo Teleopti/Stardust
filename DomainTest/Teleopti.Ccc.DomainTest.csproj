@@ -357,7 +357,7 @@
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatNoRandomnessTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTeamTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTest.cs" />
-    <Compile Include="SchedulingScenarios\MaxSeat\TestData\TeamBlockType.cs" />
+    <Compile Include="SchedulingScenarios\TeamBlockType.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduleDaysTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduledDaysCascadingTest.cs" />

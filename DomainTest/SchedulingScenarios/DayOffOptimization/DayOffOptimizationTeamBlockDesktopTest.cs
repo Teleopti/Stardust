@@ -296,9 +296,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		[TestCase(true)]
-		[TestCase(false)]
-		public void ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(bool agentHasChoosenClassicInGui)
+		[TestCase(TeamBlockType.Team)]
+		[TestCase(TeamBlockType.Block)]
+		[TestCase(TeamBlockType.TeamAndBlock)]
+		[TestCase(TeamBlockType.Classic)]
+		public void ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -322,16 +324,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses[5].SetDayOff(new DayOffTemplate());
 			asses[0].ClearMainActivities();//bland day
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
+			IExtraPreferences extra = null;
+			switch (teamBlockType)
+			{
+				case TeamBlockType.Classic:
+					extra = new ExtraPreferences {UseTeams = false, UseTeamBlockOption = false};
+					break;
+				case TeamBlockType.Block:
+					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
+					break;
+				case TeamBlockType.Team:
+					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
+					break;
+				case TeamBlockType.TeamAndBlock:
+					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
+					break;
+			}
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag() },
-				Extra = { UseTeams = !agentHasChoosenClassicInGui, UseTeamBlockOption = false }
+				Extra = extra
 			};
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			var wasModified = !stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-			if (agentHasChoosenClassicInGui)
+			if (teamBlockType == TeamBlockType.Classic)
 			{
 				wasModified.Should().Be.False();
 			}
