@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -9,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			system.AddService<FailsAfterAttribute.FailsAfterAspect>();
 			system.AddService<FailingHandlerImpl>();
 		}
 		
@@ -107,6 +108,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			FailingHandler.Attempts.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldHandleRetriesWheAspectFails()
+		{
+			Publisher.Publish(new AspectEvent());
+
+			11.Times(() =>
+			{
+				Hangfire.WorkerIteration();
+				Hangfire.RequeueScheduledJobs();
+			});
+
+			FailingHandler.Attempts.Should().Be(10);
+		}
 		
 		public class RetryEvent : IEvent
 		{
@@ -120,10 +135,34 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 		}
 
+		public class AspectEvent : IEvent
+		{
+		}
+
+		public class FailsAfterAttribute : AspectAttribute
+		{
+			
+			public FailsAfterAttribute() : base(typeof(FailsAfterAspect))
+			{
+			}
+			public class FailsAfterAspect : IAspect
+			{
+				public void OnBeforeInvocation(IInvocationInfo invocation)
+				{
+				}
+
+				public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+				{
+					throw new NotImplementedException();
+				}
+			}
+		}
+
 		public class FailingHandlerImpl :
 			IHandleEvent<RetryEvent>,
 			IHandleEvent<DefaultRetryEvent>,
 			IHandleEvent<RecurringEvent>,
+			IHandleEvent<AspectEvent>,
 			IRunOnHangfire
 		{
 
@@ -152,6 +191,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 					throw new Exception("fail!");
 			}
 
+			[FailsAfter]
+			[Attempts(10)]
+			public virtual void Handle(AspectEvent @event)
+			{
+				Attempts++;
+			}
 		}
 	}
 }
