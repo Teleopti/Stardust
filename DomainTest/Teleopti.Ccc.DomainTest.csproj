@@ -312,6 +312,7 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="Optimization\FetchAgentGroupModelTest.cs" />
+    <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationAgentGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationJobFromWebTest.cs" />
