@@ -42,8 +42,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			using (CommandScope.Create(@event))
 			{
-				DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule);
-				_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, @event.Period);
+				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
+				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule);
+				_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, period);
 			}
 		}
 

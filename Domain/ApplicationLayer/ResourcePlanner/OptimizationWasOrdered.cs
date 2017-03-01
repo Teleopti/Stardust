@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class OptimizationWasOrdered : WebScheduleStardustBaseEvent, ICommandIdentifier
 	{
-		public DateOnlyPeriod Period { get; set; }
+		public DateOnly StartDate { get; set; }
+		public DateOnly EndDate { get; set; }
 		public IEnumerable<Guid> AgentsInIsland { get; set; }
 		public bool RunResolveWeeklyRestRule { get; set; }
 		public IEnumerable<Guid> AgentsToOptimize { get; set; }

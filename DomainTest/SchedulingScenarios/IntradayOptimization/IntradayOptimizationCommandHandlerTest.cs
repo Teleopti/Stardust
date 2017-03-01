@@ -29,8 +29,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand {Period = period });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single()
-				.Period.Should().Be.EqualTo(period);
+			var optimizationWasOrdered = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single();
+			optimizationWasOrdered.StartDate.Should().Be.EqualTo(period.StartDate);
+			optimizationWasOrdered.EndDate.Should().Be.EqualTo(period.EndDate);
 		}
 
 		[Test]

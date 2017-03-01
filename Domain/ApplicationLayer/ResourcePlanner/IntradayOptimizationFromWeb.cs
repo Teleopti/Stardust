@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		protected override Guid? SaveJobResultIfNeeded(IPlanningPeriod planningPeriod)
 		{
-			var jobResult = new JobResult(JobCategory.WebSchedule, planningPeriod.Range, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+			var jobResult = new JobResult(JobCategory.WebIntradayOptimiztion, planningPeriod.Range, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 			_jobResultRepository.Add(jobResult);
 			planningPeriod.JobResults.Add(jobResult);
 			return jobResult.Id;
@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				Period = planningPeriod.Range,
 				RunResolveWeeklyRestRule = true,
-				JobResultId = jobResultId
+				JobResultId = jobResultId,
+				PlanningPeriodId = planningPeriodId
 			};
 			if (planningPeriod.AgentGroup != null)
 			{

@@ -10,12 +10,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class WebOptimizationHandler : IHandle<WebDayoffOptimizationStardustEvent>
+	public class WebDayOffOptimizationHandler : IHandle<WebDayoffOptimizationStardustEvent>
 	{
 		private readonly IComponentContext _componentContext;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 
-		public WebOptimizationHandler(IStardustJobFeedback stardustJobFeedback, IComponentContext componentContext)
+		public WebDayOffOptimizationHandler(IStardustJobFeedback stardustJobFeedback, IComponentContext componentContext)
 		{
 			_stardustJobFeedback = stardustJobFeedback;
 			_componentContext = componentContext;

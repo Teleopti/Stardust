@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_jobResultRepository = jobResultRepository;
 		}
 
+		[AsSystem]
 		public override void Handle(OptimizationWasOrdered @event)
 		{
 			try
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[UnitOfWork]
 		protected virtual void SaveDetailToJobResult(OptimizationWasOrdered @event, DetailLevel level, string message, Exception exception)
 		{
-			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), 1);
+			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), @event.TotalEvents);
 		}
 	}
 }

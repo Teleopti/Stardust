@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				{
 					events.Add(new OptimizationWasOrdered
 					{
-						Period = command.Period,
+						StartDate = command.Period.StartDate,
+						EndDate = command.Period.EndDate,
 						RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
 						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
 						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
@@ -56,8 +57,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				}
 			}
 			events.ForEach(e => e.TotalEvents = events.Count);
-			if(command.JobResultId!=null)
+			if (command.JobResultId != null)
 				events.ForEach(e => e.JobResultId = command.JobResultId.Value);
+			if (command.PlanningPeriodId != null)
+				events.ForEach(e => e.PlanningPeriodId = command.PlanningPeriodId.Value);
 			_eventPublisher.Publish(events.ToArray());
 		}
 

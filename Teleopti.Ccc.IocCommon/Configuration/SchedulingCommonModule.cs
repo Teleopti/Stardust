@@ -441,12 +441,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
 			{
 				builder.RegisterType<SchedulePlanningPeriodJobCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //can be single after remove ExecuteAndReturn method
-				builder.RegisterType<IntradayOptimizationFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<IntradayOptimizationJobFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			else
 			{
 				builder.RegisterType<SchedulePlanningPeriodCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<IntradayOptimizationJobFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<IntradayOptimizationFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			}
 
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
