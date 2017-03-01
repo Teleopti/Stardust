@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private PlanningPeriod planningPeriod;
 		public WebDayoffOptimizationStardustHandler Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupStaffLoader AgentGroupStaffLoader;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;

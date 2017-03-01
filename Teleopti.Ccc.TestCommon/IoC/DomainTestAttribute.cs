@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			system.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
 
-			system.UseTestDouble<FakeAgentGroupStaffLoader>().For<IAgentGroupStaffLoader>();
 			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 
 			// Tenant (and datasource) stuff

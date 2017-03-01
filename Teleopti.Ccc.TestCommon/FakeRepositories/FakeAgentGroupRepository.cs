@@ -4,8 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

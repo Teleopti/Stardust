@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public WebScheduleStardustHandler Target;
 		public FullScheduling FullScheduling;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupStaffLoader AgentGroupStaffLoader;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		private PlanningPeriod planningPeriod;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;

@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public MutableNow Now;
 		public FakeMissingForecastProvider MissingForecastProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupStaffLoader AgentGroupStaffLoader;
 		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakeFixedStaffLoader FixedStaffLoader;
 
 		[Test]
 		public void ShouldReturnDefaultPlanningPeriodForAgentGroupIfNotCreated()
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2010, 1, 1));
-			AgentGroupStaffLoader.SetPeople(person);
+			FixedStaffLoader.SetPeople(person);
 
 			var result = (OkResult)Target.Publish(Guid.NewGuid());
 			result.Should().Not.Be.Null();
