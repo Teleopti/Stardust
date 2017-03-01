@@ -99,89 +99,91 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		{
 			var updateReadModelInterval = _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-			var skillCombinations = loadSkillCombination();
-
-			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
-			using (var connection = new SqlConnection(connectionString))
+			lock (skillCombinationLock)
 			{
-				connection.Open();
+				var skillCombinations = loadSkillCombination();
 
-				var purgeTime = dataLoaded.AddMinutes(-updateReadModelInterval*2);
-				//Purge old intervals that is out of the scope
-				using (var deleteCommand = new SqlCommand(@"
+				var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
+				using (var connection = new SqlConnection(connectionString))
+				{
+					connection.Open();
+
+					var purgeTime = dataLoaded.AddMinutes(-updateReadModelInterval*2);
+					//Purge old intervals that is out of the scope
+					using (var deleteCommand = new SqlCommand(@"
 						DELETE FROM [ReadModel].[SkillCombinationResource] 
 						WHERE StartDateTime < @purgeTime", connection))
-				{
-					deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
-					deleteCommand.ExecuteNonQuery();
-				}
+					{
+						deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
+						deleteCommand.ExecuteNonQuery();
+					}
 
-				using (var deleteCommand = new SqlCommand($@"
+					using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResourceDelta] 
 						WHERE StartDateTime < @purgeTime", connection))
-				{
-					deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
-					deleteCommand.ExecuteNonQuery();
-				}
-
-
-				foreach (var skillCombinationResource in skillCombinationResources)
-				{
-					var key = keyFor(skillCombinationResource.SkillCombination);
-					Guid id;
-					lock (skillCombinationLock)
 					{
+						deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
+						deleteCommand.ExecuteNonQuery();
+					}
+
+
+					foreach (var skillCombinationResource in skillCombinationResources)
+					{
+						var key = keyFor(skillCombinationResource.SkillCombination);
+						Guid id;
+
 						if (!skillCombinations.TryGetValue(key, out id))
 						{
 							id = persistSkillCombination(skillCombinationResource.SkillCombination);
 							skillCombinations.Add(key, id);
 						}
-					}
 
 
-					using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-					{
-						using (var deleteCommand = new SqlCommand($@"
+
+						using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+						{
+							using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM [ReadModel].[SkillCombinationResource] 
 						WHERE SkillCombinationId = @id 
 						AND StartDateTime = @startTime", connection, transaction))
-						{
-							deleteCommand.Parameters.AddWithValue("@id", id);
-							deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
-							deleteCommand.ExecuteNonQuery();
-						}
+							{
+								deleteCommand.Parameters.AddWithValue("@id", id);
+								deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
+								deleteCommand.ExecuteNonQuery();
+							}
 
-						using (var deleteCommand = new SqlCommand($@"
+							using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM ReadModel.SkillCombinationResourceDelta
 						WHERE InsertedOn < @dataLoaded
 						AND SkillCombinationId = @id
 						AND StartDateTime = @startTime", connection, transaction))
-						{
-							deleteCommand.Parameters.AddWithValue("@dataLoaded", dataLoaded);
-							deleteCommand.Parameters.AddWithValue("@id", id);
-							deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
-							deleteCommand.ExecuteNonQuery();
-						}
+							{
+								deleteCommand.Parameters.AddWithValue("@dataLoaded", dataLoaded);
+								deleteCommand.Parameters.AddWithValue("@id", id);
+								deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
+								deleteCommand.ExecuteNonQuery();
+							}
 
 
-						using (var insertCommand = new SqlCommand(@"
+							using (var insertCommand = new SqlCommand(@"
 							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
 							VALUES (@SkillCombinationId, @StartDateTime, @EndDateTime, @Resource, @InsertedOn, @BusinessUnit)", connection, transaction))
-						{
-							insertCommand.Parameters.AddWithValue("@SkillCombinationId", id);
-							insertCommand.Parameters.AddWithValue("@StartDateTime", skillCombinationResource.StartDateTime);
-							insertCommand.Parameters.AddWithValue("@EndDateTime", skillCombinationResource.EndDateTime);
-							insertCommand.Parameters.AddWithValue("@Resource", skillCombinationResource.Resource);
-							insertCommand.Parameters.AddWithValue("@InsertedOn", _now.UtcDateTime());
-							insertCommand.Parameters.AddWithValue("@BusinessUnit", bu);
+							{
+								insertCommand.Parameters.AddWithValue("@SkillCombinationId", id);
+								insertCommand.Parameters.AddWithValue("@StartDateTime", skillCombinationResource.StartDateTime);
+								insertCommand.Parameters.AddWithValue("@EndDateTime", skillCombinationResource.EndDateTime);
+								insertCommand.Parameters.AddWithValue("@Resource", skillCombinationResource.Resource);
+								insertCommand.Parameters.AddWithValue("@InsertedOn", _now.UtcDateTime());
+								insertCommand.Parameters.AddWithValue("@BusinessUnit", bu);
 
-							insertCommand.ExecuteNonQuery();
+								insertCommand.ExecuteNonQuery();
+							}
+
+							transaction.Commit();
 						}
-
-						transaction.Commit();
 					}
-				}
 
+				}
 			}
 		}
 
