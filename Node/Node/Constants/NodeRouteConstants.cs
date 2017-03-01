@@ -12,6 +12,8 @@
 
 		public const string IsAlive = "ping";
 
+		public const string IsWorking = "isworking";
+
 		public const string IsIdle = "isIdle";
 	}
 }

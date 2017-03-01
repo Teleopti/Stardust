@@ -134,6 +134,11 @@ namespace Stardust.Node
 			return Ok();
 		}
 
+		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsWorking)]
+		public IHttpActionResult IsWorking()
+		{
+			return Ok(_workerWrapper.IsWorking);
+		}
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
 		public IHttpActionResult IsIdle()
