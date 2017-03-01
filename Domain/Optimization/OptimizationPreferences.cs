@@ -120,6 +120,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			throw new NotSupportedException($"Cannot find block finder for {BlockTypeValue}");
 		}
+
+		public bool IsClassic()
+		{
+			return !UseTeams && !UseTeamBlockOption;
+		}
 	}
 
     public class ShiftPreferences : IShiftPreferences

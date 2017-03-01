@@ -354,6 +354,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         bool UseTeamBlockOption { get; set; }
 
 	    IBlockFinder BlockFinder();
+	    bool IsClassic();
     }
 
     /// <summary>

@@ -57,13 +57,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			var stateHolder = _schedulerStateHolder();
+			if(optimizationPreferences.Extra.IsClassic() && selectedDays.Any(selectedDay => !selectedDay.IsScheduled()))
+				return;
 
+			var stateHolder = _schedulerStateHolder();
 #pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true))
 #pragma warning restore 618
 			{
 				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
+
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
