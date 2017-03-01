@@ -213,6 +213,10 @@
 			return personSelectionSvc.anyAgentChecked();
 		};
 
+		vm.activateCommandMenu = function(){
+			return vm.canRemoveActivity() || vm.canRemoveAbsence() || personSelectionSvc.anyAgentChecked();
+		};
+
 		function registerShortCuts() {
 			vm.commands.forEach(function (cmd) {
 				function wrappedAction() {

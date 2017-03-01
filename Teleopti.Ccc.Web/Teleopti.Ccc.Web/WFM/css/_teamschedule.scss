@@ -352,6 +352,9 @@ wfm-multiple-search-input .advanced-input {
 			}
 		}
 	}
+	.context-menu.active-menu{
+		background: rgba(0,0,0,.06)!important;
+	}
 	.view-navigator-container .wfm-btn {
 		padding: 5px;
 	}
