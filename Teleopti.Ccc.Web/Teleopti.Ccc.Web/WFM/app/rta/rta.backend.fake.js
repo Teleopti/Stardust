@@ -35,7 +35,9 @@
 			withSkillAreas: withSkillAreas,
 			withPhoneState: withPhoneState,
 			withOrganization: withOrganization,
-			withOrganizationOnSkills: withOrganizationOnSkills
+			withOrganizationOnSkills: withOrganizationOnSkills,
+			withPermittedSites: withPermittedSites,
+			withPermittedTeams: withPermittedTeams
 		};
 
 		///////////////////////////////
@@ -59,6 +61,8 @@
 		var organizationsOnSkills = [];
 		var siteAdherencesForSkill = [];
 		var teamAdherencesForSkill = [];
+		var permittedSitesId = [];
+		var permittedTeamsId = [];
 		var paramsOf = function (url) {
 			var result = {};
 			var queryString = url.split("?")[1];
@@ -490,9 +494,15 @@
 
 		fake(/\.\.\/api\/Sites$/,
 			function (params) {
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizaionlOnly_40660"])
+					sites = filteredByPermission(sites,permittedSitesId);
 				return [200, sites];
 			});
-
+		function filteredByPermission(content,permittedcontentIds){
+			return content.filter(function(c){
+				return permittedcontentIds.indexOf(c.Id) > -1;
+			});
+		}
 		function sitesOrTeamsForSkillOrSkillArea(adherences, adherenceKey, paramId, sitesOrTeams) {
 			var siteOrTeamIdsBySkillOrSkillAreaId = adherences.filter(function (a) {
 				return paramId.indexOf(a[adherenceKey]) > -1;
@@ -564,6 +574,8 @@
 
 		fake(/\.\.\/api\/Teams\/Build(.*)/,
 			function (params) {
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizaionlOnly_40660"])
+					teams = filteredByPermission(teams,permittedTeamsId);
 				return [200, teams.filter(function (team) {
 					return team.SiteId === params.siteId;
 				})];
@@ -639,6 +651,8 @@
 			phoneStates = [];
 			siteAdherencesForSkill = [];
 			teamAdherencesForSkill = [];
+			permittedSitesId = [];
+			permittedTeamsId = [];
 		}
 
 		function withToggle(toggle) {
@@ -696,6 +710,13 @@
 			return this;
 		};
 
+		function withPermittedSites(siteIds){
+			siteIds.forEach(function(siteId){
+				permittedSitesId.push(siteId);
+			});
+			return this;
+		}
+
 		function withSiteAdherence(siteAdherence) {
 			siteAdherences.push(siteAdherence);
 			return this;
@@ -723,6 +744,13 @@
 
 		function withTeam(team) {
 			teams.push(team);
+			return this;
+		};
+
+		function withPermittedTeams(teamIds) {
+			teamIds.forEach(function(teamId){
+				permittedTeamsId.push(teamId);
+			});
 			return this;
 		};
 
