@@ -71,6 +71,7 @@
 		vm.goToSelectSkill = goToSelectSkill;
 		vm.toggleSelection = toggleSelection;
 		vm.openSelectedItems = openSelectedItems;
+		
 		(function initialize() {
 			rtaService.getSkillAreas().then(function(skillAreas){
 				vm.skillAreas = skillAreas.SkillAreas;
@@ -137,8 +138,8 @@
 
 		function goToAgents(selectedItemIds) {
 			var stateParamsObject = {};
-			var skillOrSkillAreaKey = vm.selectedSkill != null ? 'skillIds' : 'skillAreaId';
-			var skillOrSkillAreaValue = vm.selectedSkill != null ? vm.skillIds : vm.skillAreaId;
+			var skillOrSkillAreaKey = vm.skillIds != null ? 'skillIds' : 'skillAreaId';
+			var skillOrSkillAreaValue = vm.skillIds != null ? vm.skillIds : vm.skillAreaId;
 			var sitesOrTeamsKey = vm.sites ? 'siteIds' : 'teamIds';
 			var sitesOrTeamsValue = selectedItemIds;
 			if (vm.skillIds || vm.skillAreaId) {
@@ -242,20 +243,6 @@
 					rtaRouteService.goToSites();
 			}
 		);
-
-		$scope.$watch(function () {
-			return vm.selectedSkill;
-		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue))
-				vm.goToDashboard();
-		});
-
-		$scope.$watch(function () {
-			return vm.selectedSkillArea;
-		}, function (newValue, oldValue) {
-			if (changed(newValue, oldValue))
-				vm.goToDashboard();
-		});
 
 		$scope.$on('$destroy', function () { $interval.cancel(polling); });
 
