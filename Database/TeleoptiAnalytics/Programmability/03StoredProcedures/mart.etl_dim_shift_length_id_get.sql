@@ -14,19 +14,21 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	
 	DECLARE @shift_length_id int
+	BEGIN TRANSACTION
+		SELECT @shift_length_id = shift_length_id 
+		FROM mart.dim_shift_length WITH (TABLOCKX)
+		WHERE shift_length_m = @shift_length_m
 
-    SELECT @shift_length_id = shift_length_id 
-	FROM mart.dim_shift_length
-	WHERE shift_length_m = @shift_length_m
+		IF @shift_length_id IS NULL
+		BEGIN
+			INSERT INTO mart.dim_shift_length (shift_length_m, shift_length_h, datasource_id)
+			VALUES (@shift_length_m, CONVERT(decimal(10,2), @shift_length_m / 60.0), 1)
 
-	IF @shift_length_id IS NULL
-	BEGIN
-		INSERT INTO mart.dim_shift_length (shift_length_m, shift_length_h, datasource_id)
-		VALUES (@shift_length_m, CONVERT(decimal(10,2), @shift_length_m / 60.0), 1)
-
-		SET @shift_length_id = @@IDENTITY
-	END
+			SET @shift_length_id = @@IDENTITY
+		END
+	COMMIT TRANSACTION
 
 	SELECT @shift_length_id
 END
