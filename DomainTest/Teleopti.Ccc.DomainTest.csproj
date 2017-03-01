@@ -314,6 +314,7 @@
     <Compile Include="Optimization\FetchAgentGroupModelTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationAgentGroupTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationJobFromWebTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
     <Compile Include="Optimization\AgentGroupModelPersisterTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicTest.cs" />

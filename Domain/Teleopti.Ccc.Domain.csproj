@@ -244,6 +244,9 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPreferenceMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsRequestMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\IIntradayOptimizationFromWeb.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWebBase.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationJobFromWeb.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ISchedulePlanningPeriodCommandHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandler.cs" />
