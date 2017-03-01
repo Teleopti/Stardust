@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Interfaces.Domain;
