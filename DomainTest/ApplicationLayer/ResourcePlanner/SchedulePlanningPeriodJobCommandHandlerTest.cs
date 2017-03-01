@@ -15,9 +15,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
+	[TestFixture]
 	[DomainTest]
 	[Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874)]
-	public class SchedulePlanningPeriodTaskCommandHandlerTest
+	public class SchedulePlanningPeriodJobCommandHandlerTest
 	{
 		public ISchedulePlanningPeriodCommandHandler Target;
 		public FakeJobResultRepository JobResultRepository;

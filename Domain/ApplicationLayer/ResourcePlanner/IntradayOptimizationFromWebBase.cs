@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public abstract class IntradayOptimizationFromWebBase: IIntradayOptimizationFromWeb
 	{
-		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+		private readonly IWebIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IPersonRepository _personRepository;
 
-		protected IntradayOptimizationFromWebBase(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler,
+		protected IntradayOptimizationFromWebBase(IWebIntradayOptimizationCommandHandler intradayOptimizationCommandHandler,
 			IPlanningPeriodRepository planningPeriodRepository, IPersonRepository personRepository)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;

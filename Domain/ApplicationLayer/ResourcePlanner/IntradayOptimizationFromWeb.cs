@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class IntradayOptimizationFromWeb: IntradayOptimizationFromWebBase
 	{
-		public IntradayOptimizationFromWeb(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler,
+		public IntradayOptimizationFromWeb(IWebIntradayOptimizationCommandHandler intradayOptimizationCommandHandler,
 			IPlanningPeriodRepository planningPeriodRepository, IPersonRepository personRepository)
 			: base(intradayOptimizationCommandHandler, planningPeriodRepository, personRepository)
 		{

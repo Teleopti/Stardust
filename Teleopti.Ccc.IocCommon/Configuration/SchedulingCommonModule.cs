@@ -437,16 +437,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentsToSkillGroups>().SingleInstance();
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
-			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
+			builder.RegisterType<IntradayOptimizationCommandHandler>().As<IDesktopIntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			if (_configuration.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
 			{
 				builder.RegisterType<SchedulePlanningPeriodJobCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //can be single after remove ExecuteAndReturn method
 				builder.RegisterType<IntradayOptimizationJobFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<WebIntradayOptimizationCommandHandler>().As<IWebIntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			}
 			else
 			{
 				builder.RegisterType<SchedulePlanningPeriodCommandHandler>().As<ISchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<IntradayOptimizationFromWeb>().As<IIntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<IntradayOptimizationCommandHandler>().As<IWebIntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			}
 
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();

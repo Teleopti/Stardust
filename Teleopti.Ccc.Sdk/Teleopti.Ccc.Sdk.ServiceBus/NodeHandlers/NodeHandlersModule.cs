@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebScheduleHandler>().As<IHandle<WebScheduleStardustEvent>>().SingleInstance();
 			builder.RegisterType<WebDayOffOptimizationHandler>().As<IHandle<WebDayoffOptimizationStardustEvent>>().SingleInstance();
-			builder.RegisterType<WebIntradayOptimizationHandler>().As<IHandle<OptimizationWasOrdered>>().SingleInstance();
+			builder.RegisterType<WebIntradayOptimizationHandler>().As<IHandle<WebIntradayOptimizationStardustEvent>>().SingleInstance();
 		}
 	}
 }

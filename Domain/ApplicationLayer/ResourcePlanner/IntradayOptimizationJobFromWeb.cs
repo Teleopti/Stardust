@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public IntradayOptimizationJobFromWeb(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler,
+		public IntradayOptimizationJobFromWeb(IWebIntradayOptimizationCommandHandler intradayOptimizationCommandHandler,
 			IPlanningPeriodRepository planningPeriodRepository, IPersonRepository personRepository,
 			IJobResultRepository jobResultRepository, ILoggedOnUser loggedOnUser)
 			: base(intradayOptimizationCommandHandler, planningPeriodRepository, personRepository)

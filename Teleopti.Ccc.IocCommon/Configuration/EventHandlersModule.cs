@@ -24,6 +24,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Aop;
@@ -96,22 +97,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                 .SingleInstance()
                 .Except<IntradayOptimizationEventRunInProcessHandler>(ct =>
                 {
-					if (!_config.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
-					{
-						ct.As<IHandleEvent<OptimizationWasOrdered>>()
+					ct.As<IHandleEvent<OptimizationWasOrdered>>()
 						.AsSelf()
 						.InstancePerLifetimeScope()
 						.ApplyAspects();
-					}
                 })
 				.Except<WebIntradayOptimizationStardustHandler>(ct =>
 				{
 					if (_config.Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874))
 					{
-						ct.As<IHandleEvent<OptimizationWasOrdered>>()
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
+						ct.As<IHandleEvent<WebIntradayOptimizationStardustEvent>>()
+							.AsSelf()
+							.InstancePerLifetimeScope()
+							.ApplyAspects();
 					}
 				})
                 .Except<ShiftTradeRequestHandler>(ct =>

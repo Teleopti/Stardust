@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
@@ -75,14 +76,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var startDate = new DateOnly(2017, 3, 1);
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimiztion, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
-			Target.Handle(new OptimizationWasOrdered
+			Target.Handle(new WebIntradayOptimizationStardustEvent
 			{
 				JobResultId = jobResultId,
 				TotalEvents = 3,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
-				StartDate = startDate,
-				EndDate = endDate
+				OptimizationWasOrdered = new OptimizationWasOrdered
+				{
+					StartDate = startDate,
+					EndDate = endDate
+				}
 			});
 
 			var jobResult = JobResultRepository.Get(jobResultId);
@@ -104,14 +108,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var startDate = new DateOnly(2017, 3, 1);
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimiztion, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
-			Target.Handle(new OptimizationWasOrdered
+			Target.Handle(new WebIntradayOptimizationStardustEvent
 			{
 				JobResultId = jobResultId,
 				TotalEvents = 1,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
-				StartDate = startDate,
-				EndDate = endDate
+				OptimizationWasOrdered = new OptimizationWasOrdered
+				{
+					StartDate = startDate,
+					EndDate = endDate
+				}
 			});
 
 			var jobResult = JobResultRepository.Get(jobResultId);

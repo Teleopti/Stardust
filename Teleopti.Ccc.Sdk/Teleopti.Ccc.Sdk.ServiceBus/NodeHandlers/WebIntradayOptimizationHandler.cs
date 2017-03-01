@@ -3,13 +3,13 @@ using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class WebIntradayOptimizationHandler : IHandle<OptimizationWasOrdered>
+	public class WebIntradayOptimizationHandler : IHandle<WebIntradayOptimizationStardustEvent>
 	{
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 		private readonly IComponentContext _componentContext;
@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		}
 
 		[AsSystem]
-		public void Handle(OptimizationWasOrdered parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public void Handle(WebIntradayOptimizationStardustEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
-			var theRealOne = _componentContext.Resolve<IHandleEvent<OptimizationWasOrdered>>();
+			var theRealOne = _componentContext.Resolve<IHandleEvent<WebIntradayOptimizationStardustEvent>>();
 			theRealOne.Handle(parameters);
 			_stardustJobFeedback.SendProgress = null;
 		}

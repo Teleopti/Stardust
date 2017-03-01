@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
-	public class OptimizationWasOrdered : WebScheduleStardustBaseEvent, ICommandIdentifier
+	public class OptimizationWasOrdered : IEvent, ICommandIdentifier
 	{
 		public DateOnly StartDate { get; set; }
 		public DateOnly EndDate { get; set; }
@@ -18,6 +17,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public Guid CommandId { get; set; }
 		public IEnumerable<LockInfo> UserLocks { get; set; }
 		public IEnumerable<Guid> Skills { get; set; }
-		public int TotalEvents { get; set; }
 	}
 }

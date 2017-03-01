@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizeIntradayIslandsDesktop
 	{
-		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+		private readonly IDesktopIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 		private readonly Func<ISchedulerStateHolder> _currentSchedulerStateHolder;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 
-		public OptimizeIntradayIslandsDesktop(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
+		public OptimizeIntradayIslandsDesktop(IDesktopIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 																		DesktopOptimizationContext desktopOptimizationContext,
 																		Func<ISchedulerStateHolder> currentSchedulerStateHolder,
 																		IResourceCalculation resourceOptimizationHelper)

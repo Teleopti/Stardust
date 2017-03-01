@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
@@ -13,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public abstract class IntradayOptimizationEventBaseHandler: IHandleEvent<OptimizationWasOrdered>
+	public abstract class IntradayOptimizationEventBaseHandler
 	{
 		private readonly IntradayOptimization _intradayOptimization;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[TestLog]
-		public virtual void Handle(OptimizationWasOrdered @event)
+		protected virtual void HandleEvent(OptimizationWasOrdered @event)
 		{
 			using (CommandScope.Create(@event))
 			{

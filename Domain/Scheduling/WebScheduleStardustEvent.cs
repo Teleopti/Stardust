@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -36,5 +37,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public WebDayoffOptimizationStardustEvent(WebScheduleStardustBaseEvent @event) : base(@event)
 		{
 		}
+	}
+
+	public class WebIntradayOptimizationStardustEvent : WebScheduleStardustBaseEvent
+	{
+		public OptimizationWasOrdered OptimizationWasOrdered { get; set; }
+		public int TotalEvents { get; set; }
 	}
 }
