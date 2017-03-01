@@ -535,13 +535,7 @@ describe('RtaFilterController', function () {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
-			siteIds: [],
-			teamIds: []
-		}, {
-				reload: true,
-				notify: true
-			});
+		expect($state.go).not.toHaveBeenCalled();
 	});
 
 	it('should select site and teams when preexisting selection for site', function () {

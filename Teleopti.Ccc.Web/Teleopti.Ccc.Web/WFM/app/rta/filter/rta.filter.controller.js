@@ -232,6 +232,8 @@
 				selection['skillIds'] = $stateParams.skillIds;
 			else if ($stateParams.skillAreaId)
 				selection['skillAreaId'] = $stateParams.skillAreaId;
+			
+			if(angular.toJson(selection.siteIds) === angular.toJson(siteIds) && angular.toJson(selection.teamIds) === angular.toJson(teamIds)) return;		
 			stateGoToAgents(selection);
 		}
 
