@@ -1,5 +1,5 @@
 ﻿
-(function() {
+(function () {
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
@@ -7,17 +7,50 @@
 			function ($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, planningPeriodService, NoticeService, toggleService, $interval) {
 				var toggledOptimization = false;
 				var toggledSchedulingOnStardust = false;
+				var tenMinutes = 1000 * 60 * 10;
+				var planningPeriodId = $stateParams.id;
 				$scope.issues = [];
 				$scope.scheduledAgents = 0;
-				
 				$scope.hasIssues = false;
 				$scope.isDataAvailable = false;
 				$scope.dayNodes = [];
 				$scope.optimizeRunning = false;
 				$scope.optimizationHasBeenRun = false;
+				$scope.gridOptions = {};
+				$scope.optimizeDayOffIsEnabled = optimizeDayOffIsEnabled;
+				$scope.intraOptimize = intraOptimize;
+				$scope.publishSchedule = publishSchedule;
 
+				var keepAliveRef = $interval(function () {
+					planningPeriodService.keepAlive();
+				}, tenMinutes);
 
-				var initResult = function (interResult, result, planningPeriod) {
+				var checkProgressTimer = $interval(function () {
+					if (toggledOptimization)
+						checkIntradayOptimizationProgress();
+				}, 10000);
+
+				toggleService.togglesLoaded.then(function () {
+					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
+					toggledSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
+					initLoad();
+				});
+
+				$scope.$watch(function () { return $scope.dayNodes; },
+					function (newData) {
+						if (newData.length !== 0) {
+							parseRelativeDifference(newData);
+							parseWeekends(newData);
+						}
+					}
+				);
+
+				$scope.$on('$destroy', function () {
+					$interval.cancel(keepAliveRef);
+					$interval.cancel(checkProgressTimer);
+				});
+
+				function initResult(interResult, result, planningPeriod) {
 					$scope.planningPeriod = planningPeriod;
 					var scheduleResult = interResult.SkillResultList ? interResult.SkillResultList : [];
 					$scope.issues = result.BusinessRulesValidationResults ? result.BusinessRulesValidationResults : [];
@@ -31,76 +64,90 @@
 					parseRelativeDifference($scope.dayNodes);
 					parseWeekends($scope.dayNodes);
 
-					displayGird();
+					displayGrid();
 				}
 
-				var initLoad = function() {
+				function initLoad() {
 					if (toggledSchedulingOnStardust) {
-						planningPeriodService.lastJobResult({ id: $stateParams.id })
+						planningPeriodService.lastJobResult({ id: planningPeriodId })
 							.$promise.then(function (data) {
 								initResult(data.OptimizationResult, data.ScheduleResult, data.PlanningPeriod);
 							});
+						checkIntradayOptimizationProgress();
 					} else {
 						initResult($stateParams.interResult, $stateParams.result, $stateParams.planningperiod);
 					}
 				}
 
-				toggleService.togglesLoaded.then(function() {
-					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
-					toggledSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
-					initLoad();
-				});
-				$scope.optimizeDayOffIsEnabled = function() {
-					return (toggledOptimization && $stateParams.id !== "");
-				}
-				$scope.$watch(function() {
-						return $scope.dayNodes;
-					},
-					function(newData) {
-						if (newData.length !== 0) {
-							parseRelativeDifference(newData);
-							parseWeekends(newData);
-						}
+				function publishSchedule() {
+					//Translate me better
+					if ($scope.publishedClicked === true) {
+						NoticeService.warning($translate.instant('Error'), null, true);
+						return;
 					}
-				);
-
-				$scope.intraOptimize = function() {
-					$scope.optimizeRunning = true;
-					//to make sure long optimization request doesn't create a new cookie based on current time
-					//we call keepAlive here again
-					planningPeriodService.keepAlive().then(function () {
-						ResourcePlannerReportSrvc.intraOptimize({
-							id: $stateParams.id
-						}).$promise.then(function(result) {
-							$scope.optimizeRunning = false;
-							$scope.optimizationHasBeenRun = true;
-							//Untill further notice the intraOptimize results will be disabled
-							//$scope.dayNodes = result.SkillResultList;
-							notifyOptimizationDone();
-						}, function(reason) {
-							$scope.optimizeRunning = false;
-						});
+					$scope.publishedClicked = true;
+					planningPeriodService.publishPeriod({
+						id: planningPeriodId
+					}).$promise.then(function () {
+						NoticeService.success($translate.instant('Done'), null, true);
 					});
 				};
 
-				var tenMinutes = 1000 * 60 * 10;
-				var keepAliveRef = $interval(function() {
-					planningPeriodService.keepAlive();
-				}, tenMinutes);
+				function optimizeDayOffIsEnabled() {
+					return (toggledOptimization && planningPeriodId !== "");
+				}
 
-				var notifyOptimizationDone = function() {
+				function notifyOptimizationDone() {
 					NoticeService.success($translate.instant('Done'), null, true);
-				};
-				var parseRelativeDifference = function(period) {
+				}
+				function parseRelativeDifference(period) {
 					ResourcePlannerReportSrvc.parseRelDif(period);
-				};
-				var parseWeekends = function(period) {
+				}
+				function parseWeekends(period) {
 					ResourcePlannerReportSrvc.parseWeek(period);
+				}
+
+				function intraOptimize() {
+					$scope.optimizeRunning = true;
+					if (toggledSchedulingOnStardust) {
+						ResourcePlannerReportSrvc.intraOptimize({
+							id: planningPeriodId
+						}).$promise.then(checkIntradayOptimizationProgress, intradayOptimizationFailedHandler);
+					} else {
+						//to make sure long optimization request doesn't create a new cookie based on current time
+						//we call keepAlive here again
+						planningPeriodService.keepAlive().then(function () {
+							ResourcePlannerReportSrvc.intraOptimize({
+								id: planningPeriodId
+							}).$promise.then(intradayOptimizationDone, intradayOptimizationFailedHandler);
+						});
+					}
 				};
 
-				$scope.gridOptions = {};
+				function checkIntradayOptimizationProgress() {
+					planningPeriodService.lastIntradayOptimizationJobStatus({ id: planningPeriodId }).$promise.then(function (result) {
+						if (result.HasJob === false) {
+							$scope.optimizeRunning = false;
+						} else if (result.Successful === true) {
+							intradayOptimizationDone();
+						} else if (result.Failed) {
+							intradayOptimizationFailedHandler();
+						}
+					});
+				}
 
-				var displayGird = function() {
+				function intradayOptimizationDone() {
+					//Untill further notice the intraOptimize results will be disabled
+					//$scope.dayNodes = result.SkillResultList;
+					if ($scope.optimizeRunning && !$scope.optimizationHasBeenRun)
+						notifyOptimizationDone();
+					$scope.optimizeRunning = false;
+					$scope.optimizationHasBeenRun = true;
+				}
+				function intradayOptimizationFailedHandler() {
+					$scope.optimizeRunning = false;
+				}
+				function displayGrid() {
 					$scope.gridOptions = {
 						columnDefs: [
 							{
@@ -120,23 +167,6 @@
 						data: $scope.issues
 					};
 				}
-
-				$scope.publishSchedule = function() {
-					//Translate me better
-					if ($scope.publishedClicked === true) {
-						NoticeService.warning($translate.instant('Error'), null, true);
-						return;
-					}
-					$scope.publishedClicked = true;
-					planningPeriodService.publishPeriod({
-						id: $stateParams.id
-					}).$promise.then(function() {
-						NoticeService.success( $translate.instant('Done'), null, true);
-					});
-				};
-				$scope.$on('$destroy', function() {
-					$interval.cancel(keepAliveRef);
-				});
 			}
 		]);
 })();

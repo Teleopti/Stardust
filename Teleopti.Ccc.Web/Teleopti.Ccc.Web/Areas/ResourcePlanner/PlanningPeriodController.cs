@@ -68,17 +68,30 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
 			var lastJobResult = planningPeriod.JobResults.Where(x => x.JobCategory == JobCategory.WebSchedule).OrderByDescending(x => x.Timestamp).FirstOrDefault();
 			if (lastJobResult != null)
-				return
-					Ok(
-						new
-						{
-							HasJob = true,
-							CurrentStep = lastJobResult.Details.Count(),
-							TotalSteps = 2,
-							Successful = lastJobResult.FinishedOk,
-							Failed = lastJobResult.Details.Any(x => x.DetailLevel == DetailLevel.Error)
-						});
+				return Ok(new
+				{
+					HasJob = true,
+					CurrentStep = lastJobResult.Details.Count(),
+					TotalSteps = 2,
+					Successful = lastJobResult.FinishedOk,
+					Failed = lastJobResult.Details.Any(x => x.DetailLevel == DetailLevel.Error)
+				});
 			return Ok(new {HasJob = false});
+		}
+
+		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/intradaystatus")]
+		public virtual IHttpActionResult IntradayOptimizationJobStatus(Guid planningPeriodId)
+		{
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			var lastJobResult = planningPeriod.JobResults.Where(x => x.JobCategory == JobCategory.WebIntradayOptimiztion).OrderByDescending(x => x.Timestamp).FirstOrDefault();
+			if (lastJobResult != null)
+				return Ok(new
+				{
+					HasJob = true,
+					Successful = lastJobResult.FinishedOk,
+					Failed = lastJobResult.Details.Any(x => x.DetailLevel == DetailLevel.Error)
+				});
+			return Ok(new { HasJob = false });
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/agentgroup/{agentGroupId}/planningperiods")]
