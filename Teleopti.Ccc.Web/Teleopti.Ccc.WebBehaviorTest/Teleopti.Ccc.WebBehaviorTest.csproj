@@ -243,6 +243,11 @@
       <DependentUpon>CiscoFinesse.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\CiscoFinesseStepDefinition.cs" />
+    <Compile Include="MyTime\WeekScheduleStaffingProbability.feature.cs">
+      <DependentUpon>WeekScheduleStaffingProbability.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\Forecasting\Forecaster.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1193,6 +1198,10 @@
     <None Include="MyTime\CiscoFinesse.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CiscoFinesse.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\WeekScheduleStaffingProbability.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekScheduleStaffingProbability.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Forecasting\Forecaster.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
