@@ -68,7 +68,6 @@
 				return;
 			}
 			if (params) {
-				console.log("params: ", params);
 				if (params.agentSearchTerm) vm.agentSearchTerm = params.agentSearchTerm;
 				if (params.selectedTeamIds) vm.selectedTeamIds = params.selectedTeamIds;
 				if (params.paging) vm.paging = params.paging;
