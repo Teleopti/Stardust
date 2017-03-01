@@ -307,6 +307,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.AddModule(new ResourcePlannerModule());
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
 
+			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 		}
 	}
 }
