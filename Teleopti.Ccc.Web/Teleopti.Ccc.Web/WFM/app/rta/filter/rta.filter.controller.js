@@ -113,7 +113,8 @@
 
 
 		function keepSelectionForOrganization() {
-			selectSiteAndTeamsUnder();
+			if (vm.showOrganization)
+				selectSiteAndTeamsUnder();
 			if (teamIds.length > 0)
 				vm.teamsSelected = teamIds;
 			enableWatchOnTeam = true;

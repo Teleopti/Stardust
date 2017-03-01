@@ -33,6 +33,8 @@ describe('RtaFilterController', function () {
 
 		scope = $controllerBuilder.setup('RtaFilterController');
 
+		$state.current.name = 'rta.agents';
+
 		$fakeBackend.clear();
 		spyOn($state, 'go');
 
