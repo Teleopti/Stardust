@@ -49,6 +49,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithDefaultScenario("default")
+				.WithStateGroup("default", true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup("phone")
 				.WithStateCode("phone");
 			stateCodes.ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));

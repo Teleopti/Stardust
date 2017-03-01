@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithDefaultScenario("default")
+				.WithStateGroup("default", true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithActivity("phone")
 				.WithActivity("break")
 				.WithActivity("lunch");

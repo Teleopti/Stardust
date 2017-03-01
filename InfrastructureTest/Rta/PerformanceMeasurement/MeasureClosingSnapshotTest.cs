@@ -16,7 +16,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
@@ -49,6 +48,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		{
 			Analytics.WithDataSource(9, "sourceId");
 			Database
+				.WithStateGroup("default", true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup("phone")
 				.WithStateCode("phone");
 			stateCodes.ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));

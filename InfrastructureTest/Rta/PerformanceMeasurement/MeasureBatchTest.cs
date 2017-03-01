@@ -47,7 +47,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		private void createData()
 		{
 			Analytics.WithDataSource(9, "sourceId");
-			Database.WithDefaultScenario("default");
+			Database
+				.WithDefaultScenario("default")
+				.WithStateGroup("default", true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
 			stateCodes.ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
 			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
 
