@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INow _now;
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
+		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly IUserUiCulture _uiCulture;
 
@@ -21,12 +22,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			INow now,
 			ISiteRepository siteRepository,
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
+			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
 			ICurrentAuthorization authorization,
 			IUserUiCulture uiCulture)
 		{
 			_now = now;
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
+			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_authorization = authorization;
 			_uiCulture = uiCulture;
 		}
@@ -115,12 +118,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.ForSkills(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
 			var org = from num in numberOfAgents
 					  from site in sites
+					  let teamIdsBySkill = site.TeamCollection.Any() ? _numberOfAgentsInTeamReader.ForSkills(site.TeamCollection.Select(t => t.Id.Value), skillIds) : new Dictionary<Guid, int>() 
 					  where num.Key == site.Id.Value && num.Value > 0 && site.TeamCollection.Count > 0
 					  select new OrganizationSiteViewModel
 					  {
 						  Id = site.Id.Value,
 						  Name = site.Description.Name,
-						  Teams = site.TeamCollection.Select(
+						  Teams = site.TeamCollection
+						  .Where(team => teamIdsBySkill.ContainsKey(team.Id.Value))
+						  .Select(
 							  team => new OrganizationTeamViewModel
 							  {
 								  Id = team.Id.Value,

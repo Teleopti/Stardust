@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public SiteViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeNumberOfAgentsInSiteReader AgentsInSite;
+		public FakeNumberOfAgentsInTeamReader AgentsInTeam;
 		public FakeUserUiCulture UiCulture;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -190,16 +191,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var wrongSite = Guid.NewGuid();
 			var team = Guid.NewGuid();
 			var wrongTeam = Guid.NewGuid();
+			var londonWrongTeam = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
-
+			var wrongSkillId = Guid.NewGuid();
 			Database
 				.WithSite(london, "London")
 				.WithTeam(team, "Team")
+				.WithTeam(londonWrongTeam, "LondonWrongTeam")
 				.WithSite(wrongSite, "WrongSite")
 				.WithTeam(wrongTeam, "WrongTeam");
 
 			AgentsInSite.Has(wrongSite, 20);
-			AgentsInSite.Has(london, skillId, 20);
+
+			AgentsInSite.Has(london, skillId, 10);
+			AgentsInSite.Has(london, wrongSkillId, 10);
+
+			AgentsInTeam.Has(team, skillId,10);
+			AgentsInTeam.Has(londonWrongTeam, wrongSkillId, 10);
+
 			var org = Target.ForOrganizationWithSkills(new[] { skillId }).Single();
 
 			org.Id.Should().Be(london);
