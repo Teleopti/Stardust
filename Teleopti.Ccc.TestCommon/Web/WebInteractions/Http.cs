@@ -65,10 +65,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		public void Dispose()
 		{
-			if (_client != null)
-				_client.Dispose();
-			if (_handler != null)
-				_handler.Dispose();
+			_client?.Dispose();
+			_handler?.Dispose();
 		}
 	}
 	
