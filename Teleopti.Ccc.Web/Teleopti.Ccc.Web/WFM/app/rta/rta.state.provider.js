@@ -4,11 +4,13 @@ angular
     .module('wfm.rta')
     .provider('RtaState', function() {
 
-        var toggles = {};
+        var toggles = {}
 
         this.$get = function() {
             return function(toggleService) {
-                toggleService.togglesLoaded.then(function() {});
+                toggleService.togglesLoaded.then(function() {
+                    toggles = toggleService
+                });
             };
         };
 
@@ -67,12 +69,12 @@ angular
                 })
                 .state('rta.historical', {
                     url: '/agent-historical/:personId',
-                    templateUrl: (function() {
+                    templateUrl: function() {
                         if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)
                             return 'app/rta/historical/rta-historical-RTA_SolidProofWhenManagingAgentAdherence_39351.html'
                         else
                             return 'app/rta/historical/rta-historical-SeeAllOutOfAdherences_39146.html'
-                    }()),
+                    },
                     controller: 'RtaHistoricalController as vm',
                 });
         };

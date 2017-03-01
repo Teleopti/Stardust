@@ -1,9 +1,9 @@
 ﻿(function() {
     'use strict';
     angular.module('wfm.rta').controller('RtaHistoricalController', RtaHistoricalController);
-    RtaHistoricalController.$inject = ['$stateParams', 'rtaService'];
+    RtaHistoricalController.$inject = ['$stateParams', 'rtaService', 'Toggle'];
 
-    function RtaHistoricalController($stateParams, rtaService, $scope) {
+    function RtaHistoricalController($stateParams, rtaService, toggles) {
         var vm = this;
 
         var id = $stateParams.personId;
@@ -50,48 +50,53 @@
 
                 vm.fullTimeline = buildTimeline(shiftInfo);
 
-                var states = [];
-                // states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 07:00", "", "In adherence", "Before shift start"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 10, "2016-10-10 08:01", "Phone", "In adherence", "Phone 08:00 - 09:00"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, "2016-10-10 09:01", "Break", "Neutral", "Break 09:00 - 09.30"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, "2016-10-10 09:31", "Phone", "In adherence", "Phone 09:30 - 11:00"));
-                // states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 10:01", "Phone", "Out of adherence", "Phone 09:30 - 11:00"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 8, "2016-10-10 10:16", "Phone", "In adherence", "Phone 09:30 - 11:00"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 2, "2016-10-10 11:04", "Lunch", "Neutral", "Lunch 11:00 - 12:00"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 1, "2016-10-10 11:55", "Lunch", "Neutral", "Lunch 11:00 - 12:00"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 20, "2016-10-10 12:01", "Phone", "In adherence", "Phone 12:00 - 14:00"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 9, "2016-10-10 14:01", "Break", "Neutral", "Break 14:00 - 15:00"));
-                // states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 14:55", "Break", "In adherence", "Break 14:00 - 15:00"));
-                // states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 18, "2016-10-10 15:16", "Phone", "In adherence", "Phone 15:00 - 17:00"));
-                // states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 17:05", "After shift end", "In adherence", "After shift end"));
+                if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351) {
+                    var states = [];
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 07:00", "", "In adherence", { activity: "Before shift start", time: '' }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 10, "2016-10-10 08:01", "Phone", "In adherence", { activity: "Phone", time: "08:00 - 09:00" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, "2016-10-10 09:01", "Break", "Neutral", { activity: "Break", time: "09:00 - 09.30" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, "2016-10-10 09:31", "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 10:01", "Phone", "Out of adherence", { activity: "Phone", time: "09:30 - 11:00" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 8, "2016-10-10 10:16", "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 2, "2016-10-10 11:04", "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 1, "2016-10-10 11:55", "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 20, "2016-10-10 12:01", "Phone", "In adherence", { activity: "Phone", time: "12:00 - 14:00" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 9, "2016-10-10 14:01", "Break", "Neutral", { activity: "Break", time: "14:00 - 15:00" }));
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 14:55", "Break", "In adherence", { activity: "Break", time: "14:00 - 15:00" }));
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 18, "2016-10-10 15:16", "Phone", "In adherence", { activity: "Phone", time: "15:00 - 17:00" }));
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 17:05", "After shift end", "In adherence", { activity: "After shift end", time: "" }));
 
-                states = states.map(function(state, i) {
-                    state.id = i
-                    var nextState = states[i + 1]
-                    if (nextState != null) {
-                        state.width = calculateWidth(state.time, nextState.time, totalSeconds)
-                    } else {
-                        state.width = calculateWidth(state.time, shiftInfo.end, totalSeconds)
-                    }
-                    return state;
-                })
+                    states = states.map(function(state, i) {
+                        state.id = i
+                        var nextState = states[i + 1]
+                        if (nextState != null) {
+                            state.width = calculateWidth(state.time, nextState.time, totalSeconds)
+                        } else {
+                            state.width = calculateWidth(state.time, shiftInfo.end, totalSeconds)
+                        }
+                        return state;
+                    })
 
-                vm.rulechanges = states
-                vm.rulechanges2 = states.reduce(function(arr, state) {
-                    var key = state.key
-                    var existing = arr.find(function(item) { return item.key === key })
-                    if (existing == null) {
-                        arr.push({
-                            key: key,
-                            header: key,
-                            items: [state]
+                    vm.rulechanges = states
+                    vm.rulechanges2 = states.reduce(function(arr, state) {
+                        var key = state.key
+                        var existing = arr.find(function(item) {
+                            console.log(item.key, key)
+                            return item.key.activity === key.activity && item.key.time === key.time
                         })
-                    } else {
-                        existing.items.push(state)
-                    }
+                        if (existing == null) {
+                            arr.push({
+                                key: key,
+                                header: key,
+                                items: [state]
+                            })
+                        } else {
+                            existing.items.push(state)
+                        }
 
-                    return arr
-                }, [])
+                        return arr
+                    }, [])
+                }
             });
 
         function offChangesFor(startOfShift, totalSeconds, time, activity, adherence, key) {

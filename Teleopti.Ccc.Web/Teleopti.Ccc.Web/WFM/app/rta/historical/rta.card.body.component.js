@@ -5,7 +5,7 @@
         var ctrl = this
 
         var classes = ctrl.classes != null ? cleanStrArr(ctrl.classes.split(' ')) : []
-        ctrl.allClasses = mainClass.concat(classes).join(' ')
+        ctrl.allClasses = classes.join(' ')
     }
 
     function cleanStrArr(arr) {
