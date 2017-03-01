@@ -81,7 +81,6 @@
                     vm.rulechanges2 = states.reduce(function(arr, state) {
                         var key = state.key
                         var existing = arr.find(function(item) {
-                            console.log(item.key, key)
                             return item.key.activity === key.activity && item.key.time === key.time
                         })
                         if (existing == null) {
