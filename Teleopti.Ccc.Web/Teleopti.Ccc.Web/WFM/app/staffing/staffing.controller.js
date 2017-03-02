@@ -162,7 +162,10 @@
 
 		function addOvertime() {
 			vm.hasSuggestionData = false;
-			if (vm.overTimeModels.length === 0) return;
+			if (vm.overTimeModels.length === 0) {
+			    vm.hasRequestedSuggestion = false;
+			    return;
+			}
 			var query = staffingService.addOvertime.save(vm.overTimeModels);
 			query.$promise.then(function () {
 				if (vm.selectedSkill) {
