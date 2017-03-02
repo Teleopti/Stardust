@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IPersonRepository persons,
-			INow now, IUserTimeZone timeZone)
+			INow now,
+			IUserTimeZone timeZone)
 		{
 			_reader = reader;
 			_scenario = scenario;
@@ -71,13 +72,79 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var schedule = getCurrentSchedules(person);
 
 			var result = _reader.Read(personId, utcDateTime, utcDateTime.AddDays(1));
-			
+
+			var agentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			return new HistoricalAdherenceViewModel
 			{
 				PersonId = personId,
 				AgentName = person?.Name.ToString(),
 				Schedules = schedule,
-				Now = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+				Now = agentNow.ToString("yyyy-MM-ddTHH:mm:ss"),
+				Changes = new[]
+				{
+					new HistoricalAdherenceChangeViewModel
+					{
+						Time = agentNow.Date.AddHours(7).AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss"),
+						State = "Ready",
+						Rule = "Positive",
+						RuleColor = ColorTranslator.ToHtml(Color.Chocolate),
+						Adherence = "Neutral",
+						AdherenceColor = ColorTranslator.ToHtml(Color.Aquamarine)
+					},
+					new HistoricalAdherenceChangeViewModel
+					{
+						Time = agentNow.Date.AddHours(7).AddMinutes(58).ToString("yyyy-MM-ddTHH:mm:ss"),
+						State = "InCall",
+						Rule = "Positive",
+						RuleColor = ColorTranslator.ToHtml(Color.Chocolate),
+						Adherence = "Neutral",
+						AdherenceColor = ColorTranslator.ToHtml(Color.Aquamarine)
+					},
+					new HistoricalAdherenceChangeViewModel
+					{
+						Time = agentNow.Date.AddHours(9).AddMinutes(26).ToString("yyyy-MM-ddTHH:mm:ss"),
+						Activity = "Phone",
+						ActivityColor = ColorTranslator.ToHtml(Color.LightGreen),
+						State = "InCall",
+						Rule = "Phone",
+						RuleColor = ColorTranslator.ToHtml(Color.DarkOliveGreen),
+						Adherence = "In adherence",
+						AdherenceColor = ColorTranslator.ToHtml(Color.DarkGoldenrod)
+					},
+					new HistoricalAdherenceChangeViewModel
+					{
+						Time = agentNow.Date.AddHours(12).AddMinutes(03).ToString("yyyy-MM-ddTHH:mm:ss"),
+						Activity = "Lunch",
+						ActivityColor = ColorTranslator.ToHtml(Color.Yellow),
+						State = "Logged off",
+						Rule = "Lunch",
+						RuleColor = ColorTranslator.ToHtml(Color.DarkOrchid),
+						Adherence = "In adherence",
+						AdherenceColor = ColorTranslator.ToHtml(Color.DarkGoldenrod)
+					},
+					new HistoricalAdherenceChangeViewModel
+					{
+						Time = agentNow.Date.AddHours(13).AddMinutes(00).ToString("yyyy-MM-ddTHH:mm:ss"),
+						Activity = "Phone",
+						ActivityColor = ColorTranslator.ToHtml(Color.LightGreen),
+						State = "Logged off",
+						Rule = "WHERE IS HE 😱 😱",
+						RuleColor = ColorTranslator.ToHtml(Color.Crimson),
+						Adherence = "Out of adherence",
+						AdherenceColor = ColorTranslator.ToHtml(Color.DeepPink)
+					},
+					new HistoricalAdherenceChangeViewModel
+					{
+						Time = agentNow.Date.AddHours(14).AddMinutes(12).ToString("yyyy-MM-ddTHH:mm:ss"),
+						Activity = "Phone",
+						ActivityColor = ColorTranslator.ToHtml(Color.LightGreen),
+						State = "Ready",
+						Rule = "Phone",
+						RuleColor = ColorTranslator.ToHtml(Color.DarkOliveGreen),
+						Adherence = "In adherence",
+						AdherenceColor = ColorTranslator.ToHtml(Color.DarkGoldenrod)
+					}
+				},
 				OutOfAdherences = (result?.OutOfAdherences).EmptyIfNull().Select(y =>
 				{
 					string endTime = null;
