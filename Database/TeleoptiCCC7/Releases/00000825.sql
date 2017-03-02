@@ -17,14 +17,14 @@ GO
 DELETE dbo.[RtaState]
 FROM dbo.RtaState s
 WHERE s.Id NOT IN (
-	SELECT MIN(s2.Id) 
+	SELECT MIN(CAST(s2.Id AS BINARY(16)))
 	FROM dbo.[RtaState] s2 
 	WHERE 
 	s2.StateCode = s.StateCode AND
 	s2.BusinessUnit = s.BusinessUnit
 	)
 
-ALTER TABLE [dbo].[RtaState] ADD CONSTRAINT [UQ_StateCode_PlatFormTypeId_BusinessUnit] UNIQUE NONCLUSTERED 
+ALTER TABLE [dbo].[RtaState] ADD CONSTRAINT [UQ_StateCode_BusinessUnit] UNIQUE NONCLUSTERED 
 (
 	[StateCode] ASC,
 	[BusinessUnit] ASC
