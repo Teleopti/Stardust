@@ -502,12 +502,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		[TestCase(TeamBlockType.Team)]
-		[TestCase(TeamBlockType.Block)]
-		[TestCase(TeamBlockType.TeamAndBlock)]
-		[TestCase(TeamBlockType.Classic)]
 		[Ignore("43277")]
-		public void ShouldReScheduleWhiteSpotsAfterGetBackToLegalState(TeamBlockType teamBlockType)
+		[Test]
+		public void ShouldReScheduleWhiteSpotsAfterGetBackToLegalStateClassic()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -531,28 +528,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses[2].SetDayOff(new DayOffTemplate());
 			asses[3].SetDayOff(new DayOffTemplate());
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
-			IExtraPreferences extra = null;
-			switch (teamBlockType)
-			{
-				case TeamBlockType.Classic:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.Block:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
-					break;
-				case TeamBlockType.Team:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.TeamAndBlock:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
-					break;
-			}
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag() },
-				Extra = extra
+				Extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false }
 			};
-
 			var dayOffsPreferences = new DaysOffPreferences
 			{
 				UseFullWeekendsOff = true,
