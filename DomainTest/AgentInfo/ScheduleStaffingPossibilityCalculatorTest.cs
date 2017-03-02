@@ -84,6 +84,17 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
+		public void ShouldNotCacheAllZeroOrNullStaffingData()
+		{
+			_callStaffingViewModelCreatorTimes = 2;
+			setupTestDataForOneSkill(new double?[] { null, 0 }, new double?[] { 0, 0 });
+			Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
+			Assert.AreEqual(0, possibilities.Count);
+			StaffingViewModelCreator.VerifyAllExpectations();
+		}
+
+		[Test]
 		public void ShouldGetPossibilitiesWhenCacheIsNoAvailable()
 		{
 			_callStaffingViewModelCreatorTimes = 2;
