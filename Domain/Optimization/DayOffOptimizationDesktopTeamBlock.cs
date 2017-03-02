@@ -63,27 +63,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			if (optimizationPreferences.Extra.IsClassic() && selectedDays.Any(selectedDay => !selectedDay.IsScheduled()))
-			{
-				var notFullyScheduledPersons = (from selectedDay in selectedDays where !selectedDay.IsScheduled() select selectedDay.Person).ToArray();
-				selectedDays = selectedDays.Where(x => !notFullyScheduledPersons.Contains(x.Person)).ToArray();
-			}
-
 			var stateHolder = _schedulerStateHolder();
 #pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true))
 #pragma warning restore 618
 			{
-				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
+				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filterAgentsWithEmptyDaysIfClassic(optimizationPreferences, selectedDays));
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				if (optimizationPreferences.Extra.IsClassic())
 				{
-					var containerList =
-						matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
-							.Cast<IScheduleMatrixOriginalStateContainer>()
-							.ToList();
-
-					_daysOffBackToLegalState.Execute(containerList,
+					_daysOffBackToLegalState.Execute(matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)),
 													backgroundWorker, stateHolder.CommonStateHolder.ActiveDayOffs.ToList()[0],
 													schedulingOptions,
 													dayOffOptimizationPreferenceProvider,
@@ -107,6 +96,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 					teamInfoFactory,
 					backgroundWorker);
 			}
+		}
+
+		private static IEnumerable<IScheduleDay> filterAgentsWithEmptyDaysIfClassic(IOptimizationPreferences optimizationPreferences, IEnumerable<IScheduleDay> selectedDays) 
+		{
+			if (optimizationPreferences.Extra.IsClassic())
+			{
+				var nonFullyScheduledAgents = selectedDays.Where(x => !x.IsScheduled()).Select(x => x.Person).ToArray();
+				return selectedDays.Where(x => !nonFullyScheduledAgents.Contains(x.Person)).ToArray();
+			}
+			return selectedDays;
 		}
 	}
 }

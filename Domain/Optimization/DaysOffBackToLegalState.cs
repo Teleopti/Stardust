@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
+		public void Execute(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
 			ISchedulingOptions schedulingOptions,
