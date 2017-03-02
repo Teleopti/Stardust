@@ -94,6 +94,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
 		}
 
+		[Test]
+		public void ShouldOnlyValidateIntervalsInRequestPeriod()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var shiftPeriod = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
+			var requestPeriod = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 10);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, shiftPeriod, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 1),
+				createSkillCombinationResource(shiftPeriod, new[] {skill.Id.GetValueOrDefault()}, 10)
+			});
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skill.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = shiftPeriod.StartDateTime,
+																	 EndDateTime = shiftPeriod.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skill.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
+
+			Target.Process(personRequest, requestPeriod.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
+		}
+
 		private static void createWfcs(WorkflowControlSet wfcs, IAbsence absence)
 		{
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod

@@ -90,10 +90,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
 				var deltaResourcesForAgent = new List<SkillCombinationResource>();
+				var earliestProjectionStartDateTime = DateTime.MaxValue;
 				foreach (var day in scheduleDays)
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
-
+					if (projection.OriginalProjectionPeriod.Value.StartDateTime < earliestProjectionStartDateTime)
+					{
+						earliestProjectionStartDateTime = projection.OriginalProjectionPeriod.Value.StartDateTime;
+					}
 					var layers = projection.ToResourceLayers(skillInterval);
 					if (!layers.Any())
 					{
@@ -116,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
 					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList(), useShrinkage);
 					
-					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals);
+					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals.Where(x => x.StartDateTime >= earliestProjectionStartDateTime));
 					if (validatedRequest.IsValid)
 					{
 						if (!autoGrant) return;
