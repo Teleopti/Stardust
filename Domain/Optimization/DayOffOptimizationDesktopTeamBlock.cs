@@ -108,12 +108,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 					backgroundWorker);
 			}
 		}
-
-		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
-		{
-			var result = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
-					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
-			return result;
-		}
 	}
 }
