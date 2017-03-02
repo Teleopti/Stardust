@@ -42,7 +42,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should rule and state changes")]
 		public void ThenIShouldSeeStates(Table table)
 		{
-			ScenarioContext.Current.Pending();
+			var changes = table.CreateSet<RuleAndStateChanges>();
+			changes.ForEach(change =>
+			{
+				Browser.Interactions.AssertExists(
+					".change[data-time='{0}'][data-activity='{1}'][data-state='{2}'][data-rule='{3}'][data-adherence='{4}']",
+					change.Time,
+					change.Activity,
+					change.State,
+					change.Rule,
+					change.Adherence
+				);
+			});
+		}
+
+		public class RuleAndStateChanges
+		{
+			public string Time;
+			public string Activity;
+			public string State;
+			public string Rule;
+			public string Adherence;
 		}
 
 		public class StartEndTimePair

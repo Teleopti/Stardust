@@ -51,20 +51,34 @@
                 vm.fullTimeline = buildTimeline(shiftInfo);
 
                 if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351) {
+                    var m = vm.date.clone()
                     var states = [];
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 07:00", "", "In adherence", { activity: "Before shift start", time: '' }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 10, "2016-10-10 08:01", "Phone", "In adherence", { activity: "Phone", time: "08:00 - 09:00" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, "2016-10-10 09:01", "Break", "Neutral", { activity: "Break", time: "09:00 - 09.30" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, "2016-10-10 09:31", "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 10:01", "Phone", "Out of adherence", { activity: "Phone", time: "09:30 - 11:00" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 8, "2016-10-10 10:16", "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 2, "2016-10-10 11:04", "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 1, "2016-10-10 11:55", "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 20, "2016-10-10 12:01", "Phone", "In adherence", { activity: "Phone", time: "12:00 - 14:00" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 9, "2016-10-10 14:01", "Break", "Neutral", { activity: "Break", time: "14:00 - 15:00" }));
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 14:55", "Break", "In adherence", { activity: "Break", time: "14:00 - 15:00" }));
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 18, "2016-10-10 15:16", "Phone", "In adherence", { activity: "Phone", time: "15:00 - 17:00" }));
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, "2016-10-10 17:05", "After shift end", "In adherence", { activity: "After shift end", time: "" }));
+                    m.hour(7)
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "", "In adherence", { activity: "Before shift start", time: '' }));
+                    m.hour(8).minute(1)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 10, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "08:00 - 09:00" }));
+                    m.hour(9).minute(1)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, m.format('YYYY-MM-DD HH:mm'), "Break", "Neutral", { activity: "Break", time: "09:00 - 09.30" }));
+                    m.hour(9).minute(31)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
+                    m.hour(10).minute(1)
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "Phone", "Out of adherence", { activity: "Phone", time: "09:30 - 11:00" }));
+                    m.hour(10).minute(16)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 8, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
+                    m.hour(11).minute(4)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 2, m.format('YYYY-MM-DD HH:mm'), "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
+                    m.hour(11).minute(55)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 1, m.format('YYYY-MM-DD HH:mm'), "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
+                    m.hour(12).minute(1)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 20, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "12:00 - 14:00" }));
+                    m.hour(14).minute(1)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 9, m.format('YYYY-MM-DD HH:mm'), "Break", "Neutral", { activity: "Break", time: "14:00 - 15:00" }));
+                    m.hour(14).minute(55)
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "Break", "In adherence", { activity: "Break", time: "14:00 - 15:00" }));
+                    m.hour(15).minute(16)
+                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 18, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "15:00 - 17:00" }));
+                    m.hour(17).minute(5)
+                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "After shift end", "In adherence", { activity: "After shift end", time: "" }));
 
                     states = states.map(function(state, i) {
                         state.id = i
@@ -77,8 +91,8 @@
                         return state;
                     })
 
-                    vm.rulechanges = states
-                    vm.rulechanges2 = states.reduce(function(arr, state) {
+                    vm.states = states
+                    vm.rulechanges = states.reduce(function(arr, state) {
                         var key = state.key
                         var existing = arr.find(function(item) {
                             return item.key.activity === key.activity && item.key.time === key.time

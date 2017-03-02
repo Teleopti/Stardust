@@ -308,63 +308,6 @@
         };
 
         function getAgentHistoricalData(id) {
-            if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351) {
-                return $q(function(resolve) {
-                    resolve({
-                        PersonId: '000000000000-0000-0000-0000-00000000',
-                        AgentName: 'Mikkey Dee',
-                        Schedules: [{
-                            Color: 'lightgreen',
-                            StartTime: '2016-10-10 08:00:00',
-                            EndTime: '2016-10-10 09:00:00'
-                        }, {
-                            Color: 'red',
-                            StartTime: '2016-10-10 09:00:00',
-                            EndTime: '2016-10-10 09:30:00'
-                        }, {
-                            Color: 'lightgreen',
-                            StartTime: '2016-10-10 09:30:00',
-                            EndTime: '2016-10-10 11:00:00'
-                        }, {
-                            Color: 'yellow',
-                            StartTime: '2016-10-10 11:00:00',
-                            EndTime: '2016-10-10 12:00:00'
-                        }, {
-                            Color: 'lightgreen',
-                            StartTime: '2016-10-10 12:00:00',
-                            EndTime: '2016-10-10 14:00:00'
-                        }, {
-                            Color: 'red',
-                            StartTime: '2016-10-10 14:00:00',
-                            EndTime: '2016-10-10 15:00:00'
-                        }, {
-                            Color: 'lightgreen',
-                            StartTime: '2016-10-10 15:00:00',
-                            EndTime: '2016-10-10 17:00:00'
-                        }],
-                        OutOfAdherences: [{
-                            StartTime: '2016-10-10 09:00:00',
-                            EndTime: '2016-10-10 09:30:00'
-                        }, {
-                            StartTime: '2016-10-10 10:01:00',
-                            EndTime: '2016-10-10 10:16:00'
-                        }, {
-                            StartTime: '2016-10-10 11:00:00',
-                            EndTime: '2016-10-10 11:10:00'
-                        }, {
-                            StartTime: '2016-10-10 11:55:00',
-                            EndTime: '2016-10-10 12:00:00'
-                        }, {
-                            StartTime: '2016-10-10 14:00:00',
-                            EndTime: '2016-10-10 14:55:00'
-                        }, {
-                            StartTime: '2016-10-10 17:00:00',
-                            EndTime: '2016-10-10 17:05:00'
-                        }]
-                    })
-                });
-            }
-
             return $resource('../api/HistoricalAdherence/For', {}, {
                 query: {
                     method: 'GET',
