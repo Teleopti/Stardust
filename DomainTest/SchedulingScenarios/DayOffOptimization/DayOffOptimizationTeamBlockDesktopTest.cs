@@ -296,11 +296,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		[TestCase(TeamBlockType.Team, ExpectedResult = true)]
-		[TestCase(TeamBlockType.Block, ExpectedResult = true)]
-		[TestCase(TeamBlockType.TeamAndBlock, ExpectedResult = true)]
-		[TestCase(TeamBlockType.Classic, ExpectedResult = false)]
-		public bool ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(TeamBlockType teamBlockType)
+		[TestCase(TeamBlockType.Team)]
+		[TestCase(TeamBlockType.Block)]
+		[TestCase(TeamBlockType.TeamAndBlock)]
+		[TestCase(TeamBlockType.Classic)]
+		public void ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -349,7 +349,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			var wasModified = !stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-			return wasModified;
+			if (teamBlockType == TeamBlockType.Classic)
+			{
+				wasModified.Should().Be.False();
+			}
+			else
+			{
+				wasModified.Should().Be.True();
+			}
 		}
 
 		[TestCase(TeamBlockType.Team)]
@@ -423,12 +430,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		[TestCase(TeamBlockType.Team, ExpectedResult = false)]
-		[TestCase(TeamBlockType.Block, ExpectedResult = false)]
-		[TestCase(TeamBlockType.TeamAndBlock, ExpectedResult = false)]
-		[TestCase(TeamBlockType.Classic, ExpectedResult = true)]
-		[Ignore("43277")]
-		public bool ShouldGetBackToLegalState(TeamBlockType teamBlockType)
+		[TestCase(TeamBlockType.Team)]
+		[TestCase(TeamBlockType.Block)]
+		[TestCase(TeamBlockType.TeamAndBlock)]
+		[TestCase(TeamBlockType.Classic)]
+		public void ShouldGetBackToLegalState(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -443,13 +449,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				5,
 				5,
-				5,
-				5,
-				5,
 				1,
+				1,
+				5,
+				5,
 				5);
 			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
-			asses[5].SetDayOff(new DayOffTemplate());
+			asses[2].SetDayOff(new DayOffTemplate());
+			asses[3].SetDayOff(new DayOffTemplate());
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
 			IExtraPreferences extra = null;
 			switch (teamBlockType)
@@ -472,16 +479,27 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				General = { ScheduleTag = new ScheduleTag() },
 				Extra = extra
 			};
+
 			var dayOffsPreferences = new DaysOffPreferences
 			{
 				UseFullWeekendsOff = true,
-				FullWeekendsOffValue = new MinMax<int>(1, 1)
+				FullWeekendsOffValue = new MinMax<int>(1,1)
 			};
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
-			var wasModified = !stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-			return wasModified;
+			var wasModified1 = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
+			var wasModified2 = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff();
+			if (teamBlockType == TeamBlockType.Classic)
+			{
+				wasModified1.Should().Be.True();
+				wasModified2.Should().Be.True();
+			}
+			else
+			{
+				wasModified1.Should().Be.False();
+				wasModified2.Should().Be.False();
+			}
 		}
 	}
 }

@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceCalculation resourceOptimizationHelper,
 								ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
@@ -34,7 +36,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
 								CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 								TeamInfoFactoryFactory teamInfoFactoryFactory,
-								IUserTimeZone userTimeZone)
+								IUserTimeZone userTimeZone,
+								DaysOffBackToLegalState daysOffBackToLegalState,
+								IScheduleDayEquator scheduleDayEquator)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
@@ -46,6 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_userTimeZone = userTimeZone;
+			_daysOffBackToLegalState = daysOffBackToLegalState;
+			_scheduleDayEquator = scheduleDayEquator;
 		}
 
 		public void Execute(DateOnlyPeriod selectedPeriod, 
@@ -69,9 +75,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 #pragma warning restore 618
 			{
 				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
+				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
+				if (optimizationPreferences.Extra.IsClassic())
+				{
+					var containerList =
+						matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
+							.Cast<IScheduleMatrixOriginalStateContainer>()
+							.ToList();
+
+					_daysOffBackToLegalState.Execute(containerList,
+													backgroundWorker, stateHolder.CommonStateHolder.ActiveDayOffs.ToList()[0],
+													schedulingOptions,
+													dayOffOptimizationPreferenceProvider,
+													optimizationPreferences,
+													workShiftFinderResultHolder,
+													resourceOptimizerPersonOptimized);
+				}
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
-				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.AllPermittedPersons, stateHolder.Schedules, groupPageLight);
@@ -86,6 +107,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					teamInfoFactory,
 					backgroundWorker);
 			}
+		}
+
+		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
+		{
+			var result = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
+					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
+			return result;
 		}
 	}
 }
