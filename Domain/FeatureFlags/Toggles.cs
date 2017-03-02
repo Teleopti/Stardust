@@ -22,7 +22,7 @@
 		RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_SpreadTransactionLocksStrategy_41823,
 		RTA_FasterAgentsView_42039,
-		RTA_MonitorAgentsInPermittedOrganizaionlOnly_40660,
+		RTA_MonitorAgentsInPermittedOrganizationOnly_40660,
 		RTA_SolidProofWhenManagingAgentAdherence_39351,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
