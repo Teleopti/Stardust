@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 {
@@ -82,10 +83,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			if (agent.StartDate.HasValue)
 			{
 				dateCell.SetCellValue(agent.StartDate.Value);
-			}			
-
-			// dateCell.CellStyle.DataFormat = returnedFile.CreateDataFormat().GetFormat(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
-
+			}
+			CellUtil.SetCellStyleProperty(dateCell,returnedFile, CellUtil.DATA_FORMAT,returnedFile.CreateDataFormat().GetFormat(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern));		
 			row.CreateCell(ColumnHeaderMap["Organization"]).SetCellValue(agent.Organization);
 			row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
 			row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
