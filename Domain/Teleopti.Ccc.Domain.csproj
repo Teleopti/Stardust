@@ -117,6 +117,7 @@
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
     <Compile Include="AgentInfo\IAgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
+    <Compile Include="AgentInfo\ImportAgent\ImportAgentDataProvider.cs" />
     <Compile Include="AgentInfo\PeopleSelection.cs" />
     <Compile Include="AgentInfo\PersonsThatChangedPersonSkillsDuringPeriodFinder.cs" />
     <Compile Include="AgentInfo\Requests\BudgetAbsenceAllowanceDetail.cs" />

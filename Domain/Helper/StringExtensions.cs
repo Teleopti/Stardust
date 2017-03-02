@@ -69,5 +69,10 @@ namespace Teleopti.Ccc.Domain.Helper
 				return s;
 			}
 		}
+
+		public static bool IsNullOrEmpty(this string s)
+		{
+			return string.IsNullOrEmpty(s);
+		}
 	}
 }

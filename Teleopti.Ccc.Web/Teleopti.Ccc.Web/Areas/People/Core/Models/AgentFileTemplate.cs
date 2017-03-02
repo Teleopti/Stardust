@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 {
@@ -35,15 +39,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 
 		public override IDictionary<string, int> ColumnHeaderMap => _columnHeaderMap;
 
-		public override MemoryStream GetFileTemplateWithDemoData()
+		public RawAgent GetDefaultAgent()
 		{
-			const string sheetName = "Agents";
-
-			var ms = new MemoryStream();
-			var returnedFile = GetTemplateWorkbook(sheetName);
-			var newSheet = returnedFile.GetSheet(sheetName);
-
-			var agent = new RawAgent
+			return new RawAgent
 			{
 				Firstname = "John",
 				Lastname = "Smith",
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 				ApplicationUserId = "john.smith@teleopti.com",
 				Password = "password",
 				Role = "agent, \"London, Team Leader\"",
-				StartDate = "2017-02-28",
+				StartDate = new DateTime(2017,3,1),
 				Organization = "Team Preference",
 				Skill = "Outbound, Direct sales",
 				ExternalLogon = "001001",
@@ -62,6 +60,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 				SchedulePeriodType = "Week",
 				SchedulePeriodLength = 4
 			};
+		}
+
+		public MemoryStream GetFileTemplate(RawAgent agent)
+		{
+			const string sheetName = "Agents";
+
+			var ms = new MemoryStream();
+			var returnedFile = GetTemplateWorkbook(sheetName);
+			var newSheet = returnedFile.GetSheet(sheetName);
 
 			var row = newSheet.CreateRow(1);
 
@@ -71,7 +78,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			row.CreateCell(ColumnHeaderMap["ApplicationUserId"]).SetCellValue(agent.ApplicationUserId);
 			row.CreateCell(ColumnHeaderMap["Password"]).SetCellValue(agent.Password);
 			row.CreateCell(ColumnHeaderMap["Role"]).SetCellValue(agent.Role);
-			row.CreateCell(ColumnHeaderMap["StartDate"]).SetCellValue(agent.StartDate);
+			var dateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
+			if (agent.StartDate.HasValue)
+			{
+				dateCell.SetCellValue(agent.StartDate.Value);
+			}			
+
+			// dateCell.CellStyle.DataFormat = returnedFile.CreateDataFormat().GetFormat(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+
 			row.CreateCell(ColumnHeaderMap["Organization"]).SetCellValue(agent.Organization);
 			row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
 			row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
@@ -80,24 +94,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			row.CreateCell(ColumnHeaderMap["PartTimePercentage"]).SetCellValue(agent.PartTimePercentage);
 			row.CreateCell(ColumnHeaderMap["ShiftBag"]).SetCellValue(agent.ShiftBag);
 			row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
-			row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(agent.SchedulePeriodLength);
+			if (agent.SchedulePeriodLength.HasValue)
+			{
+				var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
+				schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength.Value);				
+			}
+
 			returnedFile.Write(ms);
 
 			return ms;
 		}
-		//private IWorkbook getTemplateWorkbook(string invalidUserSheetName)
-		//{
-		//	var returnedFile = new HSSFWorkbook();
-		//	var newsheet = returnedFile.CreateSheet(invalidUserSheetName);
-
-		//	var row = newsheet.CreateRow(0);
-		//	for (var i = 0; i < ColumnHeaderNames.Length; i++)
-		//	{
-		//		row.CreateCell(i).SetCellValue(ColumnHeaderNames[i]);
-		//	}
-
-		//	return returnedFile;
-		//}
 
 	}
 }

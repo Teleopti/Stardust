@@ -13837,6 +13837,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid {0} : {1}.
+        /// </summary>
+        public static string InvalidColumn {
+            get {
+                return ResourceManager.GetString("InvalidColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid credentials. Please try again..
         /// </summary>
         public static string InvalidCredential {
@@ -16444,6 +16453,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MissingAbsenceType {
             get {
                 return ResourceManager.GetString("MissingAbsenceType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing Column.
+        /// </summary>
+        public static string MissingColumn {
+            get {
+                return ResourceManager.GetString("MissingColumn", resourceCulture);
             }
         }
         
@@ -26307,6 +26325,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SchedulePeriods {
             get {
                 return ResourceManager.GetString("SchedulePeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule period type.
+        /// </summary>
+        public static string SchedulePeriodType {
+            get {
+                return ResourceManager.GetString("SchedulePeriodType", resourceCulture);
             }
         }
         

@@ -11,7 +11,6 @@ using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 
@@ -23,12 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 
 		private readonly IPeoplePersister _peoplePersister;
-		private readonly IImportAgentFileValidator _fileValidator;
 
-		public ImportPeopleController(IPeoplePersister peoplePersister, IImportAgentFileValidator fileValidator)
+		public ImportPeopleController(IPeoplePersister peoplePersister)
 		{
 			_peoplePersister = peoplePersister;
-			_fileValidator = fileValidator;
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
@@ -104,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		public HttpResponseMessage GetFileTemplateAgent()
 		{
 			var template = new AgentFileTemplate();
-			var ms = template.GetFileTemplateWithDemoData();
+			var ms = template.GetFileTemplate(template.GetDefaultAgent());
 			var response = Request.CreateResponse(HttpStatusCode.OK);
 			response.Headers.Clear();
 			response.Content = new ByteArrayContent(ms.ToArray());

@@ -15592,4 +15592,16 @@ Do you want to participate?</value>
     <value>Can't add to agent(s) in another time zone</value>
     <comment>Error message for adding full-day absence to agent in another time zone in Teams</comment>
   </data>
+  <data name="InvalidColumn" xml:space="preserve">
+    <value>Invalid {0} : {1}</value>
+    <comment>Invalid column message of importing agents. e.g: Invalid Contract: a, b, c</comment>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>Schedule period type</value>
+    <comment>Name used in column header.</comment>
+  </data>
+  <data name="MissingColumn" xml:space="preserve">
+    <value>Missing Column</value>
+    <comment>missing column in excel file</comment>
+  </data>
 </root>

@@ -48,5 +48,23 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			((string)null).ContainsIgnoreCase(null)
 					.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldTestNullString()
+		{
+			((string)null).IsNullOrEmpty().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldTestEmptyString()
+		{
+			"".IsNullOrEmpty().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldTestNormalString()
+		{
+			"String".IsNullOrEmpty().Should().Be.False();
+		}
 	}
 }

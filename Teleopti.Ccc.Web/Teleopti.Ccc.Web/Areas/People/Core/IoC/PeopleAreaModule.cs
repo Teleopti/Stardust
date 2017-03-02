@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
@@ -16,6 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 			builder.RegisterType<PersonInfoUpdater>().As<IPersonInfoUpdater>().SingleInstance();
 			builder.RegisterType<ImportAgentFileValidator>().As<IImportAgentFileValidator>().SingleInstance();
 			builder.RegisterType<TenantUserPersister>().As<ITenantUserPersister>().SingleInstance();
+			builder.RegisterType<ImportAgentDataProvider>().As<IImportAgentDataProvider>().SingleInstance();
+
 		}
 	}
 }
