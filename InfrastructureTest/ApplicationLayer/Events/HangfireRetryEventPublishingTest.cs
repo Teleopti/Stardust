@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new ThreeRetryEvent());
 
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfScheduledJobs().Should().Be(1);
 			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new ThreeRetryEvent());
 
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 			Hangfire.RequeueScheduledJobs();
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfScheduledJobs().Should().Be(1);
 		}
@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new ThreeRetryEvent());
 
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 			Hangfire.RequeueScheduledJobs();
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 			Hangfire.RequeueScheduledJobs();
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfFailedJobs().Should().Be(1);
 			Hangfire.NumberOfScheduledJobs().Should().Be(0);
@@ -71,10 +71,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new ThreeRetryEvent());
 
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 			Hangfire.RequeueScheduledJobs();
 			FailingHandler.Succeeds = true;
-			Hangfire.WorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfFailedJobs().Should().Be(0);
 			Hangfire.NumberOfScheduledJobs().Should().Be(0);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			10.Times(() =>
 			{
-				Hangfire.WorkerIteration();
+				Hangfire.EmulateWorkerIteration();
 				Hangfire.RequeueScheduledJobs();
 			});
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Hangfire.TriggerReccuringJobs();
 			20.Times(() =>
 			{
-				Hangfire.WorkerIteration();
+				Hangfire.EmulateWorkerIteration();
 				Hangfire.RequeueScheduledJobs();
 			});
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			11.Times(() =>
 			{
-				Hangfire.WorkerIteration();
+				Hangfire.EmulateWorkerIteration();
 				Hangfire.RequeueScheduledJobs();
 			});
 

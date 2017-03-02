@@ -36,21 +36,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 				Hangfire.TriggerReccuringJobs();
 				Publisher.Publish(new RegularEvent());
 			});
-			
-			while (Hangfire.NumberOfEnqueuedJobs() > 0)
-			{
-				var workers = (int)Math.Min(Hangfire.NumberOfEnqueuedJobs(), 8);
-				workers.Times(() =>
-				{
-					Run.InParallel(() =>
-					{
-						Hangfire.WorkerIteration();
-					});
-				});
-				Run.Wait();
 
-				Hangfire.RequeueScheduledJobs();
-			}
+			Hangfire.EmulateQueueProcessing();
 
 			Hangfire.NumberOfFailedJobs().Should().Be(200);
 		}

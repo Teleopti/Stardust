@@ -42,10 +42,17 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			});
 		}
 
+		public void RequeueScheduledJobs()
+		{
+			monitoring
+				.ScheduledJobs(0, 100)
+				.ForEach(j => backgroundJobs.Requeue(j.Key));
+		}
+
 		public void CleanQueue()
 		{
 			foreach (var queueName in Queues.OrderOfPriority())
-				deleteJobs(() => monitoring.EnqueuedJobs(queueName, 0, 10).Select(x => x.Key), WorkerIteration);
+				deleteJobs(() => monitoring.EnqueuedJobs(queueName, 0, 10).Select(x => x.Key), EmulateWorkerIteration);
 			deleteJobs(() => monitoring.ScheduledJobs(0, 10).Select(x => x.Key), null);
 			deleteJobs(() => monitoring.FailedJobs(0, 10).Select(x => x.Key), null);
 			deleteJobs(() => monitoring.SucceededJobs(0, 10).Select(x => x.Key), null);
@@ -63,19 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				});
 				jobs = ids.Invoke();
 			}
-		}
-
-		public void WorkerIteration()
-		{
-			// will hang if nothing to work with
-			if (NumberOfEnqueuedJobs() > 0)
-				new Worker(Queues.OrderOfPriority().ToArray()).Execute(
-					new BackgroundProcessContext(
-						"fake server",
-						_storage.Value,
-						new Dictionary<string, object>(),
-						new CancellationToken()
-					));
 		}
 
 		public void CancelQueue()
@@ -183,11 +177,23 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			throw new AggregateException("Hangfire job has failed!", exceptions);
 		}
 
-		public void RequeueScheduledJobs()
+
+
+
+
+
+		public void EmulateWorkerIteration()
 		{
-			monitoring
-				.ScheduledJobs(0, 100)
-				.ForEach(j => backgroundJobs.Requeue(j.Key));
+			// will hang if nothing to work with
+			if (NumberOfEnqueuedJobs() > 0)
+				new Worker(Queues.OrderOfPriority().ToArray()).Execute(
+					new BackgroundProcessContext(
+						"fake server",
+						_storage.Value,
+						new Dictionary<string, object>(),
+						new CancellationToken()
+					));
 		}
+
 	}
 }

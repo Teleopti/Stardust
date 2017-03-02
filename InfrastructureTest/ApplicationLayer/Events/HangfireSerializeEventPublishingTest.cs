@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new TestEvent());
 
-			Hangfire.Value.WorkerIteration();
+			Hangfire.Value.EmulateWorkerIteration();
 
 			Handler.GotEvent.Should().Not.Be.Null();
 		}
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new TestEvent {Data = "hello"});
 
-			Hangfire.Value.WorkerIteration();
+			Hangfire.Value.EmulateWorkerIteration();
 
 			Handler.GotEvent.Data.Should().Be("hello");
 		}

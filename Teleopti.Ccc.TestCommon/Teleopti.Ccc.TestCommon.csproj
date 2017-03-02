@@ -257,6 +257,7 @@
     <Compile Include="FakeRepositories\Rta\FakeTeamInAlarmReader.cs" />
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
+    <Compile Include="HangfireUtilitiesExtensions.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
