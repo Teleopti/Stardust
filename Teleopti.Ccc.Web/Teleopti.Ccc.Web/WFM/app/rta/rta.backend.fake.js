@@ -61,8 +61,8 @@
 		var organizationsOnSkills = [];
 		var siteAdherencesForSkill = [];
 		var teamAdherencesForSkill = [];
-		var permittedSitesId = [];
-		var permittedTeamsId = [];
+		var permittedSiteIds = [];
+		var permittedTeamIds = [];
 		var paramsOf = function (url) {
 			var result = {};
 			var queryString = url.split("?")[1];
@@ -494,8 +494,8 @@
 
 		fake(/\.\.\/api\/Sites$/,
 			function (params) {
-				if(toggles["RTA_MonitorAgentsInPermittedOrganizaionlOnly_40660"])
-					sites = filteredByPermission(sites,permittedSitesId);
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					sites = filteredByPermission(sites,permittedSiteIds);
 				return [200, sites];
 			});
 		function filteredByPermission(content,permittedcontentIds){
@@ -526,12 +526,16 @@
 
 		fake(/\.\.\/api\/Sites\/ForSkills(.*)/,
 			function (params) {
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					sites = filteredByPermission(sites, permittedSiteIds);
 				var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill, 'SkillId', params.skillIds, sites);
 				return [200, filteredSites];
 			});
 
 		fake(/\.\.\/api\/Teams\/ForSkills(.*)/,
 			function (params) {
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					teams = filteredByPermission(teams, permittedTeamIds);
 				var teamsBySite = teams.filter(function (t) {
 					return params.siteId.indexOf(t.SiteId) > -1;
 				});
@@ -543,6 +547,8 @@
 			function (params) {
 				var adherenceBySiteId = {};
 				var sAdherencesForMultipleSkills = [];
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					siteAdherencesForSkill = filteredByPermission(siteAdherencesForSkill,permittedSiteIds);
 				var sAdherencesForSkill = siteAdherencesForSkill.filter(function (sa) {
 					return params.skillIds.indexOf(sa.SkillId) > -1;
 				});
@@ -569,13 +575,15 @@
 
 		fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
 			function (params) {
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					siteAdherences = filteredByPermission(siteAdherences,permittedSiteIds);
 				return [200, siteAdherences];
 			});
 
 		fake(/\.\.\/api\/Teams\/Build(.*)/,
 			function (params) {
-				if(toggles["RTA_MonitorAgentsInPermittedOrganizaionlOnly_40660"])
-					teams = filteredByPermission(teams,permittedTeamsId);
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					teams = filteredByPermission(teams,permittedTeamIds);
 				return [200, teams.filter(function (team) {
 					return team.SiteId === params.siteId;
 				})];
@@ -585,6 +593,9 @@
 			function (params) {
 				var adherenceByTeamId = {};
 				var tAdherencesForMultipleSkills = [];
+
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					teamAdherencesForSkill = filteredByPermission(teamAdherencesForSkill, permittedTeamIds);
 
 				var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function (ta) {
 					return params.skillIds.indexOf(ta.SkillId) > -1 && ta.SiteId === params.siteId;
@@ -613,6 +624,8 @@
 
 		fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/,
 			function (params) {
+				if(toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
+					teamAdherences = filteredByPermission(teamAdherences, permittedTeamIds);
 				var result =
 					teamAdherences.filter(function (ta) {
 						var t = teams.find(function (team) {
@@ -651,8 +664,8 @@
 			phoneStates = [];
 			siteAdherencesForSkill = [];
 			teamAdherencesForSkill = [];
-			permittedSitesId = [];
-			permittedTeamsId = [];
+			permittedSiteIds = [];
+			permittedTeamIds = [];
 		}
 
 		function withToggle(toggle) {
@@ -712,7 +725,7 @@
 
 		function withPermittedSites(siteIds){
 			siteIds.forEach(function(siteId){
-				permittedSitesId.push(siteId);
+				permittedSiteIds.push(siteId);
 			});
 			return this;
 		}
@@ -749,7 +762,7 @@
 
 		function withPermittedTeams(teamIds) {
 			teamIds.forEach(function(teamId){
-				permittedTeamsId.push(teamId);
+				permittedTeamIds.push(teamId);
 			});
 			return this;
 		};

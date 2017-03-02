@@ -1550,6 +1550,7 @@
     <Content Include="WFM\app\rta\filter\rta.filter.controller.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.js" />
     <Content Include="WFM\app\rta\filter\rta.filter.controller.overview.spec.js" />
+    <Content Include="WFM\app\rta\overview\rta.overview.controller.permittedOrganizationOnly.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.teams.spec.js" />
     <Content Include="WFM\app\rta\rta.adherence.service.js" />
