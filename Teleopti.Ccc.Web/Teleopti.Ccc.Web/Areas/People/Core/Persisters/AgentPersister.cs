@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
@@ -43,13 +46,30 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					continue;
 				}
 
-				// [ToDo] Create new person period
-
-				// [ToDo] Create new schedule period
-
+				addPersonData(person, agentData);				
 			}
 		}
 
+		[UnitOfWork]
+		private void addPersonData(IPerson person, AgentDataModel agentData)
+		{
+			addPersonPeriod(person, agentData);
+			addSchedulePeriod(person, agentData);
+		}
+
+		private void addSchedulePeriod(IPerson person, AgentDataModel agentData)
+		{
+			var schedulePeriod = new SchedulePeriod(agentData.StartDate, agentData.SchedulePeriodType,
+				agentData.SchedulePeriodLength);
+			person.AddSchedulePeriod(schedulePeriod);
+		}
+
+		private void addPersonPeriod(IPerson person, AgentDataModel agentData)
+		{
+			var personContract = new PersonContract(agentData.Contract,agentData.PartTimePercentage,agentData.ContractSchedule);
+			var personPeriod = new PersonPeriod(agentData.StartDate,personContract,agentData.Team);
+			person.AddPersonPeriod(personPeriod);
+		}
 
 		[UnitOfWork]
 		private IPerson persistPerson(AgentDataModel agentData)
