@@ -296,11 +296,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		[TestCase(TeamBlockType.Team)]
-		[TestCase(TeamBlockType.Block)]
-		[TestCase(TeamBlockType.TeamAndBlock)]
-		[TestCase(TeamBlockType.Classic)]
-		public void ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(TeamBlockType teamBlockType)
+		[TestCase(TeamBlockType.Team, ExpectedResult = true)]
+		[TestCase(TeamBlockType.Block, ExpectedResult = true)]
+		[TestCase(TeamBlockType.TeamAndBlock, ExpectedResult = true)]
+		[TestCase(TeamBlockType.Classic, ExpectedResult = false)]
+		public bool ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -349,14 +349,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			var wasModified = !stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-			if (teamBlockType == TeamBlockType.Classic)
-			{
-				wasModified.Should().Be.False();
-			}
-			else
-			{
-				wasModified.Should().Be.True();
-			}
+			return wasModified;
 		}
 
 		[TestCase(TeamBlockType.Team)]
@@ -430,12 +423,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		[TestCase(TeamBlockType.Team)]
-		[TestCase(TeamBlockType.Block)]
-		[TestCase(TeamBlockType.TeamAndBlock)]
-		[TestCase(TeamBlockType.Classic)]
+		[TestCase(TeamBlockType.Team, ExpectedResult = false)]
+		[TestCase(TeamBlockType.Block, ExpectedResult = false)]
+		[TestCase(TeamBlockType.TeamAndBlock, ExpectedResult = false)]
+		[TestCase(TeamBlockType.Classic, ExpectedResult = true)]
 		[Ignore("43277")]
-		public void ShouldGetBackToLegalState(TeamBlockType teamBlockType)
+		public bool ShouldGetBackToLegalState(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -479,7 +472,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				General = { ScheduleTag = new ScheduleTag() },
 				Extra = extra
 			};
-
 			var dayOffsPreferences = new DaysOffPreferences
 			{
 				UseFullWeekendsOff = true,
@@ -489,14 +481,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			var wasModified = !stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-			if (teamBlockType == TeamBlockType.Classic)
-			{
-				wasModified.Should().Be.True();
-			}
-			else
-			{
-				wasModified.Should().Be.False();
-			}
+			return wasModified;
 		}
 	}
 }
