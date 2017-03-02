@@ -26,7 +26,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
+			// to fetch when agents in far away timezones bug #43288
+			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling.AddDays(1));
 			//IScenario scenario = _jobParameters.StateHolder.DefaultScenario;
 
 			foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
