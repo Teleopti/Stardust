@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<FailingHandlerImpl>();
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldRetryDifferentAmountOfTimesConcurrently()
 		{
 			10.Times(() =>
