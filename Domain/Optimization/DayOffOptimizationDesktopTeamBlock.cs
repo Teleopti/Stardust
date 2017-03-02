@@ -57,8 +57,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			if(optimizationPreferences.Extra.IsClassic() && selectedDays.Any(selectedDay => !selectedDay.IsScheduled()))
-				return;
+			if (optimizationPreferences.Extra.IsClassic() && selectedDays.Any(selectedDay => !selectedDay.IsScheduled()))
+			{
+				var notFullyScheduledPersons = (from selectedDay in selectedDays where !selectedDay.IsScheduled() select selectedDay.Person).ToArray();
+				selectedDays = selectedDays.Where(x => !notFullyScheduledPersons.Contains(x.Person)).ToArray();
+			}
 
 			var stateHolder = _schedulerStateHolder();
 #pragma warning disable 618
@@ -66,13 +69,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 #pragma warning restore 618
 			{
 				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
-
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
-
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
-
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.AllPermittedPersons, stateHolder.Schedules, groupPageLight);
 

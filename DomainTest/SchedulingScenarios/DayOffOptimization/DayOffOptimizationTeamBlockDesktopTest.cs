@@ -358,5 +358,76 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				wasModified.Should().Be.True();
 			}
 		}
+
+		[TestCase(TeamBlockType.Team)]
+		[TestCase(TeamBlockType.Block)]
+		[TestCase(TeamBlockType.TeamAndBlock)]
+		[TestCase(TeamBlockType.Classic)]
+		public void ShouldMoveDayOffToDayWithLessDemandPerAgent_MarkedBlankDay(TeamBlockType teamBlockType)
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var activity = new Activity("_");
+			var skill = new Skill().For(activity).IsOpen();
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var team = new Team { Site = new Site("_") };
+			var agent1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent1.SchedulePeriod(firstDay).SetDaysOff(1);
+			agent2.SchedulePeriod(firstDay).SetDaysOff(1);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				5,
+				1,
+				5,
+				5,
+				5,
+				25,
+				5);
+			var asses1 = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent1, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			var asses2 = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent2, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			asses1[5].SetDayOff(new DayOffTemplate());
+			asses2[5].SetDayOff(new DayOffTemplate());
+			asses1[0].ClearMainActivities();//bland day
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent1, agent2 }, asses1.Union(asses2), skillDays);
+			IExtraPreferences extra = null;
+			switch (teamBlockType)
+			{
+				case TeamBlockType.Classic:
+					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
+					break;
+				case TeamBlockType.Block:
+					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
+					break;
+				case TeamBlockType.Team:
+					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
+					break;
+				case TeamBlockType.TeamAndBlock:
+					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
+					break;
+			}
+			var optPrefs = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag() },
+				Extra = extra
+			};
+
+			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent1, agent2), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+
+			var wasModified1 = !stateHolder.Schedules[agent1].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
+			var wasModified2 = !stateHolder.Schedules[agent2].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
+
+			if (teamBlockType == TeamBlockType.Classic)
+			{
+				wasModified1.Should().Be.False();
+				wasModified2.Should().Be.True();
+			}
+			else
+			{
+				wasModified1.Should().Be.True();
+				wasModified2.Should().Be.True();
+			}
+		}
 	}
 }
