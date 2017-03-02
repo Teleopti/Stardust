@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	[HangfireTest]
 	public class HangfireQueueSelectionEventPublishingTest : ISetup
 	{
-		public Lazy<HangfireUtilities> Hangfire;
+		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -30,8 +28,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new DefaultQueueEvent());
 
-			Hangfire.Value.NumberOfJobsInQueue(Queues.Default).Should().Be(1);
-			Hangfire.Value.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(0);
+			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(0);
 		}
 
 		[Test]
@@ -39,8 +37,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new OtherQueueEvent());
 
-			Hangfire.Value.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
-			Hangfire.Value.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
+			Hangfire.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(1);
 		}
 
 		public class DefaultQueueEvent : IEvent
