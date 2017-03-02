@@ -20,7 +20,6 @@ define(["knockout"
 				stateCode: data.StateCode,
 				isLoggedOn: 'true',
 				timestamp: data.Timestamp || moment.utc().format('YYYY-MM-DD HH:mm:ss'),
-				platformTypeId: data.PlatformTypeId,
 				sourceId: data.SourceId,
 				isSnapshot: 'false'
 			};

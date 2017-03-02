@@ -3,7 +3,6 @@
 	public class ExternalUserStateWebModel
 	{
 		public string AuthenticationKey { get; set; }
-		public string PlatformTypeId { get; set; }
 		public string SourceId { get; set; }
 
 		public string UserCode { get; set; }

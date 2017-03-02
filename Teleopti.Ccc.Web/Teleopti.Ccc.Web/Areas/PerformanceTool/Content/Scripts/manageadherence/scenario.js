@@ -69,7 +69,6 @@ define([
 			for (var p = 0; p < configuration.Persons.length; p++) {
 
 				iterations.push(new Iteration({
-					PlatformTypeId: configuration.PlatformTypeId,
 					SourceId: configuration.SourceId,
 					Person: configuration.Persons[p],
 					StateCode: configuration.States[p],
@@ -87,7 +86,6 @@ define([
 			for (var p = 0; p < configuration.Persons.length; p++) {
 
 				iterations.push(new Iteration({
-					PlatformTypeId: configuration.PlatformTypeId,
 					SourceId: configuration.SourceId,
 					Person: configuration.Persons[p],
 					StateCode: configuration.ClearAgentStateCode,
@@ -117,14 +115,13 @@ define([
 		});
 
 		self.Configuration(JSON.stringify({
-			PlatformTypeId: "00000000-0000-0000-0000-000000000000",
 			SourceId: 1,
 			Persons: [
 				{
 					ExternalLogOn: "2001"
 				}
 			],
-			States: ["Ready", "OFF"],
+			States: ["Ready (00000000-0000-0000-0000-000000000000)", "OFF (00000000-0000-0000-0000-000000000000)"],
 			TeamId: "34590A63-6331-4921-BC9F-9B5E015AB495",
 			PollingPerSecond: 0,
 			ClearAgentState: true,

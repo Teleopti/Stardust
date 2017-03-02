@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Import Namespace="Teleopti.Ccc.Web.Core" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -14,8 +15,8 @@
     <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
     <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />	
 	
-	  <%--<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>--%>
-	  <script>var require = { urlArgs: 'v=<%=1%>' };</script>
+	<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
+	<%--<script>var require = { urlArgs: 'v=<%=1%>' };</script>--%>
 	<script src="Areas/RtaTool/Content/Scripts/require/configuration.js"></script>
     <script data-main="Areas/RtaTool/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
 	<style>

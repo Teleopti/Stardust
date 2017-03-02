@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			var personId = DataMaker.Person(personName).Person.Id.Value;
 			var configuration = new
 			{
-				PlatformTypeId = Guid.Empty,
 				SourceId = datasource,
 				Persons = new[]
 				{
@@ -73,7 +72,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 		{
 			var configuration = new
 			{
-				PlatformTypeId = Guid.Empty,
 				SourceId = datasource,
 				Persons = new[]
 				{

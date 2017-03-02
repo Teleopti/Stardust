@@ -3,11 +3,6 @@ using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class PlatformTypeInjector
-	{
-		public string Inject(string stateCode, string platformTypeId) => $"{stateCode} ({platformTypeId})";
-	}
-
 	public class Rta
 	{
 		public static string LogOutBySnapshot = "CCC Logged out";

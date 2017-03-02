@@ -10,12 +10,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	public class StateController : ApiController
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
-		private readonly PlatformTypeInjector _platformTypeInjector;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, PlatformTypeInjector platformTypeInjector)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_rta = rta;
-			_platformTypeInjector = platformTypeInjector;
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						AuthenticationKey = input.AuthenticationKey,
 						SourceId = input.SourceId,
 						UserCode = input.UserCode,
-						StateCode = _platformTypeInjector.Inject(input.StateCode, input.PlatformTypeId),
+						StateCode = input.StateCode,
 						StateDescription = input.StateDescription,
 						SnapshotId = parseSnapshotId(input.SnapshotId),
 					});
@@ -67,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				var states = input.Select(i => new BatchStateInputModel
 				{
 					UserCode = i.UserCode,
-					StateCode = _platformTypeInjector.Inject(i.StateCode, i.PlatformTypeId),
+					StateCode = i.StateCode,
 					StateDescription = i.StateDescription,
 				}).ToArray();
 

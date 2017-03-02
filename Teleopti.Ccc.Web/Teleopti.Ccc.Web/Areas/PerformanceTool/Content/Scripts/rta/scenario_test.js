@@ -23,15 +23,14 @@ define([
 
 				var configuration = JSON.parse(vm.Configuration());
 
-				assert(configuration.PlatformTypeId);
 				assert(configuration.SourceId);
 
 				assert.equals(configuration.Persons.length, 1);
 				assert.equals(configuration.Persons[0].ExternalLogOn, "2001");
 				assert.equals(configuration.Persons[0].PersonId, "B46A2588-8861-42E3-AB03-9B5E015B257C");
 				assert.equals(configuration.States.length, 2);
-				assert.contains(configuration.States, "Ready");
-				assert.contains(configuration.States, "OFF");
+				assert.contains(configuration.States, "Ready (00000000-0000-0000-0000-000000000000)");
+				assert.contains(configuration.States, "OFF (00000000-0000-0000-0000-000000000000)");
 				assert.equals(configuration.ExpectedEndingStateGroup, "Logged off");
 			},
 

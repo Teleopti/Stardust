@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 					AuthenticationKey = LegacyAuthenticationKey.TheKey,
 					UserCode = logon.UserCode,
 					StateCode = stateChange.StateCode,
-					PlatformTypeId = Guid.Empty.ToString(),
 					SourceId = _testConfiguration.SourceId,
 				})
 				.Batch(batchSize)

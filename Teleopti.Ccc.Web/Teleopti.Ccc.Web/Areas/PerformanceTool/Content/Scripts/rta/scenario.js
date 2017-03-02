@@ -54,7 +54,6 @@ define([
 				for (var p = 0; p < configuration.Persons.length; p++) {
 
 					iterations.push(new Iteration({
-						PlatformTypeId: configuration.PlatformTypeId,
 						SourceId: configuration.SourceId,
 						Person: configuration.Persons[p],
 						StateCode: configuration.States[s],
@@ -106,7 +105,6 @@ define([
 		});
 
 		self.Configuration(JSON.stringify({
-			PlatformTypeId: "00000000-0000-0000-0000-000000000000",
 			SourceId: 1,
 			Persons: [
 				{
@@ -114,7 +112,7 @@ define([
 					PersonId: "B46A2588-8861-42E3-AB03-9B5E015B257C"
 				}
 			],
-			States: ["Ready","OFF"],
+			States: ["Ready (00000000-0000-0000-0000-000000000000)", "OFF (00000000-0000-0000-0000-000000000000)"],
 			ExpectedEndingStateGroup: "Logged off",
 		}, null, 4));
 

@@ -20,7 +20,13 @@ ALTER TABLE [dbo].[RtaState] DROP CONSTRAINT [UQ_StateCode_PlatFormTypeId_Busine
 GO
 ALTER TABLE dbo.[RtaState] ALTER COLUMN StateCode varchar(300)
 GO
-UPDATE dbo.[RtaState] SET StateCode = StateCode + ' (' + convert(varchar(max), PlatformTypeId) + ')'
+UPDATE dbo.[RtaState] 
+SET
+StateCode = StateCode + ' (' + convert(varchar(max), PlatformTypeId) + ')',
+Name = Name + ' (' + convert(varchar(max), PlatformTypeId) + ')'
+WHERE 
+PlatformTypeId <> '00000000-0000-0000-0000-000000000000' AND
+StateCode <> 'CCC Logged out'
 GO
 ALTER TABLE dbo.[RtaState] DROP COLUMN PlatformTypeId
 GO

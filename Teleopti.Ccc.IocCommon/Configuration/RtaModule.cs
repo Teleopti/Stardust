@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 
 			builder.RegisterType<ProperAlarm>().SingleInstance();
-			builder.RegisterType<PlatformTypeInjector>().SingleInstance();
 
 			builder.RegisterType<SiteViewModelBuilder>().SingleInstance();
 			builder.RegisterType<TeamViewModelBuilder>().SingleInstance();

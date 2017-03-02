@@ -17,13 +17,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
-		private readonly PlatformTypeInjector _platformTypeInjector;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(TeleoptiRtaService));
 
-		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, PlatformTypeInjector platformTypeInjector)
+		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_rta = rta;
-			_platformTypeInjector = platformTypeInjector;
 		}
 
 		public int SaveExternalUserState(
@@ -121,16 +119,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				stateCode = "LOGGED-OFF";
 			if (stateCode == null)
 				return null;
-
 			stateCode = stateCode.Trim();
 
-			if (stateCode.Length > 255)
-				throw new InvalidStateCodeException("State code can not exceed 255 characters");
-
 			if (string.IsNullOrEmpty(platformTypeId))
-				throw new InvalidPlatformException("Platform id is required");
+				throw new InvalidPlatformException("Platform type id is required");
+			var parsedPlatformTypeId = Guid.Parse(platformTypeId);
+			if (parsedPlatformTypeId != Guid.Empty)
+				stateCode = $"{stateCode} ({parsedPlatformTypeId.ToString().ToUpper()})";
 
-			return _platformTypeInjector.Inject(stateCode, platformTypeId);
+			if (stateCode.Length > 300)
+				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
+
+			return stateCode;
 		}
 
 		private static DateTime? fixSnapshotId(DateTime snapshotId, bool isSnapshot)

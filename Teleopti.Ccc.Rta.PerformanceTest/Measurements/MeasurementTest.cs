@@ -28,12 +28,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 		public Http Http;
 		public IEventPublisherScope EventPublisher;
 		public ConfigurableSyncEventPublisher Publisher;
-		public PlatformTypeInjector PlatformTypeInjector;
 
 		[Test]
 		public void BatchTest()
 		{
-			var playformTypeId = Guid.NewGuid().ToString();
+			var platformTypeId = Guid.NewGuid().ToString();
 			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
 			Publisher.AddHandler<MappingReadModelUpdater>();
 			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
@@ -44,7 +43,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 				Database
 					.WithDefaultScenario("default")
 					.WithStateGroup("phone")
-					.WithStateCode(PlatformTypeInjector.Inject("phone", playformTypeId));
+					.WithStateCode("phone")
+					.WithStateCode($"phone ({platformTypeId})");
 				Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
 				Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
 				userCodes.ForEach(x => Database.WithAgent(x));
@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 						return new
 						{
 							b.AuthenticationKey,
-							playformTypeId,
 							b.SourceId,
 							States = b.States
 								.Select(s => new ExternalUserState
@@ -103,7 +102,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 								AuthenticationKey = b.AuthenticationKey,
 								UserCode = s.UserCode,
 								StateCode = s.StateCode,
-								PlatformTypeId = playformTypeId,
 								SourceId = b.SourceId,
 							});
 					});
@@ -121,7 +119,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 						{
 							int result;
 							bool resultSpecified;
-							service.SaveBatchExternalUserState(b.AuthenticationKey, playformTypeId, b.SourceId, b.States, out result, out resultSpecified);
+							service.SaveBatchExternalUserState(b.AuthenticationKey, platformTypeId, b.SourceId, b.States, out result, out resultSpecified);
 							if (result < 0)
 								throw new Exception(result.ToString());
 						});
