@@ -17,7 +17,11 @@
 
         rtaService.getAgentHistoricalData(id)
             .then(function(data) {
-                var shiftInfo = buildShiftInfo(data.Schedules);
+                if (data.Changes == null) {
+                    data.Changes = [];
+                }
+
+                var shiftInfo = buildShiftInfo(data.Schedules, data.Now);
 
                 vm.personId = data.PersonId;
                 vm.agentName = data.AgentName;
@@ -50,143 +54,55 @@
 
                 vm.fullTimeline = buildTimeline(shiftInfo);
 
-                if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351) {
-                    var m = vm.date.clone()
-                    var states = [];
-                    m.hour(7)
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "", "In adherence", { activity: "Before shift start", time: '' }));
-                    m.hour(8).minute(1)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 10, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "08:00 - 09:00" }));
-                    m.hour(9).minute(1)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, m.format('YYYY-MM-DD HH:mm'), "Break", "Neutral", { activity: "Break", time: "09:00 - 09.30" }));
-                    m.hour(9).minute(31)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 5, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
-                    m.hour(10).minute(1)
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "Phone", "Out of adherence", { activity: "Phone", time: "09:30 - 11:00" }));
-                    m.hour(10).minute(16)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 8, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "09:30 - 11:00" }));
-                    m.hour(11).minute(4)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 2, m.format('YYYY-MM-DD HH:mm'), "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
-                    m.hour(11).minute(55)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 1, m.format('YYYY-MM-DD HH:mm'), "Lunch", "Neutral", { activity: "Lunch", time: "11:00 - 12:00" }));
-                    m.hour(12).minute(1)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 20, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "12:00 - 14:00" }));
-                    m.hour(14).minute(1)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 9, m.format('YYYY-MM-DD HH:mm'), "Break", "Neutral", { activity: "Break", time: "14:00 - 15:00" }));
-                    m.hour(14).minute(55)
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "Break", "In adherence", { activity: "Break", time: "14:00 - 15:00" }));
-                    m.hour(15).minute(16)
-                    states = states.concat(phoneChangesFor(startOfShift, totalSeconds, 18, m.format('YYYY-MM-DD HH:mm'), "Phone", "In adherence", { activity: "Phone", time: "15:00 - 17:00" }));
-                    m.hour(17).minute(5)
-                    states = states.concat(offChangesFor(startOfShift, totalSeconds, m.format('YYYY-MM-DD HH:mm'), "After shift end", "In adherence", { activity: "After shift end", time: "" }));
-
-                    states = states.map(function(state, i) {
-                        state.id = i
-                        var nextState = states[i + 1]
-                        if (nextState != null) {
-                            state.width = calculateWidth(state.time, nextState.time, totalSeconds)
-                        } else {
-                            state.width = calculateWidth(state.time, shiftInfo.end, totalSeconds)
-                        }
-                        return state;
-                    })
-
-                    vm.states = states
-                    vm.rulechanges = states.reduce(function(arr, state) {
-                        var key = state.key
-                        var existing = arr.find(function(item) {
-                            return item.key.activity === key.activity && item.key.time === key.time
-                        })
-                        if (existing == null) {
-                            arr.push({
-                                key: key,
-                                header: key,
-                                items: [state]
-                            })
-                        } else {
-                            existing.items.push(state)
-                        }
-
-                        return arr
-                    }, [])
-                }
+                vm.changes = data.Changes.map(function(change) {
+                    change.offset = calculateWidth(startOfShift, change.Time, totalSeconds);
+                    return change;
+                });
+                vm.sortedChanges = mapChanges(data.Changes, data.Schedules);
             });
 
-        function offChangesFor(startOfShift, totalSeconds, time, activity, adherence, key) {
-            return {
-                offset: calculateWidth(startOfShift, time, totalSeconds),
-                state: "Logged off",
-                time: moment(time),
-                activity: activity,
-                activityColor: (function() {
-                    if (activity == "Phone") {
-                        return "lightgreen"
-                    } else if (activity == "Lunch") {
-                        return "yellow"
-                    } else if (activity == "Break") {
-                        return "red"
-                    }
-                }()),
-                rule: activity !== "" ? activity + '-Logged off rule' : "Logged off rule",
-                ruleColor: "darksalmon",
-                adherence: adherence,
-                adherenceColor: (function() {
-                    if (adherence === "In adherence") {
-                        return "green";
-                    } else if (adherence === "Neutral") {
-                        return "yellow";
-                    } else if (adherence === "Out of adherence") {
-                        return "red"
-                    }
-                }()),
-                key: key
-            }
-        }
+        function mapChanges(changes, schedules) {
+            return changes.reduce(function(arr, change) {
+                var changeTime = moment(change.Time);
+                var earliestStartTime = earliest(schedules);
+                var latestEndTime = latest(schedules);
 
-        function phoneChangesFor(startOfShift, totalSeconds, num, time, activity, adherence, key) {
-            var arr = [];
-            for (var i = 0; i < num; i++) {
-                var state = i % 2 == 0 ? 'Call' : 'Ready'
-                var m = moment(time, 'YYYY-MM-DD HH:mm')
-                m.add(6 * i, 'm')
-                arr.push({
-                    offset: calculateWidth(startOfShift, m.format('YYYY-MM-DD HH:mm:ss'), totalSeconds),
-                    state: state,
-                    time: m,
-                    activity: activity,
-                    activityColor: (function() {
-                        if (activity == "Phone") {
-                            return "lightgreen"
-                        } else if (activity == "Lunch") {
-                            return "yellow"
-                        } else if (activity == "Break") {
-                            return "red"
-                        }
-                    }()),
-                    rule: activity + '-' + state + ' rule',
-                    ruleColor: adherence === "In adherence" ? "darkgreen" : "burlywood",
-                    adherence: adherence,
-                    adherenceColor: (function() {
-                        if (adherence === "In adherence") {
-                            return "green";
-                        } else if (adherence === "Neutral") {
-                            return "yellow";
-                        } else if (adherence === "Out of adherence") {
-                            return "red"
-                        }
-                    }()),
-                    key: key
+                var key;
+                if (changeTime.isBefore(earliestStartTime)) {
+                    key = 'Before shift start';
+                } else if (changeTime.isAfter(latestEndTime)) {
+                    key = 'After shift end';
+                } else {
+                    var activityWhenChangeOccurred = schedules.find(function(layer) {
+                        return layer.StartTime <= change.Time && layer.EndTime >= change.Time;
+                    });
+                    var activityStart = moment(activityWhenChangeOccurred.StartTime);
+                    var activityEnd = moment(activityWhenChangeOccurred.EndTime);
+                    // "phone 08:00 - 09:00"
+                    key = activityWhenChangeOccurred.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
+                }
+                var existing = arr.find(function(item) {
+                    return item.key === key;
                 });
-            }
+                if (existing == null) {
+                    arr.push({
+                        key: key,
+                        header: key,
+                        items: [change]
+                    });
+                } else {
+                    existing.items.push(change);
+                }
 
-            return arr;
+                return arr;
+            }, []);
         }
 
-        function buildShiftInfo(schedule) {
+        function buildShiftInfo(schedule, serverNow) {
             if (schedule.length === 0)
                 return {
-                    start: moment().hour(8).minute(0).second(0),
-                    stop: moment().hour(17).minute(0).second(0),
+                    start: moment(serverNow).hour(8).minute(0).second(0),
+                    stop: moment(serverNow).hour(17).minute(0).second(0),
                     totalSeconds: (17 - 8) * 3600
                 };
 

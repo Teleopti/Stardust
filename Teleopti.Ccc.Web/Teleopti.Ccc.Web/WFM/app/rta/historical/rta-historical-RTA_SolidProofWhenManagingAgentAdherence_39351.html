@@ -120,13 +120,13 @@
 
     <div class="row">
         <div class="hidden-md" style="height: 30px; position: relative;">
-            <div data-id="{{rulechange.id}}" class="diamond" ng-repeat="rulechange in vm.states" ng-click="vm.scrollTo(rulechange.id)" ng-attr-style="left: {{rulechange.offset}}; background-color: {{rulechange.ruleColor}}"></div>
+            <div data-id="{{rulechange.id}}" class="diamond" ng-repeat="rulechange in vm.changes" ng-click="vm.scrollTo(rulechange.id)" ng-attr-style="left: {{rulechange.offset}}; background-color: {{rulechange.ruleColor}}"></div>
         </div>
     </div>
 </div>
 
 
-<rta-card ng-repeat="rulechange in vm.rulechanges">
+<rta-card ng-repeat="rulechange in vm.sortedChanges">
     <rta-card-header ng-attr-styles="border-left-color: {{rulechange.items[0].activityColor}}">{{rulechange.header.activity}} {{rulechange.header.time}}</rta-card-header>
     <rta-card-body>
         <div class="con-row">
