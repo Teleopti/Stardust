@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
-
 	public class ImportAgentFileValidator:IImportAgentFileValidator
 	{
 		private const int maxNameLength = 25;
@@ -46,8 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			"SchedulePeriodType",
 			"SchedulePeriodLength"
 		};
-
-
 
 		public List<string> ExtractColumnNames(IWorkbook workbook)
 		{
@@ -108,7 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var raw = new RawAgent();
 			var agentInfo = new AgentDataModel();
 
-			SetRawData(raw,cells,result);
+			setRawData(raw,cells,result);
 
 			result.Raw = raw;
 
@@ -204,7 +201,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return new List<string>();
 		}
 
-		private static void SetRawData(RawAgent raw,ICell[] cells,AgentExtractionResult result)
+		private static void setRawData(RawAgent raw,ICell[] cells,AgentExtractionResult result)
 		{
 			raw.Firstname = cells[0].StringCellValue;
 			raw.Lastname = cells[1].StringCellValue;

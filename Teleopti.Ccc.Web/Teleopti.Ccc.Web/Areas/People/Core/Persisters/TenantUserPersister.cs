@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Ajax.Utilities;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -11,7 +13,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public interface ITenantUserPersister
 	{
-		List<string> Persist(PersonInfoModel tenantUserData);		
+		List<string> Persist(PersonInfoModel tenantUserData);
+		List<string> Persist(AgentDataModel agentData, Guid personId);
 	}
 
 	public class TenantUserPersister : ITenantUserPersister
@@ -23,6 +26,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		{
 			_persistPersonInfo = persistPersonInfo;
 			_personInfoMapper = personInfoMapper;
+		}
+
+		public List<string> Persist(AgentDataModel agentData, Guid personId)
+		{
+			var tenantUserData = new PersonInfoModel
+			{
+				ApplicationLogonName = agentData.ApplicationUserId.IsNullOrWhiteSpace() ? null : agentData.ApplicationUserId,
+				Identity = agentData.WindowsUser.IsNullOrWhiteSpace() ? null : agentData.WindowsUser,
+				Password = agentData.Password.IsNullOrWhiteSpace()? null : agentData.Password,
+				PersonId = personId
+			};
+
+			return Persist(tenantUserData);
 		}
 
 		[TenantUnitOfWork]
