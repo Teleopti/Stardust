@@ -9,6 +9,7 @@
 				var toggledSchedulingOnStardust = false;
 				var tenMinutes = 1000 * 60 * 10;
 				var planningPeriodId = $stateParams.id;
+				var checkProgressRef;
 				$scope.issues = [];
 				$scope.scheduledAgents = 0;
 				$scope.hasIssues = false;
@@ -20,15 +21,10 @@
 				$scope.optimizeDayOffIsEnabled = optimizeDayOffIsEnabled;
 				$scope.intraOptimize = intraOptimize;
 				$scope.publishSchedule = publishSchedule;
-
+				
 				var keepAliveRef = $interval(function () {
 					planningPeriodService.keepAlive();
 				}, tenMinutes);
-
-				var checkProgressTimer = $interval(function () {
-					if (toggledOptimization)
-						checkIntradayOptimizationProgress();
-				}, 10000);
 
 				toggleService.togglesLoaded.then(function () {
 					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
@@ -47,7 +43,8 @@
 
 				$scope.$on('$destroy', function () {
 					$interval.cancel(keepAliveRef);
-					$interval.cancel(checkProgressTimer);
+					if (checkProgressRef)
+						$interval.cancel(checkProgressRef);
 				});
 
 				function initResult(interResult, result, planningPeriod) {
@@ -74,6 +71,9 @@
 								initResult(data.OptimizationResult, data.ScheduleResult, data.PlanningPeriod);
 							});
 						checkIntradayOptimizationProgress();
+						checkProgressRef = $interval(function () {
+								checkIntradayOptimizationProgress();
+						}, 10000);
 					} else {
 						initResult($stateParams.interResult, $stateParams.result, $stateParams.planningperiod);
 					}

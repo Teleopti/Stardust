@@ -74,7 +74,7 @@
 					$scope.schedulingPerformed = false;
 					$scope.scheduleClicked = true;
 
-					planningPeriodService.launchScheduling({ id: p.Id }).$promise.then(function () {
+					planningPeriodService.launchScheduling({ id: p.Id, runAsynchronously: true }).$promise.then(function () {
 						checkProgress(p.Id);
 					}, handleScheduleOrOptimizeError);
 				}
@@ -85,7 +85,7 @@
 					$scope.scheduleClicked = true;
 
 					$scope.status = $translate.instant('PresentTenseSchedule');
-					planningPeriodService.launchScheduling({ id: p.Id }).$promise.then(function (scheduleResult) {
+					planningPeriodService.launchScheduling({ id: p.Id, runAsynchronously: false }).$promise.then(function (scheduleResult) {
 						$scope.status = $translate.instant('OptimizingDaysOff');
 						//to make sure long optimization request doesn't create a new cookie based on current time
 						//we call keepAlive here again
@@ -144,8 +144,7 @@
 							checkProgress($stateParams.id);
 							checkProgressRef = $interval(function () {
 								checkProgress($stateParams.id);
-							},
-								10000);
+							}, 10000);
 						}
 					});
 

@@ -18,7 +18,7 @@
 			getSuggestions: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/suggestions', isArray: true },
 			publishPeriod: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/publish' },
 			changeRange: { method: 'PUT', params: { id: "@id" } },
-			schedule: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/schedule' },
+			schedule: { method: 'POST', params: { id: "@id", runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/schedule' },
 			optimize: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/optimize' }
 		});
 
