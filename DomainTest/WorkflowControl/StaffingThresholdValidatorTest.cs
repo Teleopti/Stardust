@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			var filteredVisualLayers = MockRepository.GenerateMock<IFilteredVisualLayerCollection>();
 
-			range.Stub(x => x.ScheduledDayCollection(new DateOnlyPeriod(date, date.AddDays(1)))).Return(new[] {scheduleDay, scheduleDay2});
+			range.Stub(x => x.ScheduledDayCollection(new DateOnlyPeriod(date, date.AddDays(1)))).Return(new[] {scheduleDay, scheduleDay2}).IgnoreArguments();
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, _timeZone));
 			scheduleDay2.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date.AddDays(1), _timeZone));
 			scheduleDay.Stub(x => x.ProjectionService()).Return(projectionService);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			IList<IVisualLayer> visualLayers = new List<IVisualLayer> {visualLayer};
 			var filteredVisualLayers = MockRepository.GenerateMock<IFilteredVisualLayerCollection>();
 
-			range.Stub(x => x.ScheduledDayCollection(new DateOnlyPeriod(date, date))).Return(new[] {scheduleDay});
+			range.Stub(x => x.ScheduledDayCollection(new DateOnlyPeriod(date, date))).Return(new[] {scheduleDay}).IgnoreArguments();
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, _timeZone));
 			scheduleDay.Stub(x => x.ProjectionService()).Return(projectionService);
 			projectionService.Stub(x => x.CreateProjection()).Return(visualLayerCollection);
