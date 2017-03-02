@@ -1502,6 +1502,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adherence for.
+        /// </summary>
+        public static string AdherenceFor {
+            get {
+                return ResourceManager.GetString("AdherenceFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adherence calculation.
         /// </summary>
         public static string AdherenceReportCalculation {
@@ -1696,6 +1705,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AfterCustomerWorkTime {
             get {
                 return ResourceManager.GetString("AfterCustomerWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After shift end.
+        /// </summary>
+        public static string AfterShiftEnd {
+            get {
+                return ResourceManager.GetString("AfterShiftEnd", resourceCulture);
             }
         }
         
@@ -3995,6 +4013,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Basic {
             get {
                 return ResourceManager.GetString("Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before shift start.
+        /// </summary>
+        public static string BeforeShiftStart {
+            get {
+                return ResourceManager.GetString("BeforeShiftStart", resourceCulture);
             }
         }
         
@@ -19223,6 +19250,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No shift.
+        /// </summary>
+        public static string NoShift {
+            get {
+                return ResourceManager.GetString("NoShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No shifts available for this preference.
         /// </summary>
         public static string NoShiftsAvailableForThisPreference {
@@ -25586,6 +25622,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RtaStateGroupsMustBeConfigured {
             get {
                 return ResourceManager.GetString("RtaStateGroupsMustBeConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rule.
+        /// </summary>
+        public static string Rule {
+            get {
+                return ResourceManager.GetString("Rule", resourceCulture);
             }
         }
         

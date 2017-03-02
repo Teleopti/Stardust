@@ -6,6 +6,7 @@ describe('RtaHistoricalController', function() {
         $sessionStorage,
         $fakeBackend,
         $controllerBuilder,
+        $translate,
         scope;
 
     var stateParams = {};
@@ -21,13 +22,14 @@ describe('RtaHistoricalController', function() {
         });
     });
 
-    beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
+    beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$translate_) {
         $interval = _$interval_;
         $state = _$state_;
         $sessionStorage = _$sessionStorage_;
         $httpBackend = _$httpBackend_;
         $fakeBackend = _FakeRtaBackend_;
         $controllerBuilder = _ControllerBuilder_;
+        $translate = _$translate_;
 
         scope = $controllerBuilder.setup('RtaHistoricalController');
 
@@ -334,7 +336,8 @@ describe('RtaHistoricalController', function() {
 
         var vm = $controllerBuilder.createController().vm;
 
-        expect(vm.sortedChanges.find(function(change) { return change.key == 'Before shift start' }).items.length).toEqual(1)
+
+        expect(vm.sortedChanges.find(function(change) { return change.key == $translate.instant('BeforeShiftStart') }).items.length).toEqual(1)
     });
 
     it('should handle change after schedule end', function() {
@@ -361,7 +364,7 @@ describe('RtaHistoricalController', function() {
 
         var vm = $controllerBuilder.createController().vm;
 
-        expect(vm.sortedChanges.find(function(change) { return change.key == 'After shift end' }).items.length).toEqual(1)
+        expect(vm.sortedChanges.find(function(change) { return change.key == $translate.instant('AfterShiftEnd') }).items.length).toEqual(1)
     });
 
     it('should set offset for changes', function() {
@@ -385,4 +388,6 @@ describe('RtaHistoricalController', function() {
 
         expect(vm.changes[0].offset).toEqual(1 / 11 * 100 + '%')
     });
+
+    xit('should highlight selected rule change', function() {})
 });

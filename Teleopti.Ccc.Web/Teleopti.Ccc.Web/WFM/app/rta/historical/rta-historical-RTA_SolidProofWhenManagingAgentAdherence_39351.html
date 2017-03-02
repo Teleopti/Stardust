@@ -10,25 +10,9 @@
         top: 50%;
         transform: rotate(45deg);
         margin-top: -8px;
+        margin-left: -4px;
         cursor: pointer;
         /*border-right: 1px solid white;*/
-    }
-    
-    .label {
-        display: inline;
-        padding: .2em .6em .3em;
-        font-size: 75%;
-        font-weight: 700;
-        line-height: 1;
-        color: #fff;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: baseline;
-        border-radius: .25em;
-    }
-    
-    .label:hover {
-        background-color: white;
     }
     
     .label:empty {
@@ -86,7 +70,7 @@
 
 <div class="panel material-depth-1">
     <div class="sub-header">
-        <h2>Adherence for {{vm.date | amDateFormat: "YYYY-MM-DD"}}</h2>
+        <h2>{{'AdherenceFor' | translate}} {{vm.date | amDateFormat: "YYYY-MM-DD"}}</h2>
     </div>
     <div class="con-row">
         <div class="con-flex">
@@ -120,34 +104,34 @@
 
     <div class="row">
         <div class="hidden-md" style="height: 30px; position: relative;">
-            <div data-id="{{rulechange.id}}" class="diamond" ng-repeat="rulechange in vm.changes" ng-click="vm.scrollTo(rulechange.id)" ng-attr-style="left: {{rulechange.offset}}; background-color: {{rulechange.ruleColor}}"></div>
+            <div data-id="{{rulechange.id}}" class="diamond" ng-repeat="rulechange in vm.changes" ng-click="vm.scrollTo(rulechange.id)" ng-attr-style="left: {{rulechange.offset}}; background-color: {{rulechange.RuleColor}}"></div>
         </div>
     </div>
 </div>
 
 
 <rta-card ng-repeat="rulechange in vm.sortedChanges">
-    <rta-card-header ng-attr-styles="border-left-color: {{rulechange.items[0].activityColor}}">{{rulechange.header.activity}} {{rulechange.header.time}}</rta-card-header>
+    <rta-card-header ng-attr-styles="border-left-color: {{rulechange.items[0].ActivityColor}}">{{rulechange.key}}</rta-card-header>
     <rta-card-body>
         <div class="con-row">
             <div class="con-flex">
                 <ul class="wfm-simple-list rta-list">
                     <li>
                         <div class="con-row rta-change-row hidden-sm">
-                            <div class="con-flex"><b>Time</b></div>
-                            <div class="con-flex"><b>Activity</b></div>
-                            <div class="con-flex"><b>State</b></div>
-                            <div class="con-flex"><b>Rule</b></div>
-                            <div class="con-flex"><b>Adherence</b></div>
+                            <div class="con-flex"><b>{{'Time' | translate}}</b></div>
+                            <div class="con-flex"><b>{{'Activity' | translate}}</b></div>
+                            <div class="con-flex"><b>{{'State' | translate}}</b></div>
+                            <div class="con-flex"><b>{{'Rule' | translate}}</b></div>
+                            <div class="con-flex"><b>{{'Adherence' | translate}}</b></div>
                         </div>
                     </li>
-                    <li ng-repeat="item in rulechange.items" class="change" data-time="{{item.time | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-activity="{{item.activity}}" data-state="{{item.state}}" data-rule="{{item.rule}}" data-adherence="{{item.adherence}}">
+                    <li ng-repeat="item in rulechange.items" class="change" data-time="{{item.Time | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-activity="{{item.Activity}}" data-state="{{item.State}}" data-rule="{{item.Rule}}" data-adherence="{{item.Adherence}}">
                         <div class="con-row rta-change-row">
-                            <div class="con-flex time">{{item.time | amDateFormat: 'HH:mm:ss'}}</div>
-                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.activityColor}};">{{item.activity}}</span></div>
-                            <div class="con-flex">{{item.state}}</div>
-                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.ruleColor}};">{{item.rule}}</span></div>
-                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.adherenceColor}};">{{item.adherence}}</span></div>
+                            <div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss'}}</div>
+                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.ActivityColor}};">{{item.Activity}}</span></div>
+                            <div class="con-flex">{{item.State}}</div>
+                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.RuleColor}};">{{item.Rule}}</span></div>
+                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.AdherenceColor}};">{{item.Adherence}}</span></div>
                         </div>
                     </li>
                 </ul>

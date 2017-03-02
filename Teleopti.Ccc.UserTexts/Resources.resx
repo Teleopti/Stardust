@@ -15608,4 +15608,19 @@ Do you want to participate?</value>
     <value>Missing Column</value>
     <comment>missing column in excel file</comment>
   </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>Adherence for</value>
+  </data>
+  <data name="AfterShiftEnd" xml:space="preserve">
+    <value>After shift end</value>
+  </data>
+  <data name="BeforeShiftStart" xml:space="preserve">
+    <value>Before shift start</value>
+  </data>
+  <data name="NoShift" xml:space="preserve">
+    <value>No shift</value>
+  </data>
+  <data name="Rule" xml:space="preserve">
+    <value>Rule</value>
+  </data>
 </root>

@@ -1,9 +1,9 @@
 ﻿(function() {
     'use strict';
     angular.module('wfm.rta').controller('RtaHistoricalController', RtaHistoricalController);
-    RtaHistoricalController.$inject = ['$stateParams', 'rtaService', 'Toggle'];
+    RtaHistoricalController.$inject = ['$stateParams', 'rtaService', '$translate', 'Toggle'];
 
-    function RtaHistoricalController($stateParams, rtaService, toggles) {
+    function RtaHistoricalController($stateParams, rtaService, $translate, toggles) {
         var vm = this;
 
         var id = $stateParams.personId;
@@ -68,18 +68,22 @@
                 var latestEndTime = latest(schedules);
 
                 var key;
-                if (changeTime.isBefore(earliestStartTime)) {
-                    key = 'Before shift start';
-                } else if (changeTime.isAfter(latestEndTime)) {
-                    key = 'After shift end';
+                if (schedules.length === 0) {
+                    key = $translate.instant('NoShift');
                 } else {
-                    var activityWhenChangeOccurred = schedules.find(function(layer) {
-                        return layer.StartTime <= change.Time && layer.EndTime >= change.Time;
-                    });
-                    var activityStart = moment(activityWhenChangeOccurred.StartTime);
-                    var activityEnd = moment(activityWhenChangeOccurred.EndTime);
-                    // "phone 08:00 - 09:00"
-                    key = activityWhenChangeOccurred.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
+                    if (changeTime.isBefore(earliestStartTime)) {
+                        key = $translate.instant('BeforeShiftStart');
+                    } else if (changeTime.isAfter(latestEndTime)) {
+                        key = $translate.instant('AfterShiftEnd');
+                    } else {
+                        var activityWhenChangeOccurred = schedules.find(function(layer) {
+                            return layer.StartTime <= change.Time && layer.EndTime >= change.Time;
+                        });
+                        var activityStart = moment(activityWhenChangeOccurred.StartTime);
+                        var activityEnd = moment(activityWhenChangeOccurred.EndTime);
+                        // "phone 08:00 - 09:00"
+                        key = activityWhenChangeOccurred.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
+                    }
                 }
                 var existing = arr.find(function(item) {
                     return item.key === key;
