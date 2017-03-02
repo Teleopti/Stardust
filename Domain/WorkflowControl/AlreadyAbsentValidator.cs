@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -9,12 +10,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var period = absenceRequest.Period;
 			var scheduleDays = scheduleRange.ScheduledDayCollection(
-				period.ToDateOnlyPeriod(absenceRequest.Person.PermissionInformation.DefaultTimeZone()));
+				period.ToDateOnlyPeriod(absenceRequest.Person.PermissionInformation.DefaultTimeZone()).Inflate(1));
 			foreach (var scheduleDay in scheduleDays)
 			{
 				var projection = scheduleDay.ProjectionService().CreateProjection();
 				var absenceLayers = projection.FilterLayers(period).FilterLayers<IAbsence>();
-				return absenceLayers.Any();
+				if (absenceLayers.Any()) return true;
 			}
 			return false;
 		}

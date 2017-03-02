@@ -168,15 +168,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var result = new UnderstaffingDetails();
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
-			var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
+			var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod.Inflate(1));
 			var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, localPeriod.StartDate);
 
 			if (!isSkillOpenForDateOnly(localPeriod.StartDate, skills.Skills))
 				return result;
 
-			var datesToResourceCalculate = absenceRequest.Period.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			var calculatedPeriod = absenceRequest.Period;
-
+			var datesToResourceCalculate = calculatedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			
 			var resCalcData = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.ToResourceOptimizationData(true, false);
 			foreach (var dateOnly in datesToResourceCalculate.DayCollection())
 			{

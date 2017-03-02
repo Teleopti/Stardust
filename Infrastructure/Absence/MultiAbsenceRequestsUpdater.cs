@@ -464,7 +464,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				persons.Add(personRequest.Person);
 			}
-			var totalPeriodIncludingMidnight = new DateTimePeriod(totalPeriod.StartDateTime.Date, totalPeriod.EndDateTime);
+			var totalPeriodIncludingMidnight = new DateTimePeriod(totalPeriod.StartDateTime, totalPeriod.EndDateTime);
 
 			if (shouldLoadDataForResourceCalculation)
 			{

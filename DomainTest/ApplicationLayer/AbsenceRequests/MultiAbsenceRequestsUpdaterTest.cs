@@ -119,6 +119,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		public void ShouldDenyIfPersonIsAlreadyAbsentMidnight()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
+			var scenario = ScenarioRepository.Has("scnearioName");
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var person = PersonFactory.CreatePerson(wfcs).WithId();
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			var personAbsence = new PersonAbsence(person, scenario, absenceLayer);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 2, 12, 2016, 12, 2, 13))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
+			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonAlreadyAbsent);
+		}
+
+		[Test]
 		public void ShouldDenyExpiredRequestWithWaitlistingEnabled()
 		{
 			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
@@ -352,6 +386,136 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			reqs.Count(x => x.IsApproved).Should().Be.EqualTo(30); //with 0% threshold
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(170);
+		}
+
+
+		[Test]
+		public void ShouldHandleMidnightShiftsWhenAbsenceIsOnSecondDay()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
+			var firstDay = new DateOnly(2016, 12, 1);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+
+			var scenario = ScenarioRepository.Has("scnearioName");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = new WorkflowControlSet().WithId();
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			};
+
+			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
+
+			var contractSchedule = new ContractSchedule("_");
+			var partTimePercentage = new PartTimePercentage("_");
+			var team = new Team { Site = new Site("site") };
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var category = new ShiftCategory("shiftCategory");
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 170));
+
+			var reqs = Enumerable.Range(0, 200).Select(i =>
+			{
+				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
+				agent.WorkflowControlSet = workflowControlSet;
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
+				PersonAssignmentRepository.Has(assignment);
+				var personRequest =
+					new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 2, 03, 2016, 12, 2, 04))).WithId();
+				personRequest.Pending();
+				PersonRequestRepository.Add(personRequest);
+				return personRequest;
+			}).ToArray();
+
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
+
+			reqs.Count(x => x.IsApproved).Should().Be.EqualTo(30); //with 0% threshold
+			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(170);
+		}
+
+		[Test]
+		public void ShouldHandleMidnightShiftsOnOtherAgents()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
+			var firstDay = new DateOnly(2016, 12, 1);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+
+			var scenario = ScenarioRepository.Has("scnearioName");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = new WorkflowControlSet().WithId();
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			};
+
+			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
+
+			var contractSchedule = new ContractSchedule("_");
+			var partTimePercentage = new PartTimePercentage("_");
+			var team = new Team { Site = new Site("site") };
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var category = new ShiftCategory("shiftCategory");
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 12));
+
+			for (int i = 0; i < 10; i++)
+			{
+				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
+				agent.WorkflowControlSet = workflowControlSet;
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category);
+				PersonAssignmentRepository.Has(assignment);
+			}
+
+			var reqs = Enumerable.Range(0, 10).Select(i =>
+			{
+				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
+				agent.WorkflowControlSet = workflowControlSet;
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity,
+					new DateTimePeriod(2016, 12, 2, 01, 2016, 12, 2, 04), category);
+				PersonAssignmentRepository.Has(assignment);
+				var personRequest =
+					new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 2, 03, 2016, 12, 2, 04))).WithId();
+				personRequest.Pending();
+				PersonRequestRepository.Add(personRequest);
+				return personRequest;
+			}).ToArray();
+
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
+
+			reqs.Count(x => x.IsApproved).Should().Be.EqualTo(8); //with 0% threshold
+			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(2);
 		}
 
 

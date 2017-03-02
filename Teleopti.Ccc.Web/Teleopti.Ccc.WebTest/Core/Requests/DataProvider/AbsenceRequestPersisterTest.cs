@@ -231,6 +231,76 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldDenyWhenAlreadyAbsentAndAbsenceStartsTheDayBefore([Values]bool autoGrant)
+		{
+			var dateTimePeriodForm = new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			};
+
+			var alreadyAbsentPeriod = _today.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
+												  , UserTimeZone.TimeZone()).ChangeStartTime(TimeSpan.FromDays(-1));
+
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), alreadyAbsentPeriod));
+			_absence = createAbsence();
+
+			setWorkflowControlSet(autoGrant: autoGrant);
+
+			var form = createAbsenceRequestForm(dateTimePeriodForm);
+
+			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
+				, alreadyAbsentPeriod, _absence).WithId());
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(true);
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonAlreadyAbsent);
+		}
+
+		[Test]
+		public void ShouldNotDenyWhenAbsentTheDayBeforeAndShiftSpansOverMidnight([Values]bool autoGrant)
+		{
+			var requestDate = _today.AddDays(2);
+			var dateTimePeriodForm = new DateTimePeriodForm
+			{
+				StartDate = requestDate,
+				EndDate = requestDate,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			};
+
+			var shiftPeriod = requestDate.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
+												  , UserTimeZone.TimeZone()).ChangeStartTime(TimeSpan.FromDays(-1));
+
+			var alreadyAbsentPeriod = requestDate.AddDays(-1).ToDateTimePeriod(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
+												  , UserTimeZone.TimeZone());
+
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), shiftPeriod));
+			_absence = createAbsence();
+
+			setWorkflowControlSet(autoGrant: autoGrant);
+
+			var form = createAbsenceRequestForm(dateTimePeriodForm);
+
+			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
+				, alreadyAbsentPeriod, _absence).WithId());
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(false);
+			request.DenyReason.Should().Be("");
+		}
+
+		[Test]
 		public void ShouldDenyWhenUpdateAbsenceOutOfDate()
 		{
 			_absence = createAbsence();

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var person = personRequest.Person;
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false), absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())
+				new ScheduleDictionaryLoadOptions(false, false), absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).Inflate(1)
 				, _currentScenario.Current());
 
 			var scheduleRange = scheduleDictionary[person];

@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.Domain.Collection
 	                        IEnumerable<IScheduleDay> partsBefore;
 	                        if (absences.Any())
 	                        {
-		                        partsBefore = range.ScheduledDayCollection(absences.OrderByDescending(a => a.EndDate).First());
+		                        partsBefore = range.ScheduledDayCollection(absences.OrderByDescending(a => a.EndDate).First().Inflate(1));
 	                        }
 	                        else
 	                        {
