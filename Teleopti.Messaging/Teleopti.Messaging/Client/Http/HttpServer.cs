@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Messaging.Client.Http
 {
@@ -28,10 +26,10 @@ namespace Teleopti.Messaging.Client.Http
 
 		public Task Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			return innerPost(new Uri(uri), thing);
+			return innerPost(new Uri(uri), thing, customHeadersFunc);
 		}
 
-		private Task<HttpResponseMessage> innerPost(Uri uri, object thing, Func<string,NameValueCollection> customHeadersFunc = null)
+		private Task<HttpResponseMessage> innerPost(Uri uri, object thing, Func<string,NameValueCollection> customHeadersFunc)
 		{
 			var content = _serializer.SerializeObject(thing);
 			var request = new HttpRequestMessage
