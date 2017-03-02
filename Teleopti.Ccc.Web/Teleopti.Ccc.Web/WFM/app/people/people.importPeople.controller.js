@@ -3,7 +3,7 @@
 
 	angular.module('wfm.people')
 		.directive('importPeople', ImportPeopleDirective)
-		.controller('ImportPeopleCtrl', ['$timeout', 'People', ImportPeopleController]);
+		.controller('ImportPeopleCtrl', ['$timeout', 'People', 'Toggle', ImportPeopleController]);
 
 	function ImportPeopleDirective() {
 		return {
@@ -13,11 +13,11 @@
 			scope: {
 				importOptions: '=?'
 			},
-			templateUrl: "app/people/html/importPeople.html"
+			templateUrl: 'app/people/html/importPeople.html'
 		};
 	};
 
-	function ImportPeopleController($timeout, peopleSvc) {
+	function ImportPeopleController($timeout, peopleSvc, toggles) {
 		var vm = this;
 
 		vm.files = [];
@@ -38,14 +38,21 @@
 		};
 
 		vm.hasInvalidData = false;
+
 		vm.getFileTemplate = function() {
-			peopleSvc.downloadFileTemplate().then(function(response) {
-				var blob = new Blob([response.data], {
-					type: response.headers()['content-type']
-				});
-				saveAs(blob, 'userTemplate.xls');
-			});
+			if (toggles.Wfm_People_ImportAndCreateAgentFromFile_42528) {
+				peopleSvc.downloadFileTemplateAgent()
+					.then(function (response) {
+						saveFile(response, 'agent_template.xls');
+					});
+			} else {
+				peopleSvc.downloadFileTemplate()
+					.then(function (response) {
+						saveFile(response, 'user_template.xls');
+					});
+			}
 		};
+
 		vm.successCount = 0;
 		vm.failedCount = 0;
 		vm.upload = function (files) {
@@ -125,5 +132,12 @@
 			}
 			f.readAsText(bb);
 		}
-	};
+
+		function saveFile(response, filename) {
+			var blob = new Blob([response.data], {
+				type: response.headers()['content-type']
+			});
+			saveAs(blob, filename);
+		}
+	}
 }());
