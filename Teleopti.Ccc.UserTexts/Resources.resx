@@ -15596,6 +15596,10 @@ Do you want to participate?</value>
     <value>Invalid {0} : {1}</value>
     <comment>Invalid column message of importing agents. e.g: Invalid Contract: a, b, c</comment>
   </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>Latest schedule result</value>
+    <comment>Latest schedule/dayoff optimization result, which is used in web schedule</comment>
+  </data>
   <data name="SchedulePeriodType" xml:space="preserve">
     <value>Schedule period type</value>
     <comment>Name used in column header.</comment>

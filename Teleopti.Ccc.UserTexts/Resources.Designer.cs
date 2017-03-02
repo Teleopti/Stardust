@@ -14413,6 +14413,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latest schedule result.
+        /// </summary>
+        public static string LatestScheduleResult {
+            get {
+                return ResourceManager.GetString("LatestScheduleResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Latest start time.
         /// </summary>
         public static string LatestStartTime {
