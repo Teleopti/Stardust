@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 		[Test]
 		public void BatchTest()
 		{
-			var platformTypeId = Guid.NewGuid().ToString();
 			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
 			Publisher.AddHandler<MappingReadModelUpdater>();
 			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
@@ -43,8 +42,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 				Database
 					.WithDefaultScenario("default")
 					.WithStateGroup("phone")
-					.WithStateCode("phone")
-					.WithStateCode($"phone ({platformTypeId})");
+					.WithStateCode("phone");
 				Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
 				Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
 				userCodes.ForEach(x => Database.WithAgent(x));
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 						{
 							int result;
 							bool resultSpecified;
-							service.SaveBatchExternalUserState(b.AuthenticationKey, platformTypeId, b.SourceId, b.States, out result, out resultSpecified);
+							service.SaveBatchExternalUserState(b.AuthenticationKey, Guid.Empty.ToString(), b.SourceId, b.States, out result, out resultSpecified);
 							if (result < 0)
 								throw new Exception(result.ToString());
 						});
