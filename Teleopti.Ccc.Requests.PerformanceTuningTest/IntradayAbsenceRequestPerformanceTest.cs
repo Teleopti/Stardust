@@ -20,8 +20,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392)]
+	[RequestPerformanceTuningTest]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;

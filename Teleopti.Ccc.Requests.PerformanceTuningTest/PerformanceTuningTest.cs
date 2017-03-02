@@ -14,8 +14,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392)]
+	[RequestPerformanceTuningTest]
 	public class PerformanceTuningTest
     {
         public AsSystem AsSystem;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		    Assert.Pass();
 	    }
 
-        [Test]
+		[Test]
         public void ShouldHandle200AbsenceRequestsFast()
         {
             using (DataSource.OnThisThreadUse("Teleopti WFM"))
