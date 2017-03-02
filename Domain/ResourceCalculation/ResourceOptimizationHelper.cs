@@ -60,17 +60,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					_intraIntervalFinderService.Execute(resourceCalculationData.SkillDays, localDate, relevantProjections);
 				}
 
-				if (context != null)
-				{
-					context.Dispose();
-				}
+				context?.Dispose();
 			}
 		}
 
 		private DateTimePeriod getPeriod(DateOnly localDate)
 		{
-			var currentStart = localDate;
-			return new DateOnlyPeriod(currentStart, currentStart).ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()); 
+			return localDate.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()); 
 		}
 
 		private void resourceCalculateDate(IResourceCalculationData resourceCalculationData, IResourceCalculationDataContainer relevantProjections, DateOnly localDate, bool considerShortBreaks)
