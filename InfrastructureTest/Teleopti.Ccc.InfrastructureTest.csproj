@@ -159,6 +159,7 @@
     <Compile Include="ApplicationLayer\Archiving\MoveTestCase.cs" />
     <Compile Include="ApplicationLayer\Archiving\ScheduleManagementTestBase.cs" />
     <Compile Include="ApplicationLayer\Archiving\SourceAbsenceSplitTestCase.cs" />
+    <Compile Include="ApplicationLayer\Events\HangfireAllowRecurringFailuresEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireAllowRecurringFailuresEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireRetryEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireSerializeEventPublishingTest.cs" />
