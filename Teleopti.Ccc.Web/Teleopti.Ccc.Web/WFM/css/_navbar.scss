@@ -2,7 +2,7 @@
 .main-menu{
 	.main-menu-ctrls{
 		position: fixed;
-		z-index: 99999;
+		z-index: 1000;
 		top:-10px;
 		left: -3px;
 		color:$white;
@@ -92,7 +92,7 @@
 		left:0;
 		width: 100%!important;
 		bottom:0!important;
-		z-index: 100!important;
+		z-index: 1010!important;
 		background: $white;
 		margin-top: 0!important;
 	}
