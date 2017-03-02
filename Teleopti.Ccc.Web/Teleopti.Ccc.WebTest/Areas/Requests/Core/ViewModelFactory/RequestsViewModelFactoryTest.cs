@@ -54,6 +54,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldGetNothingWhenSelectNoAnyTeam()
+		{
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedTeamIds = new List<Guid>().ToArray()
+			};
+
+			var result = Target.CreateRequestListViewModel(input);
+			result.TotalCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldGetRequests()
 		{
 			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
@@ -245,7 +261,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new []{Guid.NewGuid()}
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -269,7 +286,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new[] { Guid.NewGuid() }
 			};
 			input.AgentSearchTerm.Add(PersonFinderField.Role, roleDescription);
 
@@ -293,7 +311,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new[] { Guid.NewGuid() }
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -321,7 +340,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } }
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } },
+				SelectedTeamIds = new[] { Guid.NewGuid() }
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -409,7 +429,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 3),
 				EndDate = new DateOnly(2015, 10, 9),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new[] { Guid.NewGuid() }
 			};
 
 			var result = Target.CreateRequestListViewModel(input);

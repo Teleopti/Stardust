@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -47,7 +46,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			setupStateHolderProxy();
 
 		}
-		
+
+		[Test]
+		public void ShouldGetNothingWhenSelectNoTeam()
+		{
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 1),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new List<Guid>().ToArray()
+			};
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+			requestListViewModel.TotalCount.Should().Be.EqualTo(0);
+		}
+
 		[Test]
 		public void ShouldGetShiftTradeRequest()
 		{
@@ -87,7 +101,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new[] { Guid.NewGuid() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -114,7 +129,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new[] { Guid.NewGuid() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -136,7 +152,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new []{Guid.NewGuid()}
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -470,7 +487,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 1),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new [] {Guid.NewGuid()}
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -542,7 +560,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = startDate,
 				EndDate = endDate,
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new []{Guid.NewGuid()}
 			};
 			return ShiftTradeRequestViewModelFactory.CreateRequestListViewModel (input);
 		}

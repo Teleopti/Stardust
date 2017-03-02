@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				Requests = new RequestViewModel[] { }
 			};
 
-			if (input == null)
+			if (input == null || input.SelectedTeamIds.Length == 0)
 			{
 				return requestListModel;
 			}
