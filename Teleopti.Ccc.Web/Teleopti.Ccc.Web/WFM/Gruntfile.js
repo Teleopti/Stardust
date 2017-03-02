@@ -151,6 +151,7 @@ module.exports = function(grunt) {
             devJs: {
                 options: {
                     separator: ';' + grunt.util.linefeed,
+                    sourceMap: true
                 },
                 src: ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
                 dest: 'dist/main.js'
