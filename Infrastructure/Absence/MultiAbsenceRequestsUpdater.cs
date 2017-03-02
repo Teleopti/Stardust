@@ -273,6 +273,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
 					var validatorList = getValidatorList(personRequest.Id.Value, mergedPeriod);
 					var processAbsenceRequest = getAbsenceRequestProcess(personRequest.Id.Value, mergedPeriod);
+					var personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod);
 
 					if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
 					{
@@ -298,7 +299,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 						_schedulingResultStateHolder,
-						getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod),
+						personAccountBalanceCalculator,
 						_resourceOptimizationHelper,
 						_budgetGroupAllowanceSpecification,
 						_budgetGroupHeadCountSpecification);

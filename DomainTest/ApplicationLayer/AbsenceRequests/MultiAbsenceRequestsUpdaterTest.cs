@@ -15,7 +15,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public MutableNow Now;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -740,6 +743,66 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
 
 			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldDenyWhenPersonalAccountIsOnAndBalanceIsNotEnoughButOverZero()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
+			var scenario = ScenarioRepository.Has("scnearioName");
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			absence.InContractTime = true;
+			absence.InWorkTime = true;
+			absence.InPaidTime = true;
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new PersonAccountBalanceValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+
+			var person = PersonFactory.CreatePerson(wfcs).WithId();
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 18))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			createAccount(person, absence, createAccountDay(new DateOnly(2016, 12, 1), TimeSpan.FromMinutes(360)));
+
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.IsWaitlisted.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestWaitlistedReasonPersonAccount);
+		}
+
+		private void createAccount(IPerson person, IAbsence absence, params IAccount[] accountDays)
+		{
+			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+			personAbsenceAccount.Absence.Tracker = Tracker.CreateTimeTracker();
+			foreach (var accountDay in accountDays)
+			{
+				personAbsenceAccount.Add(accountDay);
+			}
+			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
+		}
+
+		private static AccountDay createAccountDay(DateOnly startDate, TimeSpan balance)
+		{
+			return new AccountDay(startDate)
+			{
+				Accrued = TimeSpan.FromMinutes(480),
+				LatestCalculatedBalance = balance
+			};
 		}
 	}
 }
