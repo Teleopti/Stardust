@@ -272,6 +272,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
+		[Ignore("#43299")]
+		public void ShouldShovelAllResourcesFromClosedPrimarySkillNoMatterDemandOnSubskill()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var primarySkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var subskill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 10);
+			var primarySkillDay = primarySkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var subskillDay = subskill.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(9, 10));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { primarySkillDay, subskillDay }, false, false));
+
+			subskillDay.SkillStaffPeriodCollection.Last().CalculatedResource
+				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldHandleSkillGroupOnlyContainingNoneCascadingSkills()
 		{
 			var scenario = new Scenario("_");
