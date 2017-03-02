@@ -204,7 +204,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				_configReader.ReadValue("sendDetailsToManagerMilliSeconds", 2000)
 				);
 
-			var iocArgs = new IocArgs(new ConfigReader());
+			var iocArgs = new IocArgs(new ConfigReader())
+			{
+				OptimizeScheduleChangedEvents_DontUseFromWeb = true
+			};
+			
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
