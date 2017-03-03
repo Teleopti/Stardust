@@ -79,7 +79,7 @@
                         key = $translate.instant('AfterShiftEnd');
                     } else {
                         var activityWhenChangeOccurred = schedules.find(function(layer) {
-                            return layer.StartTime <= change.Time && layer.EndTime >= change.Time;
+                            return layer.StartTime <= change.Time && layer.EndTime > change.Time;
                         });
                         var activityStart = moment(activityWhenChangeOccurred.StartTime);
                         var activityEnd = moment(activityWhenChangeOccurred.EndTime);

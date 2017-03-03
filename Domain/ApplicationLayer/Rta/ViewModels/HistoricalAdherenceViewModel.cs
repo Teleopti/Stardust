@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string Color { get; set; }
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
+		public string Name { get; set; }
 	}
 
 	public class HistoricalAdherenceChangeViewModel

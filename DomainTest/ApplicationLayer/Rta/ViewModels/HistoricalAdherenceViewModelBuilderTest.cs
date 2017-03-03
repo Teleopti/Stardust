@@ -108,11 +108,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithAgent(person, "name")
 				.WithAssignment(person, "2016-10-11")
-				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
+				.WithActivity(null, "phone", ColorTranslator.FromHtml("#80FF80"))
 				.WithAssignedActivity("2016-10-11 09:00", "2016-10-11 17:00");
 
 			var historicalData = Target.Build(person);
 
+			historicalData.Schedules.Single().Name.Should().Be("phone");
 			historicalData.Schedules.Single().Color.Should().Be("#80FF80");
 			historicalData.Schedules.Single().StartTime.Should().Be("2016-10-11T09:00:00");
 			historicalData.Schedules.Single().EndTime.Should().Be("2016-10-11T17:00:00");

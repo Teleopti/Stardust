@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				where layer.Period.ToDateOnlyPeriod(tz).Contains(utcDateTime)
 				select new HistoricalAdherenceActivityViewModel
 				{
+					Name = layer.DisplayDescription().Name,
 					Color = ColorTranslator.ToHtml(layer.DisplayColor()),
 					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
 					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss")

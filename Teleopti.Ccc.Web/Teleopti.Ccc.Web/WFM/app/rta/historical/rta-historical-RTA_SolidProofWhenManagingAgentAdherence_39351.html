@@ -32,6 +32,10 @@
         width: 10px;
     }
     
+    .change {
+        cursor: pointer;
+    }
+    
     .change.highlight {
         background-color: #9CCC65;
     }
@@ -149,7 +153,7 @@
                         </div>
                     </li>
                     <li ng-repeat="item in rulechange.items" ng-class="{'change': true, 'highlight': vm.highlighted[item.id]}" data-time="{{item.Time | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-activity="{{item.Activity}}" data-state="{{item.State}}" data-rule="{{item.Rule}}"
-                        data-adherence="{{item.Adherence}}">
+                        data-adherence="{{item.Adherence}}" ng-click="vm.scrollTo(item.id)">
                         <div class="con-row rta-change-row">
                             <div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss'}}</div>
                             <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.ActivityColor}};">{{item.Activity}}</span></div>

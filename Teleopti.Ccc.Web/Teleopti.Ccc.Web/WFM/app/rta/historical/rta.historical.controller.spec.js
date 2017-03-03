@@ -283,6 +283,11 @@ describe('RtaHistoricalController', function() {
                     Color: 'red',
                     StartTime: '2016-10-10T11:00:00',
                     EndTime: '2016-10-10T11:10:00'
+                }, {
+                    Name: 'phone',
+                    Color: 'lightgreen',
+                    StartTime: '2016-10-10T11:10:00',
+                    EndTime: '2016-10-10T14:00:00'
                 }],
                 OutOfAdherences: [],
                 Changes: [{
@@ -303,6 +308,12 @@ describe('RtaHistoricalController', function() {
                     Rule: 'Short Break',
                     State: 'Logged off',
                     Adherence: 'In adherence'
+                }, {
+                    Time: '2016-10-10T11:10:00',
+                    Activity: 'phone',
+                    Rule: 'In Call',
+                    State: 'Ready',
+                    Adherence: 'In adherence'
                 }]
             });
 
@@ -310,6 +321,7 @@ describe('RtaHistoricalController', function() {
 
         expect(vm.sortedChanges.find(function(change) { return change.key == 'phone 08:00 - 11:00' }).items.length).toEqual(2)
         expect(vm.sortedChanges.find(function(change) { return change.key == 'break 11:00 - 11:10' }).items.length).toEqual(1)
+        expect(vm.sortedChanges.find(function(change) { return change.key == 'phone 11:10 - 14:00' }).items.length).toEqual(1)
     });
 
     it('should handle change before schedule start', function() {
@@ -389,7 +401,7 @@ describe('RtaHistoricalController', function() {
         expect(vm.changes[0].offset).toEqual(1 / 11 * 100 + '%')
     });
 
-    fit('should highlight selected rule change', function() {
+    it('should highlight selected rule change', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
