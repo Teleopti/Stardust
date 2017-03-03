@@ -20,6 +20,8 @@ ALTER TABLE [dbo].[RtaState] DROP CONSTRAINT [UQ_StateCode_PlatFormTypeId_Busine
 GO
 ALTER TABLE dbo.[RtaState] ALTER COLUMN StateCode varchar(300)
 GO
+ALTER TABLE dbo.[RtaState] ALTER COLUMN Name varchar(300)
+GO
 UPDATE dbo.[RtaState] 
 SET
 StateCode = StateCode + ' (' + convert(varchar(max), PlatformTypeId) + ')',
