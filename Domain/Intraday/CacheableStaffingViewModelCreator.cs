@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Text;
+using log4net;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class CacheableStaffingViewModelCreator : ICacheableStaffingViewModelCreator
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(CacheableStaffingViewModelCreator));
 		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
 		private const double tolerance = 0.00001;
 
@@ -22,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				return intradyStaffingViewModelCache;
 
 			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId}, useShrinkage);
+			logIntradayStaffingViewModel(skillId, useShrinkage, intradyStaffingViewModel);
 			if (!existsStaffingData(intradyStaffingViewModel))
 				return intradyStaffingViewModel;
 			var cachePolicy = new CacheItemPolicy {SlidingExpiration = new TimeSpan(0, 10, 0)};
@@ -50,6 +54,26 @@ namespace Teleopti.Ccc.Domain.Intraday
 				return false;
 
 			return true;
+		}
+
+		private void logIntradayStaffingViewModel(Guid skillId, bool useShrinkage,
+			IntradayStaffingViewModel intradayStaffingViewModel)
+		{
+			var stringBuilder = new StringBuilder();
+			stringBuilder.AppendLine($"Skill:{skillId}, useShrinkage:{useShrinkage}");
+			for (int i = 0; i < intradayStaffingViewModel.DataSeries.Time.Length; i++)
+			{
+				stringBuilder.Append($"[{intradayStaffingViewModel.DataSeries.Time[i]},");
+				stringBuilder.Append(i <= intradayStaffingViewModel.DataSeries.ScheduledStaffing.Length - 1
+					? $"{intradayStaffingViewModel.DataSeries.ScheduledStaffing[i] ?? double.NaN},"
+					: $"{double.NaN}");
+				stringBuilder.Append(i <= intradayStaffingViewModel.DataSeries.ForecastedStaffing.Length - 1
+					? $"{intradayStaffingViewModel.DataSeries.ForecastedStaffing[i] ?? double.NaN}"
+					: $"{double.NaN}");
+				stringBuilder.Append("],");
+			}
+			stringBuilder.AppendLine();
+			logger.Warn(stringBuilder.ToString());
 		}
 	}
 

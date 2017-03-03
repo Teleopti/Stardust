@@ -158,9 +158,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private static bool staffingDataHasValue(skillStaffingData skillStaffingData, int i)
 		{
 			var isScheduledStaffingDataAvailable = skillStaffingData.ScheduledStaffing.Length > i &&
-												   skillStaffingData.ScheduledStaffing[i].GetValueOrDefault() > 0;
+												   skillStaffingData.ScheduledStaffing[i].HasValue;
 			var isForecastedStaffingDataAvailable = skillStaffingData.ForecastedStaffing.Length > i &&
-													skillStaffingData.ForecastedStaffing[i].GetValueOrDefault() > 0;
+													skillStaffingData.ForecastedStaffing[i].HasValue;
 			return isScheduledStaffingDataAvailable && isForecastedStaffingDataAvailable;
 		}
 
