@@ -397,6 +397,12 @@
 		.ui-grid-menu-button.ui-grid-menu-button {
             right: -8px;
         }
+
+		div.ui-grid-viewport.ng-isolate-scope{
+			overflow-x:hidden !important
+		}
+
+		overflow-x:hidden
     }
 
     .shift-trade-view {
