@@ -99,7 +99,8 @@
 											id: p.Id,
 											result: scheduleResult,
 											interResult: result,
-											planningperiod: p
+											planningperiod: p,
+											ranSynchronously: true
 										});
 									},
 										handleScheduleOrOptimizeError);

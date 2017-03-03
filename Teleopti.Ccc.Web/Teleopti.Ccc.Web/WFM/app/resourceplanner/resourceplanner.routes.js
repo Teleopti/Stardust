@@ -31,7 +31,8 @@
 			params: {
 				result: {},
 				interResult: [],
-				planningperiod: {}
+				planningperiod: {},
+				ranSynchronously: undefined
 			},
 			url: '/report/:id',
 			templateUrl: 'app/resourceplanner/resourceplanner-report.html',
