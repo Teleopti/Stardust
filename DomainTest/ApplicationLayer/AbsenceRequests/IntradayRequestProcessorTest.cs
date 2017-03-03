@@ -125,24 +125,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var wfcs = new WorkflowControlSet().WithId();
 			createWfcs(wfcs, absence);
 			agent.WorkflowControlSet = wfcs;
-			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var periodBefore = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var periodAfter = new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 1, 11);
 			var shiftPeriod = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
-			var requestPeriod = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 10);
+			var requestPeriod = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 11);
 
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, shiftPeriod, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 1),
-				createSkillCombinationResource(shiftPeriod, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(periodBefore, new[] {skill.Id.GetValueOrDefault()}, 1),
+				createSkillCombinationResource(shiftPeriod, new[] {skill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(periodAfter, new[] {skill.Id.GetValueOrDefault()}, 1)
 			});
 
 			ScheduleForecastSkillReadModelRepository.Persist(new[]
 															 {
 																 new SkillStaffingInterval
 																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
+																	 StartDateTime = periodBefore.StartDateTime,
+																	 EndDateTime = periodBefore.EndDateTime,
 																	 Forecast = 5,
 																	 SkillId = skill.Id.GetValueOrDefault()
 																 },
@@ -150,6 +152,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 																 {
 																	 StartDateTime = shiftPeriod.StartDateTime,
 																	 EndDateTime = shiftPeriod.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skill.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = periodAfter.StartDateTime,
+																	 EndDateTime = periodAfter.EndDateTime,
 																	 Forecast = 5,
 																	 SkillId = skill.Id.GetValueOrDefault()
 																 }

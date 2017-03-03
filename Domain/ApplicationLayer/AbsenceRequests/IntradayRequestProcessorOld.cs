@@ -123,12 +123,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var skillCombinationResourcesForAgent = new List<SkillCombinationResource>();
 				var earliestProjectionStartDateTime = DateTime.MaxValue;
+				var latestProjectionEndDateTime = DateTime.MinValue;
 				foreach (var day in scheduleDays)
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
 					if (projection.OriginalProjectionPeriod.Value.StartDateTime < earliestProjectionStartDateTime)
 					{
 						earliestProjectionStartDateTime = projection.OriginalProjectionPeriod.Value.StartDateTime;
+					}
+					if (projection.OriginalProjectionPeriod.Value.EndDateTime > latestProjectionEndDateTime)
+					{
+						latestProjectionEndDateTime = projection.OriginalProjectionPeriod.Value.EndDateTime;
 					}
 					var layers = projection.ToResourceLayers(skillInterval);
 
@@ -184,7 +189,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var staffingThresholdValidator = validators.OfType<StaffingThresholdValidator>().FirstOrDefault();
 				if (staffingThresholdValidator != null)
 				{
-					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals.Where(x => x.StartDateTime >= earliestProjectionStartDateTime));
+					var validatedRequest = staffingThresholdValidator.ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals.Where(x => x.StartDateTime >= earliestProjectionStartDateTime && x.StartDateTime < latestProjectionEndDateTime));
 					if (validatedRequest.IsValid)
 					{
 						if (!autoGrant) return;
