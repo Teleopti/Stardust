@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						SourceId = input.SourceId,
 						UserCode = input.UserCode,
 						StateCode = input.StateCode,
-						StateDescription = input.StateDescription,
 						SnapshotId = parseSnapshotId(input.SnapshotId),
 					});
 			}
@@ -65,8 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				var states = input.Select(i => new BatchStateInputModel
 				{
 					UserCode = i.UserCode,
-					StateCode = i.StateCode,
-					StateDescription = i.StateDescription,
+					StateCode = i.StateCode
 				}).ToArray();
 
 				var root = input.First();

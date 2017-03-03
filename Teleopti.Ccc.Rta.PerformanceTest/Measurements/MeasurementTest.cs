@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 								{
 									IsLoggedOn = true,
 									StateCode = s.StateCode,
-									StateDescription = s.StateDescription,
 									UserCode = s.UserCode
 								}).ToArray()
 						};
