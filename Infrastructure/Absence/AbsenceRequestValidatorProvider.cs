@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Absence
 {
@@ -22,16 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		public IEnumerable<IAbsenceRequestValidator> GetValidatorList(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var validators = absenceRequestOpenPeriod.GetSelectedValidatorList().ToList();
-
-			if (!validateAllAgentSkills())
-			{
-				var staffingThresholdValidator = validators.FirstOrDefault(x => x.GetType() == typeof(StaffingThresholdValidator));
-				if (staffingThresholdValidator != null)
-				{
-					var index = validators.IndexOf(staffingThresholdValidator);
-					validators[index] = getStaffingThresholdValidatorCascadingSkills(staffingThresholdValidator);
-				}
-			}
 
 			if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_Check_Expired_Requests_40274))
 			{
@@ -71,26 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			{
 				return new StaffingThresholdValidator();
 			}
-			if (!validateAllAgentSkills())
-			{
-				staffingThresholdValidator = getStaffingThresholdValidatorCascadingSkills(staffingThresholdValidator);
-			}
 			return staffingThresholdValidator;
-		}
-
-		private bool validateAllAgentSkills()
-		{
-			return _toggleManager.IsEnabled(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
-		}
-
-		private IAbsenceRequestValidator getStaffingThresholdValidatorCascadingSkills(
-			IAbsenceRequestValidator staffingThresholdValidator)
-		{
-			if (staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator))
-			{
-				return new StaffingThresholdValidatorCascadingSkillsWithShrinkage();
-			}
-			return new StaffingThresholdValidatorCascadingSkills();
 		}
 	}
 }

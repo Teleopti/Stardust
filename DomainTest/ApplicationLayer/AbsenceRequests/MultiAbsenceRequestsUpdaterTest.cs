@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTestWithStaticDependenciesAvoidUse]
 	[TestFixture, SetCulture("en-US")]
-	[Toggle(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392)]
 	public class MultiAbsenceRequestsUpdaterTest : ISetup
 	{
 		public IMultiAbsenceRequestsUpdater Target;

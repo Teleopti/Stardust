@@ -20,33 +20,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldStaffingThresholdValidatorByIntradayValidatorFlag()
 		{
-			var staffingThresholdValidator = getStaffingThresholdValidator(true, false);
+			var staffingThresholdValidator = getStaffingThresholdValidator(false);
 			Assert.IsNotNull(staffingThresholdValidator);
 			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidator));
 		}
 
 		[Test]
-		public void ShouldGetStaffingThresholdValidatorCascadingSkillsByIntradayValidatorFlag()
-		{
-			var staffingThresholdValidator = getStaffingThresholdValidator(false, false);
-			Assert.IsNotNull(staffingThresholdValidator);
-			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkills));
-		}
-
-		[Test]
 		public void ShouldGetStaffingThresholdWithShrinkageValidatorByIntradayValidatorFlag()
 		{
-			var staffingThresholdValidator = getStaffingThresholdValidator(true, true);
+			var staffingThresholdValidator = getStaffingThresholdValidator(true);
 			Assert.IsNotNull(staffingThresholdValidator);
 			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
-		}
-
-		[Test]
-		public void ShouldGetStaffingThresholdValidatorCascadingSkillsWithShrinkageByIntradayValidatorFlag()
-		{
-			var staffingThresholdValidator = getStaffingThresholdValidator(false, true);
-			Assert.IsNotNull(staffingThresholdValidator);
-			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidatorCascadingSkillsWithShrinkage));
 		}
 
 		[Test]
@@ -54,19 +38,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(_absence, new GrantAbsenceRequest(), false);
 			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new AbsenceRequestNoneValidator();
-			var staffingThresholdValidator = getStaffingThresholdValidator(true, false, workflowControlSet);
+			var staffingThresholdValidator = getStaffingThresholdValidator(false, workflowControlSet);
 			Assert.IsNotNull(staffingThresholdValidator);
 			Assert.IsTrue(staffingThresholdValidator.GetType() == typeof(StaffingThresholdValidator));
 		}
 
-		private IAbsenceRequestValidator getStaffingThresholdValidator(bool validateAllAgentSkills, bool useShrinkage,
+		private IAbsenceRequestValidator getStaffingThresholdValidator(bool useShrinkage,
 			IWorkflowControlSet workflowControlSet = null)
 		{
 			var toggleManager = new FakeToggleManager();
-			if (validateAllAgentSkills)
-			{
-				toggleManager.Enable(Toggles.AbsenceRequests_ValidateAllAgentSkills_42392);
-			}
 			var absenceRequestValidatorProvider = new AbsenceRequestValidatorProvider(toggleManager, null);
 
 			var person = createPerson();
