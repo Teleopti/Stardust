@@ -1,10 +1,8 @@
 ﻿using System.Configuration;
-using System.Timers;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
-using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Timers;
 using Stardust.Manager.Validations;
@@ -38,7 +36,6 @@ namespace ManagerTest
 				scope.Resolve<NodeManager>().Should().Not.Be.Null();
 				scope.Resolve<JobManager>().Should().Not.Be.Null();
 				scope.Resolve<Validator>().Should().Not.Be.Null();
-				scope.Resolve<CreateSqlCommandHelper>().Should().Not.Be.Null();
 				scope.Resolve<RetryPolicyProvider>().Should().Not.Be.Null();
 				scope.Resolve<JobPurgeTimer>().Should().Not.Be.Null();
 				scope.Resolve<NodePurgeTimer>().Should().Not.Be.Null();

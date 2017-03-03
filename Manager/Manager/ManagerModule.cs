@@ -25,7 +25,7 @@ namespace Stardust.Manager
 			builder.RegisterType<Validator>().SingleInstance();
 			builder.RegisterType<JobPurgeTimer>().SingleInstance();
 			builder.RegisterType<NodePurgeTimer>().SingleInstance();
-			builder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
+			builder.RegisterType<JobRepositoryCommandExecuter>().SingleInstance();
 			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();

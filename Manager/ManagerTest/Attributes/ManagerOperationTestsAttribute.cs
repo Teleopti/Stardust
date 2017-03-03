@@ -21,8 +21,8 @@ namespace ManagerTest.Attributes
 
 			builder.RegisterInstance(config).SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
-			builder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
+			builder.RegisterType<JobRepositoryCommandExecuter>().SingleInstance();
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
 			builder.RegisterType<ManagerController>();
