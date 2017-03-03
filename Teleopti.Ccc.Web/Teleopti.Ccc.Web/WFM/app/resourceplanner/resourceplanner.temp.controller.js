@@ -13,7 +13,8 @@
 				$scope.intraOptimize = function() {
 					status = 'running';
 					ResourcePlannerReportSrvc.intraOptimize({
-						id: $stateParams.id
+						id: $stateParams.id,
+						runAsynchronously: false
 					}).$promise.then(function(result) {
 						status = 'done';
 					},function(reason){

@@ -24,7 +24,7 @@
 						});
 					});
 				};
-				var intraOptimize = $resource('../api/resourceplanner/planningperiod/:id/optimizeintraday', { id: '@id' },{});
+				var intraOptimize = $resource('../api/resourceplanner/planningperiod/:id/optimizeintraday', { id: '@id', runAsynchronously: function (d) { return d.runAsynchronously } }, {});
 
 				function parseRelDif(period) {
 					period.forEach(function(node) {

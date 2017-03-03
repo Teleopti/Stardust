@@ -111,14 +111,16 @@
 					$scope.optimizeRunning = true;
 					if (toggledSchedulingOnStardust) {
 						ResourcePlannerReportSrvc.intraOptimize({
-							id: planningPeriodId
+							id: planningPeriodId,
+							runAsynchronously: true
 						}).$promise.then(checkIntradayOptimizationProgress, intradayOptimizationFailedHandler);
 					} else {
 						//to make sure long optimization request doesn't create a new cookie based on current time
 						//we call keepAlive here again
 						planningPeriodService.keepAlive().then(function () {
 							ResourcePlannerReportSrvc.intraOptimize({
-								id: planningPeriodId
+								id: planningPeriodId,
+								runAsynchronously: false
 							}).$promise.then(intradayOptimizationDone, intradayOptimizationFailedHandler);
 						});
 					}
