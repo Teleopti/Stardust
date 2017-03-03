@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
