@@ -40,22 +40,26 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			PortAuthenticationBridge = Port - new Random().Next(1, 100);
 			PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
 
-			URL = new Uri(string.Format("http://localhost:{0}/", Port));
-			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
-			WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
+			URL = new Uri($"http://localhost:{Port}/");
+			UrlAuthenticationBridge = new Uri($"http://localhost:{PortAuthenticationBridge}/");
+			WindowsClaimProvider =
+				$"<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{PortWindowsIdentityProvider}/\" protocolHandler=\"OpenIdHandler\" />";
 			UrlWindowsIdentityProvider = $"http://localhost:{PortWindowsIdentityProvider}/";
-			TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti\" url=\"http://localhost:{0}/sso/\" protocolHandler=\"OpenIdHandler\" />", Port);
+			TeleoptiClaimProvider =
+				$"<add identifier=\"urn:Teleopti\" displayName=\"Teleopti\" url=\"http://localhost:{Port}/sso/\" protocolHandler=\"OpenIdHandler\" />";
 
 			return new GenericDisposable(() =>
 			{
 				Port = originalPort;
-				URL = new Uri(string.Format("http://localhost:{0}/", originalPort));
+				URL = new Uri($"http://localhost:{originalPort}/");
 				PortAuthenticationBridge = originalAuthenticationBridgePort;
-				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
+				UrlAuthenticationBridge = new Uri($"http://localhost:{PortAuthenticationBridge}/");
 				PortWindowsIdentityProvider = originalWindowsIdentityProviderPort;
-				WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
+				WindowsClaimProvider =
+					$"<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{PortWindowsIdentityProvider}/\" protocolHandler=\"OpenIdHandler\" />";
 				UrlWindowsIdentityProvider = $"http://localhost:{PortWindowsIdentityProvider}/";
-				TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti\" url=\"http://localhost:{0}/sso/\" protocolHandler=\"OpenIdHandler\" />", originalPort);
+				TeleoptiClaimProvider =
+					$"<add identifier=\"urn:Teleopti\" displayName=\"Teleopti\" url=\"http://localhost:{originalPort}/sso/\" protocolHandler=\"OpenIdHandler\" />";
 			});
 		}
 
@@ -103,20 +107,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		{
 			try
 			{
-				if (_server != null)
-				{
-					_server.Dispose();
-				}
+				_server?.Dispose();
 			}
 			catch (NullReferenceException)
 			{
 				//sometimes throws "Process window not found" - don't make that exception bubble up in this teardown...
 				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
 			}
-			if (_portsConfiguration != null)
-			{
-				_portsConfiguration.Dispose();
-			}
+			_portsConfiguration?.Dispose();
 			writeWebConfigs();
 		}
 
@@ -169,6 +167,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.UpdateFileByName("HangfireDashboardStatistics", "true");
 			settingsFile.UpdateFileByName("HangfireDashboardCounters", "true");
 			settingsFile.UpdateFileByName("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
+			settingsFile.UpdateFileByName("<customErrors mode=\"On\" defaultRedirect=\"~/content/error/error.htm\">", "<customErrors mode=\"Off\" defaultRedirect=\"~/content/error/error.htm\">");
 
 			// iisexpress
 			settingsFile.UpdateFileByName("Port", TestSiteConfigurationSetup.Port.ToString());
