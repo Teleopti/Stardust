@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
@@ -24,13 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public AgentPersister(ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
-			ITenantUserPersister tenantUserPersister)
+			ITenantUserPersister tenantUserPersister, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
 			_tenantUserPersister = tenantUserPersister;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public void Persist(IEnumerable<AgentExtractionResult> data)
@@ -83,7 +81,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 		private void removePerson(IPerson person)
 		{
-			_personRepository.Remove(person);
+			if (_currentUnitOfWork.Current().Contains(person))
+			{
+				_currentUnitOfWork.Current().Remove(person);
+			}
 		}
 
 		private IPerson createPersonFromModel(AgentDataModel agentData)

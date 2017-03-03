@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[UnitOfWork, Route("api/People/GetImportAgentSettingsData"), HttpGet]
-		public ImportAgentSettingsDataModel GetImportAgentSettingsData()
+		public virtual ImportAgentSettingsDataModel GetImportAgentSettingsData()
 		{
 			return _importAgentDataProvider.GetImportAgentSettingsData();
 		}
@@ -138,19 +138,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 				return invalidFileResponse;
 			}
+			var total = workbook.GetSheetAt(0).LastRowNum;
+			var invalidAgents = ProcessWorkbook(workbook);
 
-			var extractedResult = _fileValidator.ExtractAgentInfoValues(workbook);
 
-			var extractedValidAgents = extractedResult.Where(r => r.Agent != null);
-
-			if (extractedValidAgents.Any())
-			{
-				_agentPersister.Persist(extractedValidAgents);
-			}
-
-			var invalidAgents = extractedResult.Where(r => r.ErrorMessages.Any()).Concat(extractedValidAgents.Where(a => a.ErrorMessages.Any()));
-
-			var successCount = extractedResult.Count - invalidAgents.Count();
+			var successCount = total - invalidAgents.Count;
 			var failedCount = invalidAgents.Count();
 
 			var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -168,6 +160,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				new MediaTypeHeaderValue(isXlsx ? newExcelFileContentType : oldExcelFileContentType);
 
 			return response;
+		}
+
+		[UnitOfWork]
+		protected virtual IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook)
+		{
+			var extractedResult = _fileValidator.ExtractAgentInfoValues(workbook);
+			_agentPersister.Persist(extractedResult);
+			return extractedResult.Where(r => r.ErrorMessages.Any()).ToList();
 		}
 
 		[Route("api/People/AgentTemplate"), HttpPost]
