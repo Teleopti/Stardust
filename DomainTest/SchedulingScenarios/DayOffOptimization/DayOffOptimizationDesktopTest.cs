@@ -381,7 +381,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
-		[Ignore("43277")]
 		public void ShouldGetBackToLegalStateWorkShifts()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon

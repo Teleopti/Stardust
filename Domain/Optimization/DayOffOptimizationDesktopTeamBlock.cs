@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
+		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
+		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceCalculation resourceOptimizationHelper,
 								ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
@@ -41,7 +44,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IUserTimeZone userTimeZone,
 								DaysOffBackToLegalState daysOffBackToLegalState,
 								IScheduleDayEquator scheduleDayEquator,
-								ScheduleBlankSpots scheduleBlankSpots)
+								ScheduleBlankSpots scheduleBlankSpots,
+								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
+								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
@@ -56,6 +61,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_scheduleDayEquator = scheduleDayEquator;
 			_scheduleBlankSpots = scheduleBlankSpots;
+			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Execute(DateOnlyPeriod selectedPeriod, 
@@ -85,7 +92,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 													optimizationPreferences,
 													workShiftFinderResultHolder,
 													resourceOptimizerPersonOptimized);
-
+					var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
+					foreach (var matrixOriginalStateContainer in matrixListOriginalStateContainer)
+					{
+						workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling)));
+					}
 					_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
 				}
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
