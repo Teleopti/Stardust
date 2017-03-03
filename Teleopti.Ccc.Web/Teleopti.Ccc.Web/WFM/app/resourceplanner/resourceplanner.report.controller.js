@@ -65,7 +65,6 @@
 				}
 
 				function initLoad() {
-					console.log('initLoad()',$stateParams);
 					if (toggledSchedulingOnStardust && !$stateParams.ranSynchronously) {
 						planningPeriodService.lastJobResult({ id: planningPeriodId })
 							.$promise.then(function (data) {
