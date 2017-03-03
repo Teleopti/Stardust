@@ -415,13 +415,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				General = { ScheduleTag = new ScheduleTag() },
 				Extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false }
 			};
-			var dayOffsPreferences = new DaysOffPreferences
-			{
-				UseFullWeekendsOff = true,
-				FullWeekendsOffValue = new MinMax<int>(1, 1)
-			};
 
-			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay)
 					.PersonAssignment()
