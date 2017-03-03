@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly ScheduleBlankSpots _scheduleBlankSpots;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceCalculation resourceOptimizationHelper,
 								ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								TeamInfoFactoryFactory teamInfoFactoryFactory,
 								IUserTimeZone userTimeZone,
 								DaysOffBackToLegalState daysOffBackToLegalState,
-								IScheduleDayEquator scheduleDayEquator)
+								IScheduleDayEquator scheduleDayEquator,
+								ScheduleBlankSpots scheduleBlankSpots)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_userTimeZone = userTimeZone;
 			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_scheduleDayEquator = scheduleDayEquator;
+			_scheduleBlankSpots = scheduleBlankSpots;
 		}
 
 		public void Execute(DateOnlyPeriod selectedPeriod, 
@@ -72,13 +75,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				if (optimizationPreferences.Extra.IsClassic())
 				{
-					_daysOffBackToLegalState.Execute(matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)),
+					var matrixListOriginalStateContainer = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToArray();
+
+					_daysOffBackToLegalState.Execute(matrixListOriginalStateContainer,
 													backgroundWorker, stateHolder.CommonStateHolder.ActiveDayOffs.ToList()[0],
 													schedulingOptions,
 													dayOffOptimizationPreferenceProvider,
 													optimizationPreferences,
 													workShiftFinderResultHolder,
 													resourceOptimizerPersonOptimized);
+
+					_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
 				}
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
