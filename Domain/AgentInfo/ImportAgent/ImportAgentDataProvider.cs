@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public interface IImportAgentDataProvider
 	{
 		void Init();
+		ImportAgentSettingsDataModel GetImportAgentSettingsData();
 		IApplicationRole FindRole(string roleName);
 		IContract FindContract(string contractName);
 		IContractSchedule FindContractSchedule(string contractScheduleName);
@@ -30,7 +34,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IExternalLogOnRepository _externalLogOnRepository;
-
 
 		private IList<IApplicationRole> _applicationRoles;
 		private IList<IContract> _contracts;
@@ -66,6 +69,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 			_sites = _siteRepository.LoadAll();
 			_teams = _teamRepository.LoadAll();
 			_externalLogOns = _externalLogOnRepository.LoadAll();
+		}
+
+		public ImportAgentSettingsDataModel GetImportAgentSettingsData()
+		{
+			var settingData = new ImportAgentSettingsDataModel()
+			{
+				Roles = _applicationRoles.ToList(),
+				StartDate = new DateOnly(),
+				Teams = _teams.ToList(),
+				Skills = _skills.ToList(),
+				ExternalLogons = _externalLogOns.ToList(),
+				Contracts = _contracts.ToList(),
+				ContractSchedules = _contractSchedules.ToList(),
+				PartTimePercentages = _partTimePercentages.ToList(),
+				ShiftBags = _ruleSetBags.ToList(),
+				SchedulePeriodTypes = Enum.GetValues(typeof(SchedulePeriodType)).Cast<SchedulePeriodType>().ToList(),
+				SchedulePeriodLength = 1
+			};
+			return settingData;
 		}
 
 		public IExternalLogOn FindExternalLogOn(string externalLogonName)

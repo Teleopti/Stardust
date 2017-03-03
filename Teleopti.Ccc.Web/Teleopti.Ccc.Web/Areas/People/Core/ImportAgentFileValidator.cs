@@ -5,7 +5,6 @@ using System.Linq;
 using Microsoft.Ajax.Utilities;
 using NPOI.SS.UserModel;
 using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;

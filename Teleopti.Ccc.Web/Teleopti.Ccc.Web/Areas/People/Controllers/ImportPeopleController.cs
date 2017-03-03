@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
@@ -27,12 +28,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private readonly IPeoplePersister _peoplePersister;
 		private readonly IImportAgentFileValidator _fileValidator;
 		private readonly IAgentPersister _agentPersister;
+		private readonly IImportAgentDataProvider _importAgentDataProvider;
 
-		public ImportPeopleController(IPeoplePersister peoplePersister, IImportAgentFileValidator fileValidator, IAgentPersister agentPersister)
+		public ImportPeopleController(IPeoplePersister peoplePersister, IImportAgentFileValidator fileValidator, IAgentPersister agentPersister, IImportAgentDataProvider importAgentDataProvider)
 		{
 			_peoplePersister = peoplePersister;
 			_fileValidator = fileValidator;
 			_agentPersister = agentPersister;
+			_importAgentDataProvider = importAgentDataProvider;
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
@@ -102,6 +105,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			response.Content.Headers.ContentType = new MediaTypeHeaderValue(oldExcelFileContentType);
 
 			return response;
+		}
+
+		[UnitOfWork, Route("api/People/GetImportAgentSettingsData"), HttpGet]
+		public ImportAgentSettingsDataModel GetImportAgentSettingsData()
+		{
+			return _importAgentDataProvider.GetImportAgentSettingsData();
 		}
 
 		[UnitOfWork, Route("api/People/UploadAgent"), HttpPost]

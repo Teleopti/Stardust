@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NPOI.SS.UserModel;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
