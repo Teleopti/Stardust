@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 					if (!skillIntervals.Any()) continue;
 
 					var shiftStart = skillIntervals.First().StartDateTime;
-					var shiftEnd = new DateTime(skillIntervals.First().StartDateTime.Ticks);
+					var shiftEnd = shiftStart;
 					var ts = skillIntervals.First().GetTimeSpan();
 					foreach (var skillStaffingInterval in skillIntervals)
 					{

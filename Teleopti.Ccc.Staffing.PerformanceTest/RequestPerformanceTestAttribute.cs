@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			var intervalFetcher = new FakeIntervalLengthFetcher();
 			intervalFetcher.Has(15);  //because we don't restore Analytics
 			base.Setup(system, configuration);
-			system.AddModule(new CommonModule(configuration));
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<MutableNow>().For<INow>();
