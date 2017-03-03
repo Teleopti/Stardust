@@ -5,7 +5,7 @@
 		.component('organizationPicker', {
 			templateUrl: 'app/global/organizationPicker/organizationPicker.tpl.html',
 			controller: organizationPickerCtrl,
-			bindings: {			
+			bindings: {
 				date: '<',
 				preselectedTeamIds: '<?',
 				onOpen: '&',
@@ -26,9 +26,9 @@
 		ctrl.selectedTeamIds = [];
 		ctrl.searchTerm = '';
 
-		ctrl.$onInit = function init() {			
+		ctrl.$onInit = function init() {
 			orgPickerSvc.getAvailableHierarchy(moment(ctrl.date).format('YYYY-MM-DD'))
-				.then(function (resp) {					
+				.then(function (resp) {
 					populateGroupList({ sites: resp.data.Children });
 
 					if (ctrl.preselectedTeamIds && ctrl.preselectedTeamIds.length > 0) {
@@ -57,7 +57,7 @@
 			updateAllSiteSelection();
 		}
 
-		function populateGroupList(groupData) {			
+		function populateGroupList(groupData) {
 			var groupList = [];
 			var availableTeamIds = [];
 
@@ -176,8 +176,16 @@
 				site.isChecked = false;
 		}
 
-		ctrl.onSearchOrganization = function($event) {
-			$event.stopPropagation();
+		ctrl.searchOrganization = function(){
+			if(ctrl.searchTerm.length > 0){
+				ctrl.groupList.forEach(function(site){
+					site.expanded = true;
+				});
+			}else{
+				ctrl.groupList.forEach(function(site){
+					site.expanded = false;
+				});
+			}
 		};
 
 		ctrl.onPickerOpen = function () {

@@ -3,7 +3,7 @@
 	<label>{{'Organization' | translate}}</label>
 		<md-select ng-model="$ctrl.selectedTeamIds" md-on-close="$ctrl.onPickerClose()" md-on-open="$ctrl.onPickerOpen()" md-selected-text="$ctrl.formatSelectedDisplayName()" data-md-container-class="organization-picker" multiple>
 			<md-select-header class="picker-select-header">
-				<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$ctrl.onSearchOrganization($event)">
+				<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$event.stopPropagation()" ng-change="$ctrl.searchOrganization()">
 			</md-select-header>
 			<md-optgroup ng-repeat="site in $ctrl.groupList | filter: $ctrl.searchTerm">
 				<div class="group-header pointer">
