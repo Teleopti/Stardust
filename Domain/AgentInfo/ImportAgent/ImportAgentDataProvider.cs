@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 		private readonly ITeamRepository _teamRepository;
 		private readonly IExternalLogOnRepository _externalLogOnRepository;
 
+		private readonly IPermissionProvider _permissionProvider;
+
 		private IList<IApplicationRole> _applicationRoles;
 		private IList<IContract> _contracts;
 		private IList<IContractSchedule> _contractSchedules;
@@ -45,7 +47,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 		private IList<ITeam> _teams;
 		private IList<IExternalLogOn> _externalLogOns;
 
-		public ImportAgentDataProvider(IApplicationRoleRepository applicationRoleRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository, IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, ISkillRepository skillRepository, ISiteRepository siteRepository, ITeamRepository teamRepository, IExternalLogOnRepository externalLogOnRepository)
+		public ImportAgentDataProvider(IApplicationRoleRepository applicationRoleRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository, 
+			IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, ISkillRepository skillRepository, 
+			ISiteRepository siteRepository, ITeamRepository teamRepository, IExternalLogOnRepository externalLogOnRepository, IPermissionProvider permissionProvider)
 		{
 			_applicationRoleRepository = applicationRoleRepository;
 			_contractRepository = contractRepository;
@@ -56,6 +60,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
 			_externalLogOnRepository = externalLogOnRepository;
+			_permissionProvider = permissionProvider;
 		}
 
 		public void Init()
@@ -76,8 +81,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 			var settingData = new ImportAgentSettingsDataModel()
 			{
 				Roles = _applicationRoles.ToList(),
-				StartDate = new DateOnly(),
-				Teams = _teams.ToList(),
+				Teams = GetPermittedTeams(),
 				Skills = _skills.ToList(),
 				ExternalLogons = _externalLogOns.ToList(),
 				Contracts = _contracts.ToList(),
@@ -88,6 +92,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 				SchedulePeriodLength = 1
 			};
 			return settingData;
+		}
+
+		public List<TeamViewModel> GetPermittedTeams()
+		{
+			var permittedTeamList = new List<TeamViewModel>();
+
+			foreach (var team in _teams)
+			{
+				if (_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.WebPeople, DateOnly.Today, team))
+				{
+					permittedTeamList.Add(new TeamViewModel
+					{
+						Id = team.Id.Value.ToString(),
+						SiteAndTeam = team.SiteAndTeam
+					});
+				}
+			}
+
+			return permittedTeamList.OrderBy(t => t.SiteAndTeam).ToList();
 		}
 
 		public IExternalLogOn FindExternalLogOn(string externalLogonName)

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			
 
 			_provider = new ImportAgentDataProvider(_applicationRoleRepository,_contractRepository,_contractScheduleRepository, 
-				_partTimePercentageRepository, _ruleSetBagRepository, _skillRepository, _siteRepository, _teamRepository, _externalLogonRepo);
+				_partTimePercentageRepository, _ruleSetBagRepository, _skillRepository, _siteRepository, _teamRepository, _externalLogonRepo, null);
 
 			_template = new AgentFileTemplate();
 

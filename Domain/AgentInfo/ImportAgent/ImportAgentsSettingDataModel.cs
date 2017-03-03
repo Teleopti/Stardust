@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class ImportAgentSettingsDataModel
 	{
 		public List<IApplicationRole> Roles { get; set; }
-		public DateOnly StartDate { get; set; }
-		public List<ITeam> Teams { get; set; }
+		public List<TeamViewModel> Teams { get; set; }
 		public List<ISkill> Skills { get; set; }
 		public List<IExternalLogOn> ExternalLogons { get; set; }
 		public List<IContract> Contracts { get; set; }
@@ -17,5 +15,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 		public List<IRuleSetBag> ShiftBags { get; set; }
 		public List<SchedulePeriodType> SchedulePeriodTypes { get; set; }
 		public int SchedulePeriodLength { get; set; }
+	}
+
+	public class TeamViewModel
+	{
+		public string Id { get; set; }
+		public string SiteAndTeam { get; set; }
 	}
 }
