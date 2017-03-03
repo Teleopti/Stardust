@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				if (optimizationPreferences.Extra.IsClassic())
 				{
+					//TO SIMULATE OLD CLASSIC BEHAVIOR (diff behavior between classic and teamblock)
 					var matrixListOriginalStateContainer = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToArray();
-
 					_daysOffBackToLegalState.Execute(matrixListOriginalStateContainer,
 													backgroundWorker, stateHolder.CommonStateHolder.ActiveDayOffs.ToList()[0],
 													schedulingOptions,
@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling)));
 					}
 					_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
+					//////////////////
 				}
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);

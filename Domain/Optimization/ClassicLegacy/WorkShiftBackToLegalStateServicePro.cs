@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 {
     public class WorkShiftBackToLegalStateServicePro : IWorkShiftBackToLegalStateServicePro
     {
