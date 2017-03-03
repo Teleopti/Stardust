@@ -3,6 +3,19 @@
 
     function RtaCardController() {
         var ctrl = this
+
+        ctrl.$onChanges = function onChanges(changes) {
+            if (ctrl.isOpen == null) {
+                return
+            }
+
+            var shouldOpen = ctrl.ngOpen || changes.ngOpen != null && changes.ngOpen.currentValue
+            if (shouldOpen) {
+                ctrl.open()
+            } else {
+                ctrl.close()
+            }
+        }
     }
 
     function ToggleableDirective() {
@@ -46,6 +59,8 @@
                 body: 'rtaCardBody'
             },
             bindings: {
+                ngSelectedId: '<',
+                ngOpen: '<',
                 defaultOpen: '@'
             }
         })

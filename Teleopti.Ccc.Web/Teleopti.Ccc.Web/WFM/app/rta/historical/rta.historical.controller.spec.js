@@ -389,5 +389,26 @@ describe('RtaHistoricalController', function() {
         expect(vm.changes[0].offset).toEqual(1 / 11 * 100 + '%')
     });
 
-    xit('should highlight selected rule change', function() {})
+    fit('should highlight selected rule change', function() {
+        stateParams.personId = '1';
+        $fakeBackend
+            .withTime('2016-10-10T15:00:00')
+            .withAgent({
+                PersonId: '1',
+                Schedules: [],
+                OutOfAdherences: [],
+                Changes: [{
+                    Time: '2016-10-10T08:00:00',
+                    Activity: 'phone',
+                    Rule: 'In Call',
+                    State: 'Ready',
+                    Adherence: 'In adherence'
+                }]
+            });
+
+        var vm = $controllerBuilder.createController().vm;
+        vm.scrollTo(0);
+
+        expect(vm.highlighted[0]).toEqual(true)
+    });
 });

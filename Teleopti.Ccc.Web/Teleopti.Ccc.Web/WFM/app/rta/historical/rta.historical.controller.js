@@ -7,6 +7,7 @@
         var vm = this;
 
         var id = $stateParams.personId;
+        vm.highlighted = {};
 
         vm.ooaTooltipTime = function(time) {
             if (time == null)
@@ -54,11 +55,12 @@
 
                 vm.fullTimeline = buildTimeline(shiftInfo);
 
-                vm.changes = data.Changes.map(function(change) {
+                vm.changes = data.Changes.map(function(change, i) {
+                    change.id = i;
                     change.offset = calculateWidth(startOfShift, change.Time, totalSeconds);
                     return change;
                 });
-                vm.sortedChanges = mapChanges(data.Changes, data.Schedules);
+                vm.sortedChanges = mapChanges(vm.changes, data.Schedules);
             });
 
         function mapChanges(changes, schedules) {
@@ -124,17 +126,44 @@
             };
         }
 
-        vm.scrollTo = function(id) {
-            var row = document.querySelector('tr[data-id="' + id + '"]')
-            var diamond = document.querySelector('.diamond[data-id="' + id + '"]')
-            document.getElementById('rulechanges').scrollTop = row.offsetTop - 100
+        vm.isOpen = function isOpen(items) {
+            return items.some(function(item) {
+                return !!vm.highlighted[item.id];
+            });
+        }
 
-            var highlighted = document.querySelectorAll('.highlight')
-            for (var i = 0; i < highlighted.length; i++) {
-                highlighted[i].classList.remove('highlight')
+        vm.selectedId = function selectedId() {
+            for (var id in vm.highlighted) {
+                if (!vm.highlighted.hasOwnProperty(id)) {
+                    continue;
+                }
+
+                if (vm.highlighted[id]) {
+                    return id;
+                }
             }
-            row.classList.add("highlight")
-            diamond.classList.add("highlight")
+        }
+
+        vm.scrollTo = function scrollTo(id) {
+            for (var key in vm.highlighted) {
+                if (!vm.highlighted.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                vm.highlighted[key] = false;
+
+            }
+            vm.highlighted[id] = true;
+            // var row = document.querySelector('.change[data-id="' + id + '"]')
+            // var diamond = document.querySelector('.diamond[data-id="' + id + '"]')
+            // document.getElementById('rulechanges').scrollTop = row.offsetTop - 100
+
+            // var highlighted = document.querySelectorAll('.highlight')
+            // for (var i = 0; i < highlighted.length; i++) {
+            //     highlighted[i].classList.remove('highlight')
+            // }
+            // row.classList.add("highlight")
+            // diamond.classList.add("highlight")
         }
 
         function calculateWidth(startTime, endTime, totalSeconds) {
