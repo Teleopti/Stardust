@@ -24,7 +24,7 @@
 			templateUrl: 'app/resourceplanner/resourceplanner-filters.html',
 			controller: 'ResourceplannerFilterCtrl'
 		}).state('resourceplanner.planningperiod', {
-			url: '/planningperiod/:id',
+			url: '/planningperiod/:id?runForTest',
 			templateUrl: 'app/resourceplanner/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.report', {

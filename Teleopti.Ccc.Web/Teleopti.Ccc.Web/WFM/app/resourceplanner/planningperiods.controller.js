@@ -5,7 +5,7 @@
 		.controller('PlanningPeriodsCtrl', [
 			'$scope', '$state', '$stateParams', '$interval', 'planningPeriodService', 'Toggle', '$translate', 'dayOffRuleService',
 			function ($scope, $state, $stateParams, $interval, planningPeriodService, toggleService, $translate, dayOffRuleService) {
-				var toggleSchedulingOnStardust = false;
+				var runAsynchronously = false;
 				//schedulings
 				$scope.status = '';
 				$scope.schedulingPerformed = false;
@@ -19,7 +19,7 @@
 					return !$scope.initialized || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
 				};
 				$scope.disableReport = function () {
-					return !($scope.schedulingPerformed && $scope.lastJobSuccessful && toggleSchedulingOnStardust);
+					return !($scope.schedulingPerformed && $scope.lastJobSuccessful && runAsynchronously);
 				};
 
 				function handleScheduleOrOptimizeError() {
@@ -109,7 +109,7 @@
 				}
 
 				$scope.launchSchedule = function (p) {
-					if (toggleSchedulingOnStardust) {
+					if (runAsynchronously) {
 						launchScheduleNew(p);
 					} else {
 						launchScheduleOld(p);
@@ -131,7 +131,7 @@
 
 				toggleService.togglesLoaded.then(function () {
 					$scope.isEnabled = toggleService.Wfm_ChangePlanningPeriod_33043;
-					toggleSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
+					runAsynchronously = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874 && !$stateParams.runForTest;
 				});
 
 				var checkProgressRef;
@@ -140,7 +140,7 @@
 					.$promise.then(function (result) {
 						$scope.planningPeriod = result;
 						$scope.initialized = true;
-						if (toggleSchedulingOnStardust) {
+						if (runAsynchronously) {
 							checkProgress($stateParams.id);
 							checkProgressRef = $interval(function () {
 								checkProgress($stateParams.id);
