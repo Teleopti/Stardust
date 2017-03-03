@@ -17,23 +17,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[TestFixture]
 	[DomainTest]
 	[Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874)]
-	public class IntradayOptimizationJobFromWebTest
+	public class IntradayOptimizationFromWebTest
 	{
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeAgentGroupRepository AgentGroupRepository;
-		public IIntradayOptimizationFromWeb Target;
+		public IntradayOptimizationFromWeb Target;
 		public FakeJobResultRepository JobResultRepository;
 
 		[Test]
 		public void ShouldSaveJobResult()
 		{
 			var team = new Team { Site = new Site("site") };
-			var agentGroup = new AgentGroup("Europe")
-				.AddFilter(new TeamFilter(team));
+			var agentGroup = new AgentGroup("Europe").AddFilter(new TeamFilter(team));
 
 			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
 
-			Target.Execute(Guid.NewGuid());
+			Target.Execute(Guid.NewGuid(), true);
 
 			var jobResult = JobResultRepository.LoadAll().Single();
 			jobResult.JobCategory.Should().Be.EqualTo(JobCategory.WebIntradayOptimiztion);

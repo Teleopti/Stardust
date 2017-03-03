@@ -246,10 +246,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPreferenceMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsRequestMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\IIntradayOptimizationFromWeb.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWebBase.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationJobFromWeb.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\ISchedulePlanningPeriodCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWeb.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalCloseSnapshotWebModel.cs" />
@@ -1558,7 +1555,6 @@
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWeb.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\OptimizationWasOrdered.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IMappingReader.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangesPublisher.cs" />

@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class ScheduleController : ApiController
 	{
-		private readonly ISchedulePlanningPeriodCommandHandler _schedulePlanningPeriodCommandHandler;
+		private readonly SchedulePlanningPeriodCommandHandler _schedulePlanningPeriodCommandHandler;
 
-		public ScheduleController(ISchedulePlanningPeriodCommandHandler schedulePlanningPeriodCommandHandler)
+		public ScheduleController(SchedulePlanningPeriodCommandHandler schedulePlanningPeriodCommandHandler)
 		{
 			_schedulePlanningPeriodCommandHandler = schedulePlanningPeriodCommandHandler;
 		}

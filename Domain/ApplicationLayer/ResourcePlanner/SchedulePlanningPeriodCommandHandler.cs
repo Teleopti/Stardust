@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
-	public class SchedulePlanningPeriodCommandHandler : ISchedulePlanningPeriodCommandHandler
+	public class SchedulePlanningPeriodCommandHandler
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly FullScheduling _fullScheduling;

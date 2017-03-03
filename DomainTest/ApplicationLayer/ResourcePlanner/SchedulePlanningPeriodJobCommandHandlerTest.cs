@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
 	[TestFixture]
 	[DomainTest]
-	public class SchedulePlanningPeriodJobCommandHandlerTest
+	public class SchedulePlanningPeriodCommandHandlerTest
 	{
-		public ISchedulePlanningPeriodCommandHandler Target;
+		public SchedulePlanningPeriodCommandHandler Target;
 		public FakeJobResultRepository JobResultRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeEventPublisher EventPublisher;

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public IIntradayOptimizationFromWeb Target;
+		public IntradayOptimizationFromWeb Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.Has(agent1, scenario, phoneActivity, new ShiftCategory("x"), dateOnly, new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.Has(agent2, scenario, mailActivity, new ShiftCategory("x"), dateOnly, new TimePeriod(8, 0, 16, 0));
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.Execute(planningPeriod.Id.Value, false);
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agent1).ShiftCategory.Should().Be.EqualTo(shiftCategory);
 		}

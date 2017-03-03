@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizeIntradayIslandsDesktop
 	{
-		private readonly IDesktopIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 		private readonly Func<ISchedulerStateHolder> _currentSchedulerStateHolder;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 
-		public OptimizeIntradayIslandsDesktop(IDesktopIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
+		public OptimizeIntradayIslandsDesktop(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 																		DesktopOptimizationContext desktopOptimizationContext,
 																		Func<ISchedulerStateHolder> currentSchedulerStateHolder,
 																		IResourceCalculation resourceOptimizationHelper)
@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var command = new IntradayOptimizationCommand
 			{
 				Period = selectedPeriod,
-				AgentsToOptimize = agents
+				AgentsToOptimize = agents,
+				RunAsynchronously = false
 			};
 
 			using (_desktopOptimizationContext.Set(command, _currentSchedulerStateHolder(), optimizerPreferences, intradayOptimizationCallback))
