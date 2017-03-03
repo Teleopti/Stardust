@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_");
-			var contract = new Contract("_"){NegativePeriodWorkTimeTolerance = TimeSpan.FromDays(20), PositivePeriodWorkTimeTolerance = TimeSpan.FromDays(20)};
+			var contract = new ContractWithMaximumTolerance();
 			var skill = new Skill().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_");
-			var contract = new Contract("_") { NegativePeriodWorkTimeTolerance = TimeSpan.FromDays(20), PositivePeriodWorkTimeTolerance = TimeSpan.FromDays(20) };
+			var contract = new ContractWithMaximumTolerance();
 			var skill = new Skill().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
