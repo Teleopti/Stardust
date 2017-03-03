@@ -275,6 +275,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[Ignore("#43299")]
 		public void ShouldShovelAllResourcesFromClosedPrimarySkillNoMatterDemandOnSubskill()
 		{
+			/* RK: when we fix this we probably also need to test+impl cases where...
+			 * - subskill is overstaffed (should still move resourses)
+			 * - parallell subskills in case below
+			 */
+
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
