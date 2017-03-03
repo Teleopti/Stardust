@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			setupTestDataForOneSkill(new double?[] { null, 0 }, new double?[] { 0, 0 });
 			Target.CalcuateIntradayAbsenceIntervalPossibilities();
 			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
-			Assert.AreEqual(0, possibilities.Count);
+			Assert.AreEqual(1, possibilities.Count);
 			StaffingViewModelCreator.VerifyAllExpectations();
 		}
 
