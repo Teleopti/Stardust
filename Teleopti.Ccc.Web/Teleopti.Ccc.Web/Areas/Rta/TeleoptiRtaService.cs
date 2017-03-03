@@ -117,8 +117,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			if (!isLoggedOn)
 				stateCode = "LOGGED-OFF";
+
 			if (stateCode == null)
-				return null;
+				throw new InvalidStateCodeException("State code is required");
+
 			stateCode = stateCode.Trim();
 
 			if (string.IsNullOrEmpty(platformTypeId))
