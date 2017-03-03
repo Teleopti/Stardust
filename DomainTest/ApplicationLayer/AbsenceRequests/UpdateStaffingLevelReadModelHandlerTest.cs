@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			WasCalled = true;
 		}
 
-		public void UpdateFromResourceCalculationData(DateTimePeriod period, IResourceCalculationData resCalcData,
+		public void UpdateFromResourceCalculationData(DateTimePeriod period, ResourceCalculationData resCalcData,
 			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded)
 		{
 			throw new NotImplementedException();

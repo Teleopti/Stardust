@@ -624,7 +624,6 @@
     <Compile Include="InterfaceLegacy\Domain\IRequestApprovalService.cs" />
     <Compile Include="ResourceCalculation\IResourceCalculateDelayer.cs" />
     <Compile Include="ResourceCalculation\IResourceCalculation.cs" />
-    <Compile Include="ResourceCalculation\IResourceCalculationData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IResourceCalculationPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRestrictionBase.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRestrictionChecker.cs" />

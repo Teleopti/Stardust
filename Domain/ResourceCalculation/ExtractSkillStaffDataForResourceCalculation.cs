@@ -4,20 +4,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ExtractCascadingSkillStaffDataForResourceCalculation : IExtractSkillStaffDataForResourceCalculation
+	public class ExtractSkillStaffingDataForResourceCalculation
 	{
 		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 
-		public ExtractCascadingSkillStaffDataForResourceCalculation(LoaderForResourceCalculation loaderForResourceCalculation, IResourceCalculation resourceOptimizationHelper, CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
+		public ExtractSkillStaffingDataForResourceCalculation(LoaderForResourceCalculation loaderForResourceCalculation, IResourceCalculation resourceOptimizationHelper, CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_loaderForResourceCalculation = loaderForResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
-		public IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly)
+		public ResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly)
 		{
 			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
 
@@ -28,18 +28,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		[TestLog]
-		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
+		public virtual void DoCalculation(DateOnlyPeriod period, ResourceCalculationData resCalcData)
 		{
 			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, false, period))
 			{
 				_resourceOptimizationHelper.ResourceCalculate(period, resCalcData);
 			}
 		}
-	}
-
-	public interface IExtractSkillStaffDataForResourceCalculation
-	{
-		IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly);
-		void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData);
 	}
 }

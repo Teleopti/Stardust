@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ResourceCalculationData : IResourceCalculationData
+	public class ResourceCalculationData
 	{
 		public ResourceCalculationData(ISchedulingResultStateHolder schedulingResultStateHolder, 
 																bool considerShortBreaks, 

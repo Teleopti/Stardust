@@ -12,19 +12,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class UpdateStaffingLevelReadModel : IUpdateStaffingLevelReadModel
 	{
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
-		private readonly IExtractSkillStaffDataForResourceCalculation _extractSkillStaffDataForResourceCalculation;
+		private readonly ExtractSkillStaffingDataForResourceCalculation _extractSkillStaffingDataForResourceCalculation;
 		private readonly INow _now;
 		private readonly IStardustJobFeedback _feedback;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 
 		public UpdateStaffingLevelReadModel(
 			IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
-			INow now, IExtractSkillStaffDataForResourceCalculation extractSkillStaffDataForResourceCalculation,
+			INow now, ExtractSkillStaffingDataForResourceCalculation extractSkillStaffingDataForResourceCalculation,
 			IStardustJobFeedback feedback, ISkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_now = now;
-			_extractSkillStaffDataForResourceCalculation = extractSkillStaffDataForResourceCalculation;
+			_extractSkillStaffingDataForResourceCalculation = extractSkillStaffingDataForResourceCalculation;
 			_feedback = feedback;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
@@ -35,18 +35,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_feedback.SendProgress($"Starting ForecastSkill Read Model update for period {period}");
 			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
 			var resCalcData =
-				_extractSkillStaffDataForResourceCalculation.ExtractResourceCalculationData(periodDateOnly);
+				_extractSkillStaffingDataForResourceCalculation.ExtractResourceCalculationData(periodDateOnly);
 
 			UpdateFromResourceCalculationData(period, resCalcData, periodDateOnly, timeWhenResourceCalcDataLoaded);
 		}
 
-		public void UpdateFromResourceCalculationData(DateTimePeriod period, IResourceCalculationData resCalcData,
+		public void UpdateFromResourceCalculationData(DateTimePeriod period, ResourceCalculationData resCalcData,
 			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded)
 		{
 			var models = CreateReadModel(resCalcData.SkillResourceCalculationPeriodDictionary, period);
 
 			setUseShrinkage(resCalcData);
-			_extractSkillStaffDataForResourceCalculation.DoCalculation(periodDateOnly, resCalcData);
+			_extractSkillStaffingDataForResourceCalculation.DoCalculation(periodDateOnly, resCalcData);
 
 			updateModelsAfterCalculatingWithShrinkage(models, resCalcData.SkillResourceCalculationPeriodDictionary, period);
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return ret;
 		}
 
-		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData)
+		private static void setUseShrinkage(ResourceCalculationData resourceCalculationData)
 		{
 			resourceCalculationData.SkillCombinationHolder?.StartRecodingValuesWithShrinkage();
 			
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		void Update(DateTimePeriod period);
 
-		void UpdateFromResourceCalculationData(DateTimePeriod period, IResourceCalculationData resCalcData,
+		void UpdateFromResourceCalculationData(DateTimePeriod period, ResourceCalculationData resCalcData,
 			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded);
 
 		IList<SkillStaffingInterval> CreateReadModel(

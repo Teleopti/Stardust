@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public static class ResourceCalculationDataCreator
 	{
-		public static IResourceCalculationData WithData(IScenario scenario, 
+		public static ResourceCalculationData WithData(IScenario scenario, 
 											DateOnly date, 
 											IEnumerable<IPersistableScheduleData> persistableScheduleData, 
 											IEnumerable<ISkillDay> skillDays,
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			return WithData(scenario, date.ToDateOnlyPeriod(), persistableScheduleData, skillDays, considerShortbreaks, doIntraIntervalCalculation);
 		}
 
-		public static IResourceCalculationData WithData(IScenario scenario,
+		public static ResourceCalculationData WithData(IScenario scenario,
 									DateOnlyPeriod period,
 									IEnumerable<IPersistableScheduleData> persistableScheduleData,
 									IEnumerable<ISkillDay> skillDays,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				skillDaysDic.Keys, skillDaysDic, considerShortbreaks, doIntraIntervalCalculation);
 		}
 
-		public static IResourceCalculationData WithData(IShovelingCallback shovelingCallback,
+		public static ResourceCalculationData WithData(IShovelingCallback shovelingCallback,
 									IScenario scenario,
 									DateOnly date,
 									IEnumerable<IPersistableScheduleData> persistableScheduleData,

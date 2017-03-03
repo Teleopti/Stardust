@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return _scenarioRepository.LoadDefaultScenario();
 		}
 
-		public IResourceCalculationData ResourceCalculationData(DateOnlyPeriod period)
+		public ResourceCalculationData ResourceCalculationData(DateOnlyPeriod period)
 		{
 			var skills = skillsToUse(_agents, period).ToList();
 			var skillDays = SkillDays(period, skills);

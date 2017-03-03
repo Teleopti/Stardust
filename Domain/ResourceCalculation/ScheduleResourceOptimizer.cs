@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				this.clearSkillStaffPeriods();
 		}
 
-		public void Optimize(DateTimePeriod datePeriodToRecalculate, IResourceCalculationData resourceCalculationData = null)
+		public void Optimize(DateTimePeriod datePeriodToRecalculate, ResourceCalculationData resourceCalculationData = null)
 		{
 			var affectedSkills = _personSkillService.AffectedSkills;
 			_distinctActivities.ForEach(
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						optimizeActivity(affectedSkills, currentActivity, datePeriodToRecalculate, resourceCalculationData));
 		}
 
-		private void optimizeActivity(IEnumerable<ISkill> affectedSkills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate, IResourceCalculationData resourceCalculationData)
+		private void optimizeActivity(IEnumerable<ISkill> affectedSkills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate, ResourceCalculationData resourceCalculationData)
 		{
 			IList<ISkill> skills = new List<ISkill>();
 			foreach (var affectedSkill in affectedSkills)
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod, IResourceCalculationData resourceCalculationData)
+		private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod, ResourceCalculationData resourceCalculationData)
 		{
 			IDividedActivityData dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
 																					   currentActivity, _relevantProjections,

@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest)
 		{
-			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			 var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
 			return getMergedOpenPeriods(absenceRequest, dateOnlyPeriod);

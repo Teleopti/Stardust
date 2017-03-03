@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return false;
 		}
 
-		public IResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}

@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<UpdateStaffingLevelReadModel>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<ExtractCascadingSkillStaffDataForResourceCalculation>().As<IExtractSkillStaffDataForResourceCalculation>().InstancePerLifetimeScope();
+			builder.RegisterType<ExtractSkillStaffingDataForResourceCalculation>().InstancePerLifetimeScope();
 
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312))
