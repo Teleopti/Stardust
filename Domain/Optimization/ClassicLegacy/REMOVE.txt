@@ -1,0 +1,3 @@
+﻿Remove and/or check types in this namespace when we're done-done with everything regarding classic.
+
+Files here could probably be removed then. Need to wait until last though, because they are still used in teamblock when "simulating" classic.

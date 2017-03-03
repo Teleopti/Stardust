@@ -1310,11 +1310,11 @@
     <Compile Include="Scheduling\SeatLimitation\IsOverMaxSeat.cs" />
     <Compile Include="Scheduling\SeatLimitation\IUsedSeats.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatOptimization.cs" />
-    <Compile Include="Optimization\DaysOffBackToLegalState.cs" />
+    <Compile Include="Optimization\ClassicLegacy\DaysOffBackToLegalState.cs" />
     <Compile Include="Optimization\AffectedDates.cs" />
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\ScheduleChangesAffectedDates.cs" />
-    <Compile Include="Optimization\ScheduleBlankSpots.cs" />
+    <Compile Include="Optimization\ClassicLegacy\ScheduleBlankSpots.cs" />
     <Compile Include="Optimization\ScheduleMatrixesPrimarySkillExtractor.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Optimization\TeamBlock\RestrictionOverLimitValidator.cs" />
@@ -3861,6 +3861,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
+    <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\AgentGroup.hbm.xml">
       <SubType>Designer</SubType>
