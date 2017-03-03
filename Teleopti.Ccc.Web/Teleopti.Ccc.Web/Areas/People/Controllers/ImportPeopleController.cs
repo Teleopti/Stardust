@@ -11,6 +11,9 @@ using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 
@@ -22,10 +25,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 
 		private readonly IPeoplePersister _peoplePersister;
+		private readonly IImportAgentFileValidator _fileValidator;
+		private readonly IAgentPersister _agentPersister;
 
-		public ImportPeopleController(IPeoplePersister peoplePersister)
+		public ImportPeopleController(IPeoplePersister peoplePersister, IImportAgentFileValidator fileValidator, IAgentPersister agentPersister)
 		{
 			_peoplePersister = peoplePersister;
+			_fileValidator = fileValidator;
+			_agentPersister = agentPersister;
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
@@ -51,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				string errorMessage;
 				if (anyColumnMissing(headerRow, out errorMessage, fileTemplate))
 				{
-					var errorMsg = string.Format(UserTexts.Resources.MissingColumnX, errorMessage.Trim(',', ' '));
+					var errorMsg = string.Format(Resources.MissingColumnX, errorMessage.Trim(',', ' '));
 					var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
 					invalidFileResponse.Headers.Clear();
 					invalidFileResponse.Content = new StringContent(errorMsg);
@@ -93,6 +100,63 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			response.Headers.Clear();
 			response.Content = new ByteArrayContent(ms.ToArray());
 			response.Content.Headers.ContentType = new MediaTypeHeaderValue(oldExcelFileContentType);
+
+			return response;
+		}
+
+		[UnitOfWork, Route("api/People/UploadAgent"), HttpPost]
+		public virtual async Task<HttpResponseMessage> UploadAgent()
+		{
+			if (!Request.Content.IsMimeMultipartContent())
+			{
+				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+			}
+
+			var provider = new MultipartMemoryStreamProvider();
+			await Request.Content.ReadAsMultipartAsync(provider);
+			var workbook = parseFiles(provider.Contents.First());
+			var isXlsx = workbook is XSSFWorkbook;
+
+			var columnHearders = _fileValidator.ExtractColumnNames(workbook);
+			var errors = _fileValidator.ValidateColumnNames(columnHearders);
+			if (errors.Any())
+			{
+				var errorMsg = string.Format(Resources.MissingColumnX, string.Join(",", errors));
+				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
+				invalidFileResponse.Headers.Clear();
+				invalidFileResponse.Content = new StringContent(errorMsg);
+				invalidFileResponse.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+				return invalidFileResponse;
+			}
+
+			var extractedResult = _fileValidator.ExtractAgentInfoValues(workbook);
+
+			var extractedValidAgents = extractedResult.Where(r => r.Agent != null);
+
+			if (extractedValidAgents.Any())
+			{
+				_agentPersister.Persist(extractedValidAgents);
+			}
+
+			var invalidAgents = extractedResult.Where(r => r.ErrorMessages.Any()).Concat(extractedValidAgents.Where(a => a.ErrorMessages.Any()));
+
+			var successCount = extractedResult.Count - invalidAgents.Count();
+			var failedCount = invalidAgents.Count();
+
+			var response = Request.CreateResponse(HttpStatusCode.OK);
+			response.Headers.Clear();
+			response.Headers.Add("Message", $"success count:{successCount}, failed count:{failedCount}");
+
+			if (!invalidAgents.Any())
+			{
+				return response;
+			}
+
+			var ms = constructReturnedAgentFile(isXlsx, invalidAgents.ToList());
+			response.Content = new ByteArrayContent(ms.ToArray());
+			response.Content.Headers.ContentType =
+				new MediaTypeHeaderValue(isXlsx ? newExcelFileContentType : oldExcelFileContentType);
 
 			return response;
 		}
@@ -140,6 +204,43 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return ms;
 		}
 
+
+		private static MemoryStream constructReturnedAgentFile(bool isXlsx, IList<AgentExtractionResult> agents)
+		{
+			const string invalidUserSheetName = "Agents";
+			var ms = new MemoryStream();
+			var agentTemplate = new AgentFileTemplate();
+			var returnedFile = agentTemplate.GetTemplateWorkbook(invalidUserSheetName, isXlsx);
+			var newSheet = returnedFile.GetSheet(invalidUserSheetName);
+			newSheet.GetRow(0).CreateCell(agentTemplate.ColumnHeaderNames.Length).SetCellValue("ErrorMessage");
+
+			for (var i = 0; i < agents.Count; i++)
+			{
+				var rawAgent = agents[i].Raw;
+				var row = newSheet.CreateRow(i + 1);
+
+				row.CreateCell(agentTemplate.ColumnHeaderMap["Firstname"]).SetCellValue(rawAgent.Firstname);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["Lastname"]).SetCellValue(rawAgent.Lastname);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["WindowsUser"]).SetCellValue(rawAgent.WindowsUser);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["ApplicationUserId"]).SetCellValue(rawAgent.ApplicationUserId);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["Password"]).SetCellValue(rawAgent.Password);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["Role"]).SetCellValue(rawAgent.Role);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["StartDate"]).SetCellValue(rawAgent.StartDate.Value);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["Organization"]).SetCellValue(rawAgent.Organization);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["Skill"]).SetCellValue(rawAgent.Skill);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["ExternalLogon"]).SetCellValue(rawAgent.ExternalLogon);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["Contract"]).SetCellValue(rawAgent.Contract);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["ContractSchedule"]).SetCellValue(rawAgent.ContractSchedule);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["PartTimePercentage"]).SetCellValue(rawAgent.PartTimePercentage);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["ShiftBag"]).SetCellValue(rawAgent.ShiftBag);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(rawAgent.SchedulePeriodType);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(rawAgent.SchedulePeriodLength.Value);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["ErrorMessage"]).SetCellValue(string.Join(";", rawAgent.ErrorMessage));
+			}
+			returnedFile.Write(ms);
+			return ms;
+		}
+
 		private static IWorkbook getTemplateFile(bool isXlsx, bool includeErrorMessage, string invalidUserSheetName, UserFileTemplate fileTemplate )
 		{
 			var returnedFile = isXlsx
@@ -158,7 +259,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 			return returnedFile;
 		}
-
 
 		private static IWorkbook parseFiles(HttpContent content)
 		{

@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
 
-		public AgentPersister(ILoggedOnUser loggedOnUser, IPersonRepository personRepository, ITenantUserPersister tenantUserPersister)
+		public AgentPersister(ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
+			ITenantUserPersister tenantUserPersister)
 		{
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
@@ -50,7 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			}
 		}
 
-		[UnitOfWork]
 		private void addPersonData(IPerson person, AgentDataModel agentData)
 		{
 			addPersonPeriod(person, agentData);
@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			person.AddPersonPeriod(personPeriod);
 		}
 
-		[UnitOfWork]
 		private IPerson persistPerson(AgentDataModel agentData)
 		{
 			var person = createPersonFromModel(agentData);
@@ -79,7 +78,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			return person;
 		}
 
-		[UnitOfWork]
 		private void removePerson(IPerson person)
 		{
 			_personRepository.Remove(person);

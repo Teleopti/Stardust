@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 {
@@ -54,9 +55,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			return ms;
 		}
 
-		public IWorkbook GetTemplateWorkbook(string invalidUserSheetName)
+		public IWorkbook GetTemplateWorkbook(string invalidUserSheetName, bool isXlsx=false)
 		{
-			var returnedFile = new HSSFWorkbook();
+			var returnedFile = isXlsx ? (IWorkbook)new XSSFWorkbook() : new HSSFWorkbook();
 			var newsheet = returnedFile.CreateSheet(invalidUserSheetName);
 
 			var row = newsheet.CreateRow(0);
