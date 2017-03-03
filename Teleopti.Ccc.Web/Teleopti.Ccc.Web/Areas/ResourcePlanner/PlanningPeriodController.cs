@@ -44,20 +44,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
 			var range = planningPeriod.Range;
-			var lastJobResult = planningPeriod.JobResults.Where(x=>x.JobCategory==JobCategory.WebSchedule && x.FinishedOk).OrderByDescending(x => x.Timestamp).FirstOrDefault();
+			var lastJobResult = planningPeriod.JobResults
+				.Where(x => x.JobCategory == JobCategory.WebSchedule && x.FinishedOk)
+				.OrderByDescending(x => x.Timestamp)
+				.FirstOrDefault();
 			if (lastJobResult != null)
-				return
-					Ok(
-						new
-						{
-							PlanningPeriod = new
-							{
-								StartDate = range.StartDate.Date,
-								EndDate = range.EndDate.Date
-							},
-							ScheduleResult = JsonConvert.DeserializeObject(lastJobResult.Details.First().Message),
-							OptimizationResult = JsonConvert.DeserializeObject(lastJobResult.Details.Last().Message)
-						});
+				return Ok(new
+				{
+					PlanningPeriod = new
+					{
+						StartDate = range.StartDate.Date,
+						EndDate = range.EndDate.Date
+					},
+					ScheduleResult = JsonConvert.DeserializeObject(lastJobResult.Details.First().Message),
+					OptimizationResult = JsonConvert.DeserializeObject(lastJobResult.Details.Last().Message)
+				});
 			return NotFound();
 		}
 
@@ -66,7 +67,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult JobStatus(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
-			var lastJobResult = planningPeriod.JobResults.Where(x => x.JobCategory == JobCategory.WebSchedule).OrderByDescending(x => x.Timestamp).FirstOrDefault();
+			var lastJobResult = planningPeriod.JobResults
+				.Where(x => x.JobCategory == JobCategory.WebSchedule)
+				.OrderByDescending(x => x.Timestamp)
+				.FirstOrDefault();
 			if (lastJobResult != null)
 				return Ok(new
 				{
