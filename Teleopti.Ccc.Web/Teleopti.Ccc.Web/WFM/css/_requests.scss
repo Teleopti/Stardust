@@ -393,6 +393,10 @@
         .arrow-box-no-border:after, .arrow-box-no-border:before {
             border: none !important;
         }
+
+		.ui-grid-menu-button.ui-grid-menu-button {
+            right: -8px;
+        }
     }
 
     .shift-trade-view {
@@ -444,7 +448,7 @@
         }
 
         .ui-grid-menu-button.ui-grid-menu-button {
-            right: -20px;
+            right: -8px;
         }
 
         .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
