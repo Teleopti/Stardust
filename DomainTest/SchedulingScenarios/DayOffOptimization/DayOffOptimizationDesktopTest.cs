@@ -380,53 +380,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(3)).IsScheduled().Should().Be.True();
 		}
 
-		[TestCase(TeamBlockType.TeamAndBlock)]
-		[TestCase(TeamBlockType.Classic)]
-		[Ignore("43277 - why is this green?")]
-		public void ShouldSetTag(TeamBlockType teamBlockType)
-		{
-			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
-			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
-			var scenario = new Scenario("_");
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var team = new Team { Site = new Site("_") };
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
-			agent.SchedulePeriod(firstDay).SetDaysOff(1);
-			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				5,
-				1,
-				5,
-				5,
-				5,
-				25,
-				5);
-			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
-			asses[5].SetDayOff(new DayOffTemplate()); //saturday
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
-			var tag = new ScheduleTag();
-			IExtraPreferences extra = null;
-			switch (teamBlockType)
-			{
-				case TeamBlockType.Classic:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.TeamAndBlock:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
-					break;
-			}
-			var optPrefs = new OptimizationPreferences { General = { ScheduleTag =  tag}, Extra = extra};
-
-			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
-
-			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).ScheduleTag()
-				.Should().Be.EqualTo(tag);
-			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).ScheduleTag()
-				.Should().Be.EqualTo(tag);
-		}
-
 		[Test]
 		public void ShouldGetBackToLegalStateWorkShifts()
 		{
