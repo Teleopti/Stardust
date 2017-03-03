@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.RequestViewModel");
 
@@ -60,5 +59,18 @@ $(document).ready(function () {
 		equal(vm.AbsenceTrackedAsHour(), false);
 		equal(vm.AbsenceUsed(), '0');
 		equal(vm.AbsenceRemaining(), '0');
+	});
+
+	test("could tolerate invalid date hash in url", function() {
+		var old = Teleopti.MyTimeWeb.Portal.ParseHash;
+		Teleopti.MyTimeWeb.Portal.ParseHash = function() {
+			return {
+				dateHash: "20170101"
+			}
+		}
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+		Teleopti.MyTimeWeb.Portal.ParseHash = old;
+		equal(vm.DateTo().isValid(), true);
+		
 	});
 });

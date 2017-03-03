@@ -19,8 +19,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 		// Change date in style "2017/12/31" to "2017-12-31" to fix momentjs warning
 		urlDate = urlDate.replace(/\//g, "-");
 	}
-	self.DateFrom = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
-	self.DateTo = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
+
+	self.DateFrom = ko.observable(urlDate && moment(urlDate).isValid()? moment(urlDate).startOf('day') : moment().startOf('day'));
+	self.DateTo = ko.observable(urlDate && moment(urlDate).isValid() ? moment(urlDate).startOf('day') : moment().startOf('day'));
 
 	self.PreviousDateTo = ko.observable(moment());
 	self.TimeFromInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultStartTime : null);
