@@ -118,7 +118,7 @@
 						.filter(function (s) { return s != null; }))
 					.then(function () {
 						if (vm.snapshot)
-							closeSnapshot(vm.authKey, selectedAgents[0].DataSource, now);
+							closeSnapshot(vm.authKey, selectedAgents[0].DataSource, now());
 					});
 			});
 		}
@@ -128,7 +128,7 @@
 			rtaToolService.sendState(createState(vm.authKey, userCode, dataSource, stateName, now()))
 				.then(function () {
 					if (vm.snapshot)
-						closeSnapshot(vm.authKey, dataSource, now)
+						closeSnapshot(vm.authKey, dataSource, now())
 				});
 		}
 
