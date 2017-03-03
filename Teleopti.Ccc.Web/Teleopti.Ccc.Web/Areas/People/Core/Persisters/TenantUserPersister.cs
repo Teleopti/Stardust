@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			_personInfoMapper = personInfoMapper;
 		}
 
-		public List<string> Persist(AgentDataModel agentData, Guid personId)
+		public virtual List<string> Persist(AgentDataModel agentData, Guid personId)
 		{
 			var tenantUserData = new PersonInfoModel
 			{
@@ -41,14 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			return Persist(tenantUserData);
 		}
 
-		[TenantUnitOfWork]
-		public List<string> Persist(PersonInfoModel tenantUserData)
+		public virtual List<string> Persist(PersonInfoModel tenantUserData)
 		{
 			var errorMessages = new List<string>();
 
 			try
 			{
-				_persistPersonInfo.Persist(_personInfoMapper.Map(tenantUserData));
+				PersistInternal(tenantUserData);
 			}
 			catch (PasswordStrengthException)
 			{
@@ -62,12 +61,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			{
 				errorMessages.Add(Resources.DuplicatedApplicationLogonErrorMsgSemicolon);
 			}
-			catch(Exception)
+			catch(Exception e)
 			{
 				errorMessages.Add(Resources.InternalErrorXMsg);
 			}
 
 			return errorMessages;
+		}
+		[TenantUnitOfWork]
+		protected virtual void PersistInternal(PersonInfoModel personInfo)
+		{
+			_persistPersonInfo.Persist(_personInfoMapper.Map(personInfo));
 		}
 	}
 }
