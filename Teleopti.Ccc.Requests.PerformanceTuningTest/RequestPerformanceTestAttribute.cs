@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<UpdateStaffingLevelReadModel>().For<UpdateStaffingLevelReadModel>();
 			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
+			system.UseTestDouble<MutableNow>().For<INow>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
 		}
