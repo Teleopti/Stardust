@@ -204,12 +204,7 @@ namespace Stardust.Node.Workers
 
 						                  break;
 				                  }
-			                  }, TaskContinuationOptions.LongRunning)
-							  .ContinueWith(t =>
-							                {
-												_currentMessageToProcess = null;
-												IsWorking = false;
-											});
+			                  }, TaskContinuationOptions.LongRunning);
 
 			Task.Start();
 		}
@@ -309,6 +304,8 @@ namespace Stardust.Node.Workers
 		{
 			// Dispose timer.
 			SetNodeStatusTimer(null, null);
+			_currentMessageToProcess = null;
+			IsWorking = false;
 		}
 
 		private void SendJobProgressToManager(string message)
