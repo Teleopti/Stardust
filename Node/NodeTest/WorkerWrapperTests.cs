@@ -8,7 +8,6 @@ using NodeTest.Fakes.InvokeHandlers;
 using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
-using SharpTestsEx;
 using Stardust.Node;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
@@ -104,7 +103,7 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
-
+			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 		}
 
@@ -120,7 +119,7 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
-
+			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 		}
 
@@ -136,7 +135,7 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
-
+			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
 
@@ -155,7 +154,7 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
-
+			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
 
@@ -215,23 +214,5 @@ namespace NodeTest
 			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
 		}
 
-		[Test]
-		public void CancelJobShouldSetIsWorkingToFalse()
-		{
-			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
-											   _nodeConfigurationFake,
-											   _nodeStartupNotification,
-											   _pingToManagerFake,
-											   _sendJobDoneTimer,
-											   _sendJobCanceledTimer,
-											   _sendJobFaultedTimer,
-											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
-
-			_workerWrapper.StartJob(_jobDefinition);
-			_workerWrapper.IsWorking.Should().Be.EqualTo(true);
-			_workerWrapper.CancelJob(_jobDefinition.JobId);
-			_workerWrapper.IsWorking.Should().Be.EqualTo(false);
-		}
 	}
 }
