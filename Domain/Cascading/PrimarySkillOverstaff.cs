@@ -8,6 +8,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class PrimarySkillOverstaff
 	{
+		private readonly IAddResourceToSubSkillsProvider _addResourceToSubSkillsProvider;
+
+		public PrimarySkillOverstaff(IAddResourceToSubSkillsProvider addResourceToSubSkillsProvider)
+		{
+			_addResourceToSubSkillsProvider = addResourceToSubSkillsProvider;
+		}
+
 		public ShovelResourcesState AvailableSum(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> allSkillGroups, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			var primarySkillsExistsButTheyAreAllClosed = true;
@@ -46,9 +53,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 					dic.Add(skillGroup.PrimarySkills.First(), skillGroup.RemainingResources);
 					break;
 				}
+				return new ShovelResourcesState(_addResourceToSubSkillsProvider.Fetch(true), dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval));
 			}
 
-			return new ShovelResourcesState(dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval));
+			return new ShovelResourcesState(_addResourceToSubSkillsProvider.Fetch(false), dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval));
 		}
 	}
 }

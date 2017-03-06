@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 						new IntraIntervalFinderService(new SkillDayIntraIntervalFinder(new IntraIntervalFinder(),
 							new SkillActivityCountCollector(new SkillActivityCounter()), new FullIntervalFinder())), new FakeTimeZoneGuard(),
 						new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), new FakeTimeZoneGuard())),
-					new ShovelResources(new AddResourcesToSubSkills(), new ReducePrimarySkillResources(),
-						new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new FakeTimeZoneGuard()));
+					new ShovelResources(new ReducePrimarySkillResources(),
+						new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(new AddResourceToSubSkillsProvider()), new FakeTimeZoneGuard()));
 			skillDayRepository = new FakeSkillDayRepository();
 			multisiteDayRepository = new FakeMultisiteDayRepository();
 			loadSchedulingStateHolderForResourceCalculation =

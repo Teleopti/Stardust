@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_NotShovelCorrectly_41763)]
 	public class CascadingResourceCalculationClosedSkillsTest
 	{
 		public CascadingResourceCalculation Target;
@@ -61,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 
 		[Test]
-		[Ignore("#43299")]
 		public void ShouldShovelAllResourcesFromClosedPrimarySkillNoMatterDemandOnSubskill()
 		{
 			var scenario = new Scenario("_");
@@ -81,7 +82,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("#43299")]
 		public void ShouldShovelAllResourcesFromClosedPrimarySkillEvenIfSubskillIsOverstaffed()
 		{
 			var scenario = new Scenario("_");
@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("#43299")]
 		public void ShouldShovelAllResourcesFromClosedPrimarySkillToSubskillWithDemand()
 		{
 			var scenario = new Scenario("_");
@@ -128,7 +127,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("#43299")]
 		public void ShouldShovelResourcesFromClosedPrimarySkillToSubskillWithDemandBeforeSubskillWithNoDemand()
 		{
 			var scenario = new Scenario("_");
@@ -155,7 +153,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("#43299")]
 		public void ShouldShovelResourcesFromClosedPrimarySkill_ResultingInAllSubSkillsOverStaffed()
 		{
 			var scenario = new Scenario("_");
@@ -182,7 +179,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("#43299")]
 		public void ShouldShovelAllResourcesFromClosedPrimaryToSubSkillEvenIfNoneIsUnderstaffed()
 		{
 			var scenario = new Scenario("_");

@@ -10,15 +10,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
 		private readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
 
-		public ShovelResourcesState(IDictionary<ISkill, double> resources, ResourceDistributionForSkillGroupsWithSameIndex resourceDistribution)
+		public ShovelResourcesState(IAddResourcesToSubSkills addResourcesToSubSkills, IDictionary<ISkill, double> resources, ResourceDistributionForSkillGroupsWithSameIndex resourceDistribution)
 		{
 			_resourceDistribution = resourceDistribution;
+			AddResourcesToSubSkills = addResourcesToSubSkills;
 			ResourcesAvailableForPrimarySkill = resources;
 			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
 			_resourcesMovedOnSkillGroup = new Dictionary<CascadingSkillGroup, double>();
 		}
 
+		public IAddResourcesToSubSkills AddResourcesToSubSkills { get; }
 		public IDictionary<ISkill, double> ResourcesAvailableForPrimarySkill { get; }
 		public double ResourcesMoved { get; private set; }
 		public double RemainingOverstaffing { get; private set; }
