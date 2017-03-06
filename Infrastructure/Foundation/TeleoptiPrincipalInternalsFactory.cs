@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			try
 			{
-				return person == null ? string.Empty : person.Name.ToString();
+				return person?.Name.ToString() ?? string.Empty;
 			}
 			catch (NHibernate.ObjectNotFoundException exception)
 			{
