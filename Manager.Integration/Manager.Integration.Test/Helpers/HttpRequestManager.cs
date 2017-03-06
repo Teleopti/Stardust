@@ -17,9 +17,10 @@ namespace Manager.Integration.Test.Helpers
 			MangerUriBuilder = new ManagerUriBuilder();
 		}
 
-		public void CancelJob(Guid jobId)
+		public async void CancelJob(Guid jobId)
 		{
 			var response = HttpSender.DeleteAsync(MangerUriBuilder.GetCancelJobUri(jobId)).Result;
+			await response.Content.ReadAsStringAsync();
 		}
 
 		public Guid AddJob(JobQueueItem jobQueueItem)
@@ -35,6 +36,14 @@ namespace Manager.Integration.Test.Helpers
 			var content = await result.Content.ReadAsStringAsync();
 			return content;
 		}
+
+		public bool IsNodeWorking()
+		{
+			var response = HttpSender.GetAsync(new Uri("http://localhost:9050/IsWorking")).Result;
+			var result = response.Content.ReadAsStringAsync().Result;
+			return result.Equals("true");
+		}
+
 
 		public bool IsManagerUp()
 		{

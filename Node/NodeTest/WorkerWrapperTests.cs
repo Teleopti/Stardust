@@ -229,6 +229,7 @@ namespace NodeTest
 											   _jobDetailSender);
 
 			_workerWrapper.StartJob(_jobDefinition);
+			_workerWrapper.IsWorking.Should().Be.EqualTo(true);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
 			_workerWrapper.IsWorking.Should().Be.EqualTo(false);
 		}

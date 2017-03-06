@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Core;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Entities;
@@ -79,7 +80,7 @@ namespace Stardust.Node.Workers
 		{
 			lock (_startJobLock)
 			{
-				if (_currentMessageToProcess != null)
+				if (_currentMessageToProcess != null || IsWorking)
 				{
 					var responseMsg = new HttpResponseMessage(HttpStatusCode.Conflict) {Content = new StringContent(WorkerIsAlreadyWorking)};
 					return responseMsg;
@@ -140,8 +141,6 @@ namespace Stardust.Node.Workers
 			IsWorking = true;
 			CancellationTokenSource = new CancellationTokenSource();
 
-			_currentMessageToProcess = jobQueueItemEntity;
-
 			var typ = _nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
 			var deSer = JsonConvert.DeserializeObject(jobQueueItemEntity.Serialized,
 			                                          typ);
@@ -177,15 +176,14 @@ namespace Stardust.Node.Workers
 
 						                  SetNodeStatusTimer(_trySendJobDoneStatusToManagerTimer,
 						                                     _currentMessageToProcess);
-						                  break;
+										  break;
 
 
 					                  case TaskStatus.Canceled:
 
 						                  SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
 						                                     _currentMessageToProcess);
-
-						                  break;
+										  break;
 
 
 					                  case TaskStatus.Faulted:
@@ -207,10 +205,11 @@ namespace Stardust.Node.Workers
 						                  break;
 				                  }
 			                  }, TaskContinuationOptions.LongRunning)
-				.ContinueWith(t =>
-				              {
-								  IsWorking = false;
-				              });
+							  .ContinueWith(t =>
+							                {
+												_currentMessageToProcess = null;
+												IsWorking = false;
+											});
 
 			Task.Start();
 		}
@@ -228,7 +227,6 @@ namespace Stardust.Node.Workers
 			{
 				var token = CancellationTokenSource;
 				token?.Cancel();
-				IsWorking = false;
 			}
 			else
 			{
@@ -311,9 +309,6 @@ namespace Stardust.Node.Workers
 		{
 			// Dispose timer.
 			SetNodeStatusTimer(null, null);
-
-			// Reset jobToDo, so it can start processing new work.
-			ResetCurrentMessage();
 		}
 
 		private void SendJobProgressToManager(string message)

@@ -15,6 +15,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 		[Test]
 		public void CancelWrongJobsTest()
 		{
+			WaitForNodeToFinishWorking();
 			var startedTest = DateTime.UtcNow;
 			var manualResetEventSlim = new ManualResetEventSlim();
 			var checkTablesInManagerDbTimer =
@@ -66,6 +67,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 		[Test]
 		public void CreateRequestShouldReturnCancelStatusWhenJobHasStartedAndBeenCanceled()
 		{
+			WaitForNodeToFinishWorking();
 			var startedTest = DateTime.UtcNow;
 			var manualResetEventSlim = new ManualResetEventSlim();
 			var checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
@@ -94,7 +96,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 
 
-			manualResetEventSlim.Wait(TimeSpan.FromSeconds(30));
+			manualResetEventSlim.Wait(TimeSpan.FromSeconds(10));
 
 			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue must be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Jobs must have been added.");
@@ -115,10 +117,71 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			                                  endedTest);
 		}
 
+		private void WaitForNodeToStartWorking()
+		{
+			var working = false;
+			while (!working)
+			{
+				working = HttpRequestManager.IsNodeWorking();
+				Thread.Sleep(TimeSpan.FromMilliseconds(200));
+			}
+		}
+
+		private void WaitForNodeToFinishWorking()
+		{
+			var working = true;
+			while (working)
+			{
+				working = HttpRequestManager.IsNodeWorking();
+				Thread.Sleep(TimeSpan.FromMilliseconds(200));
+			}
+		}
+
+
+
+		[Test]
+		public void NodeShouldNotGetStuckWhenCancellingOrFailingJobs()
+		{
+			WaitForNodeToFinishWorking();
+			var jobRepository = new ManagerDbRepository(ManagerDbConnectionString);
+
+			var jobQueueItemCancel = JobHelper.GenerateTestJobRequests(1, TimeSpan.FromMinutes(1)).First();
+			var jobQueueItemFail = JobHelper.GenerateFailingJobParamsRequests(1).First();
+			var jobQueueItemSuccess = JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(2)).First();
+
+			var cancelId = HttpRequestManager.AddJob(jobQueueItemCancel);
+			WaitForNodeToStartWorking();
+			HttpRequestManager.CancelJob(cancelId);
+			WaitForNodeToFinishWorking();
+
+			Thread.Sleep(TimeSpan.FromSeconds(2));
+
+			HttpRequestManager.AddJob(jobQueueItemFail);  
+			Thread.Sleep(TimeSpan.FromSeconds(2)); //might be a risc it ends before we see it is working.. 
+			WaitForNodeToFinishWorking();
+
+			Thread.Sleep(TimeSpan.FromSeconds(2));
+
+			HttpRequestManager.AddJob(jobQueueItemSuccess);
+			WaitForNodeToStartWorking();
+			WaitForNodeToFinishWorking();
+
+			Thread.Sleep(TimeSpan.FromSeconds(2));
+
+			var queueItems = jobRepository.JobQueueItems;
+			var jobs = jobRepository.Jobs;
+			Assert.IsTrue(!queueItems.Any(), "Job queue must be empty.");
+			Assert.IsTrue(jobs.Any(), "Jobs must have been added.");
+			Assert.IsTrue(jobs.Any(job => job.Result.StartsWith("Canceled", StringComparison.InvariantCultureIgnoreCase)));
+			Assert.IsTrue(jobs.Any(job => job.Result.StartsWith("fail", StringComparison.InvariantCultureIgnoreCase)));
+			Assert.IsTrue(jobs.Any(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
+		}
+
 
 		[Test]
 		public void JobShouldHaveStatusFailedIfFailedTest()
 		{
+			WaitForNodeToFinishWorking();
 			var startedTest = DateTime.UtcNow;
 			var manualResetEventSlim = new ManualResetEventSlim();
 			var checkTablesInManagerDbTimer =
@@ -171,6 +234,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 		[Test]
 		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
+			WaitForNodeToFinishWorking();
 			var startedTest = DateTime.UtcNow;
 			var manualResetEventSlim = new ManualResetEventSlim();
 			var checkTablesInManagerDbTimer =
