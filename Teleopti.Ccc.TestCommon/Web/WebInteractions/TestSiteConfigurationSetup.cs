@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
 using Teleopti.Support.Library.Config;
@@ -153,7 +154,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		{
 			var file = Path.Combine(Paths.WebPath(), "app_offline.htm");
 			File.WriteAllText(file, "<html><body>Offline!</body></html>");
+			Thread.Sleep(TimeSpan.FromSeconds(5));
 			File.Delete(file);
+			Thread.Sleep(TimeSpan.FromSeconds(5));
 		}
 
 		private static SearchReplaceCollection searchReplaces()
