@@ -160,8 +160,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 					if (!validationResult.IsOk)
 					{
-						allEnabledRules.Add(new ShiftTradeValidationFailedRule(getValidationMessage(validationResult, personRequest)
-							, personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone())));
+						allEnabledRules.Add(new ShiftTradeValidationFailedRule(getValidationMessage(validationResult, personRequest),
+							personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone())));
 					}
 
 					var approvalService = _requestFactory.GetRequestApprovalService(allEnabledRules, scenario,
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					personRequest.Pending();
 
 					var ruleResponses = new List<IBusinessRuleResponse>();
-					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest) )
+					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest))
 					{
 						logger.DebugFormat("Approving ShiftTrade: {0}", personRequest.GetSubject(new NormalizeText()));
 						ruleResponses.AddRange(_shiftTradeApproveService.AutoApprove(personRequest, approvalService, _schedulingResultStateHolder));
@@ -242,12 +242,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			var sb = new StringBuilder(personRequest.GetMessage(new NormalizeText()));
 			sb.AppendLine();
 			sb.AppendLine($"{Resources.ResourceManager.GetString("ViolationOfABusinessRule", culture)}:");
-			foreach (var brokenBusinessRuleMessage in brokenBusinessResponses.Select(m => m.Message).Distinct())
+
+			var brokenRuleMessages = brokenBusinessResponses.Select(m => m.Message).Distinct().ToArray();
+			if (brokenRuleMessages.Any())
 			{
-				sb.AppendLine(brokenBusinessRuleMessage);
-				if (logger.IsWarnEnabled)
+				var index = 1;
+				var sbBrokenRuleMessages = new StringBuilder();
+				sbBrokenRuleMessages.AppendLine("The following @event is from broken rules on handle PersonRequest "
+												+ $"with Id=\"{personRequest.Id}\":");
+				foreach (var brokenBusinessRuleMessage in brokenRuleMessages)
 				{
-					logger.WarnFormat("The following @event is from a broken rule: {0}", brokenBusinessRuleMessage);
+					sb.AppendLine(brokenBusinessRuleMessage);
+					sbBrokenRuleMessages.AppendLine($"  {index}. {brokenBusinessRuleMessage}");
+					index++;
+				}
+
+				if (logger.IsInfoEnabled)
+				{
+					logger.Info(sbBrokenRuleMessages.ToString());
 				}
 			}
 
@@ -319,7 +331,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private IShiftTradeRequest getShiftTradeRequest(IPersonRequest personRequest)
 		{
-			return (IShiftTradeRequest) personRequest.Request;
+			return (IShiftTradeRequest)personRequest.Request;
 		}
 
 		private IScenario loadDefaultScenario()
@@ -331,14 +343,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private void loadSchedules(DateTimePeriod period, IEnumerable<IPerson> persons, IScenario scenario)
 		{
 			_loadSchedulingDataForRequestWithoutResourceCalculation.Execute(scenario, period, persons.ToList(),
-																			_schedulingResultStateHolder);
+				_schedulingResultStateHolder);
 		}
 
 		private class isRequestReadyForProcessingSpecification : Specification<IPersonRequest>
 		{
-			public override bool IsSatisfiedBy(IPersonRequest obj)
+			public override bool IsSatisfiedBy(IPersonRequest personRequest)
 			{
-				return (obj != null && (obj.IsNew || obj.IsPending));
+				return personRequest != null && (personRequest.IsNew || personRequest.IsPending);
 			}
 		}
 	}
