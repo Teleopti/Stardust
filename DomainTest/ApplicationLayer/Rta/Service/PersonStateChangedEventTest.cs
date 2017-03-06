@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 		
 		[Test]
-		public void ShouldPublishWithNeutralAdhernce()
+		public void ShouldPublishWithNeutralAdherence()
 		{
 			var personId = Guid.NewGuid();
 			var admin = Guid.NewGuid();
@@ -255,6 +255,53 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
 			@event.RuleColor.Should().Be(Color.Chocolate.ToArgb());
+		}
+
+		[Test]
+		public void ShouldPublishWithStateName()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out)
+				;
+			Now.Is("2017-03-06 10:00");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "break"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.StateName.Should().Be("out");
+		}
+
+		[Test]
+		public void ShouldPublishWithStateGroupId()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var stateGroup = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithStateGroup(stateGroup, "out")
+				.WithStateCode("break")
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out)
+				;
+			Now.Is("2017-03-06 10:00");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "break"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.StateGroupId.Should().Be(stateGroup);
 		}
 
 

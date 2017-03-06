@@ -283,7 +283,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.Single()
 				.BelongsToDate.Should().Be("2015-02-19".Date());
 		}
-		
+
+		[Test]
+		public void ShouldPublishRuleChangedEventWithBelongsToDate()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out);
+			Now.Is("2015-02-20 2:00");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone",
+			});
+
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Single()
+				.BelongsToDate.Should().Be("2015-02-19".Date());
+		}
+
 		[Test]
 		public void ShouldPublishWithShiftNotEndedYesterday()
 		{

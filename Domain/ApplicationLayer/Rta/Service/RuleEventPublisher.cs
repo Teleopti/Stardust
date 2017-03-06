@@ -18,7 +18,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_publisher.Publish(new PersonRuleChangedEvent
 			{
-				PersonId = context.PersonId
+				PersonId = context.PersonId,
+				Timestamp = context.CurrentTime,
+				BelongsToDate = context.Schedule.BelongsToDate,
+				StateName = context.State.StateGroupName(),
+				StateGroupId = context.State.StateGroupId(),
+				RuleName = context.State.RuleName(),
+				Adherence = context.Adherence.Adherence,
+				ActivityName = context.Schedule.CurrentActivityName(),
+				ActivityColor = context.Schedule.CurrentActivity()?.DisplayColor,
+				RuleColor = context.State.RuleDisplayColor()
 			});
 		}
 	}
