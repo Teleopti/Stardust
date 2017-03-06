@@ -19,17 +19,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private readonly ApplicationDataSourceFromToken _applicationDataSourceFromToken = new ApplicationDataSourceFromToken();
         private readonly LicenseFromToken _licenseFromToken = new LicenseFromToken();
 
-        public IBusinessUnit BusinessUnit
-        {
-            get { return _businessUnitFromToken.BusinessUnit; }
-        }
+        public IBusinessUnit BusinessUnit => _businessUnitFromToken.BusinessUnit;
 
-        public IDataSource DataSource
-        {
-            get { return _applicationDataSourceFromToken.DataSource; }
-        }
+	    public IDataSource DataSource => _applicationDataSourceFromToken.DataSource;
 
-        protected override bool CanValidateTokenCore(SecurityToken token)
+	    protected override bool CanValidateTokenCore(SecurityToken token)
         {
             // Check that the incoming token is a username token type that  
             // can be validated by this implementation.
@@ -73,10 +67,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
         private static bool isIncompleteToken(CustomUserNameSecurityToken userNameToken)
         {
-            return userNameToken == null ||
-                   string.IsNullOrEmpty(userNameToken.DataSource) ||
-                   string.IsNullOrEmpty(userNameToken.UserName) ||
-                   string.IsNullOrEmpty(userNameToken.Password);
+            return string.IsNullOrEmpty(userNameToken?.DataSource) || string.IsNullOrEmpty(userNameToken.UserName) || string.IsNullOrEmpty(userNameToken.Password);
         }
     }
 }

@@ -88,6 +88,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             throw new FaultException(string.Format(CultureInfo.InvariantCulture, "The user with user name {0} could not be found.", _customUserNameSecurityToken.UserName));
         }
 
-        public PersonContainer PersonContainer { get { return _personContainer; } }
+        public PersonContainer PersonContainer => _personContainer;
     }
 }

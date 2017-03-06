@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Logon
 		    TokenIdentity token = null;
 			if (_tokenIdentityProvider != null)
 				token = _tokenIdentityProvider.RetrieveToken();
-		    var principal = _principalFactory.MakePrincipal(user, dataSource, businessUnit, token == null ? null : token.OriginalToken);
+		    var principal = _principalFactory.MakePrincipal(user, dataSource, businessUnit, token?.OriginalToken);
 			_currentPrincipalContext.SetCurrentPrincipal(principal);
     	}
     }

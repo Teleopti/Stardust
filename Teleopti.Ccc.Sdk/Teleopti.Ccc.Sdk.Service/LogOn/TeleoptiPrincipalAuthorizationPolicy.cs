@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         {
             if (tokenClaims == null)
             {
-                throw new ArgumentNullException("tokenClaims");
+                throw new ArgumentNullException(nameof(tokenClaims));
             }
             _issuer = tokenClaims.Issuer;
             _tokenClaims = tokenClaims;
@@ -31,22 +31,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             _id = Guid.NewGuid().ToString();
         }
 
-        public ClaimSet Issuer
-        {
-            get { return _issuer; }
-        }
+        public ClaimSet Issuer => _issuer;
 
-        public string Id
-        {
-            get { return _id; }
-        }
+	    public string Id => _id;
 
-        public PersonContainer PersonContainer
-        {
-            get { return _personContainer; }
-        }
+	    public PersonContainer PersonContainer => _personContainer;
 
-        public IIdentity Identity { get; set; }
+	    public IIdentity Identity { get; set; }
 
         public bool Evaluate(EvaluationContext evaluationContext, ref object state)
         {
@@ -73,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                 if (identities == null || identities.Count <= 0)
                     throw new FaultException("No Identity found");
 
-                evaluationContext.Properties.Add("Principal",new TeleoptiPrincipal(identities[0], _personContainer==null ? null : _personContainer.Person));
+                evaluationContext.Properties.Add("Principal",new TeleoptiPrincipal(identities[0], _personContainer?.Person));
             }
         }
 
