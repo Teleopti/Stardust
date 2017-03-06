@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -128,49 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
 			@event.Adherence.Should().Be(EventAdherence.Out);
 		}
-
-		[Test]
-		public void ShouldPublishInAdherenceForPreviousActivity()
-		{
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			Database
-				.WithAgent("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("phone", activityId, 0);
-			Now.Is("2014-10-20 11:05");
-
-			Target.SaveState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-
-			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.AdherenceWithPreviousActivity.Should().Be(EventAdherence.In);
-		}
-
-		[Test]
-		public void ShouldPublishOutOfAdherenceForPreviousActivity()
-		{
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			Database
-				.WithAgent("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("phone", activityId, 1);
-			Now.Is("2014-10-20 11:05");
-
-			Target.SaveState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-
-			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.AdherenceWithPreviousActivity.Should().Be(EventAdherence.Out);
-		}
-
+		
 		[Test]
 		public void ShouldPublishWithNeutralAdhernce()
 		{
@@ -191,27 +150,113 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
 				.Adherence.Should().Be(EventAdherence.Neutral);
 		}
-		
+
 		[Test]
-		public void ShouldPublishNeutralAdhernceWithPreviousActivity()
+		public void ShouldPublishWithActivity()
 		{
 			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("phone", activityId, -1, Adherence.Neutral);
-			Now.Is("2014-10-20 11:05");
+				.WithSchedule(personId, phone, "phone", "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithStateGroup(null, "default", true);
+			Now.Is("2017-03-06 10:00");
 
 			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone"
+				StateCode = "break"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
-				.AdherenceWithPreviousActivity.Should().Be(EventAdherence.Neutral);
+			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.ActivityName.Should().Be("phone");
 		}
+
+		[Test]
+		public void ShouldPublishWithActivityColor()
+		{
+			var personId = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, Color.Green, "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithStateGroup(null, "default", true);
+			Now.Is("2017-03-06 10:00");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "break"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.ActivityColor.Should().Be(Color.Green.ToArgb());
+		}
+
+		[Test]
+		public void ShouldPublishWithRule()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithRule("break", phone, "out");
+			Now.Is("2017-03-06 10:00");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "break"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.RuleName.Should().Be("out");
+		}
+
+		[Test]
+		public void ShouldPublishWithRuleColor()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.DarkGoldenrod)
+				;
+			Now.Is("2017-03-06 10:00");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "break"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.RuleColor.Should().Be(Color.DarkGoldenrod.ToArgb());
+		}
+
+		[Test]
+		public void ShouldPublishWithOtherRuleColor()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.Chocolate)
+				;
+			Now.Is("2017-03-06 10:00");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "break"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.RuleColor.Should().Be(Color.Chocolate.ToArgb());
+		}
+
 
 	}
 }

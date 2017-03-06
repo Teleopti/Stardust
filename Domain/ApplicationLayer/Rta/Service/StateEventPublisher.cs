@@ -20,10 +20,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BelongsToDate = info.Schedule.BelongsToDate,
 				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
-				StateGroupName = info.State.StateGroupName(),
+				StateName = info.State.StateGroupName(),
 				StateGroupId = info.State.StateGroupId(),
-				AdherenceWithPreviousActivity = info.Adherence.AdherenceForNewStateAndPreviousActivity(),
-				Adherence = info.Adherence.AdherenceForNewStateAndCurrentActivity()
+				ActivityName = info.Schedule.CurrentActivityName(),
+				ActivityColor = info.Schedule.CurrentActivity()?.DisplayColor,
+				RuleName = info.State.RuleName(),
+				RuleColor = info.State.RuleDisplayColor(),
+				Adherence = info.Adherence.AdherenceForNewStateAndCurrentActivity(),
 			});
 		}
 	}

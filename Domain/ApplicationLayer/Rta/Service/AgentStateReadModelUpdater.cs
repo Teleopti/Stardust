@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static void handle(AgentStateReadModel model, PersonStateChangedEvent @event)
 		{
-			model.StateName = @event.StateGroupName;
+			model.StateName = @event.StateName;
 			model.StateGroupId = @event.StateGroupId;
 			model.StateStartTime = @event.Timestamp;
 		}
