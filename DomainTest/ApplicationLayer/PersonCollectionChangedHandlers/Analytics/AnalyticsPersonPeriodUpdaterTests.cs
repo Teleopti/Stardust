@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IPersonRepository _personRepository;
 		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private IAnalyticsTeamRepository _analyticsTeamRepository;
+
 		private FakeEventPublisher _eventPublisher;
 		private IAnalyticsDateRepository _analyticsDateRepository;
 		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
@@ -97,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				_analyticsIntervalRepository,
 				_globalSettingDataRepository, new AnalyticsPersonPeriodDateFixer(_analyticsDateRepository, _analyticsIntervalRepository));
 
-			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _eventPublisher, new ThisAnalyticsUnitOfWork(new FakeUnitOfWork()), personPeriodFilter, personPeriodTransformer);
+			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, new EventPopulatingPublisher(new CurrentEventPublisher(_eventPublisher), new DummyInfrastructureInfoPopulator()), new ThisAnalyticsUnitOfWork(new FakeUnitOfWork()), personPeriodFilter, personPeriodTransformer);
 		}
 
 		[Test]

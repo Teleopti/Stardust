@@ -562,7 +562,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(groupPage.Description.Name);
 			addedGroupPage.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.DescriptionKey);
 			addedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Description.Name);
-			addedGroupPage.GroupIsCustom.Should().Be.False();
+			addedGroupPage.GroupIsCustom.Should().Be.True();
 
 			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);

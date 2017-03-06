@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					{
 						GroupPageCode = groupPage.Id.GetValueOrDefault(),
 						GroupPageNameResourceKey = groupPage.DescriptionKey,
-						GroupPageName = groupPage.Description.Name
-					}));
+						GroupPageName = groupPage.Description.Name,
+					}) {IsCustom = true});
 				}
 				
 			}
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					GroupName = groupInfo.GroupName,
 					GroupCode = groupInfo.GroupCode,
 					BusinessUnitCode = businessUnitId,
-					GroupIsCustom = false,
+					GroupIsCustom = groupInfo.IsCustom,
 					GroupPageCode = groupInfo.GroupPageCode,
 					GroupPageName = groupInfo.GroupPageName,
 					GroupPageNameResourceKey = groupInfo.GroupPageNameResourceKey
@@ -214,6 +214,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				GroupPageName = groupPage.GroupPageName;
 				GroupPageCode = groupPage.GroupPageCode;
 				GroupName = groupName;
+				IsCustom = false;
 			}
 
 			public Guid GroupCode { get; private set; }
@@ -221,6 +222,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			public string GroupPageName { get; private set; }
 			public string GroupPageNameResourceKey { get; private set; }
 			public string GroupName { get; private set; }
+			public bool IsCustom { get; set; }
 		}
 	}
 }

@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 		private readonly IPersonPeriodFilter _personPeriodFilter;
 		private readonly IPersonPeriodTransformer _personPeriodTransformer;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IEventPublisher eventPublisher,
+			IEventPopulatingPublisher eventPublisher,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IPersonPeriodFilter personPeriodFilter,
 			IPersonPeriodTransformer personPeriodTransformer)
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					var existingPeriodSkillsetId = existingPeriod?.SkillsetId == -1 ? null : existingPeriod?.SkillsetId;
 					if (newPeriodSkillsetId != existingPeriodSkillsetId)
 					{
-						publishSkillChangeEvent(@event, personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
+						publishSkillChangeEvent(personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
 					}
 
 					// Update/Add/Delete from Bridge Acd Login Person table
@@ -165,13 +165,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
 				if (!changedPeople.Any()) return;
-				var analyticsPersonCollectionChangedEvent = new AnalyticsPersonCollectionChangedEvent
-				{
-					InitiatorId = @event.InitiatorId,
-					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
-					LogOnDatasource = @event.LogOnDatasource,
-					Timestamp = @event.Timestamp
-				};
+				var analyticsPersonCollectionChangedEvent = new AnalyticsPersonCollectionChangedEvent();
 				analyticsPersonCollectionChangedEvent.SetPersonIdCollection(changedPeople);
 				_eventPublisher.Publish(analyticsPersonCollectionChangedEvent);
 			});
@@ -179,20 +173,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
 				if (!peopleWithUnlinkedPersonPeriod.Any()) return;
-				var analyticsPersonPeriodRangeChangedEvent = new AnalyticsPersonPeriodRangeChangedEvent
-				{
-					InitiatorId = @event.InitiatorId,
-					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
-					LogOnDatasource = @event.LogOnDatasource,
-					Timestamp = @event.Timestamp
-				};
+				var analyticsPersonPeriodRangeChangedEvent = new AnalyticsPersonPeriodRangeChangedEvent();
 				analyticsPersonPeriodRangeChangedEvent.SetPersonIdCollection(peopleWithUnlinkedPersonPeriod);
 				_eventPublisher.Publish(analyticsPersonPeriodRangeChangedEvent);
 			});
 
 		}
 
-		private void publishSkillChangeEvent(PersonCollectionChangedEvent @event, IPersonPeriod personPeriod, IEnumerable<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
+		private void publishSkillChangeEvent(IPersonPeriod personPeriod, IEnumerable<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
 		{
 			var existsInAnalytics = personPeriod.PersonSkillCollection.Where(a => analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id))).ToList();
 
@@ -210,11 +198,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					AnalyticsPersonPeriodId = updatedAnalyticsPersonPeriod.PersonId,
 					AnalyticsBusinessUnitId = updatedAnalyticsPersonPeriod.BusinessUnitId,
 					AnalyticsActiveSkillsId = activeSkills,
-					AnalyticsInactiveSkillsId = inactiveSkills,
-					InitiatorId = @event.InitiatorId,
-					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
-					LogOnDatasource = @event.LogOnDatasource,
-					Timestamp = @event.Timestamp
+					AnalyticsInactiveSkillsId = inactiveSkills
 				});
 			});
 		}
