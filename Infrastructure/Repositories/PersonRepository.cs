@@ -14,16 +14,13 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -32,6 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public PersonRepository(ICurrentUnitOfWork currentUnitOfWork) 
 			: base(currentUnitOfWork)
 		{
+		}
+
+		public void HardRemove(IPerson person)
+		{
+			// Used when record should be deleted instead of being mark-deleted. 
+			Session.Delete(person);
 		}
 
 		public IList<IPerson> FindPersonsThatAlsoAreUsers()

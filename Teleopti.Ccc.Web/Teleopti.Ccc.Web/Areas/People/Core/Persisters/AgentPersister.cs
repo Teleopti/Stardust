@@ -3,10 +3,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
@@ -20,15 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-
+		
 		public AgentPersister(ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
-			ITenantUserPersister tenantUserPersister, ICurrentUnitOfWork currentUnitOfWork)
+			ITenantUserPersister tenantUserPersister)
 		{
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
-			_tenantUserPersister = tenantUserPersister;
-			_currentUnitOfWork = currentUnitOfWork;
+			_tenantUserPersister = tenantUserPersister;			
 		}
 
 		public void Persist(IEnumerable<AgentExtractionResult> data)
@@ -36,14 +34,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			foreach (var agentResult in data)
 			{
 				var agentData = agentResult.Agent;
-				if (agentData == null) continue;
+				if (agentResult.ErrorMessages.Any() || agentData == null) continue;
 
 				var person = persistPerson(agentData);
 				var errorMessages =	_tenantUserPersister.Persist(agentData, person.Id.GetValueOrDefault());
 
 				if (errorMessages.Any())
 				{
-					removePerson(person);
+					_personRepository.HardRemove(person);
 					agentResult.ErrorMessages.AddRange(errorMessages);
 					continue;
 				}
@@ -62,6 +60,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		{
 			var schedulePeriod = new SchedulePeriod(agentData.StartDate, agentData.SchedulePeriodType,
 				agentData.SchedulePeriodLength);
+
+			
 			person.AddSchedulePeriod(schedulePeriod);
 		}
 
@@ -69,6 +69,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		{
 			var personContract = new PersonContract(agentData.Contract,agentData.PartTimePercentage,agentData.ContractSchedule);
 			var personPeriod = new PersonPeriod(agentData.StartDate,personContract,agentData.Team);
+
+
+			agentData.Skills.ForEach(s => personPeriod.AddPersonSkill(new PersonSkill(s, new Percent(1))));
+		
+			personPeriod.RuleSetBag = agentData.RuleSetBag;
+			personPeriod.AddExternalLogOn(agentData.ExternalLogon);
 			person.AddPersonPeriod(personPeriod);
 		}
 
@@ -77,14 +83,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			var person = createPersonFromModel(agentData);
 			_personRepository.Add(person);
 			return person;
-		}
-
-		private void removePerson(IPerson person)
-		{
-			if (_currentUnitOfWork.Current().Contains(person))
-			{
-				_currentUnitOfWork.Current().Remove(person);
-			}
 		}
 
 		private IPerson createPersonFromModel(AgentDataModel agentData)

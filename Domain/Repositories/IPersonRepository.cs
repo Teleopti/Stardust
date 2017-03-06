@@ -96,5 +96,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<IPerson> FindUsers(DateOnly date);
 		IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period);
+
+		void HardRemove(IPerson person);
 	}
 }

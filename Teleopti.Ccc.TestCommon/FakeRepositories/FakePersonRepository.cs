@@ -10,9 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -272,6 +270,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					result.Add(person);
 			}
 			return result;
+		}
+
+		public void HardRemove(IPerson person)
+		{
+			_storage.Remove(person);
 		}
 	}
 }

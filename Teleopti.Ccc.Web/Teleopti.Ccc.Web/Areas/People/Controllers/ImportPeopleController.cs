@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return _importAgentDataProvider.GetImportAgentSettingsData();
 		}
 
-		[UnitOfWork, Route("api/People/UploadAgent"), HttpPost]
+		[Route("api/People/UploadAgent"), HttpPost]
 		public virtual async Task<HttpResponseMessage> UploadAgent()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				row.CreateCell(agentTemplate.ColumnHeaderMap["ShiftBag"]).SetCellValue(rawAgent.ShiftBag);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(rawAgent.SchedulePeriodType);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(rawAgent.SchedulePeriodLength.Value);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["ErrorMessage"]).SetCellValue(string.Join(";", rawAgent.ErrorMessage));
+				row.CreateCell(agentTemplate.ColumnHeaderMap.Count).SetCellValue(string.Join(";", agents[i].ErrorMessages));
 			}
 			returnedFile.Write(ms);
 			return ms;
