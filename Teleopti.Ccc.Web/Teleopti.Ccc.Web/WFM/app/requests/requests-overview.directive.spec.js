@@ -231,15 +231,19 @@
 				endDate: moment().endOf('week')._d
 			};
 			targetScope.selectedTeams = ["team"];
-			var count = 0;
-			function initCallBack(count) {
-				
-			}
+			targetScope.initFooter = function (count) { };
+
 			targetElement = $compile('<requests-overview ' +
 				'is-active="selectedTabIndex == 0" ' +
 				'selected-team-ids="selectedTeams"' +
-				'on-init-call-back="' + initCallBack(count) + '"' +
+				'on-init-call-back="initFooter(count)"' +
 				'period="absencePeriod"></requests-overview>')(targetScope);
+			targetScope.$digest();
+
+			targetScope.absencePeriod = {
+				startDate: moment().add(-1, 'd')._d,
+				endDate: moment().add(1, 'd')._d
+			};
 			targetScope.$digest();
 
 			expect(requestsDataService.getCallCounts()).toEqual(1);

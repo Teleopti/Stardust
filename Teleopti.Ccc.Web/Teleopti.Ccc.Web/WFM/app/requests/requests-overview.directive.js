@@ -35,17 +35,12 @@
 			if (toggleService.Wfm_Requests_Default_Status_Filter_39472) {
 				vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
 			}
-
-			if (vm.isActive) {
-				reload();
-			}
 		}
 
 		toggleService.togglesLoaded.then(init);
 
 		function getRequests(requestsFilter, sortingOrders, paging) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
-
 				vm.requests = requests.data.Requests;
 
 				if (vm.requests && vm.requests.length > 0) {
@@ -81,7 +76,6 @@
 			};
 
 			vm.isLoading = true;
-
 			if (vm.isPaginationEnabled) {
 				getRequests(requestsFilter, vm.sortingOrders, vm.paging);
 			} else {
@@ -97,7 +91,6 @@
 		if (endDate === null || startDate === null) return false;
 		return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
 	}
-
 
 	function requestsOverviewDirective() {
 		return {

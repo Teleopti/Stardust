@@ -5,51 +5,51 @@
 	</div>
 </div>
 
-<div class="wfm-requests panel wfm-block material-depth-1" ng-if="requests.isRequestsEnabled && requests.permissionsReady">
+<div class="wfm-requests panel wfm-block material-depth-1" ng-if="vm.isRequestsEnabled">
 	<div class="operation-container">
 		<div class="left-part">
-			<favorite-search ng-if="requests.saveFavoriteSearchesEnabled"
-							 apply-favorite="requests.applyFavorite(currentFavorite)"
-							 get-search="requests.getSearch()"
-							 current-favorite="requests.selectedFavorite"
-							 on-init-async="requests.onFavoriteSearchInitDefer"></favorite-search>
+			<favorite-search ng-if="vm.businessHierarchyToggleEnabled && vm.saveFavoriteSearchesToggleEnabled"
+							 apply-favorite="vm.applyFavorite(currentFavorite)"
+							 get-search="vm.getSearch()"
+							 current-favorite="vm.selectedFavorite"
+							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<organization-picker ng-if="requests.businessHierarchyToggleEnabled"
-								 on-open="requests.agentSearchOptions.focusingSearch = false"
-								 on-init-async="requests.defaultTeamLoadedDefer"
-								 on-pick="requests.changeSelectedTeams(teams)"
-								 preselected-team-ids="requests.selectedTeamIds"
+			<organization-picker ng-if="vm.businessHierarchyToggleEnabled"
+								 on-open="vm.agentSearchOptions.focusingSearch = false"
+								 on-init-async="vm.defaultTeamLoadedDefer"
+								 on-pick="vm.changeSelectedTeams(teams)"
+								 preselected-team-ids="vm.selectedTeamIds"
 								 class="organization-picker-container"></organization-picker>
 
 			<span class="people-search-container">
-				<wfm-multiple-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.keyDownOnSearchTermChanged" focus-input="requests.agentSearchOptions.focusingSearch" ></wfm-multiple-search-input>
+				<wfm-multiple-search-input class="request-filter inline-block" search-options="vm.agentSearchOptions" search-callback="vm.onSearchTermChangedCallback" focus-input="vm.agentSearchOptions.focusingSearch" ></wfm-multiple-search-input>
 			</span>
 
-			<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="requests.period"
-							   template-type="requests.dateRangeTemplateType"
-							   custom-validators="requests.dateRangeCustomValidators"></date-range-picker>
+			<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="vm.period"
+							   template-type="vm.dateRangeTemplateType"
+							   custom-validators="vm.dateRangeCustomValidators"></date-range-picker>
 
-			<div class="wfm-switch filter-switch" ng-if="requests.filterToggleEnabled">
-				<input type="checkbox" id="filter-switch" ng-model="requests.filterEnabled" />
+			<div class="wfm-switch filter-switch" ng-if="vm.filterToggleEnabled">
+				<input type="checkbox" id="filter-switch" ng-model="vm.filterEnabled" />
 				<label for="filter-switch">
 					<span class="wfm-switch-toggle"></span>
 					<span style="width: 55px; display: inline-block;"></span>
-					<span class="wfm-switch-label" ng-show="requests.filterEnabled !== true"><span translate>ShowFilter</span></span>
-					<span class="wfm-switch-label" ng-show="requests.filterEnabled === true" translate>HideFilter</span>
+					<span class="wfm-switch-label" ng-show="vm.filterEnabled !== true"><span translate>ShowFilter</span></span>
+					<span class="wfm-switch-label" ng-show="vm.filterEnabled === true" translate>HideFilter</span>
 				</label>
 			</div>
 		</div>
 		
 		<div class="right-part">
-			<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled && requests.canApproveOrDenyRequest()"
-									before-command="requests.onBeforeCommand()"
-									is-shift-trade-view-active="requests.isShiftTradeViewActive()"
-									after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod)"
-									on-error-messages="requests.onErrorMessages(errorMessages)"
-									after-command-error="requests.onCommandError(error)"
-									commands-disabled="requests.disableInteraction"
-									on-process-waitlist-finished="requests.onProcessWaitlistFinished(message)"
-									on-approve-based-on-business-rules-finished="requests.onApproveBasedOnBusinessRulesFinished(message)"
+			<requests-commands-pane ng-if="vm.isRequestsCommandsEnabled && vm.canApproveOrDenyRequest()"
+									before-command="vm.onBeforeCommand()"
+									is-shift-trade-view-active="vm.isShiftTradeViewActive()"
+									after-command-success="vm.onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod)"
+									on-error-messages="vm.onErrorMessages(errorMessages)"
+									after-command-error="vm.onCommandError(error)"
+									commands-disabled="vm.disableInteraction"
+									on-process-waitlist-finished="vm.onProcessWaitlistFinished(message)"
+									on-approve-based-on-business-rules-finished="vm.onApproveBasedOnBusinessRulesFinished(message)"
 									></requests-commands-pane>
 		</div>
 	</div>
@@ -57,32 +57,32 @@
 	<div class="request-body" synchronize-header-height >
 		<div class="wfm-slide-tabs tabbed-panel">
 			<md-content class="md-padding">
-				<md-tabs md-dynamic-height md-border-botto md-no-pagination md-selected="requests.selectedTabIndex">
+				<md-tabs md-dynamic-height md-border-botto md-no-pagination md-selected="vm.selectedTabIndex">
 					<md-tab label="{{'Absence' | translate}} {{'And' | translate}} {{'Text' | translate}}">
 						<md-content class="md-padding text-absence-view">
-							<requests-overview is-active="requests.selectedTabIndex == 0"
-													 period="requests.absencePeriod"
-													 agent-search-term="requests.agentSearchTerm"
-													 selected-team-ids="requests.selectedTeamIds"
-													 paging="requests.paging"
-													 on-init-call-back="requests.initFooter(count)"
-													 is-using-request-submitter-time-zone="requests.isUsingRequestSubmitterTimeZone"
-													 filter-enabled="requests.filterEnabled" >
+							<requests-overview is-active="vm.selectedTabIndex == 0"
+													 period="vm.absencePeriod"
+													 agent-search-term="vm.agentSearchOptions.keyword"
+													 selected-team-ids="vm.selectedTeamIds"
+													 paging="vm.paging"
+													 on-init-call-back="vm.initFooter(count)"
+													 is-using-request-submitter-time-zone="vm.isUsingRequestSubmitterTimeZone"
+													 filter-enabled="vm.filterEnabled" >
 							</requests-overview>
 						</md-content>
 					</md-tab>
 
-					<md-tab label="{{'ShiftTrade' | translate}}" ng-if="requests.isShiftTradeViewVisible" >
+					<md-tab label="{{'ShiftTrade' | translate}}" ng-if="vm.isShiftTradeViewVisible" >
 						<md-content class="md-padding shift-trade-view">
 							<requests-overview shift-trade-view
-													 is-active="requests.selectedTabIndex == 1"
-													 period="requests.shiftTradePeriod"
-													 agent-search-term="requests.agentSearchTerm"
-													 selected-team-ids="requests.selectedTeamIds"
-													 paging="requests.paging"
-													 on-init-call-back="requests.initFooter(count)"
-													 is-using-request-submitter-time-zone="requests.isUsingRequestSubmitterTimeZone"
-													 filter-enabled="requests.filterEnabled">
+													 is-active="vm.selectedTabIndex == 1"
+													 period="vm.shiftTradePeriod"
+													 agent-search-term="vm.agentSearchOptions.keyword"
+													 selected-team-ids="vm.selectedTeamIds"
+													 paging="vm.paging"
+													 on-init-call-back="vm.initFooter(count)"
+													 is-using-request-submitter-time-zone="vm.isUsingRequestSubmitterTimeZone"
+													 filter-enabled="vm.filterEnabled">
 							</requests-overview>
 						</md-content>
 					</md-tab>
@@ -91,10 +91,10 @@
 		</div>
 	</div>
 
-	<requests-footer ng-if="requests.isFooterInited"
-			paging="requests.paging"
-			page-size-options="requests.pageSizeOptions"
-			is-shift-trade-view-active="requests.isShiftTradeViewActive()"
-			is-using-request-submitter-time-zone="requests.isUsingRequestSubmitterTimeZone"
+	<requests-footer ng-if="vm.isFooterInited"
+			paging="vm.paging"
+			page-size-options="vm.pageSizeOptions"
+			is-shift-trade-view-active="vm.isShiftTradeViewActive()"
+			is-using-request-submitter-time-zone="vm.isUsingRequestSubmitterTimeZone"
 	></requests-footer>
 </div>

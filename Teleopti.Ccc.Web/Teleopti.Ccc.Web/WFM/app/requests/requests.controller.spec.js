@@ -9,7 +9,7 @@ describe('RequestsControllerTests', function () {
 	var shiftTradeRequestTabIndex = 1;
 
 	beforeEach(function () {
-		module('wfm.requests');		
+		module('wfm.requests');
 
 		requestCommandParamsHolder = new fakeRequestCommandParamsHolder();
 
@@ -147,7 +147,7 @@ describe('RequestsControllerTests', function () {
 			focusingSearch: true
 		};
 
-		target.keyDownOnSearchTermChanged();
+		target.onSearchTermChangedCallback();
 
 		expect(target.agentSearchOptions.focusingSearch).toEqual(false);
 	});
@@ -196,7 +196,7 @@ describe('RequestsControllerTests', function () {
 		requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
 		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
 
-		target.keyDownOnSearchTermChanged();
+		target.onSearchTermChangedCallback();
 		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
 	});
 

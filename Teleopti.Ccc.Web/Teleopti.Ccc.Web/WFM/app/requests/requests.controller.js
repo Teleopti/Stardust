@@ -7,7 +7,6 @@
 
 	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, CurrentUserInfo) {
 		var vm = this;
-		vm.permissionsReady = false;
 
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.paging = {
@@ -16,35 +15,41 @@
 			totalPages: 1,
 			totalRequestsCount: 0
 		};
-		vm.initFooter = initFooter;
-		function initFooter(count) {
-			vm.isFooterInited = true;
-			onTotalRequestsCountChanges(count);
-		}
-		function onTotalRequestsCountChanges(totalRequestsCount) {
-			var totalPages = Math.ceil(totalRequestsCount / vm.paging.pageSize);
-			if (totalPages !== vm.paging.totalPages) vm.paging.pageNumber = 1;
+		vm.agentSearchOptions = {
+			keyword: "",
+			isAdvancedSearchEnabled: true,
+			searchKeywordChanged: false,
+			focusingSearch: false,
+			searchFields: [
+				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
+				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
+			]
+		};
+		vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
+		vm.saveFavoriteSearchesToggleEnabled = toggleService.Wfm_Requests_SaveFavoriteSearches_42578;
+		vm.onFavoriteSearchInitDefer = $q.defer();
 
-			vm.paging.totalPages = totalPages;
-			vm.paging.totalRequestsCount = totalRequestsCount;
+		if (!vm.saveFavoriteSearchesToggleEnabled) {
+			vm.onFavoriteSearchInitDefer.resolve();
 		}
 
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
 		var shiftTradeRequestTabIndex = 1;
 		vm.selectedTeamIds = [];
-		var internalSelectedTeamIds = [];
-
 		vm.defaultTeamLoadedDefer = $q.defer();
 		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
 			vm.defaultTeamLoadedDefer.resolve();
 		}
 
 		$q.all([toggleService.togglesLoaded])
-			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeams) {
-				internalSelectedTeamIds = defaultTeams ? defaultTeams : [];
-				vm.selectedTeamIds = internalSelectedTeamIds;
-				$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: internalSelectedTeamIds, agentSearchTerm: vm.agentSearchTerm});
+			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeam) {
+				vm.selectedTeamIds = defaultTeam || [];
+
+				//Jianfeng TODO: add favorite search permission check here
+				if(vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled)){
+					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
+				}
 			}))
 			.then(init);
 
@@ -56,52 +61,46 @@
 			}
 		}];
 
-		vm.selectedFavorite = null;
-
 		vm.changeSelectedTeams = function (teams) {
-			internalSelectedTeamIds = teams;
+			vm.selectedTeamIds = teams;
 			vm.agentSearchOptions.focusingSearch = true;
-			vm.selectedFavorite = false;
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
-			internalSelectedTeamIds = currentFavorite.TeamIds;
+			vm.selectedTeamIds = currentFavorite.TeamIds;
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
-			setSearchFilter();
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-
-			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:currentFavorite.TeamIds,agentSearchTerm:currentFavorite.SearchTerm});
+			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:currentFavorite.TeamIds,agentSearchTerm: vm.agentSearchOptions.keyword});
 			vm.agentSearchOptions.focusingSearch = false;
 		};
 
 		vm.getSearch = function () {
 			return {
-				TeamIds: internalSelectedTeamIds,
+				TeamIds: vm.selectedTeamIds,
 				SearchTerm: vm.agentSearchOptions.keyword
 			};
 		};
 
-		vm.keyDownOnSearchTermChanged = function() {
-			setSearchFilter();
-			vm.selectedFavorite = false;
+		vm.onSearchTermChangedCallback = function() {
 			vm.agentSearchOptions.focusingSearch = false;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-
-			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:vm.selectedTeamIds,agentSearchTerm:vm.agentSearchTerm});
+			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
 		};
 
-		vm.onFavoriteSearchInitDefer = $q.defer();
+		vm.initFooter = function (count) {
+			vm.isFooterInited = true;
 
-		function setSearchFilter() {
-			vm.selectedTeamIds = internalSelectedTeamIds;
-			vm.agentSearchTerm = vm.agentSearchOptions && vm.agentSearchOptions.keyword;
-		}
+			var totalPages = Math.ceil(count / vm.paging.pageSize);
+			if (totalPages !== vm.paging.totalPages) vm.paging.pageNumber = 1;
+
+			vm.paging.totalPages = totalPages;
+			vm.paging.totalRequestsCount = count;
+		};
 
 		function init() {
-			vm.permissionsReady = true;
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
 			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
 			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
@@ -115,21 +114,15 @@
 
 			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
 			vm.filterEnabled = vm.filterToggleEnabled;
-			vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
-			vm.saveFavoriteSearchesEnabled = toggleService.Wfm_Requests_SaveFavoriteSearches_42578;
-
-			if (!vm.saveFavoriteSearchesEnabled) {
-				vm.onFavoriteSearchInitDefer.resolve();
-			}
 
 			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
 				if (defaultSearch) {
 					vm.selectedTeamIds = defaultSearch.TeamIds;
-					internalSelectedTeamIds = defaultSearch.TeamIds;
-					
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
-					vm.agentSearchTerm = vm.agentSearchOptions.keyword;
-					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:internalSelectedTeamIds,agentSearchTerm:vm.agentSearchTerm});
+				}
+				//Jianfeng TODO: add favorite search permission check here
+				if(vm.saveFavoriteSearchesToggleEnabled){
+					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
 				}
 			});
 
@@ -142,18 +135,6 @@
 			periodForAbsenceRequest = defaultDateRange;
 			periodForShiftTradeRequest = defaultDateRange;
 
-			vm.agentSearchOptions = {
-				keyword: "",
-				isAdvancedSearchEnabled: true,
-				searchKeywordChanged: false,
-				focusingSearch: false,
-				searchFields: [
-					'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
-					'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
-				]
-			};
-			vm.agentSearchTerm = vm.agentSearchOptions.keyword;
-
 			vm.onBeforeCommand = onBeforeCommand;
 			vm.onCommandSuccess = onCommandSuccess;
 			vm.onCommandError = onCommandError;
@@ -162,6 +143,10 @@
 			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
 			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
 
+			setReleaseNotification();
+		}
+
+		function setReleaseNotification(){
 			if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
 				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 					.replace('{0}', $translate.instant('Requests'))
@@ -270,7 +255,6 @@
 				} else {
 					vm.absencePeriod = newValue;
 				}
-
 				requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 				vm.agentSearchOptions.focusingSearch = false;
 			});
