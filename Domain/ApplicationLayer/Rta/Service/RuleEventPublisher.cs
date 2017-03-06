@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void Publish(Context context)
 		{
-
 			if (!context.State.RuleChanged()) return;
 
 			_publisher.Publish(new PersonRuleChangedEvent
@@ -21,13 +20,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PersonId = context.PersonId,
 				Timestamp = context.CurrentTime,
 				BelongsToDate = context.Schedule.BelongsToDate,
+
 				StateName = context.State.StateGroupName(),
 				StateGroupId = context.State.StateGroupId(),
-				RuleName = context.State.RuleName(),
-				Adherence = context.Adherence.Adherence,
+
 				ActivityName = context.Schedule.CurrentActivityName(),
 				ActivityColor = context.Schedule.CurrentActivity()?.DisplayColor,
-				RuleColor = context.State.RuleDisplayColor()
+
+				RuleName = context.State.RuleName(),
+				RuleColor = context.State.RuleDisplayColor(),
+
+				Adherence = context.Adherence.Adherence,
+				StaffingEffect = context.State.StaffingEffect(),
+				IsAlarm = context.IsAlarm,
+				AlarmStartTime = context.AlarmStartTime,
+				AlarmColor = context.State.AlarmColor(),
 			});
 		}
 	}

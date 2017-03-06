@@ -59,15 +59,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					NextActivityName = context.Schedule.NextActivityName(),
 					NextActivityStartTime = context.Schedule.NextActivityStartTime(),
 
-					RuleName = context.State.RuleName(),
-					RuleStartTime = context.RuleStartTime,
-					RuleDisplayColor = context.State.RuleDisplayColor(),
-					StaffingEffect = context.State.StaffingEffect(),
-
-					IsAlarm = context.IsAlarm,
-					AlarmStartTime = context.AlarmStartTime,
-					AlarmColor = context.State.AlarmColor(),
-
 					ActivitiesInTimeWindow = context.Schedule.ActivitiesInTimeWindow(),
 				});
 

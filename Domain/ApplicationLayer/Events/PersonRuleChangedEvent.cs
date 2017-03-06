@@ -19,6 +19,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string RuleName { get; set; }
 		public int? RuleColor { get; set; }
 
+		public double? StaffingEffect { get; set; }
+		public bool IsAlarm { get; set; }
+		public DateTime? AlarmStartTime { get; set; }
+		public int? AlarmColor { get; set; }
 		public EventAdherence? Adherence { get; set; }
 	}
 }

@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	// composite event never ment to be used in a queue
+	// special event never ment to be used in a queue
 	public class AgentStateChangedEvent : IEvent
 	{
 		public Guid PersonId { get; set; }
@@ -16,15 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public string CurrentActivityName { get; set; }
 		public string NextActivityName { get; set; }
 		public DateTime? NextActivityStartTime { get; set; }
-
-		public string RuleName { get; set; }
-		public DateTime? RuleStartTime { get; set; }
-		public int? RuleDisplayColor { get; set; }
-		public double? StaffingEffect { get; set; }
-
-		public bool IsAlarm { get; set; }
-		public DateTime? AlarmStartTime { get; set; }
-		public int? AlarmColor { get; set; }
 
 		public IEnumerable<ScheduledActivity> ActivitiesInTimeWindow { get; set; }
 
@@ -74,6 +65,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					handle(model, @event as PersonNeutralAdherenceEvent);
 				else if (@event is PersonStateChangedEvent)
 					handle(model, @event as PersonStateChangedEvent);
+				else if (@event is PersonRuleChangedEvent)
+					handle(model, @event as PersonRuleChangedEvent);
 			}
 
 			if (model.OutOfAdherences != null)
@@ -92,14 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			model.NextActivity = @event.NextActivityName;
 			model.NextActivityStartTime = @event.NextActivityStartTime;
 
-			model.RuleName = @event.RuleName;
-			model.RuleStartTime = @event.RuleStartTime;
-			model.RuleColor = @event.RuleDisplayColor;
-			model.StaffingEffect = @event.StaffingEffect;
-
-			model.IsRuleAlarm = @event.IsAlarm;
-			model.AlarmStartTime = @event.AlarmStartTime;
-			model.AlarmColor = @event.AlarmColor;
 			model.Shift = @event.ActivitiesInTimeWindow
 				.Select(a => new AgentStateActivityReadModel
 				{
@@ -109,6 +94,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Name = a.Name
 				})
 				.ToArray();
+		}
+
+		private static void handle(AgentStateReadModel model, PersonRuleChangedEvent @event)
+		{
+			model.RuleName = @event.RuleName;
+			model.RuleStartTime = @event.Timestamp;
+			model.RuleColor = @event.RuleColor;
+
+			model.StaffingEffect = @event.StaffingEffect;
+			model.IsRuleAlarm = @event.IsAlarm;
+			model.AlarmStartTime = @event.AlarmStartTime;
+			model.AlarmColor = @event.AlarmColor;
 		}
 
 		private static void handle(AgentStateReadModel model, PersonStateChangedEvent @event)
