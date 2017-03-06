@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2016-02-23 08:00", "2016-02-23 10:00")
-				.WithRule("loggedout", phone, -1, Adherence.Out)
-				.WithRule("loggedout", null, 0, Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Adherence.Out)
+				.WithMappedRule("loggedout", null, 0, Adherence.In)
 				;
 
 			Now.Is("2016-02-23 08:05");

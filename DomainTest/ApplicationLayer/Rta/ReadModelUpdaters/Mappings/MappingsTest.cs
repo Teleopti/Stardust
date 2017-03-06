@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		{
 			var rule = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			Database.WithRule(rule, "off", phone, 1, "Out", Adherence.Out, Color.Red);
+			Database.WithMappedRule(rule, "off", phone, 1, "Out", Adherence.Out, Color.Red);
 
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		[Test]
 		public void ShouldContainMapWithoutRule()
 		{
-			Database.WithRule(null, "phone", null, 0, null, null, null);
+			Database.WithMappedRule(null, "phone", null, 0, null, null, null);
 
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		{
 			var rule = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			Database.WithRule(rule, "phone", phone, 0, "In", Adherence.In, Color.Green);
+			Database.WithMappedRule(rule, "phone", phone, 0, "In", Adherence.In, Color.Green);
 			Database.WithAlarm(TimeSpan.FromMinutes(2), Color.Red);
 
 			Target.Handle(new TenantMinuteTickEvent());
@@ -193,9 +193,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 			var rule2 = Guid.NewGuid();
 			var rule3 = Guid.NewGuid();
 			Database
-				.WithRule(rule1, "phone", null, 0, null, null, null)
-				.WithRule(rule2, null, Guid.NewGuid(), 0, null, null, null)
-				.WithRule(rule3, null, null, 0, null, null, null);
+				.WithMappedRule(rule1, "phone", null, 0, null, null, null)
+				.WithMappedRule(rule2, null, Guid.NewGuid(), 0, null, null, null)
+				.WithMappedRule(rule3, null, null, 0, null, null, null);
 
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -212,9 +212,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 				.WithActivity(Guid.NewGuid())
 				.WithStateCode("code1")
 				.WithStateCode("code2")
-				.WithRule(Guid.NewGuid(), "code3", null, 0, null, null, null)
-				.WithRule(Guid.NewGuid(), null, Guid.NewGuid(), 0, null, null, null)
-				.WithRule(Guid.NewGuid(), null, null, 0, null, null, null);
+				.WithMappedRule(Guid.NewGuid(), "code3", null, 0, null, null, null)
+				.WithMappedRule(Guid.NewGuid(), null, Guid.NewGuid(), 0, null, null, null)
+				.WithMappedRule(Guid.NewGuid(), null, null, 0, null, null, null);
 
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 			var phone = Guid.NewGuid();
 			Database
 				.WithBusinessUnit(Guid.NewGuid())
-				.WithRule(null, null, phone, 0, null, null, null);
+				.WithMappedRule(null, null, phone, 0, null, null, null);
 
 			Target.Handle(new TenantMinuteTickEvent());
 			
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 			var rule = Guid.NewGuid();
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Database.WithRule(rule, null, null, 0, null, null, null);
+			Database.WithMappedRule(rule, null, null, 0, null, null, null);
 			Target.Handle(new RtaMapChangedEvent());
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 			var rule = Guid.NewGuid();
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Database.WithRule(rule, null, null, 0, null, null, null);
+			Database.WithMappedRule(rule, null, null, 0, null, null, null);
 			Target.Handle(new RtaRuleChangedEvent());
 			Target.Handle(new TenantMinuteTickEvent());
 

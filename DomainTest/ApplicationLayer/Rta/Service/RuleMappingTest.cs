@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
-				.WithRule(null, phone, 0, Adherence.Out)
+				.WithMappedRule(null, phone, 0, Adherence.Out)
 				;
 			Now.Is("2015-03-12 08:05");
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
-				.WithRule("phone", phone, (Guid?) null)
+				.WithMappedRule("phone", phone, (Guid?) null)
 				;
 			Now.Is("2015-03-12 08:05");
 
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-05-11 08:00", "2015-05-11 09:00")
-				.WithRule("AUX1 " + platform1, phone, -1, Adherence.Out)
-				.WithRule("AUX1 " + platform2, phone, 0, Adherence.In)
+				.WithMappedRule("AUX1 " + platform1, phone, -1, Adherence.Out)
+				.WithMappedRule("AUX1 " + platform2, phone, 0, Adherence.In)
 				;
 			Now.Is("2015-05-11 08:00");
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithMapWithStateGroupWithoutStateCodes()
-				.WithRule(null, null, 0, Adherence.In)
+				.WithMappedRule(null, null, 0, Adherence.In)
 				;
 
 			Target.CheckForActivityChanges(Database.TenantName());

@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("user1", personId1)
 				.WithAgent("user2", personId2)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithRule("ready")
-				.WithRule("phone")
+				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithMappedRule("ready")
+				.WithMappedRule("phone")
 				;
 			Target.SaveStateBatch(new BatchForTest
 			{

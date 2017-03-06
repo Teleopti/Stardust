@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", personId)
-				.WithRule("someStateCode");
+				.WithMappedRule("someStateCode");
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithAgent("usercode")
-				.WithRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
+				.WithMappedRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
 
 			Target.SaveState(new StateForTest
 			{

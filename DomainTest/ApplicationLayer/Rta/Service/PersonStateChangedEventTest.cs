@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", personId)
-				.WithRule("stateone", Guid.NewGuid())
-				.WithRule("statetwo", Guid.NewGuid());
+				.WithMappedRule("stateone", Guid.NewGuid())
+				.WithMappedRule("statetwo", Guid.NewGuid());
 
 			Target.SaveState(new StateForTest
 			{
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("statecode", activityId, 0);
+				.WithMappedRule("statecode", activityId, 0);
 			Now.Is("2014-10-20 10:00");
 
 			Target.SaveState(new StateForTest
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("break", phone, 1);
+				.WithMappedRule("break", phone, 1);
 			Now.Is("2014-10-20 10:00");
 
 			Target.SaveState(new StateForTest
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, admin, "2015-03-13 08:00", "2015-03-13 09:00")
-				.WithRule("admin", admin, 0, Adherence.Neutral);
+				.WithMappedRule("admin", admin, 0, Adherence.Neutral);
 			Now.Is("2015-03-13 08:00");
 
 			Target.SaveState(new StateForTest
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
-				.WithRule("break", phone, "out");
+				.WithMappedRule("break", phone, "out");
 			Now.Is("2017-03-06 10:00");
 
 			Target.SaveState(new StateForTest
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
-				.WithRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.DarkGoldenrod)
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.DarkGoldenrod)
 				;
 			Now.Is("2017-03-06 10:00");
 
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
-				.WithRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.Chocolate)
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.Chocolate)
 				;
 			Now.Is("2017-03-06 10:00");
 

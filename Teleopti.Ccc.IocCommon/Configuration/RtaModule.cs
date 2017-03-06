@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
 			builder.RegisterType<StateEventPublisher>().SingleInstance();
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance();
+			builder.RegisterType<RuleEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 

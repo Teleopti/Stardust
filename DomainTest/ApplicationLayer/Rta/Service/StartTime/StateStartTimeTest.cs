@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			var personId = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", personId)
-				.WithRule("stateone", Guid.NewGuid());
+				.WithMappedRule("stateone", Guid.NewGuid());
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new StateForTest
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			var personId = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", personId)
-				.WithRule("stateone", Guid.NewGuid())
-				.WithRule("statetwo", Guid.NewGuid());
+				.WithMappedRule("stateone", Guid.NewGuid())
+				.WithMappedRule("statetwo", Guid.NewGuid());
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new StateForTest

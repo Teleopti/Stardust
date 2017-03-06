@@ -263,7 +263,9 @@
     <Compile Include="ApplicationLayer\Rta\Service\IExternalLogonReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IContextLoadingStrategy.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidStateCodeException.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonRuleChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PerTenant.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\RuleEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />

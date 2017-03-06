@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithRule("statecode", activityId, 1)
+				.WithMappedRule("statecode", activityId, 1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithRule("statecode", activityId, -1)
+				.WithMappedRule("statecode", activityId, -1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithRule("statecode1", activityId, -1)
-				.WithRule("statecode2", activityId, 1)
+				.WithMappedRule("statecode1", activityId, -1)
+				.WithMappedRule("statecode2", activityId, 1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithRule(null, phone, 0)
-				.WithRule("loggedoff", phone, -1);
+				.WithMappedRule(null, phone, 0)
+				.WithMappedRule("loggedoff", phone, -1);
 			Now.Is("2014-10-20 9:05");
 
 			Target.SaveState(new StateForTest
@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithRule(null, phone, -1)
-				.WithRule("loggedoff", phone, -1);
+				.WithMappedRule(null, phone, -1)
+				.WithMappedRule("loggedoff", phone, -1);
 			Now.Is("2014-10-20 9:05");
 
 			Target.SaveState(new StateForTest
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithScenario(null, true)
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-11-11 10:00", "2014-11-11 12:00")
-				.WithRule("statecode", activityId, -1);
+				.WithMappedRule("statecode", activityId, -1);
 			Now.Is("2014-11-11 11:00");
 
 			Target.SaveState(new StateForTest
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithRule("statecode", activityId, -1);
+				.WithMappedRule("statecode", activityId, -1);
 			Now.Is("2014-10-20 9:00");
 
 			Target.SaveState(new StateForTest
@@ -191,8 +191,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
-				.WithRule("phone", phone, 0)
-				.WithRule("phone", null, +1)
+				.WithMappedRule("phone", phone, 0)
+				.WithMappedRule("phone", null, +1)
 				;
 			Now.Is("2015-11-25 8:00");
 			Target.SaveState(new StateForTest
@@ -217,10 +217,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
-				.WithRule("phone", phone, 0)
-				.WithRule("phone", null, 1)
-				.WithRule("logged off", phone, -1)
-				.WithRule("logged off", null, 0)
+				.WithMappedRule("phone", phone, 0)
+				.WithMappedRule("phone", null, 1)
+				.WithMappedRule("logged off", phone, -1)
+				.WithMappedRule("logged off", null, 0)
 				;
 			Now.Is("2015-11-25 11:55");
 			Target.SaveState(new StateForTest
@@ -249,8 +249,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithRule("state1", phone, -1, Adherence.Out)
-				.WithRule("state2", phone, -1, Adherence.Out)
+				.WithMappedRule("state1", phone, -1, Adherence.Out)
+				.WithMappedRule("state2", phone, -1, Adherence.Out)
 				;
 
 			Now.Is("2016-05-30 09:00");
@@ -260,8 +260,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "state1"
 			});
 			Database.ClearRuleMap()
-				.WithRule("state1", phone, 0, Adherence.In)
-				.WithRule("state2", phone, -1, Adherence.Out)
+				.WithMappedRule("state1", phone, 0, Adherence.In)
+				.WithMappedRule("state2", phone, -1, Adherence.Out)
 				;
 			Now.Is("2016-05-30 09:01");
 			Target.SaveState(new StateForTest

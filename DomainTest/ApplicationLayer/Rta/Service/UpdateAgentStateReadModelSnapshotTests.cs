@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode", Guid.Empty, null, "A State")
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithMappedRule("statecode", Guid.Empty, null, "A State")
+				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 
 			Now.Is("2014-10-20 10:00");
@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode", Guid.Empty, null, "A State")
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithMappedRule("statecode", Guid.Empty, null, "A State")
+				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateBatch(new BatchForTest
@@ -157,8 +157,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDataSource("source1")
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode1", Guid.Empty, null, "A State")
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithMappedRule("statecode1", Guid.Empty, null, "A State")
+				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -209,8 +209,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
-				.WithRule("statecode1", Guid.Empty, null, "A State")
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithMappedRule("statecode1", Guid.Empty, null, "A State")
+				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 

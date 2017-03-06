@@ -150,64 +150,64 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public static class FakeDatabaseRuleExtensions
 	{
-		public static FakeDatabase WithRule(this FakeDatabase database)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database)
 		{
-			return database.WithRule(null, "", null, 0, null, null);
+			return database.WithMappedRule(null, "", null, 0, null, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode)
 		{
-			return database.WithRule(null, stateCode, null, 0, stateCode, null);
+			return database.WithMappedRule(null, stateCode, null, 0, stateCode, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, activityId, 0, null, null);
+			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, 0, null, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, null);
+			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId)
 		{
-			return database.WithRule(ruleId, stateCode, activityId, 0, null, null);
+			return database.WithMappedRule(ruleId, stateCode, activityId, 0, null, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId, string name)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId, string name)
 		{
-			return database.WithRule(ruleId, stateCode, activityId, 0, name, null);
+			return database.WithMappedRule(ruleId, stateCode, activityId, 0, name, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, string name)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, string name)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, activityId, 0, name, null);
+			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, 0, name, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid activityId, int staffingEffect, Adherence adherence)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid activityId, int staffingEffect, Adherence adherence)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
+			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence)
 		{
-			return database.WithRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
+			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId)
 		{
-			return database.WithRule(ruleId, stateCode, activityId, 0, null, null);
+			return database.WithMappedRule(ruleId, stateCode, activityId, 0, null, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId, string name)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId, string name)
 		{
-			return database.WithRule(ruleId, stateCode, activityId, 0, name, null);
+			return database.WithMappedRule(ruleId, stateCode, activityId, 0, name, null);
 		}
 
-		public static FakeDatabase WithRule(this FakeDatabase database, Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
 		{
-			return database.WithRule(ruleId, stateCode, activityId, staffingEffect, name, adherence, null);
+			return database.WithMappedRule(ruleId, stateCode, activityId, staffingEffect, name, adherence, null);
 		}
 
 	}
@@ -854,58 +854,64 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		[UnitOfWork]
-		public virtual FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color? displayColor)
+		public FakeDatabase WithMappedRule(Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color? displayColor)
 		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 
-			_rule = null;
-			if (ruleId != null)
-			{
-				_rule = new RtaRule();
-				if (name != null)
-					_rule.Description = new Description(name);
-				_rule.SetId(ruleId);
-				_rule.SetBusinessUnit(_businessUnit);
-				_rule.StaffingEffect = staffingEffect;
-				_rule.Adherence = adherence;
-				_rule.DisplayColor = displayColor.GetValueOrDefault();
-				_rules.Add(_rule);
-			}
-
-			IRtaStateGroup stateGroup = null;
+			_stateGroup = null;
 			if (stateCode != null)
 			{
-				stateGroup = (
+				_stateGroup = (
 					from g in _stateGroups.LoadAll()
 					from s in g.StateCollection
 					where s.StateCode == stateCode
 					select g
-					).FirstOrDefault();
-				if (stateGroup == null)
+					).FirstOrDefault() as RtaStateGroup;
+				if (_stateGroup == null)
 				{
-					var isDefaultStateGroup = _stateGroups.LoadAll().IsEmpty();
-					stateGroup = new RtaStateGroup(name, isDefaultStateGroup, true);
-					stateGroup.SetId(Guid.NewGuid());
-					stateGroup.SetBusinessUnit(_businessUnit);
-					stateGroup.AddState(stateCode, null);
-					_stateGroups.Add(stateGroup);
+					WithStateGroup(null, name);
+					WithStateCode(stateCode);
 				}
 			}
 
-			IActivity activity = null;
+			_activity = null;
 			if (activityId != null)
 			{
 				ensureExists(_activities, activityId, () => WithActivity(activityId, null, null));
 				_activity = _activities.LoadAll().Single(x => x.Id == activityId) as Activity;
-				activity = _activity;
 			}
 
-			var mapping = new RtaMap(stateGroup, activity) { RtaRule = _rule };
+			_rule = null;
+			if (ruleId != null)
+				WithRule(ruleId, name, staffingEffect, adherence, displayColor);
+
+			WithMapping();
+
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual FakeDatabase WithRule(Guid? ruleId, string name, int staffingEffect, Adherence? adherence, Color? displayColor)
+		{
+			_rule = new RtaRule();
+			if (name != null)
+				_rule.Description = new Description(name);
+			_rule.SetId(ruleId ?? Guid.NewGuid());
+			_rule.SetBusinessUnit(_businessUnit);
+			_rule.StaffingEffect = staffingEffect;
+			_rule.Adherence = adherence;
+			_rule.DisplayColor = displayColor.GetValueOrDefault();
+			_rules.Add(_rule);
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual FakeDatabase WithMapping()
+		{
+			var mapping = new RtaMap(_stateGroup, _activity) {RtaRule = _rule};
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
 			_mappings.Add(mapping);
-
 			return this;
 		}
 

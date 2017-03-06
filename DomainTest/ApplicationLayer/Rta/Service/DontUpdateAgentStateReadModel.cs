@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", person)
-				.WithRule("phone")
-				.WithRule("loggedOff");
+				.WithMappedRule("phone")
+				.WithMappedRule("loggedOff");
 			
 			Target.SaveState(new StateForTest
 			{
@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", person)
-				.WithRule("phone")
-				.WithRule("loggedOff");
+				.WithMappedRule("phone")
+				.WithMappedRule("loggedOff");
 
 			Target.SaveState(new StateForTest
 			{

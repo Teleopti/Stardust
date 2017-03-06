@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode2", personId2)
 				.WithSchedule(personId1, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithRule("statecode1", activityId, 0)
-				.WithRule("statecode2", activityId, 1)
+				.WithMappedRule("statecode1", activityId, 0)
+				.WithMappedRule("statecode2", activityId, 1)
 				;
 
 			Target.SaveState(new StateForTest
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithRule("statecode1", activityId, 0)
-				.WithRule("statecode2", activityId, 0);
+				.WithMappedRule("statecode1", activityId, 0)
+				.WithMappedRule("statecode2", activityId, 0);
 
 			Target.SaveState(new StateForTest
 			{

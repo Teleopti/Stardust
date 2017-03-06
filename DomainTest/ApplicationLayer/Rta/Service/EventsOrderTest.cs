@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("phone", phone, 0);
+				.WithMappedRule("phone", phone, 0);
 			Now.Is("2014-10-20 10:00");
 
 			Target.SaveState(new StateForTest
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("phone", activityId, 1);
+				.WithMappedRule("phone", activityId, 1);
 			Now.Is("2014-10-20 10:00");
 
 			Target.SaveState(new StateForTest
@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
-				.WithRule("phone", phone, 0, Adherence.In)
-				.WithRule("phone", null, 1, Adherence.Out)
-				.WithRule("loggedout", null, 0, Adherence.In)
-				.WithRule("loggedout", phone, -1, Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Adherence.In)
+				.WithMappedRule("phone", null, 1, Adherence.Out)
+				.WithMappedRule("loggedout", null, 0, Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Adherence.Out)
 				;
 			Now.Is("2014-10-20 7:55");
 			Target.SaveState(new StateForTest
@@ -132,10 +132,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
-				.WithRule("phone", phone, 0, Adherence.In)
-				.WithRule("phone", null, 1, Adherence.Neutral)
-				.WithRule("loggedout", null, 0, Adherence.In)
-				.WithRule("loggedout", phone, -1, Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Adherence.In)
+				.WithMappedRule("phone", null, 1, Adherence.Neutral)
+				.WithMappedRule("loggedout", null, 0, Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Adherence.Out)
 				;
 			Now.Is("2014-10-20 16:55");
 			Target.SaveState(new StateForTest

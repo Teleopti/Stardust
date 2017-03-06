@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, 0, Adherence.In)
+				.WithMappedRule("phone", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, 0, Adherence.In)
+				.WithMappedRule("phone", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
@@ -75,9 +75,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, 0, Adherence.In)
+				.WithMappedRule("phone", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5))
-				.WithRule("break", phone, -1, Adherence.Out)
+				.WithMappedRule("break", phone, -1, Adherence.Out)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, 0, Adherence.In)
+				.WithMappedRule("phone", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5))
-				.WithRule("ACW", phone, 0, Adherence.In)
+				.WithMappedRule("ACW", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
