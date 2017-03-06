@@ -228,6 +228,7 @@ namespace Stardust.Node.Workers
 			{
 				var token = CancellationTokenSource;
 				token?.Cancel();
+				IsWorking = false;
 			}
 			else
 			{
