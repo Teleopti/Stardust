@@ -6,6 +6,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 	[Binding]
 	public class RealTimeAdherenceOverviewDefinitions
 	{
+		[Then(@"I should see site '(.*)'")]
+		public void ThenIShouldSeeSite(string siteName)
+		{
+			Browser.Interactions.AssertAnyContains(".site", siteName);
+		}
+
 		[Then(@"I should see site '(.*)' with (.*) of (.*) employees out of adherence")]
 		[Then(@"I should see site '(.*)' with (.*) of (.*) agents in alarm")]
 		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence(string site, int number, int total)
@@ -25,6 +31,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldNotSeeSite(string siteName)
 		{
 			Browser.Interactions.AssertNotExists("body", $"[name='{siteName}']");
+		}
+
+		[Then(@"I should see team '(.*)'")]
+		public void ThenIShouldSeeTeam(string teamName)
+		{
+			Browser.Interactions.AssertAnyContains(".team", teamName);
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]

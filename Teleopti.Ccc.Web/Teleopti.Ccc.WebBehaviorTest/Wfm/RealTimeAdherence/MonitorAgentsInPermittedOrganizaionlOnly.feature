@@ -19,7 +19,6 @@ Background: Access permitted site/teams only
 	 | Field      | Value      |
 	 | Team       | TeamYellow |
 	 | Start Date | 2017-02-10 |
-	 | Skill      | Support    |
 	And AgentPink has a person period with
 	 | Field      | Value      |
 	 | Team       | TeamPink   |
@@ -50,7 +49,7 @@ Background: Access permitted site/teams only
 	And 'AgentYellow' sets her phone state to 'LoggedOut'
 	And 'AgentPink' sets her phone state to 'LoggedOut'
 	
-@ignore
+@OnlyRunIfEnabled('RTA_MonitorAgentsInPermittedOrganizationOnly_40660')
 Scenario: As a Team leader - See how many agents that are in alarm for my site
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -58,27 +57,27 @@ Scenario: As a Team leader - See how many agents that are in alarm for my site
 	 | Access to team                         | TeamBlue    |
 	 | Access to real time adherence overview | True        |
 	When I view Real time adherence sites
-	Then I should see site 'SiteGreen' with 1 of 2 agents in alarm
+	Then I should see site 'SiteGreen'
 	And I should not see site 'SitePink'
-
-@ignore
-Scenario: As a Team leader - See how many agents that are in alarm for my team
+	
+@OnlyRunIfEnabled('RTA_MonitorAgentsInPermittedOrganizationOnly_40660')
+Scenario: As a Team leader - Only see permitted team
 	Given I have a role with
 	 | Field                                  | Value       |
 	 | Name                                   | Team leader |
 	 | Access to team                         | TeamBlue    |
 	 | Access to real time adherence overview | True        |
 	When I view Real time adherence for teams on site 'SiteGreen'
-	Then I should see team 'TeamBlue' with 1 of 1 agents in alarm
+	Then I should see team 'TeamBlue'
 	And I should not see team 'TeamYellow'
-
-@ignore
-Scenario: As a Site manager - See how many agents that are in alarm for my site
+	
+@OnlyRunIfEnabled('RTA_MonitorAgentsInPermittedOrganizationOnly_40660')
+Scenario: As a Site manager - Only see permitted site
 	Given I have a role with
 	 | Field                                  | Value       |
 	 | Name                                   | Site leader |
 	 | Access to site                         | SiteGreen   |
 	 | Access to real time adherence overview | True        |
 	When I view Real time adherence sites
-	Then I should see site 'SiteGreen' with 2 of 2 agents in alarm
+	Then I should see site 'SiteGreen'
 	And I should not see site 'SitePink'
