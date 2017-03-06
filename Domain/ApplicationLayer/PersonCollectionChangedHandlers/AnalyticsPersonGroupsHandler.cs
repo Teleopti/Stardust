@@ -11,6 +11,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -42,8 +43,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var person = _personRepository.Get(personId) ?? new Person();
+				var personPeriod = person.Period(DateOnly.Today);
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
-				foreach (var personPeriod in person.PersonPeriodCollection)
+				var analyticsPersonPeriodIds = analyticsPersonPeriods.Select(x => x.PersonId).ToList();
+				if (personPeriod != null)
 				{
 					var analyticsPersonPeriod = analyticsPersonPeriods.FirstOrDefault(x => x.PersonPeriodCode == personPeriod.Id.GetValueOrDefault());
 					if (analyticsPersonPeriod == null)
@@ -58,13 +61,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					handleRuleSetBag(personPeriod, groupIds, groupPages);
 					handleNotes(person.Note, groupIds, groupPages);
 					handleCustomGroups(personId, groupIds);
-
-					var deletedGroupIds = updatePersonGroups(analyticsPersonPeriod.PersonId, groupIds, analyticsPersonPeriod.BusinessUnitCode);
-
-					clearEmptyGroups(deletedGroupIds, analyticsPersonPeriod.BusinessUnitCode);
+					
+					foreach (var analyticsPersonId in analyticsPersonPeriodIds)
+					{
+						var deletedGroupIds = updatePersonGroups(analyticsPersonId, groupIds, analyticsPersonPeriod.BusinessUnitCode);
+						clearEmptyGroups(deletedGroupIds, analyticsPersonPeriod.BusinessUnitCode);
+						// Remove any group pages associated with deleted person periods or deleted persons
+					}
 				}
-				// Remove any group pages associated with deleted person periods or deleted persons
-				var analyticsPersonPeriodIds = analyticsPersonPeriods.Select(x => x.PersonId).ToList();
+				
 				logger.Debug($"Deleting bridge group page person {personId} excluding person periods {string.Join(",", analyticsPersonPeriodIds)}");
 				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, analyticsPersonPeriodIds);
 			}
