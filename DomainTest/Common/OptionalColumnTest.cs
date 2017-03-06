@@ -36,5 +36,16 @@ namespace Teleopti.Ccc.DomainTest.Common
         	_optionalColumn = new OptionalColumn(_columnName) {TableName = tableName};
         	Assert.AreEqual(tableName, _optionalColumn.TableName);
         }
-    }
+
+		[Test]
+		public void VerifyEnableReportingCanSet()
+		{
+			_optionalColumn = new OptionalColumn(_columnName)
+			{
+				Name = _columnName,
+				EnableReporting = true
+			};
+			Assert.AreEqual(true, _optionalColumn.EnableReporting);
+		}
+	}
 }

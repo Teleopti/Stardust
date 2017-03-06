@@ -5,9 +5,11 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Settings;
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return comboBoxOptionalColumns.SelectedItem as IOptionalColumn; }
 		}
 
-		public OptionalColumnsControl()
+		public OptionalColumnsControl(IToggleManager toggleManager)
 		{
 			InitializeComponent();
 
@@ -50,6 +52,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxName.TextChanged += textBoxNameTextChanged;
 			buttonNew.Click += buttonNewClick;
 			buttonDelete.Click += buttonDeleteClick;
+			checkBoxAdvEnableReporting.Validated += CheckBoxAdvEnableReportingValidated;
+
+			if (!toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
+			{
+				var rowIndex = tableLayoutPanel3.GetRow(checkBoxAdvEnableReporting);
+				tableLayoutPanel3.RowStyles[rowIndex].Height = 0;
+			}
+		}
+
+		private void CheckBoxAdvEnableReportingValidated(object sender, EventArgs e)
+		{
+			if (SelectedOptionalColumn != null)
+			{
+				SelectedOptionalColumn.EnableReporting = checkBoxAdvEnableReporting.Checked;
+			}
 		}
 
 		void textBoxNameTextChanged(object sender, EventArgs e)
@@ -67,8 +84,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			Cursor.Current = Cursors.WaitCursor;
 			textBoxName.TextChanged -= textBoxNameTextChanged;
 			selectOptionalColumn();
-			if (SelectedOptionalColumn != null)
-				changedInfo();
 			Cursor.Current = Cursors.Default;
 			textBoxName.TextChanged += textBoxNameTextChanged;
 		}        
@@ -190,6 +205,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (SelectedOptionalColumn != null)
 			{
 				textBoxName.Text = SelectedOptionalColumn.Name;
+				changedInfo();
+				checkBoxAdvEnableReporting.Checked = SelectedOptionalColumn.EnableReporting;
 			}
 		}
 

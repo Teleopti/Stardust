@@ -11,45 +11,47 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    [TestFixture]
-    [Category("BucketB")]
-    public class OptionalColumnRepositoryTest : RepositoryTest<IOptionalColumn>
-    {
-    	private OptionalColumnRepository repository;
+	[TestFixture]
+	[Category("BucketB")]
+	public class OptionalColumnRepositoryTest : RepositoryTest<IOptionalColumn>
+	{
+		private OptionalColumnRepository repository;
 
-    	protected override void ConcreteSetup()
-        {
-            repository = new OptionalColumnRepository(UnitOfWork);
-        }
+		protected override void ConcreteSetup()
+		{
+			repository = new OptionalColumnRepository(UnitOfWork);
+		}
 
-        protected override IOptionalColumn CreateAggregateWithCorrectBusinessUnit()
-        {
-            OptionalColumn opc = new OptionalColumn("OptionalColumn");
-            opc.TableName = "Person";           
-            return opc;
-        }
+		protected override IOptionalColumn CreateAggregateWithCorrectBusinessUnit()
+		{
+			OptionalColumn opc = new OptionalColumn("OptionalColumn");
+			opc.TableName = "Person";
+			opc.EnableReporting = true;
+			return opc;
+		}
 
-        protected override void VerifyAggregateGraphProperties(IOptionalColumn loadedAggregateFromDatabase)
-        {
-            IOptionalColumn opc = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(opc.Name, loadedAggregateFromDatabase.Name);
-            Assert.AreEqual(opc.TableName, loadedAggregateFromDatabase.TableName);
-        }
+		protected override void VerifyAggregateGraphProperties(IOptionalColumn loadedAggregateFromDatabase)
+		{
+			IOptionalColumn opc = CreateAggregateWithCorrectBusinessUnit();
+			Assert.AreEqual(opc.Name, loadedAggregateFromDatabase.Name);
+			Assert.AreEqual(opc.TableName, loadedAggregateFromDatabase.TableName);
+			Assert.AreEqual(opc.EnableReporting, loadedAggregateFromDatabase.EnableReporting);
+		}
 
-        protected override Repository<IOptionalColumn> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
-        {
-            return new OptionalColumnRepository(currentUnitOfWork);
-        }
+		protected override Repository<IOptionalColumn> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new OptionalColumnRepository(currentUnitOfWork);
+		}
 
 		[Test]
 		public void ShouldReturnUniqueValues()
 		{
 			var col = CreateAggregateWithCorrectBusinessUnit();
 			IPerson person1 = PersonFactory.CreatePerson("sdgf");
-			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"),col );
+			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
 			var person2 = PersonFactory.CreatePerson("s");
 			person2.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
-			var person3 =  PersonFactory.CreatePerson("gg");
+			var person3 = PersonFactory.CreatePerson("gg");
 			person3.AddOptionalColumnValue(new OptionalColumnValue("VAL2"), col);
 			var person4 = PersonFactory.CreatePerson("hgyj");
 			person4.AddOptionalColumnValue(new OptionalColumnValue("VAL3"), col);
@@ -59,12 +61,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person2);
 			PersistAndRemoveFromUnitOfWork(person3);
 			PersistAndRemoveFromUnitOfWork(person4);
-			
+
 			UnitOfWork.PersistAll();
 			CleanUpAfterTest();
 
 			var ret = repository.UniqueValuesOnColumn(col.Id.Value);
-			Assert.That(ret.Count,Is.EqualTo(3));
+			Assert.That(ret.Count, Is.EqualTo(3));
 			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			personRep.Remove(person1);
 			personRep.Remove(person2);
@@ -78,7 +80,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyGetOptionalColumns()
 		{
 			const string columnName = "Column A";
-			var columnA = new OptionalColumn(columnName) {TableName = "Person"};
+			var columnA = new OptionalColumn(columnName)
+			{
+				TableName = "Person",
+				EnableReporting = true
+			};
 
 			PersistAndRemoveFromUnitOfWork(columnA);
 
@@ -86,6 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Assert.AreEqual(1, returnList.Count);
 			Assert.AreEqual(columnName, returnList[0].Name);
+			Assert.AreEqual(true, returnList[0].EnableReporting);
 		}
-    }
+	}
 }

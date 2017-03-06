@@ -13,6 +13,7 @@
     <property name="UpdatedOn" type="UtcDateTime" not-null="true"/>
 
     <property name="Name" type="string" not-null="true" />
+    <property name="EnableReporting" type="boolean" not-null="true" />
     <property name="TableName" type="string" not-null="true" />
     
     <many-to-one name="BusinessUnit"

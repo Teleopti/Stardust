@@ -3,30 +3,37 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class OptionalColumn : VersionedAggregateRootWithBusinessUnit, IOptionalColumn
-    {
-        protected OptionalColumn()
-        {}
+	public class OptionalColumn : VersionedAggregateRootWithBusinessUnit, IOptionalColumn
+	{
+		protected OptionalColumn()
+		{ }
 
-        public OptionalColumn(string name)
-            : this()
-        {
-            _name = name;
-        }
+		public OptionalColumn(string name)
+			 : this()
+		{
+			_name = name;
+		}
 
-        private string _name;
-        private string _tableName;
-        
-        public virtual string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+		private string _name;
+		private bool _enableReporting;
+		private string _tableName;
 
-        public virtual string TableName
-        {
-            get { return _tableName; }
-            set { _tableName = value; }
-        }
-    }
+		public virtual string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
+		public virtual bool EnableReporting
+		{
+			get { return _enableReporting; }
+			set { _enableReporting = value; }
+		}
+
+		public virtual string TableName
+		{
+			get { return _tableName; }
+			set { _tableName = value; }
+		}
+	}
 }
