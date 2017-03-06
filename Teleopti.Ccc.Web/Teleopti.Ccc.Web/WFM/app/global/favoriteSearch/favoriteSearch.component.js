@@ -69,7 +69,9 @@
 		}
 
 		ctrl.$onInit = function () {
-			FavoriteSearchDataService.getPermission()
+			FavoriteSearchDataService.initPermission();
+
+			FavoriteSearchDataService.hasPermission()
 				.then(function(response) {
 					ctrl.enabled = response.data;
 					if (!ctrl.enabled) {

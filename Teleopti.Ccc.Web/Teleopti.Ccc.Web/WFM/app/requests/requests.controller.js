@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo"];
 
-	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, CurrentUserInfo) {
+	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo) {
 		var vm = this;
 
 		vm.pageSizeOptions = [20, 50, 100, 200];
@@ -27,6 +27,7 @@
 		};
 		vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
 		vm.saveFavoriteSearchesToggleEnabled = toggleService.Wfm_Requests_SaveFavoriteSearches_42578;
+		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
 		if (!vm.saveFavoriteSearchesToggleEnabled) {
@@ -43,11 +44,12 @@
 		}
 
 		$q.all([toggleService.togglesLoaded])
+			.then(FavoriteSearchSvc.hasPermission().then(function(response){
+				vm.hasFavoriteSearchPermission = response.data;
+			}))
 			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeam) {
 				vm.selectedTeamIds = defaultTeam || [];
-
-				//Jianfeng TODO: add favorite search permission check here
-				if(vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled)){
+				if(vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled || !vm.hasFavoriteSearchPermission)){
 					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
 				}
 			}))
@@ -120,8 +122,7 @@
 					vm.selectedTeamIds = defaultSearch.TeamIds;
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
-				//Jianfeng TODO: add favorite search permission check here
-				if(vm.saveFavoriteSearchesToggleEnabled){
+				if(vm.saveFavoriteSearchesToggleEnabled && vm.hasFavoriteSearchPermission){
 					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
 				}
 			});

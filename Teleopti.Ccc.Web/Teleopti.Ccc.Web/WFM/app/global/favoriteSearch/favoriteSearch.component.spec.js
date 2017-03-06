@@ -24,6 +24,7 @@ describe('favoriteSearch component tests', function () {
 		$compile = _$compile_;
 		httpBackend = _$httpBackend_;
 
+		httpBackend.expectGET('../api/FavoriteSearch/GetPermission').respond(200, '');
 	}));
 
 	it("should populate favorite list", inject(function () {
@@ -226,6 +227,16 @@ describe('favoriteSearch component tests', function () {
 
 		this.getPermission = function() {
 			return { then: function (cb) { cb({data: true}); } };
+		};
+
+		this.hasPermission = function(){
+			return { then: function(cb){
+				cb({data: true});
+			}}
+		};
+
+		this.initPermission = function(){
+
 		};
 	}
 
