@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return false;
         }
 
-    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
     	{
-    		return queryingPerson.IsUser(authorizeOrganisationDetail.PersonId);
+    		return queryingPerson.IsUser(personAuthorizationInfo.PersonId);
     	}
     }
 }

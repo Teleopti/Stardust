@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			return processShiftTradePeople(shiftTradeDate, personForShiftTradeList);
 		}
 
-		private IEnumerable<IPerson> processShiftTradePeople(DateOnly shiftTradeDate, IList<IAuthorizeOrganisationDetail> personForShiftTradeList)
+		private IEnumerable<IPerson> processShiftTradePeople(DateOnly shiftTradeDate, IList<IPersonAuthorizationInfo> personForShiftTradeList)
 		{
 			var me = _loggedOnUser.CurrentUser();
 

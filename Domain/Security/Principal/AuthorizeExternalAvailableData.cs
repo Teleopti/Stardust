@@ -69,11 +69,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return result.GetValueOrDefault(false);
         }
 
-    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
     	{
-    		return _availableTeams.Contains(authorizeOrganisationDetail.TeamId.GetValueOrDefault()) ||
-    		       _availableSites.Contains(authorizeOrganisationDetail.SiteId.GetValueOrDefault()) ||
-    		       _availableBusinessUnits.Contains(authorizeOrganisationDetail.BusinessUnitId);
+    		return _availableTeams.Contains(personAuthorizationInfo.TeamId.GetValueOrDefault()) ||
+    		       _availableSites.Contains(personAuthorizationInfo.SiteId.GetValueOrDefault()) ||
+    		       _availableBusinessUnits.Contains(personAuthorizationInfo.BusinessUnitId);
     	}
 
     	private bool? CheckTeam(ITeam team)

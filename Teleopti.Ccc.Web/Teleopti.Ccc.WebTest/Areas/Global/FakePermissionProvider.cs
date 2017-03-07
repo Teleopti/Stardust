@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date,
-			IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+			IPersonAuthorizationInfo personAuthorizationInfo)
 		{
 			if (!enabled) return true;
 			return _applicationFunctions.ContainsKey(applicationFunctionPath)

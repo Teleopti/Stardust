@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 					var person = Persons.Load(personId);
 					var dataSource = DataSourceForTenant.Tenant($"tenant{i}");
 					var businessUnit = BusinessUnits.LoadAll().Single();
-					LogOnOff.LogOnWithoutClaims(dataSource, person, businessUnit);
-					LogOnOff.SetupClaims($"tenant{i}");
+					LogOnOff.LogOn(dataSource, person, businessUnit);
 					
 					Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview).Should().Be.True();
 					Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SeatPlanner).Should().Be.False();

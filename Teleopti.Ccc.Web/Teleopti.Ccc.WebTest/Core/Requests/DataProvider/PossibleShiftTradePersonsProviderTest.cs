@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList , data.SearchNameText))
-											.Return(new List<IAuthorizeOrganisationDetail> { currentUserGuids });
+											.Return(new List<IPersonAuthorizationInfo> { currentUserGuids });
 
 			personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
             (nameFormatSettingsProvider as FakeNameFormatSettingProvider).SetNameFormat(NameFormatSetting.LastNameThenFirstName);
 
             personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText, NameFormatSetting.LastNameThenFirstName ))
-                                            .Return(new List<IAuthorizeOrganisationDetail> { currentUserGuids });
+                                            .Return(new List<IPersonAuthorizationInfo> { currentUserGuids });
 
             personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
-											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
+											.Return(new List<IPersonAuthorizationInfo> { personInMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = teamIds };
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
-											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
+											.Return(new List<IPersonAuthorizationInfo> { personInMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = new List<Guid>(){myTeam.Id.GetValueOrDefault()}};
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))
-											.Return(new List<IAuthorizeOrganisationDetail> { validAgentGuids, invalidAgentGuids });
+											.Return(new List<IPersonAuthorizationInfo> { validAgentGuids, invalidAgentGuids });
 			permissionProvider.Expect(
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
-											.Return(new List<IAuthorizeOrganisationDetail> { person2InMyTeamGuids });
+											.Return(new List<IPersonAuthorizationInfo> { person2InMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,

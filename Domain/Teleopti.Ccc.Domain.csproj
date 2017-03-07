@@ -372,7 +372,7 @@
     <Compile Include="InterfaceLegacy\Domain\IAuditSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAuditSettingRepository.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAuthorizationSettings.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAuthorizeOrganisationDetail.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IPersonAuthorizationInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAutoPositionedActivityExtender.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAvailabilityDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAvailabilityRestriction.cs" />

@@ -45,18 +45,18 @@ namespace Teleopti.Ccc.Domain.Repositories
         Note
     }
 
-    public interface IPersonSelectorOrganization : IAuthorizeOrganisationDetail, ILightPerson
+    public interface IPersonSelectorOrganization : IPersonAuthorizationInfo, ILightPerson
     {
         string Team { get; set; }
         string Site { get; set; }
     }
 
-    public interface IPersonSelectorBuiltIn : IAuthorizeOrganisationDetail, ILightPerson
+    public interface IPersonSelectorBuiltIn : IPersonAuthorizationInfo, ILightPerson
     {
         string Node { get; set; }
     }
 
-    public interface IPersonSelectorUserDefined : IAuthorizeOrganisationDetail, ILightPerson
+    public interface IPersonSelectorUserDefined : IPersonAuthorizationInfo, ILightPerson
     {
         Guid NodeId { get; set; }
         string Node { get; set; }

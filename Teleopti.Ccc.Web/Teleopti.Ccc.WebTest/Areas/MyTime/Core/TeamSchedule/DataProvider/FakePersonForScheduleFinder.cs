@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			_personNameProvider = personNameProvider;
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
+		public IList<IPersonAuthorizationInfo> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
 		{
 			var businessUnit = _businessUnitRepository.LoadAll().FirstOrDefault();
 			name = name ?? string.Empty;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 					 && _personNameProvider.BuildNameFromSetting(x.Name).Contains(name);
 
 
-			}).Select<IPerson,IAuthorizeOrganisationDetail>(x => new PersonSelectorShiftTrade
+			}).Select<IPerson,IPersonAuthorizationInfo>(x => new PersonSelectorShiftTrade
 			{
 				PersonId = x.Id.GetValueOrDefault(),
 				TeamId = x.MyTeam(shiftTradeDate).Id,

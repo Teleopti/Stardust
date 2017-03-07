@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest
 		}
 
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date,
-			IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+			IPersonAuthorizationInfo personAuthorizationInfo)
 		{
 			return true;
 		}

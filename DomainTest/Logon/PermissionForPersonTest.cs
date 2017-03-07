@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 	[DomainTest]
 	[LoggedOff]
 	[RealPermissions]
-	public class PermissionTestTroughAuthorizeOrganisationDetail
+	public class PermissionForPersonTest
 	{
 		public FakeDatabase Database;
 		public FakePersonRepository Persons;
@@ -39,39 +39,17 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				.WithRole(AvailableDataRangeOption.MyTeam, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)
 				;
 			var me = Persons.Load(meId);
-			var myTeam = me.MyTeam("2017-03-07".Date());
-			var siteId = myTeam.Site.Id.Value;
-			var otherGuyDetails = new personAuthorizationInfoForTest
-			{
-				PersonId = otherGuyId,
-				BusinessUnitId = Database.CurrentBusinessUnitId(),
-				SiteId = siteId,
-				TeamId = otherTeamId
-			};
-			var myDetails = new personAuthorizationInfoForTest
-			{
-				PersonId = meId,
-				BusinessUnitId = Database.CurrentBusinessUnitId(),
-				SiteId = siteId,
-				TeamId = myTeamId
-			};
+			var otherGuy = Persons.Load(otherGuyId);
 
 			LogOnOff.LogOn("tenant", me, Database.CurrentBusinessUnitId());
-			
+
 			Authorization.IsPermitted(
-				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(), myDetails)
+				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(), me)
 				.Should().Be.True();
 			Authorization.IsPermitted(
-				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(), otherGuyDetails)
+				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(), otherGuy)
 				.Should().Be.False();
 		}
 
-		private class personAuthorizationInfoForTest : IPersonAuthorizationInfo
-		{
-			public Guid PersonId { get; set; }
-			public Guid? TeamId { get; set; }
-			public Guid? SiteId { get; set; }
-			public Guid BusinessUnitId { get; set; }
-		}
 	}
 }

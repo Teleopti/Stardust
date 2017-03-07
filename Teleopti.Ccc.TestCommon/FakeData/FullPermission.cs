@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return !_blackList.Contains(functionPath);
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
 		{
 			return !_blackList.Contains(functionPath);
 		}

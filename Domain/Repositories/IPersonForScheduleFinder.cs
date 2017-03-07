@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IPersonForScheduleFinder
 	{
-		IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName);
+		IList<IPersonAuthorizationInfo> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName);
 	}
 }

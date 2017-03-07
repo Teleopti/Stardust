@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person);
 		bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team);
 		bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site);
-		bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail);
+		bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo);
 
 		IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person);
 

@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Security
 			return _authorization.IsPermitted(applicationFunctionPath, date, team);
 		}
 
-		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IPersonAuthorizationInfo personAuthorizationInfo)
 		{
-			return _authorization.IsPermitted(applicationFunctionPath, date, authorizeOrganisationDetail);
+			return _authorization.IsPermitted(applicationFunctionPath, date, personAuthorizationInfo);
 		}
 
 		public bool IsPersonSchedulePublished(DateOnly date,

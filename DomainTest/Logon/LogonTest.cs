@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				.WithRole(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 			var person = Persons.Load(personId);
 
-			LogOnOff.ProperLogOn("tenant", person, Database.CurrentBusinessUnitId());
+			LogOnOff.LogOn("tenant", person, Database.CurrentBusinessUnitId());
 
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview).Should().Be.True();
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SeatPlanner).Should().Be.False();

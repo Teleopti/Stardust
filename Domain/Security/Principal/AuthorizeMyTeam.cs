@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return false;
         }
 
-    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
     	{
-    		return queryingPerson.BelongsToTeam(authorizeOrganisationDetail.TeamId.GetValueOrDefault(), dateOnly);
+    		return queryingPerson.BelongsToTeam(personAuthorizationInfo.TeamId.GetValueOrDefault(), dateOnly);
     	}
     }
 }

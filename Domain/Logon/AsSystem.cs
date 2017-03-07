@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Logon
 			{
 				var systemUser = _repositoryFactory.CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SystemUser.Id);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(unitOfWork).Get(businessUnitId);
-				_logOnOff.ProperLogOn(dataSource, systemUser, businessUnit);
+				_logOnOff.LogOn(dataSource, systemUser, businessUnit);
 			}
 		}
 		

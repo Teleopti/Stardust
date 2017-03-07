@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Guid.Parse(businessUnitId.ToString());
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> groupIdList , string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
+		public IList<IPersonAuthorizationInfo> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> groupIdList , string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
 		{
 		    var useChineseNameFormat = name != null && StringHelper.StringContainsChinese(name);
 		    var firstNameFirst = nameFormat == NameFormatSetting.FirstNameThenLastName;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							   + "@groupIdList=:groupIdList, @businessUnitId=:businessUnitId, @name=:name, "
                                + "@noSpaceInName = :noSpaceInName, "
                                + "@firstNameFirst = :firstNameFirst";
-			var result = new List<IAuthorizeOrganisationDetail>();
+			var result = new List<IPersonAuthorizationInfo>();
 			groupIdList.Batch(100).ForEach(l =>
 			{
 				var batchResult = ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(sql)
@@ -63,14 +63,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetGuid("businessUnitId", getBusinessUnitId())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
 				.SetReadOnly(true)
-				.List<IAuthorizeOrganisationDetail>();
+				.List<IPersonAuthorizationInfo>();
 				result.AddRange(batchResult);
 			});
 			return result;
 		}
 	}
 
-	public class PersonSelectorShiftTrade : IAuthorizeOrganisationDetail
+	public class PersonSelectorShiftTrade : IPersonAuthorizationInfo
 	{
 		public Guid PersonId { get; set; }
 		public Guid? TeamId { get; set; }

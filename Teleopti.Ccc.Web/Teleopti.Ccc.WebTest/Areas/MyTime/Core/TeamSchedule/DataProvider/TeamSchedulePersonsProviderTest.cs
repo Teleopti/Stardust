@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
             _nameFormatSettingProvider.SetNameFormat(NameFormatSetting.LastNameThenFirstName);
           
             _personForScheduleFinder.Stub(rep => rep.GetPersonFor(input.ScheduleDate, input.TeamIdList, input.SearchNameText, NameFormatSetting.LastNameThenFirstName))
-                                            .Return(new List<IAuthorizeOrganisationDetail> ());
+                                            .Return(new List<IPersonAuthorizationInfo> ());
 
 
             _target.RetrievePeople(input);

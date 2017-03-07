@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
 			_availableBusinessUnitsProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
-			_logOnOff.Stub(x => x.LogOnWithoutClaims(dataSource, person, bu));
+			_logOnOff.Stub(x => x.LogOnWithoutPermissions(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
 			_initializer.Stub(x => x.InitializeApplication(dataSourceContainer)).Return(true);
 			_view.Stub(x => x.Exit(DialogResult.OK));
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
 			_availableBusinessUnitsProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
-			_logOnOff.Stub(x => x.LogOnWithoutClaims(dataSource, person, bu));
+			_logOnOff.Stub(x => x.LogOnWithoutPermissions(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
 			_initializer.Stub(x => x.InitializeApplication(dataSourceContainer)).Return(false);
 			_view.Stub(x => x.Exit(DialogResult.Cancel));

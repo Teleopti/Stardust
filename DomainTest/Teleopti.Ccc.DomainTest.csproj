@@ -314,7 +314,9 @@
     <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
-    <Compile Include="Logon\PermissionTest.cs" />
+    <Compile Include="Logon\PermissionForPersonTest.cs" />
+    <Compile Include="Logon\PermissionForSiteTest.cs" />
+    <Compile Include="Logon\PermissionForTeamTest.cs" />
     <Compile Include="Logon\PermissionTestTroughAuthorizeOrganisationDetail.cs" />
     <Compile Include="Optimization\FetchAgentGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />

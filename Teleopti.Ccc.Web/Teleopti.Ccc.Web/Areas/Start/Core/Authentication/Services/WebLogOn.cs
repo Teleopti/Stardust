@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRep.Get(personId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).Get(businessUnitId);
-				_logOnOff.ProperLogOn(dataSource, person, businessUnit);
+				_logOnOff.LogOn(dataSource, person, businessUnit);
 
 				// why just load all but discard any result from the server?
 				_repositoryFactory.CreateApplicationFunctionRepository(uow).LoadAll();

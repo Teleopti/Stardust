@@ -5,9 +5,8 @@ namespace Teleopti.Ccc.Domain.Logon
 {
 	public interface ILogOnOff
 	{
-		void ProperLogOn(string tenant, IPerson user, Guid businessUnitId);
-		void ProperLogOn(IDataSource dataSource, IPerson user, IBusinessUnit businessUnit);
-		void LogOnWithoutClaims(IDataSource dataSource, IPerson user, IBusinessUnit businessUnit);
-		void SetupClaims(string tenant);
+		void LogOn(string tenant, IPerson user, Guid businessUnitId);
+		void LogOn(IDataSource dataSource, IPerson user, IBusinessUnit businessUnit);
+		void LogOnWithoutPermissions(IDataSource dataSource, IPerson user, IBusinessUnit businessUnit);
 	}
 }

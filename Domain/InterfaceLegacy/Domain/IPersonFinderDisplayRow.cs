@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// Display row for find results
     /// </summary>
-    public interface IPersonFinderDisplayRow : IAuthorizeOrganisationDetail
+    public interface IPersonFinderDisplayRow : IPersonAuthorizationInfo
     {
         /// <summary>
         /// First name

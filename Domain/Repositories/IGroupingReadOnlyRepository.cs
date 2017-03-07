@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnlyPeriod queryRange);
 	}
 
-	public class ReadOnlyGroupDetail : IAuthorizeOrganisationDetail
+	public class ReadOnlyGroupDetail : IPersonAuthorizationInfo
 	{
 		public Guid PageId { get; set; }
 		public string GroupName { get; set; }

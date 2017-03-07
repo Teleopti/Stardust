@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			_availableBusinessUnitsProvider.LoadHierarchyInformation(selectedDataSource.DataSource, businessUnit);
 
-			_logOnOff.LogOnWithoutClaims(selectedDataSource.DataSource, selectedDataSource.User, businessUnit);
+			_logOnOff.LogOnWithoutPermissions(selectedDataSource.DataSource, selectedDataSource.User, businessUnit);
 
 			var unitOfWorkFactory = selectedDataSource.DataSource.Application;
 			var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));

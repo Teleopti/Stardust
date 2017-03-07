@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			IBusinessUnit bu = site == null ? null : site.BusinessUnit;
 
 
-			var authorizeOrganisationDetail = new AuthorizeOrganisationDetail
+			var authorizeOrganisationDetail = new personAuthorizationInfo
 			{
 				PersonId = request.Person.Id ?? Guid.Empty,
 				TeamId = team == null? null : team.Id,
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				authorizeOrganisationDetail);
 		}
 
-		private class AuthorizeOrganisationDetail : IAuthorizeOrganisationDetail
+		private class personAuthorizationInfo : IPersonAuthorizationInfo
 		{
 			public Guid PersonId { get; set; }
 			public Guid? TeamId { get; set; }
