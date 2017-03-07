@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public IAuthorization Authorization;
 		public ICurrentTeleoptiPrincipal Principal;
 		public ClaimSetForApplicationRole ClaimSetForApplicationRole;
-		public ConcurrencyRunner Run;
 
 		[Test]
 		public void ShouldHavePermissionsOfRole()

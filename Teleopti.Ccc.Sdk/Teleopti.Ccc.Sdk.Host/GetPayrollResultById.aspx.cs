@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				Response.Write(result.FailReason);
 				return;
 			}
-			var logOnOff = new LogOnOff(new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
+			var logOnOff = new LogOnOff(null, null, new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
 			logOnOff.LogOn(result.DataSource, result.Person, null);
 			
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())
