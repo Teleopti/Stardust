@@ -59,6 +59,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private void logIntradayStaffingViewModel(Guid skillId, bool useShrinkage,
 			IntradayStaffingViewModel intradayStaffingViewModel)
 		{
+			if (intradayStaffingViewModel.DataSeries?.Time == null)
+			{
+				logger.Warn($"no data for {skillId}");
+				return;
+			}
+				
 			var stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine($"Skill:{skillId}, useShrinkage:{useShrinkage}");
 			for (int i = 0; i < intradayStaffingViewModel.DataSeries.Time.Length; i++)
