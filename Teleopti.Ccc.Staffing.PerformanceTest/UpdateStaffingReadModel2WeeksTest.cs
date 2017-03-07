@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 			WithUnitOfWork.Do(() =>
 			{
-				UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1), now.AddDays(15)));
+				UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(14).AddHours(1)));
 			});
 		}
 	}
