@@ -119,9 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 			var backgroundWorker = new NoSchedulingProgress();
 			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
-#pragma warning disable 618
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false))
-#pragma warning restore 618
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false, period.Inflate(1)))
 			{
 				_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 					matrixListForDayOffOptimization, period,
