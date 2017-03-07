@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			var businessUnit = _model.SelectedBu;
 			businessUnit = _availableBusinessUnitsProvider.LoadHierarchyInformation(_model.SelectedDataSourceContainer.DataSource, businessUnit);
 
-			_logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
+			_logOnOff.LogOnWithoutClaims(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 
 			AuthenticationTypeOption = _model.AuthenticationType;
 		}

@@ -313,7 +313,7 @@
     <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
-    <Compile Include="Logon\PermissionsTest.cs" />
+    <Compile Include="Logon\PermissionTest.cs" />
     <Compile Include="Optimization\FetchAgentGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />

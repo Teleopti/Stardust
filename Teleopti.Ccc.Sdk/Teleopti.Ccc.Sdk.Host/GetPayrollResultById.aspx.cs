@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -35,8 +34,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				Response.Write(result.FailReason);
 				return;
 			}
-			var logOnOff = new LogOnOff(null, null, new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
-			logOnOff.LogOn(result.DataSource, result.Person, null);
+			var logOnOff = new LogOnOff(null, null, null, null, null, new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
+			logOnOff.LogOnWithoutClaims(result.DataSource, result.Person, null);
 			
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())
 			{

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRep.Get(personId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).Get(businessUnitId);
-				_logOnOff.LogOn(dataSource, person, businessUnit);
+				_logOnOff.LogOnWithoutClaims(dataSource, person, businessUnit);
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, dataSource.Application, personRep);
 

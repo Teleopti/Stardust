@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -37,12 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				.WithPerson(personId, "roger")
 				.WithRole(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 			var person = Persons.Load(personId);
-			var dataSource = DataSourceForTenant.Tenant("tenant");
-			var businessUnit = BusinessUnits.LoadAll().Single();
 
-			LogOnOff.LogOn(dataSource, person, businessUnit);
-			foreach (var role in person.PermissionInformation.ApplicationRoleCollection)
-				Principal.Current().AddClaimSet(ClaimSetForApplicationRole.Transform(role, "tenant"));
+			LogOnOff.ProperLogOn("tenant", person, Database.CurrentBusinessUnitId());
 
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview).Should().Be.True();
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SeatPlanner).Should().Be.False();

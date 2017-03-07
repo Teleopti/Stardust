@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public void ShouldHandleConcurrency()
 		{
 			var personId = Guid.NewGuid();
-			100.Times(i => Database.WithTenant("tenant" + i));
+			100.Times(i => Database.WithTenant($"tenant{i}"));
 			Database
 				.WithPerson(personId, "roger")
 				.WithRole(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
@@ -43,15 +43,11 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				100.Times(i =>
 				{
 					var person = Persons.Load(personId);
-					var dataSource = DataSourceForTenant.Tenant("tenant" + i);
+					var dataSource = DataSourceForTenant.Tenant($"tenant{i}");
 					var businessUnit = BusinessUnits.LoadAll().Single();
-					LogOnOff.LogOn(dataSource, person, businessUnit);
-
-					foreach (var role in person.PermissionInformation.ApplicationRoleCollection)
-					{
-						Principal.Current().AddClaimSet(ClaimSetForApplicationRole.Transform(role, "tenant" + i));
-					}
-
+					LogOnOff.LogOnWithoutClaims(dataSource, person, businessUnit);
+					LogOnOff.SetupClaims($"tenant{i}");
+					
 					Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview).Should().Be.True();
 					Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SeatPlanner).Should().Be.False();
 				});

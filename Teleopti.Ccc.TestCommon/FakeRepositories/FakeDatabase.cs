@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithSite(id, "s");
 		}
 
+		public static FakeDatabase WithSite(this FakeDatabase database, string name)
+		{
+			return database.WithSite(null, name);
+		}
+
 		public static FakeDatabase WithSite(this FakeDatabase database)
 		{
 			return database.WithSite(null, "s");
@@ -516,7 +521,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithSite(Guid? id, string name)
 		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
-			_site = new Site(name);
+			_site = new Site(name ?? RandomName.Make());
 			_site.SetBusinessUnit(_businessUnit);
 			_site.SetId(id ?? Guid.NewGuid());
 			_sites.Has(_site);
@@ -526,7 +531,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithTeam(Guid? id, string name)
 		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
-			ensureExists(_sites, null, () => this.WithSite(null));
+			ensureExists(_sites, null, () => this.WithSite(null, null));
 			_team = new Team {Site = _site};
 			_team.SetId(id ?? Guid.NewGuid());
 			if (name != null)

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			target.LogOn(dataSourceName, buId, personId, null, true, false);
 
-			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+			logOnOff.AssertWasCalled(x => x.LogOnWithoutClaims(choosenDatasource, logonPerson, choosenBusinessUnit));
 			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null, true, false), o => o.IgnoreArguments());
 		}
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			target.LogOn(dataSourceName, buId, personId, null, false, false);
 
-			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+			logOnOff.AssertWasCalled(x => x.LogOnWithoutClaims(choosenDatasource, logonPerson, choosenBusinessUnit));
 			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null, false, false), o => o.IgnoreArguments());
 		}
 
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			Assert.Throws<PermissionException>(() => target.LogOn(dataSourceName, buId, personId, null, false, false));
 
-			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+			logOnOff.AssertWasCalled(x => x.LogOnWithoutClaims(choosenDatasource, logonPerson, choosenBusinessUnit));
 			sessionSpecificDataProvider.AssertWasNotCalled(x => x.StoreInCookie(null, false, false), o => o.IgnoreArguments());
 		}
 

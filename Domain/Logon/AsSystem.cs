@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Logon
 			{
 				var systemUser = _repositoryFactory.CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SystemUser.Id);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(unitOfWork).Get(businessUnitId);
-				_logOnOff.LogOn(dataSource, systemUser, businessUnit);
+				_logOnOff.LogOnWithoutClaims(dataSource, systemUser, businessUnit);
 				setCorrectPermissionsOnUser(dataSource.Application);
 			}
 		}
