@@ -22,6 +22,11 @@ ALTER TABLE dbo.[RtaState] ALTER COLUMN StateCode varchar(300)
 GO
 ALTER TABLE dbo.[RtaState] ALTER COLUMN Name varchar(300)
 GO
+DELETE dbo.[RtaState]
+WHERE
+PlatformTypeId <> '00000000-0000-0000-0000-000000000000' AND
+StateCode = 'CCC Logged out'
+GO
 UPDATE dbo.[RtaState] 
 SET
 StateCode = StateCode + ' (' + convert(varchar(max), PlatformTypeId) + ')',
