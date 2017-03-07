@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
-		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonRepository _personRepository;
+		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
 		public ScheduleOptimizationTeamBlock(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 			IResourceCalculation resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IUserTimeZone userTimeZone,
-			IPersonRepository personRepository)
+			IPersonRepository personRepository,
+			DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
-			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_userTimeZone = userTimeZone;
 			_personRepository = personRepository;
+			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 			var backgroundWorker = new NoSchedulingProgress();
-			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
+			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
 #pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false))
 #pragma warning restore 618
