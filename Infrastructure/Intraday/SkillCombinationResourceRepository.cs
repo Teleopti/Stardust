@@ -80,7 +80,15 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.SetResultTransformer(Transformers.AliasToBean<internalSkillCombination>())
 				.List<internalSkillCombination>();
 
-			var dictionary = result.GroupBy(x => x.Id).ToDictionary(k => keyFor(k.Select(x => x.SkillId)), v => v.Key);
+			var dictionary = new Dictionary<string, Guid>();
+			var groups = result.GroupBy(x => x.Id);
+			foreach (var group in groups)
+			{
+				var key = keyFor(group.Select(x => x.SkillId));
+				if (dictionary.ContainsKey(key))
+					continue;
+				dictionary.Add(key, group.Key);
+			}
 			return dictionary;
 		}
 
