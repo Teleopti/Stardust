@@ -449,9 +449,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersistIntradayOptimizationResult>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<UpdateStaffingLevelReadModel>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ExtractSkillStaffingDataForResourceCalculation>().InstancePerLifetimeScope();
 
+			if (_configuration.Toggle(Toggles.StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334))
+			{
+				builder.RegisterType<UpdateStaffingLevelReadModelOnlySkillCombinationResources>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<UpdateStaffingLevelReadModel>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
+			}
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312))
 			{

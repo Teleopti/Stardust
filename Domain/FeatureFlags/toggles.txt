@@ -227,5 +227,6 @@ Wfm_ResourcePlanner_AgentGroup_42871 = RC
 Landing_Page_Data_Protection_Question_35721 = true
 StaffingActions_UseRealForecast_42663 = false
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = RC
+StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334 = false
 
 QRCodeForMobileApps_42695 = RC

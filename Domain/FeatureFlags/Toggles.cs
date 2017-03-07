@@ -217,7 +217,8 @@
 		Wfm_ResourcePlanner_AgentGroup_42871,
 		Landing_Page_Data_Protection_Question_35721,
 		StaffingActions_UseRealForecast_42663,
-		Wfm_ResourcePlanner_SchedulingOnStardust_42874
+		Wfm_ResourcePlanner_SchedulingOnStardust_42874,
+		StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334
 		// ReSharper restore InconsistentNaming
 	}
 }

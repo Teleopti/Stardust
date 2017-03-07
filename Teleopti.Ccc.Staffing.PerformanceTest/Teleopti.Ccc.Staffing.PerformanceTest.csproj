@@ -54,6 +54,7 @@
     <Compile Include="ResourceCalculate3DaysTest.cs" />
     <Compile Include="StaffingPerformanceTestAttribute.cs" />
     <Compile Include="UpdateReadModelPerformanceTestAttribute.cs" />
+    <Compile Include="UpdateStaffingReadModelWithOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="UpdateStaffingReadModel2WeeksTest.cs" />
   </ItemGroup>
   <ItemGroup>

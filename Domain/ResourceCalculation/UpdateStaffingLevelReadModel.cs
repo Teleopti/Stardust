@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var resCalcData =
 				_extractSkillStaffingDataForResourceCalculation.ExtractResourceCalculationData(periodDateOnly);
 
-			UpdateFromResourceCalculationData(period, resCalcData, periodDateOnly, timeWhenResourceCalcDataLoaded);
+			updateFromResourceCalculationData(period, resCalcData, periodDateOnly, timeWhenResourceCalcDataLoaded);
 		}
 
-		public void UpdateFromResourceCalculationData(DateTimePeriod period, ResourceCalculationData resCalcData,
+		private void updateFromResourceCalculationData(DateTimePeriod period, ResourceCalculationData resCalcData,
 			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded)
 		{
-			var models = CreateReadModel(resCalcData.SkillResourceCalculationPeriodDictionary, period);
+			var models = createReadModel(resCalcData.SkillResourceCalculationPeriodDictionary, period);
 
 			setUseShrinkage(resCalcData);
 			_extractSkillStaffingDataForResourceCalculation.DoCalculation(periodDateOnly, resCalcData);
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					var filteredCombinations =
 						resCalcData.SkillCombinationHolder.SkillCombinationResources.Where(
 							x =>
-								x.StartDateTime > period.StartDateTime.AddHours(-1) &&
-								x.StartDateTime < period.EndDateTime.AddHours(1));
+								x.StartDateTime >= period.StartDateTime &&
+								x.StartDateTime < period.EndDateTime);
 					_skillCombinationResourceRepository.PersistSkillCombinationResource(timeWhenResourceCalcDataLoaded,
 						filteredCombinations);
 				}
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 		
-		public virtual IList<SkillStaffingInterval> CreateReadModel(
+		private IList<SkillStaffingInterval> createReadModel(
 			ISkillResourceCalculationPeriodDictionary skillResourceCalculationPeriodDictionary, DateTimePeriod period)
 		{
 			var ret = new List<SkillStaffingInterval>();
@@ -144,11 +144,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IUpdateStaffingLevelReadModel
 	{
 		void Update(DateTimePeriod period);
-
-		void UpdateFromResourceCalculationData(DateTimePeriod period, ResourceCalculationData resCalcData,
-			DateOnlyPeriod periodDateOnly, DateTime timeWhenResourceCalcDataLoaded);
-
-		IList<SkillStaffingInterval> CreateReadModel(
-			ISkillResourceCalculationPeriodDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period);
 	}
 }
