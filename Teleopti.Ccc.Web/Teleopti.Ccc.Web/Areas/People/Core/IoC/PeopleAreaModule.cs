@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 			builder.RegisterType<ImportAgentFileValidator>().As<IImportAgentFileValidator>().SingleInstance();
 			builder.RegisterType<TenantUserPersister>().As<ITenantUserPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ImportAgentDataProvider>().As<IImportAgentDataProvider>().SingleInstance();
-			builder.RegisterType<AgentPersister>().As<IAgentPersister>().SingleInstance().ApplyAspects();
+			builder.RegisterType<AgentPersister>().As<IAgentPersister>().SingleInstance();
+			builder.RegisterType<FileProcessor>().As<IFileProcessor>().SingleInstance();
 		}
 	}
 }

@@ -48,6 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		public List<string> ExtractColumnNames(IWorkbook workbook)
 		{
+			if(workbook.NumberOfSheets == 0)
+				return new List<string>();
 			var sheet = workbook.GetSheetAt(0);
 			var headerRow = sheet.GetRow(0);
 			return headerRow.Cells.Select(x => x.StringCellValue).ToList();
@@ -55,7 +57,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		public List<AgentExtractionResult> ExtractAgentInfoValues(IWorkbook workbook)
 		{
-			_importAgentDataProvider.Init();
 			var sheet = workbook.GetSheetAt(0);
 
 			var result = new List<AgentExtractionResult>();

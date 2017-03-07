@@ -26,16 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 
 		private readonly IPeoplePersister _peoplePersister;
-		private readonly IImportAgentFileValidator _fileValidator;
-		private readonly IAgentPersister _agentPersister;
-		private readonly IImportAgentDataProvider _importAgentDataProvider;
+		private readonly IFileProcessor _fileProcessor;
 
-		public ImportPeopleController(IPeoplePersister peoplePersister, IImportAgentFileValidator fileValidator, IAgentPersister agentPersister, IImportAgentDataProvider importAgentDataProvider)
+		public ImportPeopleController(IPeoplePersister peoplePersister, IFileProcessor fileProcessor)
 		{
 			_peoplePersister = peoplePersister;
-			_fileValidator = fileValidator;
-			_agentPersister = agentPersister;
-			_importAgentDataProvider = importAgentDataProvider;
+			_fileProcessor = fileProcessor;
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
@@ -49,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var provider = new MultipartMemoryStreamProvider();
 			await Request.Content.ReadAsMultipartAsync(provider);
 			var fileTemplate = new UserFileTemplate();
-			var workbook = parseFiles(provider.Contents.First());
+			var workbook = _fileProcessor.ParseFiles(provider.Contents.First());
 			var isXlsx = workbook is XSSFWorkbook;
 
 			var sheet = workbook.GetSheetAt(0);
@@ -107,82 +103,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return response;
 		}
 
-		[UnitOfWork, Route("api/People/GetImportAgentSettingsData"), HttpGet]
-		public virtual ImportAgentSettingsDataModel GetImportAgentSettingsData()
-		{
-			return _importAgentDataProvider.GetImportAgentSettingsData();
-		}
-
-		[Route("api/People/UploadAgent"), HttpPost]
-		public virtual async Task<HttpResponseMessage> UploadAgent()
-		{
-			if (!Request.Content.IsMimeMultipartContent())
-			{
-				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-			}
-
-			var provider = new MultipartMemoryStreamProvider();
-			await Request.Content.ReadAsMultipartAsync(provider);
-			var workbook = parseFiles(provider.Contents.First());
-			var isXlsx = workbook is XSSFWorkbook;
-
-			var columnHearders = _fileValidator.ExtractColumnNames(workbook);
-			var errors = _fileValidator.ValidateColumnNames(columnHearders);
-			if (errors.Any())
-			{
-				var errorMsg = string.Format(Resources.MissingColumnX, string.Join(",", errors));
-				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
-				invalidFileResponse.Headers.Clear();
-				invalidFileResponse.Content = new StringContent(errorMsg);
-				invalidFileResponse.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-				return invalidFileResponse;
-			}
-			var total = workbook.GetSheetAt(0).LastRowNum;
-			var invalidAgents = ProcessWorkbook(workbook);
-
-
-			var successCount = total - invalidAgents.Count;
-			var failedCount = invalidAgents.Count();
-
-			var response = Request.CreateResponse(HttpStatusCode.OK);
-			response.Headers.Clear();
-			response.Headers.Add("Message", $"success count:{successCount}, failed count:{failedCount}");
-
-			if (!invalidAgents.Any())
-			{
-				return response;
-			}
-
-			var ms = constructReturnedAgentFile(isXlsx, invalidAgents.ToList());
-			response.Content = new ByteArrayContent(ms.ToArray());
-			response.Content.Headers.ContentType =
-				new MediaTypeHeaderValue(isXlsx ? newExcelFileContentType : oldExcelFileContentType);
-
-			return response;
-		}
-
-		[UnitOfWork]
-		protected virtual IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook)
-		{
-			var extractedResult = _fileValidator.ExtractAgentInfoValues(workbook);
-			_agentPersister.Persist(extractedResult);
-			return extractedResult.Where(r => r.ErrorMessages.Any()).ToList();
-		}
-
-		[Route("api/People/AgentTemplate"), HttpPost]
-		public HttpResponseMessage GetFileTemplateAgent()
-		{
-			var template = new AgentFileTemplate();
-			var ms = template.GetFileTemplate(template.GetDefaultAgent());
-			var response = Request.CreateResponse(HttpStatusCode.OK);
-			response.Headers.Clear();
-			response.Content = new ByteArrayContent(ms.ToArray());
-			response.Content.Headers.ContentType = new MediaTypeHeaderValue(oldExcelFileContentType);
-
-			return response;
-		}
-
 		private static MemoryStream constructReturnedFile(bool isXlsx, IList<RawUser> users, bool includeErrorMessage = false)
 		{
 			const string invalidUserSheetName = "Users";
@@ -212,44 +132,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			returnedFile.Write(ms);
 			return ms;
 		}
-
-
-		private static MemoryStream constructReturnedAgentFile(bool isXlsx, IList<AgentExtractionResult> agents)
-		{
-			const string invalidUserSheetName = "Agents";
-			var ms = new MemoryStream();
-			var agentTemplate = new AgentFileTemplate();
-			var returnedFile = agentTemplate.GetTemplateWorkbook(invalidUserSheetName, isXlsx);
-			var newSheet = returnedFile.GetSheet(invalidUserSheetName);
-			newSheet.GetRow(0).CreateCell(agentTemplate.ColumnHeaderNames.Length).SetCellValue("ErrorMessage");
-
-			for (var i = 0; i < agents.Count; i++)
-			{
-				var rawAgent = agents[i].Raw;
-				var row = newSheet.CreateRow(i + 1);
-
-				row.CreateCell(agentTemplate.ColumnHeaderMap["Firstname"]).SetCellValue(rawAgent.Firstname);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["Lastname"]).SetCellValue(rawAgent.Lastname);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["WindowsUser"]).SetCellValue(rawAgent.WindowsUser);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["ApplicationUserId"]).SetCellValue(rawAgent.ApplicationUserId);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["Password"]).SetCellValue(rawAgent.Password);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["Role"]).SetCellValue(rawAgent.Role);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["StartDate"]).SetCellValue(rawAgent.StartDate.Value);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["Organization"]).SetCellValue(rawAgent.Organization);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["Skill"]).SetCellValue(rawAgent.Skill);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["ExternalLogon"]).SetCellValue(rawAgent.ExternalLogon);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["Contract"]).SetCellValue(rawAgent.Contract);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["ContractSchedule"]).SetCellValue(rawAgent.ContractSchedule);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["PartTimePercentage"]).SetCellValue(rawAgent.PartTimePercentage);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["ShiftBag"]).SetCellValue(rawAgent.ShiftBag);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(rawAgent.SchedulePeriodType);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(rawAgent.SchedulePeriodLength.Value);
-				row.CreateCell(agentTemplate.ColumnHeaderMap.Count).SetCellValue(string.Join(";", agents[i].ErrorMessages));
-			}
-			returnedFile.Write(ms);
-			return ms;
-		}
-
 		private static IWorkbook getTemplateFile(bool isXlsx, bool includeErrorMessage, string invalidUserSheetName, UserFileTemplate fileTemplate )
 		{
 			var returnedFile = isXlsx
@@ -268,16 +150,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 			return returnedFile;
 		}
-
-		private static IWorkbook parseFiles(HttpContent content)
-		{
-			var fileName = content.Headers.ContentDisposition.FileName.Trim('\"');
-			var dataStream = content.ReadAsStreamAsync().Result;
-			return fileName.ToLower().EndsWith("xlsx")
-				? (IWorkbook) new XSSFWorkbook(dataStream)
-				: new HSSFWorkbook(dataStream);
-		}
-
 		private static IList<RawUser> parseWorkBook(IWorkbook workbook, UserFileTemplate fileTemplate)
 		{
 			var userList = new List<RawUser>();

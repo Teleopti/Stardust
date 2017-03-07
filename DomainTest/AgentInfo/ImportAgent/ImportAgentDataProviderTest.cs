@@ -63,8 +63,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.ImportAgent
 			PermissionProvider.Enable();
 			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.WebPeople, team, DateOnly.Today);
 
-			Target.Init();
-
 			var permittedTeams = Target.GetPermittedTeams();
 
 			permittedTeams.Count.Should().Be.EqualTo(1);

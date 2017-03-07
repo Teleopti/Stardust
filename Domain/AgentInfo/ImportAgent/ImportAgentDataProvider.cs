@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public interface IImportAgentDataProvider
 	{
-		void Init();
 		ImportAgentSettingsDataModel GetImportAgentSettingsData();
 		IApplicationRole FindRole(string roleName);
 		IContract FindContract(string contractName);
@@ -37,16 +36,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 
 		private readonly IPermissionProvider _permissionProvider;
 
-		private IList<IApplicationRole> _applicationRoles;
-		private IList<IContract> _contracts;
-		private IList<IContractSchedule> _contractSchedules;
-		private IList<IPartTimePercentage> _partTimePercentages;
-		private IList<IRuleSetBag> _ruleSetBags;
-		private IList<ISkill> _skills;
-		private IList<ISite> _sites;
-		private IList<ITeam> _teams;
-		private IList<IExternalLogOn> _externalLogOns;
-
 		public ImportAgentDataProvider(IApplicationRoleRepository applicationRoleRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository, 
 			IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, ISkillRepository skillRepository, 
 			ISiteRepository siteRepository, ITeamRepository teamRepository, IExternalLogOnRepository externalLogOnRepository, IPermissionProvider permissionProvider)
@@ -62,32 +51,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 			_externalLogOnRepository = externalLogOnRepository;
 			_permissionProvider = permissionProvider;
 		}
-
-		public void Init()
-		{
-			_applicationRoles = _applicationRoleRepository.LoadAll();
-			_contracts = _contractRepository.LoadAll();
-			_contractSchedules = _contractScheduleRepository.LoadAll();
-			_partTimePercentages = _partTimePercentageRepository.LoadAll();
-			_ruleSetBags = _ruleSetBagRepository.LoadAll();
-			_skills = _skillRepository.LoadAll();
-			_sites = _siteRepository.LoadAll();
-			_teams = _teamRepository.LoadAll();
-			_externalLogOns = _externalLogOnRepository.LoadAll();
-		}
-
 		public ImportAgentSettingsDataModel GetImportAgentSettingsData()
 		{
+			var applicationRoles = _applicationRoleRepository.LoadAll();
+			var contracts = _contractRepository.LoadAll();
+			var contractSchedules = _contractScheduleRepository.LoadAll();
+			var partTimePercentages = _partTimePercentageRepository.LoadAll();
+			var ruleSetBags = _ruleSetBagRepository.LoadAll();
+			var skills = _skillRepository.LoadAll();
+			var externalLogOns = _externalLogOnRepository.LoadAll();
 			var settingData = new ImportAgentSettingsDataModel()
 			{
-				Roles = _applicationRoles.ToList(),
+				Roles = applicationRoles.ToList(),
 				Teams = GetPermittedTeams(),
-				Skills = _skills.ToList(),
-				ExternalLogons = _externalLogOns.ToList(),
-				Contracts = _contracts.ToList(),
-				ContractSchedules = _contractSchedules.ToList(),
-				PartTimePercentages = _partTimePercentages.ToList(),
-				ShiftBags = _ruleSetBags.ToList(),
+				Skills = skills.ToList(),
+				ExternalLogons = externalLogOns.ToList(),
+				Contracts = contracts.ToList(),
+				ContractSchedules = contractSchedules.ToList(),
+				PartTimePercentages = partTimePercentages.ToList(),
+				ShiftBags = ruleSetBags.ToList(),
 				SchedulePeriodTypes = Enum.GetValues(typeof(SchedulePeriodType)).Cast<SchedulePeriodType>().ToList(),
 				SchedulePeriodLength = 1
 			};
@@ -96,9 +78,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 
 		public List<TeamViewModel> GetPermittedTeams()
 		{
+			var teams = _teamRepository.LoadAll();
 			var permittedTeamList = new List<TeamViewModel>();
 
-			foreach (var team in _teams)
+			foreach (var team in teams)
 			{
 				if (_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.WebPeople, DateOnly.Today, team))
 				{
@@ -115,23 +98,23 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 
 		public IExternalLogOn FindExternalLogOn(string externalLogonName)
 		{
-			return _externalLogOns.FirstOrDefault(externalLogon => externalLogon.AcdLogOnName == externalLogonName);
+			return _externalLogOnRepository.LoadAll().FirstOrDefault(externalLogon => externalLogon.AcdLogOnName == externalLogonName);
 		}
 
 		public IApplicationRole FindRole(string roleName)
 		{			
-			return _applicationRoles.FirstOrDefault(role => role.Name == roleName);
+			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.Name == roleName);
 		}
 
 		public IContract FindContract(string contractName)
 		{			
-			return _contracts.FirstOrDefault(
+			return _contractRepository.LoadAll().FirstOrDefault(
 					contract => contract.Description.Name == contractName || contract.Description.ShortName == contractName);
 		}
 
 		public IContractSchedule FindContractSchedule(string contractScheduleName)
 		{
-			return _contractSchedules.FirstOrDefault(
+			return _contractScheduleRepository.LoadAll().FirstOrDefault(
 				contractSchedule =>
 					contractSchedule.Description.Name == contractScheduleName ||
 					contractSchedule.Description.ShortName == contractScheduleName);
@@ -139,7 +122,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 
 		public IPartTimePercentage FindPartTimePercentage(string partTimePercentageName)
 		{
-			return	_partTimePercentages.FirstOrDefault(
+			return	_partTimePercentageRepository.LoadAll().FirstOrDefault(
 					partTimePercentage =>
 						partTimePercentage.Description.Name == partTimePercentageName ||
 						partTimePercentage.Description.ShortName == partTimePercentageName);
@@ -148,23 +131,23 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 		public IRuleSetBag FindRuleSetBag(string ruleSetBagName)
 		{
 			return
-				_ruleSetBags.FirstOrDefault(
+				_ruleSetBagRepository.LoadAll().FirstOrDefault(
 					ruleSetBag => ruleSetBag.Description.Name == ruleSetBagName || ruleSetBag.Description.ShortName == ruleSetBagName);
 		}
 
 		public ISite FindSite(string siteName)
 		{
-			return _sites.FirstOrDefault(site => site.Description.Name == siteName);
+			return _siteRepository.LoadAll().FirstOrDefault(site => site.Description.Name == siteName);
 		}
 
 		public ITeam FindTeam(ISite site, string teamName)
 		{
-			return _teams.FirstOrDefault(team => team.Description.Name == teamName && team.Site.Id == site.Id);
+			return _teamRepository.LoadAll().FirstOrDefault(team => team.Description.Name == teamName && team.Site.Id == site.Id);
 		}
 
 		public ISkill FindSkill(string skillName)
 		{
-			return _skills.FirstOrDefault(skill => skill.Name == skillName);
+			return _skillRepository.LoadAll().FirstOrDefault(skill => skill.Name == skillName);
 		}
 
 	}

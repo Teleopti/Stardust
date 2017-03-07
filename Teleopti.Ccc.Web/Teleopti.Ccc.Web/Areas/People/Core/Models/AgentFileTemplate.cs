@@ -91,9 +91,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			row.CreateCell(ColumnHeaderMap["PartTimePercentage"]).SetCellValue(agent.PartTimePercentage);
 			row.CreateCell(ColumnHeaderMap["ShiftBag"]).SetCellValue(agent.ShiftBag);
 			row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
+			var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
 			if (agent.SchedulePeriodLength.HasValue)
 			{
-				var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
 				schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength.Value);				
 			}
 
