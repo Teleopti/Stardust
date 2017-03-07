@@ -13098,6 +13098,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import agents.
+        /// </summary>
+        public static string ImportAgents {
+            get {
+                return ResourceManager.GetString("ImportAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import error.
         /// </summary>
         public static string ImportError {

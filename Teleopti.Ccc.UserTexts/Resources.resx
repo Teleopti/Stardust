@@ -15623,4 +15623,8 @@ Do you want to participate?</value>
   <data name="Rule" xml:space="preserve">
     <value>Rule</value>
   </data>
+  <data name="ImportAgents" xml:space="preserve">
+    <value>Import agents</value>
+    <comment>Function name of importing agents in web People.</comment>
+  </data>
 </root>
