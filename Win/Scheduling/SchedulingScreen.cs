@@ -3220,6 +3220,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						if (_cancelButtonPressed)
 						{
+							_backgroundWorkerScheduling.CancelAsync();
 							progress.Cancel = true;
 							progress.CancelCallback();
 						}
