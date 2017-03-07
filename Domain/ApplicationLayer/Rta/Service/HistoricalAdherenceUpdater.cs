@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[ReadModelUnitOfWork]
 		[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
-		public void Handle(PersonStateChangedEvent @event)
+		public virtual void Handle(PersonStateChangedEvent @event)
 		{
 			_historicalChangePersister.Persist(new HistoricalChangeReadModel
 			{
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[ReadModelUnitOfWork]
 		[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
-		public void Handle(PersonRuleChangedEvent @event)
+		public virtual void Handle(PersonRuleChangedEvent @event)
 		{
 			_historicalChangePersister.Persist(new HistoricalChangeReadModel
 			{
