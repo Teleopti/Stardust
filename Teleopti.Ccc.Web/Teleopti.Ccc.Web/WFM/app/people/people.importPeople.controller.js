@@ -104,7 +104,7 @@
 							if (vm.failedCount > 0) {
 								vm.hasInvalidData = true;
 								var extension = isXlsx ? '.xlsx' : '.xls';
-								saveAs(blob, 'invalidUsers' + extension);
+								saveAs(blob, 'invalidAgents' + extension);
 							}
 
 						}, function (response) {
