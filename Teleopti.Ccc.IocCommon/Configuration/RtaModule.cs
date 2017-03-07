@@ -75,6 +75,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();
 			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>();
 
+			builder.RegisterType<HistoricalChangeReadModelReader>().As<IHistoricalChangeReadModelReader>();
+			builder.RegisterType<HistoricalChangeReadModelPersister>().As<IHistoricalChangeReadModelPersister>();
+
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
 			builder.RegisterType<StateEventPublisher>().SingleInstance();

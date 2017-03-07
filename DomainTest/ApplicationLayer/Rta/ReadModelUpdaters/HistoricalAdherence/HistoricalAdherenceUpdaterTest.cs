@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 		}
 
 		[Test]
-		public void ShouldAddSecondOurOfAdherence()
+		public void ShouldAddSecondOutOfAdherence()
 		{
 			var personId = Guid.NewGuid();
 

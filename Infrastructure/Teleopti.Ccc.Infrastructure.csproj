@@ -452,6 +452,8 @@
     <Compile Include="Rta\HardcodedSkillGroupingPageId.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelPersister.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelReader.cs" />
+    <Compile Include="Rta\HistoricalChangeReadModelPersister.cs" />
+    <Compile Include="Rta\HistoricalChangeReadModelReader.cs" />
     <Compile Include="Rta\MappingReadModelReader.cs" />
     <Compile Include="Rta\KeyValueStorePersister.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersister.cs" />
