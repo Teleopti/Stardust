@@ -315,6 +315,7 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="Logon\PermissionTest.cs" />
+    <Compile Include="Logon\PermissionTestTroughAuthorizeOrganisationDetail.cs" />
     <Compile Include="Optimization\FetchAgentGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />

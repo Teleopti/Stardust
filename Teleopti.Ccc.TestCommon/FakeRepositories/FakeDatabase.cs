@@ -644,10 +644,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithRole(params string[] functionPaths)
 		{
-			return WithRole(AvailableDataRangeOption.Everyone, functionPaths);
+			return WithRole(AvailableDataRangeOption.Everyone, null, functionPaths);
 		}
 
 		public FakeDatabase WithRole(AvailableDataRangeOption availableDataRange, params string[] functionPaths)
+		{
+			return WithRole(availableDataRange, null, functionPaths);
+		}
+
+		public FakeDatabase WithRole(AvailableDataRangeOption availableDataRange, Guid? teamId, params string[] functionPaths)
 		{
 			var role = new ApplicationRole { Name = "role" };
 			role.SetId(Guid.NewGuid());
@@ -660,6 +665,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				ApplicationRole = role,
 				AvailableDataRange = availableDataRange
 			};
+
+			if (teamId != null)
+				availableData.AddAvailableTeam(_teams.Get(teamId.Value));
+
 			_availableDatas.Add(availableData);
 			role.AvailableData = availableData;
 			_applicationRoles.Add(role);
@@ -1017,6 +1026,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
-		
+
 	}
 }
