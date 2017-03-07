@@ -1,11 +1,11 @@
 		<div class="con-row">
 			<div class="con-flex">
-				<div class="con-row">
-					<span class="con-flex align-bottom-flex">
+				<div class="con-row align-bottom-flex">
+					<span class="con-flex">
 						<md-autocomplete id="skill-id"
 										 ng-disabled="!vm.skillsLoaded"
 										 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
-										 class="autocomplete-skill"
+										 class="autocomplete-skill "
 										 md-input-id="skill-input"
 										 md-selected-item="vm.selectedSkill"
 										 md-search-text="searchSkillText"
@@ -25,7 +25,7 @@
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
 					</span>
-					<span class="con-flex align-bottom-flex">
+					<span class="con-flex">
 						<md-autocomplete id="skill-area-id"
 										ng-disabled="!vm.skillAreasLoaded"
 										ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
@@ -49,7 +49,7 @@
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
 					</span>
-					<span class="con-flex rta-multiple-selection-panel align-bottom-flex">
+					<span class="con-flex rta-multiple-selection-panel">
 						<md-input-container class="rta-md-input-container" id="organization" md-no-float>
 							<label class="for-searchTerm"></label>
 							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" ng-keydown="vm.stopOnKeyDown($event)" multiple md-on-close="vm.goToAgents()">
