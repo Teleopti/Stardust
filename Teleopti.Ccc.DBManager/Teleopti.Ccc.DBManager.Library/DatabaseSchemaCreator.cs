@@ -72,7 +72,13 @@ namespace Teleopti.Ccc.DBManager.Library
 										orderby number
 			                            select new {file = f, number};
 
-			string dbVersionSql = Environment.NewLine + "GO" + Environment.NewLine + "INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@buildnumber,@systemversion)";
+			string dbVersionSql =
+				$@"
+{Environment.NewLine}GO
+{Environment.NewLine}if not exists (select 1 from DatabaseVersion where BuildNumber = @buildnumber and SystemVersion = @systemversion)
+{Environment.NewLine}BEGIN
+{Environment.NewLine}INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@buildnumber,@systemversion)
+{Environment.NewLine}END";
 						
 			foreach (var scriptFile in applicableScriptFiles)
 			{
@@ -82,7 +88,8 @@ namespace Teleopti.Ccc.DBManager.Library
 					var sql = File.ReadAllText(scriptFile.file.FullName);
 					if (scriptFile.number >= buildNumberWhenTrunkDisappeared)
 					{
-						_executeSql.ExecuteNonQuery(sql + dbVersionSql, Timeouts.CommandTimeout, new Dictionary<string, object>{{"@buildnumber",scriptFile.number},{"@systemversion",codeVersion()}});
+						_executeSql.ExecuteNonQuery(sql + dbVersionSql, Timeouts.CommandTimeout,
+							new Dictionary<string, object> {{"@buildnumber", scriptFile.number}, {"@systemversion", codeVersion()}});
 					}
 					else
 					{
