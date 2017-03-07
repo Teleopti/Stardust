@@ -122,6 +122,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void ThenThereIsForecastDataForDefaultPeriodFor(string workload)
 		{
 			checkForecastResult(workload, DefaultScenario.Scenario.Description.Name);
+			Browser.Interactions.ClickContaining("card-header span b", workload);
 		}
 
 		private static void checkForecastResult(string workload, string scenario)
