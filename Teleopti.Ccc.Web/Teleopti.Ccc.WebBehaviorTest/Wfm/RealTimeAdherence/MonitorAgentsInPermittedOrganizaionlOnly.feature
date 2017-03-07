@@ -6,6 +6,7 @@ Feature: Monitor agents based on permitted site/teams only
 
 Background: Access permitted site/teams only
 	Given there is a switch
+	And there is an activity named 'Phone'
 	And there is a site named 'SiteGreen'
 	And there is a site named 'SitePink'
 	And there is a team named 'TeamBlue' on site 'SiteGreen'
