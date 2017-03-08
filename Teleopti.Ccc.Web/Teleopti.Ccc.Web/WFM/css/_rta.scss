@@ -253,4 +253,10 @@
 	height: $full-padding*10;
 }
 
+ @media screen and (min-width: 768px) {
+        .rta-filters-container .con-flex {
+            align-self: flex-end;
+        }
+    }
+
 
