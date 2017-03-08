@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPress += Form_KeyPress;
 
 			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
-			webViewDataProtection.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
 			webViewDataProtection.RegisterJSExtensionFunction("yesResponseCallback", yesResponse);
 			webViewDataProtection.RegisterJSExtensionFunction("noOrNotNowResponseCallback", noResponse);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
@@ -143,11 +142,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			showBalloon();
 			logInfo("Session dropped in StayingAlive");
 			wfmWebView.LoadUrl(webServer + "start/Url/RedirectToWebLogin");
+		}		
 
-
-		}
-
-		private void setBusinessUnitInWebView()
+		private void setBusinessUnitInWfmWebView()
 		{
 			if (!wfmWebControl.Enabled) return;
 			var bu = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
@@ -165,6 +162,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				setWfmWebUrl(_permissionModule);
 			}
+		}
+
+		private void setBusinessUnitInDataProtectionWebView()
+		{		
+			var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
+			var request = new Request(webServer + "Start/AuthenticationApi/Logon");
+			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
+			request.Method = "post";
+			webViewDataProtection.LoadCompleted += dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
+			webViewDataProtection.LoadRequest(request);
+		}
+
+		private void dataProtectionWebViewOnLoadCompletedSetBusinessUnit(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
+		{
+			webViewDataProtection.LoadCompleted -= dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
+			webControlDataProtection.WebView.Url = string.Format("{0}WFM/index_desktop_client.html#/fdpa", webServer);
 		}
 
 		private int cnt;
@@ -277,7 +290,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				"/OpenId/TriggerWindowsAuthorization"
 			};
 
-			setBusinessUnitInWebView();
+			setBusinessUnitInWfmWebView();
 
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
 		}
@@ -964,9 +977,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					showDataProtectionWebPage = true;
 					wfmWebControl.Visible = false;
 					webControl1.Visible = false;
-					webControlDataProtection.Enabled = true;
 					webControlDataProtection.Visible = true;
-					webControlDataProtection.WebView.Url = string.Format("{0}WFM/index_desktop_client.html#/fdpa", webServer);
+					setBusinessUnitInDataProtectionWebView();
 					break;
 			}
 		}
