@@ -127,7 +127,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 								  Assert.Greater(result.DataSeries.Time.Length, 0);
 								  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
 								  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
-								  Assert.Greater(result.DataSeries.ActualStaffing.Length, 0);
 							  });
 		}
 
@@ -144,7 +143,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 								  Assert.Greater(result.DataSeries.Time.Length, 0);
 								  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
 								  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
-								  Assert.Greater(result.DataSeries.ActualStaffing.Length, 0);
 							  });
 		}
 
