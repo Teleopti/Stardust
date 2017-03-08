@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
+namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 {
-	public interface IImportAgentDataProvider
-	{
-		ImportAgentSettingsDataModel GetImportAgentSettingsData();
-		IApplicationRole FindRole(string roleName);
-		IContract FindContract(string contractName);
-		IContractSchedule FindContractSchedule(string contractScheduleName);
-		IPartTimePercentage FindPartTimePercentage(string partTimePercentageName);
-		IRuleSetBag FindRuleSetBag(string ruleSetBagName);
-		ISkill FindSkill(string skillName);
-		ISite FindSite(string siteName);
-		ITeam FindTeam(ISite site, string teamName);
-		IExternalLogOn FindExternalLogOn(string externalLogonName);
-	}
-
 	public class ImportAgentDataProvider : IImportAgentDataProvider
 	{
 		private readonly IApplicationRoleRepository _applicationRoleRepository;
@@ -51,29 +38,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 			_externalLogOnRepository = externalLogOnRepository;
 			_permissionProvider = permissionProvider;
 		}
-		public ImportAgentSettingsDataModel GetImportAgentSettingsData()
+
+		public ImportAgentsFieldOptionsModel FieldOptions()
 		{
-			var applicationRoles = _applicationRoleRepository.LoadAll();
-			var contracts = _contractRepository.LoadAll();
-			var contractSchedules = _contractScheduleRepository.LoadAll();
-			var partTimePercentages = _partTimePercentageRepository.LoadAll();
-			var ruleSetBags = _ruleSetBagRepository.LoadAll();
-			var skills = _skillRepository.LoadAll();
-			var externalLogOns = _externalLogOnRepository.LoadAll();
-			var settingData = new ImportAgentSettingsDataModel()
+			return new ImportAgentsFieldOptionsModel
 			{
-				Roles = applicationRoles.ToList(),
-				Teams = GetPermittedTeams(),
-				Skills = skills.ToList(),
-				ExternalLogons = externalLogOns.ToList(),
-				Contracts = contracts.ToList(),
-				ContractSchedules = contractSchedules.ToList(),
-				PartTimePercentages = partTimePercentages.ToList(),
-				ShiftBags = ruleSetBags.ToList(),
-				SchedulePeriodTypes = Enum.GetValues(typeof(SchedulePeriodType)).Cast<SchedulePeriodType>().ToList(),
-				SchedulePeriodLength = 1
+				Roles = _applicationRoleRepository.LoadAll().Select(r => r.Name).ToList(),
+				Teams =
+					_teamRepository.LoadAll()
+						.Where(
+							t => _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.WebPeople, DateOnly.Today, t))
+						.ToDictionary(t => t.Id.GetValueOrDefault(), t => t.SiteAndTeam),
+				Contracts = _contractRepository.LoadAll().ToDictionary(c => c.Id.GetValueOrDefault(), c => c.Description.Name),
+				ContractSchedules =
+					_contractScheduleRepository.LoadAll().ToDictionary(c => c.Id.GetValueOrDefault(), c => c.Description.Name),
+				ShiftBags = _ruleSetBagRepository.LoadAll().ToDictionary(r => r.Id.GetValueOrDefault(), r => r.Description.Name),
+				Skills = _skillRepository.LoadAll().ToDictionary(s => s.Id.GetValueOrDefault(), s => s.Name),
+				SchedulePeriodTypes =
+					Enum.GetValues(typeof(SchedulePeriodType)).Cast<SchedulePeriodType>().ToDictionary(t => (int) t, t => t.ToString())
 			};
-			return settingData;
 		}
 
 		public List<TeamViewModel> GetPermittedTeams()

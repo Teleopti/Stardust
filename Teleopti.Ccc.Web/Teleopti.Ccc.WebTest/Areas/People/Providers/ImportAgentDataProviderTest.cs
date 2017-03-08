@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -11,16 +10,16 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Ccc.WebTest.Areas.Global;
+using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.AgentInfo.ImportAgent
+namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 {
 	[TestFixture]
 	[DomainTest]
 	public class ImportAgentDataProviderTest: ISetup
 	{
-		public FakePermissionProvider PermissionProvider;
+		public Global.FakePermissionProvider PermissionProvider;
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.ImportAgent
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<ImportAgentDataProvider>().For<IImportAgentDataProvider>();
 		}

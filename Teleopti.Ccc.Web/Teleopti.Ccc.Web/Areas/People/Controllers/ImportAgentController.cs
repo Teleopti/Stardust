@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
+using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
@@ -32,9 +33,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[UnitOfWork, Route("api/People/GetImportAgentSettingsData"), HttpGet]
-		public virtual ImportAgentSettingsDataModel GetImportAgentSettingsData()
+		public virtual ImportAgentsFieldOptionsModel GetImportAgentSettingsData()
 		{
-			return _importAgentDataProvider.GetImportAgentSettingsData();
+			return _importAgentDataProvider.FieldOptions();
 		}
 
 		[Route("api/People/UploadAgent"), HttpPost]

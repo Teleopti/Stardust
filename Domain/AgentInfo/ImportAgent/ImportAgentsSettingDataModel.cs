@@ -1,20 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
-	public class ImportAgentSettingsDataModel
+	public class ImportAgentsFieldOptionsModel
 	{
-		public List<IApplicationRole> Roles { get; set; }
-		public List<TeamViewModel> Teams { get; set; }
-		public List<ISkill> Skills { get; set; }
-		public List<IExternalLogOn> ExternalLogons { get; set; }
-		public List<IContract> Contracts { get; set; }
-		public List<IContractSchedule> ContractSchedules { get; set; }
-		public List<IPartTimePercentage> PartTimePercentages { get; set; }
-		public List<IRuleSetBag> ShiftBags { get; set; }
-		public List<SchedulePeriodType> SchedulePeriodTypes { get; set; }
-		public int SchedulePeriodLength { get; set; }
+		public IList<string> Roles { get; set; }
+		public IDictionary<Guid, string> Teams { get; set; }
+		public IDictionary<Guid, string> Skills { get; set; }
+		public IDictionary<Guid, string> Contracts { get; set; }
+		public IDictionary<Guid, string> ContractSchedules { get; set; }
+		public IDictionary<Guid, string> ShiftBags { get; set; }
+		public IDictionary<int, string> SchedulePeriodTypes { get; set; }
 	}
 
 	public class TeamViewModel

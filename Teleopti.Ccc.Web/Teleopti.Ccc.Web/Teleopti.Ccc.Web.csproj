@@ -555,6 +555,8 @@
     <Compile Include="Areas\People\Core\MultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\People\Core\Persisters\AgentPersister.cs" />
     <Compile Include="Areas\People\Core\Persisters\TenantUserPersister.cs" />
+    <Compile Include="Areas\People\Core\Providers\IImportAgentDataProvider.cs" />
+    <Compile Include="Areas\People\Core\Providers\ImportAgentDataProvider.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Reporting\Core\ServerPathProvider.cs" />

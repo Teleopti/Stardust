@@ -292,6 +292,7 @@
     <Compile Include="Areas\People\MultipartHttpContentExtractorTest.cs" />
     <Compile Include="Areas\People\PeopleAreaModuleTest.cs" />
     <Compile Include="Areas\People\PeopleSmartWorkflowControlSetControllerTest.cs" />
+    <Compile Include="Areas\People\Providers\ImportAgentDataProviderTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\AgentGroupControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\Validation\PersonContractValidatorTest.cs" />
