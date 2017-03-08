@@ -21,51 +21,84 @@
 }
 
 .weekview-mobile .overtime-panel-body {
-	height: 60px;
+	height: auto;
 	padding: 0;
 	text-align: center;
 }
 
 .weekview-mobile .day .panel-body {
-	min-height: 40px;
+	min-height: 25px;
 	padding: 0;
 	text-align: center;
 }
 
 .weekview-mobile {
-	padding-top: 10px;
+	padding-top: 15px;
 }
 
-.weekview-mobile .body {
-	padding-top: 10px;
+.mobile-view-day {
+	margin-bottom: 15px;
+}
+
+.navbar-weekview {
+	
+}
+
+.weekview-mobile .action-menu-container{
+	margin: 0 5px 5px;
+}
+
+.weekview-mobile .action-button{
+	padding: 6.5px 10px;
+	border-radius: 50%;
 }
 
 .date-input-style{
 	padding: 10px 1px;
 }
 
-.shift-category-content {
+.shift-category-content, .overtime-availability-content{
+	padding: 5px;
 	display: inline-block;
-}
-
-.shift-category-content.noFloatLeft{
-	float: none;
+	font-size: 1em;
+	text-align: center;
 }
 
 .overtime-availability-content {
 	background-color: #f0f8ff;
-	text-align: center;
 	color: #333333;
-	display: inline-block;
 }
 
-#mobileWeek-day-view-body {
+.shift-category-content, .overtime-availability-content p{
+	margin: 0;
+}
+
+.mobileWeek-day-view-body {
 	display: inline-block;
 	width: 100%;
+}
+
+.mobileWeek-day-view-body.has-overtime-availability .shift-category-content,
+.mobileWeek-day-view-body.has-overtime-availability .overtime-availability-content{
+	height: 70px;
+	text-overflow: ellipsis;
+}
+
+.mobile-view-day .well{
+	margin-bottom: 0;
 }
 
 .mobileWeek-day-view-layer-container {
 	width: 100%;
+}
+
+.mobile-bottom-bar{
+	margin-top: 5px;
+}
+
+.weekview-mobile .action-menus{
+	right: 0;
+	left: auto;
 }
 
 .mobileWeek-day-view-layer{
@@ -80,17 +113,18 @@
 	height: 100%;
 }
 
+.weekview-mobile .overtime-availability-add, 
+.weekview-mobile .absence-report-add{
+	cursor: default;
+}
+
 @media(max-width: 768px) {
 	.mobileWeek-day-view-layer .weekview-day-schedule-layer div {
 		display: none;
 	}
 
-	.weekview-mobile .navbar-weekview .glyphicon {
-		display: none;
-	}
-
 	.weekview-mobile .nav > li > a.overtime-availability-add, 
-	.weekview-mobile .nav > li > a.addAbsenceReport{
+	.weekview-mobile .nav > li > a.absence-report-add{
 		padding-left: 5px;
 		padding-right: 5px;
 	}
@@ -98,4 +132,12 @@
 
 .mobile-foot {
 	text-align: center;
+}
+
+.weekview-mobile .display-none{
+	display: none;
+}
+
+.weekview-mobile .display-block{
+	display: block;
 }

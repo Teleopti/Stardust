@@ -54,32 +54,30 @@
 <div class="container weekview-mobile">
 	<div class="body">
 		<!-- ko foreach: dayViewModels-->
-		<div class="day panel panel-default" data-bind="attr: { 'data-mytime-date': fixedDate }">
+		<div class="day panel panel-default mobile-view-day" data-bind="attr: { 'data-mytime-date': fixedDate }">
 			<div class="header panel-heading">
 				<span class="weekday" data-bind="text: weekDayHeaderTitle"></span>
 				<span class="date" data-bind="text: fixedDate"></span>
 			</div>
 
-			<div id="mobileWeek-day-view-body" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'dayoff': isDayoff(),  'overtime-panel-body': hasOvertime, 'panel-body': !hasOvertime }">
-				<div class="shift-category-content col-xs-6 col-sm-6" data-bind="css: {'noFloatLeft': !hasOvertimeAvailability()}">
-					<div>
-						<strong data-bind="text: summaryName"></strong>
-					</div>
-					<div data-bind="text: summaryTimeSpan"></div>
+			<div class="mobileWeek-day-view-body" data-bind="css: {'dayoff': isDayoff(),  'overtime-panel-body': hasOvertime, 'panel-body': !hasOvertime,'has-overtime-availability': hasOvertimeAvailability() }">
+				<div class="shift-category-content" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'col-xs-12': !hasOvertimeAvailability(), ' col-xs-6 col-sm-6':hasOvertimeAvailability()}">
+					<strong data-bind="text: summaryName"></strong>
+					<span data-bind="text: summaryTimeSpan"></span>
 					<!-- ko if: hasOvertime -->
-					<div>
+					<p>
 						<strong>@Resources.Overtime</strong>
-					</div>
+					</p>
 					<!-- /ko -->
 				</div>
 				<!-- ko if: hasOvertimeAvailability-->
 				<div class="overtime-availability-content col-xs-6 col-sm-6">
-					<div>
+					<p>
 						<strong>@Resources.OvertimeAvailability</strong>
-					</div>
-					<div>
+					</p>
+					<p>
 						<span data-bind="text: overtimeAvailabilityStart"></span> - <span data-bind="text: overtimeAvailabilityEnd"></span>
-					</div>
+					</p>
 				</div>
 				<!-- /ko -->
 			</div>
@@ -110,19 +108,54 @@
 					<!-- /ko -->
 				</div>
 			</div>
+			<div class="mobile-bottom-bar">
+				<ul class="nav nav-pills navbar-weekview">
+					<!-- ko if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
+						<!-- ko if: overtimeAvailabilityPermission() -->
+						<li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
+							<a href="#" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
+						</li>
+						<!-- /ko -->
+						<!-- ko if: isPermittedToReportAbsence() -->
+						<li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
+							<a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
+						</li>
+						<!-- /ko -->
+					<!-- /ko -->
 
-			<ul class="nav nav-pills navbar-weekview">
-				<!-- ko if: overtimeAvailabilityPermission() -->
-				<li data-bind="css: { active: $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
-					<a class="overtime-availability-add" href="#" data-bind="click: $parent.showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
-				</li>
-				<!-- /ko -->
-				<!-- ko if: isPermittedToReportAbsence() -->
-				<li data-bind="css: { active: $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
-					<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
-				</li>
-				<!-- /ko -->
-			</ul>
+					<!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
+						<!-- ko if: overtimeAvailabilityPermission() -->
+						<li class="display-none" data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
+							<a class="overtime-availability-add">@Resources.OvertimeAvailability</a>
+						</li>
+						<!-- /ko -->
+						<!-- ko if: isPermittedToReportAbsence() -->
+						<li class="display-none" data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
+							<a class="absence-report-add">@Resources.AbsenceReport</a>
+						</li>
+						<!-- /ko -->
+						<!-- ko if: (overtimeAvailabilityPermission() || isPermittedToReportAbsence())-->
+						<li class="pull-right action-menu-container">
+							<div class="dropdown">
+								<a class="btn btn-primary action-button" href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="glyphicon glyphicon-plus"></i></a>
+								<ul class="dropdown-menu action-menus">
+									<!-- ko if: overtimeAvailabilityPermission() -->
+									<li>
+										<a href="#" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
+									</li>
+									<!-- /ko -->
+									<!-- ko if: isPermittedToReportAbsence() -->
+									<li>
+										<a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
+									</li>
+									<!-- /ko -->
+								</ul>
+							</div>
+						</li>
+						<!-- /ko -->
+					<!-- /ko -->
+				</ul>
+			</div>
 			<div data-bind="visible: formattedFixedDate() === $parent.formattedRequestDate()">
 				<!-- ko with: $parent.requestViewModel -->
 				<div data-bind="with: model">

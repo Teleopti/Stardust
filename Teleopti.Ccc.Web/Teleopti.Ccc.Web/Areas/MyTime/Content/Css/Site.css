@@ -95,6 +95,10 @@
 .invisible {
 	visibility: hidden;
 }
+
+.visible{
+	visibility: visible;
+}
 /* Hide visually and from screenreaders, but maintain layout */
 
 .cursorpointer {
@@ -1519,6 +1523,10 @@ End personal drop down menu
 
 .navbar {
 	margin-bottom: 5px;
+}
+
+.navbar-teleopti{
+	margin-bottom: 0;
 }
 
 .navbar-toggle {
