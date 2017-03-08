@@ -211,7 +211,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 														IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameOpenHours)
 		{
 			shiftList = _shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, shiftList, finderResult);
-			shiftList = _activityRequiresSkillProjectionFilter.Filter(person, shiftList, dateOnly, finderResult);
 			shiftList = _timeLimitsRestrictionShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction,
 																 finderResult);
             if (sameOpenHours)
@@ -235,10 +234,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			
 			shiftList = _disallowedShiftCategoriesShiftFilter.Filter(schedulingOptions.NotAllowedShiftCategories, shiftList,
 																	 finderResult);
-			shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction,
-																finderResult);
 			
 			shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, finderResult);
+
+			shiftList = _activityRequiresSkillProjectionFilter.Filter(person, shiftList, dateOnly, finderResult);
+			shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction, finderResult);
 			shiftList = _notOverWritableActivitiesShiftFilter.Filter(schedules, dateOnly, person, shiftList, finderResult);
 
 			return shiftList;
