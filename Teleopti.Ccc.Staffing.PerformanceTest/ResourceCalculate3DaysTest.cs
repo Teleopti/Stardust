@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
 			var now = Now.UtcDateTime();
-			var period = new DateTimePeriod(now.AddHours(-1), now.AddDays(3));
+			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(4));
 			WithUnitOfWork.Do(() =>
 							  {
 
