@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Stardust.Node.Constants;
@@ -48,7 +49,7 @@ namespace Stardust.Node.Workers
 		}
 
 
-		public void Send()
+		public void Send(CancellationToken cancellationToken)
 		{
 			if (_jobDetails == null || _jobDetails.Count <= 0) return;
 
@@ -58,13 +59,13 @@ namespace Stardust.Node.Workers
 				{
 					var task = Task.Factory.StartNew(async () =>
 					                                 {
-						                                 var httpResponseMessage = await _httpSender.PostAsync(_uriBuilder.Uri, _jobDetails);
+						                                 var httpResponseMessage = await _httpSender.PostAsync(_uriBuilder.Uri, _jobDetails, cancellationToken);
 						                                 if (httpResponseMessage.IsSuccessStatusCode)
 						                                 {
 							                                 //detail.Sent = true;
 						                                 }
-					                                 });
-					task.Wait();
+					                                 }, cancellationToken);
+					task.Wait(cancellationToken);
 					_jobDetails.Clear();
 				}
 				catch (Exception)
@@ -72,27 +73,6 @@ namespace Stardust.Node.Workers
 					Logger.ErrorWithLineNumber($"Send job progresses to manager failed for job ( jobId ) : ( {_jobDetails.FirstOrDefault().JobId} )");
 				}
 			}
-
-			//foreach (var detail in _jobDetails)
-			//{
-			//	try
-			//	{
-			//		var task = Task.Factory.StartNew(async () =>
-			//		{
-			//			var httpResponseMessage = await _httpSender.PostAsync(_uriBuilder.Uri, detail);
-			//			if (httpResponseMessage.IsSuccessStatusCode)
-			//			{
-			//				detail.Sent = true;
-			//			}
-			//		});
-			//		task.Wait();
-			//	}
-			//	catch (Exception)
-			//	{
-			//		Logger.ErrorWithLineNumber($"Send job progresses to manager failed for job ( jobId ) : ( {detail.JobId} )");
-			//	}
-			//}
-			//_jobDetails.RemoveAll(x => x.Sent);
 		}
 	}
 }

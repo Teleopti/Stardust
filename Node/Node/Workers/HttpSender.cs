@@ -24,12 +24,6 @@ namespace Stardust.Node.Workers
 		}
 
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
-		                                                 object data)
-		{
-			return await PostAsync(url, data, CancellationToken.None);
-		}
-
-		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data,
 		                                                 CancellationToken cancellationToken)
 		{

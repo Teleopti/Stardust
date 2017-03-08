@@ -8,5 +8,5 @@ namespace Stardust.Node.Interfaces
 	public interface IHttpSender
 	{
 		Task<HttpResponseMessage> PostAsync(Uri url, object data, CancellationToken cancellationToken);
-		Task<HttpResponseMessage> PostAsync(Uri url, object data);	}
+	}
 }

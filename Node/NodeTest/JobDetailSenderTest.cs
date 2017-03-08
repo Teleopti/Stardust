@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
+using System.Threading;
 using NodeTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -54,7 +55,7 @@ namespace NodeTest
 		{
 			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
 			Target.AddDetail(Guid.NewGuid(), "Progress message.");
-			Target.Send();
+			Target.Send(CancellationToken.None);
 			Target.DetailsCount().Should().Be.EqualTo(0);
 		}
 
@@ -67,7 +68,7 @@ namespace NodeTest
 			Target.AddDetail(jobid, "Progress message 1.");
 			Target.AddDetail(jobid, "Progress message 2.");
 
-			Target.Send();
+			Target.Send(CancellationToken.None);
 			_httpSenderFake.SentJson.Should().Contain("Progress message 1.");
 			_httpSenderFake.SentJson.Should().Contain("Progress message 2.");
 		}
