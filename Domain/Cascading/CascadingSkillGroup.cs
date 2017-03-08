@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				subHash.Append("subindex:" + subSkills.CascadingIndex);
 				foreach (var subSkill in subSkills)
 				{
-					subHash.Append(subSkill.CascadingIndex);
+					subHash.Append("subsubindex:" + subSkill.CascadingIndex);
 				}
 			}
 			return subHash.ToString();
