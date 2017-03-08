@@ -47,12 +47,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			if (primarySkillsExistsButTheyAreAllClosed)
 			{
-				//TODO: suspicious code here - bug?
-				foreach (var skillGroup in skillGroupsWithSameIndex)
-				{
-					dic.Add(skillGroup.PrimarySkills.First(), skillGroup.RemainingResources);
-					break;
-				}
+				var resources = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
+				dic.Add(skillGroupsWithSameIndex.First().PrimarySkills.First(), resources);
 				return new ShovelResourcesState(_addResourceToSubSkillsProvider.Fetch(true), dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval));
 			}
 

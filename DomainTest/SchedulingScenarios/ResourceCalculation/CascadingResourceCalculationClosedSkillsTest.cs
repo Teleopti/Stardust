@@ -200,5 +200,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDay1Resources.Should().Be.EqualTo(0.5);
 			skillDay2Resources.Should().Be.EqualTo(0.5);
 		}
+
+		[Test]
+		public void ShouldShovelAllResourcesWhenAgentsBelongToDifferentSkillGroups()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var nonCascadingSkill1 = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsClosed();
+			var nonCascadingSkill2 = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsClosed();
+			var primarySkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var subskill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 10);
+			var primarySkillDay = primarySkill.CreateSkillDayWithDemand(scenario, dateOnly, 100);
+			var subskillDay = subskill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill, nonCascadingSkill1);
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(9, 10));
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill, nonCascadingSkill2);
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(9, 10));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subskillDay }, false, false));
+
+			subskillDay.SkillStaffPeriodCollection.Last().CalculatedResource
+				.Should().Be.EqualTo(2);
+		}
 	}
 }
