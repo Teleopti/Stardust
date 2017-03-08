@@ -6,12 +6,18 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using Autofac;
 using Castle.DynamicProxy;
-using log4net;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
 {
+	//public class AspectInvocationException : Exception
+	//{
+	//	public AspectInvocationException(string message, Exception inner) : base(message, inner)
+	//	{
+	//	}
+	//}
+
 	public class AspectInterceptor : IInterceptor
 	{
 		private readonly IComponentContext _resolver;
@@ -44,64 +50,73 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			}
 
 			var invocationInfo = new InvocationInfo(invocation);
+
+			runBefores(invocationInfo, aspects);
+
+			throwAny(invocationInfo);
+
+			invoke(invocationInfo);
+
+			runAfters(invocationInfo, aspects);
+
+			throwAny(invocationInfo);
+		}
+
+		private void runBefores(InvocationInfo invocation, IEnumerable<IAspect> aspects)
+		{
 			var completedBefores = new List<IAspect>();
+
 			try
 			{
 				aspects.ForEach(a =>
 				{
-					a.OnBeforeInvocation(invocationInfo);
+					a.OnBeforeInvocation(invocation);
 					completedBefores.Add(a);
 				});
 			}
 			catch (Exception e)
 			{
-				LogManager.GetLogger(invocation.TargetType)
-					.Error($"Aspect call before {invocation.Method.Name} failed", e);
-				runAfters(invocation, completedBefores, invocationInfo, e);
+				invocation.AddException(e, $"Aspect call before {invocation.TargetType.FullName}.{invocation.Method.Name} failed");
+				runAfters(invocation, completedBefores);
 			}
+		}
 
-			Exception exception = null;
+		private void invoke(InvocationInfo invocation)
+		{
 			try
 			{
 				invocation.Proceed();
 			}
 			catch (Exception e)
 			{
-				exception = e;
-				throw;
-			}
-			finally
-			{
-				runAfters(invocation, aspects, invocationInfo, exception);
+				invocation.AddException(e, null);
 			}
 		}
 
-		private static void runAfters(IInvocation invocation, IEnumerable<IAspect> aspects, IInvocationInfo invocationInfo, Exception exception)
+		private void runAfters(InvocationInfo invocation, IEnumerable<IAspect> aspects)
 		{
-			var exceptions = new List<Exception>();
-			if (exception != null)
-				exceptions.Add(exception);
-
 			aspects
 				.Reverse()
 				.ForEach(a =>
 				{
 					try
 					{
-						a.OnAfterInvocation(exception, invocationInfo);
+						a.OnAfterInvocation(invocation.Exceptions.FirstOrDefault(), invocation);
 					}
 					catch (Exception e)
 					{
-						LogManager.GetLogger(invocation.TargetType)
-							.Error($"Aspect call after {invocation.Method.Name} failed", e);
-						exceptions.Add(e);
+						invocation.AddException(e, $"Aspect call after {invocation.TargetType.FullName}.{invocation.Method.Name} failed");
 					}
 				});
-
-			if (exceptions.Count == 1)
-				ExceptionDispatchInfo.Capture(exceptions.First()).Throw();
-			if (exceptions.Any())
-				throw new AggregateException(exceptions);
 		}
+		
+		private static void throwAny(InvocationInfo invocation)
+		{
+			if (invocation.Exceptions.Count == 1)
+				ExceptionDispatchInfo.Capture(invocation.Exceptions.First()).Throw();
+			if (invocation.Exceptions.Any())
+				throw new AggregateException(invocation.Exceptions);
+		}
+
 	}
 }
