@@ -29,11 +29,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, primarySkillMode, period));
 		}
 
-		public IDisposable Create(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool primarySkillMode, DateOnlyPeriod period, bool useAllSkills)
-		{
-			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(skillCombinationResources, allSkills, primarySkillMode, useAllSkills)));
-		}
-
 		private Lazy<IResourceCalculationDataContainerWithSingleOperation> createResources(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, bool primarySkillMode, DateOnlyPeriod? period)
 		{
 			var createResources = new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() =>
