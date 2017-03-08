@@ -22,8 +22,10 @@
 					return !($scope.schedulingPerformed && $scope.lastJobSuccessful && runAsynchronously);
 				};
 
-				function handleScheduleOrOptimizeError() {
-					$scope.errorMessage = "Latest scheduling/optimization has been failed. Please try again.";
+				function handleScheduleOrOptimizeError(message) {
+					if (!message)
+						message = "An error occurred. Please try again.";
+					$scope.errorMessage = message;
 					$scope.schedulingPerformed = false;
 					$scope.status = '';
 					$scope.scheduleClicked = false;
@@ -31,7 +33,9 @@
 
 				dayOffRuleService.getDayOffRules().$promise.then(function (result) {
 					$scope.dayOffRules = result;
-				}, handleScheduleOrOptimizeError);
+				}, function() {
+					handleScheduleOrOptimizeError("Failed to load dayoff rules.");
+				});
 
 				var tenMinutes = 1000 * 60 * 10;
 				var keepAliveRef = $interval(function () {
@@ -52,7 +56,14 @@
 									$scope.schedulingPerformed = true;
 									$scope.lastJobSuccessful = true;
 								} else if (result.Failed) {
-									handleScheduleOrOptimizeError();
+									if (result.CurrentStep === 0) {
+										handleScheduleOrOptimizeError("Failed to schedule for selected planning period due to technical error.");
+									} else if (result.CurrentStep === 1) {
+										handleScheduleOrOptimizeError("Failed to schedule for selected planning period due to technical error.");
+									} else if (result.CurrentStep === 2) {
+										handleScheduleOrOptimizeError("Failed to optimize dayoff for selected planning period due to technical error.");
+									}
+
 									$scope.lastJobSuccessful = false;
 								} else {
 									$scope.scheduleClicked = true;
@@ -76,7 +87,9 @@
 
 					planningPeriodService.launchScheduling({ id: p.Id, runAsynchronously: true }).$promise.then(function () {
 						checkProgress(p.Id);
-					}, handleScheduleOrOptimizeError);
+					}, function() {
+						handleScheduleOrOptimizeError("Failed to create scheduling job for selected planning period.");
+					});
 				}
 
 				var launchScheduleOld = function (p) {
