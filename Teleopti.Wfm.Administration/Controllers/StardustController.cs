@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
 
@@ -10,10 +16,15 @@ namespace Teleopti.Wfm.Administration.Controllers
     public class StardustController : ApiController
 	{
 		private readonly StardustRepository _stardustRepository;
+		private readonly IEventPublisher _eventPublisher;
+		private readonly ILoadAllTenants _loadAllTenants;
 
-		public StardustController(StardustRepository stardustRepository)
+		public StardustController(StardustRepository stardustRepository, IEventPublisher eventPublisher, 
+			ILoadAllTenants loadAllTenants)
 		{
 			_stardustRepository = stardustRepository;
+			_eventPublisher = eventPublisher;
+			_loadAllTenants = loadAllTenants;
 		}
 
 		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
@@ -89,5 +100,38 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_stardustRepository.DeleteQueuedJobs(ids);
 			return Ok();
 		}
+
+		[HttpPost, Route("Stardust/TriggerResourceCalculation")]
+		[TenantUnitOfWork]
+		public virtual IHttpActionResult TriggerResourceCalculation([FromBody] LogOnModel logOnModel)
+		{
+			if(logOnModel == null) return BadRequest("logOnModel is null!");
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(logOnModel.Tenant));
+			var appConnstring = tenant.DataSourceConfiguration.ApplicationConnectionString;
+			var bus = _stardustRepository.SelectAllBus(appConnstring);
+			foreach (var bu in bus)
+			{
+				_eventPublisher.Publish(
+				new UpdateStaffingLevelReadModelEvent
+				{
+					StartDateTime = DateTime.UtcNow.AddHours(-1),
+					EndDateTime = DateTime.UtcNow.AddDays(1).AddHours(1),
+					RequestedFromWeb = true,
+					LogOnDatasource = logOnModel.Tenant,
+					LogOnBusinessUnitId = bu
+				}
+			);
+			}
+
+			return Ok();
+		}
+
+
+	}
+
+	public class LogOnModel
+	{
+		public string Tenant;
+		//public Guid BusinessUnit;
 	}
 }

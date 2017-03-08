@@ -101,6 +101,29 @@
 		</div>
 		<div class="col-md-5 summary-nodes">
 			<div class="col-md-12 panel panel-default ">
+				<div class="panel-heading">Trigger Resource Calculation</div>
+				<div class="panel-body">
+					<p>
+						Don't trigger this Stardust job in a customer environment unless you know what you are doing! 
+					</p>
+				</div>
+				<div class="panel-footer">
+					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<span ng-show="!vm.selectedTenantName">Select Tenant...</span>
+							<span ng-show="vm.selectedTenantName">{{vm.selectedTenantName}}</span>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li ng-repeat="tenant in vm.Tenants" ng-click="vm.selectTenant(tenant.Name)"><a>{{tenant.Name}}</a></li>
+						</ul>
+					</div>
+					<button class="btn btn-primary" ng-disabled="!vm.selectedTenantName" ng-click="vm.triggerResourceCalculation()">
+						<span class="text-white">Trigger Resource Calculation &raquo;</span>
+					</button>
+				</div>
+			</div>
+			<div class="col-md-12 panel panel-default ">
 				<div class="panel-heading">Nodes</div>
 				<div class="panel-body">
 					<p>
@@ -108,20 +131,20 @@
 					</p>
 					<table>
 						<thead>
-							<tr>
-								<th>Url</th>
-								<th>Latest Heartbeat (UTC)</th>
-								<th>Working</th>
-								<th>Alive</th>
-							</tr>
+						<tr>
+							<th>Url</th>
+							<th>Latest Heartbeat (UTC)</th>
+							<th>Working</th>
+							<th>Alive</th>
+						</tr>
 						</thead>
 						<tbody>
-							<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
-								<td><a href="#StardustDashboard/nodes/{{node.Id}}">{{node.Url}}</a></td>
-								<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-								<td>{{node.Running}}</td>
-								<td ng-class="node.Alive === true ? 'green' : 'red'">{{node.Alive}}</td>
-							</tr>
+						<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
+							<td><a href="#StardustDashboard/nodes/{{node.Id}}">{{node.Url}}</a></td>
+							<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{node.Running}}</td>
+							<td ng-class="node.Alive === true ? 'green' : 'red'">{{node.Alive}}</td>
+						</tr>
 						</tbody>
 					</table>
 				</div>

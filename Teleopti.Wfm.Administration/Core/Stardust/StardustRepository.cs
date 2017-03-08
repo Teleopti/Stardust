@@ -300,6 +300,51 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			}
 		}
 
+		public List<Guid> SelectAllTenants()
+		{
+			const string selectCommandText = "SELECT * FROM dbo.BusinessUnit WITH(NOLOCK)";
+			var ids = new List<Guid>();
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = getQueuedJob.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!sqlDataReader.HasRows) return ids;
+						while (sqlDataReader.Read())
+						{
+							ids.Add(sqlDataReader.GetGuid(0));
+						}
+					}
+				}
+			}
+			return ids;
+		}
+
+
+		public List<Guid> SelectAllBus(string connString)
+		{
+			const string selectCommandText = "SELECT Id FROM dbo.BusinessUnit WITH(NOLOCK)";
+			var ids = new List<Guid>();
+			using (var sqlConnection = new SqlConnection(connString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = getQueuedJob.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!sqlDataReader.HasRows) return ids;
+						while (sqlDataReader.Read())
+						{
+							ids.Add(sqlDataReader.GetGuid(0));
+						}
+					}
+				}
+			}
+			return ids;
+		}
+
 		public object GetAllFailedJobs(int from, int to)
 		{
 			var jobs = new List<Job>();

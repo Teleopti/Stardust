@@ -11,7 +11,8 @@
 		vm.title = 'Stardust Summary';
 		vm.NodeError = '';
 		vm.JobError = '';
-
+		vm.triggerResourceCalculation = triggerResourceCalculation;
+		vm.selectTenant = selectTenant;
 		$http.get("./Stardust/Jobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.RunningJobs = data;
@@ -60,5 +61,24 @@
 				}
 
 			});
+		$http.get("./GetAllTenants", tokenHeaderService.getHeaders())
+			.success(function(data) {
+				vm.Tenants = data;
+			});
+
+		function selectTenant(name) {
+			vm.selectedTenantName = name;
+
+		};
+
+		function triggerResourceCalculation() {
+			if (!vm.selectedTenantName) return;
+			$http.post("./Stardust/TriggerResourceCalculation",
+				{
+					"Tenant": vm.selectedTenantName
+				},
+				tokenHeaderService.getHeaders()
+			);
+		}
 	}
 })();
