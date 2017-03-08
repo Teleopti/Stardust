@@ -11,6 +11,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		public List<IFactScheduleRow> FactScheduleRows = new List<IFactScheduleRow>();
 		public List<IAnalyticsFactScheduleDayCount> FactScheduleDayCountRows = new List<IAnalyticsFactScheduleDayCount>();
+		public List<IAnalyticsShiftLength> AnalyticsShiftLengths = new List<IAnalyticsShiftLength>();
+
+		public void Has(IAnalyticsShiftLength shiftLength)
+		{
+			AnalyticsShiftLengths.Add(shiftLength);
+		}
 
 		public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 		{
@@ -38,12 +44,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
-			return new List<IAnalyticsShiftLength>();
+			return AnalyticsShiftLengths;
 		}
 
 		public int ShiftLengthId(int shiftLength)
 		{
-			return 0;
+			return AnalyticsShiftLengths.FirstOrDefault(item => item.ShiftLength == shiftLength)?.Id ?? 0;
 		}
 
 		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,

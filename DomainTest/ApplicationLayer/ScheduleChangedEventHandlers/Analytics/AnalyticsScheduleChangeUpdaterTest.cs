@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[TestFixture]
 	[DomainTest]
-	
 	public class AnalyticsScheduleChangeUpdaterTest : ISetup
 	{
 		public AnalyticsScheduleChangeUpdater Target;

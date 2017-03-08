@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private const int minutesPerInterval = 15;
 		private DateTime _scheduleChangeTime;
 
-
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService(new FakeAnalyticsDateRepository(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1));
@@ -64,14 +63,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void ShouldReturnNullWhenShiftStartLocalDateIdNotFound()
 		{
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, new DateOnly(1974, 12, 27), _layer, _scheduleChangeTime, minutesPerInterval);
-			Assert.Null(analyticsFactScheduleDate);
+			analyticsFactScheduleDate.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenShiftStartUtcDateIdNotFound()
 		{
 			var analyticsFactScheduleDate = Target.Map(new DateTime(1974, 12, 27), _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
-			Assert.Null(analyticsFactScheduleDate);
+			analyticsFactScheduleDate.Should().Be.Null();
 		}
 
 		[Test]
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
 			};
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, invalidLayer, _scheduleChangeTime, minutesPerInterval);
-			Assert.Null(analyticsFactScheduleDate);
+			analyticsFactScheduleDate.Should().Be.Null();
 		}
 
 		[Test]
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, invalidLayer, _scheduleChangeTime, minutesPerInterval);
 
-			Assert.NotNull(analyticsFactScheduleDate);
+			analyticsFactScheduleDate.Should().Not.Be.Null();
 			AnalyticsDates.MaxDate().DateId.Should().Be.GreaterThan(maxBefore.DateId);
 		}
 
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			var invalidShiftStart = new DateTime(2014, 12, 1, 0, 0, 0, DateTimeKind.Utc);
 			var analyticsFactScheduleDate = Target.Map(invalidShiftStart, _shiftEndDateUtc, _shiftStartDateLocal, invalidLayer, _scheduleChangeTime, minutesPerInterval);
-			Assert.Null(analyticsFactScheduleDate);
+			analyticsFactScheduleDate.Should().Be.Null();
 		}
 
 		[Test]
@@ -128,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, invalidShiftEnd, _shiftStartDateLocal, invalidLayer, _scheduleChangeTime, minutesPerInterval);
 
-			Assert.NotNull(analyticsFactScheduleDate);
+			analyticsFactScheduleDate.Should().Not.Be.Null();
 			AnalyticsDates.MaxDate().DateId.Should().Be.GreaterThan(maxBefore.DateId);
 		}
 

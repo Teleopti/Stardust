@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public FakeIntervalLengthFetcher IntervalLength;
 		public FakeAnalyticsDateRepository AnalyticsDates;
 		public FakeAnalyticsAbsenceRepository AnalyticsAbsences;
+
 		private readonly Guid absenceId = Guid.NewGuid();
 		private readonly Guid personCode = Guid.NewGuid();
 		private readonly Guid scenarioCode = Guid.NewGuid();
-
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			var scheduleChangeTime = DateTime.Now;
 			Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), null, scheduleChangeTime, 1, 1, scenarioCode, personCode);
-
 		}
 
 		[Test]

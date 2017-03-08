@@ -2,51 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[TestFixture]
-	public class AnalyticsFactScheduleTimeMapperTest
+	[DomainTest]
+	public class AnalyticsFactScheduleTimeMapperTest : ISetup
 	{
-		private AnalyticsFactScheduleTimeMapper _target;
-		private IAnalyticsScheduleRepository _analyticsScheduleRepository;
-		private IAnalyticsActivityRepository _analyticsActivityRepository;
-		private IAnalyticsOvertimeRepository _overtimeRepository;
+		public IAnalyticsFactScheduleTimeMapper Target;
+		public FakeAnalyticsScheduleRepository AnalyticsSchedules;
+		public FakeAnalyticsActivityRepository AnalyticsActivities;
+		public FakeAnalyticsOvertimeRepository AnalyticsOvertimes;
+		public FakeAnalyticsAbsenceRepository AnalyticsAbsences;
+
 		private IList<AnalyticsActivity> _activities;
+		private IList<AnalyticsAbsence> _absences;
+		private IList<AnalyticsOvertime> _overtimes;
+		private IList<IAnalyticsShiftLength> _shiftLengths;
+
 		private readonly Guid _guidActInPaid = Guid.NewGuid();
 		private readonly Guid _guidActInReady = Guid.NewGuid();
 		private readonly Guid _guidActInBoth = Guid.NewGuid();
 		private readonly Guid _guidActInNone = Guid.NewGuid();
-
 		private readonly Guid _guidAbsInPaid = Guid.NewGuid();
 		private readonly Guid _guidAbsNotPaid = Guid.NewGuid();
-		private List<AnalyticsAbsence> _absences;
-		private List<AnalyticsOvertime> _overtimes;
-		private List<IAnalyticsShiftLength> _shiftLengths;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<FakeAnalyticsScheduleRepository>();
+			system.AddService<FakeAnalyticsActivityRepository>();
+			system.AddService<FakeAnalyticsOvertimeRepository>();
+			system.AddService<FakeAnalyticsAbsenceRepository>();
+		}
 
 		[SetUp]
 		public void Setup()
 		{
-			_analyticsActivityRepository = new FakeAnalyticsActivityRepository();
-			
-			_overtimeRepository = MockRepository.GenerateMock<IAnalyticsOvertimeRepository>();
-			_analyticsScheduleRepository = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
 			_absences = new List<AnalyticsAbsence>
 			{
 				new AnalyticsAbsence {AbsenceCode = _guidAbsInPaid, AbsenceId = 1, InPaidTime = true},
 				new AnalyticsAbsence {AbsenceCode = _guidAbsNotPaid, AbsenceId = 2, InPaidTime = false}
 			};
-			_target = new AnalyticsFactScheduleTimeMapper(_analyticsScheduleRepository, new FakeAnalyticsAbsenceRepository(_absences), _overtimeRepository, _analyticsActivityRepository);
 
 			_activities = new List<AnalyticsActivity>
 			{
@@ -55,14 +61,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				new AnalyticsActivity {ActivityCode = _guidActInBoth, ActivityId = 3, InPaidTime = true, InReadyTime = true},
 				new AnalyticsActivity {ActivityCode = _guidActInNone, ActivityId = 4, InPaidTime = false, InReadyTime = false}
 			};
-
-			_activities.ForEach(a => _analyticsActivityRepository.AddActivity(a));
-
 			
 			_overtimes = new List<AnalyticsOvertime>
 			{
 				new AnalyticsOvertime { OvertimeId = 3, OvertimeCode = Guid.NewGuid() }
 			};
+
 			_shiftLengths = new List<IAnalyticsShiftLength>
 			{
 				new AnalyticsShiftLength{ Id = 6, ShiftLength = 120 }
@@ -72,6 +76,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldSetActivityTimeIfNotAbsence()
 		{
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
 			var start = new DateTime(2014, 12, 4, 8, 0, 0);
 			var layer = new ProjectionChangedEventLayer
 			{
@@ -82,9 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10),
 			};
-			_overtimeRepository.Stub(x => x.Overtimes()).Return(_overtimes);
-			_analyticsScheduleRepository.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
-			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(1);
@@ -107,6 +114,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldHandlePaidTimeAndReadyTime()
 		{
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
 			var start = new DateTime(2014, 12, 4, 8, 0, 0);
 			var layer = new ProjectionChangedEventLayer
 			{
@@ -117,9 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(12)
 			};
-			_overtimeRepository.Stub(x => x.Overtimes()).Return(_overtimes);
-			_analyticsScheduleRepository.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
-			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(3);
@@ -131,10 +141,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.OverTimeId.Should().Be.EqualTo(-1);
 		}
 
-
 		[Test]
 		public void ShouldSetAbsenceTimeIfAbsence()
 		{
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
 			var start = new DateTime(2014, 12, 4, 8, 0, 0);
 			var layer = new ProjectionChangedEventLayer
 			{
@@ -146,9 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10)
 			};
-			_overtimeRepository.Stub(x => x.Overtimes()).Return(_overtimes);
-			_analyticsScheduleRepository.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
-			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.ShiftCategoryId.Should().Be.EqualTo(-1);
 			result.AbsenceId.Should().Be.EqualTo(1);
@@ -170,7 +182,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldSetOvertime()
 		{
-			
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
 			var start = new DateTime(2014, 12, 4, 8, 0, 0);
 			var layer = new ProjectionChangedEventLayer
 			{
@@ -180,10 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = start.AddMinutes(10)
 			};
 
-			_overtimeRepository.Stub(x => x.Overtimes()).Return(_overtimes);
-			_analyticsScheduleRepository.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
-
-			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.OverTimeMinutes.Should().Be.EqualTo(10);
 			result.OverTimeId.Should().Be.EqualTo(_overtimes[0].OvertimeId);
@@ -192,40 +205,61 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapAbsenceId()
 		{
-			var absence =_target.MapAbsenceId(_absences[0].AbsenceCode);
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
+			var absence = Target.MapAbsenceId(_absences[0].AbsenceCode);
 			absence.AbsenceId.Should().Be.EqualTo(_absences[0].AbsenceId);
 		}
 
 		[Test]
 		public void ShouldFailToMapAbsenceId()
 		{
-			var absence = _target.MapAbsenceId(Guid.NewGuid());
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
+			var absence = Target.MapAbsenceId(Guid.NewGuid());
 			absence.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldMapOvertimeId()
 		{
-			_overtimeRepository.Stub(x => x.Overtimes()).Return(_overtimes);
-			var overtimeId = _target.MapOvertimeId(_overtimes[0].OvertimeCode);
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
+			var overtimeId = Target.MapOvertimeId(_overtimes[0].OvertimeCode);
+
 			overtimeId.Should().Be.EqualTo(_overtimes[0].OvertimeId);
 		}
 
 		[Test]
 		public void ShouldFailToMapOvertimeId()
 		{
-			_overtimeRepository.Stub(x => x.Overtimes()).Return(new List<AnalyticsOvertime>());
-			var overtimeId = _target.MapOvertimeId(Guid.NewGuid());
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_shiftLengths.ForEach(sl => AnalyticsSchedules.Has(sl));
+
+			var overtimeId = Target.MapOvertimeId(Guid.NewGuid());
+
 			overtimeId.Should().Be.EqualTo(-1);
 		}
 
 		[Test]
 		public void ShouldMapNewShiftLengthId()
 		{
-			_analyticsScheduleRepository.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
-			_analyticsScheduleRepository.Stub(x => x.ShiftLengthId(30)).Return(77);
+			_activities.ForEach(a => AnalyticsActivities.AddActivity(a));
+			_absences.ForEach(a => AnalyticsAbsences.AddAbsence(a));
+			_overtimes.ForEach(o => AnalyticsOvertimes.AddOrUpdate(o));
+			AnalyticsSchedules.Has(new AnalyticsShiftLength {Id = 77, ShiftLength = 30});
 
-			var shiftLengthId = _target.MapShiftLengthId(30);
+			var shiftLengthId = Target.MapShiftLengthId(30);
 
 			shiftLengthId.Should().Be.EqualTo(77);
 		}
