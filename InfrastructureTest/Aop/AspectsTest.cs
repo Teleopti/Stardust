@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 			var target = container.Resolve<AspectedClass>();
 
-			Assert.Throws<FileNotFoundException>(target.ResolvedAspectMethod);
+			Assert.Throws<AspectInvocationException>(target.ResolvedAspectMethod);
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 			var target = container.Resolve<DoubleAspectedClass>();
 
-			Assert.Throws<FileNotFoundException>(target.ThrowsAfterAspectedMethod);
+			Assert.Throws<AspectInvocationException>(target.ThrowsAfterAspectedMethod);
 			afterInvoke.Should().Be.True();
 		}
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 			var target = container.Resolve<DoubleAspectedClass>();
 
-			Assert.Throws<FileNotFoundException>(target.ThrowsBeforeAspectedMethod);
+			Assert.Throws<AspectInvocationException>(target.ThrowsBeforeAspectedMethod);
 			afterInvoke.Should().Be.True();
 		}
 
