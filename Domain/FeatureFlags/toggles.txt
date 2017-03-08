@@ -158,6 +158,7 @@ MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = true
 MyTimeWeb_ShowContractTime_41462 = true
 MyTimeWeb_ViewIntradayStaffingProbability_41608 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
+MyTimeWeb_ViewIntradayStaffingProbabilityInMobileView_42913 = DEV
 
 Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true

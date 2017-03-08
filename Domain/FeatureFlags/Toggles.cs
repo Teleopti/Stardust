@@ -18,7 +18,7 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
-		
+
 		RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_SpreadTransactionLocksStrategy_41823,
 		RTA_FasterAgentsView_42039,
@@ -37,6 +37,7 @@
 		MyTimeWeb_ShowContractTime_41462,
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,
+		MyTimeWeb_ViewIntradayStaffingProbabilityInMobileView_42913,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 
 		Backlog_Module_23980,
@@ -193,7 +194,7 @@
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
 		QRCodeForMobileApps_42695,
-		
+
 		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
 		NewPasswordHash_40460,
