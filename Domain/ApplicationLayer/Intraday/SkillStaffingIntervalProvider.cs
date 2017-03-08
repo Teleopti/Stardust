@@ -65,15 +65,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			if (useShrinkage)
 				setUseShrinkage(skillStaffingIntervals);
 
-			using (getContext(combinationResources, skills, dateOnlyPeriod, false))
+			using (getContext(combinationResources, skills, false))
 			{
-				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, dateOnlyPeriod, true));
+				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, true));
 			}
 
 			return skillStaffingIntervals;
 		}
 
-		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, DateOnlyPeriod dateOnlyPeriod, bool useAllSkills)
+		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, bool useAllSkills)
 		{
 			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
