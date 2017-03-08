@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			WithUnitOfWork.Do(() =>
 							  {
 								  var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray());
+								  Assert.AreEqual(result.StaffingHasData, true);
 								  Assert.Greater(result.DataSeries.Time.Length, 0);
 								  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
 								  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
@@ -139,6 +140,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			WithUnitOfWork.Do(() =>
 							  {
 								  var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), true);
+								  Assert.AreEqual(result.StaffingHasData, true);
 								  Assert.Greater(result.DataSeries.Time.Length, 0);
 								  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
 								  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
