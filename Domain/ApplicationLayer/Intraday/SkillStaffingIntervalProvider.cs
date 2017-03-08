@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
 		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, DateOnlyPeriod dateOnlyPeriod, bool useAllSkills)
 		{
-			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, false, useAllSkills)));
+			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
 
 		private static void setUseShrinkage(IEnumerable<SkillStaffingInterval> relevantSkillStaffPeriods)

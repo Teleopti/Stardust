@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly List<SkillCombinationResource> _skillCombinationResources;
 		private readonly ILookup<Guid, ISkill> _allSkills;
 
-		public ResourceCalculationDataConatainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool primarySkillMode, bool useAllSkills)
+		public ResourceCalculationDataConatainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool useAllSkills)
 		{
 			_skillCombinationResources = skillCombinationResources;
 			_allSkills = allSkills.ToLookup(s => s.Id.GetValueOrDefault());
-			PrimarySkillMode = primarySkillMode;
+			PrimarySkillMode = false;
 			MinSkillResolution = allSkills.Any() ? allSkills.Min(s => s.DefaultResolution) : 15;
 			createDictionary(skillCombinationResources);
 			UseAllSkills = useAllSkills;
