@@ -1,5 +1,6 @@
 using log4net.Core;
 using log4net.Filter;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -7,15 +8,20 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		public override FilterDecision Decide(LoggingEvent loggingEvent)
 		{
-			if (loggingEvent.Level == Level.Error && loggingEvent.ThreadName.Contains("Worker #"))
-			{
-				if (loggingEvent.LoggerName.StartsWith("NHibernate"))
-					return FilterDecision.Deny;
-				if (loggingEvent.LoggerName.Contains(".NHibernateUnitOfWork"))
-					return FilterDecision.Deny;
-				if (loggingEvent.LoggerName.Contains(".AnalyticsUnitOfWork"))
-					return FilterDecision.Deny;
-			}
+			if (loggingEvent.Level != Level.Error)
+				return FilterDecision.Neutral;
+			if (!loggingEvent.ThreadName.Contains("Worker #"))
+				return FilterDecision.Neutral;
+
+
+			if (loggingEvent.LoggerName.StartsWith("NHibernate"))
+				return FilterDecision.Deny;
+
+			if (loggingEvent.LoggerName.Equals(typeof(NHibernateUnitOfWork).FullName))
+				return FilterDecision.Deny;
+			if (loggingEvent.LoggerName.Equals(typeof(AnalyticsUnitOfWork).FullName))
+				return FilterDecision.Deny;
+
 
 			return FilterDecision.Neutral;
 		}
