@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[TestFixture]
-	public class AnalyticsFactScheduleTimeHandlerTest
+	public class AnalyticsFactScheduleTimeMapperTest
 	{
 		private AnalyticsFactScheduleTimeMapper _target;
 		private IAnalyticsScheduleRepository _analyticsScheduleRepository;

@@ -3,9 +3,12 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -23,6 +26,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsScheduleChangeUpdaterFilter _analyticsScheduleChangeUpdaterFilter;
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly IPersonRepository _personRepository;
+		private readonly IScenarioRepository _scenarioRepository;
+		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 
 		public AnalyticsScheduleChangeUpdater(
 			IAnalyticsFactScheduleMapper factScheduleMapper,
@@ -32,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
 			IAnalyticsScheduleChangeUpdaterFilter analyticsScheduleChangeUpdaterFilter,
 			IAnalyticsScenarioRepository analyticsScenarioRepository,
-			IAnalyticsShiftCategoryRepository analyticsShiftCategoryRepository)
+			IAnalyticsShiftCategoryRepository analyticsShiftCategoryRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
 		{
 			_factScheduleMapper = factScheduleMapper;
 			_factScheduleDateMapper = factScheduleDateMapper;
@@ -42,6 +49,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_analyticsScheduleChangeUpdaterFilter = analyticsScheduleChangeUpdaterFilter;
 			_analyticsScenarioRepository = analyticsScenarioRepository;
 			_analyticsShiftCategoryRepository = analyticsShiftCategoryRepository;
+			_scheduleStorage = scheduleStorage;
+			_personRepository = personRepository;
+			_scenarioRepository = scenarioRepository;
+			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 		}
 
 		[ImpersonateSystem]
@@ -52,57 +63,70 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		{
 			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(@event))
 				return;
-			var scenario = _analyticsScenarioRepository.Get(@event.ScenarioId);
-			if (scenario == null)
+			var analyticsScenario = _analyticsScenarioRepository.Get(@event.ScenarioId);
+			if (analyticsScenario == null)
 			{
 				logger.Warn($"Scenario with code {@event.ScenarioId} has not been inserted in analytics yet. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 				throw new ScenarioMissingInAnalyticsException();
 			}
-			var scenarioId = scenario.ScenarioId;
+			var scenarioId = analyticsScenario.ScenarioId;
+			var person = _personRepository.Get(@event.PersonId);
+			if (person == null)
+				throw new PersonNotFoundException($"Could not load person {@event.PersonId} from application database.");
+			var scenario = _scenarioRepository.Get(@event.ScenarioId);
+			if (scenario == null)
+				throw new Exception($"Could not load scenario {@event.ScenarioId} from application database.");
 
-			foreach (var scheduleDay in @event.ScheduleDays)
+			foreach (var eventScheduleDay in @event.ScheduleDays)
 			{
-				var dateOnly = new DateOnly(scheduleDay.Date);
-
+				var dateOnly = new DateOnly(eventScheduleDay.Date);
+				
 				int dateId;
 				if (!_factScheduleDateMapper.MapDateId(dateOnly, out dateId))
 				{
-					logger.Warn($"Date {scheduleDay.Date} could not be mapped to Analytics date_id. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
+					logger.Warn($"Date {eventScheduleDay.Date} could not be mapped to Analytics date_id. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 					//throw new DateMissingInAnalyticsException(scheduleDay.Date);
 					continue;
 				}
 
-				var personPart = _factSchedulePersonMapper.Map(scheduleDay.PersonPeriodId);
+				var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dateOnly, dateOnly), scenario);
+				var scheduleDay = schedule.SchedulesForDay(dateOnly).FirstOrDefault();
+				if (scheduleDay == null)
+					continue;
+				var currentEventScheduleDay = _projectionChangedEventBuilder.BuildEventScheduleDay(scheduleDay);
+				if (currentEventScheduleDay == null)
+					throw new Exception("No schedule");
+				var personPart = _factSchedulePersonMapper.Map(currentEventScheduleDay.PersonPeriodId);
 				if (personPart.PersonId == -1)
 				{
-					logger.Warn($"PersonPeriodId {scheduleDay.PersonPeriodId} could not be found. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
-					throw new PersonPeriodMissingInAnalyticsException(scheduleDay.PersonPeriodId);
+					logger.Warn($"PersonPeriodId {currentEventScheduleDay.PersonPeriodId} could not be found. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
+					throw new PersonPeriodMissingInAnalyticsException(currentEventScheduleDay.PersonPeriodId);
 				}
 
 				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
 
-				if (!scheduleDay.NotScheduled)
+				if (!currentEventScheduleDay.NotScheduled)
 				{
 					var shiftCategoryId = -1;
-					if (scheduleDay.Shift != null)
-						shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
+					if (currentEventScheduleDay.Shift != null)
+						shiftCategoryId = getCategory(currentEventScheduleDay.ShiftCategoryId);
 
-					var dayCount = _factScheduleDayCountMapper.Map(scheduleDay, personPart, scenarioId, shiftCategoryId);
+					var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, scenarioId, shiftCategoryId);
+					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId, @event.ScenarioId, @event.PersonId);
+
+					if (agentDaySchedule == null)
+						continue;
+
 					if (dayCount != null)
 						_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
 
-					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId, @event.ScenarioId, @event.PersonId);
-					if (agentDaySchedule == null)
-					{
-						_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
-						continue;
-					}
 					_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
 				}
 
 				if (@event.IsDefaultScenario)
 				{
-					if (scheduleDay.Date < DateTime.Now.AddDays(1))
+					if (currentEventScheduleDay.Date < DateTime.Now.AddDays(1))
 					{
 						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(dateOnly, @event.PersonId, @event.ScenarioId, @event.LogOnBusinessUnitId, DateTime.Now);
 					}

@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[TestFixture]
-	public class AnalyticsFactScheduleDayCountHandlerTest
+	public class AnalyticsFactScheduleDayCountMapperTest
 	{
 		private IAnalyticsFactScheduleDateMapper _dateMapper;
 		private IAnalyticsFactScheduleTimeMapper _timeMapper;

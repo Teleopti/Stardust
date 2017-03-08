@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -8,35 +9,47 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
+		public List<IFactScheduleRow> FactScheduleRows = new List<IFactScheduleRow>();
+		public List<IAnalyticsFactScheduleDayCount> FactScheduleDayCountRows = new List<IAnalyticsFactScheduleDayCount>();
+
 		public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 		{
-			throw new NotImplementedException();
+			FactScheduleRows.AddRange(factScheduleRows);
 		}
 
 		public void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount)
 		{
-			throw new NotImplementedException();
+			FactScheduleDayCountRows.Add(dayCount);
 		}
 
 		public void DeleteFactSchedule(int dateId, int personId, int scenarioId)
 		{
-			throw new NotImplementedException();
+			FactScheduleRows.RemoveAll(x => x.PersonPart != null
+											&& x.PersonPart.PersonId == personId
+											&& x.DatePart != null
+											&& x.DatePart.ScheduleDateId == dateId
+											&& x.TimePart != null
+											&& x.TimePart.ScenarioId == scenarioId);
+
+			FactScheduleDayCountRows.RemoveAll(x => x.PersonId == personId
+													&& x.ShiftStartDateLocalId == dateId 
+													&& x.ScenarioId == scenarioId);
 		}
 
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
-			throw new NotImplementedException();
+			return new List<IAnalyticsShiftLength>();
 		}
 
 		public int ShiftLengthId(int shiftLength)
 		{
-			throw new NotImplementedException();
+			return 0;
 		}
 
 		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,
 			DateTime datasourceUpdateDate)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
@@ -46,18 +59,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public int GetFactScheduleRowCount(int personId)
 		{
-			throw new NotImplementedException();
+			return FactScheduleRows.Count(x => x.PersonPart != null && x.PersonPart.PersonId == personId);
 		}
 
 		public int GetFactScheduleDayCountRowCount(int personId)
 		{
-			throw new NotImplementedException();
+			return FactScheduleDayCountRows.Count(x => x.PersonId == personId);
 		}
 
 		public int GetFactScheduleDeviationRowCount(int personId)
 		{
 			throw new NotImplementedException();
 		}
-
 	}
 }

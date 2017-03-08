@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[TestFixture]
-	public class AnalyticsFactScheduleDateHandlerTest
+	public class AnalyticsFactScheduleDateMapperTest
 	{
 		private IAnalyticsDateRepository _dateRepository;
 		private AnalyticsFactScheduleDateMapper _target;
