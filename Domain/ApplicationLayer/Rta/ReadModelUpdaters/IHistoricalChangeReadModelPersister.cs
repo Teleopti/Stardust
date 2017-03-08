@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 	public interface IHistoricalChangeReadModelReader
 	{
-		IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime date);
+		IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime startTime, DateTime endTime);
 	}
 
 	public enum HistoricalChangeInternalAdherence

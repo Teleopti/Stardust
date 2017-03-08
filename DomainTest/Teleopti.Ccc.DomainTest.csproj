@@ -190,6 +190,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\InAlarmTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest2.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalChangeViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />

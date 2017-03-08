@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Adherence = HistoricalChangeInternalAdherence.In
 			});
 
-			var change = Target.Read(personId, "2017-03-07".Utc()).Single();
+			var change = Target.Read(personId, "2017-03-07 00:00".Utc(), "2017-03-08 00:00".Utc()).Single();
 			change.PersonId.Should().Be(personId);
 			change.BelongsToDate.Should().Be("2017-03-07".Date());
 			change.Timestamp.Should().Be("2017-03-07 10:00".Utc());

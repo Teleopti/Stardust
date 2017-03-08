@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime date)
+		public IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var result = _unitOfWork.Current()
 				.CreateSqlQuery(@"
@@ -27,8 +27,8 @@ WHERE PersonId = :PersonId
 AND [Timestamp] BETWEEN :StartTime AND :EndTime
 ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
-				.SetParameter("StartTime", date.Date)
-				.SetParameter("EndTime", date.Date.AddDays(1))
+				.SetParameter("StartTime", startTime.AddHours(-2))
+				.SetParameter("EndTime", endTime.AddDays(1))
 				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
 				.List<internalModel>();
 

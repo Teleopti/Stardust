@@ -19,14 +19,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IPersonRepository _persons;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		
+		private readonly IHistoricalChangeReadModelReader _changeReader;
+
 		public HistoricalAdherenceViewModelBuilder(
 			IHistoricalAdherenceReadModelReader reader,
 			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IPersonRepository persons,
 			INow now,
-			IUserTimeZone timeZone)
+			IUserTimeZone timeZone,
+			IHistoricalChangeReadModelReader changeReader)
 		{
 			_reader = reader;
 			_scenario = scenario;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_persons = persons;
 			_now = now;
 			_timeZone = timeZone;
+			_changeReader = changeReader;
 		}
 		
 		private IEnumerable<HistoricalAdherenceActivityViewModel> getCurrentSchedules(IPerson person)
@@ -65,88 +68,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				})
 				.ToArray();
 		}
-		
+
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
 			var person = _persons.Load(personId);
 			var utcDateTime = utcDateTimeForOoa(person);
 			var schedule = getCurrentSchedules(person);
 
-			var result = _reader.Read(personId, utcDateTime, utcDateTime.AddDays(1));
-
-			var agentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			return new HistoricalAdherenceViewModel
-			{
-				PersonId = personId,
-				AgentName = person?.Name.ToString(),
-				Schedules = schedule,
-				Now = agentNow.ToString("yyyy-MM-ddTHH:mm:ss"),
-				Changes = new[]
-				{
-					new HistoricalAdherenceChangeViewModel
-					{
-						Time = agentNow.Date.AddHours(7).AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss"),
-						State = "Ready",
-						Rule = "Positive",
-						RuleColor = ColorTranslator.ToHtml(Color.Chocolate),
-						Adherence = "Neutral",
-						AdherenceColor = ColorTranslator.ToHtml(Color.Aquamarine)
-					},
-					new HistoricalAdherenceChangeViewModel
-					{
-						Time = agentNow.Date.AddHours(7).AddMinutes(58).ToString("yyyy-MM-ddTHH:mm:ss"),
-						State = "InCall",
-						Rule = "Positive",
-						RuleColor = ColorTranslator.ToHtml(Color.Chocolate),
-						Adherence = "Neutral",
-						AdherenceColor = ColorTranslator.ToHtml(Color.Aquamarine)
-					},
-					new HistoricalAdherenceChangeViewModel
-					{
-						Time = agentNow.Date.AddHours(9).AddMinutes(26).ToString("yyyy-MM-ddTHH:mm:ss"),
-						Activity = "Phone",
-						ActivityColor = ColorTranslator.ToHtml(Color.LightGreen),
-						State = "InCall",
-						Rule = "Phone",
-						RuleColor = ColorTranslator.ToHtml(Color.DarkOliveGreen),
-						Adherence = "In adherence",
-						AdherenceColor = ColorTranslator.ToHtml(Color.DarkGoldenrod)
-					},
-					new HistoricalAdherenceChangeViewModel
-					{
-						Time = agentNow.Date.AddHours(12).AddMinutes(03).ToString("yyyy-MM-ddTHH:mm:ss"),
-						Activity = "Lunch",
-						ActivityColor = ColorTranslator.ToHtml(Color.Yellow),
-						State = "Logged off",
-						Rule = "Lunch",
-						RuleColor = ColorTranslator.ToHtml(Color.DarkOrchid),
-						Adherence = "In adherence",
-						AdherenceColor = ColorTranslator.ToHtml(Color.DarkGoldenrod)
-					},
-					new HistoricalAdherenceChangeViewModel
-					{
-						Time = agentNow.Date.AddHours(13).AddMinutes(00).ToString("yyyy-MM-ddTHH:mm:ss"),
-						Activity = "Phone",
-						ActivityColor = ColorTranslator.ToHtml(Color.LightGreen),
-						State = "Logged off",
-						Rule = "WHERE IS HE 😱 😱",
-						RuleColor = ColorTranslator.ToHtml(Color.Crimson),
-						Adherence = "Out of adherence",
-						AdherenceColor = ColorTranslator.ToHtml(Color.DeepPink)
-					},
-					new HistoricalAdherenceChangeViewModel
-					{
-						Time = agentNow.Date.AddHours(14).AddMinutes(12).ToString("yyyy-MM-ddTHH:mm:ss"),
-						Activity = "Phone",
-						ActivityColor = ColorTranslator.ToHtml(Color.LightGreen),
-						State = "Ready",
-						Rule = "Phone",
-						RuleColor = ColorTranslator.ToHtml(Color.DarkOliveGreen),
-						Adherence = "In adherence",
-						AdherenceColor = ColorTranslator.ToHtml(Color.DarkGoldenrod)
-					}
-				},
-				OutOfAdherences = (result?.OutOfAdherences).EmptyIfNull().Select(y =>
+			var historicalAdherence = _reader.Read(personId, utcDateTime, utcDateTime.AddDays(1));
+			var outOfAdherences = (historicalAdherence?.OutOfAdherences)
+				.EmptyIfNull()
+				.Select(y =>
 				{
 					string endTime = null;
 					if (y.EndTime.HasValue)
@@ -157,6 +89,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						EndTime = endTime
 					};
 				})
+				.ToArray();
+			var changes = _changeReader.Read(personId, utcDateTime, utcDateTime.AddDays(1))
+				.Select(x => new HistoricalChangeViewModel
+				{
+					Time = TimeZoneInfo.ConvertTimeFromUtc(x.Timestamp, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+					Activity = x.ActivityName,
+					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
+					State = x.StateName,
+					Rule = x.RuleName,
+					RuleColor = x.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor.Value)) : null,
+					Adherence = nameForAdherence(x.Adherence),
+					AdherenceColor = colorForAdherence(x.Adherence)
+				})
+				.ToArray();
+
+			var agentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			return new HistoricalAdherenceViewModel
+			{
+				PersonId = personId,
+				AgentName = person?.Name.ToString(),
+				Schedules = schedule,
+				Now = agentNow.ToString("yyyy-MM-ddTHH:mm:ss"),
+				Changes = changes,
+				OutOfAdherences = outOfAdherences
 			};
 		}
 
@@ -178,6 +134,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var tzNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz);
 			var tzDate = tzNow.Date;
 			return TimeZoneInfo.ConvertTimeToUtc(tzDate, tz);
+		}
+
+		private string nameForAdherence(HistoricalChangeInternalAdherence? adherence)
+		{
+			if (!adherence.HasValue)
+				return null;
+
+			switch (adherence.Value)
+			{
+				case HistoricalChangeInternalAdherence.In:
+					return "In adherence";
+				case HistoricalChangeInternalAdherence.Neutral:
+					return "Neutral";
+				case HistoricalChangeInternalAdherence.Out:
+					return "Out of adherence";
+				default:
+					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
+			}
+		}
+
+		private static string colorForAdherence(HistoricalChangeInternalAdherence? adherence)
+		{
+			if (!adherence.HasValue)
+				return null;
+
+			switch (adherence.Value)
+			{
+				case HistoricalChangeInternalAdherence.In:
+					return ColorTranslator.ToHtml(Color.FromArgb(Color.DarkOliveGreen.ToArgb()));
+				case HistoricalChangeInternalAdherence.Neutral:
+					return ColorTranslator.ToHtml(Color.FromArgb(Color.LightSalmon.ToArgb()));
+				case HistoricalChangeInternalAdherence.Out:
+					return ColorTranslator.ToHtml(Color.FromArgb(Color.Firebrick.ToArgb()));
+				default:
+					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
+			}
 		}
 	}
 }

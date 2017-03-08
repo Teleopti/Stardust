@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 				StateName = "phone"
 			});
 
-			var change = Persister.Read(personId, "2017-03-07".Utc()).Single();
+			var change = Persister.Read(personId, "2017-03-07".Date()).Single();
 			change.PersonId.Should().Be(personId);
 			change.StateName.Should().Be("phone");
 		}
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 				Adherence = EventAdherence.In
 			});
 
-			var change = Persister.Read(personId, "2017-03-07".Utc()).Single();
+			var change = Persister.Read(personId, "2017-03-07".Date()).Single();
 			change.PersonId.Should().Be(personId);
 			change.BelongsToDate.Should().Be("2017-03-07".Date());
 			change.Timestamp.Should().Be("2017-03-07 10:00".Utc());

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
@@ -15,10 +16,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			data = data.Append(model.CopyBySerialization());
 		}
 
-		public IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime date)
+		public IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateOnly date)
+		{
+			var d = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
+			return Read(personId, d, d.AddDays(1));
+		}
+
+		public IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			return data
-				.Where(x => x.PersonId == personId && x.Timestamp.Date == date.Date)
+				.Where(x => x.PersonId == personId && x.Timestamp >= startTime.AddHours(-2) && x.Timestamp <= endTime.AddDays(1))
 				.ToArray();
 		}
 	}
