@@ -28,17 +28,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IScheduleForecastSkillReadModelValidator _scheduleForecastSkillReadModelValidator;
+		private readonly SkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public IntradayRequestProcessorOld(ICommandDispatcher commandDispatcher,
-												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
-												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
-												 ISkillRepository skillRepository, IActivityRepository activityRepository, 
-			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, IScheduleForecastSkillReadModelValidator scheduleForecastSkillReadModelValidator, 
-			SkillGroupPerActivityProvider skillGroupPerActivityProvider, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ICurrentBusinessUnit currentBusinessUnit)
+										   ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
+										   IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
+										   ISkillRepository skillRepository, IActivityRepository activityRepository,
+										   ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff,
+										   SkillGroupPerActivityProvider skillGroupPerActivityProvider, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider,
+										   SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -50,17 +50,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_activityRepository = activityRepository;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_primarySkillOverstaff = primarySkillOverstaff;
-			_scheduleForecastSkillReadModelValidator = scheduleForecastSkillReadModelValidator;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
-			_currentBusinessUnit = currentBusinessUnit;
+			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
 			try
 			{
-				if (!_scheduleForecastSkillReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
+				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
 					logger.Warn(Resources.DenyReasonTechnicalIssues + "Read model is not up to date");
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyReasonTechnicalIssues);

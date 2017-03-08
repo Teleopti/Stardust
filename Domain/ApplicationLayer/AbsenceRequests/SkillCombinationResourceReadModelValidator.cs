@@ -1,12 +1,10 @@
-﻿using System;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
+﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class SkillCombinationResourceReadModelValidator : ISkillCombinationResourceReadModelValidator
+	public class SkillCombinationResourceReadModelValidator
 	{
 		private readonly IRequestStrategySettingsReader _requestStrategySettingReader;
 		private readonly INow _now;
@@ -24,43 +22,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var buStartTime = _skillCombinationResourceRepository.GetLastCalculatedTime();
 			return _now.UtcDateTime() <= buStartTime.AddMinutes(bulkExecutionSetting*2);
 		}
-	}
-
-	public class ScheduleForecastSkillReadModelValidator : IScheduleForecastSkillReadModelValidator
-	{
-		private readonly IRequestStrategySettingsReader _requestStrategySettingReader;
-		private readonly INow _now;
-		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
-		public ScheduleForecastSkillReadModelValidator(IRequestStrategySettingsReader requestStrategySettingReader,  INow now, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
-		{
-			_requestStrategySettingReader = requestStrategySettingReader;
-			_now = now;
-			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
-		}
-
-		public bool Validate(Guid buId)
-		{
-			var bulkExecutionSetting = _requestStrategySettingReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
-			var buStartTime = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
-			if (buStartTime.ContainsKey(buId))
-			{
-				if (_now.UtcDateTime() > buStartTime[buId].AddMinutes(bulkExecutionSetting * 2))
-					return false;
-			}
-			return true;
-		}
-	}
-
-	public class ScheduleForecastSkillReadModelValidator42046ToggleDisabled : IScheduleForecastSkillReadModelValidator
-	{
-		public bool Validate(Guid buId)
-		{
-			return true;
-		}
-	}
-
-	public interface IScheduleForecastSkillReadModelValidator
-	{
-		bool Validate(Guid buId);
 	}
 }

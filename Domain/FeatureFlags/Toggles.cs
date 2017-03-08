@@ -132,7 +132,6 @@
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
 		Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770,
 		Wfm_Requests_ApprovingModifyRequests_41930,
-		wfm_Requests_ReadModelOldData_42046,
 		Wfm_Requests_ShowBudgetAllowanceDetail_41945,
 		Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309,
 		Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450,

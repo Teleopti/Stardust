@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<IntradayRequestProcessorOld>().For<IIntradayRequestProcessor>();
-			system.UseTestDouble<ScheduleForecastSkillReadModelValidator>().For<IScheduleForecastSkillReadModelValidator>();
 		}
 
 		[Test]
