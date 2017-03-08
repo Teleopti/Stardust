@@ -289,6 +289,7 @@
     <Compile Include="Areas\People\FileProcessorTest.cs" />
     <Compile Include="Areas\People\AgentFileTemplateTest.cs" />
     <Compile Include="Areas\People\IoC\WebPeopleTestAttribute.cs" />
+    <Compile Include="Areas\People\MultipartHttpContentExtractorTest.cs" />
     <Compile Include="Areas\People\PeopleAreaModuleTest.cs" />
     <Compile Include="Areas\People\PeopleSmartWorkflowControlSetControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />

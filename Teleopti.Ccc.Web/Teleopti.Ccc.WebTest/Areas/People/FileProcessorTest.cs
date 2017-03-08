@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using NPOI.HSSF.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -82,17 +80,17 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test, Ignore("file parsing")]
 		public void ShouldParseWorkbookFromHttpContent()
 		{
-			HttpContent content;
-			using (FileStream file = new FileStream(@"C:\TeleoptiWFM\SourceCode\main\Teleopti\Logs\test.xls", FileMode.Open, FileAccess.Read))
+			var fileData = new FileData();						
+			using (var file = new FileStream(@"C:\TeleoptiWFM\SourceCode\main\Teleopti\Logs\test.xls", FileMode.Open, FileAccess.Read))
 			{
 				var ms = new MemoryStream();
 				file.CopyTo(ms);
-				content = new ByteArrayContent(ms.ToArray());
-				content.Headers.ContentDisposition = new ContentDispositionHeaderValue("file") {FileName = "\"test.xls\""};
+				
+				fileData.FileName = "test.xls";
+				fileData.Data = ms.ToArray();
 			}
-			
-
-			var result = Target.ParseFiles(content);
+						
+			var result = Target.ParseFile(fileData);
 
 			result.Should().Not.Be.Null();
 			result.GetType().Should().Be<HSSFWorkbook>();
@@ -102,11 +100,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		public void ShouldReturnNullWithWrongFileType()
 		{
 			var ms = new MemoryStream();
-			HttpContent content = new ByteArrayContent(ms.ToArray());
-			content.Headers.ContentDisposition = new ContentDispositionHeaderValue("file") {FileName = "\"test.img\""};
+			var fileData = new FileData
+			{
+				FileName = "test.jpg",
+				Data = ms.ToArray()
+			};
 
-
-			var result = Target.ParseFiles(content);
+			var result = Target.ParseFile(fileData);
 
 			result.Should().Be.Null();
 		}

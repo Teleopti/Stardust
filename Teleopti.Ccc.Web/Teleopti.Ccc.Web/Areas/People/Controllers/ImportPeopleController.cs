@@ -11,8 +11,6 @@ using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
@@ -27,11 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 		private readonly IPeoplePersister _peoplePersister;
 		private readonly IFileProcessor _fileProcessor;
+		private readonly IMultipartHttpContentExtractor _multipartHttpContentExtractor;
 
-		public ImportPeopleController(IPeoplePersister peoplePersister, IFileProcessor fileProcessor)
+		public ImportPeopleController(IPeoplePersister peoplePersister, IFileProcessor fileProcessor, IMultipartHttpContentExtractor multipartHttpContentExtractor)
 		{
 			_peoplePersister = peoplePersister;
 			_fileProcessor = fileProcessor;
+			_multipartHttpContentExtractor = multipartHttpContentExtractor;
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
@@ -45,7 +45,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var provider = new MultipartMemoryStreamProvider();
 			await Request.Content.ReadAsMultipartAsync(provider);
 			var fileTemplate = new UserFileTemplate();
-			var workbook = _fileProcessor.ParseFiles(provider.Contents.First());
+
+			var fileData = _multipartHttpContentExtractor.ExtractFileData(provider.Contents);
+			var workbook = _fileProcessor.ParseFile(fileData.FirstOrDefault());
 			var isXlsx = workbook is XSSFWorkbook;
 
 			var sheet = workbook.GetSheetAt(0);

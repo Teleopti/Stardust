@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -18,14 +19,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 	{
 		private readonly IImportAgentDataProvider _importAgentDataProvider;
 		private readonly IFileProcessor _fileProcessor;
+		private readonly IMultipartHttpContentExtractor _multipartHttpContentExtractor;
 
 		private const string newExcelFileContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 
-		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider, IFileProcessor fileProcessor)
+		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider, IFileProcessor fileProcessor, IMultipartHttpContentExtractor multipartHttpContentExtractor)
 		{
 			_importAgentDataProvider = importAgentDataProvider;
 			_fileProcessor = fileProcessor;
+			_multipartHttpContentExtractor = multipartHttpContentExtractor;
 		}
 
 		[UnitOfWork, Route("api/People/GetImportAgentSettingsData"), HttpGet]
@@ -45,13 +48,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var provider = new MultipartMemoryStreamProvider();
 			await Request.Content.ReadAsMultipartAsync(provider);
 
-			return ProcessInternal(provider.Contents.First());
-
+			return ProcessInternal(provider.Contents);
 		}
+
 		[UnitOfWork]
-		protected virtual HttpResponseMessage ProcessInternal(HttpContent content)
+		protected virtual HttpResponseMessage ProcessInternal(IEnumerable<HttpContent> contents)
 		{
-			var workbook = _fileProcessor.ParseFiles(content);
+			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents);
+			var workbook = _fileProcessor.ParseFile(fileData.SingleOrDefault());
 			var isXlsx = workbook is XSSFWorkbook;
 
 			var errors = _fileProcessor.ValidateWorkbook(workbook);

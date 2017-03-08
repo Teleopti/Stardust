@@ -534,6 +534,7 @@
     <Compile Include="Areas\People\Controllers\ImportAgentController.cs" />
     <Compile Include="Areas\People\Core\FileProcessor.cs" />
     <Compile Include="Areas\People\Core\IImportAgentFileValidator.cs" />
+    <Compile Include="Areas\People\Core\IMultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\People\Core\Models\AgentDataModel.cs" />
     <Compile Include="Areas\People\Core\Models\AgentFileTemplate.cs" />
     <Compile Include="Areas\People\Core\Models\InputModel.cs" />
@@ -551,6 +552,7 @@
     <Compile Include="Areas\People\Controllers\WorkflowControlSetModel.cs" />
     <Compile Include="Areas\People\Core\ImportAgentFileValidator.cs" />
     <Compile Include="Areas\People\Core\Models\UserFileTemplate.cs" />
+    <Compile Include="Areas\People\Core\MultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\People\Core\Persisters\AgentPersister.cs" />
     <Compile Include="Areas\People\Core\Persisters\TenantUserPersister.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />

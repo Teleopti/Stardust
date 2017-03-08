@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Web;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -36,12 +33,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return _fileValidator.ValidateColumnNames(columnHearders);
 		}
 
-		public IWorkbook ParseFiles(HttpContent content)
+		public IWorkbook ParseFile(FileData fileData)
 		{
-			var fileName = content.Headers.ContentDisposition.FileName.Trim('\"');
+			if (fileData == null) return null;
+			var fileName = fileData.FileName;
 			if (!fileName.ToLower().EndsWith("xls") && !fileName.ToLower().EndsWith("xlsx"))
 				return null;
-			var dataStream = content.ReadAsStreamAsync().Result;
+			var dataStream = new MemoryStream(fileData.Data); 
 			return fileName.ToLower().EndsWith("xlsx")
 				? (IWorkbook)new XSSFWorkbook(dataStream)
 				: new HSSFWorkbook(dataStream);
@@ -88,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 	{
 		IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook);
 		IList<string> ValidateWorkbook(IWorkbook workbook);
-		IWorkbook ParseFiles(HttpContent content);
+		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
 	}
 }
