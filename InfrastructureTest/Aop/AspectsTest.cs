@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			Aspect1.BeforeFailsWith = new FileNotFoundException();
 
-			Assert.Throws<AspectInvocationException>(Target.AspectedMethod);
+			Assert.Throws<FileNotFoundException>(Target.AspectedMethod);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			Aspect1.AfterFailsWith = new FileNotFoundException();
 
-			Assert.Throws<AspectInvocationException>(Target.AspectedMethod);
+			Assert.Throws<FileNotFoundException>(Target.AspectedMethod);
 			Aspect2.AfterInvoked.Should().Be.True();
 			Aspect3.AfterInvoked.Should().Be.True();
 		}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			Aspect3.BeforeFailsWith = new FileNotFoundException();
 
-			Assert.Throws<AspectInvocationException>(Target.AspectedMethod);
+			Assert.Throws<FileNotFoundException>(Target.AspectedMethod);
 			Aspect1.AfterInvoked.Should().Be.True();
 			Aspect2.AfterInvoked.Should().Be.True();
 		}
