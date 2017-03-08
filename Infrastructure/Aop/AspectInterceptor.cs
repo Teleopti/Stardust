@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			}
 			catch (Exception e)
 			{
-				invocation.AddException(e, $"Aspect call before {invocation.TargetType.FullName}.{invocation.Method.Name} failed");
+				invocation.Exceptions.Add(e);
 				runAfters(invocation, completedBefores);
 			}
 		}
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			}
 			catch (Exception e)
 			{
-				invocation.AddException(e, null);
+				invocation.Exceptions.Add(e);
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 					}
 					catch (Exception e)
 					{
-						invocation.AddException(e, $"Aspect call after {invocation.TargetType.FullName}.{invocation.Method.Name} failed");
+						invocation.Exceptions.Add(e);
 					}
 				});
 		}

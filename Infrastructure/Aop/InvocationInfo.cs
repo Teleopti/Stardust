@@ -20,10 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 		public object ReturnValue => _invocation.ReturnValue;
 		public Type TargetType => _invocation.TargetType;
 
-		public void AddException(Exception exception, string aspectMessage)
-		{
-			Exceptions.Add(exception);
-		}
 
 		public List<Exception> Exceptions = new List<Exception>();
 		public void Proceed() => _invocation.Proceed();
