@@ -1453,6 +1453,7 @@
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.component.js" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.component.spec.js" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.service.js" />
+    <Content Include="WFM\app\global\organizationPicker\organizationPicker.single.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\_modules.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />

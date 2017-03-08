@@ -24,7 +24,8 @@
 								 on-open="vm.searchOptions.focusingSearch = false"
 								 on-init-async="vm.onSelectedTeamsInitDefer"
 								 on-pick="vm.onSelectedTeamsChanged(teams)"
-								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
+			                     preselected-team-ids="vm.selectedTeamIds"
+                                 ></organization-picker>
 
 			<span class="people-search-container inline-block" ng-if="vm.searchEnabled">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" focus-input="vm.searchOptions.focusingSearch" ></wfm-multiple-search-input>
@@ -78,8 +79,7 @@
 							selected-date="vm.scheduleDate"
 							show-warnings="vm.validateWarningEnabled"							
 							selected-timezone="vm.currentTimezone"
-							pagination-options="vm.paginationOptions"
-							/>
+			                pagination-options="vm.paginationOptions"/>
 		</div>
 
 		<teamschedule-command-container date="vm.scheduleDate"
