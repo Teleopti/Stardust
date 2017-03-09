@@ -409,6 +409,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				checkPeriodValue = true;
 				return false;
 			}
+			
 
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
@@ -457,8 +458,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 				}
 			}
-			
 
+			if (optimizationPreferences.Extra.IsClassic())
+			{
+				//TODO - investigate... 
+				// * run even if not success?
+				// * run also when normal team/block?
+				// * lock also added DO days?
+				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+			}
+			
 			checkPeriodValue = true;
 			return true;
 		}
