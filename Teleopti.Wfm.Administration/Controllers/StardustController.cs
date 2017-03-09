@@ -109,13 +109,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(logOnModel.Tenant));
 			var appConnstring = tenant.DataSourceConfiguration.ApplicationConnectionString;
 			var bus = _stardustRepository.SelectAllBus(appConnstring);
+			
 			foreach (var bu in bus)
 			{
 				_eventPublisher.Publish(
 				new UpdateStaffingLevelReadModelEvent
 				{
 					StartDateTime = DateTime.UtcNow.AddHours(-1),
-					EndDateTime = DateTime.UtcNow.AddDays(1).AddHours(1),
+					EndDateTime = DateTime.UtcNow.AddDays(logOnModel.Days).AddHours(1),
 					RequestedFromWeb = true,
 					LogOnDatasource = logOnModel.Tenant,
 					LogOnBusinessUnitId = bu
@@ -132,6 +133,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class LogOnModel
 	{
 		public string Tenant;
+		public int Days;
 		//public Guid BusinessUnit;
 	}
 }

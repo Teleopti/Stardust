@@ -12,6 +12,7 @@
 		vm.NodeError = '';
 		vm.JobError = '';
 		vm.triggerResourceCalculation = triggerResourceCalculation;
+		vm.triggerResourceCalculation2weeks = triggerResourceCalculation2weeks;
 		vm.selectTenant = selectTenant;
 		$http.get("./Stardust/Jobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
@@ -75,7 +76,20 @@
 			if (!vm.selectedTenantName) return;
 			$http.post("./Stardust/TriggerResourceCalculation",
 				{
-					"Tenant": vm.selectedTenantName
+					"Tenant": vm.selectedTenantName, 
+					"Days": 1
+				},
+				tokenHeaderService.getHeaders()
+			);
+		}
+
+
+		function triggerResourceCalculation2weeks() {
+			if (!vm.selectedTenantName) return;
+			$http.post("./Stardust/TriggerResourceCalculation",
+				{
+					"Tenant": vm.selectedTenantName,
+					"Days": 14
 				},
 				tokenHeaderService.getHeaders()
 			);

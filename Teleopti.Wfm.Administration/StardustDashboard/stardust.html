@@ -104,7 +104,7 @@
 				<div class="panel-heading">Trigger Resource Calculation</div>
 				<div class="panel-body">
 					<p>
-						Don't trigger this Stardust job in a customer environment unless you know what you are doing! 
+						Don't trigger this Stardust job in a customer environment unless you know what you are doing! These jobs will take a lot of Stardust resources.
 					</p>
 				</div>
 				<div class="panel-footer">
@@ -118,9 +118,14 @@
 							<li ng-repeat="tenant in vm.Tenants" ng-click="vm.selectTenant(tenant.Name)"><a>{{tenant.Name}}</a></li>
 						</ul>
 					</div>
-					<button class="btn btn-primary" ng-disabled="!vm.selectedTenantName" ng-click="vm.triggerResourceCalculation()">
-						<span class="text-white">Trigger Resource Calculation &raquo;</span>
-					</button>
+					<div class="row">
+						<button class="btn btn-primary" ng-disabled="!vm.selectedTenantName" ng-click="vm.triggerResourceCalculation()">
+							<span class="text-white">Trigger Resource Calculation Intraday &raquo;</span>
+						</button>
+						<button class="btn btn-primary" ng-disabled="!vm.selectedTenantName" ng-click="vm.triggerResourceCalculation2weeks()">
+							<span class="text-white">Trigger Resource Calculation 2 Weeks &raquo;</span>
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="col-md-12 panel panel-default ">
