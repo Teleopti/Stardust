@@ -431,13 +431,13 @@
                 var uniqueSiteIds = [];
                 var returnOrg = [];
                 var skillIdsArray = angular.isArray(params.skillIds) ? params.skillIds : params.skillIds.split(",");
-                skillIdsArray.forEach(function (key) {   
+                skillIdsArray.forEach(function (key) {
                      if(uniqueSiteIds.indexOf(organizationsOnSkills[key][0].Id) < 0){
                          uniqueSiteIds = uniqueSiteIds.concat(organizationsOnSkills[key][0].Id);
                          returnOrg = returnOrg.concat(organizationsOnSkills[key]);
                      }
                 });
-                
+
                 if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
                     returnOrg = filteredByPermission(returnOrg, permittedSiteIds);
                 return [200, returnOrg];
