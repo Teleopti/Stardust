@@ -71,9 +71,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.AssertVisibleUsingJQuery(".forecast-create-button");
 			Browser.Interactions.Click(".forecast-create-button");
 			Browser.Interactions.AssertVisibleUsingJQuery(".date-range-start-date strong");
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
+			var dateStartString = Browser.Interactions.GetText(".date-range-start-date strong");
+			var dateEndString = Browser.Interactions.GetText(".date-range-end-date strong");
+			var theCulture = CultureInfo.GetCultureInfo(swedishDateFormat(dateStartString) ? 1053 : 1033);
+			var dateStart = new DateOnly(DateTime.Parse(dateStartString, theCulture));
+			var dateEnd = new DateOnly(DateTime.Parse(dateEndString, theCulture));
+			ScenarioContext.Current.Add("startdate", dateStart);
+			ScenarioContext.Current.Add("enddate", dateEnd);
 			Browser.Interactions.Click(".wfm-btn-invis-primary.do-forecast");
+		}
+
+		private bool swedishDateFormat(string dateString)
+		{
+			var date = new DateOnly(DateTime.Parse(dateString, CultureInfo.GetCultureInfo(1053)));
+			return DateTime.Now.Year == date.Year;
 		}
 
 		[Given(@"I use default forecast period and forecast for one workload")]
