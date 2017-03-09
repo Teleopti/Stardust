@@ -141,13 +141,27 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		var hasAbsenceReportPermission = data.RequestPermission != null ? data.RequestPermission.AbsenceReportPermission : false;
 		var hasOvertimeAvailabilityPermission = data.RequestPermission != null ? data.RequestPermission.OvertimeAvailabilityPermission : false;
 
+		self.timelines = ko.utils.arrayMap(data.TimeLine, function (rawTimeline) {
+			var hourMinuteSecond = rawTimeline.Time.split(":");
+			return {
+				minutes: hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1])
+			};
+		});
+
 		self.absenceReportPermission(hasAbsenceReportPermission);
 		self.overtimeAvailabilityPermission(hasOvertimeAvailabilityPermission);
 
-		var dayViewModels = data.Days.map(function (scheduleDay) {
-			return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay,
-				hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self.userTexts);
-		});
+		var dayViewModels = data.Days == undefined || data.Days == null || data.Days.length === 0
+			? []
+			: data.Days.map(function (scheduleDay) {
+				var isToday = false; // TODO: How to check if it's today?
+				var rawProbabilies = isToday ? data.Possibilities : [];
+				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay,
+					rawProbabilies,
+					hasAbsenceReportPermission,
+					hasOvertimeAvailabilityPermission,
+					self.userTexts);
+			});
 
 		self.dayViewModels(dayViewModels);
 
@@ -158,8 +172,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	};
 };
 
-Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission,
-	overtimeAvailabilityPermission, userTexts) {
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProbabilities,
+	absenceReportPermission, overtimeAvailabilityPermission, userTexts) {
 	var self = this;
 
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
@@ -172,10 +186,9 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
 	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
 	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
 	self.isDayoff = function () {
-		if (self.summaryStyleClassName() != undefined && self.summaryStyleClassName() != null) {
-			return self.summaryStyleClassName() === "dayoff striped";
-		}
-		return false;
+		return self.summaryStyleClassName() != undefined &&
+			self.summaryStyleClassName() != null &&
+			self.summaryStyleClassName() === "dayoff striped";
 	};
 
 	self.hasOvertime = scheduleDay.HasOvertime && !scheduleDay.IsFullDayAbsence;

@@ -4,6 +4,35 @@
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel");
 
+	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+
+	var createTimeline = function (startHour, endHour) {
+		var timelinePoints = [];
+
+		if (startHour > 0) {
+			timelinePoints.push({
+				"Time": (startHour - 1) + ":45:00",
+				"TimeLineDisplay": (startHour - 1) + ":45"
+			});
+		}
+
+		for (var i = startHour; i <= endHour; i++) {
+			timelinePoints.push({
+				"Time": i + ":00:00",
+				"TimeLineDisplay": i + ":00"
+			});
+		}
+
+		if (endHour < 24) {
+			timelinePoints.push({
+				"Time": endHour + ":45:00",
+				"TimeLineDisplay": endHour + ":45"
+			});
+		}
+
+		return timelinePoints;
+	}
+
 	test("should read absence report permission", function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
 
@@ -32,5 +61,25 @@ $(document).ready(function () {
 		});
 
 		equal(vm.dayViewModels().length, 1);
+	});
+
+	test("Should read timelines", function () {
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+		var timelineStart = 8;
+		var timelineEnd = 16;
+		var lengthInHour = timelineEnd - timelineStart + 1;
+		var rawTimeline = createTimeline(timelineStart, timelineEnd);
+
+		var rawData = {
+			Days: [{}],
+			TimeLine: rawTimeline
+		};
+
+		vm.readData(rawData);
+
+		equal(vm.timelines.length, lengthInHour + 2); // 2 extra timeline point will be created
+		equal(vm.timelines[0].minutes, timelineStart * 60 - 15);
+		equal(vm.timelines[vm.timelines.length - 1].minutes, timelineEnd * 60 + 45);
 	});
 });
