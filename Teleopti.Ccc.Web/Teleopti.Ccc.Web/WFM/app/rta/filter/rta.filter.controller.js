@@ -221,8 +221,15 @@
 
 		/***********MULTI-SELECT************/
 		function expandSite(site) { site.isExpanded = !site.isExpanded; };
+		
+		function shrinkSites() {
+			vm.sites.forEach(function (site) {
+				site.isExpanded = false;
+			});
+		}
 
 		function goToAgents() {
+			shrinkSites();
 			var selection = {};
 			var selectedSiteIds = vm.selectedSites();
 			var selectedTeamIds = vm.teamsSelected;
@@ -232,9 +239,8 @@
 				selection['skillIds'] = $stateParams.skillIds;
 			else if ($stateParams.skillAreaId)
 				selection['skillAreaId'] = $stateParams.skillAreaId;
-			
-			if(angular.toJson(selection.siteIds) === angular.toJson(siteIds) && angular.toJson(selection.teamIds) === angular.toJson(teamIds)) return;		
-			stateGoToAgents(selection);
+			if (angular.toJson(selection.siteIds) === angular.toJson(siteIds) && angular.toJson(selection.teamIds) === angular.toJson(teamIds)) return;
+			stateGoToAgents(selection);		
 		}
 
 		function stateGoToAgents(selection) {
