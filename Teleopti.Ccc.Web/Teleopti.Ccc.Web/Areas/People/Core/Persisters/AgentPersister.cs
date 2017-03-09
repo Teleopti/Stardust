@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			foreach (var agentResult in data)
 			{
 				var agentData = agentResult.Agent;
-				if (agentResult.ErrorMessages.Any() || agentData == null) continue;
+				if (agentResult.Feedback.ErrorMessages.Any() || agentData == null) continue;
 
 				var person = persistPerson(agentData);
 				var errorMessages =	_tenantUserPersister.Persist(agentData, person.Id.GetValueOrDefault());
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				if (errorMessages.Any())
 				{
 					_personRepository.HardRemove(person);
-					agentResult.ErrorMessages.AddRange(errorMessages);
+					agentResult.Feedback.ErrorMessages.AddRange(errorMessages);
 					continue;
 				}
 

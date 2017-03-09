@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
-using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.Aop;
@@ -55,6 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[UnitOfWork]
 		protected virtual HttpResponseMessage ProcessInternal(IEnumerable<HttpContent> contents)
 		{
+			var formData = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentFormData>(contents);
 			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents);
 			var workbook = _fileProcessor.ParseFile(fileData.SingleOrDefault());
 			var isXlsx = workbook is XSSFWorkbook;
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				return invalidFileResponse;
 			}
 			var total = workbook.GetSheetAt(0).LastRowNum;
-			var invalidAgents = _fileProcessor.ProcessWorkbook(workbook);
+			var invalidAgents = _fileProcessor.ProcessWorkbook(workbook, formData);
 
 			var successCount = total - invalidAgents.Count;
 			var failedCount = invalidAgents.Count;

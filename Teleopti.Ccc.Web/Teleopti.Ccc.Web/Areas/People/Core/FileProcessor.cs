@@ -20,13 +20,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			_agentPersister = agentPersister;
 		}
 
-		public IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook)
+		public IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook, ImportAgentFormData defaultValues = null)
 		{
+			if (defaultValues != null)
+			{
+				_fileValidator.SetDefaultValues(defaultValues);
+			}
 			var extractedResult = _fileValidator.ExtractAgentInfoValues(workbook);
 			_agentPersister.Persist(extractedResult);
-			return extractedResult.Where(r => r.ErrorMessages.Any()).ToList();
+			return extractedResult.Where(r => r.Feedback.ErrorMessages.Any() || r.Feedback.WarningMessages.Any()).ToList();
 		}
-
+		
 		public IList<string> ValidateWorkbook(IWorkbook workbook)
 		{
 			var columnHearders = _fileValidator.ExtractColumnNames(workbook);
@@ -52,7 +56,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var agentTemplate = new AgentFileTemplate();
 			var returnedFile = agentTemplate.GetTemplateWorkbook(invalidUserSheetName, isXlsx);
 			var newSheet = returnedFile.GetSheet(invalidUserSheetName);
-			newSheet.GetRow(0).CreateCell(agentTemplate.ColumnHeaderNames.Length).SetCellValue("ErrorMessage");
+
+			var errorMessageColumnIndex = agentTemplate.ColumnHeaderNames.Length;
+			var warningMessageColumnIndex = agentTemplate.ColumnHeaderNames.Length + 1;
+
+			newSheet.GetRow(0).CreateCell(errorMessageColumnIndex).SetCellValue("ErrorMessage");
+			newSheet.GetRow(0).CreateCell(warningMessageColumnIndex).SetCellValue("WarningMessage");
 
 			for (var i = 0; i < agents.Count; i++)
 			{
@@ -75,7 +84,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				row.CreateCell(agentTemplate.ColumnHeaderMap["ShiftBag"]).SetCellValue(rawAgent.ShiftBag);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(rawAgent.SchedulePeriodType);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(rawAgent.SchedulePeriodLength.Value);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["ErrorMessage"]).SetCellValue(string.Join(";", rawAgent.ErrorMessage));
+				row.CreateCell(errorMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.ErrorMessages));
+				row.CreateCell(warningMessageColumnIndex).SetCellValue(string.Join(";",agents[i].Feedback.WarningMessages));
 			}
 			returnedFile.Write(ms);
 			return ms;
@@ -84,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 	public interface IFileProcessor
 	{
-		IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook);
+		IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook, ImportAgentFormData defaultValues = null);
 		IList<string> ValidateWorkbook(IWorkbook workbook);
 		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);

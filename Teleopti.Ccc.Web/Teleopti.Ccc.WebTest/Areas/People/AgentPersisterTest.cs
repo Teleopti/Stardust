@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var holder = new AgentExtractionResult {Agent = agentData};
 			Target.Persist(new List<AgentExtractionResult> { holder });
 			PersonRepository.LoadAll().Should().Be.Empty();
-			holder.ErrorMessages.Single().Should().Be(Resources.DuplicatedApplicationLogonErrorMsgSemicolon);
+			holder.Feedback.ErrorMessages.Single().Should().Be(Resources.DuplicatedApplicationLogonErrorMsgSemicolon);
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		{
 			var agentData = getAgentDataModel();
 			var holder = new AgentExtractionResult { Agent = agentData};
-			holder.ErrorMessages.Add("existing data error");
+			holder.Feedback.ErrorMessages.Add("existing data error");
 			Target.Persist(new List<AgentExtractionResult> { holder });
 			PersonRepository.LoadAll().Should().Be.Empty();
 		}

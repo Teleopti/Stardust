@@ -4,15 +4,33 @@ using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
+	public class Feedback
+	{
+		public List<string> ErrorMessages { get; }
+		public List<string> WarningMessages { get; }
+
+		public Feedback()
+		{
+			ErrorMessages = new List<string>();
+			WarningMessages = new List<string>();
+		}
+
+		public void Merge(Feedback other)
+		{
+			ErrorMessages.AddRange(other.ErrorMessages);
+			WarningMessages.AddRange(other.WarningMessages);
+		}
+	}
+
 	public class AgentExtractionResult
 	{
-		public AgentDataModel Agent;
-		public RawAgent Raw;
-		public List<string> ErrorMessages { get; }
+		public AgentDataModel Agent { get; set; }
+		public RawAgent Raw { get; set; }
+		public Feedback Feedback { get; }
 
 		public AgentExtractionResult()
 		{
-			ErrorMessages = new List<string>();
+			Feedback = new Feedback();
 		}
 	}
 
@@ -21,5 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		List<string> ExtractColumnNames(IWorkbook workbook);
 		List<string> ValidateColumnNames(List<string> columnNames);
 		List<AgentExtractionResult> ExtractAgentInfoValues(IWorkbook workbook);
+		void SetDefaultValues(ImportAgentFormData defaultValues);
 	}
 }

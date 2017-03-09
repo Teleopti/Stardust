@@ -79,20 +79,41 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			return permittedTeamList.OrderBy(t => t.SiteAndTeam).ToList();
 		}
 
+		public IExternalLogOn FindExternalLogOn(Guid id)
+		{
+			return _externalLogOnRepository.Get(id);
+		}
+
 		public IExternalLogOn FindExternalLogOn(string externalLogonName)
 		{
 			return _externalLogOnRepository.LoadAll().FirstOrDefault(externalLogon => externalLogon.AcdLogOnName == externalLogonName);
 		}
+
+		public IApplicationRole FindRole(Guid id)
+		{
+			return _applicationRoleRepository.Get(id);
+		}
+
 
 		public IApplicationRole FindRole(string roleName)
 		{			
 			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.Name == roleName);
 		}
 
+		public IContract FindContract(Guid id)
+		{
+			return _contractRepository.Get(id);
+		}
+
 		public IContract FindContract(string contractName)
 		{			
 			return _contractRepository.LoadAll().FirstOrDefault(
 					contract => contract.Description.Name == contractName || contract.Description.ShortName == contractName);
+		}
+
+		public IContractSchedule FindContractSchedule(Guid id)
+		{
+			return _contractScheduleRepository.Get(id);
 		}
 
 		public IContractSchedule FindContractSchedule(string contractScheduleName)
@@ -103,12 +124,22 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					contractSchedule.Description.ShortName == contractScheduleName);
 		}
 
+		public IPartTimePercentage FindPartTimePercentage(Guid id)
+		{
+			return _partTimePercentageRepository.Get(id);
+		}
+
 		public IPartTimePercentage FindPartTimePercentage(string partTimePercentageName)
 		{
 			return	_partTimePercentageRepository.LoadAll().FirstOrDefault(
 					partTimePercentage =>
 						partTimePercentage.Description.Name == partTimePercentageName ||
 						partTimePercentage.Description.ShortName == partTimePercentageName);
+		}
+
+		public IRuleSetBag FindRuleSetBag(Guid id)
+		{
+			return _ruleSetBagRepository.Get(id);
 		}
 
 		public IRuleSetBag FindRuleSetBag(string ruleSetBagName)
@@ -123,9 +154,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			return _siteRepository.LoadAll().FirstOrDefault(site => site.Description.Name == siteName);
 		}
 
+		public ITeam FindTeam(Guid id)
+		{
+			return _teamRepository.Get(id);
+		}
+
 		public ITeam FindTeam(ISite site, string teamName)
 		{
 			return _teamRepository.LoadAll().FirstOrDefault(team => team.Description.Name == teamName && team.Site.Id == site.Id);
+		}
+
+		public ISkill FindSkill(Guid id)
+		{
+			return _skillRepository.Get(id);
 		}
 
 		public ISkill FindSkill(string skillName)

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IApplicationRole Get(Guid id)
 		{
-			return _roles.FirstOrDefault();
+			return _roles.FirstOrDefault(r => r.Id.GetValueOrDefault() == id);
 		}
 
 		public IList<IApplicationRole> LoadAll()

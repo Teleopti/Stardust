@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
+﻿using System;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
@@ -15,5 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		ISite FindSite(string siteName);
 		ITeam FindTeam(ISite site, string teamName);
 		IExternalLogOn FindExternalLogOn(string externalLogonName);
+		IExternalLogOn FindExternalLogOn(Guid id);
+		IApplicationRole FindRole(Guid id);
+		IContract FindContract(Guid id);
+		IContractSchedule FindContractSchedule(Guid id);
+		IPartTimePercentage FindPartTimePercentage(Guid id);
+		IRuleSetBag FindRuleSetBag(Guid id);
+		ITeam FindTeam(Guid id);
+		ISkill FindSkill(Guid id);
 	}
 }

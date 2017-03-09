@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.Null();
-			result.First().ErrorMessages.Count.Should().Be(9);
+			result.First().Feedback.ErrorMessages.Count.Should().Be(9);
 		}
 
 
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var result = Target.ProcessWorkbook(workbook);
 
-			var errorMsg = result.Single().ErrorMessages;
+			var errorMsg = result.Single().Feedback.ErrorMessages;
 			errorMsg.Contains(Resources.BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon).Should().Be.True();
 		}
 
@@ -192,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var result = Target.ProcessWorkbook(workbook);
 
-			var errorMsg = result.Single().ErrorMessages;
+			var errorMsg = result.Single().Feedback.ErrorMessages;
 			errorMsg.Contains(Resources.NoLogonAccountErrorMsgSemicolon).Should().Be.True();
 		}
 
@@ -207,6 +208,192 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			result.Count.Should().Be(0);
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidSchedulePeriodType()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.SchedulePeriodType = "Invalid schedule period type";
+
+			var defaultSchedulePeriodType = "Week";
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook, new ImportAgentFormData { SchedulePeriodType = defaultSchedulePeriodType});
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.SchedulePeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidExternalLogon()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.ExternalLogon = "Invalid external logon";
+
+			var externalLogon = ExternalLogOnFactory.CreateExternalLogOn().WithId();
+			ExternalLogOnRepository.Add(externalLogon);
+
+			var defaultExternalLogon = externalLogon.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.ExternalLogon.Should().Be.EqualTo(externalLogon);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidRuleSetBag()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.ShiftBag = "Invalid shift bag";
+
+			var ruleSetBag = new RuleSetBag().WithId();			
+			RuleSetBagRepository.Add(ruleSetBag);
+
+			var defaultValue = ruleSetBag.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ShiftBagId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.RuleSetBag.Should().Be.EqualTo(ruleSetBag);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidPartTimePercentage()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.PartTimePercentage = "Invalid parttime percentage";
+
+			var defaultEntity = PartTimePercentageFactory.CreatePartTimePercentage("default");
+			PartTimePercentageRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { PartTimePercentageId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidContractSchedule()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.ContractSchedule = "Invalid contract schedule";
+
+			var defaultEntity = ContractScheduleFactory.CreateContractSchedule("default").WithId();
+			ContractScheduleRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ContractScheduleId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.ContractSchedule.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidContract()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.Contract = "Invalid contract";
+
+			var defaultEntity = ContractFactory.CreateContract("default").WithId();
+			ContractRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ContractId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidRoles()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.Role = "invalid role";
+
+			var defaultEntity = ApplicationRoleFactory.CreateRole("default", "default role").WithId();
+			RoleRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { RoleIds = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidTeam()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.Organization = "invalid site/invalid team";
+
+			var defaultEntity = TeamFactory.CreateSimpleTeam("default").WithId();
+			TeamRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { TeamId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixInvalidSkill()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.Skill = "invalid skill";
+
+			var defaultEntity = SkillFactory.CreateSkill("default").WithId();
+			SkillRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { SkillIds = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
 		private RawAgent setupProviderData()
