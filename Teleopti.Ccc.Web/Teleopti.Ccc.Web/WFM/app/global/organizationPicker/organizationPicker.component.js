@@ -26,7 +26,7 @@
 		return !('single' in attrs);
 	}
 
-	organizationPickerCtrl.$inject = ['$scope', '$translate', '$attrs',  'organizationPickerSvc'];
+	organizationPickerCtrl.$inject = ['$scope', '$translate', '$attrs', 'organizationPickerSvc'];
 
 	function organizationPickerCtrl($scope, $translate, $attrs, orgPickerSvc) {
 		var ctrl = this,
@@ -176,6 +176,17 @@
 			return some && !all;
 		};
 
+		ctrl.hasTeamsSelected = function(site) {
+			if (!site) return false;
+			var hasItem = false;
+			site.teams.forEach(function(team) {
+				if (ctrl.selectedTeamIds.indexOf(team.id) > -1) {
+					hasItem = true;
+				}
+			});
+			return hasItem;
+		}
+
 		ctrl.setCurrentSiteValue = function(site) {
 			currentSite = site;
 		};
@@ -216,13 +227,13 @@
 				site.isChecked = false;
 		}
 
-		ctrl.searchOrganization = function(){
-			if(ctrl.searchTerm.length > 0){
-				ctrl.groupList.forEach(function(site){
+		ctrl.searchOrganization = function() {
+			if (ctrl.searchTerm.length > 0) {
+				ctrl.groupList.forEach(function(site) {
 					site.expanded = true;
 				});
-			}else{
-				ctrl.groupList.forEach(function(site){
+			} else {
+				ctrl.groupList.forEach(function(site) {
 					site.expanded = false;
 				});
 			}
