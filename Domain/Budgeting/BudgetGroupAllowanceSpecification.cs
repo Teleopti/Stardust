@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			}
 
 			var defaultScenario = _scenarioRepository.Current();
-			var budgetDays = _budgetDayRepository.Find(defaultScenario, personPeriod.BudgetGroup, requestedPeriod);
+			var budgetDays = _budgetDayRepository.Find(defaultScenario, personPeriod.BudgetGroup, requestedPeriod,true);
 
 			if (budgetDays == null)
 			{

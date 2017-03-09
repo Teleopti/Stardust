@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return lastBudgetDay.Day;
         }
 
-        public IList<IBudgetDay> Find(IScenario scenario, IBudgetGroup budgetGroup, DateOnlyPeriod dateOnlyPeriod)
+        public IList<IBudgetDay> Find(IScenario scenario, IBudgetGroup budgetGroup, DateOnlyPeriod dateOnlyPeriod, bool noLock = false)
         {
 			
 			var foundBudgetDaysSubquery = DetachedCriteria.For<BudgetDay>()
@@ -50,12 +50,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Subqueries.PropertyIn("Id", foundBudgetDaysSubquery))
                 .SetFetchMode("CustomEfficiencyShrinkages", FetchMode.Join);
 	        IList result;
-	        using (Session.BeginTransaction(IsolationLevel.ReadUncommitted))
+	        if (noLock)
 	        {
+				using (Session.BeginTransaction(IsolationLevel.ReadUncommitted))
+				{
+					result = Session.CreateMultiCriteria().Add(customShrinkages).Add(customEfficiencyShrinkages).List();
+				}
+			}else
 				result = Session.CreateMultiCriteria().Add(customShrinkages).Add(customEfficiencyShrinkages).List();
-			}
-	        
-            var foundBudgetDays = CollectionHelper.ToDistinctGenericCollection<IBudgetDay>(result[0]).ToList();
+
+
+			var foundBudgetDays = CollectionHelper.ToDistinctGenericCollection<IBudgetDay>(result[0]).ToList();
             return foundBudgetDays;
         }
     }
