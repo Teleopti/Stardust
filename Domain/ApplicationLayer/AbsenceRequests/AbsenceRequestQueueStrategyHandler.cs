@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			int absenceReqFarFutureTime;
 			IList<IEnumerable<Guid>> listOfAbsenceRequests = new List<IEnumerable<Guid>>();
 			IDictionary<Guid, int> reqWithVersion = new Dictionary<Guid, int>();
-
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				businessUnits = _businessUnitRepository.LoadAll();
