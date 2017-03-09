@@ -1,16 +1,18 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
-/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.js" />
 
-if (typeof (Teleopti) === 'undefined') {
+if (typeof (Teleopti) === "undefined") {
 	Teleopti = {};
 }
-if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+if (typeof (Teleopti.MyTimeWeb) === "undefined") {
 	Teleopti.MyTimeWeb = {};
 }
-if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
+if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
@@ -22,8 +24,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.displayDate = ko.observable();
 	self.nextWeekDate = ko.observable(moment());
 	self.previousWeekDate = ko.observable(moment());
-	self.selectedDate = ko.observable(moment().startOf('day'));
-	
+	self.selectedDate = ko.observable(moment().startOf("day"));
+
 	self.selectedDateSubscription = null;
 	self.initialRequestDay = ko.observable();
 	self.formattedRequestDate = ko.computed(function () {
@@ -42,15 +44,17 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 			self.selectedDateSubscription.dispose();
 		self.selectedDate(date);
 		self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" +
+				Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD")));
 		});
 	};
 
-	self.desktop = function() {
+	self.desktop = function () {
 		var date = self.selectedDate();
-		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
-		$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)').show();
-		$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)').show();
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
+			Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD")));
+		$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").show();
+		$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").show();
 	};
 
 	self.nextWeek = function () {
@@ -62,7 +66,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	};
 
 	self.showAddRequestToolbar = ko.computed(function () {
-		return (self.requestViewModel() || '') != '';
+		return (self.requestViewModel() || "") !== "";
 	});
 
 	self.showAddAbsenceReportFormWithData = function (data) {
@@ -73,7 +77,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.requestViewModel(addAbsenceReportModel);
 		_fillFormData();
 	};
-	
+
 	self.isWithinSelected = function (startDate, endDate) {
 		return (startDate <= self.maxDate() && endDate >= self.minDate());
 	};
@@ -85,12 +89,12 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		requestViewModel.DateFrom(requestDay);
 		requestViewModel.DateTo(requestDay);
 
-		if (requestViewModel.LoadRequestData) {		
+		if (requestViewModel.LoadRequestData) {
 			if (data && data.StartTime) {
 				requestViewModel.LoadRequestData(data);
 			} else {
 				var day = ko.utils.arrayFirst(self.dayViewModels(), function (item) {
-					return item.fixedDate() == self.initialRequestDay();
+					return item.fixedDate() === self.initialRequestDay();
 				});
 				var oaData = day.overtimeAvailability();
 				requestViewModel.LoadRequestData(oaData);
@@ -100,15 +104,14 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 	var addOvertimeModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, reloadSchedule),
-		type: function () { return 'overtime'; },
+		type: function () { return "overtime"; },
 		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
 	};
 
-
 	var addAbsenceReportModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
-		type: function () { return 'absenceReport'; },
-		CancelAddingNewRequest: function() { self.CancelAddingNewRequest(); }
+		type: function () { return "absenceReport"; },
+		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
 	};
 
 	self.showAddOvertimeAvailabilityForm = function (data) {
@@ -120,18 +123,16 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		_fillFormData(data);
 	};
 
-
 	self.CancelAddingNewRequest = function () {
 		self.requestViewModel(undefined);
 	};
 
 	function reloadSchedule() {
-		self.CancelAddingNewRequest();	
+		self.CancelAddingNewRequest();
 		reloadData();
 	}
-	
-	self.readData = function (data) {
 
+	self.readData = function (data) {
 		if (data.DatePickerFormat != undefined && data.DatePickerFormat != null) {
 			self.datePickerFormat(data.DatePickerFormat.toUpperCase());
 		} else {
@@ -143,21 +144,22 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.absenceReportPermission(hasAbsenceReportPermission);
 		self.overtimeAvailabilityPermission(hasOvertimeAvailabilityPermission);
 
-
-		var dayViewModels = data.Days.map(function(scheduleDay) {
-			return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self);
+		var dayViewModels = data.Days.map(function (scheduleDay) {
+			return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay,
+				hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self.userTexts);
 		});
 
 		self.dayViewModels(dayViewModels);
-	
-		self.minDate(moment(data.Days[0].FixedDate).add('day', -1));
-		self.maxDate(moment(data.Days[ data.Days.length -1  ].FixedDate).add('day', 1));
-		
+
+		self.minDate(moment(data.Days[0].FixedDate).add("day", -1));
+		self.maxDate(moment(data.Days[data.Days.length - 1].FixedDate).add("day", 1));
+
 		self.displayDate(data.PeriodSelection.Display);
 	};
 };
 
-Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission, overtimeAvailabilityPermission, parent) {
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission,
+	overtimeAvailabilityPermission, userTexts) {
 	var self = this;
 
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
@@ -169,9 +171,9 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
 	});
 	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
 	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
-	self.isDayoff = function() {
+	self.isDayoff = function () {
 		if (self.summaryStyleClassName() != undefined && self.summaryStyleClassName() != null) {
-			return self.summaryStyleClassName() == "dayoff striped";
+			return self.summaryStyleClassName() === "dayoff striped";
 		}
 		return false;
 	};
@@ -186,42 +188,44 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
 			if (!period.IsOvertimeAvailability)
 				timespan.push(scheduleDay.Periods[i].TimeSpan);
 		}
-		self.summaryTimeSpan(timespan[0].slice(0,-8) + timespan[timespan.length - 1].slice(-8));
+		self.summaryTimeSpan(timespan[0].slice(0, -8) + timespan[timespan.length - 1].slice(-8));
 	}
-	
+
 	self.hasShift = self.summaryColor() != null ? true : false;
 
 	self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
-	self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
+	self.summaryTextColor = ko.observable(self.backgroundColor
+		? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor)
+		: "black");
 
-	self.absenceReportPermission = ko.observable(absenceReportPermission != undefined ? absenceReportPermission : false);
-	self.overtimeAvailabilityPermission = ko.observable(overtimeAvailabilityPermission != undefined ? overtimeAvailabilityPermission : false);
+	self.absenceReportPermission = ko.observable(absenceReportPermission !== undefined ? absenceReportPermission : false);
+	self.overtimeAvailabilityPermission = ko.observable(overtimeAvailabilityPermission !== undefined ? overtimeAvailabilityPermission : false);
 	self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
 
-	self.hasOvertimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.HasOvertimeAvailability : false);
-	self.overtimeAvailabilityStart = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.StartTime : null);
-	self.overtimeAvailabilityEnd = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.EndTime : null);
+	self.hasOvertimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty ? scheduleDay.OvertimeAvailabililty.HasOvertimeAvailability : false);
+	self.overtimeAvailabilityStart = ko.observable(scheduleDay.OvertimeAvailabililty ? scheduleDay.OvertimeAvailabililty.StartTime : null);
+	self.overtimeAvailabilityEnd = ko.observable(scheduleDay.OvertimeAvailabililty ? scheduleDay.OvertimeAvailabililty.EndTime : null);
 
 	self.isPermittedToReportAbsence = ko.computed(function () {
-		var momentToday = (new Date().getTeleoptiTime == undefined)
-			? moment().startOf('day')
-			: moment(new Date(new Date().getTeleoptiTime())).startOf('day');
+		var momentToday = (new Date().getTeleoptiTime === undefined)
+			? moment().startOf("day")
+			: moment(new Date(new Date().getTeleoptiTime())).startOf("day");
 		var momentCurrentDate = moment(self.fixedDate());
 
-		var dateDiff = momentCurrentDate.diff(momentToday, 'days');
+		var dateDiff = momentCurrentDate.diff(momentToday, "days");
 
 		//Absence report is available only for today and tomorrow.
-		var isPermittedDate = (dateDiff == 0 || dateDiff == 1);
+		var isPermittedDate = (dateDiff === 0 || dateDiff === 1);
 		var result = self.absenceReportPermission() && isPermittedDate;
 		return result;
 	});
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
-		return new MobileWeekLayerViewModel(item, parent);
+		return new MobileWeekLayerViewModel(item, userTexts);
 	});
 };
 
-var MobileWeekLayerViewModel = function (layer, parent) {
+var MobileWeekLayerViewModel = function (layer, userTexts) {
 	var self = this;
 
 	self.title = ko.observable(layer.Title);
@@ -243,7 +247,7 @@ var MobileWeekLayerViewModel = function (layer, parent) {
 	self.meetingDescription = ko.computed(function () {
 		if (self.hasMeeting()) {
 			if (layer.Meeting.Description.length > 300) {
-				return layer.Meeting.Description.substring(0, 300) + '...';
+				return layer.Meeting.Description.substring(0, 300) + "...";
 			}
 			return layer.Meeting.Description;
 		}
@@ -253,40 +257,39 @@ var MobileWeekLayerViewModel = function (layer, parent) {
 	self.timeSpan = ko.computed(function () {
 		var originalTimespan = layer.TimeSpan;
 		// Remove extra space for extreme long timespan (For example: "10:00 PM - 12:00 AM +1")
-		var realTimespan = originalTimespan.length >= 22 ? originalTimespan.replace(" - ", "-").replace(" +1", "+1") : originalTimespan;
+		var realTimespan = originalTimespan.length >= 22
+			? originalTimespan.replace(" - ", "-").replace(" +1", "+1")
+			: originalTimespan;
 		return realTimespan;
 	});
 
 	self.tooltipText = ko.computed(function () {
 		//not nice! rewrite tooltips in the future!
-		var text = '';
-		if (self.hasMeeting()) {
-			text = ('<div>{0}</div><div style="text-align: left">' +
-				'<div class="tooltip-wordwrap" style="overflow: hidden"><i>{1}</i> {2}</div>' +
-				'<div class="tooltip-wordwrap" style="overflow: hidden"><i>{3}</i> {4}</div>' +
-				'<div class="tooltip-wordwrap" style="white-space: normal"><i>{5}</i> {6}</div>' +
-				'</div>')
-				.format(self.timeSpan(),
-						parent.userTexts.subjectColon,
-						$('<div/>').text(self.meetingTitle()).html(),
-						parent.userTexts.locationColon,
-						$('<div/>').text(self.meetingLocation()).html(),
-						parent.userTexts.descriptionColon,
-						$('<div/>').text(self.meetingDescription()).html());
-		} else {
-			text = self.timeSpan();
-		}
+		var text = !self.hasMeeting()
+			? self.timeSpan()
+			: ("<div>{0}</div><div style='text-align: left'>" +
+				"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{1}</i> {2}</div>" +
+				"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{3}</i> {4}</div>" +
+				"<div class='tooltip-wordwrap' style='white-space: normal'><i>{5}</i> {6}</div>" +
+				"</div>")
+			.format(self.timeSpan(),
+				userTexts.subjectColon,
+				$("<div/>").text(self.meetingTitle()).html(),
+				userTexts.locationColon,
+				$("<div/>").text(self.meetingLocation()).html(),
+				userTexts.descriptionColon,
+				$("<div/>").text(self.meetingDescription()).html());
 
-		return '<div>{0}</div>{1}'.format(self.title(), text);
+		return "<div>{0}</div>{1}".format(self.title(), text);
 	});
 
-	self.backgroundColor = ko.observable('rgb(' + layer.Color + ')');
+	self.backgroundColor = ko.observable("rgb(" + layer.Color + ")");
 	self.textColor = ko.computed(function () {
-		if (layer.Color != null && layer.Color != 'undefined') {
-			var backgroundColor = 'rgb(' + layer.Color + ')';
+		if (layer.Color != null && layer.Color !== "undefined") {
+			var backgroundColor = "rgb(" + layer.Color + ")";
 			return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
 		}
-		return 'black';
+		return "black";
 	});
 
 	self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
@@ -298,21 +301,24 @@ var MobileWeekLayerViewModel = function (layer, parent) {
 		return self.startPositionPercentage();
 	});
 	self.widthPer = ko.computed(function () {
-		return 100 * (self.endPositionPercentage() - self.startPositionPercentage()) + '%';
+		return 100 * (self.endPositionPercentage() - self.startPositionPercentage()) + "%";
 	});
 	self.leftPer = ko.computed(function () {
-		return self.left() * 100 + '%';
+		return self.left() * 100 + "%";
 	});
 	self.overTimeLighterBackgroundStyle = ko.computed(function () {
 		var rgbTohex = function (rgb) {
-			if (rgb.charAt(0) === '#')
+			if (rgb.charAt(0) === "#") {
 				return rgb;
+			}
+
 			var ds = rgb.split(/\D+/);
 			var decimal = Number(ds[1]) * 65536 + Number(ds[2]) * 256 + Number(ds[3]);
 			var digits = 6;
 			var hexString = decimal.toString(16);
-			while (hexString.length < digits)
+			while (hexString.length < digits) {
 				hexString += "0";
+			}
 
 			return "#" + hexString;
 		}
@@ -326,20 +332,23 @@ var MobileWeekLayerViewModel = function (layer, parent) {
 		var lightColor = "#00ffff";
 		var darkColor = "#795548";
 		var backgroundColor = rgbTohex(self.backgroundColor());
-		var useLighterStyle = Math.abs(getLumi(backgroundColor) - getLumi(lightColor)) > Math.abs(getLumi(backgroundColor) - getLumi(darkColor));
+		var useLighterStyle = Math.abs(getLumi(backgroundColor) - getLumi(lightColor)) >
+			Math.abs(getLumi(backgroundColor) - getLumi(darkColor));
 
 		return useLighterStyle;
 	});
 
-	self.overTimeDarkerBackgroundStyle = ko.computed(function () { return !self.overTimeLighterBackgroundStyle(); });
+	self.overTimeDarkerBackgroundStyle = ko.computed(function () {
+		return !self.overTimeLighterBackgroundStyle();
+	});
 
 	self.styleJson = ko.computed(function () {
 		return {
-			'left': self.leftPer,
-			'width': self.widthPer,
-			'color': self.textColor,
-			'background-size': self.isOvertime ? '11px 11px' : 'initial',
-			'background-color': self.backgroundColor
+			"left": self.leftPer,
+			"width": self.widthPer,
+			"color": self.textColor,
+			"background-size": self.isOvertime ? "11px 11px" : "initial",
+			"background-color": self.backgroundColor
 		};
 	});
 };
