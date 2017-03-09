@@ -49,15 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 			var invalidSample = invalidMethods.FirstOrDefault();
 			if (invalidSample != null)
-				throw new AspectApplicationException(string.Format("Aspected methods needs to be virtual. {0} is not.", invalidSample.Name));
+				throw new AspectApplicationException($"Aspected methods needs to be virtual. {invalidSample.Name} is not.");
 		}
 
-	}
-
-	public class AspectApplicationException : Exception
-	{
-		public AspectApplicationException(string message) : base(message)
-		{
-		}
 	}
 }

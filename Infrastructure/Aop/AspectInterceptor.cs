@@ -11,13 +11,6 @@ using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
 {
-	//public class AspectInvocationException : Exception
-	//{
-	//	public AspectInvocationException(string message, Exception inner) : base(message, inner)
-	//	{
-	//	}
-	//}
-
 	public class AspectInterceptor : IInterceptor
 	{
 		private readonly IComponentContext _resolver;
@@ -81,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			}
 		}
 
-		private void invoke(InvocationInfo invocation)
+		private static void invoke(InvocationInfo invocation)
 		{
 			try
 			{
