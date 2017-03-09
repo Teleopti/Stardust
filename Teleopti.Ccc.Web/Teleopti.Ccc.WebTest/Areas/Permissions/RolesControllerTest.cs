@@ -84,69 +84,69 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		public void ShouldAddNewFunctionsToRole()
 		{
 			var functionOneId = Guid.NewGuid();
-			var roleId = Guid.NewGuid();
-
+			
 			var functionOne = new ApplicationFunction("FunctionOne");
 			ApplicationFunctionRepository.Add(functionOne);
 			var agentRole = new ApplicationRole {Name = "Agent"};
+			agentRole.WithId();
 			agentRole.AddApplicationFunction(functionOne);
 			ApplicationRoleRepository.Add(agentRole);
-			Target.AddFunctions(roleId, new FunctionsForRoleInput {Functions = new Collection<Guid> {functionOneId}});
+			Target.AddFunctions(agentRole.Id.Value, new FunctionsForRoleInput {Functions = new Collection<Guid> {functionOneId}});
 
 			agentRole.ApplicationFunctionCollection.Should().Contain(functionOne);
 		}
 
 		[Test]
 		public void ShouldRemoveAvailableBusinessUnitFromRole()
-		{
-			var roleId = Guid.NewGuid();
+		{			
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
+			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
 			ApplicationRoleRepository.Add(agentRole);
 
-			Target.RemoveAvailableBusinessUnit(roleId, businessUnit.Id.GetValueOrDefault());
+			Target.RemoveAvailableBusinessUnit(agentRole.Id.Value, businessUnit.Id.GetValueOrDefault());
 
 			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldRemoveAvailableTeamFromRole()
-		{
-			var roleId = Guid.NewGuid();
+		{		
 			var team = TeamFactory.CreateSimpleTeam();
 			team.SetId(Guid.NewGuid());
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
+			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableTeam(team);
 			ApplicationRoleRepository.Add(agentRole);
-			Target.RemoveAvailableTeam(roleId, team.Id.GetValueOrDefault());
+			Target.RemoveAvailableTeam(agentRole.Id.Value, team.Id.GetValueOrDefault());
 
 			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldRemoveAvailableSiteFromRole()
-		{
-			var roleId = Guid.NewGuid();
+		{			
 			var site = SiteFactory.CreateSimpleSite();
 			site.SetId(Guid.NewGuid());
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
+			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableSite(site);
 			ApplicationRoleRepository.Add(agentRole);
 
-			Target.RemoveAvailableSite(roleId, site.Id.GetValueOrDefault());
+			Target.RemoveAvailableSite(agentRole.Id.Value, site.Id.GetValueOrDefault());
 
 			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldNotAddNewAvailableDataToBuiltInRole()
-		{
-			var roleId = Guid.NewGuid();
+		{			
 			var businessUnitId = Guid.NewGuid();
 			var agentRole = new ApplicationRole {Name = "Agent", BuiltIn = true, AvailableData = new AvailableData()};
+			agentRole.WithId();
 			ApplicationRoleRepository.Add(agentRole);
-			Target.AddAvailableData(roleId,
+			Target.AddAvailableData(agentRole.Id.Value,
 				new AvailableDataForRoleInput
 				{
 					BusinessUnits = new Collection<Guid> {businessUnitId}
@@ -157,11 +157,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 		[Test]
 		public void ShouldRenameRole()
-		{
-			var roleId = Guid.NewGuid();
+		{			
 			var agentRole = new ApplicationRole {Name = "Agent", DescriptionText = "Agent"};
+			agentRole.WithId();
 			ApplicationRoleRepository.Add(agentRole);
-			var result = Target.RenameRole(roleId, new RoleNameInput {NewDescription = "Self service agent"});
+			var result = Target.RenameRole(agentRole.Id.Value, new RoleNameInput {NewDescription = "Self service agent"});
 
 			agentRole.DescriptionText.Should().Be.EqualTo("Self service agent");
 			agentRole.Name.Should().Be.EqualTo("Selfserviceagent");
@@ -170,11 +170,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 		[Test]
 		public void ShouldNotRenameBuiltInRole()
-		{
-			var roleId = Guid.NewGuid();
+		{		
 			var agentRole = new ApplicationRole {Name = "Agent", BuiltIn = true};
+			agentRole.WithId();
 			ApplicationRoleRepository.Add(agentRole);
-			var response = Target.RenameRole(roleId, new RoleNameInput {NewDescription = "Self service agent"});
+			var response = Target.RenameRole(agentRole.Id.Value, new RoleNameInput {NewDescription = "Self service agent"});
 
 			agentRole.Name.Should().Be.EqualTo("Agent");
 			response.Should().Be.OfType<BadRequestErrorMessageResult>();
@@ -195,13 +195,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		[Test]
 		public void ShouldNotAddNewFunctionsToBuiltInRole()
 		{
-			var functionOneId = Guid.NewGuid();
-			var roleId = Guid.NewGuid();
+			var functionOneId = Guid.NewGuid();			
 			var functionOne = new ApplicationFunction("FunctionOne");
 			ApplicationFunctionRepository.Add(functionOne);
 			var agentRole = new ApplicationRole {Name = "Agent", BuiltIn = true};
+			agentRole.WithId();
 			ApplicationRoleRepository.Add(agentRole);
-			Target.AddFunctions(roleId, new FunctionsForRoleInput {Functions = new Collection<Guid> {functionOneId}});
+			Target.AddFunctions(agentRole.Id.Value, new FunctionsForRoleInput {Functions = new Collection<Guid> {functionOneId}});
 
 			agentRole.ApplicationFunctionCollection.Should().Be.Empty();
 		}
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			Target.Request = new HttpRequestMessage();
 			var team = TeamFactory.CreateTeam("Team 1", "Paris");
-			var roleId = Guid.NewGuid();
+			
 			var functionOne = new ApplicationFunction("FunctionOne");
 			var agentRole = new ApplicationRole
 			{
@@ -343,6 +343,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 				BuiltIn = true,
 				AvailableData = new AvailableData()
 			};
+			agentRole.WithId();
 			agentRole.AddApplicationFunction(functionOne);
 			agentRole.AvailableData.AvailableDataRange = AvailableDataRangeOption.MySite;
 			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
@@ -350,7 +351,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			agentRole.AvailableData.AddAvailableTeam(team);
 			ApplicationRoleRepository.Add(agentRole);
 
-			Target.CopyExistingRole(roleId);
+			Target.CopyExistingRole(agentRole.Id.Value);
 
 			ApplicationRoleRepository.LoadAll()
 				.Last()
@@ -446,7 +447,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		[Test]
 		public void ShouldRemoveFunctionWitChild()
 		{
-			var roleId = Guid.NewGuid();
+			
 			var parentId = Guid.NewGuid();
 			var childId = Guid.NewGuid();
 			var grandChildId = Guid.NewGuid();
@@ -462,19 +463,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			child.AddChild(grandChild);
 			parent.AddChild(child);
 			var agentRole = new ApplicationRole {Name = "Agent"};
+			agentRole.WithId();
 			ApplicationRoleRepository.Add(agentRole);
 			agentRole.AddApplicationFunction(parent);
 			agentRole.AddApplicationFunction(child);
 			agentRole.AddApplicationFunction(grandChild);
-			Target.RemoveFunction(roleId, parentId);
+			Target.RemoveFunction(agentRole.Id.Value, parentId);
 
 			agentRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldRemoveAvailableSiteWithTeamsFromRole()
-		{
-			var roleId = Guid.NewGuid();
+		{			
 			var team = TeamFactory.CreateSimpleTeam();
 			var site = SiteFactory.CreateSimpleSite();
 			var siteId = Guid.NewGuid();
@@ -483,12 +484,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			team.SetId(Guid.NewGuid());
 			team.Site = site;
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
+			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableTeam(team);
 
 			agentRole.AvailableData.AddAvailableSite(site);
 			ApplicationRoleRepository.Add(agentRole);
 
-			Target.RemoveAvailableSite(roleId, site.Id.GetValueOrDefault());
+			Target.RemoveAvailableSite(agentRole.Id.Value, site.Id.GetValueOrDefault());
 
 			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
 			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(0);
@@ -499,12 +501,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
 			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-				new TeleoptiIdentity("test", null, businessUnit, null, null), PersonFactory.CreatePerson());
-			var roleId = Guid.NewGuid();
+				new TeleoptiIdentity("test", null, businessUnit, null, null), PersonFactory.CreatePerson());			
 			var site = SiteFactory.CreateSimpleSite();
 
 			businessUnit.SetId(site.BusinessUnit.Id);
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
+			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
 			ApplicationRoleRepository.Add(agentRole);
 
@@ -522,7 +524,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			agentRole.AvailableData.AddAvailableSite(site);
 			ApplicationRoleRepository.Add(agentRole);
 
-			Target.RemoveAvailableBusinessUnit(roleId, businessUnit.Id.GetValueOrDefault());
+			Target.RemoveAvailableBusinessUnit(agentRole.Id.Value, businessUnit.Id.GetValueOrDefault());
 
 			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
 			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
@@ -531,8 +533,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 		[Test]
 		public void ShouldRemoveFunctionWithChildAndAllParents()
-		{
-			var roleId = Guid.NewGuid();
+		{			
 			var iamNoParentId = Guid.NewGuid();
 			var parentOfEverythingId = Guid.NewGuid();
 			var grandChildId = Guid.NewGuid();
@@ -550,12 +551,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			parentOfEverything.AddChild(grandChild);
 
 			var agentRole = new ApplicationRole {Name = "Agent"};
+			agentRole.WithId();
 			ApplicationRoleRepository.Add(agentRole);
 			agentRole.AddApplicationFunction(iAmNoParent);
 			agentRole.AddApplicationFunction(parentOfEverything);
 			agentRole.AddApplicationFunction(grandChild);
 
-			Target.RemoveFunction(roleId, grandChildId,
+			Target.RemoveFunction(agentRole.Id.Value, grandChildId,
 				new FunctionsForRoleInput() {Functions = new Guid[] {iamNoParentId, parentOfEverythingId}});
 
 			agentRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(0);
@@ -645,12 +647,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
 			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-				new TeleoptiIdentity("test", null, businessUnit, null, null), PersonFactory.CreatePerson());
-			var roleId = Guid.NewGuid();
+				new TeleoptiIdentity("test", null, businessUnit, null, null), PersonFactory.CreatePerson());			
 			var site = SiteFactory.CreateSimpleSite();
 
 			businessUnit.SetId(site.BusinessUnit.Id);
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
+			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
 			ApplicationRoleRepository.Add(agentRole);
 
@@ -678,7 +680,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			agentRole.AvailableData.AddAvailableSite(site);
 			ApplicationRoleRepository.Add(agentRole);
 
-			Target.RemoveAvailable(roleId, data);
+			Target.RemoveAvailable(agentRole.Id.Value, data);
 
 			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
 			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
