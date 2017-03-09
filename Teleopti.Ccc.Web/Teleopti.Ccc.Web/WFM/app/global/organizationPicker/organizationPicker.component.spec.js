@@ -79,7 +79,7 @@ describe('organizationPicker component tests',
 					onPick: angular.noop
 				}
 
-				var ctrl = $componentController('organizationPicker', null, bindings);
+				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
 				ctrl.$onInit();
 
 				expect(ctrl.groupList.length).toEqual(2);
@@ -98,7 +98,7 @@ describe('organizationPicker component tests',
 					onPick: angular.noop
 				}
 
-				var ctrl = $componentController('organizationPicker', null, bindings);
+				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
 				ctrl.$onInit();
 
 				ctrl.onPickerOpen();
@@ -122,7 +122,7 @@ describe('organizationPicker component tests',
 					}
 				}
 
-				var ctrl = $componentController('organizationPicker', null, bindings);
+				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
 				ctrl.$onInit();
 
 				ctrl.onPickerOpen();
@@ -142,7 +142,7 @@ describe('organizationPicker component tests',
 					}
 				}
 
-				var ctrl = $componentController('organizationPicker', null, bindings);
+				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
 				ctrl.$onInit();
 
 				ctrl.onPickerOpen();

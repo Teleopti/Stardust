@@ -26,9 +26,9 @@
 		return !('single' in attrs);
 	}
 
-	organizationPickerCtrl.$inject = ['$scope', '$translate', '$attrs', '$element', 'organizationPickerSvc'];
+	organizationPickerCtrl.$inject = ['$scope', '$translate', '$attrs',  'organizationPickerSvc'];
 
-	function organizationPickerCtrl($scope, $translate, $attrs, $element, orgPickerSvc) {
+	function organizationPickerCtrl($scope, $translate, $attrs, orgPickerSvc) {
 		var ctrl = this,
 			currentSite,
 			initialSelectedTeamIds = [],
