@@ -149,11 +149,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return requestValidators;
 		}
 
-		private IList<IPersonRequest> getPersonRequests(IEnumerable<Guid> personRequestIds)
-		{
-			return _personRequestRepository.Find(personRequestIds);
-		}
-
 		private class isNullOrNotNewSpecification : Specification<IPersonRequest>
 		{
 			public override bool IsSatisfiedBy(IPersonRequest obj)
