@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
-	//[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
+	[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
 	public class ResourceCalculate3DaysTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
