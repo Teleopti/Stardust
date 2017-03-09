@@ -48,7 +48,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 		_initTimeIndicator();
 		$(".body-weekview-inner").show();
-		completelyLoaded();
+		if (completelyLoaded && $.isFunction(completelyLoaded)) {
+			completelyLoaded();
+		}
 	}
 
 	function _fetchData(dataHandler) {
@@ -63,7 +65,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			},
 			success: function (data) {
 				_bindData(data);
-				_setTimeIndicator(getCurrentUserDateTime());
+				_setTimeIndicator(getCurrentUserDateTime(vm.baseUtcOffsetInMinutes));
 				if (dataHandler != undefined) {
 					dataHandler(data);
 				}
@@ -111,10 +113,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		return moment(timeWithoutTimezone + "+00:00");
 	}
 
-	function getCurrentUserDateTime() {
+	function getCurrentUserDateTime(utcOffsetInMinutes) {
 		var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
-				? stripTeleoptiTimeToUTCForScenarioTest().zone(-baseUtcOffsetInMinutes)
-				: moment().zone(-baseUtcOffsetInMinutes);//work in user timezone, just make life easier
+				? stripTeleoptiTimeToUTCForScenarioTest().zone(-utcOffsetInMinutes)
+				: moment().zone(-utcOffsetInMinutes);//work in user timezone, just make life easier
 
 		_ensureDST(currentUserDateTime);
 		return currentUserDateTime;
@@ -126,7 +128,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			clearInterval(currentTimeInterval);
 		}
 		currentTimeInterval = setInterval(function () {
-			var currentUserDateTime = getCurrentUserDateTime();
+			var currentUserDateTime = getCurrentUserDateTime(baseUtcOffsetInMinutes);
 			if (timeIndicatorDateTime === undefined || currentUserDateTime.minutes() !== timeIndicatorDateTime.minutes()) {
 				timeIndicatorDateTime = currentUserDateTime;
 				_setTimeIndicator(timeIndicatorDateTime);
@@ -469,7 +471,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return new TimelineViewModel(item, data.TimeLineCulture);
 			});
 			self.timeLines(timelines);
-			var currentUserDate = getCurrentUserDateTime().format("YYYY-MM-DD");
+			var currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
 			var days = ko.utils.arrayMap(data.Days, function (item) {
 				var isToday = item.FixedDate === currentUserDate;
 				return new Teleopti.MyTimeWeb.Schedule.DayViewModel(item, isToday ? data.Possibilities : undefined, self);
@@ -520,7 +522,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		var days = vm.days();
-		var currentUserDate = getCurrentUserDateTime().format("YYYY-MM-DD");
+		var currentUserDate = getCurrentUserDateTime(vm.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
 		for (var i = 0; i < days.length; i++) {
 			var day = days[i];
 			var isToday = day.fixedDate() === currentUserDate;
@@ -618,7 +620,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
 		},
-		Constants: constants
+		Constants: constants,
+		GetCurrentUserDateTime: getCurrentUserDateTime
 	};
 })(jQuery);
 

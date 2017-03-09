@@ -26,6 +26,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.previousWeekDate = ko.observable(moment());
 	self.selectedDate = ko.observable(moment().startOf("day"));
 
+	self.baseUtcOffsetInMinutes = ko.observable();
+
 	self.selectedDateSubscription = null;
 	self.initialRequestDay = ko.observable();
 	self.formattedRequestDate = ko.computed(function () {
@@ -138,8 +140,15 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		} else {
 			self.datePickerFormat("");
 		}
-		var hasAbsenceReportPermission = data.RequestPermission != null ? data.RequestPermission.AbsenceReportPermission : false;
-		var hasOvertimeAvailabilityPermission = data.RequestPermission != null ? data.RequestPermission.OvertimeAvailabilityPermission : false;
+
+		self.baseUtcOffsetInMinutes(data.BaseUtcOffsetInMinutes);
+
+		var hasAbsenceReportPermission = false;
+		var hasOvertimeAvailabilityPermission = false;
+		if (data.RequestPermission != null) {
+			hasAbsenceReportPermission = data.RequestPermission.AbsenceReportPermission;
+			hasOvertimeAvailabilityPermission = data.RequestPermission.OvertimeAvailabilityPermission;
+		}
 
 		self.timelines = ko.utils.arrayMap(data.TimeLine, function (rawTimeline) {
 			var hourMinuteSecond = rawTimeline.Time.split(":");
@@ -154,13 +163,12 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		var dayViewModels = data.Days == undefined || data.Days == null || data.Days.length === 0
 			? []
 			: data.Days.map(function (scheduleDay) {
-				var isToday = false; // TODO: How to check if it's today?
+				var currentUserDate = moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(self.baseUtcOffsetInMinutes))
+					.format("YYYY-MM-DD");
+				var isToday = scheduleDay.FixedDate === currentUserDate;
 				var rawProbabilies = isToday ? data.Possibilities : [];
-				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay,
-					rawProbabilies,
-					hasAbsenceReportPermission,
-					hasOvertimeAvailabilityPermission,
-					self.userTexts);
+				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, rawProbabilies,
+					hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self.userTexts);
 			});
 
 		self.dayViewModels(dayViewModels);
