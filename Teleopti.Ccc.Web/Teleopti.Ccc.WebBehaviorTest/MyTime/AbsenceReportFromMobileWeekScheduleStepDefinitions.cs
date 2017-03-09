@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see any add absence report button")]
 		public void ThenIShouldNotSeeTheAddAbsenceReportButton()
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(".day", "#addAbsenceReport");
+			Browser.Interactions.AssertNotExistsUsingJQuery(".day", ".absence-report-add");
 		}
 
 		[Then(@"I should see the add absence report form")]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private string getAddAbsenceReportButtonSelector(string date)
 		{
-			return string.Format(".day[data-mytime-date='{0}'] #addAbsenceReport", date);
+			return string.Format(".day[data-mytime-date='{0}'] .absence-report-add", date);
 		}
 
 		private string getAddAbsenceReportFormSelector(string date)

@@ -113,12 +113,12 @@
 					<!-- ko if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
 						<!-- ko if: overtimeAvailabilityPermission() -->
 						<li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
-							<a href="#" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
+							<a href="#" class="overtime-availability-add" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
 						</li>
 						<!-- /ko -->
 						<!-- ko if: isPermittedToReportAbsence() -->
 						<li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
-							<a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
+							<a href="#" class="absence-report-add" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
 						</li>
 						<!-- /ko -->
 					<!-- /ko -->
@@ -137,7 +137,7 @@
 						<!-- ko if: (overtimeAvailabilityPermission() || isPermittedToReportAbsence())-->
 						<li class="pull-right action-menu-container">
 							<div class="dropdown">
-								<a class="btn btn-primary action-button" href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="glyphicon glyphicon-plus"></i></a>
+								<a class="btn btn-primary dropdown-toggle action-button" href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i></a>
 								<ul class="dropdown-menu action-menus">
 									<!-- ko if: overtimeAvailabilityPermission() -->
 									<li>
@@ -147,7 +147,7 @@
 									<!-- ko if: isPermittedToReportAbsence() -->
 									<li>
 										<a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
-									</li>
+									</li>	
 									<!-- /ko -->
 								</ul>
 							</div>
