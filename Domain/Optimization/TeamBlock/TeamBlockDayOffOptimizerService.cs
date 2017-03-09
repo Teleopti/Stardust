@@ -404,22 +404,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			                                         movedDaysOff.RemovedDaysOff,
 			                                         rollbackService, resourceCalculateDelayer,
 			                                         schedulingResultStateHolder);
-			if (success)
-			{
-				if (optimizationPreferences.Extra.IsClassic())
-				{
-					//TODO - investigate... 
-					// * run even if not success?
-					// * run also when normal team/block?
-					// * lock also added DO days?
-					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-				}
-			}
-			else
+			if (!success)
 			{
 				checkPeriodValue = true;
 				return false;
 			}
+
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 			{
