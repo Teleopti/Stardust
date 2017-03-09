@@ -2,7 +2,7 @@
 	<h2>Stardust Dashboard</h2>
 	<div class="row">
 		<div class="col-md-7 summary-jobs ">
-			<div class="col-md-12 panel panel-default ">
+			<div class="panel panel-default ">
 				<div class="panel-heading">Failures</div>
 				<div class="panel-body">
 					<p>
@@ -35,7 +35,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-md-12 panel panel-default ">
+			<div class="panel panel-default ">
 				<div class="panel-heading">Queue</div>
 				<div class="panel-body">
 					<p>
@@ -64,7 +64,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-md-12 panel panel-default">
+			<div class="panel panel-default">
 				<div class="panel-heading">History</div>
 				<div class="panel-body ">
 					<p>
@@ -100,7 +100,7 @@
 			</div>
 		</div>
 		<div class="col-md-5 summary-nodes">
-			<div class="col-md-12 panel panel-default ">
+			<div class="panel panel-default ">
 				<div class="panel-heading">Trigger Resource Calculation</div>
 				<div class="panel-body">
 					<p>
@@ -108,9 +108,9 @@
 					</p>
 				</div>
 				<div class="panel-footer">
-					<div class="dropdown">
+					<div class="dropdown" style="padding-bottom: 10px" >
 						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							<span ng-show="!vm.selectedTenantName">Select Tenant...</span>
+							<span  ng-show="!vm.selectedTenantName">Select Tenant...</span>
 							<span ng-show="vm.selectedTenantName">{{vm.selectedTenantName}}</span>
 							<span class="caret"></span>
 						</button>
@@ -128,7 +128,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-12 panel panel-default ">
+			<div class="panel panel-default ">
 				<div class="panel-heading">Nodes</div>
 				<div class="panel-body">
 					<p>
