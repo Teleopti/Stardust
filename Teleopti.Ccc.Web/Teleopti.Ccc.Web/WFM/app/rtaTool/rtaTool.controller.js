@@ -85,9 +85,15 @@
 		}
 
 		vm.sendRandomBatch = function () {
-			sendBatch(function () {
-				return vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
-			});
+			var selectedAgents = vm.gridApi.selection.getSelectedRows();
+			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
+			var randomAgent = selectedAgents[Math.floor(Math.random()*selectedAgents.length)];
+			var stateName = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
+			vm.sendState(randomAgent.UserCode, randomAgent.DataSource, stateName);
+
+			// sendBatch(function () {
+			// 	return vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
+			// });
 		}
 
 		function sendBatch(stateName) {
