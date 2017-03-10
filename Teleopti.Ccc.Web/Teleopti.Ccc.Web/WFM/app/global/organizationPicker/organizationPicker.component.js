@@ -108,18 +108,18 @@
 		ctrl.formatSelectedDisplayName = function () {
 			if (!ctrl.selectedTeamIds) return '';
 
-			if (ctrl.selectedTeamIds.length > 1) {
+			if (isMultiple && ctrl.selectedTeamIds.length > 1) {
 				return $translate.instant("SeveralTeamsSelected").replace("{0}", ctrl.selectedTeamIds.length);
 			}
-
 			for (var i = 0; i < ctrl.groupList.length; i++) {
 				var teams = ctrl.groupList[i].teams;
 				for (var j = 0; j < teams.length; j++) {
-					if (ctrl.selectedTeamIds[0] === teams[j].id) {
+					if (isTeamSelected(teams[j].id)) {
 						return teams[j].name;
 					}
 				}
 			}
+
 			return $translate.instant("Organization");
 		};
 
