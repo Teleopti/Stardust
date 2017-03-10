@@ -144,11 +144,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			switch (adherence.Value)
 			{
 				case HistoricalChangeInternalAdherence.In:
-					return "In adherence";
+					return UserTexts.Resources.InAdherence;
 				case HistoricalChangeInternalAdherence.Neutral:
-					return "Neutral";
+					return UserTexts.Resources.NeutralAdherence;
 				case HistoricalChangeInternalAdherence.Out:
-					return "Out of adherence";
+					return UserTexts.Resources.OutOfAdherence;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
 			}

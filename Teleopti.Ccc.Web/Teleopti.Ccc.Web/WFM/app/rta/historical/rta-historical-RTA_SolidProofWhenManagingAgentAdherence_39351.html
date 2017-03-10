@@ -152,10 +152,9 @@
                             <div class="con-flex"><b>{{'Adherence' | translate}}</b></div>
                         </div>
                     </li>
-                    <li ng-repeat="item in card.Items" ng-class="{'change': true, 'highlight': item.highlight}" data-time="{{item.Time | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-activity="{{item.Activity}}" data-state="{{item.State}}" data-rule="{{item.Rule}}"
-                        data-adherence="{{item.Adherence}}" ng-click="item.click()">
+                    <li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}" data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}" ng-click="item.click()">
                         <div class="con-row rta-change-row">
-                            <div class="con-flex time">{{item.Time}}</div>
+                            <div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
                             <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.ActivityColor}};">{{item.Activity}}</span></div>
                             <div class="con-flex">{{item.State}}</div>
                             <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.RuleColor}};">{{item.Rule}}</span></div>

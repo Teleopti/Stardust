@@ -567,7 +567,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
         public static void GoToAgentHistoricalAdherence(Guid personId)
 		{
-			GoToPage("wfm/#/rta/agent-historical/" + personId);
+			GoToPage($"wfm/#/rta/agent-historical/{personId}?open");
 		}
 
 		public static void GotoPageCiscoFinesse()

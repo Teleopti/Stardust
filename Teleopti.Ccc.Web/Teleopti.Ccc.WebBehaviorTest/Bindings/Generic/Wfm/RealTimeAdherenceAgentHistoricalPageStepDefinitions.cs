@@ -1,6 +1,9 @@
+using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
@@ -45,14 +48,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var changes = table.CreateSet<RuleAndStateChanges>();
 			changes.ForEach(change =>
 			{
-				Browser.Interactions.AssertExists(
-					".change[data-time='{0}'][data-activity='{1}'][data-state='{2}'][data-rule='{3}'][data-adherence='{4}']",
-					change.Time,
-					change.Activity,
-					change.State,
-					change.Rule,
-					change.Adherence
-				);
+				var selector = $".change[data-time='{change.Time}']";
+				Browser.Interactions.AssertFirstContains(selector, change.Time);
+				if (!string.IsNullOrEmpty(change.Activity)) 
+					Browser.Interactions.AssertFirstContains(selector, change.Activity);
+				Browser.Interactions.AssertFirstContains(selector, change.State);
+				Browser.Interactions.AssertFirstContains(selector, change.Rule);
+				Browser.Interactions.AssertFirstContains(selector, change.AdherenceText);
 			});
 		}
 
@@ -62,7 +64,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			public string Activity;
 			public string State;
 			public string Rule;
-			public string Adherence;
+			public Adherence Adherence;
+
+			public string AdherenceText
+			{
+				get
+				{
+					switch (Adherence)
+					{
+						case Adherence.In:
+							return UserTexts.Resources.InAdherence;
+						case Adherence.Neutral:
+							return UserTexts.Resources.NeutralAdherence;
+						case Adherence.Out:
+							return UserTexts.Resources.OutOfAdherence;
+
+						default:
+							return null;
+					}
+				}
+			}
 		}
 
 		public class StartEndTimePair

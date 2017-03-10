@@ -11,6 +11,7 @@
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
+		$stateParams.open = ($stateParams.open || "false")
 
 		vm.ooaTooltipTime = function(time) {
 			if (time == null)
@@ -150,7 +151,7 @@
 						Header: key,
 						Items: [change],
 						Color: cardColor,
-						isOpen: false
+						isOpen: $stateParams.open != "false"
 					};
 					arr.push(existing);
 				} else {

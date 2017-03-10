@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.State.Should().Be("InCall");
 			result.Rule.Should().Be("in");
 			result.RuleColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkKhaki.ToArgb())));
-			result.Adherence.Should().Be("In adherence");
+			result.Adherence.Should().Be(UserTexts.Resources.InAdherence);
 			result.AdherenceColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkOliveGreen.ToArgb())));
 		}
 

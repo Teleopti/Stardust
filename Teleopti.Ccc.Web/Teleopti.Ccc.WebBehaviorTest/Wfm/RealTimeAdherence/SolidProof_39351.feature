@@ -1,6 +1,6 @@
 ﻿@RTA
 @ignore
-Feature: I need solid proof when I manage agent adherence
+Feature: Solid proof
 	As an adherence analyst I need to see all OoA occurrences and the exact reason why,
 	so that I have solid proof when I talk to team leads and agents about bad adherence.
 	and so that I can find issues in the configured setup.
@@ -58,10 +58,10 @@ Scenario: See rule changes
 	And the time is '2016-10-11 12:00:00'
 	When I view historical adherence for 'Mikkey Dee'
 	Then I should rule and state changes
-	| Time                | Activity | State     | Rule         | Adherence         |
-	| 2016-10-11 08:30:00 |          | LoggedOff | Neutral      | Neutral adherence |
-	| 2016-10-11 09:00:00 | Phone    | LoggedOff | Not adhering | Out of adherence  |
-	| 2016-10-11 11:00:00 | Lunch    | LoggedOff | Adhering     | In adherence      |
+	| Time     | Activity | State     | Rule         | Adherence |
+	| 08:30:00 |          | LoggedOff | Neutral      | Neutral   |
+	| 09:00:00 | Phone    | LoggedOff | Not adhering | Out       |
+	| 11:00:00 | Lunch    | LoggedOff | Adhering     | In        |
 
 @OnlyRunIfEnabled('RTA_SolidProofWhenManagingAgentAdherence_39351')
 Scenario: See state changes
@@ -77,8 +77,8 @@ Scenario: See state changes
 	And the time is '2016-10-11 12:00:00'
 	When I view historical adherence for 'Mikkey Dee'
 	Then I should rule and state changes
-	| Time                | Activity | State     | Rule     | Adherence         |
-	| 2016-10-11 08:30:00 |          | LoggedOff | Neutral  | Neutral adherence |
-	| 2016-10-11 08:40:00 | Phone    | Ready     | Positive | Out of adherence  |
-	| 2016-10-11 08:50:00 | Phone    | LoggedOff | Neutral  | Neutral adherence |
-	| 2016-10-11 10:10:00 | Phone    | Ready     | Adhering | In adherence      |
+	| Time     | Activity | State     | Rule     | Adherence |
+	| 08:30:00 |          | LoggedOff | Neutral  | Neutral   |
+	| 08:40:00 | Phone    | Ready     | Positive | Out       |
+	| 08:50:00 | Phone    | LoggedOff | Neutral  | Neutral   |
+	| 10:10:00 | Phone    | Ready     | Adhering | In        |
