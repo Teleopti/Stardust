@@ -709,7 +709,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ValidDateTimePeriodShiftFilter>().As<IValidDateTimePeriodShiftFilter>().SingleInstance();
 			builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>().SingleInstance();
 			builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>().SingleInstance();
-			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>().InstancePerLifetimeScope();
+			builder.RegisterType<CommonActivityFilter>().SingleInstance();
 			builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
 			builder.RegisterType<RuleSetBagExtractorProvider>().SingleInstance();
 			builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>().SingleInstance();

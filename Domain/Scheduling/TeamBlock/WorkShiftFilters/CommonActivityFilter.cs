@@ -4,12 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-	public interface ICommonActivityFilter
-	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction);
-	}
-
-	public class CommonActivityFilter : ICommonActivityFilter
+	public class CommonActivityFilter
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction)
 		{

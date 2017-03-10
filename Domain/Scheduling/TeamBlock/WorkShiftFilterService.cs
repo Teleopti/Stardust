@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkTimeLimitationShiftFilter _workTimeLimitationShiftFilter;
 		private readonly IShiftLengthDecider _shiftLengthDecider;
 		private readonly IWorkShiftMinMaxCalculator _minMaxCalculator;
-		private readonly ICommonActivityFilter _commonActivityFilter;
+		private readonly CommonActivityFilter _commonActivityFilter;
         private readonly IRuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessabilityFilter;
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IWorkTimeLimitationShiftFilter workTimeLimitationShiftFilter,
 			IShiftLengthDecider shiftLengthDecider,
 			IWorkShiftMinMaxCalculator minMaxCalculator,
-			ICommonActivityFilter commonActivityFilter, 
+			CommonActivityFilter commonActivityFilter, 
 			IRuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
 			IShiftProjectionCacheManager shiftProjectionCacheManager,
 			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter,

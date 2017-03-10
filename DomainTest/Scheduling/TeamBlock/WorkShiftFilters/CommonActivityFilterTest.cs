@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	[TestFixture]
 	public class CommonActivityFilterTest
 	{
-		private ICommonActivityFilter _target;
+		private CommonActivityFilter _target;
 		private IActivity _activity;
 		private ShiftCategory _category;
 		private WorkShift _workShift;
