@@ -55,7 +55,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				ShiftBags = _ruleSetBagRepository.LoadAll().ToDictionary(r => r.Id.GetValueOrDefault(), r => r.Description.Name),
 				Skills = _skillRepository.LoadAll().ToDictionary(s => s.Id.GetValueOrDefault(), s => s.Name),
 				SchedulePeriodTypes =
-					Enum.GetValues(typeof(SchedulePeriodType)).Cast<SchedulePeriodType>().ToDictionary(t => (int) t, t => t.ToString())
+					Enum.GetValues(typeof(SchedulePeriodType)).Cast<SchedulePeriodType>().ToDictionary(t => (int) t, t => t.ToString()),
+
+				PartTimePercentages =
+					_partTimePercentageRepository.LoadAll().ToDictionary(p => p.Id.GetValueOrDefault(), p => p.Description.Name),
+
+				ExternalLogons = _externalLogOnRepository.LoadAll().ToDictionary(e => e.Id.GetValueOrDefault(), e => e.AcdLogOnName)
 			};
 		}
 

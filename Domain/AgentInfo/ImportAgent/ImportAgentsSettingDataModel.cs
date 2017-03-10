@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 		public IDictionary<Guid, string> ContractSchedules { get; set; }
 		public IDictionary<Guid, string> ShiftBags { get; set; }
 		public IDictionary<int, string> SchedulePeriodTypes { get; set; }
+		public IDictionary<Guid, string> PartTimePercentages { get; set; }
+		public IDictionary<Guid, string> ExternalLogons { get; set; }
 	}
 
 	public class TeamViewModel
