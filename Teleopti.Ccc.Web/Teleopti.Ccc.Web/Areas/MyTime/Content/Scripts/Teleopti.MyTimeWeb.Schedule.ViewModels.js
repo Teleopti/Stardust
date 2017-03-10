@@ -242,7 +242,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 			actualTooltips: "",
 			cssClass: function () { return "probability-none"; },
 			tooltips: function () { return "" },
-			styleJson: { "height": Math.round(constants.scheduleHeight * boundaries.probabilityStartPosition) + "px" }
+			styleJson: { "height": (boundaries.probabilityStartPosition * 100) + "%" }
 		});
 
 		for (var j = 0; j < rawProbabilities.length; j++) {

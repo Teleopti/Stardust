@@ -85,7 +85,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.absenceProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -98,7 +98,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.absenceProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -111,7 +111,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.overtimeProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -124,7 +124,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.overtimeProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartPosition, 0);
@@ -137,7 +137,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.absenceProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 570);
 		equal(vm.probabilityEndMinutes, 1110);
 		equal(Math.round(vm.probabilityStartPosition * 1000), Math.round(570 * 1000 / constants.totalMinutesOfOneDay));
@@ -163,13 +163,13 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.overtimeProbabilityType, [], openHourPeriod);
 
-		equal(vm.heightPercentagePerMinute, 1 / timelineLengthInMinutes);
+		equal(vm.lengthPercentagePerMinute, 1 / timelineLengthInMinutes);
 		equal(vm.probabilityStartMinutes, 420); // 07:00
 		equal(vm.probabilityEndMinutes, 960); // 16:00
 		equal(Math.round(vm.probabilityStartPosition * 1000),
-			Math.round(((420 - timelineStartInMinutes) * vm.heightPercentagePerMinute) * 1000));
+			Math.round(((420 - timelineStartInMinutes) * vm.lengthPercentagePerMinute) * 1000));
 		equal(Math.round(vm.probabilityEndPosition * 1000),
-			Math.round(((960 - timelineStartInMinutes) * vm.heightPercentagePerMinute) * 1000));
+			Math.round(((960 - timelineStartInMinutes) * vm.lengthPercentagePerMinute) * 1000));
 	});
 
 	test("Calculate absence probability boundaries for cross day schedule end today", function () {
@@ -178,7 +178,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.absenceProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 60);
 		equal(vm.probabilityStartPosition, 0);
@@ -191,7 +191,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.absenceProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 1020);
 		equal(vm.probabilityEndMinutes, 1440);
 		equal(Math.round(vm.probabilityStartPosition * 1000), Math.round(1020 * 1000 / constants.totalMinutesOfOneDay));
@@ -204,7 +204,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.overtimeProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 1440);
 		equal(vm.probabilityStartPosition, 0);
@@ -217,7 +217,7 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
 			constants.overtimeProbabilityType, [], undefined);
 
-		equal(vm.heightPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
+		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 1440);
 		equal(vm.probabilityStartPosition, 0);

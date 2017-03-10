@@ -57,14 +57,13 @@
 		+ "</div>"
 		: "";
 
-	var heightPerIntervalInPx = boundaries.heightPercentagePerMinute * constants.intervalLengthInMinutes *
-		constants.scheduleHeight;
+	var lengthPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * constants.intervalLengthInMinutes * 100;
 	return {
 		startMinutes: intervalStartMinutes,
 		endInMinutes: intervalEndMinutes,
 		actualClass: cssClass,
 		actualTooltips: tooltips,
-		styleJson: { "height": heightPerIntervalInPx + "px" },
+		styleJson: { "height": lengthPerIntervalInPercentage + "%" },
 		cssClass: function () {
 			if (parent.userNowInMinute() < 0) {
 				return invisibleProbabilityClass;

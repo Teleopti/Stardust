@@ -30,7 +30,7 @@ $(document).ready(function () {
 	}
 
 	var boundaries = {
-		"heightPercentagePerMinute": 0.01,
+		"lengthPercentagePerMinute": 0.01,
 		"probabilityStartMinutes": 240, // 04:00
 		"probabilityEndMinutes": 1380, // 23:00
 		"probabilityStartPosition": 0.14,
@@ -93,12 +93,13 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
-			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
+			constants.intervalLengthInMinutes *
+			100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
 		equal(vm.actualClass, expectedActualClass);
 		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
-		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
 		equal(vm.cssClass(), invisibleProbabilityCssClass);
@@ -135,11 +136,12 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
-			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
+			constants.intervalLengthInMinutes *
+			100;
 		equal(vm.actualClass, invisibleProbabilityCssClass);
 		equal(vm.actualTooltips, "");
-		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
 		equal(vm.cssClass(), invisibleProbabilityCssClass);
@@ -210,12 +212,13 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
-			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
+			constants.intervalLengthInMinutes *
+			100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
 		equal(vm.actualClass, expectedActualClass);
 		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
-		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
 		equal(vm.cssClass(), invisibleProbabilityCssClass);
@@ -252,12 +255,13 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPx = boundaries.heightPercentagePerMinute *
-			constants.intervalLengthInMinutes * constants.scheduleHeight;
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
+			constants.intervalLengthInMinutes *
+			100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
 		equal(vm.actualClass, expectedActualClass);
 		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
-		equal(vm.styleJson.height, expectedHeightPerIntervalInPx + "px");
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
 		equal(vm.cssClass(), invisibleProbabilityCssClass);

@@ -25,7 +25,7 @@
 		? timelineEndMinutes - constants.intervalLengthInMinutes
 		: timelineEndMinutes;
 
-	var heightPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
+	var lengthPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
 
 	var momentDate = moment(scheduleDay.FixedDate);
 
@@ -99,11 +99,11 @@
 	probabilityStartMinutes = Math.max.apply(null, startTimeCandidates);
 	probabilityEndMinutes = Math.min.apply(null, endTimeCandidates);
 
-	probabilityStartPosition = (probabilityStartMinutes - timelineStartMinutes) * heightPercentagePerMinute;
-	probabilityEndPosition = (probabilityEndMinutes - timelineStartMinutes) * heightPercentagePerMinute;
+	probabilityStartPosition = (probabilityStartMinutes - timelineStartMinutes) * lengthPercentagePerMinute;
+	probabilityEndPosition = (probabilityEndMinutes - timelineStartMinutes) * lengthPercentagePerMinute;
 
 	return {
-		heightPercentagePerMinute: heightPercentagePerMinute,
+		lengthPercentagePerMinute: lengthPercentagePerMinute,
 		probabilityStartMinutes: probabilityStartMinutes,
 		probabilityEndMinutes: probabilityEndMinutes,
 		probabilityStartPosition: probabilityStartPosition,
