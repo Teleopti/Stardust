@@ -3,39 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	
-	public class SkillStaffIntervalHolder : IShovelResourceData
-	{
-		private readonly IDictionary<ISkill, IResourceCalculationPeriod> _dictionary;
-
-		public SkillStaffIntervalHolder(IDictionary<ISkill,IResourceCalculationPeriod> dictionary)
-		{
-			_dictionary = dictionary;
-		}
-		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
-		{
-			IResourceCalculationPeriod resourceCalculationPeriod;
-			if (_dictionary.TryGetValue(skill, out resourceCalculationPeriod))
-			{
-				var staffingInterval = (SkillStaffingInterval)resourceCalculationPeriod;
-				if (period == new DateTimePeriod(staffingInterval.StartDateTime.Utc(), staffingInterval.EndDateTime.Utc()))
-				{
-					dataForInterval = staffingInterval;
-					return true;
-				}
-			}
-			dataForInterval = null;
-			return false;
-		}
-	}
-
 	public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder
 	{
 		private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
@@ -45,28 +18,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			CreateInternalDictionary(skillDays);
 		}
-
-		//public SkillStaffPeriodHolder(IList<ISkill> allSkills, IList<SkillStaffingInterval> skillStaffingIntervals  )
-		//{
-		//	_internalDictionary = new SkillSkillStaffPeriodExtendedDictionary();
-		//	var skillsOnInterval = skillStaffingIntervals.Select(x => x.SkillId).Distinct();
-		//	foreach (var skillId in skillsOnInterval)
-		//	{
-		//		var skill = allSkills.First(x => x.Id.Value == skillId);
-		//		ISkillStaffPeriodDictionary skillStaffPeriods = new SkillStaffPeriodDictionary(skill);
-		//		foreach (var skillstaffInterval in skillStaffingIntervals.Where(x=>x.SkillId==skillId))
-		//		{
-		//			var newPeriod = new SkillStaffPeriod(skillstaffInterval.DateTimePeriod, new Task(), new ServiceAgreement(),
-		//				new StaffingCalculatorServiceFacade());
-		//			newPeriod.SetCalculatedLoggedOn(skillstaffInterval.FStaff);
-		//			newPeriod.ForecastedDistributedDemand
-		//			skillStaffPeriods.Add(skillstaffInterval.DateTimePeriod,newPeriod);
-					
-		//		}
-		//		if (skillStaffPeriods.Count > 0)
-		//			_internalDictionary.Add(skill, skillStaffPeriods);
-		//	}
-		//}
 
 		public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills, ISkillPriorityProvider skillPriorityProvider)
 		{
@@ -100,8 +51,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 							double absoluteDifferenceScheduledHeadsAndMinMaxHeads = skillStaffPeriod.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true);
 							var origDemand = skillStaffPeriod.FStaffTime().TotalMinutes;
-							var assignedResource =skillStaffPeriod.Payload.CalculatedResource*
-										   skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
+							var assignedResource = skillStaffPeriod.Payload.CalculatedResource *
+											 skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
 							ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataInfo(origDemand,
 																									assignedResource,
 																									skillStaffPeriod.
@@ -109,8 +60,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 																									minimumPersons,
 																									maximumPersons,
 																									absoluteDifferenceScheduledHeadsAndMinMaxHeads,
-																									skillStaffPeriod.PeriodDistribution, 
-																									skillPriorityProvider.GetOverstaffingFactor(skill), 
+																									skillStaffPeriod.PeriodDistribution,
+																									skillPriorityProvider.GetOverstaffingFactor(skill),
 																									skillPriorityProvider.GetPriorityValue(skill));
 
 							dataHolders.Add(skillStaffPeriod.Period.StartDateTime, dataHolder);
@@ -155,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return personSkillSkillStaff;
 		}
 
-		public static Dictionary<DateTime, ISkillStaffPeriodDataHolder> BoostFirstAndLastInterval(Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders )
+		public static Dictionary<DateTime, ISkillStaffPeriodDataHolder> BoostFirstAndLastInterval(Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders)
 		{
 			DateTime? lastKey = null;
 			//Boost first and last interval
@@ -187,7 +138,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (KeyValuePair<DateTime, ISkillStaffPeriodDataHolder> valuePair in dictionaryTo)
 			{
 				ISkillStaffPeriodDataHolder skillStaffPeriodDataHolder;
-				if (dictionaryFrom.TryGetValue(valuePair.Key,out skillStaffPeriodDataHolder))
+				if (dictionaryFrom.TryGetValue(valuePair.Key, out skillStaffPeriodDataHolder))
 				{
 					valuePair.Value.OriginalDemandInMinutes +=
 					 skillStaffPeriodDataHolder.OriginalDemandInMinutes;
@@ -197,7 +148,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					valuePair.Value.MinimumPersons += skillStaffPeriodDataHolder.MinimumPersons;
 					valuePair.Value.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads += skillStaffPeriodDataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads;
 					valuePair.Value.TweakedCurrentDemand += skillStaffPeriodDataHolder.TweakedCurrentDemand;
-					if(skillStaffPeriodDataHolder.Boost)
+					if (skillStaffPeriodDataHolder.Boost)
 						valuePair.Value.Boost = true;
 				}
 			}
@@ -211,7 +162,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (!dictionaryToControl.ContainsKey(pair.Key))
 				{
-					ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataInfo(0, 0, pair.Value.Period, 0, 0,0, null);
+					ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataInfo(0, 0, pair.Value.Period, 0, 0, 0, null);
 					dictionaryToControl.Add(pair.Key, dataHolder);
 				}
 			}
@@ -249,7 +200,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						skillStaffPeriods.Add(skillStaffPeriod.Period, skillStaffPeriod);
 					}
 				}
-				if (skillStaffPeriods.Count>0)
+				if (skillStaffPeriods.Count > 0)
 					_internalDictionary.Add(skillDay.Key, skillStaffPeriods);
 			}
 		}
@@ -303,10 +254,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					{
 						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
 						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
-						
+
 						newDictionary.Add(dictionary.Key, dictionary.Value);
 					}
-					if(newDictionary.Count > 0 )
+					if (newDictionary.Count > 0)
 						skillStaffPeriods.Add(skill, newDictionary);
 				}
 			}
@@ -316,80 +267,80 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IList<ISkillStaffPeriod> SkillStaffPeriodList(IAggregateSkill skill, DateTimePeriod utcPeriod)
 		{
 			int minimumResolution = getMinimumResolution(skill);
-			
-			lock(Locker)
-			{
-			IDictionary<DateTimePeriod, IList<ISkillStaffPeriod>> skillStaffPeriods = new Dictionary<DateTimePeriod,IList<ISkillStaffPeriod>>();
-			foreach (ISkill aggregateSkill in skill.AggregateSkills)
-			{
-				ISkillStaffPeriodDictionary content;
-				if (!_internalDictionary.TryGetValue(aggregateSkill, out content)) continue;
 
-				if (aggregateSkill.DefaultResolution>minimumResolution)
+			lock (Locker)
+			{
+				IDictionary<DateTimePeriod, IList<ISkillStaffPeriod>> skillStaffPeriods = new Dictionary<DateTimePeriod, IList<ISkillStaffPeriod>>();
+				foreach (ISkill aggregateSkill in skill.AggregateSkills)
 				{
-					var relevantSkillStaffPeriodList = content.Where(c => utcPeriod.Contains(c.Key)).Select(c => c.Value);
-					var skillStaffPeriodsSplitList = new List<ISkillStaffPeriod>();
-					double factor = (double)minimumResolution / aggregateSkill.DefaultResolution;
-					foreach (ISkillStaffPeriod skillStaffPeriod in relevantSkillStaffPeriodList)
-					{
-						skillStaffPeriodsSplitList.AddRange(SplitSkillStaffPeriod(skillStaffPeriod,factor,TimeSpan.FromMinutes(minimumResolution)));
-					}
+					ISkillStaffPeriodDictionary content;
+					if (!_internalDictionary.TryGetValue(aggregateSkill, out content)) continue;
 
-					foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodsSplitList)
+					if (aggregateSkill.DefaultResolution > minimumResolution)
 					{
-						IList<ISkillStaffPeriod> foundList;
-						if (!skillStaffPeriods.TryGetValue(skillStaffPeriod.Period, out foundList))
+						var relevantSkillStaffPeriodList = content.Where(c => utcPeriod.Contains(c.Key)).Select(c => c.Value);
+						var skillStaffPeriodsSplitList = new List<ISkillStaffPeriod>();
+						double factor = (double)minimumResolution / aggregateSkill.DefaultResolution;
+						foreach (ISkillStaffPeriod skillStaffPeriod in relevantSkillStaffPeriodList)
 						{
-							foundList = new List<ISkillStaffPeriod>();
-							skillStaffPeriods.Add(skillStaffPeriod.Period, foundList);
+							skillStaffPeriodsSplitList.AddRange(SplitSkillStaffPeriod(skillStaffPeriod, factor, TimeSpan.FromMinutes(minimumResolution)));
 						}
 
-						foundList.Add(skillStaffPeriod);
-					}
-				}
-				else
-				{
-					foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> pair in content.Where(c => utcPeriod.Contains(c.Key)))
-					{
-						IList<ISkillStaffPeriod> foundList;
-						if (!skillStaffPeriods.TryGetValue(pair.Key, out foundList))
+						foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodsSplitList)
 						{
-							foundList = new List<ISkillStaffPeriod>();
-							skillStaffPeriods.Add(pair.Key,foundList);
+							IList<ISkillStaffPeriod> foundList;
+							if (!skillStaffPeriods.TryGetValue(skillStaffPeriod.Period, out foundList))
+							{
+								foundList = new List<ISkillStaffPeriod>();
+								skillStaffPeriods.Add(skillStaffPeriod.Period, foundList);
+							}
+
+							foundList.Add(skillStaffPeriod);
 						}
-
-						foundList.Add(pair.Value);
-					}
-				}
-			}
-
-			IList<ISkillStaffPeriod> skillStaffPeriodsToReturn = new List<ISkillStaffPeriod>();
-			
-			foreach (KeyValuePair<DateTimePeriod, IList<ISkillStaffPeriod>> keyValuePair in skillStaffPeriods)
-			{
-				ISkillStaffPeriod tempPeriod = SkillStaffPeriod.Combine(keyValuePair.Value);
-				var aggregate = (IAggregateSkillStaffPeriod)tempPeriod;
-				aggregate.IsAggregate = true;
-				recalculateMinMaxStaffAlarm((SkillStaffPeriod)aggregate);
-				foreach (ISkillStaffPeriod staffPeriod in keyValuePair.Value)
-				{
-					recalculateMinMaxStaffAlarm((SkillStaffPeriod)staffPeriod);
-					var asAgg = (IAggregateSkillStaffPeriod) staffPeriod;
-					if(!asAgg.IsAggregate)
-					{
-						HandleAggregate(keyValuePair, aggregate, staffPeriod, asAgg);
 					}
 					else
 					{
-						if(keyValuePair.Value.Count > 1)
-							aggregate.CombineAggregatedSkillStaffPeriod(asAgg);
-					}
-					
-				}
-				skillStaffPeriodsToReturn.Add(tempPeriod);
-			}
+						foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> pair in content.Where(c => utcPeriod.Contains(c.Key)))
+						{
+							IList<ISkillStaffPeriod> foundList;
+							if (!skillStaffPeriods.TryGetValue(pair.Key, out foundList))
+							{
+								foundList = new List<ISkillStaffPeriod>();
+								skillStaffPeriods.Add(pair.Key, foundList);
+							}
 
-			return SortedPeriods(skillStaffPeriodsToReturn);
+							foundList.Add(pair.Value);
+						}
+					}
+				}
+
+				IList<ISkillStaffPeriod> skillStaffPeriodsToReturn = new List<ISkillStaffPeriod>();
+
+				foreach (KeyValuePair<DateTimePeriod, IList<ISkillStaffPeriod>> keyValuePair in skillStaffPeriods)
+				{
+					ISkillStaffPeriod tempPeriod = SkillStaffPeriod.Combine(keyValuePair.Value);
+					var aggregate = (IAggregateSkillStaffPeriod)tempPeriod;
+					aggregate.IsAggregate = true;
+					recalculateMinMaxStaffAlarm((SkillStaffPeriod)aggregate);
+					foreach (ISkillStaffPeriod staffPeriod in keyValuePair.Value)
+					{
+						recalculateMinMaxStaffAlarm((SkillStaffPeriod)staffPeriod);
+						var asAgg = (IAggregateSkillStaffPeriod)staffPeriod;
+						if (!asAgg.IsAggregate)
+						{
+							HandleAggregate(keyValuePair, aggregate, staffPeriod, asAgg);
+						}
+						else
+						{
+							if (keyValuePair.Value.Count > 1)
+								aggregate.CombineAggregatedSkillStaffPeriod(asAgg);
+						}
+
+					}
+					skillStaffPeriodsToReturn.Add(tempPeriod);
+				}
+
+				return SortedPeriods(skillStaffPeriodsToReturn);
 			}
 		}
 
@@ -441,7 +392,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (criticalUnderstaffing.IsSatisfiedBy(staffPeriod))
 				asAgg.AggregatedStaffingThreshold = StaffingThreshold.CriticalUnderstaffing;
 			asAgg.IsAggregate = true;
-			if (keyValuePair.Value.Count >1)
+			if (keyValuePair.Value.Count > 1)
 				aggregate.CombineAggregatedSkillStaffPeriod(asAgg);
 			asAgg.IsAggregate = false;
 		}
@@ -465,17 +416,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				ISkillStaffPeriod newShortPeriod =
 					new SkillStaffPeriod(new DateTimePeriod(currentTime, currentTime.Add(minimumResolution)),
-										 new Task(skillStaffPeriod.Payload.TaskData.Tasks*factor,
-												  skillStaffPeriod.Payload.TaskData.AverageTaskTime,
-												  skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime),
+										 new Task(skillStaffPeriod.Payload.TaskData.Tasks * factor,
+													skillStaffPeriod.Payload.TaskData.AverageTaskTime,
+													skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime),
 										 skillStaffPeriod.Payload.ServiceAgreementData,
 										 skillStaffPeriod.StaffingCalculatorService);
 				newShortPeriod.SetCalculatedResource65(skillStaffPeriod.Payload.CalculatedResource);
 				newShortPeriod.Payload.Shrinkage = skillStaffPeriod.Payload.Shrinkage;
-				newShortPeriod.Payload.SkillPersonData = (SkillPersonData) skillStaffPeriod.Payload.SkillPersonData.Clone();
+				newShortPeriod.Payload.SkillPersonData = (SkillPersonData)skillStaffPeriod.Payload.SkillPersonData.Clone();
 				((SkillStaff)newShortPeriod.Payload).ForecastedIncomingDemand = skillStaffPeriod.Payload.ForecastedIncomingDemand;
-																  
-				var aggregate = (IAggregateSkillStaffPeriod) newShortPeriod;
+
+				var aggregate = (IAggregateSkillStaffPeriod)newShortPeriod;
 				aggregate.IsAggregate = true;
 				aggregate.AggregatedFStaff = skillStaffPeriod.FStaff;
 				aggregate.AggregatedCalculatedResource = skillStaffPeriod.CalculatedResource;
@@ -489,7 +440,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			return _internalDictionary.GuessResourceCalculationHasBeenMade();
 		}
-
-		
 	}
 }
