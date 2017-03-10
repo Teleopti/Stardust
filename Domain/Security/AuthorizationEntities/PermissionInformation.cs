@@ -102,6 +102,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			defaultTimeZone = value.Id;
 		}
 
+		public string DefaultTimeZoneString()
+		{
+			return defaultTimeZone;
+		}
+
 		public TimeZoneInfo DefaultTimeZone()
 		{
 			return _defaultTimeZoneCache.Value;

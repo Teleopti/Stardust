@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Web.Http;
+using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core;
 
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			var principal = _currentTeleoptiPrincipal.Current();
 			var principalCacheable = principal as TeleoptiPrincipalCacheable;
 			
-			var defaultTimezone = principalCacheable != null
+			var defaultTimezone = (principalCacheable != null) && (!principalCacheable.Person.PermissionInformation.DefaultTimeZoneString().IsNullOrEmpty())
 				? principalCacheable.Person.PermissionInformation.DefaultTimeZone()
 				: principal.Regional.TimeZone;
 			
