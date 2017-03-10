@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
 			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
 			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly);
-			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, false, periodDateOnly))
+			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, true, periodDateOnly))
 			{
 				_resourceCalculation.ResourceCalculate(periodDateOnly, resCalcData);
 			}
