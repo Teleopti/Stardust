@@ -4,13 +4,8 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
-{
-	public interface IBusinessRulesShiftFilter
-	{
-		IList<IShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<IShiftProjectionCache> shiftList, DateOnly dateToCheck, IWorkShiftFinderResult finderResult);
-	}
-
-	public class BusinessRulesShiftFilter : IBusinessRulesShiftFilter
+{ 
+	public class BusinessRulesShiftFilter
 	{
 		private readonly IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private readonly ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
