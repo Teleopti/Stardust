@@ -112,16 +112,26 @@ namespace Teleopti.Wfm.Administration.Controllers
 			
 			foreach (var bu in bus)
 			{
-				_eventPublisher.Publish(
-				new UpdateStaffingLevelReadModelEvent
-				{
-					StartDateTime = DateTime.UtcNow.AddHours(-1),
-					EndDateTime = DateTime.UtcNow.AddDays(logOnModel.Days).AddHours(1),
-					RequestedFromWeb = true,
-					LogOnDatasource = logOnModel.Tenant,
-					LogOnBusinessUnitId = bu
-				}
-			);
+				if (logOnModel.Days == 1)
+					_eventPublisher.Publish(
+						new UpdateStaffingLevelReadModelEvent()
+						{
+							StartDateTime = DateTime.UtcNow.AddHours(-1),
+							EndDateTime = DateTime.UtcNow.AddDays(logOnModel.Days).AddHours(1),
+							RequestedFromWeb = true,
+							LogOnDatasource = logOnModel.Tenant,
+							LogOnBusinessUnitId = bu
+						});
+				else
+					_eventPublisher.Publish(
+						new UpdateStaffingLevelReadModel2WeeksEvent
+						{
+							StartDateTime = DateTime.UtcNow.AddHours(-1),
+							EndDateTime = DateTime.UtcNow.AddDays(logOnModel.Days).AddHours(1),
+							LogOnDatasource = logOnModel.Tenant,
+							LogOnBusinessUnitId = bu
+						}
+					);
 			}
 
 			return Ok();
