@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-	public class ActivityRequiresSkillProjectionFilter : IActivityRequiresSkillProjectionFilter
+	public class ActivityRequiresSkillProjectionFilter
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 

@@ -704,7 +704,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NotOverWritableActivitiesShiftFilter>().As<INotOverWritableActivitiesShiftFilter>().SingleInstance();
 			builder.RegisterType<PersonalShiftsShiftFilter>().As<IPersonalShiftsShiftFilter>().SingleInstance();
 			builder.RegisterType<RuleSetPersonalSkillsActivityFilter>().As<IRuleSetPersonalSkillsActivityFilter>().InstancePerLifetimeScope();
-			builder.RegisterType<ActivityRequiresSkillProjectionFilter>().As<IActivityRequiresSkillProjectionFilter>().InstancePerLifetimeScope();
+			builder.RegisterType<ActivityRequiresSkillProjectionFilter>().SingleInstance();
 			builder.RegisterType<ShiftCategoryRestrictionShiftFilter>().As<IShiftCategoryRestrictionShiftFilter>().SingleInstance();
 			builder.RegisterType<ValidDateTimePeriodShiftFilter>().As<IValidDateTimePeriodShiftFilter>().SingleInstance();
 			builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>().SingleInstance();
