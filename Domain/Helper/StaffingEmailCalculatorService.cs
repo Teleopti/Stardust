@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Helper
 {
 	public class StaffingEmailCalculatorService : IStaffingCalculatorServiceFacade
     {
-		public double TeleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength)
+		private static double teleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength)
 		{
 			if (sla > 1d)
 			{
@@ -17,30 +17,11 @@ namespace Teleopti.Ccc.Domain.Helper
 			return calls/workPerAgent;
 		}
 
-    	public double AgentsFromUtilization(double theUtilization, double theCallsPerHour, double averageHandlingTime, TimeSpan periodLength)
-        {
-            return 0;
-        }
-
         public double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, double minOccupancy, double maxOccupancy, int maxParallelTasks)
         {
-			return TeleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength);
+			return teleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength);
         }
 
-        public double ServiceLevelAchieved(double agents, double serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, int orderedSla)
-        {
-            return 1;
-        }
-
-        public double TeleoptiErgBExtended(double servers, double intensity)
-        {
-            return 0;
-        }
-
-        public double TeleoptiErgCExtended(double servers, double intensity)
-        {
-            return 0;
-        }
 
 		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength,
 			double sla, double forecastedAgents, int maxParellelTasks)
