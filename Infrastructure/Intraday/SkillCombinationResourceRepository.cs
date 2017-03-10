@@ -134,6 +134,14 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 						deleteCommand.ExecuteNonQuery();
 					}
 
+					var dt = new DataTable();
+					dt.Columns.Add("SkillCombinationId", typeof(Guid));
+					dt.Columns.Add("StartDateTime", typeof(DateTime));
+					dt.Columns.Add("EndDateTime", typeof(DateTime));
+					dt.Columns.Add("Resource", typeof(double));
+					dt.Columns.Add("InsertedOn", typeof(DateTime));
+					dt.Columns.Add("BusinessUnit", typeof(Guid));
+					var insertedOn = _now.UtcDateTime();
 
 					foreach (var skillCombinationResource in skillCombinationResources)
 					{
@@ -146,49 +154,47 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 							skillCombinations.Add(key, id);
 						}
 
+						var row = dt.NewRow();
+						row["SkillCombinationId"] = id;
+						row["StartDateTime"] = skillCombinationResource.StartDateTime;
+						row["EndDateTime"] = skillCombinationResource.EndDateTime;
+						row["Resource"] = skillCombinationResource.Resource;
+						row["InsertedOn"] = insertedOn;
+						row["BusinessUnit"] = bu;
+						dt.Rows.Add(row);
+					}
 
-
-						using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-						{
-							using (var deleteCommand = new SqlCommand($@"
-						DELETE FROM [ReadModel].[SkillCombinationResource] 
-						WHERE SkillCombinationId = @id 
-						AND StartDateTime = @startTime", connection, transaction))
-							{
-								deleteCommand.Parameters.AddWithValue("@id", id);
-								deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
-								deleteCommand.ExecuteNonQuery();
-							}
-
-							using (var deleteCommand = new SqlCommand($@"
+					using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+					{
+						using (var deleteCommand = new SqlCommand($@"
 						DELETE FROM ReadModel.SkillCombinationResourceDelta
-						WHERE InsertedOn < @dataLoaded
-						AND SkillCombinationId = @id
-						AND StartDateTime = @startTime", connection, transaction))
-							{
-								deleteCommand.Parameters.AddWithValue("@dataLoaded", dataLoaded);
-								deleteCommand.Parameters.AddWithValue("@id", id);
-								deleteCommand.Parameters.AddWithValue("@startTime", skillCombinationResource.StartDateTime);
-								deleteCommand.ExecuteNonQuery();
-							}
-
-
-							using (var insertCommand = new SqlCommand(@"
-							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
-							VALUES (@SkillCombinationId, @StartDateTime, @EndDateTime, @Resource, @InsertedOn, @BusinessUnit)", connection, transaction))
-							{
-								insertCommand.Parameters.AddWithValue("@SkillCombinationId", id);
-								insertCommand.Parameters.AddWithValue("@StartDateTime", skillCombinationResource.StartDateTime);
-								insertCommand.Parameters.AddWithValue("@EndDateTime", skillCombinationResource.EndDateTime);
-								insertCommand.Parameters.AddWithValue("@Resource", skillCombinationResource.Resource);
-								insertCommand.Parameters.AddWithValue("@InsertedOn", _now.UtcDateTime());
-								insertCommand.Parameters.AddWithValue("@BusinessUnit", bu);
-
-								insertCommand.ExecuteNonQuery();
-							}
-
-							transaction.Commit();
+						WHERE InsertedOn < @dataLoaded and 
+						SkillCombinationId in 
+								(select skillcombinationId from  [ReadModel].[SkillCombinationResource] 
+								where businessunit = @buid)"
+						, connection, transaction))
+						{
+							deleteCommand.Parameters.AddWithValue("@buid", bu);
+							deleteCommand.Parameters.AddWithValue("@dataLoaded", dataLoaded);
+							deleteCommand.ExecuteNonQuery();
 						}
+
+						using (var deleteCommand = new SqlCommand($@"
+						DELETE FROM [ReadModel].[SkillCombinationResource] 
+						WHERE businessunit = @buid", connection, transaction))
+						{
+							deleteCommand.Parameters.AddWithValue("@buid", bu);
+							deleteCommand.ExecuteNonQuery();
+						}
+
+
+						using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+						{
+							sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombinationResource]";
+							sqlBulkCopy.WriteToServer(dt);
+						}
+
+						transaction.Commit();
 					}
 
 				}

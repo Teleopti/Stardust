@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Common
 		public ScheduleDictionaryLoadOptions(bool loadRestrictions, bool loadNotes) : this(loadRestrictions, loadNotes, false)
 		{ }
 
-		public ScheduleDictionaryLoadOptions(bool loadRestrictions, bool loadNotes, bool loadOnlyPreferensesAndHourlyAvailabilit)
+		public ScheduleDictionaryLoadOptions(bool loadRestrictions, bool loadNotes, bool loadOnlyPreferensesAndHourlyAvailability)
 		{
 			LoadRestrictions = loadRestrictions;
 			LoadNotes = loadNotes;
-			LoadOnlyPreferensesAndHourlyAvailability = loadOnlyPreferensesAndHourlyAvailabilit;
+			LoadOnlyPreferensesAndHourlyAvailability = loadOnlyPreferensesAndHourlyAvailability;
 			LoadAgentDayScheduleTags = true;
 		}
 	}
