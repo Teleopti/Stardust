@@ -5,12 +5,7 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-	public interface ICommonMainShiftFilter
-	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction effectiveRestriction);
-	}
-	
-	public class CommonMainShiftFilter : ICommonMainShiftFilter
+	public class CommonMainShiftFilter
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 

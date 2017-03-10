@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly ActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
 		private readonly BusinessRulesShiftFilter _businessRulesShiftFilter;
-		private readonly ICommonMainShiftFilter _commonMainShiftFilter;
+		private readonly CommonMainShiftFilter _commonMainShiftFilter;
 		private readonly IContractTimeShiftFilter _contractTimeShiftFilter;
 		private readonly IDisallowedShiftCategoriesShiftFilter _disallowedShiftCategoriesShiftFilter;
 		private readonly IEffectiveRestrictionShiftFilter _effectiveRestrictionShiftFilter;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public WorkShiftFilterService(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			BusinessRulesShiftFilter businessRulesShiftFilter,
-			ICommonMainShiftFilter commonMainShiftFilter,
+			CommonMainShiftFilter commonMainShiftFilter,
 			IContractTimeShiftFilter contractTimeShiftFilter,
 			IDisallowedShiftCategoriesShiftFilter disallowedShiftCategoriesShiftFilter,
 			IEffectiveRestrictionShiftFilter effectiveRestrictionShiftFilter,

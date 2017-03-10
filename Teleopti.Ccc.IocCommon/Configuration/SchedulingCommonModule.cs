@@ -694,7 +694,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<ActivityRestrictionsShiftFilter>().SingleInstance();
 			builder.RegisterType<BusinessRulesShiftFilter>().SingleInstance();
-			builder.RegisterType<CommonMainShiftFilter>().As<ICommonMainShiftFilter>().SingleInstance();
+			builder.RegisterType<CommonMainShiftFilter>().SingleInstance();
 			builder.RegisterType<ContractTimeShiftFilter>().As<IContractTimeShiftFilter>().InstancePerLifetimeScope();
 			builder.RegisterType<DisallowedShiftCategoriesShiftFilter>().As<IDisallowedShiftCategoriesShiftFilter>().SingleInstance();
 			builder.RegisterType<EarliestEndTimeLimitationShiftFilter>().As<IEarliestEndTimeLimitationShiftFilter>().SingleInstance();
