@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 {
@@ -71,13 +72,11 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 			}
 
 			Guid jobResultId;
-			var person = TeleoptiPrincipal.CurrentPrincipal.Person();
+			var person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-#pragma warning disable 618
-														person.UnsafePerson(), DateTime.UtcNow);
-#pragma warning restore 618
+														person, DateTime.UtcNow);
 				_jobResultRepository.Add(jobResult);
 				jobResultId = jobResult.Id.GetValueOrDefault();
 				unitOfWork.PersistAll();
@@ -87,12 +86,12 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 					JobId = jobResultId,
 					UploadedFileId = _model.FileId,
 					TargetSkillId = _model.SelectedSkill.Id.GetValueOrDefault(),
-					OwnerPersonId = person.PersonId,
+					OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
 					ImportMode = _model.ImportMode,
 					LogOnDatasource = _unitOfWorkFactory.Name,
 					LogOnBusinessUnitId = _model.SelectedSkill.BusinessUnit.Id.GetValueOrDefault(),
 					JobName = "Import forecast from file",
-					InitiatorId = person.PersonId
+					InitiatorId = person.Id.GetValueOrDefault()
 				};
 				try
 				{

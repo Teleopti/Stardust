@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Payroll;
@@ -17,6 +18,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
@@ -27,6 +29,8 @@ using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Payroll
 {
@@ -42,13 +46,16 @@ namespace Teleopti.Ccc.Win.Payroll
 		private static BackgroundWorker _payrollBackgroundWorker;
 		private readonly IComponentContext _componentContext;
 		private readonly IPayrollResultRepository _payrollResultRepository;
+		private readonly IToggleManager _toggleManager;
 		private readonly IStardustSender _stardustSender;
+		private readonly MessagePopulatingServiceBusSender _messageSender;
 
 
 		public PayrollExportNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory,
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IComponentContext componentContext, 
 			IPayrollResultRepository payrollResultRepository,
+			IToggleManager toggleManager,
 			IStardustSender stardustSender)
 		{
 			InitializeComponent();
@@ -77,10 +84,11 @@ namespace Teleopti.Ccc.Win.Payroll
 			_componentContext = componentContext;
 			
 			_payrollResultRepository = payrollResultRepository;
+			_toggleManager = toggleManager;
 			_stardustSender = stardustSender;
 			var serviceBusSender = new ServiceBusSender();
 			var populator = EventInfrastructureInfoPopulator.Make();
-			new MessagePopulatingServiceBusSender(serviceBusSender, populator);
+			_messageSender = new MessagePopulatingServiceBusSender(serviceBusSender, populator);
 			
 		}
 
@@ -218,7 +226,7 @@ namespace Teleopti.Ccc.Win.Payroll
 
 				uow.PersistAll();
 				var payrollResultId = payrollResult.Id.GetValueOrDefault();
-				var personId = TeleoptiPrincipal.CurrentPrincipal.Person().PersonId;
+				var personId = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty);
 				var message = new RunPayrollExportEvent
 				{
 					PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),

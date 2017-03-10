@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
@@ -33,10 +35,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			var loggedOnPerson = TeleoptiPrincipal.CurrentPrincipal.Person();
-#pragma warning disable 618
-			_presenter = new ChangePasswordPresenter(this, _container.Resolve<IChangePassword>(), loggedOnPerson.UnsafePerson());
-#pragma warning restore 618
+			var loggedOnPerson = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
+			_presenter = new ChangePasswordPresenter(this, _container.Resolve<IChangePassword>(), loggedOnPerson);
 			_presenter.Initialize();
 			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ", loggedOnPerson.Name);
 		}

@@ -13,6 +13,7 @@ using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting
 {
@@ -1055,16 +1056,16 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				Response.Redirect($"~/Reporting/Report/{ReportId}#{ReportId}");
 			}
 			var princip = Thread.CurrentPrincipal;
-			var loggedOnPerson = ((TeleoptiPrincipalCacheable) princip).Person();
-			var id = loggedOnPerson.PersonId;
+			var loggedOnPerson = ((TeleoptiPrincipalCacheable) princip).Person;
+			var id = loggedOnPerson.Id;
 			var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
 			var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
 
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
-			ParameterSelector.UserCode = id;
+			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
-			ParameterSelector.LanguageId = loggedOnPerson.UICulture.LCID;
-			ParameterSelector.UserTimeZone = loggedOnPerson.DefaultTimeZone;
+			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
+			ParameterSelector.UserTimeZone = loggedOnPerson.PermissionInformation.DefaultTimeZone();
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId))
 			{
 				ParameterSelector.DbTimeout = commonReports.DbTimeout;

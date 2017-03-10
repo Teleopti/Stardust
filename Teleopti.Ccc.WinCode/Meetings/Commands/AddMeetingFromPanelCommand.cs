@@ -10,6 +10,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Meetings.Commands
 {
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
 
                     var pers = rep.FindPeople(_personSelectorPresenter.SelectedPersonGuids);
 
-                    viewSchedulesPermission = isPermittedToViewSchedules(rep);
+                    viewSchedulesPermission = isPermittedToViewSchedules();
                     meetingViewModel = MeetingComposerPresenter.CreateDefaultMeeting(organizer,
                                         defaultScenario, activities[0], DateOnly.Today.AddDays(1),
                                         pers, commonNameDescription, organizer.PermissionInformation.DefaultTimeZone(), new Now());
@@ -88,9 +89,9 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             return _canExecute;
         }
 
-        private static bool isPermittedToViewSchedules(IPersonRepository rep)
+        private static bool isPermittedToViewSchedules()
         {
-            IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(rep);
+            IPerson person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
             ITeam rightClickedPersonsTeam = person.MyTeam(DateOnly.Today);
             if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
             {

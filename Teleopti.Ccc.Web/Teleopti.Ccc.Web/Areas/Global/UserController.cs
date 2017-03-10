@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			var principal = _currentTeleoptiPrincipal.Current();
 			var principalCacheable = principal as TeleoptiPrincipalCacheable;
 			
-			var defaultTimezone = principalCacheable != null && !principalCacheable.Person().DefaultTimeZoneString.IsNullOrEmpty()
-				? principalCacheable.Person().DefaultTimeZone
+			var defaultTimezone = (principalCacheable != null) && (!principalCacheable.Person.PermissionInformation.DefaultTimeZoneString().IsNullOrEmpty())
+				? principalCacheable.Person.PermissionInformation.DefaultTimeZone()
 				: principal.Regional.TimeZone;
 			
 			var regionnal = principalCacheable != null ? principalCacheable.Regional: principal.Regional;

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -41,10 +42,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 //Save start of processing to job history
                 var period = command.Period.ToDateOnlyPeriod();
-	            var principalPerson = TeleoptiPrincipal.CurrentPrincipal.Person();
-#pragma warning disable 618
-	            var jobResult = new JobResult(JobCategory.MultisiteExport, period, principalPerson.UnsafePerson(), DateTime.UtcNow);
-#pragma warning restore 618
+                var jobResult = new JobResult(JobCategory.MultisiteExport, period,
+                                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);
                 jobId = jobResult.Id.GetValueOrDefault();
                 unitOfWork.PersistAll();
@@ -52,7 +51,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 //Prepare message to send to service bus
                 var message = new ExportMultisiteSkillsToSkillEvent
                                   {
-                                      OwnerPersonId = principalPerson.PersonId,
+                                      OwnerPersonId =
+                                          ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
+                                              Guid.Empty),
                                               JobId = jobId,
                                       PeriodStart = period.StartDate.Date,
 									  PeriodEnd = period.EndDate.Date

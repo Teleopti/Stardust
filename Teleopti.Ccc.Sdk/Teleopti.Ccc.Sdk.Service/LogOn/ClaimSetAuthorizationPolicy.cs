@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
             lock (teleoptiPrincipal)
             {
-                var person = teleoptiPrincipal.Person();
+                var person = ((IUnsafePerson) teleoptiPrincipal).Person;
                 if (person == null) return true;
 
                 var unitOfWorkFactory = ((ITeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
                 var personRepository = new PersonRepository(new FromFactory(() => unitOfWorkFactory));
-                var personId = person.PersonId;
+                var personId = person.Id.GetValueOrDefault();
 
                 using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {

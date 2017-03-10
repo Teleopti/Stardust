@@ -40,13 +40,15 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 
 		public ICommand LoadNextPage { get; private set; }
 		public ICommand LoadPreviousPage { get; private set; }
-		public CommandModel Load { get; }
+		public CommandModel Load { get; private set; }
 		public SpecificationFilterViewModel<IFollowUpPushMessageViewModel> PushMessageFilter { get; private set; }
 		public ObservableCollection<IFollowUpPushMessageViewModel> PushMessages
 		{
-			get; }
+			get;
+			private set;
+		}
 
-		public PagingDetail PagingDetail => _pagingDetail;
+		public PagingDetail PagingDetail { get { return _pagingDetail; } }
 
 		private void loadPagedConversations(IPushMessageRepository repository)
 		{
@@ -71,12 +73,19 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 				_pagingDetail = pagingDetail;
 				_pagingDetail.PropertyChanged += (sender, e) =>
 				                                 	{
-														 CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-					                                 };
+				                                 		var handler = CanExecuteChanged;
+				                                 		if (handler != null)
+				                                 		{
+				                                 			handler.Invoke(this, EventArgs.Empty);
+				                                 		}
+				                                 	};
 			}
 
 			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-			public string Text => UserTexts.Resources.DoubleArrowAdd;
+			public string Text
+			{
+				get { return UserTexts.Resources.DoubleArrowAdd; }
+			}
 
 			public void Execute(object parameter)
 			{
@@ -86,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 
 			public bool CanExecute(object parameter)
 			{
-				return _pagingDetail.Skip+_pagingDetail.Take <= _pagingDetail.TotalNumberOfResults;
+				return (_pagingDetail.Skip+_pagingDetail.Take) <= _pagingDetail.TotalNumberOfResults;
 			}
 
 			public event EventHandler CanExecuteChanged;
@@ -103,12 +112,19 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 				_pagingDetail = pagingDetail;
 				_pagingDetail.PropertyChanged += (sender, e) =>
 				{
-					CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+					var handler = CanExecuteChanged;
+					if (handler != null)
+					{
+						handler.Invoke(this, EventArgs.Empty);
+					}
 				};
 			}
 
 			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-			public string Text => UserTexts.Resources.DoubleArrowRemove;
+			public string Text
+			{
+				get { return UserTexts.Resources.DoubleArrowRemove; }
+			}
 
 			public void Execute(object parameter)
 			{
@@ -135,7 +151,10 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 				_model = model;
 				_repFactory = repFactory;
 			}
-			public override string Text => UserTexts.Resources.Load;
+			public override string Text
+			{
+				get { return UserTexts.Resources.Load; }
+			}
 
 			public override void OnExecute(IUnitOfWork uow, object sender, ExecutedRoutedEventArgs e)
 			{

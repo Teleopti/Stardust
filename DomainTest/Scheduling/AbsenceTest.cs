@@ -48,9 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             target.DisplayColor = Color.Red;
             target.Confidential = true;
-#pragma warning disable 618
-            var loggedOn = TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson();
-#pragma warning restore 618
+            var loggedOn = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
             Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(loggedOn));
             Assert.AreEqual(target.Description, target.ConfidentialDescription(loggedOn));
         }

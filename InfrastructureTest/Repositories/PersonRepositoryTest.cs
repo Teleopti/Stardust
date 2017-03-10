@@ -32,7 +32,9 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -172,9 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson loaded = Session.Get<Person>(person.Id);
 			Assert.AreEqual(person, loaded);
 			Assert.AreEqual(new DateOnly(2000, 1, 1), loaded.PersonWriteProtection.PersonWriteProtectedDate);
-#pragma warning disable 618
-			Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), loaded.PersonWriteProtection.UpdatedBy);
-#pragma warning restore 618
+			Assert.AreEqual(((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, loaded.PersonWriteProtection.UpdatedBy);
 			Assert.IsNotNull(loaded.PersonWriteProtection.UpdatedOn);
 			Assert.AreSame(loaded, loaded.PersonWriteProtection.BelongsTo);
 			var version = ((IVersioned)loaded).Version;

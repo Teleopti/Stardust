@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                                                                                         new CommonNameDescriptionSetting());
                 
                 meetingViewModel = new MeetingViewModel(theMeeting, commonNameDescription);
-				_meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider);
-			}
+            }
+            _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider);
         }
 
         public bool CanExecute()

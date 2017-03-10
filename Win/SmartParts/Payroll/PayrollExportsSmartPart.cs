@@ -165,8 +165,8 @@ namespace Teleopti.Ccc.Win.SmartParts.Payroll
                             MessageBoxAdv.Show(new WeakOwner(this), UserTexts.Resources.TheFileIsLockedByAnotherProgram,
                                             UserTexts.Resources.OpenTeleoptiCCC, MessageBoxButtons.OK,
                                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
-                                            TeleoptiPrincipal.CurrentPrincipal.Person().
-	                                            RightToLeftDisplay
+                                            (((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.
+                                                RightToLeftDisplay)
                                                 ? MessageBoxOptions.RtlReading |
                                                   MessageBoxOptions.RightAlign
                                                 : 0);

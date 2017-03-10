@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Shared;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using FlowDirection=System.Windows.FlowDirection;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
             {
                 //Set right to left:
                 window.FlowDirection =
-					TeleoptiPrincipal.CurrentPrincipal.Person().RightToLeftDisplay ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+                    (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
                 
                 //Set timezone:
                 //VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);

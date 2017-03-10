@@ -15,6 +15,7 @@ using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -36,6 +37,7 @@ using Teleopti.Ccc.Sdk.Logic.Payroll;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.WcfService
 {
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly ITenantPeopleSaver _tenantPeopleSaver;
 		private readonly IChangePassword _changePassword;
+		private ICurrentBusinessUnit _currentBusinessUnit;
 		private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(TeleoptiCccSdkService));
 		private readonly IAuthenticationFactory _authenticationFactory;
@@ -71,6 +74,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			_lifetimeScope = lifetimeScope;
 			_tenantPeopleSaver = tenantPeopleSaver;
 			_changePassword = changePassword;
+			_currentBusinessUnit = currentBusinessUnit;
 			Logger.Info("Creating new instance of the service.");
 		}
 
@@ -1935,7 +1939,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				new List<ApplicationFunctionDto>();
 			List<IApplicationFunction> afUnionCollection = new List<IApplicationFunction>();
 
-			if (TeleoptiPrincipal.CurrentPrincipal.Person().PersonId == person.Id.GetValueOrDefault(Guid.Empty))
+			if (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id == person.Id.GetValueOrDefault(Guid.Empty))
 			{
 				afUnionCollection.AddRange(PrincipalAuthorization.Current().GrantedFunctions());
 			}

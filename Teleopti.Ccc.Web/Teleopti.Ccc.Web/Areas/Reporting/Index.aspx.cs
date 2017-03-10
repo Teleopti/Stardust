@@ -59,22 +59,22 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			{
 				if (!Guid.TryParse(Request.QueryString["REPORTID"], out ReportId))
 					return;
-				Response.Redirect($"~/Reporting/Report/{ReportId}#{ReportId}");
+				Response.Redirect(string.Format("~/Reporting/Report/{0}#{1}", ReportId, ReportId));
 			}
 			var princip = Thread.CurrentPrincipal;
-			var person = ((TeleoptiPrincipalCacheable)princip).Person();
-			var id = person.PersonId;
+			var person = ((TeleoptiPrincipalCacheable)princip).Person;
+			var id = person.Id;
 			var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
 			var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
 
-			Thread.CurrentThread.CurrentUICulture = person.UICulture.FixPersianCulture();
-			Thread.CurrentThread.CurrentCulture = person.Culture.FixPersianCulture();
+			Thread.CurrentThread.CurrentUICulture = person.PermissionInformation.UICulture().FixPersianCulture();
+			Thread.CurrentThread.CurrentCulture = person.PermissionInformation.Culture().FixPersianCulture();
 
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
-			ParameterSelector.UserCode = id;
+			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
-			ParameterSelector.LanguageId = person.UICulture.LCID;
-			ParameterSelector.UserTimeZone = person.DefaultTimeZone;
+			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
+			ParameterSelector.UserTimeZone = person.PermissionInformation.DefaultTimeZone();
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 			{
 				ParameterSelector.DbTimeout = commonReports.DbTimeout;

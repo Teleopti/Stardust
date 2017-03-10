@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldReturnBasicNavigation()
 		{
-			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+			var principal = (ITeleoptiPrincipal)MockRepository.GenerateStrictMock(typeof (ITeleoptiPrincipal), new[] {typeof (IUnsafePerson)});
 			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
 			var regional = MockRepository.GenerateMock<IRegional>();
 
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			identity.Stub(x => x.Name).Return("fake");
 			principal.Stub(x => x.Regional).Return(regional);
 			var person = PersonFactory.CreatePersonWithId();
-			principal.Stub(x => x.Person()).Return(new PrincipalPerson(person));
+			((IUnsafePerson)principal).Stub(x => x.Person).Return(person);
 
 			regional.Stub(x => x.TimeZone).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			ianaTimeZoneProvider.Stub(x => x.WindowsToIana("W. Europe Standard Time")).Return("Europe/Berlin");

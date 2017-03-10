@@ -1,39 +1,47 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
 	public class PayrollResultFactory : IPayrollResultFactory
 	{
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly IPayrollResultRepository _payrollResultRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPayrollExportRepository _payrollExportRepository;
+		private readonly IToggleManager _toggleManager;
 		private readonly IStardustSender _stardustSender;
 
-		public PayrollResultFactory(IPayrollResultRepository payrollResultRepository, IPersonRepository personRepository,
-			IPayrollExportRepository payrollExportRepository, IStardustSender stardustSender)
+		public PayrollResultFactory(IMessagePopulatingServiceBusSender serviceBusSender,
+			IPayrollResultRepository payrollResultRepository, IPersonRepository personRepository,
+			IPayrollExportRepository payrollExportRepository, IToggleManager toggleManager, IStardustSender stardustSender)
 		{
+			_serviceBusSender = serviceBusSender;
 			_payrollResultRepository = payrollResultRepository;
 			_personRepository = personRepository;
 			_payrollExportRepository = payrollExportRepository;
+			_toggleManager = toggleManager;
 			_stardustSender = stardustSender;
 		}
 
 		public Guid RunPayrollOnBus(PayrollExportDto payrollExport)
 		{
-			if (payrollExport == null) throw new ArgumentNullException(nameof(payrollExport));
+			if (payrollExport == null) throw new ArgumentNullException("payrollExport");
 
 			var payrollResultId = SavePayrollResult(payrollExport);
-			var personId = TeleoptiPrincipal.CurrentPrincipal.Person().PersonId;
+			var personId = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty);
 			var message = new RunPayrollExportEvent
 			{
 				PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),

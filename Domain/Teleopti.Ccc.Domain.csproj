@@ -1413,8 +1413,6 @@
     <Compile Include="Security\Principal\CurrentAuthorization.cs" />
     <Compile Include="Security\Principal\IUpdatedBy.cs" />
     <Compile Include="Security\Principal\IUpdatedByScope.cs" />
-    <Compile Include="Security\Principal\PersonNotFoundException.cs" />
-    <Compile Include="Security\Principal\PrincipalPerson.cs" />
     <Compile Include="Security\Principal\UpdatedBy.cs" />
     <Compile Include="DayOffPlanning\IPeopleInOrganization.cs" />
     <Compile Include="DayOffPlanning\PeopleInOrganization.cs" />
@@ -3065,6 +3063,7 @@
     <Compile Include="Security\Principal\TeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipalCacheable.cs" />
+    <Compile Include="Security\Principal\UnsafePersonProvider.cs" />
     <Compile Include="Security\Principal\UserCulture.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\SystemUser.cs" />

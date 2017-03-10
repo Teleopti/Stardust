@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	    public void Handle(RecalculateForecastOnSkillCollectionCommandDto command)
 		{
 			var principal = TeleoptiPrincipal.CurrentPrincipal;
-			var person = principal.Person();
+			var person = ((IUnsafePerson)principal).Person;
 			var @event = new RecalculateForecastOnSkillCollectionEvent
 				{
 					SkillCollection = new Collection<RecalculateForecastOnSkill>(),
 					ScenarioId = command.ScenarioId,
-					OwnerPersonId = person.PersonId
+					OwnerPersonId = person.Id.GetValueOrDefault()
 				};
 			foreach (var model in command.WorkloadOnSkillSelectionDtos)
 			{

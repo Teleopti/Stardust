@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public IUnitOfWorkFactory Current()
 		{
 			var current = _currentDataSource.Current();
-			return current?.Application;
+			return current == null ? null : current.Application;
 		}
 	}
 }

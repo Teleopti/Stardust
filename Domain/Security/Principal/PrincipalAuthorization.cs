@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
     {
         public override bool IsSatisfiedBy(IApplicationFunction obj)
         {
-            return obj?.Parent != null && obj.SortOrder.HasValue && obj.Level == 1;
+            return obj != null && obj.Parent!=null && obj.SortOrder.HasValue && obj.Level == 1;
         }
     }
 

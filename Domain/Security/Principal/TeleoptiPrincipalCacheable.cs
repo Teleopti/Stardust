@@ -1,25 +1,29 @@
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Security.Principal;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class TeleoptiPrincipalCacheable : GenericPrincipal, ITeleoptiPrincipal
+	public class TeleoptiPrincipalCacheable : GenericPrincipal, ITeleoptiPrincipal, IUnsafePerson
 	{
-		private readonly PrincipalPerson _principalPerson;
 		private readonly IList<ClaimSet> _claimSets = new List<ClaimSet>();
 
-		private TeleoptiPrincipalCacheable(IIdentity identity, PrincipalPerson principalPerson)
-			: base(identity, new string[] { })
-		{
-			_principalPerson = principalPerson;
-		}
+		private TeleoptiPrincipalCacheable(IIdentity identity)
+			: base(identity, new string[] { }) { }
 		
 		public static TeleoptiPrincipalCacheable Make(ITeleoptiIdentity identity, IPerson person)
 		{
-			return new TeleoptiPrincipalCacheable(identity, new PrincipalPerson(person));
+			var lightPerson = new Person();
+			lightPerson.SetName(person.Name);
+			lightPerson.SetId(person.Id);
+			return new TeleoptiPrincipalCacheable(identity)
+			       	{
+			       		Person = lightPerson
+			       	};
 		}
 
 		public IRegional Regional { get; set; }
@@ -30,15 +34,19 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		
 		public IPerson GetPerson(IPersonRepository personRepository)
 		{
-			var person = personRepository.Get(_principalPerson.PersonId);
+			var person = personRepository.Get(Person.Id.Value);
 			if (person == null)
 				throw new PersonNotFoundException("Person not found for this principal");
 			return person;
 		}
 
-		public PrincipalPerson Person()
-		{
-			return _principalPerson;
-		}
+		public IPerson Person { get; set; }
 	}
+	
+	public class PersonNotFoundException : Exception
+	{
+		public PersonNotFoundException(string message) : base(message) { }
+		public PersonNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+	}
+
 }
