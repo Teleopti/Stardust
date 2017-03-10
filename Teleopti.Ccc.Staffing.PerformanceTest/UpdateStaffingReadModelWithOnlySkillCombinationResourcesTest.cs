@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[TestFixture]
 	[UpdateReadModelPerformanceTest]
-	[Toggle(Toggles.StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334)]
+	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class UpdateStaffingReadModelWithOnlySkillCombinationResourcesTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;

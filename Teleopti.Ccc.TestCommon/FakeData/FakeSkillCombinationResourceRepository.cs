@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private List<SkillCombinationResource> _combinationResources = new List<SkillCombinationResource>();
 		private readonly INow _now;
+		private DateTime? _lastCalcualted;
 
 		public FakeSkillCombinationResourceRepository(INow now)
 		{
@@ -53,7 +54,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public DateTime GetLastCalculatedTime()
 		{
-			return _now.UtcDateTime().AddMinutes(-10);  // just have something
+			return _lastCalcualted ?? _now.UtcDateTime().AddMinutes(-10);
+		}
+
+		public void SetLastCalculatedTime(DateTime dt)
+		{
+			_lastCalcualted = dt;
 		}
 	}
 }

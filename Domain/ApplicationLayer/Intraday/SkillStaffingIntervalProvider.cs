@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		{
 			var skills = _skillRepository.LoadAllSkills().ToList();
 
-			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, period).ToList();
+			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, period, useShrinkage).ToList();
 			skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 			var relevantSkillStaffPeriods =
@@ -61,9 +61,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 																							 s => (IResourceCalculationPeriod)s)));
 			var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
-
-			if (useShrinkage)
-				setUseShrinkage(skillStaffingIntervals);
 
 			using (getContext(combinationResources, skills, false))
 			{
@@ -78,13 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
 
-		private static void setUseShrinkage(IEnumerable<SkillStaffingInterval> relevantSkillStaffPeriods)
-		{
-			foreach (var skillStaffPeriod in relevantSkillStaffPeriods)
-			{
-				skillStaffPeriod.FStaff = skillStaffPeriod.ForecastWithShrinkage;
-			}
-		}
+	
 	}
 
 
@@ -131,11 +122,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
 
-		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period)
+		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage)
 		{
-			return
-				_scheduleForecastSkillReadModelRepository.GetBySkills(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(),
+			var skillStaffPeriods = _scheduleForecastSkillReadModelRepository.GetBySkills(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(),
 					period.StartDateTime, period.EndDateTime).ToList();
+			if (!useShrinkage) return skillStaffPeriods;
+
+			foreach (var skillStaffPeriod in skillStaffPeriods)
+			{
+				skillStaffPeriod.FStaff = skillStaffPeriod.ForecastWithShrinkage;
+			}
+			return skillStaffPeriods;
+
 		}
 	}
 
@@ -150,12 +148,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			_currentScenario = currentScenario;
 		}
 
-		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period)
+		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage)
 		{
 			var returnList = new List<SkillStaffingInterval>();
 			var skillDays =  _skillDayRepository.FindReadOnlyRange(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), skills, _currentScenario.Current());
 			foreach (var skillDay in skillDays)
 			{
+				if (useShrinkage)
+				{
+					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+					{
+						skillStaffPeriod.Payload.UseShrinkage = true;
+					}
+				}
 				returnList.AddRange(getSkillStaffingIntervals(skillDay));
 			}
 			return returnList;
@@ -178,6 +183,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
 	public interface IExtractSkillForecastIntervals
 	{
-		IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period);
+		IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage);
 	}
 }

@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
-	[Toggle(Toggles.StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334)]
+	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest
 	{
 		public IUpdateStaffingLevelReadModel Target;

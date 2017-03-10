@@ -211,14 +211,14 @@
 		Mailbox_Optimization_41900,
 		No_UnitOfWork_Nesting_42175,
 		Wfm_Intraday_ESL_41827,
-		WfmStaffing_AllowActions_42524,
-		Staffing_ReadModel_UseSkillCombination_42663,
 		Wfm_Web_Intraday_Rta_As_first_Choice_42206,
 		Wfm_ResourcePlanner_AgentGroup_42871,
 		Landing_Page_Data_Protection_Question_35721,
-		StaffingActions_UseRealForecast_42663,
 		Wfm_ResourcePlanner_SchedulingOnStardust_42874,
-		StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334
+
+		WfmStaffing_AllowActions_42524,
+		Staffing_ReadModel_UseSkillCombination_42663,
+		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
 		// ReSharper restore InconsistentNaming
 	}
 }

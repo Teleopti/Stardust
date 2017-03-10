@@ -20,8 +20,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[Toggle(Toggles.StaffingActions_UseRealForecast_42663)]
-	[Toggle(Toggles.StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334)]
+	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	[RequestPerformanceTuningTest]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
