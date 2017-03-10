@@ -70,12 +70,14 @@
 
 			};
 
-			this.uploadAgentFromFile = function(file) {
+			this.uploadAgentFromFile = function (file, fields) {
+				var formatedFields = normalizeFormData(fields);
 				var config = overload({
 					url: '../api/People/UploadAgent',
 					method: 'POST',
 					responseType: 'arraybuffer',
 					file: file,
+					fields: formatedFields,
 					headers: {
 						'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/json'
 					}
@@ -83,6 +85,22 @@
 				return $http(config);
 
 			};
+
+			function normalizeFormData(fields) {
+				return {
+					StartDate: fields.startDate,
+					RoleIds: (fields.roles||[]).join(","),
+					TeamId: fields.team,
+					SkillIds:(fields.skills||[]).join(","),
+					ExternalLogonId: fields.externalLogon,
+					ContractId: fields.contract,
+					ContractSchedule: fields.contractSchedule,
+					ShiftBagId: fields.shiftBag,
+					PartTimePercentageId: fields.partTimePercentage,
+					SchedulePeriodType: fields.schedulePeriodType,
+					SchedulePeriodLength: fields.schedulePeriodLength
+				};
+			}
 
 			this.downloadFileTemplate = function() {
 				var config = overload({

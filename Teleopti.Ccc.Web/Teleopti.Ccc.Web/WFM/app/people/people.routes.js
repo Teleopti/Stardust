@@ -28,5 +28,9 @@
 			templateUrl: 'app/people/html/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'
 		})
+		.state('people.importagents', {
+			url: '/importagents',
+			template: '<wfm-import-agents></wfm-import-agents>'
+		})
 	}
 })();

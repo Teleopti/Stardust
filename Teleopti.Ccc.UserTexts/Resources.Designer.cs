@@ -9317,6 +9317,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Template.
+        /// </summary>
+        public static string DownloadTemplate {
+            get {
+                return ResourceManager.GetString("DownloadTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to delete the tag {0}.?.
         /// </summary>
         public static string DoYouWantToDeleteTag {
@@ -28069,6 +28078,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetCulture {
             get {
                 return ResourceManager.GetString("SetCulture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set fallback values to replace invalid ones.
+        /// </summary>
+        public static string SetFallbackValuesToReplaceInvalidOnes {
+            get {
+                return ResourceManager.GetString("SetFallbackValuesToReplaceInvalidOnes", resourceCulture);
             }
         }
         

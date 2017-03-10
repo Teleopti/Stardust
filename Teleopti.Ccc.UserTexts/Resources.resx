@@ -15627,4 +15627,12 @@ Do you want to participate?</value>
     <value>Import agents</value>
     <comment>Function name of importing agents in web People.</comment>
   </data>
+  <data name="DownloadTemplate" xml:space="preserve">
+    <value>Download Template</value>
+    <comment>Link text in Import Agents</comment>
+  </data>
+  <data name="SetFallbackValuesToReplaceInvalidOnes" xml:space="preserve">
+    <value>Set fallback values to replace invalid ones</value>
+    <comment>Checkbox label in Import Agents</comment>
+  </data>
 </root>
