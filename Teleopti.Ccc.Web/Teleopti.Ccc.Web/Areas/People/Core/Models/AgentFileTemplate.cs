@@ -104,10 +104,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			row.CreateCell(ColumnHeaderMap["ApplicationUserId"]).SetCellValue(agent.ApplicationUserId);
 			row.CreateCell(ColumnHeaderMap["Password"]).SetCellValue(agent.Password);
 			row.CreateCell(ColumnHeaderMap["Role"]).SetCellValue(agent.Role);
-						
+
+			var startDateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
 			if (agent.StartDate.HasValue)
 			{
-				row.CreateCell(ColumnHeaderMap["StartDate"]).SetCellValue(agent.StartDate.Value);
+				startDateCell.SetCellValue(agent.StartDate.Value);
 			}
 			row.CreateCell(ColumnHeaderMap["Organization"]).SetCellValue(agent.Organization);
 			row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
@@ -117,9 +118,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			row.CreateCell(ColumnHeaderMap["PartTimePercentage"]).SetCellValue(agent.PartTimePercentage);
 			row.CreateCell(ColumnHeaderMap["ShiftBag"]).SetCellValue(agent.ShiftBag);
 			row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
+
+			var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
 			if (agent.SchedulePeriodLength.HasValue)
 			{
-				row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(agent.SchedulePeriodLength.Value);
+				schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength.Value);
 			}
 			returnedFile.Write(ms);
 
