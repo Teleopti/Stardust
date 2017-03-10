@@ -60,13 +60,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			IShiftProjectionCache bestShift = null;
 
 			var shiftsWithValue =
-				shifts.AsParallel()
-					.Select(s => new { s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo) })
-					.Where(s => s.value.HasValue);
+				shifts
+					.Select(s => new {s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo)})
+					.Where(s => s.value.HasValue).ToArray();
 
 			if (schedulingOptions.SkipNegativeShiftValues)
 			{
-				shiftsWithValue = shiftsWithValue.Where(x => x.value > 0);
+				shiftsWithValue = shiftsWithValue.Where(x => x.value > 0).ToArray();
 			}
 
 			foreach (var item in shiftsWithValue)
@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		private double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			var actvityValue =
-				skillIntervalDataLocalDictionary.AsParallel()
-					.Select(i => valueForActivity(i.Key, i.Value, shiftProjectionCache, parameters, timeZoneInfo));
+				skillIntervalDataLocalDictionary
+					.Select(i => valueForActivity(i.Key, i.Value, shiftProjectionCache, parameters, timeZoneInfo)).ToArray();
 			if (actvityValue.Any(v => !v.HasValue)) return null;
 
 			return actvityValue.Sum(x => x.Value);
