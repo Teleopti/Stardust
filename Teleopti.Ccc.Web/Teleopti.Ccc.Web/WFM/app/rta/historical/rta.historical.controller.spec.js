@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('RtaHistoricalController', function() {
+describe('RtaHistoricalController', function() {
 	var $interval,
 		$httpBackend,
 		$state,

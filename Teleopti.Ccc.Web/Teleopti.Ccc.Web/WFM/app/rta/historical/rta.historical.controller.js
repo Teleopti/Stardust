@@ -123,7 +123,7 @@
 				var latestEndTime = latest(schedules);
 
 				var key;
-				var activityColor = 'black';
+				var cardColor = 'black';
 				if (schedules.length === 0) {
 					key = $translate.instant('NoShift');
 				} else {
@@ -137,8 +137,7 @@
 						});
 						var activityStart = moment(activityWhenChangeOccurred.StartTime);
 						var activityEnd = moment(activityWhenChangeOccurred.EndTime);
-						activityColor = activityWhenChangeOccurred.Color;
-						// "phone 08:00 - 09:00"
+						cardColor = activityWhenChangeOccurred.Color;
 						key = activityWhenChangeOccurred.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
 					}
 				}
@@ -150,7 +149,7 @@
 						key: key,
 						Header: key,
 						Items: [change],
-						Color: activityColor,
+						Color: cardColor,
 						isOpen: false
 					};
 					arr.push(existing);

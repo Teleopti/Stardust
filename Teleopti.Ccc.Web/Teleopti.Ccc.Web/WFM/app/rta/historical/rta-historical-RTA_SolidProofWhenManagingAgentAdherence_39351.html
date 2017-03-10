@@ -2,7 +2,7 @@
     .highlight>td {
         background-color: #C2E085;
     }
-    
+
     .diamond {
         position: absolute;
         top: 50%;
@@ -11,12 +11,12 @@
         transform: rotate(45deg);
         cursor: pointer;
     }
-    
+
     .diamond .inner {
         height: 8px;
         width: 8px;
     }
-    
+
     .diamond.highlight {
         border-width: 1px;
         border-style: solid;
@@ -25,56 +25,56 @@
         margin-top: -12px;
         margin-left: -8px;
     }
-    
+
     .diamond.highlight .inner {
         border-radius: 50%;
         height: 10px;
         width: 10px;
     }
-    
+
     .change {
         cursor: pointer;
     }
-    
+
     .change.highlight {
         background-color: #9CCC65;
     }
-    
+
     .label:empty {
         display: none;
     }
-    
+
     .rta-change-row {
         border-bottom: 1px solid #eee;
     }
-    
+
     .rta-change-row .time {
         font-weight: bold;
     }
-    
+
     .rta-list {
         max-height: 100%;
     }
-    
+
     .rta-card .wfm-card-title {
         border-left: 10px solid black;
     }
-    
+
     .rta-card .wfm-card-selected .wfm-card-title {
         background-color: white;
         border-bottom: 1px solid #eee;
     }
-    
+
     .test {
         font-size: 24px;
     }
-    
+
     @media screen and (max-width: 768px) {
         .hidden-sm {
             display: none;
         }
     }
-    
+
     @media screen and (max-width: 960px) {
         .hidden-md {
             display: none;
@@ -129,16 +129,16 @@
 
     <div class="row">
         <div class="hidden-md" style="height: 30px; position: relative;">
-            <div ng-class="{'diamond': true, 'highlight': vm.highlighted[rulechange.id]}" ng-repeat="rulechange in vm.changes" ng-click="vm.scrollTo(rulechange.id)" ng-attr-style="left: {{rulechange.offset}}; border-color: {{rulechange.RuleColor}};">
-                <div class="inner" ng-attr-style="background-color: {{rulechange.RuleColor}};"></div>
+            <div ng-repeat="diamond in vm.diamonds" ng-class="{'diamond': true, 'highlight': diamond.highlight}" ng-click="diamond.click()" ng-attr-style="left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}};">
+                <div class="inner" ng-attr-style="background-color: {{diamond.RuleColor}};"></div>
             </div>
         </div>
     </div>
 </div>
 
 
-<rta-card ng-repeat="rulechange in vm.sortedChanges" ng-open="vm.isOpen(rulechange.items)" ng-selected-id="vm.selectedId()">
-    <rta-card-header ng-attr-styles="border-left-color: {{rulechange.items[0].ActivityColor}}">{{rulechange.key}}</rta-card-header>
+<rta-card ng-repeat="card in vm.cards" ng-open="card.isOpen">
+    <rta-card-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-header>
     <rta-card-body>
         <div class="con-row">
             <div class="con-flex">
@@ -152,10 +152,10 @@
                             <div class="con-flex"><b>{{'Adherence' | translate}}</b></div>
                         </div>
                     </li>
-                    <li ng-repeat="item in rulechange.items" ng-class="{'change': true, 'highlight': vm.highlighted[item.id]}" data-time="{{item.Time | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-activity="{{item.Activity}}" data-state="{{item.State}}" data-rule="{{item.Rule}}"
-                        data-adherence="{{item.Adherence}}" ng-click="vm.scrollTo(item.id)">
+                    <li ng-repeat="item in card.Items" ng-class="{'change': true, 'highlight': item.highlight}" data-time="{{item.Time | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-activity="{{item.Activity}}" data-state="{{item.State}}" data-rule="{{item.Rule}}"
+                        data-adherence="{{item.Adherence}}" ng-click="item.click()">
                         <div class="con-row rta-change-row">
-                            <div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss'}}</div>
+                            <div class="con-flex time">{{item.Time}}</div>
                             <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.ActivityColor}};">{{item.Activity}}</span></div>
                             <div class="con-flex">{{item.State}}</div>
                             <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.RuleColor}};">{{item.Rule}}</span></div>
