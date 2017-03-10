@@ -2,7 +2,6 @@ using Autofac;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
