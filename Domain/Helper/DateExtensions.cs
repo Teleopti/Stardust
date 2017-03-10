@@ -45,12 +45,4 @@ namespace Teleopti.Ccc.Domain.Helper
 			return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 		}
 	}
-
-	public static class CalendarExtensions
-	{
-		public static int GetMonth(this Calendar calendar, DateOnly date)
-		{
-			return calendar.GetMonth(date.Date);
-		}
-	}
 }
