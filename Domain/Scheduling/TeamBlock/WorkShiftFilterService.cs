@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class WorkShiftFilterService : IWorkShiftFilterService
 	{
-		private readonly IActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
+		private readonly ActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
 		private readonly IBusinessRulesShiftFilter _businessRulesShiftFilter;
 		private readonly ICommonMainShiftFilter _commonMainShiftFilter;
 		private readonly IContractTimeShiftFilter _contractTimeShiftFilter;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ActivityRequiresSkillProjectionFilter _activityRequiresSkillProjectionFilter;
 		private readonly OpenHoursFilter _openHoursFilter;
 
-		public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
+		public WorkShiftFilterService(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			IBusinessRulesShiftFilter businessRulesShiftFilter,
 			ICommonMainShiftFilter commonMainShiftFilter,
 			IContractTimeShiftFilter contractTimeShiftFilter,

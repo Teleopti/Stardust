@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	[TestFixture]
 	public class ActivityRestrictionsShiftFilterTest
 	{
-		private IActivityRestrictionsShiftFilter _target;
+		private ActivityRestrictionsShiftFilter _target;
 		private MockRepository _mocks;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private IPerson _person;
