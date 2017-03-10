@@ -178,8 +178,7 @@ describe('organizationPicker component tests',
 				var ctrl = container.isolateScope().$ctrl;
 				ctrl.onPickerClose();
 
-				expect(selectedTeams.length).toEqual(1);
-				expect(selectedTeams[0]).toEqual(angular.element(opt).text());
+				expect(selectedTeams).toEqual(angular.element(opt).text());
 
 				var opt2 = options[1].querySelector("div.md-text");
 				angular.element(openMenu).triggerHandler({
@@ -188,8 +187,7 @@ describe('organizationPicker component tests',
 					currentTarget: openMenu[0]
 				});
 				ctrl.onPickerClose();
-				expect(selectedTeams.length).toEqual(1);
-				expect(selectedTeams[0]).toEqual(angular.element(opt2).text());
+				expect(selectedTeams).toEqual(angular.element(opt2).text());
 
 			});
 
