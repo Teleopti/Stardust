@@ -671,12 +671,12 @@ namespace Teleopti.Ccc.Win.Intraday
 					if (wizard.ShowDialog(this) != DialogResult.OK) return;
 
 					var principal = TeleoptiPrincipal.CurrentPrincipal;
-					var person = ((IUnsafePerson)principal).Person;
+					var person = principal.Person();
 					var @event = new RecalculateForecastOnSkillCollectionEvent
 					{
 						SkillCollection = new Collection<RecalculateForecastOnSkill>(),
 						ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
-						OwnerPersonId = person.Id.GetValueOrDefault()
+						OwnerPersonId = person.PersonId
 					};
 					foreach (var model in models.ReforecastModels)
 					{

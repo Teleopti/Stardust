@@ -11,14 +11,11 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Meetings.Commands;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 {
@@ -83,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(scenarioRep.LoadDefaultScenario()).Return(scenario);
 
             Expect.Call(_repositoryFactory.CreatePersonRepository(uow)).Return(personsRep);
-            Expect.Call(personsRep.Get(Guid.Empty)).Return(new Person());
+            Expect.Call(personsRep.Get(Guid.Empty)).Return(new Person()).Repeat.AtLeastOnce();
             Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(uow)).Return(settingsRep);
             Expect.Call(settingsRep.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())).Return(cmnName).IgnoreArguments();
 

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			{
 				xdtpDate.RightToLeft = RightToLeft.No;
 				xdtpDate.RightToLeft =
-					(((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay)
+					TeleoptiPrincipal.CurrentPrincipal.Person().RightToLeftDisplay
 						? RightToLeft.Yes
 						: RightToLeft.No;
 			}

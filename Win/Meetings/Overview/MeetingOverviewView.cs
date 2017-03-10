@@ -11,12 +11,14 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -423,7 +425,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
 		{
-			var viewSchedulesPermission = isPermittedToViewSchedules();
+			var viewSchedulesPermission = isPermittedToViewSchedules(new RepositoryFactory().CreatePersonRepository(UnitOfWorkFactory.Current.CurrentUnitOfWork()));
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
 															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider, _scheduleStorageFactory);
 			meetingComposerView.ShowDialog(this);
@@ -505,9 +507,9 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			_calendarAndTextPanel.SetText(text);
 		}
 
-		private static bool isPermittedToViewSchedules()
+		private static bool isPermittedToViewSchedules(IPersonRepository repository)
 		{
-			IPerson person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
+			IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(repository);
 			ITeam rightClickedPersonsTeam = person.MyTeam(DateOnly.Today);
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
 			{

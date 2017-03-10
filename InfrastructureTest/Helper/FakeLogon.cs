@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 		private FakeLogon(IPrincipalFactory factory, IBusinessUnit businessUnit)
 		{
 			_oldPrincipal = (TeleoptiPrincipal)Thread.CurrentPrincipal;
-			var newPrincipal = factory.MakePrincipal(((IUnsafePerson)_oldPrincipal).Person, ((TeleoptiIdentity)_oldPrincipal.Identity).DataSource, businessUnit, null);
+#pragma warning disable 618
+			var newPrincipal = factory.MakePrincipal((_oldPrincipal).Person().UnsafePerson(), ((TeleoptiIdentity)_oldPrincipal.Identity).DataSource, businessUnit, null);
+#pragma warning restore 618
 			Thread.CurrentPrincipal = newPrincipal;
 		}
 

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		{			
 			if (data.ScheduleDay == null)
 			{
-				_scheduleDayReadModelRepository.ClearPeriodForPerson(new DateOnlyPeriod(data.Date, data.Date), data.PersonId);
+				_scheduleDayReadModelRepository.ClearPeriodForPerson(data.Date.ToDateOnlyPeriod(), data.PersonId);
 				return;
 			}
 			_scheduleDayReadModelRepository.SaveReadModel(data.ScheduleDay);

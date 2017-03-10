@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Messages.Models;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 {
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			return Json(new
 			{
 				UserName = principal.Identity.Name,
-				PersonId = ((IUnsafePerson)principal).Person.Id,
+				PersonId = principal.Person().PersonId,
 				IsMyTimeAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 				IsAnywhereAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)
 			}, JsonRequestBehavior.AllowGet);

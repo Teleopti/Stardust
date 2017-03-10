@@ -6,13 +6,12 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class TeleoptiPrincipal : GenericPrincipal, IUnsafePerson, ITeleoptiPrincipal
+	public class TeleoptiPrincipal : GenericPrincipal, ITeleoptiPrincipal
 	{
 		private static readonly CurrentTeleoptiPrincipal currentTeleoptiPrincipal = new CurrentTeleoptiPrincipal(new ThreadPrincipalContext());
 
 		public static ITeleoptiPrincipal CurrentPrincipal => currentTeleoptiPrincipal.Current();
-
-
+		
 		private IPerson _person;
 		private IList<ClaimSet> _claimSets = new List<ClaimSet>();
 		private IIdentity _identity;
@@ -44,12 +43,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			Organisation = OrganisationMembership.FromPerson(_person);
 		}
 
-		public override IIdentity Identity { get { return _identity ?? base.Identity; } }
+		public override IIdentity Identity => _identity ?? base.Identity;
 
 		public IRegional Regional { get; private set; }
 		public IOrganisationMembership Organisation { get; private set; }
 
-		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
+		public IEnumerable<ClaimSet> ClaimSets => _claimSets;
 
 		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
 
@@ -58,12 +57,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return personRepository.Get(_person.Id.GetValueOrDefault());
 		}
 
-		IPerson IUnsafePerson.Person { get { return _person; } }
-
+		public PrincipalPerson Person()
+		{
+			return new PrincipalPerson(_person);
+		}
 	}
-
-    public interface IUnsafePerson
-    {
-        IPerson Person { get; }
-    }
 }

@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 	public class ScheduleHistoryReportTest : AuditTest
 	{
 		private IScheduleHistoryReport target;
-		private IUnsafePersonProvider personProvider;
 		private Regional regional;
 
 		protected override void AuditSetup()
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			regional = new Regional(TimeZoneInfo.Local, culture, culture);
 			target = new ScheduleHistoryReport(UnitOfWorkFactory.Current, regional);
-			personProvider = new UnsafePersonProvider();
 		}
 
 		[Test]
@@ -67,7 +65,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(),
+#pragma warning restore 618
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
 								  new List<IPerson> { PersonAssignment.Person },100);
@@ -99,7 +99,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(),
+#pragma warning restore 618
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person },100);
@@ -131,7 +133,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(),
+#pragma warning restore 618
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person },100);
@@ -171,7 +175,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(),
+#pragma warning restore 618
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 									new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
 								  new List<IPerson> { PersonAssignment.Person },100);
@@ -204,7 +210,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(),
+#pragma warning restore 618
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person },100);
@@ -236,7 +244,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(),
+#pragma warning restore 618
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
 								  new List<IPerson> { PersonAssignment.Person },100);
@@ -348,7 +358,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(),new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(),new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(0).Detail, PersonAssignment.ShiftCategory.Description.Name);
@@ -369,7 +381,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, PersonAssignment.ShiftCategory.Description.Name);
@@ -389,7 +403,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
@@ -410,7 +426,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
@@ -431,7 +449,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
@@ -451,7 +471,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, Resources.PersonalShift);
@@ -471,7 +493,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, Resources.Overtime);
@@ -490,7 +514,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, string.Empty);
@@ -512,7 +538,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning disable 618
+				var res = target.Report(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+#pragma warning restore 618
 							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, string.Empty);

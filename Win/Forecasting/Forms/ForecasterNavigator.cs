@@ -39,7 +39,6 @@ using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 using Wizard = Teleopti.Ccc.Win.Common.PropertyPageAndWizard.Wizard;
 
@@ -1275,7 +1274,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var period =new DateOnlyPeriod(new DateOnly( message.TargetPeriodStart),new DateOnly(message.TargetPeriodEnd));
 							var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 							var jobResult = new JobResult(JobCategory.QuickForecast, period,
-				                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+#pragma warning disable 618
+				                              TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), DateTime.UtcNow);
+#pragma warning restore 618
 							jobResultRep.Add(jobResult);
 							var jobId = jobResult.Id.GetValueOrDefault();
 							uow.PersistAll();
@@ -1418,7 +1419,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 									var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 									var period = new DateOnlyPeriod(new DateOnly( message.PeriodStart),new DateOnly(message.PeriodEnd));
 									var jobResult = new JobResult(JobCategory.MultisiteExport, period,
-																			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+#pragma warning disable 618
+																			TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), DateTime.UtcNow);
+#pragma warning restore 618
 									jobResultRep.Add(jobResult);
 									message.JobId = jobResult.Id.GetValueOrDefault();
 									uow.PersistAll();

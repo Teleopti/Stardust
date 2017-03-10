@@ -57,11 +57,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				throw new FaultException("You're not authorized to run this command.");
 			}
 			Guid jobResultId;
-			var person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
+			var person = TeleoptiPrincipal.CurrentPrincipal.Person();
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-														person, DateTime.UtcNow);
+#pragma warning disable 618
+														person.UnsafePerson(), DateTime.UtcNow);
+#pragma warning restore 618
 				_jobResultRepository.Add(jobResult);
 				jobResultId = jobResult.Id.GetValueOrDefault();
 				unitOfWork.PersistAll();
@@ -71,8 +73,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					JobId = jobResultId,
 					UploadedFileId = command.UploadedFileId,
 					TargetSkillId = command.TargetSkillId,
-					OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
-					ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode),
+					OwnerPersonId = person.PersonId,
+					ImportMode = (ImportForecastsMode)(int)command.ImportForecastsMode,
 					LogOnDatasource = _unitOfWorkFactory.Current().Name,
 					LogOnBusinessUnitId = _currentBusinessUnit.Current().Id.GetValueOrDefault()
 

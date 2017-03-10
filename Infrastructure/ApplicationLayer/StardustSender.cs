@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -41,17 +40,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var userName = "Stardust";
 			if (_updatedBy.Person() != null)
 				userName = _updatedBy.Person().Name.ToString();
-			else if(TeleoptiPrincipal.CurrentPrincipal != null && ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person != null)
-				userName = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name.ToString();
+			else if(TeleoptiPrincipal.CurrentPrincipal != null && TeleoptiPrincipal.CurrentPrincipal.Person() != null)
+				userName = TeleoptiPrincipal.CurrentPrincipal.Person().Name.ToString();
 
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
 			var job = @event as IStardustJobInfo;
-			if (job != null && job.JobName != null)
+			if (job?.JobName != null)
 			{
 				jobName = job.JobName;
 			}
-			if (job != null && job.UserName != null)
+			if (job?.UserName != null)
 			{
 				userName = job.UserName;
 			}

@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		void AddClaimSet(ClaimSet claimSet);
 
 		IPerson GetPerson(IPersonRepository personRepository);
+		PrincipalPerson Person();
 	}
 }

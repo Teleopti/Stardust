@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IProjectionChangedEventBuilder _builder;
 		private readonly IReadModelFixer _readModelFixer;
-
-
+		
 		public ReadModelScheduleProjectionReadOnlyValidator(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder, IReadModelFixer readModelFixer)
 		{
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		public IEnumerable<ScheduleProjectionReadOnlyModel> Build(IPerson person,DateOnly date)
 		{
 			var scenario = _currentScenario.Current();
-			var period = new DateOnlyPeriod(date,date);
+			var period = date.ToDateOnlyPeriod();
 			var extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone = period.Inflate(1);
 
 			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,

@@ -40,7 +40,9 @@ namespace Teleopti.Ccc.WpfControls.Controls.Messaging
 
     	public PushMessageControl(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
     	{
-			IPerson currentPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
+#pragma warning disable 618
+			IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson();
+#pragma warning restore 618
 			SendPushMessageModel = new SendPushMessageViewModel(repositoryFactory,unitOfWorkFactory);
 			if (currentPerson != null)
 			{

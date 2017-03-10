@@ -75,15 +75,13 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 
 		public ExportMultisiteSkillsToSkillEvent TransformToServiceBusMessage()
 		{
+			var ownerPersonId = TeleoptiPrincipal.CurrentPrincipal.Person().PersonId;
 			var message = new ExportMultisiteSkillsToSkillEvent
 			{
-				OwnerPersonId =
-					 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
-						  Guid.Empty),
+				OwnerPersonId = ownerPersonId,
 				PeriodStart = Period.StartDate.Date,
 				PeriodEnd = Period.EndDate.Date,
-				InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
-						  Guid.Empty)
+				InitiatorId = ownerPersonId
 			};
 
 			foreach (var multisiteSkillSelection in MultisiteSkillSelectionModels)

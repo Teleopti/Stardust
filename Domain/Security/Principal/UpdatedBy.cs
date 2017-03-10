@@ -24,7 +24,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				return _threadPerson.Value;
 
 			var principal = _principal.Current();
-			return ((IUnsafePerson) principal)?.Person;
+#pragma warning disable 618
+			return principal?.Person()?.UnsafePerson();
+#pragma warning restore 618
 		}
 
 		public void OnThisThreadUse(IPerson person)

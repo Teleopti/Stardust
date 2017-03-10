@@ -27,7 +27,6 @@ using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
 namespace Teleopti.Ccc.Win.Permissions
@@ -1017,7 +1016,7 @@ namespace Teleopti.Ccc.Win.Permissions
 		{
 			if (StateHolderReader.IsInitialized)
 			{
-				bool rightToLeft = (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay);
+				bool rightToLeft = TeleoptiPrincipal.CurrentPrincipal.Person().RightToLeftDisplay;
 				listViewRoles.RightToLeftLayout = rightToLeft;
 				listViewPeople.RightToLeftLayout = rightToLeft;
 			}

@@ -16,8 +16,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Startup;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Json(new
 			{
 				UserName = principal.Identity.Name,
-				PersonId = ((IUnsafePerson)principal).Person.Id,
+				PersonId = principal.Person().PersonId,
 				IsMyTimeAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 				IsRealTimeAdherenceAvailable =
 					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),

@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -38,8 +37,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			{
 				//Save start of processing to job history
 				var period = command.TargetPeriod.ToDateOnlyPeriod();
-				var jobResult = new JobResult(JobCategory.QuickForecast, period,
-											  ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+#pragma warning disable 618
+				var jobResult = new JobResult(JobCategory.QuickForecast, period, TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson(), DateTime.UtcNow);
+#pragma warning restore 618
 				_jobResultRepository.Add(jobResult);
 				jobId = jobResult.Id.GetValueOrDefault();
 

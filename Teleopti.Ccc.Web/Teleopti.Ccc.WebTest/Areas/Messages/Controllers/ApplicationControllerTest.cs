@@ -15,7 +15,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Messages.Controllers;
 using Teleopti.Ccc.Web.Areas.Messages.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 {
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 		[Test]
 		public void ShouldReturnBasicNavigation()
 		{
-			var principal = (ITeleoptiPrincipal)MockRepository.GenerateStrictMock(typeof(ITeleoptiPrincipal), new[] { typeof(IUnsafePerson) });
+			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
 			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
 
 			_authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
@@ -115,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 			principal.Stub(x => x.Identity).Return(identity);
 			identity.Stub(x => x.Name).Return("fake");
 			var person = PersonFactory.CreatePersonWithId();
-			((IUnsafePerson)principal).Stub(x => x.Person).Return(person);
+			principal.Stub(x => x.Person()).Return(new PrincipalPerson(person));
 
 			var result = target.NavigationContent();
 			dynamic content = result.Data;

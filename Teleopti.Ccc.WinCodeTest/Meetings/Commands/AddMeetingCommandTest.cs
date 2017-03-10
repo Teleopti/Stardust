@@ -10,12 +10,10 @@ using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Meetings.Commands;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 {
@@ -73,7 +71,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 	        Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork());
             Expect.Call(_activityRepository.LoadAllSortByName()).Return(new List<IActivity> {activity});
-            Expect.Call(_personRepository.Get(Guid.Empty)).Return(((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person);
+#pragma warning disable 618
+            Expect.Call(_personRepository.Get(Guid.Empty)).Return(TeleoptiPrincipal.CurrentPrincipal.Person().UnsafePerson());
+#pragma warning restore 618
             Expect.Call(_settingDataRepository.FindValueByKey("CommonNameDescription",
                                                               new CommonNameDescriptionSetting())).Return(
                                                                   new CommonNameDescriptionSetting()).IgnoreArguments();
