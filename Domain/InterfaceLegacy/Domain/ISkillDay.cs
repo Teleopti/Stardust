@@ -300,19 +300,20 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         void ResetSkillStaffPeriods(ISkillDataPeriod skillDataPeriod);
 
-        /// <summary>
-        /// Splits SkillStaffPeriodCollection into a new collection of ISkillStaffPeriodViews.
-        /// The specified period length must be shorter than on this and the split must be even.
-        /// For example can not a collection of periods in 15 minutes period be split on 10. But 5.
-        /// </summary>
-        /// <param name="periodLength">Length of the period in the new collection.</param>
-        /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-07-06    
-        /// /// </remarks>
-        ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength);
+	    /// <summary>
+	    /// Splits SkillStaffPeriodCollection into a new collection of ISkillStaffPeriodViews.
+	    /// The specified period length must be shorter than on this and the split must be even.
+	    /// For example can not a collection of periods in 15 minutes period be split on 10. But 5.
+	    /// </summary>
+	    /// <param name="periodLength">Length of the period in the new collection.</param>
+	    /// <param name="useShrinkage"></param>
+	    /// <returns></returns>
+	    /// /// 
+	    /// <remarks>
+	    ///  Created by: Ola
+	    ///  Created date: 2009-07-06    
+	    /// /// </remarks>
+	    ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength, bool useShrinkage = false);
 
 	    void OpenAllSkillStaffPeriods(int maxSeats);
     }

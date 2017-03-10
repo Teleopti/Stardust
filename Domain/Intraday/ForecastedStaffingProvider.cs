@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
 
-			if (useShrinkage)
-				return getForecastWithShrinkageFromReadModel(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), new DateTimePeriod(usersNow.Date.ToUniversalTime(), usersNow.AddDays(1).Date.ToUniversalTime()));
+			//if (useShrinkage)
+			//	return getForecastWithShrinkageFromReadModel(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), new DateTimePeriod(usersNow.Date.ToUniversalTime(), usersNow.AddDays(1).Date.ToUniversalTime()));
 
 			var staffingIntervals = new List<StaffingIntervalModel>();
 			var resolution = TimeSpan.FromMinutes(minutesPerInterval);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				var skillDaysForSkill = skillDays.Where(x => x.Skill.Id.Value == skill.Id.Value).ToList();
 				foreach (var skillDay in skillDaysForSkill)
 				{
-					staffingIntervals.AddRange(getStaffingIntervalModels(skillDay, resolution));
+					staffingIntervals.AddRange(getStaffingIntervalModels(skillDay, resolution, useShrinkage));
 				}
 			}
 
@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return intervals.ToList();
 		}
 
-		private IEnumerable<StaffingIntervalModel> getStaffingIntervalModels(ISkillDay skillDay, TimeSpan resolution)
+		private IEnumerable<StaffingIntervalModel> getStaffingIntervalModels(ISkillDay skillDay, TimeSpan resolution, bool useShrinkage)
 		{
-			var skillStaffPeriods = skillDay.SkillStaffPeriodViewCollection(resolution);
-
+			var skillStaffPeriods = skillDay.SkillStaffPeriodViewCollection(resolution, useShrinkage);
+	
 			return skillStaffPeriods.Select(skillStaffPeriod => new StaffingIntervalModel
 			{
 				SkillId = skillDay.Skill.Id.Value,

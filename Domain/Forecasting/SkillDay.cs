@@ -1524,7 +1524,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return newSkillDay;
         }
 
-        public virtual ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength)
+        public virtual ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength, bool useShrinkage = false)
         {
             var views = new List<ISkillStaffPeriodView>();
             TimeSpan myPeriodLength = TimeSpan.Zero;
@@ -1533,7 +1533,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 myPeriodLength = SkillStaffPeriodCollection[0].Period.ElapsedTime();
             }
 	        if (myPeriodLength < periodLength) return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
-
+	        foreach (var skillStaffPeriod in SkillStaffPeriodCollection)
+	        {
+		        skillStaffPeriod.Payload.UseShrinkage = useShrinkage;
+	        }
 	        views.AddRange(SkillStaffPeriodCollection.SelectMany(period => period.Split(periodLength)).ToArray());
 
 	        return new ReadOnlyCollection<ISkillStaffPeriodView>(views);

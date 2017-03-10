@@ -845,7 +845,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void ShouldReturnForecastWithShrinkage()
 		{
 			TimeZone.IsSweden();
-			fakeScenarioAndIntervalLength();
+			var scenario = fakeScenarioAndIntervalLength();
 			var act = ActivityRepository.Has("act");
 			var skill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false, act);
 			skill.SetCascadingIndex(1);
@@ -855,27 +855,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
-			var skillStaffingIntervals = new List<SkillStaffingInterval>();
 			var skillCombinationResources = new List<SkillCombinationResource>();
 
-			skillStaffingIntervals.Add(new SkillStaffingInterval
-			{
-				SkillId = skill.Id.GetValueOrDefault(),
-				StartDateTime = userNow,
-				EndDateTime = userNow.AddMinutes(minutesPerInterval),
-				Forecast = 1,
-				ForecastWithShrinkage = 2
-			});
+			var skillday = skill.CreateSkillDayWithDemand(scenario, new DateOnly(userNow), 1);
+			skillday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
+			SkillDayRepository.Has(skillday);
 
-			skillStaffingIntervals.Add(new SkillStaffingInterval
-			{
-				SkillId = skill2.Id.GetValueOrDefault(),
-				StartDateTime = userNow,
-				EndDateTime = userNow.AddMinutes(minutesPerInterval),
-				Forecast = 1,
-				ForecastWithShrinkage = 20
-			});
-
+			var skillday2 = skill2.CreateSkillDayWithDemand(scenario, new DateOnly(userNow), 1);
+			skillday2.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
+			SkillDayRepository.Has(skillday2);
 
 			skillCombinationResources.Add(new SkillCombinationResource
 			{
@@ -884,23 +872,17 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Resource = 34,
 				SkillCombination = new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() }
 			});
-
-			ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, DateTime.UtcNow);
+			
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 
 			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, true);
-
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(1);
-			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
-			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(1);
-			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(1.25);
 
 			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, true);
 
-			vm2.DataSeries.Time.Length.Should().Be.EqualTo(1);
-			vm2.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
-			vm2.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(1);
-			vm2.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(20);
+			vm2.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm2.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -968,11 +950,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm2.DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(20);
 		}
 
-		[Test][Ignore("WIP")]
+		[Test]
 		public void ShouldReturnForecastWithShrinkageSplit()
 		{
 			TimeZone.IsSweden();
-			fakeScenarioAndIntervalLength();
+			var scenario = fakeScenarioAndIntervalLength();
 			var act = ActivityRepository.Has("act");
 			var skill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 9, 0), false, act);
 			skill.SetCascadingIndex(1);
@@ -982,28 +964,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill, skill2);
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
-
-			var skillStaffingIntervals = new List<SkillStaffingInterval>();
 			var skillCombinationResources = new List<SkillCombinationResource>();
 
-			skillStaffingIntervals.Add(new SkillStaffingInterval
-			{
-				SkillId = skill.Id.GetValueOrDefault(),
-				StartDateTime = userNow,
-				EndDateTime = userNow.AddMinutes(minutesPerInterval * 2),
-				Forecast = 1,
-				ForecastWithShrinkage = 2
-			});
+			var skillday = skill.CreateSkillDayWithDemand(scenario, new DateOnly(userNow), 1);
+			skillday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
+			SkillDayRepository.Has(skillday);
 
-			skillStaffingIntervals.Add(new SkillStaffingInterval
-			{
-				SkillId = skill2.Id.GetValueOrDefault(),
-				StartDateTime = userNow,
-				EndDateTime = userNow.AddMinutes(minutesPerInterval * 2),
-				Forecast = 1,
-				ForecastWithShrinkage = 20
-			});
-
+			var skillday2 = skill2.CreateSkillDayWithDemand(scenario, new DateOnly(userNow), 1);
+			skillday2.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
+			SkillDayRepository.Has(skillday2);
 
 			skillCombinationResources.Add(new SkillCombinationResource
 			{
@@ -1012,25 +981,31 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Resource = 34,
 				SkillCombination = new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() }
 			});
+			skillCombinationResources.Add(new SkillCombinationResource
+			{
+				StartDateTime = userNow.AddMinutes(minutesPerInterval * 2),
+				EndDateTime = userNow.AddMinutes(minutesPerInterval * 4),
+				Resource = 34,
+				SkillCombination = new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() }
+			});
 
-			ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, DateTime.UtcNow);
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 
 			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, true);
 
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(4);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
-			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
-			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(2);
-			vm.DataSeries.ForecastedStaffing.Last().Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(4);
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(1.25);
+			vm.DataSeries.ForecastedStaffing.Last().Should().Be.EqualTo(1.25);
 
 			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, true);
 
-			vm2.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm2.DataSeries.Time.Length.Should().Be.EqualTo(4);
 			vm2.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
-			vm2.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
-			vm2.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(20);
-			vm2.DataSeries.ForecastedStaffing.Last().Should().Be.EqualTo(20);
+			vm2.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(4);
+			vm2.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(2);
+			vm2.DataSeries.ForecastedStaffing.Last().Should().Be.EqualTo(2);
 		}
 
 		[Test]
