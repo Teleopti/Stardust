@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6")]
-		public static void EnableRibbonControls(ToolStrip clipboard, ToolStrip edit, Control actions, Control locks, ToolStripItem filterAgents, ToolStripItem lockMenuItem, ToolStripItem loggedOnUserTimeZone, bool restrictionView)
+		public static void EnableRibbonControls(ToolStrip clipboard, ToolStrip edit, Control actions, Control locks, ToolStripItem filterAgents, ToolStripItem lockMenuItem, bool restrictionView)
 		{
 			clipboard.Visible = true;
 			edit.Visible = true;
@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			locks.Visible = true;
 			filterAgents.Enabled = true;
 			lockMenuItem.Enabled = true;
-			loggedOnUserTimeZone.Enabled = true;
 
 			if (!restrictionView)
 			{

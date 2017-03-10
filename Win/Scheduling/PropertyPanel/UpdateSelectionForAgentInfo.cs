@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                     }
 
 					var tagLabel = LanguageResourceHelper.Translate("XXScheduleTagColon");
-					_statusLabelTag.Text = string.Concat(tagLabel, " ", selectedTagsText);
+					_statusLabelTag.Text = string.Concat(" ", tagLabel, " ", selectedTagsText);
 
 					if (agentInfo != null && showInfoPanel)
 						agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState.AllPersonAccounts);

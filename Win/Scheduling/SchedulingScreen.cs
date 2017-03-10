@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -57,11 +56,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -99,18 +95,17 @@ using Teleopti.Ccc.WpfControls.Controls.Editor;
 using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 #endregion
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	
+
 	public partial class SchedulingScreen : BaseRibbonForm
 	{
 		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
 		private readonly ILifetimeScope _container;
-		private static readonly ILog Log = LogManager.GetLogger(typeof (SchedulingScreen));
+		private static readonly ILog log = LogManager.GetLogger(typeof (SchedulingScreen));
 		private ISchedulerStateHolder _schedulerState;
 		private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
 		private readonly SkillDayGridControl _skillDayGridControl;
@@ -295,7 +290,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _tmpTimer_Tick(object sender, EventArgs e)
+		private void tmpTimerTick(object sender, EventArgs e)
 		{
 			_tmpTimer.Enabled = false;
 			updateShiftEditor();
@@ -423,8 +418,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState, _container.Resolve<IResourceCalculation>(), _container.Resolve<ISkillPriorityProvider>(), _container.Resolve<IScheduleStorageFactory>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 
-			toolStripMenuItemLoggedOnUserTimeZone.Text = _schedulerState.TimeZoneInfo.DisplayName;
-			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			_clipHandlerSchedule = new ClipHandler<IScheduleDay>();
 
 			_scenario = loadScenario;
@@ -471,41 +464,41 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dateNavigateControl.ClosedPopup += dateNavigateControlClosedPopup;
 
 			_backgroundWorkerDelete.WorkerSupportsCancellation = true;
-			_backgroundWorkerDelete.DoWork += _backgroundWorkerDelete_DoWork;
-			_backgroundWorkerDelete.RunWorkerCompleted += _backgroundWorkerDelete_RunWorkerCompleted;
+			_backgroundWorkerDelete.DoWork += backgroundWorkerDeleteDoWork;
+			_backgroundWorkerDelete.RunWorkerCompleted += backgroundWorkerDeleteRunWorkerCompleted;
 
 			_backgroundWorkerResourceCalculator.WorkerSupportsCancellation = true;
-			_backgroundWorkerResourceCalculator.DoWork += _backgroundWorkerResourceCalculator_DoWork;
-			_backgroundWorkerResourceCalculator.ProgressChanged += _backgroundWorkerResourceCalculator_ProgressChanged;
-			_backgroundWorkerResourceCalculator.RunWorkerCompleted += _backgroundWorkerResourceCalculator_RunWorkerCompleted;
+			_backgroundWorkerResourceCalculator.DoWork += backgroundWorkerResourceCalculatorDoWork;
+			_backgroundWorkerResourceCalculator.ProgressChanged += backgroundWorkerResourceCalculatorProgressChanged;
+			_backgroundWorkerResourceCalculator.RunWorkerCompleted += backgroundWorkerResourceCalculatorRunWorkerCompleted;
 
 			_backgroundWorkerValidatePersons.WorkerSupportsCancellation = true;
-			_backgroundWorkerValidatePersons.RunWorkerCompleted += _backgroundWorkerValidatePersons_RunWorkerCompleted;
-			_backgroundWorkerValidatePersons.DoWork += _backgroundWorkerValidatePersons_DoWork;
+			_backgroundWorkerValidatePersons.RunWorkerCompleted += backgroundWorkerValidatePersonsRunWorkerCompleted;
+			_backgroundWorkerValidatePersons.DoWork += backgroundWorkerValidatePersonsDoWork;
 
 			_backgroundWorkerScheduling.WorkerReportsProgress = true;
 			_backgroundWorkerScheduling.WorkerSupportsCancellation = true;
-			_backgroundWorkerScheduling.DoWork += _backgroundWorkerScheduling_DoWork;
-			_backgroundWorkerScheduling.ProgressChanged += _backgroundWorkerScheduling_ProgressChanged;
-			_backgroundWorkerScheduling.RunWorkerCompleted += _backgroundWorkerScheduling_RunWorkerCompleted;
+			_backgroundWorkerScheduling.DoWork += backgroundWorkerSchedulingDoWork;
+			_backgroundWorkerScheduling.ProgressChanged += backgroundWorkerSchedulingProgressChanged;
+			_backgroundWorkerScheduling.RunWorkerCompleted += backgroundWorkerSchedulingRunWorkerCompleted;
 
 			_backgroundWorkerOvertimeScheduling.WorkerReportsProgress = true;
 			_backgroundWorkerOvertimeScheduling.WorkerSupportsCancellation = true;
-			_backgroundWorkerOvertimeScheduling.DoWork += _backgroundWorkerOvertimeScheduling_DoWork;
-			_backgroundWorkerOvertimeScheduling.ProgressChanged += _backgroundWorkerOvertimeScheduling_ProgressChanged;
-			_backgroundWorkerOvertimeScheduling.RunWorkerCompleted += _backgroundWorkerOvertimeScheduling_RunWorkerCompleted;
+			_backgroundWorkerOvertimeScheduling.DoWork += backgroundWorkerOvertimeSchedulingDoWork;
+			_backgroundWorkerOvertimeScheduling.ProgressChanged += backgroundWorkerOvertimeSchedulingProgressChanged;
+			_backgroundWorkerOvertimeScheduling.RunWorkerCompleted += backgroundWorkerOvertimeSchedulingRunWorkerCompleted;
 
 			_backgroundWorkerOptimization.WorkerReportsProgress = true;
 			_backgroundWorkerOptimization.WorkerSupportsCancellation = true;
-			_backgroundWorkerOptimization.DoWork += _backgroundWorkerOptimization_DoWork;
-			_backgroundWorkerOptimization.ProgressChanged += _backgroundWorkerOptimization_ProgressChanged;
-			_backgroundWorkerOptimization.RunWorkerCompleted += _backgroundWorkerOptimization_RunWorkerCompleted;
+			_backgroundWorkerOptimization.DoWork += backgroundWorkerOptimizationDoWork;
+			_backgroundWorkerOptimization.ProgressChanged += backgroundWorkerOptimizationProgressChanged;
+			_backgroundWorkerOptimization.RunWorkerCompleted += backgroundWorkerOptimizationRunWorkerCompleted;
 
 			//setPermissionOnControls();
 			setInitialClipboardControlState();
 			setupContextMenuSkillGrid();
 			setupToolbarButtonsChartViews();
-			contextMenuViews.Opened += contextMenuViews_Opened;
+			contextMenuViews.Opened += contextMenuViewsOpened;
 			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate, null, null);
 			setLoadingOptions();
 			setShowRibbonTexts();
@@ -532,7 +525,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			catch (CouldNotCreateTransactionException ex)
 			{
-				Log.Error("An error occurred while trying to load settings.", ex);
+				log.Error("An error occurred while trying to load settings.", ex);
 				return new SchedulingScreenSettings();
 			}
 		}
@@ -570,7 +563,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon, Resources.Schedules, startDate, endDate, _scenario.Description.Name);
 		}
 
-		private void _schedulerMeetingHelper_ModificationOccured(object sender, ModifyMeetingEventArgs e)
+		private void schedulerMeetingHelperModificationOccured(object sender, ModifyMeetingEventArgs e)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -605,7 +598,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				.ForEach(p => p.Value.ForceRecalculationOfTargetTimeContractTimeAndDaysOff());
 		}
 
-		private void contextMenuViews_Opened(object sender, EventArgs e)
+		private void contextMenuViewsOpened(object sender, EventArgs e)
 		{
 			if (_scheduleView != null)
 				_scheduleView.Presenter.UpdateFromEditor();
@@ -633,7 +626,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SchedulerRibbonHelper.InstantiateEditControlRestrictions(_editControlRestrictions);
 			_editControlRestrictions.NewClicked += editControlRestrictionsNewClicked;
 			_editControlRestrictions.NewSpecialClicked += editControlRestrictionsNewSpecialClicked;
-			_editControlRestrictions.DeleteClicked += toolStripMenuItemRestrictionDelete_Click;
+			_editControlRestrictions.DeleteClicked += toolStripMenuItemRestrictionDeleteClick;
 			var editControlHostRestrictions = new ToolStripControlHost(_editControlRestrictions);
 			toolStripExEdit2.Items.Add(editControlHostRestrictions);
 			editControlHostRestrictions.Visible = false;
@@ -837,8 +830,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_clipboardControlRestrictions = new ClipboardControl();
 			SchedulerRibbonHelper.InstantiateClipboardControlRestrictions(_clipboardControlRestrictions);
-			_clipboardControlRestrictions.CopyClicked += toolStripMenuItemRestrictionCopy_Click;
-			_clipboardControlRestrictions.PasteClicked += toolStripMenuItemRestrictionPaste_Click;
+			_clipboardControlRestrictions.CopyClicked += toolStripMenuItemRestrictionCopyClick;
+			_clipboardControlRestrictions.PasteClicked += toolStripMenuItemRestrictionPasteClick;
 			var clipboardhost = new ToolStripControlHost(_clipboardControlRestrictions);
 			toolStripExClipboard.Items.Add(clipboardhost);
 			clipboardhost.Visible = false;
@@ -985,9 +978,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			backgroundWorkerLoadData.WorkerSupportsCancellation = true;
-			backgroundWorkerLoadData.DoWork += backgroundWorkerLoadData_DoWork;
-			backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadData_RunWorkerCompleted;
-			backgroundWorkerLoadData.ProgressChanged += backgroundWorkerLoadData_ProgressChanged;
+			backgroundWorkerLoadData.DoWork += backgroundWorkerLoadDataDoWork;
+			backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadDataRunWorkerCompleted;
+			backgroundWorkerLoadData.ProgressChanged += backgroundWorkerLoadDataProgressChanged;
 
 
 			var authorization = PrincipalAuthorization.Current();
@@ -1003,7 +996,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			setPermissionOnControls();
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
-			schedulerSplitters1.MultipleHostControl3.GotFocus += MultipleHostControl3OnGotFocus;
+			schedulerSplitters1.MultipleHostControl3.GotFocus += multipleHostControl3OnGotFocus;
 
 			//releaseEvents(this);
 
@@ -1015,7 +1008,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//No code after the call to runworkerasynk
 		}
 
-		private void MultipleHostControl3OnGotFocus(object sender, System.Windows.RoutedEventArgs routedEventArgs)
+		private void multipleHostControl3OnGotFocus(object sender, System.Windows.RoutedEventArgs routedEventArgs)
 		{
 			updateRibbon(ControlType.ShiftEditor);
 		}
@@ -1098,11 +1091,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 				catch (CouldNotCreateTransactionException dataSourceException)
 				{
-					Log.Error("An error occurred when trying to save settings on closing scheduler.", dataSourceException);
+					log.Error("An error occurred when trying to save settings on closing scheduler.", dataSourceException);
 				}
 				catch (NullReferenceException nullReferenceException)
 				{
-					Log.Error("An error occurred when trying to save settings on closing scheduler.", nullReferenceException);
+					log.Error("An error occurred when trying to save settings on closing scheduler.", nullReferenceException);
 				}
 			}
 
@@ -1231,14 +1224,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripButtonQuickAccessSaveClick(object sender, EventArgs e)
-		{
-			if (_forceClose) return;
-
-			save();
-		}
-
-
 		private void changeRequestStatus(IHandlePersonRequestCommand command,
 			IList<PersonRequestViewModel> requestViewAdapters)
 		{
@@ -1306,22 +1291,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 			scheduleSelected(false);
 		}
 
-		private void toolStripButtonMainMenuSave_Click(object sender, EventArgs e)
+		private void toolStripButtonMainMenuSaveClick(object sender, EventArgs e)
 		{
 			save();
 		}
 
-		private void toolStripButtonMainMenuHelp_Click(object sender, EventArgs e)
+		private void toolStripButtonMainMenuHelpClick(object sender, EventArgs e)
 		{
 			ViewBase.ShowHelp(this, false);
 		}
 
-		private void toolStripButtonMainMenuClose_Click(object sender, EventArgs e)
+		private void toolStripButtonMainMenuCloseClick(object sender, EventArgs e)
 		{
 			Close();
 		}
 
-		private void toolStripButtonSystemExit_Click(object sender, EventArgs e)
+		private void toolStripButtonSystemExitClick(object sender, EventArgs e)
 		{
 			if (!CloseAllOtherForms(this))
 				return; // a form was canceled
@@ -1333,7 +1318,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Application.Exit();
 		}
 
-		private void toolStripButtonQuickAccessCancel_Click(object sender, EventArgs e)
+		private void toolStripButtonQuickAccessCancelClick(object sender, EventArgs e)
 		{
 			//cancelAllBackgroundWorkers();
 			_cancelButtonPressed = true;
@@ -1582,7 +1567,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void toolStripMenuItemLockSpecificDayOff_Click(object sender, EventArgs e)
+		private void toolStripMenuItemLockSpecificDayOffClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			var dayOffTemplate = (IDayOffTemplate) (((ToolStripMenuItem) (sender)).Tag);
@@ -1797,7 +1782,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			executer.AllUnavailableAvailability(e.Button);
 		}
 
-		private void ToolStripMenuItemAllAvailableAvailabilityMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllAvailableAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllAvailableAvailability(e.Button);
@@ -1811,13 +1796,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#endregion
 
-		private void ToolStripMenuItemPaste_Click(object sender, EventArgs e)
+		private void toolStripMenuItemPasteClick(object sender, EventArgs e)
 		{
 			_cutPasteHandlerFactory.For(_controlType).Paste();
 			updateShiftEditor();
 		}
 
-		private void toolStripMenuItemPasteSpecial2_Click(object sender, EventArgs e)
+		private void toolStripMenuItemPasteSpecial2Click(object sender, EventArgs e)
 		{
 			_cutPasteHandlerFactory.For(_controlType).PasteSpecial();
 			updateShiftEditor();
@@ -1840,7 +1825,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Context menu events
 
-		private void contextMenuViews_Opening(object sender, CancelEventArgs e)
+		private void contextMenuViewsOpening(object sender, CancelEventArgs e)
 		{
 			if (_scheduleView == null)
 				e.Cancel = true;
@@ -1861,11 +1846,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
 
 			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Any();
-
-			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
-			{
-				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
-			}
 		}
 
 		#region Virtual skill handling
@@ -1912,7 +1892,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateSkillGridMenuItem();
 		}
 
-		private void skillGridMenuItem_Click(object sender, EventArgs e)
+		private void skillGridMenuItemClick(object sender, EventArgs e)
 		{
 			using (var skillSummery = new SkillSummary(_schedulerState.SchedulingResultState.Skills))
 			{
@@ -1925,7 +1905,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void skillGridMenuItemEdit_Click(object sender, EventArgs e)
+		private void skillGridMenuItemEditClick(object sender, EventArgs e)
 		{
 			var menuItem = (ToolStripMenuItem) sender;
 			var skill = (ISkill) menuItem.Tag;
@@ -1954,7 +1934,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void skillGridMenuItemDelete_Click(object sender, EventArgs e)
+		private void skillGridMenuItemDeleteClick(object sender, EventArgs e)
 		{
 			var menuItem = (ToolStripMenuItem) sender;
 			var virtualSkill = (IAggregateSkill) menuItem.Tag;
@@ -2014,7 +1994,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			skillGridMenuItem.Enabled = true;
 			var subItem = new ToolStripMenuItem(virtualSkill.Name);
 			subItem.Tag = virtualSkill;
-			subItem.Click += skillGridMenuItemEdit_Click;
+			subItem.Click += skillGridMenuItemEditClick;
 			skillGridMenuItem.DropDownItems.Add(subItem);
 		}
 
@@ -2024,7 +2004,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			skillGridMenuItem.Enabled = true;
 			var subItem = new ToolStripMenuItem(virtualSkill.Name);
 			subItem.Tag = virtualSkill;
-			subItem.Click += skillGridMenuItemDelete_Click;
+			subItem.Click += skillGridMenuItemDeleteClick;
 			skillGridMenuItem.DropDownItems.Add(subItem);
 		}
 
@@ -2063,7 +2043,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 						break;
 					}
 				}
-				return;
 			}
 		}
 
@@ -2075,7 +2054,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Gridevents
 
-		private void grid_CurrentCellKeyDown(object sender, KeyEventArgs e)
+		private void gridCurrentCellKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 			{
@@ -2089,7 +2068,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			GridHelper.HandleSelectionKeys((GridControl) sender, e);
 		}
 
-		private void _currentView_viewPasteCompleted(object sender, EventArgs e)
+		private void currentViewViewPasteCompleted(object sender, EventArgs e)
 		{
 			RecalculateResources();
 			_grid.Invalidate();
@@ -2130,7 +2109,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerResourceCalculator.RunWorkerAsync();
 		}
 
-		private void _backgroundWorkerResourceCalculator_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerResourceCalculatorRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			//updateDistrbutionInformation(TODO);
 
@@ -2161,7 +2140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			validatePersons();
 		}
 
-		private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		private void backgroundWorkerResourceCalculatorProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -2179,7 +2158,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripProgressBar1.PerformStep();
 		}
 
-		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerResourceCalculatorDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
@@ -2213,7 +2192,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals",
 			MessageId = "result")]
-		private void _backgroundWorkerValidatePersons_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerValidatePersonsDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			if (_scheduleView != null)
@@ -2228,7 +2207,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 		}
 
-		private void _backgroundWorkerValidatePersons_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerValidatePersonsRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -2301,7 +2280,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private GridRangeInfo _lastGridSelection;
 		private bool gridSelectionChangedRunning;
-		private void grid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		private void gridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
 			if (e.Range == _lastGridSelection)
 				return;
@@ -2472,7 +2451,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region BackgroundWorkerLoadData events
 
-		private void backgroundWorkerLoadData_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		private void backgroundWorkerLoadDataProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -2485,7 +2464,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			statusStrip1.Refresh();
 		}
 
-		private void backgroundWorkerLoadData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerLoadDataRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_backgroundWorkerRunning = false;
 			_cancelButtonPressed = false;
@@ -2510,12 +2489,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			SuspendLayout();
-			setupContextMenuAvailTimeZones();
+			setupAvailTimeZones();
 			
 			zoom(ZoomLevel.PeriodView);
 			DateOnly dateOnly = SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
 			_scheduleView.SetSelectedDateLocal(dateOnly);
-			_scheduleView.ViewPasteCompleted += _currentView_viewPasteCompleted;
+			_scheduleView.ViewPasteCompleted += currentViewViewPasteCompleted;
 			schedulerSplitters1.ElementHost1.Enabled = true;
 			_splitContainerAdvMain.Visible = true;
 			_grid.Cursor = Cursors.WaitCursor;
@@ -2560,7 +2539,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 				
 				_requestView.PropertyChanged += _requestView_PropertyChanged;
-				_requestView.SelectionChanged += _requestView_SelectionChanged;
+				_requestView.SelectionChanged += requestViewSelectionChanged;
 			}
 			else
 			{
@@ -2593,7 +2572,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SikuliHelper.ShowLoadedView(this);
 		}
 
-		private void _requestView_SelectionChanged(object sender, EventArgs e)
+		private void requestViewSelectionChanged(object sender, EventArgs e)
 		{
 			var request = _requestView.SelectedAdapters().FirstOrDefault();
 			if (request == null) return;
@@ -2604,15 +2583,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupRequestViewButtonStates()
 		{
-			var view =
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance);
 			toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted ||
 													 PrincipalAuthorization.Current()
 														 .IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance);
 			toolStripMenuItemViewAllowance.Visible = _budgetPermissionService.IsAllowancePermitted ||
 													 PrincipalAuthorization.Current()
 														 .IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance);
-			;
 			toolStripMenuItemViewAllowance.Enabled = _budgetPermissionService.IsAllowancePermitted ||
 													 PrincipalAuthorization.Current()
 														 .IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance);
@@ -2724,7 +2700,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return false;
 		}
 
-		private void backgroundWorkerLoadData_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerLoadDataDoWork(object sender, DoWorkEventArgs e)
 		{
 			// this is a workaround because if we press cancel before loadPeople has finished the scheduleingscreen will not unload
 			// can't find out why / Ola
@@ -2810,7 +2786,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private bool _updating;
 
-		private void grid_GotFocus(object sender, EventArgs e)
+		private void gridGotFocus(object sender, EventArgs e)
 		{
 			if (_updating)
 			{
@@ -2827,7 +2803,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateRibbon(ControlType.SchedulerGridSkillData);
 		}
 
-		private void wpfShiftEditor1_ShiftUpdated(object sender, ShiftEditorEventArgs e)
+		private void wpfShiftEditor1ShiftUpdated(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView != null)
 			{
@@ -2838,7 +2814,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void wpfShiftEditor1_CommitChanges(object sender, ShiftEditorEventArgs e)
+		private void wpfShiftEditor1CommitChanges(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView != null)
 			{
@@ -2879,7 +2855,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return true;
 		}
 
-		private void _backgroundWorkerDelete_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerDeleteRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -2935,7 +2911,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _backgroundWorkerDelete_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerDeleteDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			var argument = (Tuple<DeleteOption, IList<IScheduleDay>>) e.Argument;
@@ -2955,7 +2931,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CommitBatch();
 		}
 
-		private void tabSkillData_SelectedIndexChanged(object sender, EventArgs e)
+		private void tabSkillDataSelectedIndexChanged(object sender, EventArgs e)
 		{
 			drawSkillGrid();
 			reloadChart();
@@ -2965,12 +2941,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Chart Events
 
-		private void gridrowInChartSetting_LineInChartEnabledChanged(object sender, GridlineInChartButtonEventArgs e)
+		private void gridrowInChartSettingLineInChartEnabledChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
 			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, _gridrowInChartSettingButtons, e.Enabled);
 		}
 
-		private void gridlinesInChartSettings_LineInChartSettingsChanged(object sender, GridlineInChartButtonEventArgs e)
+		private void gridlinesInChartSettingsLineInChartSettingsChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
 			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, e.Enabled, e.ChartSeriesStyle, e.GridToChartAxis,
 				e.LineColor);
@@ -2988,7 +2964,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void skillIntradayGridControl_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		private void skillIntradayGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
 			if (_skillIntradayGridControl.CurrentSelectedGridRow != null)
 			{
@@ -3000,17 +2976,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 
-		private void toolStripButtonGridInChart_Click(object sender, EventArgs e)
+		private void toolStripButtonGridInChartClick(object sender, EventArgs e)
 		{
 			reloadChart();
 		}
 
-		private void chartControlSkillData_ChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
+		private void chartControlSkillDataChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
 		{
 			GridChartManager.SetChartToolTip(e.Region, _chartControlSkillData);
 		}
 
-		private void chartControlSkillData_ChartRegionClick(object sender, ChartRegionMouseEventArgs e)
+		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
 		{
 			int column = Math.Max(1, (int) GridChartManager.GetIntervalValueForChartPoint(_chartControlSkillData, e.Point));
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week) && !_chartInIntradayMode)
@@ -3041,12 +3017,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Private methods
 
-		private void toolStripMenuItemCut_Click(object sender, EventArgs e)
+		private void toolStripMenuItemCutClick(object sender, EventArgs e)
 		{
 			_cutPasteHandlerFactory.For(_controlType).Cut();
 		}
 
-		private void toolStripMenuItemCutSpecial2_Click(object sender, EventArgs e)
+		private void toolStripMenuItemCutSpecial2Click(object sender, EventArgs e)
 		{
 			_cutPasteHandlerFactory.For(_controlType).CutSpecial();
 		}
@@ -3172,7 +3148,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			backgroundWorker.RunWorkerAsync(argument);
 		}
 
-		private void _backgroundWorkerScheduling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerSchedulingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -3188,13 +3164,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			RecalculateResources();
 		}
 
-		private void _backgroundWorkerScheduling_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		private void backgroundWorkerSchedulingProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			if (Disposing)
 				return;
 
 			if (InvokeRequired)
-				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerScheduling_ProgressChanged), sender, e);
+				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(backgroundWorkerSchedulingProgressChanged), sender, e);
 			else
 			{
 				if (e.UserState is BackToLegalShiftArgs)
@@ -3239,7 +3215,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerSchedulingDoWork(object sender, DoWorkEventArgs e)
 		{
 			_totalScheduled = 0;
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
@@ -3290,7 +3266,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _backgroundWorkerOptimization_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerOptimizationRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -3304,12 +3280,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			RecalculateResources();
 		}
 
-		private void _backgroundWorkerOptimization_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		private void backgroundWorkerOptimizationProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			if (Disposing)
 				return;
 			if (InvokeRequired)
-				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerOptimization_ProgressChanged), sender, e);
+				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(backgroundWorkerOptimizationProgressChanged), sender, e);
 			else
 			{
 				optimizationProgress(e);
@@ -3461,7 +3437,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _backgroundWorkerOvertimeScheduling_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerOvertimeSchedulingDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
@@ -3495,13 +3471,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CommitBatch();
 		}
 
-		private void _backgroundWorkerOvertimeScheduling_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		private void backgroundWorkerOvertimeSchedulingProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			if (Disposing)
 				return;
 
 			if (InvokeRequired)
-				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerOvertimeScheduling_ProgressChanged), sender,
+				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(backgroundWorkerOvertimeSchedulingProgressChanged), sender,
 					e);
 			else
 			{
@@ -3524,7 +3500,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _backgroundWorkerOvertimeScheduling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerOvertimeSchedulingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -3544,7 +3520,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			RecalculateResources();
 		}
 
-		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerOptimizationDoWork(object sender, DoWorkEventArgs e)
 		{
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
@@ -3687,6 +3663,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXValidations"));
 			////TODO move into the else clause above
+			_detectedTimeZoneInfos.Add(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
 			{
 				validatePersonAccounts(permittedPerson);
@@ -3719,7 +3696,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 
-		private IBusinessRuleResponse validatePersonAccounts(IPerson person)
+		private void validatePersonAccounts(IPerson person)
 		{
 			IScheduleRange range = SchedulerState.SchedulingResultState.Schedules[person];
 			var rule = new NewPersonAccountRule(SchedulerState.SchedulingResultState,
@@ -3745,8 +3722,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			dic.Add(person, range);
 			//TODO need to make the call twice, ugly fix for now /MD
 			rule.Validate(dic, allScheduleDays);
-
-			return null;
 		}
 
 		private void validation()
@@ -3817,7 +3792,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				setDeciderResult(result);
 
 				int removedPeople = result.FilterPeople(peopleInOrg);
-				Log.Info("Removed " + removedPeople + " people when filtering (original: " + peopleCountFromBeginning +
+				log.Info("Removed " + removedPeople + " people when filtering (original: " + peopleCountFromBeginning +
 						 ")");
 
 				//RK: jag tycker detta är fel, men det rättar en bugg för nu. 
@@ -3827,11 +3802,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				peopleInOrg = new HashSet<IPerson>(peopleInOrg);
 				SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
 				SchedulerState.SchedulingResultState.PersonsInOrganization = peopleInOrg;
-				Log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
+				log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
 				var skills = stateHolder.SchedulingResultState.Skills;
 				int orgSkills = skills.Length;
 				int removedSkills = result.FilterSkills(skills,stateHolder.SchedulingResultState.RemoveSkill,s => stateHolder.SchedulingResultState.AddSkills(s));			
-				Log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
+				log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
 			}
 		}
 
@@ -3884,7 +3859,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				stateHolder.LoadSchedules(_container.Resolve<IFindSchedulesForPersons>(), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
-			SchedulerState.Schedules.PartModified += _schedules_PartModified;
+			SchedulerState.Schedules.PartModified += schedulesPartModified;
 		}
 
 		private void initMessageBroker(DateTimePeriod period)
@@ -3913,11 +3888,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _schedules_PartModified(object sender, ModifyEventArgs e)
+		private void schedulesPartModified(object sender, ModifyEventArgs e)
 		{
 			if (InvokeRequired)
 			{
-				BeginInvoke(new EventHandler<ModifyEventArgs>(_schedules_PartModified), sender, e);
+				BeginInvoke(new EventHandler<ModifyEventArgs>(schedulesPartModified), sender, e);
 			}
 			else
 			{
@@ -4056,7 +4031,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				string explanation;
 				if (e.LicenseType.Equals(LicenseType.Seat))
 				{
-					explanation = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats, e.NumberOfLicensed);
+					explanation = string.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats, e.NumberOfLicensed);
 				}
 				else
 				{
@@ -4075,10 +4050,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_personAbsenceAccountPersistValidationBusinessRuleResponses != null)
 				_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
 
-			IEnumerable<PersistConflict> foundConflicts = null;
 			try
 			{
 				var persister = _container.Resolve<ISchedulingScreenPersister>();
+				IEnumerable<PersistConflict> foundConflicts;
 				bool success = persister.TryPersist(_schedulerState.Schedules,
 					_schedulerState.PersonRequests,
 					_modifiedWriteProtections,
@@ -4343,7 +4318,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var skillGridMenuSeparator = new ToolStripSeparator();
 			_contextMenuSkillGrid.Items.Add(skillGridMenuSeparator);
 			skillGridMenuItem = new ToolStripMenuItem(Resources.CreateSkillSummery);
-			skillGridMenuItem.Click += skillGridMenuItem_Click;
+			skillGridMenuItem.Click += skillGridMenuItemClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 			skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
@@ -4616,7 +4591,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			enableRibbonForRequests(false);
 			var isRestrictionView = level == ZoomLevel.RestrictionView;
 			SchedulerRibbonHelper.EnableRibbonControls(toolStripExClipboard, toolStripExEdit2, toolStripExActions,
-				toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock, toolStripMenuItemLoggedOnUserTimeZone,
+				toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock,
 				isRestrictionView);
 
 			var callback = _container.Resolve<IScheduleDayChangeCallback>();
@@ -4709,7 +4684,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.Presenter.IsAscendingSort = isAscendingSort;
 				_scheduleView.RefreshSelectionInfo += scheduleViewRefreshSelectionInfo;
 				_scheduleView.RefreshShiftEditor += scheduleViewRefreshShiftEditor;
-				_scheduleView.ViewPasteCompleted += _currentView_viewPasteCompleted;
+				_scheduleView.ViewPasteCompleted += currentViewViewPasteCompleted;
 				_scheduleView.LoadScheduleViewGrid();
 
 				if (scheduleParts != null)
@@ -4863,7 +4838,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var lockDaysOffMenuBuilder = new LockDaysOffMenuBuilder();
 			lockDaysOffMenuBuilder.Build(_schedulerState.CommonStateHolder.DayOffs, toolStripMenuItemLockFreeDaysClick,
-				toolStripMenuItemLockSpecificDayOff_Click, toolStripMenuItemDayOffLockRmMouseUp,
+				toolStripMenuItemLockSpecificDayOffClick, toolStripMenuItemDayOffLockRmMouseUp,
 				toolStripMenuItemLockDayOff, toolStripMenuItemLockFreeDaysRM);
 
 			var lockShiftCategoriesMenuBuilder = new LockShiftCategoriesMenuBuilder();
@@ -5179,18 +5154,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void setEventHandlers()
 		{
 			schedulerSplitters1.ValidationAlertsAgentDoubleClick += schedulerSplitters1ValidationAlertsAgentDoubleClick;
-			_schedulerMeetingHelper.ModificationOccured += _schedulerMeetingHelper_ModificationOccured;
-			_tmpTimer.Tick += _tmpTimer_Tick;
-			schedulerSplitters1.TabSkillData.SelectedIndexChanged += tabSkillData_SelectedIndexChanged;
-			_grid.CurrentCellKeyDown += grid_CurrentCellKeyDown;
-			_grid.GotFocus += grid_GotFocus;
-			_grid.SelectionChanged += grid_SelectionChanged;
+			_schedulerMeetingHelper.ModificationOccured += schedulerMeetingHelperModificationOccured;
+			_tmpTimer.Tick += tmpTimerTick;
+			schedulerSplitters1.TabSkillData.SelectedIndexChanged += tabSkillDataSelectedIndexChanged;
+			_grid.CurrentCellKeyDown += gridCurrentCellKeyDown;
+			_grid.GotFocus += gridGotFocus;
+			_grid.SelectionChanged += gridSelectionChanged;
 			_grid.Click += grid_Click;
 			_grid.ScrollControlMouseUp += _grid_ScrollControlMouseUp;
 			_grid.StartAutoScrolling += _grid_StartAutoScrolling;
 
-			wpfShiftEditor1.ShiftUpdated += wpfShiftEditor1_ShiftUpdated;
-			wpfShiftEditor1.CommitChanges += wpfShiftEditor1_CommitChanges;
+			wpfShiftEditor1.ShiftUpdated += wpfShiftEditor1ShiftUpdated;
+			wpfShiftEditor1.CommitChanges += wpfShiftEditor1CommitChanges;
 			wpfShiftEditor1.EditMeeting += wpfShiftEditor1_EditMeeting;
 			wpfShiftEditor1.RemoveParticipant += wpfShiftEditor1_RemoveParticipant;
 			wpfShiftEditor1.DeleteMeeting += wpfShiftEditor1_DeleteMeeting;
@@ -5212,16 +5187,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillFullPeriodGridControl.GotFocus += skillGridControlGotFucus;
 
 			_skillDayGridControl.SelectionChanged += skillGridControlSelectionChanged;
-			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
+			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
 			_skillWeekGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillMonthGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillFullPeriodGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillResultHighlightGridControl.GoToDate += _skillResultHighlightGridControl_GoToDate;
 
-			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettings_LineInChartSettingsChanged;
-			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSetting_LineInChartEnabledChanged;
-			_chartControlSkillData.ChartRegionMouseHover += chartControlSkillData_ChartRegionMouseHover;
-			_chartControlSkillData.ChartRegionClick += chartControlSkillData_ChartRegionClick;
+			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
+			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
+			_chartControlSkillData.ChartRegionMouseHover += chartControlSkillDataChartRegionMouseHover;
+			_chartControlSkillData.ChartRegionClick += chartControlSkillDataChartRegionClick;
 			_undoRedo.ChangedHandler += undoRedo_Changed;
 
 			#region eventaggregator
@@ -5380,10 +5355,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripTabItem1.Click -= toolStripTabItem1_Click;
 			schedulerSplitters1.ValidationAlertsAgentDoubleClick -= schedulerSplitters1ValidationAlertsAgentDoubleClick;
 			toolStripButtonRequestBack.Click -= toolStripButtonRequestBackClick;
-			toolStripButtonFilterAgentsRequestView.Click -= toolStripButtonFilterAgents_Click;
+			toolStripButtonFilterAgentsRequestView.Click -= toolStripButtonFilterAgentsClick;
 			ToolStripMenuItemViewDetails.Click -= ToolStripMenuItemViewDetails_Click;
 			toolStripButtonViewAllowance.Click -= toolStripItemViewAllowanceClick;
-			toolStripButtonViewRequestHistory.Click -= toolStripViewRequestHistory_Click;
+			toolStripButtonViewRequestHistory.Click -= toolStripViewRequestHistoryClick;
 			toolStripButtonApproveRequest.Click -= toolStripButtonApproveRequestClick;
 			toolStripButtonDenyRequest.Click -= toolStripButtonDenyRequestClick;
 			toolStripButtonEditNote.Click -= toolStripButtonEditNote_Click;
@@ -5391,33 +5366,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonReplyAndDeny.Click -= toolStripButtonReplyAndDeny_Click;
 			//Chart tab
 			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
-			toolStripButtonGridInChart.Click -= toolStripButtonGridInChart_Click;
+			toolStripButtonGridInChart.Click -= toolStripButtonGridInChartClick;
 			toolStripButtonChartPeriodView.Click -= toolStripButtonChartPeriodViewClick;
 			toolStripButtonChartMonthView.Click -= toolStripButtonChartPeriodViewClick;
 			toolStripButtonChartWeekView.Click -= toolStripButtonChartPeriodViewClick;
 			toolStripButtonChartDayView.Click -= toolStripButtonChartPeriodViewClick;
 			toolStripButtonChartIntradayView.Click -= toolStripButtonChartPeriodViewClick;
 			//
-			toolStripButtonFilterStudentAvailability.Click -= toolStripButtonFilterStudentAvailability_Click;
-			toolStripButtonFilterOvertimeAvailability.Click -= toolStripButtonFilterOvertimeAvailability_Click;
-			toolStripButtonFilterAgents.Click -= toolStripButtonFilterAgents_Click;
+			toolStripButtonFilterStudentAvailability.Click -= toolStripButtonFilterStudentAvailabilityClick;
+			toolStripButtonFilterOvertimeAvailability.Click -= toolStripButtonFilterOvertimeAvailabilityClick;
+			toolStripButtonFilterAgents.Click -= toolStripButtonFilterAgentsClick;
 			toolStripTabItemHome.Click -= toolStripTabItemHome_Click;
 			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
 			toolStripTabItem1.Click -= toolStripTabItem1_Click;
 			if (_schedulerMeetingHelper != null)
-				_schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
+				_schedulerMeetingHelper.ModificationOccured -= schedulerMeetingHelperModificationOccured;
 			if (_tmpTimer != null)
-				_tmpTimer.Tick -= _tmpTimer_Tick;
+				_tmpTimer.Tick -= tmpTimerTick;
 			if (_dateNavigateControl != null)
 			{
 				_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
 				_dateNavigateControl.ClosedPopup -= dateNavigateControlClosedPopup;
 			}
-			backStageButtonMainMenuSave.Click -= toolStripButtonMainMenuSave_Click;
-			backStageButtonMainMenuHelp.Click -= toolStripButtonMainMenuHelp_Click;
-			backStageButtonMainMenuClose.Click -= toolStripButtonMainMenuClose_Click;
+			backStageButtonMainMenuSave.Click -= toolStripButtonMainMenuSaveClick;
+			backStageButtonMainMenuHelp.Click -= toolStripButtonMainMenuHelpClick;
+			backStageButtonMainMenuClose.Click -= toolStripButtonMainMenuCloseClick;
 			backStageButtonOptions.Click -= toolStripButtonOptions_Click;
-			backStageButtonSystemExit.Click -= toolStripButtonSystemExit_Click;
+			backStageButtonSystemExit.Click -= toolStripButtonSystemExitClick;
 			backStage1.VisibleChanged -= backStage1VisibleChanged;
 
 			if (flowLayoutExportToScenario != null && flowLayoutExportToScenario.ContainerControl != null)
@@ -5429,9 +5404,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 						button.Click -= menuItemClick;
 				}
 			}
-			toolStripButtonSaveLarge.Click -= toolStripButtonSaveLarge_Click;
-			toolStripButtonRefreshLarge.Click -= toolStripButtonRefreshLarge_Click;
-			toolStripButtonQuickAccessCancel.Click -= toolStripButtonQuickAccessCancel_Click;
+			toolStripButtonSaveLarge.Click -= toolStripButtonSaveLargeClick;
+			toolStripButtonRefreshLarge.Click -= toolStripButtonRefreshLargeClick;
+			toolStripButtonQuickAccessCancel.Click -= toolStripButtonQuickAccessCancelClick;
 			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedo_Click_1;
 			toolStripMenuItemQuickAccessUndo.Click -= toolStripSplitButtonQuickAccessUndo_ButtonClick;
 			toolStripMenuItemQuickAccessUndoAll.Click -= toolStripMenuItemQuickAccessUndoAll_Click_1;
@@ -5453,68 +5428,68 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (backgroundWorkerLoadData != null)
 			{
-				backgroundWorkerLoadData.DoWork -= backgroundWorkerLoadData_DoWork;
-				backgroundWorkerLoadData.RunWorkerCompleted -= backgroundWorkerLoadData_RunWorkerCompleted;
-				backgroundWorkerLoadData.ProgressChanged -= backgroundWorkerLoadData_ProgressChanged;
+				backgroundWorkerLoadData.DoWork -= backgroundWorkerLoadDataDoWork;
+				backgroundWorkerLoadData.RunWorkerCompleted -= backgroundWorkerLoadDataRunWorkerCompleted;
+				backgroundWorkerLoadData.ProgressChanged -= backgroundWorkerLoadDataProgressChanged;
 			}
 
 			if (_backgroundWorkerDelete != null)
 			{
-				_backgroundWorkerDelete.DoWork -= _backgroundWorkerDelete_DoWork;
-				_backgroundWorkerDelete.RunWorkerCompleted -= _backgroundWorkerDelete_RunWorkerCompleted;
+				_backgroundWorkerDelete.DoWork -= backgroundWorkerDeleteDoWork;
+				_backgroundWorkerDelete.RunWorkerCompleted -= backgroundWorkerDeleteRunWorkerCompleted;
 			}
 
 			if (_backgroundWorkerResourceCalculator != null)
 			{
-				_backgroundWorkerResourceCalculator.DoWork -= _backgroundWorkerResourceCalculator_DoWork;
-				_backgroundWorkerResourceCalculator.ProgressChanged -= _backgroundWorkerResourceCalculator_ProgressChanged;
-				_backgroundWorkerResourceCalculator.RunWorkerCompleted -= _backgroundWorkerResourceCalculator_RunWorkerCompleted;
+				_backgroundWorkerResourceCalculator.DoWork -= backgroundWorkerResourceCalculatorDoWork;
+				_backgroundWorkerResourceCalculator.ProgressChanged -= backgroundWorkerResourceCalculatorProgressChanged;
+				_backgroundWorkerResourceCalculator.RunWorkerCompleted -= backgroundWorkerResourceCalculatorRunWorkerCompleted;
 			}
 
 			if (_backgroundWorkerValidatePersons != null)
 			{
-				_backgroundWorkerValidatePersons.RunWorkerCompleted -= _backgroundWorkerValidatePersons_RunWorkerCompleted;
-				_backgroundWorkerValidatePersons.DoWork -= _backgroundWorkerValidatePersons_DoWork;
+				_backgroundWorkerValidatePersons.RunWorkerCompleted -= backgroundWorkerValidatePersonsRunWorkerCompleted;
+				_backgroundWorkerValidatePersons.DoWork -= backgroundWorkerValidatePersonsDoWork;
 			}
 
 			if (_backgroundWorkerScheduling != null)
 			{
-				_backgroundWorkerScheduling.DoWork -= _backgroundWorkerScheduling_DoWork;
-				_backgroundWorkerScheduling.ProgressChanged -= _backgroundWorkerScheduling_ProgressChanged;
-				_backgroundWorkerScheduling.RunWorkerCompleted -= _backgroundWorkerScheduling_RunWorkerCompleted;
+				_backgroundWorkerScheduling.DoWork -= backgroundWorkerSchedulingDoWork;
+				_backgroundWorkerScheduling.ProgressChanged -= backgroundWorkerSchedulingProgressChanged;
+				_backgroundWorkerScheduling.RunWorkerCompleted -= backgroundWorkerSchedulingRunWorkerCompleted;
 			}
 
 			if (_backgroundWorkerOvertimeScheduling != null)
 			{
-				_backgroundWorkerOvertimeScheduling.DoWork -= _backgroundWorkerOvertimeScheduling_DoWork;
-				_backgroundWorkerOvertimeScheduling.ProgressChanged -= _backgroundWorkerOvertimeScheduling_ProgressChanged;
-				_backgroundWorkerOvertimeScheduling.RunWorkerCompleted -= _backgroundWorkerOvertimeScheduling_RunWorkerCompleted;
+				_backgroundWorkerOvertimeScheduling.DoWork -= backgroundWorkerOvertimeSchedulingDoWork;
+				_backgroundWorkerOvertimeScheduling.ProgressChanged -= backgroundWorkerOvertimeSchedulingProgressChanged;
+				_backgroundWorkerOvertimeScheduling.RunWorkerCompleted -= backgroundWorkerOvertimeSchedulingRunWorkerCompleted;
 			}
 
 			if (_backgroundWorkerOptimization != null)
 			{
-				_backgroundWorkerOptimization.DoWork -= _backgroundWorkerOptimization_DoWork;
-				_backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
+				_backgroundWorkerOptimization.DoWork -= backgroundWorkerOptimizationDoWork;
+				_backgroundWorkerOptimization.ProgressChanged -= backgroundWorkerOptimizationProgressChanged;
 			}
 
 			if (toolStripComboBoxAutoTag != null)
 				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTagSelectedIndexChanged;
 
 			if (SchedulerState != null && SchedulerState.Schedules != null)
-				SchedulerState.Schedules.PartModified -= _schedules_PartModified;
+				SchedulerState.Schedules.PartModified -= schedulesPartModified;
 
 			if (_schedulerMeetingHelper != null)
-				_schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
+				_schedulerMeetingHelper.ModificationOccured -= schedulerMeetingHelperModificationOccured;
 			if (schedulerSplitters1 != null)
 			{
 				schedulerSplitters1.HandlePersonRequestView1.RemoveEvents();
-				schedulerSplitters1.TabSkillData.SelectedIndexChanged -= tabSkillData_SelectedIndexChanged;
+				schedulerSplitters1.TabSkillData.SelectedIndexChanged -= tabSkillDataSelectedIndexChanged;
 			}
 			if (_grid != null)
 			{
-				_grid.CurrentCellKeyDown -= grid_CurrentCellKeyDown;
-				_grid.GotFocus -= grid_GotFocus;
-				_grid.SelectionChanged -= grid_SelectionChanged;
+				_grid.CurrentCellKeyDown -= gridCurrentCellKeyDown;
+				_grid.GotFocus -= gridGotFocus;
+				_grid.SelectionChanged -= gridSelectionChanged;
 				_grid.StartAutoScrolling -= _grid_StartAutoScrolling;
 				_grid.ScrollControlMouseUp -= _grid_ScrollControlMouseUp;
 				_grid.Click -= grid_Click;
@@ -5522,8 +5497,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (wpfShiftEditor1 != null)
 			{
-				wpfShiftEditor1.ShiftUpdated -= wpfShiftEditor1_ShiftUpdated;
-				wpfShiftEditor1.CommitChanges -= wpfShiftEditor1_CommitChanges;
+				wpfShiftEditor1.ShiftUpdated -= wpfShiftEditor1ShiftUpdated;
+				wpfShiftEditor1.CommitChanges -= wpfShiftEditor1CommitChanges;
 				wpfShiftEditor1.EditMeeting -= wpfShiftEditor1_EditMeeting;
 				wpfShiftEditor1.RemoveParticipant -= wpfShiftEditor1_RemoveParticipant;
 				wpfShiftEditor1.DeleteMeeting -= wpfShiftEditor1_DeleteMeeting;
@@ -5544,7 +5519,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_requestView != null)
 			{
 				_requestView.PropertyChanged -= _requestView_PropertyChanged;
-				_requestView.SelectionChanged -= _requestView_SelectionChanged;
+				_requestView.SelectionChanged -= requestViewSelectionChanged;
 			}
 
 			if (_skillResultHighlightGridControl != null)
@@ -5568,7 +5543,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_skillDayGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
 			if (_skillIntradayGridControl != null)
-				_skillIntradayGridControl.SelectionChanged -= skillIntradayGridControl_SelectionChanged;
+				_skillIntradayGridControl.SelectionChanged -= skillIntradayGridControlSelectionChanged;
 
 			if (_skillWeekGridControl != null)
 				_skillWeekGridControl.SelectionChanged -= skillGridControlSelectionChanged;
@@ -5581,14 +5556,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_gridrowInChartSettingButtons != null)
 			{
-				_gridrowInChartSettingButtons.LineInChartSettingsChanged -= gridlinesInChartSettings_LineInChartSettingsChanged;
-				_gridrowInChartSettingButtons.LineInChartEnabledChanged -= gridrowInChartSetting_LineInChartEnabledChanged;
+				_gridrowInChartSettingButtons.LineInChartSettingsChanged -= gridlinesInChartSettingsLineInChartSettingsChanged;
+				_gridrowInChartSettingButtons.LineInChartEnabledChanged -= gridrowInChartSettingLineInChartEnabledChanged;
 			}
 
 			if (_chartControlSkillData != null)
 			{
-				_chartControlSkillData.ChartRegionMouseHover -= chartControlSkillData_ChartRegionMouseHover;
-				_chartControlSkillData.ChartRegionClick -= chartControlSkillData_ChartRegionClick;
+				_chartControlSkillData.ChartRegionMouseHover -= chartControlSkillDataChartRegionMouseHover;
+				_chartControlSkillData.ChartRegionClick -= chartControlSkillDataChartRegionClick;
 			}
 
 			if (_clipboardControl != null)
@@ -5603,8 +5578,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_clipboardControlRestrictions != null)
 			{
-				_clipboardControlRestrictions.CopyClicked -= toolStripMenuItemRestrictionCopy_Click;
-				_clipboardControlRestrictions.PasteClicked -= toolStripMenuItemRestrictionPaste_Click;
+				_clipboardControlRestrictions.CopyClicked -= toolStripMenuItemRestrictionCopyClick;
+				_clipboardControlRestrictions.PasteClicked -= toolStripMenuItemRestrictionPasteClick;
 			}
 
 			if (_editControl != null)
@@ -5619,7 +5594,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_editControlRestrictions.NewClicked -= editControlRestrictionsNewClicked;
 				_editControlRestrictions.NewSpecialClicked -= editControlRestrictionsNewSpecialClicked;
-				_editControlRestrictions.DeleteClicked -= toolStripMenuItemRestrictionDelete_Click;
+				_editControlRestrictions.DeleteClicked -= toolStripMenuItemRestrictionDeleteClick;
 			}
 
 			if (toolStripMenuItemDeleteSpecial != null)
@@ -5631,8 +5606,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (contextMenuViews != null)
 			{
-				contextMenuViews.Opened -= contextMenuViews_Opened;
-				contextMenuViews.Opening -= contextMenuViews_Opening;
+				contextMenuViews.Opened -= contextMenuViewsOpened;
+				contextMenuViews.Opening -= contextMenuViewsOpening;
 			}
 
 			if (_eventAggregator != null)
@@ -5945,7 +5920,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_container.Dispose();
 			if (_scheduleView != null)
 			{
-				_scheduleView.ViewPasteCompleted -= _currentView_viewPasteCompleted;
+				_scheduleView.ViewPasteCompleted -= currentViewViewPasteCompleted;
 				_scheduleView.RefreshSelectionInfo -= scheduleViewRefreshSelectionInfo;
 				_scheduleView.RefreshShiftEditor -= scheduleViewRefreshShiftEditor;
 				_scheduleView.Dispose();
@@ -6070,37 +6045,30 @@ namespace Teleopti.Ccc.Win.Scheduling
 			enableSave();
 		}
 
-		private void toolStripMenuItemLoggedOnUserTimeZone_Click(object sender, EventArgs e)
-		{
-			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
-			{
-				downItem.Checked = (_schedulerState.TimeZoneInfo.Equals(downItem.Tag));
-			}
-		}
-
-		private void setupContextMenuAvailTimeZones()
+		private void setupAvailTimeZones()
 		{
 			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
-			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
 
 			foreach (TimeZoneInfo info in _detectedTimeZoneInfos)
 			{
-				if (!info.Equals(_schedulerState.TimeZoneInfo))
-				{
-					var item = new ToolStripMenuItem(info.DisplayName);
-					item.Tag = info;
-					item.Click += toolStripMenuItemLoggedOnUserTimeZone_Click;
-					item.MouseUp += toolStripMenuItemLoggedOnUserTimeZoneMouseUp;
-					toolStripMenuItemViewPointTimeZone.DropDownItems.Add(item);
-				}
+				var timeZoneItem = new ToolStripMenuItem(info.DisplayName) {Tag = info};
+				timeZoneItem.Click += timeZoneItemClick;
+				toolStripSplitButtonTimeZone.DropDownItems.Add(timeZoneItem);			
 			}
 
 			displayTimeZoneInfo();
 		}
 
-		private void ToolStripMenuItemExportToPdfGraphicalMouseUp(object sender, MouseEventArgs e)
+		private void timeZoneItemClick(object sender, EventArgs e)
+		{
+			var item = (ToolStripMenuItem)sender;
+			var timeZone = (TimeZoneInfo)item.Tag;
+			changeTimeZone(timeZone);
+		}
+
+		private void toolStripMenuItemExportToPdfGraphicalMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
 			var exporter = new ExportToPdfGraphical(_scheduleView, this, _schedulerState,
@@ -6109,7 +6077,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			exporter.Export();
 		}
 
-		private void ExportToPdf(bool shiftsPerDay)
+		private void exportToPdf(bool shiftsPerDay)
 		{
 			var exporter = new ExportToPdf(_scheduleView, this, _schedulerState,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
@@ -6117,13 +6085,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			exporter.Export(shiftsPerDay);
 		}
 
-		private void ToolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
-			ExportToPdf(false);
+			exportToPdf(false);
 		}
 
-		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
+		private void toolStripButtonFilterAgentsClick(object sender, EventArgs e)
 		{
 			showFilterDialog();
 			reloadFilteredPeople();
@@ -6500,7 +6468,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			deleteMeeting();
 		}
 
-		private void toolStripSplitButtonUnlock_ButtonClick(object sender, EventArgs e)
+		private void toolStripSplitButtonUnlockButtonClick(object sender, EventArgs e)
 		{
 			LockManager.Clear();
 			Refresh();
@@ -6513,7 +6481,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				swapRaw();
 		}
 
-		private void toolStripMenuItemFindMatching_Click(object sender, EventArgs e)
+		private void toolStripMenuItemFindMatchingClick(object sender, EventArgs e)
 		{
 			IScheduleDay selected;
 			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selected))
@@ -6532,7 +6500,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return true;
 		}
 
-		private void toolStripMenuItemFindMatching2_Click(object sender, EventArgs e)
+		private void toolStripMenuItemFindMatching2Click(object sender, EventArgs e)
 		{
 			var selectedAdapters = _requestView.SelectedAdapters();
 			if (selectedAdapters.Count != 1) return;
@@ -6577,7 +6545,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripMenuItemViewHistory_Click(object sender, EventArgs e)
+		private void toolStripMenuItemViewHistoryClick(object sender, EventArgs e)
 		{
 			if (!_scenario.DefaultScenario || !_isAuditingSchedules) return;
 			IScheduleDay selected;
@@ -6619,7 +6587,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_requestView.ShowRequestAllowanceView(this);
 		}
 
-		private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
+		private void toolStripViewRequestHistoryClick(object sender, EventArgs e)
 		{
 			var id = Guid.Empty;
 			var defaultRequest = _requestView.SelectedAdapters().Count > 0
@@ -6631,7 +6599,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			presenter.ShowHistory(id, _schedulerState.FilteredCombinedAgentsDictionary.Values);
 		}
 
-		private void toolStripExTags_SizeChanged(object sender, EventArgs e)
+		private void toolStripExTagsSizeChanged(object sender, EventArgs e)
 		{
 			toolStripSplitButtonChangeTag.Width = toolStripComboBoxAutoTag.Width;
 		}
@@ -6660,23 +6628,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<IRankedPersonBasedOnStartDate>()));
 		}
 
-		private void ToolStripMenuItemExportToPDFShiftsPerDay_MouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemExportToPdfShiftsPerDayMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
-			ExportToPdf(true);
+			exportToPdf(true);
 		}
 
-		private void toolStripMenuItemRestrictionCopy_Click(object sender, EventArgs e)
+		private void toolStripMenuItemRestrictionCopyClick(object sender, EventArgs e)
 		{
 			toolStripMenuItemCopyClick(sender, e);
 		}
 
-		private void toolStripMenuItemRestrictionPaste_Click(object sender, EventArgs e)
+		private void toolStripMenuItemRestrictionPasteClick(object sender, EventArgs e)
 		{
 			((AgentRestrictionsDetailView) _scheduleView).PasteSelectedRestrictions(_undoRedo);
 		}
 
-		private void toolStripMenuItemRestrictionDelete_Click(object sender, EventArgs e)
+		private void toolStripMenuItemRestrictionDeleteClick(object sender, EventArgs e)
 		{
 			((AgentRestrictionsDetailView) _scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag, _container.Resolve<IScheduleDayChangeCallback>());
 		}
@@ -6751,7 +6719,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			enableSave();
 		}
 
-		private void toolStripButtonFilterOvertimeAvailability_Click(object sender, EventArgs e)
+		private void toolStripButtonFilterOvertimeAvailabilityClick(object sender, EventArgs e)
 		{
 			if (toolStripButtonFilterOvertimeAvailability.Checked)
 			{
@@ -6773,7 +6741,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripButtonFilterStudentAvailability_Click(object sender, EventArgs e)
+		private void toolStripButtonFilterStudentAvailabilityClick(object sender, EventArgs e)
 		{
 			if (toolStripButtonFilterStudentAvailability.Checked)
 			{
@@ -6820,35 +6788,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 													  _schedulerState.FilteredCombinedAgentsDictionary.Count;
 		}
 
-		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
+		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgentClick(object sender, EventArgs e)
 		{
 			IScheduleDay scheduleDay;
 			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out scheduleDay))
 			{
-				TimeZoneGuard.Instance.TimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+				var timeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 
-				changeTimeZone();
+				changeTimeZone(timeZone);
 			}
 		}
 
-		private void toolStripMenuItemLoggedOnUserTimeZoneMouseUp(object sender, MouseEventArgs e)
+		private void changeTimeZone(TimeZoneInfo timeZone)
 		{
-			if (e.Button != MouseButtons.Left)
-				return;
-			var item = (ToolStripMenuItem) sender;
-			TimeZoneGuard.Instance.TimeZone = (TimeZoneInfo) item.Tag;
-
-			changeTimeZone();
-		}
-
-		private void changeTimeZone()
-		{
+			TimeZoneGuard.Instance.TimeZone = timeZone;
 			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
-			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
-			{
-				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
-			}
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
@@ -6866,17 +6821,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void displayTimeZoneInfo()
 		{
-			bool show = toolStripMenuItemViewPointTimeZone.DropDownItems.Count > 1;
-
-			toolStripMenuItemViewPointTimeZone.Visible = show;
+			bool show = _detectedTimeZoneInfos.Count > 1;
+			if(!show)
+				toolStripStatusLabelScheduleTag.BorderSides = ToolStripStatusLabelBorderSides.Right;
 			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Visible = show;
-			toolStripStatusLabelTimeZone.Visible = show;
-			toolStripStatusLabelTimeZone.Text = string.Concat(LanguageResourceHelper.Translate("XXViewPointTimeZone"),
+			toolStripSplitButtonTimeZone.Visible = show;
+			toolStripSplitButtonTimeZone.Text = string.Concat(LanguageResourceHelper.Translate("XXViewPointTimeZone"),
 				Resources.Colon,
-				_schedulerState.TimeZoneInfo.StandardName);
+				TimeZoneGuard.Instance.TimeZone.DisplayName);
 		}
 
-		private void toolStripMenuItemScheduleOvertime_Click(object sender, EventArgs e)
+		private void toolStripMenuItemScheduleOvertimeClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerOvertimeScheduling.IsBusy) return;
 			if (_scheduleView == null) return;
@@ -6946,14 +6901,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return personPeriod.PersonSkillCollection.Where(s => s.Active).Select(s => s.Skill).Distinct();
 		}
 
-		private void toolStripMenuItemContractTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItemContractTimeClick(object sender, EventArgs e)
 		{
 			ToolStripMenuItem item = (ToolStripMenuItem) sender;
 			_scheduleTimeType = (ScheduleTimeType) item.Tag;
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
 		}
 
-		private void toolStripButtonShowPropertyPanel_Click(object sender, EventArgs e)
+		private void toolStripButtonShowPropertyPanelClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
@@ -6991,12 +6946,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripButtonSaveLarge_Click(object sender, EventArgs e)
+		private void toolStripButtonSaveLargeClick(object sender, EventArgs e)
 		{
 			save();
 		}
 
-		private void toolStripButtonRefreshLarge_Click(object sender, EventArgs e)
+		private void toolStripButtonRefreshLargeClick(object sender, EventArgs e)
 		{
 			refreshData();
 		}
