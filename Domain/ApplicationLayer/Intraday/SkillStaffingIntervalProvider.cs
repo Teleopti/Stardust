@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				}
 				returnList.AddRange(getSkillStaffingIntervals(skillDay));
 			}
-			return returnList;
+			return returnList.Where(x => period.Contains(x.StartDateTime));
 		}
 
 		private IEnumerable<SkillStaffingInterval> getSkillStaffingIntervals(ISkillDay skillDay)
