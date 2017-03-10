@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.LicenseOptions;
 
@@ -7,15 +8,19 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 {
     public static class DefinedLicenseDataFactory
     {
-        private static readonly ConcurrentDictionary<string, ILicenseActivator> _licenseActivators = new ConcurrentDictionary<string, ILicenseActivator>();
+		private static readonly ILog logger = LogManager.GetLogger(typeof(DefinedLicenseDataFactory));
+		private static readonly ConcurrentDictionary<string, ILicenseActivator> _licenseActivators = new ConcurrentDictionary<string, ILicenseActivator>();
 
-        public static ILicenseActivator GetLicenseActivator(string dataSource)
-        {
-            ILicenseActivator activator;
-            _licenseActivators.TryGetValue(dataSource, out activator);
-            
-            return activator;
-        }
+	    public static ILicenseActivator GetLicenseActivator(string dataSource)
+	    {
+		    ILicenseActivator activator;
+		    _licenseActivators.TryGetValue(dataSource, out activator);
+		    if (activator == null)
+		    {
+			    logger.Warn($"activator for {dataSource} is null");
+		    }
+		    return activator;
+	    }
 
 	    public static void ClearLicenseActivators()
 	    {
