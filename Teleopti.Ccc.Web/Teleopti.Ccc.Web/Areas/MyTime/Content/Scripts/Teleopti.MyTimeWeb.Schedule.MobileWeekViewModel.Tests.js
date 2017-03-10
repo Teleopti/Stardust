@@ -4,8 +4,6 @@
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel");
 
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
-
 	var createTimeline = function (startHour, endHour) {
 		var timelinePoints = [];
 
@@ -81,8 +79,9 @@ $(document).ready(function () {
 
 		vm.readData(rawData);
 
-		equal(vm.timelines.length, lengthInHour + 2); // 2 extra timeline point will be created
-		equal(vm.timelines[0].minutes, timelineStart * 60 - 15);
-		equal(vm.timelines[vm.timelines.length - 1].minutes, timelineEnd * 60 + 45);
+		var timelines = vm.timeLines();
+		equal(timelines.length, lengthInHour + 2); // 2 extra timeline point will be created
+		equal(timelines[0].minutes, timelineStart * 60 - 15);
+		equal(timelines[timelines.length - 1].minutes, timelineEnd * 60 + 45);
 	});
 });

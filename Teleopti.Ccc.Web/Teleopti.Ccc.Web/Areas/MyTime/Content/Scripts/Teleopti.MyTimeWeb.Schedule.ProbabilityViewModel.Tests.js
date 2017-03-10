@@ -116,6 +116,45 @@ $(document).ready(function () {
 		equal(vm.tooltips(), "");
 	});
 
+	test("Create normal absence possibility view model to show horizontal within continous periods", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T06:00:00",
+			"EndTime": baseDate + "T06:15:00",
+			"Possibility": Math.round(Math.random())
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel(300);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel, constants.horizontalDirectionLayout);
+
+		var expectedWidthPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
+			constants.intervalLengthInMinutes *
+			100;
+		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
+		equal(vm.actualClass, expectedActualClass);
+		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+		equal(vm.styleJson.width, expectedWidthPerIntervalInPercentage + "%");
+
+		// Will not show by default (Current user time is not set)
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+
+		// Show before current time
+		dayViewModel.setUserNowInMinutes(0);
+		equal(vm.cssClass(), vm.actualClass);
+		equal(vm.tooltips(), vm.actualTooltips);
+
+		// Masked after current time
+		dayViewModel.setUserNowInMinutes(420);
+		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
+		equal(vm.tooltips(), "");
+	});
+
 	test("Will create a absence possibility view model never visible between continous periods", function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T06:00:00",

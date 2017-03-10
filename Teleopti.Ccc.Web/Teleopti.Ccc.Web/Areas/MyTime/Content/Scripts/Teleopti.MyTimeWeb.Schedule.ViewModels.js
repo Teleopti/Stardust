@@ -247,7 +247,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (day, rawProbabilities, pare
 
 		for (var j = 0; j < rawProbabilities.length; j++) {
 			var probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbabilities[j],
-				probabilityType, boundaries, continousPeriods, parent.userTexts, self);
+				probabilityType, boundaries, continousPeriods, parent.userTexts, self,
+				constants.verticalDirectionLayout);
 			if (!$.isEmptyObject(probabilityModel)) {
 				probabilitieModels.push(probabilityModel);
 			}

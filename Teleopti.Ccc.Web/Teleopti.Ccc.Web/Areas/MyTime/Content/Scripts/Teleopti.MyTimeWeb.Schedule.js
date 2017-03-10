@@ -30,6 +30,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		absenceProbabilityType: 1,
 		overtimeProbabilityType: 2,
 
+		verticalDirectionLayout: 0,
+		horizontalDirectionLayout: 1,
+
 		intervalLengthInMinutes: 15,
 		totalMinutesOfOneDay: 1440 //: 24 * 60, Total minutes of a day
 	};
