@@ -3,7 +3,7 @@
 
 	angular.module('wfm.people')
 		.directive('importPeople', ImportPeopleDirective)
-		.controller('ImportPeopleCtrl', ['$timeout', 'People', 'Toggle', ImportPeopleController]);
+		.controller('ImportPeopleCtrl', ['$timeout', 'PeopleService', 'Toggle', ImportPeopleController]);
 
 	function ImportPeopleDirective() {
 		return {

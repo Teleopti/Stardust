@@ -1,7 +1,7 @@
 ﻿(function (angular) {
 	'use strict';
 
-	angular.module('peopleService', ['ngResource']).service('People', [
+	angular.module('wfm.people').service('PeopleService', [
 		'$resource', '$http', function($resource, $http) {
 			this.search = $resource('../api/Search/People/Keyword', {
 				keyword: "@searchKey",

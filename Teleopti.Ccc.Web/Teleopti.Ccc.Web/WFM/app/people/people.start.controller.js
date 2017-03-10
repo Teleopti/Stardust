@@ -4,7 +4,7 @@ angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleStartCtrl', [
 		'$scope', '$filter', '$state', '$stateParams', '$translate', 'i18nService', 'uiGridConstants',
-		'uiGridExporterConstants', '$q', 'Toggle', 'People', 'NoticeService', PeopleStartController
+		'uiGridExporterConstants', '$q', 'Toggle', 'PeopleService', 'NoticeService', PeopleStartController
 	]);
 
 function PeopleStartController($scope, $filter, $state, $stateParams, $translate, i18nService, uiGridConstants,

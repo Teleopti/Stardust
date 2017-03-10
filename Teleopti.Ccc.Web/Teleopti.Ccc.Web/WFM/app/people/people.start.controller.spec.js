@@ -1,10 +1,10 @@
-﻿'use strict';
-describe("PeopleStartCtrl", function() {
+﻿describe('PeopleStartCtrl', function() {
+	'use strict';
 	var $q,
 		$rootScope,
 		$httpBackend,
 		$translate;
-	var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill", currentKeyword: '', paginationOptions: {} };
+	var stateParams = { selectedPeopleIds: [], commandTag: 'AdjustSkill', currentKeyword: '', paginationOptions: {} };
 	var sentMessage;
 	var mockNoticeService = {
 		info: function (message, timeout, flag) {
@@ -57,8 +57,8 @@ describe("PeopleStartCtrl", function() {
 
 	it("should show agent by search function", inject(function($controller) {
 		var scope = $rootScope.$new();
-		
-		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService, NoticeService: mockNoticeService });
+
+		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, PeopleService: mockPeopleService, NoticeService: mockNoticeService });
 
 		scope.searchOptions.keyword = "ashley";
 		scope.searchKeyword();
@@ -74,7 +74,7 @@ describe("PeopleStartCtrl", function() {
 
 	it("should show my team as default keyword", inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService, NoticeService: mockNoticeService });
+		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, PeopleService: mockPeopleService, NoticeService: mockNoticeService });
 
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
