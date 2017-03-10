@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					foreach (var dictionary in content)
 					{
 						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
-						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) break; //perf, will only work when ordered by datetime (which always seems to be the case)
 
 						skillStaffPeriods.Add(dictionary.Value);
 					}
