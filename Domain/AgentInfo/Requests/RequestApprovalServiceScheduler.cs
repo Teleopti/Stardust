@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
-		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest =  null)
+		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person)
 		{
 			var totalScheduleRange = _scheduleDictionary[person];
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());

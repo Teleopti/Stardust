@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
 		{
 			var personRequest = absenceRequest.Parent as IPersonRequest;
-			requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person, personRequest);
+			requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person);
 		}
 
 

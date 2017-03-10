@@ -78,11 +78,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 
 			requestApprovalService.Stub(
-				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest))
+				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person))
 				.Return(new List<IBusinessRuleResponse>());
 			Target.ApproveRequests(new List<Guid> { personRequest.Id.GetValueOrDefault() }, string.Empty);
 			requestApprovalService.AssertWasCalled(
-				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest),
+				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person),
 				options => options.Repeat.AtLeastOnce());
 		}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequest.Pending();
 
 			requestApprovalService.Stub(
-				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest))
+				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person))
 				.Return(new List<IBusinessRuleResponse>());
 			var result = Target.ApproveRequests(new List<Guid> { personRequest.Id.GetValueOrDefault() }, string.Empty);
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequest.Pending();
 
 			requestApprovalService.Stub(
-				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest))
+				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person))
 				.Return(new List<IBusinessRuleResponse>());
 			var result = Target.ApproveRequests(new List<Guid> { personRequest.Id.GetValueOrDefault() }, "test");
 
@@ -154,10 +154,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequest2.Pending();
 
 			requestApprovalService.Stub(
-				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest1))
+				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person))
 				.Return(new List<IBusinessRuleResponse>());
 			requestApprovalService.Stub(
-				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest2))
+				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person))
 				.Return(new List<IBusinessRuleResponse>());
 
 			var result = Target.ApproveRequests(new List<Guid>
@@ -501,7 +501,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequest.Pending();
 
 			requestApprovalService.Stub(
-				x => x.ApproveAbsence(absence, dateTimePeriod, person, associatePersonAbsence ? personRequest : null))
+				x => x.ApproveAbsence(absence, dateTimePeriod, person))
 				.IgnoreArguments()
 				.Return(new List<IBusinessRuleResponse>());
 
@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
 			personRequest.Pending();
 
-			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person, personRequest))
+			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person))
 				.Return(new List<IBusinessRuleResponse>());
 
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(dateTimePeriod.StartDateTime);

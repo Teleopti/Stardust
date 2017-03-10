@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			setBusinessRules(person, account);
 
 			setRequestApprovalService();
-			var responses = _requestApprovalService.ApproveAbsence(absence, absenceDateTimePeriod, person, personRequest);
+			var responses = _requestApprovalService.ApproveAbsence(absence, absenceDateTimePeriod, person);
 
 			Assert.AreEqual(0, responses.Count());
 			Assert.AreEqual(24, accountDay1.Remaining.TotalDays);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			setBusinessRules(person, holidayAccount);
 
 			setRequestApprovalService();
-			var responses = _requestApprovalService.ApproveAbsence(holidayAbsence, absenceDateTimePeriod, person, personRequest);
+			var responses = _requestApprovalService.ApproveAbsence(holidayAbsence, absenceDateTimePeriod, person);
 
 			Assert.AreEqual(0, responses.Count());
 			Assert.AreEqual(24, holidayAccountDay1.Remaining.TotalDays);
@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			setBusinessRules(person, account);
 
 			setRequestApprovalService();
-			var absence1Responses =_requestApprovalService.ApproveAbsence(absence, absence1DateTimePeriod, person, personRequest1);
-			var absence2Responses = _requestApprovalService.ApproveAbsence(absence, absence2DateTimePeriod, person, personRequest2);
+			var absence1Responses =_requestApprovalService.ApproveAbsence(absence, absence1DateTimePeriod, person);
+			var absence2Responses = _requestApprovalService.ApproveAbsence(absence, absence2DateTimePeriod, person);
 
 			Assert.AreEqual(0, absence1Responses.Count());
 			Assert.AreEqual(0, absence2Responses.Count());

@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (brokenRules.Count == 0)
 			{
 				RequestState.Approve(isAutoGrant);
-				DenyReason = String.Empty;
+				DenyReason = string.Empty;
 				notifyOnStatusChange();
 			}
 			return brokenRules;
