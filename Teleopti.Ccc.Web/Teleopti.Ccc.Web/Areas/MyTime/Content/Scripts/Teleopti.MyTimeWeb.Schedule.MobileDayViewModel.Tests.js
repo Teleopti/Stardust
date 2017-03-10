@@ -4,10 +4,12 @@
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.MobileDayViewModel");
 
-	var userTexts = {
-		"subjectColon": "Subject:",
-		"locationColon": "Location:",
-		"descriptionColon": "Description:"
+	var weekViewModel = {
+		userTexts: {
+			"subjectColon": "Subject:",
+			"locationColon": "Location:",
+			"descriptionColon": "Description:"
+		}
 	};
 
 	test("should read date", function () {
@@ -15,7 +17,7 @@ $(document).ready(function () {
 			FixedDate: "2014-04-14"
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, false, true, userTexts);
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], false, true, weekViewModel);
 
 		equal(vm.fixedDate(), "2014-04-14");
 		equal(vm.absenceReportPermission(), false);
@@ -23,7 +25,7 @@ $(document).ready(function () {
 	});
 
 	test("should read permission", function () {
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel({}, false, true, userTexts);
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel({}, [], false, true, weekViewModel);
 
 		equal(vm.absenceReportPermission(), false);
 		equal(vm.overtimeAvailabilityPermission(), true);
@@ -39,7 +41,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, true, true, userTexts);
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, weekViewModel);
 		equal(vm.summaryName(), scheduleDay.Summary.Title);
 		equal(vm.summaryTimeSpan(), scheduleDay.Summary.TimeSpan);
 		equal(vm.summaryColor(), scheduleDay.Summary.Color);
@@ -54,7 +56,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, true, true, userTexts);
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, weekViewModel);
 		equal(vm.isDayoff(), true);
 	});
 
@@ -65,7 +67,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, true, true, userTexts);
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, weekViewModel);
 		equal(vm.hasShift, true);
 	});
 
@@ -76,7 +78,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, true, true, userTexts);
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, weekViewModel);
 		equal(vm.weekDayHeaderTitle(), "Monday");
 	});
 
@@ -111,7 +113,7 @@ $(document).ready(function () {
 			HasOvertime: true
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, true, true, userTexts);
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, weekViewModel);
 		equal(vm.summaryTimeSpan(), "9:00 AM -  2:00 PM");
 		equal(vm.layers.length, 4);
 	});

@@ -168,7 +168,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 				var isToday = scheduleDay.FixedDate === currentUserDate;
 				var rawProbabilies = isToday ? data.Possibilities : [];
 				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, rawProbabilies,
-					hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self.userTexts);
+					hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self);
 			});
 
 		self.dayViewModels(dayViewModels);
@@ -181,7 +181,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 };
 
 Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProbabilities,
-	absenceReportPermission, overtimeAvailabilityPermission, userTexts) {
+	absenceReportPermission, overtimeAvailabilityPermission, parent) {
 	var self = this;
 
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
@@ -242,7 +242,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 	});
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
-		return new MobileWeekLayerViewModel(item, userTexts);
+		return new MobileWeekLayerViewModel(item, parent.userTexts);
 	});
 };
 

@@ -72,6 +72,9 @@ $(document).ready(function () {
 		var rawTimeline = createTimeline(timelineStart, timelineEnd);
 
 		var rawData = {
+			PeriodSelection: [{
+				Display: null
+			}],
 			Days: [{}],
 			TimeLine: rawTimeline
 		};
