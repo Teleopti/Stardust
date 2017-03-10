@@ -18,7 +18,7 @@
 		}
 
 		svc.getAvailableHierarchy = function (dateStr) {
-			var input = moduleMap[currentModule] + "?date=" + dateStr;
+			var input = (moduleMap[currentModule] || moduleMap['wfm.teamSchedule']) + "?date=" + dateStr;
 			return $http.get(input);
 		};
 	}
