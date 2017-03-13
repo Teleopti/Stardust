@@ -52,6 +52,9 @@ EXEC mart.etl_job_delete_schedule_All
 --Empty the datamart
 EXEC mart.etl_data_mart_delete
 
+-- Insert not_defined rows, we do not run initial so this needs to be done manually
+EXEC [mart].[etl_all_dimensions_not_defined_load]
+
 -- Create a schedule for the main job that runs one minute aftere this script is run
 DECLARE @main_job_schedule_id INT, @minutes_of_day INT, @job_start_time_string NVARCHAR(100)
 DECLARE @run_period_start SMALLDATETIME, @run_period_end SMALLDATETIME
