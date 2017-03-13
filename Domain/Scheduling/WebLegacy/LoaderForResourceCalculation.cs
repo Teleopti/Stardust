@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return _scenarioRepository.LoadDefaultScenario();
 		}
 
-		public ResourceCalculationData ResourceCalculationData(DateOnlyPeriod period)
+		public ResourceCalculationData ResourceCalculationData(DateOnlyPeriod period, bool doIntraIntervalCalculation = true)
 		{
 			var skills = skillsToUse(_agents, period).ToList();
 			var skillDays = SkillDays(period, skills);
 			var schedules = Schedules(period);
-			return  new ResourceCalculationData(schedules,skills,skillDays,true, true);
+			return  new ResourceCalculationData(schedules,skills,skillDays,true, doIntraIntervalCalculation);
 		}
 
 		[TestLog]
