@@ -16,22 +16,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			public string Tag { get; set; }
 			public IBrowserActivator Activator { get; set; }
 			public bool Started { get; set; }
+			public Exception StartException { get; set; }
 		}
+
+		private static IBrowserActivator _noBrowser = new NoBrowserActivator();
 
 		private static readonly IEnumerable<registeredActivator> activators =
 			new List<registeredActivator>
+			{
+				new registeredActivator
 				{
-					new registeredActivator
-						{
-							Tag = "Chrome",
-							Activator = new CoypuChromeActivator()
-						},
-					new registeredActivator
-					{
-						Tag = "NoBrowser",
-						Activator =  new NoBrowserActivator()
-					}
-				};
+					Tag = "Chrome",
+					Activator = new CoypuChromeActivator()
+				},
+				new registeredActivator
+				{
+					Tag = "NoBrowser",
+					Activator = _noBrowser
+				}
+			};
 
 		private static registeredActivator _activator;
 		private static TimeSpan _timeout;
@@ -42,17 +45,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			_activator = activators.First();
 		}
 
-		private static IBrowserActivator getStartedActivator()
+		public static bool IsStarted => _activator.Started;
+
+		private static IBrowserActivator getActivator()
 		{
+			if (_activator.StartException != null)
+				throw _activator.StartException;
 			if (!_activator.Started)
 			{
-				_activator.Activator.Start(_timeout, _retry);
+				try
+				{
+					_activator.Activator.Start(_timeout, _retry);
+				}
+				catch (Exception e)
+				{
+					_activator.StartException = e;
+					throw;
+				}
 				_activator.Started = true;
 			}
 			return _activator.Activator;
 		}
 
-		public static IBrowserInteractions Interactions { get { return getStartedActivator().GetInteractions(); } }
+		public static IBrowserInteractions Interactions => getActivator().GetInteractions();
 
 		public static void SetDefaultTimeouts(TimeSpan timeout, TimeSpan retry)
 		{
@@ -72,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static IDisposable TimeoutScope(TimeSpan timeout)
 		{
-			return new TimeoutScope(getStartedActivator(), timeout);
+			return new TimeoutScope(getActivator(), timeout);
 		}
 
 		public static void Dispose()

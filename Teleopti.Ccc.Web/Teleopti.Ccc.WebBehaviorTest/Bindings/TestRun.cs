@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			log.Debug($"Cleaning up after scenario {ScenarioContext.Current.ScenarioInfo.Title}");
 			log.Info(TestContext.CurrentContext.Result.Outcome.Status);
-			Browser.Interactions.GoTo("about:blank");
+			if (Browser.IsStarted)
+				Browser.Interactions.GoTo("about:blank");
 			DataMaker.AfterScenario();
 			LocalSystem.Hangfire.WaitForQueue();
 
