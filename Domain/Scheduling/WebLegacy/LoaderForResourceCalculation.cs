@@ -23,9 +23,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IActivityRepository _activityRepository;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private IScenario _scenario;
 		private ICollection<IPerson> _agents;
+
 		public LoaderForResourceCalculation(IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
 					IScheduleStorage scheduleStorage,
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					IActivityRepository activityRepository,
 					IShiftCategoryRepository shiftCategoryRepository,
 					ISkillRepository skillRepository,
-					IDisableDeletedFilter disableDeletedFilter)
+					IDisableDeletedFilter disableDeletedFilter, ISkillTypeRepository skillTypeRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_skillRepository = skillRepository;
 			_disableDeletedFilter = disableDeletedFilter;
+			_skillTypeRepository = skillTypeRepository;
 		}
 
 		protected IScenario FetchScenario()
@@ -89,17 +92,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected virtual void PreFill(DateOnlyPeriod period)
 		{
 			_scenario = _scenarioRepository.LoadDefaultScenario();
-			_agents = _personRepository.FindPeopleInOrganizationQuiteLight(period);
+			
 			using (_disableDeletedFilter.Disable())
 			{
 				_activityRepository.LoadAll();
+				_skillTypeRepository.LoadAll();
+				_skillRepository.LoadAllSkills();
+				
 				_absenceRepository.LoadAll();
 				_shiftCategoryRepository.LoadAll();
 			}	
 			_skillRepository.FindAllWithSkillDays(period);
+			_agents = _personRepository.FindPeopleInOrganizationQuiteLight(period);
 		}
 
-		private IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var agentSkills = new HashSet<ISkill>();
 			foreach (var agent in agents)
