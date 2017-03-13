@@ -1,9 +1,9 @@
-﻿'use strict';
-
+﻿
 (function () {
+	'use strict';
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'People', '$mdSidenav',
+			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'PeopleService', '$mdSidenav',
 			'$mdUtil', '$state', '$interval', '$mdComponentRegistry', '$locale', PeopleCartController
 		]);
 
@@ -322,4 +322,4 @@
 
 		initialize();
 	}
-}());
+})();
