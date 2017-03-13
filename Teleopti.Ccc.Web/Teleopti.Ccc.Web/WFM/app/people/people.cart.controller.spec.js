@@ -1,6 +1,5 @@
-﻿'use strict';
-
-describe("PeopleCartCtrl", function () {
+﻿describe("PeopleCartCtrl", function () {
+	'use strict';
 	var $q,
 		$rootScope,
 		$httpBackend,
@@ -219,7 +218,7 @@ describe("PeopleCartCtrl", function () {
 		return $controller("PeopleCartCtrl", {
 			$scope: scope,
 			$stateParams: stateParams,
-			People: mockPeopleService
+			PeopleService: mockPeopleService
 		});
 	}
 });
