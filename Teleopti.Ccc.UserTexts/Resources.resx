@@ -15638,6 +15638,10 @@ Do you want to participate?</value>
   <data name="EnterANumber" xml:space="preserve">
     <value>Enter a number</value>
   </data>
+  <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
+    <value>{0} fixed with fallback value</value>
+    <comment>Warning message template in fixing an invalid field with a pre-set fallback value. </comment>
+  </data>
   <data name="ImportAgentsDoneOpenTheDownloadedFileForMoreDetails" xml:space="preserve">
     <value>Done. Open the downloaded file for more details.</value>
     <comment>Message to show when importing agents is done. </comment>

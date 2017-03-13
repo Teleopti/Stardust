@@ -77,6 +77,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 		}
 
+		private static string warningMessage(string column)
+		{
+			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column);
+		}
+
 		[Test, Ignore("file parsing")]
 		public void ShouldParseWorkbookFromHttpContent()
 		{
@@ -223,7 +228,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook, new ImportAgentFormData { SchedulePeriodType = defaultSchedulePeriodType});
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType"));
 			result.Single().Agent.SchedulePeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
 		}
 
@@ -244,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));
 			result.Single().Agent.ExternalLogon.Should().Be.EqualTo(externalLogon);
 		}
 
@@ -265,7 +270,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ShiftBagId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag"));
 			result.Single().Agent.RuleSetBag.Should().Be.EqualTo(ruleSetBag);
 		}
 
@@ -286,7 +291,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { PartTimePercentageId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage"));
 			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -307,7 +312,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ContractScheduleId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule"));
 			result.Single().Agent.ContractSchedule.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -328,7 +333,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ContractId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract"));
 			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -349,7 +354,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Roles"));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -370,7 +375,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Team"));
 			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -391,7 +396,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be("Fixed by default");
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Skills"));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 

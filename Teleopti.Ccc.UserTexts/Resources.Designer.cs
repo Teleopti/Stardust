@@ -13125,6 +13125,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} fixed with fallback value.
+        /// </summary>
+        public static string ImportAgentsColumnFixedWithFallbackValue {
+            get {
+                return ResourceManager.GetString("ImportAgentsColumnFixedWithFallbackValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done. Open the downloaded file for more details..
         /// </summary>
         public static string ImportAgentsDoneOpenTheDownloadedFileForMoreDetails {

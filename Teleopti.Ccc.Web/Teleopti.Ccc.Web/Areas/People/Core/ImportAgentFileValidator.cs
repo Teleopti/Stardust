@@ -411,8 +411,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			if (_defaultValues.SchedulePeriodType.HasValue)
 			{
 				agentInfo.SchedulePeriodType = _defaultValues.SchedulePeriodType.Value;
-				// [ToDo] Add message to resource
-				feedback.WarningMessages.Add("Fixed by default");
+				feedback.WarningMessages.Add(warningMessage("SchedulePeriodType"));
 				return feedback;
 			}
 
@@ -430,8 +429,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.ExternalLogon != null)
 				{
 					agentInfo.ExternalLogon = _defaultValues.ExternalLogon;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("ExternalLogon"));
 					return feedback;
 				}
 
@@ -452,8 +450,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.RuleSetBag != null)
 				{
 					agentInfo.RuleSetBag = _defaultValues.RuleSetBag;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("ShiftBag"));
 					return feedback;
 				}
 
@@ -474,8 +471,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.PartTimePercentage != null)
 				{
 					agentInfo.PartTimePercentage = _defaultValues.PartTimePercentage;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("PartTimePercentage"));
 					return feedback;
 				}
 
@@ -496,8 +492,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.ContractSchedule != null)
 				{
 					agentInfo.ContractSchedule = _defaultValues.ContractSchedule;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("ContractSchedule"));
 					return feedback;
 				}
 
@@ -518,8 +513,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.Contract != null)
 				{
 					agentInfo.Contract = _defaultValues.Contract;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("Contract"));
 					return feedback;
 				}
 
@@ -555,8 +549,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.Roles.Any())
 				{
 					agent.Roles = _defaultValues.Roles;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("Roles"));
 					return feedback;
 				}
 
@@ -593,8 +586,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.Team != null)
 				{
 					agent.Team = _defaultValues.Team;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("Team"));
 					return feedback;
 				}
 
@@ -631,8 +623,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if(_defaultValues.Skills.Any())
 				{
 					agent.Skills = _defaultValues.Skills;
-					// [ToDo] Add message to resource
-					feedback.WarningMessages.Add("Fixed by default");
+					feedback.WarningMessages.Add(warningMessage("Skills"));
 					return feedback;
 				}
 
@@ -646,6 +637,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			}
 
 			return feedback;		
+		}
+
+		private static string warningMessage(string column)
+		{
+			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column);
 		}
 
 		private class defaultAgentDataModel
