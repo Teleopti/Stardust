@@ -55,12 +55,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
-			schedulingResultStateHolder.PersonsInOrganization = loadLight ? 
-				_personRepository.FindPeopleInOrganizationQuiteLight(dateOnlyPeriod) : _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
-
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod).ToArray();
 			_workloadRepository.LoadAll();
 			schedulingResultStateHolder.AddSkills(skills);
+
+			schedulingResultStateHolder.PersonsInOrganization = loadLight ?
+				_personRepository.FindPeopleInOrganizationQuiteLight(dateOnlyPeriod) : _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
 
 			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
 			result.FilterPeople(schedulingResultStateHolder.PersonsInOrganization);

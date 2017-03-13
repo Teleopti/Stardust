@@ -232,7 +232,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void preloadData()
 		{
-			_skillRepository.LoadAllSkills();
 			_contractRepository.LoadAll();
 			_skillTypeRepository.LoadAll();
 			_partTimePercentageRepository.LoadAll();
@@ -240,6 +239,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_activityRepository.LoadAll();
 			_absenceRepository.LoadAll();
 			_dayOffTemplateRepository.LoadAll();
+			_skillRepository.LoadAllSkills();
 		}
 
 		private void processOrderList(IList<IPersonRequest> requests, IScenario currentScenario)
@@ -481,7 +481,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
 		{
-			var personRequest = absenceRequest.Parent as IPersonRequest;
 			requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person);
 		}
 
