@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
         private readonly DateOnlyPeriod _period;
         private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
-        private readonly ISkillExtractor _allSkillExtractor;
+		private readonly Lazy<IEnumerable<ISkill>> _extractedSkills;
 
         public RelativeDailyDifferencesByAllSkillsExtractor(
             DateOnlyPeriod period, 
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             _period = period;
             _dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
-            _allSkillExtractor = allSkillExtractor;
+            _extractedSkills = new Lazy<IEnumerable<ISkill>>(allSkillExtractor.ExtractSkills);
         }
 
 		public RelativeDailyDifferencesByAllSkillsExtractor(
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISkillExtractor allSkillExtractor)
 		{
 			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
-			_allSkillExtractor = allSkillExtractor;
+			_extractedSkills = new Lazy<IEnumerable<ISkill>>(allSkillExtractor.ExtractSkills);
 		}
 
         public IList<double?> Values()
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             double dailyForecast = 0;
             double dailyScheduled = 0;
 
-            foreach (ISkill skill in _allSkillExtractor.ExtractSkills())
+            foreach (ISkill skill in _extractedSkills.Value)
             {
                 ForecastScheduleValuePair forecastScheduleValuePairForSkill = _dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(skill, scheduleDay);
                 dailyForecast += forecastScheduleValuePairForSkill.ForecastValue;
