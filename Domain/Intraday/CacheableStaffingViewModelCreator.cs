@@ -72,10 +72,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 				stringBuilder.Append($"[{intradayStaffingViewModel.DataSeries.Time[i]},");
 				stringBuilder.Append(i <= intradayStaffingViewModel.DataSeries.ScheduledStaffing?.Length - 1
 					? $"{intradayStaffingViewModel.DataSeries.ScheduledStaffing[i] ?? double.NaN},"
-					: $"{double.NaN}");
+					: "NotFound");
 				stringBuilder.Append(i <= intradayStaffingViewModel.DataSeries.ForecastedStaffing?.Length - 1
 					? $"{intradayStaffingViewModel.DataSeries.ForecastedStaffing[i] ?? double.NaN}"
-					: $"{double.NaN}");
+					: "NotFound");
 				stringBuilder.Append("],");
 			}
 			stringBuilder.AppendLine();
