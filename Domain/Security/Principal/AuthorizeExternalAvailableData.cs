@@ -69,14 +69,27 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return result.GetValueOrDefault(false);
         }
 
-    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorization authorization)
     	{
-    		return _availableTeams.Contains(personAuthorizationInfo.TeamId.GetValueOrDefault()) ||
-    		       _availableSites.Contains(personAuthorizationInfo.SiteId.GetValueOrDefault()) ||
-    		       _availableBusinessUnits.Contains(personAuthorizationInfo.BusinessUnitId);
+    		return _availableTeams.Contains(authorization.TeamId.GetValueOrDefault()) ||
+    		       _availableSites.Contains(authorization.SiteId.GetValueOrDefault()) ||
+    		       _availableBusinessUnits.Contains(authorization.BusinessUnitId);
     	}
 
-    	private bool? CheckTeam(ITeam team)
+		public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAutorization authorization)
+		{
+			return _availableTeams.Contains(authorization.TeamId) ||
+				   _availableSites.Contains(authorization.SiteId) ||
+				   _availableBusinessUnits.Contains(authorization.BusinessUnitId);
+		}
+
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAutorization authorization)
+	    {
+			return _availableSites.Contains(authorization.SiteId) ||
+				   _availableBusinessUnits.Contains(authorization.BusinessUnitId);
+		}
+
+		private bool? CheckTeam(ITeam team)
         {
             if (team == null)
             {

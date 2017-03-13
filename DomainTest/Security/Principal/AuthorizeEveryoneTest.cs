@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         [Test]
         public void ShouldAuthorizeOrganisation()
         {
-            target.Check(null, DateOnly.Today, (IPersonAuthorizationInfo)null).Should().Be.True();
+            target.Check(null, DateOnly.Today, (IPersonAuthorization)null).Should().Be.True();
         }
     }
 }

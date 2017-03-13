@@ -47,9 +47,19 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return queryingPerson.BelongsToBusinessUnit(businessUnit,dateOnly);
         }
 
-    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorization authorization)
     	{
-    		return queryingPerson.BelongsToBusinessUnit(personAuthorizationInfo.BusinessUnitId, dateOnly);
+    		return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly);
     	}
-    }
+
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAutorization authorization)
+	    {
+			return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly);
+		}
+
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAutorization authorization)
+	    {
+			return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly);
+		}
+	}
 }

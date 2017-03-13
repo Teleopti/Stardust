@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = unitOfWork;
 		}
 
-		public IList<IPersonAuthorizationInfo> GetPeople (IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> groupIdList,
+		public IList<IPersonAuthorization> GetPeople (IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> groupIdList,
 			string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
 		{
 			var useChineseNameFormat = name != null && StringHelper.StringContainsChinese(name);
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							   + "@fromPersonId = :fromPersonId, "
 							   + "@shiftStartUTC = :shiftStartUTC, "
 							   + "@shiftEndUTC = :shiftEndUTC";
-			var result = new List<IPersonAuthorizationInfo>();
+			var result = new List<IPersonAuthorization>();
 			//ROBTODO: Temporary - Person From Shift Period is currently not being passed to Get People, this is currently not being used by the query,
 			//	but is a requested parameter to add for further optimisation
 			var dummyDateTimePeriod = new DateTimePeriod(DateTime.Today.ToUniversalTime(), DateTime.Now.ToUniversalTime());
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetDateTime("shiftEndUTC", dummyDateTimePeriod.EndDateTime)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
 				.SetReadOnly(true)
-				.List<IPersonAuthorizationInfo>();
+				.List<IPersonAuthorization>();
 				result.AddRange(batchResult);
 			});
 			return result;

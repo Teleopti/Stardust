@@ -29,7 +29,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return false;
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorization authorization)
+		{
+			return false;
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAutorization authorization)
+		{
+			return false;
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAutorization authorization)
 		{
 			return false;
 		}

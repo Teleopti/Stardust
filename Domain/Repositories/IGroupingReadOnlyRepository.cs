@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnlyPeriod queryRange);
 	}
 
-	public class ReadOnlyGroupDetail : IPersonAuthorizationInfo
+	public class ReadOnlyGroupDetail : IPersonAuthorization
 	{
 		public Guid PageId { get; set; }
 		public string GroupName { get; set; }

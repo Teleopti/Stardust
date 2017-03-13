@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Global
@@ -45,8 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					x => x.ApplicationFunctionPath == applicationfunctionpath && x.Date == today && x.Site == site);
 		}
 
-		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date,
-			IPersonAuthorizationInfo personAuthorizationInfo)
+		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IPersonAuthorization personAuthorizationInfo)
 		{
 			if (!enabled) return true;
 			return _applicationFunctions.ContainsKey(applicationFunctionPath)

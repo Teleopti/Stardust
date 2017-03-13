@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			IBusinessUnit bu = site == null ? null : site.BusinessUnit;
 
 
-			var authorizeOrganisationDetail = new personAuthorizationInfo
+			var authorizeOrganisationDetail = new PersonAuthorization
 			{
 				PersonId = request.Person.Id ?? Guid.Empty,
 				TeamId = team == null? null : team.Id,
@@ -83,14 +84,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				new DateOnly(request.Request.Period.StartDateTime),
 				authorizeOrganisationDetail);
 		}
-
-		private class personAuthorizationInfo : IPersonAuthorizationInfo
-		{
-			public Guid PersonId { get; set; }
-			public Guid? TeamId { get; set; }
-			public Guid? SiteId { get; set; }
-			public Guid BusinessUnitId { get; set; }
-		}
-
+		
 	}
 }

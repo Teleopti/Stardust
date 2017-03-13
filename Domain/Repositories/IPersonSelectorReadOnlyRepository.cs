@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -45,18 +46,18 @@ namespace Teleopti.Ccc.Domain.Repositories
         Note
     }
 
-    public interface IPersonSelectorOrganization : IPersonAuthorizationInfo, ILightPerson
+    public interface IPersonSelectorOrganization : IPersonAuthorization, ILightPerson
     {
         string Team { get; set; }
         string Site { get; set; }
     }
 
-    public interface IPersonSelectorBuiltIn : IPersonAuthorizationInfo, ILightPerson
+    public interface IPersonSelectorBuiltIn : IPersonAuthorization, ILightPerson
     {
         string Node { get; set; }
     }
 
-    public interface IPersonSelectorUserDefined : IPersonAuthorizationInfo, ILightPerson
+    public interface IPersonSelectorUserDefined : IPersonAuthorization, ILightPerson
     {
         Guid NodeId { get; set; }
         string Node { get; set; }

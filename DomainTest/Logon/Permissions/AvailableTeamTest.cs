@@ -3,19 +3,18 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.Logon
+namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 {
 	[DomainTest]
 	[LoggedOff]
 	[RealPermissions]
-	public class PermissionForTeamTest
+	public class AvailableTeamTest
 	{
 		public FakeDatabase Database;
 		public FakePersonRepository Persons;

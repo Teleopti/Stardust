@@ -9,18 +9,19 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.Logon
+namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 {
 	[DomainTest]
 	[LoggedOff]
 	[RealPermissions]
-	public class PermissionForSiteTest
+	public class AvailableSiteTest
 	{
 		public FakeDatabase Database;
 		public FakePersonRepository Persons;
 
 		public ILogOnOff LogOnOff;
 		public IAuthorization Authorization;
+
 		[Test]
 		public void ShouldHavePermissionForMySite()
 		{

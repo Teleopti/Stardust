@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
             _nameFormatSettingProvider.SetNameFormat(NameFormatSetting.LastNameThenFirstName);
           
             _personForScheduleFinder.Stub(rep => rep.GetPersonFor(input.ScheduleDate, input.TeamIdList, input.SearchNameText, NameFormatSetting.LastNameThenFirstName))
-                                            .Return(new List<IPersonAuthorizationInfo> ());
+                                            .Return(new List<IPersonAuthorization> ());
 
 
             _target.RetrievePeople(input);

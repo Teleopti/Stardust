@@ -42,9 +42,19 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return false;
         }
 
-    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorization authorization)
     	{
-    		return queryingPerson.BelongsToSite(personAuthorizationInfo.SiteId.GetValueOrDefault(), dateOnly);
+    		return queryingPerson.BelongsToSite(authorization.SiteId.GetValueOrDefault(), dateOnly);
     	}
-    }
+
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAutorization authorization)
+	    {
+			return queryingPerson.BelongsToSite(authorization.SiteId, dateOnly);
+		}
+
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAutorization authorization)
+	    {
+			return queryingPerson.BelongsToSite(authorization.SiteId, dateOnly);
+		}
+	}
 }

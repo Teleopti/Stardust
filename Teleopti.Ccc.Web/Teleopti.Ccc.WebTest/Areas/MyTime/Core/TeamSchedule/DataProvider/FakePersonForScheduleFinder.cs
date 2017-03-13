@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Core;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			_personNameProvider = personNameProvider;
 		}
 
-		public IList<IPersonAuthorizationInfo> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
+		public IList<IPersonAuthorization> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
 		{
 			var businessUnit = _businessUnitRepository.LoadAll().FirstOrDefault();
 			name = name ?? string.Empty;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 					 && _personNameProvider.BuildNameFromSetting(x.Name).Contains(name);
 
 
-			}).Select<IPerson,IPersonAuthorizationInfo>(x => new PersonSelectorShiftTrade
+			}).Select<IPerson, IPersonAuthorization>(x => new PersonSelectorShiftTrade
 			{
 				PersonId = x.Id.GetValueOrDefault(),
 				TeamId = x.MyTeam(shiftTradeDate).Id,

@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeam team);
         bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISite site);
         bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IBusinessUnit businessUnit);
-    	bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo);
+    	bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorization authorization);
+	    bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAutorization authorization);
+	    bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAutorization authorization);
     }
 }

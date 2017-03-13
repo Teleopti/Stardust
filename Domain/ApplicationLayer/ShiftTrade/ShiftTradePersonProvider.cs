@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Interfaces.Domain;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			return processShiftTradePeople(shiftTradeDate, personForShiftTradeList);
 		}
 
-		private IEnumerable<IPerson> processShiftTradePeople(DateOnly shiftTradeDate, IList<IPersonAuthorizationInfo> personForShiftTradeList)
+		private IEnumerable<IPerson> processShiftTradePeople(DateOnly shiftTradeDate, IList<IPersonAuthorization> personForShiftTradeList)
 		{
 			var me = _loggedOnUser.CurrentUser();
 

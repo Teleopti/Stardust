@@ -9,12 +9,12 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.Logon
+namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 {
 	[DomainTest]
 	[LoggedOff]
 	[RealPermissions]
-	public class PermissionTestTroughAuthorizeOrganisationDetail
+	public class AvailablePersonAuthorizationTest
 	{
 		public FakeDatabase Database;
 		public FakePersonRepository Persons;
@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			var me = Persons.Load(meId);
 			var myTeam = me.MyTeam("2017-03-07".Date());
 			var siteId = myTeam.Site.Id.Value;
-			var otherGuyDetails = new personAuthorizationInfoForTest
+			var otherGuyDetails = new PersonAuthorization
 			{
 				PersonId = otherGuyId,
 				BusinessUnitId = Database.CurrentBusinessUnitId(),
 				SiteId = siteId,
 				TeamId = otherTeamId
 			};
-			var myDetails = new personAuthorizationInfoForTest
+			var myDetails = new PersonAuthorization
 			{
 				PersonId = meId,
 				BusinessUnitId = Database.CurrentBusinessUnitId(),
@@ -66,12 +66,5 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				.Should().Be.False();
 		}
 
-		private class personAuthorizationInfoForTest : IPersonAuthorizationInfo
-		{
-			public Guid PersonId { get; set; }
-			public Guid? TeamId { get; set; }
-			public Guid? SiteId { get; set; }
-			public Guid BusinessUnitId { get; set; }
-		}
 	}
 }

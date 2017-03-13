@@ -39,7 +39,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return true;
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorization authorization)
+		{
+			return true;
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAutorization authorization)
+		{
+			return true;
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAutorization authorization)
 		{
 			return true;
 		}
@@ -95,17 +105,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 
 
+		public bool IsPermitted(string functionPath)
+		{
+			return checkPermitted(functionPath, a => true); //Ignoring available data!
+		}
+
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
         {
             return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, person));
         }
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorizationInfo personAuthorizationInfo)
-		{
-			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, personAuthorizationInfo));
-		}
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
         {
             return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, team));
         }
@@ -115,10 +125,20 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, site));
         }
 
-        public bool IsPermitted(string functionPath)
-        {
-			return checkPermitted(functionPath, a => true); //Ignoring available data!
-        }
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorization authorization)
+		{
+			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAutorization authorization)
+		{
+			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAutorization authorization)
+		{
+			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
+		}
 
 		private bool checkPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
 		{

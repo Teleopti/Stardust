@@ -1,11 +1,12 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Display row for find results
     /// </summary>
-    public interface IPersonFinderDisplayRow : IPersonAuthorizationInfo
+    public interface IPersonFinderDisplayRow : IPersonAuthorization
     {
         /// <summary>
         /// First name
