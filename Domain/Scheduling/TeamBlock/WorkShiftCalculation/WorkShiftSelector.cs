@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			var shiftsWithValue =
 				shifts.AsParallel()
 					.Select(s => new {s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo)})
-					.Where(s => s.value.HasValue).ToArray();
+					.Where(s => s.value.HasValue);
 
 			if (schedulingOptions.SkipNegativeShiftValues)
 			{
-				shiftsWithValue = shiftsWithValue.Where(x => x.value > 0).ToArray();
+				shiftsWithValue = shiftsWithValue.Where(x => x.value > 0);
 			}
 
 			foreach (var item in shiftsWithValue)
