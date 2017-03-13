@@ -15,7 +15,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.AlertActivity = (function () {
 	var alertvm;
-	var notifyOptions;
+	var notifyOptions = {};
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var currentTimeout = null;
 	var notificationDisplayTime = null;
@@ -38,8 +38,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				type: 'GET',
 				success: function(displayTime) {
 					notificationDisplayTime = displayTime.DurationInSecond;
-					Teleopti.MyTimeWeb.Asm.UpdateNotificationDisplayTimeSetting(displayTime);
-					notifyOptions.timeout = displayTime * 1000;
+					Teleopti.MyTimeWeb.Asm.UpdateNotificationDisplayTimeSetting(displayTime.DurationInSecond);
+					notifyOptions.timeout = displayTime.DurationInSecond * 1000;
 				}
 			});
 		}
@@ -236,6 +236,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			settingLoadDeffered.resolve();
 		});
 
+		loadAlertNotificationDisplayingTimeSetting(function() {});
+
 		$.when(dataLoadDeffered, settingLoadDeffered).done(function () {
 			alertvm._createLayers(activityData);
 			alertvm._readAlertTimeSetting(beforeAlertTimeSetting);
@@ -297,6 +299,9 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		AbortAjax: function () {
 			if (currentTimeout !== null) clearTimeout(currentTimeout);
 			ajax.AbortAll();
+		},
+		_replaceAjax: function(another_ajax) {
+			ajax = another_ajax;
 		}
 	};
 })(jQuery);
