@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 				if (diff.Any())
 				{
-					if (personRequest.StatusText != Resources.Approved)
+					if (!personRequest.IsApproved)
 					{
 						logger.Warn($"Schedule from {range.Period.StartDateTime:yyyy-mm-dd} to {range.Period.EndDateTime:yyyy-mm-dd} "
 									+ "was changed on approving the request with Id=\"{personRequest.Id}\", "
