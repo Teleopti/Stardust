@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishEventOnlyIfRuleChanged()
+		public void ShouldPublishOnlyIfChanged()
 		{
 			var personId = Guid.NewGuid();
 			Database
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishWithSystemTime()
+		public void ShouldPublishWithTimeOfStateChange()
 		{
 			var personId = Guid.NewGuid();
 			Database
@@ -92,6 +92,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			@event.Timestamp.Should().Be("2017-03-06 10:00".Utc());
 		}
 
+		[Test]
+		[Ignore("WIP")]
+		public void ShouldPublishWithTimeOfActivityChange()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", person)
+				.WithSchedule(person, phone, "2017-03-13 9:00", "2017-03-13 10:00")
+				.WithMappedRule("state1", null);
+			Now.Is("2014-03-13 9:05");
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "state1"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>().Single()
+				.Timestamp.Should().Be("2017-03-13 9:00".Utc());
+		}
+		
 		[Test]
 		public void ShouldPublishWithRuleName()
 		{

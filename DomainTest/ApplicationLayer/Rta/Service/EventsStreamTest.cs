@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -85,6 +86,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.In);
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:15".Utc());
 		}
+
+		[Test]
+		[Ignore("WIP")]
+		public void ShouldPublishRuleEventsForBothChangesInASingleTrigger()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var brejk = Guid.NewGuid();
+			var inAdherence = Guid.NewGuid();
+			var outOfAdherence = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-13 9:00", "2017-03-13 10:00")
+				.WithSchedule(personId, brejk, "2017-03-13 10:00", "2017-03-13 10:15")
+				.WithMappedRule("phone", phone, inAdherence, "in")
+				.WithMappedRule("phone", brejk, outOfAdherence, "out")
+				.WithMappedRule("break", brejk, inAdherence, "in")
+				.WithMappedRule("break", phone, outOfAdherence, "out");
+			Now.Is("2017-03-13 9:00");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Publisher.Clear();
+
+			Now.Is("2017-03-13 10:02");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "break"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Single(x => x.RuleName == "out")
+				.Timestamp.Should().Be("2017-03-13 10:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Single(x => x.RuleName == "in")
+				.Timestamp.Should().Be("2017-03-13 10:02".Utc());
+		}
+
 
 	}
 }

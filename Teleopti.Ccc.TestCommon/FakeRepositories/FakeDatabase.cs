@@ -913,12 +913,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		[UnitOfWork]
-		public virtual FakeDatabase WithRule(Guid? ruleId, string name, int staffingEffect, Adherence? adherence, Color? displayColor)
+		public virtual FakeDatabase WithRule(Guid? id, string name, int staffingEffect, Adherence? adherence, Color? displayColor)
 		{
+			var existing = _rules.LoadAll().FirstOrDefault(x => x.Id.GetValueOrDefault() == id.GetValueOrDefault());
+			if (existing != null)
+			{
+				_rule = existing as RtaRule;
+				return this;
+			}
+
 			_rule = new RtaRule();
 			if (name != null)
 				_rule.Description = new Description(name);
-			_rule.SetId(ruleId ?? Guid.NewGuid());
+			_rule.SetId(id ?? Guid.NewGuid());
 			_rule.SetBusinessUnit(_businessUnit);
 			_rule.StaffingEffect = staffingEffect;
 			_rule.Adherence = adherence;
