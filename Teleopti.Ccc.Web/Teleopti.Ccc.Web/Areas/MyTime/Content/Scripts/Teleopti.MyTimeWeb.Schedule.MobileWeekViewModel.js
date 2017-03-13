@@ -25,6 +25,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.nextWeekDate = ko.observable(moment());
 	self.previousWeekDate = ko.observable(moment());
 	self.selectedDate = ko.observable(moment().startOf("day"));
+	self.formatedSelectedDate = ko.computed(function() {
+		return moment(self.selectedDate()).format("l");
+	})
 
 	self.baseUtcOffsetInMinutes = ko.observable();
 	self.intradayOpenPeriod = null;
@@ -121,6 +124,29 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
 		type: function () { return "absenceReport"; },
 		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
+	};
+
+	self.selectedProbabilityOptionValue = ko.observable("0");
+
+	var probabilityOptionModel = {
+		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue()),
+		type: function () { return 'probabilityOptions' },
+		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.OnProbabilityOptionSelectCallback(selectedOptionValue); }
+	};
+
+	self.showProbabilityOptionsPanel = function (data) {
+		self.initialRequestDay(data.fixedDate());
+
+		if(self.requestViewModel() && self.requestViewModel().type() == probabilityOptionModel.type()){
+			self.requestViewModel(undefined);
+		}else{
+			self.requestViewModel(probabilityOptionModel);
+		}
+	};
+
+	self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {
+		self.requestViewModel(undefined);
+		self.selectedProbabilityOptionValue(selectedOptionValue);
 	};
 
 	self.showAddOvertimeAvailabilityForm = function (data) {
@@ -261,6 +287,10 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		var isPermittedDate = (dateDiff === 0 || dateDiff === 1);
 		var result = self.absenceReportPermission() && isPermittedDate;
 		return result;
+	});
+
+	self.showProbabilityOptions = ko.computed(function(){
+		return self.formattedFixedDate() == parent.formatedSelectedDate();
 	});
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {

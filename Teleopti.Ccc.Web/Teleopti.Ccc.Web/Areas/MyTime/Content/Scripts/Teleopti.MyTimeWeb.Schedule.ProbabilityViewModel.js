@@ -84,3 +84,10 @@
 		}
 	};
 };
+
+
+
+Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel = function (selectedOptionValue) {
+	this.Template = "probability-options-template";
+	this.checkedProbability = ko.observable(selectedOptionValue);
+}

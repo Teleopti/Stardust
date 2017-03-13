@@ -1,10 +1,10 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @{
-	Layout = null;
+    Layout = null;
 }
 
 <script>
-	$(function() {
+	$(function () {
 		Teleopti.MyTimeWeb.Schedule.MobileWeek.SetupResource({
 			xRequests: '@Resources.XRequests',
 			subjectColon: '@Resources.SubjectColon',
@@ -28,156 +28,166 @@
 </script>
 
 <script type="text/html" id="add-absence-report-detail-template">
-	@Html.Partial("AddAbsenceReportPartial")
+    @Html.Partial("AddAbsenceReportPartial")
 </script>
 <script type="text/html" id="add-overtime-availability-template">
-	@Html.Partial("AddOvertimeAvailabilityPartial")
+    @Html.Partial("AddOvertimeAvailabilityPartial")
 </script>
+<script type="text/html" id="probability-options-template">
+    @Html.Partial("ProbabilityOptionsPartial")
+</script>
+
 
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat" />
 
 <div class="navbar navbar-teleopti subnavbar">
-	<div class="container">
-		<ul class="nav navbar-nav navbar-teleopti row submenu">
-			<li class="col-xs-12 col-sm-3">
-				<div class="input-group" style="max-width: 329px;">
-					<span class="input-group-btn">
-						<button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
-							<i class="glyphicon glyphicon-chevron-left"></i>
-						</button>
-					</span>
-					<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
-					<span class="input-group-btn">
-						<button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
-							<i class="glyphicon glyphicon-chevron-right"></i>
-						</button>
-					</span>
-				</div>
-			</li>
-		</ul>
-	</div>
+    <div class="container">
+        <ul class="nav navbar-nav navbar-teleopti row submenu">
+            <li class="col-xs-12 col-sm-3">
+                <div class="input-group" style="max-width: 329px;">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                        </button>
+                    </span>
+                    <input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div class="container weekview-mobile">
-	<div class="body">
-		<!-- ko foreach: dayViewModels-->
-		<div class="day panel panel-default mobile-view-day" data-bind="attr: { 'data-mytime-date': fixedDate }">
-			<div class="header panel-heading">
-				<span class="weekday" data-bind="text: weekDayHeaderTitle"></span>
-				<span class="date" data-bind="text: fixedDate"></span>
-			</div>
+    <div class="body">
+        <!-- ko foreach: dayViewModels-->
+        <div class="day panel panel-default mobile-view-day" data-bind="attr: { 'data-mytime-date': fixedDate }">
+            <div class="header panel-heading">
+                <span class="weekday" data-bind="text: weekDayHeaderTitle"></span>
+                <span class="date" data-bind="text: fixedDate"></span>
+            </div>
 
-			<div class="mobileWeek-day-view-body" data-bind="css: {'dayoff': isDayoff(),  'overtime-panel-body': hasOvertime, 'panel-body': !hasOvertime,'has-overtime-availability': hasOvertimeAvailability() }">
-				<div class="shift-category-content" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'col-xs-12': !hasOvertimeAvailability(), ' col-xs-6 col-sm-6':hasOvertimeAvailability()}">
-					<strong data-bind="text: summaryName"></strong>
-					<span data-bind="text: summaryTimeSpan"></span>
-					<!-- ko if: hasOvertime -->
-					<p>
-						<strong>@Resources.Overtime</strong>
-					</p>
-					<!-- /ko -->
-				</div>
-				<!-- ko if: hasOvertimeAvailability-->
-				<div class="overtime-availability-content col-xs-6 col-sm-6">
-					<p>
-						<strong>@Resources.OvertimeAvailability</strong>
-					</p>
-					<p>
-						<span data-bind="text: overtimeAvailabilityStart"></span> - <span data-bind="text: overtimeAvailabilityEnd"></span>
-					</p>
-				</div>
-				<!-- /ko -->
-			</div>
+            <div class="mobileWeek-day-view-body" data-bind="css: {'dayoff': isDayoff(),  'overtime-panel-body': hasOvertime, 'panel-body': !hasOvertime,'has-overtime-availability': hasOvertimeAvailability() }">
+                <div class="shift-category-content" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'col-xs-12': !hasOvertimeAvailability(), ' col-xs-6 col-sm-6':hasOvertimeAvailability()}">
+                    <strong data-bind="text: summaryName"></strong>
+                    <span data-bind="text: summaryTimeSpan"></span>
+                    <!-- ko if: hasOvertime -->
+                    <p>
+                        <strong>@Resources.Overtime</strong>
+                    </p>
+                    <!-- /ko -->
+                </div>
+                <!-- ko if: hasOvertimeAvailability-->
+                <div class="overtime-availability-content col-xs-6 col-sm-6">
+                    <p>
+                        <strong>@Resources.OvertimeAvailability</strong>
+                    </p>
+                    <p>
+                        <span data-bind="text: overtimeAvailabilityStart"></span> - <span data-bind="text: overtimeAvailabilityEnd"></span>
+                    </p>
+                </div>
+                <!-- /ko -->
+            </div>
 
-			<div class="mobileWeek-day-view-layer-container">
-				<div class="mobileWeek-day-view-layer" data-bind="visible: layers.length> 0">
-					<!-- ko foreach: layers -->
-					<!-- ko if: isOvertimeAvailability() -->
-					<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, click: $parent.showOvertimeAvailability">
-						<i class="glyphicon glyphicon-time"></i>
-					</div>
-					<!-- /ko -->
-					<!-- ko ifnot: isOvertimeAvailability() -->
-					<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
-						<div>
-							<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
-							<!-- ko if: hasMeeting -->
-							<div class="meeting floatright">
-								<i class="meeting-icon icon-user mr10">
-									<i class="glyphicon glyphicon-user ml10"></i>
-								</i>
-							</div>
-							<!-- /ko -->
-							<span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="text: timeSpan"></span>
-						</div>
-					</div>
-					<!-- /ko -->
-					<!-- /ko -->
-				</div>
-			</div>
-			<div class="mobile-bottom-bar">
-				<ul class="nav nav-pills navbar-weekview">
-					<!-- ko if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
-						<!-- ko if: overtimeAvailabilityPermission() -->
-						<li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
-							<a href="#" class="overtime-availability-add" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
-						</li>
-						<!-- /ko -->
-						<!-- ko if: isPermittedToReportAbsence() -->
-						<li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
-							<a href="#" class="absence-report-add" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
-						</li>
-						<!-- /ko -->
-					<!-- /ko -->
-
-					<!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
-						<!-- ko if: overtimeAvailabilityPermission() -->
-						<li class="display-none" data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
-							<a class="overtime-availability-add">@Resources.OvertimeAvailability</a>
-						</li>
-						<!-- /ko -->
-						<!-- ko if: isPermittedToReportAbsence() -->
-						<li class="display-none" data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
-							<a class="absence-report-add">@Resources.AbsenceReport</a>
-						</li>
-						<!-- /ko -->
-						<!-- ko if: (overtimeAvailabilityPermission() || isPermittedToReportAbsence())-->
-						<li class="pull-right action-menu-container">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle action-button" href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i></a>
-								<ul class="dropdown-menu action-menus">
-									<!-- ko if: overtimeAvailabilityPermission() -->
-									<li>
-										<a href="#" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
-									</li>
-									<!-- /ko -->
-									<!-- ko if: isPermittedToReportAbsence() -->
-									<li>
-										<a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
-									</li>	
-									<!-- /ko -->
-								</ul>
-							</div>
-						</li>
-						<!-- /ko -->
-					<!-- /ko -->
-				</ul>
-			</div>
-			<div data-bind="visible: formattedFixedDate() === $parent.formattedRequestDate()">
-				<!-- ko with: $parent.requestViewModel -->
-				<div data-bind="with: model">
-					<div id="Request-add-section" class="well well-sm clearfix">
-						<div data-bind="template: Template">
-						</div>
-					</div>
-				</div>
-				<!-- /ko -->
-			</div>
-			<!-- /ko -->
-		</div>
-		<!-- /ko -->
-	</div>
-	<div class="mobile-foot">
-		@Resources.Mobile | <a href="#" id="desktop" data-bind="click: desktop">@Resources.Desktop</a>
-	</div>
+            <div class="mobileWeek-day-view-layer-container">
+                <div class="mobileWeek-day-view-layer" data-bind="visible: layers.length> 0">
+                    <!-- ko foreach: layers -->
+                    <!-- ko if: isOvertimeAvailability() -->
+                    <div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, click: $parent.showOvertimeAvailability">
+                        <i class="glyphicon glyphicon-time"></i>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko ifnot: isOvertimeAvailability() -->
+                    <div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
+                        <div>
+                            <strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
+                            <!-- ko if: hasMeeting -->
+                            <div class="meeting floatright">
+                                <i class="meeting-icon icon-user mr10">
+                                    <i class="glyphicon glyphicon-user ml10"></i>
+                                </i>
+                            </div>
+                            <!-- /ko -->
+                            <span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="text: timeSpan"></span>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div class="mobile-bottom-bar">
+                <ul class="nav nav-pills navbar-weekview">
+                    <!-- ko if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
+                    <!-- ko if: overtimeAvailabilityPermission() -->
+                    <li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
+                        <a href="#" class="overtime-availability-add" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
+                    </li>
+                    <!-- /ko -->
+                    <!-- ko if: isPermittedToReportAbsence() -->
+                    <li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
+                        <a href="#" class="absence-report-add" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
+                    </li>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
+                    <!-- ko if: overtimeAvailabilityPermission() -->
+                    <li class="display-none" data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
+                        <a class="overtime-availability-add">@Resources.OvertimeAvailability</a>
+                    </li>
+                    <!-- /ko -->
+                    <!-- ko if: isPermittedToReportAbsence() -->
+                    <li class="display-none" data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
+                        <a class="absence-report-add">@Resources.AbsenceReport</a>
+                    </li>
+                    <!-- /ko -->
+                    <!-- ko if: (overtimeAvailabilityPermission() || isPermittedToReportAbsence())-->
+                    <li class="pull-right action-menu-container">
+                        <div class="dropdown">
+                            <a class="btn btn-primary dropdown-toggle action-button" href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i></a>
+                            <ul class="dropdown-menu action-menus">
+                                <!-- ko if: overtimeAvailabilityPermission() -->
+                                <li>
+                                    <a href="#" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
+                                </li>
+                                <!-- /ko -->
+                                <!-- ko if: isPermittedToReportAbsence() -->
+                                <li>
+                                    <a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
+                                </li>
+                                <!-- /ko -->
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- ko if: showProbabilityOptions() -->
+                    <li class="pull-right">
+                        <a class="btn btn btn-default probability-icon" data-bind="click:$parent.showProbabilityOptionsPanel">
+                            <i class="glyphicon glyphicon-eye-open"></i>
+                        </a>
+                    </li>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </ul>
+            </div>
+            <div data-bind="visible: formattedFixedDate() === $parent.formattedRequestDate()">
+                <!-- ko with: $parent.requestViewModel -->
+                <div data-bind="with: model">
+                    <div id="Request-add-section" class="well well-sm clearfix">
+                        <div data-bind="template: Template">
+                        </div>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+    <div class="mobile-foot">
+        @Resources.Mobile | <a href="#" id="desktop" data-bind="click: desktop">@Resources.Desktop</a>
+    </div>
 </div>

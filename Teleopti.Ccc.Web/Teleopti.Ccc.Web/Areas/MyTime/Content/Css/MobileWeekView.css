@@ -48,9 +48,19 @@
 	margin: 0 5px 5px;
 }
 
-.weekview-mobile .action-button{
+.weekview-mobile .action-button, .weekview-mobile .probability-icon{
 	padding: 6.5px 10px;
 	border-radius: 50%;
+}
+
+.weekview-mobile .probability-icon{
+	background: transparent;
+	border-color: transparent;
+	color: #007fff;
+}
+
+.weekview-mobile .probability-icon a:focus{
+	color: #007fff;
 }
 
 .date-input-style{
@@ -99,6 +109,20 @@
 .weekview-mobile .action-menus{
 	right: 0;
 	left: auto;
+}
+
+.probability-radios-group .radio{
+	vertical-align: top;
+}
+
+.probability-radios-group .radio input[type="radio"]{
+	transform: scale(1.8);
+	margin-left: -15px;
+}
+
+.probability-radios-group .radio > span{
+	font-size: 1.2em;
+	margin-left: 10px;
 }
 
 .mobileWeek-day-view-layer{
