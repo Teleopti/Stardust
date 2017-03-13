@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			{
 				var row = sheet.GetRow(i);
 				var extractedRow = new AgentExtractionResult();
+				extractedRow.Row = row;
 				IList<string> rowErrors;
 				var raw = ParseRow(row, out rowErrors);
 				extractedRow.Raw = raw;
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				case CellType.Boolean:
 					return cell.BooleanCellValue;
 			}
-			
+
 			return null;
 		}
 	}
