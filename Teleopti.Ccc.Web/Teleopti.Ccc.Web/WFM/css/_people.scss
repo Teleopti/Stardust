@@ -320,8 +320,18 @@ wfm-import-agents {
 			text-align: right;
 		}
 
-		td {
-			line-height: 2em;
+		.wfm-table {
+			th, td {
+				border: none;
+			}
+
+			th {
+				text-align: start;
+			}
+
+			td {
+				line-height: 2em;
+			}
 		}
         }
         .droparea {

@@ -10091,6 +10091,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a number.
+        /// </summary>
+        public static string EnterANumber {
+            get {
+                return ResourceManager.GetString("EnterANumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter contract details.
         /// </summary>
         public static string EnterContractDetails {
@@ -13112,6 +13121,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportAgents {
             get {
                 return ResourceManager.GetString("ImportAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done. Open the downloaded file for more details..
+        /// </summary>
+        public static string ImportAgentsDoneOpenTheDownloadedFileForMoreDetails {
+            get {
+                return ResourceManager.GetString("ImportAgentsDoneOpenTheDownloadedFileForMoreDetails", resourceCulture);
             }
         }
         
@@ -17992,6 +18010,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewGroupPageName {
             get {
                 return ResourceManager.GetString("NewGroupPageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Import.
+        /// </summary>
+        public static string NewImport {
+            get {
+                return ResourceManager.GetString("NewImport", resourceCulture);
             }
         }
         
@@ -28285,6 +28312,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftBackToLegal {
             get {
                 return ResourceManager.GetString("ShiftBackToLegal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift bag.
+        /// </summary>
+        public static string ShiftBag {
+            get {
+                return ResourceManager.GetString("ShiftBag", resourceCulture);
             }
         }
         

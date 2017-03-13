@@ -15635,4 +15635,18 @@ Do you want to participate?</value>
     <value>Set fallback values to replace invalid ones</value>
     <comment>Checkbox label in Import Agents</comment>
   </data>
+  <data name="EnterANumber" xml:space="preserve">
+    <value>Enter a number</value>
+  </data>
+  <data name="ImportAgentsDoneOpenTheDownloadedFileForMoreDetails" xml:space="preserve">
+    <value>Done. Open the downloaded file for more details.</value>
+    <comment>Message to show when importing agents is done. </comment>
+  </data>
+  <data name="NewImport" xml:space="preserve">
+    <value>New Import</value>
+    <comment>Start a new import in Import Agents</comment>
+  </data>
+  <data name="ShiftBag" xml:space="preserve">
+    <value>Shift bag</value>
+  </data>
 </root>
