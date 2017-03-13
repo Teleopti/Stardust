@@ -67,10 +67,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			for (var i = 0; i < agents.Count; i++)
 			{
-				var rawAgent = agents[i].Raw;
 				var sourceRow = agents[i].Row;
 				var newRow = newSheet.CreateRow(i + 1);
-				CopyRow(newRow, sourceRow);
+				sourceRow.CopyTo(newRow);
 				newRow.CreateCell(errorMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.ErrorMessages));
 				newRow.CreateCell(warningMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.WarningMessages));
 			}
@@ -78,83 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return ms;
 		}
 
-		private void CopyRow(IRow targeRow, IRow sourceRow)
-		{
-			var sheet = targeRow.Sheet;
-			var workbook = sheet.Workbook;
-
-			for (int i = 0; i < sourceRow.LastCellNum; i++)
-			{
-
-				// Grab a copy of the old/new cell
-				var oldCell = sourceRow.GetCell(i);
-				var newCell = targeRow.CreateCell(i);
-
-				// If the old cell is null jump to next cell
-				if (oldCell == null)
-				{
-					newCell = null;
-					continue;
-				}
-
-				// Copy style from old cell and apply to new cell
-				var newCellStyle = workbook.CreateCellStyle();
-				newCellStyle.CloneStyleFrom(oldCell.CellStyle); ;
-				newCell.CellStyle = newCellStyle;
-
-				// If there is a cell comment, copy
-				if (newCell.CellComment != null) newCell.CellComment = oldCell.CellComment;
-
-				// If there is a cell hyperlink, copy
-				if (oldCell.Hyperlink != null) newCell.Hyperlink = oldCell.Hyperlink;
-
-				// Set the cell data type
-				newCell.SetCellType(oldCell.CellType);
-
-				// Set the cell data value
-				switch (oldCell.CellType)
-				{
-					case CellType.Blank:
-						newCell.SetCellValue(oldCell.StringCellValue);
-						break;
-					case CellType.Boolean:
-						newCell.SetCellValue(oldCell.BooleanCellValue);
-						break;
-					case CellType.Error:
-						newCell.SetCellErrorValue(oldCell.ErrorCellValue);
-						break;
-					case CellType.Formula:
-						newCell.SetCellFormula(oldCell.CellFormula);
-						break;
-					case CellType.Numeric:
-						newCell.SetCellValue(oldCell.NumericCellValue);
-						break;
-					case CellType.String:
-						newCell.SetCellValue(oldCell.RichStringCellValue);
-						break;
-					case CellType.Unknown:
-						newCell.SetCellValue(oldCell.StringCellValue);
-						break;
-				}
-			}
-
-			// If there are are any merged regions in the source row, copy to new row
-			for (int i = 0; i < sheet.NumMergedRegions; i++)
-			{
-				var cellRangeAddress = sheet.GetMergedRegion(i);
-				if (cellRangeAddress.FirstRow == sourceRow.RowNum)
-				{
-					var newCellRangeAddress = new NPOI.SS.Util.CellRangeAddress(targeRow.RowNum,
-																				(targeRow.RowNum +
-																				 (cellRangeAddress.FirstRow -
-																				  cellRangeAddress.LastRow)),
-																				cellRangeAddress.FirstColumn,
-																				cellRangeAddress.LastColumn);
-					sheet.AddMergedRegion(newCellRangeAddress);
-				}
-			}
-
-		}
+		
 	}
 
 	public interface IFileProcessor

@@ -554,6 +554,7 @@
     <Compile Include="Areas\People\Core\ImportAgentFileValidator.cs" />
     <Compile Include="Areas\People\Core\Models\UserFileTemplate.cs" />
     <Compile Include="Areas\People\Core\MultipartHttpContentExtractor.cs" />
+    <Compile Include="Areas\People\Core\RowExtensions.cs" />
     <Compile Include="Areas\People\Core\Persisters\AgentPersister.cs" />
     <Compile Include="Areas\People\Core\Persisters\TenantUserPersister.cs" />
     <Compile Include="Areas\People\Core\Providers\IImportAgentDataProvider.cs" />
