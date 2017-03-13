@@ -56,6 +56,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		});
 	};
 
+	self.userNowInMinute = ko.observable(0);
+
 	self.desktop = function () {
 		var date = self.selectedDate();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
@@ -315,10 +317,8 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 			return [];
 		}
 
-		console.log("[LIXF] - 1");
 		// If today is full day absence or dayoff, Then hide absence probabilities
 		var probabilityType = parent.probabilityType();
-		console.log("[LIXF] - 1");
 		if (probabilityType === constants.noneProbabilityType ||
 			(probabilityType === constants.absenceProbabilityType && (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff))) {
 			return [];
