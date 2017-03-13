@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_skillExtractor.ExtractSkills())
-                    .Return(_skillList).Repeat.Times(numberOfdays);
+                    .Return(_skillList).Repeat.Any();
                 Expect.Call(_dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(_skill1, day1))
                     .Return(new ForecastScheduleValuePair { ForecastValue = 10, ScheduleValue = 5 });
                 Expect.Call(_dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(_skill1, day2))
