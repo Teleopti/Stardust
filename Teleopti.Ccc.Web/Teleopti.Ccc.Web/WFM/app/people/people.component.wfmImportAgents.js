@@ -28,6 +28,10 @@
 		this.fetchingFieldOptions = false;
 	};
 
+	WfmImportAgentsCtrl.prototype.noFile = function () {
+		return !(!!this.file);
+	};
+
 	WfmImportAgentsCtrl.prototype.clickImport = function () {
 		this.started = true;
 		this._peopleSvc.uploadAgentFromFile(this.file, this.fallbacks)

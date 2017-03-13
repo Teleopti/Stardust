@@ -16,10 +16,9 @@
 	        <div class="droparea"
 		     ngf-drop
 		     ngf-select
-		     ngf-multiple="false"
+		     ngf-multiple="false" ngf-keep="false"
 		     ngf-allow-dir="false"
 		     ngf-accept="'.xls,.xlsx'"
-		     ngf-drop-available="dropAvailable"
 		     ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
 		        {{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}
 			<div ng-show="$ctrl.file" class="fileinfo">
@@ -133,8 +132,8 @@
                 </div>
                 <div class="footer">
                         <button class="wfm-btn"
-                                ng-class="{'wfm-btn-invis-primary': $ctrl.file, 'wfm-btn-invis-disabled': !$ctrl.file}"
-                                ng-disabled="!$ctrl.file"
+                                ng-class="{'wfm-btn-invis-primary': !$ctrl.noFile(), 'wfm-btn-invis-disabled': $ctrl.noFile()}"
+                                ng-disabled="$ctrl.noFile()"
                                 ng-click="$ctrl.clickImport()">{{ 'Import'|translate }}</button>
                 </div>
         </div>
