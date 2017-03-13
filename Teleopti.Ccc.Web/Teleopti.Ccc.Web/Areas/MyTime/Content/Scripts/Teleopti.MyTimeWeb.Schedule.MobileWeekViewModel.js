@@ -5,6 +5,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.Helper.js" />
 
 if (typeof (Teleopti) === "undefined") {
 	Teleopti = {};
@@ -25,9 +26,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.nextWeekDate = ko.observable(moment());
 	self.previousWeekDate = ko.observable(moment());
 	self.selectedDate = ko.observable(moment().startOf("day"));
-	self.formatedSelectedDate = ko.computed(function() {
+	self.formatedSelectedDate = ko.computed(function () {
 		return moment(self.selectedDate()).format("l");
-	})
+	});
 
 	self.baseUtcOffsetInMinutes = ko.observable();
 	self.intradayOpenPeriod = null;
@@ -137,9 +138,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.showProbabilityOptionsPanel = function (data) {
 		self.initialRequestDay(data.fixedDate());
 
-		if(self.requestViewModel() && self.requestViewModel().type() == probabilityOptionModel.type()){
+		if (self.requestViewModel() && self.requestViewModel().type() == probabilityOptionModel.type()) {
 			self.requestViewModel(undefined);
-		}else{
+		} else {
 			self.requestViewModel(probabilityOptionModel);
 		}
 	};
@@ -289,105 +290,23 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		return result;
 	});
 
-	self.showProbabilityOptions = ko.computed(function(){
-		return self.formattedFixedDate() == parent.formatedSelectedDate();
+	self.showProbabilityOptions = ko.computed(function () {
+		return self.formattedFixedDate() === parent.formatedSelectedDate();
 	});
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
 		return new MobileWeekLayerViewModel(item, parent.userTexts);
 	});
 
-	// TODO: Duplicate code in both Teleopti.MyTimeWeb.Schedule.DayViewModel
-	var getContinousPeriods = function (date, periods) {
-		if (!periods || periods.length === 0) return [];
-
-		var continousPeriods = [];
-		var previousEndMinutes = 0;
-		var continousPeriodStart = 0;
-		for (var l = 0; l < periods.length; l++) {
-			var currentPeriodStartMinutes = moment(day.Periods[l].StartTime).diff(date) / (60 * 1000);
-			var currentPeriodEndMinutes = moment(day.Periods[l].EndTime).diff(date) / (60 * 1000);
-
-			if (currentPeriodStartMinutes < 0) {
-				currentPeriodStartMinutes = 0;
-			}
-
-			if (currentPeriodEndMinutes > constants.totalMinutesOfOneDay) {
-				currentPeriodEndMinutes = constants.totalMinutesOfOneDay;
-			}
-
-			if (currentPeriodStartMinutes === currentPeriodEndMinutes) continue;
-
-			if (l === 0) {
-				continousPeriodStart = currentPeriodStartMinutes;
-			}
-
-			if (previousEndMinutes !== 0 && currentPeriodStartMinutes !== previousEndMinutes) {
-				continousPeriods.push({
-					"startTime": continousPeriodStart,
-					"endTime": previousEndMinutes
-				});
-				continousPeriodStart = currentPeriodStartMinutes;
-			}
-
-			if (l === periods.length - 1) {
-				continousPeriods.push({
-					"startTime": continousPeriodStart,
-					"endTime": currentPeriodEndMinutes
-				});
-			}
-			previousEndMinutes = currentPeriodEndMinutes;
-		}
-
-		return continousPeriods;
-	};
-
-	var createProbabilityModels = function (rawProbabilities) {
-		if (!self.staffingProbabilityEnabled() || rawProbabilities == undefined || rawProbabilities.length === 0) {
-			return [];
-		}
-
-		// If today is full day absence or dayoff, Then hide absence probabilities
-		var probabilityType = parent.probabilityType();
-		if (probabilityType === constants.noneProbabilityType ||
-			(probabilityType === constants.absenceProbabilityType && (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff))) {
-			return [];
-		}
-
-		var continousPeriods = [];
-
-		var date = moment(scheduleDay.FixedDate);
-		if (probabilityType === constants.absenceProbabilityType) {
-			continousPeriods = getContinousPeriods(date, scheduleDay.Periods);
-		}
-
-		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, parent.timeLines(),
-			probabilityType, rawProbabilities, parent.intradayOpenPeriod);
-
-		var probabilitieModels = [];
-		// Add an "invisible" probability on top to make all probabilities displayed from correct position
-		probabilitieModels.push({
-			actualClass: "probability-none",
-			actualTooltips: "",
-			cssClass: function () { return "probability-none"; },
-			tooltips: function () { return "" },
-			styleJson: { "width": (boundaries.probabilityStartPosition * 100) + "%" }
-		});
-
-		for (var j = 0; j < rawProbabilities.length; j++) {
-			var probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbabilities[j],
-				probabilityType, boundaries, continousPeriods, parent.userTexts, self,
-				constants.horizontalDirectionLayout);
-			if (!$.isEmptyObject(probabilityModel)) {
-				probabilitieModels.push(probabilityModel);
-			}
-		}
-
-		//return probabilitieModels.length > 1 ? probabilitieModels : [];
-		return probabilitieModels;
-	}
-
-	self.probabilities = createProbabilityModels(rawProbabilities);
+	self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
+	{
+		staffingProbabilityEnabled: self.staffingProbabilityEnabled(),
+		probabilityType: parent.probabilityType(),
+		layoutDirection: constants.horizontalDirectionLayout,
+		timelines: parent.timeLines(),
+		intradayOpenPeriod: parent.intradayOpenPeriod,
+		userTexts: parent.userTexts
+	});
 };
 
 var MobileWeekLayerViewModel = function (layer, userTexts) {

@@ -51,14 +51,14 @@ $(document).ready(function () {
 				"endTime": 1380 // 23:00
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
 		equal($.isEmptyObject(vm), true);
 	});
 
-	test("Will not create absence possibility view model after probability start", function () {
+	test("Will not create absence possibility view model after probability end", function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T23:15:00",
 			"EndTime": baseDate + "T23:30:00",
@@ -70,7 +70,7 @@ $(document).ready(function () {
 				"endTime": 1380 // 23:00
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
@@ -89,7 +89,7 @@ $(document).ready(function () {
 				"endTime": 1380 // 23:00
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
@@ -128,7 +128,7 @@ $(document).ready(function () {
 				"endTime": 1380 // 23:00
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel, constants.horizontalDirectionLayout);
 
@@ -171,7 +171,7 @@ $(document).ready(function () {
 				"endTime": 1200
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
@@ -209,14 +209,14 @@ $(document).ready(function () {
 				"endTime": 1380 // 23:00
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
 		equal($.isEmptyObject(vm), true);
 	});
 
-	test("Will not create overtime possibility view model after probability start", function () {
+	test("Will not create overtime possibility view model after probability end", function () {
 		var rawProbability = {
 			"StartTime": baseDate + "T23:15:00",
 			"EndTime": baseDate + "T23:30:00",
@@ -228,7 +228,7 @@ $(document).ready(function () {
 				"endTime": 1380 // 23:00
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
@@ -247,7 +247,7 @@ $(document).ready(function () {
 				"endTime": 1380 // 23:00
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
@@ -290,7 +290,7 @@ $(document).ready(function () {
 				"endTime": 1200
 			}
 		];
-		var dayViewModel = createDayViewModel(300);
+		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 

@@ -79,7 +79,8 @@ $(document).ready(function () {
 			},
 			"days": function () { return []; },
 			"probabilityType": function () { return probabilityType; },
-			"timeLines": function () { return createTimeline(timelineStartHour, timelineEndHour); }
+			"timeLines": function () { return createTimeline(timelineStartHour, timelineEndHour); },
+			"formatedSelectedDate": function () { return "2017-02-16"; }
 		}
 	};
 
