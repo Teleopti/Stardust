@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		public AgentDataModel MapRawData(RawAgent raw, out Feedback feedback)
 		{
+			result.Row = row;
 			var agentInfo = new AgentDataModel();
 			feedback = new Feedback();
 
@@ -541,4 +542,5 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			}
 		}
 	}
+
 }

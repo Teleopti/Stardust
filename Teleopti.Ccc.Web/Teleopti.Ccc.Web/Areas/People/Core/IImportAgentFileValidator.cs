@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 	public class AgentExtractionResult 
 	{
 		public AgentDataModel Agent { get; set; }
+
+		public IRow Row { get; set; }
 		public RawAgent Raw { get; set; }
 		public Feedback Feedback { get; }
 
