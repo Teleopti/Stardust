@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public AffectedPersonSkillService(IEnumerable<ISkill> skillCollection)
         {
             InParameter.NotNull(nameof(skillCollection), skillCollection);
-	        _affectedSkills = skillCollection.Where(x => x.SkillType.ForecastSource != ForecastSource.MaxSeatSkill && x.SkillType.ForecastSource != ForecastSource.NonBlendSkill);
+	        _affectedSkills = skillCollection.Where(x => x.SkillType.ForecastSource != ForecastSource.MaxSeatSkill &&
+														 x.SkillType.ForecastSource != ForecastSource.NonBlendSkill).ToList();
         }
 
 	    public IEnumerable<ISkill> AffectedSkills
