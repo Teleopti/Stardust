@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 							break;
 					}
 
-					errors.Add(string.Format(Resources.InvalidColumn, pro.Name, string.Format(Resources.ExpectedXColumnFormat, expectedFormat)));
+					errors.Add(string.Format(Resources.InvalidColumn, pro.Name, string.Format(Resources.RequireXCellFormat, expectedFormat)));
 				}
 			}
 

@@ -15627,8 +15627,8 @@ Do you want to participate?</value>
     <value>Import agents</value>
     <comment>Function name of importing agents in web People.</comment>
   </data>
-  <data name="ExpectedXColumnFormat" xml:space="preserve">
-    <value>expected {0} column format</value>
+  <data name="RequireXCellFormat" xml:space="preserve">
+    <value>require {0} cell format</value>
     <comment>error message for mismatched column format in web Importing agents function.</comment>
   </data>
   <data name="DownloadTemplate" xml:space="preserve">
@@ -15656,5 +15656,5 @@ Do you want to participate?</value>
   </data>
   <data name="ShiftBag" xml:space="preserve">
     <value>Shift bag</value>
-	</data>
+  </data>
 </root>

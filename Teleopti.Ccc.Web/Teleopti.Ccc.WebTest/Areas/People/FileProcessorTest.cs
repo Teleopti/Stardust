@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(sheet);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "ExternalLogon", string.Format(Resources.ExpectedXColumnFormat, "text"))).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "ExternalLogon", string.Format(Resources.RequireXCellFormat, "text"))).Should().Be.True();
 		}
 
 		[Test]
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(sheet);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.ExpectedXColumnFormat, "date"))).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.RequireXCellFormat, "date"))).Should().Be.True();
 		}
 
 		[Test]
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(sheet);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.ExpectedXColumnFormat, "date"))).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.RequireXCellFormat, "date"))).Should().Be.True();
 		}
 
 		[Test]
