@@ -15628,7 +15628,7 @@ Do you want to participate?</value>
     <comment>Function name of importing agents in web People.</comment>
   </data>
   <data name="RequireXCellFormat" xml:space="preserve">
-    <value>require {0} cell format</value>
+    <value>cell can not be parsed, require {0} formatted value</value>
     <comment>error message for mismatched column format in web Importing agents function.</comment>
   </data>
   <data name="DownloadTemplate" xml:space="preserve">
