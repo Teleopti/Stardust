@@ -34,7 +34,7 @@
 				dayOffRuleService.getDayOffRules().$promise.then(function (result) {
 					$scope.dayOffRules = result;
 				}, function() {
-					handleScheduleOrOptimizeError("Failed to load dayoff rules.");
+					handleScheduleOrOptimizeError("Failed to load Dayoff Rules.");
 				});
 
 				var tenMinutes = 1000 * 60 * 10;
@@ -57,11 +57,11 @@
 									$scope.lastJobSuccessful = true;
 								} else if (result.Failed) {
 									if (result.CurrentStep === 0) {
-										handleScheduleOrOptimizeError("Failed to schedule for selected planning period due to technical error.");
+										handleScheduleOrOptimizeError("Failed to Schedule for selected Planning Period due to Technical error.");
 									} else if (result.CurrentStep === 1) {
-										handleScheduleOrOptimizeError("Failed to schedule for selected planning period due to technical error.");
+                                        handleScheduleOrOptimizeError("Failed to Schedule for selected Planning Period due to Technical error.");
 									} else if (result.CurrentStep === 2) {
-										handleScheduleOrOptimizeError("Failed to optimize dayoff for selected planning period due to technical error.");
+                                        handleScheduleOrOptimizeError("Failed to Optimize Dayoff for selected Planning Period due to Technical error.");
 									}
 
 									$scope.lastJobSuccessful = false;
@@ -88,7 +88,7 @@
 					planningPeriodService.launchScheduling({ id: p.Id, runAsynchronously: true }).$promise.then(function () {
 						checkProgress(p.Id);
 					}, function() {
-						handleScheduleOrOptimizeError("Failed to create scheduling job for selected planning period.");
+						handleScheduleOrOptimizeError("Failed to create Scheduling job for selected Planning Period.");
 					});
 				}
 
