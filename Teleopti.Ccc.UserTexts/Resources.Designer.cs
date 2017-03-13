@@ -10559,6 +10559,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to expected {0} column format.
+        /// </summary>
+        public static string ExpectedXColumnFormat {
+            get {
+                return ResourceManager.GetString("ExpectedXColumnFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expired.
         /// </summary>
         public static string Expired {

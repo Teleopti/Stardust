@@ -19,26 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private const int maxWindowUserLength = 100;
 		private const int maxApplicationUserIdLength = 50;
 
-		private readonly string[] expectedColumnNames = new[]
-		{
-			"Firstname",
-			"Lastname",
-			"WindowsUser",
-			"ApplicationUserId",
-			"Password",
-			"Role",
-			"StartDate",
-			"Organization",
-			"Skill",
-			"ExternalLogon",
-			"Contract",
-			"ContractSchedule",
-			"PartTimePercentage",
-			"ShiftBag",
-			"SchedulePeriodType",
-			"SchedulePeriodLength"
-		};
-
 		private defaultAgentDataModel _defaultValues = new defaultAgentDataModel();
 
 		private readonly IImportAgentDataProvider _importAgentDataProvider;
@@ -48,35 +28,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			_importAgentDataProvider = importAgentDataProvider;
 		}
 
-		public List<string> ExtractColumnNames(IWorkbook workbook)
-		{
-			if (workbook.NumberOfSheets == 0)
-				return new List<string>();
-			var sheet = workbook.GetSheetAt(0);
-			var headerRow = sheet.GetRow(0);
-			return headerRow.Cells.Select(x => x.StringCellValue).ToList();
-		}
-
-		public List<AgentExtractionResult> ExtractAgentInfoValues(IWorkbook workbook)
-		{
-			var sheet = workbook.GetSheetAt(0);
-
-			var result = new List<AgentExtractionResult>();
-
-			for (int i = 1; i <= sheet.LastRowNum; i++)
-			{
-				var row = sheet.GetRow(i);
-				result.Add(extractAgentInfo(row));
-			}
-
-			return result;
-		}
-
 		public void SetDefaultValues(ImportAgentFormData defaultValues)
 		{
 			_defaultValues = new defaultAgentDataModel();
 			if (!defaultValues.RoleIds.IsNullOrWhiteSpace())
-			{				
+			{
 				var roleIds = StringHelper.SplitStringList(defaultValues.RoleIds);
 				foreach (var roleIdString in roleIds)
 				{
@@ -110,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			}
 
 			if (!defaultValues.SkillIds.IsNullOrWhiteSpace())
-			{				
+			{
 				var skillIds = StringHelper.SplitStringList(defaultValues.SkillIds);
 
 				foreach (var skillIdString in skillIds)
@@ -119,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 					if (Guid.TryParse(skillIdString, out skillId))
 					{
 						var skill = _importAgentDataProvider.FindSkill(skillId);
-						if(skill != null)
+						if (skill != null)
 						{
 							_defaultValues.Skills.Add(skill);
 						}
@@ -140,13 +96,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if(!defaultValues.PartTimePercentageId.IsNullOrWhiteSpace())
+			if (!defaultValues.PartTimePercentageId.IsNullOrWhiteSpace())
 			{
 				Guid partTimePercentageId;
-				if(Guid.TryParse(defaultValues.PartTimePercentageId,out partTimePercentageId))
+				if (Guid.TryParse(defaultValues.PartTimePercentageId, out partTimePercentageId))
 				{
 					var partTimePercentage = _importAgentDataProvider.FindPartTimePercentage(partTimePercentageId);
-					if(partTimePercentage != null)
+					if (partTimePercentage != null)
 					{
 						_defaultValues.PartTimePercentage = partTimePercentage;
 					}
@@ -211,78 +167,31 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			}
 		}
 
-		public List<string> ValidateColumnNames(List<string> names)
+		public AgentDataModel MapRawData(RawAgent raw, out Feedback feedback)
 		{
-			var columnNames = names.ToArray();
-			var errorMessages = new List<string>();
-			for (var i = 0; i < expectedColumnNames.Length; i++)
-			{
-				var expectedColumnName = expectedColumnNames[i];
-				if (i >= columnNames.Length)
-				{
-					errorMessages.Add(expectedColumnName);
-					continue;
-				}
-				var columnName = columnNames[i];
-				if (string.Compare(columnName, expectedColumnName, true, CultureInfo.CurrentCulture) != 0)
-				{
-					errorMessages.Add(expectedColumnName);
-				}
-			}
-
-			return errorMessages;
-		}
-
-		private AgentExtractionResult extractAgentInfo(IRow row)
-		{
-			var cells = row.Cells.ToArray();
-			var result = new AgentExtractionResult();
-
-			if (cells.Length < expectedColumnNames.Length)
-			{
-				result.Feedback.ErrorMessages.Add(Resources.MissingColumn);
-				return result;
-			}
-
-			var raw = new RawAgent();
 			var agentInfo = new AgentDataModel();
-
-			setRawData(raw, cells, result);
-
-			result.Raw = raw;
+			feedback = new Feedback();
 
 			agentInfo.Firstname = raw.Firstname;
 			agentInfo.Lastname = raw.Lastname;
 
-			result.Feedback.Merge(parseFirstnameAndLastname(raw.Firstname, raw.Lastname, agentInfo));
-			result.Feedback.Merge(parseWindowsUserAndApplicationLogonId(raw.WindowsUser, raw.ApplicationUserId, agentInfo));
-			result.Feedback.Merge(parsePassword(raw.Password, agentInfo));
-			result.Feedback.Merge(parseRole(raw.Role, agentInfo));
+			feedback.Merge(parseFirstnameAndLastname(raw.Firstname, raw.Lastname, agentInfo));
+			feedback.Merge(parseWindowsUserAndApplicationLogonId(raw.WindowsUser, raw.ApplicationUserId, agentInfo));
+			feedback.Merge(parsePassword(raw.Password, agentInfo));
+			feedback.Merge(parseRole(raw.Role, agentInfo));
+			agentInfo.StartDate = new DateOnly(raw.StartDate);
 
-			if (raw.StartDate.HasValue)
-			{
-				agentInfo.StartDate = new DateOnly(raw.StartDate.Value);
-			}
+			feedback.Merge(parseOrganization(raw.Organization, agentInfo));
+			feedback.Merge(parseSkill(raw.Skill, agentInfo));
+			feedback.Merge(parseExternalLogon(raw.ExternalLogon, agentInfo));
+			feedback.Merge(parseContract(raw.Contract, agentInfo));
+			feedback.Merge(parseContractSchedule(raw.ContractSchedule, agentInfo));
+			feedback.Merge(parsePartTimePercentage(raw.PartTimePercentage, agentInfo));
+			feedback.Merge(parseRuleSetBag(raw.ShiftBag, agentInfo));
+			feedback.Merge(parseSchedulePeriodType(raw.SchedulePeriodType, agentInfo));
+			agentInfo.SchedulePeriodLength = (int) raw.SchedulePeriodLength;
 
-			result.Feedback.Merge(parseOrganization(raw.Organization, agentInfo));
-			result.Feedback.Merge(parseSkill(raw.Skill, agentInfo));
-			result.Feedback.Merge(parseExternalLogon(raw.ExternalLogon, agentInfo));
-			result.Feedback.Merge(parseContract(raw.Contract, agentInfo));
-			result.Feedback.Merge(parseContractSchedule(raw.ContractSchedule, agentInfo));
-			result.Feedback.Merge(parsePartTimePercentage(raw.PartTimePercentage, agentInfo));
-			result.Feedback.Merge(parseRuleSetBag(raw.ShiftBag, agentInfo));
-			result.Feedback.Merge(parseSchedulePeriodType(raw.SchedulePeriodType, agentInfo));
-
-			if (raw.SchedulePeriodLength.HasValue)
-			{
-				agentInfo.SchedulePeriodLength = (int) raw.SchedulePeriodLength.Value;
-			}
-
-			if (!result.Feedback.ErrorMessages.Any())
-			{
-				result.Agent = agentInfo;
-			}
-			return result;
+			return agentInfo;
 		}
 
 		private Feedback parseFirstnameAndLastname(string rawFirstname, string rawLastname,
@@ -327,12 +236,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				errorMessages.Add(Resources.NoLogonAccountErrorMsgSemicolon);
 			}
 
-			if (rawWindowsUser.Length > maxWindowUserLength)
+			if (!rawWindowsUser.IsNullOrWhiteSpace() && rawWindowsUser.Length > maxWindowUserLength)
 			{
 				errorMessages.Add(Resources.TooLongWindowsUserErrorMsgSemicolon);
 			}
 
-			if (rawApplicationUserId.Length > maxApplicationUserIdLength)
+			if (!rawApplicationUserId.IsNullOrWhiteSpace() && rawApplicationUserId.Length > maxApplicationUserIdLength)
 			{
 				errorMessages.Add(Resources.TooLongApplicationUserIdErrorMsgSemicolon);
 			}
@@ -345,43 +254,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			agentInfo.WindowsUser = rawWindowsUser;
 			agentInfo.ApplicationUserId = rawApplicationUserId;
 			return feedback;
-		}
-
-		private static void setRawData(RawAgent raw, ICell[] cells, AgentExtractionResult result)
-		{
-			raw.Firstname = cells[0].StringCellValue;
-			raw.Lastname = cells[1].StringCellValue;
-			raw.WindowsUser = cells[2].StringCellValue;
-			raw.ApplicationUserId = cells[3].StringCellValue;
-			raw.Password = cells[4].StringCellValue;
-			raw.Role = cells[5].StringCellValue;
-			try
-			{
-				raw.StartDate = cells[6].DateCellValue;
-			}
-			catch (Exception)
-			{
-				raw.StartDate = null;
-				result.Feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "StartDate", cells[6].StringCellValue));
-			}
-
-			raw.Organization = cells[7].StringCellValue;
-			raw.Skill = cells[8].StringCellValue;
-			raw.ExternalLogon = cells[9].StringCellValue;
-			raw.Contract = cells[10].StringCellValue;
-			raw.ContractSchedule = cells[11].StringCellValue;
-			raw.PartTimePercentage = cells[12].StringCellValue;
-			raw.ShiftBag = cells[13].StringCellValue;
-			raw.SchedulePeriodType = cells[14].StringCellValue;
-			try
-			{
-				raw.SchedulePeriodLength = cells[15].NumericCellValue;
-			}
-			catch (Exception)
-			{
-				raw.SchedulePeriodLength = null;
-				result.Feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "SchedulePeriodLength", cells[15].StringCellValue));
-			}
 		}
 
 		private Feedback parsePassword(string rawPassword, AgentDataModel agentInfo)
@@ -415,8 +287,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				return feedback;
 			}
 
-			feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"SchedulePeriodType",rawSchedulePeriodType));
-			return feedback;			
+			feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "SchedulePeriodType", rawSchedulePeriodType));
+			return feedback;
 		}
 
 		private Feedback parseExternalLogon(string rawExternalLogon, AgentDataModel agentInfo)
@@ -426,15 +298,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (externalLogon == null)
 			{
-				if(_defaultValues.ExternalLogon != null)
+				if (_defaultValues.ExternalLogon != null)
 				{
 					agentInfo.ExternalLogon = _defaultValues.ExternalLogon;
 					feedback.WarningMessages.Add(warningMessage("ExternalLogon"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"ExternalLogOn",rawExternalLogon));
-				return feedback;				
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ExternalLogOn", rawExternalLogon));
+				return feedback;
 			}
 
 			agentInfo.ExternalLogon = externalLogon;
@@ -447,15 +319,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var ruleSetBag = _importAgentDataProvider.FindRuleSetBag(rawShiftBag);
 			if (ruleSetBag == null)
 			{
-				if(_defaultValues.RuleSetBag != null)
+				if (_defaultValues.RuleSetBag != null)
 				{
 					agentInfo.RuleSetBag = _defaultValues.RuleSetBag;
 					feedback.WarningMessages.Add(warningMessage("ShiftBag"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"ShiftBags",rawShiftBag));
-				return feedback;;
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ShiftBags", rawShiftBag));
+				return feedback;
+				;
 			}
 
 			agentInfo.RuleSetBag = ruleSetBag;
@@ -468,15 +341,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var partTimePercentage = _importAgentDataProvider.FindPartTimePercentage(rawPartTimePercentage);
 			if (partTimePercentage == null)
 			{
-				if(_defaultValues.PartTimePercentage != null)
+				if (_defaultValues.PartTimePercentage != null)
 				{
 					agentInfo.PartTimePercentage = _defaultValues.PartTimePercentage;
 					feedback.WarningMessages.Add(warningMessage("PartTimePercentage"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"PartTimePercentage",rawPartTimePercentage));
-				return feedback;;
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "PartTimePercentage", rawPartTimePercentage));
+				return feedback;
+				;
 			}
 
 			agentInfo.PartTimePercentage = partTimePercentage;
@@ -489,14 +363,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var contractSchedule = _importAgentDataProvider.FindContractSchedule(rawContractSchedule);
 			if (contractSchedule == null)
 			{
-				if(_defaultValues.ContractSchedule != null)
+				if (_defaultValues.ContractSchedule != null)
 				{
 					agentInfo.ContractSchedule = _defaultValues.ContractSchedule;
 					feedback.WarningMessages.Add(warningMessage("ContractSchedule"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"ContractSchedule",rawContractSchedule));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ContractSchedule", rawContractSchedule));
 				return feedback;
 			}
 
@@ -510,14 +384,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var contract = _importAgentDataProvider.FindContract(rawContract);
 			if (contract == null)
 			{
-				if(_defaultValues.Contract != null)
+				if (_defaultValues.Contract != null)
 				{
 					agentInfo.Contract = _defaultValues.Contract;
 					feedback.WarningMessages.Add(warningMessage("Contract"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"Contract",rawContract));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Contract", rawContract));
 				return feedback;
 			}
 
@@ -546,23 +420,23 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (!agent.Roles.Any())
 			{
-				if(_defaultValues.Roles.Any())
+				if (_defaultValues.Roles.Any())
 				{
 					agent.Roles = _defaultValues.Roles;
 					feedback.WarningMessages.Add(warningMessage("Roles"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"Role",string.Join(",",invalidRoles)));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Role", string.Join(",", invalidRoles)));
 				return feedback;
 			}
 
 			if (invalidRoles.Any())
 			{
-				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn,"Role",string.Join(",",invalidRoles)));
+				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, "Role", string.Join(",", invalidRoles)));
 			}
 
-			return feedback;			
+			return feedback;
 		}
 
 		private Feedback parseOrganization(string rawOrganizationString, AgentDataModel agent)
@@ -583,14 +457,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (team == null)
 			{
-				if(_defaultValues.Team != null)
+				if (_defaultValues.Team != null)
 				{
 					agent.Team = _defaultValues.Team;
 					feedback.WarningMessages.Add(warningMessage("Team"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"Organization",rawOrganizationString));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Organization", rawOrganizationString));
 				return feedback;
 			}
 
@@ -601,7 +475,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private Feedback parseSkill(string rawSkillString, AgentDataModel agent)
 		{
 			var feedback = new Feedback();
-			var skillNames = StringHelper.SplitStringList(rawSkillString);
+			var skillNames = !rawSkillString.IsNullOrWhiteSpace()
+				? StringHelper.SplitStringList(rawSkillString)
+				: new List<string>();
 			agent.Skills = new List<ISkill>();
 
 			var invalidSkills = new List<string>();
@@ -620,23 +496,23 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (!agent.Skills.Any())
 			{
-				if(_defaultValues.Skills.Any())
+				if (_defaultValues.Skills.Any())
 				{
 					agent.Skills = _defaultValues.Skills;
 					feedback.WarningMessages.Add(warningMessage("Skills"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn,"Skill",string.Join(",",invalidSkills)));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Skill", string.Join(",", invalidSkills)));
 				return feedback;
 			}
 
 			if (invalidSkills.Any())
 			{
-				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn,"Skill",string.Join(",",invalidSkills)));				
+				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, "Skill", string.Join(",", invalidSkills)));
 			}
 
-			return feedback;		
+			return feedback;
 		}
 
 		private static string warningMessage(string column)
@@ -665,6 +541,4 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			}
 		}
 	}
-
-	
 }

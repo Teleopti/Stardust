@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			var fmt = returnedFile.CreateDataFormat();
 			var textStyle = returnedFile.CreateCellStyle();
 			textStyle.DataFormat = fmt.GetFormat("@");
-			var numberStyle = returnedFile.CreateCellStyle();			
+			var numberStyle = returnedFile.CreateCellStyle();
 			numberStyle.DataFormat = fmt.GetFormat("0");
 			var dateStyle = returnedFile.CreateCellStyle();
 			dateStyle.DataFormat = fmt.GetFormat(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 				if (ColumnHeaderMap["StartDate"] == i)
 				{
 					newSheet.SetDefaultColumnStyle(i, dateStyle);
-				} else if (ColumnHeaderMap["SchedulePeriodLength"] == i)
+				}
+				else if (ColumnHeaderMap["SchedulePeriodLength"] == i)
 				{
 					newSheet.SetDefaultColumnStyle(i, numberStyle);
 				}
@@ -97,19 +98,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			var row = newSheet.CreateRow(1);
 
 			row.CreateCell(ColumnHeaderMap["Firstname"]).SetCellValue(agent.Firstname);
-			
+
 			row.CreateCell(ColumnHeaderMap["Lastname"]).SetCellValue(agent.Lastname);
-			
+
 			row.CreateCell(ColumnHeaderMap["WindowsUser"]).SetCellValue(agent.WindowsUser);
 			row.CreateCell(ColumnHeaderMap["ApplicationUserId"]).SetCellValue(agent.ApplicationUserId);
 			row.CreateCell(ColumnHeaderMap["Password"]).SetCellValue(agent.Password);
 			row.CreateCell(ColumnHeaderMap["Role"]).SetCellValue(agent.Role);
 
 			var startDateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
-			if (agent.StartDate.HasValue)
-			{
-				startDateCell.SetCellValue(agent.StartDate.Value);
-			}
+
+			startDateCell.SetCellValue(agent.StartDate);
 			row.CreateCell(ColumnHeaderMap["Organization"]).SetCellValue(agent.Organization);
 			row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
 			row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
@@ -120,10 +119,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
 
 			var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
-			if (agent.SchedulePeriodLength.HasValue)
-			{
-				schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength.Value);
-			}
+
+			schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength);
 			returnedFile.Write(ms);
 
 			return ms;

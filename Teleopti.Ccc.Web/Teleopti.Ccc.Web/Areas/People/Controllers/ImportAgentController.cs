@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				return invalidFileResponse;
 			}
 			var total = workbook.GetSheetAt(0).LastRowNum;
-			var invalidAgents = _fileProcessor.ProcessWorkbook(workbook, formData);
+			var invalidAgents = _fileProcessor.ProcessSheet(workbook.GetSheetAt(0), formData);
 
 			var successCount = total - invalidAgents.Count;
 			var failedCount = invalidAgents.Count;

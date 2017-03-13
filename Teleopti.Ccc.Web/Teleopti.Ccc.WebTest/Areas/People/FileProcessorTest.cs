@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			result.GetType().Should().Be<HSSFWorkbook>();
 		}
 
+
 		[Test]
 		public void ShouldReturnNullWithWrongFileType()
 		{
@@ -151,16 +153,125 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void ShouldReturnMissingHeaderForInvalidFileWithNontextHeader()
+		{
+			HSSFWorkbook hssfwb = new HSSFWorkbook();
+			var sheet = hssfwb.CreateSheet("test");
+			var row = sheet.CreateRow(0);
+			row.CreateCell(0).SetCellValue(1234);
+
+
+			var result = Target.ValidateWorkbook(hssfwb);
+
+			result.Count.Should().Be.EqualTo(16);
+		}
+
+		[Test]
 		public void ShouldParseRawDataWithCorrectColumnInput()
 		{
 			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent {Firstname = "test", StartDate = new DateTime(2017, 3, 1)});
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook);
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0));
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Raw.Firstname.Should().Be("test");
 			result.First().Raw.StartDate.Should().Be(new DateTime(2017, 3, 1));
+		}
+
+		[Test]
+		public void ShouldParseRawValueIfExternalLogonColumnTypeNotMatch()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			var row = sheet.CreateRow(1);
+			row.CreateCell(0).SetCellValue("ashley");
+			row.CreateCell(1).SetCellValue("andeen");
+
+			row.CreateCell(2).SetCellValue("");
+			row.CreateCell(3).SetCellValue("aa");
+			row.CreateCell(4).SetCellValue("aa");
+			row.CreateCell(5).SetCellValue("agent");
+			row.CreateCell(6).SetCellValue(new DateTime(2017, 3, 13));
+			row.CreateCell(7).SetCellValue("london");
+			row.CreateCell(8).SetCellValue("test");
+			row.CreateCell(9).SetCellValue(1009);
+
+			row.CreateCell(10).SetCellValue("fix");
+			row.CreateCell(11).SetCellValue("fix");
+			row.CreateCell(12).SetCellValue("partime");
+			row.CreateCell(13).SetCellValue("early");
+			row.CreateCell(14).SetCellValue("week");
+			row.CreateCell(15).SetCellValue(4);
+			row.Cells[9].SetCellType(CellType.Numeric);
+
+			var result = Target.ProcessSheet(sheet);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "ExternalLogon", string.Format(Resources.ExpectedXColumnFormat, "text"))).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldParseRawValueIfStartDateColumnTypeNotMatch()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			var row = sheet.CreateRow(1);
+			row.CreateCell(0).SetCellValue("ashley");
+			row.CreateCell(1).SetCellValue("andeen");
+
+			row.CreateCell(2).SetCellValue("");
+			row.CreateCell(3).SetCellValue("aa");
+			row.CreateCell(4).SetCellValue("aa");
+			row.CreateCell(5).SetCellValue("agent");
+			row.CreateCell(6).SetCellValue("2017-09-23");
+			row.CreateCell(7).SetCellValue("london");
+			row.CreateCell(8).SetCellValue("test");
+			row.CreateCell(9).SetCellValue(1009);
+
+			row.CreateCell(10).SetCellValue("fix");
+			row.CreateCell(11).SetCellValue("fix");
+			row.CreateCell(12).SetCellValue("partime");
+			row.CreateCell(13).SetCellValue("early");
+			row.CreateCell(14).SetCellValue("week");
+			row.CreateCell(15).SetCellValue(4);
+
+			var result = Target.ProcessSheet(sheet);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.ExpectedXColumnFormat, "date"))).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldParseRawValueIfPartimePercentageColumnTypeNotMatch()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			var row = sheet.CreateRow(1);
+			row.CreateCell(0).SetCellValue("ashley");
+			row.CreateCell(1).SetCellValue("andeen");
+
+			row.CreateCell(2).SetCellValue("");
+			row.CreateCell(3).SetCellValue("aa");
+			row.CreateCell(4).SetCellValue("aa");
+			row.CreateCell(5).SetCellValue("agent");
+			row.CreateCell(6).SetCellValue("2017-09-23");
+			row.CreateCell(7).SetCellValue("london");
+			row.CreateCell(8).SetCellValue("test");
+			row.CreateCell(9).SetCellValue(1009);
+
+			row.CreateCell(10).SetCellValue("fix");
+			row.CreateCell(11).SetCellValue("fix");
+			row.CreateCell(12).SetCellValue(1);
+			row.CreateCell(13).SetCellValue("early");
+			row.CreateCell(14).SetCellValue("week");
+			row.CreateCell(15).SetCellValue(4);
+			row.Cells[12].SetCellType(CellType.Numeric);
+
+			var result = Target.ProcessSheet(sheet);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.ExpectedXColumnFormat, "date"))).Should().Be.True();
 		}
 
 		[Test]
@@ -169,7 +280,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent {Firstname = "test", StartDate = new DateTime(2017, 3, 1)});
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook);
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0));
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.Null();
@@ -183,7 +294,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { Firstname = "", Lastname = "", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook);
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0));
 
 			var errorMsg = result.Single().Feedback.ErrorMessages;
 			errorMsg.Contains(Resources.BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon).Should().Be.True();
@@ -195,7 +306,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { ApplicationUserId = "", WindowsUser = "", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook);
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0));
 
 			var errorMsg = result.Single().Feedback.ErrorMessages;
 			errorMsg.Contains(Resources.NoLogonAccountErrorMsgSemicolon).Should().Be.True();
@@ -208,7 +319,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook);
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0));
 
 			result.Count.Should().Be(0);
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
@@ -225,7 +336,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook, new ImportAgentFormData { SchedulePeriodType = defaultSchedulePeriodType});
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { SchedulePeriodType = defaultSchedulePeriodType});
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType"));
@@ -246,7 +357,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));
@@ -267,7 +378,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ShiftBagId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ShiftBagId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag"));
@@ -288,7 +399,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { PartTimePercentageId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { PartTimePercentageId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage"));
@@ -309,7 +420,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ContractScheduleId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ContractScheduleId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule"));
@@ -330,7 +441,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { ContractId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ContractId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract"));
@@ -351,7 +462,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { RoleIds = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Roles"));
@@ -372,7 +483,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { TeamId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Team"));
@@ -393,7 +504,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessWorkbook(workbook,new ImportAgentFormData { SkillIds = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Skills"));

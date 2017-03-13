@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NPOI.SS.UserModel;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		}
 	}
 
-	public class AgentExtractionResult
+	public class AgentExtractionResult 
 	{
 		public AgentDataModel Agent { get; set; }
 		public RawAgent Raw { get; set; }
@@ -36,9 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 	public interface IImportAgentFileValidator
 	{
-		List<string> ExtractColumnNames(IWorkbook workbook);
-		List<string> ValidateColumnNames(List<string> columnNames);
-		List<AgentExtractionResult> ExtractAgentInfoValues(IWorkbook workbook);
+		AgentDataModel MapRawData(RawAgent raw, out Feedback feedback);
 		void SetDefaultValues(ImportAgentFormData defaultValues);
 	}
 }

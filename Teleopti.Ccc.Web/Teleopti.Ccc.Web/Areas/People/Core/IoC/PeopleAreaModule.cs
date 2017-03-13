@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 			builder.RegisterType<AgentPersister>().As<IAgentPersister>().SingleInstance();
 			builder.RegisterType<FileProcessor>().As<IFileProcessor>().SingleInstance();
 			builder.RegisterType<MultipartHttpContentExtractor>().As<IMultipartHttpContentExtractor>().SingleInstance();
+			builder.RegisterType<WorkbookHandler>().As<IWorkbookHandler>().SingleInstance();
 		}
 	}
 }

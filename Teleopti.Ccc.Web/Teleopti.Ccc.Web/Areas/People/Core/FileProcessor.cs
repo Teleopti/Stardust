@@ -13,28 +13,29 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 	{
 		private readonly IImportAgentFileValidator _fileValidator;
 		private readonly IAgentPersister _agentPersister;
+		private readonly IWorkbookHandler _workbookHandler;
 
-		public FileProcessor(IImportAgentFileValidator fileValidator, IAgentPersister agentPersister)
+		public FileProcessor(IImportAgentFileValidator fileValidator, IAgentPersister agentPersister, IWorkbookHandler workbookHandler)
 		{
 			_fileValidator = fileValidator;
 			_agentPersister = agentPersister;
+			_workbookHandler = workbookHandler;
 		}
 
-		public IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook, ImportAgentFormData defaultValues = null)
+		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentFormData defaultValues = null)
 		{
 			if (defaultValues != null)
 			{
 				_fileValidator.SetDefaultValues(defaultValues);
 			}
-			var extractedResult = _fileValidator.ExtractAgentInfoValues(workbook);
+			var extractedResult = _workbookHandler.ProcessSheet(sheet);
 			_agentPersister.Persist(extractedResult);
 			return extractedResult.Where(r => r.Feedback.ErrorMessages.Any() || r.Feedback.WarningMessages.Any()).ToList();
 		}
 		
 		public IList<string> ValidateWorkbook(IWorkbook workbook)
 		{
-			var columnHearders = _fileValidator.ExtractColumnNames(workbook);
-			return _fileValidator.ValidateColumnNames(columnHearders);
+			return _workbookHandler.ValidateSheetColumnHeader(workbook);
 		}
 
 		public IWorkbook ParseFile(FileData fileData)
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				row.CreateCell(agentTemplate.ColumnHeaderMap["ApplicationUserId"]).SetCellValue(rawAgent.ApplicationUserId);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["Password"]).SetCellValue(rawAgent.Password);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["Role"]).SetCellValue(rawAgent.Role);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["StartDate"]).SetCellValue(rawAgent.StartDate.Value);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["StartDate"]).SetCellValue(rawAgent.StartDate);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["Organization"]).SetCellValue(rawAgent.Organization);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["Skill"]).SetCellValue(rawAgent.Skill);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["ExternalLogon"]).SetCellValue(rawAgent.ExternalLogon);
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				row.CreateCell(agentTemplate.ColumnHeaderMap["PartTimePercentage"]).SetCellValue(rawAgent.PartTimePercentage);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["ShiftBag"]).SetCellValue(rawAgent.ShiftBag);
 				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(rawAgent.SchedulePeriodType);
-				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(rawAgent.SchedulePeriodLength.Value);
+				row.CreateCell(agentTemplate.ColumnHeaderMap["SchedulePeriodLength"]).SetCellValue(rawAgent.SchedulePeriodLength);
 				row.CreateCell(errorMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.ErrorMessages));
 				row.CreateCell(warningMessageColumnIndex).SetCellValue(string.Join(";",agents[i].Feedback.WarningMessages));
 			}
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 	public interface IFileProcessor
 	{
-		IList<AgentExtractionResult> ProcessWorkbook(IWorkbook workbook, ImportAgentFormData defaultValues = null);
+		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentFormData defaultValues = null);
 		IList<string> ValidateWorkbook(IWorkbook workbook);
 		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
