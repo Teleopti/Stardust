@@ -120,12 +120,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 		private double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
-			var actvityValue =
-				skillIntervalDataLocalDictionary
-					.Select(i => valueForActivity(i.Key, i.Value, shiftProjectionCache, parameters, timeZoneInfo)).ToArray();
-			if (actvityValue.Any(v => !v.HasValue)) return null;
-
-			return actvityValue.Sum(x => x.Value);
+			var activityValueSum = 0d;
+			foreach (var skillInterval in skillIntervalDataLocalDictionary)
+			{
+				var activityValue = valueForActivity(skillInterval.Key, skillInterval.Value, shiftProjectionCache, parameters, timeZoneInfo);
+				if (!activityValue.HasValue)
+					return null;
+				activityValueSum += activityValue.Value;
+			}
+			return activityValueSum;
 		}
 	}
 }
