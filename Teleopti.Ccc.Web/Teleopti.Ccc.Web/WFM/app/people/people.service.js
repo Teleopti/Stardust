@@ -71,19 +71,20 @@
 			};
 
 			this.uploadAgentFromFile = function (file, fields) {
-				var formatedFields = normalizeFormData(fields);
-				var config = overload({
+				var config = {
 					url: '../api/People/UploadAgent',
 					method: 'POST',
 					responseType: 'arraybuffer',
 					file: file,
-					fields: formatedFields,
 					headers: {
 						'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/json'
 					}
-				});
+				};
+				if (fields) {
+					config.fields = normalizeFormData(fields);
+				}
+				config = overload(config);
 				return $http(config);
-
 			};
 
 			function normalizeFormData(fields) {
