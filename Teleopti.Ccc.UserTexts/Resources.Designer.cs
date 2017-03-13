@@ -10955,11 +10955,47 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create Scheduling job for selected Planning Period..
+        /// </summary>
+        public static string FailedToCreateSchedulingJobForSelectedPlanningPeriod {
+            get {
+                return ResourceManager.GetString("FailedToCreateSchedulingJobForSelectedPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load Dayoff Rules..
+        /// </summary>
+        public static string FailedToLoadDayoffRules {
+            get {
+                return ResourceManager.GetString("FailedToLoadDayoffRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to Optimize Dayoff for selected Planning Period due to Technical error..
+        /// </summary>
+        public static string FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError {
+            get {
+                return ResourceManager.GetString("FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to remove selected absence..
         /// </summary>
         public static string FailedToRemoveAbsence {
             get {
                 return ResourceManager.GetString("FailedToRemoveAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to Schedule for selected Planning Period due to Technical error..
+        /// </summary>
+        public static string FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError {
+            get {
+                return ResourceManager.GetString("FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError", resourceCulture);
             }
         }
         
