@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -6,29 +7,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class AffectedPersonSkillService : IAffectedPersonSkillService
     {
-        private readonly IEnumerable<ISkill> _skillCollection;
+	    private readonly IEnumerable<ISkill> _affectedSkills;
 
-        public AffectedPersonSkillService(IEnumerable<ISkill> skillCollection)
+	    public AffectedPersonSkillService(IEnumerable<ISkill> skillCollection)
         {
             InParameter.NotNull(nameof(skillCollection), skillCollection);
-            _skillCollection = skillCollection;
+	        _affectedSkills = skillCollection.Where(x => x.SkillType.ForecastSource != ForecastSource.MaxSeatSkill && x.SkillType.ForecastSource != ForecastSource.NonBlendSkill);
         }
 
-        public IEnumerable<ISkill> AffectedSkills
-        {
-            get
-            {
-				IList<ISkill> skills = new List<ISkill>();
-				foreach (var affectedSkill in _skillCollection)
-				{
-
-					if (affectedSkill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill || affectedSkill.SkillType.ForecastSource == ForecastSource.NonBlendSkill)
-						continue;
-						
-					skills.Add(affectedSkill);
-				}
-				return skills;
-            }
-        }
+	    public IEnumerable<ISkill> AffectedSkills
+	    {
+		    get
+		    {
+				var affectedSkills = new List<ISkill>();
+			    affectedSkills.AddRange(_affectedSkills);
+				return affectedSkills;
+		    }
+	    }
     }
 }
