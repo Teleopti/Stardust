@@ -95,7 +95,7 @@
 					SkillIds:(fields.skills||[]).join(","),
 					ExternalLogonId: fields.externalLogon,
 					ContractId: fields.contract,
-					ContractSchedule: fields.contractSchedule,
+					ContractScheduleId: fields.contractSchedule,
 					ShiftBagId: fields.shiftBag,
 					PartTimePercentageId: fields.partTimePercentage,
 					SchedulePeriodType: fields.schedulePeriodType,
