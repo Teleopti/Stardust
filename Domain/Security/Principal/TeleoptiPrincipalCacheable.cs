@@ -20,6 +20,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			var lightPerson = new Person();
 			lightPerson.SetName(person.Name);
 			lightPerson.SetId(person.Id);
+
+			if (person.PermissionInformation != null)
+			{
+				lightPerson.PermissionInformation.SetDefaultTimeZone(person.PermissionInformation.DefaultTimeZone());
+			}
+
 			return new TeleoptiPrincipalCacheable(identity)
 			       	{
 			       		Person = lightPerson
