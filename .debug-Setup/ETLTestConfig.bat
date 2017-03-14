@@ -31,6 +31,7 @@ ECHO $^(WEB_BROKER_FOR_WEB^)^|%WEB_BROKER_FOR_WEB%>>"%MySettings%"
 ECHO $^(PM_SERVICE^)^|%PM_SERVICE%>>"%MySettings%"
 ECHO $^(ETLPM_BINDING_NAME^)^|%ETLPM_BINDING_NAME%>>"%MySettings%"
 ECHO $^(URL^)^|%URL%>>"%MySettings%"
+ECHO ^<!--$^(ToggleModeAppSetting^)--^>^|^<add key="ToggleMode" value="%ToggleMode%" /^>>>"%MySettings%"
 
 IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
 	::Build Teleopti.Support.Tool.exe
