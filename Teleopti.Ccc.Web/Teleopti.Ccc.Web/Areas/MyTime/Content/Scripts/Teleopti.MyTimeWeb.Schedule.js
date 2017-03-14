@@ -264,7 +264,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.mobile = function () {
 			var date = self.selectedDate();
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD")));
+			var probabilityUrlPart = self.probabilityType() !== constants.noneProbabilityType
+			? "/Probability/" + self.probabilityType()
+			: "";
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek"
+				+ Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD")) + probabilityUrlPart);
 		}
 
 		function getProbabilityPart() {

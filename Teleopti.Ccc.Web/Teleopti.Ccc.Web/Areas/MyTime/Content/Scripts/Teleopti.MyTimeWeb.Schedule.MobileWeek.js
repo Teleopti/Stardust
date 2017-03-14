@@ -5,14 +5,15 @@
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
 
-if (typeof (Teleopti) === 'undefined') {
+if (typeof (Teleopti) === "undefined") {
 	Teleopti = {};
 }
-if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+if (typeof (Teleopti.MyTimeWeb) === "undefined") {
 	Teleopti.MyTimeWeb = {};
 }
-if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
+if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
@@ -20,15 +21,15 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
-	var currentPage = 'Teleopti.MyTimeWeb.Schedule';
-	var _subscribed = false;
+	var currentPage = "Teleopti.MyTimeWeb.Schedule";
+	var subscribed = false;
 	var userTexts;
 
-	var _fetchData = function () {
+	var fetchData = function () {
 		ajax.Ajax({
-			url: '../api/Schedule/FetchData',
+			url: "../api/Schedule/FetchData",
 			dataType: "json",
-			type: 'GET',
+			type: "GET",
 			data: {
 				date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
 				staffingPossiblityType: vm.selectedProbabilityOptionValue()
@@ -39,42 +40,45 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 				vm.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
 				vm.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
 				completelyLoaded();
-				if (!_subscribed) _subscribeForChanges();
+				if (!subscribed) subscribeForChanges();
 			}
 		});
 	};
-	_cleanBinding = function () {
-		ko.cleanNode($('#page')[0]);
+
+	var cleanBinding = function () {
+		ko.cleanNode($("#page")[0]);
 		if (vm != null) {
 			vm.dayViewModels([]);
 			vm = null;
 		}
-	}
+	};
 
-	function _subscribeForChanges() {
+	function subscribeForChanges() {
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 			successCallback: Teleopti.MyTimeWeb.Schedule.MobileWeek.ReloadScheduleListener,
-			domainType: 'IScheduleChangedInDefaultScenario',
+			domainType: "IScheduleChangedInDefaultScenario",
 			page: currentPage
 		});
-		_subscribed = true;
+		subscribed = true;
 	}
 
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
-				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/MobileWeek', Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialInit, Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialDispose);
+				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack("Schedule/MobileWeek",
+					Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialInit,
+					Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialDispose);
 			}
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-			if ($('.weekview-mobile').length > 0) {
-				$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)').hide();
-				$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)').hide();
+			if ($(".weekview-mobile").length > 0) {
+				$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
+				$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
 
 				completelyLoaded = completelyLoadedCallback;
-				vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(userTexts, ajax, _fetchData);
-				ko.applyBindings(vm, $('#page')[0]);
-				_fetchData();
+				vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(userTexts, ajax, fetchData);
+				ko.applyBindings(vm, $("#page")[0]);
+				fetchData();
 				readyForInteractionCallback();
 			}
 		},
@@ -87,13 +91,12 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 
 			if (vm.isWithinSelected(messageStartDate, messageEndDate)) {
-				_fetchData();
+				fetchData();
 			};
 		},
 
 		PartialDispose: function () {
-			_cleanBinding();
+			cleanBinding();
 		}
 	};
-
 })(jQuery);
