@@ -394,6 +394,7 @@ Scenario: Keep selected probability when switching back from non current week vi
 	When I click the current week button
 	Then I should see the selected value for probability is 'Show absence probability'
 
+@ignore
 Scenario: Should not show absence probability option when staffing check is not intraday staffing check
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
