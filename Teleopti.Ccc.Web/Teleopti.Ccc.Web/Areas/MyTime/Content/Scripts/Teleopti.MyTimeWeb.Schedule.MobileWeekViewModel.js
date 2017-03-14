@@ -26,8 +26,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.nextWeekDate = ko.observable(moment());
 	self.previousWeekDate = ko.observable(moment());
 	self.selectedDate = ko.observable(moment().startOf("day"));
-	self.formatedSelectedDate = ko.computed(function () {
-		return moment(self.selectedDate()).format("l");
+	self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
+	self.formatedCurrentUserDate = ko.computed(function () {
+		return moment(self.currentUserDate()).format("l");
 	});
 
 	self.baseUtcOffsetInMinutes = ko.observable();
@@ -309,7 +310,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 	});
 
 	self.showProbabilityOptions = ko.computed(function () {
-		return self.formattedFixedDate() === parent.formatedSelectedDate();
+		return self.formattedFixedDate() === parent.formatedCurrentUserDate();
 	});
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {

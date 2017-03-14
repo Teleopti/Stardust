@@ -65,8 +65,8 @@ $(document).ready(function () {
 		self.textPermission = function () { return true; };
 		self.requestPermission = function () { return true; };
 		self.absenceRequestPermission = function () { return true; };
-		self.selectedDate =  ko.observable(moment("2017-02-16").startOf("day"));
-		self.formatedSelectedDate = ko.observable(moment("2017-02-16").startOf("day").format('l'));
+		self.currentUserDate =  ko.observable(moment("2017-02-16").startOf("day"));
+		self.formatedCurrentUserDate = ko.observable(moment("2017-02-16").startOf("day").format('l'));
 		self.dayViewModels = ko.observableArray();
 		self.absenceReportPermission = ko.observable();
 		self.requestViewModel = ko.observable();
@@ -121,7 +121,6 @@ $(document).ready(function () {
 		self.days= function () { return []; };
 		self.probabilityType = function () { return probabilityType; };
 		self.timeLines = function () { return createTimeline(timelineStartHour, timelineEndHour); };
-                self.formatedSelectedDate = function () { return "2017-02-16"; };
 		return self;
 	};
 
@@ -823,7 +822,7 @@ $(document).ready(function () {
 		week.toggleProbabilityOptionsPanel(vm);
 		equal(week.requestViewModel().model.checkedProbability() , 0);
 
-		week.requestViewModel().model.mockClickForTest(1);
+		week.requestViewModel().model.onOptionSelected(1);
 		week.probabilityOptionModel(week.createProbabilityOptionModel());
 		equal(week.requestViewModel().model.checkedProbability() , 1);
 	});
@@ -838,7 +837,7 @@ $(document).ready(function () {
 		week.toggleProbabilityOptionsPanel(vm);
 		equal(week.requestViewModel().model.checkedProbability() , 0);
 
-		week.requestViewModel().model.mockClickForTest(2);
+		week.requestViewModel().model.onOptionSelected(2);
 		week.probabilityOptionModel(week.createProbabilityOptionModel());
 		equal(week.requestViewModel().model.checkedProbability() , 2);
 	});
@@ -855,7 +854,7 @@ $(document).ready(function () {
 		week.toggleProbabilityOptionsPanel(vm);
 		equal(week.requestViewModel().model.checkedProbability() , 1);
 
-		week.requestViewModel().model.mockClickForTest(0);
+		week.requestViewModel().model.onOptionSelected(0);
 		equal(week.requestViewModel(), undefined);
 	});
 });
