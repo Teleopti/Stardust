@@ -298,6 +298,7 @@
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
     <Compile Include="Cascading\IShovelingCallback.cs" />
     <Compile Include="Cascading\TrackShoveling\AddedResource.cs" />
+    <Compile Include="Forecasting\StoreSkilldayInUndoRedoContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\AuthenticationTypeOption.cs" />
     <Compile Include="InterfaceLegacy\Domain\AvailableDataRangeOption.cs" />
     <Compile Include="InterfaceLegacy\Domain\AxisLocation.cs" />

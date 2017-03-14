@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -83,10 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, dateOnly);
 			var undoResCalcChanges = new UndoRedoContainer();
-			foreach (var skillDay in _schedulingResultStateHolder.SkillDaysOnDateOnly(new[] { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1)}))
-			{
-				skillDay.SkillStaffPeriodCollection.ForEach(x => undoResCalcChanges.SaveState(x.Payload));
-			}
+			undoResCalcChanges.FillWith(_schedulingResultStateHolder.SkillDaysOnDateOnly(new[] { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1) }));
 
 			_rollbackService.ClearModificationCollection();
 
