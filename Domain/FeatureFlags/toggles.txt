@@ -230,3 +230,5 @@ WfmStaffing_AllowActions_42524 = RC
 StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = RC # don't enable without Staffing_ReadModel_UseSkillCombination_xx
 
 QRCodeForMobileApps_42695 = RC
+
+ETL_SpeedUpNightlyDayOff_38213 = true

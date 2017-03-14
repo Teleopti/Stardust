@@ -217,7 +217,8 @@
 
 		WfmStaffing_AllowActions_42524,
 		Staffing_ReadModel_UseSkillCombination_xx,
-		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
+		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388,
+		ETL_SpeedUpNightlyDayOff_38213
 		// ReSharper restore InconsistentNaming
 	}
 }
