@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
@@ -175,8 +174,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IndexMaintenanceRepository>().As<IIndexMaintenanceRepository>().SingleInstance();
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
-
-            builder.RegisterType<PerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
+			
             builder.RegisterType<DeviceInfoProvider>().As<IDeviceInfoProvider>().SingleInstance();
 
 	        builder.RegisterType<ScheduleProjectionReadOnlyPersister>()

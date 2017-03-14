@@ -1611,12 +1611,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ISiteInAlarmReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamInAlarmReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Performance\PersonGenerator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Performance\ScheduleGenerator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Performance\StateGenerator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCountDone.cs" />
-    <Compile Include="ApplicationLayer\Rta\Performance\IPerformanceCounter.cs" />
-    <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Rta.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RtaProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleInfo.cs" />

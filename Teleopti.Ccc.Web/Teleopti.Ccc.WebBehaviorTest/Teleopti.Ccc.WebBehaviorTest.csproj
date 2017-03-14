@@ -422,7 +422,6 @@
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\SiteConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceTemplateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
     <Compile Include="Data\Setups\DoNotUse\GroupingReadOnlyUpdate.cs" />
@@ -486,11 +485,6 @@
     </Compile>
     <Compile Include="Data\Setups\Configurable\CalendarLinkConfigurable.cs" />
     <Compile Include="Data\ScenarioDataFactory.cs" />
-    <Compile Include="PerformanceTool\PerformanceView.feature.cs">
-      <DependentUpon>PerformanceView.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1338,10 +1332,6 @@
     <None Include="MyTime\ShiftTradeRequestEdit.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeRequestEdit.feature.cs</LastGenOutput>
-    </None>
-    <None Include="PerformanceTool\PerformanceView.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RemoveAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

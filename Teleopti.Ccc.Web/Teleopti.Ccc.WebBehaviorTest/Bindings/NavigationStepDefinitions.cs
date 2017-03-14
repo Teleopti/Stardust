@@ -189,13 +189,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAvailability(date);
 		}
 
-		[When(@"I am viewing the performance view")]
-		public void WhenIAmViewingThePerformanceView()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GoToPerformanceTool();
-		}
-
 		[When(@"I am viewing the performance view for '(.*)'")]
 		public void WhenIAmViewingThePerformanceViewFor(string scenarioName)
 		{

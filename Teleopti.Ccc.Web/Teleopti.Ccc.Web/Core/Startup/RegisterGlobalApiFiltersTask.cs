@@ -6,7 +6,6 @@ using Owin;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
-using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
 using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				c.Filters.Add(new AuthorizeTeleoptiAttribute(new[]
 				{
-					typeof (DangerousController),
 					typeof (MessageBrokerController),
 					typeof (ToggleHandlerController),
 					typeof (AuthenticateController),
