@@ -32,12 +32,13 @@
 .mobile-view-day {
 	margin-bottom: 15px;
 }
-.navbar-weekview {
+.mobile-bottom-bar {
+	margin-top: 5px;
 }
 .weekview-mobile .action-menu-container {
-	margin: 0 5px 5px;
+	margin: 0 5px 5px 15px;
 }
-.weekview-mobile .action-button, .weekview-mobile .probability-icon {
+.weekview-mobile .action-button, .weekview-mobile .probability-icon, .weekview-mobile .background-transparent {
 	padding: 6.5px 10px;
 	border-radius: 50%;
 }
@@ -46,8 +47,15 @@
 	border-color: transparent;
 	color: #007fff;
 }
-.weekview-mobile .probability-icon a:focus {
-	color: #007fff;
+.weekview-mobile .probability-icon > i{
+	transform: scale(1.2);
+	-webkit-transform: scale(1.2);
+}
+.weekview-mobile a.background-transparent:hover, .weekview-mobile a.background-transparent:focus {
+	background: transparent;
+}
+.weekview-mobile a.background-transparent .absence-probability-label:hover, .weekview-mobile a.background-transparent .overtime-probability-label:hover {
+	box-shadow: 0 0 1px 4px #eee;
 }
 .date-input-style {
 	padding: 10px 1px;
@@ -79,23 +87,9 @@
 .mobileWeek-day-view-layer-container {
 	width: 100%;
 }
-.mobile-bottom-bar {
-	margin-top: 5px;
-}
 .weekview-mobile .action-menus {
 	right: 0;
 	left: auto;
-}
-.probability-radios-group .radio {
-	vertical-align: top;
-}
-.probability-radios-group .radio input[type="radio"] {
-	transform: scale(1.8);
-	margin-left: -15px;
-}
-.probability-radios-group .radio > span {
-	font-size: 1em;
-	margin-left: 10px;
 }
 .mobileWeek-day-view-layer {
 	width: 100%;
@@ -127,4 +121,48 @@
 }
 .weekview-mobile .display-block {
 	display: block;
+}
+.weekview-mobile .pointer {
+	cursor: pointer;
+}
+.probability-radios-group .radio {
+	vertical-align: top;
+}
+.probability-radios-group .radio input[type="radio"] {
+	transform: scale(1.8);
+	margin-left: -15px;
+}
+.probability-radios-group .radio > span {
+	font-size: 1em;
+	margin-left: 10px;
+}
+.absence-probability-label {
+	margin: auto 5px;
+	padding: 0;
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+	background: #00ffff;
+	text-align: center;
+	box-shadow: 0 0 1px 2px #eee;
+	border-radius: 3px;
+}
+.absence-probability-label:before {
+	font-size: 15px;
+	content: 'A';
+}
+.overtime-probability-label {
+	margin: auto 5px;
+	padding: 0;
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+	background: #ffff00;
+	text-align: center;
+	box-shadow: 0 0 1px 2px #eee;
+	border-radius: 3px;
+}
+.overtime-probability-label:before {
+	font-size: 15px;
+	content: 'O';
 }

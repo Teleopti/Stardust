@@ -2,17 +2,19 @@
 
 <!-- ko if: $parents[1].showProbabilityOptions() -->
 <div class="probability-radios-group"> 
-	<label class="radio">
+	<label class="radio pointer">
 		<input type="radio"  name="probabilityRadios" aria-label="@Resources.HideStaffingProbability" data-bind="value: noneOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
 		<span>@Resources.HideStaffingProbability</span>
 	</label>
-	<label class="radio">
+	<label class="radio pointer">
 		<input type="radio" name="probabilityRadios" aria-label="@Resources.ShowAbsenceProbability" data-bind="value: absenceOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
 		<span>@Resources.ShowAbsenceProbability</span>
+		<span class="absence-probability-label"></span>
 	</label>
-	<label class="radio">
+	<label class="radio pointer">
 		<input type="radio" name="probabilityRadios" aria-label="@Resources.ShowOvertimeProbability"  data-bind="value: overtimeOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
 		<span>@Resources.ShowOvertimeProbability</span>
+		<span class="overtime-probability-label"></span>
 	</label>
 </div>
 <!-- /ko -->

@@ -166,8 +166,16 @@
                     </li>
                     <!-- ko if: showProbabilityOptions() -->
                     <li class="pull-right">
-                        <a class="btn btn btn-default probability-icon" data-bind="click: $parent.toggleProbabilityOptionsPanel">
+                        <a data-bind="click: $parent.toggleProbabilityOptionsPanel, css: {'btn btn-default probability-icon': !$parent.showingAbsenceProbability() && !$parent.showingOvertimeProbability(), 'background-transparent pointer': $parent.showingAbsenceProbability() || $parent.showingOvertimeProbability()}">
+                            <!-- ko ifnot: $parent.showingAbsenceProbability() || $parent.showingOvertimeProbability() -->
                             <i class="glyphicon glyphicon-eye-open"></i>
+                            <!-- /ko -->
+                            <!-- ko if: $parent.showingAbsenceProbability() -->
+                            <span class="absence-probability-label"></span>
+                            <!-- /ko -->
+                            <!-- ko if: $parent.showingOvertimeProbability() -->
+                            <span class="overtime-probability-label"></span>
+                            <!-- /ko -->
                         </a>
                     </li>
                     <!-- /ko -->

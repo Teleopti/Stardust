@@ -34,6 +34,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.baseUtcOffsetInMinutes = ko.observable();
 	self.intradayOpenPeriod = null;
 	self.selectedProbabilityOptionValue = ko.observable(Teleopti.MyTimeWeb.Schedule.Constants.noneProbabilityType);
+	self.showingAbsenceProbability = ko.observable(false);
+	self.showingOvertimeProbability = ko.observable(false);
 
 	self.selectedDateSubscription = null;
 	self.initialRequestDay = ko.observable();
@@ -134,9 +136,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.OnProbabilityOptionSelectCallback(selectedOptionValue); }
 	};
 
-	self.showingAbsenceProbability = ko.observable(false);
-	self.showingOvertimeProbability = ko.observable(false);
-
 	self.toggleProbabilityOptionsPanel = function (data) {
 
 		self.probabilityOptionModel.model = new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self);
@@ -160,8 +159,10 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 		if(self.selectedProbabilityOptionValue()==Teleopti.MyTimeWeb.Schedule.Constants.absenceProbabilityType){
 			self.showingAbsenceProbability(true); 
+			self.showingOvertimeProbability(false);
 			reloadSchedule();
 		}else if(self.selectedProbabilityOptionValue()==Teleopti.MyTimeWeb.Schedule.Constants.overtimeProbabilityType){
+			self.showingAbsenceProbability(false);
 			self.showingOvertimeProbability(true);
 			reloadSchedule();
 		}
