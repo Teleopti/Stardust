@@ -147,7 +147,9 @@
                     <!-- ko if: (overtimeAvailabilityPermission() || isPermittedToReportAbsence())-->
                     <li class="pull-right action-menu-container">
                         <div class="dropdown">
-                            <a class="btn btn-primary dropdown-toggle action-button" href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i></a>
+                            <a class="btn btn-primary dropdown-toggle action-button" href="#" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </a>
                             <ul class="dropdown-menu action-menus">
                                 <!-- ko if: overtimeAvailabilityPermission() -->
                                 <li>
@@ -164,7 +166,7 @@
                     </li>
                     <!-- ko if: showProbabilityOptions() -->
                     <li class="pull-right">
-                        <a class="btn btn btn-default probability-icon" data-bind="click:$parent.showProbabilityOptionsPanel">
+                        <a class="btn btn btn-default probability-icon" data-bind="click: $parent.toggleProbabilityOptionsPanel">
                             <i class="glyphicon glyphicon-eye-open"></i>
                         </a>
                     </li>

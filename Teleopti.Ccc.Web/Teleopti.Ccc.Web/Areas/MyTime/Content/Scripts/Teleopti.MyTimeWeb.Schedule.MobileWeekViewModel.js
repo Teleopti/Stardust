@@ -127,27 +127,45 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
 	};
 
-	self.selectedProbabilityOptionValue = ko.observable("0");
+	self.selectedProbabilityOptionValue = ko.observable(Teleopti.MyTimeWeb.Schedule.Constants.noneProbabilityType);
 
-	var probabilityOptionModel = {
-		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue()),
+	self.probabilityOptionModel = {
+		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self),
 		type: function () { return 'probabilityOptions' },
 		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.OnProbabilityOptionSelectCallback(selectedOptionValue); }
 	};
 
-	self.showProbabilityOptionsPanel = function (data) {
+	self.showingAbsenceProbability = ko.observable(false);
+	self.showingOvertimeProbability = ko.observable(false);
+
+	self.toggleProbabilityOptionsPanel = function (data) {
+
+		self.probabilityOptionModel.model = new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self);
+
 		self.initialRequestDay(data.fixedDate());
 
-		if (self.requestViewModel() && self.requestViewModel().type() === probabilityOptionModel.type()) {
+		if(self.requestViewModel() && self.requestViewModel().type() == self.probabilityOptionModel.type()){
 			self.requestViewModel(undefined);
-		} else {
-			self.requestViewModel(probabilityOptionModel);
+		} else { 
+			self.requestViewModel(self.probabilityOptionModel);
 		}
 	};
 
 	self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {
-		self.requestViewModel(undefined);
 		self.selectedProbabilityOptionValue(selectedOptionValue);
+
+		if(self.selectedProbabilityOptionValue() == 0){
+			self.showingAbsenceProbability(false);
+			self.showingOvertimeProbability(false);
+		}
+
+		if(self.selectedProbabilityOptionValue()==Teleopti.MyTimeWeb.Schedule.Constants.absenceProbabilityType){
+			self.showingAbsenceProbability(true); 
+		}else if(self.selectedProbabilityOptionValue()==Teleopti.MyTimeWeb.Schedule.Constants.overtimeProbabilityType){ 
+			self.showingOvertimeProbability(true);
+		}
+
+		self.requestViewModel(undefined);
 	};
 
 	self.showAddOvertimeAvailabilityForm = function (data) {
