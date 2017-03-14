@@ -2,7 +2,7 @@
     .highlight>td {
         background-color: #C2E085;
     }
-
+    
     .diamond {
         position: absolute;
         top: 50%;
@@ -11,12 +11,12 @@
         transform: rotate(45deg);
         cursor: pointer;
     }
-
+    
     .diamond .inner {
         height: 8px;
         width: 8px;
     }
-
+    
     .diamond.highlight {
         border-width: 1px;
         border-style: solid;
@@ -25,56 +25,75 @@
         margin-top: -12px;
         margin-left: -8px;
     }
-
+    
     .diamond.highlight .inner {
         border-radius: 50%;
         height: 10px;
         width: 10px;
     }
-
+    
     .change {
         cursor: pointer;
     }
-
+    
     .change.highlight {
         background-color: #9CCC65;
     }
-
+    
     .label:empty {
         display: none;
     }
-
+    
     .rta-change-row {
         border-bottom: 1px solid #eee;
+        padding: 8px;
     }
-
+    
     .rta-change-row .time {
         font-weight: bold;
     }
-
+    
     .rta-list {
         max-height: 100%;
     }
-
+    
+    .rta-list li {
+        margin-bottom: 0px!important;
+        padding-bottom: 0px!important;
+        padding-top: 0px!important;
+    }
+    
     .rta-card .wfm-card-title {
         border-left: 10px solid black;
     }
-
+    
     .rta-card .wfm-card-selected .wfm-card-title {
         background-color: white;
         border-bottom: 1px solid #eee;
     }
-
+    
     .test {
         font-size: 24px;
     }
-
+    
+    .historical-label {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+    }
+    
     @media screen and (max-width: 768px) {
         .hidden-sm {
             display: none;
         }
     }
-
+    
     @media screen and (max-width: 960px) {
         .hidden-md {
             display: none;
@@ -105,8 +124,8 @@
 
             <div class="rta-out-of-adherences-wrapper">
                 <!--<span class="rta-schedule-overlay" style="background-color: rgba(0,0,0,.26); border: 1px solid rgba(0,0,0,.46); position: absolute; top: 4%; height: 85%; left: 18.181818181818183%; z-index: 5; width: calc(27.272727272727273% - 18.181818181818183%);"></span>-->
-                <span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline out-of-adherence" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;" data-starttime="{{outOfAdherence.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
-                    data-endtime="{{outOfAdherence.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
+                <span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline out-of-adherence" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;"
+                    data-starttime="{{outOfAdherence.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-endtime="{{outOfAdherence.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
 					<md-tooltip md-direction="top">
 						{{vm.ooaTooltipTime(outOfAdherence.StartTime)}} - {{vm.ooaTooltipTime(outOfAdherence.EndTime)}}
 					</md-tooltip>
@@ -119,8 +138,8 @@
 				</span>
 
                 <div class="rta-shift rta-full-shift-wrapper">
-                    <div ng-repeat="activity in vm.agentsFullSchedule" class="rta-layer absolute floatleft activity" tabindex="0" ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;" data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
-                        data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
+                    <div ng-repeat="activity in vm.agentsFullSchedule" class="rta-layer absolute floatleft activity" tabindex="0" ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;"
+                        data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
                     </div>
                 </div>
             </div>
@@ -129,7 +148,8 @@
 
     <div class="row">
         <div class="hidden-md" style="height: 30px; position: relative;">
-            <div ng-repeat="diamond in vm.diamonds" ng-class="{'diamond': true, 'highlight': diamond.highlight}" ng-click="diamond.click()" ng-attr-style="left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}};">
+            <div ng-repeat="diamond in vm.diamonds" ng-class="{'diamond': true, 'highlight': diamond.highlight}" ng-click="diamond.click()"
+                ng-attr-style="left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}};">
                 <div class="inner" ng-attr-style="background-color: {{diamond.RuleColor}};"></div>
             </div>
         </div>
@@ -152,13 +172,14 @@
                             <div class="con-flex"><b>{{'Adherence' | translate}}</b></div>
                         </div>
                     </li>
-                    <li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}" data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}" ng-click="item.click()">
+                    <li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}" data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
+                        ng-click="item.click()">
                         <div class="con-row rta-change-row">
                             <div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
-                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.ActivityColor}};">{{item.Activity}}</span></div>
+                            <div class="con-flex"><span class="historical-label" ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">{{item.Activity}}</span></div>
                             <div class="con-flex">{{item.State}}</div>
-                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.RuleColor}};">{{item.Rule}}</span></div>
-                            <div class="con-flex"><span class="label" ng-attr-style="background-color: {{item.AdherenceColor}};">{{item.Adherence}}</span></div>
+                            <div class="con-flex"><span class="historical-label" ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">{{item.Rule}}</span></div>
+                            <div class="con-flex"><span class="historical-label" ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">{{item.Adherence}}</span></div>
                         </div>
                     </li>
                 </ul>
