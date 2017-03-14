@@ -8,7 +8,6 @@ Feature: AgentGroup
 		so that Fixed agents in London have exactly 2 DOs off per week.
 
 @ignore
-@OnlyRunIfEnabled('Wfm_ResourcePlanner_AgentGroup_42871')
 Scenario: Create agent group
 	Given there is a site named 'Site 1'
 	And there is a site named 'Site 2'

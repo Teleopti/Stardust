@@ -221,7 +221,6 @@ Mailbox_Optimization_41900 = true
 No_UnitOfWork_Nesting_42175 = true
 Wfm_Intraday_ESL_41827 = true
 Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
-Wfm_ResourcePlanner_AgentGroup_42871 = RC
 Landing_Page_Data_Protection_Question_35721 = true
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = RC
 
