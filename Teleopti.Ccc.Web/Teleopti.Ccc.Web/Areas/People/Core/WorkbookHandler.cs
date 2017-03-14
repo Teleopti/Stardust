@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			for (var i = 1; i <= sheet.LastRowNum; i++)
 			{
 				var row = sheet.GetRow(i);
-				var extractedRow = new AgentExtractionResult();
-				extractedRow.Row = row;
+				var extractedRow = new AgentExtractionResult {Row = row};
 				IList<string> rowErrors;
 				var raw = ParseRow(row, out rowErrors);
 				extractedRow.Raw = raw;
@@ -78,13 +77,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		{
 			var raw = new RawAgent();
 			errors = new List<string>();
-			var cells = row.Cells;
 			for (var i = 0; i < propertyInfos.Length - 1; i++)
 			{
 				var pro = propertyInfos[i];
+				var cell = row.GetCell(i);
 				try
 				{
-					pro.SetValue(raw, getVale(cells[i], pro));
+					var proValue = getVale(cell, pro);
+					pro.SetValue(raw, proValue);
+
 				}
 				catch (Exception)
 				{
@@ -101,7 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 							break;
 					}
 
-					errors.Add(string.Format(Resources.InvalidColumn, pro.Name, string.Format(Resources.RequireXCellFormat, expectedFormat)));
+					errors.Add(string.Format(Resources.InvalidColumn, pro.Name,
+						string.Format(Resources.RequireXCellFormat, expectedFormat)));
 				}
 			}
 
@@ -131,22 +133,37 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		private static object getVale(ICell cell, PropertyInfo pro)
 		{
-			if (pro.Name == "StartDate")
+			if (cell == null || cell.CellType == CellType.Blank)
 			{
-				return cell.DateCellValue;
+				switch (pro.Name)
+				{
+					case "Firstname":
+					case "Lastname":
+					case "WindowsUser":
+					case "ApplicationUserId":
+					case "Password":
+					case "ExternalLogon":
+						return null;
+				}
 			}
-			switch (cell.CellType)
+
+			switch (pro.Name)
 			{
-
-				case CellType.Numeric:
-					return cell.NumericCellValue;
-				case CellType.String:
-					return cell.StringCellValue;
-				case CellType.Boolean:
-					return cell.BooleanCellValue;
+				case "StartDate":
+					if (cell.DateCellValue != DateTime.MinValue && cell.DateCellValue != DateTime.MaxValue)
+						return cell.DateCellValue;
+					break;
+				case "SchedulePeriodLength":
+					if (cell.CellType == CellType.Numeric)
+						return cell.NumericCellValue;
+					break;
+				
+				default:
+					if (cell.CellType == CellType.String)
+						return cell.StringCellValue;
+					break;
 			}
-
-			return null;
+			throw new Exception();
 		}
 	}
 

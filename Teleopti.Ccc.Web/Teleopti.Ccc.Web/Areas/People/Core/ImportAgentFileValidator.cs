@@ -205,11 +205,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				errorMessages.Add(Resources.BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon);
 			}
 
-			if (rawFirstname.Length > maxNameLength)
+			if (rawFirstname != null && rawFirstname.Length > maxNameLength)
 			{
 				errorMessages.Add(Resources.TooLongFirstnameErrorMsgSemicolon);
 			}
-			if (rawLastname.Length > maxNameLength)
+			if (rawLastname != null && rawLastname.Length > maxNameLength)
 			{
 				errorMessages.Add(Resources.TooLongLastnameErrorMsgSemicolon);
 			}
@@ -294,6 +294,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private Feedback parseExternalLogon(string rawExternalLogon, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
+			if (rawExternalLogon == null)
+				return feedback;
 			var externalLogon = _importAgentDataProvider.FindExternalLogOn(rawExternalLogon);
 
 			if (externalLogon == null)

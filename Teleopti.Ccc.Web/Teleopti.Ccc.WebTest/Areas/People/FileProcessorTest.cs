@@ -275,6 +275,71 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void ShouldGiveCorrectErrorIfRequiredColumnCellIsEmpty()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			var row = sheet.CreateRow(1);
+			row.CreateCell(0).SetCellValue("ashley");
+			row.CreateCell(1).SetCellValue("andeen");
+
+			row.CreateCell(2).SetCellValue("");
+			row.CreateCell(3).SetCellValue("aa");
+			row.CreateCell(4).SetCellValue("aa");
+			row.CreateCell(5).SetCellValue("agent");
+			row.CreateCell(6).SetCellValue("2017-09-23");
+			row.CreateCell(7).SetCellValue("london");
+			row.CreateCell(8).SetCellValue("test");
+			row.CreateCell(9).SetCellValue(1009);
+
+			row.CreateCell(10).SetCellValue("fix");
+			row.CreateCell(11).SetCellValue("fix");
+			row.CreateCell(12).SetCellValue(1);
+			row.CreateCell(13).SetCellValue("early");
+			row.CreateCell(14).SetCellValue("week");
+			row.CreateCell(15);
+			row.Cells[12].SetCellType(CellType.Numeric);
+
+			var result = Target.ProcessSheet(sheet);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "SchedulePeriodLength", string.Format(Resources.RequireXCellFormat, "number"))).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotGiveErrorIfNullableColumnCellIsEmpty()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			var row = sheet.CreateRow(1);
+			row.CreateCell(0);
+			row.CreateCell(1).SetCellValue("andeen");
+
+			row.CreateCell(2).SetCellValue("");
+			row.CreateCell(3).SetCellValue("aa");
+			row.CreateCell(4).SetCellValue("aa");
+			row.CreateCell(5).SetCellValue("agent");
+			row.CreateCell(6).SetCellValue("2017-09-23");
+			row.CreateCell(7).SetCellValue("london");
+			row.CreateCell(8).SetCellValue("test");
+			row.CreateCell(9).SetCellValue(1009);
+
+			row.CreateCell(10).SetCellValue("fix");
+			row.CreateCell(11).SetCellValue("fix");
+			row.CreateCell(12).SetCellValue(1);
+			row.CreateCell(13).SetCellValue("early");
+			row.CreateCell(14).SetCellValue("week");
+			row.CreateCell(15);
+			row.Cells[12].SetCellType(CellType.Numeric);
+
+			var result = Target.ProcessSheet(sheet);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "Firstname", string.Format(Resources.RequireXCellFormat, "text"))).Should().Be.False();
+		}
+
+
+		[Test]
 		public void ShouldWriteErrorMsgForInvalidInput()
 		{
 			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent {Firstname = "test", StartDate = new DateTime(2017, 3, 1)});
@@ -310,6 +375,37 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var errorMsg = result.Single().Feedback.ErrorMessages;
 			errorMsg.Contains(Resources.NoLogonAccountErrorMsgSemicolon).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotGiveErrorIfExternalLogonIsEmpty()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			var row = sheet.CreateRow(1);
+			row.CreateCell(0);
+			row.CreateCell(1).SetCellValue("andeen");
+
+			row.CreateCell(2).SetCellValue("");
+			row.CreateCell(3).SetCellValue("aa");
+			row.CreateCell(4).SetCellValue("aa");
+			row.CreateCell(5).SetCellValue("agent");
+			row.CreateCell(6).SetCellValue(new DateTime(2017,1,1));
+			row.CreateCell(7).SetCellValue("london");
+			row.CreateCell(8).SetCellValue("test");
+			row.CreateCell(9);
+
+			row.CreateCell(10).SetCellValue("fix");
+			row.CreateCell(11).SetCellValue("fix");
+			row.CreateCell(12).SetCellValue("100%");
+			row.CreateCell(13).SetCellValue("early");
+			row.CreateCell(14).SetCellValue("week");
+			row.CreateCell(15).SetCellValue(4);
+
+			var result = Target.ProcessSheet(sheet);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Feedback.ErrorMessages.Count(m => m.Contains("ExternalLogOn")).Should().Be(0);
 		}
 
 		[Test]
