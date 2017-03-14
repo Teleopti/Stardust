@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 	self.baseUtcOffsetInMinutes = ko.observable();
 	self.intradayOpenPeriod = null;
-	self.probabilityType = ko.observable(0);
+	self.selectedProbabilityOptionValue = ko.observable(Teleopti.MyTimeWeb.Schedule.Constants.noneProbabilityType);
 
 	self.selectedDateSubscription = null;
 	self.initialRequestDay = ko.observable();
@@ -128,8 +128,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
 	};
 
-	self.selectedProbabilityOptionValue = ko.observable(Teleopti.MyTimeWeb.Schedule.Constants.noneProbabilityType);
-
 	self.probabilityOptionModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self),
 		type: function () { return 'probabilityOptions' },
@@ -162,8 +160,10 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 		if(self.selectedProbabilityOptionValue()==Teleopti.MyTimeWeb.Schedule.Constants.absenceProbabilityType){
 			self.showingAbsenceProbability(true); 
-		}else if(self.selectedProbabilityOptionValue()==Teleopti.MyTimeWeb.Schedule.Constants.overtimeProbabilityType){ 
+			reloadSchedule();
+		}else if(self.selectedProbabilityOptionValue()==Teleopti.MyTimeWeb.Schedule.Constants.overtimeProbabilityType){
 			self.showingOvertimeProbability(true);
+			reloadSchedule();
 		}
 
 		self.requestViewModel(undefined);
@@ -215,7 +215,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		});
 		self.timeLines = ko.observableArray(timelines);
 
-		self.probabilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().probability);
 		self.intradayOpenPeriod = data.SiteOpenHourIntradayPeriod != null
 			? {
 				"startTime": data.SiteOpenHourIntradayPeriod.StartTime,
@@ -320,7 +319,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 	self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
 	{
 		staffingProbabilityEnabled: self.staffingProbabilityEnabled(),
-		probabilityType: parent.probabilityType(),
+		probabilityType: parent.selectedProbabilityOptionValue(),
 		layoutDirection: constants.horizontalDirectionLayout,
 		timelines: parent.timeLines(),
 		intradayOpenPeriod: parent.intradayOpenPeriod,

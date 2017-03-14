@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 			type: 'GET',
 			data: {
 				date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
-				staffingPossiblityType: vm.probabilityType()
+				staffingPossiblityType: vm.selectedProbabilityOptionValue()
 			},
 			success: function (data) {
 				vm.readData(data);
