@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class ImportAgentsFieldOptionsModel
 	{
-		public IList<string> Roles { get; set; }
+		public IDictionary<Guid, string> Roles { get; set; }
 		public IDictionary<Guid, string> Teams { get; set; }
 		public IDictionary<Guid, string> Skills { get; set; }
 		public IDictionary<Guid, string> Contracts { get; set; }

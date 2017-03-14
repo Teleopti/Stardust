@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			return new ImportAgentsFieldOptionsModel
 			{
-				Roles = _applicationRoleRepository.LoadAll().Select(r => r.Name).ToList(),
+				Roles = _applicationRoleRepository.LoadAll().ToDictionary(r => r.Id.GetValueOrDefault(), r => r.Name),
+
 				Teams =
 					_teamRepository.LoadAll()
 						.Where(
