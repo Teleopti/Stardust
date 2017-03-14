@@ -28,6 +28,10 @@
 		this.fetchingFieldOptions = false;
 	};
 
+	WfmImportAgentsCtrl.prototype.setTeam = function (teamId) {
+		this.fallbacks.team = teamId;
+	};
+
 	WfmImportAgentsCtrl.prototype.noFile = function () {
 		return !(!!this.file);
 	};
