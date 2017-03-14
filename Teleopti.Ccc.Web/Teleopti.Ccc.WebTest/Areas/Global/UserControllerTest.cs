@@ -33,21 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(TimeZoneInfo.Local.DisplayName, result.DefaultTimeZoneName);
 		}
-
-		[Test]
-		public void ShouldFallbackToRegionalTimezoneWhenPermissionTimezoneIsNotSpecifiedInCachedPrincipal()
-		{
-			var person = PersonFactory.CreatePerson();
-
-			// Not setting principal permission information
-			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("Pelle", null, null, null, null), person);
-			principal.Regional = new Regional(TimeZoneInfoFactory.BrazilTimeZoneInfo(), CultureInfo.CurrentCulture, CultureInfo.CurrentCulture);
-
-			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider());
-			dynamic result = target.CurrentUser();
-			Assert.AreEqual(TimeZoneInfoFactory.BrazilTimeZoneInfo().DisplayName, result.DefaultTimeZoneName);
-		}
+		
 
 		[Test]
 		public void ShouldGetTheCurrentLoggonUserCulture()
