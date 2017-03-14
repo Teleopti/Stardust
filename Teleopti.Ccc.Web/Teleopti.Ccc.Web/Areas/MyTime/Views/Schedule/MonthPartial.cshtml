@@ -67,11 +67,18 @@
 							<strong class="visible-md" data-bind="text: absenceName" />
 							<div class="hidden-md hidden-lg">
 								<strong data-bind="text: absenceShortName"></strong>
+
 							</div>
+							<!--ko if:hasOvertime-->
+							<div class="overtime">
+								<div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
+								<strong>@Resources.Overtime</strong>
+							</div>
+							<!-- /ko -->
 							<!-- /ko -->
 						</div>
 						<!-- /ko -->
-						<!-- ko if: !hasShift && hasOvertime && !isDayOff -->
+						<!-- ko if: !hasShift && !hasAbsence && hasOvertime && !isDayOff -->
 						<div class="overtime">
 							<div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
 							<strong>@Resources.Overtime</strong>

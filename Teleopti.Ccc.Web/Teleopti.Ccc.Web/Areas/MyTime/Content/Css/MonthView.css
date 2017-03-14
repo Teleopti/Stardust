@@ -135,6 +135,9 @@ span[data-cal-date] {
 .cal-month-day .overtime {
 	padding-top: 40px;
 }
+.cal-month-day .absence .overtime {
+	padding: 0;
+}
 
 .cal-weekday-header {
 	border-left: 1px solid #dfdfdf !important;
