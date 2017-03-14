@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				var startTime = period.Value.TimePeriod(userTimeZone).StartTime;
 				var endTime = period.Value.TimePeriod(userTimeZone).EndTime;
 				var localEndDate = new DateOnly(period.Value.EndDateTimeLocal(userTimeZone).Date);
-				if (endTime.Days > startTime.Days && week.Contains(localEndDate))
+				if ((endTime.Days > startTime.Days && endTime > TimeSpan.FromDays(1))   && week.Contains(localEndDate))
 					earlyStart = TimeSpan.Zero;
 				else if (scheduleDay.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
 					earlyStart = startTime;
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var earlyStartOvertimeAvailability = new TimeSpan(23, 59, 59);
 			var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
 			var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
-			if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && week.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1)))
+			if ((overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && overtimeAvailabilityEnd > TimeSpan.FromDays(1) ) && week.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1)))
 				earlyStartOvertimeAvailability = TimeSpan.Zero;
 			else if (scheduleDay.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
 				earlyStartOvertimeAvailability = overtimeAvailabilityStart;

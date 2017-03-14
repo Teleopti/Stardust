@@ -427,6 +427,30 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldHaveCorrectStartTimeForEndingAtMidNightEdgeCase()
+		{
+			var date = new DateOnly(2012, 08, 28);
+			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(date.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(24));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+			var result = target.Get(date);
+
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(19);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
+
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
+		}
+
+		[Test]
 		public void ShouldMapMinMaxTimeForNightShiftFromPreviousWeek()
 		{
 			var date = new DateOnly(2012, 08, 28);
