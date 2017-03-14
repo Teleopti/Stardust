@@ -138,7 +138,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.showProbabilityOptionsPanel = function (data) {
 		self.initialRequestDay(data.fixedDate());
 
-		if (self.requestViewModel() && self.requestViewModel().type() == probabilityOptionModel.type()) {
+		if (self.requestViewModel() && self.requestViewModel().type() === probabilityOptionModel.type()) {
 			self.requestViewModel(undefined);
 		} else {
 			self.requestViewModel(probabilityOptionModel);

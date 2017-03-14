@@ -5,9 +5,6 @@ $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.Helper");
 
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
-	var invisibleProbabilityCssClass = "probability-none";
-	var expiredProbabilityCssClass = "probability-expired";
-
 	var yesterday = "2017-03-09";
 	var baseDate = "2017-03-10";
 	var tomorrow = "2017-03-11";
@@ -117,7 +114,7 @@ $(document).ready(function () {
 		equal(vm[0].endTime, 360);
 	});
 
-	test("Should get correct continous periods", function () {
+	test("Should get multiple continous periods - 1", function () {
 		var schedulePeriods = [
 			{
 				"StartTime": baseDate + "T02:45:00",
@@ -141,6 +138,39 @@ $(document).ready(function () {
 		var secondContinousPeriod = vm[1];
 		equal(secondContinousPeriod.startTime, 360);
 		equal(secondContinousPeriod.endTime, 540);
+	});
+
+	test("Should get multiple continous periods - 2", function () {
+		var schedulePeriods = [
+			{
+				"StartTime": baseDate + "T02:45:00",
+				"EndTime": baseDate + "T04:00:00"
+			}, {
+				"StartTime": baseDate + "T04:00:00",
+				"EndTime": baseDate + "T04:15:00"
+			}, {
+				"StartTime": baseDate + "T06:00:00",
+				"EndTime": baseDate + "T09:00:00"
+			}, {
+				"StartTime": baseDate + "T14:00:00",
+				"EndTime": baseDate + "T20:00:00"
+			}
+		];
+
+		var vm = new Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(baseDate, schedulePeriods);
+		equal(vm.length, 3);
+
+		var firstContinousPeriod = vm[0];
+		equal(firstContinousPeriod.startTime, 165);
+		equal(firstContinousPeriod.endTime, 255);
+
+		var secondContinousPeriod = vm[1];
+		equal(secondContinousPeriod.startTime, 360);
+		equal(secondContinousPeriod.endTime, 540);
+
+		var thirdContinousPeriod = vm[2];
+		equal(thirdContinousPeriod.startTime, 840);
+		equal(thirdContinousPeriod.endTime, 1200);
 	});
 
 	test("Should get correct starttime and endtime for cross day schedules", function () {
@@ -221,20 +251,20 @@ $(document).ready(function () {
 	});
 
 	test("Should create probability with height for vertical layout direction", function () {
-		var probabilities = createProbabilities(constants.verticalDirectionLayout)
+		var probabilities = createProbabilities(constants.verticalDirectionLayout);
 		equal(probabilities.length, 14);
 		for (var i = 0; i < probabilities.length; i++) {
-			equal(probabilities[i].styleJson.height != undefined, true)
-			equal(probabilities[i].styleJson.width == undefined, true)
+			equal(probabilities[i].styleJson.height != undefined, true);
+			equal(probabilities[i].styleJson.width == undefined, true);
 		}
 	});
 
 	test("Should create probability with height for horizontal layout direction", function () {
-		var probabilities = createProbabilities(constants.horizontalDirectionLayout)
+		var probabilities = createProbabilities(constants.horizontalDirectionLayout);
 		equal(probabilities.length, 14);
 		for (var i = 0; i < probabilities.length; i++) {
-			equal(probabilities[i].styleJson.width != undefined, true)
-			equal(probabilities[i].styleJson.height == undefined, true)
+			equal(probabilities[i].styleJson.width != undefined, true);
+			equal(probabilities[i].styleJson.height == undefined, true);
 		}
 	});
 });
