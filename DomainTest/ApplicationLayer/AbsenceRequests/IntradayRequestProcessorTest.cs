@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
+	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	public class IntradayRequestProcessorTest : ISetup
 	{
 		public IntradayRequestProcessor Target;

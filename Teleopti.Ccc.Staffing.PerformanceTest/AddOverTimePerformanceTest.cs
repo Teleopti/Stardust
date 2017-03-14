@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
+	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class AddOverTimePerformanceTest : PerformanceTestWithOneTimeSetup
 	{

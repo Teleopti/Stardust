@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
+	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
-	public class IntradayReqIntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModeluestProcessorTest : ISetup
+	public class IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel : ISetup
 	{
 		public IntradayRequestProcessor Target;
 		public FakePersonRepository PersonRepository;

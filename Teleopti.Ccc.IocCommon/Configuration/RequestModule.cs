@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
 			registerType
 				<IIntradayRequestProcessor, IntradayRequestProcessor, IntradayRequestProcessorOld>(builder,
-						Toggles.Staffing_ReadModel_UseSkillCombination_42663);
+						Toggles.Staffing_ReadModel_UseSkillCombination_xx);
 
 
 			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();

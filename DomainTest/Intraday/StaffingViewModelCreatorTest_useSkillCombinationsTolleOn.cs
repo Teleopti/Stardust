@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663)]
+	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	public class StaffingViewModelCreatorTest_useSkillCombinationsTolleOn : ISetup
 	{
 		public IStaffingViewModelCreator Target;

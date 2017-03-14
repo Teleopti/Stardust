@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
 			builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_42663))
+			if (_configuration.Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx))
 				builder.RegisterType<SkillStaffingIntervalProvider>().As<ISkillStaffingIntervalProvider>().SingleInstance();
 			else
 				builder.RegisterType<SkillStaffingIntervalProviderOldReadModel>().As<ISkillStaffingIntervalProvider>().SingleInstance();
