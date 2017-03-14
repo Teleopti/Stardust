@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockScheduleCommand>().As<ITeamBlockScheduleCommand>();
 			builder.RegisterType<TeamBlockOptimizationCommand>().As<ITeamBlockOptimizationCommand>();
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();
-			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
+			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
 			builder.RegisterType<BackToLegalShiftCommand>();
 			builder.RegisterType<IntraIntervalOptimizationCommand>().As<IIntraIntervalOptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPersonBuilderWrapper>().As<IGroupPersonBuilderWrapper>().InstancePerLifetimeScope();
