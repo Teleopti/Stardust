@@ -68,6 +68,9 @@
         <div class="day panel panel-default mobile-view-day" data-bind="attr: { 'data-mytime-date': fixedDate }">
             <div class="header panel-heading">
                 <span class="weekday" data-bind="text: weekDayHeaderTitle"></span>
+                <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913') && showProbabilityOptions()-->
+                <span class="weekday">(@Resources.Today)</span>
+                <!-- /ko -->
                 <span class="date" data-bind="text: fixedDate"></span>
             </div>
 
@@ -160,7 +163,7 @@
                                 <li>
                                     <a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
                                 </li>
-                                <!-- /ko -->
+                                <!-- /ko -->`
                             </ul>
                         </div>
                     </li>

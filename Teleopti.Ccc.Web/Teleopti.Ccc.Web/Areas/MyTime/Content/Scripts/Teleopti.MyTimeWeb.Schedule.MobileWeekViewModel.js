@@ -150,6 +150,11 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	};
 
 	self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {
+		if(selectedOptionValue == self.selectedProbabilityOptionValue()){
+			self.requestViewModel(undefined);
+			return;
+		}
+
 		self.selectedProbabilityOptionValue(selectedOptionValue);
 
 		if(self.selectedProbabilityOptionValue() == 0){
