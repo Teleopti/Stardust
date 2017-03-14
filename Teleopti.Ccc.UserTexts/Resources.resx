@@ -15577,11 +15577,11 @@ Do you want to participate?</value>
     <comment>Teleopti Mobile App - a title for QR code on setting page in MyTime </comment>
   </data>
   <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
-    <value>Use Teleopti Mobile App to scan this QRCode</value>
+    <value>Use Teleopti Mobile App to scan this QR Code</value>
     <comment>Tips of QRCode on settings page in MyTime web</comment>
   </data>
   <data name="ViewQRCodeForConfiguration" xml:space="preserve">
-    <value>View QR Code For Configuration</value>
+    <value>View QR Code for Configuration</value>
     <comment>Used in MyTimeWeb, permission of viewing the QR code  to configure mobile App</comment>
   </data>
   <data name="MonitorUpToXAgents" xml:space="preserve">
@@ -15628,7 +15628,7 @@ Do you want to participate?</value>
     <comment>Function name of importing agents in web People.</comment>
   </data>
   <data name="RequireXCellFormat" xml:space="preserve">
-    <value>cell can not be parsed, require {0} formatted value</value>
+    <value>cell cannot be parsed, require {0} formatted value</value>
     <comment>error message for mismatched column format in web Importing agents function.</comment>
   </data>
   <data name="DownloadTemplate" xml:space="preserve">
@@ -15658,19 +15658,19 @@ Do you want to participate?</value>
     <value>Shift bag</value>
   </data>
   <data name="FailedToCreateSchedulingJobForSelectedPlanningPeriod" xml:space="preserve">
-    <value>Failed to create Scheduling job for selected Planning Period.</value>
+    <value>Failed to create scheduling job for selected planning period.</value>
     <comment>Failed to create Scheduling job for selected Planning Period.</comment>
   </data>
   <data name="FailedToLoadDayoffRules" xml:space="preserve">
-    <value>Failed to load Dayoff Rules.</value>
+    <value>Failed to load day off rules.</value>
     <comment>Failed to load Dayoff Rules.</comment>
   </data>
   <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Failed to Optimize Dayoff for selected Planning Period due to Technical error.</value>
+    <value>Failed to optimize days off for selected planning period due to technical error.</value>
     <comment>Failed to Optimize Dayoff for selected Planning Period due to Technical error.</comment>
   </data>
   <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Failed to Schedule for selected Planning Period due to Technical error.</value>
+    <value>Failed to schedule for selected planning period due to technical error.</value>
     <comment>Failed to Schedule for selected Planning Period due to Technical error.</comment>
   </data>
 </root>

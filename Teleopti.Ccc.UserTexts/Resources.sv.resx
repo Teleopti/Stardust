@@ -14266,4 +14266,88 @@ Vill du registrera dig?</value>
   <data name="DenyReasonTechnicalIssues" xml:space="preserve">
     <value>Din förfrågan har avslagits pga. tekniska problem. Var god försök igen senare. </value>
   </data>
+  <data name="ShowAbsenceProbability" xml:space="preserve">
+    <value>Visa sannolikhet för frånvaro</value>
+  </data>
+  <data name="ShowOvertimeProbability" xml:space="preserve">
+    <value>Visa sannolikhet för övertid</value>
+  </data>
+  <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
+    <value>Sannolikhet att få frånvaro godkänd:</value>
+  </data>
+  <data name="ProbabilityToGetOvertimeColon" xml:space="preserve">
+    <value>Sannolikhet att få övertid:</value>
+  </data>
+  <data name="ViewQRCodeForConfiguration" xml:space="preserve">
+    <value>Visa QR-kod för konfiguration.</value>
+  </data>
+  <data name="MonitorUpToXAgents" xml:space="preserve">
+    <value>Bevaka upp till 50 agenter</value>
+  </data>
+  <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Kan inte lägga till för agent(er) i en annan tidszon</value>
+  </data>
+  <data name="InvalidColumn" xml:space="preserve">
+    <value>Ogiltig {0} : {1}</value>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>Schemaperiodtyp</value>
+  </data>
+  <data name="MissingColumn" xml:space="preserve">
+    <value>Kolumn som saknas</value>
+  </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>Frånvaro för</value>
+  </data>
+  <data name="AfterShiftEnd" xml:space="preserve">
+    <value>Efter skiftslut</value>
+  </data>
+  <data name="BeforeShiftStart" xml:space="preserve">
+    <value>Före skiftstart</value>
+  </data>
+  <data name="NoShift" xml:space="preserve">
+    <value>Inget skift</value>
+  </data>
+  <data name="Rule" xml:space="preserve">
+    <value>Regel</value>
+  </data>
+  <data name="ImportAgents" xml:space="preserve">
+    <value>Importera agenter</value>
+  </data>
+  <data name="DownloadTemplate" xml:space="preserve">
+    <value>Ladda ner mall</value>
+  </data>
+  <data name="ImportAgentsDoneOpenTheDownloadedFileForMoreDetails" xml:space="preserve">
+    <value>Klart. Öppna den nedladdade filen för mer detaljer.</value>
+  </data>
+  <data name="NewImport" xml:space="preserve">
+    <value>Ny import</value>
+  </data>
+  <data name="ShiftBag" xml:space="preserve">
+    <value>Skiftpåse</value>
+  </data>
+  <data name="FailedToCreateSchedulingJobForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Misslyckades att skapa schemaläggningsjobb för den valda planeringsperioden. </value>
+  </data>
+  <data name="FailedToLoadDayoffRules" xml:space="preserve">
+    <value>Misslyckades att ladda fridagsregler.</value>
+  </data>
+  <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Misslyckades att optimera fridagar för vald planeringsperiod pga. tekniskt fel.</value>
+  </data>
+  <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Misslyckades att schemalägga vald planeringsperiod pga. tekniskt fel. </value>
+  </data>
+  <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
+    <value>Flyttar ett skift till en annan dag</value>
+  </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>Senaste schemaresultat</value>
+  </data>
+  <data name="SetFallbackValuesToReplaceInvalidOnes" xml:space="preserve">
+    <value>Ange standardvärden för att ersätta ogiltiga värden</value>
+  </data>
+  <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
+    <value>{0} ersattes med standardvärdet</value>
+  </data>
 </root>
