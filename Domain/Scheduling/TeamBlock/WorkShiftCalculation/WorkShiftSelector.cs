@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			IShiftProjectionCache bestShift = null;
 
 			var shiftsWithValue =
-				shifts
+				shifts.AsParallel()
 					.Select(s => new {s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo)})
 					.Where(s => s.value.HasValue);
 
