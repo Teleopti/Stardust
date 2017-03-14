@@ -102,7 +102,7 @@
 	width: 100%;
 	margin-bottom: 5px;
 }
-.probability-status-bar > div{
+.probability-status-bar > .probability-cell{
 	height: 20px;
 	float: left;
 }
