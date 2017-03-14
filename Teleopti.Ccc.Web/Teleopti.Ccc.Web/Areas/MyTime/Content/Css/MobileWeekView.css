@@ -98,6 +98,14 @@
 	height: 45px;
 	background: #fafafa;
 }
+.probability-status-bar{
+	width: 100%;
+	margin-bottom: 5px;
+}
+.probability-status-bar > div{
+	height: 20px;
+	float: left;
+}
 .weekview-day-schedule-layer {
 	height: 100%;
 }

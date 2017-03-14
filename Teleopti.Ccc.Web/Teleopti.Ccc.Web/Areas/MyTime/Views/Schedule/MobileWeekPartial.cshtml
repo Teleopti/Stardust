@@ -122,6 +122,14 @@
                     <!-- /ko -->
                 </div>
             </div>
+            <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913') && ($parent.showingAbsenceProbability() || $parent.showingOvertimeProbability()) -->
+            <div class="probability-status-bar clearfix">
+                <!--ko foreach: probabilities-->
+                <div data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+
             <div class="mobile-bottom-bar">
                 <ul class="nav nav-pills navbar-weekview">
                     <!-- ko if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
@@ -163,7 +171,7 @@
                                 <li>
                                     <a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
                                 </li>
-                                <!-- /ko -->`
+                                <!-- /ko -->
                             </ul>
                         </div>
                     </li>

@@ -68,8 +68,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		});
 	};
 
-	self.userNowInMinute = ko.observable(0);
-
 	self.desktop = function () {
 		var date = self.selectedDate();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
@@ -232,7 +230,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, rawProbabilies,
 					hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self);
 			});
-
 		self.dayViewModels(dayViewModels);
 
 		self.minDate(moment(data.Days[0].FixedDate).add("day", -1));
@@ -254,6 +251,9 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 	self.formattedFixedDate = ko.computed(function () {
 		return moment(self.fixedDate()).format("l");
 	});
+	self.userNowInMinute = ko.observable(0);
+	self.mergeIdenticalProbabilityIntervals = true;
+
 	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
 	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
 	self.isDayoff = function () {

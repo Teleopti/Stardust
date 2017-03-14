@@ -95,6 +95,6 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel = function (selectedOptio
 
 	this.onOptionSelected = function(opValue){
 		this.checkedProbability(opValue);
-		weekViewModelParent.OnProbabilityOptionSelectCallback(this.checkedProbability());
+		weekViewModelParent.OnProbabilityOptionSelectCallback(parseInt(this.checkedProbability()));
 	}
 }
