@@ -161,6 +161,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.showingAbsenceProbability(self.selectedProbabilityOptionValue() === constants.absenceProbabilityType);
 		self.showingOvertimeProbability(self.selectedProbabilityOptionValue() === constants.overtimeProbabilityType);
 
+		if(self.showingAbsenceProbability() || self.showingOvertimeProbability())
+			reloadSchedule();
+
 		self.requestViewModel(undefined);
 	};
 
