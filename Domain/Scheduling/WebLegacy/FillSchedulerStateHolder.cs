@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
 			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period, onlyUseSkills);
 			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
-			removeUnwantedSkillDays(schedulerStateHolderTo, skills);
+			removeUnwantedSkillsAndSkillDays(schedulerStateHolderTo, skills);
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 		}
 
-		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skillsToKeep)
+		private static void removeUnwantedSkillsAndSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skillsToKeep)
 		{
 			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.Skills.ToList().Where(skill => !skillsToKeep.Contains(skill)))
 			{
@@ -96,6 +96,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			foreach (var skillDay in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillsToKeep.Contains(skillDay.Key)))
 			{
 				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skillDay.Key);
+			}
+
+			foreach (var emptySkillday in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillDay.Value.Any()))
+			{
+				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(emptySkillday.Key);
+				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(emptySkillday.Key);
 			}
 		}
 
