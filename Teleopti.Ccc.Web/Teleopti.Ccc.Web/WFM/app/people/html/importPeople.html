@@ -39,10 +39,10 @@
 						<div ng-show="!vm.hasInvalidData" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>{{'SuccessfullyImportedCountColon'|translate}} {{vm.successCount}}.</div>
 						<div ng-show="vm.hasInvalidData" >
 							<div ng-show="vm.successCount > 0" class="alert-success notice-spacer">
-								<i class='mdi mdi-thumb-up'></i>{{'SuccessfullyImportedCountColon'|translate}} {{vm.successCount}}.
+								<i class='mdi mdi-thumb-up'></i>{{ vm.getSuccessMessage(vm.successCount) }}.
 							</div>
 							<div class="alert-warning notice-spacer">
-								<i class='mdi mdi-information'></i>{{'FailedImportedCountColon'|translate}} {{vm.failedCount}}. {{'PleaseFindTheDownloadedExcelSheetToCheckTheError'|translate}}
+								<i class='mdi mdi-information'></i>{{ vm.getFailureMessage(vm.failedCount) }}. {{'PleaseFindTheDownloadedExcelSheetToCheckTheError'|translate}}
 							</div>
 							
 						</div>

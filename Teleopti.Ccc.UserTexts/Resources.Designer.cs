@@ -10955,7 +10955,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to create Scheduling job for selected Planning Period..
+        ///   Looks up a localized string similar to Failed to create scheduling job for selected planning period..
         /// </summary>
         public static string FailedToCreateSchedulingJobForSelectedPlanningPeriod {
             get {
@@ -10964,7 +10964,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to load Dayoff Rules..
+        ///   Looks up a localized string similar to Failed to import {0} agent(s).
+        /// </summary>
+        public static string FailedToImportAgents {
+            get {
+                return ResourceManager.GetString("FailedToImportAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load day off rules..
         /// </summary>
         public static string FailedToLoadDayoffRules {
             get {
@@ -10973,7 +10982,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to Optimize Dayoff for selected Planning Period due to Technical error..
+        ///   Looks up a localized string similar to Failed to optimize days off for selected planning period due to technical error..
         /// </summary>
         public static string FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError {
             get {
@@ -10991,7 +11000,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to Schedule for selected Planning Period due to Technical error..
+        ///   Looks up a localized string similar to Failed to schedule for selected planning period due to technical error..
         /// </summary>
         public static string FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError {
             get {
@@ -24843,7 +24852,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cell can not be parsed, require {0} formatted value.
+        ///   Looks up a localized string similar to cell cannot be parsed, require {0} formatted value.
         /// </summary>
         public static string RequireXCellFormat {
             get {
@@ -30650,6 +30659,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully imported {0} agent(s).
+        /// </summary>
+        public static string SuccessfullyImportedAgents {
+            get {
+                return ResourceManager.GetString("SuccessfullyImportedAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imported successfully:.
         /// </summary>
         public static string SuccessfullyImportedCountColon {
@@ -33640,7 +33658,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Teleopti Mobile App to scan this QRCode.
+        ///   Looks up a localized string similar to Use Teleopti Mobile App to scan this QR Code.
         /// </summary>
         public static string UseTeleoptiMobileAppToScanThisQRCode {
             get {
@@ -34099,7 +34117,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View QR Code For Configuration.
+        ///   Looks up a localized string similar to View QR Code for Configuration.
         /// </summary>
         public static string ViewQRCodeForConfiguration {
             get {

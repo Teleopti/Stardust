@@ -3,7 +3,7 @@
 
 	angular.module('wfm.people')
 		.directive('importPeople', ImportPeopleDirective)
-		.controller('ImportPeopleCtrl', ['$timeout', 'PeopleService', 'Toggle', ImportPeopleController]);
+		.controller('ImportPeopleCtrl', ['$timeout', 'PeopleService', 'Toggle', '$translate',  ImportPeopleController]);
 
 	function ImportPeopleDirective() {
 		return {
@@ -17,7 +17,7 @@
 		};
 	};
 
-	function ImportPeopleController($timeout, peopleSvc, toggles) {
+	function ImportPeopleController($timeout, peopleSvc, toggles, $translate) {
 		var vm = this;
 
 		vm.files = [];
@@ -123,6 +123,14 @@
 				}
 			}
 		};
+
+		vm.getSuccessMessage = function (successCount) {		
+			return $translate.instant('SuccessfullyImportedAgents').replace('{0}', successCount);					
+		}
+
+		vm.getFailureMessage = function (failureCount) {
+			return $translate.instant('FailedToImportAgents').replace('{0}', failureCount);
+		}
 
 		function arrayBuffer2String(buf, callback) {
 			var bb = new Blob([buf]);

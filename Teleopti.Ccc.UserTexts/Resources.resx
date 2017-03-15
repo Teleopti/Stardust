@@ -15680,4 +15680,12 @@ Do you want to participate?</value>
   <data name="OutOfIndexRange" xml:space="preserve">
     <value>Out of index range {0} - {1}</value>
   </data>
+  <data name="FailedToImportAgents" xml:space="preserve">
+    <value>Failed to import {0} agent(s)</value>
+    <comment>Message to notify user about agent import result, e.g. Failed to import 5 agents</comment>
+  </data>
+  <data name="SuccessfullyImportedAgents" xml:space="preserve">
+    <value>Successfully imported {0} agent(s)</value>
+    <comment>Message to notify user about agent import result. e.g. Successfully imported 5 agents</comment>
+  </data>
 </root>
