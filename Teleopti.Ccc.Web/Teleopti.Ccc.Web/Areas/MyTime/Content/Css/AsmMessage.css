@@ -172,3 +172,9 @@
 .container hr {
     border-color: #ffffff;
 }
+
+.asm-messages .dialogue .sender {
+	margin-top: 0.4em;
+	font-size: 0.8em;
+	color: #9E9E9E;
+}
