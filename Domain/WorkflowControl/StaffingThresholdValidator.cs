@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				if (skill == null) continue;
 				if (validatePeriods.IsEmpty()) continue;
 
-				var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods.Where(x => ((SkillStaffingInterval) x).SkillId == skill.Id.GetValueOrDefault()), timeZone, result);
+				var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods.Where(x => ((SkillStaffingInterval) x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval)x).FStaff > 0), timeZone, result);
 				if (validatedUnderStaffingResult.IsValid) continue;
 
 				requestsLogger.Debug($"Understaffed on skill: {skill.Name}, Intervals: {string.Join(",", result.UnderstaffingTimes.Select(x => x.StartTime))}");
