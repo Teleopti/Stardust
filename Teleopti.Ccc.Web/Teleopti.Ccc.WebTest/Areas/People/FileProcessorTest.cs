@@ -28,7 +28,7 @@ using Teleopti.Ccc.WebTest.Areas.People.IoC;
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
 	[TestFixture, WebPeopleTest]
-	public class FileProcessorTest:ISetup
+	public class FileProcessorTest : ISetup
 	{
 		public FileProcessor Target;
 		public FakeApplicationRoleRepository RoleRepository;
@@ -86,16 +86,16 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test, Ignore("file parsing")]
 		public void ShouldParseWorkbookFromHttpContent()
 		{
-			var fileData = new FileData();						
+			var fileData = new FileData();
 			using (var file = new FileStream(@"C:\TeleoptiWFM\SourceCode\main\Teleopti\Logs\test.xls", FileMode.Open, FileAccess.Read))
 			{
 				var ms = new MemoryStream();
 				file.CopyTo(ms);
-				
+
 				fileData.FileName = "test.xls";
 				fileData.Data = ms.ToArray();
 			}
-						
+
 			var result = Target.ParseFile(fileData);
 
 			result.Should().Not.Be.Null();
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		{
 			var fileTemplate = new AgentFileTemplate();
 			var workbook = fileTemplate.GetTemplateWorkbook("test");
-			
+
 
 			var result = Target.ValidateWorkbook(workbook);
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldParseRawDataWithCorrectColumnInput()
 		{
-			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent {Firstname = "test", StartDate = new DateTime(2017, 3, 1)});
+			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { Firstname = "test", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0));
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldWriteErrorMsgForInvalidInput()
 		{
-			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent {Firstname = "test", StartDate = new DateTime(2017, 3, 1)});
+			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { Firstname = "test", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0));
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			row.CreateCell(3).SetCellValue("aa");
 			row.CreateCell(4).SetCellValue("aa");
 			row.CreateCell(5).SetCellValue("agent");
-			row.CreateCell(6).SetCellValue(new DateTime(2017,1,1));
+			row.CreateCell(6).SetCellValue(new DateTime(2017, 1, 1));
 			row.CreateCell(7).SetCellValue("london");
 			row.CreateCell(8).SetCellValue("test");
 			row.CreateCell(9);
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { SchedulePeriodType = defaultSchedulePeriodType});
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { SchedulePeriodType = defaultSchedulePeriodType });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType"));
@@ -487,7 +487,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));
@@ -500,7 +500,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var rawAgent = setupProviderData();
 			rawAgent.ShiftBag = "Invalid shift bag";
 
-			var ruleSetBag = new RuleSetBag().WithId();			
+			var ruleSetBag = new RuleSetBag().WithId();
 			RuleSetBagRepository.Add(ruleSetBag);
 
 			var defaultValue = ruleSetBag.Id.Value.ToString();
@@ -508,7 +508,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ShiftBagId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ShiftBagId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag"));
@@ -529,7 +529,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { PartTimePercentageId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { PartTimePercentageId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage"));
@@ -550,7 +550,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ContractScheduleId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ContractScheduleId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule"));
@@ -571,7 +571,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ContractId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ContractId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract"));
@@ -592,7 +592,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { RoleIds = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Roles"));
@@ -613,7 +613,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { TeamId = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Team"));
@@ -634,11 +634,33 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { SkillIds = defaultValue });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Skills"));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void ShouldProcessSheetResultWithoutBlankRows()
+		{
+			var workbook = new HSSFWorkbook();
+			var sheet = workbook.CreateSheet("Test sheet");
+			for (int i = 0; i < 4; i++)
+			{
+				var blankRow = sheet.CreateRow(i);
+				for (int j = 0; j < 4; j++)
+				{
+					blankRow.CreateCell(j);
+				}
+			}
+			var row = sheet.CreateRow(4);
+			for (int j = 0; j < 4; j++)
+			{
+				row.CreateCell(j).SetCellValue(j);
+			}
+			var result = Target.ProcessSheet(sheet);
+			Assert.AreEqual(result.Count, 1);
 		}
 
 		private RawAgent setupProviderData()

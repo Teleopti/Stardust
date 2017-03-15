@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using NPOI.SS.UserModel;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
@@ -49,6 +50,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			for (var i = 1; i <= sheet.LastRowNum; i++)
 			{
 				var row = sheet.GetRow(i);
+				if (row.IsBlank())
+				{
+					continue;
+				}
 				var extractedRow = new AgentExtractionResult {Row = row};
 				IList<string> rowErrors;
 				var raw = ParseRow(row, out rowErrors);

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		public void ShouldCopyAllCellsWhenCopyRow()
 		{
 			var row = _sheet.CreateRow(0);
-			createDateCell(row,0);
+			createDateCell(row, 0);
 
 			var nextRow = _sheet.CreateRow(1);
 			row.CopyTo(nextRow);
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		public void ShouldCopyCellsInRangeWhenCopyRow()
 		{
 			var row = _sheet.CreateRow(0);
-			createDateCell(row, 0);
-			createDateCell(row, 1);
+			createDateCell(row, 0, DateTime.Now);
+			createDateCell(row, 1, DateTime.Now);
 			createDateCell(row, 2);
 			createDateCell(row, 3);
 
@@ -49,10 +49,36 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			Assert.AreEqual(nextRow.Cells.Count, 3);
 		}
 
-		private void createDateCell(IRow row, int cellIndex)
+		[Test]
+		public void ShouldIsBankRowWhenAllCellsNoValue()
+		{
+			var row = _sheet.CreateRow(0);
+			row.CreateCell(0, CellType.String);
+			row.CreateCell(1, CellType.String).SetCellValue("");
+			createDateCell(row, 2);
+
+			Assert.IsTrue(row.IsBlank());
+		}
+
+		[Test]
+		public void ShouldIsNotBlankRowWhenAnyCellsHasValue()
+		{
+			var row = _sheet.CreateRow(0);
+			row.CreateCell(0);
+			Console.WriteLine(row.GetCell(0).CellType);
+			row.CreateCell(1, CellType.String).SetCellValue("xx");
+			createDateCell(row, 2, DateTime.Now);
+
+			Assert.IsFalse(row.IsBlank());
+		}
+
+		private void createDateCell(IRow row, int cellIndex, DateTime? value = null)
 		{
 			var dateCell = row.CreateCell(cellIndex);
-			dateCell.SetCellValue(DateTime.Now);
+			if (value.HasValue)
+			{
+				dateCell.SetCellValue(value.Value);
+			}
 			var cellStyle = _workBook.CreateCellStyle();
 			cellStyle.DataFormat = _dataFormat.GetFormat("M/d/yyyy");
 			dateCell.CellStyle = cellStyle;

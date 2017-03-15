@@ -77,6 +77,25 @@ namespace Teleopti.Ccc.Domain.Helper
 
 		}
 
+		public static bool IsBlank(this IRow row)
+		{
+			return row.Cells.Sum(c => c.IsBlank() ? 1 : 0) == row.Cells.Count;
+		}
+
+		private static bool IsBlank(this ICell cell)
+		{
+			if (cell.CellType == CellType.Blank)
+			{
+				return true;
+			}
+			if (cell.CellType == CellType.String && cell.StringCellValue.IsNullOrEmpty())
+			{
+				return true;
+			}
+			return false;
+		}
+
+
 		private static bool validateCopyRowParameters(IRow sourceRow, IRow targetRow, int startIndex, int endIndex)
 		{
 			if (sourceRow == null)
