@@ -377,6 +377,7 @@ Scenario: Show black absence text when absence background color is white
 @ignore
 Scenario: Keep selected probability when switching back from month view
 	Given I have the role 'Full access to mytime'
+	And I am englishspeaking swede
 	And I have the workflow control set 'Intraday staffing check'
 	When I view my week schedule for date '2013-01-01'
 	And I select 'Show absence probability' as probability value
@@ -387,6 +388,7 @@ Scenario: Keep selected probability when switching back from month view
 @ignore
 Scenario: Keep selected probability when switching back from non current week view
 	Given I have the role 'Full access to mytime'
+	And I am englishspeaking swede
 	And I have the workflow control set 'Intraday staffing check'
 	When I view my week schedule for date '2013-01-01'
 	And I select 'Show absence probability' as probability value
@@ -394,9 +396,9 @@ Scenario: Keep selected probability when switching back from non current week vi
 	When I click the current week button
 	Then I should see the selected value for probability is 'Show absence probability'
 
-@ignore
 Scenario: Should not show absence probability option when staffing check is not intraday staffing check
 	Given I have the role 'Full access to mytime'
+	And I am englishspeaking swede
 	And I have the workflow control set 'Published schedule'
 	When I view my week schedule for date '2013-01-01'
 	Then I should not see option 'Show absence probability'in probability value list
