@@ -20015,6 +20015,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only support: {0}.
+        /// </summary>
+        public static string OnlySupport {
+            get {
+                return ResourceManager.GetString("OnlySupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On this date you are no longer an employee.
         /// </summary>
         public static string OnThisDateYouAreNoLongerAnEmployee {
@@ -20786,6 +20795,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OutOfAdherence {
             get {
                 return ResourceManager.GetString("OutOfAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Out of index range {0} - {1}.
+        /// </summary>
+        public static string OutOfIndexRange {
+            get {
+                return ResourceManager.GetString("OutOfIndexRange", resourceCulture);
             }
         }
         

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -23,8 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		private readonly IPermissionProvider _permissionProvider;
 
-		public ImportAgentDataProvider(IApplicationRoleRepository applicationRoleRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository, 
-			IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, ISkillRepository skillRepository, 
+		public ImportAgentDataProvider(IApplicationRoleRepository applicationRoleRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository,
+			IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, ISkillRepository skillRepository,
 			ISiteRepository siteRepository, ITeamRepository teamRepository, IExternalLogOnRepository externalLogOnRepository, IPermissionProvider permissionProvider)
 		{
 			_applicationRoleRepository = applicationRoleRepository;
@@ -55,8 +56,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					_contractScheduleRepository.LoadAll().ToDictionary(c => c.Id.GetValueOrDefault(), c => c.Description.Name),
 				ShiftBags = _ruleSetBagRepository.LoadAll().ToDictionary(r => r.Id.GetValueOrDefault(), r => r.Description.Name),
 				Skills = _skillRepository.LoadAll().ToDictionary(s => s.Id.GetValueOrDefault(), s => s.Name),
-				SchedulePeriodTypes =
-					Enum.GetValues(typeof(SchedulePeriodType)).Cast<SchedulePeriodType>().ToDictionary(t => (int) t, t => t.ToString()),
+				SchedulePeriodTypes = EnumExtensions.GetValues(SchedulePeriodType.ChineseMonth)
+									.ToDictionary(t => (int)t, t => t.ToString()),
 
 				PartTimePercentages =
 					_partTimePercentageRepository.LoadAll().ToDictionary(p => p.Id.GetValueOrDefault(), p => p.Description.Name),
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 
 		public IApplicationRole FindRole(string roleName)
-		{			
+		{
 			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.Name == roleName);
 		}
 
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		}
 
 		public IContract FindContract(string contractName)
-		{			
+		{
 			return _contractRepository.LoadAll().FirstOrDefault(
 					contract => contract.Description.Name == contractName || contract.Description.ShortName == contractName);
 		}
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		public IPartTimePercentage FindPartTimePercentage(string partTimePercentageName)
 		{
-			return	_partTimePercentageRepository.LoadAll().FirstOrDefault(
+			return _partTimePercentageRepository.LoadAll().FirstOrDefault(
 					partTimePercentage =>
 						partTimePercentage.Description.Name == partTimePercentageName ||
 						partTimePercentage.Description.ShortName == partTimePercentageName);

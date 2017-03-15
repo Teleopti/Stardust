@@ -7,6 +7,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
@@ -59,8 +60,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var agentTemplate = new AgentFileTemplate();
 			var returnedFile = agentTemplate.GetTemplateWorkbook(invalidUserSheetName, isXlsx);
 			var newSheet = returnedFile.GetSheet(invalidUserSheetName);
-			var errorMessageColumnIndex = agentTemplate.ColumnHeaderNames.Length;
-			var warningMessageColumnIndex = agentTemplate.ColumnHeaderNames.Length + 1;
+			var columnsCount = agentTemplate.ColumnHeaderNames.Length;
+			var errorMessageColumnIndex = columnsCount;
+			var warningMessageColumnIndex = columnsCount + 1;
 
 			newSheet.GetRow(0).CreateCell(errorMessageColumnIndex).SetCellValue("ErrorMessage");
 			newSheet.GetRow(0).CreateCell(warningMessageColumnIndex).SetCellValue("WarningMessage");
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			{
 				var sourceRow = agents[i].Row;
 				var newRow = newSheet.CreateRow(i + 1);
-				sourceRow.CopyTo(newRow);
+				sourceRow.CopyTo(newRow, 0, columnsCount - 1);
 				newRow.CreateCell(errorMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.ErrorMessages));
 				newRow.CreateCell(warningMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.WarningMessages));
 			}
@@ -77,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return ms;
 		}
 
-		
+
 	}
 
 	public interface IFileProcessor

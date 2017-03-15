@@ -15673,4 +15673,11 @@ Do you want to participate?</value>
     <value>Failed to schedule for selected planning period due to technical error.</value>
     <comment>Failed to Schedule for selected Planning Period due to Technical error.</comment>
   </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>Only support: {0}</value>
+    <comment>e.g.: SchedulePeriodType only support: Day, Week, Month..</comment>
+  </data>
+  <data name="OutOfIndexRange" xml:space="preserve">
+    <value>Out of index range {0} - {1}</value>
+  </data>
 </root>

@@ -3,21 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Domain.Helper
 {
 	public static class RowExtensions
 	{
-		public static void CopyTo(this IRow sourceRow, IRow targetRow)
+		public static void CopyTo(this IRow sourceRow, IRow targetRow, int startIndex = 0, int endIndex = 0)
 		{
-			if (sourceRow == null || targetRow == null)
+			if (!validateCopyRowParameters(sourceRow, targetRow, startIndex, endIndex))
 			{
 				return;
 			}
+
+			var maxIndex = sourceRow.LastCellNum;
 			var sheet = targetRow.Sheet;
 			var workbook = sheet.Workbook;
 
-			for (int i = 0; i < sourceRow.LastCellNum; i++)
+			for (int i = startIndex; i < endIndex + 1; i++)
 			{
 				var oldCell = sourceRow.GetCell(i);
 				var newCell = targetRow.CreateCell(i);
@@ -72,6 +75,24 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
+		}
+
+		private static bool validateCopyRowParameters(IRow sourceRow, IRow targetRow, int startIndex, int endIndex)
+		{
+			if (sourceRow == null)
+			{
+				throw new ArgumentNullException("sourceRow");
+			}
+			if (targetRow == null)
+			{
+				throw new ArgumentNullException("targetRow");
+			}
+			var maxIndex = sourceRow.LastCellNum;
+			if (startIndex < 0 || endIndex > maxIndex)
+			{
+				throw new ArgumentException(string.Format(Resources.OutOfIndexRange, startIndex, endIndex));
+			}
+			return true;
 		}
 	}
 }

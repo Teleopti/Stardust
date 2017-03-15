@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
 using NPOI.SS.UserModel;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
@@ -167,6 +168,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			}
 		}
 
+
+
 		public AgentDataModel MapRawData(RawAgent raw, out Feedback feedback)
 		{
 			var agentInfo = new AgentDataModel();
@@ -189,7 +192,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			feedback.Merge(parsePartTimePercentage(raw.PartTimePercentage, agentInfo));
 			feedback.Merge(parseRuleSetBag(raw.ShiftBag, agentInfo));
 			feedback.Merge(parseSchedulePeriodType(raw.SchedulePeriodType, agentInfo));
-			agentInfo.SchedulePeriodLength = (int) raw.SchedulePeriodLength;
+			agentInfo.SchedulePeriodLength = (int)raw.SchedulePeriodLength;
 
 			return agentInfo;
 		}
@@ -287,7 +290,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				return feedback;
 			}
 
-			feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "SchedulePeriodType", rawSchedulePeriodType));
+			var avaliableSchedulePeriodTypeValues = String.Join(", ", EnumExtensions
+															.GetValues(SchedulePeriodType.ChineseMonth)
+															.Select(t => t.ToString()));
+			feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "SchedulePeriodType", string.Format(Resources.OnlySupport, avaliableSchedulePeriodTypeValues)));
 			return feedback;
 		}
 
