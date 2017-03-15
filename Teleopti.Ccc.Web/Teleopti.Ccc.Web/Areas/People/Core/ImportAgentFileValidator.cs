@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
-using NPOI.SS.UserModel;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
@@ -297,27 +294,45 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return feedback;
 		}
 
-		private Feedback parseExternalLogon(string rawExternalLogon, AgentDataModel agentInfo)
+		private Feedback parseExternalLogon(string rawExternalLogons, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
-			if (rawExternalLogon == null)
+			if (rawExternalLogons == null)
 				return feedback;
-			var externalLogon = _importAgentDataProvider.FindExternalLogOn(rawExternalLogon);
+			var externalLogons = StringHelper.SplitStringList(rawExternalLogons);
+			agentInfo.ExternalLogons = new List<IExternalLogOn>();
+			var invalidLogons = new List<string>(); 
+			foreach (var logon in externalLogons)
+			{
+				var externalLogon = _importAgentDataProvider.FindExternalLogOn(logon);
+				if (externalLogon == null)
+				{
+					invalidLogons.Add(logon);
+				}
+				else
+				{
+					agentInfo.ExternalLogons.Add(externalLogon);
+					
+				}
+			}
 
-			if (externalLogon == null)
+			if (!agentInfo.ExternalLogons.Any())
 			{
 				if (_defaultValues.ExternalLogon != null)
 				{
-					agentInfo.ExternalLogon = _defaultValues.ExternalLogon;
+					agentInfo.ExternalLogons.Add(_defaultValues.ExternalLogon);
 					feedback.WarningMessages.Add(warningMessage("ExternalLogon"));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ExternalLogOn", rawExternalLogon));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ExternalLogon", rawExternalLogons));
 				return feedback;
 			}
 
-			agentInfo.ExternalLogon = externalLogon;
+			if (invalidLogons.Any())
+			{
+				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), string.Join(",", invalidLogons)));
+			}
 			return feedback;
 		}
 

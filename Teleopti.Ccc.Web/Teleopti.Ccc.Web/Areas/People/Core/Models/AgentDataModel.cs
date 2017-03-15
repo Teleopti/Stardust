@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 		public DateOnly StartDate { get; set; }
 		public ITeam Team { get; set; }
 		public List<ISkill> Skills { get; set; }
-		public IExternalLogOn ExternalLogon { get; set; }
+		public IList<IExternalLogOn> ExternalLogons { get; set; }
 		public IContract Contract { get; set; }
 		public IContractSchedule ContractSchedule { get; set; }
 		public IPartTimePercentage PartTimePercentage { get; set; }

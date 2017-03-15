@@ -409,6 +409,40 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void ShouldValidateMultipleExternalLogon()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			var row = sheet.CreateRow(1);
+			row.CreateCell(0);
+			row.CreateCell(1).SetCellValue("andeen");
+
+			row.CreateCell(2).SetCellValue("");
+			row.CreateCell(3).SetCellValue("aa");
+			row.CreateCell(4).SetCellValue("aa");
+			row.CreateCell(5).SetCellValue("agent");
+			row.CreateCell(6).SetCellValue(new DateTime(2017,1,1));
+			row.CreateCell(7).SetCellValue("london");
+			row.CreateCell(8).SetCellValue("test");
+			row.CreateCell(9).SetCellValue("0019,0018");
+
+			row.CreateCell(10).SetCellValue("fix");
+			row.CreateCell(11).SetCellValue("fix");
+			row.CreateCell(12).SetCellValue("100%");
+			row.CreateCell(13).SetCellValue("early");
+			row.CreateCell(14).SetCellValue("week");
+			row.CreateCell(15).SetCellValue(4);
+
+			var result = Target.ProcessSheet(sheet);
+
+			result.Count.Should().Be.EqualTo(1);
+			var errForExtLogon =
+				result.First().Feedback.ErrorMessages.Where(r => r.Contains("ExternalLogon")).Single();
+			errForExtLogon.Should()
+				.Be.EqualTo(string.Format(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), "0019,0018"));
+		}
+
+		[Test]
 		public void ShouldPersistAgentWithValidData()
 		{
 			var rawAgent = setupProviderData();
@@ -457,7 +491,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));
-			result.Single().Agent.ExternalLogon.Should().Be.EqualTo(externalLogon);
+			result.Single().Agent.ExternalLogons.Single().Should().Be.EqualTo(externalLogon);
 		}
 
 		[Test]

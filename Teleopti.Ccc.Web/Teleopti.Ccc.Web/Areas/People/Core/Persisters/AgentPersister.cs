@@ -74,7 +74,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			agentData.Skills.ForEach(s => personPeriod.AddPersonSkill(new PersonSkill(s, new Percent(1))));
 		
 			personPeriod.RuleSetBag = agentData.RuleSetBag;
-			personPeriod.AddExternalLogOn(agentData.ExternalLogon);
+			foreach (var externalLogOn in agentData.ExternalLogons)
+			{
+				personPeriod.AddExternalLogOn(externalLogOn);
+			}
 			person.AddPersonPeriod(personPeriod);
 		}
 

@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var persistedPersonPeriod = persistedUser.PersonPeriodCollection.Single();
 
 			persistedPersonPeriod.PersonSkillCollection.Single().Skill.Should().Be.EqualTo(agentData.Skills.Single());
-			persistedPersonPeriod.ExternalLogOnCollection.Single().Should().Be(agentData.ExternalLogon);
+			persistedPersonPeriod.ExternalLogOnCollection.Single().Should().Be(agentData.ExternalLogons.Single());
 			persistedPersonPeriod.PersonContract.Contract.Should().Be(agentData.Contract);
 			persistedPersonPeriod.PersonContract.ContractSchedule.Should().Be(agentData.ContractSchedule);
 			persistedPersonPeriod.PersonContract.PartTimePercentage.Should().Be(agentData.PartTimePercentage);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				StartDate = new DateOnly(2017,1,1),
 				Team = TeamFactory.CreateSimpleTeam(),
 				Skills = new List<ISkill> { SkillFactory.CreateSkill("skill") },
-				ExternalLogon = ExternalLogOnFactory.CreateExternalLogOn(),
+				ExternalLogons = new List<IExternalLogOn> { ExternalLogOnFactory.CreateExternalLogOn()},
 				Contract = ContractFactory.CreateContract("contract"),
 				ContractSchedule = ContractScheduleFactory.CreateContractSchedule("contractSchedule"),
 				PartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("parttime percentage"),
