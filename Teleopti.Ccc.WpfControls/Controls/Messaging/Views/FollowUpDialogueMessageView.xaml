@@ -9,7 +9,7 @@
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="35"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
         <Controls:AnalogPresenter DataContext="{Binding Path=CreatedAsLocal}"  
 								  HorizontalAlignment="Stretch" 
@@ -23,6 +23,7 @@
 		
 		<TextBlock	Grid.Column="2"
 					Text="{Binding Path=Text}" 
+					TextWrapping="Wrap"
 					VerticalAlignment="Center"/>
 	</Grid>
 </UserControl>
