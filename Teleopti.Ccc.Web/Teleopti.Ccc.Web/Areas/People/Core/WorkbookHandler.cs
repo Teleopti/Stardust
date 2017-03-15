@@ -93,11 +93,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 					var expectedFormat = "text";
 					switch (pro.Name)
 					{
-						case "StartDate":
+						case nameof(RawAgent.StartDate):
 							expectedFormat = "date";
 							break;
 
-						case "SchedulePeriodLength":
+						case nameof(RawAgent.SchedulePeriodLength):
 							expectedFormat = "number";
 							break;
 					}
@@ -137,23 +137,23 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			{
 				switch (pro.Name)
 				{
-					case "Firstname":
-					case "Lastname":
-					case "WindowsUser":
-					case "ApplicationUserId":
-					case "Password":
-					case "ExternalLogon":
+					case nameof(RawAgent.Firstname):
+					case nameof(RawAgent.Lastname):
+					case nameof(RawAgent.WindowsUser):
+					case nameof(RawAgent.ApplicationUserId):
+					case nameof(RawAgent.Password):
+					case nameof(RawAgent.ExternalLogon):
 						return null;
 				}
 			}
 
 			switch (pro.Name)
 			{
-				case "StartDate":
+				case nameof(RawAgent.StartDate):
 					if (cell.DateCellValue != DateTime.MinValue && cell.DateCellValue != DateTime.MaxValue)
 						return cell.DateCellValue;
 					break;
-				case "SchedulePeriodLength":
+				case nameof(RawAgent.SchedulePeriodLength):
 					if (cell.CellType == CellType.Numeric)
 						return cell.NumericCellValue;
 					break;
