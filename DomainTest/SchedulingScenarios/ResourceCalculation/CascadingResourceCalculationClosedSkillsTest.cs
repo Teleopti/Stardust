@@ -223,24 +223,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			subskillDay.SkillStaffPeriodCollection.Last().CalculatedResource
 				.Should().Be.EqualTo(2);
 		}
-
-		[Test]
-		[Ignore("Bug 43460")]
-		public void ShouldShovelAllResourcesFromPrimaryWithNoForecast()
-		{
-			var scenario = new Scenario("_");
-			var activity = new Activity("_");
-			var dateOnly = DateOnly.Today;
-			var primarySkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(9, 10);
-			var subSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(9, 10);
-			var subSkillDay = subSkill.CreateSkillDayWithDemand(scenario, dateOnly, 100);
-			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subSkill);
-			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(9, 10));
-
-			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { subSkillDay}, false, false));
-
-			var subSkillResources = subSkillDay.SkillStaffPeriodCollection.Last().CalculatedResource;
-			subSkillResources.Should().Be.EqualTo(1);
-		}
 	}
 }
