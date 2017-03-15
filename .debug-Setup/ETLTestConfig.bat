@@ -40,10 +40,6 @@ IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Su
 	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /property:Configuration=%Configuration% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
 )
 
-::Deploy new -MODEBUG input for Support.Tool
-SET ConfigFiles=%ROOTDIR%\..\Teleopti.Support.Tool\bin\Release\ConfigFiles\ConfigFiles.txt
-ECHO ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\%Configuration%\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,BuildArtifacts\AppETLService.config>>"%ConfigFiles%"
-
 ::Run supportTool to replace all config
 "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -MODebug
 
