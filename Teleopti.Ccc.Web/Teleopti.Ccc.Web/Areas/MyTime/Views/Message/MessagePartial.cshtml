@@ -61,17 +61,13 @@
 							</div>
 							<div class="dialogue">
 								<!-- ko foreach: dialogueMessages -->
-								<div></div>
-								<div>
-									<div>
-										<span>@Resources.Sender: </span>
-										<span data-bind="text: sender"></span>
-										<span>@Resources.Sent: </span>
-										<span data-bind="text: created"></span>
-									</div>
+								<div class="sender">
+									<span>@Resources.Sender: </span>
+									<span data-bind="text: sender"></span>
+									<span>@Resources.Sent: </span>
+									<span data-bind="text: created"></span>
 								</div>
-								<span data-bind="text: text"></span>
-								<br />
+								<div data-bind="html: text"></div>
 								<!-- /ko -->
 							</div>
 							<div data-bind="visible: allowDialogueReply">
