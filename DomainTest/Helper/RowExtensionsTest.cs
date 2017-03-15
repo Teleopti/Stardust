@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			var row = _sheet.CreateRow(0);
 			row.CreateCell(0);
-			Console.WriteLine(row.GetCell(0).CellType);
 			row.CreateCell(1, CellType.String).SetCellValue("xx");
 			createDateCell(row, 2, DateTime.Now);
 
