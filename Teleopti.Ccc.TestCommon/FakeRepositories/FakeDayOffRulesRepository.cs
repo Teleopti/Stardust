@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeDayOffRulesRepository : IDayOffRulesRepository
 	{
-		private readonly IList<DayOffRules> _workRuleSettings = new List<DayOffRules>();
+		private readonly List<DayOffRules> _workRuleSettings = new List<DayOffRules>();
 
 		public void Add(DayOffRules root)
 		{
+			if (root.Default && root.AgentGroup == null)
+			{
+				var currDefault = Default();
+				if (currDefault != null)
+					_workRuleSettings.Remove(currDefault);
+			}
 			_workRuleSettings.Add(root);
 		}
 
@@ -37,7 +43,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
-		public DayOffRules Default()
+
+		private DayOffRules Default()
 		{
 			var curr = _workRuleSettings.SingleOrDefault(x => x.Default);
 			if (curr != null)
@@ -50,6 +57,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var defaultSettings = DayOffRules.CreateDefault();
 			actionOnDefaultInstance(defaultSettings);
 			_workRuleSettings.Add(defaultSettings);
+		}
+
+		public IList<DayOffRules> LoadAllByAgentGroup(IAgentGroup agentGroup)
+		{
+			return _workRuleSettings.Where(x => x.AgentGroup == agentGroup).ToList();
+		}
+
+		public IList<DayOffRules> LoadAllWithoutAgentGroup()
+		{
+			return _workRuleSettings.Where(x => x.AgentGroup == null).ToList();
+		}
+
+		public void RemoveForAgentGroup(IAgentGroup agentGroup)
+		{
+			_workRuleSettings.RemoveAll(dayOffRule => dayOffRule.AgentGroup == agentGroup);
 		}
 	}
 }

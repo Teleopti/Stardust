@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeTeamRepository TeamRepository;
 		public FakeContractRepository ContractRepository;
 		public FakeSkillRepository SkillRepository;
+		public FakeDayOffRulesRepository DayOffRulesRepository;
 		public IAgentGroupModelPersister Target;
 
 		[Test]
@@ -46,6 +47,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			var contractFilter = (ContractFilter)inDb.Filters.Single();
 			contractFilter.Contract.Should().Be.EqualTo(contract);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -68,6 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			var siteFilter = (SiteFilter)inDb.Filters.Single();
 			siteFilter.Site.Should().Be.EqualTo(site);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -90,6 +97,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			var teamFilter = (TeamFilter)inDb.Filters.Single();
 			teamFilter.Team.Should().Be.EqualTo(team);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -111,6 +121,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			var skillFilter = (SkillFilter)inDb.Filters.Single();
 			skillFilter.Skill.Should().Be.EqualTo(skill);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -127,6 +140,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -143,6 +159,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -159,6 +178,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 
@@ -176,6 +198,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var inDb = AgentGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
+
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -231,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldRemoveAgentGroup()
+		public void ShouldRemoveAgentGroupAndRemoveDayOffRules()
 		{
 			var existing = new AgentGroup()
 				.WithId();
@@ -239,10 +264,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Delete(existing.Id.GetValueOrDefault());
 
-			var inDb = AgentGroupRepository.Get(existing.Id.GetValueOrDefault()) as IDeleteTag;
+			var inDb = AgentGroupRepository.Get(existing.Id.GetValueOrDefault());
 			inDb.Should().Not.Be.Null();
-			inDb.IsDeleted.Should().Be.True();
-		}
+			((IDeleteTag)inDb).IsDeleted.Should().Be.True();
 
+			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			dayOffRules.Should().Be.Empty();
+		}
 	}
 }

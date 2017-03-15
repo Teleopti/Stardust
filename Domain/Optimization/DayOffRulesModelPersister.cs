@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -8,20 +9,26 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 		private readonly FilterMapper _filterMapper;
+		private readonly IAgentGroupRepository _agentGroupRepository;
 
-		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository, FilterMapper filterMapper)
+		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository, FilterMapper filterMapper, IAgentGroupRepository agentGroupRepository)
 		{
 			_dayOffRulesRepository = dayOffRulesRepository;
 			_filterMapper = filterMapper;
+			_agentGroupRepository = agentGroupRepository;
 		}
 
 		public void Persist(DayOffRulesModel model)
 		{
+			IAgentGroup agentGroup = null;
+			if (model.AgentGroupId.HasValue)
+				agentGroup = _agentGroupRepository.Get(model.AgentGroupId.Value);
+
 			if (model.Id == Guid.Empty)
 			{
 				var dayOffRules = model.Default ?
-					DayOffRules.CreateDefault() :
-					new DayOffRules();
+					DayOffRules.CreateDefault(agentGroup) :
+					new DayOffRules(agentGroup);
 				setProperies(dayOffRules, model);
 				_dayOffRulesRepository.Add(dayOffRules);
 			}

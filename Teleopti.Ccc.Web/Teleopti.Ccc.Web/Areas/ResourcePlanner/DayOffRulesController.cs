@@ -26,7 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules")]
 		public virtual IHttpActionResult FetchAll()
 		{
-			return Ok(_fetchDayOffRulesModel.FetchAll());
+			return Ok(_fetchDayOffRulesModel.FetchAllWithoutAgentGroup());
+		}
+
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/agentgroup/{agentGroupId}/dayoffrules")]
+		public virtual IHttpActionResult FetchAllForAgentGroup(Guid agentGroupId)
+		{
+			return Ok(_fetchDayOffRulesModel.FetchAll(agentGroupId));
 		}
 
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/dayoffrules/{id}")]

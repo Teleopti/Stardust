@@ -5,7 +5,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IFetchDayOffRulesModel
 	{
-		IEnumerable<DayOffRulesModel> FetchAll();
+		IEnumerable<DayOffRulesModel> FetchAllWithoutAgentGroup();
 		DayOffRulesModel Fetch(Guid id);
+		IEnumerable<DayOffRulesModel> FetchAll(Guid agentGroupId);
 	}
 }

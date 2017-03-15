@@ -12,7 +12,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void CanAddMulitpleNonDefaults()
+		public void CanAddMultipleNonDefaults()
 		{
 			var rep = new DayOffRulesRepository(CurrUnitOfWork);
 			rep.Add(new DayOffRules());
@@ -60,7 +59,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.Flush();
 			rep.Add(lastDefault);
 			UnitOfWork.Flush();
-			rep.Default().Should().Be.EqualTo(lastDefault);
+			rep.LoadAllWithoutAgentGroup().SingleOrDefault().Should().Not.Be.Null();
+			rep.LoadAllWithoutAgentGroup().Single().Should().Be.EqualTo(lastDefault);
 		}
 
 		[Test]
@@ -81,13 +81,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.Throws<ArgumentException>(() => rep.Remove(defaultSetting));
 		}
 
-		//TODO: this should be handled differently when views/workflow is more stable -> don't create implicitly here
 		[Test]
 		public void ShouldReturnDefaultValuesIfNotPresentInDb()
 		{
 			var defaultSetting = DayOffRules.CreateDefault();
-			var defaultInDb = new DayOffRulesRepository(CurrUnitOfWork).Default();
+			var defaultInDb = new DayOffRulesRepository(CurrUnitOfWork).LoadAllWithoutAgentGroup().SingleOrDefault();
 
+			defaultInDb.Should().Not.Be.Null();
 			defaultInDb.DayOffsPerWeek.Should().Be.EqualTo(defaultSetting.DayOffsPerWeek);
 			defaultInDb.ConsecutiveDayOffs.Should().Be.EqualTo(defaultSetting.ConsecutiveDayOffs);
 			defaultInDb.ConsecutiveWorkdays.Should().Be.EqualTo(defaultSetting.ConsecutiveWorkdays);
@@ -177,6 +177,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			rep.Get(dayOffRules.Id.Value)
 				.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldAddDayOffRuleForAgentGroup()
+		{
+			var agentGroup = new AgentGroup("_");
+			PersistAndRemoveFromUnitOfWork(agentGroup);
+			PersistAndRemoveFromUnitOfWork(DayOffRules.CreateDefault());
+
+			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			rep.Add(DayOffRules.CreateDefault(agentGroup));
+
+			UnitOfWork.Flush();
+
+			var result = rep.LoadAllByAgentGroup(agentGroup);
+
+			result.SingleOrDefault().Should().Not.Be.Null();
+			result.Single().AgentGroup.Should().Be.EqualTo(agentGroup);
+
+			var result2 = rep.LoadAllWithoutAgentGroup();
+
+			result2.SingleOrDefault().Should().Not.Be.Null();
+			result2.Single().AgentGroup.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldBeAbleToRemoveForAgentGroup()
+		{
+			var agentGroup = new AgentGroup("_");
+			PersistAndRemoveFromUnitOfWork(agentGroup);
+			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			rep.Add(DayOffRules.CreateDefault(agentGroup));
+			UnitOfWork.Flush();
+
+			rep.RemoveForAgentGroup(agentGroup);
+			UnitOfWork.Flush();
+
+			var result = rep.LoadAllByAgentGroup(agentGroup);
+			result.Should().Be.Empty();
 		}
 	}
 }

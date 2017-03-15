@@ -9,10 +9,12 @@
 
 	function factory($resource) {
 		var dayOffRule = $resource('../api/resourceplanner/dayoffrules/:id', { id: '@id' });
+		var agentGroupDo = $resource('../api/resourceplanner/agentgroup/:agentGroupId/dayoffrules', { agentGroupId: '@agentGroupId' });
 		var filterResult = $resource('../api/filters', { searchString: '@searchString', maxHits: 100 });
 
 		var service = {
 			getDayOffRules: dayOffRule.query,
+			getDayOffRulesForAgentGroup: agentGroupDo.query,
 			removeDayOffRule: dayOffRule.remove,
 			getDayOffRule: dayOffRule.get,
 			saveDayOffRule: dayOffRule.save,

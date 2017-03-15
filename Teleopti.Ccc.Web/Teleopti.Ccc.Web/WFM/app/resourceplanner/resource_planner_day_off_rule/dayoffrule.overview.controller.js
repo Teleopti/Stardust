@@ -18,7 +18,7 @@
 		getDayOffRules();
 
 		function getDayOffRules() {
-			return dayOffRuleService.getDayOffRules()
+			return dayOffRuleService.getDayOffRulesForAgentGroup({ agentGroupId: $stateParams.groupId})
 				.$promise.then(function (data) {
 					vm.dayOffRules = data;
 					return vm.dayOffRules;

@@ -7,12 +7,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class AgentGroupModelPersister : IAgentGroupModelPersister
 	{
 		private readonly IAgentGroupRepository _agentGroupRepository;
+		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 		private readonly FilterMapper _filterMapper;
 
-		public AgentGroupModelPersister(IAgentGroupRepository agentGroupRepository, FilterMapper filterMapper)
+		public AgentGroupModelPersister(IAgentGroupRepository agentGroupRepository, FilterMapper filterMapper, IDayOffRulesRepository dayOffRulesRepository)
 		{
 			_agentGroupRepository = agentGroupRepository;
 			_filterMapper = filterMapper;
+			_dayOffRulesRepository = dayOffRulesRepository;
 		}
 
 		public void Persist(AgentGroupModel agentGroupModel)
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var agentGroup = new AgentGroup();
 				setProperties(agentGroup, agentGroupModel);
 				_agentGroupRepository.Add(agentGroup);
+				_dayOffRulesRepository.Add(DayOffRules.CreateDefault(agentGroup));
 			}
 			else
 			{
@@ -45,8 +48,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Delete(Guid id)
 		{
 			var agentGroup = _agentGroupRepository.Get(id);
-			if (agentGroup != null)
-				_agentGroupRepository.Remove(agentGroup);
+			if (agentGroup == null) return;
+			_dayOffRulesRepository.RemoveForAgentGroup(agentGroup);
+			_agentGroupRepository.Remove(agentGroup);
 		}
 	}
 }

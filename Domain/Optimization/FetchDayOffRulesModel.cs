@@ -8,22 +8,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 		private readonly DayOffRulesMapper _dayOffRulesMapper;
+		private readonly IAgentGroupRepository _agentGroupRepository;
 
-		public FetchDayOffRulesModel(IDayOffRulesRepository dayOffRulesRepository, DayOffRulesMapper dayOffRulesMapper)
+		public FetchDayOffRulesModel(IDayOffRulesRepository dayOffRulesRepository, DayOffRulesMapper dayOffRulesMapper, IAgentGroupRepository agentGroupRepository)
 		{
 			_dayOffRulesRepository = dayOffRulesRepository;
 			_dayOffRulesMapper = dayOffRulesMapper;
+			_agentGroupRepository = agentGroupRepository;
 		}
 
-		public IEnumerable<DayOffRulesModel> FetchAll()
+		public IEnumerable<DayOffRulesModel> FetchAllWithoutAgentGroup()
 		{
-			var all = _dayOffRulesRepository.LoadAll();
+			var all = _dayOffRulesRepository.LoadAllWithoutAgentGroup();
+
+			if (!all.Any(x => x.Default))
+				all.Add(DayOffRules.CreateDefault());
 
 			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
-
-			if(!all.Any(x => x.Default))
-				result.Add(_dayOffRulesMapper.ToModel(DayOffRules.CreateDefault()));
-
 			return result;
 		}
 
@@ -31,9 +32,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var dayOffRules = _dayOffRulesRepository.Get(id);
 			if (dayOffRules == null)
-				throw new ArgumentException(string.Format("Cannot find DayOffRules with Id {0}", id));
+				throw new ArgumentException($"Cannot find DayOffRules with Id {id}");
 
 			return _dayOffRulesMapper.ToModel(dayOffRules);
+		}
+
+		public IEnumerable<DayOffRulesModel> FetchAll(Guid agentGroupId)
+		{
+			var agentGroup = _agentGroupRepository.Get(agentGroupId);
+			var all = _dayOffRulesRepository.LoadAllByAgentGroup(agentGroup);
+			// TODO: How about default?
+
+			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
+			return result;
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}.WithId();
 			DayOffRulesRepository.Add(presentInDb);
 
-			var loaded = Target.FetchAll().Single(x => !x.Default);
+			var loaded = Target.FetchAllWithoutAgentGroup().Single(x => !x.Default);
 
 			loaded.MinDayOffsPerWeek.Should().Be.EqualTo(presentInDb.DayOffsPerWeek.Minimum);
 			loaded.MaxDayOffsPerWeek.Should().Be.EqualTo(presentInDb.DayOffsPerWeek.Maximum);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldReturnDefaultRuleWhenNotExistsInDb()
 		{
-			var loaded = Target.FetchAll().Single(x => x.Default);
+			var loaded = Target.FetchAllWithoutAgentGroup().Single(x => x.Default);
 			loaded.Should().Not.Be.Null();
 		}
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var presentDefaultRule = DayOffRules.CreateDefault().WithId();
       DayOffRulesRepository.Add(presentDefaultRule);
 
-			var loaded = Target.FetchAll().Single();
+			var loaded = Target.FetchAllWithoutAgentGroup().Single();
 
 			loaded.Id.Should().Be.EqualTo(presentDefaultRule.Id);
 		}
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRule.AddFilter(contractFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
-			var loaded = Target.FetchAll().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+			var loaded = Target.FetchAllWithoutAgentGroup().Single(x => x.Id.Equals(dayOffRule.Id.Value));
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.ContractFilterType);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRule.AddFilter(teamFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
-			var loaded = Target.FetchAll().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+			var loaded = Target.FetchAllWithoutAgentGroup().Single(x => x.Id.Equals(dayOffRule.Id.Value));
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.TeamFilterType);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRule.AddFilter(siteFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
-			var loaded = Target.FetchAll().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+			var loaded = Target.FetchAllWithoutAgentGroup().Single(x => x.Id.Equals(dayOffRule.Id.Value));
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.SiteFilterType);

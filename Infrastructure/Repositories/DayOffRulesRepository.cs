@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using NHibernate.Criterion;
+using NHibernate.Transform;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -13,16 +15,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		private static readonly object addLocker = new object();
+
 		public override void Add(DayOffRules root)
 		{
-			if (root.Default && !root.Id.HasValue)
+			if (root.Default && !root.Id.HasValue && root.AgentGroup == null)
 			{
 				lock (addLocker)
 				{
 					var currentDefault = Default();
 					if (currentDefault != null)
 					{
-						base.Remove(Default());
+						base.Remove(currentDefault);
 						Session.Flush();
 					}
 				}
@@ -37,12 +40,38 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			base.Remove(root);
 		}
 
-		public DayOffRules Default()
+		private DayOffRules Default()
 		{
-			//TODO: this should be handled differently when views/workflow is more stable -> don't create implicitly here
-			//Also, when done, remove similar logic in repofake
-			var defaultSettingInDb =  Session.GetNamedQuery("loadDefault").UniqueResult<DayOffRules>();
-			return defaultSettingInDb ?? DayOffRules.CreateDefault();
+			return Session.GetNamedQuery("loadGlobalDefault").UniqueResult<DayOffRules>();
+		}
+
+		public IList<DayOffRules> LoadAllByAgentGroup(IAgentGroup agentGroup)
+		{
+			return Session.CreateCriteria(typeof(DayOffRules), "dayOffRules")
+				.Add(Restrictions.Eq("dayOffRules.AgentGroup", agentGroup))
+				 .SetResultTransformer(Transformers.DistinctRootEntity)
+				 .List<DayOffRules>();
+		}
+
+		public IList<DayOffRules> LoadAllWithoutAgentGroup()
+		{
+			if (Default() == null)
+				lock (addLocker)
+				{
+					Add(DayOffRules.CreateDefault());
+					Session.Flush();
+				}
+			return Session.CreateCriteria(typeof(DayOffRules), "dayOffRules")
+				.Add(Restrictions.IsNull("dayOffRules.AgentGroup"))
+				 .SetResultTransformer(Transformers.DistinctRootEntity)
+				 .List<DayOffRules>();
+		}
+
+		public void RemoveForAgentGroup(IAgentGroup agentGroup)
+		{
+			var dayOffRules = LoadAllByAgentGroup(agentGroup);
+			foreach (var dayOffRule in dayOffRules)
+				base.Remove(dayOffRule);
 		}
 	}
 }
