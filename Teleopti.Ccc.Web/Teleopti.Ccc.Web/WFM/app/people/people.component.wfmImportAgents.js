@@ -4,7 +4,10 @@
 	function WfmImportAgentsCtrl(svc, peopleSvc) {
 		this._svc = svc;
 		this._peopleSvc = peopleSvc;
-		this.fallbacks = {};
+
+		this.fallbacks = {
+			externalLogon: this.blankId
+		};
 
 		this.now = new Date();
 	}
@@ -12,6 +15,8 @@
 	WfmImportAgentsCtrl.prototype.fetchingFieldOptions = true;
 	WfmImportAgentsCtrl.prototype.started = false;
 	WfmImportAgentsCtrl.prototype.done = false;
+
+	WfmImportAgentsCtrl.prototype.blankId = '00000000-0000-0000-0000-000000000000';
 
 	WfmImportAgentsCtrl.prototype.reset = function() {
 		this.done = false;

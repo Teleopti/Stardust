@@ -76,6 +76,7 @@
                                                         <td>ExternalLogon</td>
                                                         <td>
                                                                 <md-select placeholder="{{ 'ExternalLogOn'|translate }}"  ng-model="$ctrl.fallbacks.externalLogon">
+                                                                        <md-option ng-value="$ctrl.blankId">{{ 'None'|translate }}</md-option>
                                                                         <md-option ng-repeat="(id, name) in $ctrl.fieldOptions.ExternalLogons" ng-value="id">{{name}}</md-option>
                                                                 </md-select>
                                                         </td>
