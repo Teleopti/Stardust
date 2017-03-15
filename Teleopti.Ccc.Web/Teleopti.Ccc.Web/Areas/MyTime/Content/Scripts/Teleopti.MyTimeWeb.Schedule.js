@@ -26,6 +26,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		pixelToDisplayAll: 38,
 		pixelToDisplayTitle: 16,
 
+		probabilityLow: 0,
+		probabilityHigh: 1,
 		noneProbabilityType: 0,
 		absenceProbabilityType: 1,
 		overtimeProbabilityType: 2,

@@ -97,8 +97,7 @@ $(document).ready(function () {
 			constants.intervalLengthInMinutes *
 			100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
-		equal(vm.actualClass, expectedActualClass);
-		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
@@ -107,8 +106,8 @@ $(document).ready(function () {
 
 		// Show before current time
 		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), vm.actualClass);
-		equal(vm.tooltips(), vm.actualTooltips);
+		equal(vm.cssClass(), expectedActualClass);
+		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 
 		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
@@ -136,8 +135,7 @@ $(document).ready(function () {
 			constants.intervalLengthInMinutes *
 			100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
-		equal(vm.actualClass, expectedActualClass);
-		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+
 		equal(vm.styleJson.width, expectedWidthPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
@@ -146,8 +144,8 @@ $(document).ready(function () {
 
 		// Show before current time
 		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), vm.actualClass);
-		equal(vm.tooltips(), vm.actualTooltips);
+		equal(vm.cssClass(), expectedActualClass);
+		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 
 		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
@@ -178,8 +176,6 @@ $(document).ready(function () {
 		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
 			constants.intervalLengthInMinutes *
 			100;
-		equal(vm.actualClass, invisibleProbabilityCssClass);
-		equal(vm.actualTooltips, "");
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
@@ -255,8 +251,7 @@ $(document).ready(function () {
 			constants.intervalLengthInMinutes *
 			100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
-		equal(vm.actualClass, expectedActualClass);
-		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
@@ -265,8 +260,8 @@ $(document).ready(function () {
 
 		// Show before current time
 		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), vm.actualClass);
-		equal(vm.tooltips(), vm.actualTooltips);
+		equal(vm.cssClass(), expectedActualClass);
+		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 
 		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
@@ -298,8 +293,6 @@ $(document).ready(function () {
 			constants.intervalLengthInMinutes *
 			100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
-		equal(vm.actualClass, expectedActualClass);
-		equal(vm.actualTooltips.indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
@@ -308,8 +301,8 @@ $(document).ready(function () {
 
 		// Show before current time
 		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), vm.actualClass);
-		equal(vm.tooltips(), vm.actualTooltips);
+		equal(vm.cssClass(), expectedActualClass);
+		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
 
 		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);

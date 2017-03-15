@@ -485,16 +485,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -512,16 +506,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -540,15 +528,9 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
-				equal(probability.actualTooltips.length, 0);
-
-				equal(probability.actualTooltips.length, 0);
+				equal(probability.cssClass(), invisibleProbabilityCssClass);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
-				equal(probability.actualTooltips.length > 0, true);
-
 				// Schedule started from 09:30, current time is 12:30
 				// Then the first (12:30 - 09:30) * 4 probabilities should be masked
 				if (i <= 12) {
@@ -575,15 +557,9 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
-				equal(probability.actualTooltips.length, 0);
-
-				equal(probability.actualTooltips.length, 0);
+				equal(probability.cssClass(), invisibleProbabilityCssClass);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
-				equal(probability.actualTooltips.length > 0, true);
-
 				// Open hour period started from 02:00, current time is 12:30
 				// Then the first (12:30 - 02:00) * 4 probabilities should be invisible
 				if (i <= 42) {
@@ -626,16 +602,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -657,16 +627,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -689,16 +653,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -717,16 +675,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -745,16 +697,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -775,16 +721,10 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0 || (7 <= i && i <= 38)) {
-				equal(probability.actualClass, invisibleProbabilityCssClass);
 				equal(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length, 0);
 				equal(probability.tooltips().length, 0);
 			} else {
-				notEqual(probability.actualClass, invisibleProbabilityCssClass);
 				notEqual(probability.cssClass(), invisibleProbabilityCssClass);
-
-				equal(probability.actualTooltips.length > 0, true);
 				equal(probability.tooltips().length > 0, true);
 			}
 		}

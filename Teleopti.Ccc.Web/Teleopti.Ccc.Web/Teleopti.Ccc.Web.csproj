@@ -1476,6 +1476,7 @@
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.controller.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.debounce.service.js" />
     <Content Include="Areas\MyTime\Views\Schedule\ProbabilityOptionsPartial.cshtml" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />

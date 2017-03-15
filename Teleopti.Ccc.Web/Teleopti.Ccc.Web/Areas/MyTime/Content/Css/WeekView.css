@@ -108,6 +108,15 @@
 	height: 668px;
 }
 
+.probability-pane .tooltip {
+	text-align: center;
+}
+
+.probability-pane .tooltip-wordwrap {
+	font-weight: 600;
+	overflow: hidden;
+}
+
 .probability-none {
 	background-color: #F9F9F9;
 }
