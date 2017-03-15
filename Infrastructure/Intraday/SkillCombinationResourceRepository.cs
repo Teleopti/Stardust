@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			_requestStrategySettingsReader = requestStrategySettingsReader;
 		}
 
-		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination)
+		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination, SqlConnection connection, SqlTransaction transaction)
 		{
 			var combinationId = Guid.NewGuid();
 			var dt = new DataTable();
@@ -54,37 +54,27 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			}
 
 
-			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
-
-			using (var connection = new SqlConnection(connectionString))
+			using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
 			{
-				connection.Open();
-				using (var transaction = connection.BeginTransaction())
-				{
-					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
-					{
-						sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombination]";
-						sqlBulkCopy.WriteToServer(dt);
-					}
-					transaction.Commit();
-				}
-
+				sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombination]";
+				sqlBulkCopy.WriteToServer(dt);
 			}
+
 			return combinationId;
 		}
 
 		private static Dictionary<string, Guid> loadSkillCombination(SqlConnection connection, SqlTransaction transaction)
 		{
 			var skillCombinations = new Dictionary<string, Guid>();
+			var result = new List<internalSkillCombination>();
 			using (var command = new SqlCommand("select Id, SkillId from [ReadModel].[SkillCombination] order by id", connection, transaction))
 			{
-				var result = new List<internalSkillCombination>();
 				using (var reader = command.ExecuteReader())
 				{
 					if (!reader.HasRows) return skillCombinations;
 					while (reader.Read())
 					{
-						var internalSkillCombination = new internalSkillCombination()
+						var internalSkillCombination = new internalSkillCombination
 						{
 							Id = reader.GetGuid(0),
 							SkillId = reader.GetGuid(1)
@@ -92,15 +82,16 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 						result.Add(internalSkillCombination);
 					}
 				}
-				var groups = result.GroupBy(x => x.Id);
-				foreach (var group in groups)
-				{
-					var key = keyFor(group.Select(x => x.SkillId));
-					if (skillCombinations.ContainsKey(key))
-						continue;
-					skillCombinations.Add(key, group.Key);
-				}
 			}
+			var groups = result.GroupBy(x => x.Id);
+			foreach (var group in groups)
+			{
+				var key = keyFor(group.Select(x => x.SkillId));
+				if (skillCombinations.ContainsKey(key))
+					continue;
+				skillCombinations.Add(key, group.Key);
+			}
+
 			return skillCombinations;
 		}
 
@@ -165,7 +156,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 							if (!skillCombinations.TryGetValue(key, out id))
 							{
-								id = persistSkillCombination(skillCombinationResource.SkillCombination);
+								id = persistSkillCombination(skillCombinationResource.SkillCombination, connection, transaction);
 								skillCombinations.Add(key, id);
 							}
 
@@ -207,7 +198,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 							sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombinationResource]";
 							sqlBulkCopy.WriteToServer(dt);
 						}
-
 						transaction.Commit();
 					}
 
@@ -255,6 +245,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 			using (var connection = new SqlConnection(connectionString))
 			{
+				connection.Open();
 				var skillCombinations = loadSkillCombination(connection, null);
 
 				var dt = new DataTable();
@@ -299,8 +290,6 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 						.ExecuteUpdate();
 				}
 
-
-				connection.Open();
 				using (var transaction = connection.BeginTransaction())
 				{
 					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
