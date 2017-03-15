@@ -10982,7 +10982,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to optimize days off for selected planning period due to technical error..
+        ///   Looks up a localized string similar to Failed to optimize days off for selected planning period due to technical error. Please try again..
         /// </summary>
         public static string FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError {
             get {
@@ -11000,7 +11000,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to schedule for selected planning period due to technical error..
+        ///   Looks up a localized string similar to Failed to schedule for selected planning period due to technical error.. Please try again..
         /// </summary>
         public static string FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError {
             get {
