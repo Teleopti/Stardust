@@ -109,10 +109,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					Timestamp = "2017-03-06 14:00".Utc()
 				});
 			ReadModel.Persist(new HistoricalChangeReadModel
-				{
-					PersonId = person,
-					Timestamp = "2017-03-07 14:00".Utc()
-				});
+			{
+				PersonId = person,
+				Timestamp = "2017-03-07 14:00".Utc()
+			});
 
 			var historicalData = Target.Build(person).Changes.Single();
 			historicalData.Time.Should().Be("2017-03-07T14:00:00");
@@ -164,6 +164,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			// "2017-03-06 00:00 - 2017-03-07 00:00" -10
 			// "2017-03-06 10:00 - 2017-03-07 10:00" utc
 			// "2017-03-06 08:00 - 2017-03-08 10:00" +extra
+		}
+
+		[Test]
+		public void ShouldExcludeChangesEarlierThanOneHourBeforeShiftStart()
+		{
+			Now.Is("2017-03-14 09:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "nicklas")
+				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
+			ReadModel
+				.Persist(new HistoricalChangeReadModel
+				{
+					PersonId = person,
+					Timestamp = "2017-03-14 07:59".Utc()
+				});
+			ReadModel.Persist(new HistoricalChangeReadModel
+			{
+				PersonId = person,
+				Timestamp = "2017-03-14 08:00".Utc()
+			});
+
+			var data = Target.Build(person);
+
+			data.Changes.Single().Time.Should().Be("2017-03-14T08:00:00");
+		}
+
+		[Test]
+		public void ShouldExcludeChangesLaterThanOneHourAfterShiftEnd()
+		{
+			Now.Is("2017-03-14 18:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "nicklas")
+				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
+			ReadModel
+				.Persist(new HistoricalChangeReadModel
+				{
+					PersonId = person,
+					Timestamp = "2017-03-14 18:00".Utc()
+				});
+			ReadModel.Persist(new HistoricalChangeReadModel
+			{
+				PersonId = person,
+				Timestamp = "2017-03-14 18:01".Utc()
+			});
+
+			var data = Target.Build(person);
+
+			data.Changes.Single().Time.Should().Be("2017-03-14T18:00:00");
 		}
 	}
 }

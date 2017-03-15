@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_changeReader = changeReader;
 		}
 		
-		private IEnumerable<HistoricalAdherenceActivityViewModel> getCurrentSchedules(IPerson person)
+		private IEnumerable<internalHistoricalAdherenceActivityViewModel> getCurrentSchedules(IPerson person)
 		{
 			var scenario = _scenario.Current();
 			if (scenario == null || person == null)
-				return Enumerable.Empty<HistoricalAdherenceActivityViewModel>();
+				return Enumerable.Empty<internalHistoricalAdherenceActivityViewModel>();
 
 			var tz = person.PermissionInformation.DefaultTimeZone();
 			var utcDateTime = utcDateForSchedules(person);
@@ -59,14 +59,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				from scheduleDay in schedules[person].ScheduledDayCollection(period)
 				from layer in scheduleDay.ProjectionService().CreateProjection()
 				where layer.Period.ToDateOnlyPeriod(tz).Contains(utcDateTime)
-				select new HistoricalAdherenceActivityViewModel
+				select new internalHistoricalAdherenceActivityViewModel
 				{
 					Name = layer.DisplayDescription().Name,
 					Color = ColorTranslator.ToHtml(layer.DisplayColor()),
 					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss")
+					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+					StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
+					EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
 				})
 				.ToArray();
+		}
+
+		private class internalHistoricalAdherenceActivityViewModel : HistoricalAdherenceActivityViewModel
+		{
+			public DateTime StartDateTime { get; set; }
+			public DateTime EndDateTime { get; set; }
 		}
 
 		public HistoricalAdherenceViewModel Build(Guid personId)
@@ -74,6 +82,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var person = _persons.Load(personId);
 			var utcDateTime = utcDateTimeForOoa(person);
 			var schedule = getCurrentSchedules(person);
+
+			var shiftStart = schedule.Any() ? schedule.Min(x => x.StartDateTime) : (DateTime?)null;
+			var shiftEnd = schedule.Any() ? schedule.Max(x => x.EndDateTime) : (DateTime?)null;
 
 			var historicalAdherence = _reader.Read(personId, utcDateTime, utcDateTime.AddDays(1));
 			var outOfAdherences = (historicalAdherence?.OutOfAdherences)
@@ -91,6 +102,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				})
 				.ToArray();
 			var changes = _changeReader.Read(personId, utcDateTime, utcDateTime.AddDays(1))
+				.Where(x => shiftStart == null || x.Timestamp >= shiftStart.Value.AddHours(-1))
+				.Where(x => shiftEnd == null || x.Timestamp <= shiftEnd.Value.AddHours(1))
 				.Select(x => new HistoricalChangeViewModel
 				{
 					Time = TimeZoneInfo.ConvertTimeFromUtc(x.Timestamp, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
