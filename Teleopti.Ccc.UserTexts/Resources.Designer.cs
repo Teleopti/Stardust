@@ -24852,7 +24852,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cell cannot be parsed, require {0} formatted value.
+        ///   Looks up a localized string similar to Cell can not be parsed, require {0} formatted value.
         /// </summary>
         public static string RequireXCellFormat {
             get {

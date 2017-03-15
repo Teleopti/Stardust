@@ -15628,8 +15628,8 @@ Do you want to participate?</value>
     <comment>Function name of importing agents in web People.</comment>
   </data>
   <data name="RequireXCellFormat" xml:space="preserve">
-    <value>cell cannot be parsed, require {0} formatted value</value>
-    <comment>error message for mismatched column format in web Importing agents function.</comment>
+    <value>Cell can not be parsed, require {0} formatted value</value>
+    <comment>error message for mismatched column format in web Importing agents function, the dynamic values can be the available cell formats in office excel sheet.</comment>
   </data>
   <data name="DownloadTemplate" xml:space="preserve">
     <value>Download Template</value>
