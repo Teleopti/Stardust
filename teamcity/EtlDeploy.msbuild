@@ -5,7 +5,8 @@
 
 	<PropertyGroup>
 		<Customer Condition="'$(Customer)'==''">Umniah</Customer>
-		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>	
+		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>
+		<ToggleMode Condition="'$(ToggleMode)'==''">Customer</ToggleMode>	
 		<ETLStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLStuff>
 		<ETLDBNamePrefix>ETLTest</ETLDBNamePrefix>
 		<ETLNightlyBuild-PrepareETL>$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql</ETLNightlyBuild-PrepareETL>
@@ -105,7 +106,7 @@
 	</Target>
 	
 	<Target Name="PrepareFiles">
-		<Exec Command ='"$(ETLTestConfig)" "$(ETLCCC7DB)" "$(ETLAnalyticsDB)" "$(Configuration)" "$(AS_SERVER_NAME)" "$(AS_DATABASE)" "$(SQL_AUTH_STRING)"'/>
+		<Exec Command ='"$(ETLTestConfig)" "$(ETLCCC7DB)" "$(ETLAnalyticsDB)" "$(Configuration)" "$(AS_SERVER_NAME)" "$(AS_DATABASE)" "$(SQL_AUTH_STRING)" "$(ToggleMode)"'/>
 	</Target>
 	
 	<Target Name="CleanUp" DependsOnTargets="DropCube;DropSQLDatabases">
