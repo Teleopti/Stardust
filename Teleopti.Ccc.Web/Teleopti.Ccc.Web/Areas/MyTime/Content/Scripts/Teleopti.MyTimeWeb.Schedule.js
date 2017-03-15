@@ -449,6 +449,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled());
 
+			if (!self.absenceProbabilityEnabled() && self.probabilityType() === constants.absenceProbabilityType) {
+				self.probabilityType(constants.noneProbabilityType);
+			}
+
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
