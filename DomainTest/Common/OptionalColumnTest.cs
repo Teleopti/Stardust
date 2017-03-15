@@ -38,14 +38,14 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
 		[Test]
-		public void VerifyEnableReportingCanSet()
+		public void VerifyAvailableAsGroupPageCanSet()
 		{
 			_optionalColumn = new OptionalColumn(_columnName)
 			{
 				Name = _columnName,
-				EnableReporting = true
+				AvailableAsGroupPage = true
 			};
-			Assert.AreEqual(true, _optionalColumn.EnableReporting);
+			Assert.AreEqual(true, _optionalColumn.AvailableAsGroupPage);
 		}
 	}
 }

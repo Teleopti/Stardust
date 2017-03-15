@@ -35,6 +35,7 @@
 			this.buttonDelete = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonNew = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.autoLabelMax5GroupPages = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel5 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.comboBoxOptionalColumns = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.textBoxName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
@@ -42,7 +43,7 @@
 			this.autoLabelChangeInfo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.checkBoxAdvEnableReporting = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAdvAvailableAsGroupPage = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -52,7 +53,7 @@
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxOptionalColumns)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxName)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvEnableReporting)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAvailableAsGroupPage)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -149,6 +150,7 @@
 			this.tableLayoutPanel3.ColumnCount = 2;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.autoLabelMax5GroupPages, 0, 4);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabel5, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.comboBoxOptionalColumns, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.textBoxName, 1, 1);
@@ -156,12 +158,13 @@
 			this.tableLayoutPanel3.Controls.Add(this.autoLabelChangeInfo, 0, 3);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabelInfoAboutChanges, 1, 3);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabel2, 0, 2);
-			this.tableLayoutPanel3.Controls.Add(this.checkBoxAdvEnableReporting, 1, 2);
+			this.tableLayoutPanel3.Controls.Add(this.checkBoxAdvAvailableAsGroupPage, 1, 2);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 40);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 5;
+			this.tableLayoutPanel3.RowCount = 6;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -169,6 +172,20 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(744, 195);
 			this.tableLayoutPanel3.TabIndex = 1;
+			// 
+			// autoLabelMax5GroupPages
+			// 
+			this.autoLabelMax5GroupPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.autoLabelMax5GroupPages.AutoSize = false;
+			this.tableLayoutPanel3.SetColumnSpan(this.autoLabelMax5GroupPages, 2);
+			this.autoLabelMax5GroupPages.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.autoLabelMax5GroupPages.Location = new System.Drawing.Point(3, 148);
+			this.autoLabelMax5GroupPages.Margin = new System.Windows.Forms.Padding(3);
+			this.autoLabelMax5GroupPages.Name = "autoLabelMax5GroupPages";
+			this.autoLabelMax5GroupPages.Size = new System.Drawing.Size(729, 24);
+			this.autoLabelMax5GroupPages.TabIndex = 13;
+			this.autoLabelMax5GroupPages.Text = "xx*Maximum 5 optional columns can be available as group pages.";
+			this.autoLabelMax5GroupPages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// autoLabel5
 			// 
@@ -251,21 +268,22 @@
 			this.autoLabel2.Name = "autoLabel2";
 			this.autoLabel2.Size = new System.Drawing.Size(198, 24);
 			this.autoLabel2.TabIndex = 11;
-			this.autoLabel2.Text = "xxEnableReportingColon";
+			this.autoLabel2.Text = "xxAvailable As Group Page:*";
 			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// checkBoxAdvEnableReporting
+			// checkBoxAdvAvailableAsGroupPage
 			// 
-			this.checkBoxAdvEnableReporting.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxAdvEnableReporting.BeforeTouchSize = new System.Drawing.Size(20, 24);
-			this.checkBoxAdvEnableReporting.DrawFocusRectangle = false;
-			this.checkBoxAdvEnableReporting.Location = new System.Drawing.Point(207, 75);
-			this.checkBoxAdvEnableReporting.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAdvEnableReporting.Name = "checkBoxAdvEnableReporting";
-			this.checkBoxAdvEnableReporting.Size = new System.Drawing.Size(20, 24);
-			this.checkBoxAdvEnableReporting.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAdvEnableReporting.TabIndex = 12;
-			this.checkBoxAdvEnableReporting.ThemesEnabled = false;
+			this.checkBoxAdvAvailableAsGroupPage.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvAvailableAsGroupPage.BeforeTouchSize = new System.Drawing.Size(20, 24);
+			this.checkBoxAdvAvailableAsGroupPage.DrawFocusRectangle = false;
+			this.checkBoxAdvAvailableAsGroupPage.Location = new System.Drawing.Point(207, 75);
+			this.checkBoxAdvAvailableAsGroupPage.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvAvailableAsGroupPage.Name = "checkBoxAdvAvailableAsGroupPage";
+			this.checkBoxAdvAvailableAsGroupPage.Size = new System.Drawing.Size(20, 24);
+			this.checkBoxAdvAvailableAsGroupPage.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAdvAvailableAsGroupPage.TabIndex = 12;
+			this.checkBoxAdvAvailableAsGroupPage.ThemesEnabled = false;
+			this.checkBoxAdvAvailableAsGroupPage.CheckedChanged += new System.EventHandler(this.checkBoxAdvAvailableAsGroupPage_CheckedChanged);
 			// 
 			// gradientPanelHeader
 			// 
@@ -328,7 +346,7 @@
 			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxOptionalColumns)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxName)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvEnableReporting)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAvailableAsGroupPage)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -356,6 +374,7 @@
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
-		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvEnableReporting;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAvailableAsGroupPage;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelMax5GroupPages;
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public OptionalColumnRepository Repository { get; private set; }
 		public IUnitOfWork UnitOfWork { get; private set; }
 		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
+		private bool _isLoadingOptional;
 
 		public int LastItemIndex
 		{
@@ -52,23 +55,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxName.TextChanged += textBoxNameTextChanged;
 			buttonNew.Click += buttonNewClick;
 			buttonDelete.Click += buttonDeleteClick;
-			checkBoxAdvEnableReporting.Validated += CheckBoxAdvEnableReportingValidated;
 
 			if (!toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
 			{
-				var rowIndex = tableLayoutPanel3.GetRow(checkBoxAdvEnableReporting);
+				var rowIndex = tableLayoutPanel3.GetRow(checkBoxAdvAvailableAsGroupPage);
 				tableLayoutPanel3.RowStyles[rowIndex].Height = 0;
 			}
 		}
-
-		private void CheckBoxAdvEnableReportingValidated(object sender, EventArgs e)
-		{
-			if (SelectedOptionalColumn != null)
-			{
-				SelectedOptionalColumn.EnableReporting = checkBoxAdvEnableReporting.Checked;
-			}
-		}
-
+		
 		void textBoxNameTextChanged(object sender, EventArgs e)
 		{
 			changeOptionalColumnName();
@@ -81,13 +75,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void comboBoxOptionalColumnsSelectedIndexChanged(object sender, EventArgs e)
 		{
+			_isLoadingOptional = true;
 			Cursor.Current = Cursors.WaitCursor;
 			textBoxName.TextChanged -= textBoxNameTextChanged;
 			selectOptionalColumn();
 			Cursor.Current = Cursors.Default;
 			textBoxName.TextChanged += textBoxNameTextChanged;
-		}        
-
+			_isLoadingOptional = false;
+		}
+		
 		private void buttonNewClick(object sender, EventArgs e)
 		{
 			if (SelectedOptionalColumn == null) return;
@@ -206,7 +202,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				textBoxName.Text = SelectedOptionalColumn.Name;
 				changedInfo();
-				checkBoxAdvEnableReporting.Checked = SelectedOptionalColumn.EnableReporting;
+				checkBoxAdvAvailableAsGroupPage.Checked = SelectedOptionalColumn.AvailableAsGroupPage;
+				if (checkBoxAdvAvailableAsGroupPage.Checked)
+				{
+					checkBoxAdvAvailableAsGroupPage.Enabled = true;
+				}
+				else
+				{
+					checkBoxAdvAvailableAsGroupPage.Enabled = _optionalColumnList.Count(x => x.AvailableAsGroupPage) < 5;
+				}
+				
 			}
 		}
 
@@ -299,6 +304,40 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public ViewType ViewType
 		{
 			get { return ViewType.OptionalColumns; }
+		}
+
+		private void checkBoxAdvAvailableAsGroupPage_CheckedChanged(object sender, EventArgs e)
+		{
+			if (_isLoadingOptional)
+				return;
+
+			var oldState = !checkBoxAdvAvailableAsGroupPage.Checked;
+			var areYouSureDialogResult = DialogResult.OK;
+			
+			if (checkBoxAdvAvailableAsGroupPage.Checked)
+			{
+				areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.OptionalColumnCreateGroupPageQuestion, 
+					Resources.OptionalColumn);
+			}
+			else
+			{
+				areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.OptionalColumnRemoveGroupPageQuestion,
+					Resources.OptionalColumn);
+			}
+			
+			if (areYouSureDialogResult == DialogResult.No)
+			{
+				_isLoadingOptional = true;
+				checkBoxAdvAvailableAsGroupPage.Checked = oldState;
+				_isLoadingOptional = false;
+			}
+			else
+			{
+				if (SelectedOptionalColumn != null)
+				{
+					SelectedOptionalColumn.AvailableAsGroupPage = checkBoxAdvAvailableAsGroupPage.Checked;
+				}
+			}
 		}
 	}
 }

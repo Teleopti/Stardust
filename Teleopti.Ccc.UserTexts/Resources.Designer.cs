@@ -3549,6 +3549,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available As Group Page:*.
+        /// </summary>
+        public static string AvailableAsGroupPage {
+            get {
+                return ResourceManager.GetString("AvailableAsGroupPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available for a limited time only!.
         /// </summary>
         public static string AvailableForALimitedTimeOnly {
@@ -15881,6 +15890,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to *Maximum 5 optional columns can be available as group pages..
+        /// </summary>
+        public static string Maximum5OptionalColumns {
+            get {
+                return ResourceManager.GetString("Maximum5OptionalColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to *Maximum 5 scenarios may be used for reporting..
         /// </summary>
         public static string Maximum5Scenarios {
@@ -20474,11 +20492,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will create a group page for the optional column so that you can pull reports based on that. Do you want to continue?.
+        /// </summary>
+        public static string OptionalColumnCreateGroupPageQuestion {
+            get {
+                return ResourceManager.GetString("OptionalColumnCreateGroupPageQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optional column name.
         /// </summary>
         public static string OptionalColumnName {
             get {
                 return ResourceManager.GetString("OptionalColumnName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove the optional column group page and stop you from pulling reports based on that. Do you want to continue?.
+        /// </summary>
+        public static string OptionalColumnRemoveGroupPageQuestion {
+            get {
+                return ResourceManager.GetString("OptionalColumnRemoveGroupPageQuestion", resourceCulture);
             }
         }
         

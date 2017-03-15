@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			OptionalColumn opc = new OptionalColumn("OptionalColumn");
 			opc.TableName = "Person";
-			opc.EnableReporting = true;
+			opc.AvailableAsGroupPage = true;
 			return opc;
 		}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IOptionalColumn opc = CreateAggregateWithCorrectBusinessUnit();
 			Assert.AreEqual(opc.Name, loadedAggregateFromDatabase.Name);
 			Assert.AreEqual(opc.TableName, loadedAggregateFromDatabase.TableName);
-			Assert.AreEqual(opc.EnableReporting, loadedAggregateFromDatabase.EnableReporting);
+			Assert.AreEqual(opc.AvailableAsGroupPage, loadedAggregateFromDatabase.AvailableAsGroupPage);
 		}
 
 		protected override Repository<IOptionalColumn> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var columnA = new OptionalColumn(columnName)
 			{
 				TableName = "Person",
-				EnableReporting = true
+				AvailableAsGroupPage = true
 			};
 
 			PersistAndRemoveFromUnitOfWork(columnA);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Assert.AreEqual(1, returnList.Count);
 			Assert.AreEqual(columnName, returnList[0].Name);
-			Assert.AreEqual(true, returnList[0].EnableReporting);
+			Assert.AreEqual(true, returnList[0].AvailableAsGroupPage);
 		}
 	}
 }

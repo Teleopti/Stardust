@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Common
 		}
 
 		private string _name;
-		private bool _enableReporting;
+		private bool _availableAsGroupPage;
 		private string _tableName;
 
 		public virtual string Name
@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Domain.Common
 			set { _name = value; }
 		}
 
-		public virtual bool EnableReporting
+		public virtual bool AvailableAsGroupPage
 		{
-			get { return _enableReporting; }
-			set { _enableReporting = value; }
+			get { return _availableAsGroupPage; }
+			set { _availableAsGroupPage = value; }
 		}
 
 		public virtual string TableName

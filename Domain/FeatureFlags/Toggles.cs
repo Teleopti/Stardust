@@ -216,7 +216,6 @@
 		Wfm_ResourcePlanner_SchedulingOnStardust_42874,
 
 		WfmStaffing_AllowActions_42524,
-		StaffingActions_OnlyUpdateSkillCombinationResourceReadModel_43334,
 		Reporting_Optional_Columns_42066,
 		Staffing_ReadModel_UseSkillCombination_xx,
 		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388,

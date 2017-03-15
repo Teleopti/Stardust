@@ -20,7 +20,7 @@
 		/// </remarks>
 		string Name { get; set; }
 
-		bool EnableReporting { get; set; }
+		bool AvailableAsGroupPage { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the table.
