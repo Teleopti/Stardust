@@ -8,6 +8,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
