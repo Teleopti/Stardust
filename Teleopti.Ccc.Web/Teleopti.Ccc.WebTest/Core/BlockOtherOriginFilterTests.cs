@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
@@ -26,6 +25,18 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldNotBlockOtherOriginWhenIPv4Host()
+		{
+			var context = CreateExecutedContext();
+			context.Request.RequestUri = new Uri("http://wfmserver1/teleoptiwfm");
+			context.Request.Headers.Add("Origin", "http://192.168.0.1/test/2");
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.IsSuccessStatusCode.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldBlockOtherReferrer()
 		{
 			var context = CreateExecutedContext();
@@ -35,6 +46,18 @@ namespace Teleopti.Ccc.WebTest.Core
 			filter.OnActionExecuting(context);
 
 			context.Response.IsSuccessStatusCode.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotBlockOtherReferrerWhenIPv4Host()
+		{
+			var context = CreateExecutedContext();
+			context.Request.RequestUri = new Uri("http://wfmserver1/teleoptiwfm");
+			context.Request.Headers.Referrer = new Uri("http://192.168.0.1/test/2");
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.IsSuccessStatusCode.Should().Be.True();
 		}
 
 		[Test]
@@ -145,6 +168,18 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldNotBlockOtherOriginWhenIPv4Host()
+		{
+			var filter = new CsrfFilter();
+			var filterTester = new FilterTester();
+			filterTester.AddHeader("Origin", "http://192.168.0.1/test/2");
+			filterTester.UsePost();
+			filterTester.InvokeFilter(filter);
+
+			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
+		}
+
+		[Test]
 		public void ShouldBlockOtherReferrer()
 		{
 			var filter = new CsrfFilter();
@@ -154,6 +189,18 @@ namespace Teleopti.Ccc.WebTest.Core
 			filterTester.InvokeFilter(filter);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
+		}
+
+		[Test]
+		public void ShouldNotBlockOtherReferrerWhenIPv4Host()
+		{
+			var filter = new CsrfFilter();
+			var filterTester = new FilterTester();
+			filterTester.AddHeader("Referer", "http://192.168.0.1/test/2");
+			filterTester.UsePost();
+			filterTester.InvokeFilter(filter);
+
+			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
 		}
 
 		[Test]
