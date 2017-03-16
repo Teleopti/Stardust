@@ -165,6 +165,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.Timestamp.Should().Be("2017-03-13 10:02".Utc());
 		}
 
+		[Test]
+		[Ignore("WIP #39351")]
+		public void ShouldPublishRuleEventsFor2ChangesAfterShortActivity()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var brejk = Guid.NewGuid();
+			var inAdherence = Guid.NewGuid();
+			var outOfAdherence = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-13 9:00", "2017-03-13 10:00")
+				.WithSchedule(personId, brejk, "2017-03-13 10:00", "2017-03-13 10:01")
+				.WithSchedule(personId, phone, "2017-03-13 10:01", "2017-03-13 11:00")
+				.WithMappedRule("phone", phone, inAdherence, "in")
+				.WithMappedRule("phone", brejk, outOfAdherence, "out")
+				.WithMappedRule("break", brejk, inAdherence, "in")
+				.WithMappedRule("break", phone, outOfAdherence, "out");
+			Now.Is("2017-03-13 9:00");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Publisher.Clear();
+
+			Now.Is("2017-03-13 10:02");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Single(x => x.RuleName == "out")
+				.Timestamp.Should().Be("2017-03-13 10:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Single(x => x.RuleName == "in")
+				.Timestamp.Should().Be("2017-03-13 10:01".Utc());
+		}
+
 
 	}
 }
