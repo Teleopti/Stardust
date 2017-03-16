@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				ContractSchedules =
 					_contractScheduleRepository.LoadAll().ToDictionary(c => c.Id.GetValueOrDefault(), c => c.Description.Name),
 				ShiftBags = _ruleSetBagRepository.LoadAll().ToDictionary(r => r.Id.GetValueOrDefault(), r => r.Description.Name),
-				Skills = _skillRepository.LoadAll().ToDictionary(s => s.Id.GetValueOrDefault(), s => s.Name),
+				Skills = _skillRepository.FindAllWithoutMultisiteSkills().ToDictionary(s => s.Id.GetValueOrDefault(), s => s.Name),
 				SchedulePeriodTypes = EnumExtensions.GetValues(SchedulePeriodType.ChineseMonth)
 									.ToDictionary(t => (int)t, t => t.ToString()),
 
