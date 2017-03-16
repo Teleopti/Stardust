@@ -74,8 +74,8 @@ $(document).ready(function () {
 
 		var vm = new Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 1);
-		equal(vm[0].startTime, 165);
-		equal(vm[0].endTime, 360);
+		equal(vm[0].startTimeInMin, 165);
+		equal(vm[0].endTimeInMin, 360);
 	});
 
 	test("Should get multiple continous periods - 1", function () {
@@ -96,12 +96,12 @@ $(document).ready(function () {
 		equal(vm.length, 2);
 
 		var firstContinousPeriod = vm[0];
-		equal(firstContinousPeriod.startTime, 165);
-		equal(firstContinousPeriod.endTime, 255);
+		equal(firstContinousPeriod.startTimeInMin, 165);
+		equal(firstContinousPeriod.endTimeInMin, 255);
 
 		var secondContinousPeriod = vm[1];
-		equal(secondContinousPeriod.startTime, 360);
-		equal(secondContinousPeriod.endTime, 540);
+		equal(secondContinousPeriod.startTimeInMin, 360);
+		equal(secondContinousPeriod.endTimeInMin, 540);
 	});
 
 	test("Should get multiple continous periods - 2", function () {
@@ -125,16 +125,16 @@ $(document).ready(function () {
 		equal(vm.length, 3);
 
 		var firstContinousPeriod = vm[0];
-		equal(firstContinousPeriod.startTime, 165);
-		equal(firstContinousPeriod.endTime, 255);
+		equal(firstContinousPeriod.startTimeInMin, 165);
+		equal(firstContinousPeriod.endTimeInMin, 255);
 
 		var secondContinousPeriod = vm[1];
-		equal(secondContinousPeriod.startTime, 360);
-		equal(secondContinousPeriod.endTime, 540);
+		equal(secondContinousPeriod.startTimeInMin, 360);
+		equal(secondContinousPeriod.endTimeInMin, 540);
 
 		var thirdContinousPeriod = vm[2];
-		equal(thirdContinousPeriod.startTime, 840);
-		equal(thirdContinousPeriod.endTime, 1200);
+		equal(thirdContinousPeriod.startTimeInMin, 840);
+		equal(thirdContinousPeriod.endTimeInMin, 1200);
 	});
 
 	test("Should get correct starttime and endtime for cross day schedules", function () {
@@ -155,12 +155,12 @@ $(document).ready(function () {
 		equal(vm.length, 2);
 
 		var firstContinousPeriod = vm[0];
-		equal(firstContinousPeriod.startTime, 0);
-		equal(firstContinousPeriod.endTime, 240);
+		equal(firstContinousPeriod.startTimeInMin, 0);
+		equal(firstContinousPeriod.endTimeInMin, 240);
 
 		var secondContinousPeriod = vm[1];
-		equal(secondContinousPeriod.startTime, 1035);
-		equal(secondContinousPeriod.endTime, 1440);
+		equal(secondContinousPeriod.startTimeInMin, 1035);
+		equal(secondContinousPeriod.endTimeInMin, 1440);
 	});
 
 	test("Should not create probability if set to show no probability", function () {
@@ -236,7 +236,7 @@ $(document).ready(function () {
 
 		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
 
-		equal(probabilities.length, 14);
+		equal(probabilities.length, 13);
 		for (var i = 0; i < probabilities.length; i++) {
 			equal(probabilities[i].styleJson.height != undefined, true);
 			equal(probabilities[i].styleJson.width == undefined, true);
@@ -276,7 +276,7 @@ $(document).ready(function () {
 		};
 
 		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
-		equal(probabilities.length, 14);
+		equal(probabilities.length, 13);
 		for (var i = 0; i < probabilities.length; i++) {
 			equal(probabilities[i].styleJson.width != undefined, true);
 			equal(probabilities[i].styleJson.height == undefined, true);

@@ -101,11 +101,20 @@
 	height: 45px;
 	background: #fafafa;
 }
-.probability-status-bar{
+.probability-horizontal-bar{
+	position: relative;
 	width: 100%;
+	height: 20px;
 	margin-bottom: 5px;
 }
-.probability-status-bar > .probability-cell{
+.probability-horizontal-bar .probability-cell{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	z-index: 10;
+}
+.weekview-mobile .probability-horizontal-bar > .probability-cell{
 	height: 20px;
 	float: left;
 }

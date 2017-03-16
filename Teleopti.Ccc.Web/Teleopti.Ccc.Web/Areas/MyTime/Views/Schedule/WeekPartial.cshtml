@@ -214,9 +214,9 @@
                             <!-- /ko -->
                         </div>
                         <!-- ko if: showProbabilityBar() -->
-                            <div class="probability-pane">
+                            <div class="probability-vertical-bar ">
                                 <!--ko foreach: probabilities-->
-                                <div data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+                                <div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
                                 <!-- /ko -->
                             </div>
                         <!-- /ko -->

@@ -17,8 +17,6 @@ $(document).ready(function () {
 
 	var probabilityNames = ["low", "high"];
 	var probabilityLabels = [userTexts.low, userTexts.high];
-
-	var invisibleProbabilityCssClass = "probability-none";
 	var expiredProbabilityCssClass = "probability-expired";
 
 	var createDayViewModel = function () {
@@ -99,10 +97,6 @@ $(document).ready(function () {
 
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
-		// Will not show by default (Current user time is not set)
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
-		equal(vm.tooltips(), "");
-
 		// Show before current time
 		dayViewModel.setUserNowInMinutes(0);
 		equal(vm.cssClass(), expectedActualClass);
@@ -137,7 +131,6 @@ $(document).ready(function () {
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
 		equal(vm.tooltips(), "");
 
 		// Show before current time
@@ -174,7 +167,6 @@ $(document).ready(function () {
 		equal(vm.styleJson.width, expectedWidthPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
 		equal(vm.tooltips(), "");
 
 		// Show before current time
@@ -213,17 +205,13 @@ $(document).ready(function () {
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
 		equal(vm.tooltips(), "");
 
 		// Invisible before current time
 		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
-		equal(vm.tooltips(), "");
 
 		// Masked after current time
 		dayViewModel.setUserNowInMinutes(750);
-		equal(vm.cssClass(), invisibleProbabilityCssClass + " " + expiredProbabilityCssClass);
 		equal(vm.tooltips(), "");
 	});
 
@@ -288,7 +276,6 @@ $(document).ready(function () {
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
 		equal(vm.tooltips(), "");
 
 		// Show before current time
@@ -328,7 +315,6 @@ $(document).ready(function () {
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
-		equal(vm.cssClass(), invisibleProbabilityCssClass);
 		equal(vm.tooltips(), "");
 
 		// Show before current time

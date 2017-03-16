@@ -122,8 +122,8 @@
                     <!-- /ko -->
                 </div>
             </div>
-            <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913') && ($parent.showingAbsenceProbability() || $parent.showingOvertimeProbability()) -->
-            <div class="probability-status-bar clearfix">
+            <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913') && ($parent.showingAbsenceProbability() || $parent.showingOvertimeProbability()) && showProbabilityOptions() -->
+            <div class="probability-horizontal-bar">
                 <!--ko foreach: probabilities-->
                 <div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
                 <!-- /ko -->

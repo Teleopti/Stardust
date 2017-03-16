@@ -69,8 +69,8 @@ Teleopti.MyTimeWeb.Schedule.Helper = (function ($) {
 		}
 
 		var continousPeriods = [];
-
 		var date = moment(scheduleDay.FixedDate);
+
 		if (options.probabilityType === constants.absenceProbabilityType) {
 			continousPeriods = Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(date, scheduleDay.Periods);
 		}
@@ -78,17 +78,7 @@ Teleopti.MyTimeWeb.Schedule.Helper = (function ($) {
 		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, options.timelines,
 			options.probabilityType, rawProbabilities, options.intradayOpenPeriod);
 
-		var styleJson = {};
-		var lengthProperty = options.layoutDirection === constants.horizontalDirectionLayout ? "width" : "height";
-		styleJson[lengthProperty] = (boundaries.probabilityStartPosition * 100) + "%";
-
 		var probabilityModels = [];
-		// Add an "invisible" probability on top to make all probabilities displayed from correct position
-		probabilityModels.push({
-			cssClass: function () { return "probability-none"; },
-			tooltips: function () { return "" },
-			styleJson: styleJson
-		});
 
 		var filteredRawProbabilities = rawProbabilities;
 		if (options.probabilityType == constants.absenceProbabilityType) {

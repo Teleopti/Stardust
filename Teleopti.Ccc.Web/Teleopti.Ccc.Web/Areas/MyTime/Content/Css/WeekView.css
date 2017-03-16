@@ -98,21 +98,40 @@
 	height: 668px;
 }
 
-	.weekview-day-schedule .tooltip {
-		position: absolute;
-	}
+.weekview-day-schedule .tooltip {
+	position: absolute;
+}
 
-.probability-pane {
+.probability-vertical-bar {
+	position: relative;
 	display: inline-block;
 	width: 10px;
 	height: 668px;
 }
 
-.probability-pane .tooltip {
+.probability-vertical-bar .probability-mask{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 11;
+	background: #eee;
+	opacity: .5;
+}
+
+.probability-vertical-bar .probability-cell{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 10;
+}
+
+.probability-vertical-bar .tooltip {
 	text-align: center;
 }
 
-.probability-pane .tooltip-wordwrap {
+.probability-vertical-bar .tooltip-wordwrap {
 	font-weight: 600;
 	overflow: hidden;
 }
