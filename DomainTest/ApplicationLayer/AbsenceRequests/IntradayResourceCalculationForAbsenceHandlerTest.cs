@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         public FakeBusinessUnitRepository BusinessUnitRepository;
         public FakeConfigReader ConfigReader;
         public FakePersonRepository PersonRepository;
-        //public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
         public FakeEventPublisher Publisher;
         public MutableNow Now;
 	    public FakeCurrentBusinessUnit BuesinessUnitScope;
@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         public void ShouldNotRunResourceCalculationIfItsRecentlyExecuted()
         {
 			Now.Is("2016-03-01 10:00");
-			//ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(Guid.NewGuid(), DateTime.Now);
             Target.Handle(new TenantMinuteTickEvent());
             Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
         }
@@ -57,26 +56,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Now.Is("2016-03-01 10:00");
 	        var businessUnit = BusinessUnitFactory.CreateWithId("bu");
 			BusinessUnitRepository.Add(businessUnit);
-			//ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(businessUnit.Id.GetValueOrDefault(), new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc));
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
             Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
-        }
-
-        [Test]
-        public void ShouldUseConfiguredFakeNowInsteadOfSystemNow()
-        {
-			Now.Is("2016-03-01 10:00");
-			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-02 08:10");
-			var businessUnit = BusinessUnitFactory.CreateWithId("bu");
-			BusinessUnitRepository.Add(businessUnit);
-			//ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(businessUnit.Id.GetValueOrDefault(), new DateTime(2016, 02, 02, 8, 0, 0, DateTimeKind.Utc));
-			addPerson();
-			Target.Handle(new TenantMinuteTickEvent());
-            Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
-	        var StardustEvent = Publisher.PublishedEvents.FirstOrDefault() as UpdateStaffingLevelReadModelEvent;
-	        StardustEvent.StartDateTime.Should().Be.EqualTo(new DateTime(2016, 02, 01, 7, 10, 0, DateTimeKind.Utc));
-
         }
 
 		[Test]
@@ -87,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-01 08:10");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
 			BusinessUnitRepository.Add(bu);
-			//ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(bu.Id.GetValueOrDefault(),  new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc));
 
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());

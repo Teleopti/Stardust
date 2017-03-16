@@ -2,6 +2,7 @@
 using System.Globalization;
 using log4net;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -14,7 +15,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
+namespace Teleopti.Ccc.Domain.Staffing
 {
     public class SendUpdateStaffingReadModelHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
     {
@@ -50,20 +51,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public void Handle(TenantMinuteTickEvent @event)
         {
-            var now = _now.UtcDateTime();
-            var configuredNow = _configReader.AppConfig("FakeIntradayUtcStartDateTime");
-            if (configuredNow != null)
-            {
-                try
-                {
-                    now = DateTime.ParseExact(configuredNow, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture).Utc();
-                }
-                catch
-                {
-                    logger.Warn("The app setting 'FakeIntradayStartDateTime' is not specified correctly. Format your datetime as 'yyyy-MM-dd HH:mm' ");
-                }
-            }
-
 	        using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 	        {
 		        var updateResourceReadModelIntervalMinutes =
@@ -80,23 +67,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			        if (lastExecutedPerBu.ContainsKey(businessUnit.Id.GetValueOrDefault()))
 			        {
 				        var lastExecuted = lastExecutedPerBu[businessUnit.Id.GetValueOrDefault()];
-				        if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) < _now.UtcDateTime())
+				        if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) >= _now.UtcDateTime()) return;
+				        _businessUnitScope.OnThisThreadUse(businessUnit);
+				        _publisher.Publish(new UpdateStaffingLevelReadModelEvent
 				        {
-					        _businessUnitScope.OnThisThreadUse(businessUnit);
-							_publisher.Publish(new UpdateStaffingLevelReadModelEvent()
-					        {
-								StartDateTime = now.AddHours(-25),
-						        EndDateTime = now.AddHours(25)
-					        });
-				        }
+					        Days = 1
+				        });
 			        }
 			        else
 			        {
 						_businessUnitScope.OnThisThreadUse(businessUnit);
-						_publisher.Publish(new UpdateStaffingLevelReadModelEvent()
+						_publisher.Publish(new UpdateStaffingLevelReadModelEvent
 						{
-							StartDateTime = now.AddHours(-25),
-							EndDateTime = now.AddHours(25)
+							Days = 1
 						});
 					}
 

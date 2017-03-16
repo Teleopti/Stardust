@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -35,8 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldUpdateReadModel()
 		{
 			var buID = Guid.NewGuid();
-			Target.Handle(new UpdateStaffingLevelReadModelEvent() {StartDateTime = new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc) ,
-				EndDateTime = new DateTime(2016, 10, 03, 12, 0, 0, DateTimeKind.Utc),
+			Target.Handle(new UpdateStaffingLevelReadModelEvent {Days = 1,
 				LogOnBusinessUnitId = buID
 			});
 			UpdateStaffingLevelReadModel.WasCalled.Should().Be.True();
@@ -50,10 +50,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var buID = Guid.NewGuid();
 			var missingBuId = Guid.NewGuid();
 			JobStartTimeRepository.Persist(buID, new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc));
-			Target.Handle(new UpdateStaffingLevelReadModelEvent()
+			Target.Handle(new UpdateStaffingLevelReadModelEvent
 			{
-				StartDateTime = new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 10, 03, 12, 0, 0, DateTimeKind.Utc),
+				Days = 1,
 				LogOnBusinessUnitId = missingBuId
 			});
 			UpdateStaffingLevelReadModel.WasCalled.Should().Be.True();
@@ -70,8 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newNow = new DateTime(2016, 10, 03, 10, 50, 0, DateTimeKind.Utc);
 			Now.Is(newNow);
 
-			Target.Handle(new UpdateStaffingLevelReadModelEvent() { StartDateTime = new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc),
-																	EndDateTime = new DateTime(2016, 10, 03, 12, 0, 0, DateTimeKind.Utc),
+			Target.Handle(new UpdateStaffingLevelReadModelEvent { Days = 1,
 			LogOnBusinessUnitId = buID});
 			UpdateStaffingLevelReadModel.WasCalled.Should().Be.False();
 		}
@@ -85,10 +83,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newNow = new DateTime(2016, 10, 03, 11, 1, 0, DateTimeKind.Utc);
 			Now.Is(newNow);
 			
-			Target.Handle(new UpdateStaffingLevelReadModelEvent()
+			Target.Handle(new UpdateStaffingLevelReadModelEvent
 			{
-				StartDateTime = new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 10, 03, 12, 0, 0, DateTimeKind.Utc),
+				Days = 1,
 				LogOnBusinessUnitId = buID
 			});
 			UpdateStaffingLevelReadModel.WasCalled.Should().Be.True();
@@ -103,10 +100,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var date = new DateTime(2016, 10, 03, 10, 10, 0, DateTimeKind.Utc);
 			Now.Is(date);
 			var buID = Guid.NewGuid();
-			Target.Handle(new UpdateStaffingLevelReadModelEvent()
+			Target.Handle(new UpdateStaffingLevelReadModelEvent
 			{
-				StartDateTime = new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 10, 03, 12, 0, 0, DateTimeKind.Utc),
+				Days = 1,
 				LogOnBusinessUnitId = buID,
 				RequestedFromWeb = true
 			});
@@ -120,10 +116,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var date = new DateTime(2016, 10, 03, 10, 10, 0, DateTimeKind.Utc);
 			Now.Is(date);
 			var buID = Guid.NewGuid();
-			Target.Handle(new UpdateStaffingLevelReadModelEvent()
+			Target.Handle(new UpdateStaffingLevelReadModelEvent
 			{
-				StartDateTime = new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 10, 03, 12, 0, 0, DateTimeKind.Utc),
+				Days = 1,
 				LogOnBusinessUnitId = buID,
 				RequestedFromWeb = true
 			});

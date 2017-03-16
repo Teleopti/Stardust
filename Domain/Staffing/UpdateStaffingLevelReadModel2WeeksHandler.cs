@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -8,7 +9,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
+namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class UpdateStaffingLevelReadModel2WeeksHandler : IHandleEvent<UpdateStaffingLevelReadModel2WeeksEvent>, IRunOnStardust
 	{
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		{
 			var updateThingy= new UpdateStaffingLevelReadModelOnlySkillCombinationResources(_now, _cascadingResourceCalculationContextFactory,
 				_loaderForResourceCalculation,_resourceCalculation, _skillCombinationResourceRepository);
-			updateThingy.Update(new DateTimePeriod(@event.StartDateTime.Utc(), @event.EndDateTime.Utc()));
+			updateThingy.Update(new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(@event.Days).AddHours(1)));
 		}
 	}
 }

@@ -206,7 +206,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\SendUpdateStaffingReadModelHandler.cs" />
+    <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestIntradayFilter.cs" />
@@ -256,7 +256,7 @@
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
     <Compile Include="ApplicationLayer\Intraday\SkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\Intraday\SplitSkillStaffInterval.cs" />
-    <Compile Include="ApplicationLayer\Intraday\UpdateStaffingLevelReadModel2WeeksHandler.cs" />
+    <Compile Include="Staffing\UpdateStaffingLevelReadModel2WeeksHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsHourlyAvailabilityMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPreferenceMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsRequestMatchingPerson.cs" />
@@ -1095,7 +1095,7 @@
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\WorkloadChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdater.cs" />
-    <Compile Include="ApplicationLayer\Intraday\UpdateStaffingLevelReadModelHandler.cs" />
+    <Compile Include="Staffing\UpdateStaffingLevelReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />

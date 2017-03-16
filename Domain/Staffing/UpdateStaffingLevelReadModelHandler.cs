@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -8,7 +9,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
+namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class UpdateStaffingLevelReadModelHandler : IHandleEvent<UpdateStaffingLevelReadModelEvent>, IRunOnStardust
 	{
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				}
 				_jobStartTimeRepository.Persist(@event.LogOnBusinessUnitId, _now.UtcDateTime());
 			}
-			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
+			var period = new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(@event.Days).AddHours(1));
 			_updateStaffingLevelReadModel.Update(period);
 			var current = _currentFactory.Current().CurrentUnitOfWork();
 			//an ugly solution for bug 39594

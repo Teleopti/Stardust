@@ -114,10 +114,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				if (logOnModel.Days == 1)
 					_eventPublisher.Publish(
-						new UpdateStaffingLevelReadModelEvent()
+						new UpdateStaffingLevelReadModelEvent
 						{
-							StartDateTime = DateTime.UtcNow.AddHours(-1),
-							EndDateTime = DateTime.UtcNow.AddDays(logOnModel.Days).AddHours(1),
+							Days = logOnModel.Days,
 							RequestedFromWeb = true,
 							LogOnDatasource = logOnModel.Tenant,
 							LogOnBusinessUnitId = bu
@@ -126,8 +125,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					_eventPublisher.Publish(
 						new UpdateStaffingLevelReadModel2WeeksEvent
 						{
-							StartDateTime = DateTime.UtcNow.AddHours(-1),
-							EndDateTime = DateTime.UtcNow.AddDays(logOnModel.Days).AddHours(1),
+							Days = 14,
 							LogOnDatasource = logOnModel.Tenant,
 							LogOnBusinessUnitId = bu
 						}
@@ -144,6 +142,5 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		public string Tenant;
 		public int Days;
-		//public Guid BusinessUnit;
 	}
 }
