@@ -548,11 +548,11 @@ wfm-multiple-search-input .advanced-input {
     }
 }
 
-md-select .md-select-value.md-select-placeholder {
-    color: inherit;
-}
-
 .organization-picker {
+    md-select .md-select-value.md-select-placeholder {
+        color: inherit;
+    }
+
     min-width: 200px !important;
     margin: -.5em 0 0 2.3em;
     color: inherit;
