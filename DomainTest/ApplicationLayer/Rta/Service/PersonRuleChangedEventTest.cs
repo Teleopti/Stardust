@@ -101,8 +101,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2017-03-13 9:00", "2017-03-13 10:00")
-				.WithMappedRule("state1", null);
-			Now.Is("2014-03-13 9:05");
+				.WithMappedRule("state1", phone)
+				.WithMappedRule(null, phone);
+			Now.Is("2017-03-13 9:05");
 
 			Target.SaveState(new StateForTest
 			{
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "state1"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>().Single()
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>().First()
 				.Timestamp.Should().Be("2017-03-13 9:00".Utc());
 		}
 		
