@@ -1200,7 +1200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var now = DateTime.UtcNow;
 			var filter = new RequestFilter
 			{
-				Period = new DateTimePeriod(now.AddMinutes(-1), now),
+				Period = new DateTimePeriod(now.AddMinutes(-5), now),
 				RequestFilters = new Dictionary<RequestFilterField, string>
 				{
 					{RequestFilterField.Type, "0"}

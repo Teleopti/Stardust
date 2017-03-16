@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using NPOI.SS.UserModel;
-using NPOI.SS.Util;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 {

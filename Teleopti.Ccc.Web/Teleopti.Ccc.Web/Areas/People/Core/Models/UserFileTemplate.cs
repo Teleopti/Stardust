@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			"Role"
 		};
 
-		public virtual IDictionary<string, int> ColumnHeaderMap { get; } = new Dictionary<string, int>(){
+		public virtual IDictionary<string, int> ColumnHeaderMap { get; } = new Dictionary<string, int>
+		{
 			{"Firstname", 0},
 			{"Lastname", 1},
 			{"WindowsUser", 2},
