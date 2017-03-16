@@ -75,18 +75,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider;
+			
 			var period = planningPeriod.Range;
 			var agentGroup = planningPeriod.AgentGroup;
 			if (agentGroup == null)
 			{
+				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 			}
 			else
 			{
+				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(agentGroup);
 				var people = _personRepository.FindPeopleInAgentGroup(agentGroup, period);
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, people.Select(x=>x.Id.Value), null, null, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, people.Select(x => x.Id.Value), null, null, period);
 			}
 			
 			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToArray();

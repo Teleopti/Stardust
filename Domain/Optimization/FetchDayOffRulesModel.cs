@@ -37,11 +37,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _dayOffRulesMapper.ToModel(dayOffRules);
 		}
 
-		public IEnumerable<DayOffRulesModel> FetchAll(Guid agentGroupId)
+		public IEnumerable<DayOffRulesModel> FetchAllForAgentGroup(Guid agentGroupId)
 		{
 			var agentGroup = _agentGroupRepository.Get(agentGroupId);
 			var all = _dayOffRulesRepository.LoadAllByAgentGroup(agentGroup);
-			// TODO: How about default?
 
 			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
 			return result;

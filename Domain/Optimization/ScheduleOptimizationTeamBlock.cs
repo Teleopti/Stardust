@@ -92,16 +92,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 			optimizationPreferences.Extra.UseTeams = true; //flytta in i provider
 			optimizationPreferences.Extra.UseTeamBlockOption = true; //flytta in i provider
 			*/
-			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider;
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			var agentGroup = planningPeriod.AgentGroup;
 			if (agentGroup == null)
 			{
+				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 			}
 			else
 			{
+				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(agentGroup);
 				var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, period);
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, people.Select(x => x.Id.Value), null, null, period);
 			}
