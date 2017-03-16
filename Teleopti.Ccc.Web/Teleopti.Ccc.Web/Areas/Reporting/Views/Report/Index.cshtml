@@ -12,17 +12,25 @@
 	<script src="~/Content/jquery/jquery-1.12.4.min.js"></script>
 	<script src="~/Content/bootstrap/Scripts/bootstrap.js"></script>
 	<script type="text/javascript">
-	function setCookie() {
-		if (window.location.hash) {
-			var d = new Date();
-			d.setTime(d.getTime() + (5 * 60 * 1000));
-			var expires = "expires=" + d.toUTCString();
-			document.cookie = "returnHash" + "=" + window.location.hash + "; " + expires + "; path=/";
+		function setCookie() {
+			if (window.location.hash) {
+				var d = new Date();
+				d.setTime(d.getTime() + (5 * 60 * 1000));
+				var expires = "expires=" + d.toUTCString();
+				document.cookie = "returnHash" + "=" + window.location.hash + "; " + expires + "; path=/";
+			}
+			var re = new RegExp(/^.*\//);
+			var loc = re.exec(window.location.href);
+			window.location = loc + "../Authentication";
 		}
-		var re = new RegExp(/^.*\//);
-		var loc = re.exec(window.location.href);
-		window.location = loc + "../Authentication";
-	}
+
+		function refreshPage() {
+			setTimeout(function() {
+					window.location.reload();
+				},
+				30*60*1000);
+		}
+
 	</script>
 
 </head>
@@ -105,6 +113,6 @@
 				
 			</div>
 		</header>
-		<iframe style="border: none;height: 95%;width:99.4%;position: fixed;top: 50px;" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id&UseOpenXml=@Model.UseOpenXml.ToString().ToLower()"></iframe>
+		<iframe id="reportIframe" style="border: none;height: 95%;width:99.4%;position: fixed;top: 50px;" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id&UseOpenXml=@Model.UseOpenXml.ToString().ToLower()" onload="refreshPage();"></iframe>
 	</body>
 </html>
