@@ -146,7 +146,20 @@
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div class="con-flex" ng-if="$ctrl.done">
-			<div>{{ 'ImportAgentsDoneOpenTheDownloadedFileForMoreDetails'|translate }}</div>
+			<div ng-show="$ctrl.result.success > 0" class="alert-success notice-spacer">
+				<i class='mdi mdi-thumb-up'></i>{{ $ctrl.getMessage('success', $ctrl.result.success) }}.
+			</div>
+			<div ng-show="$ctrl.result.warning > 0" class="alert-warning notice-spacer">
+				<i class='mdi mdi-information'></i>{{ $ctrl.getMessage('warning', $ctrl.result.warning) }}.
+			</div>
+			<div ng-show="$ctrl.result.failure > 0" class="alert-danger notice-spacer">
+				<i class='mdi mdi-information'></i>{{ $ctrl.getMessage('failure', $ctrl.result.failure) }}.
+			</div>
+
+			<div ng-show="$ctrl.result.warning + $ctrl.result.failure > 0" class="alert-warning notice-spacer">
+				<i class='mdi mdi-information'></i>{{'PleaseFindTheDownloadedExcelSheetToCheckTheError'|translate}}
+			</div>
+
 			<div>
 				<button class="wfm-btn wfm-btn-invis-primary"
 						ng-disabled="!$ctrl.done"

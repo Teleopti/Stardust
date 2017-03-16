@@ -71,14 +71,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				return invalidFileResponse;
 			}
 			var total = workbook.GetSheetAt(0).LastRowNum;
-			var invalidAgents = _fileProcessor.ProcessSheet(workbook.GetSheetAt(0), formData);
+			var invalidAgents = _fileProcessor.ProcessSheet(workbook.GetSheetAt(0), formData).ToList();
 
 			var successCount = total - invalidAgents.Count;
-			var failedCount = invalidAgents.Count;
+			var failedCount = invalidAgents.Count(a => a.Feedback.ErrorMessages.Any());
+			var warningCount = invalidAgents.Count(a => (!a.Feedback.ErrorMessages.Any()) && a.Feedback.WarningMessages.Any());
 
 			var response = Request.CreateResponse(HttpStatusCode.OK);
 			response.Headers.Clear();
-			response.Headers.Add("Message", $"success count:{successCount}, failed count:{failedCount}");
+			response.Headers.Add("Message", $"success count:{successCount}, failed count:{failedCount}, warning count:{warningCount}");
 
 			if (!invalidAgents.Any())
 			{

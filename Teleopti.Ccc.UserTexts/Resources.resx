@@ -15646,10 +15646,6 @@ Do you want to participate?</value>
     <value>{0} fixed with fallback value</value>
     <comment>Warning message template in fixing an invalid field with a pre-set fallback value. </comment>
   </data>
-  <data name="ImportAgentsDoneOpenTheDownloadedFileForMoreDetails" xml:space="preserve">
-    <value>Done. Open the downloaded file for more details.</value>
-    <comment>Message to show when importing agents is done. </comment>
-  </data>
   <data name="NewImport" xml:space="preserve">
     <value>New Import</value>
     <comment>Start a new import in Import Agents</comment>
@@ -15703,5 +15699,9 @@ Do you want to participate?</value>
   <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
     <value>This will remove the optional column group page and stop you from pulling reports based on that. Do you want to continue?</value>
     <comment>This will remove the optional column group page and stop you from pulling reports based on that. Do you want to continue?</comment>
+  </data>
+  <data name="WarnImportedAgents" xml:space="preserve">
+    <value>Imported {0} agent(s) containing warnings</value>
+    <comment>Warning message for agent import, used to indicate that the action is successful but containing warnings that user needs to know. E.g. Imported 5 agents containing warnings.</comment>
   </data>
 </root>

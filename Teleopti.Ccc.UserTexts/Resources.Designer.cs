@@ -13188,15 +13188,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Done. Open the downloaded file for more details..
-        /// </summary>
-        public static string ImportAgentsDoneOpenTheDownloadedFileForMoreDetails {
-            get {
-                return ResourceManager.GetString("ImportAgentsDoneOpenTheDownloadedFileForMoreDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Import error.
         /// </summary>
         public static string ImportError {
@@ -34356,6 +34347,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WalkAways {
             get {
                 return ResourceManager.GetString("WalkAways", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported {0} agent(s) containing warnings.
+        /// </summary>
+        public static string WarnImportedAgents {
+            get {
+                return ResourceManager.GetString("WarnImportedAgents", resourceCulture);
             }
         }
         
