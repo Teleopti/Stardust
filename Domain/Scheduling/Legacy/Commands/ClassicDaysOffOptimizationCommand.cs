@@ -181,9 +181,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					scheduleService, _workShiftFinderResultHolder,
 					resourceCalculateDelayer);
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(scheduleResultStateHolder, _userTimeZone);
-			var deviationStatisticData = new DeviationStatisticData();
-			var dayOffOptimizerPreMoveResultPredictor =
-				new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator, deviationStatisticData, _personalSkillsProvider);
+			var dayOffOptimizerPreMoveResultPredictor = new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator, _personalSkillsProvider);
 
 			IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
 				= new DayOffDecisionMakerExecuter(rollbackService,
