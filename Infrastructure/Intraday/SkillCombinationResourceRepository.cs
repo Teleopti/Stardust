@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
-			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(5, TimeSpan.FromMilliseconds(100));
+			_retryPolicy = new RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts>(5, TimeSpan.FromMilliseconds(100));
 		}
 
 		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination, SqlConnection connection, SqlTransaction transaction)
