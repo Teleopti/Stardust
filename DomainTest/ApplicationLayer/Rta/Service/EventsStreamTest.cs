@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
-		public void ShouldPublishAdherenceEventsForBothCausesInASingleTrigger()
+		public void ShouldPublishAdherenceEventsFor2Changes()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore("WIP")]
-		public void ShouldPublishRuleEventsForBothChangesInASingleTrigger()
+		[Ignore("WIP #39351")]
+		public void ShouldPublishRuleEventsFor2Changes()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -117,6 +117,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode",
 				StateCode = "break"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Single(x => x.RuleName == "out")
+				.Timestamp.Should().Be("2017-03-13 10:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Single(x => x.RuleName == "in")
+				.Timestamp.Should().Be("2017-03-13 10:02".Utc());
+		}
+
+		[Test]
+		[Ignore("WIP #39351")]
+		public void ShouldPublishRuleEventsFor2ChangesAfterShift()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var inAdherence = Guid.NewGuid();
+			var outOfAdherence = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2017-03-13 9:00", "2017-03-13 10:00")
+				.WithMappedRule("phone", phone, inAdherence, "in")
+				.WithMappedRule("phone", null, outOfAdherence, "out")
+				.WithMappedRule("loggedoff", null, inAdherence, "in")
+				.WithMappedRule("loggedoff", phone, outOfAdherence, "out");
+			Now.Is("2017-03-13 9:00");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Publisher.Clear();
+
+			Now.Is("2017-03-13 10:02");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedoff"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
