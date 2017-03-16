@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				Roles = _applicationRoleRepository.LoadAll().Select(r => new FieldOptionViewModel
 				{
 					Id = r.Id.GetValueOrDefault(),
-					Name = r.Name
+					Name = r.DescriptionText
 				}).ToList(),
 
 				Teams =
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		public IApplicationRole FindRole(string roleName)
 		{
-			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.Name == roleName);
+			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.DescriptionText == roleName);
 		}
 
 		public IContract FindContract(Guid id)

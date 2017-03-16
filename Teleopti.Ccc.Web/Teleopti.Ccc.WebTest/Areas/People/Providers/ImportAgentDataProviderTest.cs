@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
+		public FakeApplicationRoleRepository RoleRepository;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		public FakeLoggedOnUser CurrentLoggedOnUser;
 		public ImportAgentDataProvider Target;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<ImportAgentDataProvider>().For<IImportAgentDataProvider>();
+			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 		}
 
 		[Test]
@@ -66,6 +68,16 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 
 			permittedTeams.Count.Should().Be.EqualTo(1);
 			permittedTeams.Single().SiteAndTeam.Should().Be.EqualTo(team.SiteAndTeam);
+		}
+
+		[Test]
+		public void ShouldUseDescriptionTextForFindingRole()
+		{
+			var role = ApplicationRoleFactory.CreateRole("name", "description");
+			RoleRepository.Has(role);
+
+			var foundRole = Target.FindRole("description");
+			foundRole.Should().Not.Be.Null();
 		}
 	}
 }
