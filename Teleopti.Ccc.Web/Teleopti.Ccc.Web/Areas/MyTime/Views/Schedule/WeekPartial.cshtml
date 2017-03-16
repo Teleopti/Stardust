@@ -213,11 +213,13 @@
                             <!-- /ko -->
                             <!-- /ko -->
                         </div>
-                        <div class="probability-pane">
-                            <!--ko foreach: probabilities-->
-                            <div data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
-                            <!-- /ko -->
-                        </div>
+                        <!-- ko if: showProbabilityBar() -->
+                            <div class="probability-pane">
+                                <!--ko foreach: probabilities-->
+                                <div data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+                                <!-- /ko -->
+                            </div>
+                        <!-- /ko -->
                         <!-- /ko -->
                     </div>
                 </div>

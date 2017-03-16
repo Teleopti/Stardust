@@ -22,7 +22,7 @@
 		if (probabilityType === constants.absenceProbabilityType) {
 			for (var i = 0; i < continousPeriods.length; i++) {
 				var continousPeriod = continousPeriods[i];
-				if (continousPeriod.startTime <= intervalStartMinutes && intervalEndMinutes <= continousPeriod.endTime) {
+				if (continousPeriod.startTimeInMin <= intervalStartMinutes && intervalEndMinutes <= continousPeriod.endTimeInMin) {
 					visible = true;
 					break;
 				}

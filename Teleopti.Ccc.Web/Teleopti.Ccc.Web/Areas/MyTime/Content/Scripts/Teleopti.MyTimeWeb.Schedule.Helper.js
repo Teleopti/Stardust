@@ -38,16 +38,16 @@ Teleopti.MyTimeWeb.Schedule.Helper = (function ($) {
 
 			if (previousEndMinutes !== 0 && currentPeriodStartMinutes !== previousEndMinutes) {
 				continousPeriods.push({
-					"startTime": continousPeriodStart,
-					"endTime": previousEndMinutes
+					"startTimeInMin": continousPeriodStart,
+					"endTimeInMin": previousEndMinutes
 				});
 				continousPeriodStart = currentPeriodStartMinutes;
 			}
 
 			if (i === periods.length - 1) {
 				continousPeriods.push({
-					"startTime": continousPeriodStart,
-					"endTime": currentPeriodEndMinutes
+					"startTimeInMin": continousPeriodStart,
+					"endTimeInMin": currentPeriodEndMinutes
 				});
 			}
 			previousEndMinutes = currentPeriodEndMinutes;
@@ -57,13 +57,14 @@ Teleopti.MyTimeWeb.Schedule.Helper = (function ($) {
 	};
 
 	var createProbabilityModels = function (scheduleDay, rawProbabilities, dayViewModel, options) {
-		if (!options.staffingProbabilityEnabled || rawProbabilities == undefined || rawProbabilities.length === 0) {
+		if (rawProbabilities == undefined || rawProbabilities.length === 0) {
 			return [];
 		}
 
 		// If today is full day absence or dayoff, Then hide absence probabilities
-		if (options.probabilityType === constants.noneProbabilityType ||
-			(options.probabilityType === constants.absenceProbabilityType && (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff))) {
+		if (options.probabilityType === constants.noneProbabilityType 
+			|| (options.probabilityType === constants.absenceProbabilityType
+			&& (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff))) {
 			return [];
 		}
 
@@ -81,25 +82,44 @@ Teleopti.MyTimeWeb.Schedule.Helper = (function ($) {
 		var lengthProperty = options.layoutDirection === constants.horizontalDirectionLayout ? "width" : "height";
 		styleJson[lengthProperty] = (boundaries.probabilityStartPosition * 100) + "%";
 
-		var probabilitieModels = [];
+		var probabilityModels = [];
 		// Add an "invisible" probability on top to make all probabilities displayed from correct position
-		probabilitieModels.push({
-			actualClass: "probability-none",
-			actualTooltips: "",
+		probabilityModels.push({
 			cssClass: function () { return "probability-none"; },
 			tooltips: function () { return "" },
 			styleJson: styleJson
 		});
 
-		for (var i = 0; i < rawProbabilities.length; i++) {
-			var probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbabilities[i],
-				options.probabilityType, boundaries, continousPeriods, options.userTexts, dayViewModel, options.layoutDirection);
+		var filteredRawProbabilities = rawProbabilities;
+		if (options.probabilityType == constants.absenceProbabilityType) {
+			filteredRawProbabilities = rawProbabilities.filter(function(r) {
+				var proStartInMin = moment(r.StartTime).diff(date) / (60 * 1000);
+				var proEndInMin = moment(r.EndTime).diff(date) / (60 * 1000);
+				var interceptWithSchedulePeriod = false;
+
+				for (i = 0; i < continousPeriods.length; i++) {
+					if ((proStartInMin >= continousPeriods[i].startTimeInMin && proStartInMin <= continousPeriods[i].endTimeInMin) || (proEndInMin >= continousPeriods[i].startTimeInMin && proEndInMin <= continousPeriods[i].endTimeInMin)) {
+						interceptWithSchedulePeriod = true;
+					}
+				}
+				return interceptWithSchedulePeriod;
+			});
+		}
+
+		var intervalLenghtInMinutes, tempProbability, probabilityModel;
+		for (var i = 0; i < filteredRawProbabilities.length; i++) {
+			tempProbability = {
+				StartTime: filteredRawProbabilities[i].StartTime,
+				Possibility: filteredRawProbabilities[i].Possibility,
+				EndTime: filteredRawProbabilities[i].EndTime
+			};
+			probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(tempProbability, options.probabilityType, boundaries, continousPeriods, options.userTexts, dayViewModel, options.layoutDirection);
 			if (!$.isEmptyObject(probabilityModel)) {
-				probabilitieModels.push(probabilityModel);
+				probabilityModels.push(probabilityModel);
 			}
 		}
 
-		return probabilitieModels;
+		return probabilityModels;
 	}
 
 	return {

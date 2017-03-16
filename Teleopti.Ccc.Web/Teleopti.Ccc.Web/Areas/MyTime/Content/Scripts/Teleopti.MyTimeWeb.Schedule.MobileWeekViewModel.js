@@ -316,15 +316,19 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		return new MobileWeekLayerViewModel(item, parent.userTexts);
 	});
 
-	self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
-	{
-		staffingProbabilityEnabled: self.staffingProbabilityEnabled(),
-		probabilityType: parent.selectedProbabilityOptionValue(),
-		layoutDirection: constants.horizontalDirectionLayout,
-		timelines: parent.timeLines(),
-		intradayOpenPeriod: parent.intradayOpenPeriod,
-		userTexts: parent.userTexts
-	});
+	if(self.staffingProbabilityEnabled()){
+		self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
+		{
+			probabilityType: parent.selectedProbabilityOptionValue(),
+			layoutDirection: constants.horizontalDirectionLayout,
+			timelines: parent.timeLines(),
+			intradayOpenPeriod: parent.intradayOpenPeriod,
+			mergeIntervals: self.mergeIdenticalProbabilityIntervals,
+			userTexts: parent.userTexts
+		});
+	}else{
+		self.probabilities = [];
+	}
 };
 
 var MobileWeekLayerViewModel = function (layer, userTexts) {
