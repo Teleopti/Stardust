@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public IStaffingViewModelCreator StaffingViewModelCreator;
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario CurrentScenario;
+		public IIntervalLengthFetcher IntervalLengthFetcher;
 
 		[Test]
 		public void ShouldProcessMultipleCalculationAbsencePossibilities1000()
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			{
 				var person = PersonRepository.Get(new Guid(personId));
 				var currentUser = new FakeLoggedOnUser(person);
-				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator);
+				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator, IntervalLengthFetcher);
 				_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
 					cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario);
 				var possibilities = _scheduleStaffingPossibilityCalculator.CalcuateIntradayAbsenceIntervalPossibilities();
