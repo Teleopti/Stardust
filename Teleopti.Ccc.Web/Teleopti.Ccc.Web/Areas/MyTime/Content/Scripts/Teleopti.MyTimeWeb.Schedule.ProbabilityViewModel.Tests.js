@@ -93,9 +93,45 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
-			constants.intervalLengthInMinutes *
-			100;
+		var expectedIntervalLength = moment(rawProbability.EndTime).diff(moment(rawProbability.StartTime), "minute");
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
+		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
+
+		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
+
+		// Will not show by default (Current user time is not set)
+		equal(vm.cssClass(), invisibleProbabilityCssClass);
+		equal(vm.tooltips(), "");
+
+		// Show before current time
+		dayViewModel.setUserNowInMinutes(0);
+		equal(vm.cssClass(), expectedActualClass);
+		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.Possibility]) > -1, true);
+
+		// Masked after current time
+		dayViewModel.setUserNowInMinutes(420);
+		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
+		equal(vm.tooltips(), "");
+	});
+
+	test("Create normal absence possibility view model with length greater than 15 minutes", function () {
+		var rawProbability = {
+			"StartTime": baseDate + "T06:00:00",
+			"EndTime": baseDate + "T06:28:00",
+			"Possibility": Math.round(Math.random())
+		};
+		var continousPeriods = [
+			{
+				"startTime": 60, // 01:00
+				"endTime": 1380 // 23:00
+			}
+		];
+		var dayViewModel = createDayViewModel();
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
+			boundaries, continousPeriods, userTexts, dayViewModel);
+
+		var expectedIntervalLength = moment(rawProbability.EndTime).diff(moment(rawProbability.StartTime), "minute");
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
 
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
@@ -131,9 +167,8 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel, constants.horizontalDirectionLayout);
 
-		var expectedWidthPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
-			constants.intervalLengthInMinutes *
-			100;
+		var expectedIntervalLength = moment(rawProbability.EndTime).diff(moment(rawProbability.StartTime), "minute");
+		var expectedWidthPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
 
 		equal(vm.styleJson.width, expectedWidthPerIntervalInPercentage + "%");
@@ -173,9 +208,8 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
-			constants.intervalLengthInMinutes *
-			100;
+		var expectedIntervalLength = moment(rawProbability.EndTime).diff(moment(rawProbability.StartTime), "minute");
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 
 		// Will not show by default (Current user time is not set)
@@ -247,9 +281,8 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
-			constants.intervalLengthInMinutes *
-			100;
+		var expectedIntervalLength = moment(rawProbability.EndTime).diff(moment(rawProbability.StartTime), "minute");
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
 
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
@@ -289,9 +322,8 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
 			boundaries, continousPeriods, userTexts, dayViewModel);
 
-		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute *
-			constants.intervalLengthInMinutes *
-			100;
+		var expectedIntervalLength = moment(rawProbability.EndTime).diff(moment(rawProbability.StartTime), "minute");
+		var expectedHeightPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.Possibility];
 		equal(vm.styleJson.height, expectedHeightPerIntervalInPercentage + "%");
 

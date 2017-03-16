@@ -19,10 +19,10 @@
 	// If timeline is not start or end at 00:00, there will exist an extra 15 minutes at start or end
 	// Need handle with this scenario.
 	var timelineStartMinutesForBoundary = timelineStartMinutes > 0
-		? timelineStartMinutes + constants.intervalLengthInMinutes
+		? timelineStartMinutes + constants.timelineMarginInMinutes
 		: 0;
 	var timelineEndMinutesForBoundary = timelineEndMinutes < constants.totalMinutesOfOneDay
-		? timelineEndMinutes - constants.intervalLengthInMinutes
+		? timelineEndMinutes - constants.timelineMarginInMinutes
 		: timelineEndMinutes;
 
 	var lengthPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);

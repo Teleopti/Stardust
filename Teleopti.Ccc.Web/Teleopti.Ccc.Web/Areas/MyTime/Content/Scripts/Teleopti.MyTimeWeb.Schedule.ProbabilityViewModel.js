@@ -1,6 +1,5 @@
 ﻿Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbability, probabilityType, boundaries,
 	continousPeriods, userTexts, parent, layoutDirection) {
-
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
 	var invisibleProbabilityClass = "probability-none";
 	var lowProbabilityClass = "probability-low";
@@ -38,7 +37,7 @@
 	function generateCssClass() {
 		var cssClass = invisibleProbabilityClass;
 
-		if(visible) {
+		if (visible) {
 			if (rawProbability.Possibility === constants.probabilityLow)
 				cssClass = lowProbabilityClass;
 			else if (rawProbability.Possibility === constants.probabilityHigh)
@@ -56,7 +55,8 @@
 
 	function getStyleJson() {
 		var styleJson = {};
-		var lengthPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * constants.intervalLengthInMinutes * 100;
+		var intervalLength = intervalEndMinutes - intervalStartMinutes;
+		var lengthPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * intervalLength * 100;
 		var lengthProperty = layoutDirection === constants.horizontalDirectionLayout ? "width" : "height";
 		styleJson[lengthProperty] = lengthPerIntervalInPercentage + "%";
 		return styleJson;

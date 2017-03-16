@@ -15,7 +15,7 @@ $(document).ready(function () {
 
 		if (startHour > 0) {
 			timelinePoints.push({
-				"minutes": startHour * 60 - constants.intervalLengthInMinutes,
+				"minutes": startHour * 60 - constants.timelineMarginInMinutes,
 				"timeText": (startHour - 1) + ":45"
 			});
 		}
@@ -29,7 +29,7 @@ $(document).ready(function () {
 
 		if (endHour < 24) {
 			timelinePoints.push({
-				"minutes": endHour * 60 + constants.intervalLengthInMinutes,
+				"minutes": endHour * 60 + constants.timelineMarginInMinutes,
 				"timeText": endHour + ":15"
 			});
 		}
@@ -54,18 +54,18 @@ $(document).ready(function () {
 	var createWeekViewmodel = function (probabilityType, timelineStartHour, timelineEndHour, intradayOpenPeriod) {
 		var self = this;
 		self.userTexts = {
-				"xRequests": "{0} Request(s)",
-				"fair": "Fair",
-				"good": "Good",
-				"probabilityForAbsence": "Probability to get absence:",
-				"probabilityForOvertime": "Probability to get overtime:"
-			};
+			"xRequests": "{0} Request(s)",
+			"fair": "Fair",
+			"good": "Good",
+			"probabilityForAbsence": "Probability to get absence:",
+			"probabilityForOvertime": "Probability to get overtime:"
+		};
 		self.staffingProbabilityEnabled = function () { return true; };
 		self.intradayOpenPeriod = intradayOpenPeriod;
 		self.textPermission = function () { return true; };
 		self.requestPermission = function () { return true; };
 		self.absenceRequestPermission = function () { return true; };
-		self.currentUserDate =  ko.observable(moment("2017-02-16").startOf("day"));
+		self.currentUserDate = ko.observable(moment("2017-02-16").startOf("day"));
 		self.formatedCurrentUserDate = ko.observable(moment("2017-02-16").startOf("day").format('l'));
 		self.dayViewModels = ko.observableArray();
 		self.absenceReportPermission = ko.observable();
@@ -77,17 +77,17 @@ $(document).ready(function () {
 		self.selectedProbabilityOptionValue = ko.observable(0);
 		self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {
 			self.selectedProbabilityOptionValue(selectedOptionValue);
-			if(selectedOptionValue == '0'){
+			if (selectedOptionValue == '0') {
 				self.requestViewModel(undefined);
 			}
 		};
 
-		self.createProbabilityOptionModel = function(){
+		self.createProbabilityOptionModel = function () {
 			return {
 				model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self),
 				type: function () { return 'probabilityOptions' },
-				OnProbabilityOptionSelectCallback: function (selectedOptionValue) { 
-					self.OnProbabilityOptionSelectCallback(selectedOptionValue); 
+				OnProbabilityOptionSelectCallback: function (selectedOptionValue) {
+					self.OnProbabilityOptionSelectCallback(selectedOptionValue);
 				}
 			};
 		};
@@ -97,28 +97,28 @@ $(document).ready(function () {
 		self.toggleProbabilityOptionsPanel = function (data) {
 			self.initialRequestDay(data.fixedDate());
 
-			if(self.requestViewModel() && self.requestViewModel().type() == self.probabilityOptionModel.type()){
-				if(self.requestViewModel().model.checkedProbability() == 0){
+			if (self.requestViewModel() && self.requestViewModel().type() == self.probabilityOptionModel.type()) {
+				if (self.requestViewModel().model.checkedProbability() == 0) {
 					self.requestViewModel(undefined);
 					self.showingAbsenceProbability(false);
 					self.showingOvertimeProbability(false);
 				}
-			}else{
+			} else {
 				self.requestViewModel(self.probabilityOptionModel());
 			}
 		};
 		self.styles = function () {
-				return {
-					"color_80FF80": "rgb(128,255,128)",
-					"color_FF0000": "rgb(255,0,0)",
-					"color_FFFF00": "rgb(255,255,0)",
-					"color_C0C0FF": "rgb(192,192,255)",
-					"color_FF8080": "rgb(255,128,128)",
-					"color_1E90FF": "rgb(30,144,255)",
-					"color_FFC080": "rgb(255,192,128)"
-				};
+			return {
+				"color_80FF80": "rgb(128,255,128)",
+				"color_FF0000": "rgb(255,0,0)",
+				"color_FFFF00": "rgb(255,255,0)",
+				"color_C0C0FF": "rgb(192,192,255)",
+				"color_FF8080": "rgb(255,128,128)",
+				"color_1E90FF": "rgb(30,144,255)",
+				"color_FFC080": "rgb(255,192,128)"
 			};
-		self.days= function () { return []; };
+		};
+		self.days = function () { return []; };
 		self.probabilityType = function () { return probabilityType; };
 		self.timeLines = function () { return createTimeline(timelineStartHour, timelineEndHour); };
 		return self;
@@ -741,7 +741,7 @@ $(document).ready(function () {
 		equal(vm.probabilities.length, 57);
 	});
 
-	test("should set default probability option to hidden ", function(){
+	test("should set default probability option to hidden ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
 
@@ -751,38 +751,38 @@ $(document).ready(function () {
 		equal(week.requestViewModel().model.checkedProbability(), 0);
 	});
 
-	test("should change probability option value to 1 after selecting Show absence probability ", function(){
+	test("should change probability option value to 1 after selecting Show absence probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 
-		
+
 		week.toggleProbabilityOptionsPanel(vm);
-		equal(week.requestViewModel().model.checkedProbability() , 0);
+		equal(week.requestViewModel().model.checkedProbability(), 0);
 
 		week.requestViewModel().model.onOptionSelected(1);
 		week.probabilityOptionModel(week.createProbabilityOptionModel());
-		equal(week.requestViewModel().model.checkedProbability() , 1);
+		equal(week.requestViewModel().model.checkedProbability(), 1);
 	});
 
-	test("should change staffing probability option value to 2 after selecting Show overtime  probability ", function(){
+	test("should change staffing probability option value to 2 after selecting Show overtime  probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
-		
+
 		week.toggleProbabilityOptionsPanel(vm);
-		equal(week.requestViewModel().model.checkedProbability() , 0);
+		equal(week.requestViewModel().model.checkedProbability(), 0);
 
 		week.requestViewModel().model.onOptionSelected(2);
 		week.probabilityOptionModel(week.createProbabilityOptionModel());
-		equal(week.requestViewModel().model.checkedProbability() , 2);
+		equal(week.requestViewModel().model.checkedProbability(), 2);
 	});
 
-	test("should toggle off staffing probability after selecting Hide staffing probability ", function(){
+	test("should toggle off staffing probability after selecting Hide staffing probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
 
@@ -792,7 +792,7 @@ $(document).ready(function () {
 
 		week.probabilityOptionModel(week.createProbabilityOptionModel());
 		week.toggleProbabilityOptionsPanel(vm);
-		equal(week.requestViewModel().model.checkedProbability() , 1);
+		equal(week.requestViewModel().model.checkedProbability(), 1);
 
 		week.requestViewModel().model.onOptionSelected(0);
 		equal(week.requestViewModel(), undefined);

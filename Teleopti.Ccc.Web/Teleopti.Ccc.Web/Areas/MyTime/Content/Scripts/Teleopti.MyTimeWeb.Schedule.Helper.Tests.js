@@ -16,7 +16,7 @@ $(document).ready(function () {
 
 		if (startHour > 0) {
 			timelinePoints.push({
-				"minutes": startHour * 60 - constants.intervalLengthInMinutes,
+				"minutes": startHour * 60 - constants.timelineMarginInMinutes,
 				"timeText": (startHour - 1) + ":45"
 			});
 		}
@@ -30,7 +30,7 @@ $(document).ready(function () {
 
 		if (endHour < 24) {
 			timelinePoints.push({
-				"minutes": endHour * 60 + constants.intervalLengthInMinutes,
+				"minutes": endHour * 60 + constants.timelineMarginInMinutes,
 				"timeText": endHour + ":15"
 			});
 		}
