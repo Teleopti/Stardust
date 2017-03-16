@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using log4net;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
@@ -10,17 +11,19 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(CacheableStaffingViewModelCreator));
 		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
+		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private const double tolerance = 0.00001;
 
-		public CacheableStaffingViewModelCreator(IStaffingViewModelCreator staffingViewModelCreator)
+		public CacheableStaffingViewModelCreator(IStaffingViewModelCreator staffingViewModelCreator, IIntervalLengthFetcher intervalLengthFetcher)
 		{
 			_staffingViewModelCreator = staffingViewModelCreator;
+			_intervalLengthFetcher = intervalLengthFetcher;
 		}
 
 		public IntradayStaffingViewModel Load(Guid skillId, bool useShrinkage)
 		{
 			var cacheKey = getCacheKey(skillId, useShrinkage);
-			var intradyStaffingViewModelCache = MemoryCache.Default.Get(cacheKey) as IntradayStaffingViewModel;
+			var intradyStaffingViewModelCache = loadDataFromCache(cacheKey);
 			if (intradyStaffingViewModelCache != null)
 				return intradyStaffingViewModelCache;
 
@@ -28,14 +31,26 @@ namespace Teleopti.Ccc.Domain.Intraday
 			logIntradayStaffingViewModel(skillId, useShrinkage, intradyStaffingViewModel);
 			if (!existsStaffingData(intradyStaffingViewModel))
 				return intradyStaffingViewModel;
+
+			cacheData(cacheKey, intradyStaffingViewModel);
+			return intradyStaffingViewModel;
+		}
+
+		private static void cacheData(string cacheKey, IntradayStaffingViewModel intradyStaffingViewModel)
+		{
 			var cachePolicy = new CacheItemPolicy {SlidingExpiration = new TimeSpan(0, 10, 0)};
 			MemoryCache.Default.Set(cacheKey, intradyStaffingViewModel, cachePolicy);
-			return intradyStaffingViewModel;
+		}
+
+		private static IntradayStaffingViewModel loadDataFromCache(string cacheKey)
+		{
+			var intradyStaffingViewModelCache = MemoryCache.Default.Get(cacheKey) as IntradayStaffingViewModel;
+			return intradyStaffingViewModelCache;
 		}
 
 		private string getCacheKey(Guid skillId, bool useShrinkage)
 		{
-			return $"{skillId}_{useShrinkage}";
+			return $"{skillId}_{useShrinkage}_{_intervalLengthFetcher.IntervalLength}";
 		}
 
 		private bool existsStaffingData(IntradayStaffingViewModel intradyStaffingViewModel)

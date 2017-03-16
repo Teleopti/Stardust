@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public FakeScheduleDataReadScheduleStorage ScheduleStorage;
 		public FakeCurrentScenario CurrentScenario;
 		public IScheduleStaffingPossibilityCalculator Target;
+		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 
 		private readonly DateTime _today = new DateTime(2017, 2, 7, 13, 31, 0, DateTimeKind.Utc);
 		private int _callStaffingViewModelCreatorTimes = 1;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<CacheableStaffingViewModelCreator>().For<ICacheableStaffingViewModelCreator>();
+			system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();
 		}
 
 		[Test]
@@ -65,6 +68,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		[Test]
 		public void ShouldGetPossibilitiesFromCache()
 		{
+			_callStaffingViewModelCreatorTimes = 1;
 			setupTestDataForOneSkill();
 			Target.CalcuateIntradayAbsenceIntervalPossibilities();
 			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
@@ -95,6 +99,20 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
+		public void ShouldCacheStaffingDataByIntervalLength()
+		{
+			_callStaffingViewModelCreatorTimes = 2;
+			IntervalLengthFetcher.Has(15);
+			setupTestDataForOneSkill();
+			Target.CalcuateIntradayAbsenceIntervalPossibilities();
+
+			IntervalLengthFetcher.Has(30);
+			Target.CalcuateIntradayAbsenceIntervalPossibilities();
+
+			StaffingViewModelCreator.VerifyAllExpectations();
+		}
+
+		[Test]
 		public void ShouldGetPossibilitiesWhenCacheIsNoAvailable()
 		{
 			_callStaffingViewModelCreatorTimes = 2;
@@ -106,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 					.PersonPeriods(new DateOnly(_today).ToDateOnlyPeriod())
 					.FirstOrDefault()
 					?.PersonSkillCollection.FirstOrDefault();
-			var cacheKey = $"{personSkill?.Skill.Id}_{false}";
+			var cacheKey = $"{personSkill?.Skill.Id}_{false}_{IntervalLengthFetcher.IntervalLength}";
 			MemoryCache.Default.Remove(cacheKey);
 
 			var possibilities = Target.CalcuateIntradayAbsenceIntervalPossibilities();
