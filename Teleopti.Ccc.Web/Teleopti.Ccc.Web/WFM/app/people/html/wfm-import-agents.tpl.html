@@ -1,157 +1,159 @@
 <div class="panel material-depth-1 wfm-import-agents">
-        <div class="home" ng-if="!$ctrl.started">
-                <div class="sub-header">
-                        <h2>{{ 'ImportAgents'|translate }}</h2>
-                        <div class="head-actions panel-menu">
-                                <div tabindex="0" class="context-menu card-context">
-                                        <i class="mdi mdi-dots-vertical"></i>
-                                        <span class="context-menu-left">
-                                                <ul class="wfm-list">
-                                                        <li ng-click="$ctrl.getTemplate()"><i class="mdi mdi-download"></i>{{ 'DownloadTemplate'|translate }}</li>
-                                                </ul>
-                                        </span>
-                                </div>
-                        </div>
-                </div>
-	        <div class="droparea"
-		     ngf-drop
-		     ngf-select
-		     ngf-multiple="false" ngf-keep="false"
-		     ngf-allow-dir="false"
-		     ngf-accept="'.xls,.xlsx'"
-		     ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
-		        {{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}
+	<div class="home" ng-if="!$ctrl.started">
+		<div class="sub-header">
+			<h2>{{ 'ImportAgents'|translate }}</h2>
+			<div class="head-actions panel-menu">
+				<div tabindex="0" class="context-menu card-context">
+					<i class="mdi mdi-dots-vertical"></i>
+					<span class="context-menu-left">
+						<ul class="wfm-list">
+							<li ng-click="$ctrl.getTemplate()"><i class="mdi mdi-download"></i>{{ 'DownloadTemplate'|translate }}</li>
+						</ul>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="droparea"
+			 ngf-drop
+			 ngf-select
+			 ngf-multiple="false" ngf-keep="false"
+			 ngf-allow-dir="false"
+			 ngf-accept="'.xls,.xlsx'"
+			 ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
+			{{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}
 			<div ng-show="$ctrl.file" class="fileinfo">
 				{{ 'ImportFileNameColon'|translate }} &nbsp; {{$ctrl.file.name}} - {{$ctrl.file.size}}B
 			</div>
-	        </div>
-                <!--<p class="dltpl"><a href="" ng-click="$ctrl.getTemplate()">{{ 'DownloadTemplate'|translate }}</a></p>-->
-                <div ng-if="!$ctrl.fetchingFieldOptions" class="wfm-checkbox">
-                        <input type="checkbox" id="check1" checked="true" ng-model="$ctrl.setFallbacks"/>
-                        <label for="check1">
-                                <span class="wfm-checkbox-toggle"></span>
-                                <span class="wfm-checkbox-label">{{ 'SetFallbackValuesToReplaceInvalidOnes'|translate }}</span>
-                        </label>
-                </div>
-                <div ng-if="!$ctrl.fetchingFieldOptions" class="fallbackstable-wrapper">
-                        <div class="fallbackstable" ng-if="$ctrl.setFallbacks">
-                                <table class="wfm-table">
-                                        <thead>
-                                                <th class="field">Field</th>
-                                                <th>Fallback value</th>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>StartDate</td>
-                                                        <td>
-                                                                <md-datepicker ng-model="$ctrl.fallbacks.startDate" md-placeholder="Enter date"></md-datepicker>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>Role</td>
-                                                        <td>
-                                                                <md-select multiple ng-model="$ctrl.fallbacks.roles" placeholder="{{ 'Roles'|translate }}">
-                                                                        <md-option ng-repeat="role in $ctrl.fieldOptions.Roles | orderBy:'Name' " ng-value="role.Id">{{::role.Name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>Organization</td>
-                                                        <td>
-                                                                <!--<md-select class="md-no-underline" placeholder="{{ 'Organization'|translate }}" ng-model="$ctrl.fallbacks.organization">
-                                                                        <md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Teams" ng-value="id">{{::name}}</md-option>
-                                                                </md-select>-->
-                                                                <organization-picker date="$ctrl.now" on-pick="$ctrl.setTeam(teams)" single></organization-picker>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>Skill</td>
-                                                        <td>
-                                                                <md-select multiple ng-model="$ctrl.fallbacks.skills" placeholder="{{ 'Skills'|translate }}">
-                                                                        <md-option ng-repeat="skill in $ctrl.fieldOptions.Skills | orderBy:'Name' " ng-value="skill.Id">{{::skill.Name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>ExternalLogon</td>
-                                                        <td>
-                                                                <md-select placeholder="{{ 'ExternalLogOn'|translate }}"  ng-model="$ctrl.fallbacks.externalLogon">
-                                                                        <md-option ng-value="$ctrl.blankId">{{ 'None'|translate }}</md-option>
-                                                                        <md-option ng-repeat="logon in $ctrl.fieldOptions.ExternalLogons | orderBy:'Name' " ng-value="logon.Id">{{::logon.Name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>Contract</td>
-                                                        <td>
-                                                                <md-select placeholder="{{ 'Contract'|translate }}" ng-model="$ctrl.fallbacks.contract">
-                                                                        <md-option ng-repeat="contract in $ctrl.fieldOptions.Contracts | orderBy:'Name' " ng-value="contract.Id">{{::contract.Name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>ContractSchedule</td>
-                                                        <td>
-                                                                <md-select placeholder="{{ 'ContractSchedule'|translate }}" ng-model="$ctrl.fallbacks.contractSchedule">
-                                                                        <md-option ng-repeat="cs in $ctrl.fieldOptions.ContractSchedules | orderBy:'Name' " ng-value="cs.Id">{{::cs.Name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>PartTimePercentage</td>
-                                                        <td>
-                                                                <md-select placeholder="{{ 'PartTimePercentage'|translate }}" ng-model="$ctrl.fallbacks.partTimePercentage">
-                                                                        <md-option ng-repeat="p in $ctrl.fieldOptions.PartTimePercentages" ng-value="p.Id">{{::p.Name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>ShiftBag</td>
-                                                        <td>
-                                                                <md-select placeholder="{{ 'ShiftBag'|translate }}" ng-model="$ctrl.fallbacks.shiftBag">
-                                                                        <md-option ng-repeat="shiftbag in $ctrl.fieldOptions.ShiftBags | orderBy:'Name' " ng-value="shiftbag.Id">{{::shiftbag.Name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>SchedulePeriodType</td>
-                                                        <td>
-                                                                <md-select ng-model="$ctrl.fallbacks.schedulePeriodType" placeholder="{{ 'SchedulePeriodType'|translate }}">
-                                                                        <md-option ng-repeat="(value, name) in $ctrl.fieldOptions.SchedulePeriodTypes" ng-value="value">{{name}}</md-option>
-                                                                </md-select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-                                                        <td>SchedulePeriodLength</td>
-                                                        <td>
-                                                                <input ng-model="$ctrl.fallbacks.schedulePeriodLength" type="text" placeholder="{{ 'EnterANumber'|translate }}"  />
-                                                        </td>
-                                                </tr>
-                                        </tbody>
-                                </table>
-                        </div>
-                </div>
-                <div class="footer">
-                        <button class="wfm-btn"
-                                ng-class="{'wfm-btn-invis-primary': !$ctrl.noFile(), 'wfm-btn-invis-disabled': $ctrl.noFile()}"
-                                ng-disabled="$ctrl.noFile()"
-                                ng-click="$ctrl.clickImport()">{{ 'Import'|translate }}</button>
-                </div>
-        </div>
+		</div>
+		<!--<p class="dltpl"><a href="" ng-click="$ctrl.getTemplate()">{{ 'DownloadTemplate'|translate }}</a></p>-->
+		<div ng-if="!$ctrl.fetchingFieldOptions" class="wfm-checkbox">
+			<input type="checkbox" id="check1" checked="true" ng-model="$ctrl.setFallbacks" />
+			<label for="check1">
+				<span class="wfm-checkbox-toggle"></span>
+				<span class="wfm-checkbox-label">{{ 'SetFallbackValuesToReplaceInvalidOnes'|translate }}</span>
+			</label>
+		</div>
+		<div ng-if="!$ctrl.fetchingFieldOptions" class="fallbackstable-wrapper">
+			<div class="fallbackstable" ng-if="$ctrl.setFallbacks">
+				<table class="wfm-table">
+					<thead>
+					<th class="field">Field</th>
+					<th>Fallback value</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>StartDate</td>
+							<td>
+								<md-datepicker ng-model="$ctrl.fallbacks.startDate" md-placeholder="Enter date"></md-datepicker>
+							</td>
+						</tr>
+						<tr>
+							<td>Role</td>
+							<td>
+								<md-select multiple ng-model="$ctrl.fallbacks.roles" placeholder="{{ 'Roles'|translate }}">
+									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Roles" ng-value="id">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>Organization</td>
+							<td>
+								<!--<md-select class="md-no-underline" placeholder="{{ 'Organization'|translate }}" ng-model="$ctrl.fallbacks.organization">
+										<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Teams" ng-value="id">{{::name}}</md-option>
+								</md-select>-->
+								<organization-picker date="$ctrl.now" on-pick="$ctrl.setTeam(teams)" single></organization-picker>
+							</td>
+						</tr>
+						<tr>
+							<td>Skill</td>
+							<td>
+								<md-select multiple ng-model="$ctrl.fallbacks.skills" placeholder="{{ 'Skills'|translate }}">
+									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Skills" ng-value="id">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>ExternalLogon</td>
+							<td>
+								<md-select placeholder="{{ 'ExternalLogOn'|translate }}" ng-model="$ctrl.fallbacks.externalLogon">
+									<md-option ng-value="$ctrl.blankId">{{ 'None'|translate }}</md-option>
+									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.ExternalLogons" ng-value="id">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>Contract</td>
+							<td>
+								<md-select placeholder="{{ 'Contract'|translate }}" ng-model="$ctrl.fallbacks.contract">
+									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Contracts" ng-value="id">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>ContractSchedule</td>
+							<td>
+								<md-select placeholder="{{ 'ContractSchedule'|translate }}" ng-model="$ctrl.fallbacks.contractSchedule">
+									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.ContractSchedules" ng-value="id">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>PartTimePercentage</td>
+							<td>
+								<md-select placeholder="{{ 'PartTimePercentage'|translate }}" ng-model="$ctrl.fallbacks.partTimePercentage">
+									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.PartTimePercentages" ng-value="id">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>ShiftBag</td>
+							<td>
+								<md-select placeholder="{{ 'ShiftBag'|translate }}" ng-model="$ctrl.fallbacks.shiftBag">
+									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.ShiftBags" ng-value="id">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>SchedulePeriodType</td>
+							<td>
+								<md-select ng-model="$ctrl.fallbacks.schedulePeriodType" placeholder="{{ 'SchedulePeriodType'|translate }}">
+									<md-option ng-repeat="(value, name) in $ctrl.fieldOptions.SchedulePeriodTypes" ng-value="value">{{name}}</md-option>
+								</md-select>
+							</td>
+						</tr>
+						<tr>
+							<td>SchedulePeriodLength</td>
+							<td>
+								<input ng-model="$ctrl.fallbacks.schedulePeriodLength" type="text" placeholder="{{ 'EnterANumber'|translate }}" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="footer">
+			<button class="wfm-btn"
+					ng-class="{'wfm-btn-invis-primary': !$ctrl.noFile(), 'wfm-btn-invis-disabled': $ctrl.noFile()}"
+					ng-disabled="$ctrl.noFile()"
+					ng-click="$ctrl.clickImport()">
+				{{ 'Import'|translate }}
+			</button>
+		</div>
+	</div>
 	<div class="importing con-row" ng-if="$ctrl.started">
 		<div class="con-flex" ng-if="!$ctrl.done">
 			<h3>Importing...</h3>
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div class="con-flex" ng-if="$ctrl.done">
-                        <div>{{ 'ImportAgentsDoneOpenTheDownloadedFileForMoreDetails'|translate }}</div>
-                        <div>
-                                <button class="wfm-btn wfm-btn-invis-primary"
-                                        ng-disabled="!$ctrl.done"
-                                        ng-click="$ctrl.reset()">
-                                        {{ 'NewImport'|translate }}
-                                </button>
-                        </div>
+			<div>{{ 'ImportAgentsDoneOpenTheDownloadedFileForMoreDetails'|translate }}</div>
+			<div>
+				<button class="wfm-btn wfm-btn-invis-primary"
+						ng-disabled="!$ctrl.done"
+						ng-click="$ctrl.reset()">
+					{{ 'NewImport'|translate }}
+				</button>
+			</div>
 		</div>
 	</div>
 </div>

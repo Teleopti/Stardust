@@ -1,26 +1,30 @@
 (function (angular) {
 	'use strict';
 
+	var blankId = '00000000-0000-0000-0000-000000000000';
+	var defaultFallbacks = {
+		externalLogon: blankId
+	};
 	function WfmImportAgentsCtrl(svc, peopleSvc) {
 		this._svc = svc;
 		this._peopleSvc = peopleSvc;
-
-		this.fallbacks = {
-			externalLogon: this.blankId
-		};
-
+		this.fallbacks = angular.copy(defaultFallbacks);
 		this.now = new Date();
 	}
 
+	WfmImportAgentsCtrl.prototype.blankId = blankId;
 	WfmImportAgentsCtrl.prototype.fetchingFieldOptions = true;
 	WfmImportAgentsCtrl.prototype.started = false;
 	WfmImportAgentsCtrl.prototype.done = false;
 
-	WfmImportAgentsCtrl.prototype.blankId = '00000000-0000-0000-0000-000000000000';
 
-	WfmImportAgentsCtrl.prototype.reset = function() {
+
+	WfmImportAgentsCtrl.prototype.reset = function () {
 		this.done = false;
 		this.started = false;
+		this.fallbacks = angular.copy(defaultFallbacks);
+		this.file = null;
+		this.setFallbacks = false;
 	};
 
 	WfmImportAgentsCtrl.prototype.$onInit = function () {
@@ -47,9 +51,9 @@
 			.then(this.handleImportResult.bind(this));
 	};
 
-	WfmImportAgentsCtrl.prototype.getTemplate = function() {
+	WfmImportAgentsCtrl.prototype.getTemplate = function () {
 		this._peopleSvc.downloadFileTemplateAgent()
-			.then(function(response) {
+			.then(function (response) {
 				this.saveFile(response, 'agent_template.xls');
 			}.bind(this));
 	};
