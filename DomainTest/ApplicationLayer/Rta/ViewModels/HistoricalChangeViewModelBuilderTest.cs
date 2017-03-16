@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 
 			var result = Target.Build(person).Changes.Single();
-			result.Time.Should().Be("14:00:00");
+			result.Time.Should().Be("2017-03-07T14:00:00");
 			result.Activity.Should().Be("phone");
 			result.ActivityColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Crimson.ToArgb())));
 			result.State.Should().Be("InCall");
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 
 			var historicalData = Target.Build(person).Changes.Single();
-			historicalData.Time.Should().Be("14:00:00");
+			historicalData.Time.Should().Be("2017-03-07T14:00:00");
 		}
 
 		[Test]
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var data = Target.Build(person);
 
-			data.Changes.Single().Time.Should().Be("14:00:00");
+			data.Changes.Single().Time.Should().Be("2017-03-06T14:00:00");
 
 			// "2017-03-07 12:00" utc
 			// "2017-03-07 20:00" +8
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var data = Target.Build(person);
 
-			data.Changes.Single().Time.Should().Be("08:00:00");
+			data.Changes.Single().Time.Should().Be("2017-03-06T08:00:00");
 
 			// "2017-03-07 09:00" utc
 			// "2017-03-06 23:00" -10
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var data = Target.Build(person);
 
-			data.Changes.Single().Time.Should().Be("08:00:00");
+			data.Changes.Single().Time.Should().Be("2017-03-14T08:00:00");
 		}
 
 		[Test]
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var data = Target.Build(person);
 
-			data.Changes.Single().Time.Should().Be("18:00:00");
+			data.Changes.Single().Time.Should().Be("2017-03-14T18:00:00");
 		}
 	}
 }
