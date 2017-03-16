@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
@@ -12,7 +13,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Intraday
 {
@@ -22,15 +22,18 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
+		private readonly RetryPolicy _retryPolicy;
 		private readonly object skillCombinationLock = new object();
 
 		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork,
-												  ICurrentBusinessUnit currentBusinessUnit, IRequestStrategySettingsReader requestStrategySettingsReader)
+												  ICurrentBusinessUnit currentBusinessUnit, 
+												  IRequestStrategySettingsReader requestStrategySettingsReader)
 		{
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
+			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(5, TimeSpan.FromMilliseconds(100));
 		}
 
 		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination, SqlConnection connection, SqlTransaction transaction)
@@ -117,7 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 				using (var connection = new SqlConnection(connectionString))
 				{
-					connection.Open();
+					connection.OpenWithRetry(_retryPolicy);
 
 					var purgeTime = dataLoaded.AddMinutes(-updateReadModelInterval * 2);
 					//Purge old intervals that is out of the scope
@@ -245,7 +248,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				connection.Open();
+				connection.OpenWithRetry(_retryPolicy);
 				var skillCombinations = loadSkillCombination(connection, null);
 
 				var dt = new DataTable();
