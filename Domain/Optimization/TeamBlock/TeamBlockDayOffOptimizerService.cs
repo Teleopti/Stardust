@@ -20,19 +20,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public interface ITeamBlockDayOffOptimizerService
-	{
-		void OptimizeDaysOff(IList<IScheduleMatrixPro> allPersonMatrixList,
-		                     DateOnlyPeriod selectedPeriod,
-		                     IList<IPerson> selectedPersons,
-		                     IOptimizationPreferences optimizationPreferences,
-		                     ISchedulingOptions schedulingOptions,
-		                     IResourceCalculateDelayer resourceCalculateDelayer,
-							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-							ITeamInfoFactory teamInfoFactory, ISchedulingProgress schedulingProgress);
-	}
-
-	public class TeamBlockDayOffOptimizerService : ITeamBlockDayOffOptimizerService
+	public class TeamBlockDayOffOptimizerService
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
