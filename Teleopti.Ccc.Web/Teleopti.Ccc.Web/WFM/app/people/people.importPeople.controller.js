@@ -60,6 +60,9 @@
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
 					vm.isProcessing = true;
+					vm.successCount = 0;
+					vm.failedCount = 0;
+					vm.hasInvalidData = false;
 
 					if(vm.importOptions.importType == 'user') {
 						peopleSvc.uploadUserFromFile(file).then(function (response) {
