@@ -7,7 +7,6 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Intraday
 {
@@ -22,40 +21,33 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public void Persist(Guid buId, DateTime datetime)
 		{
-			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
-
-
-			using (var connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-				{
-					var deleteCommand = new SqlCommand();
-					deleteCommand.CommandText = @"delete from [JobStartTime] where BusinessUnit  = @bu";
-					deleteCommand.Connection = connection;
-					deleteCommand.Transaction = transaction;
-					deleteCommand.Parameters.AddWithValue("@bu", buId);
-					deleteCommand.ExecuteNonQuery();
-
-					var insertCommand = new SqlCommand();
-					insertCommand.CommandText = @"insert into [JobStartTime](BusinessUnit, StartTime) Values (@bu,@startTime) ";
-					insertCommand.Connection = connection;
-					insertCommand.Transaction = transaction;
-					insertCommand.Parameters.AddWithValue("@bu", buId);
-					insertCommand.Parameters.AddWithValue("@startTime", datetime);
-					insertCommand.ExecuteNonQuery();
-
-					transaction.Commit();
-				}
-			}
+			var hql = @"MERGE INTO JobStartTime T
+						USING (
+								VALUES
+								(
+									:BusinessUnit,
+									:StartTime)
+								) AS S (
+									BusinessUnit,
+									StartTime
+								)
+								ON
+									T.BusinessUnit = S.BusinessUnit
+								WHEN MATCHED THEN 
+									UPDATE SET StartTime = S.StartTime
+								WHEN NOT MATCHED THEN 
+									INSERT (BusinessUnit, StartTime) values(S.BusinessUnit,S.StartTime);";
+				var sqlQuery = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(hql);
+				sqlQuery.SetDateTime("StartTime", datetime);
+				sqlQuery.SetGuid("BusinessUnit", @buId);
+				sqlQuery.ExecuteUpdate();
 		}
 
 		public IDictionary<Guid, DateTime> LoadAll()
 		{
 			var result =
-				((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-						@"SELECT BusinessUnit, StartTime 
-				 FROM [JobStartTime]")
+				((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
+						@"SELECT BusinessUnit, StartTime  FROM [JobStartTime] with(nolock)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(StartTimePerBu)))
 					.List<StartTimePerBu>();
 
