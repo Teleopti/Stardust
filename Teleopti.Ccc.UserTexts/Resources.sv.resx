@@ -6946,7 +6946,7 @@ Uppdaterad den: {1}</value>
     <value>Skiftpåsar</value>
   </data>
   <data name="SuperRole" xml:space="preserve">
-    <value>Systemadministatör</value>
+    <value>Systemadministratör</value>
   </data>
   <data name="Excluded" xml:space="preserve">
     <value>Exkluderad</value>
@@ -14349,5 +14349,35 @@ Vill du registrera dig?</value>
   </data>
   <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
     <value>{0} ersattes med standardvärdet</value>
+  </data>
+  <data name="RequireXCellFormat" xml:space="preserve">
+    <value>Cellen kan inte analyseras, värdet måste formateras som {0}</value>
+  </data>
+  <data name="EnterANumber" xml:space="preserve">
+    <value>Ange ett antal</value>
+  </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>Stöder endast: {0}</value>
+  </data>
+  <data name="OutOfIndexRange" xml:space="preserve">
+    <value>Utanför indexintervallet {0} - {1}</value>
+  </data>
+  <data name="FailedToImportAgents" xml:space="preserve">
+    <value>Misslyckades att importera {0} agent(er)</value>
+  </data>
+  <data name="SuccessfullyImportedAgents" xml:space="preserve">
+    <value>Import av {0} agent(er) klar</value>
+  </data>
+  <data name="AvailableAsGroupPage" xml:space="preserve">
+    <value>Tillgänglig som gruppering:*</value>
+  </data>
+  <data name="Maximum5OptionalColumns" xml:space="preserve">
+    <value>* Maximalt 5 tilläggskolumner kan vara tillgängliga som grupperingar. </value>
+  </data>
+  <data name="OptionalColumnCreateGroupPageQuestion" xml:space="preserve">
+    <value>Detta kommer att skapa en gruppering för tilläggskolumnen så att du kan skapa rapporter baserat på den. Vill du fortsätta?</value>
+  </data>
+  <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
+    <value>Detta kommer att ta bort tilläggskolumngrupperingen så att du inte längre kan skapa rapporter baserat på den. Vill du fortsätta?</value>
   </data>
 </root>
