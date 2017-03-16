@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -31,8 +32,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.AustralianTimeZoneInfo());
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
-			(principal.Regional as Regional).TimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			principal.Regional = new Regional(TimeZoneInfoFactory.ChinaTimeZoneInfo(), CultureInfo.CurrentCulture, CultureInfo.CurrentCulture);
+
 			var currentPrincipal = new FakeCurrentTeleoptiPrincipal(principal);
 			var target = new UserTimeZone(currentPrincipal);
 			target.TimeZone().Should().Be(TimeZoneInfoFactory.AustralianTimeZoneInfo());
