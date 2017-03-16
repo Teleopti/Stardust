@@ -334,6 +334,7 @@
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\FatClientOptimizationEventPublishingTest.cs" />
+    <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\PersonAbsenceEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessageDictionaryPersisterTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessageTest.cs" />
@@ -598,7 +599,7 @@
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\DataSourcesFactoryTest.cs" />
-    <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\OptionalColumnChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ScheduleMessageSenderTest.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusEventPublishingTest.cs" />

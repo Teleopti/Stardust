@@ -189,6 +189,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\UpdateStaffingLevelReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddOvertimeActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\OptionalColumnCollectionChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\MoveShiftCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsHourlyAvailabilityMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPreferenceMatchingPersonTest.cs" />

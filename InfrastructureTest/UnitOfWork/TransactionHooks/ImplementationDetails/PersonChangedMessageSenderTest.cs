@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _serviceBusSender.Publish(message)).Repeat.Never();
+				Expect.Call(() => _serviceBusSender.Publish(message)).IgnoreArguments().Repeat.Never();
 			}
 			using (_mocks.Playback())
 			{

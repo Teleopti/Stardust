@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GroupPageCollectionChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<ITransactionHook>();
 			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<ITransactionHook>();
+			builder.RegisterType<OptionalColumnCollectionChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<MessageBrokerSender>().As<ITransactionHook>().SingleInstance();
 			builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();
