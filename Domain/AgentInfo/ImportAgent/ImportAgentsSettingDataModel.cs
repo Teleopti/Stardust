@@ -6,15 +6,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class ImportAgentsFieldOptionsModel
 	{
-		public IDictionary<Guid, string> Roles { get; set; }
+		public IList<FieldOptionViewModel> Roles { get; set; }
 		public IDictionary<Guid, string> Teams { get; set; }
-		public IDictionary<Guid, string> Skills { get; set; }
-		public IDictionary<Guid, string> Contracts { get; set; }
-		public IDictionary<Guid, string> ContractSchedules { get; set; }
-		public IDictionary<Guid, string> ShiftBags { get; set; }
+		public IList<FieldOptionViewModel> Skills { get; set; }
+		public IList<FieldOptionViewModel> Contracts { get; set; }
+		public IList<FieldOptionViewModel> ContractSchedules { get; set; }
+		public IList<FieldOptionViewModel> ShiftBags { get; set; }
 		public IDictionary<int, string> SchedulePeriodTypes { get; set; }
-		public IDictionary<Guid, string> PartTimePercentages { get; set; }
-		public IDictionary<Guid, string> ExternalLogons { get; set; }
+		public IList<FieldOptionViewModel> PartTimePercentages { get; set; }
+		public IList<FieldOptionViewModel> ExternalLogons { get; set; }
+	}
+
+	public class FieldOptionViewModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
 	}
 
 	public class TeamViewModel

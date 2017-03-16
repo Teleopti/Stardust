@@ -44,25 +44,56 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			return new ImportAgentsFieldOptionsModel
 			{
-				Roles = _applicationRoleRepository.LoadAll().ToDictionary(r => r.Id.GetValueOrDefault(), r => r.Name),
+				Roles = _applicationRoleRepository.LoadAll().Select(r => new FieldOptionViewModel
+				{
+					Id = r.Id.GetValueOrDefault(),
+					Name = r.Name
+				}).ToList(),
 
 				Teams =
 					_teamRepository.LoadAll()
 						.Where(
 							t => _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.WebPeople, DateOnly.Today, t))
 						.ToDictionary(t => t.Id.GetValueOrDefault(), t => t.SiteAndTeam),
-				Contracts = _contractRepository.LoadAll().ToDictionary(c => c.Id.GetValueOrDefault(), c => c.Description.Name),
-				ContractSchedules =
-					_contractScheduleRepository.LoadAll().ToDictionary(c => c.Id.GetValueOrDefault(), c => c.Description.Name),
-				ShiftBags = _ruleSetBagRepository.LoadAll().ToDictionary(r => r.Id.GetValueOrDefault(), r => r.Description.Name),
-				Skills = _skillRepository.FindAllWithoutMultisiteSkills().ToDictionary(s => s.Id.GetValueOrDefault(), s => s.Name),
+
+				Contracts = _contractRepository.LoadAll().Select(c => new FieldOptionViewModel
+				{
+					Id = c.Id.GetValueOrDefault(),
+					Name = c.Description.Name
+				}).ToList(),
+
+				ContractSchedules = _contractScheduleRepository.LoadAll().Select(c => new FieldOptionViewModel
+				{
+					Id = c.Id.GetValueOrDefault(),
+					Name = c.Description.Name
+				}).ToList(),
+
+				ShiftBags = _ruleSetBagRepository.LoadAll().Select(r => new FieldOptionViewModel
+				{
+					Id = r.Id.GetValueOrDefault(),
+					Name = r.Description.Name
+				}).ToList(),
+
+				Skills = _skillRepository.FindAllWithoutMultisiteSkills().Select(s => new FieldOptionViewModel
+				{
+					Id = s.Id.GetValueOrDefault(),
+					Name = s.Name
+				}).ToList(),
+
 				SchedulePeriodTypes = EnumExtensions.GetValues(SchedulePeriodType.ChineseMonth)
 									.ToDictionary(t => (int)t, t => t.ToString()),
 
-				PartTimePercentages =
-					_partTimePercentageRepository.LoadAll().ToDictionary(p => p.Id.GetValueOrDefault(), p => p.Description.Name),
+				PartTimePercentages = _partTimePercentageRepository.LoadAll().OrderBy(p => p.Percentage.Value).Select(p => new FieldOptionViewModel
+				{
+					Id = p.Id.GetValueOrDefault(),
+					Name = p.Description.Name
+				}).ToList(),
 
-				ExternalLogons = _externalLogOnRepository.LoadAll().ToDictionary(e => e.Id.GetValueOrDefault(), e => e.AcdLogOnName)
+				ExternalLogons = _externalLogOnRepository.LoadAll().Select(e => new FieldOptionViewModel
+				{
+					Id = e.Id.GetValueOrDefault(),
+					Name = e.AcdLogOnName
+				}).ToList()
 			};
 		}
 
