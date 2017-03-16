@@ -7,16 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IDayOffOptimizerPreMoveResultPredictor
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		double CurrentValue(IScheduleMatrixPro matrix);
-
-		PredictorResult IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
-			ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences);
-	}
-
-	public class DayOffOptimizerPreMoveResultPredictor : IDayOffOptimizerPreMoveResultPredictor
+	public class DayOffOptimizerPreMoveResultPredictor
 	{
 		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
 		private readonly IDeviationStatisticData _deviationStatisticData;

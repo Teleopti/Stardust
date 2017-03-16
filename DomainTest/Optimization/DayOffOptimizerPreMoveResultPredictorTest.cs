@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	public class DayOffOptimizerPreMoveResultPredictorTest
 	{
 		private MockRepository _mocks;
-		private IDayOffOptimizerPreMoveResultPredictor _target;
+		private DayOffOptimizerPreMoveResultPredictor _target;
 		private IScheduleMatrixPro _matrix;
 		private IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
 		private IDeviationStatisticData _deviationStatisticData;

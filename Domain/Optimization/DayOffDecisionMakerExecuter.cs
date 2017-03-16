@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
-    	private readonly IDayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
+    	private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
 	    private readonly IDaysOffPreferences _daysOffPreferences;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly IUserTimeZone _userTimeZone;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
             ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
-			IDayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
+			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
 			IDaysOffPreferences daysOffPreferences,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IUserTimeZone userTimeZone
