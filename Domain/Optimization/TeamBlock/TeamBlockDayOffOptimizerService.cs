@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -251,6 +253,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							else
 							{
 								bool checkPeriodValue;
+								var resCalcState = new UndoRedoContainer();
+								if (optimizationPreferences.Extra.IsClassic())
+								{
+									//TODO: hack -> always do this
+									resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
+								}
 								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 									resourceCalculateDelayer,
 									schedulingResultStateHolder,
@@ -258,27 +266,47 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									out checkPeriodValue,
 									movedDaysOff);
 
-								var currentPeriodValue = new Lazy<double>(
+								var periodValue = new Lazy<double>(
 										() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
-								success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
-									teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, () =>
-									{
-										cancelMe = true;
-										cancelAction();
-									}, schedulingProgress);
+
+								var currentPeriodValue = previousPeriodValue;
+								if (success && checkPeriodValue)
+								{
+									currentPeriodValue = periodValue.Value;
+									success = currentPeriodValue < previousPeriodValue;
+								}
 								if (success)
 								{
-									previousPeriodValue = currentPeriodValue.Value;
+									previousPeriodValue = periodValue.Value;
 									allFailed = false;
 								}
 								else
 								{
+									if (optimizationPreferences.Extra.IsClassic())
+									{
+										//TODO: hack -> always do this
+										resCalcState.UndoAll();
+										rollbackService.RollbackMinimumChecks();
+									}
+									else
+									{
+										_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+									}
+
 									if (!optimizationPreferences.Advanced.UseTweakedValues)
 									{
 										allFailed = false;
 										lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 										lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 									}
+								}
+
+								if (onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
+									 currentTeamInfoCounter.ToString("####") + ") " +
+									 teamInfo.Name.DisplayString(20) + " (" + currentPeriodValue + ")"), schedulingProgress))
+								{
+									cancelMe = true;
+									cancelAction();
 								}
 							}
 						}
@@ -649,6 +677,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			public IList<DateOnly> AddedDaysOff { get; set; }
 			public IList<DateOnly> RemovedDaysOff { get; set; }
+
+			public IEnumerable<DateOnly> ModifiedDays()
+			{
+				return AddedDaysOff.Union(RemovedDaysOff);
+			}
 		}
 
 	}
