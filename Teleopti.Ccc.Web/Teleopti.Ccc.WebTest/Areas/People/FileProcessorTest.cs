@@ -665,7 +665,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 		private RawAgent setupProviderData()
 		{
-			var role = ApplicationRoleFactory.CreateRole("agent", "test");
+			var role = ApplicationRoleFactory.CreateRole("agent", "role description");
 
 			RoleRepository.Add(role);
 			var team = TeamFactory.CreateSimpleTeam("preference");
@@ -693,7 +693,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				WindowsUser = "john.smith@teleopti.com",
 				ApplicationUserId = "john.smith@teleopti.com",
 				Password = "password",
-				Role = role.Name,
+				Role = role.DescriptionText,
 				StartDate = new DateTime(2017, 3, 1),
 				Organization = team.SiteAndTeam,
 				Skill = skill.Name,
