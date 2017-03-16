@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
@@ -367,6 +368,8 @@ namespace Stardust.Manager
 						sqlConnection.Close();
 						return;
 					}
+					
+					this.Log().Info(Environment.StackTrace);
 					this.Log().Info(string.Format("Aquired job id {0} for node {1}",jobQueueItem.JobId,availableNode.ToString()));
 					var builderHelper = new NodeUriBuilderHelper(availableNode);
 					var urijob = builderHelper.GetJobTemplateUri();
@@ -414,9 +417,6 @@ namespace Stardust.Manager
 				throw;
 			}
 		}
-		
-
-
 
 		public bool DoesJobQueueItemExists(Guid jobId)
 		{
