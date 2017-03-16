@@ -51,7 +51,7 @@
 							<td>Role</td>
 							<td>
 								<md-select multiple ng-model="$ctrl.fallbacks.roles" placeholder="{{ 'Roles'|translate }}">
-									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Roles" ng-value="id">{{name}}</md-option>
+									<md-option ng-repeat="role in $ctrl.fieldOptions.Roles | orderBy:'Name' " ng-value="role.Id">{{::role.Name}}</md-option>
 								</md-select>
 							</td>
 						</tr>
@@ -68,7 +68,7 @@
 							<td>Skill</td>
 							<td>
 								<md-select multiple ng-model="$ctrl.fallbacks.skills" placeholder="{{ 'Skills'|translate }}">
-									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Skills" ng-value="id">{{name}}</md-option>
+									<md-option ng-repeat="skill in $ctrl.fieldOptions.Skills | orderBy:'Name' " ng-value="skill.Id">{{::skill.Name}}</md-option>
 								</md-select>
 							</td>
 						</tr>
@@ -77,7 +77,7 @@
 							<td>
 								<md-select placeholder="{{ 'ExternalLogOn'|translate }}" ng-model="$ctrl.fallbacks.externalLogon">
 									<md-option ng-value="$ctrl.blankId">{{ 'None'|translate }}</md-option>
-									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.ExternalLogons" ng-value="id">{{name}}</md-option>
+									<md-option ng-repeat="logon in $ctrl.fieldOptions.ExternalLogons | orderBy:'Name' " ng-value="logon.Id">{{::logon.Name}}</md-option>
 								</md-select>
 							</td>
 						</tr>
@@ -85,7 +85,7 @@
 							<td>Contract</td>
 							<td>
 								<md-select placeholder="{{ 'Contract'|translate }}" ng-model="$ctrl.fallbacks.contract">
-									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Contracts" ng-value="id">{{name}}</md-option>
+									<md-option ng-repeat="contract in $ctrl.fieldOptions.Contracts | orderBy:'Name' " ng-value="contract.Id">{{::contract.Name}}</md-option>
 								</md-select>
 							</td>
 						</tr>
@@ -93,7 +93,7 @@
 							<td>ContractSchedule</td>
 							<td>
 								<md-select placeholder="{{ 'ContractSchedule'|translate }}" ng-model="$ctrl.fallbacks.contractSchedule">
-									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.ContractSchedules" ng-value="id">{{name}}</md-option>
+									<md-option ng-repeat="cs in $ctrl.fieldOptions.ContractSchedules | orderBy:'Name' " ng-value="cs.Id">{{::cs.Name}}</md-option>
 								</md-select>
 							</td>
 						</tr>
@@ -101,7 +101,7 @@
 							<td>PartTimePercentage</td>
 							<td>
 								<md-select placeholder="{{ 'PartTimePercentage'|translate }}" ng-model="$ctrl.fallbacks.partTimePercentage">
-									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.PartTimePercentages" ng-value="id">{{name}}</md-option>
+									<md-option ng-repeat="p in $ctrl.fieldOptions.PartTimePercentages" ng-value="p.Id">{{::p.Name}}</md-option>
 								</md-select>
 							</td>
 						</tr>
@@ -109,7 +109,7 @@
 							<td>ShiftBag</td>
 							<td>
 								<md-select placeholder="{{ 'ShiftBag'|translate }}" ng-model="$ctrl.fallbacks.shiftBag">
-									<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.ShiftBags" ng-value="id">{{name}}</md-option>
+									<md-option ng-repeat="shiftbag in $ctrl.fieldOptions.ShiftBags | orderBy:'Name' " ng-value="shiftbag.Id">{{::shiftbag.Name}}</md-option>
 								</md-select>
 							</td>
 						</tr>
