@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -23,7 +24,14 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			var currentUser = _loggedOnUser.Current();
 			if (currentUser == null) return null;
 
-			return currentUser.Regional.TimeZone;
+			var principalCacheable = currentUser as TeleoptiPrincipalCacheable;
+
+			var timezone = (principalCacheable != null) && (!principalCacheable.Person.PermissionInformation.DefaultTimeZoneString().IsNullOrEmpty())
+				? principalCacheable.Person.PermissionInformation.DefaultTimeZone()
+				: currentUser.Regional.TimeZone;
+
+
+			return timezone;
 		}
 	}
 }
