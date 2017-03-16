@@ -319,7 +319,25 @@ Try
 	$gotLock = GetAppLock -Connection $con -LockResource $lockResource
 	if ($gotLock -eq $false)
 	{
-		log-info "Another process had the distributed lock for patching the database. Exiting this process."
+		$maxRetries = 80
+		log-info "Another process had the distributed lock for patching the database. Awaiting it to finish."
+		do
+		{
+			log-info "."
+			Start-Sleep 10
+			$maxRetries--
+			$gotLock = GetAppLock -Connection $con -LockResource $lockResource
+		} until ($gotLock -or $maxRetries -lt 1)
+		
+		if ($gotLock)
+		{
+			log-info "Lock on other process was released. Continuing without patching because database was patched in another instance."
+			ReleaseAppLock -Connection $con -LockResource $lockResource
+		}
+		else
+		{
+			log-info "Warning, maximum wait time reached. Bailing out..."
+		}
 		return;
 	}
 
