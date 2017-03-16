@@ -58,7 +58,9 @@ namespace Stardust.Manager
 
 		public void AssignJobToWorkerNodes()
 		{
+			_checkAndAssignJob.Enabled = false;
 			_jobRepository.AssignJobToWorkerNode();
+			_checkAndAssignJob.Enabled = true;
 		}
 
 		private void CheckHeartbeats_Elapsed(object sender, ElapsedEventArgs e)
