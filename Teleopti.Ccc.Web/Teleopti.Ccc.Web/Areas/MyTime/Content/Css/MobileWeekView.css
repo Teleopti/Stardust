@@ -35,6 +35,9 @@
 .mobile-bottom-bar {
 	margin-top: 5px;
 }
+.weekview-mobile .dropdown-menu{
+	overflow-y: auto;
+}
 .weekview-mobile .action-menu-container {
 	margin: 0 5px 5px 15px;
 }
