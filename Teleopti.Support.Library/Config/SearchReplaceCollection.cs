@@ -32,7 +32,7 @@ namespace Teleopti.Support.Library.Config
 
 		public void SetByName(string name, string replaceWith)
 		{
-			set(string.Format("$({0})", name), replaceWith);
+			set($"$({name})", replaceWith);
 		}
 		
 		private void set(string searchFor, string replaceWith)

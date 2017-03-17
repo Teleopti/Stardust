@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.UpdateFileByName("HangfireDashboardStatistics", "true");
 			settingsFile.UpdateFileByName("HangfireDashboardCounters", "true");
 			settingsFile.UpdateFileByName("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
-			settingsFile.UpdateFileByName("<customErrors mode=\"On\" defaultRedirect=\"~/content/error/error.htm\">", "<customErrors mode=\"Off\" defaultRedirect=\"~/content/error/error.htm\">");
+			settingsFile.UpdateFile("<customErrors mode=\"On\" defaultRedirect=\"~/content/error/error.htm\">", "<customErrors mode=\"Off\" defaultRedirect=\"~/content/error/error.htm\">");
 
 			// iisexpress
 			settingsFile.UpdateFileByName("Port", TestSiteConfigurationSetup.Port.ToString());
