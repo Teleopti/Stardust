@@ -41,11 +41,12 @@
 
 
 	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper">
-		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns ui-grid-disable-animation class="grid people-list"></div>
+		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns ui-grid-disable-animation 
+			 class="grid people-list" style="height: 70vh;"></div>
 	</div>
 	<div ng-if="dataInitialized" class="con-footer">
 		<span class="notice-spacer pull-left" ng-show="selectAllVisible" ng-click="selectAllMatch()">
-				<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
+			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 		</span>
 
 

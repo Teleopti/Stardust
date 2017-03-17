@@ -116,8 +116,13 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		enableGridMenu: true,
 		useExternalSorting: true,
 		enableColumnResizing: true,
-		enableHorizontalScrollbar: function () {
-			return columnDefs.length + $scope.optionalColumns > 8 ? true : false;
+		enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+		enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
+		rowIdentity: function (row) {
+			return row.PersonId;
+		},
+		getRowIdentity: function (row) {
+			return row.PersonId;
 		},
 		columnDefs: [
 			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
