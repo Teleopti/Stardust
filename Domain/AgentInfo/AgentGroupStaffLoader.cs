@@ -26,5 +26,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var peopleToSchedule = result.FixedStaffPeople(period);
 			return new PeopleSelection(result, peopleToSchedule);
 		}
+
+		public int NumberOfAgents(DateOnlyPeriod period, IAgentGroup agentGroup)
+		{
+			return agentGroup != null ? _personRepository.CountPeopleInAgentGroup(agentGroup, period) : _personRepository.NumberOfActiveAgents();
+		}
 	}
 }

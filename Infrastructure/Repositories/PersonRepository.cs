@@ -681,7 +681,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
 		{
-			
 			var criteria = Session.CreateCriteria(typeof(Person), "per")
 				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
 				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
@@ -689,6 +688,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.IsNull("TerminalDate"),
 					Restrictions.Ge("TerminalDate", period.StartDate)
 				));
+			var filterCriteria = createFilterCriteria(agentGroup, period);
+			criteria.Add(filterCriteria);
+			ICollection<IPerson> retList = criteria
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.List<IPerson>();
+
+			return retList.ToList();
+		}
+
+		public int CountPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		{
+			var criteria = Session.CreateCriteria(typeof(Person), "per")
+				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+				.Add(Restrictions.Or(
+					Restrictions.IsNull("TerminalDate"),
+					Restrictions.Ge("TerminalDate", period.StartDate)
+				));
+			var filterCriteria = createFilterCriteria(agentGroup, period);
+			criteria.Add(filterCriteria);
+			var retList = criteria
+				.SetProjection(
+					Projections.Count(Projections.Id())
+				)
+				.UniqueResult<int>();
+			return retList;
+		}
+
+		private static Conjunction createFilterCriteria(IAgentGroup agentGroup, DateOnlyPeriod period)
+		{
 			var filterCriteria = Restrictions.Conjunction();
 			foreach (var group in agentGroup.Filters.GroupBy(x => x.FilterType))
 			{
@@ -697,30 +726,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					if (filter is TeamFilter)
 					{
-						groupStuff.Add(Subqueries.Exists(findActivePeriod(((TeamFilter)filter).Team, period)));
+						groupStuff.Add(Subqueries.Exists(findActivePeriod(((TeamFilter) filter).Team, period)));
 					}
 					else if (filter is SiteFilter)
 					{
-						groupStuff.Add(Subqueries.Exists(findActivePeriod(((SiteFilter)filter).Site.TeamCollection.ToArray(), period)));
+						groupStuff.Add(Subqueries.Exists(findActivePeriod(((SiteFilter) filter).Site.TeamCollection.ToArray(), period)));
 					}
 					else if (filter is ContractFilter)
 					{
-						groupStuff.Add(Subqueries.Exists(findActivePeriod(((ContractFilter)filter).Contract, period)));
+						groupStuff.Add(Subqueries.Exists(findActivePeriod(((ContractFilter) filter).Contract, period)));
 					}
 					else if (filter is SkillFilter)
 					{
-						groupStuff.Add(Subqueries.Exists(findBySkill(((SkillFilter)filter).Skill, period)));
+						groupStuff.Add(Subqueries.Exists(findBySkill(((SkillFilter) filter).Skill, period)));
 					}
-
 				}
 				filterCriteria.Add(groupStuff);
 			}
-			criteria.Add(filterCriteria);
-			ICollection<IPerson> retList = criteria
-				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.List<IPerson>();
-
-			return retList.ToList();
+			return filterCriteria;
 		}
 	}
 }

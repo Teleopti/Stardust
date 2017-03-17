@@ -19,7 +19,8 @@
 			publishPeriod: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/publish' },
 			changeRange: { method: 'PUT', params: { id: "@id" } },
 			schedule: { method: 'POST', params: { id: "@id", runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/schedule' },
-			optimize: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/optimize' }
+			optimize: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/optimize' },
+			getAgentCount: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/countagents'}
 		});
 
 		var agentGroupBaseUrl = '../api/resourceplanner/agentgroup/:agentGroupId';
@@ -47,6 +48,7 @@
 			changeRange: planningPeriod.changeRange,
 			getSuggestions: planningPeriod.getSuggestions,
 			publishPeriod: planningPeriod.publishPeriod,
+			getNumberOfAgents: planningPeriod.getAgentCount,
 			// Scheduling
 			launchScheduling: planningPeriod.schedule,
 			launchOptimization: planningPeriod.optimize,

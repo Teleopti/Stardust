@@ -12,6 +12,7 @@
 				var checkProgressRef;
 				$scope.issues = [];
 				$scope.scheduledAgents = 0;
+				$scope.totalAgents = 0;
 				$scope.hasIssues = false;
 				$scope.isDataAvailable = false;
 				$scope.dayNodes = [];
@@ -48,6 +49,10 @@
 				});
 
 				function initResult(interResult, result, planningPeriod) {
+					planningPeriodService.getNumberOfAgents({ id: planningPeriodId, startDate: planningPeriod.StartDate, endDate: planningPeriod.EndDate })
+						.$promise.then(function (data) {
+							$scope.totalAgents = data.TotalAgents;
+						});
 					$scope.planningPeriod = planningPeriod;
 					var scheduleResult = interResult.SkillResultList ? interResult.SkillResultList : [];
 					$scope.issues = result.BusinessRulesValidationResults ? result.BusinessRulesValidationResults : [];

@@ -276,5 +276,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			_storage.Remove(person);
 		}
+
+		public int CountPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		{
+			return FindPeopleInAgentGroup(agentGroup, period).Count;
+		}
 	}
 }

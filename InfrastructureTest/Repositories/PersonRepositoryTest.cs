@@ -1891,11 +1891,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var loadedAgentGroup = new AgentGroupRepository(new ThisUnitOfWork(UnitOfWork)).Get(agentGroup.Id.Value);
 
 			//load
-			var testList = target.FindPeopleInAgentGroup(loadedAgentGroup, new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6));
+			var dateOnlyPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6);
+			var testList = target.FindPeopleInAgentGroup(loadedAgentGroup, dateOnlyPeriod);
+			var testCount = target.CountPeopleInAgentGroup(loadedAgentGroup, dateOnlyPeriod);
 
 			//verify
 			var expectedPeople = testCase.ExpectedPeople(testData);
+			
 			Assert.AreEqual(expectedPeople.Count, testList.Count);
+			Assert.AreEqual(testCount, testList.Count);
 			foreach (var person in expectedPeople)
 			{
 				testList.Should().Contain(person);

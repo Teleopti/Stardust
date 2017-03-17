@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				.Where(x => x.JobCategory == JobCategory.WebSchedule && x.FinishedOk)
 				.OrderByDescending(x => x.Timestamp)
 				.FirstOrDefault();
+
 			if (lastJobResult != null)
 				return Ok(new
 				{
@@ -56,8 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						StartDate = range.StartDate.Date,
 						EndDate = range.EndDate.Date
 					},
-					ScheduleResult = JsonConvert.DeserializeObject(lastJobResult.Details.First().Message),
-					OptimizationResult = JsonConvert.DeserializeObject(lastJobResult.Details.Last().Message)
+					ScheduleResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message),
+					OptimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message),
 				});
 			return NotFound();
 		}
@@ -159,6 +160,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				EndDate = r.Range.EndDate.Date,
 				Number = r.Number
 			}));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/countagents")]
+		public virtual IHttpActionResult GetAgentCount(Guid planningPeriodId, DateTime startDate, DateTime endDate)
+		{
+			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
+			var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+			var numberOfAgents = _agentGroupStaffLoader.NumberOfAgents(period, planningPeriod.AgentGroup);
+			return Ok(new
+			{
+				TotalAgents=numberOfAgents
+			});
 		}
 
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
